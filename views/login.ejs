@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+    <title>GEOLYTIX | passport</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+        body > div {
+            padding: 50px;
+        }
+        .input_group {
+            width: 100%;
+            max-width: 500px;
+        }
+        input {
+            padding: 10px 0;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #999;
+            font-size: 18px;
+        }
+        input:focus {
+            outline: none;
+        }
+        .bar {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+        .bar:before, .bar:after {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 0;
+            position: absolute;
+            background: #079e00;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+        .bar:before {
+            left: 50%;
+        }
+        .bar:after {
+            right: 50%;
+        }
+        input:focus ~ .bar:before,
+        input:focus ~ .bar:after {
+            width: 50%;
+        }
+        button {
+            color: white;
+            background-color: #079e00;
+            margin: 10px 0;
+            padding: 8px;
+            text-align: center;
+            font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            border-radius: 3px;
+            border: 0;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        button:hover:enabled {
+            cursor: pointer;
+            color: #079e00;
+            background-color: white;
+        }
+        .register {
+            display: none;
+        }
+        p {
+            font-size: 20px;
+        }
+        #switch2register, #switch2login {
+            color: #079e00;
+            font-weight: 700;
+        }
+        #switch2register:hover,
+        #switch2login:hover {
+            cursor: pointer;
+        }
+        #btnRegister:disabled {
+            background-color: darkslategrey;
+        }
+        .msg {
+            color: orangered;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <!--<h1>Log in</h1>-->
+    <form action="/<%= subdirectory %>/login" method="post">
+
+        <div class="input_group">
+            <input id="auth_user_email" name="email" type="text" value="">
+            <span class="bar"></span>
+            <label for="auth_user_email">E-mail</label>
+        </div>
+
+        <br>
+
+        <div class="input_group">
+            <input id="auth_user_password" name="password" type="password" value="" onkeyup="check();">
+            <span class="bar"></span>
+            <label for="auth_user_password">Password</label>
+        </div>
+
+        <br>
+
+        <div class="input_group register">
+            <input id="auth_user_password_retype" name="password_retype" type="password" value="" onkeyup="check();">
+            <span class="bar"></span>
+            <label for="auth_user_password_retype">Retype password</label>
+        </div>
+
+        <% if (user) { if (user.verified == false) { %>
+        <span class="msg login">Account mail not yet verified.</span><br>
+        <% } } %>
+        <% if (user) { if (user.approved == false) { %>
+        <span class="msg login">Account not yet approved.</span><br>
+        <% } } %>
+        <% if (session_messages.length > 0) { %>
+        <span class="msg login">
+        <%= session_messages[session_messages.length - 1] %></span><br>
+        <% } %>
+
+        <br>
+
+        <button id="btnLogin" class="login" type="submit"
+                formaction="/<%= subdirectory %>/login">
+            Log In
+        </button>
+        <button id="btnRegister" class="register" type="submit"
+                formaction="/<%= subdirectory %>/register" disabled>
+            Confirm
+        </button>
+        <p class="login">Your account must be verified and approved by an administrator before you are able to log in.</p>
+        <p id="switch2register" class="login">Register a new account or reset your password.</p>
+        <p class="register">A verification link will be sent to your email address. Follow the link to activate your account.</p>
+        <p id="switch2login" class="register">Already registered? Login.</p>
+    </form>
+</div>
+</body>
+<script>
+    setTimeout(function () {
+        let user_email = document.getElementById('auth_user_email');
+        if (user_email.value.length > 0) {
+            document.getElementById('auth_user_password').focus();
+        } else {
+            document.getElementById('auth_user_email').focus();
+        }
+    }, 10);
+    const ar_map = f => x => Array.prototype.map.call(x, f);
+    const styleDisplayNone = (el) => el.style.display = 'none';
+    const styleDisplayBlock = (el) => el.style.display = 'block';
+    document.getElementById('switch2register').addEventListener('click', function(){
+        ar_map(styleDisplayNone)(document.getElementsByClassName('login'));
+        ar_map(styleDisplayBlock)(document.getElementsByClassName('register'));
+    });
+    document.getElementById('switch2login').addEventListener('click', function(){
+        ar_map(styleDisplayNone)(document.getElementsByClassName('register'));
+        ar_map(styleDisplayBlock)(document.getElementsByClassName('login'));
+    });
+    function check() {
+        let btnRegister = document.getElementById('btnRegister');
+        (document.getElementById('auth_user_password').value === document.getElementById('auth_user_password_retype').value && document.getElementById('auth_user_password').value.length > 0 )?
+            btnRegister.disabled = false : btnRegister.disabled = true;
+    }
+</script>
+</html>

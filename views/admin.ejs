@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GEOLYTIX | passport</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset;
+        }
+        td:not(.email_field) {
+            padding: 12px;
+        }
+        body {
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+        body > div {
+            padding: 40px;
+        }
+        .material-icons {
+            font-size: 40px !important;
+            -moz-user-select: -moz-none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        table {
+            text-align: left;
+        }
+        th .material-icons:hover {
+            cursor: help;
+        }
+        .delete_account {
+            cursor: pointer;
+        }
+        .checkbox {
+            position: relative;
+        }
+        .checkbox label {
+            cursor: pointer;
+            position: absolute;
+            width: 23px;
+            height: 23px;
+            top: 0;
+            left: 0;
+            background: #fff;
+            content: '\E836';
+            font-family: "Material Icons";
+            font-size: 23px;
+            line-height: 23px;
+        }
+        .checkbox label:after {
+            content: '\E836';
+        }
+        .checkbox input[type=checkbox]:checked + label:after {
+            content: '\E837';
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>Account admin</h1>
+    <table>
+        <th><i id="account" class="material-icons" title="Account email">face</i></th>
+        <th><i id="verified" class="material-icons" title="The account email has been verified through a token
+            sent to the email address.">done</i></th>
+        <th><i id="approved" class="material-icons" title="The account has been approved by a site administrator
+            and is permitted to access the application.">done_all</i></th>
+        <th><i id="admin" class="material-icons" title="The account is an admin account which can access this
+            page and change other account credentials.">font_download</i></th>
+        <th></th>
+        <% for(var i = 0; i < data.length; i++) { %>
+        <tr>
+            <td class="email_field"><%= data[i].email %></td>
+            <td>
+                <div class="checkbox">
+                    <input name="verified" type="checkbox" class="checkbox_input" id="checkbox-verified-<%= i %>"
+                            <% if(data[i].verified){ %>
+                           checked
+                            <% } %>
+                    >
+                    <label for="checkbox-verified-<%= i %>"></label>
+                </div>
+            </td>
+            <td>
+                <div class="checkbox">
+                    <input name="approved" type="checkbox" class="checkbox_input" id="checkbox-approved-<%= i %>"
+                            <% if(data[i].approved){ %>
+                           checked
+                            <% } %>
+                    >
+                    <label for="checkbox-approved-<%= i %>"></label>
+                </div>
+            </td>
+            <td>
+                <div class="checkbox">
+                    <input name="admin" type="checkbox" class="checkbox_input" id="checkbox-admin-<%= i %>"
+                            <% if(data[i].admin){ %>
+                           checked
+                            <% } %>
+                    >
+                    <label for="checkbox-admin-<%= i %>"></label>
+                </div>
+            </td>
+            <td>
+                <i id='delete_<%= i %>' class="material-icons delete_account" title="The account will be deleted.">delete</i>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+
+</div>
+</body>
+<script>
+    var xhr = new XMLHttpRequest();
+    [].forEach.call(document.querySelectorAll('.checkbox_input'), function(el) {
+                el.addEventListener('click', function () {
+                    var user = this.parentNode.parentNode.parentNode.firstChild;
+                    while(user != null && user.nodeType == 3){
+                        user = user.nextSibling;
+                    }
+                    xhr.open('POST', '/<%= subdirectory %>/update_user');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var j = JSON.parse(this.responseText);
+                            j.update ? null : alert("Oops. Something went wrong with the update!");
+                        }
+                    }
+                    xhr.send(JSON.stringify({
+                        email: user.innerText,
+                        role: this.getAttribute('name'),
+                        chk: this.checked
+                    }));
+                }, false);
+            });
+    [].forEach.call(document.querySelectorAll('.delete_account'), function (el) {
+        el.addEventListener('click', function () {
+            var tr = this.parentNode.parentNode, user = tr.firstChild;
+            while (user != null && user.nodeType == 3) {
+                user = user.nextSibling;
+            }
+            if (confirm('Delete account ' + user.innerText)) {
+                xhr.open('POST', '/<%= subdirectory %>/delete_user');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var j = JSON.parse(this.responseText);
+                        j.delete ? tr.remove() : alert("Soz. Something went wrong with the delete!");
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    email: user.innerText
+                }));
+            }
+        }, false);
+    });
+</script>
+</html>

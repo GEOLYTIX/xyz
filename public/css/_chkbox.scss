@@ -1,0 +1,31 @@
+.checkbox {
+  position: relative;
+  display: inline-block;
+  color: $glxgreen;
+}
+
+.checkbox input {
+  margin: 4px 13px 0 0;
+}
+
+.checkbox label {
+  cursor: pointer;
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 0;
+  left: -2px;
+  background: #fff;
+  content: '\E836';
+  font-family: "Material Icons";
+  font-size: 23px;
+  line-height: 23px;
+}
+
+.checkbox label:after {
+  content: '\E835';
+}
+
+.checkbox input[type=checkbox]:checked + label:after {
+  content: '\E834';
+}

@@ -1,0 +1,79 @@
+{
+  "hooks": {},
+  "locale": {
+    "btnZoomIn": "document.getElementById('btnZoomIn')",
+    "btnZoomOut": "document.getElementById('btnZoomOut')",
+    "layers": {
+      "base": false,
+      "border": false,
+      "label": false,
+      "vector": null,
+      "vectorSelect": null,
+      "location": null,
+      "locationSelect": null,
+      "grid": null
+    }
+  },
+  "gazetteer": {
+    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "style": {
+      "stroke": true,
+      "color": "#090",
+      "weight": 2,
+      "fillColor" : "#cf9",
+      "fillOpacity": 0.2
+    },
+    "btnSearch": "document.getElementById('btnSearch')",
+    "group": "document.getElementById('gaz_group')",
+    "input": "document.getElementById('gaz_input')",
+    "result": "document.getElementById('gaz_result')",
+    "country": "document.getElementById('gaz_country')",
+    "countrylist": "document.getElementById('gaz_countrylist')"
+  },
+  "vector": {
+    "container": "document.querySelector('#statistics_module > .swipe_container')",
+    "infoTable": "document.querySelector('.statistics_info')",
+    "style": {
+      "stroke": true,
+      "color": "#666",
+      "opacity": 0.5,
+      "weight": 1,
+      "fillOpacity": 0
+    },
+    "styleSelection": {
+      "stroke": true,
+      "color": "#619",
+      "weight": 2,
+      "fill": true,
+      "fillColor" : "#f48",
+      "fillOpacity": 0.2
+    },
+    "styleHighlight": {
+      "stroke": true,
+      "color": "#666",
+      "opacity": 0.7,
+      "weight": 2,
+      "fill": true,
+      "fillColor" : "#cf9",
+      "fillOpacity": 0.2
+    }
+  },
+  "country": "UK",
+  "countries": {
+    "UK": {
+      "name": "United Kingdom",
+      "placeholder": "e.g. London",
+      "bounds": [[48, -13], [62, 5]],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "border": false,
+      "vector": {
+        "arrayZoom": {
+          "10": "gb_postaldistrict_census__11",
+          "11": "gb_postaldistrict_census__11",
+          "12": "gb_postalsector_census__11"
+        }
+      }
+    }
+  }
+}

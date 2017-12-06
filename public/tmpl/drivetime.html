@@ -1,0 +1,43 @@
+<div id="drivetime_module" class="module">
+    <table class="swipe_container pages--2"  cellpadding="0" cellspacing="0" style="margin-left: 0">
+
+        <td class="swipe_page">
+            <div class="page_header">
+                <span>Drivetimes</span>
+
+            </div>
+
+            <div class="page_content">
+                <p>Please specify the maximum traveltime in minutes:</p>
+                <span id="drivetime_minutes" class="bold">45</span><span class="bold"> minutes</span>
+
+                <div class="range">
+                    <input id="drivetime_slider" type="range" min="15" max="90" value="45">
+                </div>
+
+                <!-- <div class="checkbox">
+                    <input type="checkbox" id="chkDriveTimePublic">
+                    <label for="chkDriveTimePublic"></label>
+                </div><span><small>Use public transport.</small></span> -->
+
+                <div id="btnDrivetime" class="md_button">Set Drivetime Location</div>
+            </div>
+
+        </td>
+
+        <td class="swipe_page">
+            <div class="page_header">
+                <span class="spinner"><span class="bounce1"></span><span class="bounce2"></span><span class="bounce3"></span></span>
+                <i id="btnDrivetime--off"class="material-icons cursor page_backward">cancel</i>
+                <span>Drivetime Module</span>
+            </div>
+
+            <div class="page_content">
+                <table class="drivetime_info info_table" cellpadding="0" cellspacing="0"></table>
+                <div id="btnDrivetimeCopy" class="md_button">Copy to clipboard</div>                
+            </div>
+        </td>
+
+    </table>
+
+</div>

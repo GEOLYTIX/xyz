@@ -1,0 +1,33 @@
+.info_table {
+  width: 100%;
+  font-family: 'PT Mono', monospace;
+  font-size: 13px;
+  transition: opacity 300ms ease-in-out;
+  -moz-transition: opacity 300ms ease-in-out;
+  -webkit-transition: opacity 300ms ease-in-out;
+
+  .title {
+    font-size: 15px;
+
+    td {
+      padding: 10px 0;
+    }
+  }
+
+  .pad {
+    padding-left: 10px;
+  }
+
+  td:first-child {
+    font-weight: 700;
+  }
+
+  td:nth-child(2) {
+    padding-left: 5px;
+    text-align: right;
+  }
+
+  tr:not(.title):hover {
+    background-color: $glxlightgreen;
+  }
+}

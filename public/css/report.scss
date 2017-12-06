@@ -1,0 +1,208 @@
+$desktop: true;
+$mobile: false;
+$glxgreen: #090;
+$glxlightgreen: #cf9;
+
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url("https://fonts.googleapis.com/css?family=PT+Mono");
+
+@import "leaflet";
+@import "location";
+@import "grid";
+@import "info_table";
+
+*, *::after, *::before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: ffmark, sans-serif;
+    font-family: sans-serif;
+    -webkit-print-color-adjust: exact;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    background-color: transparent;
+    color: $glxgreen;
+    font-family: ffmark_bold, sans-serif;
+    font-family: sans-serif;
+}
+
+button {
+    border: none;
+    outline: none;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cursor:hover {
+    cursor: pointer;
+}
+
+/* hidden for the report view */
+.module_container {
+    display: none !important;
+}
+
+/* hidden in the report view */
+.map_container {
+    display: none !important;
+}
+
+#attribution {
+    display: none !important;
+    margin-top: 30px;
+    font-size: 12px;
+}
+
+/* div icon */
+.leaflet-div-icon {
+    background: #fff;
+    border: 1px solid #666;
+}
+
+/* Pages */
+
+page {
+    position: relative;
+    top: 0;
+    left: 0;
+    background: white;
+    display: block;
+    box-shadow: 0 0 0.2cm rgba(0, 0, 0, 0.5);
+    padding: 2cm;
+
+    .page-footer {
+        font-size: 9px;
+        font-family: sans-serif;
+        color: #666;
+
+        span {
+            font-weight: 900;
+        }
+    }
+}
+
+page[size="A-4"] {
+    width: 21cm;
+    height: 29.7cm;
+}
+
+page[size="A4"][layout="landscape"] {
+    width: 29.7cm;
+    height: 21cm;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    * {
+        font-size: 11px !important;
+        font-family: sans-serif !important;
+    }
+    
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .table-container {
+        display: -webkit-flex;
+
+        /*border: 2px dashed red;*/
+
+        :not(:empty) {
+            min-width: 25%;
+        }
+
+        :empty {
+            display: none;
+        }
+    }
+
+    table {
+        display: flex;
+        padding: 10px;
+        border-collapse: collapse;
+        margin: 2px;
+
+        tr td:first-child:not(.grid_group) {
+            font-weight: bold;
+        }
+
+        tr td:nth-child(2) {
+            text-align: right;
+            width: -webkit-fill-available !important;
+        }
+        
+        .location_info {
+            width: 200px;
+        }
+        
+        .statistics_info {
+            width: 180px;
+        }
+        
+        .drivetime_info {
+            width: 150px;
+        }
+        
+        .location_info:empty, .statistics_info:empty, .drivetime_info:empty {
+            display: none;
+        }
+    }
+}
+
+.grid_group {
+    display: none;
+    width: 250px;
+    padding: 4px;
+    z-index: 9000;
+    
+    .grid_legend {
+        margin-top: 20px !important;
+    }
+    
+    #colourTitle {
+        transform-origin: 100px -120px !important;
+        width: 250px;
+        display: inline-flex;
+    }
+    
+    #sizeTitle {
+        width: 240px;
+        padding: 4px;
+    }
+}
+
+#map {
+    min-width: 50%;
+    max-width: 100%;
+    width: -webkit-fill-available;
+    height: 100%;
+}

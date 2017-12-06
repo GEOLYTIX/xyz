@@ -1,0 +1,109 @@
+{
+  "hooks": {},
+  "locale": {
+    "btnZoomIn": "document.getElementById('btnZoomIn')",
+    "btnZoomOut": "document.getElementById('btnZoomOut')",
+    "layers": {
+      "base": false,
+      "border": null,
+      "label": false,
+      "vector": null,
+      "vectorSelect": null,
+      "location": null,
+      "locationSelect": null,
+      "grid": null
+    }
+  },
+  "gazetteer": {
+    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "style": {
+      "stroke": true,
+      "color": "#090",
+      "weight": 2,
+      "fillColor" : "#cf9",
+      "fillOpacity": 0.2
+    },
+    "btnSearch": "document.getElementById('btnSearch')",
+    "group": "document.getElementById('gaz_group')",
+    "input": "document.getElementById('gaz_input')",
+    "result": "document.getElementById('gaz_result')",
+    "country": "document.getElementById('gaz_country')",
+    "countrylist": "document.getElementById('gaz_countrylist')"
+  },
+  "vector": {
+    "container": "document.querySelector('#statistics_module > .swipe_container')",
+    "infoTable": "document.querySelector('.statistics_info')",
+    "style": {
+      "stroke": true,
+      "color": "#666",
+      "weight": 1,
+      "fillOpacity": 0
+    },
+    "styleSelection": {
+      "stroke": true,
+      "color": "#619",
+      "weight": 2,
+      "fillColor" : "#f48",
+      "fillOpacity": 0.2
+    },
+    "styleHighlight": {
+      "stroke": true,
+      "color": "#666",
+      "weight": 2,
+      "fillColor" : "#cf9",
+      "fillOpacity": 0.2
+    }
+  },
+  "location": {
+    "default": true,
+    "container": "document.querySelector('#location_module > .swipe_container')",
+    "infoTable": "document.querySelector('.location_info')",
+    "location_drop": "document.querySelector('.location_drop')",
+    "marker": "svg_marker(['#ff4081','#6a1b9a'])"
+  },
+  "country": "UK",
+  "countries": {
+    "UK": {
+      "name": "United Kingdom",
+      "placeholder": "e.g. London",
+      "bounds": [[48, -13], [62, 5]],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "border": false,
+      "vector": {
+        "arrayZoom": {
+          "12": "gb_retail_place_bounds"
+        }
+      },
+      "location": {
+        "database": "xyz",
+        "arrayZoom": {
+          "6": "gb_retail_hx_128k",
+          "7": "gb_retail_hx_64k",
+          "8": "gb_retail_hx_32k",
+          "9": "gb_retail_hx_16k",
+          "10": "gb_retail_hx_8k",
+          "11": "gb_retail_hx_4k",
+          "12": "gb_retail_hx_2k",
+          "13": "gb_retail_hx_1k",
+          "14": "gb_retail_place"
+        },
+        "arrayStyle": {
+          "t1": "svg_builder([[200, '#FF0099']])",
+          "t2": "svg_builder([[200, '#CC1AB3']])",
+          "t3": "svg_builder([[200, '#9933CC']])",
+          "t4": "svg_builder([[200, '#664DE6']])",
+          "t5": "svg_builder([[200, '#3366FF']])",
+          "other": "svg_dot(['#A9A9A9','#C0C0C0'])"
+        },
+        "arrayCompColours": ["#FFFFFF", "#3366FF", "#664DE6", "#9933CC", "#CC1AB3", "#FF0099"],
+        "qID": "qid",
+        "qCount": "c",
+        "qValue": "v",
+        "qLayer": "gb_retail_place",
+        "qVector": "vector",
+        "qLabel": "uniq_name"
+      }
+    }
+  }
+}

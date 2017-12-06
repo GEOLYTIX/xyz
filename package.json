@@ -1,0 +1,44 @@
+{
+  "name": "maps",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack -p"
+  },
+  "dependencies": {
+    "@google/maps": "^0.3.1",
+    "@turf/turf": "^4.7.3",
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.4.7",
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.7",
+    "express": "~4.14.0",
+    "express-session": "^1.15.1",
+    "helmet": "^3.4.0",
+    "highlight.js": "^9.12.0",
+    "jsrender": "^0.9.84",
+    "leaflet": "^1.2.0",
+    "leaflet.vectorgrid": "^1.3.0",
+    "markdown-it": "^8.4.0",
+    "mobile-detect": "^1.3.6",
+    "mongoose": "^4.11.1",
+    "morgan": "~1.7.0",
+    "nodemailer": "^4.0.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pg-promise": "^5.5.6",
+    "puppeteer": "^0.12.0",
+    "request": "^2.83.0",
+    "serve-favicon": "~2.3.0",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "webpack": "^3.0.0"
+  }
+}

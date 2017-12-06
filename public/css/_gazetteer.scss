@@ -1,0 +1,150 @@
+#gaz_group {
+  display: none;
+  top: 0;
+
+  @if $desktop {
+    position: absolute;
+    z-index: 999;
+    left: 20px;
+    width: calc(100% - 20px);
+  } @else {
+    left: 0;
+  }
+
+  #gaz_result {
+    -webkit-padding-start: 0;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    list-style-type: none;
+    position: absolute;
+    background-color: white;
+
+    width: 100%;
+    //@if $mobile {
+    //  width: 100%;
+    //} @else {
+    //  width: calc(100% - 20px);
+    //}
+
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #999;
+    box-shadow: 0 2px 2px -1px grey;
+
+    @if $mobile {
+      padding-left: 70px;
+
+      li {
+        font-size: 20px;
+        color: $glxgreen;
+        list-style: none;
+        line-height: 1.5em;
+      }
+
+    } @else {
+      li {
+        list-style: none;
+        line-height: 1.2em;
+
+        &:hover {
+          cursor: pointer;
+          background-color: $glxlightgreen;
+        }
+
+        &:focus {
+          background-color: $glxlightgreen;
+        }
+
+        &.active {
+          background-color: $glxlightgreen;
+        }
+      }
+    }
+
+    .gaz-result-selected {
+      background-color: #ccff90;
+    }
+  }
+
+  #gaz_country {
+    position: absolute;
+    top: 0;
+    right: 0;
+    @if $desktop {
+      padding: 12px 0 10px 10px;
+    } @else {
+      padding: 12px 10px 10px 10px;
+    }
+    font-family: ffmark_bold, sans-serif;
+    font-size: 18px;
+    
+    &.active {
+      color: #079e00;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  #gaz_countrylist {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #999;
+    box-shadow: 0 3px 4px -1px grey;
+    font-size: 20px;
+
+    @if $mobile {
+      padding-right: 10px;
+
+      li {
+        color: $glxgreen;
+        list-style: none;
+        line-height: 1.5em;
+        padding-right: 10px;
+        text-align: right;
+      }
+
+    } @else {
+      li {
+        list-style: none;
+        line-height: 1.2em;
+        font-family: ffmark_bold;
+
+        &:hover {
+          cursor: pointer;
+          background-color: $glxlightgreen;
+
+        }
+      }
+    }
+  }
+
+  @if $mobile {
+    position: fixed;
+    box-shadow: 0 3px 4px -1px grey;
+  }
+
+  input {
+    border: none;
+    @if $desktop {
+      padding: 10px 30px 10px 0;
+    } @else {
+      width: calc(100% - 120px);
+      padding: 10px 50px 10px 70px;
+    }
+  }
+
+  .gaz-result-selected {
+    background-color: $glxlightgreen;
+  }
+}
+
+#gaz_spacer {
+  display: none;
+  height: 30px;
+}

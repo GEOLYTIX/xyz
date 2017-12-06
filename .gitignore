@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+.env
+node_modules/
+public/js/build/
+.DS_Store
+reports/1*.pdf
+.sass-cache/
+public/css/.sass-cache/
+package-lock.json

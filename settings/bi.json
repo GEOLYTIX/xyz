@@ -1,0 +1,284 @@
+{
+  "hooks": {},
+  "locale": {
+    "btnZoomIn": "document.getElementById('btnZoomIn')",
+    "btnZoomOut": "document.getElementById('btnZoomOut')",
+    "layers": {
+      "base": false,
+      "border": null,
+      "label": false,
+      "vector": null,
+      "vectorSelect": null,
+      "location": null,
+      "locationSelect": null,
+      "grid": null
+    }
+  },
+  "gazetteer": {
+    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "style": {
+      "stroke": true,
+      "color": "#090",
+      "weight": 2,
+      "fillColor": "#cf9",
+      "fillOpacity": 0.2
+    },
+    "btnSearch": "document.getElementById('btnSearch')",
+    "group": "document.getElementById('gaz_group')",
+    "input": "document.getElementById('gaz_input')",
+    "result": "document.getElementById('gaz_result')",
+    "country": "document.getElementById('gaz_country')",
+    "countrylist": "document.getElementById('gaz_countrylist')"
+  },
+  "grid": {
+    "default": true,
+    "container": "document.querySelector('#grid_module > .swipe_container')",
+    "legend": "document.querySelector('.grid_legend')",
+    "sizeTitle": "document.getElementById('sizeTitle')",
+    "colourTitle": "document.getElementById('colourTitle')",
+    "btnGridRatio": "document.getElementById('chkGridRatio')",
+    "arrayStyle": [
+      "svg_dot(['#1b7540','#1a9850'])",
+      "svg_dot(['#1a9850','#66bd63'])",
+      "svg_dot(['#66bd63','#a6d96a'])",
+      "svg_dot(['#a6d96a','#d9ef8b'])",
+      "svg_dot(['#fee08b','#ffffbf'])",
+      "svg_dot(['#fdae61','#fee08b'])",
+      "svg_dot(['#f46d43','#fdae61'])",
+      "svg_dot(['#d73027','#f46d43'])",
+      "svg_dot(['#a02620','#d73027'])",
+      "svg_dot(['rgba(0, 0, 0, 0.1)','rgba(0, 0, 0, 0.1)'])"
+    ]
+  },
+  "country": "IN",
+  "countries": {
+    "IN": {
+      "name": "India",
+      "placeholder": "e.g. Bahadurgarh",
+      "bounds": [
+        [
+          2,
+          62
+        ],
+        [
+          40,
+          103
+        ]
+      ],
+      "minZoom": 4,
+      "maxZoom": 12,
+      "border": false,
+      "grid": {
+        "database": "ghs",
+        "arrayZoom": {
+          "4": "bi_hx_256k",
+          "5": "bi_hx_128k",
+          "6": "bi_hx_64k",
+          "7": "bi_hx_32k",
+          "8": "bi_hx_16k",
+          "9": "bi_hx_8k",
+          "10": "bi_hx_4k",
+          "11": "bi_hx_2k",
+          "12": "bi_hx_1k",
+          "13": "bi_hx_500"
+        },
+        "queryFields": [
+          [
+            "pop",
+            "Population"
+          ]
+        ]
+      }
+    },
+    "PK": {
+      "name": "Pakistan",
+      "placeholder": "e.g. Islamabad",
+      "bounds": [
+        [
+          19,
+          56
+        ],
+        [
+          40,
+          82
+        ]
+      ],
+      "minZoom": 4,
+      "maxZoom": 12,
+      "border": false,
+      "grid": {
+        "database": "ghs",
+        "arrayZoom": {
+          "4": "bi_hx_256k",
+          "5": "bi_hx_128k",
+          "6": "bi_hx_64k",
+          "7": "bi_hx_32k",
+          "8": "bi_hx_16k",
+          "9": "bi_hx_8k",
+          "10": "bi_hx_4k",
+          "11": "bi_hx_2k",
+          "12": "bi_hx_1k",
+          "13": "bi_hx_500"
+        },
+        "queryFields": [
+          [
+            "pop",
+            "Population"
+          ]
+        ]
+      }
+    },
+    "NP": {
+      "name": "Nepal",
+      "placeholder": "e.g. Kathmandu",
+      "bounds": [
+        [
+          24,
+          76
+        ],
+        [
+          33,
+          93
+        ]
+      ],
+      "minZoom": 4,
+      "maxZoom": 12,
+      "border": false,
+      "grid": {
+        "database": "ghs",
+        "arrayZoom": {
+          "4": "bi_hx_256k",
+          "5": "bi_hx_128k",
+          "6": "bi_hx_64k",
+          "7": "bi_hx_32k",
+          "8": "bi_hx_16k",
+          "9": "bi_hx_8k",
+          "10": "bi_hx_4k",
+          "11": "bi_hx_2k",
+          "12": "bi_hx_1k",
+          "13": "bi_hx_500"
+        },
+        "queryFields": [
+          [
+            "pop",
+            "Population"
+          ]
+        ]
+      }
+    },
+    "BT": {
+      "name": "Bhutan",
+      "placeholder": "e.g. Thimphu",
+      "bounds": [
+        [
+          25,
+          86
+        ],
+        [
+          30,
+          94
+        ]
+      ],
+      "minZoom": 4,
+      "maxZoom": 12,
+      "border": false,
+      "grid": {
+        "database": "ghs",
+        "arrayZoom": {
+          "4": "bi_hx_256k",
+          "5": "bi_hx_128k",
+          "6": "bi_hx_64k",
+          "7": "bi_hx_32k",
+          "8": "bi_hx_16k",
+          "9": "bi_hx_8k",
+          "10": "bi_hx_4k",
+          "11": "bi_hx_2k",
+          "12": "bi_hx_1k",
+          "13": "bi_hx_500"
+        },
+        "queryFields": [
+          [
+            "pop",
+            "Population"
+          ]
+        ]
+      }
+    },
+    "BD": {
+      "name": "Bangladesh",
+      "placeholder": "e.g. Dhaka",
+      "bounds": [
+        [
+          19,
+          86
+        ],
+        [
+          28,
+          94
+        ]
+      ],
+      "minZoom": 4,
+      "maxZoom": 12,
+      "border": false,
+      "grid": {
+        "database": "ghs",
+        "arrayZoom": {
+          "4": "bi_hx_256k",
+          "5": "bi_hx_128k",
+          "6": "bi_hx_64k",
+          "7": "bi_hx_32k",
+          "8": "bi_hx_16k",
+          "9": "bi_hx_8k",
+          "10": "bi_hx_4k",
+          "11": "bi_hx_2k",
+          "12": "bi_hx_1k",
+          "13": "bi_hx_500"
+        },
+        "queryFields": [
+          [
+            "pop",
+            "Population"
+          ]
+        ]
+      }
+    },
+    "MM": {
+      "name": "Myanmar",
+      "placeholder": "e.g. Yangon",
+      "bounds": [
+        [
+          5,
+          88
+        ],
+        [
+          32,
+          104
+        ]
+      ],
+      "minZoom": 4,
+      "maxZoom": 12,
+      "border": false,
+      "grid": {
+        "database": "ghs",
+        "arrayZoom": {
+          "4": "bi_hx_256k",
+          "5": "bi_hx_128k",
+          "6": "bi_hx_64k",
+          "7": "bi_hx_32k",
+          "8": "bi_hx_16k",
+          "9": "bi_hx_8k",
+          "10": "bi_hx_4k",
+          "11": "bi_hx_2k",
+          "12": "bi_hx_1k",
+          "13": "bi_hx_500"
+        },
+        "queryFields": [
+          [
+            "pop",
+            "Population"
+          ]
+        ]
+      }
+    }
+  }
+}

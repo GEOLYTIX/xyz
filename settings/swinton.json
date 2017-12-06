@@ -1,0 +1,107 @@
+{
+  "hooks": {},
+  "locale": {
+    "btnZoomIn": "document.getElementById('btnZoomIn')",
+    "btnZoomOut": "document.getElementById('btnZoomOut')",
+    "layers": {
+      "base": false,
+      "border": null,
+      "label": false,
+      "vector": null,
+      "vectorSelect": null,
+      "location": null,
+      "locationSelect": null,
+      "grid": null
+    }
+  },
+  "gazetteer": {
+    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "style": {
+      "stroke": true,
+      "color": "#090",
+      "weight": 2,
+      "fillColor" : "#cf9",
+      "fillOpacity": 0.2
+    },
+    "btnSearch": "document.getElementById('btnSearch')",
+    "group": "document.getElementById('gaz_group')",
+    "input": "document.getElementById('gaz_input')",
+    "result": "document.getElementById('gaz_result')",
+    "country": "document.getElementById('gaz_country')",
+    "countrylist": "document.getElementById('gaz_countrylist')"
+  },
+  "grid": {
+    "container": "document.querySelector('#grid_module > .swipe_container')",
+    "legend": "document.querySelector('.grid_legend')",
+    "sizeTitle": "document.getElementById('sizeTitle')",
+    "colourTitle": "document.getElementById('colourTitle')",
+    "btnGridRatio": "document.getElementById('chkGridRatio')",
+    "arrayStyle": [
+      "svg_dot(['#1b7540','#1a9850'])",
+      "svg_dot(['#1a9850','#66bd63'])",
+      "svg_dot(['#66bd63','#a6d96a'])",
+      "svg_dot(['#a6d96a','#d9ef8b'])",
+      "svg_dot(['#fee08b','#ffffbf'])",
+      "svg_dot(['#fdae61','#fee08b'])",
+      "svg_dot(['#f46d43','#fdae61'])",
+      "svg_dot(['#d73027','#f46d43'])",
+      "svg_dot(['#a02620','#d73027'])",
+      "svg_dot(['rgba(0, 0, 0, 0.1)','rgba(0, 0, 0, 0.1)'])"
+    ]
+  },
+  "drivetime": {
+    "container": "document.querySelector('#drivetime_module > .swipe_container')",
+    "infoTable": "document.querySelector('.drivetime_info')",
+    "slider": "document.getElementById('drivetime_slider')",
+    "icon": "svg_marker(['#35b','#9cf'])",
+    "style": {
+      "stroke": true,
+      "color": "#35b",
+      "weight": 2,
+      "fillColor" : "#9cf",
+      "fillOpacity": 0.2
+    }
+  },
+  "country": "UK",
+  "countries": {
+    "UK": {
+      "name": "United Kingdom",
+      "placeholder": "e.g. London",
+      "bounds": [[48, -13], [62, 5]],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "border": false,
+      "drivetime": {
+        "infoj": "json_build_object('Population 2016',sum(pop__16)::integer,'Core: Cautious Middle Agers',sum(core_cautious_middle_agers)::integer,'Core: Deal Seekers',sum(core_deal_seekers)::integer,'Core: Older Relationship Seekers',sum(core_older_relationship_seekers)::integer,'Stretch: Added Value Affluents',sum(stretch_added_value_affluents)::integer,'Stretch: Loyal Traditionalists',sum(stretch_loyal_traditionalists)::integer,'Stretch: Smart and Savvy',sum(stretch_smart_and_savvy)::integer)",
+        "arrayGrid": ["gb_swinton_hx_64k", "gb_swinton_hx_32k", "gb_swinton_hx_16k", "gb_swinton_hx_8k", "gb_swinton_hx_4k", "gb_swinton_hx_2k"],
+        "maxMin": 45
+      },
+      "grid": {
+        "database": "xyz",
+        "arrayZoom": {
+          "6": "gb_swinton_hx_64k",
+          "7": "gb_swinton_hx_32k",
+          "8": "gb_swinton_hx_16k",
+          "9": "gb_swinton_hx_8k",
+          "10": "gb_swinton_hx_4k",
+          "11": "gb_swinton_hx_2k",
+          "12": "gb_swinton_hx_1k"
+        },
+        "queryFields": [
+          ["pop__01", "Population 2001"],
+          ["pop__11", "Population 2011"],
+          ["pop__16", "Population 2016"],
+          ["target", "Target"],
+          ["core", "Core"],
+          ["core_cautious_middle_agers", "Core: Cautious Middle Agers"],
+          ["core_deal_seekers", "Core: Deal Seekers"],
+          ["core_older_relationship_seekers", "Core: Older Relationship Seekers"],
+          ["stretch", "Stretch"],
+          ["stretch_added_value_affluents", "Stretch: Added Value Affluents"],
+          ["stretch_loyal_traditionalists", "Stretch: Loyal Traditionalists"],
+          ["stretch_smart_and_savvy", "Stretch: Smart and Savvy"]
+        ]
+      }
+    }
+  }
+}

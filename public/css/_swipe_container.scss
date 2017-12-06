@@ -1,0 +1,90 @@
+.swipe_container {
+  vertical-align: top;
+  table-layout: fixed;
+  transition: margin 250ms;
+  height: 100%;
+
+  select {
+    width: 100%
+  }
+
+  .bold {
+    font-weight: 800;
+  }
+
+  .swipe_page {
+    vertical-align: top;
+    @if $desktop {
+      padding: 0 4px 0 0;
+    } @else {
+      height: 100%;
+  }
+
+    .page_header {
+      position: relative;
+      background-color: #eee;
+      padding: 3px;
+      @if $desktop {
+        border-top-right-radius: 14px;
+        border-bottom-right-radius: 14px;
+      }
+      box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2);
+
+      .spinner {
+        position: absolute;
+        right: 0;
+        @if $desktop {
+          top: 0;
+        } @else {
+          top: 7px;
+        }
+      }
+
+      span {
+        font-family: ffmark_bold;
+        font-size: 20px;
+      }
+
+      i {
+        font-size: 30px;
+        margin-top: -5px;
+        margin-right: -5px;
+        color: $glxgreen;
+      }
+
+      .page_backward {
+        float: right;
+      }
+    }
+
+    .page_content {
+      clear: both;
+
+      .range {
+        width: 100%;
+
+        input[type=range] {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.pages--2 {
+  @extend .swipe_container;
+  @if $desktop {
+    width: 580px;
+  } @else {
+    width: 200%;
+  }
+}
+
+.pages--3 {
+  @extend .swipe_container;
+  @if $desktop {
+    width: 870px;
+  } @else {
+    width: 300%;
+  }
+}

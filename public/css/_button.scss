@@ -1,0 +1,34 @@
+.md_button {
+  @if $desktop {
+    width: 100%;
+  }
+  color: white;
+  background-color: $glxgreen;
+  margin: 10px 0;
+  padding: 8px;
+  text-align: center;
+  font-family: ffmark_bold, sans-serif;
+  border-radius: 3px;
+  border: 2px solid $glxgreen;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    cursor: pointer;
+    color: $glxgreen;
+    background-color: white;
+    border: 2px solid $glxgreen;
+  }
+
+  &.on {
+    color: $glxgreen;
+    background-color: white;
+    border: 2px solid $glxgreen;
+
+    &:hover {
+      cursor: pointer;
+      color: white;
+      background-color: $glxgreen;
+      border: 2px solid $glxgreen;
+    }
+  }
+}
