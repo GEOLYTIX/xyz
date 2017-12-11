@@ -2,6 +2,7 @@ const L = require('leaflet');
 const helper = require('./helper');
 const grid = require('./grid_tools');
 const svg_builder = require('./svg_builder');
+const d3 = require('d3');
 
 // const turfTag = require('@turf/tag');
 // const turfPlanePoint = require('@turf/planepoint');
@@ -19,7 +20,7 @@ module.exports = function(_this){
             _this.removeHook('qValue');
             _this.removeHook('grid_ratio');
             _this.removeHook('grid');
-            _this.grid.legend.parentNode.style.display = 'none'; 
+            _this.grid.legend.parentNode.style.display = 'none';
             _this.grid.container.style['marginLeft'] = '0';
         }
 
@@ -112,17 +113,6 @@ module.exports = function(_this){
             // Open & send grid.xhr.
             let bounds = _this.map.getBounds();
 
-            // console.log(localhost + 'q_grid?' + helper.paramString({
-            //     c: _this.countries[_this.country].grid.qCount,
-            //     v: _this.countries[_this.country].grid.qValue,
-            //     database: _this.countries[_this.country].grid.database,
-            //     table: _this.grid.table,
-            //     west: bounds.getWest(),
-            //     south: bounds.getSouth(),
-            //     east: bounds.getEast(),
-            //     north: bounds.getNorth()
-            // }));
-
             _this.grid.xhr.open('GET', localhost + 'q_grid?' + helper.paramString({
                 c: _this.countries[_this.country].grid.qCount,
                 v: _this.countries[_this.country].grid.qValue,
@@ -149,29 +139,24 @@ module.exports = function(_this){
                         pointToLayer: function (feature, latlng) {
 
                             // Set size dependent on the location count against arraySize.
-                            let size =
-                                feature.properties.c < _this.grid.arraySize[1] ? 7 :
+                            
+                             let size =
+                                feature.properties.c < _this.grid.arraySize[1] ? 6 :
                                     feature.properties.c < _this.grid.arraySize[2] ? 8 :
-                                        feature.properties.c < _this.grid.arraySize[3] ? 9 :
-                                            feature.properties.c < _this.grid.arraySize[4] ? 10 :
-                                                feature.properties.c < _this.grid.arraySize[5] ? 11 :
-                                                    feature.properties.c < _this.grid.arraySize[6] ? 12 :
-                                                        feature.properties.c < _this.grid.arraySize[7] ? 14 :
-                                                            feature.properties.c < _this.grid.arraySize[8] ? 16 :
-                                                                18;
-
+                                        feature.properties.c < _this.grid.arraySize[3] ? 10 :
+                                            feature.properties.c < _this.grid.arraySize[4] ? 12 :
+                                                feature.properties.c < _this.grid.arraySize[5] ? 14 :
+                                                    feature.properties.c < _this.grid.arraySize[6] ? 16 : 18;
+                            
                             let dot =
-                                feature.properties.v < _this.grid.arrayColor[1] ? _this.grid.arrayStyle[0] :
-                                    feature.properties.v < _this.grid.arrayColor[2] ? _this.grid.arrayStyle[1] :
-                                        feature.properties.v < _this.grid.arrayColor[3] ? _this.grid.arrayStyle[2] :
-                                            feature.properties.v < _this.grid.arrayColor[4] ? _this.grid.arrayStyle[3] :
-                                                feature.properties.v < _this.grid.arrayColor[5] ? _this.grid.arrayStyle[4] :
-                                                    feature.properties.v < _this.grid.arrayColor[6] ? _this.grid.arrayStyle[5] :
-                                                        feature.properties.v < _this.grid.arrayColor[7] ? _this.grid.arrayStyle[6] :
-                                                            feature.properties.v < _this.grid.arrayColor[8] ? _this.grid.arrayStyle[7] :
-                                                                feature.properties.v <= _this.grid.arrayColor[9] ? _this.grid.arrayStyle[8] :
-                                                                    _this.grid.arrayStyle[9];
-
+                                feature.properties.v < _this.grid.arrayColor[1] ? styleDot(_this.grid.colorScale[0]) :
+                                    feature.properties.v < _this.grid.arrayColor[2] ? styleDot(_this.grid.colorScale[1]) :
+                                        feature.properties.v < _this.grid.arrayColor[3] ? styleDot(_this.grid.colorScale[2]) :
+                                            feature.properties.v < _this.grid.arrayColor[4] ? styleDot(_this.grid.colorScale[3]) :
+                                                feature.properties.v < _this.grid.arrayColor[5] ? styleDot(_this.grid.colorScale[4]) :
+                                                    feature.properties.v < _this.grid.arrayColor[6] ? styleDot(_this.grid.colorScale[5]) :
+                                                        feature.properties.v < _this.grid.arrayColor[7] ? styleDot(_this.grid.colorScale[6]) : styleDot(_this.grid.colorScale[6]);
+                            
 
                             // Return L.Marker with icon as style to pointToLayer.
                             return L.marker(
@@ -186,12 +171,12 @@ module.exports = function(_this){
                                 });
                         }
                     });
-                    
+
                     _this.grid.layer.addTo(_this.map);
                     _this.locale.layersCheck('grid', true);
-                    
+
                     gridLegend();
-                    
+
                 }
             };
             _this.grid.xhr.send();
@@ -199,42 +184,101 @@ module.exports = function(_this){
 
         } else {
 
-            // Set the layersCheck for the vector 
+            // Set the layersCheck for the vector
             _this.locale.layersCheck('grid', null);
         }
+    }
+    
+    function styleDot(hex){ // set grid dot style
+        let color = d3.rgb(hex), darker = color.darker(0.5),
+            svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+            dot = document.createElement("circle"), shade = document.createElement("circle");
+        
+        svg.setAttribute("width", 866);
+        svg.setAttribute("height", 1000);
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        
+        shade.setAttribute("cx", 466);
+        shade.setAttribute("cy", 532);
+        shade.setAttribute("r", 395);
+        shade.style.fill = darker;
+        
+        dot.setAttribute("cx", 400);
+        dot.setAttribute("cy", 468);
+        dot.setAttribute("r", 395);
+        dot.style.fill = color;
+        
+        svg.appendChild(shade)
+        svg.appendChild(dot);
+        
+        return ("data:image/svg+xml," + encodeURIComponent(svg.outerHTML));
     }
 
     function gridLegend(){
         let fractionDigits = _this.grid.calcRatio === true ? 2 : 0,
             fractionMinutes = _this.drivetime ?
                 _this.drivetime.tin ? 1 / 60
-                    : 1 : 1,
-            legend_text_v = document.getElementsByClassName('legend_text_v'),
-            legend_text_c = document.getElementsByClassName('legend_text_c');
+                    : 1 : 1;
 
         // Opacity is set to transition at 300ms for .grid_legend in _grid.scss.
-        _this.grid.legend.parentNode.style.display = 'block';      
+        _this.grid.legend.parentNode.style.display = 'block';
         _this.grid.legend.style['opacity'] = 0;
+        
+        document.getElementById('grid-legend-svg').innerHTML = ''; 
+        
+        let r, x = 10, y = 25, a = -10, b = 90, w = 290, h = 160, rw=30, rh=20;
 
-        // Label the grid cell values (color).
-        legend_text_v[0].innerHTML = (_this.grid.arrayColor[1] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[1].innerHTML = (_this.grid.arrayColor[2] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[2].innerHTML = (_this.grid.arrayColor[3] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[3].innerHTML = (_this.grid.arrayColor[4] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[4].innerHTML = (_this.grid.arrayColor[5] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[5].innerHTML = (_this.grid.arrayColor[6] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[6].innerHTML = (_this.grid.arrayColor[7] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[7].innerHTML = (_this.grid.arrayColor[8] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
-        legend_text_v[8].innerHTML = (_this.grid.arrayColor[9] * fractionMinutes).toLocaleString('en-GB', {maximumFractionDigits: fractionDigits});
+        let svg = d3.select('#grid-legend-svg')
+        .append('svg')
+        .attr("width", w)
+        .attr("height", h);
 
-        // Label the grid cell count (size).
-        legend_text_c[0].innerHTML = _this.grid.arraySize[9].toLocaleString('en-GB', {maximumFractionDigits: 0});
-        legend_text_c[1].innerHTML = _this.grid.arraySize[5].toLocaleString('en-GB', {maximumFractionDigits: 0});
-        legend_text_c[2].innerHTML = _this.grid.arraySize[0].toLocaleString('en-GB', {maximumFractionDigits: 0});
+        for(let i = 7; i > 0; i--){
+          r = 2 + i, x = x + 2 * r + 20;
+            
+           svg.append("circle")
+               .attr("cx", x + 2)
+               .attr("cy", y + 31)
+               .attr("r", r)
+               .style('fill', 'rgba(64, 64, 64, 0.3)');
+          
+           svg.append("circle")
+               .attr("cx", x)
+               .attr("cy", y + 30)
+               .attr("r", r)
+               .style('fill', 'grey');   
+            
+             if(i === 7 || i === 4 || i === 1) svg.append('text')
+                 .attr("x", x)
+                 .attr("y", y + 10)
+                 .attr("text-anchor", "middle")
+                 .attr("alignment-baseline", "alphabetic")
+                 .text(_this.grid.arraySize[i].toLocaleString('en-GB', {maximumFractionDigits: fractionDigits}));
+            
+        }
+       
+        for(let i = 1; i < 8; i++){
+          a = a + 32; 
+            
+          svg.append('rect')
+              .attr("x", a)
+              .attr("y", b)
+              .attr("width", rw)
+              .attr("height", rh)
+              .style('fill', _this.grid.colorScale[i-1]);
+            
+          if(i === 1 || i === 4 || i === 7) svg.append('text')
+              .attr("x", a + rw/2)
+              .attr("y", b + 30)
+              .attr("text-anchor", "middle")
+              .attr("alignment-baseline", "hanging")
+              .text(_this.grid.arrayColor[i].toLocaleString('en-GB', {maximumFractionDigits: fractionDigits}));
+        }
 
         setTimeout(function () {
             _this.grid.legend.style['opacity'] = 1;
         }, 300);
         _this.grid.container.style['marginLeft'] = '-100%';
+        
     }
 };
