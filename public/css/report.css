@@ -570,18 +570,11 @@ page[size="A4"][layout="landscape"] {
 
 .grid_group {
   display: none;
-  width: 250px;
+  width: 290px;
   padding: 4px;
   z-index: 9000; }
   .grid_group .grid_legend {
     margin-top: 20px !important; }
-  .grid_group #colourTitle {
-    transform-origin: 100px -120px !important;
-    width: 250px;
-    display: inline-flex; }
-  .grid_group #sizeTitle {
-    width: 240px;
-    padding: 4px; }
 
 #map {
   min-width: 50%;

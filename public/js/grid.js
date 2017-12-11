@@ -226,7 +226,7 @@ module.exports = function(_this){
         
         document.getElementById('grid-legend-svg').innerHTML = ''; 
         
-        let r, x = 10, y = 25, a = -10, b = 90, w = 290, h = 160, rw=30, rh=20;
+        let r, x = 10, y = 25, a = -10, b = 90, w = 290, h = 150, rw=30, rh=20;
 
         let svg = d3.select('#grid-legend-svg')
         .append('svg')
