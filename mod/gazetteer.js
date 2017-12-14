@@ -25,54 +25,49 @@ function gazetteer(req, res) {
                 eval(req.query.p + '_placesAutoComplete')(req, res);
             }
         })
-        .catch(()=>google_placesAutoComplete(req, res));
+        .catch(() => eval(req.query.p + '_placesAutoComplete')(req, res));
 }
 
 const request = require('request');
 function mapbox_placesAutoComplete(req, res) {
-    let country = req.query.c === 'UK' ? 'GB' : req.query.c;
-
-    let mapbox_query = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?country=${country}&access_token=${process.env.MAPBOX}`;
+    let country = req.query.c === 'UK' ? 'GB' : req.query.c === 'Global' ? '' : req.query.c;
+    let mapbox_query = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
+                      +`country=${country}`
+                      +`&types=region,postcode,district,place,locality,neighborhood,address,poi`
+                      +`&access_token=${process.env.MAPBOX}`;
 
     request.get(mapbox_query, (err, response, body) => {
         if (err) {
             console.log(err);
         } else {
-            let data = [],
-                jbody = JSON.parse(body);
+            //let jbody = JSON.parse(body);
 
-            for (let i = 0; i < jbody.features.length; i++) {
-                data[i] = {
-                    label: jbody.features[i].text,
-                    id: jbody.features[i].center,
+            res.status(200).json(JSON.parse(body).features.map(f => {
+                return {
+                    label: `${f.text} ${country === '' ? ', ' + f.context.slice(-1)[0].text : ''}`,
+                    id: f.center,
                     source: 'mapbox'
-                };
-            }
-            res.status(200).json(data);
+                }
+            }));
         }
     })
 }
 
 function google_placesAutoComplete(req, res) {
-    let country = req.query.c === 'UK' ? 'GB' : req.query.c;
-
     googleMapsClient.placesAutoComplete({
         input: decodeURIComponent(req.query.q),
-        components: {
-            country: country
-        }
-    }, function(err, results) {
-        if (!err) {
-            let data = [];
-            let n = results.json.predictions.length;
-            for (let i = 0; i < n; i++) {
-                data[i] = {
-                    label: results.json.predictions[i].description,
-                    id: results.json.predictions[i].place_id,
+        components: req.query.c === 'UK' ? { country: 'GB' } : req.query.c === 'Global' ? {} : { country: req.query.c }
+    }, (err, results) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.status(200).json(results.json.predictions.map(f => {
+                return {
+                    label: f.description,
+                    id: f.place_id,
                     source: 'google'
-                };
-            }
-            res.status(200).json(data);
+                }
+            }));
         }
     });
 }

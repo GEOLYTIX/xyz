@@ -16,7 +16,7 @@
     }
   },
   "gazetteer": {
-    "provider": "mapbox",
+    "provider": "mapbox_grid",
     "icon": "svg_marker(['#64dd17','#33691e'])",
     "style": {
       "stroke": true,
@@ -86,7 +86,7 @@
     ]
   },
   "drivetime": {
-    "provider": "mapbox",
+    "provider": "mapbox_grid",
     "container": "document.querySelector('#drivetime_module > .swipe_container')",
     "infoTable": "document.querySelector('.drivetime_info')",
     "slider": "document.getElementById('drivetime_slider')",

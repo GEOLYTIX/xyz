@@ -38,7 +38,8 @@ module.exports = function(_this){
     } else {
         _this.setHook('country', _this.country);
     }
-    _this.gazetteer.country.textContent = _this.country;
+    // _this.gazetteer.country.textContent = _this.country;
+    _this.gazetteer.country.innerHTML = _this.country === 'Global'? '<i class="material-icons">language</i>': _this.country;
 
     // Initiate map object.
     _this.map = L.map('map', {
@@ -173,7 +174,8 @@ module.exports = function(_this){
     // Change country function
     function changeCountry() {
         _this.setHook('country', _this.country);
-        _this.gazetteer.country.textContent = _this.country;
+        // _this.gazetteer.country.textContent = _this.country;
+        _this.gazetteer.country.innerHTML = _this.country === 'Global'? '<i class="material-icons">language</i>': _this.country;
         _this.countries[_this.country].border ?
             drawCountryBorder(!_this.hooks.z) : setView(true);
 

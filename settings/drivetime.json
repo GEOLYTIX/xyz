@@ -16,13 +16,13 @@
     }
   },
   "gazetteer": {
-    "provider": "google",
+    "provider": "mapbox",
     "icon": "svg_marker(['#64dd17','#33691e'])",
     "style": {
       "stroke": true,
       "color": "#090",
       "weight": 2,
-      "fillColor" : "#cf9",
+      "fillColor": "#cf9",
       "fillOpacity": 0.2
     },
     "btnSearch": "document.getElementById('btnSearch')",
@@ -33,7 +33,7 @@
     "countrylist": "document.getElementById('gaz_countrylist')"
   },
   "drivetime": {
-    "provider": "google",
+    "provider": "mapbox",
     "container": "document.querySelector('#drivetime_module > .swipe_container')",
     "infoTable": "document.querySelector('.drivetime_info')",
     "slider": "document.getElementById('drivetime_slider')",
@@ -42,68 +42,29 @@
       "stroke": true,
       "color": "#35b",
       "weight": 2,
-      "fillColor" : "#9cf",
+      "fillColor": "#9cf",
       "fillOpacity": 0.2
     }
   },
-  "country": "UK",
+  "country": "Global",
   "countries": {
-    "UK": {
-      "name": "United Kingdom",
-      "placeholder": "e.g. London",
-      "bounds": [[48, -13], [62, 5]],
-      "minZoom": 6,
+    "Global": {
+      "name": "Global",
+      "placeholder": "e.g. London, Canada",
+      "bounds": [
+        [
+          80,
+          -180
+        ],
+        [
+          -80,
+          180
+        ]
+      ],
+      "minZoom": 2,
       "maxZoom": 17,
       "drivetime": {
-        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
-        "arrayGrid": ["gb_hx_128k", "gb_hx_64k", "gb_hx_32k", "gb_hx_16k", "gb_hx_8k", "gb_hx_4k", "gb_hx_2k"],
-        "maxMin": 90
-      },
-      "grid": {
-        "arrayZoom": {
-          "6": "gb_hx_64k",
-          "7": "gb_hx_32k",
-          "8": "gb_hx_16k",
-          "9": "gb_hx_8k",
-          "10": "gb_hx_4k",
-          "11": "gb_hx_2k",
-          "12": "gb_hx_1k"
-        },
-        "queryFields": [
-          ["pop__01", "Population 2001"],
-          ["pop__11", "Population 2011"],
-          ["gen_female__11", "Female population"],
-          ["gen_male__11", "Male population"]
-        ]
-      }
-    },
-    "RO": {
-      "name": "Romania",
-      "placeholder": "e.g. Constan\u021Ba",
-      "bounds": [[43, 20], [49, 30]],
-      "minZoom": 6,
-      "maxZoom": 17,
-      "border": true,
-      "drivetime": {
-        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer, 'Gender', json_build_object ('Female', sum(gen_female__11)::integer, 'Male', sum(gen_male__11)::integer), 'Age 15-24', sum(age_15to24_gen_male__11 + age_15to24_gen_female__11)::integer, 'Age 25-34', sum(age_25to34_gen_male__11 + age_25to34_gen_female__11)::integer, 'Age 35-44', sum(age_35to44_gen_male__11 + age_35to44_gen_female__11)::integer, 'Age 45-54', sum(age_45to54_gen_male__11 + age_45to54_gen_female__11)::integer, 'Age 55-64', sum(age_55to64_gen_male__11 + age_55to64_gen_female__11)::integer), 'Education', json_build_object('Tertiary', sum(edu_tertiary_gen_m__11 + edu_tertiary_gen_f__11 + edu_tertiary_university_gen_m__11 + edu_tertiary_university_gen_f__11 + edu_tertiary_i7_gen_m__11 + edu_tertiary_i7_gen_f__11)::integer, 'Secondary', sum(edu_secondary_i3_gen_m__11 + edu_secondary_i3_gen_f__11 + edu_secondary_i3v_gen_m__11 + edu_secondary_i3v_gen_f__11 + edu_secondary_i2_l_gen_m__11 + edu_secondary_i2_l_gen_f__11)::integer, 'Primary', sum(edu_primary_i1_gen_m__11 + edu_primary_i1_gen_f__11)::integer))",
-        "arrayGrid": ["ro_hx_64k", "ro_hx_32k", "ro_hx_16k", "ro_hx_8k", "ro_hx_4k", "ro_hx_2k"],
-        "maxMin": 45
-      },
-      "grid": {
-        "arrayZoom": {
-          "6": "ro_hx_64k",
-          "7": "ro_hx_32k",
-          "8": "ro_hx_16k",
-          "9": "ro_hx_8k",
-          "10": "ro_hx_4k",
-          "11": "ro_hx_2k",
-          "12": "ro_hx_1k"
-        },
-        "queryFields": [
-          ["pop__11", "Population"],
-          ["gen_male__11", "Male population"],
-          ["gen_female__11", "Female population"]
-        ]
+        "maxMin": 180
       }
     }
   }

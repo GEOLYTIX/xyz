@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@google/maps": "^0.3.1",
-    "@turf/turf": "^4.7.3",
+    "@turf/turf": "^5.0.4",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.7",
     "body-parser": "~1.15.2",

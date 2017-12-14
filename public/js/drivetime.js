@@ -44,6 +44,9 @@ module.exports = function Drivetime(_this){
     document.getElementById('btnDrivetime--off').addEventListener('click', function(){
         if (_this.drivetime.layerMark) _this.map.removeLayer(_this.drivetime.layerMark);
         if (_this.drivetime.layer) _this.map.removeLayer(_this.drivetime.layer);
+        if (_this.drivetime.layer_circlePoints) _this.map.removeLayer(_this.drivetime.layer_circlePoints);
+        if (_this.drivetime.layer_samplePoints) _this.map.removeLayer(_this.drivetime.layer_samplePoints);
+        if (_this.drivetime.layer_tin) _this.map.removeLayer(_this.drivetime.layer_tin);
         document.getElementById('btnDrivetimeCopy').style.display = 'none';
 
         // _this.removeHook('vector_id');
@@ -52,6 +55,10 @@ module.exports = function Drivetime(_this){
         // Reset module panel
         _this.drivetime.container.style['marginLeft'] = '0';
         _this.drivetime.infoTable.innerHTML = '';
+    });
+
+    document.getElementById('drivetime_slider_detail').addEventListener('input', function(){
+        document.getElementById('drivetime_detail').innerHTML = this.value;
     });
 
     document.getElementById('drivetime_slider').addEventListener('input', function(){
@@ -123,24 +130,66 @@ module.exports = function Drivetime(_this){
 
         let xhr = new XMLHttpRequest();
 
+        // let boo = document.getElementById('selectProvider');
+        // let provider = document.getElementById('selectProvider').options[document.getElementById('selectProvider').selectedIndex].value;
+
         xhr.open('GET', localhost +  'q_drivetime?' + helper.paramString({
             lng: e.latlng.lng,
             lat: e.latlng.lat,
             distance: _distance * 60,
+            detail: document.getElementById('drivetime_slider_detail').value,
             mode: 'driving',
-            provider: _this.drivetime.provider,
-            infoj: encodeURIComponent(_this.countries[_this.country].drivetime.infoj),
-            arrayGrid: _this.countries[_this.country].drivetime.arrayGrid
+            provider: document.getElementById('selectProvider').options[document.getElementById('selectProvider').selectedIndex].value
+            //infoj: encodeURIComponent(_this.countries[_this.country].drivetime.infoj),
+            //arrayGrid: _this.countries[_this.country].drivetime.arrayGrid
         }));
         
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function() {
             if (this.status === 200) {
-                // document.getElementById('loading__mask').style.display = 'none';
                 
                 if (_this.drivetime.layer) _this.map.removeLayer(_this.drivetime.layer);
+                if (_this.drivetime.layer_circlePoints) _this.map.removeLayer(_this.drivetime.layer_circlePoints);
+                if (_this.drivetime.layer_samplePoints) _this.map.removeLayer(_this.drivetime.layer_samplePoints);
+                if (_this.drivetime.layer_tin) _this.map.removeLayer(_this.drivetime.layer_tin);
                 let json = JSON.parse(this.responseText);
-                _this.drivetime.layer = L.geoJson(json,{
+
+                _this.drivetime.layer_tin = L.geoJson(json.tin,{
+                    interactive: false,
+                    style: {
+                        stroke: true,
+                        color: "#999",
+                        weight: 1,
+                        fill: false
+                      }
+                }).addTo(_this.map);
+
+                _this.drivetime.layer_circlePoints = L.geoJson(json.circlePoints,{
+                    interactive: false,
+                    pointToLayer: function (feature, latlng) {
+                        return new L.CircleMarker(latlng, {
+                            radius: 5,
+                            color: "#555",
+                            weight: 1,
+                            fill: false
+                        });
+                    }
+                }).addTo(_this.map);
+
+                _this.drivetime.layer_samplePoints = L.geoJson(json.samplePoints,{
+                    interactive: false,
+                    pointToLayer: function (feature, latlng) {
+                        return new L.CircleMarker(latlng, {
+                            radius: 2,
+                            color: "#333",
+                            fillColor: "#333",
+                            fill: true,
+                            fillOpacity: 1
+                        });
+                    }
+                }).addTo(_this.map);
+
+                _this.drivetime.layer = L.geoJson(json.iso,{
                     interactive: false,
                     style: _this.drivetime.style
                 }).addTo(_this.map);

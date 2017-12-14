@@ -6,16 +6,25 @@ const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GKEY
 });
 
-//let hxLayers = ['gb_hx_128k', 'gb_hx_64k', 'gb_hx_32k', 'gb_hx_16k', 'gb_hx_8k', 'gb_hx_4k', 'gb_hx_2k'];
+function drivetime (req, res) {
+    eval(req.query.provider + '_drivetime')(req, res);
+}
 
-function drivetime(req, res) {
+function mapbox_grid_drivetime(req, res) {
     let iL = req.query.distance > 2700 ? 0 : 1;
     req.query.arrayGrid = req.query.arrayGrid.split(',');
     req.query.infoj = decodeURIComponent(req.query.infoj);
     drivetime_pg(req, res, {}, iL);
 }
 
-function drivetime_pg (req, res, data, iL) {
+function google_grid_drivetime(req, res) {
+    let iL = req.query.distance > 2700 ? 0 : 1;
+    req.query.arrayGrid = req.query.arrayGrid.split(',');
+    req.query.infoj = decodeURIComponent(req.query.infoj);
+    drivetime_pg(req, res, {}, iL);
+}
+
+function drivetime_pg(req, res, data, iL) {
     let q = "SELECT lat, lon FROM "
         + req.query.arrayGrid[iL] + " WHERE ST_DWithin(ST_SetSRID(ST_MakePoint("
         + req.query.lng + ","
@@ -28,7 +37,7 @@ function drivetime_pg (req, res, data, iL) {
 
     db.any(q).then(function (pdata) {
         data.current = pdata;
-        req.query.provider === 'mapbox' ?
+        req.query.provider === 'mapbox_grid' ?
             drivetime_mapbox(req, res, data, iL) :
             drivetime_google(req, res, data, iL);
     });
@@ -129,7 +138,7 @@ function drivetime_return(req, res, data, iL) {
     // console.log(JSON.stringify(convex));
 
     // create a pointgrid on the extent of the tin convex hull
-    let pg = turf.pointGrid(convex, 1, 'kilometers', true, false);
+    let pg = turf.pointGrid(turf.bbox(convex), 1, {units: 'kilometers'});
     // console.log(JSON.stringify(pg));
 
     // tag the pointgrid points with the tin id
@@ -152,30 +161,342 @@ function drivetime_return(req, res, data, iL) {
 
 
     //let iso = turf.isobands(tag, [0, parseInt(req.query.distance) * 0.33, parseInt(req.query.distance) * 0.66, parseInt(req.query.distance)], 'v');
-    let iso = turf.isobands(tag, [0, parseInt(req.query.distance)], 'v');
+    let iso = turf.isobands(tag, [0, parseInt(req.query.distance)], {zProperty: 'v'});
     // console.log(JSON.stringify(iso));
 
-    // let combine = turf.combine(iso);
-    // console.log(JSON.stringify(combine));
+    let q = `SELECT
+               ${req.query.infoj} infoj,
+               ST_AsGeoJSON(
+                 ST_Transform(
+                   ST_Union(geom),
+                   4326
+                 )
+               ) geom
+             FROM
+               ${req.query.arrayGrid[iL]}
+             WHERE
+               ST_DWithin(
+                 ST_SetSRID(
+                   ST_GeomFromGeoJSON('${JSON.stringify(iso.features[0].geometry)}'),
+                   4326
+                 ),
+                 ${req.query.arrayGrid[iL]}.geomcntr,
+                 0
+               );`
 
-    let q = "SELECT "
-        + req.query.infoj + " infoj, "
-        + " ST_AsGeoJSON(ST_Transform(ST_Union(geom), 4326)) geom FROM "
-        + req.query.arrayGrid[iL] + " WHERE ST_DWithin(ST_SetSRID(ST_GeomFromGeoJSON('"
-        + JSON.stringify(iso.features[0].geometry) + "'), 4326), "
-        + req.query.arrayGrid[iL] + ".geomcntr, 0);";
+    // let q = "SELECT "
+    //     + req.query.infoj + " infoj, "
+    //     + " ST_AsGeoJSON(ST_Transform(ST_Union(geom), 4326)) geom FROM "
+    //     + req.query.arrayGrid[iL] + " WHERE ST_DWithin(ST_SetSRID(ST_GeomFromGeoJSON('"
+    //     + JSON.stringify(iso.features[0].geometry) + "'), 4326), "
+    //     + req.query.arrayGrid[iL] + ".geomcntr, 0);";
     // console.log(q);
     
     let caption = {"Travel time": (parseInt(req.query.distance/60)).toString() + " mins",
-                   "Transport mode": req.query.mode
-                  };
+                   "Transport mode": req.query.mode};
 
     db.any(q).then(function (poly) {
         res.status(200).json({
             "geometry": JSON.parse(poly[0].geom),
+            //"geometry": iso.features[0].geometry,
             "type": "Feature",
             "properties": Object.assign(caption, poly[0].infoj)
         });
+    });
+}
+
+
+function google_drivetime(req, res) {
+
+    // Distance of travel in seconds
+    req.query.distance = parseInt(req.query.distance);
+
+    // Each detail level adds 24 sample points to the query
+    req.query.detail = parseInt(req.query.detail);
+
+    res.data = {};
+    res.data.circlePoints = [];
+
+    for (let i = 1; i <= (req.query.detail * 2); i++) {
+
+        let circle = turf.circle(
+            [req.query.lng, req.query.lat],
+            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / 30),
+            { units: 'kilometers', steps: 12 });
+
+        // Rotate alternate circles
+        if (i % 2 === 0) circle = turf.transformRotate(circle, 15, { pivot: [req.query.lng, req.query.lat] });
+
+        res.data.circlePoints = res.data.circlePoints.concat(turf.explode(circle).features.slice(1));
+    }
+
+    // Deep clone the circlePoints as samplePoints
+    res.data.samplePoints = JSON.parse(JSON.stringify(res.data.circlePoints));
+
+    let destinations = res.data.samplePoints.map(pt => {
+        return [parseFloat(pt.geometry.coordinates[0].toFixed(6)),parseFloat(pt.geometry.coordinates[1].toFixed(6))]
+    });
+
+    let destinations_ = res.data.samplePoints.map(pt => {
+        return [parseFloat(pt.geometry.coordinates[1].toFixed(6)),parseFloat(pt.geometry.coordinates[0].toFixed(6))]
+    });
+
+    (function foo(i, destinations) {
+        if (i < destinations.length) {
+            request(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
+                + `${parseFloat(req.query.lng).toFixed(6)},`
+                + `${parseFloat(req.query.lat).toFixed(6)};`
+                + `${destinations.slice(i, i + 24).join(';')}?`
+                + `sources=0`
+                + `&destinations=all`
+                + `&access_token=${process.env.MAPBOX}`,
+                (err, response, body) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+
+
+                        console.log(`https://maps.googleapis.com/maps/api/distancematrix/json?`
+                            + `units=imperial&`
+                            + `origins=${parseFloat(req.query.lat).toFixed(6)},`
+                            + `${parseFloat(req.query.lng).toFixed(6)}&`
+                            + `destinations=${destinations_.slice(i, i + 24).join('|')}&`
+                            + `key=${process.env.GKEY}`);
+
+                        let jbody = JSON.parse(body),
+                            start = i,
+                            limit = i + 24;
+
+                        for (i; i < limit; i++) {
+                            res.data.samplePoints[i].properties = {
+                                v: jbody.durations[0][i - start + 1],
+                            };
+                            res.data.samplePoints[i].geometry.coordinates = jbody.destinations[i - start + 1].location;
+
+                            let displacement = turf.length(
+                                turf.lineString([
+                                    [res.data.circlePoints[i].geometry.coordinates[0], res.data.circlePoints[i].geometry.coordinates[1]],
+                                    [res.data.samplePoints[i].geometry.coordinates[0], res.data.samplePoints[i].geometry.coordinates[1]]
+                                ]),
+                                { units: 'kilometers' });
+
+                            if (displacement > 1) { res.data.samplePoints[i].properties.wide = true; }
+                        }
+
+                        identifyOutliers(res.data.samplePoints.slice(start, start + 12), start);
+                        if ((start + 24) < limit) identifyOutliers(res.data.samplePoints.slice(start + 12, start + 24), start + 12);
+
+                        function identifyOutliers(arr, sq_start) {
+
+                            arr_ = arr.filter(pt => {
+                                return pt.properties.wide != true;
+                            });
+
+                            let avg_v = arr_
+                                .map(pt => {
+                                    return pt.properties.v
+                                })
+                                .reduce(function (a, b) { return a + b }) / arr_.length;
+
+                            let avg_d = arr_
+                                .map(pt => {
+                                    return Math.pow(pt.properties.v - avg_v, pt.properties.v - avg_v);
+                                })
+                                .reduce(function (a, b) { return a + b }) / arr_.length;
+
+                            let stdDev = Math.sqrt(avg_d);
+
+                            arr.forEach((el, i) => {
+                                if (el.properties.v > (avg_v + stdDev)) {
+                                    res.data.samplePoints[sq_start + i].properties.outlier = true;
+                                }
+                            });
+
+                        }
+
+                        foo(i, destinations)
+                    }
+                })
+        } else {
+            drivetime_calc(req, res)
+        }
+    })(0, destinations);
+}
+
+
+function mapbox_drivetime(req, res) {
+
+    // Distance of travel in seconds
+    req.query.distance = parseInt(req.query.distance);
+
+    // Each detail level adds 24 sample points to the query
+    req.query.detail = parseInt(req.query.detail);
+
+    res.data = {};
+    res.data.circlePoints = [];
+
+    for (let i = 1; i <= (req.query.detail * 2); i++) {
+
+        let circle = turf.circle(
+            [req.query.lng, req.query.lat],
+            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / 30),
+            { units: 'kilometers', steps: 12 });
+
+        // Rotate alternate circles
+        if (i % 2 === 0) circle = turf.transformRotate(circle, 15, { pivot: [req.query.lng, req.query.lat] });
+
+        res.data.circlePoints = res.data.circlePoints.concat(turf.explode(circle).features.slice(1));
+    }
+
+    // Deep clone the circlePoints as samplePoints
+    res.data.samplePoints = JSON.parse(JSON.stringify(res.data.circlePoints));
+
+    let destinations = res.data.samplePoints.map(pt => {
+        return [parseFloat(pt.geometry.coordinates[0].toFixed(6)), parseFloat(pt.geometry.coordinates[1].toFixed(6))]
+    });
+
+    (function foo(i, destinations) {
+        if (i < destinations.length) {
+            request(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
+                + `${parseFloat(req.query.lng).toFixed(6)},`
+                + `${parseFloat(req.query.lat).toFixed(6)};`
+                + `${destinations.slice(i, i + 24).join(';')}?`
+                + `sources=0`
+                + `&destinations=all`
+                + `&access_token=${process.env.MAPBOX}`,
+                (err, response, body) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+
+
+                        console.log(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
+                            + `${parseFloat(req.query.lng).toFixed(6)},`
+                            + `${parseFloat(req.query.lat).toFixed(6)};`
+                            + `${destinations.slice(i, i + 24).join(';')}?`
+                            + `sources=0`
+                            + `&destinations=all`
+                            + `&access_token=${process.env.MAPBOX}`);
+
+                        let jbody = JSON.parse(body),
+                            start = i,
+                            limit = i + 24;
+
+                        for (i; i < limit; i++) {
+                            res.data.samplePoints[i].properties = {
+                                v: jbody.durations[0][i - start + 1],
+                            };
+                            res.data.samplePoints[i].geometry.coordinates = jbody.destinations[i - start + 1].location;
+
+                            let displacement = turf.length(
+                                turf.lineString([
+                                    [res.data.circlePoints[i].geometry.coordinates[0], res.data.circlePoints[i].geometry.coordinates[1]],
+                                    [res.data.samplePoints[i].geometry.coordinates[0], res.data.samplePoints[i].geometry.coordinates[1]]
+                                ]),
+                                { units: 'kilometers' });
+
+                            if (displacement > 1) { res.data.samplePoints[i].properties.wide = true; }
+                        }
+
+                        identifyOutliers(res.data.samplePoints.slice(start, start + 12), start);
+                        if ((start + 24) < limit) identifyOutliers(res.data.samplePoints.slice(start + 12, start + 24), start + 12);
+
+                        function identifyOutliers(arr, sq_start) {
+
+                            arr_ = arr.filter(pt => {
+                                return pt.properties.wide != true;
+                            });
+
+                            let avg_v = arr_
+                                .map(pt => {
+                                    return pt.properties.v
+                                })
+                                .reduce(function (a, b) { return a + b }) / arr_.length;
+
+                            let avg_d = arr_
+                                .map(pt => {
+                                    return Math.pow(pt.properties.v - avg_v, pt.properties.v - avg_v);
+                                })
+                                .reduce(function (a, b) { return a + b }) / arr_.length;
+
+                            let stdDev = Math.sqrt(avg_d);
+
+                            arr.forEach((el, i) => {
+                                if (el.properties.v > (avg_v + stdDev)) {
+                                    res.data.samplePoints[sq_start + i].properties.outlier = true;
+                                }
+                            });
+
+                        }
+
+                        foo(i, destinations)
+                    }
+                })
+        } else {
+            drivetime_calc(req, res)
+        }
+    })(0, destinations);
+}
+
+function drivetime_calc(req, res) {
+
+    // Filter outlier from samplePoints
+    res.data.samplePoints = res.data.samplePoints.filter(pt => {
+        return pt.properties.outlier != true;
+    });
+
+    // Create a pointgrid on the extent of the tin convex hull
+    let pg = turf.pointGrid(
+        turf.bbox({
+            type: "FeatureCollection",
+            features: res.data.samplePoints
+        }),
+        req.query.distance / 450,
+        { units: 'kilometers' });
+
+    // Create TIN
+    res.data.tin = turf.tin({
+        type: "FeatureCollection",
+        features: res.data.samplePoints
+    }, 'v');
+
+    // Assign tin feature IDs
+    for (let i = 0; i < res.data.tin.features.length; i++) {
+        res.data.tin.features[i].properties.id = i;
+    }
+
+    // Tag the pointgrid points with the tin id
+    let tag = turf.tag(pg, res.data.tin, 'id', 'tin');
+
+    // Assign interpolated drivetime values v from the tin element with matching tag ID
+    tag.features.map(pt =>
+        pt.properties.v = pt.properties.tin ?
+            turf.planepoint(pt, res.data.tin.features[pt.properties.tin]) :
+            parseInt(req.query.distance) * 2
+    );
+
+    // Create ISO bands on the point grid
+    res.data.iso = turf.isobands(tag,
+        [
+            0,
+            parseInt(req.query.distance) * 0.2,
+            parseInt(req.query.distance) * 0.4,
+            parseInt(req.query.distance) * 0.6,
+            parseInt(req.query.distance) * 0.8,
+            parseInt(req.query.distance)
+        ],
+        { zProperty: 'v' });
+
+    // Return json to client
+    res.status(200).json({
+        properties: {
+            "Travel time": (parseInt(req.query.distance / 60)).toString() + " mins",
+            "Transport mode": req.query.mode
+        },
+        iso: res.data.iso,
+        tin: res.data.tin,
+        circlePoints: res.data.circlePoints,
+        samplePoints: res.data.samplePoints
     });
 }
 

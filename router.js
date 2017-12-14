@@ -212,21 +212,34 @@ router.post('/delete_user', isAdmin, function (req, res) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         if (req.user.approved && req.user.verified) {
+            let o = {},
+                params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
+            if (params[0] !== '') {
+                for (let i = 0; i < params.length; i++) {
+                    let key_val = params[i].split('=');
+                    o[key_val[0]] = key_val[1];
+                }
+            }
+
+            req.session.hooks = Object.keys(o).length > 0 ?
+                o : req.session.hooks ?
+                    req.session.hooks : false;
+            
             return next();
         }
-    }
-
-    let o = {},
-        params = req.url.substring(2).split('&');
-    if (params[0] !== '') {
-        for (let i = 0; i < params.length; i++) {
-            let key_val = params[i].split('=');
-            o[key_val[0]] = key_val[1];
+    } else {
+        let o = {},
+            params = req.url.substring(2).split('&');
+        if (params[0] !== '') {
+            for (let i = 0; i < params.length; i++) {
+                let key_val = params[i].split('=');
+                o[key_val[0]] = key_val[1];
+            }
         }
-    }
 
-    req.session.hooks = Object.keys(o).length > 0 ? o : false;
-    res.redirect('/' + process.env.SUBDIRECTORY + '/login');
+        req.session.hooks = Object.keys(o).length > 0 ? o : false;
+        res.redirect('/' + process.env.SUBDIRECTORY + '/login');
+    }
 }
 
 function isAdmin(req, res, next) {
