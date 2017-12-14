@@ -396,7 +396,7 @@
   transition: opacity 300ms ease-in-out;
   -moz-transition: opacity 300ms ease-in-out;
   -webkit-transition: opacity 300ms ease-in-out;
-  margin-top: 40px; }
+  margin-top: 20px; }
 
 .rotate {
   -webkit-transform: rotate(-45deg);
@@ -416,148 +416,13 @@
   padding-top: 10px; }
 
 #colourTitle {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
   width: 300px;
   font-family: 'PT Mono', monospace;
-  font-size: 12px;
-  transform-origin: 119px -127px; }
+  font-size: 12px; }
 
-.grid_legend td {
-  height: 22px; }
-
-.grid_legend td div {
-  margin: auto; }
-
-.grid_legend tr td:nth-of-type(1) {
-  width: 22px; }
-
-.grid_legend tr td:nth-of-type(1) div {
-  width: 20px;
-  height: 20px; }
-
-.grid_legend tr td:nth-of-type(2) {
-  width: 20px; }
-
-.grid_legend tr td:nth-of-type(2) div {
-  width: 18px;
-  height: 18px; }
-
-.grid_legend tr td:nth-of-type(3) {
-  width: 18px; }
-
-.grid_legend tr td:nth-of-type(3) div {
-  width: 16px;
-  height: 16px; }
-
-.grid_legend tr td:nth-of-type(4) {
-  width: 16px; }
-
-.grid_legend tr td:nth-of-type(4) div {
-  width: 14px;
-  height: 14px; }
-
-.grid_legend tr td:nth-of-type(5) {
-  width: 14px; }
-
-.grid_legend tr td:nth-of-type(5) div {
-  width: 12px;
-  height: 12px; }
-
-.grid_legend tr td:nth-of-type(6) {
-  width: 12px; }
-
-.grid_legend tr td:nth-of-type(6) div {
-  width: 10px;
-  height: 10px; }
-
-.grid_legend tr td:nth-of-type(7) {
-  width: 10px; }
-
-.grid_legend tr td:nth-of-type(7) div {
-  width: 8px;
-  height: 8px; }
-
-.grid_legend tr td:nth-of-type(8) {
-  width: 8px; }
-
-.grid_legend tr td:nth-of-type(8) div {
-  width: 6px;
-  height: 6px; }
-
-.grid_legend tr td:nth-of-type(9) {
-  width: 6px; }
-
-.grid_legend tr td:nth-of-type(9) div {
-  width: 4px;
-  height: 4px; }
-
-.grid_legend tr td:nth-of-type(10) {
-  width: 10px; }
-
-.circle_1a9850 {
-  background: #1a9850;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #1b7540;
-  -moz-box-shadow: 1px 2px 1px #1b7540;
-  -webkit-box-shadow: 1px 2px 1px #1b7540; }
-
-.circle_66bd63 {
-  background: #66bd63;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #1a9850;
-  -moz-box-shadow: 1px 2px 1px #1a9850;
-  -webkit-box-shadow: 1px 2px 1px #1a9850; }
-
-.circle_a6d96a {
-  background: #a6d96a;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #1a9850;
-  -moz-box-shadow: 1px 2px 1px #1a9850;
-  -webkit-box-shadow: 1px 2px 1px #1a9850; }
-
-.circle_d9ef8b {
-  background: #d9ef8b;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #a6d96a;
-  -moz-box-shadow: 1px 2px 1px #a6d96a;
-  -webkit-box-shadow: 1px 2px 1px #a6d96a; }
-
-.circle_ffffbf {
-  background: #ffffbf;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #fee08b;
-  -moz-box-shadow: 1px 2px 1px #fee08b;
-  -webkit-box-shadow: 1px 2px 1px #fee08b; }
-
-.circle_fee08b {
-  background: #fee08b;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #fdae61;
-  -moz-box-shadow: 1px 2px 1px #fdae61;
-  -webkit-box-shadow: 1px 2px 1px #fdae61; }
-
-.circle_fdae61 {
-  background: #fdae61;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #f46d43;
-  -moz-box-shadow: 1px 2px 1px #f46d43;
-  -webkit-box-shadow: 1px 2px 1px #f46d43; }
-
-.circle_f46d43 {
-  background: #f46d43;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #d73027;
-  -moz-box-shadow: 1px 2px 1px #d73027;
-  -webkit-box-shadow: 1px 2px 1px #d73027; }
-
-.circle_d73027 {
-  background: #d73027;
-  border-radius: 50%;
-  box-shadow: 1px 2px 1px #a02620;
-  -moz-box-shadow: 1px 2px 1px #a02620;
-  -webkit-box-shadow: 1px 2px 1px #a02620; }
+#grid-legend-svg text {
+  font-family: 'PT Mono', monospace;
+  font-size: 11px; }
 
 .info_table {
   width: 100%;
@@ -705,18 +570,11 @@ page[size="A4"][layout="landscape"] {
 
 .grid_group {
   display: none;
-  width: 250px;
+  width: 290px;
   padding: 4px;
   z-index: 9000; }
   .grid_group .grid_legend {
     margin-top: 20px !important; }
-  .grid_group #colourTitle {
-    transform-origin: 100px -120px !important;
-    width: 250px;
-    display: inline-flex; }
-  .grid_group #sizeTitle {
-    width: 240px;
-    padding: 4px; }
 
 #map {
   min-width: 50%;

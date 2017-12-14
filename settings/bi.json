@@ -37,18 +37,15 @@
     "sizeTitle": "document.getElementById('sizeTitle')",
     "colourTitle": "document.getElementById('colourTitle')",
     "btnGridRatio": "document.getElementById('chkGridRatio')",
-    "arrayStyle": [
-      "svg_dot(['#1b7540','#1a9850'])",
-      "svg_dot(['#1a9850','#66bd63'])",
-      "svg_dot(['#66bd63','#a6d96a'])",
-      "svg_dot(['#a6d96a','#d9ef8b'])",
-      "svg_dot(['#fee08b','#ffffbf'])",
-      "svg_dot(['#fdae61','#fee08b'])",
-      "svg_dot(['#f46d43','#fdae61'])",
-      "svg_dot(['#d73027','#f46d43'])",
-      "svg_dot(['#a02620','#d73027'])",
-      "svg_dot(['rgba(0, 0, 0, 0.1)','rgba(0, 0, 0, 0.1)'])"
-    ]
+    "colorScale":[
+        "#15773f",
+        "#66bd63",
+        "#a6d96a",
+        "#d9ef8b",
+        "#fdae61",
+        "#f46d43",
+        "#d73027",
+        "rgba(0, 0, 0, 0.1)"]
   },
   "country": "IN",
   "countries": {

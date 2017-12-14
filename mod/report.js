@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const jsr = require('jsrender');
-const appSettings = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../settings/' + process.env.APPSETTINGS), 'utf8'));
-const reportpath = require('path').join(__dirname, '../reports/');
+const appSettings = JSON.parse(require('fs').readFileSync(require('path').join(process.env.SUBDIRECTORY, '../settings/' + process.env.APPSETTINGS), 'utf8'));
+const reportpath = require('path').join(process.env.SUBDIRECTORY, '../reports/');
 const reports = {};
 
 async function request(req, res) {
