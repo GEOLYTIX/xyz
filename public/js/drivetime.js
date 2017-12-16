@@ -27,16 +27,16 @@ module.exports = function Drivetime(_this){
         }*/
         
         // Check if drivetime object exists
-        if(drivetime){
-            _this.drivetime.layer = L.geoJson(drivetime.geometry, {
-                interactive: false,
-                style: _this.drivetime.style
-            }).addTo(_this.map);
+        // if(drivetime){
+        //     _this.drivetime.layer = L.geoJson(drivetime.geometry, {
+        //         interactive: false,
+        //         style: _this.drivetime.style
+        //     }).addTo(_this.map);
             
-            _this.drivetime.infoTable.innerHTML = helper.createStatsTable(drivetime.properties);
-            _this.drivetime.infoTable.style['opacity'] = 1;
+        //     _this.drivetime.infoTable.innerHTML = helper.createStatsTable(drivetime.properties);
+        //     _this.drivetime.infoTable.style['opacity'] = 1;
             
-        }
+        // }
     };
     _this.locale.drivetime();
 
