@@ -61,6 +61,10 @@ module.exports = function Drivetime(_this){
         document.getElementById('drivetime_detail').innerHTML = this.value;
     });
 
+    document.getElementById('drivetime_slider_reach').addEventListener('input', function(){
+        document.getElementById('drivetime_reach').innerHTML = this.value;
+    });
+
     document.getElementById('drivetime_slider').addEventListener('input', function(){
         document.getElementById('drivetime_minutes').innerHTML = this.value;
     });
@@ -69,23 +73,8 @@ module.exports = function Drivetime(_this){
     btnDrivetime.addEventListener('click', function(){
         document.getElementById('map').style.cursor = 'crosshair';
 
-        // let distance = document.getElementById('drivetime_slider').value * 60;
-        //
-        // _this.drivetime.tinDistance = [
-        //     distance * 0.1, //0
-        //     distance * 0.2, //0
-        //     distance * 0.3, //1
-        //     distance * 0.4, //2
-        //     distance * 0.5, //3
-        //     distance * 0.6, //4
-        //     distance * 0.7, //5
-        //     distance * 0.8, //6
-        //     distance * 0.9, //7
-        //     distance        //8
-        // ];
-
         _this.map.on('click', function(e){
-            getDrivetime(e, document.getElementById('drivetime_slider').value)
+            getDrivetime(e, document.getElementById('drivetime_slider').value * 60)
         });
     });
 
@@ -136,8 +125,9 @@ module.exports = function Drivetime(_this){
         xhr.open('GET', localhost +  'q_drivetime?' + helper.paramString({
             lng: e.latlng.lng,
             lat: e.latlng.lat,
-            distance: _distance * 60,
+            distance: _distance,
             detail: document.getElementById('drivetime_slider_detail').value,
+            reach: document.getElementById('drivetime_slider_reach').value,
             mode: 'driving',
             provider: document.getElementById('selectProvider').options[document.getElementById('selectProvider').selectedIndex].value
             //infoj: encodeURIComponent(_this.countries[_this.country].drivetime.infoj),
@@ -191,7 +181,25 @@ module.exports = function Drivetime(_this){
 
                 _this.drivetime.layer = L.geoJson(json.iso,{
                     interactive: false,
-                    style: _this.drivetime.style
+                    style: function(feature){
+
+                        console.log(feature.properties.v);
+                        console.log('0-' + parseInt(_distance * 0.33));
+                        console.log(parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66));
+                        console.log(parseInt(_distance * 0.66) + '-' + parseInt(_distance));
+
+                        let color = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
+                            '#01ffee' : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
+                                '#2200fe' : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
+                                    '#ff019e' : '#FFF';
+
+                        return {
+                            "stroke": true,
+                            "color": color,
+                            "weight": 2,
+                            "fill": false
+                        }
+                    }
                 }).addTo(_this.map);
                 _this.map.fitBounds(_this.drivetime.layer.getBounds());
 
@@ -208,7 +216,7 @@ module.exports = function Drivetime(_this){
                     document.getElementById('btnDrivetimeCopy').addEventListener('click', function () {
                         let textArea = document.createElement("textarea");
                         textArea.style.visibility = 'none';
-                        textArea.value = JSON.stringify(json);
+                        textArea.value = JSON.stringify(json.iso);
                         document.body.appendChild(textArea);
                         textArea.select();
                         document.execCommand('copy');

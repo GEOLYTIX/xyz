@@ -214,6 +214,9 @@ function google_drivetime(req, res) {
     // Each detail level adds 24 sample points to the query
     req.query.detail = parseInt(req.query.detail);
 
+    // Distance in seconds divided by the reach defines the radius for the sample points circle
+    req.query.reach = parseInt(req.query.reach);
+
     res.data = {};
     res.data.circlePoints = [];
 
@@ -221,7 +224,7 @@ function google_drivetime(req, res) {
 
         let circle = turf.circle(
             [req.query.lng, req.query.lat],
-            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / 30),
+            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / req.query.reach),
             { units: 'kilometers', steps: 12 });
 
         // Rotate alternate circles
@@ -243,44 +246,32 @@ function google_drivetime(req, res) {
 
     (function foo(i, destinations) {
         if (i < destinations.length) {
-            request(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
-                + `${parseFloat(req.query.lng).toFixed(6)},`
-                + `${parseFloat(req.query.lat).toFixed(6)};`
-                + `${destinations.slice(i, i + 24).join(';')}?`
-                + `sources=0`
-                + `&destinations=all`
-                + `&access_token=${process.env.MAPBOX}`,
+            // console.log(`https://maps.googleapis.com/maps/api/distancematrix/json?`
+            // + `units=imperial&`
+            // + `origins=${parseFloat(req.query.lat).toFixed(6)},`
+            // + `${parseFloat(req.query.lng).toFixed(6)}&`
+            // + `destinations=${destinations_.slice(i, i + 24).join('|')}&`
+            // + `key=${process.env.GKEY}`);
+            request(`https://maps.googleapis.com/maps/api/distancematrix/json?`
+            + `units=imperial&`
+            + `origins=${parseFloat(req.query.lat).toFixed(6)},`
+            + `${parseFloat(req.query.lng).toFixed(6)}&`
+            + `destinations=${destinations_.slice(i, i + 24).join('|')}&`
+            + `key=${process.env.GKEY}`,
                 (err, response, body) => {
                     if (err) {
                         console.log(err);
                     } else {
-
-
-                        console.log(`https://maps.googleapis.com/maps/api/distancematrix/json?`
-                            + `units=imperial&`
-                            + `origins=${parseFloat(req.query.lat).toFixed(6)},`
-                            + `${parseFloat(req.query.lng).toFixed(6)}&`
-                            + `destinations=${destinations_.slice(i, i + 24).join('|')}&`
-                            + `key=${process.env.GKEY}`);
-
                         let jbody = JSON.parse(body),
                             start = i,
                             limit = i + 24;
 
                         for (i; i < limit; i++) {
                             res.data.samplePoints[i].properties = {
-                                v: jbody.durations[0][i - start + 1],
+                                v: jbody.rows[0].elements[i - start].status === 'OK' ?
+                                    jbody.rows[0].elements[i - start].duration.value :
+                                    null
                             };
-                            res.data.samplePoints[i].geometry.coordinates = jbody.destinations[i - start + 1].location;
-
-                            let displacement = turf.length(
-                                turf.lineString([
-                                    [res.data.circlePoints[i].geometry.coordinates[0], res.data.circlePoints[i].geometry.coordinates[1]],
-                                    [res.data.samplePoints[i].geometry.coordinates[0], res.data.samplePoints[i].geometry.coordinates[1]]
-                                ]),
-                                { units: 'kilometers' });
-
-                            if (displacement > 1) { res.data.samplePoints[i].properties.wide = true; }
                         }
 
                         identifyOutliers(res.data.samplePoints.slice(start, start + 12), start);
@@ -289,29 +280,30 @@ function google_drivetime(req, res) {
                         function identifyOutliers(arr, sq_start) {
 
                             arr_ = arr.filter(pt => {
-                                return pt.properties.wide != true;
+                                return pt.properties.v > 0;
                             });
 
-                            let avg_v = arr_
-                                .map(pt => {
-                                    return pt.properties.v
-                                })
-                                .reduce(function (a, b) { return a + b }) / arr_.length;
+                            if (arr_.length > 3) {
+                                let avg_v = arr_
+                                    .map(pt => {
+                                        return pt.properties.v
+                                    })
+                                    .reduce(function (a, b) { return a + b }) / arr_.length;
 
-                            let avg_d = arr_
-                                .map(pt => {
-                                    return Math.pow(pt.properties.v - avg_v, pt.properties.v - avg_v);
-                                })
-                                .reduce(function (a, b) { return a + b }) / arr_.length;
+                                let avg_d = arr_
+                                    .map(pt => {
+                                        return Math.pow(pt.properties.v - avg_v, 2);
+                                    })
+                                    .reduce(function (a, b) { return a + b }) / arr_.length;
 
-                            let stdDev = Math.sqrt(avg_d);
+                                let stdDev = Math.sqrt(avg_d);
 
-                            arr.forEach((el, i) => {
-                                if (el.properties.v > (avg_v + stdDev)) {
-                                    res.data.samplePoints[sq_start + i].properties.outlier = true;
-                                }
-                            });
-
+                                arr.forEach((el, i) => {
+                                    if (el.properties.v > (avg_v + stdDev)) {
+                                        res.data.samplePoints[sq_start + i].properties.outlier = true;
+                                    }
+                                });
+                            }
                         }
 
                         foo(i, destinations)
@@ -332,6 +324,9 @@ function mapbox_drivetime(req, res) {
     // Each detail level adds 24 sample points to the query
     req.query.detail = parseInt(req.query.detail);
 
+    // Distance in seconds divided by the reach defines the radius for the sample points circle
+    req.query.reach = parseInt(req.query.reach);
+
     res.data = {};
     res.data.circlePoints = [];
 
@@ -339,7 +334,7 @@ function mapbox_drivetime(req, res) {
 
         let circle = turf.circle(
             [req.query.lng, req.query.lat],
-            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / 30),
+            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / req.query.reach),
             { units: 'kilometers', steps: 12 });
 
         // Rotate alternate circles
@@ -357,6 +352,13 @@ function mapbox_drivetime(req, res) {
 
     (function foo(i, destinations) {
         if (i < destinations.length) {
+            // console.log(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
+            // + `${parseFloat(req.query.lng).toFixed(6)},`
+            // + `${parseFloat(req.query.lat).toFixed(6)};`
+            // + `${destinations.slice(i, i + 24).join(';')}?`
+            // + `sources=0`
+            // + `&destinations=all`
+            // + `&access_token=${process.env.MAPBOX}`);
             request(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
                 + `${parseFloat(req.query.lng).toFixed(6)},`
                 + `${parseFloat(req.query.lat).toFixed(6)};`
@@ -368,16 +370,6 @@ function mapbox_drivetime(req, res) {
                     if (err) {
                         console.log(err);
                     } else {
-
-
-                        console.log(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
-                            + `${parseFloat(req.query.lng).toFixed(6)},`
-                            + `${parseFloat(req.query.lat).toFixed(6)};`
-                            + `${destinations.slice(i, i + 24).join(';')}?`
-                            + `sources=0`
-                            + `&destinations=all`
-                            + `&access_token=${process.env.MAPBOX}`);
-
                         let jbody = JSON.parse(body),
                             start = i,
                             limit = i + 24;
@@ -407,25 +399,31 @@ function mapbox_drivetime(req, res) {
                                 return pt.properties.wide != true;
                             });
 
-                            let avg_v = arr_
-                                .map(pt => {
-                                    return pt.properties.v
-                                })
-                                .reduce(function (a, b) { return a + b }) / arr_.length;
-
-                            let avg_d = arr_
-                                .map(pt => {
-                                    return Math.pow(pt.properties.v - avg_v, pt.properties.v - avg_v);
-                                })
-                                .reduce(function (a, b) { return a + b }) / arr_.length;
-
-                            let stdDev = Math.sqrt(avg_d);
-
-                            arr.forEach((el, i) => {
-                                if (el.properties.v > (avg_v + stdDev)) {
-                                    res.data.samplePoints[sq_start + i].properties.outlier = true;
-                                }
+                            arr_ = arr_.filter(pt => {
+                                return pt.properties.v > 0;
                             });
+
+                            if (arr_.length > 3) {
+                                let avg_v = arr_
+                                    .map(pt => {
+                                        return pt.properties.v
+                                    })
+                                    .reduce(function (a, b) { return a + b }) / arr_.length;
+
+                                let avg_d = arr_
+                                    .map(pt => {
+                                        return Math.pow(pt.properties.v - avg_v, 2);
+                                    })
+                                    .reduce(function (a, b) { return a + b }) / arr_.length;
+
+                                let stdDev = Math.sqrt(avg_d);
+
+                                arr.forEach((el, i) => {
+                                    if (el.properties.v > (avg_v + stdDev)) {
+                                        res.data.samplePoints[sq_start + i].properties.outlier = true;
+                                    }
+                                });
+                            }
 
                         }
 
@@ -443,6 +441,11 @@ function drivetime_calc(req, res) {
     // Filter outlier from samplePoints
     res.data.samplePoints = res.data.samplePoints.filter(pt => {
         return pt.properties.outlier != true;
+    });
+
+    // Filter outlier from samplePoints
+    res.data.samplePoints = res.data.samplePoints.filter(pt => {
+        return pt.properties.v > 0;
     });
 
     // Create a pointgrid on the extent of the tin convex hull
@@ -479,10 +482,8 @@ function drivetime_calc(req, res) {
     res.data.iso = turf.isobands(tag,
         [
             0,
-            parseInt(req.query.distance) * 0.2,
-            parseInt(req.query.distance) * 0.4,
-            parseInt(req.query.distance) * 0.6,
-            parseInt(req.query.distance) * 0.8,
+            parseInt(req.query.distance * 0.33),
+            parseInt(req.query.distance * 0.66),
             parseInt(req.query.distance)
         ],
         { zProperty: 'v' });
@@ -490,8 +491,11 @@ function drivetime_calc(req, res) {
     // Return json to client
     res.status(200).json({
         properties: {
-            "Travel time": (parseInt(req.query.distance / 60)).toString() + " mins",
-            "Transport mode": req.query.mode
+            "Latitude": `${parseFloat(req.query.lat).toFixed(6)}`,
+            "Longitude": `${parseFloat(req.query.lng).toFixed(6)}`,
+            "Travel time": `${parseInt(req.query.distance / 60)} mins`,
+            "Transport mode": req.query.mode,
+            "Provider": req.query.provider
         },
         iso: res.data.iso,
         tin: res.data.tin,
