@@ -1,7 +1,6 @@
-if (process.env.NODE_ENV === 'dev-ios') {
-    const dotenv = require('dotenv');
-    dotenv.load();
-}
+const dotenv = require('dotenv');
+dotenv.load();
+
 
 const port = process.env.PORT || 3000;
 const express = require('express');

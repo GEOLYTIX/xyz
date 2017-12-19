@@ -16,7 +16,7 @@
     }
   },
   "gazetteer": {
-    "provider": "mapbox_grid",
+    "provider": "mapbox",
     "icon": "svg_marker(['#64dd17','#33691e'])",
     "style": {
       "stroke": true,
@@ -83,7 +83,7 @@
         "rgba(0, 0, 0, 0.1)"]
   },
   "drivetime": {
-    "provider": "mapbox_grid",
+    "provider": "mapbox",
     "container": "document.querySelector('#drivetime_module > .swipe_container')",
     "infoTable": "document.querySelector('.drivetime_info')",
     "slider": "document.getElementById('drivetime_slider')",
@@ -118,6 +118,17 @@
           "13": "rp_hx_1k",
           "14": "retailpoints"
         },
+        "clusterDistance": {
+            "7": 0.09,
+            "8": 0.05,
+            "9": 0.03,
+            "10": 0.02,
+            "11": 0.009,
+            "12": 0.005,
+            "13": 0.004,
+            "14": 0.002,
+            "15": 0
+        },
         "arrayStyle": {
           "aldi": "svg_builder([[400, '#ffbf45'], [350, '#fa6f08'], [300, '#ef3c11'], [250, '#001f79'], [200, '#02bee3'], [100, '#ffffff']])",
           "asda": "svg_builder([[400, '#83b923'], [200, '#ffffff'], [150, '#fdb839']])",
@@ -140,6 +151,7 @@
           "other": "svg_dot(['#A9A9A9','#C0C0C0'])"
         },
         "arrayCompColours": ["#ddd", "#999", "#111"],
+        "competitors": ["co_op", "sainsburys", "tesco"],
         "qID": "qid",
         "qCount": "rp_c",
         "qValue": "rp_v",
