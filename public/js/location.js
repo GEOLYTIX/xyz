@@ -238,8 +238,8 @@ module.exports = function(_this){
                                 });
                             } 
                             
-                            // Zoom in one step. !!Disabled as cluster may dissappear or update content on zoom change.
-                            //_this.map.setZoomAround(latlng, _this.map.getZoom() + 1);
+                            // Zoom in one step.
+                            _this.map.setZoomAround(latlng, _this.map.getZoom() + 1);
                                     
                             // Add event to query location info to the location list records.
                             let location_table_rows = document.querySelectorAll('.location_table tr');
