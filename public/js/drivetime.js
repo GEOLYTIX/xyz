@@ -69,6 +69,29 @@ module.exports = function Drivetime(_this){
         document.getElementById('drivetime_minutes').innerHTML = this.value;
     });
 
+    document.getElementById('selectMode').addEventListener('change', function(e){
+        if (e.target.value === 'walking') {
+            _this.drivetime.slider.min = 5;
+            _this.drivetime.slider.max = 45;
+            _this.drivetime.slider.value = 15;
+            document.getElementById('drivetime_minutes').innerHTML = 15;
+            document.getElementById('drivetime_slider_reach').min = 500;
+            document.getElementById('drivetime_slider_reach').max = 750;
+            document.getElementById('drivetime_slider_reach').value = 600;
+            document.getElementById('drivetime_reach').innerHTML = 600;
+        }
+        if (e.target.value === 'driving') {
+            _this.drivetime.slider.min = 15;
+            _this.drivetime.slider.max = 180;
+            _this.drivetime.slider.value = 45;
+            document.getElementById('drivetime_minutes').innerHTML = 45;
+            document.getElementById('drivetime_slider_reach').min = 25;
+            document.getElementById('drivetime_slider_reach').max = 35;
+            document.getElementById('drivetime_slider_reach').value = 30;
+            document.getElementById('drivetime_reach').innerHTML = 30;
+        }
+    });
+
     const btnDrivetime = document.getElementById('btnDrivetime');
     btnDrivetime.addEventListener('click', function(){
         document.getElementById('map').style.cursor = 'crosshair';
@@ -128,7 +151,7 @@ module.exports = function Drivetime(_this){
             distance: _distance,
             detail: document.getElementById('drivetime_slider_detail').value,
             reach: document.getElementById('drivetime_slider_reach').value,
-            mode: 'driving',
+            mode: document.getElementById('selectMode').options[document.getElementById('selectMode').selectedIndex].value,
             provider: document.getElementById('selectProvider').options[document.getElementById('selectProvider').selectedIndex].value
             //infoj: encodeURIComponent(_this.countries[_this.country].drivetime.infoj),
             //arrayGrid: _this.countries[_this.country].drivetime.arrayGrid
@@ -182,11 +205,6 @@ module.exports = function Drivetime(_this){
                 _this.drivetime.layer = L.geoJson(json.iso,{
                     interactive: false,
                     style: function(feature){
-
-                        console.log(feature.properties.v);
-                        console.log('0-' + parseInt(_distance * 0.33));
-                        console.log(parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66));
-                        console.log(parseInt(_distance * 0.66) + '-' + parseInt(_distance));
 
                         let color = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
                             '#01ffee' : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?

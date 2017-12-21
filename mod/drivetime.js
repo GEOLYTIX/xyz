@@ -224,7 +224,9 @@ function google_drivetime(req, res) {
 
         let circle = turf.circle(
             [req.query.lng, req.query.lat],
-            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / req.query.reach),
+            req.query.mode === 'driving' ?
+                (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / req.query.reach) :
+                (req.query.distance / req.query.reach) / (req.query.detail * 2) * i,
             { units: 'kilometers', steps: 12 });
 
         // Rotate alternate circles
@@ -237,10 +239,6 @@ function google_drivetime(req, res) {
     res.data.samplePoints = JSON.parse(JSON.stringify(res.data.circlePoints));
 
     let destinations = res.data.samplePoints.map(pt => {
-        return [parseFloat(pt.geometry.coordinates[0].toFixed(6)),parseFloat(pt.geometry.coordinates[1].toFixed(6))]
-    });
-
-    let destinations_ = res.data.samplePoints.map(pt => {
         return [parseFloat(pt.geometry.coordinates[1].toFixed(6)),parseFloat(pt.geometry.coordinates[0].toFixed(6))]
     });
 
@@ -254,9 +252,10 @@ function google_drivetime(req, res) {
             // + `key=${process.env.GKEY}`);
             request(`https://maps.googleapis.com/maps/api/distancematrix/json?`
             + `units=imperial&`
+            + `mode=${req.query.mode}&`
             + `origins=${parseFloat(req.query.lat).toFixed(6)},`
             + `${parseFloat(req.query.lng).toFixed(6)}&`
-            + `destinations=${destinations_.slice(i, i + 24).join('|')}&`
+            + `destinations=${destinations.slice(i, i + 24).join('|')}&`
             + `key=${process.env.GKEY}`,
                 (err, response, body) => {
                     if (err) {
@@ -334,7 +333,9 @@ function mapbox_drivetime(req, res) {
 
         let circle = turf.circle(
             [req.query.lng, req.query.lat],
-            (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / req.query.reach),
+            req.query.mode === 'driving' ?
+                (10 * Math.pow(i, 3)) / (10 * Math.pow(req.query.detail * 2, 3)) * (req.query.distance / req.query.reach) :
+                (req.query.distance / req.query.reach) / (req.query.detail * 2) * i,
             { units: 'kilometers', steps: 12 });
 
         // Rotate alternate circles
@@ -352,14 +353,7 @@ function mapbox_drivetime(req, res) {
 
     (function foo(i, destinations) {
         if (i < destinations.length) {
-            // console.log(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
-            // + `${parseFloat(req.query.lng).toFixed(6)},`
-            // + `${parseFloat(req.query.lat).toFixed(6)};`
-            // + `${destinations.slice(i, i + 24).join(';')}?`
-            // + `sources=0`
-            // + `&destinations=all`
-            // + `&access_token=${process.env.MAPBOX}`);
-            request(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/`
+            request(`https://api.mapbox.com/directions-matrix/v1/mapbox/${req.query.mode}/`
                 + `${parseFloat(req.query.lng).toFixed(6)},`
                 + `${parseFloat(req.query.lat).toFixed(6)};`
                 + `${destinations.slice(i, i + 24).join(';')}?`
@@ -454,13 +448,25 @@ function drivetime_calc(req, res) {
             type: "FeatureCollection",
             features: res.data.samplePoints
         }),
-        req.query.distance / 450,
+        req.query.mode === 'driving' ?
+            req.query.distance / 450 :
+            req.query.distance / 10000,
         { units: 'kilometers' });
 
     // Create TIN
     res.data.tin = turf.tin({
-        type: "FeatureCollection",
-        features: res.data.samplePoints
+        type: 'FeatureCollection',
+        features: res.data.samplePoints.concat([{
+            type: 'Feature',
+            geometry: {
+                coordinates:
+                    [
+                        parseFloat(req.query.lng),
+                        parseFloat(req.query.lat)
+                    ]
+            },
+            properties: { v: 0 }
+        }])
     }, 'v');
 
     // Assign tin feature IDs
