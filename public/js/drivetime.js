@@ -99,10 +99,10 @@ module.exports = function Drivetime(_this){
         });
     });
 
-    // _this.drivetime_transit = false;
-    // document.getElementById('chkDriveTimePublic').addEventListener('click', function () {
-    //     _this.drivetime_transit = this.checked;
-    // });
+    _this.drivetime.construction = false;
+    document.getElementById('chkDrivetimeConstruction').addEventListener('click', function () {
+        _this.drivetime.construction = this.checked;
+    });
 
     function getDrivetime(e, _distance){
         _this.map.off('click');
@@ -136,12 +136,7 @@ module.exports = function Drivetime(_this){
             style: _this.gazetteer.style
         }).addTo(_this.map);
 
-        // let mode = _this.drivetime_transit ? 'transit' : 'driving';
-
         let xhr = new XMLHttpRequest();
-
-        // let boo = document.getElementById('selectProvider');
-        // let provider = document.getElementById('selectProvider').options[document.getElementById('selectProvider').selectedIndex].value;
 
         xhr.open('GET', localhost +  'q_drivetime?' + helper.paramString({
             lng: e.latlng.lng,
@@ -165,40 +160,42 @@ module.exports = function Drivetime(_this){
                 if (_this.drivetime.layer_tin) _this.map.removeLayer(_this.drivetime.layer_tin);
                 let json = JSON.parse(this.responseText);
 
-                _this.drivetime.layer_tin = L.geoJson(json.tin,{
-                    interactive: false,
-                    style: {
-                        stroke: true,
-                        color: "#999",
-                        weight: 1,
-                        fill: false
-                      }
-                }).addTo(_this.map);
-
-                _this.drivetime.layer_circlePoints = L.geoJson(json.circlePoints,{
-                    interactive: false,
-                    pointToLayer: function (feature, latlng) {
-                        return new L.CircleMarker(latlng, {
-                            radius: 5,
-                            color: "#555",
+                if (_this.drivetime.construction) {
+                    _this.drivetime.layer_tin = L.geoJson(json.tin,{
+                        interactive: false,
+                        style: {
+                            stroke: true,
+                            color: "#999",
                             weight: 1,
                             fill: false
-                        });
-                    }
-                }).addTo(_this.map);
-
-                _this.drivetime.layer_samplePoints = L.geoJson(json.samplePoints,{
-                    interactive: false,
-                    pointToLayer: function (feature, latlng) {
-                        return new L.CircleMarker(latlng, {
-                            radius: 2,
-                            color: "#333",
-                            fillColor: "#333",
-                            fill: true,
-                            fillOpacity: 1
-                        });
-                    }
-                }).addTo(_this.map);
+                          }
+                    }).addTo(_this.map);
+    
+                    _this.drivetime.layer_circlePoints = L.geoJson(json.circlePoints,{
+                        interactive: false,
+                        pointToLayer: function (feature, latlng) {
+                            return new L.CircleMarker(latlng, {
+                                radius: 5,
+                                color: "#555",
+                                weight: 1,
+                                fill: false
+                            });
+                        }
+                    }).addTo(_this.map);
+    
+                    _this.drivetime.layer_samplePoints = L.geoJson(json.samplePoints,{
+                        interactive: false,
+                        pointToLayer: function (feature, latlng) {
+                            return new L.CircleMarker(latlng, {
+                                radius: 2,
+                                color: "#333",
+                                fillColor: "#333",
+                                fill: true,
+                                fillOpacity: 1
+                            });
+                        }
+                    }).addTo(_this.map);
+                }
 
                 _this.drivetime.layer = L.geoJson(json.iso,{
                     interactive: false,
