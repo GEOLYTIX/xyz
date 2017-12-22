@@ -438,31 +438,30 @@
     display: block; }
 
 .checkbox {
-  position: relative;
-  display: inline-block;
-  color: #090; }
-
-.checkbox input {
-  margin: 4px 13px 0 0; }
-
-.checkbox label {
-  cursor: pointer;
-  position: absolute;
-  width: 23px;
-  height: 23px;
-  top: 0;
-  left: -2px;
-  background: #fff;
-  content: '\E836';
-  font-family: "Material Icons";
-  font-size: 23px;
-  line-height: 23px; }
-
-.checkbox label:after {
-  content: '\E835'; }
-
-.checkbox input[type=checkbox]:checked + label:after {
-  content: '\E834'; }
+  margin-top: 10px;
+  border-spacing: 0; }
+  .checkbox .box {
+    position: relative;
+    color: #090; }
+    .checkbox .box label {
+      cursor: pointer;
+      position: absolute;
+      width: 23px;
+      height: 23px;
+      top: 0;
+      left: -2px;
+      background: #fff;
+      content: '\E836';
+      font-family: "Material Icons";
+      font-size: 23px;
+      line-height: 23px; }
+    .checkbox .box label:after {
+      content: '\E835'; }
+    .checkbox .box input[type=checkbox]:checked + label:after {
+      content: '\E834'; }
+  .checkbox .label {
+    font-family: ffmark, sans-serif;
+    font-size: 14px; }
 
 #gaz_group {
   display: none;
@@ -538,6 +537,8 @@
   table-layout: fixed;
   transition: margin 250ms;
   height: 100%; }
+  .swipe_container .dev, .pages--2 .dev, .pages--3 .dev {
+    color: grey; }
   .swipe_container select, .pages--2 select, .pages--3 select {
     width: 100%; }
   .swipe_container .bold, .pages--2 .bold, .pages--3 .bold {

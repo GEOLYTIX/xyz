@@ -19,12 +19,12 @@ module.exports = function Drivetime(_this){
         document.getElementById('btnDrivetimeCopy').style.display = 'none';
 
         // no support for drivetime hook now
-        /*if (_this.hooks.drivetime){ 
-            _this.drivetime.layer = L.geoJson(JSON.parse(decodeURI(_this.hooks.drivetime)),{
-                interactive: false,
-                style: _this.drivetime.style
-            }).addTo(_this.map);
-        }*/
+        // if (_this.hooks.drivetime){ 
+        //     _this.drivetime.layer = L.geoJson(JSON.parse(decodeURI(_this.hooks.drivetime)),{
+        //         interactive: false,
+        //         style: _this.drivetime.style
+        //     }).addTo(_this.map);
+        // }
         
         // Check if drivetime object exists
         // if(drivetime){
@@ -32,10 +32,8 @@ module.exports = function Drivetime(_this){
         //         interactive: false,
         //         style: _this.drivetime.style
         //     }).addTo(_this.map);
-            
         //     _this.drivetime.infoTable.innerHTML = helper.createStatsTable(drivetime.properties);
         //     _this.drivetime.infoTable.style['opacity'] = 1;
-            
         // }
     };
     _this.locale.drivetime();

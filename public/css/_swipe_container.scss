@@ -4,6 +4,11 @@
   transition: margin 250ms;
   height: 100%;
 
+  .dev {
+    // display: none;
+    color: grey;
+  }
+
   select {
     width: 100%
   }

@@ -15,34 +15,40 @@
                     <input id="drivetime_slider" type="range" min="15" max="90" value="45">
                 </div>
 
-                <br>
-                <span>Detail </span><span id="drivetime_detail" class="bold">3</span>
-                <div class="range">
-                    <input id="drivetime_slider_detail" type="range" min="1" max="5" value="3">
+                <div class="dev">
+                        <br>
+                        <span>Detail </span><span id="drivetime_detail" class="bold">3</span>
+                        <div class="range">
+                            <input id="drivetime_slider_detail" type="range" min="1" max="5" value="3">
+                        </div>
+        
+                        <br>
+                        <span>Reach </span><span id="drivetime_reach" class="bold">30</span>
+                        <div class="range">
+                            <input id="drivetime_slider_reach" type="range" min="25" max="35" value="30">
+                        </div>
+                        
+                        <p>Mode</p>
+                        <select id="selectMode" name="selectMode">
+                            <option value="driving" selected>Driving</option> 
+                            <option value="walking">Walking</option>
+                        </select>
+        
+                        <p>Provider</p>
+                        <select id="selectProvider">
+                            <option value="mapbox" selected>Mapbox</option> 
+                            <option value="google">Google</option>
+                        </select>
+
+                        <table class="checkbox">
+                            <td class="box">
+                                <input type="checkbox" id="chkDrivetimeConstruction">
+                                <label for="chkDrivetimeConstruction"></label>
+                            </td>
+                            <td>Display drivetime sample points and TIN.</td>
+                        </table>
+
                 </div>
-
-                <br>
-                <span>Reach </span><span id="drivetime_reach" class="bold">30</span>
-                <div class="range">
-                    <input id="drivetime_slider_reach" type="range" min="25" max="35" value="30">
-                </div>
-                
-                <p>Mode</p>
-                <select id="selectMode" name="selectMode">
-                    <option value="driving" selected>Driving</option> 
-                    <option value="walking">Walking</option>
-                </select>
-
-                <p>Provider</p>
-                <select id="selectProvider">
-                    <option value="mapbox" selected>Mapbox</option> 
-                    <option value="google">Google</option>
-                </select>
-
-                <!-- <div class="checkbox">
-                    <input type="checkbox" id="chkDriveTimePublic">
-                    <label for="chkDriveTimePublic"></label>
-                </div><span><small>Use public transport.</small></span> -->
 
                 <div id="btnDrivetime" class="md_button">Set Drivetime Location</div>
             </div>
