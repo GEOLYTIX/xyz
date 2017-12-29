@@ -129,26 +129,82 @@
             "14": 0.002,
             "15": 0
         },
-        "arrayStyle": {
-          "aldi": "svg_builder([[400, '#ffbf45'], [350, '#fa6f08'], [300, '#ef3c11'], [250, '#001f79'], [200, '#02bee3'], [100, '#ffffff']])",
-          "asda": "svg_builder([[400, '#83b923'], [200, '#ffffff'], [150, '#fdb839']])",
-          "booths": "svg_builder([[400, '#a12629'], [200, '#ffffff'], [150, '#a12629']])",
-          "budgens": "svg_builder([[400, '#ffffff'], [200, '#679a00'], [150, '#cccb01']])",
-          "co_op": "svg_builder([[400, '#0b1e60'], [250, '#ffffff'], [200, '#a3d227']])",
-          "costco": "svg_builder([[400, '#005daa'], [350, '#ffffff'], [250, '#e31837']])",
-          "farmfoods": "svg_builder([[400, '#77a632'], [300, '#f7f900'], [200, '#ff0000']])",
-          "fultons_food": "svg_builder([[400, '#004a95'], [300, '#ffffff'], [200, '#004a95'], [100, '#fff11f']])",
-          "heron_foods": "svg_builder([[400, '#ffffff'], [300, '#313590'], [100, '#ffcf00']])",
-          "iceland": "svg_builder([[400, '#ed1b2d'], [300, '#f2552b'], [200, '#f89128'], [100, '#ffffff']])",
-          "lidl": "svg_builder([[400, '#d61408'], [350, '#ffe502'], [200, '#002d7a'], [100, '#d61408']])",
-          "makro": "svg_builder([[400, '#00457a'], [150, '#ffe811']])",
-          "marks_spencer": "svg_builder([[400, '#0a0d10'], [200, '#def036'], [100, '#0a0d10']])",
-          "morrisons": "svg_builder([[400, '#ffe133'], [200, '#00614e']])",
-          "sainsburys": "svg_builder([[400, '#ee8a00'], [250, '#ffffff'], [150, '#ee8a00']])",
-          "tesco": "svg_builder([[400, '#0055a8'], [300, '#ffffff'], [150, '#f02f26']])",
-          "waitrose": "svg_builder([[400, '#81ae37'], [150, '#ffffff']])",
-          "whole_foods": "svg_builder([[400, '#00674b'],[350, '#ffffff'],[200, '#00674b']])",
-          "other": "svg_dot(['#A9A9A9','#C0C0C0'])"
+        "markerStyle": {
+            "aldi": {
+                "style": [[400, "#ffbf45"], [350, "#fa6f08"], [300, "#ef3c11"], [250, "#001f79"], [200, "#02bee3"], [100, "#ffffff"]],
+                "label": "Aldi"
+            },
+            "asda": {
+                "style": [[400, "#83b923"], [200, "#ffffff"], [150, "#fdb839"]],
+                "label": "Asda"
+            },
+            "booths": {
+                "style": [[400, "#a12629"], [200, "#ffffff"], [150, "#a12629"]],
+                "label": "Booths"
+            },
+            "budgens": {
+                "style": [[400, "#EEEEE0"], [200, "#679a00"], [150, "#cccb01"]],
+                "label": "Budgens"
+            },
+            "co_op": {
+                "style": [[400, "#0b1e60"], [250, "#ffffff"], [200, "#a3d227"]], 
+                "label": "The Co-Operative"
+            },
+            "costco": {
+                "style": [[400, "#005daa"], [350, "#ffffff"], [250, "#e31837"]],
+                "label": "Costco"
+            },
+            "farmfoods": {
+                "style":[[400, "#77a632"], [300, "#f7f900"], [200, "#ff0000"]],
+                "label": "Farm Foods"
+            },
+            "fultons_food": {
+                "style":[[400, "#004a95"], [300, "#ffffff"], [200, "#004a95"], [100, "#fff11f"]], 
+                "label": "Fultons Food"
+            },
+            "heron_foods": {
+                "style":[[400, "#ffffff"], [300, "#313590"], [100, "#ffcf00"]], 
+                "label": "Heron Foods"},
+            "iceland": {
+                "style": [[400, "#ed1b2d"], [300, "#f2552b"], [200, "#f89128"], [100, "#ffffff"]], 
+                "label": "Iceland"
+            },
+            "lidl": {
+                "style": [[400, "#d61408"], [350, "#ffe502"], [200, "#002d7a"], [100, "#d61408"]], 
+                "label": "Lidl"
+            },
+            "makro": {
+                "style": [[400, "#00457a"], [150, "#ffe811"]], 
+                "label": "Makro"
+            },
+            "marks_spencer": {
+                "style": [[400, "#0a0d10"], [200, "#def036"], [100, "#0a0d10"]],
+                "label": "Marks & Spencer"
+            },
+            "morrisons": {
+                "style": [[400, "#ffe133"], [200, "#00614e"]], 
+                "label":"Morrisons"
+            },
+            "sainsburys": {
+                "style": [[400, "#ee8a00"], [250, "#ffffff"], [150, "#ee8a00"]], 
+                "label": "Sainsbury's"
+            },
+            "tesco": {
+                "style": [[400, "#0055a8"], [300, "#ffffff"], [150, "#f02f26"]], 
+                "label": "Tesco"
+            },
+            "waitrose": {
+                "style": [[400, "#81ae37"], [150, "#ffffff"]], 
+                "label": "Waitrose"
+            },
+            "whole_foods": {
+                "style": [[400, "#00674b"],[350, "#ffffff"],[200, "#00674b"]], 
+                "label": "Whole Foods"
+            },
+            "other": {
+                "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]], 
+                "label": "other"
+            }
         },
         "arrayCompColours": ["#ddd", "#999", "#111"],
         "competitors": ["co_op", "sainsburys", "tesco"],
@@ -157,7 +213,8 @@
         "qValue": "rp_v",
         "qLayer": "retailpoints",
         "qVector": "vector",
-        "qLabel": "store"
+        "qLabel": "store",
+        "qBrand": "brand"
       },
       "drivetime": {
             "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
@@ -414,22 +471,56 @@
           "13": "ro_fashion_hx_1k",
           "14": "ro_fashion"
         },
-        "arrayStyle": {
-          "SINSAY": "svg_builder([[400, '#8d6e63']])",
-          "MOHITO": "svg_builder([[400, '#ffeb3b']])",
-          "RESERVED": "svg_builder([[400, '#dce775']])",
-          "CROPP": "svg_builder([[400, '#64b5f6']])",
-          "HOUSE": "svg_builder([[400, '#ab47bc']])",
-          "H&M": "svg_builder([[400, '#f44336']])",
-          "other": "svg_dot('#C0C0C0', '#A9A9A9')"
+        "clusterDistance": {
+          "7": 0.09,
+          "8": 0.05,
+          "9": 0.03,
+          "10": 0.02,
+          "11": 0.009,
+          "12": 0.005,
+          "13": 0.004,
+          "14": 0.002,
+          "15": 0
+        },
+        "markerStyle": {
+            "SINSAY": {
+                "style": [[400, "#8d6e63"]], 
+                "label": "Sinsay"
+            },
+            "MOHITO": {
+                "style": [[400, "#ffeb3b"]],
+                "label": "Mohito"
+            },
+            "RESERVED": {
+                "style": [[400, "#dce775"]],
+                "label": "Reserved"
+            },
+            "CROPP": {
+                "style": [[400, "#64b5f6"]],
+                "label": "Cropp"
+            },
+            "HOUSE": {
+                "style": [[400, "#ab47bc"]],
+                "label": "House"
+            },
+            "H&M": {
+                "style": [[400, "#f44336"]],
+                "label": "H&M"
+            },
+            "other": {
+                "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]],
+                "label": "other"
+            }
         },
         "arrayCompColours": ["#ddd", "#999"],
+        "competitors": ["RESERVED", "MOHITO"],
         "qID": "qid",
         "qCount": "c",
         "qValue": "v",
         "qLayer": "ro_fashion",
         "qVector": "vector",
-        "qLabel": "store_name"
+        "qLabel": "store_name",
+        "qBrand": "fascia"
       },
       "drivetime": false,
       "vector": {

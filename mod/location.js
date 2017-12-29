@@ -7,7 +7,8 @@ const db_cluster = pgp(process.env.POSTGRES_MVT);
 function location(req, res){
     let d = parseFloat(req.query.dist),
         q = "SELECT ST_AsGeoJson(ST_Centroid(ST_Union(sq.geomcntr))) AS geomj, json_agg(json_build_object('id', sq.id, 'brand', sq.brand, 'label', sq.label)) AS infoj FROM (SELECT " 
-    + req.query.qid + " as id, brand, " 
+    + req.query.qid + " as id, "
+    + req.query.brand + " as brand, "
     + req.query.label + " as label, ST_ClusterDBSCAN(geomcntr, " 
     + d + ", 1) over() AS cid, geomcntr FROM " 
     + req.query.layer + " WHERE ST_DWithin(ST_MakeEnvelope("

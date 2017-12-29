@@ -1,7 +1,7 @@
 const L = require('leaflet');
 const helper = require('./helper');
 const grid = require('./grid_tools');
-const svg_builder = require('./svg_builder');
+//const svg_builder = require('./svg_builder');
 const d3 = require('d3');
 
 // const turfTag = require('@turf/tag');

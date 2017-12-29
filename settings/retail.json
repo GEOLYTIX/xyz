@@ -99,21 +99,26 @@
           "14": 0.002,
           "15": 0
         },
-        "arrayStyle": {
-          "t1": "svg_builder([[200, '#FF0099']])",
-          "t2": "svg_builder([[200, '#CC1AB3']])",
-          "t3": "svg_builder([[200, '#9933CC']])",
-          "t4": "svg_builder([[200, '#664DE6']])",
-          "t5": "svg_builder([[200, '#3366FF']])",
-          "other": "svg_dot(['#A9A9A9','#C0C0C0'])"
+        "markerStyle": {
+            "t1": {"style": [[200, "#FF0099"]], "label": "t1"},
+            "t2": {"style": [[200, "#CC1AB3"]], "label": "t2"},
+            "t3": {"style": [[200, "#9933CC"]], "label": "t3"},
+            "t4": {"style": [[200, "#664DE6"]], "label": "t4"},
+            "t5": {"style": [[200, "#3366FF"]], "label": "t5"},
+            "other": {
+                "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]],
+                "label": "other"
+            }
         },
         "arrayCompColours": ["#FFFFFF", "#3366FF", "#664DE6", "#9933CC", "#CC1AB3", "#FF0099"],
+        "competitors": [],
         "qID": "qid",
         "qCount": "c",
         "qValue": "v",
         "qLayer": "gb_retail_place",
         "qVector": "vector",
-        "qLabel": "uniq_name"
+        "qLabel": "uniq_name",
+        "qBrand": "brand"
       }
     }
   }

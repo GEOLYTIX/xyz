@@ -1,7 +1,8 @@
 const L = require('leaflet');
 const helper = require('./helper');
-const svg_dot = require('./svg_dot');
-const svg_builder = require('./svg_builder');
+//const svg_dot = require('./svg_dot');
+//const svg_builder = require('./svg_builder');
+const d3 = require('d3');
 
 module.exports = function(_this){
     
@@ -65,19 +66,117 @@ module.exports = function(_this){
     
     function toggleLocationLayer(override){
         let btn = document.getElementById('btnLocation--toggle');
+        
         helper.toggleClass(btn, 'on');
+        
+        // show or hide legend
+        locationLegend(_this.location.display);
+        
         if (_this.location.display === false || override === true) {
             _this.location.display = true;
+            
             btn.innerHTML = 'Turn locations off';
             _this.setHook('location', true);
             getLayer();
         } else {
             _this.location.display = false;
+            
             btn.innerHTML = 'Turn locations on';
             _this.removeHook('location');
             if (_this.location.layer) _this.map.removeLayer(_this.location.layer);
             _this.locale.layersCheck('location', null);
         }
+    }
+    
+    function locationLegend(display){
+        let loc_content = document.getElementById('location-content'),
+            loc_legend = document.getElementById('location-legend');
+        if(!display){
+            
+            createLegend();
+            loc_content.style.display = "none";
+        
+        } else {
+            
+            loc_legend.innerHTML = '';
+            loc_content.style.display = "block";
+        
+        }
+    }
+    
+    function createLegend(){
+        
+        let _keys = Object.keys(_this.countries[_this.country].location.markerStyle),
+            _len = _keys.length,
+            
+            x = 10, y, y1 = 10, y2 = 10, r = 8,
+            
+            _svg = d3.select('#location-legend')
+            .append('svg')
+            .attr("width", 280)
+            .attr("height", 2.5*r*Math.ceil(_len/2+1));
+        
+        for(let i = 0; i < _len; i++){
+            
+            i < _len/2 ? (y1 = y1 + 20, y = y1) : (x = 150, y2 = y2 + 20, y = y2);
+            
+            let _style = _this.countries[_this.country].location.markerStyle[_keys[i]].style;
+            
+            for(let j = 0; j < _style.length; j++){
+                _svg.append("circle")
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("r", _style[j][0]*8/400)
+                    .style("fill", _style[j][1]);
+            }
+            
+            _svg.append("text")
+                .attr("x", x+10)
+                .attr("y", y)
+                .attr("text-anchor", "start")
+                .attr("alignment-baseline", "middle")
+                .style("font-size", "12px")
+                .text(_this.countries[_this.country].location.markerStyle[_keys[i]].label);
+        }
+    }
+    
+    function createMarker(_val, _competition){
+        
+        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        
+        svg.setAttribute("width", 1000);
+        svg.setAttribute("height", 1000);
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+
+        return drawIcon(svg, _val, _competition);
+    }
+    
+    function drawIcon(_svg, _val, _competition){
+        
+        let _style;
+        
+        if(_competition === undefined || _competition !== true) {
+            _style = _this.countries[_this.country].location.markerStyle[_val].style;
+        } else {
+            _style = _val;
+        }
+        
+        let _len = _style.length;
+        
+        for(let i = 0; i < _len; i++){
+            
+            // draw svg
+            let _circle = document.createElement("circle");
+            
+            _circle.setAttribute("cx", 500);
+            _circle.setAttribute("cy", 500);
+            _circle.setAttribute("r", _style[i][0]);
+            _circle.style.fill = _style[i][1];
+            
+            _svg.appendChild(_circle);
+               
+        }
+        return ("data:image/svg+xml," + encodeURIComponent(_svg.outerHTML));
     }
     
     // Get location layer
@@ -90,6 +189,7 @@ module.exports = function(_this){
                 layer: _this.countries[_this.country].location.qLayer,
                 qid: _this.countries[_this.country].location.qID,
                 label: _this.countries[_this.country].location.qLabel,
+                brand: _this.countries[_this.country].location.qBrand,
                 west: bounds.getWest(),
                 south: bounds.getSouth(),
                 east: bounds.getEast(),
@@ -138,7 +238,9 @@ module.exports = function(_this){
                             }
                             dotArr.push([400 * vTot / count, _this.countries[_this.country].location.arrayCompColours[i + 1]]);
                         }
-                        dot = svg_builder(dotArr);
+                        //console.log(dotArr);
+                        //dot = svg_builder(dotArr);
+                        dot = createMarker(dotArr, true);
                         
                         return L.marker(latlng, {
                             icon: L.icon({
@@ -147,11 +249,12 @@ module.exports = function(_this){
                             })
                         });
                     } else {
-                        let brand = point.properties.infoj[0].brand || 'other';
+                        let brand = point.properties.infoj[0].brand || "other",
+                            brand_icon = createMarker(brand);
                         
                         return L.marker(latlng, {
-                            icon: L.icon({
-                                iconUrl: _this.countries[_this.country].location.arrayStyle[brand], 
+                            icon: L.icon({ 
+                                iconUrl: brand_icon,
                                 iconSize: getIconSize(count)
                             })
                         });
@@ -255,10 +358,11 @@ module.exports = function(_this){
                     }
                     
                     function layerOnMouseover(){
+                        
                         this.setIcon(L.icon({
                             iconUrl: this.options.icon.options.iconUrl,
                             iconSize: this.options.icon.options.iconSize,
-                            shadowUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%22866%22%20height%3D%221000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Ccircle%20style%3D%22fill%3A%23090%3Bfill-opacity%3A0.2%3B%22%20cx%3D%22433%22%20cy%3D%22500%22%20r%3D%22395%22%2F%3E%0A%3C%2Fsvg%3E',
+                            shadowUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%221000%22%20height%3D%221000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Ccircle%20style%3D%22fill%3A%23090%3Bfill-opacity%3A0.2%3B%22%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22395%22%2F%3E%0A%3C%2Fsvg%3E',
                             shadowSize: this.options.icon.options.iconSize + 20,
                         }));
                     }
@@ -425,11 +529,11 @@ module.exports = function(_this){
     
     // Split by competitor
     function getCompetitors(_arr){
-        let v = [0, 0, 0], len = _arr.length, vals = [], 
-            c = _this.countries[_this.country].location.competitors.length;
+        let v = [0, 0, 0], len = _arr.length || 0, vals = [], 
+            c = _this.countries[_this.country].location.competitors.length || 0;
         
         for(let i = 0; i<len; i++){
-            vals.push(_arr[i].brand);
+             vals.push(_arr[i].brand);
         }
         
         for(let j = 0; j < c; j++){
