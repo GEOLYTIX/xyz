@@ -494,6 +494,10 @@ function drivetime_calc(req, res) {
         ],
         { zProperty: 'v' });
 
+    // Remove holes from Isobands
+    res.data.iso.features.map(f => f.geometry.coordinates[0] = [f.geometry.coordinates[0][0]]);
+    //res.data.iso.features[1].geometry.coordinates[0] = [res.data.iso.features[1].geometry.coordinates[0][0]];
+
     // Return json to client
     res.status(200).json({
         properties: {
