@@ -108,13 +108,14 @@ module.exports = function(_this){
         
         let _keys = Object.keys(_this.countries[_this.country].location.markerStyle),
             _len = _keys.length,
+            _comp_len = _this.countries[_this.country].location.competitors.length,
             
             x = 10, y, y1 = 10, y2 = 10, r = 8,
             
             _svg = d3.select('#location-legend')
             .append('svg')
             .attr("width", 280)
-            .attr("height", 2.5*r*Math.ceil(_len/2+1));
+            .attr("height", 2.5*r*(Math.ceil(_len/2+1) + _comp_len) + 40);
         
         for(let i = 0; i < _len; i++){
             
@@ -137,6 +138,39 @@ module.exports = function(_this){
                 .attr("alignment-baseline", "middle")
                 .style("font-size", "12px")
                 .text(_this.countries[_this.country].location.markerStyle[_keys[i]].label);
+        }
+        
+        for(let k = 0; k < _this.countries[_this.country].location.competitors.length; k++){
+            _svg.append("circle")
+            .attr("cx", 30)
+            .attr("cy", y + 60)
+            .attr("r", 20 - 8*k)
+            .style("fill", _this.countries[_this.country].location.arrayCompColours[k]);
+        }
+        _svg.append("text")
+            .attr("x", 60)
+            .attr("y", y + 60)
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .text("Multiple locations");
+        
+        for(let l = 0; l < _this.countries[_this.country].location.competitors.length; l++){
+            
+            let _key = _this.countries[_this.country].location.competitors[l];
+            
+            _svg.append("circle")
+            .attr("cx", 70)
+            .attr("cy", y + 80 + 20*l)
+            .attr("r", 7)
+            .style("fill", _this.countries[_this.country].location.arrayCompColours[l]);
+            
+            _svg.append("text")
+            .attr("x", 80)
+            .attr("y", y + 80 + 20*l)
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .style("font-size", "12px")
+            .text(_this.countries[_this.country].location.markerStyle[_key].label); 
         }
     }
     
