@@ -3,9 +3,9 @@ if (view_mode === 'desktop') require('./lscrolly')(document.querySelector('.modu
 if (view_mode === 'mobile') require('./mobile_interface')();
 
 // Evaluate settings.
-const svg_builder = require('./svg_builder');
+//const svg_builder = require('./svg_builder');
 const svg_marker = require('./svg_marker');
-const svg_dot = require('./svg_dot');
+//const svg_dot = require('./svg_dot');
 function objectEval(settings) {
     Object.keys(settings).map(function (key) {
         if (typeof settings[key] === 'string' && key != 'color') {
