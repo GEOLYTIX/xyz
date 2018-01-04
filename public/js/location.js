@@ -35,6 +35,11 @@ module.exports = function(_this){
     // Toogle visibility of the location layer.
     document.getElementById('btnLocation--toggle').addEventListener('click', toggleLocationLayer);
     
+    // Set clustering distance
+    document.getElementById('location_slider').addEventListener('input', function(){
+        document.getElementById('location_cluster').innerHTML = parseFloat(this.value)/1000;
+    });
+    
     // Zoom to location selected from table
     document.getElementById('btnZoomLoc').addEventListener('click', function(){
         _this.map.closePopup(_this.location.popup);
@@ -88,6 +93,7 @@ module.exports = function(_this){
         }
     }
     
+    // show or hide legend and module description content
     function locationLegend(display){
         let loc_content = document.getElementById('location-content'),
             loc_legend = document.getElementById('location-legend');
@@ -104,17 +110,19 @@ module.exports = function(_this){
         }
     }
     
+    // build legend svg
     function createLegend(){
         
         let _keys = Object.keys(_this.countries[_this.country].location.markerStyle),
             _len = _keys.length,
+            _comp_len = _this.countries[_this.country].location.competitors.length,
             
             x = 10, y, y1 = 10, y2 = 10, r = 8,
             
             _svg = d3.select('#location-legend')
             .append('svg')
             .attr("width", 280)
-            .attr("height", 2.5*r*Math.ceil(_len/2+1));
+            .attr("height", 2.5*r*(Math.ceil(_len/2+1) + _comp_len) + 40);
         
         for(let i = 0; i < _len; i++){
             
@@ -137,6 +145,40 @@ module.exports = function(_this){
                 .attr("alignment-baseline", "middle")
                 .style("font-size", "12px")
                 .text(_this.countries[_this.country].location.markerStyle[_keys[i]].label);
+        }
+        
+        // add section for clusters and competitors
+        for(let k = 0; k < _this.countries[_this.country].location.competitors.length; k++){
+            _svg.append("circle")
+            .attr("cx", 30)
+            .attr("cy", y + 60)
+            .attr("r", 20 - 8*k)
+            .style("fill", _this.countries[_this.country].location.arrayCompColours[k]);
+        }
+        _svg.append("text")
+            .attr("x", 60)
+            .attr("y", y + 60)
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .text("Multiple locations");
+        
+        for(let l = 0; l < _this.countries[_this.country].location.competitors.length; l++){
+            
+            let _key = _this.countries[_this.country].location.competitors[l];
+            
+            _svg.append("circle")
+            .attr("cx", 70)
+            .attr("cy", y + 80 + 20*l)
+            .attr("r", 7)
+            .style("fill", _this.countries[_this.country].location.arrayCompColours[l]);
+            
+            _svg.append("text")
+            .attr("x", 80)
+            .attr("y", y + 80 + 20*l)
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .style("font-size", "12px")
+            .text(_this.countries[_this.country].location.markerStyle[_key].label); 
         }
     }
     
@@ -183,7 +225,14 @@ module.exports = function(_this){
     _this.location.getLayer = getLayer;
     
     function getLayer(){
-        let dist = getDistance();
+        let chkClusterDist = document.getElementById('chkClusterDist').checked,
+            dist;
+        
+        chkClusterDist ? dist = readDistance() : dist = getDistance();
+
+        //let dist = getDistance();        
+        //let dist = readDistance();
+        
         let bounds = _this.map.getBounds(),
             url = localhost + 'q_location?' + helper.paramString({
                 layer: _this.countries[_this.country].location.qLayer,
@@ -460,7 +509,7 @@ module.exports = function(_this){
     
     // Tools for clustering
     
-    // Get clustering distance
+    // Get clustering distance from settings based on zoom level
     function getDistance(){
         let zoom = _this.map.getZoom(),
             len = Object.keys(_this.countries[_this.country].location.clusterDistance).length,
@@ -472,6 +521,13 @@ module.exports = function(_this){
         else zoom = zoom.toString();
         
         return _this.countries[_this.country].location.clusterDistance[zoom];
+    }
+    
+    // Get clustering distance from slider 
+    function readDistance(){
+        let _slider_val = parseFloat(document.getElementById('location_cluster').textContent);
+        //console.log(_slider_val);
+        return _slider_val;
     }
     
     // Get classes for clustering
