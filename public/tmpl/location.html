@@ -8,9 +8,17 @@
 
             <div class="page_content">
                 <div id="location-legend"></div>
-                <p id="location-content">Select locations by clicking onto the map icons. A hex select dialog allows for selection of
-                    locations from a cluster. Properties of a selected location will be presented here.
-                </p>
+                <div id="location-content"><p>Select locations by clicking onto the map icons. A hex select dialog allows for selection of
+                    locations from a cluster. Properties of a selected location will be presented here.</p>
+                    <div class="dev">
+                        <p><small>Specify clustering distance:</small></p>
+                        <small><span id="location_cluster" class="bold">0.09</span><span class="bold"> decimal degree</span></small>
+                        <div class="range">
+                            <input id="location_slider" type="range" min="0" max="100" value="90">
+                        </div>
+                    </div>
+                </div>
+
                 <div id="btnLocation--toggle" class="md_button">Turn locations on</div>
             </div>
         </td>
