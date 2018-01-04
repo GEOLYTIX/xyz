@@ -225,8 +225,13 @@ module.exports = function(_this){
     _this.location.getLayer = getLayer;
     
     function getLayer(){
-        //let dist = getDistance();
-        let dist = readDistance();
+        let chkClusterDist = document.getElementById('chkClusterDist').checked,
+            dist;
+        
+        chkClusterDist ? dist = readDistance() : dist = getDistance();
+
+        //let dist = getDistance();        
+        //let dist = readDistance();
         
         let bounds = _this.map.getBounds(),
             url = localhost + 'q_location?' + helper.paramString({
