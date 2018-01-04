@@ -75,6 +75,7 @@ router.get('/mvt_borders/:z/:x/:y', tiles.border);
 
 const grid = require('./mod/grid');
 router.get('/q_grid', grid.grid);
+router.post('/q_grid_info', isLoggedIn, grid.info);
 
 const drivetime = require('./mod/drivetime');
 router.get('/q_drivetime', isLoggedIn, drivetime.drivetime);

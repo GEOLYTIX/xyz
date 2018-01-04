@@ -68,26 +68,14 @@ module.exports = function Drivetime(_this){
     });
 
     document.getElementById('selectMode').addEventListener('change', function(e){
-        if (e.target.value === 'walking') {
-            _this.drivetime.slider.min = 5;
-            _this.drivetime.slider.max = 45;
-            _this.drivetime.slider.value = 15;
-            document.getElementById('drivetime_minutes').innerHTML = 15;
-            document.getElementById('drivetime_slider_reach').min = 500;
-            document.getElementById('drivetime_slider_reach').max = 750;
-            document.getElementById('drivetime_slider_reach').value = 600;
-            document.getElementById('drivetime_reach').innerHTML = 600;
-        }
-        if (e.target.value === 'driving') {
-            _this.drivetime.slider.min = 15;
-            _this.drivetime.slider.max = 180;
-            _this.drivetime.slider.value = 45;
-            document.getElementById('drivetime_minutes').innerHTML = 45;
-            document.getElementById('drivetime_slider_reach').min = 25;
-            document.getElementById('drivetime_slider_reach').max = 35;
-            document.getElementById('drivetime_slider_reach').value = 30;
-            document.getElementById('drivetime_reach').innerHTML = 30;
-        }
+        _this.drivetime.slider.min = e.target.value === 'walking'? 5 : 15;
+        _this.drivetime.slider.max = e.target.value === 'walking'? 45 : 180;
+        _this.drivetime.slider.value = e.target.value === 'walking'? 15 : 45;
+        document.getElementById('drivetime_minutes').innerHTML = e.target.value === 'walking'? 15 : 45;
+        document.getElementById('drivetime_slider_reach').min = e.target.value === 'walking'? 500 : 25;
+        document.getElementById('drivetime_slider_reach').max = e.target.value === 'walking'? 750 : 35;
+        document.getElementById('drivetime_slider_reach').value = e.target.value === 'walking'? 600 : 30;
+        document.getElementById('drivetime_reach').innerHTML = e.target.value === 'walking'? 600 : 30;
     });
 
     const btnDrivetime = document.getElementById('btnDrivetime');
@@ -197,23 +185,51 @@ module.exports = function Drivetime(_this){
                     }).addTo(_this.map);
                 }
 
-                _this.drivetime.layer = L.geoJson(json.iso,{
-                    interactive: false,
-                    style: function(feature){
+                _this.drivetime.layer = L.geoJson(json.iso, {
+                    interactive: true,
+                    onEachFeature: function (feature, layer) {
+                        layer.on({
+                            click: function () {
+                                console.log(feature.properties);
+                                let xhr = new XMLHttpRequest();
+                                xhr.open('POST', 'q_grid_info');
+                                xhr.setRequestHeader("Content-Type","application/json");
+                                xhr.onload = function(){
+                                    if(this.status === 200) console.log(this.response);
+                                }
+                                xhr.send(JSON.stringify({
+                                    infoj: "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
+                                    geometry: feature.geometry
+                                }));
+                            },
+                            mouseover: function () {
+                                this.setStyle(isoStyle(feature, _distance, 0.2));
+                            },
+                            mouseout: function () {
+                                this.setStyle(isoStyle(feature, _distance, 0));
+                            }
+                        });
+                    },
+                    style: function (feature) {
+                        return isoStyle(feature, _distance, 0)
+                    }
+                }).addTo(_this.map);
 
+                function isoStyle(feature, _distance, fillOpacity){
                         let color = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
                             '#01ffee' : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
                                 '#2200fe' : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
                                     '#ff019e' : '#FFF';
 
                         return {
-                            "stroke": true,
-                            "color": color,
-                            "weight": 2,
-                            "fill": false
+                            'stroke': true,
+                            'color': color,
+                            'weight': 2,
+                            'fill': true,
+                            'fillOpacity': fillOpacity
                         }
-                    }
-                }).addTo(_this.map);
+                }
+
                 _this.map.fitBounds(_this.drivetime.layer.getBounds());
 
                 document.querySelector('#drivetime_module .page_content').style.display = 'block';

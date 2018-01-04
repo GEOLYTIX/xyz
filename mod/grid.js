@@ -1,6 +1,7 @@
 const pgp = require('pg-promise')({
     promiseLib: require('bluebird'),
     noWarnings: true});
+
 const databases = {
     xyz: pgp(process.env.POSTGRES),
     ghs: pgp(process.env.POSTGRES_GHS)
@@ -56,4 +57,41 @@ function grid(req, res) {
         });
 }
 
-module.exports = {grid: grid};
+function info(req, res) {
+
+console.log(JSON.stringify(req.body.geometry))
+    let q = `SELECT
+               ${req.body.infoj} as infoj
+             FROM gb_hx_1k
+             WHERE
+               ST_DWithin(
+                 ST_SetSRID(
+                   ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'),
+                   4326),
+                 gb_hx_1k.geomcntr, 0);`
+ 
+    console.log(q);
+
+    //res.status(200).json({OK:'COMPUTER'});
+
+    databases['xyz'].any(q)
+        .then(function (data) {
+
+            console.log(Object.keys(data).map(function (record) {
+                return Object.keys(data[record]).map(function (field) {
+                    return data[record][field];
+                });
+            }));
+
+            res.status(200).json(Object.keys(data).map(function (record) {
+                return Object.keys(data[record]).map(function (field) {
+                    return data[record][field];
+                });
+            }));
+        });
+}
+
+module.exports = {
+    grid: grid,
+    info: info
+};
