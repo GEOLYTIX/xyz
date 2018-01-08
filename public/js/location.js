@@ -6,6 +6,21 @@ const d3 = require('d3');
 
 module.exports = function(_this){
     
+    let dom = {};
+    
+    dom.btnLocationToggle = document.getElementById('btnLocation--toggle');
+    dom.sliLocation = document.getElementById('location_slider');
+    dom.clusterLocation = document.getElementById('location_cluster');
+    dom.btnMap = document.querySelector('.map_button');
+    dom.btnZoomLoc = document.getElementById('btnZoomLoc');
+    dom.btnLocOff = document.getElementById('btnLocation--off');
+    dom.locContent = document.getElementById('location-content');
+    dom.locLegendId =  'location-legend'; // container id only as it needs to be passed to both JS and D3.
+    dom.chkClusterDist = document.getElementById('chkClusterDist');
+    dom.map = document.getElementById('map');
+    dom.locDropClose = document.querySelector('.location_drop__close');
+
+    
     _this.locale.location = function(change_country){
         // Remove existing layer and layerSelection.
         if (_this.location.layer) _this.map.removeLayer(_this.location.layer);
@@ -33,15 +48,15 @@ module.exports = function(_this){
     _this.locale.location();
     
     // Toogle visibility of the location layer.
-    document.getElementById('btnLocation--toggle').addEventListener('click', toggleLocationLayer);
+    dom.btnLocationToggle.addEventListener('click', toggleLocationLayer);
     
     // Set clustering distance
-    document.getElementById('location_slider').addEventListener('input', function(){
-        document.getElementById('location_cluster').innerHTML = parseFloat(this.value)/1000;
+    dom.sliLocation.addEventListener('input', function(){
+        dom.clusterLocation.innerHTML = parseFloat(this.value)/1000;
     });
     
     // Zoom to location selected from table
-    document.getElementById('btnZoomLoc').addEventListener('click', function(){
+    dom.btnZoomLoc.addEventListener('click', function(){
         _this.map.closePopup(_this.location.popup);
         _this.map.flyToBounds(_this.location.layerSelection.getBounds());
         _this.map.fitBounds(_this.location.layerSelection.getBounds());
@@ -54,12 +69,12 @@ module.exports = function(_this){
                 _this.map.panBy([0, parseInt(_this.location.location_drop.clientHeight) / 2]);
                 _this.location.location_drop.style['display'] = 'none';
             }
-            document.querySelector('.map_button').style['display'] = 'block';
+            dom.btnMap.style['display'] = 'block';
         }
     });
     
     // Unselect location, clear info, remove hook and set container marginLeft to 0.
-    document.getElementById('btnLocation--off').addEventListener('click', function(){
+    dom.btnLocOff.addEventListener('click', function(){
         if (_this.location.layerSelection) _this.map.removeLayer(_this.location.layerSelection);
         _this.removeHook('location_id');
         _this.locale.layersCheck('locationSelect', null);
@@ -70,9 +85,8 @@ module.exports = function(_this){
     });
     
     function toggleLocationLayer(override){
-        let btn = document.getElementById('btnLocation--toggle');
         
-        helper.toggleClass(btn, 'on');
+        helper.toggleClass(dom.btnLocationToggle, 'on');
         
         // show or hide legend
         locationLegend(_this.location.display);
@@ -80,13 +94,13 @@ module.exports = function(_this){
         if (_this.location.display === false || override === true) {
             _this.location.display = true;
             
-            btn.innerHTML = 'Turn locations off';
+            dom.btnLocationToggle.innerHTML = 'Turn locations off';
             _this.setHook('location', true);
             getLayer();
         } else {
             _this.location.display = false;
             
-            btn.innerHTML = 'Turn locations on';
+            dom.btnLocationToggle.innerHTML = 'Turn locations on';
             _this.removeHook('location');
             if (_this.location.layer) _this.map.removeLayer(_this.location.layer);
             _this.locale.layersCheck('location', null);
@@ -95,17 +109,16 @@ module.exports = function(_this){
     
     // show or hide legend and module description content
     function locationLegend(display){
-        let loc_content = document.getElementById('location-content'),
-            loc_legend = document.getElementById('location-legend');
+        let loc_legend = document.getElementById(dom.locLegendId);
         if(!display){
             
             createLegend();
-            loc_content.style.display = "none";
+            dom.locContent.style.display = "none";
         
         } else {
             
             loc_legend.innerHTML = '';
-            loc_content.style.display = "block";
+            dom.locContent.style.display = "block";
         
         }
     }
@@ -119,7 +132,7 @@ module.exports = function(_this){
             
             x = 10, y, y1 = 10, y2 = 10, r = 8,
             
-            _svg = d3.select('#location-legend')
+            _svg = d3.select('#' + dom.locLegendId)
             .append('svg')
             .attr("width", 280)
             .attr("height", 2.5*r*(Math.ceil(_len/2+1) + _comp_len) + 40);
@@ -225,10 +238,9 @@ module.exports = function(_this){
     _this.location.getLayer = getLayer;
     
     function getLayer(){
-        let chkClusterDist = document.getElementById('chkClusterDist').checked,
-            dist;
+        let dist;
         
-        chkClusterDist ? dist = readDistance() : dist = getDistance();
+        dom.chkClusterDist.checked ? dist = readDistance() : dist = getDistance();
 
         //let dist = getDistance();        
         //let dist = readDistance();
@@ -287,8 +299,7 @@ module.exports = function(_this){
                             }
                             dotArr.push([400 * vTot / count, _this.countries[_this.country].location.arrayCompColours[i + 1]]);
                         }
-                        //console.log(dotArr);
-                        //dot = svg_builder(dotArr);
+                        
                         dot = createMarker(dotArr, true);
                         
                         return L.marker(latlng, {
@@ -357,11 +368,11 @@ module.exports = function(_this){
                                         
                                 // Populate and display the .location_drop with the location list table.
                                 document.querySelector('.location_table').innerHTML = table;
-                                document.querySelector('.map_button').style['display'] = 'none';
+                                dom.btnMap.style['display'] = 'none';
                                 _this.location.location_drop.style['display'] = 'block';
                                         
                                 // Pan map according to the location of the cluster cell;
-                                let map_dom = document.getElementById('map'),
+                                let map_dom = dom.map,
                                     map_dom__height = map_dom.clientHeight,
                                     map_dom__margin = parseInt(map_dom.style.marginTop),
                                     shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(_this.location.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
@@ -379,14 +390,14 @@ module.exports = function(_this){
                                 }).addTo(_this.map);
                                 
                                 // Button event to close the .location_drop.
-                                document.querySelector('.location_drop__close').addEventListener('click', function(){
+                                dom.locDropClose.addEventListener('click', function(){
                                     if (_this.location.layerSelectionCell) _this.map.removeLayer(_this.location.layerSelectionCell);
                                     if (_this.location.layerSelectionLine) _this.map.removeLayer(_this.location.layerSelectionLine);
                                     
                                     _this.map.panBy([0, parseInt(_this.location.location_drop.clientHeight) / 2]);
                                     
                                     _this.location.location_drop.style['display'] = 'none';
-                                    document.querySelector('.map_button').style['display'] = 'block';
+                                    dom.btnMap.style['display'] = 'block';
                                 });
                             } 
                             
@@ -525,8 +536,7 @@ module.exports = function(_this){
     
     // Get clustering distance from slider 
     function readDistance(){
-        let _slider_val = parseFloat(document.getElementById('location_cluster').textContent);
-        //console.log(_slider_val);
+        let _slider_val = parseFloat(dom.clusterLocation.textContent);
         return _slider_val;
     }
     
