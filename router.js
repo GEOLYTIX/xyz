@@ -21,6 +21,7 @@ router.get('/', isLoggedIn, function (req, res) {
             module_location: appSettings.location ? './public/tmpl/location.html' : null,
             module_hxgrid: appSettings.grid ? './public/tmpl/hxgrid.html' : null,
             module_drivetime: appSettings.drivetime ? './public/tmpl/drivetime.html' : null,
+            module_comparison: './public/tmpl/comparison.html',
             module_statistics: appSettings.vector ? './public/tmpl/statistics.html' : null,
             admin_button: req.user.admin ? './public/tmpl/admin_button.html' : '',
             bundle_js: "build/xyz_bundle.js",

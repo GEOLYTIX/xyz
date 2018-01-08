@@ -2,107 +2,113 @@ const L = require('leaflet');
 const helper = require('./helper');
 
 module.exports = function Drivetime(_this){
+    let dom = {};
+    dom.map = document.getElementById('map');
+    dom.container = document.querySelector('#drivetime_module > .swipe_container');
+    dom.pages = document.querySelectorAll('#drivetime_module .page_content');
+    dom.btnQuery = document.querySelector('#drivetime_module .btnQuery');
+    dom.btnOff = document.querySelector('#drivetime_module .btnOff');
+    dom.btnCopy = document.querySelector('#drivetime_module .btnCopy');
+    dom.spinner = document.querySelector('#drivetime_module .spinner');
+    dom.info_table = document.querySelector('#drivetime_module .info_table');
+    dom.minutes = document.querySelector('#drivetime_module .minutes');
+    dom.sliMinutes = document.querySelector('#drivetime_module .sliMinutes');
+    dom.reach = document.querySelector('#drivetime_module .reach');
+    dom.sliReach = document.querySelector('#drivetime_module .sliReach');
+    dom.detail = document.querySelector('#drivetime_module .detail');
+    dom.sliDetail = document.querySelector('#drivetime_module .sliDetail');
+    dom.selMode = document.querySelector('#drivetime_module .selMode');
+    dom.selProvider = document.querySelector('#drivetime_module .selProvider');
+    dom.chkDrivetimeConstruction = document.getElementById('chkDrivetimeConstruction');
 
     // locale.drivetime is called upon initialisation and when the country is changed (change_country === true).
     _this.locale.drivetime = function (change_country) {
+        removeLayer();
+        resetModule();
 
-        // Remove existing layer and layerMark.
-        if (_this.drivetime.layer) _this.map.removeLayer(_this.drivetime.layer);
-        if (_this.drivetime.layerMark) _this.map.removeLayer(_this.drivetime.layerMark);
+        dom.selProvider.innerHTML = '';
+        _this.drivetime.provider.forEach(function(e){
+            dom.selProvider.insertAdjacentHTML('beforeend','<option value="'+e+'">'+e.charAt(0).toUpperCase()+e.slice(1)+'</option>');
+        });
+        dom.selProvider.disabled = dom.selProvider.childElementCount === 1 ? true : false;
 
-        _this.drivetime.container.style['marginLeft'] = '0';
-        _this.drivetime.infoTable.innerHTML = '';
-
-        _this.drivetime.slider.value = 45;
-        document.getElementById('drivetime_minutes').innerHTML = 45;
-        _this.drivetime.slider.setAttribute('max', parseInt(_this.countries[_this.country].drivetime.maxMin));
-        document.getElementById('btnDrivetimeCopy').style.display = 'none';
-
-        // no support for drivetime hook now
-        // if (_this.hooks.drivetime){ 
-        //     _this.drivetime.layer = L.geoJson(JSON.parse(decodeURI(_this.hooks.drivetime)),{
-        //         interactive: false,
-        //         style: _this.drivetime.style
-        //     }).addTo(_this.map);
-        // }
-        
-        // Check if drivetime object exists
-        // if(drivetime){
-        //     _this.drivetime.layer = L.geoJson(drivetime.geometry, {
-        //         interactive: false,
-        //         style: _this.drivetime.style
-        //     }).addTo(_this.map);
-        //     _this.drivetime.infoTable.innerHTML = helper.createStatsTable(drivetime.properties);
-        //     _this.drivetime.infoTable.style['opacity'] = 1;
-        // }
+        dom.selMode.innerHTML = '';
+        Object.keys(_this.countries[_this.country].drivetime).map(function(key){
+            dom.selMode.insertAdjacentHTML('beforeend','<option value="'+key+'">'+key.charAt(0).toUpperCase()+key.slice(1)+'</option>');
+        });
+   
+        setParams(dom.selMode.options[dom.selMode.selectedIndex].value);
     };
     _this.locale.drivetime();
 
-    // Remove iso, clear info, remove hook and set container marginLeft to 0.
-    document.getElementById('btnDrivetime--off').addEventListener('click', function(){
-        if (_this.drivetime.layerMark) _this.map.removeLayer(_this.drivetime.layerMark);
+    function removeLayer() {
         if (_this.drivetime.layer) _this.map.removeLayer(_this.drivetime.layer);
+        if (_this.drivetime.layerMark) _this.map.removeLayer(_this.drivetime.layerMark);
         if (_this.drivetime.layer_circlePoints) _this.map.removeLayer(_this.drivetime.layer_circlePoints);
         if (_this.drivetime.layer_samplePoints) _this.map.removeLayer(_this.drivetime.layer_samplePoints);
         if (_this.drivetime.layer_tin) _this.map.removeLayer(_this.drivetime.layer_tin);
-        document.getElementById('btnDrivetimeCopy').style.display = 'none';
+    }
 
-        // _this.removeHook('vector_id');
-        // _this.locale.layersCheck('vectorSelect', null);
+    function resetModule() {
+        dom.pages[1].style.display = 'none';
+        dom.pages[0].style.display = 'block';
+        dom.container.style['marginLeft'] = '0';
+        dom.info_table.innerHTML = '';
+    }
 
-        // Reset module panel
-        _this.drivetime.container.style['marginLeft'] = '0';
-        _this.drivetime.infoTable.innerHTML = '';
+    function setParams(mode){
+        dom.sliMinutes.min = _this.countries[_this.country].drivetime[mode].minMin;
+        dom.sliMinutes.max = _this.countries[_this.country].drivetime[mode].maxMin;
+        dom.sliMinutes.value = _this.countries[_this.country].drivetime[mode].defMin;
+        dom.minutes.innerHTML = dom.sliMinutes.value;
+        dom.sliDetail.value = _this.countries[_this.country].drivetime[mode].detail;
+        dom.detail.innerHTML = dom.sliDetail.value;
+        dom.sliReach.value = _this.countries[_this.country].drivetime[mode].reach;
+        dom.reach.innerHTML = dom.sliReach.value;
+        dom.sliReach.min = parseInt(dom.sliReach.value * 0.95);
+        dom.sliReach.max = parseInt(dom.sliReach.value * 1.05);
+        dom.selMode.disabled = dom.selMode.childElementCount === 1 ? true : false;
+    }
+
+    // Remove iso, clear info, remove hook and set container marginLeft to 0.
+    dom.btnOff.addEventListener('click', function(){
+        removeLayer();
+        resetModule();
     });
 
-    document.getElementById('drivetime_slider_detail').addEventListener('input', function(){
-        document.getElementById('drivetime_detail').innerHTML = this.value;
+    dom.sliDetail.addEventListener('input', function(){
+        dom.detail.innerHTML = this.value;
     });
 
-    document.getElementById('drivetime_slider_reach').addEventListener('input', function(){
-        document.getElementById('drivetime_reach').innerHTML = this.value;
+    dom.sliReach.addEventListener('input', function(){
+        dom.reach.innerHTML = this.value;
     });
 
-    document.getElementById('drivetime_slider').addEventListener('input', function(){
-        document.getElementById('drivetime_minutes').innerHTML = this.value;
+    dom.sliMinutes.addEventListener('input', function(){
+        dom.minutes.innerHTML = this.value;
     });
 
-    document.getElementById('selectMode').addEventListener('change', function(e){
-        _this.drivetime.slider.min = e.target.value === 'walking'? 5 : 15;
-        _this.drivetime.slider.max = e.target.value === 'walking'? 45 : 180;
-        _this.drivetime.slider.value = e.target.value === 'walking'? 15 : 45;
-        document.getElementById('drivetime_minutes').innerHTML = e.target.value === 'walking'? 15 : 45;
-        document.getElementById('drivetime_slider_reach').min = e.target.value === 'walking'? 500 : 25;
-        document.getElementById('drivetime_slider_reach').max = e.target.value === 'walking'? 750 : 35;
-        document.getElementById('drivetime_slider_reach').value = e.target.value === 'walking'? 600 : 30;
-        document.getElementById('drivetime_reach').innerHTML = e.target.value === 'walking'? 600 : 30;
+    dom.selMode.addEventListener('change', function(e){
+        setParams(e.target.value);
     });
 
-    const btnDrivetime = document.getElementById('btnDrivetime');
-    btnDrivetime.addEventListener('click', function(){
-        document.getElementById('map').style.cursor = 'crosshair';
-
+    dom.btnQuery.addEventListener('click', function(){
+        dom.map.style.cursor = 'crosshair';
         _this.map.on('click', function(e){
-            getDrivetime(e, document.getElementById('drivetime_slider').value * 60)
+            getDrivetime(e, dom.sliMinutes.value * 60)
         });
-    });
-
-    _this.drivetime.construction = false;
-    document.getElementById('chkDrivetimeConstruction').addEventListener('click', function () {
-        _this.drivetime.construction = this.checked;
     });
 
     function getDrivetime(e, _distance){
         _this.map.off('click');
-        document.getElementById('map').style.cursor = '';
+        dom.map.style.cursor = '';
+        dom.btnOff.style.display = 'none';
+        dom.spinner.style.display = 'block';
+        dom.pages[0].style.display = 'none';
+        dom.container.style['marginLeft'] = '-50%';
+        removeLayer();
 
-        document.querySelector('#drivetime_module .page_content').style.display = 'none';
-        document.getElementById('btnDrivetime--off').style.display = 'none';
-        document.querySelector('#drivetime_module .spinner').style.display = 'block';
-        _this.drivetime.container.style['marginLeft'] = '-100%';
-
-        // Add geometry to the gazetteer layer
-        if (_this.drivetime.layerMark) _this.map.removeLayer(_this.drivetime.layerMark);
+        // Set layerMark on origin
         _this.drivetime.layerMark = L.geoJson({
             "type": "Feature",
             "geometry": {
@@ -130,25 +136,19 @@ module.exports = function Drivetime(_this){
             lng: e.latlng.lng,
             lat: e.latlng.lat,
             distance: _distance,
-            detail: document.getElementById('drivetime_slider_detail').value,
-            reach: document.getElementById('drivetime_slider_reach').value,
-            mode: document.getElementById('selectMode').options[document.getElementById('selectMode').selectedIndex].value,
-            provider: document.getElementById('selectProvider').options[document.getElementById('selectProvider').selectedIndex].value
-            //infoj: encodeURIComponent(_this.countries[_this.country].drivetime.infoj),
-            //arrayGrid: _this.countries[_this.country].drivetime.arrayGrid
+            detail: dom.sliDetail.value,
+            reach: dom.sliReach.value,
+            mode: dom.selMode.options[dom.selMode.selectedIndex].value,
+            provider: dom.selProvider.options[dom.selProvider.selectedIndex].value
         }));
         
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function() {
             if (this.status === 200) {
                 
-                if (_this.drivetime.layer) _this.map.removeLayer(_this.drivetime.layer);
-                if (_this.drivetime.layer_circlePoints) _this.map.removeLayer(_this.drivetime.layer_circlePoints);
-                if (_this.drivetime.layer_samplePoints) _this.map.removeLayer(_this.drivetime.layer_samplePoints);
-                if (_this.drivetime.layer_tin) _this.map.removeLayer(_this.drivetime.layer_tin);
                 let json = JSON.parse(this.responseText);
 
-                if (_this.drivetime.construction) {
+                if (dom.chkDrivetimeConstruction.checked) {
                     _this.drivetime.layer_tin = L.geoJson(json.tin,{
                         interactive: false,
                         style: {
@@ -186,21 +186,11 @@ module.exports = function Drivetime(_this){
                 }
 
                 _this.drivetime.layer = L.geoJson(json.iso, {
-                    interactive: true,
+                    interactive: _this.countries[_this.country].grid.infoj ? true : false,
                     onEachFeature: function (feature, layer) {
                         layer.on({
-                            click: function () {
-                                console.log(feature.properties);
-                                let xhr = new XMLHttpRequest();
-                                xhr.open('POST', 'q_grid_info');
-                                xhr.setRequestHeader("Content-Type","application/json");
-                                xhr.onload = function(){
-                                    if(this.status === 200) console.log(this.response);
-                                }
-                                xhr.send(JSON.stringify({
-                                    infoj: "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
-                                    geometry: feature.geometry
-                                }));
+                            click: function() {
+                                _this.comparison.fromGeoJSON(feature)
                             },
                             mouseover: function () {
                                 this.setStyle(isoStyle(feature, _distance, 0.2));
@@ -216,33 +206,33 @@ module.exports = function Drivetime(_this){
                 }).addTo(_this.map);
 
                 function isoStyle(feature, _distance, fillOpacity){
-                        let color = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
-                            '#01ffee' : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
-                                '#2200fe' : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
-                                    '#ff019e' : '#FFF';
+                    let color = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
+                        _this.drivetime.colorArray[0] : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
+                            _this.drivetime.colorArray[1] : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
+                                _this.drivetime.colorArray[2] : '#FFF';
 
-                        return {
-                            'stroke': true,
-                            'color': color,
-                            'weight': 2,
-                            'fill': true,
-                            'fillOpacity': fillOpacity
-                        }
+                    return {
+                        'stroke': true,
+                        'color': color,
+                        'weight': 2,
+                        'fill': true,
+                        'fillOpacity': fillOpacity
+                    }
                 }
 
                 _this.map.fitBounds(_this.drivetime.layer.getBounds());
+                
+                dom.spinner.style.display = 'none';
+                dom.btnOff.style.display = 'block';
+                dom.pages[1].style.display = 'block';
 
-                document.querySelector('#drivetime_module .page_content').style.display = 'block';
-                document.querySelector('#drivetime_module .spinner').style.display = 'none';
-                document.getElementById('btnDrivetime--off').style.display = 'block';
-
-                _this.drivetime.infoTable.style['opacity'] = 0;
+                dom.info_table.style['opacity'] = 0;
                 setTimeout(function () {
                     
-                    _this.drivetime.infoTable.innerHTML = helper.createStatsTable(json.properties);
-                    _this.drivetime.infoTable.style['opacity'] = 1;
+                    dom.info_table.innerHTML = helper.createStatsTable(json.properties);
+                    dom.info_table.style['opacity'] = 1;
 
-                    document.getElementById('btnDrivetimeCopy').addEventListener('click', function () {
+                    dom.btnCopy.addEventListener('click', function () {
                         let textArea = document.createElement("textarea");
                         textArea.style.visibility = 'none';
                         textArea.value = JSON.stringify(json.iso);
@@ -251,10 +241,7 @@ module.exports = function Drivetime(_this){
                         document.execCommand('copy');
                         textArea.remove();
                     });
-                    document.getElementById('btnDrivetimeCopy').style.display = 'block';
                 }, 300);
-
-                _this.drivetime.container.style['marginLeft'] = '-100%';
             }
         };
         xhr.send();

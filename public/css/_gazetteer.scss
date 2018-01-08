@@ -6,7 +6,7 @@
     position: absolute;
     z-index: 999;
     left: 20px;
-    width: calc(100% - 20px);
+    width: 290px;
   } @else {
     left: 0;
   }
@@ -18,14 +18,7 @@
     list-style-type: none;
     position: absolute;
     background-color: white;
-
     width: 100%;
-    //@if $mobile {
-    //  width: 100%;
-    //} @else {
-    //  width: calc(100% - 20px);
-    //}
-
     margin: 0;
     padding: 0;
     border-bottom: 1px solid #999;

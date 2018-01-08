@@ -1,5 +1,4 @@
 // Evaluate view_mode.
-if (view_mode === 'desktop') require('./lscrolly')(document.querySelector('.module_container'));
 if (view_mode === 'mobile') require('./mobile_interface')();
 
 // Evaluate settings.
@@ -21,9 +20,13 @@ objectEval(settings);
 require('./url_hooks')(settings);
 require('./locale')(settings);
 require('./gazetteer')(settings);
+require('./comparison')(settings);
 if (view_mode === 'desktop') require('./report')(settings);
 if (settings.grid) require('./grid')(settings);
 if (settings.location) require('./location')(settings);
 if (settings.vector) require('./vector')(settings);
 //if(settings.vector) require('./vector_geojson')(settings);
 if (settings.drivetime) require('./drivetime')(settings);
+
+document.querySelector('.module_container').style.display = 'block';
+if (view_mode === 'desktop') require('./lscrolly')(document.querySelector('.module_container'));

@@ -7,10 +7,15 @@
   .dev {
     // display: none;
     color: grey;
+
+    select {
+      color: grey;
+    }
   }
 
   select {
-    width: 100%
+    width: 100%;
+    margin: 5px 0 15px 0;
   }
 
   .bold {
@@ -20,7 +25,8 @@
   .swipe_page {
     vertical-align: top;
     @if $desktop {
-      padding: 0 4px 0 0;
+      width: 310px;
+      padding: 0 20px 0 0;
     } @else {
       height: 100%;
   }
@@ -73,23 +79,5 @@
         }
       }
     }
-  }
-}
-
-.pages--2 {
-  @extend .swipe_container;
-  @if $desktop {
-    width: 580px;
-  } @else {
-    width: 200%;
-  }
-}
-
-.pages--3 {
-  @extend .swipe_container;
-  @if $desktop {
-    width: 870px;
-  } @else {
-    width: 300%;
   }
 }

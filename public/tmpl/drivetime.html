@@ -1,44 +1,38 @@
 <div id="drivetime_module" class="module">
-    <table class="swipe_container pages--2"  cellpadding="0" cellspacing="0" style="margin-left: 0">
+    <table class="swipe_container" cellpadding="0" cellspacing="0" style="margin-left: 0">
 
         <td class="swipe_page">
             <div class="page_header">
-                <span>Drivetimes</span>
-
+                <span>Catchments</span>
             </div>
 
             <div class="page_content">
-                <p>Please specify the maximum traveltime in minutes:</p>
-                <span id="drivetime_minutes" class="bold">45</span><span class="bold"> minutes</span>
+                <p>Calculate catchments from a distance matrix.</p>
+                <span>Transit mode:</span>
+                <select class="selMode" name="selMode"></select>
+
+                <span>Please specify the maximum travel time in minutes:</span>
+                <span class="minutes bold"></span><span class="bold"> minutes</span>
 
                 <div class="range">
-                    <input id="drivetime_slider" type="range" min="15" max="90" value="45">
+                    <input class="sliMinutes" type="range">
                 </div>
 
                 <div class="dev">
                         <br>
-                        <span>Detail </span><span id="drivetime_detail" class="bold">3</span>
+                        <span>Detail </span><span class="detail" class="bold"></span>
                         <div class="range">
-                            <input id="drivetime_slider_detail" type="range" min="1" max="5" value="3">
+                            <input class="sliDetail" type="range" min="1" max="5">
                         </div>
         
                         <br>
-                        <span>Reach </span><span id="drivetime_reach" class="bold">30</span>
+                        <span>Reach </span><span class="reach" class="bold"></span>
                         <div class="range">
-                            <input id="drivetime_slider_reach" type="range" min="25" max="35" value="30">
+                            <input class="sliReach" type="range">
                         </div>
-                        
-                        <p>Mode</p>
-                        <select id="selectMode" name="selectMode">
-                            <option value="driving" selected>Driving</option> 
-                            <option value="walking">Walking</option>
-                        </select>
-        
-                        <p>Provider</p>
-                        <select id="selectProvider">
-                            <option value="mapbox" selected>Mapbox</option> 
-                            <option value="google">Google</option>
-                        </select>
+                               
+                        <span>Distance matrix provider:</span>
+                        <select class="selProvider" name="selProvider"></select>
 
                         <table class="checkbox">
                             <td class="box">
@@ -50,7 +44,7 @@
 
                 </div>
 
-                <div id="btnDrivetime" class="md_button">Set Drivetime Location</div>
+                <div class="md_button btnQuery">Set Drivetime Location</div>
             </div>
 
         </td>
@@ -58,13 +52,13 @@
         <td class="swipe_page">
             <div class="page_header">
                 <span class="spinner"><span class="bounce1"></span><span class="bounce2"></span><span class="bounce3"></span></span>
-                <i id="btnDrivetime--off"class="material-icons cursor page_backward">cancel</i>
+                <i class="material-icons cursor page_backward btnOff">cancel</i>
                 <span>Drivetime Module</span>
             </div>
 
-            <div class="page_content">
-                <table class="drivetime_info info_table" cellpadding="0" cellspacing="0"></table>
-                <div id="btnDrivetimeCopy" class="md_button">Copy to clipboard</div>                
+            <div class="page_content" style="display: none">
+                <table class="info_table" cellpadding="0" cellspacing="0"></table>
+                <div class="md_button btnCopy">Copy to clipboard</div>                
             </div>
         </td>
 

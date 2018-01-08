@@ -17,9 +17,12 @@ function drivetime (req, res) {
     // Distance in seconds divided by the reach defines the radius for the sample points circle
     req.query.reach = parseInt(req.query.reach);
 
+    // Assign empty data object to the response
     res.data = {};
-    res.data.circlePoints = [];
 
+    // Create empty array for circle (sample) points
+    // Generate points from circles generated with TurfJS
+    res.data.circlePoints = [];
     for (let i = 1; i <= (req.query.detail * 2); i++) {
 
         // Create circle on the origin of the drivetime
@@ -45,8 +48,11 @@ function drivetime (req, res) {
     // Get destinations for distance matrix requests
     res.data.destinations = eval(req.query.provider + '_destinations')(req, res);
 
-    (function foo(i) {
+    // Requests need to be split due to a limitation of 24 destinations per call
+    (function requestLoop(i) {
         if (i < res.data.destinations.length) {
+            
+            // Send request to the provider API
             request(eval(req.query.provider + '_request')(req, res, i),
                 (err, response, body) => {
                     if (err) {
@@ -56,15 +62,18 @@ function drivetime (req, res) {
                             start = i,
                             limit = i + 24;
 
+                        // Process the response from the distance matric API
                         for (i; i < limit; i++) {
                             eval(req.query.provider + '_samplePoints')(req, res, jbody, i, start)
                         }
 
+                        // Identify and flag outliers on inner ring
                         identifyOutliers(req, res, res.data.samplePoints.slice(start, start + 12), start);
 
+                        // Do not flag outliers on outermost ring
                         if ((start + 24) < limit) identifyOutliers(req, res, res.data.samplePoints.slice(start + 12, start + 24), start + 12);
 
-                        foo(i)
+                        requestLoop(i)
                     }
                 })
         } else {
@@ -75,10 +84,12 @@ function drivetime (req, res) {
 
 function identifyOutliers(req, res, arr, sq_start) {
 
+    // Filter sample points with a value greater than 0
     arr_ = arr.filter(pt => {
         return pt.properties.v > 0;
     });
 
+    // Calculate standard deviation for rings with more than 3 valid sample points
     if (arr_.length > 3) {
         let avg_v = arr_
             .map(pt => {
@@ -94,6 +105,7 @@ function identifyOutliers(req, res, arr, sq_start) {
 
         let stdDev = Math.sqrt(avg_d);
 
+        // Flag sample points which are above the standard deviation for the current ring
         arr.forEach((el, i) => {
             if (el.properties.v > (avg_v + stdDev)) {
                 res.data.samplePoints[sq_start + i].properties.outlier = true;

@@ -59,7 +59,6 @@ function grid(req, res) {
 
 function info(req, res) {
 
-console.log(JSON.stringify(req.body.geometry))
     let q = `SELECT
                ${req.body.infoj} as infoj
              FROM gb_hx_1k
@@ -69,19 +68,17 @@ console.log(JSON.stringify(req.body.geometry))
                    ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'),
                    4326),
                  gb_hx_1k.geomcntr, 0);`
- 
-    console.log(q);
 
-    //res.status(200).json({OK:'COMPUTER'});
+    //console.log(q);
 
-    databases['xyz'].any(q)
+    databases[req.body.database].any(q)
         .then(function (data) {
 
-            console.log(Object.keys(data).map(function (record) {
-                return Object.keys(data[record]).map(function (field) {
-                    return data[record][field];
-                });
-            }));
+            // console.log(Object.keys(data).map(function (record) {
+            //     return Object.keys(data[record]).map(function (field) {
+            //         return data[record][field];
+            //     });
+            // }));
 
             res.status(200).json(Object.keys(data).map(function (record) {
                 return Object.keys(data[record]).map(function (field) {
