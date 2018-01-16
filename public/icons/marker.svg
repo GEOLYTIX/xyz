@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000px" height="1000px">
+<g>
+	<path fill="#000" opacity="0.4" d="m 535,20
+	c -200,0   -360,160  -360,360 
+	     0,80    20,140    70,230
+	  100,170   290,390   290,390 
+	    0,0     190,-220  290,-390 
+	   50,-90    70,-150   70,-230 
+      0,-200 -160,-360 -360,-360 Z"/>	
+	<path fill="#ff9800" d="m 500,10
+	c -200,0   -360,160  -360,360 
+	     0,80    20,140    70,230
+	  100,170   290,390   290,390 
+	    0,0     190,-220  290,-390 
+	   50,-90    70,-150   70,-230 
+      0,-200 -160,-360 -360,-360 Z"/>	
+	<circle fill="#fff" opacity="0.8" cx="500" cy="360" r="250"/>
+</g>
+  <text x="500" y="360"
+      style="font-family: sans-serif;
+			       text-anchor: middle;
+						 alignment-baseline: central;
+             font-size: 470px;
+						 font-weight: 600;
+             fill: #555;">T
+  </text>
+</svg>

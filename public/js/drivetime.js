@@ -63,10 +63,11 @@ module.exports = function Drivetime(_this){
         dom.minutes.innerHTML = dom.sliMinutes.value;
         dom.sliDetail.value = _this.countries[_this.country].drivetime[mode].detail;
         dom.detail.innerHTML = dom.sliDetail.value;
-        dom.sliReach.value = _this.countries[_this.country].drivetime[mode].reach;
-        dom.reach.innerHTML = dom.sliReach.value;
-        dom.sliReach.min = parseInt(dom.sliReach.value * 0.95);
-        dom.sliReach.max = parseInt(dom.sliReach.value * 1.05);
+        let reach = _this.countries[_this.country].drivetime[mode].reach;
+        dom.sliReach.min = parseInt(reach * 0.9);
+        dom.sliReach.max = parseInt(reach * 1.1);
+        dom.sliReach.value = reach;
+        dom.reach.innerHTML = reach;
         dom.selMode.disabled = dom.selMode.childElementCount === 1 ? true : false;
     }
 
@@ -121,13 +122,12 @@ module.exports = function Drivetime(_this){
                 return new L.Marker(latlng, {
                     icon: L.icon({
                         iconUrl: _this.drivetime.icon,
-                        iconSize: [80, 40],
+                        iconSize: [40, 40],
                         iconAnchor: [40, 40]
                     }),
                     interactive: false
                 });
-            },
-            style: _this.gazetteer.style
+            }
         }).addTo(_this.map);
 
         let xhr = new XMLHttpRequest();

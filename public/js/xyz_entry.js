@@ -20,7 +20,7 @@ objectEval(settings);
 require('./url_hooks')(settings);
 require('./locale')(settings);
 require('./gazetteer')(settings);
-require('./comparison')(settings);
+require('./analyse')(settings);
 if (view_mode === 'desktop') require('./report')(settings);
 if (settings.grid) require('./grid')(settings);
 if (settings.location) require('./location')(settings);

@@ -458,6 +458,8 @@
       content: '\E835'; }
     .checkbox .box input[type=checkbox]:checked + label:after {
       content: '\E834'; }
+    .checkbox .box input[type=checkbox]:disabled + label:after {
+      color: grey; }
   .checkbox .label {
     font-family: ffmark, sans-serif;
     font-size: 14px; }
@@ -675,6 +677,44 @@
     text-align: right; }
   .info_table tr:not(.title):hover {
     background-color: #ccff90; }
+
+.infojHeader {
+  font-size: 16px;
+  font-weight: 700;
+  height: 20px; }
+
+.infojBtn {
+  font-size: 18px;
+  font-weight: 800;
+  float: right;
+  margin: 0 -2px 0 10px;
+  text-shadow: 1px 1px 1px grey; }
+
+.infojHeader:hover {
+  cursor: pointer; }
+
+.infojContainer {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  margin: 10px 0; }
+
+.infojTable {
+  width: 100%;
+  font-size: 12px;
+  padding-top: 5px; }
+  .infojTable .lv-0 {
+    font-size: 13px;
+    font-weight: 700; }
+  .infojTable .lv-1 {
+    font-size: 12px; }
+  .infojTable .lv-2 {
+    font-size: 12px;
+    padding-left: 10px; }
+  .infojTable .val {
+    font-family: 'PT Mono', monospace;
+    padding-left: 10px; }
+  .infojTable .key {
+    color: #090; }
 
 body {
   overflow-y: scroll;
