@@ -281,4 +281,22 @@ module.exports = function(_this){
         _this.grid.container.style['marginLeft'] = '-100%';
         
     }
+
+    _this.grid.fromGeoJSON = function(feature){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'q_grid_info');
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onload = function(){
+            if(this.status === 200) {
+                console.log(this.response);
+                feature.infoj = JSON.parse(this.response);
+                _this.analyse.add(feature);
+            }
+        }
+        xhr.send(JSON.stringify({
+            infoj: _this.countries[_this.country].grid.infoj,
+            database: _this.countries[_this.country].grid.database,
+            geometry: feature.geometry
+        }));
+    }
 };

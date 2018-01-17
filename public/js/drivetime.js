@@ -1,5 +1,6 @@
 const L = require('leaflet');
 const helper = require('./helper');
+const svg_marker = require('./svg_marker.js');
 
 module.exports = function Drivetime(_this){
     let dom = {};
@@ -121,9 +122,9 @@ module.exports = function Drivetime(_this){
             pointToLayer: function (feature, latlng) {
                 return new L.Marker(latlng, {
                     icon: L.icon({
-                        iconUrl: _this.drivetime.icon,
+                        iconUrl: svg_marker('X', '#35b'),
                         iconSize: [40, 40],
-                        iconAnchor: [40, 40]
+                        iconAnchor: [20, 40]
                     }),
                     interactive: false
                 });
@@ -190,7 +191,7 @@ module.exports = function Drivetime(_this){
                     onEachFeature: function (feature, layer) {
                         layer.on({
                             click: function() {
-                                _this.comparison.fromGeoJSON(feature)
+                                _this.grid.fromGeoJSON(feature)
                             },
                             mouseover: function () {
                                 this.setStyle(isoStyle(feature, _distance, 0.2));

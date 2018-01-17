@@ -690,9 +690,6 @@
   margin: 0 -2px 0 10px;
   text-shadow: 1px 1px 1px grey; }
 
-.infojHeader:hover {
-  cursor: pointer; }
-
 .infojContainer {
   overflow: hidden;
   transition: max-height 0.3s ease-out;

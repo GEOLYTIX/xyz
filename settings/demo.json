@@ -85,7 +85,7 @@
   "drivetime": {
     "provider": ["mapbox", "google"],
     "icon": "svg_marker(['#35b','#9cf'])",
-    "colorArray": ["#01ffee","#2200fe","#ff019e"] 
+    "colorArray": ["#999","#666","#333"] 
   },
   "country": "UK",
   "countries": {
