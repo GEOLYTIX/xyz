@@ -1,9 +1,9 @@
 const L = require('leaflet');
 const helper = require('./helper');
 const grid = require('./grid_tools');
-//const svg_builder = require('./svg_builder');
 const d3 = require('d3');
 
+// const svg_builder = require('./svg_builder');
 // const turfTag = require('@turf/tag');
 // const turfPlanePoint = require('@turf/planepoint');
 
@@ -139,8 +139,7 @@ module.exports = function(_this){
                         pointToLayer: function (feature, latlng) {
 
                             // Set size dependent on the location count against arraySize.
-                            
-                             let size =
+                            let size =
                                 feature.properties.c < _this.grid.arraySize[1] ? 6 :
                                     feature.properties.c < _this.grid.arraySize[2] ? 8 :
                                         feature.properties.c < _this.grid.arraySize[3] ? 10 :
@@ -254,7 +253,6 @@ module.exports = function(_this){
                  .attr("text-anchor", "middle")
                  .attr("alignment-baseline", "alphabetic")
                  .text(_this.grid.arraySize[i].toLocaleString('en-GB', {maximumFractionDigits: fractionDigits}));
-            
         }
        
         for(let i = 1; i < 8; i++){
@@ -288,7 +286,6 @@ module.exports = function(_this){
         xhr.setRequestHeader("Content-Type","application/json");
         xhr.onload = function(){
             if(this.status === 200) {
-                console.log(this.response);
                 feature.infoj = JSON.parse(this.response);
                 _this.analyse.add(feature);
             }

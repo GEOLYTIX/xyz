@@ -143,6 +143,8 @@ module.exports = function Analyse(_this){
         dataArray.map(function (obj) {
             if (obj.layer) _this.map.removeLayer(obj.layer);
             obj.layer = null;
+            if (obj.marker) _this.map.removeLayer(obj.marker);
+            obj.marker = null;
             obj.infoj = null;
             obj.container = null;
         });
@@ -168,31 +170,51 @@ module.exports = function Analyse(_this){
         dom.container.style['marginLeft'] = '-50%';
 
         entry.infoj = feature.infoj;
+
+        if (feature.marker) {
+            entry.marker = L.geoJson({
+                type: "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": feature.marker
+                }
+            }, {
+                    interactive: false,
+                    pointToLayer: function (feature, latlng) {
+                        return new L.Marker(latlng, {
+                            icon: L.icon({
+                                iconUrl: svg_marker(entry.letter, entry.color),
+                                iconSize: [40, 40],
+                                iconAnchor: [20, 40]
+                            }),
+                            interactive: false
+                        });
+                    }
+                }).addTo(_this.map);
+        }
+
         entry.layer = L.geoJson({
             type: "Feature",
             geometry: feature.geometry
-            // "geometry": {
-            //     "type": "Point",
-            //     "coordinates": [e.latlng.lng, e.latlng.lat]
-            // }
         }, {
                 interactive: false,
+                pane: 'shadowFilter',
                 style: {
                     stroke: true,
                     color: entry.color,
-                    weight: 1,
+                    weight: 2,
                     fill: false
-                  }
-                // pointToLayer: function (feature, latlng) {
-                //     return new L.Marker(latlng, {
-                //         icon: L.icon({
-                //             iconUrl: svg_marker(entry.letter, entry.color),
-                //             iconSize: [40, 40],
-                //             iconAnchor: [20, 40]
-                //         }),
-                //         interactive: false
-                //     });
-                // }
+                },
+                pointToLayer: function (feature, latlng) {
+                    return new L.Marker(latlng, {
+                        icon: L.icon({
+                            iconUrl: svg_marker(entry.letter, entry.color),
+                            iconSize: [40, 40],
+                            iconAnchor: [20, 40]
+                        }),
+                        interactive: false
+                    });
+                }
             }).addTo(_this.map);
 
         createInfojTable(entry);
@@ -219,6 +241,8 @@ module.exports = function Analyse(_this){
             this.parentNode.parentNode.remove();
             _this.map.removeLayer(feature.layer);
             feature.layer = null;
+            if (feature.marker) _this.map.removeLayer(feature.marker);
+            feature.marker = null;
             feature.infoj = null;
             feature.container = null;
         });
@@ -253,6 +277,26 @@ module.exports = function Analyse(_this){
             }
         });
         header.appendChild(i);
+
+        // Create control to toggle marker.
+        if (feature.marker) {
+            i = document.createElement('i');
+            i.textContent = 'location_off';
+            i.style.color = feature.color;
+            i.className = 'material-icons cursor infojBtn';
+            i.addEventListener('click', function () {
+                let container = this.parentNode.parentNode;
+                let header = this.parentNode;
+                if (this.textContent === 'location_off') {
+                    _this.map.removeLayer(feature.marker);
+                    this.textContent = 'location_on';
+                } else {
+                    _this.map.addLayer(feature.marker);
+                    this.textContent = 'location_off';
+                }
+            });
+            header.appendChild(i);
+        }
 
         // Add header element to the container.
         container.appendChild(header);

@@ -83,9 +83,7 @@
         "rgba(0, 0, 0, 0.1)"]
   },
   "drivetime": {
-    "provider": ["mapbox", "google"],
-    "icon": "svg_marker(['#35b','#9cf'])",
-    "colorArray": ["#999","#666","#333"] 
+    "provider": ["mapbox", "google"]
   },
   "country": "UK",
   "countries": {
@@ -220,7 +218,7 @@
           "defMin": 45,
           "maxMin": 180,
           "detail": 3,
-          "reach": 30
+          "reach": 40
         }
       },
       "vector": {

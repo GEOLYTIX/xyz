@@ -112,6 +112,10 @@ button {
     width: 100%;
     height: 100%;
 
+    div.leaflet-shadowFilter-pane svg > g path {
+      filter: url(#dropshadow);
+    }
+
     .mapbox-attribution-container {
       bottom: 0;
       right: 0;

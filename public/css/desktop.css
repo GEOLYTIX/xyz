@@ -976,6 +976,8 @@ button {
   .map_container .map {
     width: 100%;
     height: 100%; }
+    .map_container .map div.leaflet-shadowFilter-pane svg > g path {
+      filter: url(#dropshadow); }
     .map_container .map .mapbox-attribution-container {
       bottom: 0;
       right: 0;

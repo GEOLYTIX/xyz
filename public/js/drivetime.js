@@ -65,8 +65,8 @@ module.exports = function Drivetime(_this){
         dom.sliDetail.value = _this.countries[_this.country].drivetime[mode].detail;
         dom.detail.innerHTML = dom.sliDetail.value;
         let reach = _this.countries[_this.country].drivetime[mode].reach;
-        dom.sliReach.min = parseInt(reach * 0.9);
-        dom.sliReach.max = parseInt(reach * 1.1);
+        dom.sliReach.min = parseInt(reach * 0.5);
+        dom.sliReach.max = parseInt(reach * 1.5);
         dom.sliReach.value = reach;
         dom.reach.innerHTML = reach;
         dom.selMode.disabled = dom.selMode.childElementCount === 1 ? true : false;
@@ -122,7 +122,7 @@ module.exports = function Drivetime(_this){
             pointToLayer: function (feature, latlng) {
                 return new L.Marker(latlng, {
                     icon: L.icon({
-                        iconUrl: svg_marker('X', '#35b'),
+                        iconUrl: svg_marker('', '#777'),
                         iconSize: [40, 40],
                         iconAnchor: [20, 40]
                     }),
@@ -188,10 +188,13 @@ module.exports = function Drivetime(_this){
 
                 _this.drivetime.layer = L.geoJson(json.iso, {
                     interactive: _this.countries[_this.country].grid.infoj ? true : false,
+                    pane: 'shadowFilter',
                     onEachFeature: function (feature, layer) {
                         layer.on({
-                            click: function() {
-                                _this.grid.fromGeoJSON(feature)
+                            click: function(e) {
+                                feature.marker = [e.latlng.lng, e.latlng.lat];
+                                _this.grid.fromGeoJSON(feature);
+                                this.setStyle(isoStyle(feature, _distance, 0));
                             },
                             mouseover: function () {
                                 this.setStyle(isoStyle(feature, _distance, 0.2));
@@ -207,15 +210,15 @@ module.exports = function Drivetime(_this){
                 }).addTo(_this.map);
 
                 function isoStyle(feature, _distance, fillOpacity){
-                    let color = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
-                        _this.drivetime.colorArray[0] : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
-                            _this.drivetime.colorArray[1] : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
-                                _this.drivetime.colorArray[2] : '#FFF';
+                    let style = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
+                        ['#999',1] : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
+                            ['#666',1.5] : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
+                               ['#333',2] : ['#333',2];
 
                     return {
                         'stroke': true,
-                        'color': color,
-                        'weight': 2,
+                        'color': style[0],
+                        'weight': style[1],
                         'fill': true,
                         'fillOpacity': fillOpacity
                     }

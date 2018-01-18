@@ -141,6 +141,10 @@ module.exports = function(_this){
     _this.map.getPane('location').style.zIndex = 530;
     _this.map.getPane('location').style.pointerEvents = 'none';
 
+    _this.map.createPane('shadowFilter');
+    _this.map.getPane('shadowFilter').style.zIndex = 535;
+    _this.map.getPane('shadowFilter').style.pointerEvents = 'none';
+
     _this.map.createPane('locationSelection');
     _this.map.getPane('locationSelection').style.zIndex = 540;
     _this.map.getPane('locationSelection').style.pointerEvents = 'none';
