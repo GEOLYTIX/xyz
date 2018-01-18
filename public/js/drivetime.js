@@ -197,7 +197,7 @@ module.exports = function Drivetime(_this){
                                 this.setStyle(isoStyle(feature, _distance, 0));
                             },
                             mouseover: function () {
-                                this.setStyle(isoStyle(feature, _distance, 0.2));
+                                this.setStyle(isoStyle(feature, _distance, 0.1));
                             },
                             mouseout: function () {
                                 this.setStyle(isoStyle(feature, _distance, 0));

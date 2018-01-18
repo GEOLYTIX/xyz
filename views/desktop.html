@@ -74,18 +74,14 @@
                         <strong>Improve this map</strong>
                     </a>
             </div>
-                <svg xmlns="w3.org/2000/svg" ; version="1.1">
+                <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
                     <defs>
-                        <filter id='dropshadow' height='130%'>
+                        <filter id='dropshadow'>
                             <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                            <!-- stdDeviation is how much to blur -->
                             <feOffset dx='1' dy='1' result='offsetblur' />
-                            <!-- how much to offset -->
                             <feMerge>
                                 <feMergeNode/>
-                                <!-- this contains the offset blurred image -->
                                 <feMergeNode in='SourceGraphic' />
-                                <!-- this contains the element that the filter is applied to -->
                             </feMerge>
                         </filter>
                     </defs>

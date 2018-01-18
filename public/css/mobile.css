@@ -678,40 +678,37 @@
   .info_table tr:not(.title):hover {
     background-color: #ccff90; }
 
-.infojHeader {
-  font-size: 16px;
-  font-weight: 700;
-  height: 20px; }
-
-.infojBtn {
-  font-size: 18px;
-  font-weight: 800;
-  float: right;
-  margin: 0 -2px 0 10px;
-  text-shadow: 1px 1px 1px grey; }
-
 .infojContainer {
   overflow: hidden;
   transition: max-height 0.3s ease-out;
   margin: 10px 0; }
-
-.infojTable {
-  width: 100%;
-  font-size: 12px;
-  padding-top: 5px; }
-  .infojTable .lv-0 {
-    font-size: 13px;
-    font-weight: 700; }
-  .infojTable .lv-1 {
-    font-size: 12px; }
-  .infojTable .lv-2 {
+  .infojContainer .infojHeader {
+    font-size: 16px;
+    font-weight: 700;
+    height: 20px; }
+    .infojContainer .infojHeader .infojBtn {
+      font-size: 18px;
+      font-weight: 800;
+      float: right;
+      margin: 0 -2px 0 10px;
+      text-shadow: 1px 1px 1px grey; }
+  .infojContainer .infojTable {
+    width: 100%;
     font-size: 12px;
-    padding-left: 10px; }
-  .infojTable .val {
-    font-family: 'PT Mono', monospace;
-    padding-left: 10px; }
-  .infojTable .key {
-    color: #090; }
+    padding-top: 5px; }
+    .infojContainer .infojTable .lv-0 {
+      font-size: 13px;
+      font-weight: 700; }
+    .infojContainer .infojTable .lv-1 {
+      font-size: 12px; }
+    .infojContainer .infojTable .lv-2 {
+      font-size: 12px;
+      padding-left: 10px; }
+    .infojContainer .infojTable .val {
+      font-family: 'PT Mono', monospace;
+      padding-left: 10px; }
+    .infojContainer .infojTable .key {
+      color: #090; }
 
 body {
   overflow-y: scroll;

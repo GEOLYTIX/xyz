@@ -150,13 +150,6 @@ module.exports = function Analyse(_this){
         });
     }
 
-    // _this.map.on('click', function (e) {
-    //     let space = dataArray.filter(function (obj) {
-    //         if (!obj.infoj) return obj
-    //     });
-    //     if (space.length > 0) addToDataArray(e, space[0])
-    // });
-
     _this.analyse = {};
 
     _this.analyse.add = function(feature){
