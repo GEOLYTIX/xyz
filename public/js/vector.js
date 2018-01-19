@@ -1,198 +1,181 @@
 const L = require('leaflet');
 const helper = require('./helper');
-
-require('leaflet.vectorgrid');
+const cluster = require('./cluster'); // import cluster layer
+const mvt = require('./mvt'); // import mvt layer
+const gjson = require('./gjson'); // import geojson layer
 
 module.exports = function(_this){
+    
+    _this.vector.dom = {};
+    
+    // used in layer manager
+    _this.vector.dom.layers = document.querySelector('#layers_module .page_content table.checkbox');
+    _this.vector.dom.chkIdPref = "chkVectorLayer_";
+    
+    // module container
+    //_this.vector.dom.container = document.querySelector('#layers_module > .swipe_container');
+    
+    // used in cluster layer
+    _this.vector.dom.btnMap = document.querySelector('.map_button');
+    _this.vector.dom.btnZoomLoc = document.getElementById('btnZoomLoc');
+    _this.vector.dom.location_drop = document.querySelector('.location_drop');
+    _this.vector.dom.locationTable = document.querySelector('.location_table');
+    _this.vector.dom.locLegendId =  'layers-legend'; //id only as passed to both JS and D3.
+    _this.vector.dom.map = document.getElementById('map');
+    _this.vector.dom.locDropClose = document.querySelector('.location_drop__close');
 
     // locale.vector is called upon initialisation and when the country is changed (change_country === true).
     _this.locale.vector = function (change_country) {
-
-        // Remove existing layer and layerSelection.
-        if (_this.vector.layer) _this.map.removeLayer(_this.vector.layer);
-    
-        // Check for vector display hook.
-        if (_this.hooks.vector) {
-            toggleVectorLayer(true);
-        } else {
-            _this.vector.display = false;
-        }
-
-        // Remove the vector_id hook when country is changed or select feature if hook exists
+        
+        // Remove some hooks when country is changed or select feature if hook exists
         if (change_country) {
-            _this.removeHook('vector_id');
-            _this.vector.container.style['marginLeft'] = '0';
-            _this.vector.infoTable.innerHTML = '';
-        } else if (_this.hooks.vector_id) {
-            selectLayer(_this.hooks.vector_id);
-        }
-    };
-    _this.locale.vector();
-
-    // Toogle visibility of the vector layer.
-    document.getElementById('btnVector--toggle').addEventListener('click', toggleVectorLayer);
-
-    // Toggle vector layer function turns vector on with override === true.
-    function toggleVectorLayer(override){
-        let btn = document.getElementById('btnVector--toggle');
-        helper.toggleClass(btn, 'on');
-        if (_this.vector.display === false || override === true) {
-            _this.vector.display = true;
-            btn.innerHTML = 'Turn vectors off';
-            _this.setHook('vector', true);
-            getLayer();
-
-        } else {
-            _this.vector.display = false;
-            btn.innerHTML = 'Turn vectors on';
-            _this.removeHook('vector');
-            if (_this.vector.layer) _this.map.removeLayer(_this.vector.layer);
-            _this.locale.layersCheck('vector', null);
-        }
-    }
-
-    // Unselect vector, clear info, remove hook and set container marginLeft to 0.
-    document.getElementById('btnStatistics--off').addEventListener('click', function(){
-       
-        _this.removeHook('vector_id');
-        clearSelection(_this.vector.selected);
-    });
-
-    // Get vector layer
-    _this.vector.getLayer = getLayer;
-    function getLayer() {
-        
-        let pbfLayer_options = {
-            rendererFactory: L.canvas.tile,
-            interactive: true,
-            getFeatureId: function(f){
-                return f.properties.qid;
-            },
-            vectorTileLayerStyles: {
-                'vector': _this.vector.style
-            }
-        },
-            hl;
-        
-        let zoom = _this.map.getZoom(),
-            arrayZoom = _this.countries[_this.country].vector.arrayZoom,
-            zoomKeys = Object.keys(arrayZoom),
-            maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-
-        // Assign the table based on the zoom array.
-        _this.vector.table = zoom > maxZoomKey ?
-            arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
-                null : arrayZoom[zoom];
-
-        // Initiate data request only if table and display are true.
-        if (_this.vector.table && _this.vector.display) {
+            _this.vector.layers = {}; // cleared any pre existing layers
+            _this.removeHook('layers'); //remove selection
+            _this.removeHook('selected'); //remove selection
             
-            let bounds = _this.map.getBounds(),
-                url = localhost + 'mvt/{z}/{x}/{y}'
-            + "?" + helper.paramString({
-                table: _this.vector.table,
-                layer: "vector",
-                west: bounds.getWest(),
-                south: bounds.getSouth(),
-                east: bounds.getEast(),
-                north: bounds.getNorth()
+        // Remove existing layers and/or any selections
+            Object.keys(_this.vector.layers).map(_key => {
+                _this.vector.layers[_layer].clearLayers();
             });
-            
-            // Check for existing layer and remove from map.
-            if (_this.vector.layer) _this.map.removeLayer(_this.vector.layer);
-            
-            _this.vector.layer = L.vectorGrid.protobuf(url, pbfLayer_options)
-                .on('load', function(){
-                if(_this.vector.selected){
-                    selectLayer(_this.vector.selected);
-                }
-            })
-                .on('click', function(e){
-                if(e.layer.properties.qid === _this.hooks.vector_id) clearSelection(e.layer.properties.qid);
-                selectLayer(e.layer.properties.qid);
-                L.DomEvent.stop(e);
-            })
-                .on('mouseover', function(e){
-                clearHighlight();
-                hl = e.layer.properties.qid;
-                if(_this.hooks.vector_id){
-                    if(hl !== _this.hooks.vector_id){
-                        this.setFeatureStyle(hl, _this.vector.styleHighlight);
-                    }
-                } else {
-                    this.setFeatureStyle(hl, _this.vector.styleHighlight);
-                }
-            })
-                .on('mouseout', function(e){
-                clearHighlight();
-            })
-                .addTo(_this.map);
-
-           
-            // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
-            if (!_this.vector.table || !_this.vector.display){
-                _this.map.removeLayer(_this.vector.layer);
-                _this.locale.layersCheck('vector', false);}
-
-        } else {
-
-            // Set the layersCheck for the vector 
-            _this.locale.layersCheck('vector', null);
+    
+        } 
+        
+        // Add layer management
+        layer_manager();
+        
+        // check for selections
+        if(_this.hooks.selected){
+            let selections = _this.readSelectionMultiHook();
+            console.log(selections);
+            console.log(_this.vector.layers);
+            Object.keys(selections).map(function(_key){
+                _this.vector.layers[_key].selectLayer(selections[_key]);
+            });
         }
         
-        function clearHighlight(){
-            if(hl && hl !== _this.hooks.vector_id){
-                _this.vector.layer.resetFeatureStyle(hl);
-            }
-            hl = null;
-        }
-    }
+    };
+    
+    _this.locale.vector();
+    
+    function layer_manager(){
+           
+        _this.vector.dom.layers.innerHTML = ""; // remove layer manager
 
-    // Select a vector layer.
-    _this.vector.selectLayer = selectLayer;
-    function selectLayer(id, zoom) {
-
-        // Create new xhr for /q_vector_info?
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', localhost + 'q_vector_info?' + helper.paramString({
-            qid: id
-        }));
-
-        // Display the selected layer feature on load event.
-        xhr.onload = function () {
-            if (this.status === 200) {
-                let json = JSON.parse(this.responseText),
-                    //geomj = JSON.parse(json[0].geomj),
-                    infoj = JSON.parse(json[0].infoj),
-                    table = helper.createStatsTable(infoj);
-
-                // Display results; use opacity with css transition for fade effect.
-                _this.vector.infoTable.style['opacity'] = 0;
-                setTimeout(function () {
-                    _this.vector.infoTable.innerHTML = table;
-                    _this.vector.infoTable.style['opacity'] = 1;
-                }, 300);
-                _this.vector.container.style['marginLeft'] = '-100%';
-
-                _this.setHook('vector_id', id);
-
-                //if (zoom) _this.map.fitBounds(_this.vector.layerSelection.getBounds());
-            }
-        };
-        if(_this.vector.selected) clearSelection(_this.vector.selected);
-        if(_this.hooks.vector_id === id) clearSelection(_this.hooks.vector_id);
-        _this.vector.selected = id;
-        _this.vector.layer.setFeatureStyle(id, _this.vector.styleSelection);
-        xhr.send();
+        let content = '';
+        
+        // add checkboxes for available layers
+        Object.keys(_this.countries[_this.country].vector).map(function(_layer){
+            
+            // Initialize layer object
+            _this.vector.layers[_layer] = {};
+            
+            // remove space to apply element id
+            let layer_id = _this.respaceHook(_layer, "_");
+            
+            // save element id for reference
+            _this.vector.layers[_layer].DOM_id = _this.vector.dom.chkIdPref + layer_id;
+            
+            content += "<tr><td class='box'><input type='checkbox' id='" + _this.vector.layers[_layer].DOM_id + "'><label for='" + _this.vector.layers[_layer].DOM_id + "'></label></td><td>" + _layer + "</td></tr>";
+        });
+        
+        // update DOM
+        _this.vector.dom.layers.innerHTML = content;
+        
+        // add onchange event to each checkbox to update display state 
+        Object.keys(_this.vector.layers).map(function(_layer){
+             
+           let _id =  _this.vector.layers[_layer].DOM_id;
+            
+            document.getElementById(_id).addEventListener("change", function(){
+                this.checked ? _this.vector.layers[_layer].display = true : _this.vector.layers[_layer].display = false;
+                
+                // Check for existing layer and remove from map.
+                //if (_this.vector.layers[_layer].layer) _this.map.removeLayer(_this.vector.layers[_layer].layer);
+                //_this.vector.layers[_layer].clearLayers();
+                
+                // get layer format
+                let _format = _this.countries[_this.country].vector[_layer].format;
+                
+                if(_this.vector.layers[_layer].display){
+            
+                    // set web hook
+                    if(_this.hooks.layers) {
+                        _this.hooks.layers = _this.pushHook(_this.hooks.layers.split(","), _layer);
+                    } else {
+                        _this.hooks.layers = _this.pushHook([], _layer);
+                    }
+                    _this.setHook("layers", _this.hooks.layers);
+                    
+                    if(_format === 'geojson') gjson.getLayer(_this, _layer); // render geojson layer
+                    if(_format === 'mvt') mvt.getLayer(_this, _layer); // render mvt layer
+                    if(_format === 'cluster') cluster.getLayer(_this, _layer); // render cluster layer with legend
+                    
+                } else {
+                    
+                    _this.vector.layers[_layer].clearLayers();
+                   
+                    
+                    // remove multi hook if layer not displayed
+                    if(_this.hooks.layers){
+                        _this.hooks.layers = _this.popHook(_this.hooks.layers.split(","), _layer);
+                        // check if anything left
+                        if(_this.hooks.layers) {
+                        _this.setHook("layers", _this.hooks.layers);
+                        } else {
+                            _this.removeHook("layers");   
+                        }
+                    } else {
+                        _this.removeHook("layers");   
+                    }
+                    
+                    // remove select multi hook if layer not displayed
+                    if(_this.hooks.selected){
+                
+                        _this.hooks.selected = _this.popHook(_this.hooks.selected.split(","), _this.respaceHook(_layer) + "." + _this.vector.layers[_layer].selected);
+                        _this.vector.layers[_layer].selected = null;
+                        // check if anything left
+                        if(_this.hooks.selected) {
+                            _this.setHook("selected", _this.hooks.selected);
+                        } else {
+                            _this.removeHook("selected");   
+                        }
+                    } else {
+                        _this.removeHook("selected");   
+                    }
+                    
+                }
+            });
+        });
+        
+        //Check for vector display hook
+        if(_this.hooks.layers && _this.vector.layers){
+            
+            // read layers from web hooks
+            let _layer_hooks = _this.hooks.layers.split(",");
+            
+            // select layers to load
+            _layer_hooks.map(item => {
+                _this.vector.layers[_this.unspaceHook(item)].display = true;
+                document.getElementById(_this.vector.dom.chkIdPref + _this.respaceHook(_this.unspaceHook(item), "_")).checked = true;
+            });
+            getLayers();  // load layers
+        } 
     }
     
-    function clearSelection(id){
-        _this.vector.layer.resetFeatureStyle(id);
-        _this.vector.selected = null;
-        _this.removeHook('vector_id');
-
-        // Reset module panel
-        _this.vector.container.style['marginLeft'] = '0';
-        _this.vector.infoTable.innerHTML = '';
+    // Get vector layers. Called on view change end in locale.
+    _this.vector.getLayers = getLayers;
+    
+    function getLayers(){
+        
+        Object.keys(_this.countries[_this.country].vector).map(function(_layer){
+            let _format = _this.countries[_this.country].vector[_layer].format;
+                
+            if(_this.vector.layers[_layer].display){
+                
+                if(_format === 'geojson') gjson.getLayer(_this, _layer); // render geojson layer
+                if(_format === 'mvt') mvt.getLayer(_this, _layer); // render mvt layer
+                if(_format === 'cluster') cluster.getLayer(_this, _layer); // render cluster layer with legend
+            } 
+        });
     }
 };

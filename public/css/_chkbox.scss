@@ -27,7 +27,7 @@
     input[type=checkbox]:checked + label:after {
       content: '\E834';
     }
-
+      
     input[type=checkbox]:disabled + label:after {
       color: grey;
     }

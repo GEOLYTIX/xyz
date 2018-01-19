@@ -31,8 +31,6 @@
     "countrylist": "document.getElementById('gaz_countrylist')"
   },
   "vector": {
-    "container": "document.querySelector('#statistics_module > .swipe_container')",
-    "infoTable": "document.querySelector('.statistics_info')",
     "style": {
       "stroke": true,
       "color": "#666",
@@ -68,10 +66,14 @@
       "maxZoom": 17,
       "border": false,
       "vector": {
-        "arrayZoom": {
-          "10": "gb_postaldistrict_census__11",
-          "11": "gb_postaldistrict_census__11",
-          "12": "gb_postalsector_census__11"
+          "Postal codes": {
+              "arrayZoom": {
+                  "10": "gb_postaldistrict_census__11",
+                  "11": "gb_postaldistrict_census__11",
+                  "12": "gb_postalsector_census__11"
+            },
+            "format": "mvt",
+            "pane": "areas"
         }
       }
     }

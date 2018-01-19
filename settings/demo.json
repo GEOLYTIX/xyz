@@ -33,8 +33,6 @@
     "countrylist": "document.getElementById('gaz_countrylist')"
   },
   "vector": {
-    "container": "document.querySelector('#statistics_module > .swipe_container')",
-    "infoTable": "document.querySelector('.statistics_info')",
     "style": {
       "stroke": true,
       "color": "#666",
@@ -61,9 +59,6 @@
     }
   },
   "location": {
-    "container": "document.querySelector('#location_module > .swipe_container')",
-    "infoTable": "document.querySelector('.location_info')",
-    "location_drop": "document.querySelector('.location_drop')",
     "marker": "svg_marker(['#ff4081','#6a1b9a'])"
   },
   "grid": {
@@ -83,7 +78,18 @@
         "rgba(0, 0, 0, 0.1)"]
   },
   "drivetime": {
-    "provider": ["mapbox", "google"]
+    "provider": "mapbox",
+    "container": "document.querySelector('#drivetime_module > .swipe_container')",
+    "infoTable": "document.querySelector('.drivetime_info')",
+    "slider": "document.getElementById('drivetime_slider')",
+    "icon": "svg_marker(['#35b','#9cf'])",
+    "style": {
+      "stroke": true,
+      "color": "#35b",
+      "weight": 2,
+      "fillColor" : "#9cf",
+      "fillOpacity": 0.2
+    }
   },
   "country": "UK",
   "countries": {
@@ -94,143 +100,177 @@
       "minZoom": 6,
       "maxZoom": 17,
       "border": true,
-      "location": {
-        "database": "xyz",
-        "arrayZoom": {
-          "6": "rp_hx_128k",
-          "7": "rp_hx_64k",
-          "8": "rp_hx_32k",
-          "9": "rp_hx_16k",
-          "10": "rp_hx_8k",
-          "11": "rp_hx_4k",
-          "12": "rp_hx_2k",
-          "13": "rp_hx_1k",
-          "14": "retailpoints"
-        },
-        "clusterDistance": {
-            "7": 0.09,
-            "8": 0.05,
-            "9": 0.03,
-            "10": 0.02,
-            "11": 0.009,
-            "12": 0.005,
-            "13": 0.004,
-            "14": 0.002,
-            "15": 0
-        },
-        "markerStyle": {
-            "aldi": {
-                "style": [[400, "#ffbf45"], [350, "#fa6f08"], [300, "#ef3c11"], [250, "#001f79"], [200, "#02bee3"], [100, "#ffffff"]],
-                "label": "Aldi"
-            },
-            "asda": {
-                "style": [[400, "#83b923"], [200, "#ffffff"], [150, "#fdb839"]],
-                "label": "Asda"
-            },
-            "booths": {
-                "style": [[400, "#a12629"], [200, "#ffffff"], [150, "#a12629"]],
-                "label": "Booths"
-            },
-            "budgens": {
-                "style": [[400, "#EEEEE0"], [200, "#679a00"], [150, "#cccb01"]],
-                "label": "Budgens"
-            },
-            "co_op": {
-                "style": [[400, "#0b1e60"], [250, "#ffffff"], [200, "#a3d227"]], 
-                "label": "The Co-Operative"
-            },
-            "costco": {
-                "style": [[400, "#005daa"], [350, "#ffffff"], [250, "#e31837"]],
-                "label": "Costco"
-            },
-            "farmfoods": {
-                "style":[[400, "#77a632"], [300, "#f7f900"], [200, "#ff0000"]],
-                "label": "Farm Foods"
-            },
-            "fultons_food": {
-                "style":[[400, "#004a95"], [300, "#ffffff"], [200, "#004a95"], [100, "#fff11f"]], 
-                "label": "Fultons Food"
-            },
-            "heron_foods": {
-                "style":[[400, "#ffffff"], [300, "#313590"], [100, "#ffcf00"]], 
-                "label": "Heron Foods"},
-            "iceland": {
-                "style": [[400, "#ed1b2d"], [300, "#f2552b"], [200, "#f89128"], [100, "#ffffff"]], 
-                "label": "Iceland"
-            },
-            "lidl": {
-                "style": [[400, "#d61408"], [350, "#ffe502"], [200, "#002d7a"], [100, "#d61408"]], 
-                "label": "Lidl"
-            },
-            "makro": {
-                "style": [[400, "#00457a"], [150, "#ffe811"]], 
-                "label": "Makro"
-            },
-            "marks_spencer": {
-                "style": [[400, "#0a0d10"], [200, "#def036"], [100, "#0a0d10"]],
-                "label": "Marks & Spencer"
-            },
-            "morrisons": {
-                "style": [[400, "#ffe133"], [200, "#00614e"]], 
-                "label":"Morrisons"
-            },
-            "sainsburys": {
-                "style": [[400, "#ee8a00"], [250, "#ffffff"], [150, "#ee8a00"]], 
-                "label": "Sainsbury's"
-            },
-            "tesco": {
-                "style": [[400, "#0055a8"], [300, "#ffffff"], [150, "#f02f26"]], 
-                "label": "Tesco"
-            },
-            "waitrose": {
-                "style": [[400, "#81ae37"], [150, "#ffffff"]], 
-                "label": "Waitrose"
-            },
-            "whole_foods": {
-                "style": [[400, "#00674b"],[350, "#ffffff"],[200, "#00674b"]], 
-                "label": "Whole Foods"
-            },
-            "other": {
-                "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]], 
-                "label": "other"
-            }
-        },
-        "arrayCompColours": ["#ddd", "#999", "#111"],
-        "competitors": ["co_op", "sainsburys", "tesco"],
-        "qID": "qid",
-        "qCount": "rp_c",
-        "qValue": "rp_v",
-        "qLayer": "retailpoints",
-        "qVector": "vector",
-        "qLabel": "store",
-        "qBrand": "brand"
-      },
       "drivetime": {
-        "walking": {
-          "minMin": 5,
-          "defMin": 15,
-          "maxMin": 45,
-          "detail": 2,
-          "reach": 600
-        },
-        "driving": {
-          "minMin": 15,
-          "defMin": 45,
-          "maxMin": 180,
-          "detail": 3,
-          "reach": 40
-        }
+            "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
+            "maxMin": 90
       },
       "vector": {
-        "arrayZoom": {
-          "10": "gb_postaldistrict_census__11",
-          "11": "gb_postaldistrict_census__11",
-          "12": "gb_postalsector_census__11"
-        }
+        "Postal codes": {
+            "arrayZoom": {
+                "10": "gb_postaldistrict_census__11",
+                "11": "gb_postaldistrict_census__11",
+                "12": "gb_postalsector_census__11"
+            },
+            "format": "mvt",
+            "pane": "areas"
+        },
+        "Retail": {
+            "arrayZoom": {
+                "11": "gb_retail_place_bounds"
+            },
+            "format": "geojson",
+            "pane": "places",
+            "style": {
+                "stroke": true,
+                "color": "#F7B05B",
+                "opacity": 0.8,
+                "weight": 2,
+                "fillOpacity": 0
+            },
+            "styleSelection": {
+                "stroke": false,
+                "fill": true,
+                "fillColor" : "#F7B05B",
+                "fillOpacity": 1
+            },
+            "styleHighlight": {
+                "stroke": true,
+                "color": "#bbb",
+                "opacity": 0.8,
+                "weight": 2,
+                "fill": true,
+                "fillColor" : "#F7B05B",
+                "fillOpacity": 0.5
+            }
+        },
+        "Retail MVT": {
+            "arrayZoom": {
+                "11": "gb_retail_place"
+            },
+            "format": "mvt",
+            "pane": "bounds",
+            "style": {
+                "stroke": true,
+                "color": "#33658A",
+                "opacity": 0.8,
+                "weight": 2,
+                "fillOpacity": 0.7
+            },
+            "styleSelection": {},
+            "styleHighlight": {
+                "stroke": true,
+                "color": "#bbb",
+                "opacity": 0.7,
+                "weight": 2,
+                "fill": true,
+                "fillColor" : "#33658A",
+                "fillOpacity": 0.9
+            }
+        },
+          "Locations": {
+              "database": "xyz",
+              "format": "cluster",
+              "qID": "qid",
+              "qCount": "rp_c",
+              "qValue": "rp_v",
+              "qLayer": "retailpoints",
+              "qVector": "vector",
+              "qLabel": "store",
+              "qBrand": "brand",
+              "clusterDistance": {
+                  "7": 0.09,
+                  "8": 0.05,
+                  "9": 0.03,
+                  "10": 0.02,
+                  "11": 0.009,
+                  "12": 0.005,
+                  "13": 0.004,
+                  "14": 0.002,
+                  "15": 0
+              },
+              "markerStyle": {
+                  "aldi": {
+                      "style": [[400, "#ffbf45"], [350, "#fa6f08"], [300, "#ef3c11"], [250, "#001f79"], [200, "#02bee3"], [100, "#ffffff"]],
+                      "label": "Aldi"
+                  },
+                  "asda": {
+                      "style": [[400, "#83b923"], [200, "#ffffff"], [150, "#fdb839"]],
+                      "label": "Asda"
+                  },
+                  "booths": {
+                      "style": [[400, "#a12629"], [200, "#ffffff"], [150, "#a12629"]],
+                      "label": "Booths"
+                  },
+                  "budgens": {
+                      "style": [[400, "#EEEEE0"], [200, "#679a00"], [150, "#cccb01"]],
+                      "label": "Budgens"
+                  },
+                  "co_op": {
+                      "style": [[400, "#0b1e60"], [250, "#ffffff"], [200, "#a3d227"]], 
+                      "label": "The Co-Operative"
+                  },
+                  "costco": {
+                      "style": [[400, "#005daa"], [350, "#ffffff"], [250, "#e31837"]],
+                      "label": "Costco"
+                  },
+                  "farmfoods": {
+                      "style":[[400, "#77a632"], [300, "#f7f900"], [200, "#ff0000"]],
+                      "label": "Farm Foods"
+                  },
+                  "fultons_food": {
+                      "style":[[400, "#004a95"], [300, "#ffffff"], [200, "#004a95"], [100, "#fff11f"]], 
+                      "label": "Fultons Food"
+                  },
+                  "heron_foods": {
+                      "style":[[400, "#ffffff"], [300, "#313590"], [100, "#ffcf00"]], 
+                      "label": "Heron Foods"},
+                  "iceland": {
+                      "style": [[400, "#ed1b2d"], [300, "#f2552b"], [200, "#f89128"], [100, "#ffffff"]], 
+                      "label": "Iceland"
+                  },
+                  "lidl": {
+                      "style": [[400, "#d61408"], [350, "#ffe502"], [200, "#002d7a"], [100, "#d61408"]], 
+                      "label": "Lidl"
+                  },
+                  "makro": {
+                      "style": [[400, "#00457a"], [150, "#ffe811"]], 
+                      "label": "Makro"
+                  },
+                  "marks_spencer": {
+                      "style": [[400, "#0a0d10"], [200, "#def036"], [100, "#0a0d10"]],
+                      "label": "Marks & Spencer"
+                  },
+                  "morrisons": {
+                      "style": [[400, "#ffe133"], [200, "#00614e"]], 
+                      "label":"Morrisons"
+                  },
+                  "sainsburys": {
+                      "style": [[400, "#ee8a00"], [250, "#ffffff"], [150, "#ee8a00"]], 
+                      "label": "Sainsbury's"
+                  },
+                  "tesco": {
+                      "style": [[400, "#0055a8"], [300, "#ffffff"], [150, "#f02f26"]], 
+                      "label": "Tesco"
+                  },
+                  "waitrose": {
+                      "style": [[400, "#81ae37"], [150, "#ffffff"]], 
+                      "label": "Waitrose"
+                  },
+                  "whole_foods": {
+                      "style": [[400, "#00674b"],[350, "#ffffff"],[200, "#00674b"]], 
+                      "label": "Whole Foods"
+                  },
+                  "other": {
+                      "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]], 
+                      "label": "other"
+                  }
+              },
+              "arrayCompColours": ["#ddd", "#999", "#111"],
+              "competitors": ["co_op", "sainsburys", "tesco"]
+          }
       },
       "grid": {
         "database": "xyz",
-        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
         "arrayZoom": {
           "6": "gb_hx_64k",
           "7": "gb_hx_32k",
@@ -459,83 +499,69 @@
       "minZoom": 6,
       "maxZoom": 17,
       "border": true,
-      "location": {
-        "database": "xyz",
-        "arrayZoom": {
-          "6": "ro_fashion_hx_128k",
-          "7": "ro_fashion_hx_64k",
-          "8": "ro_fashion_hx_32k",
-          "9": "ro_fashion_hx_16k",
-          "10": "ro_fashion_hx_8k",
-          "11": "ro_fashion_hx_4k",
-          "12": "ro_fashion_hx_2k",
-          "13": "ro_fashion_hx_1k",
-          "14": "ro_fashion"
-        },
-        "clusterDistance": {
-          "7": 0.09,
-          "8": 0.05,
-          "9": 0.03,
-          "10": 0.02,
-          "11": 0.009,
-          "12": 0.005,
-          "13": 0.004,
-          "14": 0.002,
-          "15": 0
-        },
-        "markerStyle": {
-            "SINSAY": {
-                "style": [[400, "#8d6e63"]], 
-                "label": "Sinsay"
-            },
-            "MOHITO": {
-                "style": [[400, "#ffeb3b"]],
-                "label": "Mohito"
-            },
-            "RESERVED": {
-                "style": [[400, "#dce775"]],
-                "label": "Reserved"
-            },
-            "CROPP": {
-                "style": [[400, "#64b5f6"]],
-                "label": "Cropp"
-            },
-            "HOUSE": {
-                "style": [[400, "#ab47bc"]],
-                "label": "House"
-            },
-            "H&M": {
-                "style": [[400, "#f44336"]],
-                "label": "H&M"
-            },
-            "other": {
-                "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]],
-                "label": "other"
-            }
-        },
-        "arrayCompColours": ["#ddd", "#999"],
-        "competitors": ["RESERVED", "MOHITO"],
-        "qID": "qid",
-        "qCount": "c",
-        "qValue": "v",
-        "qLayer": "ro_fashion",
-        "qVector": "vector",
-        "qLabel": "store_name",
-        "qBrand": "fascia"
-      },
-      "drivetime": {
-        "driving": {
-          "minMin": 30,
-          "defMin": 60,
-          "maxMin": 120,
-          "detail": 3,
-          "reach": 30
-        }
-      },
+      "drivetime": false,
       "vector": {
-        "arrayZoom": {
-          "9": "ro_commune_census__11"
-        }
+          "Communes":{
+              "arrayZoom": {
+                  "9": "ro_commune_census__11"
+              },
+              "format": "mvt",
+              "pane": "areas"
+          },
+          "Fashion retail": {
+              "database": "xyz",
+              "format": "cluster",
+              "qID": "qid",
+              "qCount": "c",
+              "qValue": "v",
+              "qLayer": "ro_fashion",
+              "qVector": "vector",
+              "qLabel": "store_name",
+              "qBrand": "fascia",
+              "clusterDistance": {
+                  "7": 0.09,
+                  "8": 0.05,
+                  "9": 0.03,
+                  "10": 0.02,
+                  "11": 0.009,
+                  "12": 0.005,
+                  "13": 0.004,
+                  "14": 0.002,
+                  "15": 0
+              },
+              "markerStyle": {
+                  "SINSAY": {
+                      "style": [[400, "#8d6e63"]], 
+                      "label": "Sinsay"
+                  },
+                  "MOHITO": {
+                      "style": [[400, "#ffeb3b"]],
+                      "label": "Mohito"
+                  },
+                  "RESERVED": {
+                      "style": [[400, "#dce775"]],
+                      "label": "Reserved"
+                  },
+                  "CROPP": {
+                      "style": [[400, "#64b5f6"]],
+                      "label": "Cropp"
+                  },
+                  "HOUSE": {
+                      "style": [[400, "#ab47bc"]],
+                      "label": "House"
+                  },
+                  "H&M": {
+                      "style": [[400, "#f44336"]],
+                      "label": "H&M"
+                  },
+                  "other": {
+                      "style": [[400, "#A9A9A9"], [360, "#C0C0C0"]],
+                      "label": "other"
+                  }
+              },
+              "arrayCompColours": ["#ddd", "#999"],
+              "competitors": ["RESERVED", "MOHITO"]
+          }
       },
       "grid": {
         "database": "xyz",

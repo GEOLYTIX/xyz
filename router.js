@@ -18,11 +18,12 @@ router.get('/', isLoggedIn, function (req, res) {
         tmpl.render({
             title: appSettings.title,
             css: '<link rel="stylesheet" href="css/desktop.css"/>',
-            module_location: appSettings.location ? './public/tmpl/location.html' : null,
+            //module_location: appSettings.location ? './public/tmpl/location.html' : null,
+            module_layers: appSettings.vector ? './public/tmpl/layers.html' : null,
             module_hxgrid: appSettings.grid ? './public/tmpl/hxgrid.html' : null,
             module_drivetime: appSettings.drivetime ? './public/tmpl/drivetime.html' : null,
             module_analyse: './public/tmpl/analyse.html',
-            module_statistics: appSettings.vector ? './public/tmpl/statistics.html' : null,
+            //module_statistics: appSettings.vector ? './public/tmpl/statistics.html' : null,
             admin_button: req.user.admin ? './public/tmpl/admin_button.html' : '',
             bundle_js: "build/xyz_bundle.js",
             hooks: req.session.hooks ? JSON.stringify(req.session.hooks) : false,
@@ -70,6 +71,7 @@ router.get('/documentation', function (req, res) {
     })
 });
 
+// Vector layers with PGSQL MVT
 const tiles = require('./mod/tiles');
 router.get('/mvt/:z/:x/:y', tiles.fetch_tiles);
 router.get('/mvt_borders/:z/:x/:y', tiles.border);
@@ -85,10 +87,11 @@ const location = require('./mod/location');
 router.get('/q_location', isLoggedIn, location.location);
 router.get('/q_location_info', location.location_info);
 
-// Vector layers with PGSQL MVT
+// Vector layers with PGSQL infoj/geojson
 const vector = require('./mod/vector');
 router.get('/q_vector', vector.vector);
 router.get('/q_vector_info', vector.vector_info);
+router.get('/q_vector_gjson_info', vector.vector_gjson_info);
 
 /*const vector_gjson = require('./mod/vector_geojson');
 router.get('/q_vector_gjson', vector_gjson.vector);

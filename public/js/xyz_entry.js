@@ -23,7 +23,7 @@ require('./gazetteer')(settings);
 require('./analyse')(settings);
 if (view_mode === 'desktop') require('./report')(settings);
 if (settings.grid) require('./grid')(settings);
-if (settings.location) require('./location')(settings);
+//if (settings.location) require('./location')(settings);
 if (settings.vector) require('./vector')(settings);
 //if(settings.vector) require('./vector_geojson')(settings);
 if (settings.drivetime) require('./drivetime')(settings);

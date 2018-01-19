@@ -30,6 +30,9 @@ module.exports = function(_this){
             })
         });
     }
+    
+    // Initialize container for displayed layers.
+    _this.vector.layers = {};
 
 
     // Set country to hook, or set hook for country.
@@ -84,7 +87,12 @@ module.exports = function(_this){
             _this.locale.layers[layer] = _this.locale.layers[layer] === true ?
                 false : _this.locale.layers[layer];
         });
-
+        
+        
+        Object.keys(_this.vector.layers).map(function(_key){
+            if(_this.vector.layers[_key].xhr) _this.vector.layers[_key].xhr.abort();
+            if(_this.vector.layers[_key].layer) _this.map.removeLayer(_this.vector.layers[_key].layer);
+        });
         //if (_this.vector && _this.vector.xhr) _this.vector.xhr.abort();
         //if (_this.vector && _this.vector.layer) _this.map.removeLayer(_this.vector.layer);
         if (_this.location && _this.location.xhr) _this.location.xhr.abort();
@@ -119,40 +127,46 @@ module.exports = function(_this){
             layersCheck('border', true);
 
             // Get layer.
-            if (_this.vector && _this.vector.display) _this.vector.getLayer();
-            if (_this.location && _this.location.display) _this.location.getLayer();
+            _this.vector.getLayers();
+            //if (_this.vector && _this.vector.display) _this.vector.getLayer();
+            //if (_this.location && _this.location.display) _this.location.getLayer();
             if (_this.grid && _this.grid.display) _this.grid.getLayer();
 
         }, 100);
     }
 
     // Pane definitions
-    _this.map.createPane('vector');
-    _this.map.getPane('vector').style.zIndex = 500;
+    //_this.map.createPane('vector');
+    //_this.map.getPane('vector').style.zIndex = 500;
 
     _this.map.createPane('vectorSelection');
     _this.map.getPane('vectorSelection').style.zIndex = 510;
 
-    _this.map.createPane('grid');
-    _this.map.getPane('grid').style.zIndex = 520;
-    _this.map.getPane('grid').style.pointerEvents = 'none';
-
-    _this.map.createPane('location');
-    _this.map.getPane('location').style.zIndex = 530;
-    _this.map.getPane('location').style.pointerEvents = 'none';
-
-    _this.map.createPane('shadowFilter');
-    _this.map.getPane('shadowFilter').style.zIndex = 535;
-    _this.map.getPane('shadowFilter').style.pointerEvents = 'none';
-
     _this.map.createPane('locationSelection');
-    _this.map.getPane('locationSelection').style.zIndex = 540;
+    _this.map.getPane('locationSelection').style.zIndex = 550;
     _this.map.getPane('locationSelection').style.pointerEvents = 'none';
 
     _this.map.createPane('labels');
     _this.map.getPane('labels').style.zIndex = 550;
     _this.map.getPane('labels').style.pointerEvents = 'none';
 
+    // Panes for vector layers
+    _this.map.createPane("areas");
+    _this.map.getPane("areas").style.zIndex = 500;
+    
+    _this.map.createPane("bounds");
+    _this.map.getPane("bounds").style.zIndex = 510;
+    
+    _this.map.createPane("places");
+    _this.map.getPane("places").style.zIndex = 530;
+    
+    _this.map.createPane('location');
+    _this.map.getPane('location').style.zIndex = 540;
+    _this.map.getPane('location').style.pointerEvents = 'none';
+    
+    _this.map.createPane('grid');
+    _this.map.getPane('grid').style.zIndex = 520;
+    _this.map.getPane('grid').style.pointerEvents = 'none';
 
     // Add base layers
     // L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png')
@@ -185,7 +199,7 @@ module.exports = function(_this){
 
         if (_this.locale.gazetteer) _this.locale.gazetteer();
         if (_this.locale.vector) _this.locale.vector(true);
-        if (_this.locale.location) _this.locale.location(true);
+        //if (_this.locale.location) _this.locale.location(true);
         if (_this.locale.grid) _this.locale.grid(true);
         if (_this.locale.drivetime) _this.locale.drivetime(true);
     }
@@ -198,6 +212,7 @@ module.exports = function(_this){
         let tile_options = {
             rendererFactory: L.canvas.tile,
             interactive: false,
+            zIndex: 1,
             vectorTileLayerStyles: {
                 'border': {
                     color: '#96897B',
