@@ -240,6 +240,9 @@ function drivetime_calc(req, res) {
     // Truncate Isoband coordinates
     res.data.iso.features.map(f => f.geometry = turf.truncate(f.geometry, {precision: 5, coordinates: 2}));
 
+    // Change Isoband names
+    res.data.iso.features.map(f => f.properties.v = f.properties.v.split('-')[1]);
+
     // Reverse order of Isobands in array
     res.data.iso.features.reverse();
 

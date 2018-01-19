@@ -210,9 +210,9 @@ module.exports = function Drivetime(_this){
                 }).addTo(_this.map);
 
                 function isoStyle(feature, _distance, fillOpacity){
-                    let style = feature.properties.v === '0-' + parseInt(_distance * 0.33) ?
-                        ['#999',1] : feature.properties.v === parseInt(_distance * 0.33) + '-' + parseInt(_distance * 0.66) ?
-                            ['#666',1.5] : feature.properties.v === parseInt(_distance * 0.66) + '-' + parseInt(_distance) ?
+                    let style = feature.properties.v == parseInt(_distance * 0.33) ?
+                        ['#999',1] : feature.properties.v == parseInt(_distance * 0.66) ?
+                            ['#666',1.5] : feature.properties.v == parseInt(_distance) ?
                                ['#333',2] : ['#333',2];
 
                     return {

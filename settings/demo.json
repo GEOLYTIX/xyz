@@ -78,7 +78,7 @@
         "rgba(0, 0, 0, 0.1)"]
   },
   "drivetime": {
-    "provider": "mapbox",
+    "provider": ["mapbox"],
     "container": "document.querySelector('#drivetime_module > .swipe_container')",
     "infoTable": "document.querySelector('.drivetime_info')",
     "slider": "document.getElementById('drivetime_slider')",

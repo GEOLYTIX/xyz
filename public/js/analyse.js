@@ -159,6 +159,15 @@ module.exports = function Analyse(_this){
         if (space.length > 0) addToDataArray(feature, space[0])
     }
 
+    // addToDataArray({
+    //     type: "Feature",
+    //     geometry: {
+    //         type: "Point",
+    //         coordinates: [0,51]
+    //     },
+    //     infoj: testData
+    // },dataArray[0]);
+
     function addToDataArray(feature, entry) {
         dom.container.style['marginLeft'] = '-50%';
 
@@ -229,7 +238,8 @@ module.exports = function Analyse(_this){
         let i = document.createElement('i');
         i.textContent = 'clear';
         i.style.color = feature.color;
-        i.className = 'material-icons cursor infojBtn';
+        i.className = 'material-icons cursor noselect infojBtn';
+        i.title="Remove feature from selection";
         i.addEventListener('click', function(){
             this.parentNode.parentNode.remove();
             _this.map.removeLayer(feature.layer);
@@ -245,7 +255,8 @@ module.exports = function Analyse(_this){
         i = document.createElement('i');
         i.textContent = 'search';
         i.style.color = feature.color;
-        i.className = 'material-icons cursor infojBtn';
+        i.className = 'material-icons cursor noselect infojBtn';
+        i.title="Zoom map to feature bounds";
         i.addEventListener('click', function(){
             _this.map.flyToBounds(feature.layer.getBounds());
         });
@@ -255,7 +266,8 @@ module.exports = function Analyse(_this){
         i = document.createElement('i');
         i.textContent = 'expand_less';
         i.style.color = feature.color;
-        i.className = 'material-icons cursor infojBtn';
+        i.className = 'material-icons cursor noselect infojBtn';
+        i.title="Expand table";
         i.addEventListener('click', function(){
             let container = this.parentNode.parentNode;
             let header = this.parentNode;
@@ -263,10 +275,12 @@ module.exports = function Analyse(_this){
                 container.style.maxHeight = (this.clientHeight + 5) + 'px';
                 header.style.boxShadow = '0 7px 6px -4px black';
                 this.textContent = 'expand_more';
+                i.title="Hide table";
             } else {
                 container.style.maxHeight = (header.nextSibling.clientHeight + this.clientHeight + 5) + 'px';
                 header.style.boxShadow = '';
                 this.textContent = 'expand_less';
+                i.title="Expand table";
             }
         });
         header.appendChild(i);
@@ -276,20 +290,33 @@ module.exports = function Analyse(_this){
             i = document.createElement('i');
             i.textContent = 'location_off';
             i.style.color = feature.color;
-            i.className = 'material-icons cursor infojBtn';
+            i.className = 'material-icons cursor noselect infojBtn';
+            i.title="Hide marker";
             i.addEventListener('click', function () {
                 let container = this.parentNode.parentNode;
                 let header = this.parentNode;
                 if (this.textContent === 'location_off') {
                     _this.map.removeLayer(feature.marker);
                     this.textContent = 'location_on';
+                    i.title="Show marker";
                 } else {
                     _this.map.addLayer(feature.marker);
                     this.textContent = 'location_off';
+                    i.title="Hide marker";
                 }
             });
             header.appendChild(i);
         }
+
+        // Create the expand control element which controls whether the data table is displayed for the feature.
+        i = document.createElement('i');
+        i.textContent = 'view_week';
+        i.style.color = feature.color;
+        i.className = 'material-icons cursor noselect infojBtn';
+        i.title = "Add feature to comparison table";
+        i.addEventListener('click', function () {
+        });
+        header.appendChild(i);
 
         // Add header element to the container.
         container.appendChild(header);
