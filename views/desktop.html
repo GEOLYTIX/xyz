@@ -27,7 +27,7 @@
         const localhost = '{{:localhost}}';
         const mapbox_token = '{{:mapbox_token}}';
         const hooks = {{:hooks}};
-        const drivetime = {{:drivetime}};
+        const catchments = {{:catchments}};
         const settings = {{:settings}};
     </script>
 </head>
@@ -49,7 +49,6 @@
         </div>
         <div id="gaz_spacer"></div>
         <div id="ctrl_content" class="content">
-          <!--  {{include tmpl=module_location /}} -->
             
             {{include tmpl=module_layers /}}
             
@@ -57,10 +56,8 @@
             
             {{include tmpl=module_hxgrid /}}
             
-            {{include tmpl=module_drivetime /}}
+            {{include tmpl=module_catchments /}}
             
-          <!--  {{include tmpl=module_statistics /}} -->
-
         </div>
     </div>
 

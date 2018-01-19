@@ -6,7 +6,7 @@ const request = require('request');
 
 const turf = require('@turf/turf');
 
-function drivetime (req, res) {
+function catchments (req, res) {
 
     // Distance of travel in seconds
     req.query.distance = parseInt(req.query.distance);
@@ -25,7 +25,7 @@ function drivetime (req, res) {
     res.data.circlePoints = [];
     for (let i = 1; i <= (req.query.detail * 2); i++) {
 
-        // Create circle on the origin of the drivetime
+        // Create circle on the origin of the catchment
         // Circle radius increase by a logarithmic function for driving
         // Circles are linear distributed for walking
         let circle = turf.circle(
@@ -77,7 +77,7 @@ function drivetime (req, res) {
                     }
                 })
         } else {
-            drivetime_calc(req, res)
+            catchment_calc(req, res)
         }
     })(0);
 }
@@ -170,7 +170,7 @@ function mapbox_samplePoints(req, res, jbody, i, start) {
     if (displacement > 1) { res.data.samplePoints[i].properties.wide = true; }
 }
 
-function drivetime_calc(req, res) {
+function catchment_calc(req, res) {
 
     // Filter outlier from samplePoints
     res.data.samplePoints = res.data.samplePoints.filter(pt => {
@@ -217,7 +217,7 @@ function drivetime_calc(req, res) {
     // Tag the pointgrid points with the tin id
     let tag = turf.tag(pg, res.data.tin, 'id', 'tin');
 
-    // Assign interpolated drivetime values v from the tin element with matching tag ID
+    // Assign interpolated catchment values v from the tin element with matching tag ID
     tag.features.map(pt =>
         pt.properties.v = pt.properties.tin ?
             turf.planepoint(pt, res.data.tin.features[pt.properties.tin]) :
@@ -263,5 +263,5 @@ function drivetime_calc(req, res) {
 }
 
 module.exports = {
-    drivetime: drivetime
+    catchments: catchments
 };

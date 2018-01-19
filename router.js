@@ -18,16 +18,14 @@ router.get('/', isLoggedIn, function (req, res) {
         tmpl.render({
             title: appSettings.title,
             css: '<link rel="stylesheet" href="css/desktop.css"/>',
-            //module_location: appSettings.location ? './public/tmpl/location.html' : null,
             module_layers: appSettings.vector ? './public/tmpl/layers.html' : null,
             module_hxgrid: appSettings.grid ? './public/tmpl/hxgrid.html' : null,
-            module_drivetime: appSettings.drivetime ? './public/tmpl/drivetime.html' : null,
+            module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
             module_analyse: './public/tmpl/analyse.html',
-            //module_statistics: appSettings.vector ? './public/tmpl/statistics.html' : null,
             admin_button: req.user.admin ? './public/tmpl/admin_button.html' : '',
             bundle_js: "build/xyz_bundle.js",
             hooks: req.session.hooks ? JSON.stringify(req.session.hooks) : false,
-            drivetime: false,
+            catchments: false,
             mapbox_token: process.env.MAPBOX,
             settings: JSON.stringify(appSettings)
         }))
@@ -80,8 +78,8 @@ const grid = require('./mod/grid');
 router.get('/q_grid', grid.grid);
 router.post('/q_grid_info', isLoggedIn, grid.info);
 
-const drivetime = require('./mod/drivetime');
-router.get('/q_drivetime', isLoggedIn, drivetime.drivetime);
+const catchments = require('./mod/catchments');
+router.get('/q_catchments', isLoggedIn, catchments.catchments);
 
 const location = require('./mod/location');
 router.get('/q_location', isLoggedIn, location.location);

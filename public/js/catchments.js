@@ -2,52 +2,52 @@ const L = require('leaflet');
 const helper = require('./helper');
 const svg_marker = require('./svg_marker.js');
 
-module.exports = function Drivetime(_this){
+module.exports = function catchments(_this){
     let dom = {};
     dom.map = document.getElementById('map');
-    dom.container = document.querySelector('#drivetime_module > .swipe_container');
-    dom.pages = document.querySelectorAll('#drivetime_module .page_content');
-    dom.btnQuery = document.querySelector('#drivetime_module .btnQuery');
-    dom.btnOff = document.querySelector('#drivetime_module .btnOff');
-    dom.btnCopy = document.querySelector('#drivetime_module .btnCopy');
-    dom.spinner = document.querySelector('#drivetime_module .spinner');
-    dom.info_table = document.querySelector('#drivetime_module .info_table');
-    dom.minutes = document.querySelector('#drivetime_module .minutes');
-    dom.sliMinutes = document.querySelector('#drivetime_module .sliMinutes');
-    dom.reach = document.querySelector('#drivetime_module .reach');
-    dom.sliReach = document.querySelector('#drivetime_module .sliReach');
-    dom.detail = document.querySelector('#drivetime_module .detail');
-    dom.sliDetail = document.querySelector('#drivetime_module .sliDetail');
-    dom.selMode = document.querySelector('#drivetime_module .selMode');
-    dom.selProvider = document.querySelector('#drivetime_module .selProvider');
-    dom.chkDrivetimeConstruction = document.getElementById('chkDrivetimeConstruction');
+    dom.container = document.querySelector('#catchments_module > .swipe_container');
+    dom.pages = document.querySelectorAll('#catchments_module .page_content');
+    dom.btnQuery = document.querySelector('#catchments_module .btnQuery');
+    dom.btnOff = document.querySelector('#catchments_module .btnOff');
+    dom.btnCopy = document.querySelector('#catchments_module .btnCopy');
+    dom.spinner = document.querySelector('#catchments_module .spinner');
+    dom.info_table = document.querySelector('#catchments_module .info_table');
+    dom.minutes = document.querySelector('#catchments_module .minutes');
+    dom.sliMinutes = document.querySelector('#catchments_module .sliMinutes');
+    dom.reach = document.querySelector('#catchments_module .reach');
+    dom.sliReach = document.querySelector('#catchments_module .sliReach');
+    dom.detail = document.querySelector('#catchments_module .detail');
+    dom.sliDetail = document.querySelector('#catchments_module .sliDetail');
+    dom.selMode = document.querySelector('#catchments_module .selMode');
+    dom.selProvider = document.querySelector('#catchments_module .selProvider');
+    dom.chkCatchmentsConstruction = document.getElementById('chkCatchmentsConstruction');
 
-    // locale.drivetime is called upon initialisation and when the country is changed (change_country === true).
-    _this.locale.drivetime = function (change_country) {
+    // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
+    _this.locale.catchments = function (change_country) {
         removeLayer();
         resetModule();
 
         dom.selProvider.innerHTML = '';
-        _this.drivetime.provider.forEach(function(e){
+        _this.catchments.provider.forEach(function(e){
             dom.selProvider.insertAdjacentHTML('beforeend','<option value="'+e+'">'+e.charAt(0).toUpperCase()+e.slice(1)+'</option>');
         });
         dom.selProvider.disabled = dom.selProvider.childElementCount === 1 ? true : false;
 
         dom.selMode.innerHTML = '';
-        Object.keys(_this.countries[_this.country].drivetime).map(function(key){
+        Object.keys(_this.countries[_this.country].catchments).map(function(key){
             dom.selMode.insertAdjacentHTML('beforeend','<option value="'+key+'">'+key.charAt(0).toUpperCase()+key.slice(1)+'</option>');
         });
    
         setParams(dom.selMode.options[dom.selMode.selectedIndex].value);
     };
-    _this.locale.drivetime();
+    _this.locale.catchments();
 
     function removeLayer() {
-        if (_this.drivetime.layer) _this.map.removeLayer(_this.drivetime.layer);
-        if (_this.drivetime.layerMark) _this.map.removeLayer(_this.drivetime.layerMark);
-        if (_this.drivetime.layer_circlePoints) _this.map.removeLayer(_this.drivetime.layer_circlePoints);
-        if (_this.drivetime.layer_samplePoints) _this.map.removeLayer(_this.drivetime.layer_samplePoints);
-        if (_this.drivetime.layer_tin) _this.map.removeLayer(_this.drivetime.layer_tin);
+        if (_this.catchments.layer) _this.map.removeLayer(_this.catchments.layer);
+        if (_this.catchments.layerMark) _this.map.removeLayer(_this.catchments.layerMark);
+        if (_this.catchments.layer_circlePoints) _this.map.removeLayer(_this.catchments.layer_circlePoints);
+        if (_this.catchments.layer_samplePoints) _this.map.removeLayer(_this.catchments.layer_samplePoints);
+        if (_this.catchments.layer_tin) _this.map.removeLayer(_this.catchments.layer_tin);
     }
 
     function resetModule() {
@@ -58,13 +58,13 @@ module.exports = function Drivetime(_this){
     }
 
     function setParams(mode){
-        dom.sliMinutes.min = _this.countries[_this.country].drivetime[mode].minMin;
-        dom.sliMinutes.max = _this.countries[_this.country].drivetime[mode].maxMin;
-        dom.sliMinutes.value = _this.countries[_this.country].drivetime[mode].defMin;
+        dom.sliMinutes.min = _this.countries[_this.country].catchments[mode].minMin;
+        dom.sliMinutes.max = _this.countries[_this.country].catchments[mode].maxMin;
+        dom.sliMinutes.value = _this.countries[_this.country].catchments[mode].defMin;
         dom.minutes.innerHTML = dom.sliMinutes.value;
-        dom.sliDetail.value = _this.countries[_this.country].drivetime[mode].detail;
+        dom.sliDetail.value = _this.countries[_this.country].catchments[mode].detail;
         dom.detail.innerHTML = dom.sliDetail.value;
-        let reach = _this.countries[_this.country].drivetime[mode].reach;
+        let reach = _this.countries[_this.country].catchments[mode].reach;
         dom.sliReach.min = parseInt(reach * 0.5);
         dom.sliReach.max = parseInt(reach * 1.5);
         dom.sliReach.value = reach;
@@ -97,11 +97,11 @@ module.exports = function Drivetime(_this){
     dom.btnQuery.addEventListener('click', function(){
         dom.map.style.cursor = 'crosshair';
         _this.map.on('click', function(e){
-            getDrivetime(e, dom.sliMinutes.value * 60)
+            getcatchments(e, dom.sliMinutes.value * 60)
         });
     });
 
-    function getDrivetime(e, _distance){
+    function getcatchments(e, _distance){
         _this.map.off('click');
         dom.map.style.cursor = '';
         dom.btnOff.style.display = 'none';
@@ -111,7 +111,7 @@ module.exports = function Drivetime(_this){
         removeLayer();
 
         // Set layerMark on origin
-        _this.drivetime.layerMark = L.geoJson({
+        _this.catchments.layerMark = L.geoJson({
             "type": "Feature",
             "geometry": {
                 "type": "Point",
@@ -133,7 +133,7 @@ module.exports = function Drivetime(_this){
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', localhost +  'q_drivetime?' + helper.paramString({
+        xhr.open('GET', localhost +  'q_catchments?' + helper.paramString({
             lng: e.latlng.lng,
             lat: e.latlng.lat,
             distance: _distance,
@@ -149,8 +149,8 @@ module.exports = function Drivetime(_this){
                 
                 let json = JSON.parse(this.responseText);
 
-                if (dom.chkDrivetimeConstruction.checked) {
-                    _this.drivetime.layer_tin = L.geoJson(json.tin,{
+                if (dom.chkCatchmentsConstruction.checked) {
+                    _this.catchments.layer_tin = L.geoJson(json.tin,{
                         interactive: false,
                         style: {
                             stroke: true,
@@ -160,7 +160,7 @@ module.exports = function Drivetime(_this){
                           }
                     }).addTo(_this.map);
     
-                    _this.drivetime.layer_circlePoints = L.geoJson(json.circlePoints,{
+                    _this.catchments.layer_circlePoints = L.geoJson(json.circlePoints,{
                         interactive: false,
                         pointToLayer: function (feature, latlng) {
                             return new L.CircleMarker(latlng, {
@@ -172,7 +172,7 @@ module.exports = function Drivetime(_this){
                         }
                     }).addTo(_this.map);
     
-                    _this.drivetime.layer_samplePoints = L.geoJson(json.samplePoints,{
+                    _this.catchments.layer_samplePoints = L.geoJson(json.samplePoints,{
                         interactive: false,
                         pointToLayer: function (feature, latlng) {
                             return new L.CircleMarker(latlng, {
@@ -186,7 +186,7 @@ module.exports = function Drivetime(_this){
                     }).addTo(_this.map);
                 }
 
-                _this.drivetime.layer = L.geoJson(json.iso, {
+                _this.catchments.layer = L.geoJson(json.iso, {
                     interactive: _this.countries[_this.country].grid.infoj ? true : false,
                     pane: 'shadowFilter',
                     onEachFeature: function (feature, layer) {
@@ -224,7 +224,7 @@ module.exports = function Drivetime(_this){
                     }
                 }
 
-                _this.map.fitBounds(_this.drivetime.layer.getBounds());
+                _this.map.fitBounds(_this.catchments.layer.getBounds());
                 
                 dom.spinner.style.display = 'none';
                 dom.btnOff.style.display = 'block';
