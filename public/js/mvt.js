@@ -114,6 +114,8 @@ function getLayer(_this, _layer){
                 
                 setTimeout(function () {
                     console.log(infoj);
+                    // test analyse module
+                    if(_this.analyse) _this.analyse.add(infoj);
                 }, 300);
                 
                 if(_this.hooks.selected){

@@ -207,6 +207,7 @@ function getLayer(_this, _layer){
 
                         } else {
                              selectLayer(infoj[0].id);
+                             selectLayer(infoj[0].id);
                         }
                     }
 
@@ -288,6 +289,9 @@ function getLayer(_this, _layer){
                     // selection not ready yet
                     //_this.vector.selectLayer(json[0].vector);
                 //}
+                
+                // test analyse module
+                if(_this.analyse) _this.analyse.add(infoj);
 
                 // Assign info fields to info table.
                 let table = '';

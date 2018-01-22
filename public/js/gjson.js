@@ -175,6 +175,8 @@ function getLayer(_this, _layer){
                 setTimeout(function () {
                     // apply data to analyze table
                     console.log(infoj);
+                    // test analyse module
+                    if(_this.analyze) _this.analyse.add(infoj);
                 }, 300);
                 
                 // set multi hook
