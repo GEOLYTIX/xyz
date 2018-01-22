@@ -286,7 +286,7 @@ module.exports = function(_this){
         xhr.setRequestHeader("Content-Type","application/json");
         xhr.onload = function(){
             if(this.status === 200) {
-                feature.infoj = JSON.parse(this.response)[0];
+                feature.infoj = JSON.parse(this.response);
                 _this.analyse.add(feature);
             }
         }

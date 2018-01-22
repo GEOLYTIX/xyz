@@ -707,8 +707,6 @@
     .infojContainer .infojTable .val {
       font-family: 'PT Mono', monospace;
       padding-left: 10px; }
-    .infojContainer .infojTable .key {
-      color: #090; }
 
 body {
   overflow-y: scroll;

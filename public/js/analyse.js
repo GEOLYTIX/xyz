@@ -3,46 +3,38 @@ const svg_marker = require('./svg_marker.js');
 
 module.exports = function Analyse(_this){
 
-    let testData = [
-        { "Postal District": "BB10" },
-        {
-            "Age & Gender": [
-                { "Total Population": 36549 },
-                {
-                    "Gender": [
-                        { "Female": 18533 },
-                        { "Male": 18015 }
-                    ]
-                },
-                {
-                    "Age 16-24": 4047,
-                    "Age 25-29": 2329,
-                    "Age 30-44": 6940,
-                    "Age 45-59": 7026,
-                    "Age 60-64": 2592,
-                    "Age 65-74": 3478
-                }
-            ]
+    let testData = {
+        "Postal District": "BB10",
+        "Age & Gender": {
+            "Total Population": 36549,
+            "Gender": {
+                "Female": 18533,
+                "Male": 18015
+            },
+            "Age 16-24": 4047,
+            "Age 25-29": 2329,
+            "Age 30-44": 6940,
+            "Age 45-59": 7026,
+            "Age 60-64": 2592,
+            "Age 65-74": 3478
         },
-        {
-            "Ethnicity": [
-                { "White British": 28851 },
-                { "Non White British": 147 },
-                [
-                    { "Other White": 401 },
-                    { "Black": 36 },
-                    { "South Asian": 6034 },
-                    { "Chinese": 79 },
-                    { "Mixed": 485 },
-                    { "Other": 474 }
-                ]
-            ]
+        "Ethnicity": {
+            "White British": 28851,
+            "Non White British": 147,
+            "other_": {
+                "Other White": 401,
+                "Black": 36,
+                "South Asian": 6034,
+                "Chinese": 79,
+                "Mixed": 485,
+                "Other": 474
+            }
         },
-        { "Avg. income@£": 100000 },
-        { "Avg. unemployment@%": 10.1 },
-        { "Contact": "dennis@gmail.com" },
-        { "Notes" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-    ];
+        "Avg. income@£": 100000,
+        "Avg. unemployment@%": 10.1,
+        "Contact": "dennis@gmail.com",
+        "Notes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    };
 
     // let colorArray = [
     //     '#9c27b0', //purple
@@ -341,43 +333,43 @@ module.exports = function Analyse(_this){
         dom.pages[1].insertBefore(container, space.length > space.indexOf(feature) + 1 && space[space.indexOf(feature) + 1].container ? space[space.indexOf(feature) + 1].container : null);
 
         // Populate the table from the features infoj object.
-        feature.infoj.map(function (row) {
+        Object.keys(feature.infoj).map(function (key) {
+            (function processDataRow(lv, key, val) {
 
-            let tr;
-
-            // Function to decide on process flow object / array / print value.
-            (function processDataRow(lv, attribute, row) {
-
-                if (typeof row === 'object' && row.length > 0) {
-                    row.map(function (arr) {
-                        processDataRow(lv + 1, 'key', arr);
-                    })
-                } else if (typeof row === 'object') {
-                    Object.keys(row).map(function (key) {
-                        addToTable(lv, 'key', key);
-                        processDataRow(lv, 'val', row[key]);
+                if (typeof val === 'object') {
+                    if (key.charAt(key.length -1) != '_') addToTable(lv, key, '');
+                    Object.keys(val).map(function (key) {
+                        processDataRow(lv + 1, key, val[key]);
                     });
                 } else {
-                    addToTable(lv, attribute, row);
+                    addToTable(lv, key, val);
                 }
 
-                function addToTable(lv, attribute, val) {
+                function addToTable(lv, key, val) {
+                    let tr = document.createElement('tr');
                     let td = document.createElement('td');
-                    td.className = 'col-a ' + (attribute === 'key' ? 'lv-' + lv : attribute);
-                    td.textContent = val;
+                    td.className = 'lv-' + lv;
+                    td.textContent = key;
+                    tr.appendChild(td);
 
-                    // Add extra row for non numeric values otherwise add value in second column.
                     if (isNaN(val)) {
-                        tr = document.createElement('tr');
-                        td.colSpan = attribute === 'key' ? '1' : '2';
-                        tr.appendChild(td);
                         table.appendChild(tr);
+                        tr = document.createElement('tr');
+                        td = document.createElement('td');
+                        td.textContent = val;
+                        td.colSpan = '2';
+
                     } else {
-                        tr.appendChild(td);
+                        td = document.createElement('td');
+                        td.textContent = val;
                     }
+
+                    td.className = 'val';
+                    tr.appendChild(td);
+                    table.appendChild(tr);
                 }
 
-            })(0, 'key', row)
+            })(0, key, feature.infoj[key])
         });
     }
 }

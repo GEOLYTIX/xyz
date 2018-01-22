@@ -80,11 +80,15 @@ function info(req, res) {
             //     });
             // }));
 
-            res.status(200).json(Object.keys(data).map(function (record) {
-                return Object.keys(data[record]).map(function (field) {
-                    return data[record][field];
-                });
-            }));
+            console.log(data[0].infoj);
+
+            res.status(200).json(data[0].infoj);
+
+            // res.status(200).json(Object.keys(data).map(function (record) {
+            //     return Object.keys(data[record]).map(function (field) {
+            //         return data[record][field];
+            //     });
+            // }));
         });
 }
 

@@ -207,7 +207,7 @@ function getLayer(_this, _layer){
 
                         } else {
                              selectLayer(infoj[0].id);
-                             selectLayer(infoj[0].id);
+
                         }
                     }
 
@@ -263,26 +263,26 @@ function getLayer(_this, _layer){
                     infoj = JSON.parse(json[0].infoj);
 
                 // Remove layerSelection from map if exists.
-                if (_this.vector.layers[_layer].layerSelection) _this.map.removeLayer(_this.vector.layers[_layer].layerSelection);
+                //if (_this.vector.layers[_layer].layerSelection) _this.map.removeLayer(_this.vector.layers[_layer].layerSelection);
 
                 // Create layerSelection from geoJSON and add to map.
-                _this.vector.layers[_layer].layerSelection = L.geoJson({
-                    'type': 'Feature',
-                    'geometry': geomj
-                }, {
-                    pane: 'locationSelection',
-                    pointToLayer: function (feature, latlng) {
-                        return new L.Marker(latlng, {
-                            icon: L.icon({
-                                iconUrl: _this.location.marker,
-                                iconSize: [80, 40],
-                                iconAnchor: [40, 40]
-                            }),
-                            interactive: false
-                        });
-                    }
-                }).addTo(_this.map);
-                 _this.locale.layersCheck(_layer + '_select', true);
+                // _this.vector.layers[_layer].layerSelection = L.geoJson({
+                //     'type': 'Feature',
+                //     'geometry': geomj
+                // }, {
+                //     pane: 'locationSelection',
+                //     pointToLayer: function (feature, latlng) {
+                //         return new L.Marker(latlng, {
+                //             icon: L.icon({
+                //                 iconUrl: _this.location.marker,
+                //                 iconSize: [80, 40],
+                //                 iconAnchor: [40, 40]
+                //             }),
+                //             interactive: false
+                //         });
+                //     }
+                // }).addTo(_this.map);
+                //  _this.locale.layersCheck(_layer + '_select', true);
 
                 // Select the associated vector layer
                 //if (_this.vector.layers['Postal codes'].display && json[0].vector){
@@ -291,7 +291,15 @@ function getLayer(_this, _layer){
                 //}
                 
                 // test analyse module
-                if(_this.analyse) _this.analyse.add(infoj);
+                if(_this.analyse) {
+
+                
+                    let feature = {};
+                    feature.geometry = geomj;
+                    feature.infoj = infoj;
+                    console.log(feature);
+                    _this.analyse.add(feature)
+                };
 
                 // Assign info fields to info table.
                 let table = '';
