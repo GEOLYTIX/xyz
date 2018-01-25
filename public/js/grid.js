@@ -1,13 +1,22 @@
 const L = require('leaflet');
 const helper = require('./helper');
 const grid = require('./grid_tools');
+const svg_legends = require('./svg_legends');
 const d3 = require('d3');
 
-// const svg_builder = require('./svg_builder');
-// const turfTag = require('@turf/tag');
-// const turfPlanePoint = require('@turf/planepoint');
-
-module.exports = function(_this){
+module.exports = function (_this) {
+    let dom = {};
+    _this.grid.dom = dom;
+    dom.map = document.getElementById('map');
+    dom.container = document.querySelector('#grid_module > .swipe_container');
+    dom.pages = document.querySelectorAll('#grid_module .page_content');
+    dom.pages_ = document.querySelectorAll('#grid_module .swipe_page');
+    dom.legend = document.querySelector('#grid_module .legend');
+    dom.btnDisplay = document.querySelector('#grid_module .btnDisplay');
+    dom.btnOff = document.querySelector('#grid_module .btnOff');
+    dom.selSize = document.querySelector('#grid_module .selSize');
+    dom.selColor = document.querySelector('#grid_module .selColor');
+    dom.chkGridRatio = document.getElementById('chkGridRatio');
 
     // locale.grid is called upon initialisation and when the country is changed (change_country === true).
     _this.locale.grid = function (change_country) {
@@ -20,74 +29,74 @@ module.exports = function(_this){
             _this.removeHook('qValue');
             _this.removeHook('grid_ratio');
             _this.removeHook('grid');
-            _this.grid.legend.parentNode.style.display = 'none';
-            _this.grid.container.style['marginLeft'] = '0';
+            //dom.legend.style.display = 'none';
+            dom.pages[1].style.display = 'none';
+            dom.container.style.marginLeft = '0';
         }
 
-        let entries = '';
-        Array.prototype.map.call(_this.countries[_this.country].grid.queryFields, function(field){
-            entries += '<option value="' + field[0] + '">' + field[1] + '</option>';
-        });
+        setDropDown(_this.countries[_this.country].grid, dom.selSize, 'qCount');
+        setDropDown(_this.countries[_this.country].grid, dom.selColor, 'qValue');
 
-        setDropDown(document.getElementById('grid_size_select'), _this.grid.sizeTitle, 'qCount');
-        setDropDown(document.getElementById('grid_colour_select'), _this.grid.colourTitle, 'qValue');
+        function setDropDown(countrySettings, select, query) {
 
-        function setDropDown(select, title, query) {
-
-            // Populate the select drop down with entries html.
-            select.innerHTML = entries;
+            // Populate select options
+            countrySettings.queryFields.map(function (queryField) {
+                select.appendChild(
+                    helper.createElement('option', {
+                        value: queryField[0],
+                        textContent: queryField[1]
+                    })
+                );
+            });
 
             // Set the selectIndex from hook.
             if (_this.hooks[query]) {
-                _this.countries[_this.country].grid[query] = _this.hooks[query];
-                select.selectedIndex = getQueryIndex(_this.hooks[query]);
+                countrySettings[query] = _this.hooks[query];
+                select.selectedIndex = helper.getSelectOptionsIndex(select.options, _this.hooks[query]);
             } else {
-                _this.countries[_this.country].grid[query] = _this.countries[_this.country].grid.queryFields[0][0];
+                countrySettings[query] = countrySettings.queryFields[0][0];
             }
-            title.innerHTML = select.selectedOptions[0].innerText;
 
+            // Set label text.
+            //label.textContent = select.selectedOptions[0].innerText;
+
+            // onchange event to set the hook and title.
             select.onchange = function () {
-                title.innerHTML = event.target.options[event.target.selectedIndex].text;
-                _this.countries[_this.country].grid[query] = event.target.value;
-                _this.setHook(query, _this.countries[_this.country].grid[query]);
+                //label.textContent = event.target.options[event.target.selectedIndex].text;
+                countrySettings[query] = event.target.value;
+                _this.setHook(query, countrySettings[query]);
             };
-
-            function getQueryIndex(id) {
-                for (let i = 0; i < _this.countries[_this.country].grid.queryFields.length; i++) {
-                    console.log(_this.countries[_this.country].grid.queryFields[i][0]);
-                    if (_this.countries[_this.country].grid.queryFields[i][0] === id)
-                        return i
-                }
-            }
         }
 
         _this.grid.display = _this.hooks.grid || _this.grid.default;
+
         _this.grid.calcRatio = (_this.hooks.grid_ratio === 'true');
-        _this.grid.btnGridRatio.checked = _this.grid.calcRatio;
+        dom.chkGridRatio.checked = _this.grid.calcRatio;
+
         getLayer();
     };
     _this.locale.grid();
 
     // Turn ON grid layer.
-    document.getElementById('btnGrid--on').addEventListener('click', function(){
+    dom.btnDisplay.addEventListener('click', function () {
         _this.setHook('grid', true);
         _this.grid.display = true;
         getLayer();
     });
 
     // Turn OFF grid layer.
-    document.getElementById('btnGrid--off').addEventListener('click', function () {
+    dom.btnOff.addEventListener('click', function () {
         if (_this.grid.layer) _this.map.removeLayer(_this.grid.layer);
         _this.removeHook('grid');
         _this.grid.display = false;
-        _this.grid.legend.parentNode.style.display = 'none';
-        _this.grid.container.style['marginLeft'] = '0';
+        //dom.legend.style.display = 'none';
+        dom.pages[1].style.display = 'none';
+        dom.container.style.marginLeft = '0';
     });
 
     // Display count / value of grid cells as ratio.
-    _this.grid.btnGridRatio.addEventListener('click', function () {
+    dom.chkGridRatio.addEventListener('click', function () {
         _this.grid.calcRatio = this.checked;
-        this.checked === true ? _this.setHook('grid_ratio', this.checked) : _this.removeHook('grid_ratio');
         getLayer();
     });
 
@@ -128,9 +137,6 @@ module.exports = function(_this){
             _this.grid.xhr.onload = function () {
                 if (this.status === 200) {
 
-                    // Process results from backend in grid module.
-                    //let dots = grid.processGrid(_this.grid, JSON.parse(this.responseText));
-
                     // Check for existing layer and remove from map.
                     if (_this.grid.layer) _this.map.removeLayer(_this.grid.layer);
 
@@ -146,7 +152,7 @@ module.exports = function(_this){
                                             feature.properties.c < _this.grid.arraySize[4] ? 12 :
                                                 feature.properties.c < _this.grid.arraySize[5] ? 14 :
                                                     feature.properties.c < _this.grid.arraySize[6] ? 16 : 18;
-                            
+
                             let dot =
                                 feature.properties.v < _this.grid.arrayColor[1] ? styleDot(_this.grid.colorScale[0]) :
                                     feature.properties.v < _this.grid.arrayColor[2] ? styleDot(_this.grid.colorScale[1]) :
@@ -155,7 +161,7 @@ module.exports = function(_this){
                                                 feature.properties.v < _this.grid.arrayColor[5] ? styleDot(_this.grid.colorScale[4]) :
                                                     feature.properties.v < _this.grid.arrayColor[6] ? styleDot(_this.grid.colorScale[5]) :
                                                         feature.properties.v < _this.grid.arrayColor[7] ? styleDot(_this.grid.colorScale[6]) : styleDot(_this.grid.colorScale[6]);
-                            
+
 
                             // Return L.Marker with icon as style to pointToLayer.
                             return L.marker(
@@ -174,7 +180,14 @@ module.exports = function(_this){
                     _this.grid.layer.addTo(_this.map);
                     _this.locale.layersCheck('grid', true);
 
-                    gridLegend();
+                    //gridLegend();
+                    svg_legends.createGridLegend(_this.grid);
+
+                        //     setTimeout(function () {
+    //         dom.legend.style['opacity'] = 1;
+    //     }, 300);
+    //     dom.pages[1].style.display = 'block';
+    //     dom.container.style.marginLeft = '-50%';
 
                 }
             };
@@ -187,107 +200,40 @@ module.exports = function(_this){
             _this.locale.layersCheck('grid', null);
         }
     }
-    
-    function styleDot(hex){ // set grid dot style
+
+    function styleDot(hex) { // set grid dot style
         let color = d3.rgb(hex), darker = color.darker(0.5),
             svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
             dot = document.createElement("circle"), shade = document.createElement("circle");
-        
+
         svg.setAttribute("width", 866);
         svg.setAttribute("height", 1000);
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        
+
         shade.setAttribute("cx", 466);
         shade.setAttribute("cy", 532);
         shade.setAttribute("r", 395);
         shade.style.fill = darker;
-        
+
         dot.setAttribute("cx", 400);
         dot.setAttribute("cy", 468);
         dot.setAttribute("r", 395);
         dot.style.fill = color;
-        
+
         svg.appendChild(shade)
         svg.appendChild(dot);
-        
+
         return ("data:image/svg+xml," + encodeURIComponent(svg.outerHTML));
     }
 
-    function gridLegend(){
-        let fractionDigits = _this.grid.calcRatio === true ? 2 : 0,
-            fractionMinutes = _this.drivetime ?
-                _this.drivetime.tin ? 1 / 60
-                    : 1 : 1;
-
-        // Opacity is set to transition at 300ms for .grid_legend in _grid.scss.
-        _this.grid.legend.parentNode.style.display = 'block';
-        _this.grid.legend.style['opacity'] = 0;
-        
-        document.getElementById('grid-legend-svg').innerHTML = ''; 
-        
-        let r, x = 10, y = 25, a = -10, b = 90, w = 290, h = 150, rw=30, rh=20;
-
-        let svg = d3.select('#grid-legend-svg')
-        .append('svg')
-        .attr("width", w)
-        .attr("height", h);
-
-        for(let i = 7; i > 0; i--){
-          r = 2 + i, x = x + 2 * r + 20;
-            
-           svg.append("circle")
-               .attr("cx", x + 2)
-               .attr("cy", y + 31)
-               .attr("r", r)
-               .style('fill', 'rgba(64, 64, 64, 0.3)');
-          
-           svg.append("circle")
-               .attr("cx", x)
-               .attr("cy", y + 30)
-               .attr("r", r)
-               .style('fill', 'grey');   
-            
-             if(i === 7 || i === 4 || i === 1) svg.append('text')
-                 .attr("x", x)
-                 .attr("y", y + 10)
-                 .attr("text-anchor", "middle")
-                 .attr("alignment-baseline", "alphabetic")
-                 .text(_this.grid.arraySize[i].toLocaleString('en-GB', {maximumFractionDigits: fractionDigits}));
-        }
-       
-        for(let i = 1; i < 8; i++){
-          a = a + 32; 
-            
-          svg.append('rect')
-              .attr("x", a)
-              .attr("y", b)
-              .attr("width", rw)
-              .attr("height", rh)
-              .style('fill', _this.grid.colorScale[i-1]);
-            
-          if(i === 1 || i === 4 || i === 7) svg.append('text')
-              .attr("x", a + rw/2)
-              .attr("y", b + 30)
-              .attr("text-anchor", "middle")
-              .attr("alignment-baseline", "hanging")
-              .text(_this.grid.arrayColor[i].toLocaleString('en-GB', {maximumFractionDigits: fractionDigits}));
-        }
-
-        setTimeout(function () {
-            _this.grid.legend.style['opacity'] = 1;
-        }, 300);
-        _this.grid.container.style['marginLeft'] = '-100%';
-        
-    }
-
-    _this.grid.fromGeoJSON = function(feature){
+    _this.grid.statFromGeoJSON = function (feature) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_grid_info');
-        xhr.setRequestHeader("Content-Type","application/json");
-        xhr.onload = function(){
-            if(this.status === 200) {
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function () {
+            if (this.status === 200) {
                 feature.infoj = JSON.parse(this.response);
-                _this.analyse.add(feature);
+                _this.analyse.addFeature(feature);
             }
         }
         xhr.send(JSON.stringify({

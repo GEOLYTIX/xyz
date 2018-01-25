@@ -58,6 +58,7 @@ module.exports = function Analyse(_this){
     dom.container = document.querySelector('#analyse_module > .swipe_container');
     dom.table = document.querySelector('#analyse_module .infoj');
     dom.pages = document.querySelectorAll('#analyse_module .page_content');
+    dom.header = document.querySelectorAll('#analyse_module .page_header');
     dom.btnOff = document.querySelector('#analyse_module .btnOff');
 
     let dataArray = [
@@ -128,7 +129,6 @@ module.exports = function Analyse(_this){
     });
 
     function resetModule() {
-        //dom.pages[1].style.display = 'none';
         dom.pages[1].innerHTML = '';
         dom.pages[0].style.display = 'block';
         dom.container.style['marginLeft'] = '0';
@@ -144,10 +144,13 @@ module.exports = function Analyse(_this){
 
     _this.analyse = {};
 
-    _this.analyse.add = function(feature){
+    _this.analyse.addFeature = function(feature){
         let space = dataArray.filter(function (obj) {
             if (!obj.infoj) return obj
         });
+
+        dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((space.length - 1) / dataArray.length) * 100)) + '%, #eee 0%)';
+
         if (space.length > 0) addToDataArray(feature, space[0])
     }
 
@@ -166,13 +169,14 @@ module.exports = function Analyse(_this){
         entry.infoj = feature.infoj;
 
         if (feature.marker) {
-            entry.marker = L.geoJson({
-                type: "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": feature.marker
-                }
-            }, {
+            entry.marker = L.geoJson(
+                {
+                    type: "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": feature.marker
+                    }
+                }, {
                     interactive: false,
                     pointToLayer: function (feature, latlng) {
                         return new L.Marker(latlng, {
@@ -187,10 +191,11 @@ module.exports = function Analyse(_this){
                 }).addTo(_this.map);
         }
 
-        entry.layer = L.geoJson({
-            type: "Feature",
-            geometry: feature.geometry
-        }, {
+        entry.layer = L.geoJson(
+            {
+                type: "Feature",
+                geometry: feature.geometry
+            }, {
                 interactive: false,
                 pane: 'shadowFilter',
                 style: {
@@ -240,6 +245,13 @@ module.exports = function Analyse(_this){
             feature.marker = null;
             feature.infoj = null;
             feature.container = null;
+
+            let space = dataArray.filter(function (obj) {
+                if (!obj.infoj) return obj
+            });
+    
+            dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((space.length / dataArray.length) * 100)) + '%, #eee 0%)';
+
         });
         header.appendChild(i);
 

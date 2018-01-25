@@ -29,7 +29,7 @@ function vector_gjson_info(req, res) {
 
 function vector_info(req, res) {
 
-  let q = "select infoj from "
+  let q = "select st_asgeojson(geom) geomj, infoj from "
   + req.query.qid.split('.')[0] + " where qid = '"
   + req.query.qid + "'"
 

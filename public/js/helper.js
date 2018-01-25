@@ -140,15 +140,32 @@ module.exports = (function () {
         return encodedString;
     }
 
+    function createElement(tag, options) {
+        let el = document.createElement(tag);
+        if (options && typeof options === 'object') Object.keys(options).map(function (key) {
+            el[key] = options[key];
+        })
+        return el;
+    }
+
+    function getSelectOptionsIndex(options, value) {
+        for (let i=0; i < options.length; i++) {
+            if (options[i].value === value) return i;
+        }
+        return -1;
+    }
+
     return {
         createStatsTable: createStatsTable,
-        scrollElement:scrollElement,
-        addClass:addClass,
-        removeClass:removeClass,
-        toggleClass:toggleClass,
-        hasClass:hasClass,
-        indexInParent:indexInParent,
+        scrollElement: scrollElement,
+        addClass: addClass,
+        removeClass: removeClass,
+        toggleClass: toggleClass,
+        hasClass: hasClass,
+        indexInParent: indexInParent,
         paramString: paramString,
-        debounce: debounce
+        debounce: debounce,
+        createElement: createElement,
+        getSelectOptionsIndex: getSelectOptionsIndex
     };
 })();

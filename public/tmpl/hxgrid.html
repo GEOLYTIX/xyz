@@ -1,5 +1,5 @@
 <div id="grid_module" class="module">
-    <table id="grid_module_container" class="swipe_container pages--2"  cellpadding="0" cellspacing="0" style="margin-left: 0">
+    <table class="swipe_container" cellpadding="0" cellspacing="0" style="margin-left: 0">
 
         <td class="swipe_page">
             <div class="page_header">
@@ -9,40 +9,40 @@
             <div class="page_content">
                 <p>Hex grids help to visualise the demography of a country.</p>
                 <p>Select below which indicators should be used for the size and colour of the grid cells.</p>
-                <span><small>Size:</small></span>
-                <select id="grid_size_select"></select>
+                <span>Size:</span>
+                <select class="selSize" name="selSize"></select>
 
-                <br><br>
+                <br>
 
-                <span><small>Colour:</small></span>
-                <select id="grid_colour_select"></select>
+                <span>Colour:</span>
+                <select class="selColor" name="selColor"></select>
 
-                <div id="btnGrid--on" class="md_button">Turn grid on</div>
-                <div class="spacer"></div>
+                <div class="md_button btnDisplay">Turn grid on</div>
             </div>
         </td>
 
         <td class="swipe_page">
             <div class="page_header">
-                <i id="btnGrid--off" class="material-icons cursor page_backward">cancel</i>
+                <i class="material-icons cursor page_backward btnOff">cancel</i>
                 <span>Demographic Grid</span>
             </div>
 
             <div class="page_content" style="display: none;">
-            <div class='grid_legend'>
-                <div id="sizeTitle" class="bold"></div>
+
+            <div class="legend">
+                <!-- <div class="lblSize bold"></div>
                 <div id="grid-legend-svg"></div>
-                <div id="colourTitle" class="bold"></div>
+                <div class="lblColor bold"></div> -->
+            </div>
+
             <br>
-
             <table class="checkbox">
-                    <td class="box">
-                        <input type="checkbox" id="chkGridRatio">
-                        <label for="chkGridRatio"></label>
-                    </td>
-                    <td>Display colour values as a ratio to the size value.</td>
+                <td class="box">
+                    <input type="checkbox" id="chkGridRatio">
+                    <label for="chkGridRatio"></label>
+                </td>
+                <td>Display colour values as a ratio to the size value.</td>
             </table>
-
         </td>
 
     </table>

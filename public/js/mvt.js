@@ -63,7 +63,7 @@ function getLayer(_this, _layer){
                 if(e.layer.properties.qid === _this.vector.layers[_layer].selected){
                     clearSelection(e.layer.properties.qid);
                 } else {
-                    selectLayer(e.layer.properties.qid);
+                    selectLayer(e.layer.properties.qid, e.latlng);
                     L.DomEvent.stop(e);
                 }
             })
@@ -97,7 +97,7 @@ function getLayer(_this, _layer){
     // Select a vector layer
     _this.vector.layers[_layer].selectLayer = selectLayer;
     
-    function selectLayer(id){
+    function selectLayer(id, latlng){
         
         // Create new xhr for /q_vector_info?
         let xhr = new XMLHttpRequest();
@@ -110,12 +110,18 @@ function getLayer(_this, _layer){
         xhr.onload = function (){
             if(this.status === 200){
                 let json = JSON.parse(this.responseText),
-                    infoj = JSON.parse(json[0].infoj); 
+                    infoj = JSON.parse(json[0].infoj),
+                    geomj = JSON.parse(json[0].geomj);
+
+                let feature = {};
+                feature.geometry = geomj;
+                feature.infoj = infoj;
+                feature.marker = [latlng.lng, latlng.lat];
                 
                 setTimeout(function () {
                     console.log(infoj);
                     // test analyse module
-                    if(_this.analyse) _this.analyse.add(infoj);
+                    if(_this.analyse) _this.analyse.add(feature);
                 }, 300);
                 
                 if(_this.hooks.selected){

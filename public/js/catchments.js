@@ -12,11 +12,11 @@ module.exports = function catchments(_this){
     dom.btnCopy = document.querySelector('#catchments_module .btnCopy');
     dom.spinner = document.querySelector('#catchments_module .spinner');
     dom.info_table = document.querySelector('#catchments_module .info_table');
-    dom.minutes = document.querySelector('#catchments_module .minutes');
+    dom.lblMinutes = document.querySelector('#catchments_module .lblMinutes');
     dom.sliMinutes = document.querySelector('#catchments_module .sliMinutes');
-    dom.reach = document.querySelector('#catchments_module .reach');
+    dom.lblReach = document.querySelector('#catchments_module .lblReach');
     dom.sliReach = document.querySelector('#catchments_module .sliReach');
-    dom.detail = document.querySelector('#catchments_module .detail');
+    dom.lblDetail = document.querySelector('#catchments_module .lblDetail');
     dom.sliDetail = document.querySelector('#catchments_module .sliDetail');
     dom.selMode = document.querySelector('#catchments_module .selMode');
     dom.selProvider = document.querySelector('#catchments_module .selProvider');
@@ -53,7 +53,7 @@ module.exports = function catchments(_this){
     function resetModule() {
         dom.pages[1].style.display = 'none';
         dom.pages[0].style.display = 'block';
-        dom.container.style['marginLeft'] = '0';
+        dom.container.style.marginLeft = '0';
         dom.info_table.innerHTML = '';
     }
 
@@ -61,14 +61,14 @@ module.exports = function catchments(_this){
         dom.sliMinutes.min = _this.countries[_this.country].catchments[mode].minMin;
         dom.sliMinutes.max = _this.countries[_this.country].catchments[mode].maxMin;
         dom.sliMinutes.value = _this.countries[_this.country].catchments[mode].defMin;
-        dom.minutes.innerHTML = dom.sliMinutes.value;
+        dom.lblMinutes.innerHTML = dom.sliMinutes.value;
         dom.sliDetail.value = _this.countries[_this.country].catchments[mode].detail;
-        dom.detail.innerHTML = dom.sliDetail.value;
+        dom.lblDetail.innerHTML = dom.sliDetail.value;
         let reach = _this.countries[_this.country].catchments[mode].reach;
         dom.sliReach.min = parseInt(reach * 0.5);
         dom.sliReach.max = parseInt(reach * 1.5);
         dom.sliReach.value = reach;
-        dom.reach.innerHTML = reach;
+        dom.lblReach.innerHTML = reach;
         dom.selMode.disabled = dom.selMode.childElementCount === 1 ? true : false;
     }
 
@@ -79,15 +79,15 @@ module.exports = function catchments(_this){
     });
 
     dom.sliDetail.addEventListener('input', function(){
-        dom.detail.innerHTML = this.value;
+        dom.lblDetail.innerHTML = this.value;
     });
 
     dom.sliReach.addEventListener('input', function(){
-        dom.reach.innerHTML = this.value;
+        dom.lblReach.innerHTML = this.value;
     });
 
     dom.sliMinutes.addEventListener('input', function(){
-        dom.minutes.innerHTML = this.value;
+        dom.lblMinutes.innerHTML = this.value;
     });
 
     dom.selMode.addEventListener('change', function(e){
@@ -107,7 +107,7 @@ module.exports = function catchments(_this){
         dom.btnOff.style.display = 'none';
         dom.spinner.style.display = 'block';
         dom.pages[0].style.display = 'none';
-        dom.container.style['marginLeft'] = '-50%';
+        dom.container.style.marginLeft = '-50%';
         removeLayer();
 
         // Set layerMark on origin
@@ -193,7 +193,7 @@ module.exports = function catchments(_this){
                         layer.on({
                             click: function(e) {
                                 feature.marker = [e.latlng.lng, e.latlng.lat];
-                                _this.grid.fromGeoJSON(feature);
+                                _this.grid.statFromGeoJSON(feature);
                                 this.setStyle(isoStyle(feature, _distance, 0));
                             },
                             mouseover: function () {

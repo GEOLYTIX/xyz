@@ -12,36 +12,37 @@
                 <select class="selMode" name="selMode"></select>
 
                 <span>Please specify the maximum travel time in minutes:</span>
-                <span class="minutes bold"></span><span class="bold"> minutes</span>
-
+                <span class="lblMinutes bold"></span><span class="bold"> minutes</span>
                 <div class="range">
                     <input class="sliMinutes" type="range">
                 </div>
 
                 <div class="dev">
-                        <br>
-                        <span>Detail </span><span class="detail" class="bold"></span>
-                        <div class="range">
-                            <input class="sliDetail" type="range" min="1" max="5">
-                        </div>
-        
-                        <br>
-                        <span>Reach </span><span class="reach" class="bold"></span>
-                        <div class="range">
-                            <input class="sliReach" type="range">
-                        </div>
-                               
-                        <br>
-                        <span>Distance matrix provider:</span>
-                        <select class="selProvider" name="selProvider"></select>
-
-                        <table class="checkbox">
-                            <td class="box">
-                                <input type="checkbox" id="chkCatchmentsConstruction">
-                                <label for="chkCatchmentsConstruction"></label>
-                            </td>
-                            <td>Display catchment sample points and TIN.</td>
-                        </table>
+                    <br>
+                    <span>Detail </span>
+                    <span class="lblDetail" class="bold"></span>
+                    <div class="range">
+                        <input class="sliDetail" type="range" min="1" max="5">
+                    </div>
+                        
+                    <br>
+                    <span>Reach </span>
+                    <span class="lblReach" class="bold"></span>
+                    <div class="range">
+                        <input class="sliReach" type="range">
+                    </div>
+                        
+                    <br>
+                    <span>Distance matrix provider:</span>
+                    <select class="selProvider" name="selProvider"></select>
+                        
+                    <table class="checkbox">
+                        <td class="box">
+                            <input type="checkbox" id="chkCatchmentsConstruction">
+                            <label for="chkCatchmentsConstruction"></label>
+                        </td>
+                        <td>Display catchment sample points and TIN.</td>
+                    </table>
 
                 </div>
 
@@ -57,12 +58,11 @@
                 <span>Catchments Module</span>
             </div>
 
-            <div class="page_content" style="display: none">
+            <div class="page_content" style="display: none;">
                 <table class="info_table" cellpadding="0" cellspacing="0"></table>
                 <div class="md_button btnCopy">Copy to clipboard</div>                
             </div>
         </td>
 
     </table>
-
 </div>

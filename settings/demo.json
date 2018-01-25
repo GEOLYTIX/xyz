@@ -62,11 +62,6 @@
     "marker": "svg_marker(['#ff4081','#6a1b9a'])"
   },
   "grid": {
-    "container": "document.querySelector('#grid_module > .swipe_container')",
-    "legend": "document.querySelector('.grid_legend')",
-    "sizeTitle": "document.getElementById('sizeTitle')",
-    "colourTitle": "document.getElementById('colourTitle')",
-    "btnGridRatio": "document.getElementById('chkGridRatio')",
     "colorScale": [
       "#15773f",
       "#66bd63",
@@ -74,8 +69,7 @@
       "#d9ef8b",
       "#fdae61",
       "#f46d43",
-      "#d73027",
-      "rgba(0, 0, 0, 0.1)"
+      "#d73027"
     ]
   },
   "catchments": {
