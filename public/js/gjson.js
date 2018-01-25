@@ -89,6 +89,7 @@ function getLayer(_this, _layer){
                                         _this.hooks.selected = _this.popHook(_this.hooks.selected.split(","), _this.respaceHook(_layer) + "." + _this.vector.layers[_layer].selected);
                                         
                                         _this.map.removeLayer(_this.vector.layers[_layer].layerSelection);
+                                        if (_this.vector.layers[_layer].layerArea) _this.map.removeLayer(_this.vector.layers[_layer].layerArea);
                                             
                                         // check if any selection left
                                         if(_this.hooks.selected){
@@ -123,7 +124,10 @@ function getLayer(_this, _layer){
                     _this.locale.layersCheck(_layer, true);
                 
                 // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
-                if (!_this.vector.layers[_layer].table || !_this.vector.layers[_layer].display) _this.map.removeLayer(_this.vector.layers[_layer].layer);
+                if (!_this.vector.layers[_layer].table || !_this.vector.layers[_layer].display) {
+                    //_this.map.removeLayer(_this.vector.layers[_layer].layer);
+                    clearLayers();
+                }
             }
         }
         _this.vector.layers[_layer].xhr.send();
@@ -135,7 +139,8 @@ function getLayer(_this, _layer){
         document.getElementById(_this.vector.layers[_layer].DOM_id).disabled = true;
         
         if(_this.vector.layers[_layer].layer){
-            _this.map.removeLayer(_this.vector.layers[_layer].layer);
+            //_this.map.removeLayer(_this.vector.layers[_layer].layer);
+            clearLayers();
         }
     }
     
@@ -155,10 +160,14 @@ function getLayer(_this, _layer){
                 
                 let json = JSON.parse(this.responseText),
                     geomj = JSON.parse(json[0].geomj),
-                    infoj = JSON.parse(json[0].infoj);
+                    infoj = JSON.parse(json[0].infoj),
+                    areaj = JSON.parse(json[0].areaj) || null;
+                
+                //console.log(areaj);
                 
                 // Remove layerSelection from map if exists.
                 if (_this.vector.layers[_layer].layerSelection) _this.map.removeLayer(_this.vector.layers[_layer].layerSelection);
+                if (_this.vector.layers[_layer].layerArea) _this.map.removeLayer(_this.vector.layers[_layer].layerArea);
                 
                 // Create layerSelection from geoJSON and add to map.
                 _this.vector.layers[_layer].layerSelection = L.geoJSON(
@@ -170,6 +179,39 @@ function getLayer(_this, _layer){
                         style: _select
                   }).addTo(_this.map);
                 _this.locale.layersCheck(_layer + '_select', true);
+                
+                // Create areaj layer if property exists
+                if(areaj) {
+                    _this.vector.layers[_layer].layerArea = L.geoJSON(areaj, {
+                            pane: 'vectorSelection',
+                            interactive: false,
+                            style: {
+                                fill: true,
+                                stroke: true,
+                                weight: 1,
+                                opacity: 0.4,
+                                color: '#574B60',
+                                fillColor: '#574B60',
+                                fillOpacity: 0.2
+                                
+                            },
+                            pointToLayer: function(point, latlng){
+                                return L.circleMarker(latlng, {
+                                    fill: true,
+                                    //color: '#574B60',
+                                    stroke: false,
+                                    radius: 3,
+                                    fillColor: '#574B60',
+                                    weight: 1,
+                                    opacity: 0.2
+                                });
+                            }
+                        }).addTo(_this.map);
+                    _this.locale.layersCheck(_layer + '_area', true);
+                } else {
+                    //console.log(areaj + ' not found.');
+                }
+                
                 
                 // log infoj
                 setTimeout(function () {
@@ -193,12 +235,14 @@ function getLayer(_this, _layer){
         }
         xhr.send();
         _this.locale.layersCheck(_layer + '_select', false);
+        _this.locale.layersCheck(_layer + '_area', false);
     }
     
     _this.vector.layers[_layer].clearLayers = clearLayers;
     function clearLayers(){
         if (_this.vector.layers[_layer].layer) _this.map.removeLayer(_this.vector.layers[_layer].layer);
         if (_this.vector.layers[_layer].layerSelection) _this.map.removeLayer(_this.vector.layers[_layer].layerSelection);
+        if (_this.vector.layers[_layer].layerArea) _this.map.removeLayer(_this.vector.layers[_layer].layerArea);
     }
 }
 
