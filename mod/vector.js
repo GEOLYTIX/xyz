@@ -17,7 +17,7 @@ function vector(req, res) {
 
 function vector_gjson_info(req, res) {
 
-    let q = "select geomj, infoj from "
+    let q = "select geomj, infoj, areaj from "
         + req.query.qid.split('.')[0] + " where qid = '"
         + req.query.qid + "'";
     // console.log(q);
