@@ -70,6 +70,13 @@
 
     .page_content {
       clear: both;
+      padding-top: 10px;
+
+      .legend {
+        transition: opacity 300ms ease-in-out;
+        -moz-transition: opacity 300ms ease-in-out;
+        -webkit-transition: opacity 300ms ease-in-out;
+      }
 
       .range {
         width: 100%;

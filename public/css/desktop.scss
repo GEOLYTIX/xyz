@@ -14,7 +14,6 @@ $glxlightgreen: #cf9;
 @import 'gazetteer';
 @import 'swipe_container';
 @import 'location';
-@import 'grid';
 @import 'info_table';
 @import 'report_ctrl';
 
@@ -38,6 +37,10 @@ body {
 a {
   color: black;
   text-decoration: none;
+}
+
+p {
+  margin-top: 0;
 }
 
 button {

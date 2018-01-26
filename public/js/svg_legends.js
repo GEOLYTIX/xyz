@@ -2,32 +2,33 @@ const d3 = require('d3');
 
 module.exports = (function () {
 
-    function createGridLegend(grid) {
+    function createGridLegend(grid, dom) {
+
+        dom.legend.innerHTML = null;
+
         let
             yTrack = 0,
-            width = grid.dom.pages_[1].clientWidth,
+            width = dom.pages[1].clientWidth,
             padding = 40,
             _width = width - (2 * padding),
-            n = grid.colorScale.length;
-
-        let svg = d3
-            .select('#grid_module .legend')
+            n = grid.colorScale.length,
+            
+            svg = d3
+            .select(dom.legend)
             .append('svg')
-            .attr('width', width);
-
-        let text = svg
+            .attr('width', width),
+            
+            text = svg
             .append('text')
             .attr('x', 0)
             .attr('y', yTrack)
-            .style('font-weight', 500)
-            .style('font-size', 14)
-            .style('font-family', 'sans-serif')
-            .text('Tertiary education with a Bachelor degree or equivalent (IESCD 6)')
+            .style('font-weight', 600)
+            .style('font-size', 15)
+            .style('font-family', 'ffmark, sans-serif')
+            .text(dom.selSize.selectedOptions[0].innerText)
             .call(wrap, 290);
 
-        let height = parseInt(text.node().getBoundingClientRect().height);
-
-        yTrack += height + 40;
+        yTrack += parseInt(text.node().getBoundingClientRect().height) + 45;
 
         for (let i = 0; i < n; i++) {
 
@@ -37,18 +38,25 @@ module.exports = (function () {
 
             svg
                 .append('circle')
+                .attr('cx', x + 1)
+                .attr('cy', yTrack + 1)
+                .attr('r', r)
+                .style('fill', '#333');
+
+            svg
+                .append('circle')
                 .attr('cx', x)
                 .attr('cy', yTrack)
                 .attr('r', r)
-                .style('fill', 'grey');
+                .style('fill', '#999');
 
             if (i === 0 || i === (n / 2 % 1 != 0 && Math.round(n / 2) - 1) || i === n - 1) {
                 svg.append('text')
                     .attr('x', x)
                     .attr('y', yTrack - 20)
-                    .style('font-size', 14)
+                    .style('font-size', 13)
                     .attr('text-anchor', 'middle')
-                    .style('font-family', 'monospace')
+                    .style('font-family', '"PT Mono", monospace')
                     .text(grid.arraySize[i].toLocaleString('en-GB', {
                         maximumFractionDigits: 0
                     }));
@@ -76,8 +84,8 @@ module.exports = (function () {
                 .attr('x', x)
                 .attr('y', yTrack + 30)
                 .attr('text-anchor', 'middle')
-                .style('font-size', 14)
-                .style('font-family', 'monospace')
+                .style('font-size', 13)
+                .style('font-family', '"PT Mono", monospace')
                 .attr('alignment-baseline', 'hanging')
                 .text(grid.arrayColor[i].toLocaleString('en-GB', {
                     maximumFractionDigits: 0
@@ -90,18 +98,15 @@ module.exports = (function () {
             .append('text')
             .attr('x', 0)
             .attr('y', yTrack)
-            .style('font-weight', 500)
-            .style('font-size', 14)
-            .style('font-family', 'sans-serif')
-            .text('AB Higher and intermediate managerial')
+            .style('font-weight', 600)
+            .style('font-size', 15)
+            .style('font-family', 'ffmark, sans-serif')
+            .text(dom.selColor.selectedOptions[0].innerText)
             .call(wrap, 290);
 
-        height = parseInt(text.node().getBoundingClientRect().height);
+        svg.attr('height', yTrack + parseInt(text.node().getBoundingClientRect().height) + 3);
 
-        svg.attr('height', yTrack + height + 3);
-
-
-
+        dom.legend.style.opacity = 1;
     }
 
     function wrap(text, width) {
@@ -117,6 +122,7 @@ module.exports = (function () {
                 y = text.attr("y"),
                 dy = 1.1,
                 tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
             while (word = words.pop()) {
                 line.push(word);
                 tspan.text(line.join(" "));

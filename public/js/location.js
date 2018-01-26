@@ -1,7 +1,5 @@
 const L = require('leaflet');
 const helper = require('./helper');
-//const svg_dot = require('./svg_dot');
-//const svg_builder = require('./svg_builder');
 const d3 = require('d3');
 
 module.exports = function(_this){

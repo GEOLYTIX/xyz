@@ -1,16 +1,14 @@
 const L = require('leaflet');
 const helper = require('./helper');
-const grid = require('./grid_tools');
 const svg_legends = require('./svg_legends');
-const d3 = require('d3');
+const svg_dot = require('./svg_dot');
 
-module.exports = function (_this) {
+module.exports = function (_) {
+
+    // Set dom elements.
     let dom = {};
-    _this.grid.dom = dom;
-    dom.map = document.getElementById('map');
     dom.container = document.querySelector('#grid_module > .swipe_container');
     dom.pages = document.querySelectorAll('#grid_module .page_content');
-    dom.pages_ = document.querySelectorAll('#grid_module .swipe_page');
     dom.legend = document.querySelector('#grid_module .legend');
     dom.btnDisplay = document.querySelector('#grid_module .btnDisplay');
     dom.btnOff = document.querySelector('#grid_module .btnOff');
@@ -19,28 +17,28 @@ module.exports = function (_this) {
     dom.chkGridRatio = document.getElementById('chkGridRatio');
 
     // locale.grid is called upon initialisation and when the country is changed (change_country === true).
-    _this.locale.grid = function (change_country) {
+    _.locale.grid = function (change_country) {
 
         // Remove existing layer.
-        if (_this.grid.layer) _this.map.removeLayer(_this.grid.layer);
+        if (_.grid.layer) _.map.removeLayer(_.grid.layer);
 
         if (change_country) {
-            _this.removeHook('qCount');
-            _this.removeHook('qValue');
-            _this.removeHook('grid_ratio');
-            _this.removeHook('grid');
-            //dom.legend.style.display = 'none';
-            dom.pages[1].style.display = 'none';
+            _.removeHook('qCount');
+            _.removeHook('qValue');
+            _.removeHook('grid_ratio');
+            _.removeHook('grid');       
+            dom.pages[0].style.display = 'block';
             dom.container.style.marginLeft = '0';
+            dom.pages[1].style.display = 'none';
         }
 
-        setDropDown(_this.countries[_this.country].grid, dom.selSize, 'qCount');
-        setDropDown(_this.countries[_this.country].grid, dom.selColor, 'qValue');
-
-        function setDropDown(countrySettings, select, query) {
+        // Set dropdown values and events.
+        setDropDown(dom.selSize, 'qCount');
+        setDropDown(dom.selColor, 'qValue');
+        function setDropDown(select, query) {
 
             // Populate select options
-            countrySettings.queryFields.map(function (queryField) {
+            _.countries[_.country].grid.queryFields.map(function (queryField) {
                 select.appendChild(
                     helper.createElement('option', {
                         value: queryField[0],
@@ -49,84 +47,73 @@ module.exports = function (_this) {
                 );
             });
 
-            // Set the selectIndex from hook.
-            if (_this.hooks[query]) {
-                countrySettings[query] = _this.hooks[query];
-                select.selectedIndex = helper.getSelectOptionsIndex(select.options, _this.hooks[query]);
-            } else {
-                countrySettings[query] = countrySettings.queryFields[0][0];
-            }
-
-            // Set label text.
-            //label.textContent = select.selectedOptions[0].innerText;
+            select.selectedIndex = _.hooks[query] ? helper.getSelectOptionsIndex(select.options, _.hooks[query]) : 0;
 
             // onchange event to set the hook and title.
             select.onchange = function () {
-                //label.textContent = event.target.options[event.target.selectedIndex].text;
-                countrySettings[query] = event.target.value;
-                _this.setHook(query, countrySettings[query]);
+                _.setHook(query, event.target.value);
             };
         }
 
-        _this.grid.display = _this.hooks.grid || _this.grid.default;
+        _.grid.display = _.hooks.grid || _.grid.default;
 
-        _this.grid.calcRatio = (_this.hooks.grid_ratio === 'true');
-        dom.chkGridRatio.checked = _this.grid.calcRatio;
+        dom.chkGridRatio.checked = _.hooks.grid_ratio;
 
         getLayer();
     };
-    _this.locale.grid();
+    _.locale.grid();
 
     // Turn ON grid layer.
     dom.btnDisplay.addEventListener('click', function () {
-        _this.setHook('grid', true);
-        _this.grid.display = true;
+        _.setHook('grid', true);
+        _.grid.display = true;
         getLayer();
     });
 
     // Turn OFF grid layer.
     dom.btnOff.addEventListener('click', function () {
-        if (_this.grid.layer) _this.map.removeLayer(_this.grid.layer);
-        _this.removeHook('grid');
-        _this.grid.display = false;
-        //dom.legend.style.display = 'none';
-        dom.pages[1].style.display = 'none';
+        if (_.grid.layer) _.map.removeLayer(_.grid.layer);
+        _.removeHook('grid');
+        _.grid.display = false;
+        dom.pages[0].style.display = 'block';
         dom.container.style.marginLeft = '0';
+        dom.pages[1].style.display = 'none';
     });
 
     // Display count / value of grid cells as ratio.
     dom.chkGridRatio.addEventListener('click', function () {
-        _this.grid.calcRatio = this.checked;
         getLayer();
     });
 
     // Get location layer
-    _this.grid.getLayer = getLayer;
+    _.grid.getLayer = getLayer;
     function getLayer() {
-        let zoom = _this.map.getZoom(),
-            arrayZoom = _this.countries[_this.country].grid.arrayZoom,
+        let zoom = _.map.getZoom(),
+            bounds = _.map.getBounds(),
+            arrayZoom = _.countries[_.country].grid.arrayZoom,
             zoomKeys = Object.keys(arrayZoom),
             maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
         // Assign the table based on the zoom array.
-        _this.grid.table = zoom > maxZoomKey ?
+        _.grid.table = zoom > maxZoomKey ?
             arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
                 null : arrayZoom[zoom];
 
         // Initiate data request only if table and display are true.
-        if (_this.grid.table && _this.grid.display) {
+        if (_.grid.table && _.grid.display) {
 
-            // Create new grid.xhr
-            _this.grid.xhr = new XMLHttpRequest();
+            dom.pages[1].style.display = 'block';
+            dom.legend.style.opacity = 0;
+            dom.container.style.marginLeft = '-50%';
+            dom.pages[0].style.display = 'none';
 
-            // Open & send grid.xhr.
-            let bounds = _this.map.getBounds();
-
-            _this.grid.xhr.open('GET', localhost + 'q_grid?' + helper.paramString({
-                c: _this.countries[_this.country].grid.qCount,
-                v: _this.countries[_this.country].grid.qValue,
-                database: _this.countries[_this.country].grid.database,
-                table: _this.grid.table,
+            // Create and open grid.xhr
+            _.grid.xhr = new XMLHttpRequest();
+            _.grid.xhr.open('GET', localhost + 'q_grid?' + helper.paramString({
+                c: dom.selSize.selectedOptions[0].value,
+                v: dom.selColor.selectedOptions[0].value,
+                database: _.countries[_.country].grid.database,
+                table: _.grid.table,
                 west: bounds.getWest(),
                 south: bounds.getSouth(),
                 east: bounds.getEast(),
@@ -134,34 +121,35 @@ module.exports = function (_this) {
             }));
 
             // Draw layer on load event.
-            _this.grid.xhr.onload = function () {
+            _.grid.xhr.onload = function () {
                 if (this.status === 200) {
 
                     // Check for existing layer and remove from map.
-                    if (_this.grid.layer) _this.map.removeLayer(_this.grid.layer);
+                    if (_.grid.layer) _.map.removeLayer(_.grid.layer);
 
                     // Add geoJSON feature collection to the map.
-                    _this.grid.layer = new L.geoJson(grid.processGrid(_this.grid, JSON.parse(this.responseText)), {
+                    _.grid.layer = new L.geoJson(processGrid(JSON.parse(this.responseText)), {
                         pointToLayer: function (feature, latlng) {
 
                             // Set size dependent on the location count against arraySize.
                             let size =
-                                feature.properties.c < _this.grid.arraySize[1] ? 6 :
-                                    feature.properties.c < _this.grid.arraySize[2] ? 8 :
-                                        feature.properties.c < _this.grid.arraySize[3] ? 10 :
-                                            feature.properties.c < _this.grid.arraySize[4] ? 12 :
-                                                feature.properties.c < _this.grid.arraySize[5] ? 14 :
-                                                    feature.properties.c < _this.grid.arraySize[6] ? 16 : 18;
+                                feature.properties.c < _.grid.arraySize[1] ? 6 :
+                                    feature.properties.c < _.grid.arraySize[2] ? 8 :
+                                        feature.properties.c < _.grid.arraySize[3] ? 10 :
+                                            feature.properties.c < _.grid.arraySize[4] ? 12 :
+                                                feature.properties.c < _.grid.arraySize[5] ? 14 :
+                                                    feature.properties.c < _.grid.arraySize[6] ? 16 :
+                                                    18;
 
                             let dot =
-                                feature.properties.v < _this.grid.arrayColor[1] ? styleDot(_this.grid.colorScale[0]) :
-                                    feature.properties.v < _this.grid.arrayColor[2] ? styleDot(_this.grid.colorScale[1]) :
-                                        feature.properties.v < _this.grid.arrayColor[3] ? styleDot(_this.grid.colorScale[2]) :
-                                            feature.properties.v < _this.grid.arrayColor[4] ? styleDot(_this.grid.colorScale[3]) :
-                                                feature.properties.v < _this.grid.arrayColor[5] ? styleDot(_this.grid.colorScale[4]) :
-                                                    feature.properties.v < _this.grid.arrayColor[6] ? styleDot(_this.grid.colorScale[5]) :
-                                                        feature.properties.v < _this.grid.arrayColor[7] ? styleDot(_this.grid.colorScale[6]) : styleDot(_this.grid.colorScale[6]);
-
+                                feature.properties.v < _.grid.arrayColor[1] ? svg_dot.svg_dot(_.grid.colorScale[0]) :
+                                    feature.properties.v < _.grid.arrayColor[2] ? svg_dot.svg_dot(_.grid.colorScale[1]) :
+                                        feature.properties.v < _.grid.arrayColor[3] ? svg_dot.svg_dot(_.grid.colorScale[2]) :
+                                            feature.properties.v < _.grid.arrayColor[4] ? svg_dot.svg_dot(_.grid.colorScale[3]) :
+                                                feature.properties.v < _.grid.arrayColor[5] ? svg_dot.svg_dot(_.grid.colorScale[4]) :
+                                                    feature.properties.v < _.grid.arrayColor[6] ? svg_dot.svg_dot(_.grid.colorScale[5]) :
+                                                        feature.properties.v < _.grid.arrayColor[7] ? svg_dot.svg_dot(_.grid.colorScale[6]) :
+                                                        svg_dot.svg_dot(_.grid.colorScale[6]);
 
                             // Return L.Marker with icon as style to pointToLayer.
                             return L.marker(
@@ -177,68 +165,108 @@ module.exports = function (_this) {
                         }
                     });
 
-                    _this.grid.layer.addTo(_this.map);
-                    _this.locale.layersCheck('grid', true);
+                    _.grid.layer.addTo(_.map);
+                    _.locale.layersCheck('grid', true);
 
-                    //gridLegend();
-                    svg_legends.createGridLegend(_this.grid);
-
-                        //     setTimeout(function () {
-    //         dom.legend.style['opacity'] = 1;
-    //     }, 300);
-    //     dom.pages[1].style.display = 'block';
-    //     dom.container.style.marginLeft = '-50%';
-
+                    svg_legends.createGridLegend(_.grid, dom);
                 }
             };
-            _this.grid.xhr.send();
-            _this.locale.layersCheck('grid', false);
+            _.grid.xhr.send();
+            _.locale.layersCheck('grid', false);
 
         } else {
-
-            // Set the layersCheck for the vector
-            _this.locale.layersCheck('grid', null);
+            _.locale.layersCheck('grid', null);
         }
     }
 
-    function styleDot(hex) { // set grid dot style
-        let color = d3.rgb(hex), darker = color.darker(0.5),
-            svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-            dot = document.createElement("circle"), shade = document.createElement("circle");
+    function processGrid(data){
+        let avg_c = 0,
+            avg_v = 0,
+            dots = {
+                type: "FeatureCollection",
+                features: []
+            };
 
-        svg.setAttribute("width", 866);
-        svg.setAttribute("height", 1000);
-        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        data.map(function(record){
 
-        shade.setAttribute("cx", 466);
-        shade.setAttribute("cy", 532);
-        shade.setAttribute("r", 395);
-        shade.style.fill = darker;
+            // lat = record[0]
+            // lon = record[1]
+            // id = record[2]
+            // count = record[3]
+            // value = record[4]
+            if (parseFloat(record[3]) > 0) {
+                record[3] = isNaN(record[3]) ? record[3] : parseFloat(record[3]);
+                record[4] = isNaN(record[4]) ? record[4] : parseFloat(record[4]);
 
-        dot.setAttribute("cx", 400);
-        dot.setAttribute("cy", 468);
-        dot.setAttribute("r", 395);
-        dot.style.fill = color;
+                // Make the value [4]
+                if (dom.chkGridRatio.checked && record[4] > 0) record[4] /= record[3]
 
-        svg.appendChild(shade)
-        svg.appendChild(dot);
+                avg_c += parseFloat(record[3]);
+                avg_v += isNaN(record[4]) ? 0 : parseFloat(record[4]);
 
-        return ("data:image/svg+xml," + encodeURIComponent(svg.outerHTML));
+                dots.features.push({
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [record[0],record[1]]
+                    },
+                    "type": "Feature",
+                    "properties": {
+                        "c": parseFloat(record[3]),
+                        "v": isNaN(record[4]) ? record[4] : parseFloat(record[4]),
+                        "id": record[2] || null
+                    }
+                });
+            }
+        });
+
+        let min = helper.getMath(data, 3, 'min'),
+            max = helper.getMath(data, 3, 'max'),
+            avg = avg_c / dots.features.length,
+            step_lower = (avg - min) / 4,
+            step_upper = (max - avg) / 3;
+
+        _.grid.arraySize = [];
+        _.grid.arraySize[0] = min;
+        _.grid.arraySize[1] = min + step_lower;
+        _.grid.arraySize[2] = min + (step_lower * 2);
+        _.grid.arraySize[3] = min + (step_lower * 3);
+        _.grid.arraySize[4] = avg;
+        _.grid.arraySize[5] = avg + step_upper;
+        _.grid.arraySize[6] = avg + (step_upper * 2);
+        _.grid.arraySize[7] = max;
+
+        if (avg_v > 0) {
+            min = helper.getMath(data, 4, 'min');
+            max = helper.getMath(data, 4, 'max');
+            avg = avg_v / dots.features.length;
+            step_lower = (avg - min) / 4;
+            step_upper = (max - avg) / 3;
+            _.grid.arrayColor = [];
+            _.grid.arrayColor[0] = min;
+            _.grid.arrayColor[1] = min + step_lower;
+            _.grid.arrayColor[2] = min + (step_lower * 2);
+            _.grid.arrayColor[3] = min + (step_lower * 3);
+            _.grid.arrayColor[4] = avg;
+            _.grid.arrayColor[5] = avg + step_upper;
+            _.grid.arrayColor[6] = avg + (step_upper * 2);
+            _.grid.arrayColor[7] = max;
+        }
+        return dots
     }
 
-    _this.grid.statFromGeoJSON = function (feature) {
+    _.grid.statFromGeoJSON = function (feature) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_grid_info');
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = function () {
             if (this.status === 200) {
                 feature.infoj = JSON.parse(this.response);
-                _this.analyse.addFeature(feature);
+                _.analyse.addFeature(feature);
             }
         }
         xhr.send(JSON.stringify({
-            infoj: _this.countries[_this.country].grid.infoj,
-            database: _this.countries[_this.country].grid.database,
+            infoj: _.countries[_.country].grid.infoj,
+            database: _.countries[_.country].grid.database,
             geometry: feature.geometry
         }));
     }

@@ -155,6 +155,12 @@ module.exports = (function () {
         return -1;
     }
 
+    function getMath(_arr, _key, _type){
+        return Math[_type].apply(null, _arr.map(function (val) {
+            return val[_key];
+        }))
+    }
+
     return {
         createStatsTable: createStatsTable,
         scrollElement: scrollElement,
@@ -166,6 +172,7 @@ module.exports = (function () {
         paramString: paramString,
         debounce: debounce,
         createElement: createElement,
-        getSelectOptionsIndex: getSelectOptionsIndex
+        getSelectOptionsIndex: getSelectOptionsIndex,
+        getMath: getMath
     };
 })();

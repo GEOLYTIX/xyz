@@ -73,7 +73,10 @@
     ]
   },
   "catchments": {
-    "provider": ["mapbox", "google"]
+    "provider": [
+      "mapbox",
+      "google"
+    ]
   },
   "country": "UK",
   "countries": {
