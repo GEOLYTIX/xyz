@@ -15,7 +15,7 @@
     }
   },
   "gazetteer": {
-    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "style": {
       "stroke": true,
       "color": "#090",

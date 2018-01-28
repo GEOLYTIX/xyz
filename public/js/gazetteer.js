@@ -176,8 +176,8 @@ module.exports = function Gazetteer(_this) {
                     interactive: false,
                     icon: L.icon({
                         iconUrl: _this.gazetteer.icon,
-                        iconSize: [80, 40],
-                        iconAnchor: [40, 40]
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 40]
                     })
                 });
             },

@@ -15,7 +15,7 @@
     }
   },
   "gazetteer": {
-    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "style": {
       "stroke": true,
       "color": "#090",
@@ -35,7 +35,7 @@
     "container": "document.querySelector('#location_module > .swipe_container')",
     "infoTable": "document.querySelector('.location_info')",
     "location_drop": "document.querySelector('.location_drop')",
-    "marker": "svg_marker(['#ff4081','#6a1b9a'])"
+    "marker": "svg_symbols.markerColor('#ff4081','#6a1b9a')"
   },
   "country": "UK",
   "countries": {

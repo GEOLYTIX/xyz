@@ -1,8 +1,8 @@
 const L = require('leaflet');
 const helper = require('./helper');
-const svg_marker = require('./svg_marker.js');
+const svg_symbols = require('./svg_symbols.js');
 
-module.exports = function catchments(_this){
+module.exports = function catchments(_){
     let dom = {};
     dom.map = document.getElementById('map');
     dom.container = document.querySelector('#catchments_module > .swipe_container');
@@ -23,31 +23,31 @@ module.exports = function catchments(_this){
     dom.chkCatchmentsConstruction = document.getElementById('chkCatchmentsConstruction');
 
     // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
-    _this.locale.catchments = function (change_country) {
+    _.locale.catchments = function (change_country) {
         removeLayer();
         resetModule();
 
         dom.selProvider.innerHTML = '';
-        _this.catchments.provider.forEach(function(e){
+        _.catchments.provider.forEach(function(e){
             dom.selProvider.insertAdjacentHTML('beforeend','<option value="'+e+'">'+e.charAt(0).toUpperCase()+e.slice(1)+'</option>');
         });
         dom.selProvider.disabled = dom.selProvider.childElementCount === 1 ? true : false;
 
         dom.selMode.innerHTML = '';
-        Object.keys(_this.countries[_this.country].catchments).map(function(key){
+        Object.keys(_.countries[_.country].catchments).map(function(key){
             dom.selMode.insertAdjacentHTML('beforeend','<option value="'+key+'">'+key.charAt(0).toUpperCase()+key.slice(1)+'</option>');
         });
    
         setParams(dom.selMode.options[dom.selMode.selectedIndex].value);
     };
-    _this.locale.catchments();
+    _.locale.catchments();
 
     function removeLayer() {
-        if (_this.catchments.layer) _this.map.removeLayer(_this.catchments.layer);
-        if (_this.catchments.layerMark) _this.map.removeLayer(_this.catchments.layerMark);
-        if (_this.catchments.layer_circlePoints) _this.map.removeLayer(_this.catchments.layer_circlePoints);
-        if (_this.catchments.layer_samplePoints) _this.map.removeLayer(_this.catchments.layer_samplePoints);
-        if (_this.catchments.layer_tin) _this.map.removeLayer(_this.catchments.layer_tin);
+        if (_.catchments.layer) _.map.removeLayer(_.catchments.layer);
+        if (_.catchments.layerMark) _.map.removeLayer(_.catchments.layerMark);
+        if (_.catchments.layer_circlePoints) _.map.removeLayer(_.catchments.layer_circlePoints);
+        if (_.catchments.layer_samplePoints) _.map.removeLayer(_.catchments.layer_samplePoints);
+        if (_.catchments.layer_tin) _.map.removeLayer(_.catchments.layer_tin);
     }
 
     function resetModule() {
@@ -58,13 +58,13 @@ module.exports = function catchments(_this){
     }
 
     function setParams(mode){
-        dom.sliMinutes.min = _this.countries[_this.country].catchments[mode].minMin;
-        dom.sliMinutes.max = _this.countries[_this.country].catchments[mode].maxMin;
-        dom.sliMinutes.value = _this.countries[_this.country].catchments[mode].defMin;
+        dom.sliMinutes.min = _.countries[_.country].catchments[mode].minMin;
+        dom.sliMinutes.max = _.countries[_.country].catchments[mode].maxMin;
+        dom.sliMinutes.value = _.countries[_.country].catchments[mode].defMin;
         dom.lblMinutes.innerHTML = dom.sliMinutes.value;
-        dom.sliDetail.value = _this.countries[_this.country].catchments[mode].detail;
+        dom.sliDetail.value = _.countries[_.country].catchments[mode].detail;
         dom.lblDetail.innerHTML = dom.sliDetail.value;
-        let reach = _this.countries[_this.country].catchments[mode].reach;
+        let reach = _.countries[_.country].catchments[mode].reach;
         dom.sliReach.min = parseInt(reach * 0.5);
         dom.sliReach.max = parseInt(reach * 1.5);
         dom.sliReach.value = reach;
@@ -96,13 +96,13 @@ module.exports = function catchments(_this){
 
     dom.btnQuery.addEventListener('click', function(){
         dom.map.style.cursor = 'crosshair';
-        _this.map.on('click', function(e){
+        _.map.on('click', function(e){
             getcatchments(e, dom.sliMinutes.value * 60)
         });
     });
 
     function getcatchments(e, _distance){
-        _this.map.off('click');
+        _.map.off('click');
         dom.map.style.cursor = '';
         dom.btnOff.style.display = 'none';
         dom.spinner.style.display = 'block';
@@ -111,25 +111,24 @@ module.exports = function catchments(_this){
         removeLayer();
 
         // Set layerMark on origin
-        _this.catchments.layerMark = L.geoJson({
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [e.latlng.lng, e.latlng.lat]
+        _.catchments.layerMark = L.geoJson({
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [e.latlng.lng, e.latlng.lat]
             }
         }, {
             interactive: false,
             pointToLayer: function (feature, latlng) {
                 return new L.Marker(latlng, {
                     icon: L.icon({
-                        iconUrl: svg_marker('', '#777'),
+                        iconUrl: svg_symbols.markerColor('#888', '#444'),
                         iconSize: [40, 40],
                         iconAnchor: [20, 40]
-                    }),
-                    interactive: false
+                    })
                 });
             }
-        }).addTo(_this.map);
+        }).addTo(_.map);
 
         let xhr = new XMLHttpRequest();
 
@@ -150,7 +149,7 @@ module.exports = function catchments(_this){
                 let json = JSON.parse(this.responseText);
 
                 if (dom.chkCatchmentsConstruction.checked) {
-                    _this.catchments.layer_tin = L.geoJson(json.tin,{
+                    _.catchments.layer_tin = L.geoJson(json.tin,{
                         interactive: false,
                         style: {
                             stroke: true,
@@ -158,9 +157,9 @@ module.exports = function catchments(_this){
                             weight: 1,
                             fill: false
                           }
-                    }).addTo(_this.map);
+                    }).addTo(_.map);
     
-                    _this.catchments.layer_circlePoints = L.geoJson(json.circlePoints,{
+                    _.catchments.layer_circlePoints = L.geoJson(json.circlePoints,{
                         interactive: false,
                         pointToLayer: function (feature, latlng) {
                             return new L.CircleMarker(latlng, {
@@ -170,9 +169,9 @@ module.exports = function catchments(_this){
                                 fill: false
                             });
                         }
-                    }).addTo(_this.map);
+                    }).addTo(_.map);
     
-                    _this.catchments.layer_samplePoints = L.geoJson(json.samplePoints,{
+                    _.catchments.layer_samplePoints = L.geoJson(json.samplePoints,{
                         interactive: false,
                         pointToLayer: function (feature, latlng) {
                             return new L.CircleMarker(latlng, {
@@ -183,17 +182,17 @@ module.exports = function catchments(_this){
                                 fillOpacity: 1
                             });
                         }
-                    }).addTo(_this.map);
+                    }).addTo(_.map);
                 }
 
-                _this.catchments.layer = L.geoJson(json.iso, {
-                    interactive: _this.countries[_this.country].grid.infoj ? true : false,
+                _.catchments.layer = L.geoJson(json.iso, {
+                    interactive: _.countries[_.country].grid.infoj ? true : false,
                     pane: 'shadowFilter',
                     onEachFeature: function (feature, layer) {
                         layer.on({
                             click: function(e) {
                                 feature.marker = [e.latlng.lng, e.latlng.lat];
-                                _this.grid.statFromGeoJSON(feature);
+                                _.grid.statFromGeoJSON(feature);
                                 this.setStyle(isoStyle(feature, _distance, 0));
                             },
                             mouseover: function () {
@@ -207,7 +206,7 @@ module.exports = function catchments(_this){
                     style: function (feature) {
                         return isoStyle(feature, _distance, 0)
                     }
-                }).addTo(_this.map);
+                }).addTo(_.map);
 
                 function isoStyle(feature, _distance, fillOpacity){
                     let style = feature.properties.v == parseInt(_distance * 0.33) ?
@@ -224,7 +223,7 @@ module.exports = function catchments(_this){
                     }
                 }
 
-                _this.map.fitBounds(_this.catchments.layer.getBounds());
+                _.map.fitBounds(_.catchments.layer.getBounds());
                 
                 dom.spinner.style.display = 'none';
                 dom.btnOff.style.display = 'block';

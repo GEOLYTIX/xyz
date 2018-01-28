@@ -15,7 +15,7 @@
     }
   },
   "gazetteer": {
-    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "style": {
       "stroke": true,
       "color": "#090",
@@ -50,7 +50,7 @@
     "container": "document.querySelector('#drivetime_module > .swipe_container')",
     "infoTable": "document.querySelector('.drivetime_info')",
     "slider": "document.getElementById('drivetime_slider')",
-    "icon": "svg_marker(['#35b','#9cf'])",
+    "icon": "svg_symbols.markerColor('#35b','#9cf')",
     "style": {
       "stroke": true,
       "color": "#35b",

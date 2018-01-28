@@ -17,7 +17,7 @@
   },
   "gazetteer": {
     "provider": "mapbox",
-    "icon": "svg_marker(['#64dd17','#33691e'])",
+    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "style": {
       "stroke": true,
       "color": "#090",
@@ -36,7 +36,7 @@
     "provider": "mapbox",
     "container": "document.querySelector('#drivetime_module > .swipe_container')",
     "slider": "document.getElementById('drivetime_slider')",
-    "icon": "svg_marker(['#35b','#9cf'])",
+    "icon": "svg_symbols.markerColor('#35b','#9cf')",
     "style": {
       "stroke": true,
       "color": "#35b",

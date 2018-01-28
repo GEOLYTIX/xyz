@@ -2,7 +2,7 @@
 if (view_mode === 'mobile') require('./mobile_interface')();
 
 // Evaluate settings.
-const svg_marker = require('./svg_marker');
+const svg_symbols = require('./svg_symbols');
 function objectEval(settings) {
     Object.keys(settings).map(function (key) {
         if (typeof settings[key] === 'string' && key != 'color') {

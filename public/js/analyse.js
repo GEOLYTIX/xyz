@@ -1,7 +1,7 @@
 const helper = require('./helper');
-const svg_marker = require('./svg_marker.js');
+const svg_symbols = require('./svg_symbols.js');
 
-module.exports = function Analyse(_this){
+module.exports = function Analyse(_){
 
     let testData = {
         "Postal District": "BB10",
@@ -133,18 +133,18 @@ module.exports = function Analyse(_this){
         dom.pages[0].style.display = 'block';
         dom.container.style['marginLeft'] = '0';
         dataArray.map(function (obj) {
-            if (obj.layer) _this.map.removeLayer(obj.layer);
+            if (obj.layer) _.map.removeLayer(obj.layer);
             obj.layer = null;
-            if (obj.marker) _this.map.removeLayer(obj.marker);
+            if (obj.marker) _.map.removeLayer(obj.marker);
             obj.marker = null;
             obj.infoj = null;
             obj.container = null;
         });
     }
 
-    _this.analyse = {};
+    _.analyse = {};
 
-    _this.analyse.addFeature = function(feature){
+    _.analyse.addFeature = function(feature){
         let space = dataArray.filter(function (obj) {
             if (!obj.infoj) return obj
         });
@@ -171,29 +171,28 @@ module.exports = function Analyse(_this){
         if (feature.marker) {
             entry.marker = L.geoJson(
                 {
-                    type: "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": feature.marker
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: feature.marker
                     }
                 }, {
-                    interactive: false,
                     pointToLayer: function (feature, latlng) {
                         return new L.Marker(latlng, {
                             icon: L.icon({
-                                iconUrl: svg_marker(entry.letter, entry.color),
+                                iconUrl: svg_symbols.markerLetter(entry.color, entry.letter),
                                 iconSize: [40, 40],
                                 iconAnchor: [20, 40]
                             }),
                             interactive: false
                         });
                     }
-                }).addTo(_this.map);
+                }).addTo(_.map);
         }
 
         entry.layer = L.geoJson(
             {
-                type: "Feature",
+                type: 'Feature',
                 geometry: feature.geometry
             }, {
                 interactive: false,
@@ -207,14 +206,14 @@ module.exports = function Analyse(_this){
                 pointToLayer: function (feature, latlng) {
                     return new L.Marker(latlng, {
                         icon: L.icon({
-                            iconUrl: svg_marker(entry.letter, entry.color),
+                            iconUrl: svg_symbols.markerLetter(entry.color, entry.letter),
                             iconSize: [40, 40],
                             iconAnchor: [20, 40]
                         }),
                         interactive: false
                     });
                 }
-            }).addTo(_this.map);
+            }).addTo(_.map);
 
         createInfojTable(entry);
     }
@@ -239,9 +238,9 @@ module.exports = function Analyse(_this){
         i.title="Remove feature from selection";
         i.addEventListener('click', function(){
             this.parentNode.parentNode.remove();
-            _this.map.removeLayer(feature.layer);
+            _.map.removeLayer(feature.layer);
             feature.layer = null;
-            if (feature.marker) _this.map.removeLayer(feature.marker);
+            if (feature.marker) _.map.removeLayer(feature.marker);
             feature.marker = null;
             feature.infoj = null;
             feature.container = null;
@@ -262,7 +261,7 @@ module.exports = function Analyse(_this){
         i.className = 'material-icons cursor noselect infojBtn';
         i.title="Zoom map to feature bounds";
         i.addEventListener('click', function(){
-            _this.map.flyToBounds(feature.layer.getBounds());
+            _.map.flyToBounds(feature.layer.getBounds());
         });
         header.appendChild(i);
         
@@ -300,11 +299,11 @@ module.exports = function Analyse(_this){
                 let container = this.parentNode.parentNode;
                 let header = this.parentNode;
                 if (this.textContent === 'location_off') {
-                    _this.map.removeLayer(feature.marker);
+                    _.map.removeLayer(feature.marker);
                     this.textContent = 'location_on';
                     i.title="Show marker";
                 } else {
-                    _this.map.addLayer(feature.marker);
+                    _.map.addLayer(feature.marker);
                     this.textContent = 'location_off';
                     i.title="Hide marker";
                 }

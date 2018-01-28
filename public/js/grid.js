@@ -1,7 +1,7 @@
 const L = require('leaflet');
 const helper = require('./helper');
 const svg_legends = require('./svg_legends');
-const svg_dot = require('./svg_dot');
+const svg_symbols = require('./svg_symbols');
 
 module.exports = function (_) {
 
@@ -142,14 +142,14 @@ module.exports = function (_) {
                                                     18;
 
                             let dot =
-                                feature.properties.v < _.grid.arrayColor[1] ? svg_dot.svg_dot(_.grid.colorScale[0]) :
-                                    feature.properties.v < _.grid.arrayColor[2] ? svg_dot.svg_dot(_.grid.colorScale[1]) :
-                                        feature.properties.v < _.grid.arrayColor[3] ? svg_dot.svg_dot(_.grid.colorScale[2]) :
-                                            feature.properties.v < _.grid.arrayColor[4] ? svg_dot.svg_dot(_.grid.colorScale[3]) :
-                                                feature.properties.v < _.grid.arrayColor[5] ? svg_dot.svg_dot(_.grid.colorScale[4]) :
-                                                    feature.properties.v < _.grid.arrayColor[6] ? svg_dot.svg_dot(_.grid.colorScale[5]) :
-                                                        feature.properties.v < _.grid.arrayColor[7] ? svg_dot.svg_dot(_.grid.colorScale[6]) :
-                                                        svg_dot.svg_dot(_.grid.colorScale[6]);
+                                feature.properties.v < _.grid.arrayColor[1] ? svg_symbols.dot(_.grid.colorScale[0]) :
+                                    feature.properties.v < _.grid.arrayColor[2] ? svg_symbols.dot(_.grid.colorScale[1]) :
+                                        feature.properties.v < _.grid.arrayColor[3] ? svg_symbols.dot(_.grid.colorScale[2]) :
+                                            feature.properties.v < _.grid.arrayColor[4] ? svg_symbols.dot(_.grid.colorScale[3]) :
+                                                feature.properties.v < _.grid.arrayColor[5] ? svg_symbols.dot(_.grid.colorScale[4]) :
+                                                    feature.properties.v < _.grid.arrayColor[6] ? svg_symbols.dot(_.grid.colorScale[5]) :
+                                                        feature.properties.v < _.grid.arrayColor[7] ? svg_symbols.dot(_.grid.colorScale[6]) :
+                                                        svg_symbols.dot(_.grid.colorScale[6]);
 
                             // Return L.Marker with icon as style to pointToLayer.
                             return L.marker(
