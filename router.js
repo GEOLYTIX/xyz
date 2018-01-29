@@ -18,7 +18,7 @@ router.get('/', isLoggedIn, function (req, res) {
         tmpl.render({
             title: appSettings.title,
             css: '<link rel="stylesheet" href="css/desktop.css"/>',
-            module_layers: appSettings.vector ? './public/tmpl/layers.html' : null,
+            module_layers: appSettings.layers ? './public/tmpl/layers.html' : null,
             module_hxgrid: appSettings.grid ? './public/tmpl/hxgrid.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
             module_analyse: './public/tmpl/analyse.html',

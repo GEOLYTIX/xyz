@@ -3,24 +3,25 @@ const helper = require('./helper');
 const svg_symbols = require('./svg_symbols.js');
 
 module.exports = function catchments(_){
-    let dom = {};
-    dom.map = document.getElementById('map');
-    dom.container = document.querySelector('#catchments_module > .swipe_container');
-    dom.pages = document.querySelectorAll('#catchments_module .page_content');
-    dom.btnQuery = document.querySelector('#catchments_module .btnQuery');
-    dom.btnOff = document.querySelector('#catchments_module .btnOff');
-    dom.btnCopy = document.querySelector('#catchments_module .btnCopy');
-    dom.spinner = document.querySelector('#catchments_module .spinner');
-    dom.info_table = document.querySelector('#catchments_module .info_table');
-    dom.lblMinutes = document.querySelector('#catchments_module .lblMinutes');
-    dom.sliMinutes = document.querySelector('#catchments_module .sliMinutes');
-    dom.lblReach = document.querySelector('#catchments_module .lblReach');
-    dom.sliReach = document.querySelector('#catchments_module .sliReach');
-    dom.lblDetail = document.querySelector('#catchments_module .lblDetail');
-    dom.sliDetail = document.querySelector('#catchments_module .sliDetail');
-    dom.selMode = document.querySelector('#catchments_module .selMode');
-    dom.selProvider = document.querySelector('#catchments_module .selProvider');
-    dom.chkCatchmentsConstruction = document.getElementById('chkCatchmentsConstruction');
+    let dom = {
+        map: document.getElementById('map'),
+        container: document.querySelector('#catchments_module > .swipe_container'),
+        pages: document.querySelectorAll('#catchments_module .page_content'),
+        btnQuery: document.querySelector('#catchments_module .btnQuery'),
+        btnOff: document.querySelector('#catchments_module .btnOff'),
+        btnCopy: document.querySelector('#catchments_module .btnCopy'),
+        spinner: document.querySelector('#catchments_module .spinner'),
+        info_table: document.querySelector('#catchments_module .info_table'),
+        lblMinutes: document.querySelector('#catchments_module .lblMinutes'),
+        sliMinutes: document.querySelector('#catchments_module .sliMinutes'),
+        lblReach: document.querySelector('#catchments_module .lblReach'),
+        sliReach: document.querySelector('#catchments_module .sliReach'),
+        lblDetail: document.querySelector('#catchments_module .lblDetail'),
+        sliDetail: document.querySelector('#catchments_module .sliDetail'),
+        selMode: document.querySelector('#catchments_module .selMode'),
+        selProvider: document.querySelector('#catchments_module .selProvider'),
+        chkCatchmentsConstruction: document.getElementById('chkCatchmentsConstruction')
+    };
 
     // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
     _.locale.catchments = function (change_country) {

@@ -1,88 +1,103 @@
-const helper = require('./helper');
+const utils = require('./helper');
 
-module.exports = function(_this){
+module.exports = function(_){
+
+    // Get hooks from URI and split into _.hooks object
     let params = window.location.search.substring(1).split('&');
-
     if (params[0] !== '') {
         for (let i = 0; i < params.length; i++) {
             let key_val = params[i].split('=');
-            _this.hooks[key_val[0]] = key_val[1];
+            _.hooks[key_val[0]] = key_val[1].split(',');
+            //_.hooks[key_val[0]] = key_val[1];
         }
     }
 
-    if (hooks !== false) {
-        _this.hooks = hooks
+    // if (hooks !== false) {
+    //     _.hooks = hooks
+    //     try {
+    //         history.pushState({ url_hooks: true }, 'url_hooks', '?' + utils.paramString(_.hooks));
+    //     } catch (e) {}
+    // };
+
+    // Set view hook containing lat, lng and zoom.
+    _.setViewHook = function (cntr) {
+        _.hooks.lat = cntr.lat;
+        _.hooks.lng = cntr.lng;
+        _.hooks.z = _.map.getZoom();
         try {
-            history.pushState({ url_hooks: true }, 'url_hooks', '?' + helper.paramString(_this.hooks));
+            history.pushState({ url_hooks: true }, 'url_hooks', '?' + utils.paramString(_.hooks));
         } catch (e) { }
     };
 
-    _this.setViewHook = function (cntr) {
-        _this.hooks.lat = cntr.lat;
-        _this.hooks.lng = cntr.lng;
-        _this.hooks.z = _this.map.getZoom();
+    // Add kvp hook to _.hooks and URI.
+    _.setHook = function (key, val) {
+        _.hooks[key] = val;
         try {
-            history.pushState({ url_hooks: true }, 'url_hooks', '?' + helper.paramString(_this.hooks));
-        } catch (e) { }
-    };
-
-    _this.setHook = function (key, val) {
-        _this.hooks[key] = val;
-        try {
-            history.pushState({url_hooks: true}, 'url_hooks', '?' + helper.paramString(_this.hooks));
+            history.pushState({url_hooks: true}, 'url_hooks', '?' + utils.paramString(_.hooks));
         } catch(e) {}
     };
 
-    _this.removeHook = function (key) {
-        delete _this.hooks[key];
+    // Remove hook from _.hooks and URI.
+    _.removeHook = function (key) {
+        delete _.hooks[key];
         try {
-            history.pushState({url_hooks: true}, 'url_hooks', '?' + helper.paramString(_this.hooks));
+            history.pushState({url_hooks: true}, 'url_hooks', '?' + utils.paramString(_.hooks));
         } catch(e) {}
     };
     
-    // Tools for multiple values stored in one hook
     
-    // push element only if not exists
-    _this.pushHook = function(_array, _element){
-        let _respaced = _this.respaceHook(_element);
-        if(_array.indexOf(_respaced) === -1) _array.push(_respaced);
-        return _array.join(",");
+    // Push key into an array hook.
+    _.pushHook = function(key, value){
+        if (_.hooks[key]) {
+            _.hooks[key].push(value);
+        } else {
+            _.hooks[key] = [value];
+        }
+        try {
+            history.pushState({url_hooks: true}, 'url_hooks', '?' + utils.paramString(_.hooks));
+        } catch(e) {}
     }
 
-    // pop element out of an array
-    _this.popHook = function(_array, _element){
-        let _respaced = _this.respaceHook(_element), 
-            _idx = _array.indexOf(_respaced);
-        if(_idx !== -1) _array.splice(_idx, 1);
-        return _array.join(",");
-    }
-    
-     // replace space in layer name with a plus
-    _this.respaceHook = function(_val, _symbol){
-        if(_symbol === undefined) _symbol = "+";
-        let _respaced = _val.replace(/ /g, _symbol);
-        return _respaced;
-    }
-    
-    // replace a symbol with a space, reverse _respace 
-    _this.unspaceHook = function(_val, _symbol){
-        _symbol ? _symbol = _symbol : _symbol = '+';
-        let _unspaced = _val.split(_symbol).join(' ');
-        return _unspaced;
-    }
-    
-    // read multi hook for selected features
-    _this.readSelectionMultiHook = function(){
-        let _items = {}, _array;
-        
-        if(_this.hooks.selected){
-            _array = _this.hooks.selected.split(",");
-            let _mapped = _array.map(function(_el){
-                let _e = _el.split("."), _key = _this.unspaceHook(_e[0]);
-                _items[_key] = _e.slice(1).join(".");
+    // Filter key from an array hook.
+    _.filterHook = function(key, value){
+        if (_.hooks[key]) {
+            _.hooks[key] = _.hooks[key].filter(function(el){
+                return el !== value;
             });
-            return _items;
+            if (_.hooks[key].length === 0) delete _.hooks[key];
+            try {
+                history.pushState({url_hooks: true}, 'url_hooks', '?' + utils.paramString(_.hooks));
+            } catch(e) {}
         }
     }
+    
+    //  // replace space in layer name with a plus
+    // _.respaceHook = function(_val, _symbol){
+    //     if(_symbol === undefined) _symbol = "+";
+    //     let _respaced = _val.replace(/ /g, _symbol);
+    //     return _respaced;
+    // }
+    
+    // // replace a symbol with a space, reverse _respace 
+    // _.unspaceHook = function(_val, _symbol){
+    //     _symbol ? _symbol = _symbol : _symbol = '+';
+    //     let _unspaced = _val.split(_symbol).join(' ');
+    //     return _unspaced;
+    // }
+    
+    // // read multi hook for selected features
+    // _.readSelectionMultiHook = function(){
+    //     if(_.hooks.selected){
+    //         let items = {};
+    //         let array = _.hooks.selected.split(",");
+    //         array.map(function(el){
+    //             let
+    //             e = el.split('.'),
+    //             key = _.unspaceHook(e[0]);
+    //             items[key] = e.slice(1).join('.');
+    //         });
+    //         return items;
+    //     }
+    // }
     
 };

@@ -21,7 +21,7 @@ require('./gazetteer')(settings);
 require('./analyse')(settings);
 if (view_mode === 'desktop') require('./report')(settings);
 if (settings.grid) require('./grid')(settings);
-if (settings.vector) require('./vector')(settings);
+if (settings.layers) require('./layers')(settings);
 if (settings.catchments) require('./catchments')(settings);
 
 document.querySelector('.module_container').style.display = 'block';

@@ -54,12 +54,13 @@ module.exports = function Analyse(_){
     //     '#d32f2f'  //red
     // ]
   
-    let dom = {};
-    dom.container = document.querySelector('#analyse_module > .swipe_container');
-    dom.table = document.querySelector('#analyse_module .infoj');
-    dom.pages = document.querySelectorAll('#analyse_module .page_content');
-    dom.header = document.querySelectorAll('#analyse_module .page_header');
-    dom.btnOff = document.querySelector('#analyse_module .btnOff');
+    let dom = {
+        container: document.querySelector('#analyse_module > .swipe_container'),
+        table: document.querySelector('#analyse_module .infoj'),
+        pages: document.querySelectorAll('#analyse_module .page_content'),
+        header: document.querySelectorAll('#analyse_module .page_header'),
+        btnOff: document.querySelector('#analyse_module .btnOff')
+    };
 
     let dataArray = [
         {

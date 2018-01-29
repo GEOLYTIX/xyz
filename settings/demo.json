@@ -2,8 +2,6 @@
   "title": "GEOMAPP",
   "hooks": {},
   "locale": {
-    "btnZoomIn": "document.getElementById('btnZoomIn')",
-    "btnZoomOut": "document.getElementById('btnZoomOut')",
     "layers": {
       "base": false,
       "border": false,
@@ -24,15 +22,9 @@
       "weight": 2,
       "fillColor": "#cf9",
       "fillOpacity": 0.2
-    },
-    "btnSearch": "document.getElementById('btnSearch')",
-    "group": "document.getElementById('gaz_group')",
-    "input": "document.getElementById('gaz_input')",
-    "result": "document.getElementById('gaz_result')",
-    "country": "document.getElementById('gaz_country')",
-    "countrylist": "document.getElementById('gaz_countrylist')"
+    }
   },
-  "vector": {
+  "layers": {
     "style": {
       "stroke": true,
       "color": "#666",
@@ -95,7 +87,6 @@
       ],
       "minZoom": 6,
       "maxZoom": 17,
-      "border": true,
       "catchments": {
         "walking": {
           "minMin": 5,
@@ -112,8 +103,24 @@
           "reach": 40
         }
       },
-      "vector": {
-        "Postal codes": {
+      "layers": {
+        "country_border": {
+          "name": "Country Border",
+          "arrayZoom": {
+            "11": "gb_retail_place_bounds"
+          },
+          "format": "mvt",
+          "pane": "bounds",
+          "style": {
+            "stroke": true,
+            "color": "#33658A",
+            "opacity": 0.8,
+            "weight": 2,
+            "fillOpacity": 0.7
+          }
+        },
+        "postal_codes": {
+          "name": "Postal Codes",
           "arrayZoom": {
             "10": "gb_postaldistrict_census__11",
             "11": "gb_postaldistrict_census__11",
@@ -122,7 +129,9 @@
           "format": "mvt",
           "pane": "areas"
         },
-        "Retail": {
+        "retail_places": {
+          "name": "Retail Places",
+          "display": true,
           "arrayZoom": {
             "11": "gb_retail_place_bounds"
           },
@@ -151,7 +160,8 @@
             "fillOpacity": 0.5
           }
         },
-        "Retail MVT": {
+        "retail_places_mvt": {
+          "name": "Retail Places Tiles",
           "arrayZoom": {
             "11": "gb_retail_place_bounds"
           },
@@ -175,7 +185,8 @@
             "fillOpacity": 0.9
           }
         },
-        "Locations": {
+        "retail_points": {
+          "name": "Retail Points",
           "database": "xyz",
           "format": "cluster",
           "qID": "qid",
@@ -1404,17 +1415,33 @@
       ],
       "minZoom": 6,
       "maxZoom": 17,
-      "border": true,
-      "drivetime": false,
-      "vector": {
-        "Communes": {
+      "layers": {
+        "country_border": {
+          "name": "Country Border",
+          "display": true,
+          "arrayZoom": {
+            "11": "gb_retail_place_bounds"
+          },
+          "format": "mvt",
+          "pane": "bounds",
+          "style": {
+            "stroke": true,
+            "color": "#33658A",
+            "opacity": 0.8,
+            "weight": 2,
+            "fillOpacity": 0.7
+          }
+        },
+        "communes": {
+          "name": "Communes",
           "arrayZoom": {
             "9": "ro_commune_census__11"
           },
           "format": "mvt",
           "pane": "areas"
         },
-        "Fashion retail": {
+        "retail_fashion": {
+          "name": "Fashion retail",
           "database": "xyz",
           "format": "cluster",
           "qID": "qid",
