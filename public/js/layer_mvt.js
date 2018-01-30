@@ -1,7 +1,8 @@
 const L = require('leaflet');
-const helper = require('./helper');
-
 require('leaflet.vectorgrid');
+const utils = require('./utils');
+
+
 
 function getLayer(_, layer){
 
@@ -52,7 +53,7 @@ function getLayer(_, layer){
     // if(_.layers.layers[_layer].table){
     //     let bounds = _.map.getBounds(),
     //         url = localhost + 'mvt/{z}/{x}/{y}'
-    //         + "?" + helper.paramString({
+    //         + "?" + utils.paramString({
     //             table: _.layers.layers[_layer].table,
     //             layer: _layer,
     //             west: bounds.getWest(),
@@ -91,7 +92,7 @@ function getLayer(_, layer){
     //         .addTo(_.map);
     // } else {
     //     // Set the layersCheck for the vector 
-    //     _.locale.layersCheck(_layer, null);
+    //     _.layersCheck(_layer, null);
         
     //     // remove layer if there's no table
     //     if(_.layers.layers[_layer].layer) _.map.removeLayer(_.layers.layers[_layer].layer);
@@ -113,7 +114,7 @@ function getLayer(_, layer){
     //     // Create new xhr for /q_vector_info?
     //     let xhr = new XMLHttpRequest();
         
-    //     xhr.open('GET', localhost + 'q_vector_info?' + helper.paramString({
+    //     xhr.open('GET', localhost + 'q_vector_info?' + utils.paramString({
     //         qid: id
     //     }));
         
@@ -131,8 +132,8 @@ function getLayer(_, layer){
                 
     //             setTimeout(function () {
     //                 console.log(infoj);
-    //                 // test analyse module
-    //                 if(_.analyse) _.analyse.add(feature);
+    //                 // test select module
+    //                 if(_.select) _.select.add(feature);
     //             }, 300);
                 
     //             if(_.hooks.selected){
@@ -161,7 +162,7 @@ function getLayer(_, layer){
     // function clearSelection(_id){
     //     _.layers.layers[_layer].layer.resetFeatureStyle(_id);
     //     _.layers.layers[_layer].selected = null;
-    //     _.locale.layersCheck(_layer, null);
+    //     _.layersCheck(_layer, null);
         
     //     _.hooks.selected = _.popHook(_.hooks.selected.split(","), _.respaceHook(_layer) + "." + _id);
     //     // check if anything left

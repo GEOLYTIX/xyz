@@ -1,5 +1,5 @@
 const L = require('leaflet');
-const helper = require('./helper');
+const utils = require('./utils');
 const d3 = require('d3');
 
 function getLayer(_, layer){
@@ -36,7 +36,7 @@ function getLayer(_, layer){
     //     _.layers.layers[_layer].xhr = new XMLHttpRequest();
 
     //     let bounds = _.map.getBounds(),
-    //         url = localhost + 'q_location?' + helper.paramString({
+    //         url = localhost + 'q_location?' + utils.paramString({
     //             layer: _.countries[_.country].layers[_layer].qLayer,
     //             qid: _.countries[_.country].layers[_layer].qID,
     //             label: _.countries[_.country].layers[_layer].qLabel,
@@ -248,7 +248,7 @@ function getLayer(_, layer){
 
         let xhr = new XMLHttpRequest();
 
-        let url = localhost + 'q_location_info?' + helper.paramString({
+        let url = localhost + 'q_location_info?' + utils.paramString({
             qid: _.countries[_.country].layers[_layer].qID,
             id: id.toString().split('.')[1] || id,
             layer: _.countries[_.country].layers[_layer].qLayer,
@@ -284,7 +284,7 @@ function getLayer(_, layer){
                 //         });
                 //     }
                 // }).addTo(_.map);
-                //  _.locale.layersCheck(_layer + '_select', true);
+                //  _.layersCheck(_layer + '_select', true);
 
                 // Select the associated vector layer
                 //if (_.layers.layers['Postal codes'].display && json[0].layers){
@@ -292,15 +292,15 @@ function getLayer(_, layer){
                     //_.layers.selectLayer(json[0].layers);
                 //}
                 
-                // test analyse module
-                if(_.analyse) {
+                // test select module
+                if(_.select) {
 
                 
                     let feature = {};
                     feature.geometry = geomj;
                     feature.infoj = infoj;
                     console.log(feature);
-                    _.analyse.add(feature)
+                    _.select.add(feature)
                 };
 
                 // Assign info fields to info table.
@@ -332,7 +332,7 @@ function getLayer(_, layer){
             }
         }
         xhr.send();
-        _.locale.layersCheck(_layer + '_select', false);
+        _.layersCheck(_layer + '_select', false);
     }
 
     // Markers and legend

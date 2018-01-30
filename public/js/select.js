@@ -1,129 +1,42 @@
-const helper = require('./helper');
+const utils = require('./utils');
 const svg_symbols = require('./svg_symbols.js');
 
-module.exports = function Analyse(_){
+module.exports = function Select(_){
 
-    let testData = {
-        "Postal District": "BB10",
-        "Age & Gender": {
-            "Total Population": 36549,
-            "Gender": {
-                "Female": 18533,
-                "Male": 18015
-            },
-            "Age 16-24": 4047,
-            "Age 25-29": 2329,
-            "Age 30-44": 6940,
-            "Age 45-59": 7026,
-            "Age 60-64": 2592,
-            "Age 65-74": 3478
-        },
-        "Ethnicity": {
-            "White British": 28851,
-            "Non White British": 147,
-            "other_": {
-                "Other White": 401,
-                "Black": 36,
-                "South Asian": 6034,
-                "Chinese": 79,
-                "Mixed": 485,
-                "Other": 474
-            }
-        },
-        "Avg. income@£": 100000,
-        "Avg. unemployment@%": 10.1,
-        "Contact": "dennis@gmail.com",
-        "Notes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    };
-
-    // let colorArray = [
-    //     '#9c27b0', //purple
-    //     '#673ab7', //deep-purple
-    //     '#0d47a1', //indigo
-    //     '#2196f3', //blue
-    //     '#03a9f4', //light-blue
-    //     '#00bcd4', //cyan
-    //     '#009688', //teal
-    //     '#4caf50', //green
-    //     '#8bc34a', //light-green
-    //     '#cddc39', //lime
-    //     '#ffeb3b', //yellow
-    //     '#ffc107', //amber
-    //     '#ff9800', //orange
-    //     '#ff5722', //deep-orange
-    //     '#d32f2f'  //red
-    // ]
-  
     let dom = {
-        container: document.querySelector('#analyse_module > .swipe_container'),
-        table: document.querySelector('#analyse_module .infoj'),
-        pages: document.querySelectorAll('#analyse_module .page_content'),
-        header: document.querySelectorAll('#analyse_module .page_header'),
-        btnOff: document.querySelector('#analyse_module .btnOff')
+        container: document.querySelector('#select_module > .swipe_container'),
+        table: document.querySelector('#select_module .infoj'),
+        pages: document.querySelectorAll('#select_module .page_content'),
+        header: document.querySelectorAll('#select_module .page_header'),
+        btnOff: document.querySelector('#select_module .btnOff')
     };
 
-    let dataArray = [
-        {
-            'letter': 'A',
-            'color': '#9c27b0'
-        },
-        {
-            'letter': 'B',
-            'color': '#2196f3'
-        },
-        {
-            'letter': 'C',
-            'color': '#009688'
-        },
-        {
-            'letter': 'D',
-            'color': '#cddc39'
-        },
-        {
-            'letter': 'E',
-            'color': '#ff9800'
-        },
-        {
-            'letter': 'F',
-            'color': '#673ab7'
-        },
-        {
-            'letter': 'G',
-            'color': '#03a9f4'
-        },
-        {
-            'letter': 'H',
-            'color': '#4caf50'
-        },
-        {
-            'letter': 'I',
-            'color': '#ffeb3b'
-        },
-        {
-            'letter': 'J',
-            'color': '#ff5722'
-        },
-        {
-            'letter': 'K',
-            'color': '#0d47a1'
-        },
-        {
-            'letter': 'L',
-            'color': '#00bcd4'
-        },
-        {
-            'letter': 'M',
-            'color': '#8bc34a'
-        },
-        {
-            'letter': 'N',
-            'color': '#ffc107'
-        },
-        {
-            'letter': 'O',
-            'color': '#d32f2f'
-        }
-    ];
+    // locale.select is called upon initialisation and when the country is changed (change_country === true).
+    _.select.init = function (change_country) {
+
+        // Remove the layers hook on change_country event.
+        if (change_country) _.removeHook('select');
+
+        // Set the layer display from hooks if present; Overwrites the default setting.
+        if (_.hooks.select) _.hooks.select.map(function(hook) {
+            let selectionHook = hook.split('..');
+
+            selectLayer({
+                qTable: selectionHook[1],
+                qID: selectionHook[2],
+                marker: [selectionHook[3].split(';')[0], selectionHook[3].split(';')[1]]
+            })
+            
+        });
+        _.removeHook('select');
+
+        // // Remove the layers hook.
+        // _.removeHook('select');
+
+        // // Empty the layers table.
+        // dom.layersTable.innerHTML = '';
+    }
+    _.select.init();
 
     dom.btnOff.addEventListener('click', function(){
         resetModule();
@@ -133,7 +46,8 @@ module.exports = function Analyse(_){
         dom.pages[1].innerHTML = '';
         dom.pages[0].style.display = 'block';
         dom.container.style['marginLeft'] = '0';
-        dataArray.map(function (obj) {
+        _.removeHook('select');
+        _.select.layers.map(function (obj) {
             if (obj.layer) _.map.removeLayer(obj.layer);
             obj.layer = null;
             if (obj.marker) _.map.removeLayer(obj.marker);
@@ -143,31 +57,55 @@ module.exports = function Analyse(_){
         });
     }
 
-    _.analyse = {};
+    _.select.selectLayer = selectLayer;
+    function selectLayer(feature) {
 
-    _.analyse.addFeature = function(feature){
-        let space = dataArray.filter(function (obj) {
+        // Create new xhr for /q_vector_info?
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', localhost + 'q_vector_gjson_info?' + utils.paramString({
+            qTable: feature.qTable,
+            qID: feature.qID
+        }));
+    
+        // Display the selected layer feature on load event.
+        xhr.onload = function () {
+            if (this.status === 200) {
+    
+                let json = JSON.parse(this.responseText),
+                    areaj = JSON.parse(json[0].areaj) || null;
+    
+                feature.geometry = JSON.parse(json[0].geomj);
+                feature.infoj = JSON.parse(json[0].infoj);
+    
+                addFeature(feature);
+    
+            }
+        }
+    
+        xhr.send();
+    }
+
+    _.select.addFeature = addFeature;
+    function addFeature(feature){
+        let space = _.select.layers.filter(function (obj) {
             if (!obj.infoj) return obj
         });
 
-        dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((space.length - 1) / dataArray.length) * 100)) + '%, #eee 0%)';
+        dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((space.length - 1) / _.select.layers.length) * 100)) + '%, #eee 0%)';
 
-        if (space.length > 0) addToDataArray(feature, space[0])
+        if (space.length > 0) {
+            _.pushHook('select', space[0].letter + '..' + feature.qTable + '..' + feature.qID + '..' + feature.marker[0] + ';' + feature.marker[1]);
+            addToSelectLayers(feature, space[0])
+        }
     }
 
-    // addToDataArray({
-    //     type: "Feature",
-    //     geometry: {
-    //         type: "Point",
-    //         coordinates: [0,51]
-    //     },
-    //     infoj: testData
-    // },dataArray[0]);
-
-    function addToDataArray(feature, entry) {
-        dom.container.style['marginLeft'] = '-50%';
+    function addToSelectLayers(feature, entry) {
+        dom.container.style.marginLeft = '-50%';
 
         entry.infoj = feature.infoj;
+
+        entry.qTable = feature.qTable;
+        entry.qID = feature.qID;
 
         if (feature.marker) {
             entry.marker = L.geoJson(
@@ -231,7 +169,7 @@ module.exports = function Analyse(_){
         header.textContent = feature.letter;
         header.className = 'infojHeader';
 
-        // Create the clear control element to control the removal of a feature from the dataArray.
+        // Create the clear control element to control the removal of a feature from the select.layers.
         let i = document.createElement('i');
         i.textContent = 'clear';
         i.style.color = feature.color;
@@ -240,17 +178,18 @@ module.exports = function Analyse(_){
         i.addEventListener('click', function(){
             this.parentNode.parentNode.remove();
             _.map.removeLayer(feature.layer);
+            _.filterHook('select', feature.letter + '..' + feature.qTable + '..' + feature.qID + '..' + feature.marker[0] + ';' + feature.marker[1]);
             feature.layer = null;
             if (feature.marker) _.map.removeLayer(feature.marker);
             feature.marker = null;
             feature.infoj = null;
             feature.container = null;
 
-            let space = dataArray.filter(function (obj) {
+            let space = _.select.layers.filter(function (obj) {
                 if (!obj.infoj) return obj
             });
     
-            dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((space.length / dataArray.length) * 100)) + '%, #eee 0%)';
+            dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((space.length / _.select.layers.length) * 100)) + '%, #eee 0%)';
 
         });
         header.appendChild(i);
@@ -336,8 +275,8 @@ module.exports = function Analyse(_){
         // Add table element to the container.
         container.appendChild(table);
 
-        // Filter empty features from dataArray;
-        let space = dataArray.filter(function (obj) {
+        // Filter empty features from select.layers;
+        let space = _.select.layers.filter(function (obj) {
             if (obj.container) return obj
         });
 

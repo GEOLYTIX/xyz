@@ -17,11 +17,12 @@ function vector(req, res) {
 
 function vector_gjson_info(req, res) {
 
-    let q = "select geomj, infoj, areaj from "
-        + req.query.qid.split('.')[0] + " where qid = '"
-        + req.query.qid + "'";
-    // console.log(q);
+    let q = `SELECT geomj, infoj, areaj
+               FROM ${req.query.qTable}
+               WHERE qid = '${req.query.qID}';`
 
+    //console.log(q);
+             
     db.any(q).then(function (data) {
         res.status(200).json(data);
     });

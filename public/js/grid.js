@@ -1,23 +1,24 @@
 const L = require('leaflet');
-const helper = require('./helper');
+const utils = require('./utils');
 const svg_legends = require('./svg_legends');
 const svg_symbols = require('./svg_symbols');
 
 module.exports = function (_) {
 
     // Set dom elements.
-    let dom = {};
-    dom.container = document.querySelector('#grid_module > .swipe_container');
-    dom.pages = document.querySelectorAll('#grid_module .page_content');
-    dom.legend = document.querySelector('#grid_module .legend');
-    dom.btnDisplay = document.querySelector('#grid_module .btnDisplay');
-    dom.btnOff = document.querySelector('#grid_module .btnOff');
-    dom.selSize = document.querySelector('#grid_module .selSize');
-    dom.selColor = document.querySelector('#grid_module .selColor');
-    dom.chkGridRatio = document.getElementById('chkGridRatio');
+    let dom = {
+        container: document.querySelector('#grid_module > .swipe_container'),
+        pages: document.querySelectorAll('#grid_module .page_content'),
+        legend: document.querySelector('#grid_module .legend'),
+        btnDisplay: document.querySelector('#grid_module .btnDisplay'),
+        btnOff: document.querySelector('#grid_module .btnOff'),
+        selSize: document.querySelector('#grid_module .selSize'),
+        selColor: document.querySelector('#grid_module .selColor'),
+        chkGridRatio: document.getElementById('chkGridRatio')
+    };
 
     // locale.grid is called upon initialisation and when the country is changed (change_country === true).
-    _.locale.grid = function (change_country) {
+    _.grid.init = function (change_country) {
 
         // Remove existing layer.
         if (_.grid.layer) _.map.removeLayer(_.grid.layer);
@@ -40,14 +41,14 @@ module.exports = function (_) {
             // Populate select options
             _.countries[_.country].grid.queryFields.map(function (queryField) {
                 select.appendChild(
-                    helper.createElement('option', {
+                    utils.createElement('option', {
                         value: queryField[0],
                         textContent: queryField[1]
                     })
                 );
             });
 
-            select.selectedIndex = _.hooks[query] ? helper.getSelectOptionsIndex(select.options, _.hooks[query]) : 0;
+            select.selectedIndex = _.hooks[query] ? utils.getSelectOptionsIndex(select.options, _.hooks[query]) : 0;
 
             // onchange event to set the hook and title.
             select.onchange = function () {
@@ -61,7 +62,7 @@ module.exports = function (_) {
 
         getLayer();
     };
-    _.locale.grid();
+    _.grid.init();
 
     // Turn ON grid layer.
     dom.btnDisplay.addEventListener('click', function () {
@@ -109,7 +110,7 @@ module.exports = function (_) {
 
             // Create and open grid.xhr
             _.grid.xhr = new XMLHttpRequest();
-            _.grid.xhr.open('GET', localhost + 'q_grid?' + helper.paramString({
+            _.grid.xhr.open('GET', localhost + 'q_grid?' + utils.paramString({
                 c: dom.selSize.selectedOptions[0].value,
                 v: dom.selColor.selectedOptions[0].value,
                 database: _.countries[_.country].grid.database,
@@ -166,16 +167,16 @@ module.exports = function (_) {
                     });
 
                     _.grid.layer.addTo(_.map);
-                    _.locale.layersCheck('grid', true);
+                    //_.layersCheck();
 
                     svg_legends.createGridLegend(_.grid, dom);
                 }
             };
             _.grid.xhr.send();
-            _.locale.layersCheck('grid', false);
+            //_.layersCheck();
 
         } else {
-            _.locale.layersCheck('grid', null);
+            //_.layersCheck();
         }
     }
 
@@ -219,8 +220,8 @@ module.exports = function (_) {
             }
         });
 
-        let min = helper.getMath(data, 3, 'min'),
-            max = helper.getMath(data, 3, 'max'),
+        let min = utils.getMath(data, 3, 'min'),
+            max = utils.getMath(data, 3, 'max'),
             avg = avg_c / dots.features.length,
             step_lower = (avg - min) / 4,
             step_upper = (max - avg) / 3;
@@ -236,8 +237,8 @@ module.exports = function (_) {
         _.grid.arraySize[7] = max;
 
         if (avg_v > 0) {
-            min = helper.getMath(data, 4, 'min');
-            max = helper.getMath(data, 4, 'max');
+            min = utils.getMath(data, 4, 'min');
+            max = utils.getMath(data, 4, 'max');
             avg = avg_v / dots.features.length;
             step_lower = (avg - min) / 4;
             step_upper = (max - avg) / 3;
@@ -261,7 +262,7 @@ module.exports = function (_) {
         xhr.onload = function () {
             if (this.status === 200) {
                 feature.infoj = JSON.parse(this.response);
-                _.analyse.addFeature(feature);
+                _.select.addFeature(feature);
             }
         }
         xhr.send(JSON.stringify({

@@ -1,33 +1,64 @@
 const L = require('leaflet');
-const helper = require('./helper');
+const utils = require('./utils');
 
 module.exports = function Gazetteer(_) {
 
     let dom = {
-        'btnSearch': document.getElementById('btnSearch'),
-        'group': document.getElementById('gaz_group'),
-        'input': document.getElementById('gaz_input'),
-        'result': document.getElementById('gaz_result'),
-        'country': document.getElementById('gaz_country'),
-        'countrylist': document.getElementById('gaz_countrylist')
+        btnSearch: document.getElementById('btnSearch'),
+        group: document.getElementById('gaz_group'),
+        input: document.getElementById('gaz_input'),
+        result: document.getElementById('gaz_result'),
+        country: document.getElementById('gaz_country'),
+        countrylist: document.getElementById('gaz_countrylist')
     };
 
-    // locale.gazetteer is called upon initialisation and when the country is changed (change_country === true).
-    _.locale.gazetteer = function () {
+    // Get list of country keys and assign to country drop down.
+    let countries = '';
+    for (let key in _.countries) {
+        if (_.countries.hasOwnProperty(key)) countries += '<li data-country="' + key + '">' + _.countries[key].name + '</li>';
+    }
+    dom.countrylist.innerHTML = countries;
 
-        // Empty input value, results and set placeholder.
-        dom.input.value = '';
-        dom.input.placeholder = _.countries[_.country].placeholder;
-        dom.result.innerHTML = '';
+    if (Object.keys(_.countries).length > 1) {
+        utils.addClass(dom.country, 'active');
 
-        // Remove existing layer if exists
-        if (_.gazetteer.layer) _.map.removeLayer(_.gazetteer.layer);
-    };
-    _.locale.gazetteer();
+        // Add click event to toggle country drop down display.
+        dom.country.addEventListener('click', function () {
+            dom.countrylist.style.display = dom.countrylist.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Add click event to the countries in drop down.
+        let items = dom.countrylist.querySelectorAll('li');
+        Object.keys(items).map(function (key) {
+            items[key].addEventListener('click', function () {
+                dom.countrylist.style.display = 'none';
+                _.country = this.dataset.country;
+                _.setHook('country', _.country);
+                _.setView(true);
+                if (_.layers) _.layers.init(true);
+                if (_.select) _.select.init(true);
+                if (_.grid) _.grid.init(true);
+                if (_.catchments) _.catchments.init(true);
+            })
+        });
+    }
+
+    // Set country text in the Gazetteer box.
+    dom.country.innerHTML = _.country === 'Global' ? '<i class="material-icons">language</i>' : _.country;
+
+
+    // Empty input value, results and set placeholder.
+    dom.input.value = '';
+    dom.input.placeholder = _.countries[_.country].placeholder;
+    dom.result.innerHTML = '';
+
+    // Remove existing layer if exists
+    if (_.gazetteer.layer) _.map.removeLayer(_.gazetteer.layer);
+
 
     // Toggle visibility of the gazetteer group
     dom.btnSearch.addEventListener('click', function () {
-        helper.toggleClass(this, 'active');
+        utils.toggleClass(this, 'active');
         dom.group.style.display =
             dom.group.style.display === 'block' ?
             'none' : 'block';
@@ -60,7 +91,7 @@ module.exports = function Gazetteer(_) {
     // Initiate search request
     function initiateSearch(searchValue){
         _.gazetteer.xhrSearch = new XMLHttpRequest();
-        _.gazetteer.xhrSearch.open('GET', localhost + 'q_gazetteer?' + helper.paramString({
+        _.gazetteer.xhrSearch.open('GET', localhost + 'q_gazetteer?' + utils.paramString({
             c: _.country,
             q: encodeURIComponent(searchValue),
             p: _.gazetteer.provider
@@ -90,14 +121,14 @@ module.exports = function Gazetteer(_) {
 
         // Move up through results with up key
         if (key === 38) {
-            let i = helper.indexInParent(dom.result.querySelector('.active'));
-            if (i > 0) helper.toggleClass([results[i],results[i - 1]],'active');
+            let i = utils.indexInParent(dom.result.querySelector('.active'));
+            if (i > 0) utils.toggleClass([results[i],results[i - 1]],'active');
         }
 
         // Move down through results with down key
         if (key === 40) {
-            let i = helper.indexInParent(dom.result.querySelector('.active'));
-            if (i < results.length - 1) helper.toggleClass([results[i],results[i + 1]],'active');
+            let i = utils.indexInParent(dom.result.querySelector('.active'));
+            if (i < results.length - 1) utils.toggleClass([results[i],results[i + 1]],'active');
         }
 
         // Cancel search and set results to empty on backspace or delete keydown
@@ -121,7 +152,7 @@ module.exports = function Gazetteer(_) {
             }
 
             // Select active results record
-            let activeRecord = results[helper.indexInParent(dom.result.querySelector('.active'))];
+            let activeRecord = results[utils.indexInParent(dom.result.querySelector('.active'))];
             if (activeRecord) selectResult(activeRecord.dataset.id, activeRecord.dataset.source, activeRecord.innerText);
         }
     });

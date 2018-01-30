@@ -1,6 +1,6 @@
 const L = require('leaflet');
-const utils = require('./helper');
-const format = {
+const utils = require('./utils');
+const formats = {
     cluster: require('./layer_cluster'), // import cluster layer
     mvt: require('./layer_mvt'), // import mvt layer
     geojson: require('./layer_geojson') // import geojson layer
@@ -14,7 +14,7 @@ module.exports = function(_){
     };
 
     // locale.layers is called upon initialisation and when the country is changed (change_country === true).
-    _.locale.layers = function (change_country) {
+    _.layers.init = function (change_country) {
 
         // Remove the layers hook on change_country event.
         if (change_country) _.removeHook('layers');
@@ -50,7 +50,8 @@ module.exports = function(_){
             if (layers[layer].display) {
                 input.checked = true;
                 _.pushHook('layers', layer);
-                format[layers[layer].format].getLayer(_, layers[layer]);
+                layers[layer].getLayer = formats[layers[layer].format].getLayer;
+                layers[layer].getLayer(_);
             }
 
             // Add the change event listener to the layer control input.
@@ -58,9 +59,11 @@ module.exports = function(_){
                 layers[layer].display = input.checked;
                 if (layers[layer].display) {
                     _.pushHook('layers', layer);
-                    format[layers[layer].format].getLayer(_, layers[layer]);
+                    layers[layer].getLayer = formats[layers[layer].format].getLayer;
+                    layers[layer].getLayer(_);
                 } else {
                     _.filterHook('layers', layer);
+                    if(layers[layer].l) _.map.removeLayer(layers[layer].l);
                 }
             });
 
@@ -85,6 +88,6 @@ module.exports = function(_){
         });
         
     };
-    _.locale.layers();
+    _.layers.init();
 
 }

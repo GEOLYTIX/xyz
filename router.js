@@ -19,9 +19,9 @@ router.get('/', isLoggedIn, function (req, res) {
             title: appSettings.title,
             css: '<link rel="stylesheet" href="css/desktop.css"/>',
             module_layers: appSettings.layers ? './public/tmpl/layers.html' : null,
-            module_hxgrid: appSettings.grid ? './public/tmpl/hxgrid.html' : null,
+            module_grid: appSettings.grid ? './public/tmpl/grid.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
-            module_analyse: './public/tmpl/analyse.html',
+            module_select: './public/tmpl/select.html',
             admin_button: req.user.admin ? './public/tmpl/admin_button.html' : '',
             bundle_js: "build/xyz_bundle.js",
             hooks: req.session.hooks ? JSON.stringify(req.session.hooks) : false,
@@ -85,16 +85,10 @@ const location = require('./mod/location');
 router.get('/q_location', isLoggedIn, location.location);
 router.get('/q_location_info', location.location_info);
 
-// Vector layers with PGSQL infoj/geojson
 const vector = require('./mod/vector');
 router.get('/q_vector', vector.vector);
 router.get('/q_vector_info', vector.vector_info);
 router.get('/q_vector_gjson_info', vector.vector_gjson_info);
-
-/*const vector_gjson = require('./mod/vector_geojson');
-router.get('/q_vector_gjson', vector_gjson.vector);
-router.get('/q_vector_info_gjson', vector_gjson.vector_info);
-router.get('/q_vector_border', vector_gjson.vector_border);*/
 
 const gazetteer = require('./mod/gazetteer');
 router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);

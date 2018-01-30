@@ -1,51 +1,52 @@
 const L = require('leaflet');
-const utils = require('./helper');
+const utils = require('./utils');
 
-function getLayer(_, layer){
+function getLayer(_){
   
     // Assign the table based on the zoom array.
     let zoom = _.map.getZoom(),
-        zoomKeys = Object.keys(layer.arrayZoom),
+        zoomKeys = Object.keys(this.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-    layer.table = zoom > maxZoomKey ?
-        layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
-            null : layer.arrayZoom[zoom];
+        this.table = zoom > maxZoomKey ?
+        this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
+            null : this.arrayZoom[zoom];
       
-    if(layer.table){
+    if(this.table){
 
         // Create new vector.xhr
-        layer.xhr = new XMLHttpRequest(); 
+        this.loaded = false;
+        this.xhr = new XMLHttpRequest(); 
         
         // Open & send vector.xhr;
-        let bounds = _.map.getBounds(),
-            url = localhost + 'q_vector?' + utils.paramString({
-                table: layer.table,
-                west: bounds.getWest(),
-                south: bounds.getSouth(),
-                east: bounds.getEast(),
-                north: bounds.getNorth()
-            });
+        let layer = this,
+            bounds = _.map.getBounds();
         
-        layer.xhr.open('GET', url);
+        this.xhr.open('GET', localhost + 'q_vector?' + utils.paramString({
+            table: this.table,
+            west: bounds.getWest(),
+            south: bounds.getSouth(),
+            east: bounds.getEast(),
+            north: bounds.getNorth()
+        }));
         
         // Draw layer on load event.
-        layer.xhr.onload = function(){
+        this.xhr.onload = function(){
             if(this.status === 200){
 
                 // Create feature collection for vector features.
                 let data = JSON.parse(this.responseText),
                     areas = {
-                        "type": "FeatureCollection",
-                        "features": []
+                        type: 'FeatureCollection',
+                        features: []
                     };
 
                 // Push features from the data object into feature collection.
                 Object.keys(data).map(function(key){
                     areas.features.push({
-                        "type": "Feature",
-                        "geometry": JSON.parse(data[key].geomj),
-                        "properties": {
-                            "qid": data[key].qid
+                        type: 'Feature',
+                        geometry: JSON.parse(data[key].geomj),
+                        properties: {
+                            qid: data[key].qid
                         }
                     });
                 });
@@ -72,10 +73,11 @@ function getLayer(_, layer){
                                 
                                 // Select vector by its ID(qid).
                                 click: function (e) {
-                                    
-
-                                    alert(e.target.feature.properties.qid);
-
+                                    _.select.selectLayer({
+                                        qTable: layer.table,
+                                        qID: e.target.feature.properties.qid,
+                                        marker: [e.latlng.lng, e.latlng.lat]
+                                    });
                                 }
                             });
                         },
@@ -86,118 +88,17 @@ function getLayer(_, layer){
                         }
                     }).addTo(_.map);
 
-                    //_.locale.layersCheck(layer, true);
+                    layer.loaded = true;
+                    _.layersCheck();
                 
                 // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
                 if (!layer.table || !layer.display) _.map.removeLayer(layer.l);
             }
         }
         
-        layer.xhr.send();
-        //_.locale.layersCheck(layer, false);
+        this.xhr.send();
     }
 }
-    
-    // // Select a vector layer.
-    // _.layers.layers[_layer].selectLayer = selectLayer;
-    // function selectLayer(id, zoom){
-        
-    //     // Create new xhr for /q_vector_info?
-    //     let xhr = new XMLHttpRequest();
-    //     xhr.open('GET', localhost + 'q_vector_gjson_info?' + utils.paramString({
-    //         qid: id
-    //     }));
-        
-    //     // Display the selected layer feature on load event.
-    //     xhr.onload = function(){
-    //         if(this.status === 200){
-                
-    //             let json = JSON.parse(this.responseText),
-    //                 geomj = JSON.parse(json[0].geomj),
-    //                 infoj = JSON.parse(json[0].infoj),
-    //                 areaj = JSON.parse(json[0].areaj) || null;
-                
-    //             //console.log(areaj);
-                
-    //             // Remove layerSelection from map if exists.
-    //             if (_.layers.layers[_layer].layerSelection) _.map.removeLayer(_.layers.layers[_layer].layerSelection);
-    //             if (_.layers.layers[_layer].layerArea) _.map.removeLayer(_.layers.layers[_layer].layerArea);
-                
-    //             // Create layerSelection from geoJSON and add to map.
-    //             _.layers.layers[_layer].layerSelection = L.geoJSON(
-    //                 {
-    //                     "type": "Feature",
-    //                     "geometry": geomj
-    //                 }, {
-    //                     pane: 'vectorSelection',
-    //                     style: _select
-    //               }).addTo(_.map);
-    //             _.locale.layersCheck(_layer + '_select', true);
-                
-    //             // Create areaj layer if property exists
-    //             if(areaj) {
-    //                 _.layers.layers[_layer].layerArea = L.geoJSON(areaj, {
-    //                         pane: 'vectorSelection',
-    //                         interactive: false,
-    //                         style: {
-    //                             fill: true,
-    //                             stroke: true,
-    //                             weight: 1,
-    //                             opacity: 0.4,
-    //                             color: '#574B60',
-    //                             fillColor: '#574B60',
-    //                             fillOpacity: 0.2
-                                
-    //                         },
-    //                         pointToLayer: function(point, latlng){
-    //                             return L.circleMarker(latlng, {
-    //                                 fill: true,
-    //                                 //color: '#574B60',
-    //                                 stroke: false,
-    //                                 radius: 3,
-    //                                 fillColor: '#574B60',
-    //                                 weight: 1,
-    //                                 opacity: 0.2
-    //                             });
-    //                         }
-    //                     }).addTo(_.map);
-    //                 _.locale.layersCheck(_layer + '_area', true);
-    //             } else {
-    //                 //console.log(areaj + ' not found.');
-    //             }
-                
-                
-    //             // log infoj
-    //             setTimeout(function () {
-    //                 // apply data to analyze table
-    //                 console.log(infoj);
-    //                 // test analyse module
-    //                 if(_.analyze) _.analyse.add(infoj);
-    //             }, 300);
-                
-    //             // set multi hook
-    //             if(_.hooks.selected){
-    //                 _.hooks.selected = _.pushHook(_.hooks.selected.split(","), _.respaceHook(_layer) + "." + id);
-    //             } else {
-    //                 _.hooks.selected = _.pushHook([], _.respaceHook(_layer) + "." + id);
-    //             }
-    //             _.setHook("selected", _.hooks.selected);
-    //             _.layers.layers[_layer].selected = id;
-                
-    //             if (zoom) _.map.fitBounds(_.layers.layers[_layer].layerSelection.getBounds());
-    //         }
-    //     }
-    //     xhr.send();
-    //     _.locale.layersCheck(_layer + '_select', false);
-    //     _.locale.layersCheck(_layer + '_area', false);
-    // }
-    
-    // _.layers.layers[_layer].clearLayers = clearLayers;
-    // function clearLayers(){
-    //     if (_.layers.layers[_layer].layer) _.map.removeLayer(_.layers.layers[_layer].layer);
-    //     if (_.layers.layers[_layer].layerSelection) _.map.removeLayer(_.layers.layers[_layer].layerSelection);
-    //     if (_.layers.layers[_layer].layerArea) _.map.removeLayer(_.layers.layers[_layer].layerArea);
-    // }
 
 module.exports = {
     getLayer: getLayer

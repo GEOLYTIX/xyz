@@ -1,4 +1,4 @@
-const helper = require('./helper');
+const utils = require('./utils');
 
 module.exports = function(){
     if ('scrollRestoration' in history) {
@@ -14,25 +14,25 @@ module.exports = function(){
     const page_content = document.querySelectorAll('.page_content');
     for (let i = 0; i < page_content.length; i++) {
         page_content[i].addEventListener('scroll', function(){
-            helper.addClass(this.previousElementSibling, 'shadow');
-            if (this.scrollTop === 0) helper.removeClass(this.previousElementSibling, 'shadow');
+            utils.addClass(this.previousElementSibling, 'shadow');
+            if (this.scrollTop === 0) utils.removeClass(this.previousElementSibling, 'shadow');
         });
     }
 
 //tab buttons
     const body = document.querySelector('html, body');
     const modules = document.querySelectorAll('.module');
-    helper.addClass(modules, 'hidden');
-    helper.removeClass(modules[0], 'hidden');
+    utils.addClass(modules, 'hidden');
+    utils.removeClass(modules[0], 'hidden');
 
 
     settings.location ?
-        helper.addClass(document.querySelector('.tab_location'), 'active') :
+        utils.addClass(document.querySelector('.tab_location'), 'active') :
         settings.grid ?
-            helper.addClass(document.querySelector('.tab_grid'), 'active') :
+            utils.addClass(document.querySelector('.tab_grid'), 'active') :
             settings.drivetime ?
-                helper.addClass(document.querySelector('.tab_drivetime'), 'active') :
-                helper.addClass(document.querySelector('.tab_statistics'), 'active');
+                utils.addClass(document.querySelector('.tab_drivetime'), 'active') :
+                utils.addClass(document.querySelector('.tab_statistics'), 'active');
 
 
     if (!settings.location) document.querySelector('.tab_location').remove();
@@ -46,10 +46,10 @@ module.exports = function(){
     let tab_buttons = document.querySelectorAll('.tab_bar .tab_btn');
     for (let i = 0; i < tab_buttons.length; i++) {
         tab_buttons[i].addEventListener('click', function(){
-            helper.removeClass(this.parentNode.children, 'active');
-            helper.addClass(this, 'active');
-            helper.addClass(modules, 'hidden');
-            helper.removeClass(modules[i], 'hidden');
+            utils.removeClass(this.parentNode.children, 'active');
+            utils.addClass(this, 'active');
+            utils.addClass(modules, 'hidden');
+            utils.removeClass(modules[i], 'hidden');
         });
     }
 };

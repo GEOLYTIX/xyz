@@ -1,5 +1,5 @@
 const L = require('leaflet');
-const helper = require('./helper');
+const utils = require('./utils');
 const svg_symbols = require('./svg_symbols.js');
 
 module.exports = function catchments(_){
@@ -24,7 +24,7 @@ module.exports = function catchments(_){
     };
 
     // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
-    _.locale.catchments = function (change_country) {
+    _.catchments.init = function (change_country) {
         removeLayer();
         resetModule();
 
@@ -35,13 +35,14 @@ module.exports = function catchments(_){
         dom.selProvider.disabled = dom.selProvider.childElementCount === 1 ? true : false;
 
         dom.selMode.innerHTML = '';
+        
         Object.keys(_.countries[_.country].catchments).map(function(key){
             dom.selMode.insertAdjacentHTML('beforeend','<option value="'+key+'">'+key.charAt(0).toUpperCase()+key.slice(1)+'</option>');
         });
    
         setParams(dom.selMode.options[dom.selMode.selectedIndex].value);
     };
-    _.locale.catchments();
+    _.catchments.init();
 
     function removeLayer() {
         if (_.catchments.layer) _.map.removeLayer(_.catchments.layer);
@@ -133,7 +134,7 @@ module.exports = function catchments(_){
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', localhost +  'q_catchments?' + helper.paramString({
+        xhr.open('GET', localhost +  'q_catchments?' + utils.paramString({
             lng: e.latlng.lng,
             lat: e.latlng.lat,
             distance: _distance,
@@ -233,7 +234,7 @@ module.exports = function catchments(_){
                 dom.info_table.style['opacity'] = 0;
                 setTimeout(function () {
                     
-                    dom.info_table.innerHTML = helper.createStatsTable(json.properties);
+                    dom.info_table.innerHTML = utils.createStatsTable(json.properties);
                     dom.info_table.style['opacity'] = 1;
 
                     dom.btnCopy.addEventListener('click', function () {
