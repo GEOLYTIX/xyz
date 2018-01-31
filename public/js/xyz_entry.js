@@ -5,20 +5,25 @@ if (view_mode === 'mobile') require('./mobile_interface')();
 const svg_symbols = require('./svg_symbols');
 (function objectEval(_xyz) {
     Object.keys(_xyz).map(function (key) {
-        if (typeof _xyz[key] === 'string' && key != 'color') {
-            try {_xyz[key] = eval(_xyz[key])}
-            catch(me){}
+        if (typeof _xyz[key] === 'string') {
+            try {
+                let tmp = eval(_xyz[key]);
+                _xyz[key] = typeof tmp != 'undefined'? tmp: _xyz[key];
+            }
+            catch(me){
+                //console.log(me);
+            }
         }
         if (_xyz[key] && typeof _xyz[key] === 'object') objectEval(_xyz[key]);
     })
 })(_xyz)
 
-// Initiate modules.
+// Initiate leaflet, utils and hooks.
 const L = require('leaflet');
 const utils = require('./utils');
 require('./hooks')();
 
-//require('./locale')(_xyz);
+// Initiate dom object.
 let dom = {
     btnZoomIn: document.getElementById('btnZoomIn'),
     btnZoomOut: document.getElementById('btnZoomOut')
@@ -113,42 +118,11 @@ function viewChangeEnd() {
     }, 100);
 }
 
-
-
-// Pane definitions
-_xyz.map.createPane('vectorSelection');
-_xyz.map.getPane('vectorSelection').style.zIndex = 510;
-
-_xyz.map.createPane('locationSelection');
-_xyz.map.getPane('locationSelection').style.zIndex = 550;
-_xyz.map.getPane('locationSelection').style.pointerEvents = 'none';
-
-_xyz.map.createPane('shadowFilter');
-_xyz.map.getPane('shadowFilter').style.zIndex = 540;
-_xyz.map.getPane('shadowFilter').style.pointerEvents = 'none';
-
-_xyz.map.createPane('labels');
-_xyz.map.getPane('labels').style.zIndex = 550;
-_xyz.map.getPane('labels').style.pointerEvents = 'none';
-
-// Panes for vector layers
-_xyz.map.createPane("areas");
-_xyz.map.getPane("areas").style.zIndex = 500;
-
-_xyz.map.createPane("bounds");
-_xyz.map.getPane("bounds").style.zIndex = 510;
-
-_xyz.map.createPane("places");
-_xyz.map.getPane("places").style.zIndex = 530;
-
-_xyz.map.createPane('location');
-_xyz.map.getPane('location').style.zIndex = 540;
-_xyz.map.getPane('location').style.pointerEvents = 'none';
-
-_xyz.map.createPane('grid');
-_xyz.map.getPane('grid').style.zIndex = 520;
-_xyz.map.getPane('grid').style.pointerEvents = 'none';
-
+// _xyz.map.getPane('areas').style.zIndex = 500;
+// _xyz.map.getPane('bounds').style.zIndex = 510;
+// _xyz.map.getPane('grid').style.zIndex = 520;
+// _xyz.map.getPane('places').style.zIndex = 530;
+// _xyz.map.getPane('location').style.zIndex = 540;
 
 
 // Add base layers
@@ -157,6 +131,10 @@ L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y
     .on('load', function () {
         layersCheck();
     });
+
+_xyz.map.createPane('labels');
+_xyz.map.getPane('labels').style.zIndex = 550;
+_xyz.map.getPane('labels').style.pointerEvents = 'none';
 
 L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token, { pane: 'labels' })
     .addTo(_xyz.map)

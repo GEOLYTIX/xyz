@@ -1,10 +1,9 @@
-const L = require('leaflet');
 const utils = require('./utils');
 
-function getLayer(_){
+function getLayer(){
   
     // Assign the table based on the zoom array.
-    let zoom = _.map.getZoom(),
+    let zoom = _xyz.map.getZoom(),
         zoomKeys = Object.keys(this.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
         this.table = zoom > maxZoomKey ?
@@ -19,7 +18,7 @@ function getLayer(_){
         
         // Open & send vector.xhr;
         let layer = this,
-            bounds = _.map.getBounds();
+            bounds = _xyz.map.getBounds();
         
         this.xhr.open('GET', localhost + 'q_vector?' + utils.paramString({
             table: this.table,
@@ -52,12 +51,12 @@ function getLayer(_){
                 });
                 
                 // Check for existing layer and remove from map.
-                if (layer.l) _.map.removeLayer(layer.l);
+                if (layer.L) _xyz.map.removeLayer(layer.L);
                 
                 // Add geoJSON feature collection to the map.
-                layer.l = L.geoJSON(areas, {
+                layer.L = L.geoJSON(areas, {
                         style: layer.style,
-                        pane: layer.pane,
+                        pane: layer.pane[0],
                         onEachFeature: function (_feature, _layer) {
                             _layer.on({
 
@@ -73,10 +72,10 @@ function getLayer(_){
                                 
                                 // Select vector by its ID(qid).
                                 click: function (e) {
-                                    _.select.selectLayer({
+                                    _xyz.select.selectLayerFromEndpoint({
                                         qTable: layer.table,
                                         qID: e.target.feature.properties.qid,
-                                        marker: [e.latlng.lng, e.latlng.lat]
+                                        marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                                     });
                                 }
                             });
@@ -86,13 +85,13 @@ function getLayer(_){
                                 radius: 5
                             });
                         }
-                    }).addTo(_.map);
+                    }).addTo(_xyz.map);
 
                     layer.loaded = true;
-                    _.layersCheck();
+                    _xyz.layersCheck();
                 
                 // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
-                if (!layer.table || !layer.display) _.map.removeLayer(layer.l);
+                if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
             }
         }
         

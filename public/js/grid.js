@@ -17,6 +17,10 @@ module.exports = function (_) {
         chkGridRatio: document.getElementById('chkGridRatio')
     };
 
+    // Create grid pane.
+    _xyz.map.createPane('grid');
+    _xyz.map.getPane('grid').style.zIndex = 520;
+
     // locale.grid is called upon initialisation and when the country is changed (change_country === true).
     _.grid.init = function (change_country) {
 

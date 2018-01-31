@@ -19,7 +19,7 @@ module.exports = function(){
     //     _xyz.hooks = hooks
     //     try {
     //         history.pushState({ hooks: true }, 'hooks', '?' + utils.paramString(_xyz.hooks));
-    //     } catch (e) {}
+    //     } catch (me) {}
     // };
 
     // Set view hook containing lat, lng and zoom.
@@ -29,7 +29,7 @@ module.exports = function(){
         _xyz.hooks.z = _xyz.map.getZoom();
         try {
             history.pushState({ hooks: true }, 'hooks', '?' + utils.paramString(_xyz.hooks));
-        } catch (e) { }
+        } catch (me) { }
     };
 
     // Add kvp hook to _xyz.hooks and URI.
@@ -37,7 +37,7 @@ module.exports = function(){
         _xyz.hooks[key] = val;
         try {
             history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));
-        } catch(e) {}
+        } catch(me) {}
     };
 
     // Remove hook from _xyz.hooks and URI.
@@ -45,7 +45,7 @@ module.exports = function(){
         delete _xyz.hooks[key];
         try {
             history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));
-        } catch(e) {}
+        } catch(me) {}
     };
     
     // Push key into an array hook.
@@ -57,7 +57,7 @@ module.exports = function(){
         }
         try {
             history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));
-        } catch(e) {}
+        } catch(me) {}
     }
 
     // Filter key from an array hook.
@@ -69,7 +69,7 @@ module.exports = function(){
             if (_xyz.hooks[key].length === 0) delete _xyz.hooks[key];
             try {
                 history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));
-            } catch(e) {}
+            } catch(me) {}
         }
     }
     

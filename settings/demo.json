@@ -1,7 +1,7 @@
 {
   "title": "XYZ Demo",
   "select": {
-    "layers": [
+    "records": [
       {
         "letter": "A",
         "color": "#9c27b0"
@@ -184,7 +184,7 @@
             "11": "gb_retail_place_bounds"
           },
           "format": "geojson",
-          "pane": "places",
+          "pane": ["places",530],
           "style": {
             "stroke": true,
             "color": "#F7B05B",

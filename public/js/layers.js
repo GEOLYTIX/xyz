@@ -1,4 +1,3 @@
-const L = require('leaflet');
 const utils = require('./utils');
 const formats = {
     cluster: require('./layer_cluster'), // import cluster layer
@@ -6,7 +5,7 @@ const formats = {
     geojson: require('./layer_geojson') // import geojson layer
 };
 
-module.exports = function(_){
+module.exports = function(){
     
     // Assign dom objects.
     let dom = {
@@ -14,21 +13,21 @@ module.exports = function(_){
     };
 
     // locale.layers is called upon initialisation and when the country is changed (change_country === true).
-    _.layers.init = function (change_country) {
+    _xyz.layers.init = function (change_country) {
 
         // Remove the layers hook on change_country event.
-        if (change_country) _.removeHook('layers');
+        if (change_country) _xyz.removeHook('layers');
 
         // Get the layers from the current country.
-        let layers = _.countries[_.country].layers;
+        let layers = _xyz.countries[_xyz.country].layers;
         
         // Set the layer display from hooks if present; Overwrites the default setting.
-        if (_.hooks.layers) Object.keys(layers).map(function(layer){
-            layers[layer].display = _.hooks.layers.indexOf(layer) > -1 ? true : false;
+        if (_xyz.hooks.layers) Object.keys(layers).map(function(layer){
+            layers[layer].display = _xyz.hooks.layers.indexOf(layer) > -1 ? true : false;
         });
 
         // Remove the layers hook.
-        _.removeHook('layers');
+        _xyz.removeHook('layers');
 
         // Empty the layers table.
         dom.layersTable.innerHTML = '';
@@ -49,23 +48,27 @@ module.exports = function(_){
             // Call the toggleLayer function for layers with display=true.
             if (layers[layer].display) {
                 input.checked = true;
-                _.pushHook('layers', layer);
-                layers[layer].getLayer = formats[layers[layer].format].getLayer;
-                layers[layer].getLayer(_);
+                displayLayer(layer);
             }
 
             // Add the change event listener to the layer control input.
             input.addEventListener('change', function () {
                 layers[layer].display = input.checked;
                 if (layers[layer].display) {
-                    _.pushHook('layers', layer);
-                    layers[layer].getLayer = formats[layers[layer].format].getLayer;
-                    layers[layer].getLayer(_);
+                    displayLayer(layer);
                 } else {
-                    _.filterHook('layers', layer);
-                    if(layers[layer].l) _.map.removeLayer(layers[layer].l);
+                    _xyz.filterHook('layers', layer);
+                    if(layers[layer].L) _xyz.map.removeLayer(layers[layer].L);
                 }
             });
+
+            function displayLayer(layer) {
+                _xyz.pushHook('layers', layer);
+                _xyz.map.createPane(layers[layer].pane[0]);
+                _xyz.map.getPane(layers[layer].pane[0]).style.zIndex = layers[layer].pane[1];
+                layers[layer].getLayer = formats[layers[layer].format].getLayer;
+                layers[layer].getLayer();
+            }
 
             // Append the layer control to the table row.
             td.appendChild(input);
@@ -88,6 +91,5 @@ module.exports = function(_){
         });
         
     };
-    _.layers.init();
-
+    _xyz.layers.init();
 }
