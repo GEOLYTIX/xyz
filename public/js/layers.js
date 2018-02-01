@@ -35,6 +35,9 @@ module.exports = function(){
         // Loop through the country layers and build layer control elements.
         Object.keys(layers).map(function(layer){
 
+            // Set layer id to layer.
+            layers[layer].layer = layer;
+
             // Query layer style
             setLayerStyle(layers[layer]);
                                      

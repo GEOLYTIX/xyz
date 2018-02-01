@@ -142,7 +142,6 @@
       },
       "layers": {
         "border": {
-          "display": true,
           "layer": "border",
           "qField": "country",
           "filter": "AND country = 'UK'",
@@ -179,11 +178,13 @@
           }
         },
         "retail_places": {
-          "name": "Retail Places",
+          "display": true,
+          "name": "Dominos Retail Places",
           "arrayZoom": {
-            "11": "gb_retail_place_bounds"
+            "11": "bp_retail_places"
           },
           "format": "geojson",
+          "displayGeom": "areaj",
           "pane": ["places", 530],
           "style": {
             "stroke": true,

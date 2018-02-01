@@ -27,6 +27,7 @@ function vector_info(req, res) {
     let q = `SELECT
                geomj,
                infoj
+               ${req.query.displayGeom}
                FROM ${req.query.qTable}
                WHERE qid = '${req.query.qID}';`
 

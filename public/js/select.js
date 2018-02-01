@@ -28,9 +28,10 @@ module.exports = function Select(){
         if (_xyz.hooks.select) _xyz.hooks.select.map(function(hook) {
             let selectionHook = hook.split('!');
             selectLayerFromEndpoint({
-                qTable: selectionHook[1],
-                qID: selectionHook[2],
-                marker: [selectionHook[3].split(';')[0], selectionHook[3].split(';')[1]]
+                layer: selectionHook[1],
+                qTable: selectionHook[2],
+                qID: selectionHook[3],
+                marker: [selectionHook[4].split(';')[0], selectionHook[4].split(';')[1]]
             });
         });
         _xyz.removeHook('select');
@@ -51,6 +52,7 @@ module.exports = function Select(){
         _xyz.select.records.map(function (record) {
             if (record.layer && record.layer.L) _xyz.map.removeLayer(record.layer.L);
             if (record.layer && record.layer.M) _xyz.map.removeLayer(record.layer.M);
+            if (record.layer && record.layer.D) _xyz.map.removeLayer(record.layer.D);
             record.layer = null;
         });
     }
@@ -65,13 +67,17 @@ module.exports = function Select(){
         ///// Needs adding query for database and request endpoint at this stage. Can be queried from countries.layers.
         let endpoint = 'q_vector_info?';
         let qDB = 'XYZ'; /////
+        layer.displayGeom = _xyz.countries[_xyz.country].layers[layer.layer].displayGeom?
+            ',' + _xyz.countries[_xyz.country].layers[layer.layer].displayGeom + ' as displaygeom ':
+            '';
 
         // Create new xhr for /q_vector_info
         let xhr = new XMLHttpRequest();
         xhr.open('GET', localhost + endpoint + utils.paramString({
             qDB: qDB,
             qTable: layer.qTable,
-            qID: layer.qID
+            qID: layer.qID,
+            displayGeom: layer.displayGeom
         }));
     
         // Request infoj and geometry from data source
@@ -82,6 +88,7 @@ module.exports = function Select(){
     
                 layer.geometry = JSON.parse(json[0].geomj);
                 layer.infoj = JSON.parse(json[0].infoj);
+                layer.displayGeom = layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
     
                 addLayerToRecord(layer);
             }
@@ -99,7 +106,7 @@ module.exports = function Select(){
 
         if (freeRecords.length > 0) {
             freeRecords[0].layer = layer;
-            _xyz.pushHook('select', freeRecords[0].letter + '!' + freeRecords[0].layer.qTable + '!' + freeRecords[0].layer.qID + '!' + freeRecords[0].layer.marker[0] + ';' + freeRecords[0].layer.marker[1]);
+            _xyz.pushHook('select', freeRecords[0].letter + '!' + freeRecords[0].layer.layer + '!' + freeRecords[0].layer.qTable + '!' + freeRecords[0].layer.qID + '!' + freeRecords[0].layer.marker[0] + ';' + freeRecords[0].layer.marker[1]);
             addRecordToMap(freeRecords[0])
         }
         if (freeRecords.length === 1) dom.header[1].style.background = '#ffcc80';
@@ -108,6 +115,24 @@ module.exports = function Select(){
 
     function addRecordToMap(record) {
         dom.container.style.marginLeft = '-50%';
+
+        if (record.layer.displayGeom) {
+            record.layer.D = L.geoJson(
+                {
+                    type: 'Feature',
+                    geometry: record.layer.displayGeom
+                }, {
+                    interactive: false,
+                    pane: 'select',
+                    style: {
+                        stroke: false,
+                        color: record.color,
+                        weight: 2,
+                        fill: true,
+                        fillOpacity: 0.3
+                    }
+                }).addTo(_xyz.map);
+        }
 
         if (record.layer.marker) {
             record.layer.M = L.geoJson(
@@ -183,9 +208,10 @@ module.exports = function Select(){
         i.addEventListener('click', function(){
             record.layer.drawer.remove();
 
-            _xyz.filterHook('select', record.letter + '!' + record.layer.qTable + '!' + record.layer.qID + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
+            _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.qTable + '!' + record.layer.qID + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
             if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
             if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
+            if (record.layer.D) _xyz.map.removeLayer(record.layer.D);
             record.layer = null;
 
             let freeRecords = _xyz.select.records.filter(function (record) {

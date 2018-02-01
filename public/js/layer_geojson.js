@@ -77,6 +77,7 @@ function getLayer(){
                                 // Select vector by its ID(qid).
                                 click: function (e) {
                                     _xyz.select.selectLayerFromEndpoint({
+                                        layer: layer.layer,
                                         qTable: layer.table,
                                         qID: e.target.feature.properties.qid,
                                         marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
