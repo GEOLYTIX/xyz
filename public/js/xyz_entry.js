@@ -89,7 +89,7 @@ function viewChangeStart() {
     let layers = _xyz.countries[_xyz.country].layers
     Object.keys(layers).map(function (layer) {
         if(layers[layer].xhr) layers[layer].xhr.abort();
-        if(layers[layer].l) _xyz.map.removeLayer(layers[layer].l);
+        if(layers[layer].L) _xyz.map.removeLayer(layers[layer].L);
     });
 }
 
@@ -113,17 +113,10 @@ function viewChangeEnd() {
 
         let layers = _xyz.countries[_xyz.country].layers
         Object.keys(layers).map(function (layer) {
-            if(layers[layer].display) layers[layer].getLayer(_xyz);
+            layers[layer].getLayer();
         });
     }, 100);
 }
-
-// _xyz.map.getPane('areas').style.zIndex = 500;
-// _xyz.map.getPane('bounds').style.zIndex = 510;
-// _xyz.map.getPane('grid').style.zIndex = 520;
-// _xyz.map.getPane('places').style.zIndex = 530;
-// _xyz.map.getPane('location').style.zIndex = 540;
-
 
 // Add base layers
 L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token)
@@ -141,8 +134,6 @@ L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z
     .on('load', function () { 
         layersCheck();
     });
-
-
 
 // Function to check whether all display layers are drawn.
 _xyz.layersCheck = layersCheck;

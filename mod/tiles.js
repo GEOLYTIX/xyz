@@ -9,58 +9,42 @@ function fetch_tiles(req, res){
     let params = req.url.split('/'),
         x = parseInt(params[3]),
         y = parseInt(params[4]),
-        z = parseInt(params[2]);
+        z = parseInt(params[2]),
+        q = `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
+             FROM (
+               SELECT
+                 ${req.query.qField},
+                 ST_AsMVTGeom(
+                   geom_3857,
+                   TileBBox(${z},${x},${y}),
+                   4096,
+                   256,
+                   true) geom
+               FROM ${req.query.table}
+               WHERE ST_Intersects(
+                      geom,
+                      ST_MakeEnvelope(
+                        ${req.query.west},
+                        ${req.query.north},
+                        ${req.query.east},
+                        ${req.query.south},
+                        4326))
+               ${req.query.filter}
+               ) tile;`;
 
-    let query = "SELECT ST_AsMVT(tile, '"
-    + req.query.layer
-    + "', 4096, 'geom') FROM (SELECT qid, ST_AsMVTGeom(geom_3857, TileBBox("
-    + z + ", "
-    + x + ", "
-    + y + "), 4096, 256, false) geom FROM "
-    + req.query.table + " WHERE ST_Intersects(geom, ST_MakeEnvelope("
-    + req.query.west + ", "
-    + req.query.north + ", "
-    + req.query.east + ", "
-    + req.query.south + ", 4326))) tile;";
+    //console.log(q);
 
-    db.any(query).then(function(data){
-      let tiles = data[0].st_asmvt;
-      res.setHeader('Content-Type', 'application/x-protobuf');
-      res.status(200);
-      res.send(tiles);
-    }).catch(function(e){
-      console.log(e);
+    db.any(q).then(function (data) {
+        res.setHeader('Content-Type', 'application/x-protobuf');
+        res.status(200);
+        res.send(data[0].st_asmvt);
+    }).catch(function (me) {
+        console.log(me);
     });
 }
 
-function border(req, res){
-  let params = req.url.split('/'),
-      x = parseInt(params[3]),
-      y = parseInt(params[4]),
-      z = parseInt(params[2]);
-
-  let query = "SELECT ST_AsMVT(tile, '"
-      + req.query.layer
-      + "', 4096, 'geom') FROM (SELECT country, ST_AsMVTGeom(geom_3857, TileBBox("
-      + z + ", "
-      + x + ", "
-      + y + "), 4096, 256, true) geom FROM "
-      + req.query.table + " WHERE country = '"
-      + req.query.country + "') tile;";
-
-  db.any(query).then(function(data){
-    let tiles = data[0].st_asmvt;
-    res.setHeader('Content-Type', 'application/x-protobuf');
-    res.status(200);
-    res.send(tiles);
-  }).catch(function(e){
-    console.log(e);
-  });
-}
-
 module.exports = {
-    fetch_tiles: fetch_tiles,
-    border: border
+    fetch_tiles: fetch_tiles
 };
 
 

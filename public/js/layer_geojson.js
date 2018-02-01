@@ -9,8 +9,12 @@ function getLayer(){
         this.table = zoom > maxZoomKey ?
         this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
             null : this.arrayZoom[zoom];
-      
-    if(this.table){
+    
+    // Make drawer opaque if no table present.
+    this.drawer.style.opacity = !this.table? 0.4: 1;
+
+    // Request layer data when table and display are true.
+    if(this.table && this.display){
 
         // Create new vector.xhr
         this.loaded = false;
@@ -94,7 +98,6 @@ function getLayer(){
                 if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
             }
         }
-        
         this.xhr.send();
     }
 }

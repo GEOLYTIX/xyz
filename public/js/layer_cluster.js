@@ -2,9 +2,9 @@ const L = require('leaflet');
 const utils = require('./utils');
 const d3 = require('d3');
 
-function getLayer(_, layer){
+function getLayer(){
 
-    console.log(layer.name);
+    console.log(this.name);
 
     // document.getElementById(_.layers.layers[_layer].DOM_id).disabled = false;
 
@@ -244,354 +244,354 @@ function getLayer(_, layer){
     //Select a feature
     //_.layers.layers[_layer].selectLayer = selectLayer;
 
-    function selectLayer(id){
+    // function selectLayer(id){
 
-        let xhr = new XMLHttpRequest();
+    //     let xhr = new XMLHttpRequest();
 
-        let url = localhost + 'q_location_info?' + utils.paramString({
-            qid: _.countries[_.country].layers[_layer].qID,
-            id: id.toString().split('.')[1] || id,
-            layer: _.countries[_.country].layers[_layer].qLayer,
-            vector: _.countries[_.country].layers[_layer].qVector || null
-        });
+    //     let url = localhost + 'q_location_info?' + utils.paramString({
+    //         qid: _.countries[_.country].layers[_layer].qID,
+    //         id: id.toString().split('.')[1] || id,
+    //         layer: _.countries[_.country].layers[_layer].qLayer,
+    //         vector: _.countries[_.country].layers[_layer].qVector || null
+    //     });
 
-        xhr.open("GET", url);
+    //     xhr.open("GET", url);
 
-        // Display the selected layer feature on load event.
-       xhr.onload = function(){
-            if(this.status === 200){
-                let json = JSON.parse(this.responseText),
-                    geomj = JSON.parse(json[0].geomj),
-                    infoj = JSON.parse(json[0].infoj);
+    //     // Display the selected layer feature on load event.
+    //    xhr.onload = function(){
+    //         if(this.status === 200){
+    //             let json = JSON.parse(this.responseText),
+    //                 geomj = JSON.parse(json[0].geomj),
+    //                 infoj = JSON.parse(json[0].infoj);
 
-                // Remove layerSelection from map if exists.
-                //if (_.layers.layers[_layer].layerSelection) _.map.removeLayer(_.layers.layers[_layer].layerSelection);
+    //             // Remove layerSelection from map if exists.
+    //             //if (_.layers.layers[_layer].layerSelection) _.map.removeLayer(_.layers.layers[_layer].layerSelection);
 
-                // Create layerSelection from geoJSON and add to map.
-                // _.layers.layers[_layer].layerSelection = L.geoJson({
-                //     'type': 'Feature',
-                //     'geometry': geomj
-                // }, {
-                //     pane: 'locationSelection',
-                //     pointToLayer: function (feature, latlng) {
-                //         return new L.Marker(latlng, {
-                //             icon: L.icon({
-                //                 iconUrl: _.location.marker,
-                //                 iconSize: [80, 40],
-                //                 iconAnchor: [40, 40]
-                //             }),
-                //             interactive: false
-                //         });
-                //     }
-                // }).addTo(_.map);
-                //  _.layersCheck(_layer + '_select', true);
+    //             // Create layerSelection from geoJSON and add to map.
+    //             // _.layers.layers[_layer].layerSelection = L.geoJson({
+    //             //     'type': 'Feature',
+    //             //     'geometry': geomj
+    //             // }, {
+    //             //     pane: 'locationSelection',
+    //             //     pointToLayer: function (feature, latlng) {
+    //             //         return new L.Marker(latlng, {
+    //             //             icon: L.icon({
+    //             //                 iconUrl: _.location.marker,
+    //             //                 iconSize: [80, 40],
+    //             //                 iconAnchor: [40, 40]
+    //             //             }),
+    //             //             interactive: false
+    //             //         });
+    //             //     }
+    //             // }).addTo(_.map);
+    //             //  _.layersCheck(_layer + '_select', true);
 
-                // Select the associated vector layer
-                //if (_.layers.layers['Postal codes'].display && json[0].layers){
-                    // selection not ready yet
-                    //_.layers.selectLayer(json[0].layers);
-                //}
+    //             // Select the associated vector layer
+    //             //if (_.layers.layers['Postal codes'].display && json[0].layers){
+    //                 // selection not ready yet
+    //                 //_.layers.selectLayer(json[0].layers);
+    //             //}
                 
-                // test select module
-                if(_.select) {
+    //             // test select module
+    //             if(_.select) {
 
                 
-                    let feature = {};
-                    feature.geometry = geomj;
-                    feature.infoj = infoj;
-                    console.log(feature);
-                    _.select.add(feature)
-                };
+    //                 let feature = {};
+    //                 feature.geometry = geomj;
+    //                 feature.infoj = infoj;
+    //                 console.log(feature);
+    //                 _.select.add(feature)
+    //             };
 
-                // Assign info fields to info table.
-                let table = '';
+    //             // Assign info fields to info table.
+    //             let table = '';
 
-                Object.keys(infoj).map(function (_key) {
-                    let info_field = _key.substring(0,6) === 'empty_' ? '' : _key;
-                    if (infoj[_key] !== null) table += '<tr><td>' + info_field + '</td><td>' + infoj[_key] + '</td></tr>';
-                });
+    //             Object.keys(infoj).map(function (_key) {
+    //                 let info_field = _key.substring(0,6) === 'empty_' ? '' : _key;
+    //                 if (infoj[_key] !== null) table += '<tr><td>' + info_field + '</td><td>' + infoj[_key] + '</td></tr>';
+    //             });
 
-                // log infoj
-                setTimeout(function(){
-                    console.log(infoj);
-                }, 300);
+    //             // log infoj
+    //             setTimeout(function(){
+    //                 console.log(infoj);
+    //             }, 300);
 
-                // Add hook for the location
-                if(_.hooks.selected){
-                    _.hooks.selected = _.pushHook(_.hooks.selected.split(","), _.respaceHook(_layer) + "." + id);
-                } else {
-                    _.hooks.selected = _.pushHook([], _.respaceHook(_layer) + "." + id);
-                }
-                _.setHook("selected", _.hooks.selected);
+    //             // Add hook for the location
+    //             if(_.hooks.selected){
+    //                 _.hooks.selected = _.pushHook(_.hooks.selected.split(","), _.respaceHook(_layer) + "." + id);
+    //             } else {
+    //                 _.hooks.selected = _.pushHook([], _.respaceHook(_layer) + "." + id);
+    //             }
+    //             _.setHook("selected", _.hooks.selected);
 
 
-                // Move info container up if display is mobile and info container is less than 200px in view.
-                if (view_mode === 'mobile' && document.querySelector('html, body').scrollTop < 200){
-                    document.querySelector('html, body').scrollTop = 200;
-                }
-            }
-        }
-        xhr.send();
-        _.layersCheck(_layer + '_select', false);
-    }
+    //             // Move info container up if display is mobile and info container is less than 200px in view.
+    //             if (view_mode === 'mobile' && document.querySelector('html, body').scrollTop < 200){
+    //                 document.querySelector('html, body').scrollTop = 200;
+    //             }
+    //         }
+    //     }
+    //     xhr.send();
+    //     _.layersCheck(_layer + '_select', false);
+    // }
 
     // Markers and legend
 
     // show legend
-    function getLegend(){
-        hideLegend();
-        createLegend();
-    }
+    // function getLegend(){
+    //     hideLegend();
+    //     createLegend();
+    // }
 
     // hide legend
     //_.layers.layers[_layer].hideLegend = hideLegend;
 
-    function hideLegend(){
-        if(_.layers.layers[_layer].legend_id) document.getElementById(_.layers.layers[_layer].legend_id).innerHTML = "";
-    }
+    // function hideLegend(){
+    //     if(_.layers.layers[_layer].legend_id) document.getElementById(_.layers.layers[_layer].legend_id).innerHTML = "";
+    // }
 
     // build legend svg
-    function createLegend(){
+    // function createLegend(){
 
-        // create legend id
-        _.layers.layers[_layer].legend_id = _.layers.dom.locLegendId + "_" + _.respaceHook(_layer, "_");
+    //     // create legend id
+    //     _.layers.layers[_layer].legend_id = _.layers.dom.locLegendId + "_" + _.respaceHook(_layer, "_");
 
-        // add legend container
-        let node = document.createElement('div');
-        node.id = _.layers.layers[_layer].legend_id;
-        document.getElementById(_.layers.dom.locLegendId).appendChild(node);
+    //     // add legend container
+    //     let node = document.createElement('div');
+    //     node.id = _.layers.layers[_layer].legend_id;
+    //     document.getElementById(_.layers.dom.locLegendId).appendChild(node);
 
-        let _keys = Object.keys(_.countries[_.country].layers[_layer].markerStyle),
-            _len = _keys.length,
-            _comp_len = _.countries[_.country].layers[_layer].competitors.length,
+    //     let _keys = Object.keys(_.countries[_.country].layers[_layer].markerStyle),
+    //         _len = _keys.length,
+    //         _comp_len = _.countries[_.country].layers[_layer].competitors.length,
 
-            x = 10, y, y1 = 30, y2 = 30, r = 8,
+    //         x = 10, y, y1 = 30, y2 = 30, r = 8,
 
-            _svg = d3.select('#' + _.layers.layers[_layer].legend_id)
-            .append('svg')
-            .attr("width", 280)
-            .attr("height", 2.5*r*(Math.ceil(_len/2+1) + _comp_len) + 50);
+    //         _svg = d3.select('#' + _.layers.layers[_layer].legend_id)
+    //         .append('svg')
+    //         .attr("width", 280)
+    //         .attr("height", 2.5*r*(Math.ceil(_len/2+1) + _comp_len) + 50);
 
-        // title
-        _svg.append("text")
-                .attr("x", 0)
-                .attr("y", y1-5)
-                .attr("text-anchor", "start")
-                .attr("alignment-baseline", "middle")
-                .style("font-size", "14px")
-                .style("font-weight", "800")
-                .text(_layer + " legend");
+    //     // title
+    //     _svg.append("text")
+    //             .attr("x", 0)
+    //             .attr("y", y1-5)
+    //             .attr("text-anchor", "start")
+    //             .attr("alignment-baseline", "middle")
+    //             .style("font-size", "14px")
+    //             .style("font-weight", "800")
+    //             .text(_layer + " legend");
 
-        // legend content
-        for(let i = 0; i < _len; i++){
+    //     // legend content
+    //     for(let i = 0; i < _len; i++){
 
-            i < _len/2 ? (y1 = y1 + 20, y = y1) : (x = 150, y2 = y2 + 20, y = y2);
+    //         i < _len/2 ? (y1 = y1 + 20, y = y1) : (x = 150, y2 = y2 + 20, y = y2);
 
-            let _style = _.countries[_.country].layers[_layer].markerStyle[_keys[i]].style;
+    //         let _style = _.countries[_.country].layers[_layer].markerStyle[_keys[i]].style;
 
 
-            for(let j = 0; j < _style.length; j++){
-                _svg.append("circle")
-                    .attr("cx", x)
-                    .attr("cy", y)
-                    .attr("r", _style[j][0]*8/400)
-                    .style("fill", _style[j][1]);
-            }
+    //         for(let j = 0; j < _style.length; j++){
+    //             _svg.append("circle")
+    //                 .attr("cx", x)
+    //                 .attr("cy", y)
+    //                 .attr("r", _style[j][0]*8/400)
+    //                 .style("fill", _style[j][1]);
+    //         }
 
-            _svg.append("text")
-                .attr("x", x+10)
-                .attr("y", y)
-                .attr("text-anchor", "start")
-                .attr("alignment-baseline", "middle")
-                .style("font-size", "12px")
-                .text(_.countries[_.country].layers[_layer].markerStyle[_keys[i]].label);
-        }
+    //         _svg.append("text")
+    //             .attr("x", x+10)
+    //             .attr("y", y)
+    //             .attr("text-anchor", "start")
+    //             .attr("alignment-baseline", "middle")
+    //             .style("font-size", "12px")
+    //             .text(_.countries[_.country].layers[_layer].markerStyle[_keys[i]].label);
+    //     }
 
-        // add section for clusters and competitors
-        // title
-        for(let k = 0; k < _.countries[_.country].layers[_layer].competitors.length; k++){
-            _svg.append("circle")
-            .attr("cx", 10)
-            .attr("cy", y + 50)
-            .attr("r", 10 - 3*k)
-            .style("fill", _.countries[_.country].layers[_layer].arrayCompColours[k]);
-        }
-        _svg.append("text")
-            .attr("x", 25)
-            .attr("y", y + 50)
-            .attr("text-anchor", "start")
-            .attr("alignment-baseline", "middle")
-            .style("font-size", "14px")
-            .style("font-weight", "800")
-            .text("Multiple locations");
+    //     // add section for clusters and competitors
+    //     // title
+    //     for(let k = 0; k < _.countries[_.country].layers[_layer].competitors.length; k++){
+    //         _svg.append("circle")
+    //         .attr("cx", 10)
+    //         .attr("cy", y + 50)
+    //         .attr("r", 10 - 3*k)
+    //         .style("fill", _.countries[_.country].layers[_layer].arrayCompColours[k]);
+    //     }
+    //     _svg.append("text")
+    //         .attr("x", 25)
+    //         .attr("y", y + 50)
+    //         .attr("text-anchor", "start")
+    //         .attr("alignment-baseline", "middle")
+    //         .style("font-size", "14px")
+    //         .style("font-weight", "800")
+    //         .text("Multiple locations");
 
-        // list competitors
-        for(let l = 0; l < _.countries[_.country].layers[_layer].competitors.length; l++){
+    //     // list competitors
+    //     for(let l = 0; l < _.countries[_.country].layers[_layer].competitors.length; l++){
 
-            let _key = _.countries[_.country].layers[_layer].competitors[l];
+    //         let _key = _.countries[_.country].layers[_layer].competitors[l];
 
-            _svg.append("circle")
-            .attr("cx", 30)
-            .attr("cy", y + 70 + 20*l)
-            .attr("r", 7)
-            .style("fill", _.countries[_.country].layers[_layer].arrayCompColours[l]);
+    //         _svg.append("circle")
+    //         .attr("cx", 30)
+    //         .attr("cy", y + 70 + 20*l)
+    //         .attr("r", 7)
+    //         .style("fill", _.countries[_.country].layers[_layer].arrayCompColours[l]);
 
-            _svg.append("text")
-            .attr("x", 40)
-            .attr("y", y + 70 + 20*l)
-            .attr("text-anchor", "start")
-            .attr("alignment-baseline", "middle")
-            .style("font-size", "12px")
-            .text(_.countries[_.country].layers[_layer].markerStyle[_key].label);
-        }
-        _.layers.layers[_layer].legend = document.getElementById(_.layers.layers[_layer].legend_id);
-    }
+    //         _svg.append("text")
+    //         .attr("x", 40)
+    //         .attr("y", y + 70 + 20*l)
+    //         .attr("text-anchor", "start")
+    //         .attr("alignment-baseline", "middle")
+    //         .style("font-size", "12px")
+    //         .text(_.countries[_.country].layers[_layer].markerStyle[_key].label);
+    //     }
+    //     _.layers.layers[_layer].legend = document.getElementById(_.layers.layers[_layer].legend_id);
+    // }
 
-    function createMarker(_layer, _val, _competition){
+    // function createMarker(_layer, _val, _competition){
 
-        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    //     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
-        svg.setAttribute("width", 1000);
-        svg.setAttribute("height", 1000);
-        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    //     svg.setAttribute("width", 1000);
+    //     svg.setAttribute("height", 1000);
+    //     svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 
-        return drawIcon(svg, _layer, _val, _competition);
-    }
+    //     return drawIcon(svg, _layer, _val, _competition);
+    // }
 
-    function drawIcon(_svg, _layer, _val, _competition){
+    // function drawIcon(_svg, _layer, _val, _competition){
 
-        let _style;
+    //     let _style;
 
-        if(_competition === undefined || _competition !== true) {
-            _style = _.countries[_.country].layers[_layer].markerStyle[_val].style;
-        } else {
-            _style = _val;
-        }
+    //     if(_competition === undefined || _competition !== true) {
+    //         _style = _.countries[_.country].layers[_layer].markerStyle[_val].style;
+    //     } else {
+    //         _style = _val;
+    //     }
 
-        let _len = _style.length;
+    //     let _len = _style.length;
 
-        for(let i = 0; i < _len; i++){
-            // draw svg
-            let _circle = document.createElement("circle");
+    //     for(let i = 0; i < _len; i++){
+    //         // draw svg
+    //         let _circle = document.createElement("circle");
 
-            _circle.setAttribute("cx", 500);
-            _circle.setAttribute("cy", 500);
-            _circle.setAttribute("r", _style[i][0]);
-            _circle.style.fill = _style[i][1];
+    //         _circle.setAttribute("cx", 500);
+    //         _circle.setAttribute("cy", 500);
+    //         _circle.setAttribute("r", _style[i][0]);
+    //         _circle.style.fill = _style[i][1];
 
-            _svg.appendChild(_circle);
-        }
-        return ("data:image/svg+xml," + encodeURIComponent(_svg.outerHTML));
-    }
+    //         _svg.appendChild(_circle);
+    //     }
+    //     return ("data:image/svg+xml," + encodeURIComponent(_svg.outerHTML));
+    // }
 
     //_.layers.layers[_layer].clearLayers = clearLayers;
-    function clearLayers(){
-        if(_.layers.layers[_layer].layer) _.map.removeLayer(_.layers.layers[_layer].layer);
-        if(_.layers.layers[_layer].layerSelection) _.map.removeLayer(_.layers.layers[_layer].layerSelection);
-        if(_.layers.layers[_layer].legend) _.layers.layers[_layer].hideLegend();
+    // function clearLayers(){
+    //     if(_.layers.layers[_layer].layer) _.map.removeLayer(_.layers.layers[_layer].layer);
+    //     if(_.layers.layers[_layer].layerSelection) _.map.removeLayer(_.layers.layers[_layer].layerSelection);
+    //     if(_.layers.layers[_layer].legend) _.layers.layers[_layer].hideLegend();
         
-        // check selected multi hook
-        if(_.layers.layers[_layer].selected && _.hooks.selected){
-            _.hooks.selected = _.popHook(_.hooks.selected.split(","), _.respaceHook(_layer) + "." + _.layers.layers[_layer].selected);
-            _.layers.layers[_layer].selected = null;
-            if(_.hooks.selected){
-                _.setHook("selected", _.hooks.selected);
-            } else {
-                _.removeHook("selected");   
-            }
-        } else {
-            _.removeHook("selected"); 
-        }
-    }
+    //     // check selected multi hook
+    //     if(_.layers.layers[_layer].selected && _.hooks.selected){
+    //         _.hooks.selected = _.popHook(_.hooks.selected.split(","), _.respaceHook(_layer) + "." + _.layers.layers[_layer].selected);
+    //         _.layers.layers[_layer].selected = null;
+    //         if(_.hooks.selected){
+    //             _.setHook("selected", _.hooks.selected);
+    //         } else {
+    //             _.removeHook("selected");   
+    //         }
+    //     } else {
+    //         _.removeHook("selected"); 
+    //     }
+    // }
 
 
     // Tools for clustering
 
     // Get clustering distance from settings based on zoom level
-    function getDistance(_layer){
-        let zoom = _.map.getZoom(),
-            len = Object.keys(_.countries[_.country].layers[_layer].clusterDistance).length,
-            _min_cZoom = Object.keys(_.countries[_.country].layers[_layer].clusterDistance)[0],
-            _max_cZoom = Object.keys(_.countries[_.country].layers[_layer].clusterDistance)[len-1];
+    // function getDistance(_layer){
+    //     let zoom = _.map.getZoom(),
+    //         len = Object.keys(_.countries[_.country].layers[_layer].clusterDistance).length,
+    //         _min_cZoom = Object.keys(_.countries[_.country].layers[_layer].clusterDistance)[0],
+    //         _max_cZoom = Object.keys(_.countries[_.country].layers[_layer].clusterDistance)[len-1];
 
-        if(zoom < parseInt(_min_cZoom)) zoom = _min_cZoom;
-        else if(zoom > parseInt(_max_cZoom)) zoom = _max_cZoom
-        else zoom = zoom.toString();
+    //     if(zoom < parseInt(_min_cZoom)) zoom = _min_cZoom;
+    //     else if(zoom > parseInt(_max_cZoom)) zoom = _max_cZoom
+    //     else zoom = zoom.toString();
 
-        return _.countries[_.country].layers[_layer].clusterDistance[zoom];
-    }
+    //     return _.countries[_.country].layers[_layer].clusterDistance[zoom];
+    // }
 
     // Get classes for clustering
-    function breakdownClasses(_layer, features){
-        let vals = [], len = features.length;
+    // function breakdownClasses(_layer, features){
+    //     let vals = [], len = features.length;
 
-        if(len) {
-            for(let i=0; i< len; i++){
-                vals.push(features[i].properties.infoj.length);
-            }
+    //     if(len) {
+    //         for(let i=0; i< len; i++){
+    //             vals.push(features[i].properties.infoj.length);
+    //         }
 
-            let min = vals.reduce((a, b) => Math.min(a, b)),
-                max = vals.reduce((a, b) => Math.max(a, b)),
-                avg = getAvg(vals),
-                step_lower = (avg - min) / 3, step_upper = (max - avg) / 4;
+    //         let min = vals.reduce((a, b) => Math.min(a, b)),
+    //             max = vals.reduce((a, b) => Math.max(a, b)),
+    //             avg = getAvg(vals),
+    //             step_lower = (avg - min) / 3, step_upper = (max - avg) / 4;
 
-            module.arrayMarker = [];
-            module.arrayMarker[0]= min;
-            module.arrayMarker[1]= min + step_lower;
-            module.arrayMarker[2]= min + 2*step_lower;
-            module.arrayMarker[3]= avg;
-            module.arrayMarker[4]= avg + step_upper;
-            module.arrayMarker[5]= avg + 2*step_upper;
-            module.arrayMarker[6]= avg + 3*step_upper;
-            module.arrayMarker[7]= max;
-        }
-    }
+    //         module.arrayMarker = [];
+    //         module.arrayMarker[0]= min;
+    //         module.arrayMarker[1]= min + step_lower;
+    //         module.arrayMarker[2]= min + 2*step_lower;
+    //         module.arrayMarker[3]= avg;
+    //         module.arrayMarker[4]= avg + step_upper;
+    //         module.arrayMarker[5]= avg + 2*step_upper;
+    //         module.arrayMarker[6]= avg + 3*step_upper;
+    //         module.arrayMarker[7]= max;
+    //     }
+    // }
 
     // Get average
-    function getAvg(_values){
-        let _len = _values.length, _avg;
-        if(_len){
-            let _sum = _values.reduce((a, b) => a + b);
-            _avg = _sum / _values.length;
-        }
-        return _avg;
-    }
+    // function getAvg(_values){
+    //     let _len = _values.length, _avg;
+    //     if(_len){
+    //         let _sum = _values.reduce((a, b) => a + b);
+    //         _avg = _sum / _values.length;
+    //     }
+    //     return _avg;
+    // }
 
     // Get icon size
-    function getIconSize(_val){
-        let _lower = 20,
-            _zoom = _.map.getZoom(),
-            _size = _val < module.arrayMarker[1] ?
-            10 : _val < module.arrayMarker[2] ?
-            14 : _val < module.arrayMarker[3] ?
-            18 : _val < module.arrayMarker[4] ?
-            22 : _val < module.arrayMarker[5] ?
-            26 : _val < module.arrayMarker[6] ? 28 : 32;
+    // function getIconSize(_val){
+    //     let _lower = 20,
+    //         _zoom = _.map.getZoom(),
+    //         _size = _val < module.arrayMarker[1] ?
+    //         10 : _val < module.arrayMarker[2] ?
+    //         14 : _val < module.arrayMarker[3] ?
+    //         18 : _val < module.arrayMarker[4] ?
+    //         22 : _val < module.arrayMarker[5] ?
+    //         26 : _val < module.arrayMarker[6] ? 28 : 32;
 
-        if(_val === 1) _size = _zoom*2;
-        // Make max stand out only if higher than _lower
-        if(_val === module.arrayMarker[7] && _val > _lower) _size = 44;
-        return _size;
-    }
+    //     if(_val === 1) _size = _zoom*2;
+    //     // Make max stand out only if higher than _lower
+    //     if(_val === module.arrayMarker[7] && _val > _lower) _size = 44;
+    //     return _size;
+    // }
 
     // Split by competitor
-    function getCompetitors(_layer, _arr){
-        let v = [0, 0, 0], len = _arr.length || 0, vals = [],
-            c = _.countries[_.country].layers[_layer].competitors.length || 0;
+    // function getCompetitors(_layer, _arr){
+    //     let v = [0, 0, 0], len = _arr.length || 0, vals = [],
+    //         c = _.countries[_.country].layers[_layer].competitors.length || 0;
 
-        for(let i = 0; i<len; i++){
-             vals.push(_arr[i].brand);
-        }
+    //     for(let i = 0; i<len; i++){
+    //          vals.push(_arr[i].brand);
+    //     }
 
-        for(let j = 0; j < c; j++){
-            for(let k = 0; k < vals.length; k++){
-                if(vals[k] === _.countries[_.country].layers[_layer].competitors[j]){
-                    v[j]++;
-                }
-            }
-        }
-        return v;
-    }
+    //     for(let j = 0; j < c; j++){
+    //         for(let k = 0; k < vals.length; k++){
+    //             if(vals[k] === _.countries[_.country].layers[_layer].competitors[j]){
+    //                 v[j]++;
+    //             }
+    //         }
+    //     }
+    //     return v;
+    // }
 
 module.exports = {
     getLayer: getLayer

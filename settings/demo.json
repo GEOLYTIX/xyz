@@ -78,25 +78,14 @@
   "layers": {
     "style": {
       "stroke": true,
-      "color": "#666",
-      "opacity": 0.5,
+      "color": "#444",
       "weight": 1,
       "fillOpacity": 0
     },
-    "styleSelection": {
-      "stroke": true,
-      "color": "#619",
-      "weight": 2,
-      "fill": true,
-      "fillColor": "#f48",
-      "fillOpacity": 0.2
-    },
     "styleHighlight": {
       "stroke": true,
-      "color": "#666",
-      "opacity": 0.7,
+      "color": "#090",
       "weight": 2,
-      "fill": true,
       "fillColor": "#cf9",
       "fillOpacity": 0.2
     }
@@ -152,22 +141,27 @@
         }
       },
       "layers": {
-        "country_border": {
+        "border": {
+          "display": true,
+          "layer": "border",
+          "qField": "country",
+          "filter": "AND country = 'UK'",
           "name": "Country Border",
           "arrayZoom": {
-            "11": "gb_retail_place_bounds"
+            "1": "borders"
           },
           "format": "mvt",
-          "pane": "bounds",
+          "pane": ["bounds", 510],
           "style": {
             "stroke": true,
-            "color": "#33658A",
-            "opacity": 0.8,
-            "weight": 2,
-            "fillOpacity": 0.7
+            "color": "#555",
+            "weight": 1,
+            "fillOpacity": 0
           }
         },
         "postal_codes": {
+          "layer": "postal_codes",
+          "qField": "qid",
           "name": "Postal Codes",
           "arrayZoom": {
             "10": "gb_postaldistrict_census__11",
@@ -175,68 +169,66 @@
             "12": "gb_postalsector_census__11"
           },
           "format": "mvt",
-          "pane": "areas"
+          "interactive": true,
+          "pane": ["postal", 520],
+          "style": {
+            "stroke": true,
+            "color": "#666",
+            "weight": 1,
+            "fillOpacity": 0
+          }
         },
         "retail_places": {
           "name": "Retail Places",
-          "display": true,
           "arrayZoom": {
             "11": "gb_retail_place_bounds"
           },
           "format": "geojson",
-          "pane": ["places",530],
+          "pane": ["places", 530],
           "style": {
             "stroke": true,
-            "color": "#F7B05B",
-            "opacity": 0.8,
-            "weight": 2,
+            "color": "#e91e63",
+            "weight": 1,
             "fillOpacity": 0
-          },
-          "styleSelection": {
-            "stroke": false,
-            "fill": true,
-            "fillColor": "#F7B05B",
-            "fillOpacity": 1
           },
           "styleHighlight": {
             "stroke": true,
-            "color": "#bbb",
-            "opacity": 0.8,
+            "color": "#e91e63",
             "weight": 2,
-            "fill": true,
-            "fillColor": "#F7B05B",
-            "fillOpacity": 0.5
+            "fillColor": "#e91e63",
+            "fillOpacity": 0.2
           }
         },
         "retail_places_mvt": {
+          "layer": "retail_places_mvt",
+          "qField": "qid",
           "name": "Retail Places Tiles",
           "arrayZoom": {
-            "11": "gb_retail_place_bounds"
+            "10": "gb_retail_place_bounds"
           },
           "format": "mvt",
-          "pane": "bounds",
+          "interactive": true,
+          "pane": ["bounds", 510],
           "style": {
             "stroke": true,
-            "color": "#33658A",
-            "opacity": 0.8,
-            "weight": 2,
-            "fillOpacity": 0.7
+            "color": "#ff9800",
+            "weight": 1,
+            "fillOpacity": 0
           },
-          "styleSelection": {},
           "styleHighlight": {
             "stroke": true,
-            "color": "#bbb",
-            "opacity": 0.7,
+            "color": "#ff9800",
             "weight": 2,
             "fill": true,
-            "fillColor": "#33658A",
-            "fillOpacity": 0.9
+            "fillColor": "#ff9800",
+            "fillOpacity": 0.2
           }
         },
         "retail_points": {
           "name": "Retail Points",
           "database": "xyz",
           "format": "cluster",
+          "pane": ["retail_points", 540],
           "qID": "qid",
           "qCount": "rp_c",
           "qValue": "rp_v",
@@ -1473,28 +1465,39 @@
         }
       },
       "layers": {
-        "country_border": {
+        "border": {
+          "display": true,
+          "layer": "border",
+          "qField": "country",
           "name": "Country Border",
           "arrayZoom": {
-            "11": "gb_retail_place_bounds"
+            "1": "borders"
           },
           "format": "mvt",
-          "pane": "bounds",
+          "pane": ["bounds", 510],
           "style": {
             "stroke": true,
-            "color": "#33658A",
-            "opacity": 0.8,
-            "weight": 2,
-            "fillOpacity": 0.7
+            "color": "#555",
+            "weight": 1,
+            "fillOpacity": 0
           }
         },
         "communes": {
+          "layer": "communes",
+          "qField": "qid",
           "name": "Communes",
           "arrayZoom": {
             "9": "ro_commune_census__11"
           },
           "format": "mvt",
-          "pane": "areas"
+          "interactive": true,
+          "pane": ["postal", 520],
+          "style": {
+            "stroke": true,
+            "color": "#666",
+            "weight": 1,
+            "fillOpacity": 0
+          }
         },
         "retail_fashion": {
           "name": "Fashion retail",

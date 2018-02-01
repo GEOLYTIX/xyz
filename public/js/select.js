@@ -63,10 +63,10 @@ module.exports = function Select(){
         if (freeRecords.length === 0) return
 
         ///// Needs adding query for database and request endpoint at this stage. Can be queried from countries.layers.
-        let endpoint = 'q_vector_gjson_info?';
+        let endpoint = 'q_vector_info?';
         let qDB = 'XYZ'; /////
 
-        // Create new xhr for /q_vector_gjson_info
+        // Create new xhr for /q_vector_info
         let xhr = new XMLHttpRequest();
         xhr.open('GET', localhost + endpoint + utils.paramString({
             qDB: qDB,
@@ -78,8 +78,7 @@ module.exports = function Select(){
         xhr.onload = function () {
             if (this.status === 200) {
     
-                let json = JSON.parse(this.responseText),
-                    areaj = JSON.parse(json[0].areaj) || null;
+                let json = JSON.parse(this.responseText);
     
                 layer.geometry = JSON.parse(json[0].geomj);
                 layer.infoj = JSON.parse(json[0].infoj);
@@ -163,26 +162,26 @@ module.exports = function Select(){
     function addRecordToList(record) {
 
         // Create container element to contain the header with controls and the info table.
-        record.layer.container = document.createElement('div');
-        record.layer.container.className = 'infojContainer';
+        record.layer.drawer = document.createElement('div');
+        record.layer.drawer.className = 'drawer';
 
         // Create the header element to contain the control elements
         let header = utils.createElement('div', {
             textContent: record.letter,
-            className: 'infojHeader'
+            className: 'header'
         });
-        header.style.height = '25px';
         header.style.borderBottom = '3px solid ' + record.color;
 
         // Create the clear control element to control the removal of a feature from the select.layers.
         let i = utils.createElement('i', {
             textContent: 'clear',
-            className: 'material-icons cursor noselect infojBtn',
+            className: 'material-icons cursor noselect btn',
             title: 'Remove feature from selection'
         });
         i.style.color = record.color;
+        i.style.marginRight = '-6px';
         i.addEventListener('click', function(){
-            record.layer.container.remove();
+            record.layer.drawer.remove();
 
             _xyz.filterHook('select', record.letter + '!' + record.layer.qTable + '!' + record.layer.qID + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
             if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
@@ -202,7 +201,7 @@ module.exports = function Select(){
         // Create the zoom control element which zoom the map to the bounds of the feature.
         i = utils.createElement('i', {
             textContent: 'search',
-            className: 'material-icons cursor noselect infojBtn',
+            className: 'material-icons cursor noselect btn',
             title: 'Zoom map to feature bounds'
         });
         i.style.color = record.color;
@@ -214,7 +213,7 @@ module.exports = function Select(){
         // Create the expand control element which controls whether the data table is displayed for the feature.
         i = utils.createElement('i', {
             textContent: 'expand_less',
-            className: 'material-icons cursor noselect infojBtn',
+            className: 'material-icons cursor noselect btn',
             title: 'Expand table'
         });
         i.style.color = record.color;
@@ -239,7 +238,7 @@ module.exports = function Select(){
         if (record.layer.marker) {
             i = utils.createElement('i', {
                 textContent: 'location_off',
-                className: 'material-icons cursor noselect infojBtn',
+                className: 'material-icons cursor noselect btn',
                 title: 'Hide marker'
             });
             i.style.color = record.color;
@@ -262,7 +261,7 @@ module.exports = function Select(){
         // Create the expand control element which controls whether the data table is displayed for the feature.
         // i = utils.createElement('i', {
         //     textContent: 'view_week',
-        //     className: 'material-icons cursor noselect infojBtn',
+        //     className: 'material-icons cursor noselect btn',
         //     title: 'Add feature to comparison table'
         // });
         // i.style.color = record.color;
@@ -271,7 +270,7 @@ module.exports = function Select(){
         // header.appendChild(i);
 
         // Add header element to the container.
-        record.layer.container.appendChild(header);
+        record.layer.drawer.appendChild(header);
 
         // Create table element to display the features properties.
         let table = document.createElement('table');
@@ -281,7 +280,7 @@ module.exports = function Select(){
         table.cellspacing = '0';
 
         // Add table element to the container.
-        record.layer.container.appendChild(table);
+        record.layer.drawer.appendChild(table);
 
         // Filter empty features from select.layers;
         let freeRecords = _xyz.select.records.filter(function (record) {
@@ -291,7 +290,7 @@ module.exports = function Select(){
         // Insert container before the next container (alphabetical order) which is not empty or at the end (null).
         let idx = _xyz.select.records.indexOf(record);
 
-        dom.pages[1].insertBefore(record.layer.container,dom.pages[1].children[idx]);
+        dom.pages[1].insertBefore(record.layer.drawer,dom.pages[1].children[idx]);
 
         // Populate the table from the features infoj object.
         Object.keys(record.layer.infoj).map(function (key) {

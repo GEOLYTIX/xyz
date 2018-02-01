@@ -3,13 +3,10 @@ $mobile: false;
 $glxgreen: #090;
 $glxlightgreen: #cf9;
 
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-@import url("https://fonts.googleapis.com/css?family=PT+Mono");
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
 
-@import "leaflet";
-@import "location";
-@import "grid";
-@import "info_table";
+@import 'leaflet';
 
 *, *::after, *::before {
     -webkit-box-sizing: border-box;

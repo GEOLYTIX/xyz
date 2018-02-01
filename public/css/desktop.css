@@ -534,57 +534,6 @@
   display: none;
   height: 30px; }
 
-.swipe_container {
-  vertical-align: top;
-  table-layout: fixed;
-  transition: margin 250ms;
-  height: 100%; }
-  .swipe_container .dev {
-    color: grey; }
-    .swipe_container .dev select {
-      color: grey; }
-  .swipe_container select {
-    width: 100%;
-    margin: 5px 0 15px 0; }
-  .swipe_container .bold {
-    font-weight: 800; }
-  .swipe_container .swipe_page {
-    vertical-align: top;
-    width: 310px;
-    padding: 0 20px 0 0; }
-    .swipe_container .swipe_page .page_header {
-      position: relative;
-      background-color: #eee;
-      padding: 3px;
-      border-top-right-radius: 14px;
-      border-bottom-right-radius: 14px;
-      box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2); }
-      .swipe_container .swipe_page .page_header .spinner {
-        position: absolute;
-        right: 0;
-        top: 0; }
-      .swipe_container .swipe_page .page_header span {
-        font-family: ffmark_bold;
-        font-size: 20px; }
-      .swipe_container .swipe_page .page_header i {
-        font-size: 30px;
-        margin-top: -5px;
-        margin-right: -5px;
-        color: #090; }
-      .swipe_container .swipe_page .page_header .page_backward {
-        float: right; }
-    .swipe_container .swipe_page .page_content {
-      clear: both;
-      padding-top: 10px; }
-      .swipe_container .swipe_page .page_content .legend {
-        transition: opacity 300ms ease-in-out;
-        -moz-transition: opacity 300ms ease-in-out;
-        -webkit-transition: opacity 300ms ease-in-out; }
-      .swipe_container .swipe_page .page_content .range {
-        width: 100%; }
-        .swipe_container .swipe_page .page_content .range input[type=range] {
-          width: 100%; }
-
 .leaflet-popup-content .scrollbar_container {
   position: absolute;
   left: 0;
@@ -644,35 +593,84 @@
     color: #090;
     font-size: 50px; }
 
-.infojContainer {
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-  margin: 10px 0; }
-  .infojContainer .infojHeader {
-    font-size: 16px;
-    font-weight: 700;
-    height: 20px; }
-    .infojContainer .infojHeader .infojBtn {
-      font-size: 18px;
-      font-weight: 800;
-      float: right;
-      margin: 0 -2px 0 10px;
-      text-shadow: 1px 1px 1px grey; }
-  .infojContainer .infojTable {
-    width: 100%;
-    font-size: 12px;
-    padding-top: 5px; }
-    .infojContainer .infojTable .lv-0 {
-      font-size: 13px;
-      font-weight: 700; }
-    .infojContainer .infojTable .lv-1 {
-      font-size: 12px; }
-    .infojContainer .infojTable .lv-2 {
-      font-size: 12px;
-      padding-left: 10px; }
-    .infojContainer .infojTable .val {
-      font-family: 'PT Mono', monospace;
-      padding-left: 10px; }
+.module .swipe_container {
+  vertical-align: top;
+  table-layout: fixed;
+  transition: margin 250ms;
+  height: 100%; }
+  .module .swipe_container .dev {
+    color: grey; }
+    .module .swipe_container .dev select {
+      color: grey; }
+  .module .swipe_container .bold {
+    font-weight: 800; }
+  .module .swipe_container .swipe_page {
+    vertical-align: top;
+    width: 310px;
+    padding: 0 20px 0 0; }
+    .module .swipe_container .swipe_page .page_header {
+      position: relative;
+      background-color: #eee;
+      padding: 3px;
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+      box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2); }
+      .module .swipe_container .swipe_page .page_header .spinner {
+        position: absolute;
+        right: 0;
+        top: 0; }
+      .module .swipe_container .swipe_page .page_header span {
+        font-family: ffmark_bold;
+        font-size: 20px; }
+      .module .swipe_container .swipe_page .page_header i {
+        font-size: 30px;
+        margin-top: -5px;
+        margin-right: -5px;
+        color: #090;
+        float: right; }
+    .module .swipe_container .swipe_page .page_content {
+      clear: both;
+      padding-top: 10px; }
+      .module .swipe_container .swipe_page .page_content select {
+        width: 100%;
+        margin: 5px 0 15px 0; }
+      .module .swipe_container .swipe_page .page_content .legend {
+        transition: opacity 300ms ease-in-out;
+        -moz-transition: opacity 300ms ease-in-out;
+        -webkit-transition: opacity 300ms ease-in-out; }
+      .module .swipe_container .swipe_page .page_content .range {
+        width: 100%; }
+        .module .swipe_container .swipe_page .page_content .range input[type=range] {
+          width: 100%; }
+      .module .swipe_container .swipe_page .page_content .drawer {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        margin: 10px 0; }
+        .module .swipe_container .swipe_page .page_content .drawer .header {
+          font-size: 14px;
+          font-weight: 600;
+          height: 25px;
+          padding-right: 3px; }
+          .module .swipe_container .swipe_page .page_content .drawer .header .btn {
+            font-size: 22px;
+            float: right;
+            margin: 0 -2px 0 10px;
+            color: #090; }
+        .module .swipe_container .swipe_page .page_content .drawer .infojTable {
+          width: 100%;
+          font-size: 12px;
+          padding-top: 5px; }
+          .module .swipe_container .swipe_page .page_content .drawer .infojTable .lv-0 {
+            font-size: 13px;
+            font-weight: 700; }
+          .module .swipe_container .swipe_page .page_content .drawer .infojTable .lv-1 {
+            font-size: 12px; }
+          .module .swipe_container .swipe_page .page_content .drawer .infojTable .lv-2 {
+            font-size: 12px;
+            padding-left: 10px; }
+          .module .swipe_container .swipe_page .page_content .drawer .infojTable .val {
+            font-family: 'PT Mono', monospace;
+            padding-left: 10px; }
 
 #report-toast {
   visibility: hidden;
