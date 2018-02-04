@@ -38,6 +38,9 @@ module.exports = function(){
             // Set layer id to layer.
             layers[layer].layer = layer;
 
+            // Empty layer legend.
+            layers[layer].legend = null;
+
             // Query layer style
             setLayerStyle(layers[layer]);
                                      
@@ -87,53 +90,10 @@ module.exports = function(){
             }
             layers[layer].getLayer();
 
-
-            // // Create the expand control element which controls whether the data table is displayed for the feature.
-            // i = utils.createElement('i', {
-            //     textContent: 'expand_less',
-            //     className: 'material-icons cursor noselect btn',
-            //     title: 'Expand table'
-            // });
-            // i.addEventListener('click', function () {
-            //     let container = this.parentNode.parentNode;
-            //     let header = this.parentNode;
-            //     if (container.style.maxHeight != '30px') {
-            //         container.style.maxHeight = '30px';
-            //         header.style.boxShadow = '0 3px 3px -3px black';
-            //         this.textContent = 'expand_more';
-            //         i.title = "Hide layer info";
-            //     } else {
-            //         container.style.maxHeight = (header.nextSibling.clientHeight + this.clientHeight + 5) + 'px';
-            //         header.style.boxShadow = '';
-            //         this.textContent = 'expand_less';
-            //         i.title = "Show layer info";
-            //     }
-            // });
-            // header.appendChild(i);
-
             // Add header element to the container.
             layers[layer].drawer.appendChild(header);
 
             dom.layers.appendChild(layers[layer].drawer);
-            
-            // // Append the layer control to the table row.
-            // td.appendChild(input);
-            // td.appendChild(utils.createElement('label', {
-            //     htmlFor: layer
-            // }));
-            // tr.appendChild(td);
-            // tr.appendChild(utils.createElement('td', {
-            //     textContent: layers[layer].name
-            // }));
-            // dom.layersTable.appendChild(tr);
-
-            // // Append legend row underneath layer control row.
-            // tr = document.createElement('tr');
-            // tr.appendChild(document.createElement('td'));
-            // tr.appendChild(utils.createElement('td', {
-            //     className: 'legend'
-            // }));
-            // dom.layersTable.appendChild(tr);
         });
         
     };

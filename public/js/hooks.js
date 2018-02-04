@@ -73,33 +73,4 @@ module.exports = function(){
         }
     }
     
-    //  // replace space in layer name with a plus
-    // _xyz.respaceHook = function(_val, _symbol){
-    //     if(_symbol === undefined) _symbol = "+";
-    //     let _respaced = _val.replace(/ /g, _symbol);
-    //     return _respaced;
-    // }
-    
-    // // replace a symbol with a space, reverse _respace 
-    // _xyz.unspaceHook = function(_val, _symbol){
-    //     _symbol ? _symbol = _symbol : _symbol = '+';
-    //     let _unspaced = _val.split(_symbol).join(' ');
-    //     return _unspaced;
-    // }
-    
-    // // read multi hook for selected features
-    // _xyz.readSelectionMultiHook = function(){
-    //     if(_xyz.hooks.selected){
-    //         let items = {};
-    //         let array = _xyz.hooks.selected.split(",");
-    //         array.map(function(el){
-    //             let
-    //             e = el.split('.'),
-    //             key = _xyz.unspaceHook(e[0]);
-    //             items[key] = e.slice(1).join('.');
-    //         });
-    //         return items;
-    //     }
-    // }
-    
 };

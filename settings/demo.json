@@ -88,7 +88,17 @@
       "weight": 2,
       "fillColor": "#cf9",
       "fillOpacity": 0.2
-    }
+    },
+    "markerStyle": [
+      [
+        400,
+        "#A9A9A9"
+      ],
+      [
+        360,
+        "#C0C0C0"
+      ]
+    ]
   },
   "grid": {
     "colorScale": [
@@ -226,6 +236,7 @@
           }
         },
         "retail_points": {
+          "display": true,
           "name": "Retail Points",
           "database": "xyz",
           "format": "cluster",
@@ -233,7 +244,7 @@
           "qID": "qid",
           "qCount": "rp_c",
           "qValue": "rp_v",
-          "qLayer": "retailpoints",
+          "qTable": "retailpoints",
           "qVector": "vector",
           "qLabel": "store",
           "qBrand": "brand",
@@ -566,19 +577,6 @@
                 ]
               ],
               "label": "Whole Foods"
-            },
-            "other": {
-              "style": [
-                [
-                  400,
-                  "#A9A9A9"
-                ],
-                [
-                  360,
-                  "#C0C0C0"
-                ]
-              ],
-              "label": "other"
             }
           },
           "arrayCompColours": [

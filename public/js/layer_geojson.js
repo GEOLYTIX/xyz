@@ -15,8 +15,6 @@ function getLayer(){
 
     // Request layer data when table and display are true.
     if(this.table && this.display){
-
-        // Create new vector.xhr
         this.loaded = false;
         this.xhr = new XMLHttpRequest(); 
         

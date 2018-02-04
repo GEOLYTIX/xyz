@@ -80,9 +80,9 @@ router.post('/q_grid_info', isLoggedIn, grid.info);
 const catchments = require('./mod/catchments');
 router.get('/q_catchments', isLoggedIn, catchments.catchments);
 
-const location = require('./mod/location');
-router.get('/q_location', isLoggedIn, location.location);
-router.get('/q_location_info', location.location_info);
+const cluster = require('./mod/cluster');
+router.get('/q_cluster', isLoggedIn, cluster.cluster);
+router.get('/q_cluster_info', cluster.cluster_info);
 
 const vector = require('./mod/vector');
 router.get('/q_vector', vector.vector);

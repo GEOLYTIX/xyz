@@ -1,26 +1,5 @@
 module.exports = (function () {
 
-    function createStatsTable(infoj) {
-        let table = '';
-        Object.keys(infoj).map(function (key) {
-            typeof (infoj[key]) === 'object' ?
-                statsTableGroup(infoj, key, 'title') :
-                table += '<tr class="title"><td>' + key + '</td><td>' + infoj[key].toLocaleString('en-GB') + '</td></tr>';
-        });
-
-        // Add data to title groups
-        function statsTableGroup(_data, _key, _class, _sub_class) {
-            if (_class) table += '<tr class="' + _class + '"><td>' + _key + '</td></tr>';
-            Object.keys(_data[_key]).map(function (key) {
-                typeof (_data[_key][key]) === 'object' ?
-                    statsTableGroup(_data[_key], key, null, 'pad') :
-                    table += '<tr><td class="' + _sub_class + '">' + key + '</td><td>' + _data[_key][key].toLocaleString('en-GB') + '</td></tr>';
-            });
-        }
-
-        return table;
-    }
-
     function scrollElement(element, to, duration) {
         if (duration <= 0) return;
         let difference = to - element.scrollTop,
@@ -161,8 +140,28 @@ module.exports = (function () {
         }))
     }
 
+    function createStatsTable(infoj) {
+        let table = '';
+        Object.keys(infoj).map(function (key) {
+            typeof (infoj[key]) === 'object' ?
+                statsTableGroup(infoj, key, 'title') :
+                table += '<tr class="title"><td>' + key + '</td><td>' + infoj[key].toLocaleString('en-GB') + '</td></tr>';
+        });
+
+        // Add data to title groups
+        function statsTableGroup(_data, _key, _class, _sub_class) {
+            if (_class) table += '<tr class="' + _class + '"><td>' + _key + '</td></tr>';
+            Object.keys(_data[_key]).map(function (key) {
+                typeof (_data[_key][key]) === 'object' ?
+                    statsTableGroup(_data[_key], key, null, 'pad') :
+                    table += '<tr><td class="' + _sub_class + '">' + key + '</td><td>' + _data[_key][key].toLocaleString('en-GB') + '</td></tr>';
+            });
+        }
+
+        return table;
+    }
+
     return {
-        createStatsTable: createStatsTable,
         scrollElement: scrollElement,
         addClass: addClass,
         removeClass: removeClass,
@@ -173,6 +172,7 @@ module.exports = (function () {
         debounce: debounce,
         createElement: createElement,
         getSelectOptionsIndex: getSelectOptionsIndex,
-        getMath: getMath
+        getMath: getMath,
+        createStatsTable: createStatsTable
     };
 })();

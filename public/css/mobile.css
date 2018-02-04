@@ -570,7 +570,8 @@
       .module .swipe_container .swipe_page .page_content .legend {
         transition: opacity 300ms ease-in-out;
         -moz-transition: opacity 300ms ease-in-out;
-        -webkit-transition: opacity 300ms ease-in-out; }
+        -webkit-transition: opacity 300ms ease-in-out;
+        border-bottom: 1px solid #333; }
       .module .swipe_container .swipe_page .page_content .range {
         width: 100%; }
         .module .swipe_container .swipe_page .page_content .range input[type=range] {

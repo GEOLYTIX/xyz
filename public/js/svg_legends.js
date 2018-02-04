@@ -1,3 +1,4 @@
+const utils = require('./utils');
 const d3 = require('d3');
 
 module.exports = (function () {
@@ -109,6 +110,116 @@ module.exports = (function () {
         dom.legend.style.opacity = 1;
     }
 
+    function createClusterLegend(layer) {
+
+        layer.legend = utils.createElement('div', {
+            className: 'legend'
+        });
+        layer.drawer.appendChild(layer.legend);
+
+        let keys = Object.keys(layer.markerStyle),
+            x,
+            y = -10,
+            svg = d3.select(layer.legend)
+                .append('svg')
+                .attr('width', 290);
+
+        // legend content
+        for (let i = 0; i < keys.length; i++) {
+
+            y = i % 2 ? y : y += 25;
+            x = i % 2 ? 155 : 15;
+
+            let target = layer.markerStyle[keys[i]].style;
+
+            for (let ii = 0; ii < target.length; ii++) {
+                svg.append('circle')
+                    .attr('cx', x)
+                    .attr('cy', y)
+                    .attr('r', target[ii][0] * 10 / 400)
+                    .style('fill', target[ii][1]);
+            }
+
+            svg.append('text')
+                .attr('x', x + 15)
+                .attr('y', y + 1)
+                .attr('alignment-baseline', 'middle')
+                .style('font-size', '12px')
+                .text(layer.markerStyle[keys[i]].label);
+        }
+
+        y += 50;
+
+        // Add section for clusters and competitors title
+        for (let i = 0; i < layer.competitors.length; i++) {
+            svg.append('circle')
+                .attr('cx', 25)
+                .attr('cy', y)
+                .attr('r', 20 - 6 * i)
+                .style('fill', layer.arrayCompColours[i]);
+        }
+        svg.append('text')
+            .attr('x', 50)
+            .attr('y', y)
+            .attr('text-anchor', 'start')
+            .attr('alignment-baseline', 'middle')
+            .style('font-size', '14px')
+            .style('font-weight', '800')
+            .text('Multiple locations');
+
+        y += 10;
+
+        // list competitors
+        for (let i = 0; i < layer.competitors.length; i++) {
+
+            y += 25;
+
+            let key = layer.competitors[i];
+
+            svg.append('circle')
+                .attr('cx', 35)
+                .attr('cy', y)
+                .attr('r', 7)
+                .style('fill', layer.arrayCompColours[i]);
+
+            svg.append('text')
+                .attr('x', 50)
+                .attr('y', y + 1)
+                .attr('alignment-baseline', 'middle')
+                .style('font-size', '12px')
+                .text(layer.markerStyle[key].label);
+        }
+
+        svg.attr('height', y += 15);
+
+        addLegendToDrawer(layer);
+
+    }
+
+    function addLegendToDrawer(layer){
+        let i = utils.createElement('i', {
+            textContent: 'expand_less',
+            className: 'material-icons cursor noselect btn',
+            title: 'Expand table'
+        });
+        i.addEventListener('click', function () {
+            let container = this.parentNode.parentNode;
+            let header = this.parentNode;
+            if (container.style.maxHeight != '30px') {
+                container.style.maxHeight = '30px';
+                header.style.boxShadow = '0 3px 3px -3px black';
+                this.textContent = 'expand_more';
+                i.title = "Hide layer info";
+            } else {
+                container.style.maxHeight = (header.nextSibling.clientHeight + this.clientHeight + 5) + 'px';
+                header.style.boxShadow = '';
+                this.textContent = 'expand_less';
+                i.title = "Show layer info";
+            }
+        });
+        layer.drawer.firstChild.appendChild(i);
+    }
+
     function wrap(text, width) {
         text.each(function () {
             let
@@ -137,6 +248,7 @@ module.exports = (function () {
     }
 
     return {
-        createGridLegend: createGridLegend
+        createGridLegend: createGridLegend,
+        createClusterLegend: createClusterLegend
     };
 })();
