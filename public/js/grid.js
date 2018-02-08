@@ -1,6 +1,5 @@
 const L = require('leaflet');
 const utils = require('./utils');
-const svg_legends = require('./svg_legends');
 const svg_symbols = require('./svg_symbols');
 
 module.exports = function () {

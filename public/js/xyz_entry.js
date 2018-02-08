@@ -26,7 +26,8 @@ require('./hooks')();
 // Initiate dom object.
 let dom = {
     btnZoomIn: document.getElementById('btnZoomIn'),
-    btnZoomOut: document.getElementById('btnZoomOut')
+    btnZoomOut: document.getElementById('btnZoomOut'),
+    initMask: document.querySelector('.initMask')
 };
 
 // Set country to hook, or set hook for country.
@@ -47,6 +48,9 @@ _xyz.map = L
         maxZoom: _xyz.countries[_xyz.country].maxZoom
     })
     .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
+
+dom.initMask.style.width = '0';
+dom.initMask.style.opacity = 0;
 
 // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
 _xyz.setView = function(fit) {
@@ -113,6 +117,7 @@ function viewChangeEnd() {
 
         let layers = _xyz.countries[_xyz.country].layers
         Object.keys(layers).map(function (layer) {
+            if (layers[layer].loader) layers[layer].loader.style.display = 'none';
             layers[layer].getLayer();
         });
     }, 100);
@@ -154,12 +159,10 @@ function layersCheck() {
 if (_xyz.gazetteer) require('./gazetteer')(_xyz);
 if (_xyz.layers) require('./layers')(_xyz);
 if (_xyz.select) require('./select')(_xyz);
-if (_xyz.grid) require('./grid')(_xyz);
 if (_xyz.catchments) require('./catchments')(_xyz);
 
 // Load report module in desktop view.
 if (view_mode === 'desktop') require('./report')(_xyz);
 
 // Make blocks visible and set scrollbar left for desktop view.
-document.querySelector('.module_container').style.display = 'block';
 if (view_mode === 'desktop') require('./lscrolly')(document.querySelector('.module_container'));

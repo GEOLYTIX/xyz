@@ -12,7 +12,6 @@ function grid(req, res) {
     let q = `SELECT
                lon,
                lat,
-               ${req.query.id ? req.query.id : "null as id"},
                ${req.query.c} as C,
                ${req.query.v} as V
              FROM ${req.query.table}

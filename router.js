@@ -19,7 +19,6 @@ router.get('/', isLoggedIn, function (req, res) {
             title: appSettings.title,
             css: '<link rel="stylesheet" href="css/desktop.css"/>',
             module_layers: appSettings.layers ? './public/tmpl/layers.html' : null,
-            module_grid: appSettings.grid ? './public/tmpl/grid.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
             module_select: './public/tmpl/select.html',
             admin_button: req.user.admin ? './public/tmpl/admin_button.html' : '',

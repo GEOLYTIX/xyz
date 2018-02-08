@@ -567,7 +567,7 @@
       .module .swipe_container .swipe_page .page_content select {
         width: 100%;
         margin: 5px 0 15px 0; }
-      .module .swipe_container .swipe_page .page_content .legend {
+      .module .swipe_container .swipe_page .page_content .panel {
         transition: opacity 300ms ease-in-out;
         -moz-transition: opacity 300ms ease-in-out;
         -webkit-transition: opacity 300ms ease-in-out;
@@ -605,7 +605,36 @@
           .module .swipe_container .swipe_page .page_content .drawer .infojTable .val {
             font-family: 'PT Mono', monospace;
             padding-left: 10px; }
-
+        .module .swipe_container .swipe_page .page_content .drawer .loader {
+          height: 2px;
+          margin-top: -2px;
+          width: 100%;
+          position: relative;
+          overflow: hidden;
+          display: none; }
+        .module .swipe_container .swipe_page .page_content .drawer .loader:before {
+          display: block;
+          position: absolute;
+          content: "";
+          left: -200px;
+          width: 200px;
+          height: 2px;
+          background-color: #fff;
+          animation: loading 2s linear infinite; }
+@keyframes loading {
+  from {
+    left: -200px;
+    width: 30%; }
+  50% {
+    width: 30%; }
+  70% {
+    width: 70%; }
+  80% {
+    left: 50%; }
+  95% {
+    left: 120%; }
+  to {
+    left: 100%; } }
 .location_drop {
   display: none;
   position: fixed;

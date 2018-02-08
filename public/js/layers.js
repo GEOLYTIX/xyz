@@ -1,9 +1,11 @@
 const utils = require('./utils');
 const formats = {
-    cluster: require('./layer_cluster'), // import cluster layer
-    mvt: require('./layer_mvt'), // import mvt layer
-    geojson: require('./layer_geojson') // import geojson layer
+    cluster: require('./layer_cluster'),
+    mvt: require('./layer_mvt'),
+    geojson: require('./layer_geojson'),
+    grid: require('./layer_grid')
 };
+const layers_panel = require('./layers_panel');
 
 module.exports = function(){
     
@@ -34,75 +36,101 @@ module.exports = function(){
 
         // Loop through the country layers and build layer control elements.
         Object.keys(layers).map(function(layer){
-
-            // Set layer id to layer.
             layers[layer].layer = layer;
+            layer = layers[layer];
 
-            // Empty layer legend.
-            layers[layer].legend = null;
-
-            // Query layer style
-            setLayerStyle(layers[layer]);
+            // Query layer style !!! Needs adjusting for different layer types.
+            if (!layer.style) layer.style = _xyz.layers.style;
+            if (!layer.styleHighlight) layer.styleHighlight = _xyz.layers.styleHighlight;
                                      
             // Create container element to contain the header with controls and the info table.
-            layers[layer].drawer = document.createElement('div');
-            layers[layer].drawer.className = 'drawer';
+            layer.drawer = utils.createElement('div', {
+                className: 'drawer'
+            });
+            dom.layers.appendChild(layer.drawer);
 
             // Create the header element to contain the control elements
             let header = utils.createElement('div', {
-                textContent: layers[layer].name,
+                textContent: layer.name,
                 className: 'header'
             });
-            header.style.borderBottom = '2px solid ' + layers[layer].style.color;
+            header.style.borderBottom = '2px solid ' + layer.style.color;
 
             // Create the pane and set layers function.
-            _xyz.map.createPane(layers[layer].pane[0]);
-            _xyz.map.getPane(layers[layer].pane[0]).style.zIndex = layers[layer].pane[1];
-            layers[layer].getLayer = formats[layers[layer].format].getLayer;
+            _xyz.map.createPane(layer.pane[0]);
+            _xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
+            layer.getLayer = formats[layer.format].getLayer;
 
-            // Create the clear control element to control the removal of a feature from the select.layers.
+
+            // Create control to toggle layer visibility.
             let i = utils.createElement('i', {
-                textContent: 'visibility',
+                textContent: layer.display ? 'visibility_off' : 'visibility',
                 className: 'material-icons cursor noselect btn',
                 title: 'Toggle visibility'
             });
             i.addEventListener('click', function () {
-                let container = this.parentNode.parentNode;
-                let header = this.parentNode;
                 if (this.textContent === 'visibility') {
-                    layers[layer].display = true;
+                    layer.display = true;
                     this.textContent = 'visibility_off';
                     _xyz.pushHook('layers', layer);
-                    layers[layer].getLayer();
+                    layer.getLayer();
                 } else {
-                    layers[layer].display = false;
-                    _xyz.filterHook('layers', layer);
-                    if (layers[layer].L) _xyz.map.removeLayer(layers[layer].L);
+                    layer.display = false;
                     this.textContent = 'visibility';
+                    _xyz.filterHook('layers', layer);
+                    if (layer.L) _xyz.map.removeLayer(layer.L);
                 }
             });
             header.appendChild(i);
+            layer.drawer.appendChild(header);
+
+
+            // Create loader element.
+            layer.loader = utils.createElement('div', {
+                className: 'loader'
+            });
+            layer.drawer.appendChild(layer.loader);
+   
+      
+            // Add panel to layer control.
+            if (layer.panel) {
+                layer.panel = utils.createElement('div', {
+                    className: 'panel'
+                });
+                layer.drawer.appendChild(layer.panel);
+
+                layers_panel[layer.format](layer);
+
+                i = utils.createElement('i', {
+                    textContent: 'expand_less',
+                    className: 'material-icons cursor noselect btn',
+                    title: 'Expand layer panel'
+                });
+                i.addEventListener('click', function () {
+                    let container = this.parentNode.parentNode;
+                    let header = this.parentNode;
+                    if (container.style.maxHeight != '30px') {
+                        container.style.maxHeight = '30px';
+                        header.style.boxShadow = '0 3px 3px -3px black';
+                        this.textContent = 'expand_more';
+                        i.title = "Collapse layer panel";
+                    } else {
+                        container.style.maxHeight = (layer.panel.clientHeight + this.clientHeight + 5) + 'px';
+                        header.style.boxShadow = '';
+                        this.textContent = 'expand_less';
+                        i.title = "Expand layer panel";
+                    }
+                });
+                header.appendChild(i);
+            }
 
             // Display layers with display=true (default).
-            if (layers[layer].display) {
-                i.textContent = 'visibility_off';
-                _xyz.pushHook('layers', layer);
+            if (layer.display) {
+                _xyz.pushHook('layers', layer.layer);
+                layer.getLayer();
             }
-            layers[layer].getLayer();
-
-            // Add header element to the container.
-            layers[layer].drawer.appendChild(header);
-
-            dom.layers.appendChild(layers[layer].drawer);
         });
         
     };
     _xyz.layers.init();
-
-    function setLayerStyle(layer){
-
-        // Set layer styles to default if not present
-        if (!layer.style) layer.style = _xyz.layers.style;
-        if (!layer.styleHighlight) layer.styleHighlight = _xyz.layers.styleHighlight;
-    }
 }

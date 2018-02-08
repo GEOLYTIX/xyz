@@ -16,6 +16,7 @@ function getLayer(){
     // Request layer data when table and display are true.
     if(this.table && this.display){
         this.loaded = false;
+        this.loader.style.display = 'block';
         this.xhr = new XMLHttpRequest(); 
         
         // Open & send vector.xhr;
@@ -59,37 +60,29 @@ function getLayer(){
                 layer.L = L.geoJSON(areas, {
                         style: layer.style,
                         pane: layer.pane[0],
-                        onEachFeature: function (_feature, _layer) {
-                            _layer.on({
-
-                                // Set styleHighlight on mouseover.
-                                mouseover: function() {
-                                    _layer.setStyle(layer.styleHighlight);
-                                },
-
-                                // Reset style on mouseout
-                                mouseout: function() {
-                                    _layer.setStyle(layer.style);
-                                },
-                                
-                                // Select vector by its ID(qid).
-                                click: function (e) {
-                                    _xyz.select.selectLayerFromEndpoint({
-                                        layer: layer.layer,
-                                        qTable: layer.table,
-                                        qID: e.target.feature.properties.qid,
-                                        marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
-                                    });
-                                }
-                            });
-                        },
                         pointToLayer: function(point, latlng){
                             return L.circleMarker(latlng, {
                                 radius: 5
                             });
                         }
-                    }).addTo(_xyz.map);
+                    })
+                    .on('click', function(e){
+                        _xyz.select.selectLayerFromEndpoint({
+                            layer: layer.layer,
+                            qTable: layer.table,
+                            qID: e.layer.feature.properties.qid,
+                            marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+                        });
+                    })
+                    .on('mouseover', function(e){
+                        e.layer.setStyle(layer.styleHighlight);
+                    })
+                    .on('mouseout', function(e){
+                        e.layer.setStyle(layer.style);
+                    })
+                    .addTo(_xyz.map);
 
+                    layer.loader.style.display = 'none';
                     layer.loaded = true;
                     _xyz.layersCheck();
                 

@@ -33,6 +33,14 @@ module.exports = (function () {
             .attr('height', 1000)
             .attr('xmlns', 'http://www.w3.org/2000/svg');
 
+        svg
+            .append('circle')
+            .attr('cx', 540)
+            .attr('cy', 540)
+            .attr('r', style[0][0])
+            .style('fill', '#333')
+            .style('opacity', 0.4);
+
         for (let i = 0; i < style.length; i++) {
             svg
                 .append('circle')

@@ -18,6 +18,7 @@ function getLayer(){
 
         // Create new vector.xhr
         this.loaded = false;
+        this.loader.style.display = 'block';
         this.xhr = new XMLHttpRequest();
 
         // Open & send vector.xhr;
@@ -40,17 +41,21 @@ function getLayer(){
                 getFeatureId: function (f) {
                     return f.properties.qid;
                 },
-                vectorTileLayerStyles: {}
+                vectorTileLayerStyles: {
+                    //[this.layer]: this.style
+                }
             };
         options.vectorTileLayerStyles[this.layer] = this.style;
         
         this.L = L.vectorGrid.protobuf(url, options)
             .on('load', function(){
                 layer.loaded = true;
+                layer.loader.style.display = 'none';
                 _xyz.layersCheck();
             })
             .on('click', function(e){
                 _xyz.select.selectLayerFromEndpoint({
+                    layer: layer.layer,
                     qTable: layer.table,
                     qID: e.layer.properties.qid,
                     marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
