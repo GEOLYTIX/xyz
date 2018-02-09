@@ -29,8 +29,8 @@ module.exports = function Select(){
             let selectionHook = hook.split('!');
             selectLayerFromEndpoint({
                 layer: selectionHook[1],
-                qTable: selectionHook[2],
-                qID: selectionHook[3],
+                table: selectionHook[2],
+                id: selectionHook[3],
                 marker: [selectionHook[4].split(';')[0], selectionHook[4].split(';')[1]]
             });
         });
@@ -64,31 +64,27 @@ module.exports = function Select(){
         });
         if (freeRecords.length === 0) return
 
-        ///// Needs adding query for database and request endpoint at this stage. Can be queried from countries.layers.
-        let endpoint = 'q_vector_info?';
-        layer.displayGeom = _xyz.countries[_xyz.country].layers[layer.layer].displayGeom?
-            ',' + _xyz.countries[_xyz.country].layers[layer.layer].displayGeom + ' as displaygeom ':
-            '';
+        let _layer = _xyz.countries[_xyz.country].layers[layer.layer]
 
-        // Create new xhr for /q_vector_info
+        // Create new xhr for /q_select
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', localhost + endpoint + utils.paramString({
-            dbs: _xyz.countries[_xyz.country].layers[layer.layer].dbs,
-            qTable: layer.qTable,
-            qID: layer.qID,
-            displayGeom: layer.displayGeom
+        xhr.open('GET', localhost + 'q_select?' + utils.paramString({
+            dbs: _layer.dbs,
+            table: layer.table,
+            qID: _layer.qID,
+            id: layer.id,
+            infoj: _layer.infoj,
+            geomj: _layer.geomj,
+            displayGeom: _layer.displayGeom || ''
         }));
     
         // Request infoj and geometry from data source
         xhr.onload = function () {
             if (this.status === 200) {
-    
                 let json = JSON.parse(this.responseText);
-    
                 layer.geometry = JSON.parse(json[0].geomj);
-                layer.infoj = JSON.parse(json[0].infoj);
-                layer.displayGeom = layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
-    
+                layer.infoj = json[0].infoj;
+                layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
                 addLayerToRecord(layer);
             }
         }
@@ -105,7 +101,7 @@ module.exports = function Select(){
 
         if (freeRecords.length > 0) {
             freeRecords[0].layer = layer;
-            _xyz.pushHook('select', freeRecords[0].letter + '!' + freeRecords[0].layer.layer + '!' + freeRecords[0].layer.qTable + '!' + freeRecords[0].layer.qID + '!' + freeRecords[0].layer.marker[0] + ';' + freeRecords[0].layer.marker[1]);
+            _xyz.pushHook('select', freeRecords[0].letter + '!' + freeRecords[0].layer.layer + '!' + freeRecords[0].layer.table + '!' + freeRecords[0].layer.id + '!' + freeRecords[0].layer.marker[0] + ';' + freeRecords[0].layer.marker[1]);
             addRecordToMap(freeRecords[0])
         }
         if (freeRecords.length === 1) dom.header[1].style.background = '#ffcc80';
@@ -207,7 +203,7 @@ module.exports = function Select(){
         i.addEventListener('click', function(){
             record.layer.drawer.remove();
 
-            _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.qTable + '!' + record.layer.qID + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
+            _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
             if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
             if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
             if (record.layer.D) _xyz.map.removeLayer(record.layer.D);

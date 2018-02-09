@@ -89,7 +89,16 @@
       "fillColor": "#cf9",
       "fillOpacity": 0.2
     },
-    "markerStyle": [
+    "styleRange": [
+      "#15773f",
+      "#66bd63",
+      "#a6d96a",
+      "#d9ef8b",
+      "#fdae61",
+      "#f46d43",
+      "#d73027"
+    ],
+    "defaultMarker": [
       [
         400,
         "#A9A9A9"
@@ -98,15 +107,6 @@
         360,
         "#C0C0C0"
       ]
-    ],
-    "colorScale": [
-      "#15773f",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027"
     ]
   },
   "catchments": {
@@ -154,7 +154,7 @@
           "format": "mvt",
           "pane": ["bounds", 510],
           "dbs": "MVT",
-          "qField": "country",
+          "qID": "country",
           "filter": "AND country = 'UK'",
           "arrayZoom": {
             "1": "borders"
@@ -167,7 +167,6 @@
           }
         },
         "grid": {
-          "display": true,
           "panel": true,          
           "name": "Census Grid",
           "format": "grid",
@@ -183,15 +182,6 @@
             "11": "gb_hx_2k",
             "12": "gb_hx_1k"
           },
-          "colorScale": [
-            "#15773f",
-            "#66bd63",
-            "#a6d96a",
-            "#d9ef8b",
-            "#fdae61",
-            "#f46d43",
-            "#d73027"
-          ],
           "queryFields": [
             [
               "pop__01",
@@ -1032,8 +1022,9 @@
           "format": "mvt",
           "pane": ["postal", 520],
           "dbs": "MVT",
-          "interactive": true,
-          "qField": "qid",
+          "qID": "qid",
+          "infoj": "infoj",
+          "geomj": "geomj",
           "arrayZoom": {
             "10": "gb_postaldistrict_census__11",
             "11": "gb_postaldistrict_census__11",
@@ -1051,10 +1042,14 @@
           "format": "geojson",
           "pane": ["places", 530],
           "dbs": "XYZ",
+          "qID": "qid",
+          "displayGeom": ", areaj AS displayGeom",
+          "infoj": "json_build_object('Name', rp_name::text, 'Type', rp_type::text, 'Competition Strength', comp_strgh::integer, 'Units', est_units::integer, 'Brands', est_brands::integer, 'Comparison', comparison::integer, 'Convenience', conv::integer, 'Food, Beverage, Leisure', fbl::integer, 'Services', services::integer, 'Class|Brass', classbrass::integer)",
+          "geomj": "ST_AsGeoJson(geom)",
+          "geom": "geom",
           "arrayZoom": {
-            "11": "bp_retail_places"
+            "11": "dominos_retail_places"
           },
-          "displayGeom": "areaj",
           "style": {
             "stroke": true,
             "color": "#e91e63",
@@ -1074,8 +1069,9 @@
           "format": "mvt",
           "pane": ["bounds", 510],
           "dbs": "MVT",
-          "interactive": true,
-          "qField": "qid",
+          "qID": "qid",
+          "infoj": "infoj",
+          "geomj": "geomj",
           "arrayZoom": {
             "10": "gb_retail_place_bounds"
           },
@@ -1101,12 +1097,12 @@
           "pane": ["retail_points", 540],
           "dbs": "MVT",         
           "qID": "qid",
-          "qCount": "rp_c",
-          "qValue": "rp_v",
-          "qTable": "retailpoints",
+          "table": "retailpoints",
           "qVector": "vector",
           "qLabel": "store",
           "qBrand": "brand",
+          "infoj": "infoj",
+          "geomj": "geomj",
           "markerStyle": {
             "aldi": {
               "style": [
@@ -1466,29 +1462,21 @@
       },
       "layers": {
         "border": {
-          "display": true,
-          "layer": "border",
-          "qField": "country",
           "name": "Country Border",
-          "arrayZoom": {
-            "1": "borders"
-          },
           "format": "mvt",
           "pane": ["bounds", 510],
-          "style": {
-            "stroke": true,
-            "color": "#555",
-            "weight": 1,
-            "fillOpacity": 0
+          "dbs": "MVT",
+          "qID": "country",
+          "arrayZoom": {
+            "1": "borders"
           }
         },
         "grid": {
+          "panel": true,          
           "name": "Census Grid",
           "format": "grid",
-          "display": true,
-          "panel": true,
           "pane": ["grid", 515],
-          "database": "xyz",
+          "dbs": "XYZ",   
           "arrayZoom": {
             "6": "ro_hx_64k",
             "7": "ro_hx_32k",
@@ -1498,6 +1486,17 @@
             "11": "ro_hx_2k",
             "12": "ro_hx_1k"
           },
+          "styleRange": [
+            "#3366FF",
+            "#4D59F2",
+            "#664DE6",
+            "#8040D9",
+            "#9933CC",
+            "#B326BF",
+            "#CC1AB3",
+            "#E60DA6",
+            "#FF0099"
+          ],
           "queryFields": [
             [
               "pop__11",
@@ -1650,33 +1649,30 @@
           ]
         },
         "communes": {
-          "layer": "communes",
-          "qField": "qid",
           "name": "Communes",
+          "format": "mvt",
+          "pane": ["postal", 520],
+          "dbs": "MVT",
+          "qID": "qid",
+          "infoj": "infoj",
+          "geomj": "geomj",
           "arrayZoom": {
             "9": "ro_commune_census__11"
-          },
-          "format": "mvt",
-          "interactive": true,
-          "pane": ["postal", 520],
-          "style": {
-            "stroke": true,
-            "color": "#666",
-            "weight": 1,
-            "fillOpacity": 0
           }
         },
         "retail_fashion": {
+          "panel": true,
           "name": "Fashion retail",
-          "database": "xyz",
           "format": "cluster",
+          "pane": ["retail_points", 540],
+          "dbs": "MVT",
           "qID": "qid",
-          "qCount": "c",
-          "qValue": "v",
-          "qLayer": "ro_fashion",
+          "table": "ro_fashion",
           "qVector": "vector",
           "qLabel": "store_name",
           "qBrand": "fascia",
+          "infoj": "infoj",
+          "geomj": "geomj",
           "markerStyle": {
             "SINSAY": {
               "style": [

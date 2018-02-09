@@ -17,7 +17,7 @@ function fetch_tiles(req, res){
         q = `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
              FROM (
                SELECT
-                 ${req.query.qField},
+                 ${req.query.qID} AS id,
                  ST_AsMVTGeom(
                    geom_3857,
                    TileBBox(${z},${x},${y}),

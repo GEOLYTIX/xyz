@@ -10,12 +10,12 @@ function getLayer() {
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
 
+        // Build xhr request.
         let bounds = _xyz.map.getBounds();
-
         layer.xhr.open('GET', localhost + 'q_cluster?' + utils.paramString({
             dbs: layer.dbs,
-            layer: layer.qTable,
-            qid: layer.qID,
+            layer: layer.table,
+            qID: layer.qID,
             label: layer.qLabel,
             brand: layer.qBrand,
             west: bounds.getWest(),
@@ -26,29 +26,13 @@ function getLayer() {
 
         layer.xhr.onload = function () {
             if (this.status === 200) {
-                let data = JSON.parse(this.responseText),
-                    places = {
-                        type: 'Feature Collection',
-                        features: []
-                        //features: data
-                    };
-
-                Object.keys(data).map(function (key) {
-                    places.features.push({
-                        type: 'Feature',
-                        geometry: JSON.parse(data[key].geomj),
-                        properties: {
-                            infoj: data[key].infoj
-                            //c: data[key].c
-                        }
-                    });
-                });
+                let cluster = JSON.parse(this.responseText);
 
                 // get max count value for size control
                 //let max = Math.max(...places.features.map(f => f.properties.infoj.length));
-                let max = places.features.reduce(function(max, f){
-                    return Math.max(max, f.properties.infoj.length)
-                }, places.features[0].properties.infoj.length);
+                let max = cluster.reduce(function(max, c){
+                    return Math.max(max, c.properties.infoj.length)
+                }, cluster[0].properties.infoj.length);
 
                 // places.features.sort((a, b) =>
                 //     a.properties.infoj.length > b.properties.infoj.length ? -1 :
@@ -56,7 +40,7 @@ function getLayer() {
 
                 // add layer
                 if(layer.L) _xyz.map.removeLayer(layer.L);
-                layer.L = L.geoJson(places, {
+                layer.L = L.geoJson(cluster, {
                     pointToLayer: function(point, latlng){
                         let icon,
                             count = point.properties.infoj.length;
@@ -88,7 +72,7 @@ function getLayer() {
                             icon = svg_symbols.target(dotArr);
 
                         } else {                           
-                            icon = svg_symbols.target((layer.markerStyle[point.properties.infoj[0].brand] && layer.markerStyle[point.properties.infoj[0].brand].style) || _xyz.layers.markerStyle);
+                            icon = svg_symbols.target((layer.markerStyle[point.properties.infoj[0].brand] && layer.markerStyle[point.properties.infoj[0].brand].style) || layer.defaultMarker);
                         }
 
                         return L.marker(latlng, {
@@ -110,8 +94,8 @@ function getLayer() {
                     if (count === 1) {
                         _xyz.select.selectLayerFromEndpoint({
                             layer: layer.layer,
-                            qTable: layer.qTable,
-                            qID: infoj[0].id,
+                            table: layer.table,
+                            id: infoj[0].id,
                             marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                         });
                     }
@@ -199,8 +183,8 @@ function getLayer() {
                             location_table_rows[i].addEventListener('click', function () {
                                 _xyz.select.selectLayerFromEndpoint({
                                     layer: layer.layer,
-                                    qTable: layer.qTable,
-                                    qID: this.dataset.id,
+                                    table: layer.table,
+                                    id: this.dataset.id,
                                     marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                                 });
                             });

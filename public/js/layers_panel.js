@@ -77,7 +77,7 @@ module.exports = (function () {
             width = layer.panel.clientWidth,
             padding = 0,
             _width = width - (2 * padding),
-            n = _xyz.layers.colorScale.length,
+            n = layer.styleRange.length,
             svg = d3
                 .select(layer.legend)
                 .append('svg')
@@ -148,7 +148,7 @@ module.exports = (function () {
                 .attr('y', yTrack)
                 .attr('width', w)
                 .attr('height', 20)
-                .style('fill', _xyz.layers.colorScale[i]);
+                .style('fill', layer.styleRange[i]);
 
             if (i === 0) svg.append('text')
                 .attr('x', x)

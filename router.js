@@ -69,8 +69,8 @@ router.get('/documentation', function (req, res) {
 });
 
 // Vector layers with PGSQL MVT
-const tiles = require('./mod/tiles');
-router.get('/mvt/:z/:x/:y', tiles.fetch_tiles);
+const mvt = require('./mod/mvt');
+router.get('/mvt/:z/:x/:y', mvt.fetch_tiles);
 
 const grid = require('./mod/grid');
 router.get('/q_grid', grid.grid);
@@ -81,11 +81,12 @@ router.get('/q_catchments', isLoggedIn, catchments.catchments);
 
 const cluster = require('./mod/cluster');
 router.get('/q_cluster', isLoggedIn, cluster.cluster);
-router.get('/q_cluster_info', cluster.cluster_info);
 
-const vector = require('./mod/vector');
-router.get('/q_vector', vector.vector);
-router.get('/q_vector_info', vector.vector_info);
+const geojson = require('./mod/geojson');
+router.get('/q_geojson', geojson.geojson);
+
+const select = require('./mod/select');
+router.get('/q_select', select.select);
 
 const gazetteer = require('./mod/gazetteer');
 router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);

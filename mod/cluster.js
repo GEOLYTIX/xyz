@@ -17,10 +17,10 @@ function cluster(req, res){
   let q = `
     SELECT
       ST_AsGeoJson(ST_PointOnSurface(ST_Union(geomcntr))) geomj,
-      json_agg(json_build_object('id', qid, 'brand', brand, 'label', label)) infoj
+      json_agg(json_build_object('id', id, 'brand', brand, 'label', label)) infoj
     FROM (
       SELECT
-        qid,
+        id,
         brand,
         label,
         kmeans_cid,
@@ -28,7 +28,7 @@ function cluster(req, res){
         ST_ClusterDBSCAN(geomcntr, ${xDegree * 0.0075}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
       FROM (
         SELECT
-          ${req.query.qid} AS qid,
+          ${req.query.qID} AS id,
           ${req.query.brand} AS brand,
           ${req.query.label} AS label,
           ST_ClusterKMeans(geomcntr, ${parseInt(xDegree * 4)}) OVER () kmeans_cid,
@@ -52,27 +52,18 @@ function cluster(req, res){
     //console.log(q);
 
     DBS[req.query.dbs].any(q).then(function(data){
-      res.status(200).json(data);
-    });
-}
-
-function cluster_info(req, res){
-    let q = `
-    SELECT
-      geomj,
-      infoj,
-      ${req.query.vector} AS vector
-    FROM ${req.query.layer}
-    WHERE ${req.query.qid} = ${req.query.id};`
-
-    // console.log(q);
-
-    DBS[req.query.dbs].any(q).then(function (data) {
-        res.status(200).json(data);
+      res.status(200).json(Object.keys(data).map(record => {
+        return {
+          type: 'Feature',
+          geometry: JSON.parse(data[record].geomj),
+          properties: {
+            infoj: data[record].infoj
+          }
+        }
+      }));
     });
 }
 
 module.exports = {
-    cluster: cluster,
-    cluster_info: cluster_info
+    cluster: cluster
 };

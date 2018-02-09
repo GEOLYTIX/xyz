@@ -4,30 +4,30 @@ const utils = require('./utils');
 function getLayer(){
         
     // Assign the table based on the zoom array.
-    let zoom = _xyz.map.getZoom(),
-        zoomKeys = Object.keys(this.arrayZoom),
+    let layer = this,
+        zoom = _xyz.map.getZoom(),
+        zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-        this.table = zoom > maxZoomKey ?
-        this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
-            null : this.arrayZoom[zoom];
+        layer.table = zoom > maxZoomKey ?
+        layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
+            null : layer.arrayZoom[zoom];
 
     // Make drawer opaque if no table present.
-    this.drawer.style.opacity = !this.table ? 0.4 : 1;
+    layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
       
-    if(this.table && this.display){
+    if(layer.table && layer.display){
 
         // Create new vector.xhr
-        this.loaded = false;
-        this.loader.style.display = 'block';
-        this.xhr = new XMLHttpRequest();
+        layer.loaded = false;
+        layer.loader.style.display = 'block';
+        layer.xhr = new XMLHttpRequest();
 
-        // Open & send vector.xhr;
-        let layer = this,
-            bounds = _xyz.map.getBounds(),
+        // Build xhr request.
+        let bounds = _xyz.map.getBounds(),
             url = localhost + 'mvt/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
-                qField: layer.qField,
+                qID: layer.qID,
                 filter: layer.filter || '',
                 layer: layer.layer,
                 west: bounds.getWest(),
@@ -37,10 +37,10 @@ function getLayer(){
             }),
             options = {
                 rendererFactory: L.canvas.tile,
-                interactive: layer.interactive || false,
+                interactive: layer.infoj || false,
                 pane: layer.pane[0],
                 getFeatureId: function (f) {
-                    return f.properties.qid;
+                    return f.properties.id;
                 },
                 vectorTileLayerStyles: {
                     //[layer.layer]: layer.style
@@ -57,16 +57,16 @@ function getLayer(){
             .on('click', function(e){
                 _xyz.select.selectLayerFromEndpoint({
                     layer: layer.layer,
-                    qTable: layer.table,
-                    qID: e.layer.properties.qid,
+                    table: layer.table,
+                    id: e.layer.properties.id,
                     marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                 });
             })
             .on('mouseover', function(e){
-                this.setFeatureStyle(e.layer.properties.qid, layer.styleHighlight);
+                this.setFeatureStyle(e.layer.properties.id, layer.styleHighlight);
             })
             .on('mouseout', function(e){
-                this.setFeatureStyle(e.layer.properties.qid, layer.style);
+                this.setFeatureStyle(e.layer.properties.id, layer.style);
             })
             .addTo(_xyz.map);
     }

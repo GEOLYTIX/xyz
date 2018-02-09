@@ -39,9 +39,10 @@ module.exports = function(){
             layers[layer].layer = layer;
             layer = layers[layer];
 
-            // Query layer style !!! Needs adjusting for different layer types.
-            if (!layer.style) layer.style = _xyz.layers.style;
-            if (!layer.styleHighlight) layer.styleHighlight = _xyz.layers.styleHighlight;
+            // Set layer styles
+            Object.keys(_xyz.layers).map(function(key){
+                if(!layer[key]) layer[key] = _xyz.layers[key];
+            });
                                      
             // Create container element to contain the header with controls and the info table.
             layer.drawer = utils.createElement('div', {

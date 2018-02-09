@@ -20,12 +20,14 @@ function getLayer(){
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
         
-        // Open & send vector.xhr;
-        let bounds = _xyz.map.getBounds();
-        
-        this.xhr.open('GET', localhost + 'q_vector?' + utils.paramString({
+        // Build xhr request.
+        let bounds = _xyz.map.getBounds();      
+        this.xhr.open('GET', localhost + 'q_geojson?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
+            qID: layer.qID,
+            geomj: layer.geomj,
+            geom: layer.geom,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
@@ -37,28 +39,13 @@ function getLayer(){
             if(this.status === 200){
 
                 // Create feature collection for vector features.
-                let data = JSON.parse(this.responseText),
-                    areas = {
-                        type: 'FeatureCollection',
-                        features: []
-                    };
-
-                // Push features from the data object into feature collection.
-                Object.keys(data).map(function(key){
-                    areas.features.push({
-                        type: 'Feature',
-                        geometry: JSON.parse(data[key].geomj),
-                        properties: {
-                            qid: data[key].qid
-                        }
-                    });
-                });
+                let features = JSON.parse(this.responseText);
                 
                 // Check for existing layer and remove from map.
                 if (layer.L) _xyz.map.removeLayer(layer.L);
                 
                 // Add geoJSON feature collection to the map.
-                layer.L = L.geoJSON(areas, {
+                layer.L = L.geoJSON(features, {
                         style: layer.style,
                         pane: layer.pane[0],
                         pointToLayer: function(point, latlng){
@@ -70,8 +57,8 @@ function getLayer(){
                     .on('click', function(e){
                         _xyz.select.selectLayerFromEndpoint({
                             layer: layer.layer,
-                            qTable: layer.table,
-                            qID: e.layer.feature.properties.qid,
+                            table: layer.table,
+                            id: e.layer.feature.properties.id,
                             marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                         });
                     })
