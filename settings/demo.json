@@ -150,25 +150,15 @@
       },
       "layers": {
         "border": {
+          "name": "Country Border",
+          "format": "mvt",
+          "pane": ["bounds", 510],
+          "dbs": "MVT",
           "qField": "country",
           "filter": "AND country = 'UK'",
-          "name": "Country Border",
           "arrayZoom": {
             "1": "borders"
           },
-          "format": "mvt",
-          "colorScale": [
-            "#3366FF",
-            "#4D59F2",
-            "#664DE6",
-            "#8040D9",
-            "#9933CC",
-            "#B326BF",
-            "#CC1AB3",
-            "#E60DA6",
-            "#FF0099"
-          ],
-          "pane": ["bounds", 510],
           "style": {
             "stroke": true,
             "color": "#555",
@@ -178,11 +168,11 @@
         },
         "grid": {
           "display": true,
-          "panel": true,
-          "database": "xyz",
+          "panel": true,          
+          "name": "Census Grid",
           "format": "grid",
           "pane": ["grid", 515],
-          "name": "Census Grid",
+          "dbs": "XYZ",          
           "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
           "arrayZoom": {
             "6": "gb_hx_64k",
@@ -1037,17 +1027,18 @@
             ]
           ]
         },
-        "postal_codes": {
-          "qField": "qid",
+        "postal_codes": {          
           "name": "Postal Codes",
+          "format": "mvt",
+          "pane": ["postal", 520],
+          "dbs": "MVT",
+          "interactive": true,
+          "qField": "qid",
           "arrayZoom": {
             "10": "gb_postaldistrict_census__11",
             "11": "gb_postaldistrict_census__11",
             "12": "gb_postalsector_census__11"
           },
-          "format": "mvt",
-          "interactive": true,
-          "pane": ["postal", 520],
           "style": {
             "stroke": true,
             "color": "#666",
@@ -1057,12 +1048,13 @@
         },
         "retail_places": {
           "name": "Dominos Retail Places",
+          "format": "geojson",
+          "pane": ["places", 530],
+          "dbs": "XYZ",
           "arrayZoom": {
             "11": "bp_retail_places"
           },
-          "format": "geojson",
           "displayGeom": "areaj",
-          "pane": ["places", 530],
           "style": {
             "stroke": true,
             "color": "#e91e63",
@@ -1077,15 +1069,16 @@
             "fillOpacity": 0.2
           }
         },
-        "retail_places_mvt": {
-          "qField": "qid",
+        "retail_places_mvt": {          
           "name": "Retail Places Tiles",
+          "format": "mvt",
+          "pane": ["bounds", 510],
+          "dbs": "MVT",
+          "interactive": true,
+          "qField": "qid",
           "arrayZoom": {
             "10": "gb_retail_place_bounds"
           },
-          "format": "mvt",
-          "interactive": true,
-          "pane": ["bounds", 510],
           "style": {
             "stroke": true,
             "color": "#ff9800",
@@ -1104,9 +1097,9 @@
         "retail_points": {
           "panel": true,
           "name": "Retail Points",
-          "database": "xyz",
           "format": "cluster",
           "pane": ["retail_points", 540],
+          "dbs": "MVT",         
           "qID": "qid",
           "qCount": "rp_c",
           "qValue": "rp_v",
@@ -1490,6 +1483,11 @@
           }
         },
         "grid": {
+          "name": "Census Grid",
+          "format": "grid",
+          "display": true,
+          "panel": true,
+          "pane": ["grid", 515],
           "database": "xyz",
           "arrayZoom": {
             "6": "ro_hx_64k",

@@ -3,26 +3,28 @@ const svg_symbols = require('./svg_symbols');
 
 function getLayer() {
 
-    if (this.display) {
-        this.loaded = false;
-        this.loader.style.display = 'block';
-        this.xhr = new XMLHttpRequest(); 
+    let layer = this;
 
-        let layer = this,
-            bounds = _xyz.map.getBounds();
+    if (layer.display) {
+        layer.loaded = false;
+        layer.loader.style.display = 'block';
+        layer.xhr = new XMLHttpRequest(); 
 
-        this.xhr.open('GET', localhost + 'q_cluster?' + utils.paramString({
-            layer: this.qTable,
-            qid: this.qID,
-            label: this.qLabel,
-            brand: this.qBrand,
+        let bounds = _xyz.map.getBounds();
+
+        layer.xhr.open('GET', localhost + 'q_cluster?' + utils.paramString({
+            dbs: layer.dbs,
+            layer: layer.qTable,
+            qid: layer.qID,
+            label: layer.qLabel,
+            brand: layer.qBrand,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
             north: bounds.getNorth()
         }));
 
-        this.xhr.onload = function () {
+        layer.xhr.onload = function () {
             if (this.status === 200) {
                 let data = JSON.parse(this.responseText),
                     places = {
@@ -227,7 +229,7 @@ function getLayer() {
                 _xyz.layersCheck();
             }
         }
-        this.xhr.send();
+        layer.xhr.send();
     }
 }
 

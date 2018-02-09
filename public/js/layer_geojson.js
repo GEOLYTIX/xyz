@@ -3,28 +3,29 @@ const utils = require('./utils');
 function getLayer(){
   
     // Assign the table based on the zoom array.
-    let zoom = _xyz.map.getZoom(),
-        zoomKeys = Object.keys(this.arrayZoom),
+    let layer = this,
+        zoom = _xyz.map.getZoom(),
+        zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-        this.table = zoom > maxZoomKey ?
-        this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
-            null : this.arrayZoom[zoom];
+        layer.table = zoom > maxZoomKey ?
+        layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
+            null : layer.arrayZoom[zoom];
     
     // Make drawer opaque if no table present.
-    this.drawer.style.opacity = !this.table? 0.4: 1;
+    layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
     // Request layer data when table and display are true.
-    if(this.table && this.display){
-        this.loaded = false;
-        this.loader.style.display = 'block';
-        this.xhr = new XMLHttpRequest(); 
+    if(layer.table && layer.display){
+        layer.loaded = false;
+        layer.loader.style.display = 'block';
+        layer.xhr = new XMLHttpRequest(); 
         
         // Open & send vector.xhr;
-        let layer = this,
-            bounds = _xyz.map.getBounds();
+        let bounds = _xyz.map.getBounds();
         
         this.xhr.open('GET', localhost + 'q_vector?' + utils.paramString({
-            table: this.table,
+            dbs: layer.dbs,
+            table: layer.table,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
@@ -32,7 +33,7 @@ function getLayer(){
         }));
         
         // Draw layer on load event.
-        this.xhr.onload = function(){
+        layer.xhr.onload = function(){
             if(this.status === 200){
 
                 // Create feature collection for vector features.
@@ -90,7 +91,7 @@ function getLayer(){
                 if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
             }
         }
-        this.xhr.send();
+        layer.xhr.send();
     }
 }
 

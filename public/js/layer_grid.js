@@ -25,10 +25,10 @@ function getLayer(){
         let bounds = _xyz.map.getBounds();
 
         layer.xhr.open('GET', localhost + 'q_grid?' + utils.paramString({
+            dbs: layer.dbs,
+            table: layer.table,
             c: layer.qCount,
             v: layer.qValue,
-            database: layer.database,
-            table: layer.table,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
@@ -46,35 +46,24 @@ function getLayer(){
                 layer.L = new L.geoJson(processGrid(JSON.parse(this.responseText)), {
                     pointToLayer: function (feature, latlng) {
 
-                        
+                        // Distribute size between min, avg and max.
+                        let size = feature.properties.c <= layer.sizeAvg ?
+                            7 + 7 / layer.sizeAvg * feature.properties.c :
+                            14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.c - layer.sizeAvg);
 
-                        //20 + 40 / max * point.properties.infoj.length
-
-                        // Set size dependent on the location count against arraySize.
-                        let size = feature.properties.c < layer.sizeAvg ?
-                        7 + 7 / layer.sizeAvg * feature.properties.c:
-                        14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.c - layer.sizeAvg);
-
-                        let n = _xyz.layers.colorScale.length;
-
-                        let test = feature.properties.v < layer.colorAvg ?
-                        n / 2 / layer.sizeAvg * feature.properties.c:
-                        n / 2 + n / 2 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.c - layer.sizeAvg);
-
-                        //console.log(parseInt(test));
-
-                        if (parseInt(test) === n) test -= 1;
-
-                        let dot = svg_symbols.dot(_xyz.layers.colorScale[parseInt(test)]);
-
-
+                        // Distribute color index between min, avg and max. Reduce index by 1 if index exceeds range of colorScale.
+                        let n = _xyz.layers.colorScale.length,
+                            color = feature.properties.v <= layer.colorAvg ?
+                                n / 2 / layer.colorAvg * feature.properties.v :
+                                n / 2 + n / 2 / (layer.colorMax - layer.colorAvg) * (feature.properties.v - layer.colorAvg);
+                        if (parseInt(color) === n) color -= 1;
 
                         // Return L.Marker with icon as style to pointToLayer.
                         return L.marker(
                             latlng,
                             {
                                 icon: L.icon({
-                                    iconUrl: dot,
+                                    iconUrl: svg_symbols.dot(_xyz.layers.colorScale[parseInt(color)]),
                                     iconSize: size
                                 }),
                                 pane: layer.pane[0],
@@ -87,13 +76,11 @@ function getLayer(){
                 layer.loaded = true;
                 _xyz.layersCheck();
 
-                //svg_legends.createGridLegend(_xyz.grid, dom);
             }
         };
         layer.xhr.send();
         //_xyz.layersCheck();
         
-
     }
 
     function processGrid(data){
@@ -138,18 +125,17 @@ function getLayer(){
         layer.sizeAvg = avg_c / dots.features.length;
         layer.sizeMax = utils.getMath(data, 2, 'max');
 
-        if (avg_v > 0) {
-            layer.colorMin = utils.getMath(data, 3, 'min');
-            layer.colorAvg = avg_v / dots.features.length;
-            layer.colorMax = utils.getMath(data, 3, 'max');
-        }
+        layer.colorMin = utils.getMath(data, 3, 'min');
+        layer.colorAvg = avg_v / dots.features.length;
+        layer.colorMax = utils.getMath(data, 3, 'max');
 
-        document.getElementById('grid_legend_color__min').textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
-        document.getElementById('grid_legend_color__avg').textContent = layer.colorAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});
-        document.getElementById('grid_legend_color__max').textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: 0});
+        let digits = layer.chkGridRatio.checked ? 2 : 0;
         document.getElementById('grid_legend_size__min').textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
         document.getElementById('grid_legend_size__avg').textContent = layer.sizeAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});
         document.getElementById('grid_legend_size__max').textContent = layer.sizeMax.toLocaleString('en-GB', {maximumFractionDigits: 0});
+        document.getElementById('grid_legend_color__min').textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: digits});
+        document.getElementById('grid_legend_color__avg').textContent = layer.colorAvg.toLocaleString('en-GB', {maximumFractionDigits: digits});
+        document.getElementById('grid_legend_color__max').textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: digits});
 
         return dots
     }

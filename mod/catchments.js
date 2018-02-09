@@ -1,9 +1,4 @@
-const pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true});
-
 const request = require('request');
-
 const turf = require('@turf/turf');
 
 function catchments (req, res) {

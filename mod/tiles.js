@@ -1,8 +1,12 @@
-const pgp = require('pg-promise')({
+let pgp = require('pg-promise')({
     promiseLib: require('bluebird'),
-    noWarnings: true});
-
-const db = pgp(process.env.POSTGRES_MVT);
+    noWarnings: true
+});
+const DBS = {};
+Object.keys(process.env).map(function (key) {
+    if (key.split('.')[0] === 'DBS')
+        DBS[key.split('.')[1]] = pgp(process.env[key])
+});
 
 function fetch_tiles(req, res){
 
@@ -34,7 +38,7 @@ function fetch_tiles(req, res){
 
     //console.log(q);
 
-    db.any(q).then(function (data) {
+    DBS[req.query.dbs].any(q).then(function (data) {
         res.setHeader('Content-Type', 'application/x-protobuf');
         res.status(200);
         res.send(data[0].st_asmvt);

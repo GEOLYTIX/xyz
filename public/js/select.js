@@ -66,7 +66,6 @@ module.exports = function Select(){
 
         ///// Needs adding query for database and request endpoint at this stage. Can be queried from countries.layers.
         let endpoint = 'q_vector_info?';
-        let qDB = 'XYZ'; /////
         layer.displayGeom = _xyz.countries[_xyz.country].layers[layer.layer].displayGeom?
             ',' + _xyz.countries[_xyz.country].layers[layer.layer].displayGeom + ' as displaygeom ':
             '';
@@ -74,7 +73,7 @@ module.exports = function Select(){
         // Create new xhr for /q_vector_info
         let xhr = new XMLHttpRequest();
         xhr.open('GET', localhost + endpoint + utils.paramString({
-            qDB: qDB,
+            dbs: _xyz.countries[_xyz.country].layers[layer.layer].dbs,
             qTable: layer.qTable,
             qID: layer.qID,
             displayGeom: layer.displayGeom

@@ -1,14 +1,18 @@
-const pgp = require('pg-promise')({
+let pgp = require('pg-promise')({
     promiseLib: require('bluebird'),
-    noWarnings: true});
-const db = pgp(process.env.POSTGRES);
+    noWarnings: true
+});
+const DBS = {};
+Object.keys(process.env).map(function (key) {
+    if (key.split('.')[0] === 'DBS')
+        DBS[key.split('.')[1]] = pgp(process.env[key])
+});
+
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GKEY
 });
 
 function gazetteer(req, res) {
-    // let q = "SELECT label, qid id, source FROM gaz_" + req.query.c + " WHERE search LIKE '"
-    //     + decodeURIComponent(req.query.q).toUpperCase() + "%' ORDER BY searchindex, search LIMIT 10";
 
     let q = `SELECT label, qid id, source
                FROM gaz_${req.query.c}
@@ -17,15 +21,17 @@ function gazetteer(req, res) {
 
     //console.log(q);
 
-    db.any(q)
-        .then(function (data) {
-            if (data.length > 0) {
-                res.status(200).json(data);
-            } else {
-                eval(req.query.p + '_placesAutoComplete')(req, res);
-            }
-        })
-        .catch(() => eval(req.query.p + '_placesAutoComplete')(req, res));
+    eval(req.query.p + '_placesAutoComplete')(req, res);
+
+    // DBS[req.query.dbs].any(q)
+    //     .then(function (data) {
+    //         if (data.length > 0) {
+    //             res.status(200).json(data);
+    //         } else {
+    //             eval(req.query.p + '_placesAutoComplete')(req, res);
+    //         }
+    //     })
+    //     .catch(() => eval(req.query.p + '_placesAutoComplete')(req, res));
 }
 
 const request = require('request');

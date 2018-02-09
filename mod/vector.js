@@ -1,7 +1,12 @@
-const pgp = require('pg-promise')({
+let pgp = require('pg-promise')({
     promiseLib: require('bluebird'),
-    noWarnings: true});
-const db = pgp(process.env.POSTGRES);
+    noWarnings: true
+});
+const DBS = {};
+Object.keys(process.env).map(function (key) {
+    if (key.split('.')[0] === 'DBS')
+        DBS[key.split('.')[1]] = pgp(process.env[key])
+});
 
 function vector(req, res) {
     let q = `SELECT qid, geomj
@@ -17,7 +22,7 @@ function vector(req, res) {
 
     //console.log(q);
 
-    db.any(q).then(function(data){
+    DBS[req.query.dbs].any(q).then(function(data){
         res.status(200).json(data);
     });
 }
@@ -33,7 +38,7 @@ function vector_info(req, res) {
 
     //console.log(q);
              
-    db.any(q).then(function (data) {
+    DBS[req.query.dbs].any(q).then(function (data) {
         res.status(200).json(data);
     });
 }

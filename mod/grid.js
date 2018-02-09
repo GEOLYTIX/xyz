@@ -1,12 +1,12 @@
-const pgp = require('pg-promise')({
+let pgp = require('pg-promise')({
     promiseLib: require('bluebird'),
     noWarnings: true
 });
-
-const databases = {
-    xyz: pgp(process.env.POSTGRES),
-    ghs: pgp(process.env.POSTGRES_GHS)
-};
+const DBS = {};
+Object.keys(process.env).map(function (key) {
+    if (key.split('.')[0] === 'DBS')
+        DBS[key.split('.')[1]] = pgp(process.env[key])
+});
 
 function grid(req, res) {
     let q = `SELECT
@@ -27,7 +27,7 @@ function grid(req, res) {
  
     //console.log(q);
 
-    databases[req.query.database].any(q)
+    DBS[req.query.dbs].any(q)
         .then(function (data) {
             res.status(200).json(Object.keys(data).map(function (record) {
                 return Object.keys(data[record]).map(function (field) {
@@ -50,7 +50,7 @@ function info(req, res) {
 
     //console.log(q);
 
-    databases[req.body.database].any(q)
+    DBS[req.body.dbs].any(q)
         .then(function (data) {
             res.status(200).json(data[0].infoj);
         });
@@ -59,4 +59,4 @@ function info(req, res) {
 module.exports = {
     grid: grid,
     info: info
-};
+}

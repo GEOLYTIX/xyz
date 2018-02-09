@@ -1,10 +1,12 @@
-const pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true
+let pgp = require('pg-promise')({
+  promiseLib: require('bluebird'),
+  noWarnings: true
 });
-
-const db = pgp(process.env.POSTGRES);
-const db_cluster = pgp(process.env.POSTGRES_MVT);
+const DBS = {};
+Object.keys(process.env).map(function (key) {
+  if (key.split('.')[0] === 'DBS')
+      DBS[key.split('.')[1]] = pgp(process.env[key])
+});
 
 const turf = require('@turf/turf');
 
@@ -49,7 +51,7 @@ function cluster(req, res){
     
     //console.log(q);
 
-    db_cluster.any(q).then(function(data){
+    DBS[req.query.dbs].any(q).then(function(data){
       res.status(200).json(data);
     });
 }
@@ -65,7 +67,7 @@ function cluster_info(req, res){
 
     // console.log(q);
 
-    db.any(q).then(function (data) {
+    DBS[req.query.dbs].any(q).then(function (data) {
         res.status(200).json(data);
     });
 }

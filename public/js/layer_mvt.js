@@ -25,10 +25,11 @@ function getLayer(){
         let layer = this,
             bounds = _xyz.map.getBounds(),
             url = localhost + 'mvt/{z}/{x}/{y}?' + utils.paramString({
-                table: this.table,
-                qField: this.qField,
-                filter: this.filter || '',
-                layer: this.layer,
+                dbs: layer.dbs,
+                table: layer.table,
+                qField: layer.qField,
+                filter: layer.filter || '',
+                layer: layer.layer,
                 west: bounds.getWest(),
                 south: bounds.getSouth(),
                 east: bounds.getEast(),
@@ -36,16 +37,16 @@ function getLayer(){
             }),
             options = {
                 rendererFactory: L.canvas.tile,
-                interactive: this.interactive || false,
-                pane: this.pane[0],
+                interactive: layer.interactive || false,
+                pane: layer.pane[0],
                 getFeatureId: function (f) {
                     return f.properties.qid;
                 },
                 vectorTileLayerStyles: {
-                    //[this.layer]: this.style
+                    //[layer.layer]: layer.style
                 }
             };
-        options.vectorTileLayerStyles[this.layer] = this.style;
+        options.vectorTileLayerStyles[layer.layer] = layer.style;
         
         this.L = L.vectorGrid.protobuf(url, options)
             .on('load', function(){

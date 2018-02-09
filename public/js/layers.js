@@ -72,12 +72,12 @@ module.exports = function(){
                 if (this.textContent === 'visibility') {
                     layer.display = true;
                     this.textContent = 'visibility_off';
-                    _xyz.pushHook('layers', layer);
+                    _xyz.pushHook('layers', layer.layer);
                     layer.getLayer();
                 } else {
                     layer.display = false;
                     this.textContent = 'visibility';
-                    _xyz.filterHook('layers', layer);
+                    _xyz.filterHook('layers', layer.layer);
                     if (layer.L) _xyz.map.removeLayer(layer.L);
                 }
             });
@@ -97,38 +97,41 @@ module.exports = function(){
                 layer.panel = utils.createElement('div', {
                     className: 'panel'
                 });
+                layer.drawer.style.maxHeight = '30px';
                 layer.drawer.appendChild(layer.panel);
 
                 layers_panel[layer.format](layer);
 
-                i = utils.createElement('i', {
-                    textContent: 'expand_less',
+                let i = utils.createElement('i', {
+                    textContent: 'expand_more',
                     className: 'material-icons cursor noselect btn',
-                    title: 'Expand layer panel'
+                    title: 'Collapse layer panel'
                 });
-                i.addEventListener('click', function () {
-                    let container = this.parentNode.parentNode;
-                    let header = this.parentNode;
-                    if (container.style.maxHeight != '30px') {
-                        container.style.maxHeight = '30px';
+
+                layer.panelToggle = function () {
+                    if (i.textContent === 'expand_less') {
+                        layer.drawer.style.maxHeight = '30px';
                         header.style.boxShadow = '0 3px 3px -3px black';
-                        this.textContent = 'expand_more';
+                        i.textContent = 'expand_more';
                         i.title = "Collapse layer panel";
                     } else {
-                        container.style.maxHeight = (layer.panel.clientHeight + this.clientHeight + 5) + 'px';
+                        layer.drawer.style.maxHeight = (layer.panel.clientHeight + 35) + 'px';
                         header.style.boxShadow = '';
-                        this.textContent = 'expand_less';
+                        i.textContent = 'expand_less';
                         i.title = "Expand layer panel";
                     }
-                });
+                };
+              
+                i.addEventListener('click',layer.panelToggle);
                 header.appendChild(i);
             }
 
-            // Display layers with display=true (default).
+            // Push hook for display:true layer (default).
             if (layer.display) {
                 _xyz.pushHook('layers', layer.layer);
-                layer.getLayer();
+                // layer.panelToggle();
             }
+            layer.getLayer();
         });
         
     };
