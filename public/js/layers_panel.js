@@ -10,7 +10,7 @@ module.exports = (function () {
             className: 'selSize',
             name: 'selSize'
         });
-        setDropDown(selSize, 'qCount');
+        setDropDown(selSize, 'grid_size');
         layer.panel.appendChild(selSize);
 
         // Legend element.
@@ -24,7 +24,7 @@ module.exports = (function () {
             className: 'selColor',
             name: 'selColor'
         });
-        setDropDown(selColor, 'qValue');
+        setDropDown(selColor, 'grid_color');
         layer.panel.appendChild(selColor);
 
         // Grid ration checkbox element.
@@ -34,9 +34,24 @@ module.exports = (function () {
             type: 'checkbox',
             id: 'chkGridRatio'
         });
+
+        // Set checked from either hook.grid_ratio or layer.grid_ratio.
+        layer.chkGridRatio.checked = layer.grid_ratio || _xyz.hooks.grid_ratio;
+        layer.grid_ratio = layer.chkGridRatio.checked;
+        if (layer.chkGridRatio.checked) _xyz.setHook('grid_ratio', true);
+
+        // Checkbox click event to toggle grid_ratio.
         layer.chkGridRatio.addEventListener('click', function () {
+            layer.grid_ratio = this.checked;
+            if (layer.grid_ratio){
+                _xyz.setHook('grid_ratio', true);
+            } else {
+                _xyz.removeHook('grid_ratio');
+            }
             layer.getLayer();
         });
+
+        // Add grid ratio checkbox to panel.
         td.appendChild(layer.chkGridRatio);
         td.appendChild(utils.createElement('label', {
             htmlFor: 'chkGridRatio'
@@ -60,12 +75,14 @@ module.exports = (function () {
                 );
             });
 
-            select.selectedIndex = _xyz.hooks[query] ? utils.getSelectOptionsIndex(select.options, _xyz.hooks[query]) : 0;
+            // Set the select from either hook[query] or layer[query].
+            select.selectedIndex = _xyz.hooks[query] || layer[query]? utils.getSelectOptionsIndex(select.options, _xyz.hooks[query] || layer[query]) : 0;
             layer[query] = select.value;
+            _xyz.setHook(query, select.value);
 
             // onchange event to set the hook and title.
             select.onchange = function () {
-                //_xyz.setHook(query, event.target.value);
+                _xyz.setHook(query, event.target.value);
                 layer[query] = event.target.value;
                 layer.getLayer();
             };
@@ -185,7 +202,6 @@ module.exports = (function () {
 
         svg.attr('height', yTrack);
 
-        // document.querySelector('#grid_legend_text__0').textContent = 'boo';
     }
 
     function cluster(layer) {

@@ -12,8 +12,8 @@ function grid(req, res) {
     let q = `SELECT
                lon,
                lat,
-               ${req.query.c} as C,
-               ${req.query.v} as V
+               ${req.query.size} size,
+               ${req.query.color} color
              FROM ${req.query.table}
              WHERE ST_DWithin(
                      ST_MakeEnvelope(
@@ -23,7 +23,7 @@ function grid(req, res) {
                        ${req.query.north},
                        4326),
                      geomcntr, 0)
-               AND ${req.query.c} >= 1 LIMIT 10000;`
+               AND ${req.query.size} >= 1 LIMIT 10000;`
  
     //console.log(q);
 

@@ -27,8 +27,8 @@ function getLayer(){
         layer.xhr.open('GET', localhost + 'q_grid?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
-            c: layer.qCount,
-            v: layer.qValue,
+            size: layer.grid_size,
+            color: layer.grid_color,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
@@ -47,15 +47,15 @@ function getLayer(){
                     pointToLayer: function (feature, latlng) {
 
                         // Distribute size between min, avg and max.
-                        let size = feature.properties.c <= layer.sizeAvg ?
-                            7 + 7 / layer.sizeAvg * feature.properties.c :
-                            14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.c - layer.sizeAvg);
+                        let size = feature.properties.size <= layer.sizeAvg ?
+                            7 + 7 / layer.sizeAvg * feature.properties.size :
+                            14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.size - layer.sizeAvg);
 
                         // Distribute color index between min, avg and max. Reduce index by 1 if index exceeds styleRange.
                         let n = layer.styleRange.length,
-                            color = feature.properties.v <= layer.colorAvg ?
-                                n / 2 / layer.colorAvg * feature.properties.v :
-                                n / 2 + n / 2 / (layer.colorMax - layer.colorAvg) * (feature.properties.v - layer.colorAvg);
+                            color = feature.properties.color <= layer.colorAvg ?
+                                n / 2 / layer.colorAvg * feature.properties.color :
+                                n / 2 + n / 2 / (layer.colorMax - layer.colorAvg) * (feature.properties.color - layer.colorAvg);
                         if (parseInt(color) === n) color -= 1;
 
                         // Return L.Marker with icon as style to pointToLayer.
@@ -63,8 +63,8 @@ function getLayer(){
                             latlng,
                             {
                                 icon: L.icon({
-                                    iconUrl: svg_symbols.dot(layer.styleRange[parseInt(color)]),
-                                    iconSize: size
+                                    iconSize: size,
+                                    iconUrl: svg_symbols.dot(layer.styleRange[parseInt(color)])
                                 }),
                                 pane: layer.pane[0],
                                 interactive: false
@@ -84,28 +84,27 @@ function getLayer(){
     }
 
     function processGrid(data){
-        let avg_c = 0,
-            avg_v = 0,
-            dots = {
+        let dots = {
                 type: "FeatureCollection",
                 features: []
             };
-
+        layer.sizeAvg = 0;
+        layer.colorAvg = 0;
         data.map(function(record){
 
             // 0 lat
             // 1 lon
-            // 2 count
-            // 3 value
+            // 2 size
+            // 3 color
             if (parseFloat(record[2]) > 0) {
                 record[2] = isNaN(record[2]) ? record[2] : parseFloat(record[2]);
                 record[3] = isNaN(record[3]) ? record[3] : parseFloat(record[3]);
 
-                // Make the value [4]
-                if (layer.chkGridRatio.checked && record[3] > 0) record[3] /= record[2]
+                // Check for grid_ratio
+                if (layer.grid_ratio && record[3] > 0) record[3] /= record[2]
 
-                avg_c += parseFloat(record[2]);
-                avg_v += isNaN(record[3]) ? 0 : parseFloat(record[3]);
+                layer.sizeAvg += parseFloat(record[2]);
+                layer.colorAvg += isNaN(record[3]) ? 0 : parseFloat(record[3]);
 
                 dots.features.push({
                     "geometry": {
@@ -114,22 +113,22 @@ function getLayer(){
                     },
                     "type": "Feature",
                     "properties": {
-                        "c": parseFloat(record[2]),
-                        "v": isNaN(record[3]) ? record[3] : parseFloat(record[3])
+                        "size": parseFloat(record[2]),
+                        "color": isNaN(record[3]) ? record[3] : parseFloat(record[3])
                     }
                 });
             }
         });
 
         layer.sizeMin = utils.getMath(data, 2, 'min');
-        layer.sizeAvg = avg_c / dots.features.length;
+        layer.sizeAvg /= dots.features.length;
         layer.sizeMax = utils.getMath(data, 2, 'max');
 
         layer.colorMin = utils.getMath(data, 3, 'min');
-        layer.colorAvg = avg_v / dots.features.length;
+        layer.colorAvg /= dots.features.length;
         layer.colorMax = utils.getMath(data, 3, 'max');
 
-        let digits = layer.chkGridRatio.checked ? 2 : 0;
+        let digits = layer.grid_ratio ? 2 : 0;
         document.getElementById('grid_legend_size__min').textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
         document.getElementById('grid_legend_size__avg').textContent = layer.sizeAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});
         document.getElementById('grid_legend_size__max').textContent = layer.sizeMax.toLocaleString('en-GB', {maximumFractionDigits: 0});

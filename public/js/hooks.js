@@ -47,6 +47,16 @@ module.exports = function(){
             history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));
         } catch(me) {}
     };
+
+    // Remove all hooks.
+    _xyz.removeHooks = function () {
+        Object.keys(_xyz.hooks).map(function (key) {
+            delete _xyz.hooks[key];
+        });    
+        try {
+            history.pushState({ hooks: true }, 'hooks', '?' + utils.paramString(_xyz.hooks));
+        } catch (me) { }
+    };
     
     // Push key into an array hook.
     _xyz.pushHook = function(key, val){

@@ -129,7 +129,7 @@ module.exports = (function () {
 
     function getSelectOptionsIndex(options, value) {
         for (let i=0; i < options.length; i++) {
-            if (options[i].value === value) return i;
+            if (options[i].value == value) return i;
         }
         return -1;
     }
