@@ -39,14 +39,14 @@ function grid(req, res) {
 
 function info(req, res) {
     let q = `SELECT
-               ${req.body.infoj} as infoj
-             FROM gb_hx_1k
+               ${req.body.infoj} AS infoj
+             FROM ${req.body.table}
              WHERE
                ST_DWithin(
                  ST_SetSRID(
                    ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'),
                    4326),
-                 gb_hx_1k.geomcntr, 0);`
+                 geomcntr, 0);`
 
     //console.log(q);
 

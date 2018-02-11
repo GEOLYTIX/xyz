@@ -3,6 +3,10 @@ const utils = require('./utils');
 
 module.exports = function Gazetteer() {
 
+    // Create the gazetteer pane.
+    _xyz.map.createPane(_xyz.gazetteer.pane[0]);
+    _xyz.map.getPane(_xyz.gazetteer.pane[0]).style.zIndex = _xyz.gazetteer.pane[1];
+
     let dom = {
         btnSearch: document.getElementById('btnSearch'),
         group: document.getElementById('gaz_group'),
@@ -217,9 +221,11 @@ module.exports = function Gazetteer() {
         if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
         _xyz.gazetteer.layer = L.geoJson(geom, {
             interactive: false,
+            pane: _xyz.gazetteer.pane[0],
             pointToLayer: function (feature, latlng) {
                 return new L.Marker(latlng, {
                     interactive: false,
+                    pane: _xyz.catchments.pane[0],
                     icon: L.icon({
                         iconUrl: _xyz.gazetteer.icon,
                         iconSize: [40, 40],

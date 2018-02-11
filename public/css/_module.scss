@@ -73,7 +73,7 @@
 
                 select {
                     width: 100%;
-                    margin: 5px 0 15px 0;
+                    margin: 5px 0;
                 }
 
                 .panel {
@@ -81,6 +81,7 @@
                     -moz-transition: opacity 300ms ease-in-out;
                     -webkit-transition: opacity 300ms ease-in-out;
                     border-bottom: 1px solid #333;
+                    padding-bottom: 5px;
                 }
 
                 .range {
@@ -88,6 +89,31 @@
 
                     input[type=range] {
                         width: 100%;
+                    }
+                }
+
+                .infojTable {
+                    width: 100%;
+                    font-size: 12px;
+                    padding-top: 5px;
+
+                    .lv-0 {
+                        font-size: 13px;
+                        font-weight: 700;
+                    }
+
+                    .lv-1 {
+                        font-size: 12px;
+                    }
+
+                    .lv-2 {
+                        font-size: 12px;
+                        padding-left: 10px;
+                    }
+
+                    .val {
+                        font-family: 'PT Mono', monospace;
+                        padding-left: 10px;
                     }
                 }
 
@@ -108,31 +134,6 @@
                             margin: 0 -2px 0 10px;
                             color: $glxgreen;
                             // text-shadow: 1px 1px 1px grey;
-                        }
-                    }
-
-                    .infojTable {
-                        width: 100%;
-                        font-size: 12px;
-                        padding-top: 5px;
-
-                        .lv-0 {
-                            font-size: 13px;
-                            font-weight: 700;
-                        }
-
-                        .lv-1 {
-                            font-size: 12px;
-                        }
-
-                        .lv-2 {
-                            font-size: 12px;
-                            padding-left: 10px;
-                        }
-
-                        .val {
-                            font-family: 'PT Mono', monospace;
-                            padding-left: 10px;
                         }
                     }
 

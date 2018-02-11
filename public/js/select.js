@@ -101,7 +101,16 @@ module.exports = function Select(){
 
         if (freeRecords.length > 0) {
             freeRecords[0].layer = layer;
-            _xyz.pushHook('select', freeRecords[0].letter + '!' + freeRecords[0].layer.layer + '!' + freeRecords[0].layer.table + '!' + freeRecords[0].layer.id + '!' + freeRecords[0].layer.marker[0] + ';' + freeRecords[0].layer.marker[1]);
+            if(layer.layer) {
+                _xyz.pushHook('select',
+                freeRecords[0].letter + '!' +
+                freeRecords[0].layer.layer + '!' +
+                freeRecords[0].layer.table + '!' +
+                freeRecords[0].layer.id + '!' +
+                freeRecords[0].layer.marker[0] + ';' +
+                freeRecords[0].layer.marker[1]);
+            }
+            
             addRecordToMap(freeRecords[0])
         }
         if (freeRecords.length === 1) dom.header[1].style.background = '#ffcc80';

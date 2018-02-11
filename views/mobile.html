@@ -27,11 +27,13 @@
         const localhost = '{{:localhost}}';
         const mapbox_token = '{{:mapbox_token}}';
         const hooks = {{:hooks}};
-        const settings = {{:settings}};
+        const _xyz = {{:settings}};
     </script>
 </head>
 
 <body>
+
+    <div class="initMask"></div>
 
     <div id="loading__mask">
         <div class="round1">
@@ -93,35 +95,26 @@
     <div class="spacer_mobile"></div>
     <div class="module_container">
         <table class="tab_bar" cellpadding="0" cellspacing="0">
-            <td class="tab_btn tab_location">
-                <i class="material-icons tab_icon">insert_comment</i>
+            <td class="tab_btn tab_layers active">
+                <i class="material-icons tab_icon">layers</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
-            <td class="tab_btn tab_grid">
-                <i class="material-icons tab_icon">blur_on</i>
+            <td class="tab_btn tab_select">
+                <i class="material-icons tab_icon">location_on</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
-            <td class="tab_btn tab_drivetime">
-                <i class="material-icons tab_icon">drive_eta</i>
-                <i class="material-icons swipe_icon">touch_app</i>
-            </td>
-            <td class="tab_btn tab_statistics">
-                <i class="material-icons tab_icon">toc</i>
+            <td class="tab_btn tab_catchments">
+                <i class="material-icons tab_icon">timer</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
         </table>
-
-       <!-- {{include tmpl=module_location /}} -->
-        
+       
         {{include tmpl=module_layers /}}
             
         {{include tmpl=module_select /}}
 
-        {{include tmpl=module_grid /}}
-
         {{include tmpl=module_catchments /}}
 
-      <!--  {{include tmpl=module_statistics /}} -->
     </div>
 
 </body>

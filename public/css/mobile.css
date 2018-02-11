@@ -437,7 +437,6 @@
     display: block; }
 
 .checkbox {
-  margin-top: 10px;
   border-spacing: 0; }
   .checkbox .box {
     position: relative;
@@ -566,16 +565,32 @@
       padding-top: 10px; }
       .module .swipe_container .swipe_page .page_content select {
         width: 100%;
-        margin: 5px 0 15px 0; }
+        margin: 5px 0; }
       .module .swipe_container .swipe_page .page_content .panel {
         transition: opacity 300ms ease-in-out;
         -moz-transition: opacity 300ms ease-in-out;
         -webkit-transition: opacity 300ms ease-in-out;
-        border-bottom: 1px solid #333; }
+        border-bottom: 1px solid #333;
+        padding-bottom: 5px; }
       .module .swipe_container .swipe_page .page_content .range {
         width: 100%; }
         .module .swipe_container .swipe_page .page_content .range input[type=range] {
           width: 100%; }
+      .module .swipe_container .swipe_page .page_content .infojTable {
+        width: 100%;
+        font-size: 12px;
+        padding-top: 5px; }
+        .module .swipe_container .swipe_page .page_content .infojTable .lv-0 {
+          font-size: 13px;
+          font-weight: 700; }
+        .module .swipe_container .swipe_page .page_content .infojTable .lv-1 {
+          font-size: 12px; }
+        .module .swipe_container .swipe_page .page_content .infojTable .lv-2 {
+          font-size: 12px;
+          padding-left: 10px; }
+        .module .swipe_container .swipe_page .page_content .infojTable .val {
+          font-family: 'PT Mono', monospace;
+          padding-left: 10px; }
       .module .swipe_container .swipe_page .page_content .drawer {
         overflow: hidden;
         transition: max-height 0.3s ease-out;
@@ -590,21 +605,6 @@
             float: right;
             margin: 0 -2px 0 10px;
             color: #079e00; }
-        .module .swipe_container .swipe_page .page_content .drawer .infojTable {
-          width: 100%;
-          font-size: 12px;
-          padding-top: 5px; }
-          .module .swipe_container .swipe_page .page_content .drawer .infojTable .lv-0 {
-            font-size: 13px;
-            font-weight: 700; }
-          .module .swipe_container .swipe_page .page_content .drawer .infojTable .lv-1 {
-            font-size: 12px; }
-          .module .swipe_container .swipe_page .page_content .drawer .infojTable .lv-2 {
-            font-size: 12px;
-            padding-left: 10px; }
-          .module .swipe_container .swipe_page .page_content .drawer .infojTable .val {
-            font-family: 'PT Mono', monospace;
-            padding-left: 10px; }
         .module .swipe_container .swipe_page .page_content .drawer .loader {
           height: 2px;
           margin-top: -2px;

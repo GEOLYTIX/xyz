@@ -140,23 +140,6 @@ function getLayer(){
     }
 }
 
-// _xyz.grid.statFromGeoJSON = function (feature) {
-//     let xhr = new XMLHttpRequest();
-//     xhr.open('POST', 'q_grid_info');
-//     xhr.setRequestHeader("Content-Type", "application/json");
-//     xhr.onload = function () {
-//         if (this.status === 200) {
-//             feature.infoj = JSON.parse(this.response);
-//             _xyz.select.addFeature(feature);
-//         }
-//     }
-//     xhr.send(JSON.stringify({
-//         infoj: _xyz.countries[_xyz.country].grid.infoj,
-//         database: _xyz.countries[_xyz.country].grid.database,
-//         geometry: feature.geometry
-//     }));
-// }
-
 module.exports = {
     getLayer: getLayer
 }

@@ -26,22 +26,22 @@ module.exports = function(){
     utils.removeClass(modules[0], 'hidden');
 
 
-    settings.location ?
-        utils.addClass(document.querySelector('.tab_location'), 'active') :
-        settings.grid ?
-            utils.addClass(document.querySelector('.tab_grid'), 'active') :
-            settings.drivetime ?
-                utils.addClass(document.querySelector('.tab_drivetime'), 'active') :
-                utils.addClass(document.querySelector('.tab_statistics'), 'active');
+    // _xyz.location ?
+    //     utils.addClass(document.querySelector('.tab_location'), 'active') :
+    //     _xyz.grid ?
+    //         utils.addClass(document.querySelector('.tab_grid'), 'active') :
+    //         _xyz.drivetime ?
+    //             utils.addClass(document.querySelector('.tab_drivetime'), 'active') :
+    //             utils.addClass(document.querySelector('.tab_statistics'), 'active');
 
 
-    if (!settings.location) document.querySelector('.tab_location').remove();
+    // if (!settings.location) document.querySelector('.tab_location').remove();
 
-    if (!settings.grid) document.querySelector('.tab_grid').remove();
+    // if (!settings.grid) document.querySelector('.tab_grid').remove();
 
-    if (!settings.drivetime) document.querySelector('.tab_drivetime').remove();
+    // if (!settings.drivetime) document.querySelector('.tab_drivetime').remove();
 
-    if (!settings.vector) document.querySelector('.tab_statistics').remove();
+    // if (!settings.vector) document.querySelector('.tab_statistics').remove();
 
     let tab_buttons = document.querySelectorAll('.tab_bar .tab_btn');
     for (let i = 0; i < tab_buttons.length; i++) {

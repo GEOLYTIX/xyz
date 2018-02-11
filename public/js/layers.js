@@ -95,6 +95,7 @@ module.exports = function(){
       
             // Add panel to layer control.
             if (layer.panel) {
+                header.style.boxShadow = '0 3px 3px -3px black';
                 layer.panel = utils.createElement('div', {
                     className: 'panel'
                 });

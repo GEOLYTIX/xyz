@@ -67,6 +67,7 @@
   "gazetteer": {
     "provider": "google",
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
+    "pane": ["gazetteer", 550],
     "style": {
       "stroke": true,
       "color": "#090",
@@ -113,7 +114,8 @@
     "provider": [
       "mapbox",
       "google"
-    ]
+    ],
+    "pane": ["catchments", 520]
   },
   "country": "UK",
   "countries": {
@@ -133,20 +135,25 @@
       "minZoom": 6,
       "maxZoom": 17,
       "catchments": {
-        "walking": {
-          "minMin": 5,
-          "defMin": 15,
-          "maxMin": 45,
-          "detail": 2,
-          "reach": 600
+        "modes": {
+          "walking": {
+            "minMin": 5,
+            "defMin": 15,
+            "maxMin": 45,
+            "detail": 2,
+            "reach": 600
+          },
+          "driving": {
+            "minMin": 15,
+            "defMin": 45,
+            "maxMin": 180,
+            "detail": 3,
+            "reach": 40
+          }
         },
-        "driving": {
-          "minMin": 15,
-          "defMin": 45,
-          "maxMin": 180,
-          "detail": 3,
-          "reach": 40
-        }
+        "dbs": "XYZ",
+        "table": "gb_hx_1k",
+        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))"
       },
       "layers": {
         "border": {
@@ -173,7 +180,6 @@
           "pane": ["grid", 515],
           "dbs": "XYZ",  
           "grid_color": "pop__11",
-          "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
           "arrayZoom": {
             "6": "gb_hx_64k",
             "7": "gb_hx_32k",
