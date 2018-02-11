@@ -65,7 +65,7 @@
     ]
   },
   "gazetteer": {
-    "provider": "mapbox",
+    "provider": "google",
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "style": {
       "stroke": true,
@@ -172,7 +172,7 @@
           "format": "grid",
           "pane": ["grid", 515],
           "dbs": "XYZ",  
-          "qValue": "pop__11",
+          "grid_color": "pop__11",
           "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))",
           "arrayZoom": {
             "6": "gb_hx_64k",
@@ -1099,9 +1099,10 @@
           "dbs": "MVT",         
           "qID": "qid",
           "table": "retailpoints",
-          "qVector": "vector",
-          "qLabel": "store",
-          "qBrand": "brand",
+          "cluster_label": "store",
+          "cluster_competitor": "brand",
+          "cluster_kmeans": 4,
+          "cluster_dbscan": 0.0075,
           "infoj": "infoj",
           "geomj": "geomj",
           "markerStyle": {
@@ -1669,9 +1670,10 @@
           "dbs": "MVT",
           "qID": "qid",
           "table": "ro_fashion",
-          "qVector": "vector",
-          "qLabel": "store_name",
-          "qBrand": "fascia",
+          "cluster_label": "store_name",
+          "cluster_competitor": "fascia",
+          "cluster_kmeans": 4,
+          "cluster_dbscan": 0.0075,
           "infoj": "infoj",
           "geomj": "geomj",
           "markerStyle": {

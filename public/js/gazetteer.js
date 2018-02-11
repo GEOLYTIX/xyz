@@ -33,6 +33,9 @@ module.exports = function Gazetteer() {
             items[key].addEventListener('click', function () {
                 dom.countrylist.style.display = 'none';
                 _xyz.country = this.dataset.country;
+                dom.country.innerHTML = _xyz.country === 'Global' ?
+                    '<i class="material-icons">language</i>' :
+                    _xyz.country;
                 _xyz.removeHooks();
                 _xyz.setHook('country', _xyz.country);
                 _xyz.setView(true);
@@ -45,7 +48,9 @@ module.exports = function Gazetteer() {
     }
 
     // Set country text in the Gazetteer box.
-    dom.country.innerHTML = _xyz.country === 'Global' ? '<i class="material-icons">language</i>' : _xyz.country;
+    dom.country.innerHTML = _xyz.country === 'Global' ?
+        '<i class="material-icons">language</i>' :
+        _xyz.country;
 
 
     // Empty input value, results and set placeholder.
