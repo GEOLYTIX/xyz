@@ -529,6 +529,7 @@
   height: 30px; }
 
 .module .dev {
+  display: none;
   color: grey; }
   .module .dev select {
     color: grey; }
@@ -654,6 +655,32 @@
     right: 0;
     color: #079e00;
     font-size: 50px; }
+
+.img-container {
+  overflow-x: scroll;
+  max-width: 280px; }
+  .img-container tr td {
+    position: relative; }
+  .img-container tr td img {
+    height: 160px; }
+  .img-container tr td .img-actions {
+    position: absolute;
+    top: 6px;
+    right: 0; }
+  .img-container button {
+    display: block;
+    background: none; }
+    .img-container button :hover {
+      cursor: pointer; }
+    .img-container button i {
+      padding: 2px;
+      width: 32px;
+      height: 28px;
+      font-size: 24px;
+      color: white;
+      align-content: center;
+      border-radius: 10%;
+      background-color: rgba(0, 0, 0, 0.6); }
 
 body {
   overflow-y: scroll;
