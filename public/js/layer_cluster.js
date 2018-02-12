@@ -140,7 +140,6 @@ function getLayer() {
                             // Remove the line marker which connects the cell with the drop down list;
                             if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
-                            // Populate and display the .location_drop with the location list table.
                             let dom = {
                                 map: document.getElementById('map'),
                                 location_drop: document.querySelector('.location_drop'),

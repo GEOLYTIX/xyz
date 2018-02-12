@@ -37,6 +37,9 @@ if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
+    
+     // for blobs that contain image
+    app.use(bodyParser.raw({limit: '50mb'}));
 
     const passport = require('./mod/' + 'passport');
     app.use(session({

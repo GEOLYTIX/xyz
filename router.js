@@ -105,6 +105,9 @@ router.get('/q_pdf_download', isLoggedIn, function(req, res){
     res.download(reportpath + req.query.report + '.pdf');
 });
 
+const images = require('./mod/images');
+router.post('/q_upload', isLoggedIn, images.save);
+
 // ACCESS CONTROLL
 router.get('/login', function (req, res) {
     res.render('login.ejs', {
