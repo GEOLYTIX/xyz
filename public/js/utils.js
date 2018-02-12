@@ -160,6 +160,28 @@ module.exports = (function () {
 
         return table;
     }
+    
+    function dataURLToBlob(dataURL){
+        let BASE64_MARKER = ';base64,';
+        
+        if (dataURL.indexOf(BASE64_MARKER) == -1) {
+            let parts = dataURL.split(','),
+                contentType = parts[0].split(':')[1],
+                raw = parts[1];
+            return new Blob([raw], {type: contentType});
+        }
+        
+        let parts = dataURL.split(BASE64_MARKER),
+            contentType = parts[0].split(':')[1],
+            raw = window.atob(parts[1]),
+            rawLength = raw.length,
+            uInt8Array = new Uint8Array(rawLength);
+        
+        for (let i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+        return new Blob([uInt8Array], {type: contentType});
+    }
 
     return {
         scrollElement: scrollElement,
@@ -173,6 +195,7 @@ module.exports = (function () {
         createElement: createElement,
         getSelectOptionsIndex: getSelectOptionsIndex,
         getMath: getMath,
-        createStatsTable: createStatsTable
+        createStatsTable: createStatsTable,
+        dataURLToBlob: dataURLToBlob
     };
 })();
