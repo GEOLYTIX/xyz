@@ -214,6 +214,7 @@ module.exports = (function () {
         let keys = Object.keys(layer.markerStyle),
             x,
             y = -10,
+            w = layer.panel.clientWidth,
             svg = d3.select(layer.legend)
                 .append('svg')
                 .attr('width', 290);
@@ -222,7 +223,7 @@ module.exports = (function () {
         for (let i = 0; i < keys.length; i++) {
 
             y = i % 2 ? y : y += 25;
-            x = i % 2 ? 155 : 15;
+            x = i % 2 ? w/2 + 15 : 15;
 
             let target = layer.markerStyle[keys[i]].style;
 

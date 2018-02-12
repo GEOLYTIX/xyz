@@ -99,7 +99,7 @@ module.exports = function(){
                 layer.panel = utils.createElement('div', {
                     className: 'panel'
                 });
-                layer.drawer.style.maxHeight = '30px';
+                layer.drawer.style.maxHeight = '35px';
                 layer.drawer.appendChild(layer.panel);
 
                 layers_panel[layer.format](layer);
@@ -112,12 +112,12 @@ module.exports = function(){
 
                 layer.panelToggle = function () {
                     if (i.textContent === 'expand_less') {
-                        layer.drawer.style.maxHeight = '30px';
+                        layer.drawer.style.maxHeight = '35px';
                         header.style.boxShadow = '0 3px 3px -3px black';
                         i.textContent = 'expand_more';
                         i.title = "Collapse layer panel";
                     } else {
-                        layer.drawer.style.maxHeight = (layer.panel.clientHeight + 35) + 'px';
+                        layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
                         header.style.boxShadow = '';
                         i.textContent = 'expand_less';
                         i.title = "Expand layer panel";

@@ -15,7 +15,13 @@
     > .header {
         position: relative;
         background-color: #eee;
-        padding: 3px;
+        @if $desktop {
+            padding: 3px;
+        }
+        @else {
+            padding: 10px;
+        }
+        
 
         @if $desktop {
             width: 99%;
@@ -44,9 +50,17 @@
         }
 
         i {
-            font-size: 30px;
-            margin-top: -5px;
-            margin-right: -5px;
+            @if $desktop {
+                font-size: 30px;
+                margin-top: -5px;
+                margin-right: -5px;
+            }
+            @else {
+                font-size: 40px;
+                margin-top: -10px;
+                margin-right: -10px;
+            }
+
             color: $glxgreen;
             float: right;
             display: none;
@@ -109,19 +123,22 @@
             margin: 15px 0;
 
             .header {
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: 600;
-                height: 25px;
+                height: 30px;
                 padding-right: 3px;
 
                 .btn {
-                    font-size: 22px;
+                    @if $desktop {
+                        font-size: 22px;
+                        margin: 0 -2px 0 10px;
+                    }
+                    @else {
+                        font-size: 27px;
+                        margin: -2px -2px 0 10px;
+                    }
                     float: right;
-                    margin: 0 -2px 0 10px;
-                    color: $glxgreen;
-
-                    // text-shadow: 1px 1px 1px grey;
-               
+                    color: $glxgreen;             
                 }
             }
 
