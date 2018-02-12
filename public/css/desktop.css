@@ -658,9 +658,9 @@
     transition: max-height 0.3s ease-out;
     margin: 15px 0; }
     .module .content .drawer .header {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
-      height: 25px;
+      height: 30px;
       padding-right: 3px; }
       .module .content .drawer .header .btn {
         font-size: 22px;

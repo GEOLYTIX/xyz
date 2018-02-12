@@ -123,9 +123,9 @@
             margin: 15px 0;
 
             .header {
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: 600;
-                height: 25px;
+                height: 30px;
                 padding-right: 3px;
 
                 .btn {
@@ -135,7 +135,7 @@
                     }
                     @else {
                         font-size: 27px;
-                        margin: -5px -2px 0 10px;
+                        margin: -2px -2px 0 10px;
                     }
                     float: right;
                     color: $glxgreen;             

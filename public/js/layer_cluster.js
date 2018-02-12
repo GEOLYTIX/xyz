@@ -138,24 +138,30 @@ function getLayer() {
 
                         if (view_mode === 'mobile') {
                             // Remove the line marker which connects the cell with the drop down list;
-                            if (_xyz.layers.layers[_layer].layerSelectionLine) _xyz.map.removeLayer(_xyz.layers.layers[_layer].layerSelectionLine);
+                            if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
                             // Populate and display the .location_drop with the location list table.
-                            _xyz.layers.dom.locationTable.innerHTML = table;
-                            _xyz.layers.dom.btnMap.style['display'] = 'none';
-                            _xyz.layers.dom.location_drop.style['display'] = 'block';
+                            let dom = {
+                                map: document.getElementById('map'),
+                                location_drop: document.querySelector('.location_drop'),
+                                location_drop__close: document.querySelector('.location_drop__close'),
+                                location_table: document.querySelector('.location_table'),
+                                map_button: document.querySelector('.map_button')
+                            };
+                            dom.location_table.innerHTML = table;
+                            dom.map_button.style['display'] = 'none';
+                            dom.location_drop.style['display'] = 'block';
 
                             // Pan map according to the location of the cluster cell;
-                            let map_dom = _xyz.layers.dom.map,
-                                map_dom__height = map_dom.clientHeight,
-                                map_dom__margin = parseInt(map_dom.style.marginTop),
-                                shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(_xyz.layers.dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
+                            let map_dom__height = dom.map.clientHeight,
+                                map_dom__margin = parseInt(dom.map.style.marginTop),
+                                shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
 
-                            _xyz.map.setZoomAround(latLng, _xyz.map.getZoom() + 1, { animate: false });
+                            _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
                             _xyz.map.panBy([0, -shiftY]);
 
                             // Draw line marker which connects hex cell with drop down.
-                            _xyz.layers.layers[_layer].layerSelectionLine = L.marker(latLng, {
+                            layer.layerSelectionLine = L.marker(e.latlng, {
                                 icon: L.icon({
                                     iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
                                     iconSize: [3, 1000],
@@ -164,14 +170,14 @@ function getLayer() {
                             }).addTo(_xyz.map);
 
                             // Button event to close the .location_drop.
-                            _xyz.layers.dom.locDropClose.addEventListener('click', function () {
-                                if (_xyz.layers.layers[_layer].layerSelectionCell) _xyz.map.removeLayer(_xyz.layers.layers[_layer].layerSelectionCell);
-                                if (_xyz.layers.layers[_layer].layerSelectionLine) _xyz.map.removeLayer(_xyz.layers.layers[_layer].layerSelectionLine);
+                            dom.location_drop__close.addEventListener('click', function () {
+                                if (layer.layerSelectionCell) _xyz.map.removeLayer(layer.layerSelectionCell);
+                                if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
-                                _xyz.map.panBy([0, parseInt(_xyz.layers.dom.location_drop.clientHeight) / 2]);
+                                _xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);
 
-                                _xyz.layers.dom.location_drop.style['display'] = 'none';
-                                _xyz.layers.dom.btnMap.style['display'] = 'block';
+                                dom.location_drop.style['display'] = 'none';
+                                dom.map_button.style['display'] = 'block';
                             });
                         }
 

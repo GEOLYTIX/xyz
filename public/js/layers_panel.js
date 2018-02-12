@@ -214,7 +214,7 @@ module.exports = (function () {
         let keys = Object.keys(layer.markerStyle),
             x,
             y = -10,
-            w = layer.panel.clientWidth;
+            w = layer.panel.clientWidth,
             svg = d3.select(layer.legend)
                 .append('svg')
                 .attr('width', 290);
