@@ -4,9 +4,9 @@ let pgp = require('pg-promise')({
 });
 const DBS = {};
 Object.keys(process.env).map(function (key) {
-    if (key.split('.')[0] === 'DBS')
-        DBS[key.split('.')[1]] = pgp(process.env[key])
-});
+    if (key.split('_')[0] === 'DBS')
+        DBS[key.split('_')[1]] = pgp(process.env[key])
+  });
 
 function fetch_tiles(req, res){
 

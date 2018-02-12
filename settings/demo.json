@@ -1460,13 +1460,18 @@
       "minZoom": 6,
       "maxZoom": 17,
       "catchments": {
-        "walking": {
-          "minMin": 5,
-          "defMin": 15,
-          "maxMin": 45,
-          "detail": 2,
-          "reach": 600
-        }
+        "modes": {
+          "walking": {
+            "minMin": 5,
+            "defMin": 15,
+            "maxMin": 45,
+            "detail": 2,
+            "reach": 600
+          }
+        },
+        "dbs": "XYZ",
+        "table": "ro_hx_1k",
+        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer, 'Gender', json_build_object ('Female', sum(gen_female__11)::integer, 'Male', sum(gen_male__11)::integer), 'Age 15-24', sum(age_15to24_gen_male__11 + age_15to24_gen_female__11)::integer, 'Age 25-34', sum(age_25to34_gen_male__11 + age_25to34_gen_female__11)::integer,    'Age 35-44', sum(age_35to44_gen_male__11 + age_35to44_gen_female__11)::integer, 'Age 45-54', sum(age_45to54_gen_male__11 + age_45to54_gen_female__11)::integer, 'Age 55-64', sum(age_55to64_gen_male__11 + age_55to64_gen_female__11)::integer),  'Education', json_build_object('Tertiary', sum(edu_tertiary_gen_m__11 + edu_tertiary_gen_f__11 + edu_tertiary_university_gen_m__11 + edu_tertiary_university_gen_f__11 + edu_tertiary_i7_gen_m__11 + edu_tertiary_i7_gen_f__11)::integer, 'Secondary', sum(edu_secondary_i3_gen_m__11 + edu_secondary_i3_gen_f__11 + edu_secondary_i3v_gen_m__11 + edu_secondary_i3v_gen_f__11 + edu_secondary_i2_l_gen_m__11 + edu_secondary_i2_l_gen_f__11)::integer, 'Primary', sum(edu_primary_i1_gen_m__11 + edu_primary_i1_gen_f__11)::integer))"
       },
       "layers": {
         "border": {

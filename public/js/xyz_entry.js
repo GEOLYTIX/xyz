@@ -49,8 +49,8 @@ _xyz.map = L
     })
     .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
 
-dom.initMask.style.width = '0';
-dom.initMask.style.opacity = 0;
+// dom.initMask.style.width = '0';
+// dom.initMask.style.opacity = 0;
 
 // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
 _xyz.setView = function(fit) {

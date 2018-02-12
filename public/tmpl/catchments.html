@@ -1,68 +1,62 @@
 <div id="catchments_module" class="module">
-    <table class="swipe_container" cellpadding="0" cellspacing="0" style="margin-left: 0">
+    <div class="header">
+        <span class="spinner">
+            <span class="bounce1"></span>
+            <span class="bounce2"></span>
+            <span class="bounce3"></span>
+        </span>
+        <i class="material-icons cursor page_backward btnOff">cancel</i>
+        <span>Catchments</span>
+    </div>
 
-        <td class="swipe_page">
-            <div class="page_header">
-                <span>Catchments</span>
+    <div class="content">
+        <p>Calculate catchments from a distance matrix.</p>
+        <span>Transit mode:</span>
+        <select class="selMode" name="selMode"></select>
+
+        <span>Please specify the maximum travel time in minutes:</span>
+        <span class="lblMinutes bold"></span>
+        <span class="bold"> minutes</span>
+        <div class="range">
+            <input class="sliMinutes" type="range">
+        </div>
+
+        <div class="dev">
+            <br>
+            <span>Detail </span>
+            <span class="lblDetail" class="bold"></span>
+            <div class="range">
+                <input class="sliDetail" type="range" min="1" max="5">
             </div>
 
-            <div class="page_content">
-                <p>Calculate catchments from a distance matrix.</p>
-                <span>Transit mode:</span>
-                <select class="selMode" name="selMode"></select>
-
-                <span>Please specify the maximum travel time in minutes:</span>
-                <span class="lblMinutes bold"></span><span class="bold"> minutes</span>
-                <div class="range">
-                    <input class="sliMinutes" type="range">
-                </div>
-
-                <div class="dev">
-                    <br>
-                    <span>Detail </span>
-                    <span class="lblDetail" class="bold"></span>
-                    <div class="range">
-                        <input class="sliDetail" type="range" min="1" max="5">
-                    </div>
-                        
-                    <br>
-                    <span>Reach </span>
-                    <span class="lblReach" class="bold"></span>
-                    <div class="range">
-                        <input class="sliReach" type="range">
-                    </div>
-                        
-                    <br>
-                    <span>Distance matrix provider:</span>
-                    <select class="selProvider" name="selProvider"></select>
-                        
-                    <table class="checkbox">
-                        <td class="box">
-                            <input type="checkbox" id="chkCatchmentsConstruction">
-                            <label for="chkCatchmentsConstruction"></label>
-                        </td>
-                        <td>Display catchment sample points and TIN.</td>
-                    </table>
-
-                </div>
-
-                <div class="md_button btnQuery">Set Catchment Location</div>
+            <br>
+            <span>Reach </span>
+            <span class="lblReach" class="bold"></span>
+            <div class="range">
+                <input class="sliReach" type="range">
             </div>
 
-        </td>
+            <br>
+            <span>Distance matrix provider:</span>
+            <select class="selProvider" name="selProvider"></select>
 
-        <td class="swipe_page">
-            <div class="page_header">
-                <span class="spinner"><span class="bounce1"></span><span class="bounce2"></span><span class="bounce3"></span></span>
-                <i class="material-icons cursor page_backward btnOff">cancel</i>
-                <span>Catchments Module</span>
-            </div>
+            <table class="checkbox">
+                <td class="box">
+                    <input type="checkbox" id="chkCatchmentsConstruction">
+                    <label for="chkCatchmentsConstruction"></label>
+                </td>
+                <td>Display catchment sample points and TIN.</td>
+            </table>
 
-            <div class="page_content" style="display: none;">
-                <table class="infojTable" cellpadding="0" cellspacing="0"></table>
-                <div class="md_button btnCopy">Copy to clipboard</div>                
-            </div>
-        </td>
+        </div>
 
-    </table>
+        <div class="md_button btnQuery">Set Catchment Location</div>
+
+    </div>
+
+    <div class="content" style="display: none;">
+        <table class="infojTable" cellpadding="0" cellspacing="0"></table>
+        <div class="md_button btnCopy">Copy to clipboard</div>
+    </div>
+
 </div>

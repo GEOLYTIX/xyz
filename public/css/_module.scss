@@ -1,171 +1,176 @@
 .module {
-    .swipe_container {
-        vertical-align: top;
-        table-layout: fixed;
-        transition: margin 250ms;
-        height: 100%;
+    .dev {
+        display: none;
+        color: grey;
 
-        .dev {
-            // display: none;
+        select {
             color: grey;
+        }
+    }
 
-            select {
-                color: grey;
-            }
+    .bold {
+        font-weight: 800;
+    }
+
+    > .header {
+        position: relative;
+        background-color: #eee;
+        padding: 3px;
+
+        @if $desktop {
+            width: 99%;
+            border-top-right-radius: 14px;
+            border-bottom-right-radius: 14px;
         }
 
-        .bold {
-            font-weight: 800;
-        }
+        box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2);
 
-        .swipe_page {
-            vertical-align: top;
+        .spinner {
+            position: absolute;
+            display: none;
+            right: 0;
 
             @if $desktop {
-                width: 310px;
-                padding: 0 20px 0 0;
+                top: 0;
             }
             @else {
-                height: 100%;
+                top: 7px;
+            }
+        }
+
+        span {
+            font-family: ffmark_bold;
+            font-size: 20px;
+        }
+
+        i {
+            font-size: 30px;
+            margin-top: -5px;
+            margin-right: -5px;
+            color: $glxgreen;
+            float: right;
+            display: none;
+        }
+    }
+
+    .content {
+        clear: both;
+        padding-top: 10px;
+
+        select {
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .panel {
+            transition: opacity 300ms ease-in-out;
+            -moz-transition: opacity 300ms ease-in-out;
+            -webkit-transition: opacity 300ms ease-in-out;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .range {
+            width: 100%;
+
+            input[type=range] {
+                width: 100%;
+            }
+        }
+
+        .infojTable {
+            width: 100%;
+            font-size: 12px;
+            padding-top: 5px;
+
+            .lv-0 {
+                font-size: 13px;
+                font-weight: 700;
             }
 
-            .page_header {
-                position: relative;
-                background-color: #eee;
-                padding: 3px;
+            .lv-1 {
+                font-size: 12px;
+            }
 
-                @if $desktop {
-                    border-top-right-radius: 14px;
-                    border-bottom-right-radius: 14px;
-                }
+            .lv-2 {
+                font-size: 12px;
+                padding-left: 10px;
+            }
 
-                box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2);
+            .val {
+                font-family: 'PT Mono', monospace;
+                padding-left: 10px;
+            }
+        }
 
-                .spinner {
-                    position: absolute;
-                    right: 0;
+        .drawer {
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin: 15px 0;
 
-                    @if $desktop {
-                        top: 0;
-                    }
-                    @else {
-                        top: 7px;
-                    }
-                }
+            .header {
+                font-size: 14px;
+                font-weight: 600;
+                height: 25px;
+                padding-right: 3px;
 
-                span {
-                    font-family: ffmark_bold;
-                    font-size: 20px;
-                }
-
-                i {
-                    font-size: 30px;
-                    margin-top: -5px;
-                    margin-right: -5px;
-                    color: $glxgreen;
+                .btn {
+                    font-size: 22px;
                     float: right;
+                    margin: 0 -2px 0 10px;
+                    color: $glxgreen;
+
+                    // text-shadow: 1px 1px 1px grey;
+               
                 }
             }
 
-            .page_content {
-                clear: both;
-                padding-top: 10px;
+            .loader {
+                height: 2px;
+                margin-top: -2px;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
 
-                select {
-                    width: 100%;
-                    margin: 5px 0;
+                // background-color: #fff;
+                display: none;
+            }
+
+            .loader:before {
+                display: block;
+                position: absolute;
+                content: "";
+                left: -200px;
+                width: 200px;
+                height: 2px;
+                background-color: #fff;
+                animation: loading 2s linear infinite;
+            }
+
+            @keyframes loading {
+                from {
+                    left: -200px;
+                    width: 30%;
                 }
 
-                .panel {
-                    transition: opacity 300ms ease-in-out;
-                    -moz-transition: opacity 300ms ease-in-out;
-                    -webkit-transition: opacity 300ms ease-in-out;
-                    border-bottom: 1px solid #333;
-                    padding-bottom: 5px;
+                50% {
+                    width: 30%;
                 }
 
-                .range {
-                    width: 100%;
-
-                    input[type=range] {
-                        width: 100%;
-                    }
+                70% {
+                    width: 70%;
                 }
 
-                .infojTable {
-                    width: 100%;
-                    font-size: 12px;
-                    padding-top: 5px;
-
-                    .lv-0 {
-                        font-size: 13px;
-                        font-weight: 700;
-                    }
-
-                    .lv-1 {
-                        font-size: 12px;
-                    }
-
-                    .lv-2 {
-                        font-size: 12px;
-                        padding-left: 10px;
-                    }
-
-                    .val {
-                        font-family: 'PT Mono', monospace;
-                        padding-left: 10px;
-                    }
+                80% {
+                    left: 50%;
                 }
 
-                .drawer {
-                    overflow: hidden;
-                    transition: max-height 0.3s ease-out;
-                    margin: 10px 0;
+                95% {
+                    left: 120%;
+                }
 
-                    .header {
-                        font-size: 14px;
-                        font-weight: 600;
-                        height: 25px;
-                        padding-right: 3px;
-
-                        .btn {
-                            font-size: 22px;
-                            float: right;
-                            margin: 0 -2px 0 10px;
-                            color: $glxgreen;
-                            // text-shadow: 1px 1px 1px grey;
-                        }
-                    }
-
-                    .loader {
-                        height: 2px;
-                        margin-top: -2px;
-                        width: 100%;
-                        position: relative;
-                        overflow: hidden;
-                        // background-color: #fff;
-                        display: none;
-                    }
-
-                    .loader:before{
-                        display: block;
-                        position: absolute;
-                        content: "";
-                        left: -200px;
-                        width: 200px;
-                        height: 2px;
-                        background-color: #fff;
-                        animation: loading 2s linear infinite;
-                    }
-                      
-                    @keyframes loading {
-                          from {left: -200px; width: 30%;}
-                          50% {width: 30%;}
-                          70% {width: 70%;}
-                          80% { left: 50%;}
-                          95% {left: 120%;}
-                          to {left: 100%;}
-                    }
+                to {
+                    left: 100%;
                 }
             }
         }

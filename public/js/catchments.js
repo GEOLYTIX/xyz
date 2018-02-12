@@ -4,8 +4,7 @@ const svg_symbols = require('./svg_symbols.js');
 module.exports = function catchments(){
     let dom = {
         map: document.getElementById('map'),
-        container: document.querySelector('#catchments_module > .swipe_container'),
-        pages: document.querySelectorAll('#catchments_module .page_content'),
+        content: document.querySelectorAll('#catchments_module > .content'),
         btnQuery: document.querySelector('#catchments_module .btnQuery'),
         btnOff: document.querySelector('#catchments_module .btnOff'),
         btnCopy: document.querySelector('#catchments_module .btnCopy'),
@@ -28,9 +27,10 @@ module.exports = function catchments(){
 
     // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
     _xyz.catchments.init = function (change_country) {
+        dom.info_table.innerHTML = '';
+        dom.content[1].style.display = 'none';
+        dom.content[0].style.display = 'block';
         removeLayer();
-        resetModule();
-
         dom.selProvider.innerHTML = '';
         _xyz.catchments.provider.forEach(function(e){
             dom.selProvider.insertAdjacentHTML('beforeend','<option value="'+e+'">'+e.charAt(0).toUpperCase()+e.slice(1)+'</option>');
@@ -55,13 +55,6 @@ module.exports = function catchments(){
         if (_xyz.catchments.layer_tin) _xyz.map.removeLayer(_xyz.catchments.layer_tin);
     }
 
-    function resetModule() {
-        dom.pages[1].style.display = 'none';
-        dom.pages[0].style.display = 'block';
-        dom.container.style.marginLeft = '0';
-        dom.info_table.innerHTML = '';
-    }
-
     function setParams(mode){
         dom.sliMinutes.min = _xyz.countries[_xyz.country].catchments.modes[mode].minMin;
         dom.sliMinutes.max = _xyz.countries[_xyz.country].catchments.modes[mode].maxMin;
@@ -79,8 +72,10 @@ module.exports = function catchments(){
 
     // Remove iso, clear info, remove hook and set container marginLeft to 0.
     dom.btnOff.addEventListener('click', function(){
+        dom.info_table.innerHTML = '';
+        dom.content[1].style.display = 'none';
+        dom.content[0].style.display = 'block';
         removeLayer();
-        resetModule();
     });
 
     dom.sliDetail.addEventListener('input', function(){
@@ -111,8 +106,7 @@ module.exports = function catchments(){
         dom.map.style.cursor = '';
         dom.btnOff.style.display = 'none';
         dom.spinner.style.display = 'block';
-        dom.pages[0].style.display = 'none';
-        dom.container.style.marginLeft = '-50%';
+        dom.content[0].style.display = 'none';
         removeLayer();
 
         // Set layerMark on origin
@@ -232,24 +226,20 @@ module.exports = function catchments(){
                 
                 dom.spinner.style.display = 'none';
                 dom.btnOff.style.display = 'block';
-                dom.pages[1].style.display = 'block';
 
-                dom.info_table.style['opacity'] = 0;
-                setTimeout(function () {
-                    
-                    dom.info_table.innerHTML = utils.createStatsTable(json.properties);
-                    dom.info_table.style['opacity'] = 1;
+                dom.content[1].style.display = 'block';
+                dom.info_table.innerHTML = utils.createStatsTable(json.properties);
 
-                    dom.btnCopy.addEventListener('click', function () {
-                        let textArea = document.createElement("textarea");
-                        textArea.style.visibility = 'none';
-                        textArea.value = JSON.stringify(json.iso);
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        textArea.remove();
-                    });
-                }, 300);
+                dom.btnCopy.addEventListener('click', function () {
+                    let textArea = document.createElement("textarea");
+                    textArea.style.visibility = 'none';
+                    textArea.value = JSON.stringify(json.iso);
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    textArea.remove();
+                });
+
             }
         };
         xhr.send();

@@ -5,11 +5,9 @@ module.exports = function Select(){
 
     // Set dom elements for the select module.
     let dom = {
-        container: document.querySelector('#select_module > .swipe_container'),
-        table: document.querySelector('#select_module .infoj'),
-        pages: document.querySelectorAll('#select_module .page_content'),
-        header: document.querySelectorAll('#select_module .page_header'),
-        btnOff: document.querySelector('#select_module .btnOff')
+        header: document.querySelector('#select_module .header'),
+        btnOff: document.querySelector('#select_module .btnOff'),
+        layers: document.querySelector('#select_module .layers')
     };
 
     // Create select pane. This pane has a shadow filter associated in the css.
@@ -45,9 +43,9 @@ module.exports = function Select(){
 
     // Reset function for the module container.
     function resetModule() {
-        dom.pages[1].innerHTML = '';
-        dom.pages[0].style.display = 'block';
-        dom.container.style.marginLeft = '0';
+        dom.btnOff.style.display = 'none';
+        dom.header.style.background = '#eee';
+        dom.layers.innerHTML = '';
         _xyz.removeHook('select');
         _xyz.select.records.map(function (record) {
             if (record.layer && record.layer.L) _xyz.map.removeLayer(record.layer.L);
@@ -97,7 +95,8 @@ module.exports = function Select(){
             if (!record.layer) return record
         });
 
-        dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((freeRecords.length - 1) / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+        dom.btnOff.style.display = 'block';
+        dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((freeRecords.length - 1) / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
         if (freeRecords.length > 0) {
             freeRecords[0].layer = layer;
@@ -113,13 +112,11 @@ module.exports = function Select(){
             
             addRecordToMap(freeRecords[0])
         }
-        if (freeRecords.length === 1) dom.header[1].style.background = '#ffcc80';
+        if (freeRecords.length === 1) dom.header.style.background = '#ffcc80';
     }
     _xyz.select.addLayerToRecord = addLayerToRecord;
 
     function addRecordToMap(record) {
-        dom.container.style.marginLeft = '-50%';
-
         if (record.layer.displayGeom) {
             record.layer.D = L.geoJson(
                 {
@@ -222,7 +219,7 @@ module.exports = function Select(){
                 if (!record.layer) return record
             });
     
-            dom.header[1].style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+            dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
             if (freeRecords.length === _xyz.select.records.length) resetModule();
         });
@@ -288,17 +285,6 @@ module.exports = function Select(){
             header.appendChild(i);
         }
 
-        // Create the expand control element which controls whether the data table is displayed for the feature.
-        // i = utils.createElement('i', {
-        //     textContent: 'view_week',
-        //     className: 'material-icons cursor noselect btn',
-        //     title: 'Add feature to comparison table'
-        // });
-        // i.style.color = record.color;
-        // i.addEventListener('click', function () {
-        // });
-        // header.appendChild(i);
-
         // Add header element to the container.
         record.layer.drawer.appendChild(header);
 
@@ -320,7 +306,7 @@ module.exports = function Select(){
         // Insert container before the next container (alphabetical order) which is not empty or at the end (null).
         let idx = _xyz.select.records.indexOf(record);
 
-        dom.pages[1].insertBefore(record.layer.drawer,dom.pages[1].children[idx]);
+        dom.layers.insertBefore(record.layer.drawer,dom.layers.children[idx]);
 
         // Populate the table from the features infoj object.
         Object.keys(record.layer.infoj).map(function (key) {
