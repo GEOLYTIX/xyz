@@ -50,7 +50,7 @@ function getLayer(){
                         pane: layer.pane[0],
                         pointToLayer: function(point, latlng){
                             return L.circleMarker(latlng, {
-                                radius: 5
+                                radius: 10
                             });
                         }
                     })
