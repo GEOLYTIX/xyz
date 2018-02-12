@@ -108,7 +108,8 @@
         360,
         "#C0C0C0"
       ]
-    ]
+    ],
+   "image_max_size": 1024
   },
   "catchments": {
     "provider": [
@@ -1026,6 +1027,7 @@
         },
         "postal_codes": {          
           "name": "Postal Codes",
+          "enable_images": false,
           "format": "mvt",
           "pane": ["postal", 520],
           "dbs": "MVT",
@@ -1046,6 +1048,7 @@
         },
         "retail_places": {
           "name": "Dominos Retail Places",
+          "enable_images": true,
           "format": "geojson",
           "pane": ["places", 530],
           "dbs": "XYZ",
