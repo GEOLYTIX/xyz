@@ -1051,7 +1051,7 @@
           "dbs": "XYZ",
           "qID": "qid",
           "displayGeom": ", areaj AS displayGeom",
-          "infoj": "json_build_object('Name', rp_name::text, 'Type', rp_type::text, 'Competition Strength', comp_strgh::integer, 'Units', est_units::integer, 'Brands', est_brands::integer, 'Comparison', comparison::integer, 'Convenience', conv::integer, 'Food, Beverage, Leisure', fbl::integer, 'Services', services::integer, 'Class|Brass', classbrass::integer)",
+          "infoj": "json_build_object('Name', rp_name::text, 'Type', rp_type::text, 'Competition Strength', comp_strgh::integer, 'Units', est_units::integer, 'Brands', est_brands::integer, 'Comparison', comparison::integer, 'Convenience', conv::integer, 'Food, Beverage, Leisure', fbl::integer, 'Services', services::integer, 'Class|Brass', classbrass::integer, 'images', images::text)",
           "geomj": "ST_AsGeoJson(geom)",
           "geom": "geom",
           "arrayZoom": {

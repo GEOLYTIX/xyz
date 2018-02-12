@@ -529,6 +529,7 @@
   height: 30px; }
 
 .module .dev {
+  display: none;
   color: grey; }
   .module .dev select {
     color: grey; }
@@ -537,7 +538,7 @@
 .module > .header {
   position: relative;
   background-color: #eee;
-  padding: 3px;
+  padding: 10px;
   box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2); }
   .module > .header .spinner {
     position: absolute;
@@ -548,9 +549,9 @@
     font-family: ffmark_bold;
     font-size: 20px; }
   .module > .header i {
-    font-size: 30px;
-    margin-top: -5px;
-    margin-right: -5px;
+    font-size: 40px;
+    margin-top: -10px;
+    margin-right: -10px;
     color: #079e00;
     float: right;
     display: none; }
@@ -595,9 +596,9 @@
       height: 25px;
       padding-right: 3px; }
       .module .content .drawer .header .btn {
-        font-size: 22px;
+        font-size: 27px;
+        margin: -5px -2px 0 10px;
         float: right;
-        margin: 0 -2px 0 10px;
         color: #079e00; }
     .module .content .drawer .loader {
       height: 2px;
@@ -777,17 +778,18 @@ button {
     display: none; }
   .module_container .module {
     position: absolute;
-    height: calc(100% - 50px); }
+    height: calc(100% - 50px);
+    width: 100%; }
     .module_container .module .page_header {
       padding: 10px; }
       .module_container .module .page_header.shadow {
         box-shadow: 0 5px 3px 0px grey; }
-    .module_container .module .page_content {
+    .module_container .module .content {
       width: calc(100% - 20px);
       height: calc(100% - 40px);
       padding: 10px;
       overflow-y: scroll; }
-      .module_container .module .page_content p {
+      .module_container .module .content p {
         padding-bottom: 10px;
         margin: 0; }
 
