@@ -30,6 +30,8 @@ let dom = {
     initMask: document.querySelector('.initMask')
 };
 
+
+
 // Set country to hook, or set hook for country.
 if (_xyz.hooks.country) {
     _xyz.country = _xyz.hooks.country;

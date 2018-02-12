@@ -13,8 +13,12 @@ module.exports = function Gazetteer() {
         input: document.getElementById('gaz_input'),
         result: document.getElementById('gaz_result'),
         country: document.getElementById('gaz_country'),
-        countrylist: document.getElementById('gaz_countrylist')
+        countrylist: document.getElementById('gaz_countrylist'),
+        geolocate: document.getElementById('btnGeolocate')
     };
+    
+    dom.geolocate.innerHTML = '<i class="material-icons">gps_fixed</i>';
+    dom.geolocate.disabled = false;
 
     // Get list of country keys and assign to country drop down.
     let countries = '';
@@ -85,6 +89,20 @@ module.exports = function Gazetteer() {
     dom.result.addEventListener('click', function(event){
         selectResult(event.target.dataset.id, event.target.dataset.source, event.target.innerHTML);
     });
+    
+    // Click event for geolocation
+    dom.geolocate.addEventListener('click', function(){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(position){
+                
+                _xyz.map.setView([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], 16);
+            });
+        } else {
+            this.innerHTML = '<i class="material-icons">gps_off</i>';
+            this.disabled = true;
+        }
+    });
+    
 
     // Initiate search on keyup with input value
     dom.input.addEventListener('keyup', function (e) {
