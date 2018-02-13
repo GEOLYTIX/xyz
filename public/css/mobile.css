@@ -437,7 +437,8 @@
     display: block; }
 
 .checkbox {
-  border-spacing: 0; }
+  border-spacing: 0;
+  font-size: small; }
   .checkbox .box {
     position: relative;
     color: #079e00; }

@@ -438,7 +438,8 @@
     display: block; }
 
 .checkbox {
-  border-spacing: 0; }
+  border-spacing: 0;
+  font-size: small; }
   .checkbox .box {
     position: relative;
     color: #090; }
@@ -909,9 +910,6 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
-
-.dev {
-  display: none; }
 
 .cursor:hover {
   cursor: pointer; }
