@@ -530,9 +530,9 @@ module.exports = function Select(){
 
         // Populate the table from the features infoj object.
         Object.keys(record.layer.infoj).map(function (key) {
+            console.log(record.layer.infoj[key]);
             if(key === 'images'){
                 addImages(record);
-                //console.log(record.layer.infoj[key]);
             } else {
                 (function processDataRow(lv, key, val) {
                     if (typeof val === 'object') {

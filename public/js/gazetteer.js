@@ -96,7 +96,7 @@ module.exports = function Gazetteer() {
             this.disabled = true;
             this.innerHTML = '<i class="material-icons">location_searching</i>';
             navigator.geolocation.getCurrentPosition(function(position){
-                
+                console.log(position);
                 _xyz.map.setView([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], 16);
                 dom.geolocate.disabled = false;
                 dom.geolocate.innerHTML = '<i class="material-icons">gps_fixed</i>';
