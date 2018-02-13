@@ -575,7 +575,8 @@
   .module .content .infojTable {
     width: 100%;
     font-size: 12px;
-    padding-top: 5px; }
+    padding-top: 5px;
+    table-layout: fixed; }
     .module .content .infojTable .lv-0 {
       font-size: 13px;
       font-weight: 700; }
@@ -709,6 +710,8 @@ a {
   position: fixed;
   width: 100%;
   height: calc(100% - 50px); }
+  .map div.leaflet-select-pane svg > g path {
+    filter: url(#dropshadow); }
   .map .mapbox-attribution-container {
     bottom: 0;
     right: 0;

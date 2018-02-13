@@ -548,18 +548,20 @@ module.exports = function Select(){
                 (function processDataRow(lv, key, val) {
                     if(key){
                         if (val && typeof(val) === 'object') {
-                            if (key.charAt(key.length -1) != '_') addToTable(lv, key, '');
+                            if (key.charAt(key.length -1) != '_') addToTable(lv, key, '', false);
                             Object.keys(val).map(function (key) {
                                 processDataRow(lv + 1, key, val[key]);
                             });
+                            
                         } else {
-                            addToTable(lv, key, val);
+                           addToTable(lv, key, val, true);
                         }
                     }
                     
-                    function addToTable(lv, key, val) {
+                    function addToTable(lv, key, val, editable) {
                         let tr = document.createElement('tr');
                         let td = document.createElement('td');
+                        
                         td.className = 'lv-' + lv;
                         td.textContent = key;
                         tr.appendChild(td);
@@ -574,11 +576,37 @@ module.exports = function Select(){
                             td = document.createElement('td');
                             td.textContent = val;
                         }
-                        
+            
                         td.className = 'val';
+                        td.contentEditable = editable;
+                        
+                        if(editable) addDropdown(key, td);
+                        
                         tr.appendChild(td);
                         table.appendChild(tr);
                     }
+                    
+                    function addDropdown(key, element){
+                        //console.log(record);
+                        //console.log(_xyz.countries[_xyz.country].layers);
+                        let survey = _xyz.countries[_xyz.country].layers[record.layer.layer].survey;   
+                        //console.log(survey);
+                        
+                        if(survey && survey.hasOwnProperty(key)){
+                            let select = document.createElement('select'),
+                                options = survey[key];
+                            
+                            //console.log(options);
+                            for(let option of options){
+                                let opt = document.createElement('option');
+                                opt.textContent = option;
+                                select.appendChild(opt);
+                            }
+                            element.appendChild(select);
+                        }
+                    }
+                    
+                    
                 })(0, key, record.layer.infoj[key])
             }
         });
