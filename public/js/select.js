@@ -549,19 +549,20 @@ module.exports = function Select(){
                 (function processDataRow(lv, key, val) {
                     if(key){
                         if (val && typeof(val) === 'object') {
-                            if (key.charAt(key.length -1) != '_') addToTable(lv, key, '');
+                            if (key.charAt(key.length -1) != '_') addToTable(lv, key, '', false);
                             Object.keys(val).map(function (key) {
                                 processDataRow(lv + 1, key, val[key]);
                             });
                             
                         } else {
-                           addToTable(lv, key, val);
+                           addToTable(lv, key, val, true);
                         }
                     }
                     
-                    function addToTable(lv, key, val) {
+                    function addToTable(lv, key, val, editable) {
                         let tr = document.createElement('tr');
                         let td = document.createElement('td');
+                        
                         td.className = 'lv-' + lv;
                         td.textContent = key;
                         tr.appendChild(td);
@@ -576,8 +577,9 @@ module.exports = function Select(){
                             td = document.createElement('td');
                             td.textContent = val;
                         }
-                        
+            
                         td.className = 'val';
+                        td.contentEditable = editable;
                         tr.appendChild(td);
                         table.appendChild(tr);
                     }

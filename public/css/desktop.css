@@ -642,7 +642,8 @@
   .module .content .infojTable {
     width: 100%;
     font-size: 12px;
-    padding-top: 5px; }
+    padding-top: 5px;
+    table-layout: fixed; }
     .module .content .infojTable .lv-0 {
       font-size: 13px;
       font-weight: 700; }
