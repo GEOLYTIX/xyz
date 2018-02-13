@@ -296,6 +296,29 @@ module.exports = function Select(){
             header.appendChild(i);
         }
 
+        // Create control to toggle marker.
+        if (record.layer.editable) {
+            i = utils.createElement('i', {
+                textContent: 'cloud_upload',
+                className: 'material-icons cursor noselect btn',
+                title: 'Save changes to cloud'
+            });
+            i.style.color = record.color;
+            i.addEventListener('click', function () {
+            });
+            header.appendChild(i);
+
+            i = utils.createElement('i', {
+                textContent: 'delete',
+                className: 'material-icons cursor noselect btn',
+                title: 'Delete feature'
+            });
+            i.style.color = record.color;
+            i.addEventListener('click', function () {
+            });
+            header.appendChild(i);
+        }
+
         // Add header element to the container.
         record.layer.drawer.appendChild(header);
 
