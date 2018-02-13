@@ -6,7 +6,6 @@ const formats = {
     grid: require('./layer_grid')
 };
 const layers_panel = require('./layers_panel');
-const svg_symbols = require('./svg_symbols');
 
 module.exports = function(){
     

@@ -183,8 +183,8 @@ module.exports = function Select(){
                         latlng,
                         {
                             icon: L.icon({
-                                iconSize: 20,
-                                iconUrl: svg_symbols.dot(record.color)
+                                iconSize: 35,
+                                iconUrl: svg_symbols.circle(record.color)
                             }),
                             pane: 'select_circle',
                             interactive: true,
