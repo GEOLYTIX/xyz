@@ -46,6 +46,10 @@ a {
   width: 100%;
   height: calc(100% - 50px);
 
+  div.leaflet-select-pane svg > g path {
+      filter: url(#dropshadow);
+  }
+
   .mapbox-attribution-container {
     bottom: 0;
     right: 0;

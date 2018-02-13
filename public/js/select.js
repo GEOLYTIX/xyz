@@ -12,7 +12,11 @@ module.exports = function Select(){
 
     // Create select pane. This pane has a shadow filter associated in the css.
     _xyz.map.createPane('select');
-    _xyz.map.getPane('select').style.zIndex = 540;
+    _xyz.map.getPane('select').style.zIndex = 600;
+    _xyz.map.createPane('select_marker');
+    _xyz.map.getPane('select_marker').style.zIndex = 601;
+    _xyz.map.createPane('select_circle');
+    _xyz.map.getPane('select_circle').style.zIndex = 602;
     // let sheet = document.styleSheets[1];
     // sheet.insertRule(".page_content { background-color: red; }", 1);
 
@@ -81,6 +85,10 @@ module.exports = function Select(){
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
                 layer.geometry = JSON.parse(json[0].geomj);
+
+                // Set marker coordinates from point geometry.
+                if (layer.geometry.type === 'Point') layer.marker = layer.geometry.coordinates;
+
                 layer.infoj = json[0].infoj;
                 layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
                 addLayerToRecord(layer);
@@ -151,7 +159,8 @@ module.exports = function Select(){
                                 iconSize: [40, 40],
                                 iconAnchor: [20, 40]
                             }),
-                            interactive: false
+                            interactive: false,
+                            pane: 'select_marker'
                         });
                     }
                 }).addTo(_xyz.map);
@@ -167,17 +176,20 @@ module.exports = function Select(){
                 style: {
                     stroke: true,
                     color: record.color,
-                    weight: 2,
-                    fill: false
+                    //weight: 2,
+                    fill: true,
+                    fillOpacity: 0
                 },
                 pointToLayer: function (feature, latlng) {
-                    return new L.Marker(latlng, {
-                        icon: L.icon({
-                            iconUrl: svg_symbols.markerLetter(record.color, record.letter),
-                            iconSize: [40, 40],
-                            iconAnchor: [20, 40]
-                        }),
-                        interactive: false
+                    return new L.CircleMarker(latlng, {
+                        radius: 13,
+                        color: record.color,
+                        weight: 9,
+                        opacity: 0.5,
+                        fill: true,
+                        fillOpacity: 0,
+                        interactive: false,
+                        pane: 'select_circle'
                     });
                 }
             }).addTo(_xyz.map);

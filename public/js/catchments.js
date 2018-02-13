@@ -73,6 +73,7 @@ module.exports = function catchments(){
     // Remove iso, clear info, remove hook and set container marginLeft to 0.
     dom.btnOff.addEventListener('click', function(){
         dom.info_table.innerHTML = '';
+        dom.btnOff.style.display = 'none';
         dom.content[1].style.display = 'none';
         dom.content[0].style.display = 'block';
         removeLayer();

@@ -133,7 +133,7 @@
           "display": true,
           "name": "Stores",
           "format": "geojson",
-          "pane": ["places", 560],
+          "pane": ["stores", 500],
           "dbs": "XYZ",
           "qID": "id",
           "infoj": "json_build_object('City', city::text)",
@@ -143,17 +143,14 @@
             "2": "store_survey"
           },
           "style": {
-            "stroke": true,
-            "color": "#e91e63",
-            "weight": 1,
-            "fillOpacity": 0
+            "stroke": false,
+            "color": "#555",
+            "fillOpacity": 1
           },
           "styleHighlight": {
-            "stroke": true,
-            "color": "#e91e63",
-            "weight": 2,
-            "fillColor": "#e91e63",
-            "fillOpacity": 0.2
+            "stroke": false,
+            "color": "#555",
+            "fillOpacity": 0.3
           }
         }
       }

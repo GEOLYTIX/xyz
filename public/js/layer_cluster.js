@@ -82,7 +82,7 @@ function getLayer() {
                             zIndexOffset: parseInt(1000 - 1000 / max * point.properties.infoj.length),
                             icon: L.icon({
                                 iconUrl: icon,
-                                iconSize: 20 + 40 / max * point.properties.infoj.length
+                                iconSize: point.properties.infoj.length === 1 ? 20: 20 + 40 / max * point.properties.infoj.length
                                 //iconSize: 20 + 40 / Math.log(max) * Math.log(point.properties.c)
                             })
                         });
