@@ -553,8 +553,9 @@ module.exports = function Select(){
                             Object.keys(val).map(function (key) {
                                 processDataRow(lv + 1, key, val[key]);
                             });
+                            
                         } else {
-                            addToTable(lv, key, val);
+                           addToTable(lv, key, val);
                         }
                     }
                     
