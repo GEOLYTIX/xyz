@@ -136,7 +136,7 @@
           "pane": ["places", 560],
           "dbs": "XYZ",
           "qID": "qID",
-          "infoj": "json_build_object('Store ID', storeid::varchar, 'Retailer', retailer::text, 'Fascia', fascia::text, 'Fascia present during site visit', fascia_site_visit::text, 'Store pitch', store_pitch::text, 'Store size in sqm', store_size_sqm::integer, 'Floorspace allocated to Sports Performance products', floorspace_sports_performance_products_pct::integer, 'Floorspace allocated to Sportswear products', floorspace_sportswear_products_pct::integer, 'Floorspace allocated to Kids Sports products', floorspace_kids_sports_products_pct::integer, 'Floorspace allocated to other products', floorspace_other_products_pct::integer, 'Adidas share of floorspace', floorspace_adidas_pct::integer, 'City', city::text, 'Comments', comments::text, 'images', images::text[])",
+          "infoj": "json_build_object('Store ID', storeid::varchar, 'Retailer', retailer::text, 'Fascia', fascia::text, 'Fascia during site visit', fascia_site_visit::text, 'Store pitch', store_pitch::text, 'Store size sqm', store_size_sqm::integer, 'Sports Performance %', floorspace_sports_performance_products_pct::integer, 'Sportswear %', floorspace_sportswear_products_pct::integer, 'Kids Sports %', floorspace_kids_sports_products_pct::integer, 'Other products %', floorspace_other_products_pct::integer, 'Adidas floorspace %', floorspace_adidas_pct::integer, 'City', city::text, 'Comments', comments::text, 'images', images::text[])",
           "geomj": "ST_AsGeoJson(geom)",
           "geom": "geom",
           "arrayZoom": {
