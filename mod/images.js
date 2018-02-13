@@ -18,7 +18,8 @@ function save(req, res){
     
     let data = [],
         feature = req.query.feature.replace(".", "+"),
-        ext = req.query.type.replace("image/", ""),
+        //ext = req.query.type.replace("image/", ""),
+        ext = 'png';
         ts = Date.now(),
         props = feature.split("+"),
         table = props[0],

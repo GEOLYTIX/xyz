@@ -312,7 +312,7 @@ module.exports = function Select(){
         
         // Show images 
         function addImages(record){
-            //console.log(record);
+            console.log(record);
             let id = record.letter,
                 feature = record.layer.qID,
                 images = record.layer.infoj.images.reverse() || [];
@@ -542,18 +542,20 @@ module.exports = function Select(){
 
         // Populate the table from the features infoj object.
         Object.keys(record.layer.infoj).map(function (key) {
+            //console.log(record.layer.infoj[key]);
             if(key === 'images'){
                 addImages(record);
-                //console.log(record.layer.infoj[key]);
             } else {
                 (function processDataRow(lv, key, val) {
-                    if (typeof val === 'object') {
-                        if (key.charAt(key.length -1) != '_') addToTable(lv, key, '');
-                        Object.keys(val).map(function (key) {
-                            processDataRow(lv + 1, key, val[key]);
-                        });
-                    } else {
-                        addToTable(lv, key, val);
+                    if(key){
+                        if (val && typeof(val) === 'object') {
+                            if (key.charAt(key.length -1) != '_') addToTable(lv, key, '');
+                            Object.keys(val).map(function (key) {
+                                processDataRow(lv + 1, key, val[key]);
+                            });
+                        } else {
+                            addToTable(lv, key, val);
+                        }
                     }
                     
                     function addToTable(lv, key, val) {
