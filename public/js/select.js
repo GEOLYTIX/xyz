@@ -580,9 +580,34 @@ module.exports = function Select(){
             
                         td.className = 'val';
                         td.contentEditable = editable;
+                        
+                        if(editable) addDropdown(key, td);
+                        
                         tr.appendChild(td);
                         table.appendChild(tr);
                     }
+                    
+                    function addDropdown(key, element){
+                        //console.log(record);
+                        //console.log(_xyz.countries[_xyz.country].layers);
+                        let survey = _xyz.countries[_xyz.country].layers[record.layer.layer].survey;   
+                        //console.log(survey);
+                        
+                        if(survey && survey.hasOwnProperty(key)){
+                            let select = document.createElement('select'),
+                                options = survey[key];
+                            
+                            //console.log(options);
+                            for(let option of options){
+                                let opt = document.createElement('option');
+                                opt.textContent = option;
+                                select.appendChild(opt);
+                            }
+                            element.appendChild(select);
+                        }
+                    }
+                    
+                    
                 })(0, key, record.layer.infoj[key])
             }
         });
