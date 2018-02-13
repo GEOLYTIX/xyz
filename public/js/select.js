@@ -66,7 +66,7 @@ module.exports = function Select(){
         });
         if (freeRecords.length === 0) return
 
-        let _layer = _xyz.countries[_xyz.country].layers[layer.layer]
+        let _layer = _xyz.countries[_xyz.country].layers[layer.layer];
 
         // Create new xhr for /q_select
         let xhr = new XMLHttpRequest();
@@ -85,10 +85,6 @@ module.exports = function Select(){
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
                 layer.geometry = JSON.parse(json[0].geomj);
-
-                // Set marker coordinates from point geometry.
-                if (layer.geometry.type === 'Point') layer.marker = layer.geometry.coordinates;
-
                 layer.infoj = json[0].infoj;
                 layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
                 addLayerToRecord(layer);
@@ -102,6 +98,9 @@ module.exports = function Select(){
         let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.layer) return record
         });
+
+        // Set marker coordinates from point geometry.
+        if (layer.geometry.type === 'Point') layer.marker = layer.geometry.coordinates;
 
         dom.btnOff.style.display = 'block';
         dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((freeRecords.length - 1) / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
@@ -176,21 +175,21 @@ module.exports = function Select(){
                 style: {
                     stroke: true,
                     color: record.color,
-                    //weight: 2,
                     fill: true,
                     fillOpacity: 0
                 },
                 pointToLayer: function (feature, latlng) {
-                    return new L.CircleMarker(latlng, {
-                        radius: 13,
-                        color: record.color,
-                        weight: 9,
-                        opacity: 0.5,
-                        fill: true,
-                        fillOpacity: 0,
-                        interactive: false,
-                        pane: 'select_circle'
-                    });
+                    return L.marker(
+                        latlng,
+                        {
+                            icon: L.icon({
+                                iconSize: 20,
+                                iconUrl: svg_symbols.dot(record.color)
+                            }),
+                            pane: 'select_circle',
+                            interactive: true,
+                            draggable: record.layer.editable
+                        });
                 }
             }).addTo(_xyz.map);
 

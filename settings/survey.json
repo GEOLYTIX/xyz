@@ -131,6 +131,7 @@
       "layers": {
         "stores": {
           "display": true,
+          "editable": true,
           "name": "Stores",
           "format": "geojson",
           "pane": ["stores", 500],

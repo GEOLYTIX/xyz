@@ -6,11 +6,13 @@ const formats = {
     grid: require('./layer_grid')
 };
 const layers_panel = require('./layers_panel');
+const svg_symbols = require('./svg_symbols');
 
 module.exports = function(){
     
     // Assign dom objects.
     let dom = {
+        map: document.getElementById('map'),
         layers: document.querySelector('#layers_module .layers')
     };
 
@@ -65,19 +67,19 @@ module.exports = function(){
 
             // Create control to toggle layer visibility.
             let i = utils.createElement('i', {
-                textContent: layer.display ? 'visibility_off' : 'visibility',
+                textContent: layer.display ? 'visibility' : 'visibility_off',
                 className: 'material-icons cursor noselect btn',
                 title: 'Toggle visibility'
             });
             i.addEventListener('click', function () {
-                if (this.textContent === 'visibility') {
+                if (this.textContent === 'visibility_off') {
                     layer.display = true;
-                    this.textContent = 'visibility_off';
+                    this.textContent = 'visibility';
                     _xyz.pushHook('layers', layer.layer);
                     layer.getLayer();
                 } else {
                     layer.display = false;
-                    this.textContent = 'visibility';
+                    this.textContent = 'visibility_off';
                     _xyz.filterHook('layers', layer.layer);
                     if (layer.L) _xyz.map.removeLayer(layer.L);
                 }
@@ -125,6 +127,36 @@ module.exports = function(){
                 };
               
                 i.addEventListener('click',layer.panelToggle);
+                header.appendChild(i);
+            }
+
+            // Add panel to layer control.
+            if (layer.editable) {
+                let i = utils.createElement('i', {
+                    textContent: 'add_location',
+                    className: 'material-icons cursor noselect btn',
+                    title: 'Create new location'
+                });
+
+                i.addEventListener('click', function(){
+                    dom.map.style.cursor = 'crosshair';
+                    _xyz.map.on('click', function(e){
+                        _xyz.map.off('click');
+                        dom.map.style.cursor = '';
+
+                        _xyz.select.addLayerToRecord({
+                            layer: layer.layer,
+                            table: layer.table,
+                            id: 'new',
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+                            },
+                            editable: true
+                        });
+               
+                    });
+                });
                 header.appendChild(i);
             }
 
