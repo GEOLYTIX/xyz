@@ -93,9 +93,13 @@ module.exports = function Gazetteer() {
     // Click event for geolocation
     dom.geolocate.addEventListener('click', function(){
         if(navigator.geolocation){
+            this.disabled = true;
+            this.innerHTML = '<i class="material-icons">location_searching</i>';
             navigator.geolocation.getCurrentPosition(function(position){
                 
                 _xyz.map.setView([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], 16);
+                dom.geolocate.disabled = false;
+                dom.geolocate.innerHTML = '<i class="material-icons">gps_fixed</i>';
             });
         } else {
             this.innerHTML = '<i class="material-icons">gps_off</i>';
