@@ -247,7 +247,7 @@ module.exports = function Gazetteer() {
             pointToLayer: function (feature, latlng) {
                 return new L.Marker(latlng, {
                     interactive: false,
-                    pane: _xyz.catchments.pane[0],
+                    pane: _xyz.gazetteer.pane[0],
                     icon: L.icon({
                         iconUrl: _xyz.gazetteer.icon,
                         iconSize: [40, 40],
