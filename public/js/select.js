@@ -300,7 +300,7 @@ module.exports = function Select(){
         
         // Show images 
         function addImages(record){
-            //console.log(record);
+            console.log(record);
             let id = record.letter,
                 feature = record.layer.qID,
                 images = record.layer.infoj.images.reverse() || [];

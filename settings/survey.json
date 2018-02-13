@@ -135,8 +135,8 @@
           "format": "geojson",
           "pane": ["places", 560],
           "dbs": "XYZ",
-          "qID": "id",
-          "infoj": "json_build_object('City', city::text)",
+          "qID": "qID",
+          "infoj": "json_build_object('City', city::text, 'images', images::text[])",
           "geomj": "ST_AsGeoJson(geom)",
           "geom": "geom",
           "arrayZoom": {
