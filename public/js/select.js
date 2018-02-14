@@ -305,6 +305,23 @@ module.exports = function Select(){
             });
             i.style.color = record.color;
             i.addEventListener('click', function () {
+
+                let _layer = _xyz.countries[_xyz.country].layers[record.layer.layer];
+
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', 'q_save');
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        _layer.getLayer();
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    dbs: _layer.dbs,
+                    table: record.layer.table,
+                    geometry: record.layer.geometry
+                }));
+
             });
             header.appendChild(i);
 

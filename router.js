@@ -88,6 +88,9 @@ router.get('/q_geojson', geojson.geojson);
 const select = require('./mod/select');
 router.get('/q_select', select.select);
 
+const edit = require('./mod/edit');
+router.post('/q_save', isLoggedIn, edit.save);
+
 const gazetteer = require('./mod/gazetteer');
 router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);
 router.get('/q_gazetteer_places', gazetteer.gazetteer_places);
