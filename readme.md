@@ -12,7 +12,7 @@ Free use of the code in this repository is allowed through a [MIT licence](https
 
 ## Dependencies
 
-We are currently using Node.js version XX in our development environment and Node.js version XX on our server which hosts demo builds of the application.
+We are currently using Node.js version 8.4.
 
 Style sheets are written with SASS/SCSS. We are currently including compiled css in the repository. With SASS installed it is possible to compile all style sheets with following command *sass -update public/css* from the application root. It is envisagened to move to Stylus in a future build and drop the Ruby development dependency.
 
@@ -25,6 +25,22 @@ Two sets of settings are required to run the framework and host an application.
 ### Environment Settings
 
 The environment settings which contain sensitive information such as data source connection strings, security information and API keys are not contained in this repository. Below is a list of environment settings which are required to run the framework.
+
+"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database",
+"DBS_GHS": "postgres://username:password@123.123.123.123:5432/database",
+"DBS_MVT": "postgres://username:password@123.123.123.123:5432/database",
+"SUBDIRECTORY": "xyz",
+"APPSETTINGS": "demo.json",
+"PORT": "3000",
+"GKEY": "google maps api key",
+"MAPBOX": "mapbox api key",
+"GNAMES": "geolytix",
+"NODE_ENV": "development",
+"MONGODB": "mongodb://localhost:27017/database",
+"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com",
+"OURSECRET": "ChinaCatSunflower",
+"HOST": "localhost:3000",
+"LOCALHOST": "http://localhost:3000/xyz/"
 
 In Visual Studio code this settings are usually stored in the .env settings file.
 
