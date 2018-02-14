@@ -75,10 +75,14 @@ module.exports = function Select(){
             table: layer.table,
             qID: _layer.qID,
             id: layer.id,
-            infoj: _layer.infoj,
+            //infoj: _layer.infoj,
+            infoj: utils.infoj2pgsql(_layer.infoj),
             geomj: _layer.geomj,
             displayGeom: _layer.displayGeom || ''
         }));
+        
+        //console.log(_layer.infoj);
+        //console.log(utils.infoj2pgsql(_layer.infoj2));
     
         // Request infoj and geometry from data source
         xhr.onload = function () {
@@ -593,7 +597,8 @@ module.exports = function Select(){
         let idx = _xyz.select.records.indexOf(record);
 
         dom.layers.insertBefore(record.layer.drawer,dom.layers.children[idx]);
-
+        
+        console.log(record.layer.infoj);
         // Populate the table from the features infoj object.
         Object.keys(record.layer.infoj).map(function (key) {
             //console.log(record.layer.infoj[key]);
