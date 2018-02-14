@@ -90,6 +90,7 @@ router.get('/q_select', select.select);
 
 const edit = require('./mod/edit');
 router.post('/q_save', isLoggedIn, edit.save);
+router.post('/q_update', isLoggedIn, edit.update);
 
 const gazetteer = require('./mod/gazetteer');
 router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);

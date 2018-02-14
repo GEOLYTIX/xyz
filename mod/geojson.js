@@ -1,12 +1,11 @@
-let pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true
-});
+const { Client } = require('pg');
 const DBS = {};
 Object.keys(process.env).map(function (key) {
-    if (key.split('_')[0] === 'DBS')
-        DBS[key.split('_')[1]] = pgp(process.env[key])
-  });
+    if (key.split('_')[0] === 'DBS') {
+        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+        DBS[key.split('_')[1]].connect();
+    }
+});
 
 function geojson(req, res) {
     let q =
@@ -25,23 +24,32 @@ function geojson(req, res) {
         ${req.query.geom},
         0.000001);`
 
-    //console.log(q);
+    /// ASYNC
+    // let result = await DBS[req.query.dbs].query(q);
+    // res.status(200).json(Object.keys(result.rows).map(row => {
+    //     return {
+    //         type: 'Feature',
+    //         geometry: JSON.parse(result.rows[row].geomj),
+    //         properties: {
+    //             id: result.rows[row].id
+    //         }
+    //     }
+    // }));
 
-    DBS[req.query.dbs].any(q)
-        .then(data => {
-            res.status(200).json(Object.keys(data).map(record => {
+    DBS[req.query.dbs].query(q)
+        .then(result => {
+            res.status(200).json(Object.keys(result.rows).map(row => {
                 return {
                     type: 'Feature',
-                    geometry: JSON.parse(data[record].geomj),
+                    geometry: JSON.parse(result.rows[row].geomj),
                     properties: {
-                        id: data[record].id
+                        id: result.rows[row].id
                     }
                 }
             }));
         })
-        .catch(error => {
-            console.log(error);
-        });
+        .catch(err => console.log(err));
+
 }
 
 module.exports = {

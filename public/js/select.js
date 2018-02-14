@@ -86,6 +86,7 @@ module.exports = function Select(){
                 let json = JSON.parse(this.responseText);
                 layer.geometry = JSON.parse(json[0].geomj);
                 layer.infoj = json[0].infoj;
+                layer.editable = _layer.editable;
                 layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
                 addLayerToRecord(layer);
             }
@@ -309,17 +310,31 @@ module.exports = function Select(){
                 let _layer = _xyz.countries[_xyz.country].layers[record.layer.layer];
 
                 let xhr = new XMLHttpRequest();
-                xhr.open('POST', 'q_save');
+                xhr.open('POST', 'q_update');
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onload = function () {
                     if (this.status === 200) {
                         _layer.getLayer();
+                        // let marker = record.layer.M.getLayers();
+                        // let circle = record.layer.L.getLayers();
+                        
+                        // marker[0].setLatLng(circle[0].getLatLng());
+                        
+                        record.layer.M
+                            .getLayers()[0]
+                            .setLatLng(record.layer.L
+                                .getLayers()[0]
+                                .getLatLng()
+                            );
+                        
                     }
                 }
                 xhr.send(JSON.stringify({
                     dbs: _layer.dbs,
                     table: record.layer.table,
-                    geometry: record.layer.geometry
+                    qID: _layer.qID,
+                    id: record.layer.id,
+                    geometry: record.layer.L.toGeoJSON().features[0].geometry
                 }));
 
             });

@@ -1,12 +1,11 @@
-let pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true
-});
+const { Client } = require('pg');
 const DBS = {};
 Object.keys(process.env).map(function (key) {
-    if (key.split('_')[0] === 'DBS')
-        DBS[key.split('_')[1]] = pgp(process.env[key])
-  });
+    if (key.split('_')[0] === 'DBS') {
+        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+        DBS[key.split('_')[1]].connect();
+    }
+});
 
 function save(req, res) {
 
@@ -17,24 +16,28 @@ function save(req, res) {
 
     console.log(q);
              
-    DBS[req.body.dbs].one(q)
-    .then(id => {
+    DBS[req.body.dbs].query(q)
+    .then(result => {
+        console.log(result);
+        res.status(200).json();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
 
-        // let feature = {
-        //     type: 'Feature',
-        //     geometry: JSON.parse(data[0].geomj),
-        //     properties: {
-        //         infoj: data[0].infoj
-        //     }
-        // };
-        // if (req.query.displayGeom) {
-        //     feature.properties['displayGeom'] = JSON.parse(data[0].displaygeom);
-        // }
+function update(req, res) {
 
-        // if (typeof data[0].infoj === 'string') data[0].infoj = JSON.parse(data[0].infoj);
+    let q =
+    `UPDATE ${req.body.table} SET
+       geom = ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326)
+       WHERE ${req.body.qID} = '${req.body.id}';`
 
-        console.log(id);
-
+    console.log(q);
+             
+    DBS[req.body.dbs].query(q)
+    .then(result => {
+        console.log(result);
         res.status(200).json();
     })
     .catch(error => {
@@ -43,5 +46,6 @@ function save(req, res) {
 }
 
 module.exports = {
-    save: save
+    save: save,
+    update: update
 };
