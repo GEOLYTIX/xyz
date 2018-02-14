@@ -21,23 +21,27 @@ function select(req, res) {
 
     //console.log(q);
              
-    DBS[req.query.dbs].any(q).then(function (data) {
+    DBS[req.query.dbs].any(q)
+        .then(data => {
 
-        // let feature = {
-        //     type: 'Feature',
-        //     geometry: JSON.parse(data[0].geomj),
-        //     properties: {
-        //         infoj: data[0].infoj
-        //     }
-        // };
-        // if (req.query.displayGeom) {
-        //     feature.properties['displayGeom'] = JSON.parse(data[0].displaygeom);
-        // }
+            // let feature = {
+            //     type: 'Feature',
+            //     geometry: JSON.parse(data[0].geomj),
+            //     properties: {
+            //         infoj: data[0].infoj
+            //     }
+            // };
+            // if (req.query.displayGeom) {
+            //     feature.properties['displayGeom'] = JSON.parse(data[0].displaygeom);
+            // }
 
-        if (typeof data[0].infoj === 'string') data[0].infoj = JSON.parse(data[0].infoj);
+            if (typeof data[0].infoj === 'string') data[0].infoj = JSON.parse(data[0].infoj);
 
-        res.status(200).json(data);
-    });
+            res.status(200).json(data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 module.exports = {

@@ -14,7 +14,8 @@ function fetch_tiles(req, res){
         x = parseInt(params[3]),
         y = parseInt(params[4]),
         z = parseInt(params[2]),
-        q = `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
+        q =
+        `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
              FROM (
                SELECT
                  ${req.query.qID} AS id,
@@ -38,13 +39,15 @@ function fetch_tiles(req, res){
 
     //console.log(q);
 
-    DBS[req.query.dbs].any(q).then(function (data) {
-        res.setHeader('Content-Type', 'application/x-protobuf');
-        res.status(200);
-        res.send(data[0].st_asmvt);
-    }).catch(function (me) {
-        console.log(me);
-    });
+    DBS[req.query.dbs].any(q)
+        .then(data => {
+            res.setHeader('Content-Type', 'application/x-protobuf');
+            res.status(200);
+            res.send(data[0].st_asmvt);
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 module.exports = {

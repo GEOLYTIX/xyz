@@ -27,17 +27,21 @@ function geojson(req, res) {
 
     //console.log(q);
 
-    DBS[req.query.dbs].any(q).then(function(data){
-        res.status(200).json(Object.keys(data).map(record => {
-            return {
-                type: 'Feature',
-                geometry: JSON.parse(data[record].geomj),
-                properties: {
-                    id: data[record].id
+    DBS[req.query.dbs].any(q)
+        .then(data => {
+            res.status(200).json(Object.keys(data).map(record => {
+                return {
+                    type: 'Feature',
+                    geometry: JSON.parse(data[record].geomj),
+                    properties: {
+                        id: data[record].id
+                    }
                 }
-            }
-        }));
-    });
+            }));
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 module.exports = {

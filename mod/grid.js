@@ -28,17 +28,21 @@ function grid(req, res) {
     //console.log(q);
 
     DBS[req.query.dbs].any(q)
-        .then(function (data) {
+        .then(data => {
             res.status(200).json(Object.keys(data).map(function (record) {
                 return Object.keys(data[record]).map(function (field) {
                     return data[record][field];
                 });
             }));
+        })
+        .catch(error => {
+            console.log(error);
         });
 }
 
 function info(req, res) {
-    let q = `SELECT
+    let q =
+        `SELECT
                ${req.body.infoj} AS infoj
              FROM ${req.body.table}
              WHERE
@@ -51,8 +55,11 @@ function info(req, res) {
     //console.log(q);
 
     DBS[req.body.dbs].any(q)
-        .then(function (data) {
+        .then(data => {
             res.status(200).json(data[0].infoj);
+        })
+        .catch(error => {
+            console.log(error);
         });
 }
 
