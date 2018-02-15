@@ -88,99 +88,132 @@ module.exports = function Gazetteer() {
         selectResult(event.target.dataset.id, event.target.dataset.source, event.target.innerHTML);
     });
     
-    // Click event for single geolocation
-    /*dom.geolocate.addEventListener('click', function(){
-        if(navigator.geolocation){
-            this.disabled = true;
-            this.innerHTML = '<i class="material-icons">location_searching</i>';
-            navigator.geolocation.getCurrentPosition(function(position){
-                console.log(position);
-                _xyz.map.setView([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], 16);
-                dom.geolocate.disabled = false;
-                dom.geolocate.innerHTML = '<i class="material-icons">gps_fixed</i>';
-            });
-        } else {
-            this.innerHTML = '<i class="material-icons">gps_off</i>';
-            this.disabled = true;
-        }
-    });*/
     // Click event for watch geolocation
     dom.btnGeolocate.addEventListener('click', function(){
 
         utils.toggleClass(this, 'active');
+
+        if (!_xyz.gazetteer.geolocationMarker) {
+
+            navigator.geolocation.watchPosition(
+                function (position) {
+                    console.log('watch: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+    
+                    if (!_xyz.gazetteer.geolocationMarker){
+                        _xyz.gazetteer.geolocationMarker = L.marker([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], {
+                            interactive: false,
+                            icon: L.icon({
+                                iconUrl: svg_symbols.markerGeolocation(),
+                                iconSize: 30
+                            })
+                        }).addTo(_xyz.map);
+    
+                        _xyz.map.flyTo(
+                            [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
+                            _xyz.countries[_xyz.country].maxZoom);
+                    }
+    
+                    _xyz.gazetteer.geolocationMarker.setLatLng([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+                    //_xyz.map.panTo(latlng);
+                },
+                function (err) {
+                    //alert(err.message);
+                    console.log(err.message);
+                },
+                {
+                    //enableHighAccuracy: false,
+                    //timeout: 3000,
+                    //maximumAge: 0
+                });
+
+        }
         
-        let id, 
-            options = {
-                enableHighAccuracy: false,
-                //timeout: 50000,
-                maximumAge: Infinity
-            };
+
 
         utils.hasClass(this, 'active') ?
-            getGeolocation() :
-            stopGeolocation();
-        
-        // get initial location
-        function getGeolocation() {
+            showGeolocation() :
+            removeGeolocation();
 
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-
-                    _xyz.gazetteer.position = [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)];
-
-                    console.log('position: ' + _xyz.gazetteer.position);
-
-                    _xyz.gazetteer.geolocationMarker = L.marker(_xyz.gazetteer.position, {
-                        interactive: false,
-                        icon: L.icon({
-                            iconUrl: svg_symbols.markerGeolocation(),
-                            iconSize: 30
-                        })
-                    }).addTo(_xyz.map);
-
-                    _xyz.map.flyTo(_xyz.gazetteer.position, _xyz.countries[_xyz.country].maxZoom);
-
-                    watchGeolocation();
-                },
-                function error(err) {
-                    alert(err.message);
-                    console.log(err.code + ': ' + err.message);
-                },
-                options
-            );
-
-        }
-        
-        function watchGeolocation(){
-
-            console.log('start geolocation watch...');
-
-            id = navigator.geolocation.watchPosition(success, error, options);
-            
-            function success(position){
-
-                let coords = position.coords,
-                    latlng = [parseFloat(coords.latitude), parseFloat(coords.longitude)];
-                
-                console.log('latlng: ' + latlng);
-                 
-                // update marker and pan the map
-                _xyz.gazetteer.geolocationMarker.setLatLng(latlng);
-                //_xyz.map.panTo(latlng);
+            function showGeolocation(){
 
             }
-            
-            function error(err){
-                alert(err.message);
-                console.log(err.code + ': ' + err.message);
-            } 
-        }
+
+            function hideGeolocation(){
+
+            }
         
-        function stopGeolocation(){
-            if(_xyz.gazetteer.geolocationMarker) _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
-            navigator.geolocation.clearWatch(id);
-            console.log('exit geolocation watch...');
-        }
+        // get initial location
+        // function getGeolocation() {
+
+        //     id = navigator.geolocation.watchPosition(
+        //         function (position) {
+        //             console.log('watch: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+
+        //             if (!_xyz.gazetteer.geolocationMarker){
+        //                 _xyz.gazetteer.geolocationMarker = L.marker([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], {
+        //                     interactive: false,
+        //                     icon: L.icon({
+        //                         iconUrl: svg_symbols.markerGeolocation(),
+        //                         iconSize: 30
+        //                     })
+        //                 }).addTo(_xyz.map);
+    
+        //                 _xyz.map.flyTo(
+        //                     [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
+        //                     _xyz.countries[_xyz.country].maxZoom);
+        //             }
+
+        //             _xyz.gazetteer.geolocationMarker.setLatLng([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+        //             //_xyz.map.panTo(latlng);
+        //         },
+        //         function (err) {
+        //             //alert(err.message);
+        //             console.log(err.message);
+        //         },
+        //         {
+        //             //enableHighAccuracy: false,
+        //             //timeout: 3000,
+        //             //maximumAge: 0
+        //         });
+
+
+            // navigator.geolocation.getCurrentPosition(
+            //     function (position) {
+            //         console.log('start: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+
+            //         _xyz.gazetteer.geolocationMarker = L.marker([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], {
+            //             interactive: false,
+            //             icon: L.icon({
+            //                 iconUrl: svg_symbols.markerGeolocation(),
+            //                 iconSize: 30
+            //             })
+            //         }).addTo(_xyz.map);
+
+            //         _xyz.map.flyTo(
+            //             [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
+            //             _xyz.countries[_xyz.country].maxZoom);
+
+            //         watchGeolocation();
+            //     },
+            //     function error(err) {
+            //         //alert(err.message);
+            //         console.log(err.message);
+            //     },
+            //     {
+            //         //enableHighAccuracy: false,
+            //         //timeout: 5000,
+            //         //maximumAge: 0
+            //     }
+            // );
+
+        //}
+              
+        // function stopGeolocation(){
+        //     if(_xyz.gazetteer.geolocationMarker) _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
+        //     _xyz.gazetteer.geolocationMarker = null;
+        //     navigator.geolocation.clearWatch(id);
+        //     console.log('...and now his watch is ended.');
+        // }
         
     });
     

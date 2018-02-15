@@ -33,12 +33,6 @@ function select(req, res) {
     DBS[req.body.dbs].query(q)
         .then(result => {
 
-            // Object.keys(result.rows[0]).map(key => {
-            //     if (req.body.infoj[key]) {
-            //         req.body.infoj[key].value = result.rows[0][key];
-            //     }
-            // });
-
             Object.keys(req.body.infoj).map(key => {
                 if (result.rows[0][req.body.infoj[key].field]) {
                     req.body.infoj[key].value = result.rows[0][req.body.infoj[key].field];

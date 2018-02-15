@@ -621,75 +621,89 @@ module.exports = function Select(){
         
         console.log(record.layer.infoj);
         // Populate the table from the features infoj object.
+
+
         Object.keys(record.layer.infoj).map(function (key) {
-            //console.log(record.layer.infoj[key]);
-            if(key === 'images'){
-                addImages(record);
-            } else {
-                (function processDataRow(lv, key, val) {
-                    if(key){
-                        if (val && typeof(val) === 'object') {
-                            if (key.charAt(key.length -1) != '_') addToTable(lv, key, '', false);
-                            Object.keys(val).map(function (key) {
-                                processDataRow(lv + 1, key, val[key]);
-                            });
-                            
-                        } else {
-                           addToTable(lv, key, val, true);
-                        }
-                    }
-                    
-                    function addToTable(lv, key, val, editable) {
+
                         let tr = document.createElement('tr');
                         let td = document.createElement('td');
                         
-                        td.className = 'lv-' + lv;
-                        td.textContent = key;
-                        tr.appendChild(td);
-                        
-                        if (isNaN(val)) {
-                            table.appendChild(tr);
-                            tr = document.createElement('tr');
-                            td = document.createElement('td');
-                            td.textContent = val;
-                            td.colSpan = '2';
-                        } else {
-                            td = document.createElement('td');
-                            td.textContent = val;
-                        }
-            
-                        td.className = 'val';
-                        td.contentEditable = editable;
-                        
-                        if(editable) addDropdown(key, td);
-                        
+                        //td.className = 'lv-' + lv;
+                        td.textContent = record.layer.infoj[key].label;
                         tr.appendChild(td);
                         table.appendChild(tr);
-                    }
-                    
-                    function addDropdown(key, element){
-                        //console.log(record);
-                        //console.log(_xyz.countries[_xyz.country].layers);
-                        let survey = _xyz.countries[_xyz.country].layers[record.layer.layer].survey;   
-                        //console.log(survey);
-                        
-                        if(survey && survey.hasOwnProperty(key)){
-                            let select = document.createElement('select'),
-                                options = survey[key];
-                            
-                            //console.log(options);
-                            for(let option of options){
-                                let opt = document.createElement('option');
-                                opt.textContent = option;
-                                select.appendChild(opt);
-                            }
-                            element.appendChild(select);
-                        }
-                    }
-                    
-                    
-                })(0, key, record.layer.infoj[key])
-            }
+
+
         });
+        // Object.keys(record.layer.infoj).map(function (key) {
+        //     //console.log(record.layer.infoj[key]);
+        //     if(key === 'images'){
+        //         addImages(record);
+        //     } else {
+        //         (function processDataRow(lv, key, val) {
+        //             if(key){
+        //                 if (val && typeof(val) === 'object') {
+        //                     if (key.charAt(key.length -1) != '_') addToTable(lv, key, '', false);
+        //                     Object.keys(val).map(function (key) {
+        //                         processDataRow(lv + 1, key, val[key]);
+        //                     });
+                            
+        //                 } else {
+        //                    addToTable(lv, key, val, true);
+        //                 }
+        //             }
+                    
+        //             function addToTable(lv, key, val, editable) {
+        //                 let tr = document.createElement('tr');
+        //                 let td = document.createElement('td');
+                        
+        //                 td.className = 'lv-' + lv;
+        //                 td.textContent = key;
+        //                 tr.appendChild(td);
+                        
+        //                 if (isNaN(val)) {
+        //                     table.appendChild(tr);
+        //                     tr = document.createElement('tr');
+        //                     td = document.createElement('td');
+        //                     td.textContent = val;
+        //                     td.colSpan = '2';
+        //                 } else {
+        //                     td = document.createElement('td');
+        //                     td.textContent = val;
+        //                 }
+            
+        //                 td.className = 'val';
+        //                 td.contentEditable = editable;
+                        
+        //                 if(editable) addDropdown(key, td);
+                        
+        //                 tr.appendChild(td);
+        //                 table.appendChild(tr);
+        //             }
+                    
+        //             function addDropdown(key, element){
+        //                 //console.log(record);
+        //                 //console.log(_xyz.countries[_xyz.country].layers);
+        //                 let survey = _xyz.countries[_xyz.country].layers[record.layer.layer].survey;   
+        //                 //console.log(survey);
+                        
+        //                 if(survey && survey.hasOwnProperty(key)){
+        //                     let select = document.createElement('select'),
+        //                         options = survey[key];
+                            
+        //                     //console.log(options);
+        //                     for(let option of options){
+        //                         let opt = document.createElement('option');
+        //                         opt.textContent = option;
+        //                         select.appendChild(opt);
+        //                     }
+        //                     element.appendChild(select);
+        //                 }
+        //             }
+                    
+                    
+        //         })(0, key, record.layer.infoj[key])
+        //     }
+        // });
     }
 }
