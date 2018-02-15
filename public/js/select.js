@@ -628,7 +628,7 @@ module.exports = function Select(){
                         let tr = document.createElement('tr');
                         let td = document.createElement('td');
                         
-                        //td.className = 'lv-' + lv;
+                        td.className = 'lv-' + record.layer.infoj[key].level;
                         td.textContent = record.layer.infoj[key].label;
                         tr.appendChild(td);
                         table.appendChild(tr);
