@@ -24,18 +24,6 @@ function geojson(req, res) {
         ${req.query.geom},
         0.000001);`
 
-    /// ASYNC
-    // let result = await DBS[req.query.dbs].query(q);
-    // res.status(200).json(Object.keys(result.rows).map(row => {
-    //     return {
-    //         type: 'Feature',
-    //         geometry: JSON.parse(result.rows[row].geomj),
-    //         properties: {
-    //             id: result.rows[row].id
-    //         }
-    //     }
-    // }));
-
     DBS[req.query.dbs].query(q)
         .then(result => {
             res.status(200).json(Object.keys(result.rows).map(row => {

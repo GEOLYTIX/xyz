@@ -143,17 +143,30 @@ module.exports = function(){
                         _xyz.map.off('click');
                         dom.map.style.cursor = '';
 
-                        _xyz.select.addLayerToRecord({
-                            layer: layer.layer,
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'q_save');
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.onload = function () {
+                            if (this.status === 200) {
+                                layer.getLayer();               
+                                _xyz.select.selectLayerFromEndpoint({
+                                    layer: layer.layer,
+                                    table: layer.table,
+                                    id: this.response,
+                                    marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
+                                    editable: true
+                                });
+                            }
+                        }
+                        xhr.send(JSON.stringify({
+                            dbs: layer.dbs,
                             table: layer.table,
-                            id: 'new',
+                            qID: layer.qID,
                             geometry: {
                                 type: 'Point',
                                 coordinates: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                             },
-                            editable: true
-                        });
-               
+                        }));            
                     });
                 });
                 header.appendChild(i);

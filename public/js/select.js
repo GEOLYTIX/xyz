@@ -317,20 +317,14 @@ module.exports = function Select(){
                 xhr.open('POST', 'q_update');
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onload = function () {
-                    if (this.status === 200) {
-                        _layer.getLayer();
-                        // let marker = record.layer.M.getLayers();
-                        // let circle = record.layer.L.getLayers();
-                        
-                        // marker[0].setLatLng(circle[0].getLatLng());
-                        
+                    if (this.status === 200) {  
+                        _layer.getLayer();                 
                         record.layer.M
                             .getLayers()[0]
                             .setLatLng(record.layer.L
                                 .getLayers()[0]
                                 .getLatLng()
                             );
-                        
                     }
                 }
                 xhr.send(JSON.stringify({
@@ -351,6 +345,39 @@ module.exports = function Select(){
             });
             i.style.color = record.color;
             i.addEventListener('click', function () {
+
+                let _layer = _xyz.countries[_xyz.country].layers[record.layer.layer];
+
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', 'q_delete');
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onload = function () {
+                    if (this.status === 200) {                   
+                        _layer.getLayer();
+                        record.layer.drawer.remove();
+
+                        _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
+                        if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
+                        if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
+                        if (record.layer.D) _xyz.map.removeLayer(record.layer.D);
+                        record.layer = null;
+            
+                        let freeRecords = _xyz.select.records.filter(function (record) {
+                            if (!record.layer) return record
+                        });
+                
+                        dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+            
+                        if (freeRecords.length === _xyz.select.records.length) resetModule();
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    dbs: _layer.dbs,
+                    table: record.layer.table,
+                    qID: _layer.qID,
+                    id: record.layer.id
+                }));
+
             });
             header.appendChild(i);
         }

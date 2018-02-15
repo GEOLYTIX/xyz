@@ -7,26 +7,34 @@ Object.keys(process.env).map(function (key) {
     }
 });
 
-function save(req, res) {
+async function newRecord(req, res) {
+    try {
+        let q =
+        `INSERT INTO ${req.body.table} (geom)
+            SELECT ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326) AS geom
+            RETURNING id;`;
 
-    let q =
-    `INSERT INTO ${req.body.table} (geom)
-       SELECT ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326) AS geom
-       RETURNING id;`
+        //console.log(q);
 
-    console.log(q);
-             
-    DBS[req.body.dbs].query(q)
-    .then(result => {
-        console.log(result);
-        res.status(200).json();
-    })
-    .catch(error => {
-        console.log(error);
-    });
+        let result = await DBS[req.body.dbs].query(q);
+
+        q =
+        `UPDATE ${req.body.table} SET
+            ${req.body.qID} = '${req.body.table + '.' + result.rows[0].id}'
+            WHERE id = '${result.rows[0].id}';`;
+
+        //console.log(q);
+
+        await DBS[req.body.dbs].query(q);
+
+        res.status(200).send(req.body.table + '.' + result.rows[0].id);
+
+    } catch (err) {
+        console.log(err.stack)
+    }
 }
 
-function update(req, res) {
+function updateRecord(req, res) {
 
     let q =
     `UPDATE ${req.body.table} SET
@@ -38,7 +46,24 @@ function update(req, res) {
     DBS[req.body.dbs].query(q)
     .then(result => {
         console.log(result);
-        res.status(200).json();
+        res.status(200).send();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+function deleteRecord(req, res) {
+
+    let q =
+    `DELETE FROM ${req.body.table} where ${req.body.qID} = '${req.body.id}';`;
+
+    console.log(q);
+             
+    DBS[req.body.dbs].query(q)
+    .then(result => {
+        console.log(result);
+        res.status(200).send();
     })
     .catch(error => {
         console.log(error);
@@ -46,6 +71,7 @@ function update(req, res) {
 }
 
 module.exports = {
-    save: save,
-    update: update
+    newRecord: newRecord,
+    updateRecord: updateRecord,
+    deleteRecord: deleteRecord
 };

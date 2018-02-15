@@ -12,14 +12,14 @@ function select(req, res) {
 
     let q =
     `SELECT
-       ${req.query.infoj} AS infoj,
+       
        ${req.query.geomj} AS geomj
        ${req.query.displayGeom}
      FROM ${req.query.table}
      WHERE
        ${req.query.qID} = '${req.query.id}';`
 
-    //console.log(q);
+    console.log(q);
              
     DBS[req.query.dbs].any(q)
         .then(data => {
@@ -35,7 +35,7 @@ function select(req, res) {
             //     feature.properties['displayGeom'] = JSON.parse(data[0].displaygeom);
             // }
 
-            if (typeof data[0].infoj === 'string') data[0].infoj = JSON.parse(data[0].infoj);
+            //if (typeof data[0].infoj === 'string') data[0].infoj = JSON.parse(data[0].infoj);
 
             res.status(200).json(data);
         })

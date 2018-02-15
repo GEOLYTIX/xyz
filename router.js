@@ -89,8 +89,9 @@ const select = require('./mod/select');
 router.get('/q_select', select.select);
 
 const edit = require('./mod/edit');
-router.post('/q_save', isLoggedIn, edit.save);
-router.post('/q_update', isLoggedIn, edit.update);
+router.post('/q_save', isLoggedIn, edit.newRecord);
+router.post('/q_update', isLoggedIn, edit.updateRecord);
+router.post('/q_delete', isLoggedIn, edit.deleteRecord);
 
 const gazetteer = require('./mod/gazetteer');
 router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);
