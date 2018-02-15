@@ -141,7 +141,7 @@
               {
                   "field": "storeid",
                   "label": "Store ID",
-                  "type": "text",,
+                  "type": "text",
                   "options": null,
                   "value": null,
                   "input": null,
