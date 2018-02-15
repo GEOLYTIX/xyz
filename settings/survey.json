@@ -143,20 +143,18 @@
                   "label": "Store ID",
                   "type": "text",
                   "options": null,
-                  "value": "test value for Store ID",
+                  "value": "null",
                   "input": null,
                   "parent": null
               },{
                   "field": "retailer",
                   "label": "Retailer",
-                  "type": "text",
-                  "value": "test value for Retailer"
+                  "type": "text"
               },
               {
                   "field": "fascia",
                   "label": "Fascia",
-                  "type": "text",
-                  "value": "test value for Fascia"
+                  "type": "text"
               },
               {
                   "field": "fascia_site_visit",
@@ -180,8 +178,7 @@
                   "label": "Sports Performance",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %",
-                  "value": "75"
+                  "parent": "Floorspace allocated to products %"
               },
               {
                   "field": "floorspace_sportswear_products_pct",
@@ -195,8 +192,7 @@
                   "label": "Kids Sports",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %",
-                  "value": "35"
+                  "parent": "Floorspace allocated to products %"
               },
               {
                   "field": "floorspace_other_products_pct",
@@ -210,14 +206,12 @@
                   "label": "Adidas floorspace",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %",
-                  "value": "15"
+                  "parent": "Floorspace allocated to products %"
               },
               {
                   "field": "city",
                   "label": "City",
-                  "type": "text",
-                  "value": "London"
+                  "type": "text"
               },
               {
                   "field": "comments",
