@@ -189,12 +189,62 @@ module.exports = (function () {
 
         return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
     }
+    
+    function markerGeolocation(){
+        let svg = d3
+            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+            .attr('width', 1000)
+            .attr('height', 1000)
+            .attr('xmlns', 'http://www.w3.org/2000/svg');
+        
+        svg
+            .append('circle')
+            .attr('cx', 500)
+            .attr('cy', 500)
+            .attr('r', 350)
+            .style('stroke', '#090')
+            .style('opacity', 0.8)
+            .style('stroke-width', 75)
+            .style('fill', 'none');
+        
+        svg
+            .append('circle')
+            .attr('cx', 500)
+            .attr('cy', 500)
+            .attr('r', 200)
+            .style('fill', '#090')
+            .style('opacity', 0.8);
+        
+        let p = d3.path();
+        
+        p.moveTo(500,150);
+        p.lineTo(500,0);
+        
+        p.moveTo(500,850);
+        p.lineTo(500,1000);
+        
+        p.moveTo(0,500);
+        p.lineTo(150,500);
+        
+        p.moveTo(850,500);
+        p.lineTo(1000,500);
+        
+        svg
+            .append('path')
+            .style('stroke', '#090')
+            .style('opacity', 0.8)
+            .style('stroke-width', 75)
+            .attr('d', p.toString());
+        
+        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+    }
 
     return {
         dot: dot,
         target: target,
         circle: circle,
         markerLetter: markerLetter,
-        markerColor: markerColor
+        markerColor: markerColor,
+        markerGeolocation: markerGeolocation
     };
 })();
