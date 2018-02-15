@@ -1,5 +1,6 @@
 const L = require('leaflet');
 const utils = require('./utils');
+const svg_symbols = require('./svg_symbols');
 
 module.exports = function Gazetteer() {
 
@@ -17,8 +18,12 @@ module.exports = function Gazetteer() {
         geolocate: document.getElementById('btnGeolocate')
     };
     
-    dom.geolocate.innerHTML = '<i class="material-icons">gps_fixed</i>';
-    dom.geolocate.disabled = false;
+    // onload geolocation button is reset
+    //dom.geolocate.innerHTML = '<i class="material-icons">gps_fixed</i>';
+    dom.geolocate.innerHTML = '<i class="material-icons">location_searching</i>';
+    //dom.geolocate.innerHTML = '<i class="material-icons">gps_off</i>';
+    //dom.geolocate.disabled = false;
+    _xyz.gazetteer.geolocation = false;
 
     // Get list of country keys and assign to country drop down.
     let countries = '';
@@ -90,8 +95,8 @@ module.exports = function Gazetteer() {
         selectResult(event.target.dataset.id, event.target.dataset.source, event.target.innerHTML);
     });
     
-    // Click event for geolocation
-    dom.geolocate.addEventListener('click', function(){
+    // Click event for single geolocation
+    /*dom.geolocate.addEventListener('click', function(){
         if(navigator.geolocation){
             this.disabled = true;
             this.innerHTML = '<i class="material-icons">location_searching</i>';
@@ -105,6 +110,85 @@ module.exports = function Gazetteer() {
             this.innerHTML = '<i class="material-icons">gps_off</i>';
             this.disabled = true;
         }
+    });*/
+    // Click event for watch geolocation
+    dom.geolocate.addEventListener('click', function(){
+        
+        let id, 
+            btn = this,
+            options = {
+                enableHighAccuracy: false,
+                timeout: 50000,
+                maximumAge: Infinity
+            };
+        
+        _xyz.gazetteer.geolocation ? _xyz.gazetteer.geolocation = false : _xyz.gazetteer.geolocation = true;
+        _xyz.gazetteer.geolocation ? getGeolocation(id, options) : stopGeolocation(id);
+        
+        // get initial location
+        function getGeolocation(id, options){
+            btn.innerHTML = '<i class="material-icons">location_searching</i>';
+            navigator.geolocation.getCurrentPosition(function(position){
+                _xyz.gazetteer.position = [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)];
+                
+                console.log('position');
+                console.log(_xyz.gazetteer.position);
+                
+                if(_xyz.gazetteer.geolocationMarker){
+                    // watch and update position if exists
+                    watchGeolocation(id, options);
+                } else {
+                // create new marker and set map
+                    btn.innerHTML = '<i class="material-icons">gps_fixed</i>';
+                    _xyz.map.flyTo(_xyz.gazetteer.position, 16);
+                    _xyz.gazetteer.geolocationMarker = L.marker(_xyz.gazetteer.position, {
+                        interactive: false,
+                        icon: L.icon({
+                            iconUrl: svg_symbols.markerGeolocation(),
+                            iconSize: 30
+                        })
+                    }).addTo(_xyz.map);
+                }
+            });
+            
+            // disable geolocation on mousedown
+            _xyz.map.addEventListener('mousedown', function(){
+                stopGeolocation(id);
+            });
+        }
+        
+        function watchGeolocation(id, options){
+            console.log('start geolocation watch... ' + _xyz.gazetteer.geolocation);
+            id = navigator.geolocation.watchPosition(success, error, options);
+            
+            function success(position){
+                btn.innerHTML = '<i class="material-icons">gps_fixed</i>';
+                let coords = position.coords,
+                    latlng = [parseFloat(coords.latitude), parseFloat(coords.longitude)];
+                
+                console.log('latlng');
+                console.log(latlng);
+                 
+                // update marker and pan the map
+                _xyz.gazetteer.geolocationMarker.setLatLng(latlng);
+                _xyz.map.panTo(latlng);
+
+            }
+            
+            function error(err){
+                if(_xyz.gazetteer.geolocationMarker) _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
+                console.log('Geolocation watch ERROR(' + err.code + '): ' + err.message);
+                _xyz.gazetteer.geolocation ? getGeolocation(id, options) : stopGeolocation(id);
+            } 
+        }
+        
+        function stopGeolocation(id){
+            if(_xyz.gazetteer.geolocationMarker) _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
+            console.log('exit geolocation watch... ' + _xyz.gazetteer.geolocation);
+            navigator.geolocation.clearWatch(id);
+            btn.innerHTML = '<i class="material-icons">location_searching</i>';
+        }
+        
     });
     
 
