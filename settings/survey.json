@@ -220,7 +220,7 @@
               },
               {
                   "field": "images",
-                  "label": null,
+                  "label": "images",
                   "type": "text[]",
               }
           ],
