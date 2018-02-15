@@ -1,47 +1,46 @@
-let pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true
-});
+const { Client } = require('pg');
 const DBS = {};
 Object.keys(process.env).map(function (key) {
-    if (key.split('_')[0] === 'DBS')
-        DBS[key.split('_')[1]] = pgp(process.env[key])
-  });
+    if (key.split('_')[0] === 'DBS') {
+        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+        DBS[key.split('_')[1]].connect();
+    }
+});
 
 function select(req, res) {
 
+    let fields = '';
+    Object.keys(req.body.infoj).map(key => {
+        if (req.body.infoj[key].type === 'integer') {
+            fields += key + '::' + req.body.infoj[key].type + ' AS ' + key + ',';
+        }
+    });
+
     let q =
     `SELECT
-       
-       ${req.query.geomj} AS geomj
-       ${req.query.displayGeom}
-     FROM ${req.query.table}
+        ${fields}
+        ${req.body.geomj} AS geomj
+        ${req.body.displayGeom}
+     FROM ${req.body.table}
      WHERE
-       ${req.query.qID} = '${req.query.id}';`
+        ${req.body.qID} = '${req.body.id}';`
 
     console.log(q);
-             
-    DBS[req.query.dbs].any(q)
-        .then(data => {
 
-            // let feature = {
-            //     type: 'Feature',
-            //     geometry: JSON.parse(data[0].geomj),
-            //     properties: {
-            //         infoj: data[0].infoj
-            //     }
-            // };
-            // if (req.query.displayGeom) {
-            //     feature.properties['displayGeom'] = JSON.parse(data[0].displaygeom);
-            // }
+    DBS[req.query.dbs].query(q)
+        .then(result => {
 
-            //if (typeof data[0].infoj === 'string') data[0].infoj = JSON.parse(data[0].infoj);
+            Object.keys(result.rows[0]).map(key => {
+                if (req.body.infoj[key]) req.body.infoj[key].value = result.rows[0].key;
+            });
 
-            res.status(200).json(data);
+            res.status(200).json({
+                geomj: result.rows[0].geomj,
+                infoj: req.body.infoj
+            });
+            
         })
-        .catch(error => {
-            console.log(error);
-        });
+    .catch(err => console.log(err));
 }
 
 module.exports = {
