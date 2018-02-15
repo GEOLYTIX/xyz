@@ -86,7 +86,7 @@ const geojson = require('./mod/geojson');
 router.get('/q_geojson', geojson.geojson);
 
 const select = require('./mod/select');
-router.get('/q_select', select.select);
+router.post('/q_select', isLoggedIn, select.select);
 
 const edit = require('./mod/edit');
 router.post('/q_save', isLoggedIn, edit.newRecord);

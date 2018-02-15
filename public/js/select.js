@@ -74,8 +74,8 @@ module.exports = function Select(){
         xhr.onload = function () {
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
-                layer.geometry = JSON.parse(json[0].geomj);
-                layer.infoj = json[0].infoj;
+                layer.geometry = JSON.parse(json.geomj);
+                layer.infoj = json.infoj;
                 layer.editable = _layer.editable;
                 layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
                 addLayerToRecord(layer);
