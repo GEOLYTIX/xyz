@@ -165,7 +165,7 @@ module.exports = function(){
                             geometry: {
                                 type: 'Point',
                                 coordinates: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
-                            },
+                            }
                         }));            
                     });
                 });

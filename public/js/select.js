@@ -66,25 +66,11 @@ module.exports = function Select(){
         });
         if (freeRecords.length === 0) return
 
-        let _layer = _xyz.countries[_xyz.country].layers[layer.layer];
+        let _layer = _xyz.countries[_xyz.country].layers[layer.layer];   
 
-        // Create new xhr for /q_select
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', localhost + 'q_select?' + utils.paramString({
-            dbs: _layer.dbs,
-            table: layer.table,
-            qID: _layer.qID,
-            id: layer.id,
-            //infoj: _layer.infoj,
-            infoj: utils.infoj2pgsql(_layer.infoj),
-            geomj: _layer.geomj,
-            displayGeom: _layer.displayGeom || ''
-        }));
-        
-        //console.log(_layer.infoj);
-        //console.log(utils.infoj2pgsql(_layer.infoj2));
-    
-        // Request infoj and geometry from data source
+        xhr.open('POST', 'q_select');
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = function () {
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
@@ -95,7 +81,15 @@ module.exports = function Select(){
                 addLayerToRecord(layer);
             }
         }
-        xhr.send();
+        xhr.send(JSON.stringify({
+            dbs: _layer.dbs,
+            table: layer.table,
+            qID: _layer.qID,
+            id: layer.id,
+            infoj: _layer.infoj,
+            geomj: _layer.geomj,
+            displayGeom: _layer.displayGeom || ''
+        }));  
     }
     _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
 

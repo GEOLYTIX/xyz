@@ -141,7 +141,7 @@
               {
                   "field": "storeid",
                   "label": "Store ID",
-                  "type": "text",,
+                  "type": "text",
                   "options": null,
                   "value": null,
                   "input": null,
@@ -154,7 +154,7 @@
               {
                   "field": "fascia",
                   "label": "Fascia",
-                  "type": "text",
+                  "type": "text"
               },
               {
                   "field": "fascia_site_visit",
@@ -211,17 +211,17 @@
               {
                   "field": "city",
                   "label": "City",
-                  "type": "text",
+                  "type": "text"
               },
               {
                   "field": "comments",
                   "label": "Comments",
-                  "type": "text",
+                  "type": "text"
               },
               {
                   "field": "images",
                   "label": null,
-                  "type": "text[]",
+                  "type": "text[]"
               }
           ],
           "infoj2": "json_build_object('Store ID', storeid::varchar, 'Retailer', retailer::text, 'Fascia', fascia::text, 'Fascia during site visit', fascia_site_visit::text, 'Store pitch', store_pitch::text, 'Store size sqm', store_size_sqm::integer, 'Floorspace allocated to products %', json_build_object('Sports Performance', floorspace_sports_performance_products_pct::integer, 'Sportswear', floorspace_sportswear_products_pct::integer, 'Kids Sports', floorspace_kids_sports_products_pct::integer, 'Other products', floorspace_other_products_pct::integer, 'Adidas floorspace', floorspace_adidas_pct::integer), 'City', city::text, 'Comments', comments::text, 'images', images::text[])",
