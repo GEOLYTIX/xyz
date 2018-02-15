@@ -145,8 +145,9 @@
                   "options": null,
                   "value": "null",
                   "input": null,
-                  "parent": null
-              },{
+                  "level": 0
+              },
+              {
                   "field": "retailer",
                   "label": "Retailer",
                   "type": "text"
@@ -174,39 +175,42 @@
                   "options": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "more than 5000"]
               },
               {
+                  "label": "Floorspace allocated to products %"
+              },
+              {
                   "field": "floorspace_sports_performance_products_pct",
                   "label": "Sports Performance",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %"
+                  "level": 1
               },
               {
                   "field": "floorspace_sportswear_products_pct",
                   "label": "Sportswear",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %"
+                  "level": 1
               },
               {
                   "field": "floorspace_kids_sports_products_pct",
                   "label": "Kids Sports",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %"
+                  "level": 1
               },
               {
                   "field": "floorspace_other_products_pct",
                   "label": "Other products",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %"
+                  "level": 1
               },
               {
                   "field": "floorspace_adidas_pct",
                   "label": "Adidas floorspace",
                   "type": "integer",
                   "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                  "parent": "Floorspace allocated to products %"
+                  "level": 1
               },
               {
                   "field": "city",
