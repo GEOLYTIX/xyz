@@ -137,57 +137,93 @@
           "pane": ["stores", 500],
           "dbs": "XYZ",
           "qID": "qID",
-          "infoj": {
-              "storeid::varchar": {
-                  "label": "Store ID"
+          "infoj": [
+              {
+                  "field": "storeid",
+                  "label": "Store ID",
+                  "type": "text",,
+                  "options": null,
+                  "value": null,
+                  "input": null,
+                  "parent": null
+              },{
+                  "field": "retailer",
+                  "label": "Retailer",
+                  "type": "text"
               },
-              "retailer::text": {
-                  "label": "Retailer"
+              {
+                  "field": "fascia",
+                  "label": "Fascia",
+                  "type": "text",
               },
-              "fascia::text": {
-                  "label": "Fascia"
+              {
+                  "field": "fascia_site_visit",
+                  "label": "Fascia during site visit",
+                  "type": "text"
               },
-              "fascia_site_visit::text": {
-                  "label": "Fascia during site visit"
-              },
-              "store_pitch::text": {
+              {
+                  "field": "store_pitch",
                   "label": "Store pitch",
+                  "type": "text",
                   "options": ["Very Good", "Good", "Average", "Poor", "Terrible"]
               },
-              "store_size_sqm::integer": {
+              {
+                  "field": "store_size_sqm",
                   "label": "Store size sqm",
+                  "type": "text",
                   "options": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "more than 5000"]
               },
-              "floorspace_allocated_to_products": {
-                  "label": "Floorspace allocated to products %",
-                  "items" : {
-                      "floorspace_sports_performance_products_pct::integer": { 
-                          "label": "Sports Performance",
-                          "options": [ 0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100 ]
-                      },
-                      "floorspace_sportswear_products_pct::integer": { 
-                          "label": "Sportswear",
-                          "options": [ 0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100 ] 
-                      },
-                      "floorspace_kids_sports_products_pct::integer": {
-                          "label": "Kids Sports",
-                          "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
-                      },
-                      "floorspace_other_products_pct::integer": {
-                          "label": "Other products",
-                          "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
-                      },
-                      "floorspace_adidas_pct::integer": {
-                          "label": "Adidas floorspace",
-                          "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
-                      }
-                  }
+              {
+                  "field": "floorspace_sports_performance_products_pct",
+                  "label": "Sports Performance",
+                  "type": "integer",
+                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "parent": "Floorspace allocated to products %"
               },
-              "city::text": {
-                  "label": "City"
+              {
+                  "field": "floorspace_sportswear_products_pct",
+                  "label": "Sportswear",
+                  "type": "integer",
+                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "parent": "Floorspace allocated to products %"
               },
-              "images::text[]": "images"
-          },
+              {
+                  "field": "floorspace_kids_sports_products_pct",
+                  "label": "Kids Sports",
+                  "type": "integer",
+                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "parent": "Floorspace allocated to products %"
+              },
+              {
+                  "field": "floorspace_other_products_pct",
+                  "label": "Other products",
+                  "type": "integer",
+                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "parent": "Floorspace allocated to products %"
+              },
+              {
+                  "field": "floorspace_adidas_pct",
+                  "label": "Adidas floorspace",
+                  "type": "integer",
+                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "parent": "Floorspace allocated to products %"
+              },
+              {
+                  "field": "city",
+                  "label": "City",
+                  "type": "text",
+              },
+              {
+                  "field": "comments",
+                  "label": "Comments",
+                  "type": "text",
+              },
+              {
+                  "field": "images",
+                  "label": null,
+                  "type": "text[]",
+              }
+          ],
           "infoj2": "json_build_object('Store ID', storeid::varchar, 'Retailer', retailer::text, 'Fascia', fascia::text, 'Fascia during site visit', fascia_site_visit::text, 'Store pitch', store_pitch::text, 'Store size sqm', store_size_sqm::integer, 'Floorspace allocated to products %', json_build_object('Sports Performance', floorspace_sports_performance_products_pct::integer, 'Sportswear', floorspace_sportswear_products_pct::integer, 'Kids Sports', floorspace_kids_sports_products_pct::integer, 'Other products', floorspace_other_products_pct::integer, 'Adidas floorspace', floorspace_adidas_pct::integer), 'City', city::text, 'Comments', comments::text, 'images', images::text[])",
           "geomj": "ST_AsGeoJson(geom)",
           "geom": "geom",
