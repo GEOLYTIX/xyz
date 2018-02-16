@@ -624,18 +624,6 @@ module.exports = function Select(){
 
 
         Object.keys(record.layer.infoj).map(function (key) {
-<<<<<<< Updated upstream
-
-                        let tr = document.createElement('tr');
-                        let td = document.createElement('td');
-                        
-                        td.className = 'lv-' + record.layer.infoj[key].level;
-                        td.textContent = record.layer.infoj[key].label;
-                        tr.appendChild(td);
-                        table.appendChild(tr);
-
-
-=======
             
             //console.log(record.layer.infoj[key]);
             
@@ -647,13 +635,13 @@ module.exports = function Select(){
                 let tr = document.createElement('tr');
                 let td = document.createElement('td');
                                         
-                //td.className = 'lv-' + lv;
+                td.className = 'lv-' + record.layer.infoj[key].level;
                 td.textContent = record.layer.infoj[key].label;
                 tr.appendChild(td);
-                table.appendChild(tr);   
+                table.appendChild(tr); 
             }
             
->>>>>>> Stashed changes
+
         });
         // Object.keys(record.layer.infoj).map(function (key) {
         //     //console.log(record.layer.infoj[key]);
