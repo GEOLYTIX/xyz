@@ -16,8 +16,9 @@ function getLayer() {
             dbs: layer.dbs,
             layer: layer.table,
             qID: layer.qID,
+            geom: layer.geom,
             label: layer.cluster_label,
-            competitor: layer.cluster_competitor,
+            competitor: layer.cluster_competitor || null,
             kmeans: layer.cluster_kmeans,
             dbscan: layer.cluster_dbscan,
             west: bounds.getWest(),
@@ -47,7 +48,7 @@ function getLayer() {
                         let icon,
                             count = point.properties.infoj.length;
 
-                        if (count > 1) {
+                        if (count > 1 && layer.cluster_competitor) {
                             let competitorArr = [];
                             for (let i = 0; i < point.properties.infoj.length || 0; i++) {
                                 competitorArr.push(point.properties.infoj[i].competitor);
@@ -74,7 +75,9 @@ function getLayer() {
                             icon = svg_symbols.target(dotArr);
 
                         } else {                           
-                            icon = svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker);
+                            icon = layer.cluster_competitor ?
+                                svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker) :
+                                layer.customMarker || svg_symbols.target(layer.defaultMarker);
                         }
 
                         return L.marker(latlng, {
@@ -82,7 +85,7 @@ function getLayer() {
                             zIndexOffset: parseInt(1000 - 1000 / max * point.properties.infoj.length),
                             icon: L.icon({
                                 iconUrl: icon,
-                                iconSize: point.properties.infoj.length === 1 ? 20: 20 + 40 / max * point.properties.infoj.length
+                                iconSize: point.properties.infoj.length === 1 ? layer.markerMin: layer.markerMin + layer.markerMax / max * point.properties.infoj.length
                                 //iconSize: 20 + 40 / Math.log(max) * Math.log(point.properties.c)
                             })
                         });

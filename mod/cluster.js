@@ -25,7 +25,7 @@ function cluster(req, res) {
         ${req.query.east},
         ${req.query.south},
         4326),
-      geomcntr,
+        ${req.query.geom},
       0.00001
     )
   `
@@ -38,23 +38,23 @@ function cluster(req, res) {
 
       q = `
       SELECT
-        ST_AsGeoJson(ST_PointOnSurface(ST_Union(geomcntr))) geomj,
-        json_agg(json_build_object('id', id, 'competitor', competitor, 'label', label)) infoj
+        ST_AsGeoJson(ST_PointOnSurface(ST_Union(${req.query.geom}))) geomj,
+        json_agg(json_build_object('id', id, ${req.query.competitor?"'competitor', competitor,":""} 'label', label)) infoj
       FROM (
         SELECT
           id,
           competitor,
           label,
           kmeans_cid,
-          geomcntr,
-          ST_ClusterDBSCAN(geomcntr, ${xDegree * req.query.dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+          ${req.query.geom},
+          ST_ClusterDBSCAN(${req.query.geom}, ${xDegree * req.query.dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
         FROM (
           SELECT
             ${req.query.qID} AS id,
             ${req.query.competitor} AS competitor,
             ${req.query.label} AS label,
-            ST_ClusterKMeans(geomcntr, ${kmeans}) OVER () kmeans_cid,
-            geomcntr
+            ST_ClusterKMeans(${req.query.geom}, ${kmeans}) OVER () kmeans_cid,
+            ${req.query.geom}
           FROM ${req.query.layer}
           WHERE
             ST_DWithin(
@@ -64,7 +64,7 @@ function cluster(req, res) {
                 ${req.query.east},
                 ${req.query.south},
                 4326),
-              geomcntr,
+                ${req.query.geom},
               0.00001
             )
           ) kmeans

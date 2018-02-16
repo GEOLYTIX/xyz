@@ -1084,8 +1084,11 @@
           "cluster_competitor": "brand",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
+          "markerMin": 20,
+          "markerMax": 40,
           "infoj": "infoj",
           "geomj": "geomj",
+          "geom": "geomcntr",
           "markerStyle": {
             "aldi": {
               "style": [
@@ -1660,8 +1663,11 @@
           "cluster_competitor": "fascia",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
+          "markerMin": 20,
+          "markerMax": 40,
           "infoj": "infoj",
           "geomj": "geomj",
+          "geom": "geomcntr",
           "markerStyle": {
             "SINSAY": {
               "style": [
