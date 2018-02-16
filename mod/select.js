@@ -14,6 +14,9 @@ function select(req, res) {
         if (req.body.infoj[key].type === 'integer') {
             fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
         }
+        if (req.body.infoj[key].type === 'numeric') {
+            fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
+        }
         if (req.body.infoj[key].type === 'text') {
             fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
         }

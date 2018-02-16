@@ -57,7 +57,7 @@ function expander(dom, header, record) {
             this.textContent = 'expand_more';
             i.title = "Hide table";
         } else {
-            container.style.maxHeight = (header.nextSibling.clientHeight + this.clientHeight + 5) + 'px';
+            container.style.maxHeight = (header.nextSibling.clientHeight + this.clientHeight + 10) + 'px';
             header.style.boxShadow = '';
             this.textContent = 'expand_less';
             i.title = "Expand table";

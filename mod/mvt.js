@@ -1,21 +1,20 @@
-let pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true
-});
+const { Client } = require('pg');
 const DBS = {};
 Object.keys(process.env).map(function (key) {
-    if (key.split('_')[0] === 'DBS')
-        DBS[key.split('_')[1]] = pgp(process.env[key])
-  });
+    if (key.split('_')[0] === 'DBS') {
+        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+        DBS[key.split('_')[1]].connect();
+    }
+});
 
-function fetch_tiles(req, res){
+function fetch_tiles(req, res) {
 
     let params = req.url.split('/'),
         x = parseInt(params[3]),
         y = parseInt(params[4]),
         z = parseInt(params[2]),
         q =
-        `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
+            `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
              FROM (
                SELECT
                  ${req.query.qID} AS id,
@@ -39,15 +38,13 @@ function fetch_tiles(req, res){
 
     //console.log(q);
 
-    DBS[req.query.dbs].any(q)
-        .then(data => {
+    DBS[req.query.dbs].query(q)
+        .then(result => {
             res.setHeader('Content-Type', 'application/x-protobuf');
             res.status(200);
-            res.send(data[0].st_asmvt);
+            res.send(result.rows[0].st_asmvt);
         })
-        .catch(error => {
-            console.log(error);
-        });
+        .catch(err => console.log(err));
 }
 
 module.exports = {

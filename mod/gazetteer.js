@@ -1,12 +1,11 @@
-let pgp = require('pg-promise')({
-    promiseLib: require('bluebird'),
-    noWarnings: true
-});
+const { Client } = require('pg');
 const DBS = {};
 Object.keys(process.env).map(function (key) {
-    if (key.split('_')[0] === 'DBS')
-        DBS[key.split('_')[1]] = pgp(process.env[key])
-  });
+    if (key.split('_')[0] === 'DBS') {
+        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+        DBS[key.split('_')[1]].connect();
+    }
+});
 
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GKEY

@@ -206,9 +206,9 @@ module.exports = function Select(){
         // Create the header element to contain the control elements
         let header = utils.createElement('div', {
             textContent: record.letter,
-            className: 'header'
+            className: 'header',
+            style: 'border-bottom: 3px solid ' + record.color
         });
-        header.style.borderBottom = '3px solid ' + record.color;
 
         // Create the clear control element to control the removal of a feature from the select.layers.
         controls.clear(dom, header, record);
@@ -231,30 +231,25 @@ module.exports = function Select(){
         // Add header element to the container.
         record.layer.drawer.appendChild(header);
 
-        // Create table element to display the features properties.
-        let table = document.createElement('table');
-        table.className = 'infojTable';
-        table.style.borderBottom = '1px solid ' + record.color;
-        table.cellpadding = '0';
-        table.cellspacing = '0';
-
-        // Add table element to the container.
+        // Create infojTable element and append to drawer.
+        let table = utils.createElement('table', {
+            className: 'infojTable',
+            cellpadding: '0',
+            cellspacing: '0',
+            style: 'border-bottom: 1px solid ' + record.color
+        });
         record.layer.drawer.appendChild(table);
         
-        // Filter empty features from select.layers;
+        // Find free space and insert record.
         let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.layer) return record
         });
-
-        // Insert container before the next container (alphabetical order) which is not empty or at the end (null).
         let idx = _xyz.select.records.indexOf(record);
-
         dom.layers.insertBefore(record.layer.drawer,dom.layers.children[idx]);
         
         //console.log(record.layer.infoj);
+
         // Populate the table from the features infoj object.
-
-
         Object.keys(record.layer.infoj).map(function (key) {
             
             //console.log(record.layer.infoj[key]);
@@ -265,13 +260,10 @@ module.exports = function Select(){
             
             } else {
                 let tr = document.createElement('tr');
-                let td = document.createElement('td');
-                
-                                        
-                td.className = 'lv-' + record.layer.infoj[key].level;
-                
-                // set label
-                td.textContent = record.layer.infoj[key].label;
+                let td = utils.createElement('td', {
+                    className: 'lv-' + record.layer.infoj[key].level,
+                    textContent: record.layer.infoj[key].label
+                });
                 tr.appendChild(td);
                 
                 // set value
@@ -284,16 +276,15 @@ module.exports = function Select(){
                         let select = document.createElement('select');
                         Object.keys(record.layer.infoj[key].options).map(function(i){
                             let option = document.createElement('option');
-                            
                             option.textContent = record.layer.infoj[key].options[i];
                             option.value = i;
-                        
                             if(record.layer.infoj[key].options[i] === record.layer.infoj[key].value){
                                 option.selected = true;
                             }
                             select.appendChild(option);
                         });
                         td.appendChild(select);
+
                     } else {
                         // define input
                         let input = document.createElement('input');
@@ -304,11 +295,8 @@ module.exports = function Select(){
                     }   
                     tr.appendChild(td);
                 }
-                
                 table.appendChild(tr); 
             }
-            
-
         });
     }
 }
