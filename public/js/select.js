@@ -391,7 +391,7 @@ module.exports = function Select(){
         
         // Show images 
         function addImages(record, key){
-            console.log(record);
+            //console.log(record);
             let id = record.letter,
                 feature = record.layer.qID,
                 images = record.layer.infoj[key].value.reverse() || [];
@@ -634,10 +634,21 @@ module.exports = function Select(){
             } else {
                 let tr = document.createElement('tr');
                 let td = document.createElement('td');
+                let input = document.createElement('input');
+                
+                input.name = record.layer.infoj[key].field;
+                input.value = record.layer.infoj[key].value;
                                         
                 td.className = 'lv-' + record.layer.infoj[key].level;
                 td.textContent = record.layer.infoj[key].label;
+                //td.appendChild(input);
                 tr.appendChild(td);
+                
+                if(record.layer.infoj[key].type || record.layer.infoj[key].value){
+                    td = document.createElement('td');
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                }
                 table.appendChild(tr); 
             }
             
