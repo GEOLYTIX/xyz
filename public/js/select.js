@@ -390,11 +390,11 @@ module.exports = function Select(){
         record.layer.drawer.appendChild(table);
         
         // Show images 
-        function addImages(record){
+        function addImages(record, key){
             console.log(record);
             let id = record.letter,
                 feature = record.layer.qID,
-                images = record.layer.infoj.images.reverse() || [];
+                images = record.layer.infoj[key].value.reverse() || [];
             
             //console.log(record);
             
@@ -628,8 +628,8 @@ module.exports = function Select(){
             //console.log(record.layer.infoj[key]);
             
             if(record.layer.infoj[key].field === 'images'){
-                console.log(record.layer.infoj[key]);
-                //addImages(record);
+                //console.log(record.layer.infoj[key]);
+                addImages(record, key);
             
             } else {
                 let tr = document.createElement('tr');
