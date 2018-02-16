@@ -418,21 +418,45 @@ module.exports = function Select(){
             } else {
                 let tr = document.createElement('tr');
                 let td = document.createElement('td');
-                let input = document.createElement('input');
                 
-                input.name = record.layer.infoj[key].field;
-                input.value = record.layer.infoj[key].value;
                                         
                 td.className = 'lv-' + record.layer.infoj[key].level;
+                
+                // set label
                 td.textContent = record.layer.infoj[key].label;
-                //td.appendChild(input);
                 tr.appendChild(td);
                 
+                // set value
                 if(record.layer.infoj[key].type || record.layer.infoj[key].value){
                     td = document.createElement('td');
-                    td.appendChild(input);
+                    
+                    // set select options
+                    if(record.layer.infoj[key].options){
+                        
+                        let select = document.createElement('select');
+                        Object.keys(record.layer.infoj[key].options).map(function(i){
+                            let option = document.createElement('option');
+                            
+                            option.textContent = record.layer.infoj[key].options[i];
+                            option.value = i;
+                        
+                            if(record.layer.infoj[key].options[i] === record.layer.infoj[key].value){
+                                option.selected = true;
+                            }
+                            select.appendChild(option);
+                        });
+                        td.appendChild(select);
+                    } else {
+                        // define input
+                        let input = document.createElement('input');
+                        input.name = record.layer.infoj[key].field;
+                        input.value = record.layer.infoj[key].value;
+                        input.type = 'text';
+                        td.appendChild(input);
+                    }   
                     tr.appendChild(td);
                 }
+                
                 table.appendChild(tr); 
             }
             
