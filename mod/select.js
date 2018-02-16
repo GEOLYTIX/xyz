@@ -11,18 +11,7 @@ function select(req, res) {
 
     let fields = '';
     Object.keys(req.body.infoj).map(key => {
-        if (req.body.infoj[key].type === 'integer') {
-            fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
-        }
-        if (req.body.infoj[key].type === 'numeric') {
-            fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
-        }
-        if (req.body.infoj[key].type === 'text') {
-            fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
-        }
-        if (req.body.infoj[key].type === 'text[]') {
-            fields += req.body.infoj[key].field + '::' + req.body.infoj[key].type + ' AS ' + req.body.infoj[key].field + ',';
-        }
+        if (req.body.infoj[key].type) fields += `${req.body.infoj[key].field}::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
     });
 
     let q =
@@ -34,7 +23,7 @@ function select(req, res) {
      WHERE
         ${req.body.qID} = '${req.body.id}';`
 
-    console.log(q);
+    //console.log(q);
 
     DBS[req.body.dbs].query(q)
         .then(result => {

@@ -287,11 +287,18 @@ module.exports = function Select(){
 
                     } else {
                         // define input
-                        let input = document.createElement('input');
-                        input.name = record.layer.infoj[key].field;
-                        input.value = record.layer.infoj[key].value;
-                        input.type = 'text';
-                        td.appendChild(input);
+                        if (record.layer.editable) {
+                            td.appendChild(utils.createElement('input', {
+                                name: record.layer.infoj[key].field,
+                                value: record.layer.infoj[key].value,
+                                type: 'text'
+                            }));
+                        } else {
+
+                            td.textContent = record.layer.infoj[key].value;
+                        }
+                        
+                        
                     }   
                     tr.appendChild(td);
                 }
