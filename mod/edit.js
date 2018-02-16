@@ -41,11 +41,11 @@ function updateRecord(req, res) {
        geom = ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326)
        WHERE ${req.body.qID} = '${req.body.id}';`
 
-    console.log(q);
+    //console.log(q);
              
     DBS[req.body.dbs].query(q)
     .then(result => {
-        console.log(result);
+        //console.log(result);
         res.status(200).send();
     })
     .catch(error => {
@@ -58,11 +58,11 @@ function deleteRecord(req, res) {
     let q =
     `DELETE FROM ${req.body.table} where ${req.body.qID} = '${req.body.id}';`;
 
-    console.log(q);
+    //console.log(q);
              
     DBS[req.body.dbs].query(q)
     .then(result => {
-        console.log(result);
+        //console.log(result);
         res.status(200).send();
     })
     .catch(error => {

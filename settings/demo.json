@@ -1045,33 +1045,6 @@
             "fillOpacity": 0
           }
         },
-        "retail_places": {
-          "name": "Dominos Retail Places",
-          "format": "geojson",
-          "pane": ["places", 530],
-          "dbs": "XYZ",
-          "qID": "qid",
-          "displayGeom": ", areaj AS displayGeom",
-          "infoj": "json_build_object('Name', rp_name::text, 'Type', rp_type::text, 'Competition Strength', comp_strgh::integer, 'Units', est_units::integer, 'Brands', est_brands::integer, 'Comparison', comparison::integer, 'Convenience', conv::integer, 'Food, Beverage, Leisure', fbl::integer, 'Services', services::integer, 'Class|Brass', classbrass::integer, 'images', images::text[])",
-          "geomj": "ST_AsGeoJson(geom)",
-          "geom": "geom",
-          "arrayZoom": {
-            "11": "dominos_retail_places"
-          },
-          "style": {
-            "stroke": true,
-            "color": "#e91e63",
-            "weight": 1,
-            "fillOpacity": 0
-          },
-          "styleHighlight": {
-            "stroke": true,
-            "color": "#e91e63",
-            "weight": 2,
-            "fillColor": "#e91e63",
-            "fillOpacity": 0.2
-          }
-        },
         "retail_places_mvt": {          
           "name": "Retail Places Tiles",
           "format": "mvt",
@@ -1099,6 +1072,7 @@
           }
         },
         "retail_points": {
+          "display": true,
           "panel": true,
           "name": "Retail Points",
           "format": "cluster",

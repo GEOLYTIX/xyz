@@ -272,7 +272,7 @@ module.exports = function Gazetteer() {
             _xyz.gazetteer.geolocationWatcher = navigator.geolocation.watchPosition(
                 function (position) {
 
-                    console.log('watch: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+                    console.log('position: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
 
                     if (utils.hasClass(dom.btnGeolocate, 'active')) {
                         _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
@@ -286,7 +286,7 @@ module.exports = function Gazetteer() {
                     }    
                 },
                 function (err) {
-                    alert(err.message);
+                    //alert(err.message);
                     console.log(err.message);
                 },
                 {
