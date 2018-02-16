@@ -8,6 +8,7 @@ module.exports = function Gazetteer() {
     _xyz.map.createPane(_xyz.gazetteer.pane[0]);
     _xyz.map.getPane(_xyz.gazetteer.pane[0]).style.zIndex = _xyz.gazetteer.pane[1];
 
+    // Declare DOM elements
     let dom = {
         btnSearch: document.getElementById('btnSearch'),
         btnGeolocate: document.getElementById('btnGeolocate'),
@@ -58,7 +59,6 @@ module.exports = function Gazetteer() {
         '<i class="material-icons">language</i>' :
         _xyz.country;
 
-
     // Empty input value, results and set placeholder.
     dom.input.value = '';
     dom.input.placeholder = _xyz.countries[_xyz.country].placeholder;
@@ -66,7 +66,6 @@ module.exports = function Gazetteer() {
 
     // Remove existing layer if exists
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
-
 
     // Toggle visibility of the gazetteer group
     dom.btnSearch.addEventListener('click', function () {
@@ -88,136 +87,6 @@ module.exports = function Gazetteer() {
         selectResult(event.target.dataset.id, event.target.dataset.source, event.target.innerHTML);
     });
     
-    // Click event for watch geolocation
-    dom.btnGeolocate.addEventListener('click', function(){
-
-        utils.toggleClass(this, 'active');
-
-        if (!_xyz.gazetteer.geolocationMarker) {
-
-            navigator.geolocation.watchPosition(
-                function (position) {
-                    console.log('watch: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-    
-                    if (!_xyz.gazetteer.geolocationMarker){
-                        _xyz.gazetteer.geolocationMarker = L.marker([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], {
-                            interactive: false,
-                            icon: L.icon({
-                                iconUrl: svg_symbols.markerGeolocation(),
-                                iconSize: 30
-                            })
-                        }).addTo(_xyz.map);
-    
-                        _xyz.map.flyTo(
-                            [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
-                            _xyz.countries[_xyz.country].maxZoom);
-                    }
-    
-                    _xyz.gazetteer.geolocationMarker.setLatLng([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-                    //_xyz.map.panTo(latlng);
-                },
-                function (err) {
-                    //alert(err.message);
-                    console.log(err.message);
-                },
-                {
-                    //enableHighAccuracy: false,
-                    //timeout: 3000,
-                    //maximumAge: 0
-                });
-
-        }
-        
-
-
-        utils.hasClass(this, 'active') ?
-            showGeolocation() :
-            removeGeolocation();
-
-            function showGeolocation(){
-
-            }
-
-            function hideGeolocation(){
-
-            }
-        
-        // get initial location
-        // function getGeolocation() {
-
-        //     id = navigator.geolocation.watchPosition(
-        //         function (position) {
-        //             console.log('watch: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-
-        //             if (!_xyz.gazetteer.geolocationMarker){
-        //                 _xyz.gazetteer.geolocationMarker = L.marker([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], {
-        //                     interactive: false,
-        //                     icon: L.icon({
-        //                         iconUrl: svg_symbols.markerGeolocation(),
-        //                         iconSize: 30
-        //                     })
-        //                 }).addTo(_xyz.map);
-    
-        //                 _xyz.map.flyTo(
-        //                     [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
-        //                     _xyz.countries[_xyz.country].maxZoom);
-        //             }
-
-        //             _xyz.gazetteer.geolocationMarker.setLatLng([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-        //             //_xyz.map.panTo(latlng);
-        //         },
-        //         function (err) {
-        //             //alert(err.message);
-        //             console.log(err.message);
-        //         },
-        //         {
-        //             //enableHighAccuracy: false,
-        //             //timeout: 3000,
-        //             //maximumAge: 0
-        //         });
-
-
-            // navigator.geolocation.getCurrentPosition(
-            //     function (position) {
-            //         console.log('start: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-
-            //         _xyz.gazetteer.geolocationMarker = L.marker([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)], {
-            //             interactive: false,
-            //             icon: L.icon({
-            //                 iconUrl: svg_symbols.markerGeolocation(),
-            //                 iconSize: 30
-            //             })
-            //         }).addTo(_xyz.map);
-
-            //         _xyz.map.flyTo(
-            //             [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
-            //             _xyz.countries[_xyz.country].maxZoom);
-
-            //         watchGeolocation();
-            //     },
-            //     function error(err) {
-            //         //alert(err.message);
-            //         console.log(err.message);
-            //     },
-            //     {
-            //         //enableHighAccuracy: false,
-            //         //timeout: 5000,
-            //         //maximumAge: 0
-            //     }
-            // );
-
-        //}
-              
-        // function stopGeolocation(){
-        //     if(_xyz.gazetteer.geolocationMarker) _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
-        //     _xyz.gazetteer.geolocationMarker = null;
-        //     navigator.geolocation.clearWatch(id);
-        //     console.log('...and now his watch is ended.');
-        // }
-        
-    });
-    
-
     // Initiate search on keyup with input value
     dom.input.addEventListener('keyup', function (e) {
         let key = e.keyCode || e.charCode;
@@ -371,4 +240,60 @@ module.exports = function Gazetteer() {
         // Zoom to the extent of the gazetteer layer
         _xyz.map.fitBounds(_xyz.gazetteer.layer.getBounds());
     }
-};
+
+
+    // Geolocation control
+    dom.btnGeolocate.addEventListener('click', function () {
+        utils.toggleClass(this, 'active');
+        let flyTo = true;
+               
+        if (!_xyz.gazetteer.geolocationMarker) {
+            dom.btnGeolocate.children[0].textContent = 'gps_fixed';
+            _xyz.gazetteer.geolocationMarker = L.marker([0, 0], {
+                interactive: false,
+                icon: L.icon({
+                    iconUrl: svg_symbols.markerGeolocation(),
+                    iconSize: 30
+                })
+            });
+        }
+
+        if (utils.hasClass(this, 'active') && _xyz.gazetteer.geolocationMarker.getLatLng().lat !== 0) {
+            _xyz.gazetteer.geolocationMarker.addTo(_xyz.map);
+            if (flyTo) _xyz.map.flyTo(
+                _xyz.gazetteer.geolocationMarker.getLatLng(),
+                _xyz.countries[_xyz.country].maxZoom);
+            flyTo = false;
+        } else {
+            _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
+        }          
+
+        if (!_xyz.gazetteer.geolocationWatcher) {
+            _xyz.gazetteer.geolocationWatcher = navigator.geolocation.watchPosition(
+                function (position) {
+
+                    console.log('watch: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+
+                    if (utils.hasClass(dom.btnGeolocate, 'active')) {
+                        _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
+                        _xyz.gazetteer.geolocationMarker.setLatLng([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+                        _xyz.gazetteer.geolocationMarker.addTo(_xyz.map);
+
+                        if (flyTo) _xyz.map.flyTo(
+                            [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
+                            _xyz.countries[_xyz.country].maxZoom);
+                        flyTo = false;
+                    }    
+                },
+                function (err) {
+                    alert(err.message);
+                    console.log(err.message);
+                },
+                {
+                    //enableHighAccuracy: false,
+                    //timeout: 3000,
+                    //maximumAge: 0
+                });
+        }
+    });
+}
