@@ -396,7 +396,7 @@ module.exports = function Select(){
                 feature = record.layer.qID,
                 images = record.layer.infoj.images.reverse() || [];
             
-            console.log(record);
+            //console.log(record);
             
             let _tr = document.createElement('tr'),
                 _img_tr = document.createElement('tr'),
@@ -619,11 +619,12 @@ module.exports = function Select(){
 
         dom.layers.insertBefore(record.layer.drawer,dom.layers.children[idx]);
         
-        console.log(record.layer.infoj);
+        //console.log(record.layer.infoj);
         // Populate the table from the features infoj object.
 
 
         Object.keys(record.layer.infoj).map(function (key) {
+<<<<<<< Updated upstream
 
                         let tr = document.createElement('tr');
                         let td = document.createElement('td');
@@ -634,6 +635,25 @@ module.exports = function Select(){
                         table.appendChild(tr);
 
 
+=======
+            
+            //console.log(record.layer.infoj[key]);
+            
+            if(record.layer.infoj[key].field === 'images'){
+                console.log(record.layer.infoj[key]);
+                //addImages(record);
+            
+            } else {
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                                        
+                //td.className = 'lv-' + lv;
+                td.textContent = record.layer.infoj[key].label;
+                tr.appendChild(td);
+                table.appendChild(tr);   
+            }
+            
+>>>>>>> Stashed changes
         });
         // Object.keys(record.layer.infoj).map(function (key) {
         //     //console.log(record.layer.infoj[key]);
