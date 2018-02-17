@@ -3,7 +3,7 @@ const svg_symbols = require('./svg_symbols');
 const images = require('./select_images');
 const controls = require('./select_controls');
 
-module.exports = function Select(){
+module.exports = function Select() {
 
     // Set dom elements for the select module.
     let dom = {
@@ -29,7 +29,7 @@ module.exports = function Select(){
         if (change_country) resetModule();
 
         // Set the layer display from hooks if present; Overwrites the default setting.
-        if (_xyz.hooks.select) _xyz.hooks.select.map(function(hook) {
+        if (_xyz.hooks.select) _xyz.hooks.select.map(function (hook) {
             let selectionHook = hook.split('!');
             selectLayerFromEndpoint({
                 layer: selectionHook[1],
@@ -43,7 +43,7 @@ module.exports = function Select(){
     _xyz.select.init();
 
     // Reset the module on btnOff click.
-    dom.btnOff.addEventListener('click', function(){
+    dom.btnOff.addEventListener('click', function () {
         resetModule();
     });
 
@@ -68,7 +68,7 @@ module.exports = function Select(){
         });
         if (freeRecords.length === 0) return
 
-        let _layer = _xyz.countries[_xyz.country].layers[layer.layer];   
+        let _layer = _xyz.countries[_xyz.country].layers[layer.layer];
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
@@ -91,11 +91,11 @@ module.exports = function Select(){
             infoj: _layer.infoj,
             geomj: _layer.geomj,
             displayGeom: _layer.displayGeom || ''
-        }));  
+        }));
     }
     _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
 
-    function addLayerToRecord(layer){
+    function addLayerToRecord(layer) {
         let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.layer) return record
         });
@@ -108,16 +108,16 @@ module.exports = function Select(){
 
         if (freeRecords.length > 0) {
             freeRecords[0].layer = layer;
-            if(layer.layer) {
+            if (layer.layer) {
                 _xyz.pushHook('select',
-                freeRecords[0].letter + '!' +
-                freeRecords[0].layer.layer + '!' +
-                freeRecords[0].layer.table + '!' +
-                freeRecords[0].layer.id + '!' +
-                freeRecords[0].layer.marker[0] + ';' +
-                freeRecords[0].layer.marker[1]);
+                    freeRecords[0].letter + '!' +
+                    freeRecords[0].layer.layer + '!' +
+                    freeRecords[0].layer.table + '!' +
+                    freeRecords[0].layer.id + '!' +
+                    freeRecords[0].layer.marker[0] + ';' +
+                    freeRecords[0].layer.marker[1]);
             }
-            
+
             addRecordToMap(freeRecords[0])
         }
         if (freeRecords.length === 1) dom.header.style.background = '#ffcc80';
@@ -194,14 +194,15 @@ module.exports = function Select(){
                 }
             }).addTo(_xyz.map);
 
-            addRecordToList(record);
+        addRecordToList(record);
     }
 
     function addRecordToList(record) {
 
-        // Create container element to contain the header with controls and the info table.
-        record.layer.drawer = document.createElement('div');
-        record.layer.drawer.className = 'drawer';
+        // Create drawer element to contain the header with controls and the infoj table with inputs.
+        record.layer.drawer = utils.createElement('div', {
+            className: 'drawer'
+        });
 
         // Create the header element to contain the control elements
         let header = utils.createElement('div', {
@@ -215,7 +216,7 @@ module.exports = function Select(){
 
         // Create the zoom control element which zoom the map to the bounds of the feature.
         controls.zoom(dom, header, record);
-        
+
         // Create the expand control element which controls whether the data table is displayed for the feature.
         controls.expander(dom, header, record);
 
@@ -228,82 +229,104 @@ module.exports = function Select(){
         // Create control to trash editable items.
         if (record.layer.editable) controls.trash(dom, header, record);
 
-        // Add header element to the container.
+        // Add header element to the drawer.
         record.layer.drawer.appendChild(header);
 
-        // Create infojTable element and append to drawer.
-        let table = utils.createElement('table', {
-            className: 'infojTable',
-            cellpadding: '0',
-            cellspacing: '0',
-            style: 'border-bottom: 1px solid ' + record.color
-        });
-        record.layer.drawer.appendChild(table);
-        
+        // Add create and append infoj table to drawer.
+        record.layer.drawer.appendChild(addInfojToList(record));
+
         // Find free space and insert record.
         let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.layer) return record
         });
         let idx = _xyz.select.records.indexOf(record);
-        dom.layers.insertBefore(record.layer.drawer,dom.layers.children[idx]);
-        
-        //console.log(record.layer.infoj);
+        dom.layers.insertBefore(record.layer.drawer, dom.layers.children[idx]);
+    }
 
+    function addInfojToList(record) {
+
+        // Create infojTable table to be returned from this function.
+        let table = utils.createElement('table', {
+            className: 'infojTable',
+            cellPadding: '0',
+            cellSpacing: '0',
+            style: 'border-bottom: 1px solid ' + record.color
+        });
+                
         // Populate the table from the features infoj object.
         Object.keys(record.layer.infoj).map(function (key) {
-            
-            //console.log(record.layer.infoj[key]);
-            
-            if(record.layer.infoj[key].field === 'images'){
-                //console.log(record.layer.infoj[key]);
-                images.addImages(record, key, table);
-            
-            } else {
-                let tr = document.createElement('tr');
-                let td = utils.createElement('td', {
-                    className: 'lv-' + record.layer.infoj[key].level,
-                    textContent: record.layer.infoj[key].label
+
+            // Create new table row at given level and append to table.
+            let tr = utils.createElement('tr', {
+                className: 'lv-' + (record.layer.infoj[key].level || 0)
+            });
+            table.appendChild(tr);
+
+            // Create new table cell for label and append to table.
+            if (record.layer.infoj[key].label){
+                let label = utils.createElement('td', {
+                    className: 'label lv-' + (record.layer.infoj[key].level || 0),
+                    textContent: record.layer.infoj[key].label,
+                    colSpan: (!record.layer.infoj[key].type || record.layer.infoj[key].type === 'text' ? '2' : '1')
                 });
-                tr.appendChild(td);
-                
-                // set value
-                if(record.layer.infoj[key].type || record.layer.infoj[key].value){
-                    td = document.createElement('td');
-                    
-                    // set select options
-                    if(record.layer.infoj[key].options){
-                        
-                        let select = document.createElement('select');
-                        Object.keys(record.layer.infoj[key].options).map(function(i){
-                            let option = document.createElement('option');
-                            option.textContent = record.layer.infoj[key].options[i];
-                            option.value = i;
-                            if(record.layer.infoj[key].options[i] === record.layer.infoj[key].value){
-                                option.selected = true;
-                            }
-                            select.appendChild(option);
-                        });
-                        td.appendChild(select);
+                tr.appendChild(label);
 
-                    } else {
-                        // define input
-                        if (record.layer.editable) {
-                            td.appendChild(utils.createElement('input', {
-                                name: record.layer.infoj[key].field,
-                                value: record.layer.infoj[key].value,
-                                type: 'text'
-                            }));
-                        } else {
+                // return from loop if field(label) has no type.
+                if (!record.layer.infoj[key].type) return
 
-                            td.textContent = record.layer.infoj[key].value;
-                        }
-                        
-                        
-                    }   
-                    tr.appendChild(td);
-                }
-                table.appendChild(tr); 
             }
+
+            // Create new row for text cells and append to table.
+            if (record.layer.infoj[key].type && record.layer.infoj[key].type === 'text'){
+
+                tr = document.createElement('tr');
+                table.appendChild(tr);
+            }
+
+            // Create new table cell for values and append to tr.
+            let val = utils.createElement('td', {
+                className: 'val',
+                colSpan: '2'
+            });
+            tr.appendChild(val);
+
+            if (!record.layer.editable && record.layer.infoj[key].value) {
+                val.textContent = record.layer.infoj[key].value;
+                return
+            }
+
+            // Create select input when options exist
+            if (record.layer.editable && record.layer.infoj[key].options) {
+                let select = document.createElement('select');
+                Object.keys(record.layer.infoj[key].options).map(function (i) {
+                    let option = document.createElement('option');
+                    option.textContent = record.layer.infoj[key].options[i];
+                    option.value = i;
+                    if (record.layer.infoj[key].options[i] === record.layer.infoj[key].value) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+                val.appendChild(select);
+                return
+            }
+
+            // define input
+            if (record.layer.editable) {
+                val.appendChild(utils.createElement('input', {
+                    name: record.layer.infoj[key].field,
+                    value: record.layer.infoj[key].value,
+                    type: 'text'
+                }));
+            }
+                
+            // if (record.layer.infoj[key].input === 'images') {
+            //     images.addImages(record, key, table);
+            // }
+            
         });
+
+        return table;
     }
+
 }

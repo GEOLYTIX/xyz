@@ -642,13 +642,16 @@
   .module .content .infojTable {
     width: 100%;
     font-size: 12px;
-    padding-top: 5px;
-    table-layout: fixed; }
+    padding-top: 5px; }
+    .module .content .infojTable .label {
+      padding-top: 5px; }
+    .module .content .infojTable input {
+      width: 100%; }
     .module .content .infojTable .lv-0 {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700; }
     .module .content .infojTable .lv-1 {
-      font-size: 12px; }
+      font-size: 13px; }
     .module .content .infojTable .lv-2 {
       font-size: 12px;
       padding-left: 10px; }

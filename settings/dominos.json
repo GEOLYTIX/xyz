@@ -147,16 +147,15 @@
           "geom": "geom",
           "infoj": [
               {
+                "field": "store_name",
+                "label": "Store",
+                "type": "text"
+              },
+              {
                 "field": "store_id",
                 "label": "Store ID",
                 "type": "integer",
                 "level": 1
-              },
-              {
-                "field": "store_name",
-                "label": "Store",
-                "type": "text",
-                "level": 0
               },
               {
                 "field": "franchisee",

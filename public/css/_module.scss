@@ -96,15 +96,22 @@
             width: 100%;
             font-size: 12px;
             padding-top: 5px;
-            table-layout: fixed;
+
+            .label {
+                padding-top: 5px;
+            }
+
+            input {
+                width: 100%;
+            }
 
             .lv-0 {
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 700;
             }
 
             .lv-1 {
-                font-size: 12px;
+                font-size: 13px;
             }
 
             .lv-2 {
