@@ -1,6 +1,6 @@
 const utils = require('./utils');
 
-function clear(dom, header, record) {
+function clear(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'clear',
         className: 'material-icons cursor noselect btn',
@@ -9,7 +9,7 @@ function clear(dom, header, record) {
     i.style.color = record.color;
     i.style.marginRight = '-6px';
     i.addEventListener('click', function () {
-        record.layer.drawer.remove();
+        record.drawer.remove();
 
         _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
         if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
@@ -23,12 +23,12 @@ function clear(dom, header, record) {
 
         dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
-        if (freeRecords.length === _xyz.select.records.length) resetModule();
+        if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
     });
-    header.appendChild(i);
+    record.header.appendChild(i);
 }
 
-function zoom(dom, header, record) {
+function zoom(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'search',
         className: 'material-icons cursor noselect btn',
@@ -38,10 +38,10 @@ function zoom(dom, header, record) {
     i.addEventListener('click', function () {
         _xyz.map.flyToBounds(record.layer.L.getBounds());
     });
-    header.appendChild(i);
+    record.header.appendChild(i);
 }
 
-function expander(dom, header, record) {
+function expander(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'expand_less',
         className: 'material-icons cursor noselect btn',
@@ -49,24 +49,22 @@ function expander(dom, header, record) {
     });
     i.style.color = record.color;
     i.addEventListener('click', function () {
-        let container = this.parentNode.parentNode;
-        let header = this.parentNode;
-        if (container.style.maxHeight != '30px') {
-            container.style.maxHeight = '30px';
-            header.style.boxShadow = '0 3px 3px -3px black';
+        if (record.drawer.style.maxHeight != '30px') {
+            record.drawer.style.maxHeight = '30px';
+            record.header.style.boxShadow = '0 3px 3px -3px black';
             this.textContent = 'expand_more';
             i.title = "Hide table";
         } else {
-            container.style.maxHeight = (header.nextSibling.clientHeight + this.clientHeight + 10) + 'px';
-            header.style.boxShadow = '';
+            record.drawer.style.maxHeight = (record.header.nextSibling.clientHeight + this.clientHeight + 10) + 'px';
+            record.header.style.boxShadow = '';
             this.textContent = 'expand_less';
             i.title = "Expand table";
         }
     });
-    header.appendChild(i);
+    record.header.appendChild(i);
 }
 
-function marker(dom, header, record) {
+function marker(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'location_off',
         className: 'material-icons cursor noselect btn',
@@ -74,8 +72,6 @@ function marker(dom, header, record) {
     });
     i.style.color = record.color;
     i.addEventListener('click', function () {
-        let container = this.parentNode.parentNode;
-        let header = this.parentNode;
         if (this.textContent === 'location_off') {
             _xyz.map.removeLayer(record.layer.M);
             this.textContent = 'location_on';
@@ -86,10 +82,10 @@ function marker(dom, header, record) {
             i.title = 'Hide marker';
         }
     });
-    header.appendChild(i);
+    record.header.appendChild(i);
 }
 
-function update(dom, header, record) {
+function update(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'cloud_upload',
         className: 'material-icons cursor noselect btn',
@@ -123,10 +119,10 @@ function update(dom, header, record) {
         }));
 
     });
-    header.appendChild(i);
+    record.header.appendChild(i);
 }
 
-function trash(dom, header, record) {
+function trash(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'delete',
         className: 'material-icons cursor noselect btn',
@@ -143,7 +139,7 @@ function trash(dom, header, record) {
         xhr.onload = function () {
             if (this.status === 200) {
                 _layer.getLayer();
-                record.layer.drawer.remove();
+                record.drawer.remove();
 
                 _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
                 if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
@@ -157,7 +153,7 @@ function trash(dom, header, record) {
 
                 dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
-                if (freeRecords.length === _xyz.select.records.length) resetModule();
+                if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
             }
         }
         xhr.send(JSON.stringify({
@@ -168,7 +164,7 @@ function trash(dom, header, record) {
         }));
 
     });
-    header.appendChild(i);
+    record.header.appendChild(i);
 }
 
 module.exports = {

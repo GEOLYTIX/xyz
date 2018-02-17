@@ -103,6 +103,8 @@
 
             input {
                 width: 100%;
+                font-family: 'PT Mono', monospace;
+                margin: 5px 0 7px 0;
             }
 
             .lv-0 {
@@ -121,7 +123,22 @@
 
             .val {
                 font-family: 'PT Mono', monospace;
-                padding-left: 10px;
+                // padding-left: 10px;
+            }
+
+            .addImageCell {
+                vertical-align: middle;
+
+                i {
+                    color: #090;
+                    font-size: 70px;
+                    padding: 20px;
+                    text-shadow: 3px 3px 2px #222;
+                }
+
+                input {
+                    display: none;
+                }
             }
         }
 

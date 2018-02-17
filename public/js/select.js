@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
-const images = require('./select_images');
 const controls = require('./select_controls');
+const select_table = require('./select_table');
 
 module.exports = function Select() {
 
@@ -26,7 +26,7 @@ module.exports = function Select() {
     _xyz.select.init = function (change_country) {
 
         // Remove the layers hook on change_country event.
-        if (change_country) resetModule();
+        if (change_country) _xyz.select.resetModule();
 
         // Set the layer display from hooks if present; Overwrites the default setting.
         if (_xyz.hooks.select) _xyz.hooks.select.map(function (hook) {
@@ -44,10 +44,11 @@ module.exports = function Select() {
 
     // Reset the module on btnOff click.
     dom.btnOff.addEventListener('click', function () {
-        resetModule();
+        _xyz.select.resetModule();
     });
 
     // Reset function for the module container.
+    _xyz.select.resetModule = resetModule;
     function resetModule() {
         dom.btnOff.style.display = 'none';
         dom.header.style.background = '#eee';
@@ -200,133 +201,46 @@ module.exports = function Select() {
     function addRecordToList(record) {
 
         // Create drawer element to contain the header with controls and the infoj table with inputs.
-        record.layer.drawer = utils.createElement('div', {
+        record.drawer = utils.createElement('div', {
             className: 'drawer'
         });
 
         // Create the header element to contain the control elements
-        let header = utils.createElement('div', {
+        record.header = utils.createElement('div', {
             textContent: record.letter,
             className: 'header',
             style: 'border-bottom: 3px solid ' + record.color
         });
 
         // Create the clear control element to control the removal of a feature from the select.layers.
-        controls.clear(dom, header, record);
+        controls.clear(dom, record);
 
         // Create the zoom control element which zoom the map to the bounds of the feature.
-        controls.zoom(dom, header, record);
+        controls.zoom(dom, record);
 
         // Create the expand control element which controls whether the data table is displayed for the feature.
-        controls.expander(dom, header, record);
+        controls.expander(dom, record);
 
         // Create control to toggle marker.
-        controls.marker(dom, header, record);
+        controls.marker(dom, record);
 
         // Create control to update editable items.
-        if (record.layer.editable) controls.update(dom, header, record);
+        if (record.layer.editable) controls.update(dom, record);
 
         // Create control to trash editable items.
-        if (record.layer.editable) controls.trash(dom, header, record);
+        if (record.layer.editable) controls.trash(dom, record);
 
         // Add header element to the drawer.
-        record.layer.drawer.appendChild(header);
+        record.drawer.appendChild(record.header);
 
         // Add create and append infoj table to drawer.
-        record.layer.drawer.appendChild(addInfojToList(record));
+        record.drawer.appendChild(select_table.addInfojToList(record));
 
         // Find free space and insert record.
         let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.layer) return record
         });
         let idx = _xyz.select.records.indexOf(record);
-        dom.layers.insertBefore(record.layer.drawer, dom.layers.children[idx]);
+        dom.layers.insertBefore(record.drawer, dom.layers.children[idx]);
     }
-
-    function addInfojToList(record) {
-
-        // Create infojTable table to be returned from this function.
-        let table = utils.createElement('table', {
-            className: 'infojTable',
-            cellPadding: '0',
-            cellSpacing: '0',
-            style: 'border-bottom: 1px solid ' + record.color
-        });
-                
-        // Populate the table from the features infoj object.
-        Object.keys(record.layer.infoj).map(function (key) {
-
-            // Create new table row at given level and append to table.
-            let tr = utils.createElement('tr', {
-                className: 'lv-' + (record.layer.infoj[key].level || 0)
-            });
-            table.appendChild(tr);
-
-            // Create new table cell for label and append to table.
-            if (record.layer.infoj[key].label){
-                let label = utils.createElement('td', {
-                    className: 'label lv-' + (record.layer.infoj[key].level || 0),
-                    textContent: record.layer.infoj[key].label,
-                    colSpan: (!record.layer.infoj[key].type || record.layer.infoj[key].type === 'text' ? '2' : '1')
-                });
-                tr.appendChild(label);
-
-                // return from loop if field(label) has no type.
-                if (!record.layer.infoj[key].type) return
-
-            }
-
-            // Create new row for text cells and append to table.
-            if (record.layer.infoj[key].type && record.layer.infoj[key].type === 'text'){
-
-                tr = document.createElement('tr');
-                table.appendChild(tr);
-            }
-
-            // Create new table cell for values and append to tr.
-            let val = utils.createElement('td', {
-                className: 'val',
-                colSpan: '2'
-            });
-            tr.appendChild(val);
-
-            if (!record.layer.editable && record.layer.infoj[key].value) {
-                val.textContent = record.layer.infoj[key].value;
-                return
-            }
-
-            // Create select input when options exist
-            if (record.layer.editable && record.layer.infoj[key].options) {
-                let select = document.createElement('select');
-                Object.keys(record.layer.infoj[key].options).map(function (i) {
-                    let option = document.createElement('option');
-                    option.textContent = record.layer.infoj[key].options[i];
-                    option.value = i;
-                    if (record.layer.infoj[key].options[i] === record.layer.infoj[key].value) {
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-                val.appendChild(select);
-                return
-            }
-
-            // define input
-            if (record.layer.editable) {
-                val.appendChild(utils.createElement('input', {
-                    name: record.layer.infoj[key].field,
-                    value: record.layer.infoj[key].value,
-                    type: 'text'
-                }));
-            }
-                
-            // if (record.layer.infoj[key].input === 'images') {
-            //     images.addImages(record, key, table);
-            // }
-            
-        });
-
-        return table;
-    }
-
 }

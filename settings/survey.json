@@ -139,11 +139,6 @@
           "qID": "qID",
           "infoj": [
               {
-                  "field": "storeid",
-                  "label": "Store ID",
-                  "type": "text"
-              },
-              {
                   "field": "retailer",
                   "label": "Retailer",
                   "type": "text"
@@ -177,35 +172,35 @@
                   "field": "floorspace_sports_performance_products_pct",
                   "label": "Sports Performance",
                   "type": "integer",
-                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_sportswear_products_pct",
                   "label": "Sportswear",
                   "type": "integer",
-                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_kids_sports_products_pct",
                   "label": "Kids Sports",
                   "type": "integer",
-                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_other_products_pct",
                   "label": "Other products",
                   "type": "integer",
-                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_adidas_pct",
                   "label": "Adidas floorspace",
                   "type": "integer",
-                  "options": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+                  "range": [0,100],
                   "level": 1
               },
               {
@@ -222,22 +217,13 @@
                   "field": "images",
                   "label": "Images",
                   "type": "text[]",
-                  "input": "images"
+                  "images": true
               }
           ],
           "geomj": "ST_AsGeoJson(geom)",
           "geom": "geom",
           "arrayZoom": {
             "2": "store_survey"
-          },
-          "survey": {
-              "Store pitch": ["Very Good", "Good", "Average", "Poor", "Terrible"],
-              "Store size sqm": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "over 5000"],
-              "Sports Performance": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-              "Sportswear": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-              "Kids Sports": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-              "Other products": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-              "Adidas floorspace": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
           },
           "style": {
             "stroke": false,
