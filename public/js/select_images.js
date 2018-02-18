@@ -31,19 +31,21 @@ function addImages(record, images) {
     let add_img = utils.createElement('input', {
         id: 'addImage_' + record.letter,
         type: 'file',
-        accept: 'images/*',
-        capture: 'camera'
+        accept: 'images/*'
     });
+    add_img.setAttribute('capture', true);
     img_td.appendChild(add_img);
 
     // add images if there are any
     for (let image of images) {
         img_td = document.createElement('td');
         img_tr.appendChild(img_td);
-        img_td.appendChild(utils.createElement('img', {
+        let _img = utils.createElement('img', {
             id: image,
             src: localhost + 'images/' + image
-        }));
+        });
+        _img.style.border = '3px solid #EEE';
+        img_td.appendChild(_img);
     }
 
     // add change event 
@@ -79,7 +81,7 @@ function addImages(record, images) {
                 canvas.height = height;
                 canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
-                let dataURL = canvas.toDataURL('image/*');
+                let dataURL = canvas.toDataURL('image/jpeg', 0.5);
                 let _img = utils.createElement('img', {
                     src: dataURL
                 });

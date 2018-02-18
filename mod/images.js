@@ -15,7 +15,7 @@ function save(req, res) {
 
     req.setEncoding('binary');
 
-    let filename = `${req.query.id.replace('.', '+')}+${Date.now()}.png`;
+    let filename = `${req.query.id.replace('.', '+')}+${Date.now()}.jpg`;
 
     // save image to local drive
     fs.writeFile('public/images/' + filename, req.body, function (err) {
