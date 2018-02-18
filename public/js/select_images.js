@@ -31,7 +31,8 @@ function addImages(record, images) {
     let add_img = utils.createElement('input', {
         id: 'addImage_' + record.letter,
         type: 'file',
-        accept: 'images/*'
+        accept: 'images/*',
+        capture: 'camera'
     });
     img_td.appendChild(add_img);
 
@@ -79,6 +80,10 @@ function addImages(record, images) {
                 canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
                 let dataURL = canvas.toDataURL('image/*');
+                let _img = utils.createElement('img', {
+                    src: dataURL
+                });
+                _img.style.border = '3px solid #090';
                     
                 // image actions to cloud save or delete an image
                 let img_actions = utils.createElement('div', {
@@ -91,7 +96,7 @@ function addImages(record, images) {
                     innerHTML: '<i class="material-icons">cloud_upload</i>'
                 });
                 btn_save.addEventListener('click', function () {
-                    upload_image(record, img_actions, utils.dataURLToBlob(dataURL));
+                    upload_image(record, _img, img_actions, utils.dataURLToBlob(dataURL));
                 });
                 img_actions.appendChild(btn_save);
 
@@ -107,18 +112,17 @@ function addImages(record, images) {
 
                 newImage.appendChild(img_actions);
 
-                newImage.appendChild(utils.createElement('img', {
-                    src: dataURL
-                }));
+                newImage.appendChild(_img);
 
             }
 
             img.src = readerOnload.target.result;
 
         }
-        this.files[0].size < (1024 * 1024 * 50) ?
-            reader.readAsDataURL(this.files[0]) :
-            alert('Selected image is too large.');
+        reader.readAsDataURL(this.files[0])
+        // this.files[0].size < (1024 * 1024 * 50) ?
+        //     reader.readAsDataURL(this.files[0]) :
+        //     alert('Selected image is too large.');
 
 
         // insert new image before last image
@@ -128,7 +132,7 @@ function addImages(record, images) {
     return img_container;
 }
 
-function upload_image(record, img_actions, blob) {
+function upload_image(record, _img, img_actions, blob) {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', localhost + 'q_images?' + utils.paramString({
         dbs: record.layer.dbs,
@@ -140,6 +144,7 @@ function upload_image(record, img_actions, blob) {
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = function () {
         if (this.status === 200) {
+            _img.style.border = '3px solid #eee'
             img_actions.remove();
             console.log(this.responseText);
         }
