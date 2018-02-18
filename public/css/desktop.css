@@ -648,7 +648,8 @@
     .module .content .infojTable input {
       width: 100%;
       font-family: 'PT Mono', monospace;
-      margin: 5px 0 7px 0; }
+      margin: 5px 0 7px 0;
+      box-sizing: border-box; }
     .module .content .infojTable .lv-0 {
       font-size: 14px;
       font-weight: 700; }
@@ -660,7 +661,8 @@
     .module .content .infojTable .val {
       font-family: 'PT Mono', monospace; }
     .module .content .infojTable .addImageCell {
-      vertical-align: middle; }
+      vertical-align: middle;
+      height: 165px; }
       .module .content .infojTable .addImageCell i {
         color: #090;
         font-size: 70px;
@@ -868,7 +870,9 @@
     transform: scale(1); } }
 .img-container {
   overflow-x: scroll;
-  max-width: 290px; }
+  position: absolute;
+  bottom: 0;
+  width: 100%; }
   .img-container td {
     position: relative;
     padding: 5px; }

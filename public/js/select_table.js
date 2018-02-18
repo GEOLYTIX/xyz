@@ -48,6 +48,8 @@ function addInfojToList(record) {
 
         // If input is images create image control and return from object.map function.
         if (record.layer.infoj[key].images) {
+            val.style.position = 'relative';
+            val.style.height = '180px';
             val.appendChild(images.addImages(record, record.layer.infoj[key].value.reverse() || []));
             return
         }

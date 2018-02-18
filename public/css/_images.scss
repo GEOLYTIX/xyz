@@ -1,6 +1,8 @@
 .img-container {
     overflow-x: scroll;
-    max-width: 290px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 
     td {
         position: relative;
