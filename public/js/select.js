@@ -81,6 +81,8 @@ module.exports = function Select() {
                 layer.infoj = json.infoj;
                 layer.editable = _layer.editable;
                 layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
+                layer.dbs = _layer.dbs;
+                layer.qID = _layer.qID;
                 addLayerToRecord(layer);
             }
         }

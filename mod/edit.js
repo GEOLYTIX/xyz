@@ -36,8 +36,16 @@ async function newRecord(req, res) {
 
 function updateRecord(req, res) {
 
+    let fields = '';
+    Object.keys(req.body.infoj).map(key => {
+        if (req.body.infoj[key].images) return
+        if (req.body.infoj[key].type === 'text' && req.body.infoj[key].value) fields += `${req.body.infoj[key].field} = '${req.body.infoj[key].value}',`;
+        if (req.body.infoj[key].type === 'integer' && req.body.infoj[key].value) fields += `${req.body.infoj[key].field} = ${req.body.infoj[key].value},`
+    });
+
     let q =
     `UPDATE ${req.body.table} SET
+       ${fields}
        geom = ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326)
        WHERE ${req.body.qID} = '${req.body.id}';`
 

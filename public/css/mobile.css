@@ -673,29 +673,32 @@
 
 .img-container {
   overflow-x: scroll;
-  max-width: 280px; }
-  .img-container tr td {
-    position: relative; }
-  .img-container tr td img {
-    height: 160px; }
-  .img-container tr td .img-actions {
-    position: absolute;
-    top: 6px;
-    right: 0; }
-  .img-container button {
-    display: block;
-    background: none; }
-    .img-container button :hover {
-      cursor: pointer; }
-    .img-container button i {
-      padding: 2px;
-      width: 32px;
-      height: 28px;
-      font-size: 24px;
-      color: white;
-      align-content: center;
-      border-radius: 10%;
-      background-color: rgba(0, 0, 0, 0.6); }
+  max-width: 290px; }
+  .img-container td {
+    position: relative;
+    padding: 5px; }
+    .img-container td img {
+      height: 160px;
+      box-shadow: 3px 3px 4px #000;
+      border-radius: 10px; }
+    .img-container td .img-actions {
+      position: absolute;
+      top: 8px;
+      right: 2px; }
+      .img-container td .img-actions button {
+        display: block;
+        background: none; }
+        .img-container td .img-actions button :hover {
+          cursor: pointer; }
+        .img-container td .img-actions button i {
+          padding: 2px;
+          width: 40px;
+          height: 40px;
+          font-size: 35px;
+          color: white;
+          align-content: center;
+          border-radius: 5px;
+          background-color: rgba(0, 0, 0, 0.6); }
 
 body {
   overflow-y: scroll;

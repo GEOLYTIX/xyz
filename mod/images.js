@@ -15,15 +15,7 @@ function save(req, res) {
 
     req.setEncoding('binary');
 
-    let data = [],
-        feature = req.query.feature.replace(".", "+"),
-        //ext = req.query.type.replace("image/", ""),
-        ext = 'png';
-    ts = Date.now(),
-        props = feature.split("+"),
-        table = props[0],
-        qid = props[1],
-        filename = feature + "+" + ts + "." + ext;
+    let filename = `${req.query.id.replace('.', '+')}+${Date.now()}.png`;
 
     // save image to local drive
     fs.writeFile('public/images/' + filename, req.body, function (err) {
@@ -31,7 +23,9 @@ function save(req, res) {
         console.log(filename + ' saved.');
     });
 
-    let q = `UPDATE ${table} set images = array_append(images, '${filename}') where qid = '${req.query.feature}';`;
+    let q = `UPDATE ${req.query.table} 
+                SET images = array_append(images, '${filename}')
+                WHERE ${req.query.qID} = '${req.query.id}';`;
 
     //console.log(q);
 
@@ -39,7 +33,7 @@ function save(req, res) {
     DBS[req.query.dbs].query(q)
         .then(result => {
             res.status(200).send({
-                "image": filename
+                'image': filename
             });
         })
         .catch(err => console.log(err));

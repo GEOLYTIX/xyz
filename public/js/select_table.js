@@ -75,6 +75,7 @@ function addInfojToList(record) {
             })
             rangeInput.addEventListener('input', function(){
                 val.textContent = this.value;
+                record.layer.infoj[key].value = this.value;
             });
             range.appendChild(rangeInput);
             return
@@ -91,18 +92,25 @@ function addInfojToList(record) {
                 }));
             });
             val.appendChild(select);
+            select.addEventListener('change', function(e){
+                record.layer.infoj[key].value = e.target.value;
+            });
             return
         }
 
         // Creat input for editable fields
         if (record.layer.editable) {
-            val.appendChild(utils.createElement('input', {
+            let input = utils.createElement('input', {
                 name: record.layer.infoj[key].field,
-                value: record.layer.infoj[key].value,
+                value: record.layer.infoj[key].value || '',
                 type: 'text'
-            }));
+            });
+            val.appendChild(input);
+            input.addEventListener('keyup', function () {
+                record.layer.infoj[key].value = this.value;
+            });
         }
-        
+
     });
 
     return table;

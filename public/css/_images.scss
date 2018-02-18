@@ -1,42 +1,41 @@
 .img-container {
     overflow-x: scroll;
-    max-width: 280px;  
-    
-    tr td {
+    max-width: 290px;
+
+    td {
         position: relative;
-    }
-    
-    tr td {
+        padding: 5px;
+
         img {
             height: 160px;
-        }
-        
-        .img-actions {
-            position: absolute;
-            top: 6px;
-            right: 0;
-        }
-        
-    }
-        
-        button {
-            display: block;
-            background: none;
-            
-            :hover {
-                cursor: pointer;
-            }
-            
-            i {
-                padding: 2px;
-                width: 32px;
-                height: 28px;
-                font-size: 24px;
-                color: white;
-                align-content: center;
-                border-radius: 10%;
-                background-color: rgba(0,0,0,0.6);
-            }
+            box-shadow: 3px 3px 4px #000;
+            border-radius: 10px;
         }
 
+        .img-actions {
+            position: absolute;
+            top: 8px;
+            right: 2px;
+
+            button {
+                display: block;
+                background: none;
+        
+                :hover {
+                    cursor: pointer;
+                }
+        
+                i {
+                    padding: 2px;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 35px;
+                    color: white;
+                    align-content: center;
+                    border-radius: 5px;
+                    background-color: rgba(0, 0, 0, 0.6);
+                }
+            }
+        }
+    }
 }

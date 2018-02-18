@@ -113,8 +113,10 @@ function update(dom, record) {
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
             table: record.layer.table,
+            dbs: _layer.dbs,
             qID: _layer.qID,
             id: record.layer.id,
+            infoj: record.layer.infoj,
             geometry: record.layer.L.toGeoJSON().features[0].geometry
         }));
 
