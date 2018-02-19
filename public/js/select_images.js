@@ -42,9 +42,23 @@ function addImages(record, images) {
         img_tr.appendChild(img_td);
         let _img = utils.createElement('img', {
             id: image,
-            src: localhost + 'images/' + image
+            src: localhost + 'q_get_image?image=' + image
         });
         _img.style.border = '3px solid #EEE';
+
+        // add delete button / control
+        let btn_del = utils.createElement('button', {
+            title: 'Delete image',
+            className: 'btn_del',
+            innerHTML: '<i class="material-icons">delete_forever</i>'
+        });
+        btn_del.addEventListener('click', function () {
+            remove_image(record, _img);
+            this.remove();
+        });
+        img_td.appendChild(btn_del);
+
+        // append image to table cell
         img_td.appendChild(_img);
     }
 
@@ -86,33 +100,30 @@ function addImages(record, images) {
                     src: dataURL
                 });
                 _img.style.border = '3px solid #090';
-                    
-                // image actions to cloud save or delete an image
-                let img_actions = utils.createElement('div', {
-                    className: 'img-actions'
-                });
-
-                // add save button / control
-                let btn_save = utils.createElement('button', {
-                    title: 'Save image',
-                    innerHTML: '<i class="material-icons">cloud_upload</i>'
-                });
-                btn_save.addEventListener('click', function () {
-                    upload_image(record, _img, img_actions, utils.dataURLToBlob(dataURL));
-                });
-                img_actions.appendChild(btn_save);
 
                 // add delete button / control
                 let btn_del = utils.createElement('button', {
                     title: 'Delete image',
+                    className: 'btn_del',
                     innerHTML: '<i class="material-icons">delete_forever</i>'
                 });
                 btn_del.addEventListener('click', function () {
                     newImage.remove();
                 });
-                img_actions.appendChild(btn_del);
-
-                newImage.appendChild(img_actions);
+                newImage.appendChild(btn_del);
+                    
+                // add save button / control
+                let btn_save = utils.createElement('button', {
+                    title: 'Save image',
+                    className: 'btn_save',
+                    innerHTML: '<i class="material-icons">cloud_upload</i>'
+                });
+                btn_save.addEventListener('click', function () {
+                    btn_del.remove();
+                    btn_save.remove();
+                    upload_image(record, _img, utils.dataURLToBlob(dataURL));
+                });
+                newImage.appendChild(btn_save);
 
                 newImage.appendChild(_img);
 
@@ -122,10 +133,6 @@ function addImages(record, images) {
 
         }
         reader.readAsDataURL(this.files[0])
-        // this.files[0].size < (1024 * 1024 * 50) ?
-        //     reader.readAsDataURL(this.files[0]) :
-        //     alert('Selected image is too large.');
-
 
         // insert new image before last image
         img_tr.insertBefore(newImage, img_tr.childNodes[1]);
@@ -134,9 +141,9 @@ function addImages(record, images) {
     return img_container;
 }
 
-function upload_image(record, _img, img_actions, blob) {
+function upload_image(record, _img, blob) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', localhost + 'q_images?' + utils.paramString({
+    xhr.open('POST', localhost + 'q_save_image?' + utils.paramString({
         dbs: record.layer.dbs,
         table: record.layer.table,
         qID: record.layer.qID,
@@ -146,12 +153,45 @@ function upload_image(record, _img, img_actions, blob) {
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = function () {
         if (this.status === 200) {
-            _img.style.border = '3px solid #eee'
-            img_actions.remove();
-            console.log(this.responseText);
+            _img.style.border = '3px solid #eee';
+
+            // add delete button / control
+            let btn_del = utils.createElement('button', {
+                title: 'Delete image',
+                className: 'btn_del',
+                innerHTML: '<i class="material-icons">delete_forever</i>'
+            });
+            btn_del.addEventListener('click', function () {
+                _img.remove();
+            });
+            _img.parentElement.appendChild(btn_del);
+        }
+    }
+    _img.style.opacity = '0'
+    xhr.onprogress = function (e) {
+        if (e.lengthComputable) {
+            _img.style.opacity = e.loaded / e.total;
         }
     }
     xhr.send(blob);
+}
+
+function remove_image(record, _img) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', localhost + 'q_remove_image?' + utils.paramString({
+        dbs: record.layer.dbs,
+        table: record.layer.table,
+        qID: record.layer.qID,
+        id: record.layer.id,
+        filename: _img.id
+    }));
+    xhr.onload = function () {
+        if (this.status === 200) {
+            _img.remove();
+            console.log(this.responseText);
+        }
+    }
+    xhr.send();
 }
 
 module.exports = {

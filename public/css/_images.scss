@@ -4,40 +4,53 @@
     bottom: 0;
     width: 100%;
 
-    td {
-        position: relative;
-        padding: 5px;
+td {
+    position: relative;
+    padding: 5px;
 
-        img {
-            height: 160px;
-            box-shadow: 3px 3px 4px #000;
-            border-radius: 10px;
+    img {
+        height: 160px;
+        box-shadow: 2px 2px 1px #777;
+        border-radius: 10px;
+        -webkit-transition: opacity 0.2s linear;
+        -moz-transition: opacity 0.2s linear;
+        -o-transition: opacity 0.2s linear;
+        transition: opacity 0.2s linear;
+    }
+
+    button {
+        display: block;
+        background: none;
+        position: absolute;
+
+        &.btn_del {
+            right: 6px;
+            top: 10px;
         }
 
-        .img-actions {
-            position: absolute;
-            top: 10px;
-            right: 5px;
+        &.btn_save {
+            left: 5px;
+            bottom: 14px;
+        }
 
-            button {
-                display: block;
-                background: none;
-        
-                :hover {
-                    cursor: pointer;
-                }
-        
-                i {
-                    padding: 2px;
-                    width: 40px;
-                    height: 40px;
-                    font-size: 35px;
-                    color: white;
-                    align-content: center;
-                    border-radius: 5px;
-                    background-color: rgba(0, 0, 0, 0.6);
-                }
-            }
+        :hover {
+            cursor: pointer;
+        }
+
+        i {
+            padding: 2px;
+            width: 40px;
+            height: 40px;
+            font-size: 39px;
+            color: #090;
+            align-content: center;
+            border-radius: 5px;
+            background-color: #fff;
+            opacity: 0.9;
+            border: 1px solid #cf7;
+            box-shadow: 2px 2px 1px #cf7;
         }
     }
+}
+
 }

@@ -684,26 +684,36 @@
     padding: 5px; }
     .img-container td img {
       height: 160px;
-      box-shadow: 3px 3px 4px #000;
-      border-radius: 10px; }
-    .img-container td .img-actions {
-      position: absolute;
-      top: 10px;
-      right: 5px; }
-      .img-container td .img-actions button {
-        display: block;
-        background: none; }
-        .img-container td .img-actions button :hover {
-          cursor: pointer; }
-        .img-container td .img-actions button i {
-          padding: 2px;
-          width: 40px;
-          height: 40px;
-          font-size: 35px;
-          color: white;
-          align-content: center;
-          border-radius: 5px;
-          background-color: rgba(0, 0, 0, 0.6); }
+      box-shadow: 2px 2px 1px #777;
+      border-radius: 10px;
+      -webkit-transition: opacity 0.2s linear;
+      -moz-transition: opacity 0.2s linear;
+      -o-transition: opacity 0.2s linear;
+      transition: opacity 0.2s linear; }
+    .img-container td button {
+      display: block;
+      background: none;
+      position: absolute; }
+      .img-container td button.btn_del {
+        right: 6px;
+        top: 10px; }
+      .img-container td button.btn_save {
+        left: 5px;
+        bottom: 14px; }
+      .img-container td button :hover {
+        cursor: pointer; }
+      .img-container td button i {
+        padding: 2px;
+        width: 40px;
+        height: 40px;
+        font-size: 39px;
+        color: #090;
+        align-content: center;
+        border-radius: 5px;
+        background-color: #fff;
+        opacity: 0.9;
+        border: 1px solid #cf7;
+        box-shadow: 2px 2px 1px #cf7; }
 
 body {
   overflow-y: scroll;

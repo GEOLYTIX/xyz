@@ -111,7 +111,11 @@ router.get('/q_pdf_download', isLoggedIn, function(req, res){
 });
 
 const images = require('./mod/images');
-router.post('/q_images', isLoggedIn, images.save);
+router.post('/q_save_image', isLoggedIn, images.save);
+router.get('/q_remove_image', isLoggedIn, images.remove);
+router.get('/q_get_image', isLoggedIn, function(req, res){
+    res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'));
+});
 
 // ACCESS CONTROLL
 router.get('/login', function (req, res) {
