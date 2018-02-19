@@ -86,13 +86,14 @@ function marker(dom, record) {
 }
 
 function update(dom, record) {
-    let i = utils.createElement('i', {
+    record.upload = utils.createElement('i', {
         textContent: 'cloud_upload',
         className: 'material-icons cursor noselect btn',
         title: 'Save changes to cloud'
     });
-    i.style.color = record.color;
-    i.addEventListener('click', function () {
+    record.upload.style.display = 'none';
+    record.upload.style.color = record.color;
+    record.upload.addEventListener('click', function () {
 
         let _layer = _xyz.countries[_xyz.country].layers[record.layer.layer];
 
@@ -101,13 +102,20 @@ function update(dom, record) {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = function () {
             if (this.status === 200) {
+                record.upload.style.display = 'none';
+
+                //let test = record.drawer.getElementsByClassName('changed');
+                utils.removeClass(record.drawer.querySelectorAll('.changed'),'changed');
+
                 _layer.getLayer();
-                record.layer.M
-                    .getLayers()[0]
-                    .setLatLng(record.layer.L
+                try {
+                    record.layer.M
                         .getLayers()[0]
-                        .getLatLng()
-                    );
+                        .setLatLng(record.layer.L
+                            .getLayers()[0]
+                            .getLatLng()
+                        );
+                } catch(err){}
             }
         }
         xhr.send(JSON.stringify({
@@ -121,7 +129,7 @@ function update(dom, record) {
         }));
 
     });
-    record.header.appendChild(i);
+    record.header.appendChild(record.upload);
 }
 
 function trash(dom, record) {

@@ -576,8 +576,13 @@
     width: 100%;
     font-size: 12px;
     padding-top: 5px; }
+    .module .content .infojTable .changed {
+      color: #090; }
     .module .content .infojTable .label {
       padding-top: 5px; }
+    .module .content .infojTable textarea {
+      resize: none;
+      width: 100%; }
     .module .content .infojTable input {
       width: 100%;
       font-family: 'PT Mono', monospace;

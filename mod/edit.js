@@ -39,8 +39,8 @@ function updateRecord(req, res) {
     let fields = '';
     Object.keys(req.body.infoj).map(key => {
         if (req.body.infoj[key].images) return
-        if (req.body.infoj[key].type === 'text' && req.body.infoj[key].value) fields += `${req.body.infoj[key].field} = '${req.body.infoj[key].value}',`;
-        if (req.body.infoj[key].type === 'integer' && req.body.infoj[key].value) fields += `${req.body.infoj[key].field} = ${req.body.infoj[key].value},`
+        if (req.body.infoj[key].type === 'text') fields += `${req.body.infoj[key].field} = '${req.body.infoj[key].value}',`;
+        if (req.body.infoj[key].type === 'integer') fields += `${req.body.infoj[key].field} = ${req.body.infoj[key].value},`
     });
 
     let q =

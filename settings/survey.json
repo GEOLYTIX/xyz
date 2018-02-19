@@ -131,10 +131,10 @@
       "layers": {
         "stores": {
           "display": true,
-          "editable": true,
+          "editable": "geometry",
           "name": "Stores",
           "format": "geojson",
-          "pane": ["stores", 500],
+          "pane": ["stores", 510],
           "dbs": "XYZ",
           "qID": "qID",
           "infoj": [
@@ -157,13 +157,13 @@
                   "field": "store_pitch",
                   "label": "Store pitch",
                   "type": "text",
-                  "options": ["Very Good", "Good", "Average", "Poor", "Terrible"]
+                  "options": ["undefined", "Very Good", "Good", "Average", "Poor", "Terrible"]
               },
               {
                   "field": "store_size_sqm",
                   "label": "Store size sqm",
                   "type": "text",
-                  "options": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "more than 5000"]
+                  "options": ["undefined", 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "more than 5000"]
               },
               {
                   "label": "Floorspace allocated to products %"
@@ -211,7 +211,8 @@
               {
                   "field": "comments",
                   "label": "Comments",
-                  "type": "text"
+                  "type": "text",
+                  "text": true
               },
               {
                   "field": "images",
@@ -233,6 +234,61 @@
           "styleHighlight": {
             "stroke": false,
             "color": "#555",
+            "fillOpacity": 0.3
+          }
+        },
+        "venues": {
+          "display": true,
+          "editable": true,
+          "name": "Venues",
+          "format": "geojson",
+          "pane": ["venues", 500],
+          "dbs": "XYZ",
+          "qID": "qid",
+          "infoj": [
+              {
+                  "field": "venue_name",
+                  "label": "Venue",
+                  "type": "text"
+              },
+              {
+                  "field": "venue_quality",
+                  "label": "Quality",
+                  "type": "text",
+                  "options": ["undefined", "Luxury", "Premium", "Mass", "Value"]
+              },
+              {
+                  "field": "venue_status",
+                  "label": "Status",
+                  "type": "text",
+                  "options": ["undefined", "Open", "Permanently closed", "Under refurbishment", "Temporarily closed", "Under construction", "Building site - no work underway", "Unknown"]
+              },
+              {
+                  "field": "comments",
+                  "label": "Comments",
+                  "type": "text",
+                  "text": true
+              },
+              {
+                  "field": "images",
+                  "label": "Images",
+                  "type": "text[]",
+                  "images": true
+              }
+          ],
+          "geomj": "ST_AsGeoJson(geom)",
+          "geom": "geom",
+          "arrayZoom": {
+            "2": "store_survey_venues"
+          },
+          "style": {
+            "color": "#ff6f00",
+            "weight": 2,
+            "fillOpacity": 0
+          },
+          "styleHighlight": {
+            "color": "#ff6f00",
+            "weight": 2,
             "fillOpacity": 0.3
           }
         }

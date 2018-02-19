@@ -76,7 +76,8 @@ function addInfojToList(record) {
                 max: record.layer.infoj[key].range[1]
             })
             rangeInput.addEventListener('input', function(){
-                val.textContent = this.value;
+                utils.addClass(val, 'changed');
+                record.upload.style.display = 'block';
                 record.layer.infoj[key].value = this.value;
             });
             range.appendChild(rangeInput);
@@ -95,7 +96,25 @@ function addInfojToList(record) {
             });
             val.appendChild(select);
             select.addEventListener('change', function(e){
-                record.layer.infoj[key].value = e.target.value;
+                utils.addClass(this, 'changed');
+                record.upload.style.display = 'block';
+                record.layer.infoj[key].value = e.target[e.target.value].label;
+            });
+            return
+        }
+
+        // Creat input text area for editable fields
+        if (record.layer.infoj[key].text) {
+            let textArea = utils.createElement('textarea', {
+                name: record.layer.infoj[key].field,
+                rows: 5,
+                value: record.layer.infoj[key].value || ''
+            });
+            val.appendChild(textArea);
+            textArea.addEventListener('keyup', function () {
+                utils.addClass(this, 'changed');
+                record.upload.style.display = 'block';
+                record.layer.infoj[key].value = this.value;
             });
             return
         }
@@ -109,6 +128,8 @@ function addInfojToList(record) {
             });
             val.appendChild(input);
             input.addEventListener('keyup', function () {
+                utils.addClass(this, 'changed');
+                record.upload.style.display = 'block';
                 record.layer.infoj[key].value = this.value;
             });
         }

@@ -130,7 +130,7 @@ module.exports = function(){
             }
 
             // Add panel to layer control.
-            if (layer.editable) {
+            if (layer.editable && layer.editable === 'geometry') {
                 let i = utils.createElement('i', {
                     textContent: 'add_location',
                     className: 'material-icons cursor noselect btn',

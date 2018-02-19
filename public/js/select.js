@@ -236,7 +236,7 @@ module.exports = function Select() {
         if (record.layer.editable) controls.update(dom, record);
 
         // Create control to trash editable items.
-        if (record.layer.editable) controls.trash(dom, record);
+        if (record.layer.editable && record.layer.editable === 'geometry') controls.trash(dom, record);
 
         // Add header element to the drawer.
         record.drawer.appendChild(record.header);
