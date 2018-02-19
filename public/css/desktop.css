@@ -662,12 +662,12 @@
       font-family: 'PT Mono', monospace; }
     .module .content .infojTable .addImageCell {
       vertical-align: middle;
-      height: 165px; }
+      height: 170px; }
       .module .content .infojTable .addImageCell i {
         color: #090;
         font-size: 70px;
         padding: 20px;
-        text-shadow: 3px 3px 2px #222; }
+        text-shadow: 2px 2px 1px #777; }
       .module .content .infojTable .addImageCell input {
         display: none; }
   .module .content .drawer {
@@ -677,13 +677,14 @@
     .module .content .drawer .header {
       font-size: 16px;
       font-weight: 600;
-      height: 30px;
-      padding-right: 3px; }
+      height: 30px; }
       .module .content .drawer .header .btn {
-        font-size: 22px;
-        margin: 0 -2px 0 10px;
+        font-size: 30px;
+        margin: -2px 0 0 10px;
         float: right;
         color: #090; }
+        .module .content .drawer .header .btn.active {
+          text-shadow: 2px 2px 2px #cf9; }
     .module .content .drawer .loader {
       height: 2px;
       margin-top: -2px;
@@ -882,8 +883,8 @@
       border-radius: 10px; }
     .img-container td .img-actions {
       position: absolute;
-      top: 8px;
-      right: 2px; }
+      top: 10px;
+      right: 5px; }
       .img-container td .img-actions button {
         display: block;
         background: none; }
@@ -924,6 +925,13 @@ p {
 button {
   border: none;
   outline: none; }
+
+i {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
 .noselect {
   -webkit-touch-callout: none;

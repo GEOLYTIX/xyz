@@ -135,7 +135,7 @@
                     color: #090;
                     font-size: 70px;
                     padding: 20px;
-                    text-shadow: 3px 3px 2px #222;
+                    text-shadow: 2px 2px 1px #777;
                 }
 
                 input {
@@ -153,20 +153,18 @@
                 font-size: 16px;
                 font-weight: 600;
                 height: 30px;
-                padding-right: 3px;
 
                 .btn {
-                    @if $desktop {
-                        font-size: 22px;
-                        margin: 0 -2px 0 10px;
-                    }
-                    @else {
-                        font-size: 27px;
-                        margin: -2px -2px 0 10px;
-                    }
+                    font-size: 30px;
+                    margin: -2px 0 0 10px;
                     float: right;
-                    color: $glxgreen;             
+                    color: $glxgreen;
+                    
+                    &.active {
+                        text-shadow: 2px 2px 2px #cf9;
+                    }
                 }
+
             }
 
             .loader {

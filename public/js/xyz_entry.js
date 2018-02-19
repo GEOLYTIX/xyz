@@ -1,6 +1,3 @@
-// Evaluate view_mode.
-if (view_mode === 'mobile') require('./mobile_interface')();
-
 // Evaluate _xyz.
 const svg_symbols = require('./svg_symbols');
 (function objectEval(_xyz) {
@@ -17,6 +14,9 @@ const svg_symbols = require('./svg_symbols');
         if (_xyz[key] && typeof _xyz[key] === 'object') objectEval(_xyz[key]);
     })
 })(_xyz)
+
+// Evaluate view_mode.
+if (view_mode === 'mobile') require('./mobile_interface')();
 
 // Initiate leaflet, utils and hooks.
 const L = require('leaflet');

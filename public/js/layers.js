@@ -138,10 +138,22 @@ module.exports = function(){
                 });
 
                 i.addEventListener('click', function(){
+                    utils.toggleClass(this, 'active');
+
+                    if (!utils.hasClass(this, 'active')){
+                        _xyz.map.off('click');
+                        dom.map.style.cursor = '';
+                        return
+                    }
+
+                    this.style.textShadow = '2px 2px 2px #cf9;';
                     dom.map.style.cursor = 'crosshair';
                     _xyz.map.on('click', function(e){
                         _xyz.map.off('click');
                         dom.map.style.cursor = '';
+
+                        // Make select tab active on mobile device.
+                        if (_xyz.activateSelectTab) _xyz.activateSelectTab();
 
                         let xhr = new XMLHttpRequest();
                         xhr.open('POST', 'q_save');

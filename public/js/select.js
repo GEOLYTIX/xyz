@@ -60,6 +60,9 @@ module.exports = function Select() {
             if (record.layer && record.layer.D) _xyz.map.removeLayer(record.layer.D);
             record.layer = null;
         });
+        
+        // Make select tab active on mobile device.
+        if (_xyz.activateLayersTab) _xyz.activateLayersTab();
     }
 
     // Get layer from data source
@@ -68,6 +71,9 @@ module.exports = function Select() {
             if (!record.layer) return record
         });
         if (freeRecords.length === 0) return
+
+        // Make select tab active on mobile device.
+        if (_xyz.activateSelectTab) _xyz.activateSelectTab();
 
         let _layer = _xyz.countries[_xyz.country].layers[layer.layer];
 

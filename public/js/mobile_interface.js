@@ -25,23 +25,23 @@ module.exports = function(){
     utils.addClass(modules, 'hidden');
     utils.removeClass(modules[0], 'hidden');
 
+    if (!_xyz.catchments) document.querySelector('.tab_catchments').remove();
 
-    // _xyz.location ?
-    //     utils.addClass(document.querySelector('.tab_location'), 'active') :
-    //     _xyz.grid ?
-    //         utils.addClass(document.querySelector('.tab_grid'), 'active') :
-    //         _xyz.drivetime ?
-    //             utils.addClass(document.querySelector('.tab_drivetime'), 'active') :
-    //             utils.addClass(document.querySelector('.tab_statistics'), 'active');
+    _xyz.activateLayersTab = function (){
+        let tab = document.querySelector('.tab_layers');
+        utils.removeClass(tab.parentNode.children, 'active');
+        utils.addClass(tab, 'active');
+        utils.addClass(modules, 'hidden');
+        utils.removeClass(document.getElementById('layers_module'), 'hidden');
+    }
 
-
-    // if (!settings.location) document.querySelector('.tab_location').remove();
-
-    // if (!settings.grid) document.querySelector('.tab_grid').remove();
-
-    // if (!settings.drivetime) document.querySelector('.tab_drivetime').remove();
-
-    // if (!settings.vector) document.querySelector('.tab_statistics').remove();
+    _xyz.activateSelectTab = function (){
+        let tab = document.querySelector('.tab_select');
+        utils.removeClass(tab.parentNode.children, 'active');
+        utils.addClass(tab, 'active');
+        utils.addClass(modules, 'hidden');
+        utils.removeClass(document.getElementById('select_module'), 'hidden');
+    }
 
     let tab_buttons = document.querySelectorAll('.tab_bar .tab_btn');
     for (let i = 0; i < tab_buttons.length; i++) {
