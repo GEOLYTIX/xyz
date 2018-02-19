@@ -33,7 +33,7 @@ function addImages(record, images) {
         type: 'file',
         accept: 'images/*'
     });
-    add_img.setAttribute('capture', true);
+    add_img.setAttribute('capture', '');
     img_td.appendChild(add_img);
 
     // add images if there are any
