@@ -166,6 +166,13 @@
                   "options": ["undefined", 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "more than 5000"]
               },
               {
+                  "field": "num_floors",
+                  "label": "Number of floors",
+                  "type": "integer",
+                  "range": [0,10],
+                  "level": 1
+              },
+              {
                   "label": "Floorspace allocated to products %"
               },
               {
@@ -204,9 +211,10 @@
                   "level": 1
               },
               {
-                  "field": "city",
-                  "label": "City",
-                  "type": "text"
+                  "field": "address",
+                  "label": "Address",
+                  "type": "text",
+                  "text": true
               },
               {
                   "field": "comments",

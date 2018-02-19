@@ -77,6 +77,7 @@ function addInfojToList(record) {
             })
             rangeInput.addEventListener('input', function(){
                 utils.addClass(val, 'changed');
+                val.textContent = this.value;
                 record.upload.style.display = 'block';
                 record.layer.infoj[key].value = this.value;
             });
