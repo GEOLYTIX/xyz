@@ -19,7 +19,7 @@ function fetch_tiles(req, res) {
                SELECT
                  ${req.query.qID} AS id,
                  ST_AsMVTGeom(
-                   geom_3857,
+                    ${req.query.geom},
                    TileBBox(${z},${x},${y}),
                    4096,
                    256,
