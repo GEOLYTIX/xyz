@@ -133,7 +133,7 @@
           "display": true,
           "name": "Stores",
           "format": "cluster",
-          "pane": ["stores", 500],
+          "pane": ["stores", 510],
           "dbs": "MVT",
           "table": "dominos_stores",
           "qID": "store_id",
@@ -200,6 +200,50 @@
                 "type": "text"
               }
           ]
+        },
+        "retail_places": {
+          "display": true,    
+          "name": "Retail Places",
+          "format": "mvt",
+          "geom": "geom",
+          "geom_3857": "geom_3857",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "pane": ["bounds", 500],
+          "dbs": "MVT",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "comp_strength",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Est. Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Est. Brands",
+              "type": "integer",
+              "level": 1
+            }
+          ],
+          "arrayZoom": {
+            "10": "dominos_retailplace"
+          }
         }
       }
     }

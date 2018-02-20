@@ -202,6 +202,10 @@ module.exports = function Select() {
                         });
                 }
             }).addTo(_xyz.map);
+       
+        record.layer.L.getLayers()[0].on('dragend', function (e) {
+            record.upload.style.display = 'block';
+        });
 
         addRecordToList(record);
     }

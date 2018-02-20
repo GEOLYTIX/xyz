@@ -138,8 +138,10 @@
       "layers": {
         "border": {
           "name": "Country Border",
-          "format": "mvt",
           "pane": ["bounds", 510],
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geom": "geom",
           "dbs": "MVT",
           "qID": "country",
           "filter": "AND country = 'UK'",
@@ -1007,10 +1009,17 @@
         "postal_areas": {          
           "name": "Postal Areas",
           "format": "mvt",
-          "geom": "geom_3857",
+          "geom_3857": "geom_3857",
+          "geom": "geom",
+          "geomj": "geomj",
           "pane": ["postal", 520],
           "dbs": "MVT",
           "qID": "qid",
+          "arrayZoom": {
+            "10": "gb_postaldistrict_census__11",
+            "11": "gb_postaldistrict_census__11",
+            "12": "gb_postalsector_census__11"
+          },
           "infoj": [
             {
               "field": "postal_label",
@@ -1028,12 +1037,6 @@
               "type": "integer"
             }
           ],
-          "geomj": "geomj",
-          "arrayZoom": {
-            "10": "gb_postaldistrict_census__11",
-            "11": "gb_postaldistrict_census__11",
-            "12": "gb_postalsector_census__11"
-          },
           "style": {
             "stroke": true,
             "color": "#666",
@@ -1044,15 +1047,27 @@
         "retail_places_mvt": {          
           "name": "Retail Places",
           "format": "mvt",
-          "geom": "geom_3857",
+          "geom_3857": "geom_3857",
+          "geom": "geom",
+          "geomj": "ST_AsGeoJSON(geom)",
           "pane": ["bounds", 510],
           "dbs": "MVT",
-          "qID": "qid",
-          "infoj": "infoj",
-          "geomj": "geomj",
+          "qID": "id",
           "arrayZoom": {
-            "10": "gb_retail_place_bounds"
+            "10": "gb_retailplace"
           },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            }
+          ],
           "style": {
             "stroke": true,
             "color": "#ff9800",
@@ -1075,16 +1090,22 @@
           "pane": ["retail_points", 540],
           "dbs": "MVT",         
           "qID": "qid",
-          "table": "retailpoints",
+          "table": "gb_retailpoint",
           "cluster_label": "store",
           "cluster_competitor": "brand",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
           "markerMin": 20,
           "markerMax": 40,
-          "infoj": "infoj",
-          "geomj": "geomj",
-          "geom": "geomcntr",
+          "infoj": [
+            {
+              "field": "retailer",
+              "label": "Retailer",
+              "type": "text"
+            }
+          ],
+          "geomj": "ST_AsGeoJSON(geom)",
+          "geom": "geom",
           "markerStyle": {
             "aldi": {
               "style": [

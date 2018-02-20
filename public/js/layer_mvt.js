@@ -30,6 +30,7 @@ function getLayer(){
                 qID: layer.qID,
                 filter: layer.filter || '',
                 layer: layer.layer,
+                geom_3857: layer.geom_3857,
                 geom: layer.geom,
                 west: bounds.getWest(),
                 south: bounds.getSouth(),

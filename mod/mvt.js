@@ -19,14 +19,14 @@ function fetch_tiles(req, res) {
                SELECT
                  ${req.query.qID} AS id,
                  ST_AsMVTGeom(
-                    ${req.query.geom},
+                    ${req.query.geom_3857},
                    TileBBox(${z},${x},${y}),
                    4096,
                    256,
                    true) geom
                FROM ${req.query.table}
                WHERE ST_Intersects(
-                      geom,
+                      ${req.query.geom},
                       ST_MakeEnvelope(
                         ${req.query.west},
                         ${req.query.north},
