@@ -102,16 +102,14 @@ function addInfojToList(record) {
             val.appendChild(select);
             
             select.addEventListener('change', function(e){
-                
                 if(this.options[this.selectedIndex].text === "other"){
                     let other = document.createElement('input');
                     other.type = "text";
                     other.required = true;
-                    other.id = "select-other-value";
                     other.placeholder = "Please specify";
                     val.appendChild(other);
                 } else {
-                    document.getElementById("select-other-value").remove();
+                    this.nextElementSibling.remove();
                 }
                 
                 utils.addClass(this, 'changed');
