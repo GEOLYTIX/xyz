@@ -76,7 +76,8 @@ function addInfojToList(record) {
             tr = document.createElement('tr');
             table.appendChild(tr);
             let range = utils.createElement('td', {
-                colSpan: '2'              
+                colSpan: '2',
+                className: 'range'        
             })
             tr.appendChild(range);
             let rangeInput = utils.createElement('input', {
@@ -86,6 +87,13 @@ function addInfojToList(record) {
                 max: record.layer.infoj[key].range[1]
             })
             rangeInput.addEventListener('input', function(){
+                utils.addClass(val, 'changed');
+                val.textContent = this.value;
+                record.upload.style.display = 'block';
+                record.layer.infoj[key].value = this.value;
+            });
+            rangeInput.addEventListener('click', function (e) {
+                this.value = e.offsetX / this.clientWidth * this.max;
                 utils.addClass(val, 'changed');
                 val.textContent = this.value;
                 record.upload.style.display = 'block';

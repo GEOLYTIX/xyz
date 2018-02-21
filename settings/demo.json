@@ -1027,14 +1027,30 @@
               "type": "text"
             },
             {
-              "field": "pop__01",
-              "label": "Total Population '01",
+              "field": "pop__11",
+              "label": "Total Population",
               "type": "integer"
             },
             {
-              "field": "pop__11",
-              "label": "Total Population '11",
-              "type": "integer"
+              "field": "gen_female__11",
+              "label": "Female Population",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "gen_male__11",
+              "label": "Male Population",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "label": "Age Groups"
+            },
+            {
+              "field": "age_16pl__11",
+              "label": "Age 16+",
+              "type": "integer",
+              "level": 1
             }
           ],
           "style": {

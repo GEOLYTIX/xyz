@@ -86,11 +86,14 @@
 
         .range {
             width: 100%;
+            width: calc(100% - 5px);
+            padding: 5px 0;
 
             input[type=range] {
                 width: 100%;
             }
         }
+
 
         .infojTable {
             width: 100%;
@@ -115,6 +118,10 @@
                 font-family: 'PT Mono', monospace;
                 margin: 5px 0 7px 0;
                 box-sizing: border-box;
+            }
+
+            .range {
+                padding: 10px 0 10px 10px;
             }
 
             .lv-0 {
