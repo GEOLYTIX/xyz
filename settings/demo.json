@@ -1047,11 +1047,19 @@
               "label": "Age Groups"
             },
             {
-              "field": "age_16pl__11",
-              "label": "Age 16+",
+              "field": "age_15un",
+              "fieldfx": "(age_00to04__11 + age_05to07__11 + age_08to09__11 + age_10to14__11 + age_15__11)",
+              "label": "under 16",
               "type": "integer",
               "level": 1
-            }
+            },
+            {
+              "field": "age_16pl__11",
+              "label": "16 and above",
+              "type": "integer",
+              "level": 1
+            },
+            
           ],
           "style": {
             "stroke": true,

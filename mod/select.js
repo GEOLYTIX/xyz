@@ -11,7 +11,7 @@ function select(req, res) {
 
     let fields = '';
     Object.keys(req.body.infoj).map(key => {
-        if (req.body.infoj[key].type) fields += `${req.body.infoj[key].field}::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
+        if (req.body.infoj[key].type) fields += `${req.body.infoj[key].fieldfx || req.body.infoj[key].field}::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
     });
 
     let q =
