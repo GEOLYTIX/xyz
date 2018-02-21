@@ -33,6 +33,12 @@ function addInfojToList(record) {
             if (!record.layer.infoj[key].type) return
         }
 
+        // Remove row if not editable and no value
+        if (!record.layer.editable && !record.layer.infoj[key].value) {
+            tr.remove();
+            return
+        }
+
         // Create new row for text cells and append to table.
         if (record.layer.infoj[key].type && (record.layer.infoj[key].type === 'text' || record.layer.infoj[key].type === 'text[]')){
             tr = document.createElement('tr');
@@ -56,7 +62,11 @@ function addInfojToList(record) {
 
         // Set field value if layer is not editable and return from object.map function.
         if (!record.layer.editable && record.layer.infoj[key].value) {
-            val.textContent = record.layer.infoj[key].value;
+            val.textContent = record.layer.infoj[key].type === 'numeric' ?
+                record.layer.infoj[key].value.toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
+                record.layer.infoj[key].type === 'integer' ?
+                    record.layer.infoj[key].value.toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
+                    record.layer.infoj[key].value;
             return
         }
 

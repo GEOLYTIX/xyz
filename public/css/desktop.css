@@ -664,7 +664,10 @@
       font-size: 12px;
       padding-left: 10px; }
     .module .content .infojTable .val {
-      font-family: 'PT Mono', monospace; }
+      font-family: 'PT Mono', monospace;
+      padding-left: 10px;
+      font-weight: 400;
+      font-size: 12px; }
     .module .content .infojTable .addImageCell {
       vertical-align: middle;
       height: 170px; }

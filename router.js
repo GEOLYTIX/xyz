@@ -26,6 +26,7 @@ router.get('/', isLoggedIn, function (req, res) {
             hooks: req.session.hooks ? JSON.stringify(req.session.hooks) : false,
             catchments: false,
             mapbox_token: process.env.MAPBOX,
+            //localhost: process.env.LOCALHOST,
             settings: JSON.stringify(appSettings)
         }))
 });

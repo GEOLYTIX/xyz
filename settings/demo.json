@@ -1066,6 +1066,60 @@
               "field": "rp_type",
               "label": "Type",
               "type": "text"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
             }
           ],
           "style": {
@@ -1084,12 +1138,13 @@
           }
         },
         "retail_points": {
+          "display": true,
           "panel": true,
           "name": "Retail Points",
           "format": "cluster",
           "pane": ["retail_points", 540],
           "dbs": "MVT",         
-          "qID": "qid",
+          "qID": "id",
           "table": "gb_retailpoint",
           "cluster_label": "store",
           "cluster_competitor": "brand",
@@ -1099,9 +1154,58 @@
           "markerMax": 40,
           "infoj": [
             {
+              "field": "store",
+              "label": "Store",
+              "type": "text"
+            },
+            {
               "field": "retailer",
               "label": "Retailer",
               "type": "text"
+            },
+            {
+              "field": "fascia",
+              "label": "Fascia",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "size_band",
+              "label": "Size",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "label": "Address",
+              "level": 1
+            },
+            {
+              "field": "address_1",
+              "type": "text"
+            },
+            {
+              "field": "address_2",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "type": "text"
+            },
+            {
+              "field": "pqi",
+              "label": "Positional Quality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1
             }
           ],
           "geomj": "ST_AsGeoJSON(geom)",
