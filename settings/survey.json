@@ -169,7 +169,14 @@
               },
               {
                   "field": "num_floor",
-                  "label": "Number of floors",
+                  "label": "Floor number",
+                  "type": "text",
+                  "range": [0,10],
+                  "level": 1
+              },
+              {
+                  "field": "total_floors",
+                  "label": "Total number of floors",
                   "type": "text",
                   "range": [0,10],
                   "level": 1
