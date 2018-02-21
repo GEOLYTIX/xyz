@@ -132,6 +132,7 @@ function addInfojToList(record) {
             select.addEventListener('change', function(e){
                 if(this.options[this.selectedIndex].text === "other"){
                     this.nextElementSibling.style.display = "block";
+                    this.nextElementSibling.value = '';
                 } else {
                     this.nextElementSibling.style.display = "none";
                 }
