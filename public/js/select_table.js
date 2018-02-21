@@ -98,6 +98,10 @@ function addInfojToList(record) {
         // Create select input for options.
         if (record.layer.infoj[key].options) {
             let select = document.createElement('select');
+            
+            record.layer.infoj[key].options.unshift("undefined");
+            record.layer.infoj[key].options.push("other");
+            
             Object.keys(record.layer.infoj[key].options).map(function (i) {
                 select.appendChild(utils.createElement('option', {
                     textContent: record.layer.infoj[key].options[i],
@@ -106,13 +110,25 @@ function addInfojToList(record) {
                 }));
             });
             val.appendChild(select);
+            
             select.addEventListener('change', function(e){
+                if(this.options[this.selectedIndex].text === "other"){
+                    let other = document.createElement('input');
+                    other.type = "text";
+                    other.required = true;
+                    other.placeholder = "Please specify";
+                    val.appendChild(other);
+                } else {
+                    this.nextElementSibling.remove();
+                }
+                
                 utils.addClass(this, 'changed');
                 record.upload.style.display = 'block';
                 record.layer.infoj[key].value = e.target[e.target.value].label;
             });
             return
         }
+        
 
         // Creat input text area for editable fields
         if (record.layer.infoj[key].text) {

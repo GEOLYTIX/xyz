@@ -31,9 +31,9 @@ function addImages(record, images) {
     let add_img = utils.createElement('input', {
         id: 'addImage_' + record.letter,
         type: 'file',
-        accept: 'images/*'
+        accept: 'image/*;capture=camera'
     });
-    add_img.setAttribute('capture', '');
+    
     img_td.appendChild(add_img);
 
     // add images if there are any
