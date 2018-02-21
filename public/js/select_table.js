@@ -127,7 +127,7 @@ function addInfojToList(record) {
                     other.placeholder = "Please specify";
                     val.appendChild(other);
                 } else {
-                    this.nextElementSibling.remove();
+                    if(this.nextElementSibling) this.nextElementSibling.remove();
                 }
                 
                 utils.addClass(this, 'changed');
