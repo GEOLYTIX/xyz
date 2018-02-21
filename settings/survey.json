@@ -170,7 +170,7 @@
               {
                   "field": "num_floors",
                   "label": "Number of floors",
-                  "type": "integer",
+                  "type": "text",
                   "range": [0,10],
                   "level": 1
               },
@@ -180,35 +180,35 @@
               {
                   "field": "floorspace_sports_performance_products_pct",
                   "label": "Sports Performance",
-                  "type": "integer",
+                  "type": "text",
                   "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_sportswear_products_pct",
                   "label": "Sportswear",
-                  "type": "integer",
+                  "type": "text",
                   "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_kids_sports_products_pct",
                   "label": "Kids Sports",
-                  "type": "integer",
+                  "type": "text",
                   "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_other_products_pct",
                   "label": "Other products",
-                  "type": "integer",
+                  "type": "text",
                   "range": [0,100],
                   "level": 1
               },
               {
                   "field": "floorspace_adidas_pct",
                   "label": "Adidas floorspace",
-                  "type": "integer",
+                  "type": "text",
                   "range": [0,100],
                   "level": 1
               },
