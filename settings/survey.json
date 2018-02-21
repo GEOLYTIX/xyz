@@ -152,7 +152,7 @@
               },
               {
                   "field": "fascia_site_visit",
-                  "label": "Fascia during site visit",
+                  "label": "Fascia present during site visit",
                   "type": "text"
               },
               {
