@@ -168,7 +168,7 @@
                   "options": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000, 3000, 4000, 5000, "more than 5000"]
               },
               {
-                  "field": "num_floors",
+                  "field": "num_floor",
                   "label": "Number of floors",
                   "type": "text",
                   "range": [0,10],

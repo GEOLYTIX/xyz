@@ -105,7 +105,15 @@ function addInfojToList(record) {
 
         // Create select input for options.
         if (record.layer.infoj[key].options) {
-            let select = document.createElement('select');
+            let select = document.createElement('select'),
+                other = utils.createElement('input', {
+                    type: "text",
+                    required: true,
+                    placeholder: "Please specify",
+                });
+            other.style.display = "none";
+            
+            
             
             record.layer.infoj[key].options.unshift("undefined");
             record.layer.infoj[key].options.push("other");
@@ -117,17 +125,15 @@ function addInfojToList(record) {
                     selected: (record.layer.infoj[key].options[i] === record.layer.infoj[key].value)
                 }));
             });
+            
             val.appendChild(select);
+            val.appendChild(other);
             
             select.addEventListener('change', function(e){
                 if(this.options[this.selectedIndex].text === "other"){
-                    let other = document.createElement('input');
-                    other.type = "text";
-                    other.required = true;
-                    other.placeholder = "Please specify";
-                    val.appendChild(other);
+                    this.nextElementSibling.style.display = "block";
                 } else {
-                    if(this.nextElementSibling) this.nextElementSibling.remove();
+                    this.nextElementSibling.style.display = "none";
                 }
                 
                 utils.addClass(this, 'changed');
