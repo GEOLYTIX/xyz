@@ -125,6 +125,7 @@ function addInfojToList(record) {
                     .join(';');
                 select.appendChild(opt);
             });
+            
             val.appendChild(select);
 
             // Create select_input which holds the value of the select prime option.
