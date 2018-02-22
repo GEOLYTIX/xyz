@@ -679,7 +679,8 @@ input[type=range]::-moz-range-thumb {
       width: 100%;
       font-family: 'PT Mono', monospace;
       margin: 5px 0 7px 0;
-      box-sizing: border-box; }
+      box-sizing: border-box;
+      padding-left: 3px; }
     .module .content .infojTable .range {
       padding: 10px 0 10px 10px; }
     .module .content .infojTable .lv-0 {
@@ -692,7 +693,6 @@ input[type=range]::-moz-range-thumb {
       padding-left: 10px; }
     .module .content .infojTable .val {
       font-family: 'PT Mono', monospace;
-      padding-left: 10px;
       font-weight: 400;
       font-size: 12px; }
     .module .content .infojTable .addImageCell {

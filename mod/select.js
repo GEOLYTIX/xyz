@@ -12,6 +12,7 @@ function select(req, res) {
     let fields = '';
     Object.keys(req.body.infoj).map(key => {
         if (req.body.infoj[key].type) fields += `${req.body.infoj[key].fieldfx || req.body.infoj[key].field}::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
+        if (req.body.infoj[key].subfield) fields += `${req.body.infoj[key].subfield}::${req.body.infoj[key].type} AS ${req.body.infoj[key].subfield},`
     });
 
     let q =
@@ -31,6 +32,9 @@ function select(req, res) {
             Object.keys(req.body.infoj).map(key => {
                 if (result.rows[0][req.body.infoj[key].field]) {
                     req.body.infoj[key].value = result.rows[0][req.body.infoj[key].field];
+                }
+                if (result.rows[0][req.body.infoj[key].subfield]) {
+                    req.body.infoj[key].subvalue = result.rows[0][req.body.infoj[key].subfield];
                 }
             });
 

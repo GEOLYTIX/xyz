@@ -1059,7 +1059,56 @@
               "type": "integer",
               "level": 1
             },
-            
+            {
+              "label": "Education"
+            },
+            {
+              "field": "edu_primary_i1__11",
+              "label": "Primary Education (IESCD 1)",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "edu_secondary",
+              "fieldfx": "(edu_secondary_i2__11 + edu_secondary_i2_l__11 + edu_secondary_i3__11 + edu_secondary_i3v__11)",
+              "label": "Secondary Education (IESCD 2)",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "edu_tertiary_i6__11",
+              "label": "Tertiary Education (IESCD 6)",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "label": "Economic Activity"
+            },
+            {
+              "field": "eac_employed__11",
+              "label": "Employed",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "eac_unemployed__11",
+              "label": "Unemployed",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "ea_student",
+              "fieldfx": "(eac_student__11 + ein_student__11)",
+              "label": "Student",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "ein_pensioner__11",
+              "label": "Pensioner",
+              "type": "integer",
+              "level": 1
+            }
           ],
           "style": {
             "stroke": true,
