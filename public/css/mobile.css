@@ -584,7 +584,8 @@ input[type=range]::-moz-range-thumb {
   padding-top: 10px; }
   .module .content select {
     width: 100%;
-    margin: 5px 0; }
+    margin: 5px 0;
+    font-family: 'PT Mono', monospace; }
   .module .content .panel {
     transition: opacity 300ms ease-in-out;
     -moz-transition: opacity 300ms ease-in-out;
