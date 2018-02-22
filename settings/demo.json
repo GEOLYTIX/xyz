@@ -160,7 +160,8 @@
           "name": "Census Grid",
           "format": "grid",
           "pane": ["grid", 515],
-          "dbs": "XYZ",  
+          "dbs": "XYZ",
+          "geom": "geomcntr",   
           "grid_color": "pop__11",
           "arrayZoom": {
             "6": "gb_hx_64k",
@@ -1064,20 +1065,20 @@
             },
             {
               "field": "edu_primary_i1__11",
-              "label": "Primary Education (IESCD 1)",
+              "label": "Primary (IESCD 1)",
               "type": "integer",
               "level": 1
             },
             {
               "field": "edu_secondary",
               "fieldfx": "(edu_secondary_i2__11 + edu_secondary_i2_l__11 + edu_secondary_i3__11 + edu_secondary_i3v__11)",
-              "label": "Secondary Education (IESCD 2)",
+              "label": "Secondary (IESCD 2)",
               "type": "integer",
               "level": 1
             },
             {
               "field": "edu_tertiary_i6__11",
-              "label": "Tertiary Education (IESCD 6)",
+              "label": "Tertiary (IESCD 6)",
               "type": "integer",
               "level": 1
             },
@@ -1634,7 +1635,92 @@
         },
         "dbs": "XYZ",
         "table": "gb_hx_1k",
-        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer,'Gender', json_build_object ('Female', sum(gen_female__11)::integer,'Male', sum(gen_male__11)::integer),'Age 16-74', sum(age_16to74__11)::integer),'Ethinicity', json_build_object('White British', sum(ret_white_brit__11)::integer),'Unemployment', json_build_object('Unemployed 2005', sum(ue__05)::integer,'Unemployed 2006', sum(ue__06)::integer,'Unemployed 2007', sum(ue__07)::integer,'Unemployed 2008', sum(ue__08)::integer,'Unemployed 2009', sum(ue__09)::integer,'Unemployed 2010', sum(ue__10)::integer,'Unemployed 2011', sum(ue__11)::integer,'Unemployed 2012', sum(ue__12)::integer,'Unemployed 2013', sum(ue__13)::integer,'Unemployed 2014', sum(ue__14)::integer,'Unemployed 2015', sum(ue__15)::integer,'Unemployed 2016', sum(ue__16)::integer))"
+        "geom": "geomcntr",   
+        "infoj": [
+          {
+            "field": "pop__11",
+            "label": "Total Population",
+            "type": "numeric"
+          },
+          {
+            "field": "gen_female__11",
+            "label": "Female Population",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "gen_male__11",
+            "label": "Male Population",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "label": "Age Groups"
+          },
+          {
+            "field": "age_15un",
+            "fieldfx": "(age_05to07__11 + age_08to09__11 + age_10to14__11 + age_15__11)",
+            "label": "under 16",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "age_16pl__11",
+            "label": "16 and above",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "label": "Education"
+          },
+          {
+            "field": "edu_primary_i1__11",
+            "label": "Primary (IESCD 1)",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "edu_secondary",
+            "fieldfx": "(edu_secondary_i2__11 + edu_secondary_i2_l__11 + edu_secondary_i3__11 + edu_secondary_i3v__11)",
+            "label": "Secondary (IESCD 2)",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "edu_tertiary_i6__11",
+            "label": "Tertiary (IESCD 6)",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "label": "Economic Activity"
+          },
+          {
+            "field": "eac_employed__11",
+            "label": "Employed",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "eac_unemployed__11",
+            "label": "Unemployed",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "ea_student",
+            "fieldfx": "(eac_student__11 + ein_student__11)",
+            "label": "Student",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "ein_pensioner__11",
+            "label": "Pensioner",
+            "type": "numeric",
+            "level": 1
+          }
+        ]
       }
     },
     "RO": {
@@ -1652,29 +1738,26 @@
       ],
       "minZoom": 6,
       "maxZoom": 17,
-      "catchments": {
-        "modes": {
-          "walking": {
-            "minMin": 5,
-            "defMin": 15,
-            "maxMin": 45,
-            "detail": 2,
-            "reach": 600
-          }
-        },
-        "dbs": "XYZ",
-        "table": "ro_hx_1k",
-        "infoj": "json_build_object('Age & Gender', json_build_object('Total Population', sum(pop__11)::integer, 'Gender', json_build_object ('Female', sum(gen_female__11)::integer, 'Male', sum(gen_male__11)::integer), 'Age 15-24', sum(age_15to24_gen_male__11 + age_15to24_gen_female__11)::integer, 'Age 25-34', sum(age_25to34_gen_male__11 + age_25to34_gen_female__11)::integer,    'Age 35-44', sum(age_35to44_gen_male__11 + age_35to44_gen_female__11)::integer, 'Age 45-54', sum(age_45to54_gen_male__11 + age_45to54_gen_female__11)::integer, 'Age 55-64', sum(age_55to64_gen_male__11 + age_55to64_gen_female__11)::integer),  'Education', json_build_object('Tertiary', sum(edu_tertiary_gen_m__11 + edu_tertiary_gen_f__11 + edu_tertiary_university_gen_m__11 + edu_tertiary_university_gen_f__11 + edu_tertiary_i7_gen_m__11 + edu_tertiary_i7_gen_f__11)::integer, 'Secondary', sum(edu_secondary_i3_gen_m__11 + edu_secondary_i3_gen_f__11 + edu_secondary_i3v_gen_m__11 + edu_secondary_i3v_gen_f__11 + edu_secondary_i2_l_gen_m__11 + edu_secondary_i2_l_gen_f__11)::integer, 'Primary', sum(edu_primary_i1_gen_m__11 + edu_primary_i1_gen_f__11)::integer))"
-      },
       "layers": {
         "border": {
           "name": "Country Border",
+          "pane": [
+            "bounds",
+            510
+          ],
           "format": "mvt",
-          "pane": ["bounds", 510],
+          "geom_3857": "geom_3857",
+          "geom": "geom",
           "dbs": "MVT",
           "qID": "country",
           "arrayZoom": {
             "1": "borders"
+          },
+          "style": {
+            "stroke": true,
+            "color": "#555",
+            "weight": 1,
+            "fillOpacity": 0
           }
         },
         "grid": {
@@ -1682,7 +1765,8 @@
           "name": "Census Grid",
           "format": "grid",
           "pane": ["grid", 515],
-          "dbs": "XYZ",   
+          "dbs": "XYZ",
+          "geom": "geomcntr",   
           "arrayZoom": {
             "6": "ro_hx_64k",
             "7": "ro_hx_32k",
@@ -1857,16 +1941,118 @@
         "communes": {
           "name": "Communes",
           "format": "mvt",
-          "pane": ["postal", 520],
+          "geom_3857": "geom_3857",
+          "geom": "geom",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "pane": ["communes", 520],
           "dbs": "MVT",
           "qID": "qid",
-          "infoj": "infoj",
-          "geomj": "geomj",
           "arrayZoom": {
             "9": "ro_commune_census__11"
-          }
+          },
+          "infoj": [
+            {
+              "field": "commune",
+              "label": "Commune",
+              "type": "text"
+            },
+            {
+              "field": "pop__11",
+              "label": "Total Population",
+              "type": "integer"
+            },
+            {
+              "field": "gen_female__11",
+              "label": "Female Population",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "gen_male__11",
+              "label": "Male Population",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "label": "Age Groups"
+            },
+            {
+              "field": "age_14un",
+              "fieldfx": "(age_14mi_gen_male__11 + age_14mi_gen_female__11)",
+              "label": "under 14 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "age_15to24",
+              "fieldfx": "(age_15to24_gen_male__11 + age_15to24_gen_female__11)",
+              "label": "15 to 24 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "age_25to34",
+              "fieldfx": "(age_25to34_gen_male__11 + age_25to34_gen_female__11)",
+              "label": "25 to 34 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "age_35to44",
+              "fieldfx": "(age_35to44_gen_male__11 + age_35to44_gen_female__11)",
+              "label": "35 to 44 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "age_45to54",
+              "fieldfx": "(age_45to54_gen_male__11 + age_45to54_gen_female__11)",
+              "label": "45 to 54 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "age_55to64",
+              "fieldfx": "(age_55to64_gen_male__11 + age_55to64_gen_female__11)",
+              "label": "55 to 64 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "age_65pl",
+              "fieldfx": "(age_65pl_gen_male__11 + age_65pl_gen_female__11)",
+              "label": "over 64 years",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "label": "Education"
+            },
+            {
+              "field": "edu_primary",
+              "fieldfx": "(edu_none_gen_m__11 + edu_none_gen_f__11 + edu_illiterate_gen_m__11 + edu_illiterate_gen_f__11)",
+              "label": "None/Illiterate",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "edu_secondary",
+              "fieldfx": "(edu_secondary_gen_m__11 + edu_secondary_gen_f__11)",
+              "label": "Secondary",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "edu_tertiary",
+              "fieldfx": "(edu_tertiary_gen_m__11 + edu_tertiary_gen_f__11)",
+              "label": "Tertiary",
+              "type": "integer",
+              "level": 1
+            }
+          ]
         },
         "retail_fashion": {
+          "display": true,
           "panel": true,
           "name": "Fashion retail",
           "format": "cluster",
@@ -1876,12 +2062,48 @@
           "table": "ro_fashion",
           "cluster_label": "store_name",
           "cluster_competitor": "fascia",
-          "cluster_kmeans": 4,
+          "cluster_kmeans": 2,
           "cluster_dbscan": 0.0075,
           "markerMin": 20,
           "markerMax": 40,
-          "infoj": "infoj",
-          "geomj": "geomj",
+          "infoj": [
+            {
+              "field": "store_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "fascia",
+              "label": "Fascia",
+              "type": "text"
+            },
+            {
+              "field": "lessor",
+              "label": "Lessor",
+              "type": "text"
+            },
+            {
+              "field": "lease_mgr",
+              "label": "Lease Manager",
+              "type": "text"
+            },
+            {
+              "field": "open_date",
+              "label": "Open Date",
+              "type": "text"
+            },
+            {
+              "field": "size_sqm",
+              "label": "Size (m2)",
+              "type": "integer"
+            },
+            {
+              "field": "city_mall",
+              "label": "City/Mall",
+              "type": "text"
+            }
+          ],
+          "geomj": "ST_AsGeoJSON(geomcntr)",
           "geom": "geomcntr",
           "markerStyle": {
             "SINSAY": {

@@ -27,6 +27,7 @@ function getLayer(){
         layer.xhr.open('GET', localhost + 'q_grid?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
+            geom: layer.geom,
             size: layer.grid_size,
             color: layer.grid_color,
             west: bounds.getWest(),

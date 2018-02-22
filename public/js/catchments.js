@@ -27,6 +27,21 @@ module.exports = function catchments(){
 
     // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
     _xyz.catchments.init = function (change_country) {
+
+        if (!_xyz.countries[_xyz.country].catchments && view_mode === 'desktop') {
+            document.getElementById('catchments_module').style.display = 'none';
+            return
+        } else if (view_mode === 'desktop') {
+            document.getElementById('catchments_module').style.display = 'block';
+        }
+
+        if (!_xyz.countries[_xyz.country].catchments && view_mode === 'mobile') {
+            document.querySelector('.tab_catchments').style.display = 'none';
+            return
+        } else if (view_mode === 'mobile') {
+            document.querySelector('.tab_catchments').style.display = 'table-cell';
+        }
+
         dom.info_table.innerHTML = '';
         dom.content[1].style.display = 'none';
         dom.content[0].style.display = 'block';
@@ -252,13 +267,15 @@ module.exports = function catchments(){
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = function () {
             if (this.status === 200) {
-                feature.infoj = JSON.parse(this.response);
+                feature.infoj = JSON.parse(this.response).infoj;
+                feature.grid = true;
                 _xyz.select.addLayerToRecord(feature);
             }
         }
         xhr.send(JSON.stringify({
             dbs: _xyz.countries[_xyz.country].catchments.dbs,
             table: _xyz.countries[_xyz.country].catchments.table,
+            geom: _xyz.countries[_xyz.country].catchments.geom,
             infoj: _xyz.countries[_xyz.country].catchments.infoj,
             geometry: feature.geometry
         }));

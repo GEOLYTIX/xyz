@@ -20,9 +20,6 @@ function addInfojToList(record) {
         });
         table.appendChild(tr);
 
-        // Remove row if not editable and no value
-        if (!record.layer.editable && !record.layer.infoj[key].value) return
-
         // Create new table cell for label and append to table.
         if (record.layer.infoj[key].label){
             let label = utils.createElement('td', {
@@ -34,6 +31,12 @@ function addInfojToList(record) {
 
             // return from object.map function if field(label) has no type.
             if (!record.layer.infoj[key].type) return
+        }
+
+        // Remove row if not editable and no value
+        if (!record.layer.editable && !record.layer.infoj[key].value) {
+            tr.remove();
+            return
         }
 
         // Create new row for text cells and append to table.
@@ -61,10 +64,11 @@ function addInfojToList(record) {
 
         // Set field value if layer is not editable and return from object.map function.
         if (!record.layer.editable && record.layer.infoj[key].value) {
+            console.log(record.layer.grid? 0: 2);
             val.textContent = record.layer.infoj[key].type === 'numeric' ?
-                record.layer.infoj[key].value.toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
+                parseFloat(record.layer.infoj[key].value).toLocaleString('en-GB', { maximumFractionDigits: record.layer.grid? 0: 2}) :
                 record.layer.infoj[key].type === 'integer' ?
-                    record.layer.infoj[key].value.toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
+                    parseInt(record.layer.infoj[key].value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
                     record.layer.infoj[key].value;
             return
         }
