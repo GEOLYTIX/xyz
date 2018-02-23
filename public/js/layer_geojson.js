@@ -36,7 +36,7 @@ function getLayer(){
         
         // Draw layer on load event.
         layer.xhr.onload = function(){
-            if(this.status === 200){
+            if(this.status === 200 && layer.display){
 
                 // Create feature collection for vector features.
                 let features = JSON.parse(this.responseText);

@@ -38,7 +38,7 @@ function getLayer(){
 
         // Draw layer on load event.
         layer.xhr.onload = function () {
-            if (this.status === 200) {
+            if (this.status === 200 && layer.display) {
 
                 // Check for existing layer and remove from map.
                 if (layer.L) _xyz.map.removeLayer(layer.L);

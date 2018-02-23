@@ -1,5 +1,5 @@
 {
-  "title": "GEOLYTIX | DOMINOS",
+  "title": "DOMINOS",
   "select": {
     "records": [
       {
@@ -133,7 +133,7 @@
           "display": true,
           "name": "Stores",
           "format": "cluster",
-          "pane": ["stores", 510],
+          "pane": ["stores", 520],
           "dbs": "MVT",
           "table": "dominos_stores",
           "qID": "store_id",
@@ -201,16 +201,19 @@
               }
           ]
         },
-        "retail_places": {
-          "display": true,    
-          "name": "Retail Places",
+        "dominos_retailplace_select": {          
+          "name": "Retail Place Catchments",
           "format": "mvt",
-          "geom": "geom",
           "geom_3857": "geom_3857",
+          "geom": "geom",
           "geomj": "ST_AsGeoJSON(geom)",
-          "pane": ["bounds", 500],
+          "geomdisplay": ",ST_AsGeoJSON(displaygeom) AS geomdisplay",
+          "pane": ["bounds", 510],
           "dbs": "MVT",
           "qID": "id",
+          "arrayZoom": {
+            "10": "dominos_retailplace_select"
+          },
           "infoj": [
             {
               "field": "rp_name",
@@ -223,26 +226,193 @@
               "type": "text"
             },
             {
-              "field": "comp_strength",
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "sales",
+              "label": "Sales",
+              "type": "integer"
+            },
+            {
+              "field": "rank",
+              "label": "Rank",
+              "type": "integer"
+            },
+            {
+              "field": "address_total",
+              "label": "Addresses total",
+              "type": "integer"
+            },
+            {
+              "field": "address_domestic",
+              "label": "Add. Domestic",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "address_nondomestic",
+              "label": "Add. NonDomestic",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
               "label": "Competition Strength",
               "type": "integer",
               "level": 1
             },
             {
               "field": "est_units",
-              "label": "Est. Units",
+              "label": "Estimate Units",
               "type": "integer",
               "level": 1
             },
             {
               "field": "est_brands",
-              "label": "Est. Brands",
+              "label": "Estimate Brands",
               "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
               "level": 1
             }
           ],
+          "style": {
+            "stroke": true,
+            "color": "#de2939",
+            "weight": 2,
+            "fillOpacity": 0
+          },
+          "styleHighlight": {
+            "stroke": true,
+            "color": "#de2939",
+            "weight": 2,
+            "fill": true,
+            "fillColor": "#de2939",
+            "fillOpacity": 0.2
+          }
+        },
+        "dominos_retailplace": {          
+          "name": "Retail Places",
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geom": "geom",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "pane": ["bounds", 510],
+          "dbs": "MVT",
+          "qID": "id",
           "arrayZoom": {
             "10": "dominos_retailplace"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
+          "style": {
+            "stroke": true,
+            "color": "#007bad",
+            "weight": 2,
+            "fillOpacity": 0
+          },
+          "styleHighlight": {
+            "stroke": true,
+            "color": "#007bad",
+            "weight": 2,
+            "fill": true,
+            "fillColor": "#007bad",
+            "fillOpacity": 0.2
           }
         }
       }

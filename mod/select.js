@@ -19,7 +19,7 @@ function select(req, res) {
     `SELECT
         ${fields}
         ${req.body.geomj} AS geomj
-        ${req.body.displayGeom}
+        ${req.body.geomdisplay}
      FROM ${req.body.table}
      WHERE
         ${req.body.qID} = '${req.body.id}';`
@@ -40,6 +40,7 @@ function select(req, res) {
 
             res.status(200).json({
                 geomj: result.rows[0].geomj,
+                geomdisplay: result.rows[0].geomdisplay || false,
                 infoj: req.body.infoj
             });
 

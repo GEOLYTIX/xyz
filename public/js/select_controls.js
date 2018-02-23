@@ -49,8 +49,8 @@ function expander(dom, record) {
     });
     i.style.color = record.color;
     i.addEventListener('click', function () {
-        if (record.drawer.style.maxHeight != '30px') {
-            record.drawer.style.maxHeight = '30px';
+        if (record.drawer.style.maxHeight != '35px') {
+            record.drawer.style.maxHeight = '35px';
             record.header.style.boxShadow = '0 3px 3px -3px black';
             this.textContent = 'expand_more';
             i.title = "Hide table";

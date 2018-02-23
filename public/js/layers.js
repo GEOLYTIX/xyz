@@ -77,10 +77,12 @@ module.exports = function(){
                     _xyz.pushHook('layers', layer.layer);
                     layer.getLayer();
                 } else {
+                    layer.loader.style.display = 'none';
                     layer.display = false;
                     this.textContent = 'visibility_off';
                     _xyz.filterHook('layers', layer.layer);
                     if (layer.L) _xyz.map.removeLayer(layer.L);
+                    _xyz.layersCheck();
                 }
             });
             header.appendChild(i);

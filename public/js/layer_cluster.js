@@ -28,7 +28,7 @@ function getLayer() {
         }));
 
         layer.xhr.onload = function () {
-            if (this.status === 200) {
+            if (this.status === 200 && layer.display) {
                 let cluster = JSON.parse(this.responseText);
 
                 // get max count value for size control

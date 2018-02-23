@@ -13,6 +13,8 @@ module.exports = function Select() {
     };
 
     // Create select pane. This pane has a shadow filter associated in the css.
+    _xyz.map.createPane('select_display');
+    _xyz.map.getPane('select_display').style.zIndex = 501;
     _xyz.map.createPane('select');
     _xyz.map.getPane('select').style.zIndex = 600;
     _xyz.map.createPane('select_marker');
@@ -86,7 +88,7 @@ module.exports = function Select() {
                 layer.geometry = JSON.parse(json.geomj);
                 layer.infoj = json.infoj;
                 layer.editable = _layer.editable;
-                layer.displayGeom = _layer.displayGeom ? JSON.parse(json[0].displaygeom) : null;
+                layer.geomdisplay = _layer.geomdisplay ? JSON.parse(json.geomdisplay) : null;
                 layer.dbs = _layer.dbs;
                 layer.qID = _layer.qID;
                 addLayerToRecord(layer);
@@ -99,7 +101,7 @@ module.exports = function Select() {
             id: layer.id,
             infoj: _layer.infoj,
             geomj: _layer.geomj,
-            displayGeom: _layer.displayGeom || ''
+            geomdisplay: _layer.geomdisplay || ''
         }));
     }
     _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
@@ -134,14 +136,14 @@ module.exports = function Select() {
     _xyz.select.addLayerToRecord = addLayerToRecord;
 
     function addRecordToMap(record) {
-        if (record.layer.displayGeom) {
+        if (record.layer.geomdisplay) {
             record.layer.D = L.geoJson(
                 {
                     type: 'Feature',
-                    geometry: record.layer.displayGeom
+                    geometry: record.layer.geomdisplay
                 }, {
                     interactive: false,
-                    pane: 'select',
+                    pane: 'select_display',
                     style: {
                         stroke: false,
                         color: record.color,
