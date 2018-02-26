@@ -1,102 +1,294 @@
 {
-  "hooks": {},
-  "locale": {
-    "btnZoomIn": "document.getElementById('btnZoomIn')",
-    "btnZoomOut": "document.getElementById('btnZoomOut')",
-    "layers": {
-      "base": false,
-      "border": null,
-      "label": false,
-      "vector": null,
-      "vectorSelect": null,
-      "location": null,
-      "locationSelect": null,
-      "grid": null
-    }
+  "title": "Swinton",
+  "select": {
+    "records": [
+      {
+        "letter": "A",
+        "color": "#9c27b0"
+      },
+      {
+        "letter": "B",
+        "color": "#2196f3"
+      },
+      {
+        "letter": "C",
+        "color": "#009688"
+      },
+      {
+        "letter": "D",
+        "color": "#cddc39"
+      },
+      {
+        "letter": "E",
+        "color": "#ff9800"
+      },
+      {
+        "letter": "F",
+        "color": "#673ab7"
+      },
+      {
+        "letter": "G",
+        "color": "#03a9f4"
+      },
+      {
+        "letter": "H",
+        "color": "#4caf50"
+      },
+      {
+        "letter": "I",
+        "color": "#ffeb3b"
+      },
+      {
+        "letter": "J",
+        "color": "#ff5722"
+      },
+      {
+        "letter": "K",
+        "color": "#0d47a1"
+      },
+      {
+        "letter": "L",
+        "color": "#00bcd4"
+      },
+      {
+        "letter": "M",
+        "color": "#8bc34a"
+      },
+      {
+        "letter": "N",
+        "color": "#ffc107"
+      },
+      {
+        "letter": "O",
+        "color": "#d32f2f"
+      }
+    ]
   },
   "gazetteer": {
+    "provider": "google",
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
+    "pane": [
+      "gazetteer",
+      550
+    ],
     "style": {
       "stroke": true,
       "color": "#090",
       "weight": 2,
-      "fillColor" : "#cf9",
-      "fillOpacity": 0.2
-    },
-    "btnSearch": "document.getElementById('btnSearch')",
-    "group": "document.getElementById('gaz_group')",
-    "input": "document.getElementById('gaz_input')",
-    "result": "document.getElementById('gaz_result')",
-    "country": "document.getElementById('gaz_country')",
-    "countrylist": "document.getElementById('gaz_countrylist')"
-  },
-  "grid": {
-    "container": "document.querySelector('#grid_module > .swipe_container')",
-    "legend": "document.querySelector('.grid_legend')",
-    "sizeTitle": "document.getElementById('sizeTitle')",
-    "colourTitle": "document.getElementById('colourTitle')",
-    "btnGridRatio": "document.getElementById('chkGridRatio')",
-    "colorScale":[
-        "#15773f",
-        "#66bd63",
-        "#a6d96a",
-        "#d9ef8b",
-        "#fdae61",
-        "#f46d43",
-        "#d73027",
-        "rgba(0, 0, 0, 0.1)"]
-  },
-  "drivetime": {
-    "container": "document.querySelector('#drivetime_module > .swipe_container')",
-    "infoTable": "document.querySelector('.drivetime_info')",
-    "slider": "document.getElementById('drivetime_slider')",
-    "icon": "svg_symbols.markerColor('#35b','#9cf')",
-    "style": {
-      "stroke": true,
-      "color": "#35b",
-      "weight": 2,
-      "fillColor" : "#9cf",
+      "fillColor": "#cf9",
       "fillOpacity": 0.2
     }
   },
-  "country": "UK",
+  "layers": {
+    "style": {
+      "stroke": true,
+      "color": "#444",
+      "weight": 1,
+      "fillOpacity": 0
+    },
+    "styleHighlight": {
+      "stroke": true,
+      "color": "#090",
+      "weight": 2,
+      "fillColor": "#cf9",
+      "fillOpacity": 0.2
+    },
+    "styleRange": [
+      "#15773f",
+      "#66bd63",
+      "#a6d96a",
+      "#d9ef8b",
+      "#fdae61",
+      "#f46d43",
+      "#d73027"
+    ],
+    "defaultMarker": [
+      [
+        400,
+        "#A9A9A9"
+      ],
+      [
+        360,
+        "#C0C0C0"
+      ]
+    ],
+    "imageMaxSize": 1024
+  },
+  "catchments": {
+    "provider": [
+      "mapbox",
+      "google"
+    ],
+    "pane": [
+      "catchments",
+      520
+    ]
+  },
+  "country": "GB",
   "countries": {
-    "UK": {
-      "name": "United Kingdom",
-      "placeholder": "e.g. London",
-      "bounds": [[48, -13], [62, 5]],
+    "GB": {
+      "name": "Great Britain",
+      "placeholder": "e.g. Milton Keynes",
+      "bounds": [
+        [
+          40,
+          -15
+        ],
+        [
+          65,
+          7
+        ]
+      ],
       "minZoom": 6,
-      "maxZoom": 17,
-      "border": false,
-      "drivetime": {
-        "infoj": "json_build_object('Population 2016',sum(pop__16)::integer,'Core: Cautious Middle Agers',sum(core_cautious_middle_agers)::integer,'Core: Deal Seekers',sum(core_deal_seekers)::integer,'Core: Older Relationship Seekers',sum(core_older_relationship_seekers)::integer,'Stretch: Added Value Affluents',sum(stretch_added_value_affluents)::integer,'Stretch: Loyal Traditionalists',sum(stretch_loyal_traditionalists)::integer,'Stretch: Smart and Savvy',sum(stretch_smart_and_savvy)::integer)",
-        "arrayGrid": ["gb_swinton_hx_64k", "gb_swinton_hx_32k", "gb_swinton_hx_16k", "gb_swinton_hx_8k", "gb_swinton_hx_4k", "gb_swinton_hx_2k"],
-        "maxMin": 45
+      "maxZoom": 11,
+      "layers": {
+        "grid": {
+          "display": true,
+          "panel": true,
+          "name": "Demographic Grid",
+          "format": "grid",
+          "pane": [
+            "grid",
+            515
+          ],
+          "dbs": "XYZ",
+          "geom": "geomcntr",
+          "grid_color": "target",
+          "arrayZoom": {
+            "6": "gb_swinton_hx_64k",
+            "7": "gb_swinton_hx_32k",
+            "8": "gb_swinton_hx_16k",
+            "9": "gb_swinton_hx_8k",
+            "10": "gb_swinton_hx_4k",
+            "11": "gb_swinton_hx_2k"
+          },
+          "queryFields": [
+            [
+              "pop__01",
+              "Population 2001"
+            ],
+            [
+              "pop__11",
+              "Population 2011"
+            ],
+            [
+              "pop__16",
+              "Population 2016"
+            ],
+            [
+              "target",
+              "Target"
+            ],
+            [
+              "core",
+              "Core"
+            ],
+            [
+              "core_cautious_middle_agers",
+              "Core: Cautious Middle Agers"
+            ],
+            [
+              "core_deal_seekers",
+              "Core: Deal Seekers"
+            ],
+            [
+              "core_older_relationship_seekers",
+              "Core: Older Relationship Seekers"
+            ],
+            [
+              "stretch",
+              "Stretch"
+            ],
+            [
+              "stretch_added_value_affluents",
+              "Stretch: Added Value Affluents"
+            ],
+            [
+              "stretch_loyal_traditionalists",
+              "Stretch: Loyal Traditionalists"
+            ],
+            [
+              "stretch_smart_and_savvy",
+              "Stretch: Smart and Savvy"
+            ]
+          ]
+        }
       },
-      "grid": {
-        "database": "xyz",
-        "arrayZoom": {
-          "6": "gb_swinton_hx_64k",
-          "7": "gb_swinton_hx_32k",
-          "8": "gb_swinton_hx_16k",
-          "9": "gb_swinton_hx_8k",
-          "10": "gb_swinton_hx_4k",
-          "11": "gb_swinton_hx_2k",
-          "12": "gb_swinton_hx_1k"
+      "catchments": {
+        "modes": {
+          "driving": {
+            "minMin": 15,
+            "defMin": 45,
+            "maxMin": 90,
+            "detail": 3,
+            "reach": 40
+          }
         },
-        "queryFields": [
-          ["pop__01", "Population 2001"],
-          ["pop__11", "Population 2011"],
-          ["pop__16", "Population 2016"],
-          ["target", "Target"],
-          ["core", "Core"],
-          ["core_cautious_middle_agers", "Core: Cautious Middle Agers"],
-          ["core_deal_seekers", "Core: Deal Seekers"],
-          ["core_older_relationship_seekers", "Core: Older Relationship Seekers"],
-          ["stretch", "Stretch"],
-          ["stretch_added_value_affluents", "Stretch: Added Value Affluents"],
-          ["stretch_loyal_traditionalists", "Stretch: Loyal Traditionalists"],
-          ["stretch_smart_and_savvy", "Stretch: Smart and Savvy"]
+        "dbs": "XYZ",
+        "table": "gb_swinton_hx_2k",
+        "geom": "geomcntr",   
+        "infoj": [
+          {
+            "field": "pop__01",
+            "label": "Population 2001",
+            "type": "numeric"
+          },
+          {
+            "field": "pop__11",
+            "label": "Population 2011",
+            "type": "numeric"
+          },
+          {
+            "field": "pop__16",
+            "label": "Population 2016",
+            "type": "numeric"
+          },
+          {
+            "field": "core",
+            "label": "Core",
+            "type": "numeric"
+          },
+          {
+            "field": "core_cautious_middle_agers",
+            "label": "Cautious Middle Agers",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "core_deal_seekers",
+            "label": "Deal Seekers",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "core_older_relationship_seekers",
+            "label": "Older Relationship Seekers",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "stretch",
+            "label": "Stretch",
+            "type": "numeric"
+          },
+          {
+            "field": "stretch_added_value_affluents",
+            "label": "Added Value Affluents",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "stretch_loyal_traditionalists",
+            "label": "Loyal Traditionalists",
+            "type": "numeric",
+            "level": 1
+          },
+          {
+            "field": "stretch_smart_and_savvy",
+            "label": "Smart and Savvy",
+            "type": "numeric",
+            "level": 1
+          }
         ]
       }
     }
