@@ -240,13 +240,28 @@ module.exports = (function () {
                 .attr('y', y + 1)
                 .attr('alignment-baseline', 'middle')
                 .style('font-size', '12px')
-                .text(layer.markerStyle[keys[i]].label);
+                .text(layer.markerStyle[keys[i]].label)
+                .style('cursor', 'pointer')
+                .on('click', function(){
+                    
+                    // Click event to toggle wether key is filtered from cluster query.
+                    if (this.style.opacity == 0.5) {
+                        this.style.opacity = 1;
+                        console.log(layer.cluster_filter.indexOf(keys[i]));
+                        layer.cluster_filter.splice(layer.cluster_filter.indexOf(keys[i]),1);
+                    } else {
+                        this.style.opacity = 0.5;
+                        if (!layer.cluster_filter) layer.cluster_filter = [];
+                        layer.cluster_filter.push(keys[i]);
+                    }
+                    layer.getLayer();
+                });
         }
 
         y += 50;
 
         // Add section for clusters and competitors title
-        for (let i = 0; i < layer.competitors.length; i++) {
+        for (let i = 0; i < layer.arrayCompColours.length; i++) {
             svg.append('circle')
                 .attr('cx', 25)
                 .attr('cy', y)

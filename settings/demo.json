@@ -1602,18 +1602,25 @@
                 ]
               ],
               "label": "Whole Foods"
+            },
+            "other": {
+              "style": [
+                [
+                  400,
+                  "#999"
+                ],
+                [
+                  350,
+                  "#fff"
+                ]
+              ],
+              "label": "Other"
             }
           },
           "arrayCompColours": [
-            "#ddd",
-            "#999",
-            "#111"
+            "#ddd"
           ],
-          "competitors": [
-            "co_op",
-            "sainsburys",
-            "tesco"
-          ]
+          "competitors": []
         }
       },
       "catchments": {

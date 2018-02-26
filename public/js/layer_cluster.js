@@ -19,6 +19,7 @@ function getLayer() {
             geom: layer.geom,
             label: layer.cluster_label,
             competitor: layer.cluster_competitor || null,
+            filter: layer.cluster_filter || '',
             kmeans: layer.cluster_kmeans,
             dbscan: layer.cluster_dbscan,
             west: bounds.getWest(),
@@ -48,20 +49,20 @@ function getLayer() {
                         let icon,
                             count = point.properties.infoj.length;
 
-                        if (count > 1 && layer.cluster_competitor) {
-                            let competitorArr = [];
-                            for (let i = 0; i < point.properties.infoj.length || 0; i++) {
-                                competitorArr.push(point.properties.infoj[i].competitor);
-                            }
+                        if (count > 1) {
+                            // let competitorArr = [];
+                            // for (let i = 0; i < point.properties.infoj.length || 0; i++) {
+                            //     competitorArr.push(point.properties.infoj[i].competitor);
+                            // }
 
-                            let vArr = [0, 0, 0];
-                            for (let i = 0; i < layer.competitors.length || 0; i++) {
-                                for (let ii = 0; ii < competitorArr.length; ii++) {
-                                    if (competitorArr[ii] === layer.competitors[i]) {
-                                        vArr[i]++;
-                                    }
-                                }
-                            }
+                            let vArr = [0];
+                            // for (let i = 0; i < layer.competitors.length || 0; i++) {
+                            //     for (let ii = 0; ii < competitorArr.length; ii++) {
+                            //         if (competitorArr[ii] === layer.competitors[i]) {
+                            //             vArr[i]++;
+                            //         }
+                            //     }
+                            // }
 
                             let dotArr = [[400, layer.arrayCompColours[0]]];
                             for (let i = 0; i < vArr.length - 1; i++) {
@@ -75,9 +76,10 @@ function getLayer() {
                             icon = svg_symbols.target(dotArr);
 
                         } else {                           
-                            icon = layer.cluster_competitor ?
-                                svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker) :
-                                layer.customMarker || svg_symbols.target(layer.defaultMarker);
+                            // icon = layer.cluster_competitor ?
+                            //     svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker) :
+                            //     layer.customMarker || svg_symbols.target(layer.defaultMarker);
+                            icon = svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker);
                         }
 
                         return L.marker(latlng, {
@@ -224,6 +226,7 @@ function getLayer() {
             } else {
 
                 // Status 204. No features returned.
+                if(layer.L) _xyz.map.removeLayer(layer.L);
                 layer.loader.style.display = 'none';
                 layer.loaded = true;
                 _xyz.layersCheck();
