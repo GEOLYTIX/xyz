@@ -28,10 +28,12 @@ The environment settings which contain sensitive information such as data source
 
 We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
 
-__"NODE_ENV": "development"__
+**"NODE_ENV": "development"**
+
 Whether the application is run in a development or production environment.
 
 **"PORT": "3000"**
+
 The port on which the application is run.
 
 **"HOST": "geolytix.xyz/demo"**
