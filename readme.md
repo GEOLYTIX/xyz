@@ -4,7 +4,7 @@ A Node.js framework to develop applications and APIs for spatial data.
 
 ## Introduction
 
-The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport) and the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps.
+The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Pupetteer](https://github.com/GoogleChrome/puppeteer) to create PDF reports on the server-side.
 
 ## Licence
 
@@ -24,27 +24,46 @@ Two sets of settings are required to run the framework and host an application.
 
 ### Environment Settings
 
-The environment settings which contain sensitive information such as data source connection strings, security information and API keys are not contained in this repository. Below is a list of environment settings which are required to run the framework.
+The environment settings which contain sensitive information such as data source connection strings, security information and API keys are not contained in this repository. Below is a list of environment settings which are required to run the framework. In Visual Studio code this settings are usually stored in the debug .launch settings.
 
-"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database",
-"DBS_GHS": "postgres://username:password@123.123.123.123:5432/database",
-"DBS_MVT": "postgres://username:password@123.123.123.123:5432/database",
-"SUBDIRECTORY": "xyz",
-"APPSETTINGS": "demo.json",
-"PORT": "3000",
-"GKEY": "google maps api key",
-"MAPBOX": "mapbox api key",
-"GNAMES": "geolytix",
-"NODE_ENV": "development",
-"MONGODB": "mongodb://localhost:27017/database",
-"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com",
-"OURSECRET": "ChinaCatSunflower",
-"HOST": "localhost:3000",
+We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command *pm2 start myapplication.json*.
+
+#### "NODE_ENV": "development"
+Whether the application is run in a development or production environment.
+
+#### "PORT": "3000"
+The port on which the application is run.
+
+#### "SUBDIRECTORY": "xyz"
+The subdirectory in which 
+
+
+
+
+
+"GKEY": "google maps api key"
+
+"MAPBOX": "mapbox api key"
+
+"GNAMES": "geolytix"
+
+
+
+"MONGODB": "mongodb://localhost:27017/database"
+
+"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"
+
+"OURSECRET": "ChinaCatSunflower"
+
+"HOST": "localhost:3000"
+
 "LOCALHOST": "http://localhost:3000/xyz/"
 
-In Visual Studio code this settings are usually stored in the .env settings file.
+"APPSETTINGS": "demo.json"
 
-We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server.
+#### "DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"
+#### "DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"
+Keys beginning with DBS_ store PostGIS data source connections. Modules which require connections to PostGIS data sources via the [node-postgres](https://github.com/brianc/node-postgres) read the connection strings from the DBS_* keys, split the key and store the connection in a an object (DBS) with the remainder of the DBS_* key as key for the connection object. This key can be referenced in the dbs XHR request parameter where required. This allows different services and layers to connect to different data sources in the same hosted API. Any dbs keys defined in the application settings object (\_XYZ) must be referenced with a matching DBS_* key and connection string. E.g. A layer with dbs:XYZ requires DBS_XYZ with a valid connection string in the environment settings. Please reference [pg-connection-string] which is used by node-postgres to connect to a data source from a connection string.
 
 ### Application Settings
 
