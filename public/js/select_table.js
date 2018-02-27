@@ -75,7 +75,7 @@ function addInfojToList(record) {
 
         // Create range input for range fields.
         if (record.layer.infoj[key].range) {
-            val.textContent = record.layer.infoj[key].value || record.layer.infoj[key].range[0];
+            val.textContent = record.layer.infoj[key].value || record.layer.infoj[key].value == 0? parseInt(record.layer.infoj[key].value): record.layer.infoj[key].range[0];
             tr = document.createElement('tr');
             table.appendChild(tr);
             let range = utils.createElement('td', {
@@ -85,7 +85,7 @@ function addInfojToList(record) {
             tr.appendChild(range);
             let rangeInput = utils.createElement('input', {
                 type: 'range',
-                value: record.layer.infoj[key].value || record.layer.infoj[key].range[0],
+                value: record.layer.infoj[key].value || record.layer.infoj[key].value == 0? parseInt(record.layer.infoj[key].value): record.layer.infoj[key].range[0],
                 min: record.layer.infoj[key].range[0],
                 max: record.layer.infoj[key].range[1]
             })
@@ -95,13 +95,13 @@ function addInfojToList(record) {
                 record.upload.style.display = 'block';
                 record.layer.infoj[key].value = this.value;
             });
-            rangeInput.addEventListener('click', function (e) {
-                this.value = e.offsetX / this.clientWidth * this.max;
-                utils.addClass(val, 'changed');
-                val.textContent = this.value;
-                record.upload.style.display = 'block';
-                record.layer.infoj[key].value = this.value;
-            });
+            // rangeInput.addEventListener('click', function (e) {
+            //     this.value = parseInt(this.min + (e.offsetX / this.clientWidth * (this.max - this.min)));
+            //     // utils.addClass(val, 'changed');
+            //     // val.textContent = this.value;
+            //     // record.upload.style.display = 'block';
+            //     // record.layer.infoj[key].value = this.value;
+            // });
             range.appendChild(rangeInput);
             return
         }
@@ -118,10 +118,12 @@ function addInfojToList(record) {
             
             // Create options with dataset list of sub options and append to select prime.
             Object.keys(record.layer.infoj[key].options).map(function (i) {
+                
+                if(String(record.layer.infoj[key].options[i]).split(';')[0] == record.layer.infoj[key].value) console.log(String(record.layer.infoj[key].options[i]).split(';')[0]);
                 let opt = utils.createElement('option', {
                     textContent: String(record.layer.infoj[key].options[i]).split(';')[0],
                     value: i,
-                    selected: (String(record.layer.infoj[key].options[i]).split(';')[0] === record.layer.infoj[key].value)
+                    selected: (String(record.layer.infoj[key].options[i]).split(';')[0] == record.layer.infoj[key].value)
                 });
                 opt.dataset.list = String(record.layer.infoj[key].options[i])
                     .split(';')
@@ -143,15 +145,23 @@ function addInfojToList(record) {
                 record.layer.infoj[key].value = this.value;
             });
 
+            select.addEventListener('change', function () {
+                utils.addClass(this, 'changed');
+                record.upload.style.display = 'block';
+                record.layer.infoj[key].value = this.options[this.value].textContent;
+                select_input.value = this.options[this.value].textContent;
+            });
+
             // This element should only be displayed when select prime is 'other'.
             select_input.style.display = 'none';
             val.appendChild(select_input);
 
             // Check whether value exists but not found in list.
-            if (select.selectedIndex === 0 && record.layer.infoj[key].value) {
+            if (select.selectedIndex == 0 && record.layer.infoj[key].value && record.layer.infoj[key].value != 'undefined') {
                 select.selectedIndex = select.options.length - 1;
-                select_input.style.display = 'block';
             }
+
+            if (select.selectedIndex == select.options.length - 1) select_input.style.display = 'block';
 
             // Select sub condition on subfield exists.
             let subselect, subselect_input;
@@ -187,13 +197,13 @@ function addInfojToList(record) {
                 suboptions.unshift("undefined");
 
                 // Remove last option if empty.
-                if (suboptions[1] === '') suboptions.pop();
+                if (suboptions[1] == '') suboptions.pop();
                 suboptions.push('other');
                 Object.keys(suboptions).map(function (i) {
                     subselect.appendChild(utils.createElement('option', {
                         textContent: suboptions[i],
                         value: i,
-                        selected: (suboptions[i] === record.layer.infoj[key].subvalue)
+                        selected: (suboptions[i] == record.layer.infoj[key].subvalue)
                     }));
                 });
 
@@ -209,22 +219,31 @@ function addInfojToList(record) {
                     record.layer.infoj[key].subvalue = this.value;
                 });
 
+                subselect.addEventListener('change', function () {
+                    utils.addClass(this, 'changed');
+                    record.upload.style.display = 'block';
+                    record.layer.infoj[key].subvalue = this.options[this.value].textContent;
+                    subselect_input.value = this.options[this.value].textContent;
+                });
+
                 // This element should only be displayed when subselect is 'other'.
                 subselect_input.style.display = 'none';
                 td.appendChild(subselect_input);
 
                 // Check whether value exists but not found in list.
-                if (subselect.selectedIndex === 0 && record.layer.infoj[key].subvalue) {
+                if (subselect.selectedIndex == 0 && record.layer.infoj[key].subvalue && record.layer.infoj[key].subvalue != 'undefined') {
                     subselect.selectedIndex = subselect.options.length - 1;
-                    subselect_input.style.display = 'block';
                 }
+
+                if (subselect.selectedIndex == subselect.options.length - 1) subselect_input.style.display = 'block';
+                    
                               
             }
             
             select.addEventListener('change', function(e){
 
                 // Show select input only for last select option (other).
-                if (this.selectedIndex === this.options.length - 1) {
+                if (this.selectedIndex == this.options.length - 1) {
                     select_input.value = record.layer.infoj[key].value;
                     select_input.style.display = 'block';
                 } else {
@@ -237,20 +256,20 @@ function addInfojToList(record) {
                 suboptions.unshift("undefined");
 
                 // Remove last option if empty.
-                if (suboptions[1] === '') suboptions.pop();
+                if (suboptions[1] == '') suboptions.pop();
                 suboptions.push('other');
                 subselect.innerHTML = '';
                 Object.keys(suboptions).map(function (i) {
                     subselect.appendChild(utils.createElement('option', {
                         textContent: suboptions[i],
                         value: i,
-                        selected: (suboptions[i] === record.layer.infoj[key].subvalue)
+                        selected: (suboptions[i] == record.layer.infoj[key].subvalue)
                     }));
                 });
 
                 // Check whether value exists but not found in list.
-                if ((subselect.selectedIndex === subselect.options.length - 1)
-                    || (subselect.selectedIndex === 0 && record.layer.infoj[key].subvalue)) {
+                if ((subselect.selectedIndex == subselect.options.length - 1)
+                    || (subselect.selectedIndex == 0 && record.layer.infoj[key].subvalue)) {
                     subselect.selectedIndex = subselect.options.length - 1;
                     subselect_input.style.display = 'block';
                 }
@@ -265,7 +284,7 @@ function addInfojToList(record) {
             if (subselect) subselect.addEventListener('change', function(e){
 
                 // Show select input only for last select option (other).
-                if (this.selectedIndex === this.options.length - 1) {
+                if (this.selectedIndex == this.options.length - 1) {
                     subselect_input.value = record.layer.infoj[key].subvalue;
                     subselect_input.style.display = 'block';
                 } else {

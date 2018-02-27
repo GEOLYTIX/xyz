@@ -30,7 +30,7 @@ function select(req, res) {
         .then(result => {
 
             Object.keys(req.body.infoj).map(key => {
-                if (result.rows[0][req.body.infoj[key].field]) {
+                if (result.rows[0][req.body.infoj[key].field] || result.rows[0][req.body.infoj[key].field] == 0) {
                     req.body.infoj[key].value = result.rows[0][req.body.infoj[key].field];
                 }
                 if (result.rows[0][req.body.infoj[key].subfield]) {

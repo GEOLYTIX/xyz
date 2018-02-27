@@ -1220,6 +1220,8 @@
           "dbs": "MVT",         
           "qID": "id",
           "table": "gb_retailpoint",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "geom": "geom",
           "cluster_label": "store",
           "cluster_competitor": "brand",
           "cluster_kmeans": 4,
@@ -1282,8 +1284,6 @@
               "level": 1
             }
           ],
-          "geomj": "ST_AsGeoJSON(geom)",
-          "geom": "geom",
           "markerStyle": {
             "aldi": {
               "style": [

@@ -140,9 +140,9 @@ module.exports = function(){
                 });
 
                 i.addEventListener('click', function(){
-                    utils.toggleClass(this, 'active');
+                    utils.toggleClass(i, 'active');
 
-                    if (!utils.hasClass(this, 'active')){
+                    if (!utils.hasClass(i, 'active')){
                         _xyz.map.off('click');
                         dom.map.style.cursor = '';
                         return
@@ -151,6 +151,7 @@ module.exports = function(){
                     this.style.textShadow = '2px 2px 2px #cf9;';
                     dom.map.style.cursor = 'crosshair';
                     _xyz.map.on('click', function(e){
+                        utils.removeClass(i, 'active');
                         _xyz.map.off('click');
                         dom.map.style.cursor = '';
 
