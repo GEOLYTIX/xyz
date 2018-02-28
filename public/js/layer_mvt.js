@@ -45,10 +45,20 @@ function getLayer(){
                     return f.properties.id;
                 },
                 vectorTileLayerStyles: {
-                    //[layer.layer]: layer.style
+                    'border': function (properties, zoom) {
+                        return {
+                            weight: 2,
+                            color: 'red',
+                            opacity: 1,
+                            fillColor: 'yellow',
+                            fill: true,
+                            radius: 6,
+                            fillOpacity: 0.7
+                        }
+                    }
                 }
             };
-        options.vectorTileLayerStyles[layer.layer] = layer.style;
+        //options.vectorTileLayerStyles[layer.layer] = layer.style;
         
         this.L = L.vectorGrid.protobuf(url, options)
             .on('load', function(){
