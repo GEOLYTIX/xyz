@@ -146,7 +146,11 @@
           "qID": "country",
           "filter": "AND country = 'UK'",
           "arrayZoom": {
-            "1": "borders"
+            "1": "borders",
+            "2": "eurostat_nuts__13_lv_0_data",
+            "8": "eurostat_nuts__13_lv_1_data",
+            "10": "eurostat_nuts__13_lv_2_data",
+            "12": "eurostat_nuts__13_lv_3_data"
           },
           "style": {
             "stroke": true,
