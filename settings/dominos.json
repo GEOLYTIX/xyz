@@ -115,7 +115,7 @@
   "countries": {
     "GB": {
       "name": "Great Britain",
-      "placeholder": "e.g. Milton Keynes",
+      "gazetteer": ["google","GB","","e.g. Milton Keynes"],
       "bounds": [
         [
            40,

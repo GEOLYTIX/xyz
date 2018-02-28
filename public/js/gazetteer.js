@@ -61,7 +61,7 @@ module.exports = function Gazetteer() {
 
     // Empty input value, results and set placeholder.
     dom.input.value = '';
-    dom.input.placeholder = _xyz.countries[_xyz.country].gazetteer[2];
+    dom.input.placeholder = _xyz.countries[_xyz.country].gazetteer[3];
     dom.result.innerHTML = '';
 
     // Remove existing layer if exists
@@ -101,11 +101,14 @@ module.exports = function Gazetteer() {
 
     // Initiate search request
     function initiateSearch(searchValue){
+
+        console.log(_xyz.countries[_xyz.country].gazetteer[2]);
+
         _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
         _xyz.gazetteer.xhrSearch.open('GET', localhost + 'q_gazetteer?' + utils.paramString({
             provider: _xyz.countries[_xyz.country].gazetteer[0],
-            country: _xyz.countries[_xyz.country].gazetteer[1] != 'bounds' ? _xyz.countries[_xyz.country].gazetteer[1] : '',
-            bounds: _xyz.countries[_xyz.country].gazetteer[1] == 'bounds' ? _xyz.countries[_xyz.country].bounds : '',
+            country: _xyz.countries[_xyz.country].gazetteer[1],
+            bounds: encodeURIComponent(_xyz.countries[_xyz.country].gazetteer[2]),
             q: encodeURIComponent(searchValue)
         }));
         _xyz.gazetteer.xhrSearch.onload = function () {

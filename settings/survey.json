@@ -115,7 +115,7 @@
   "countries": {
     "Global": {
       "name": "Global",
-      "placeholder": "e.g. Hong Kong",
+      "gazetteer": ["google","","","e.g. Hong Kong"],
       "bounds": [
         [
           -80,

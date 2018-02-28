@@ -115,7 +115,7 @@
   "countries": {
     "EU": {
       "name": "Europe",
-      "gazetteer": ["mapbox","bounds","e.g. Brussels"],
+      "gazetteer": ["mapbox","","'-45,25,60,75'","e.g. Brussels"],
       "bounds": [
         [
           25,
@@ -163,7 +163,7 @@
     },
     "UK": {
       "name": "United Kingdom",
-      "gazetteer": ["google","GB","e.g. London"],
+      "gazetteer": ["google","GB","","e.g. London"],
       "bounds": [
         [
           48,
@@ -181,7 +181,7 @@
     },
     "London": {
       "name": "London",
-      "placeholder": "e.g. King's Cross",
+      "gazetteer": ["google","","'&location=51.5285582,-0.2416808&radius=50'","e.g. King's Cross"],
       "bounds": [
         [
           51,

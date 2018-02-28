@@ -43,8 +43,10 @@ function gazetteer(req, res) {
 // }
 
 function mapbox_placesAutoComplete(req, res) {
+
     let q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
-          + `${req.query.country? 'country=' + req.query.country: ''}`
+          + `${req.query.country ? 'country=' + req.query.country : ''}`
+          + `${req.query.bounds ? 'bbox=' + req.query.bounds : ''}`
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
           + `&access_token=${process.env.MAPBOX}`;
 
@@ -66,6 +68,7 @@ function mapbox_placesAutoComplete(req, res) {
 function google_placesAutoComplete(req, res) {
     let q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
           + `${req.query.country ? '&components=country:' + req.query.country : ''}`
+          + `${req.query.bounds ? decodeURIComponent(req.query.bounds) : ''}`
           + `&key=${process.env.GKEY}`;
 
     try {

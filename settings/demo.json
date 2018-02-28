@@ -122,7 +122,7 @@
   "countries": {
     "UK": {
       "name": "United Kingdom",
-      "placeholder": "e.g. London",
+      "gazetteer": ["google","GB","","e.g. London"],
       "bounds": [
         [
           48,
@@ -1736,7 +1736,7 @@
     },
     "RO": {
       "name": "Romania",
-      "placeholder": "e.g. Constan\u021Ba",
+      "gazetteer": ["google","RO","","e.g. Constan\u021Ba"],
       "bounds": [
         [
           43,

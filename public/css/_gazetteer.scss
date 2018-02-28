@@ -64,7 +64,8 @@
     top: 0;
     right: 0;
     @if $desktop {
-      padding: 12px 0 10px 10px;
+      padding: 12px 0 10px 5px;
+      background-color: #fff;
     } @else {
       padding: 12px 10px 10px 10px;
     }
@@ -125,7 +126,7 @@
   input {
     border: none;
     @if $desktop {
-      padding: 10px 30px 10px 0;
+      padding: 10px 0;
     } @else {
       width: calc(100% - 120px);
       padding: 10px 50px 10px 70px;

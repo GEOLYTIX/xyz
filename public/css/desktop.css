@@ -523,7 +523,8 @@ input[type=range]::-moz-range-thumb {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 12px 0 10px 10px;
+    padding: 12px 0 10px 5px;
+    background-color: #fff;
     font-family: ffmark_bold, sans-serif;
     font-size: 18px; }
     #gaz_group #gaz_country.active {
@@ -549,7 +550,7 @@ input[type=range]::-moz-range-thumb {
         background-color: #cf9; }
   #gaz_group input {
     border: none;
-    padding: 10px 30px 10px 0; }
+    padding: 10px 0; }
   #gaz_group .gaz-result-selected {
     background-color: #cf9; }
 
