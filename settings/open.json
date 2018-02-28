@@ -129,6 +129,35 @@
       "minZoom": 3,
       "maxZoom": 17,
       "layers": {
+          "border": {
+              "display": true,
+              "name": "Country Border",
+              "pane": ["bounds", 510],
+              "format": "mvt",
+              "geom_3857": "geom_3857",
+              "geom": "geom",
+              "dbs": "MVT",
+              "qID": "country",
+              "filter": "",
+              "arrayZoom": {
+                 "3": "eurostat_nuts__13_lv_0_data",
+                 "4": "eurostat_nuts__13_lv_0_data",
+                 "5": "eurostat_nuts__13_lv_0_data",
+                 "6": "eurostat_nuts__13_lv_1_data",
+                 "7": "eurostat_nuts__13_lv_1_data",
+                 "8": "eurostat_nuts__13_lv_2_data",
+                 "9": "eurostat_nuts__13_lv_2_data",
+                 "10": "eurostat_nuts__13_lv_3_data",
+                 "11": "eurostat_nuts__13_lv_3_data",
+                 "12": "eurostat_nuts__13_lv_3_data"
+              },
+              "style": {
+                  "stroke": true,
+                  "color": "#555",
+                  "weight": 1,
+                  "fillOpacity": 0
+              }
+          }
       }
     },
     "UK": {
