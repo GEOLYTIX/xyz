@@ -115,7 +115,7 @@
   "countries": {
     "EU": {
       "name": "Europe",
-      "placeholder": "e.g. Brussels",
+      "gazetteer": ["mapbox","bounds","e.g. Brussels"],
       "bounds": [
         [
           25,
@@ -133,7 +133,7 @@
     },
     "UK": {
       "name": "United Kingdom",
-      "placeholder": "e.g. London",
+      "gazetteer": ["google","GB","e.g. London"],
       "bounds": [
         [
           48,

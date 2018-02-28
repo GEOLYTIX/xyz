@@ -7,20 +7,18 @@ Object.keys(process.env).map(function (key) {
     }
 });
 
-const googleMapsClient = require('@google/maps').createClient({
-    key: process.env.GKEY
-});
+const request = require('request');
 
 function gazetteer(req, res) {
 
-    let q = `SELECT label, qid id, source
-               FROM gaz_${req.query.c}
-               WHERE search LIKE '${decodeURIComponent(req.query.q).toUpperCase()}%'
-               ORDER BY searchindex, search LIMIT 10`;
+    // let q = `SELECT label, qid id, source
+    //            FROM gaz_${req.query.c}
+    //            WHERE search LIKE '${decodeURIComponent(req.query.q).toUpperCase()}%'
+    //            ORDER BY searchindex, search LIMIT 10`;
 
     //console.log(q);
 
-    eval(req.query.p + '_placesAutoComplete')(req, res);
+    eval(req.query.provider + '_placesAutoComplete')(req, res);
 
     // DBS[req.query.dbs].any(q)
     //     .then(function (data) {
@@ -33,90 +31,77 @@ function gazetteer(req, res) {
     //     .catch(() => eval(req.query.p + '_placesAutoComplete')(req, res));
 }
 
-const request = require('request');
+// function gazetteer_places(req, res) {
+//     let q = "SELECT geomj FROM "
+//             + req.query.id.split('.')[0] + " WHERE qid = '"
+//             + req.query.id + "'";
+//     //console.log(q);
+
+//     db.any(q).then(function (data) {
+//         res.status(200).json(data[0].geomj);
+//     });
+// }
+
 function mapbox_placesAutoComplete(req, res) {
-    let country = req.query.c === 'UK' ? 'GB' : req.query.c === 'Global' ? '' : req.query.c;
-    let mapbox_query = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
-                      +`country=${country}`
-                      +`&types=region,postcode,district,place,locality,neighborhood,address,poi`
-                      +`&access_token=${process.env.MAPBOX}`;
+    let q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
+          + `${req.query.country? 'country=' + req.query.country: ''}`
+          + `&types=postcode,district,locality,place,neighborhood,address,poi`
+          + `&access_token=${process.env.MAPBOX}`;
 
-    request.get(mapbox_query, (err, response, body) => {
-        if (err) {
-            console.log(err);
-        } else {
-            //let jbody = JSON.parse(body);
-
+    try {
+        request.get(q, (err, response, body) => {
             res.status(200).json(JSON.parse(body).features.map(f => {
                 return {
-                    label: `${f.text} ${country === '' ? ', ' + f.context.slice(-1)[0].text : ''}`,
+                    label: `${f.text} (${f.place_type[0]}) ${!req.query.country && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
                     id: f.center,
                     source: 'mapbox'
                 }
             }));
-        }
-    })
+        })
+    } catch (err) {
+        console.log(err.stack)
+    }
 }
 
 function google_placesAutoComplete(req, res) {
-    googleMapsClient.placesAutoComplete({
-        input: decodeURIComponent(req.query.q),
-        components: req.query.c === 'UK' ? { country: 'GB' } : req.query.c === 'Global' ? {} : { country: req.query.c }
-    }, (err, results) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.status(200).json(results.json.predictions.map(f => {
+    let q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
+          + `${req.query.country ? '&components=country:' + req.query.country : ''}`
+          + `&key=${process.env.GKEY}`;
+
+    try {
+        request.get(q, (err, response, body) => {
+            res.status(200).json(JSON.parse(body).predictions.map(f => {
                 return {
                     label: f.description,
                     id: f.place_id,
                     source: 'google'
                 }
             }));
-        }
-    });
-}
-
-function gazetteer_places(req, res) {
-    let q = "SELECT geomj FROM "
-            + req.query.id.split('.')[0] + " WHERE qid = '"
-            + req.query.id + "'";
-    //console.log(q);
-
-    db.any(q).then(function (data) {
-        res.status(200).json(data[0].geomj);
-    });
-}
-
-function gazetteer_mapboxplaces(req, res) {
-    googleMapsClient.place({
-        placeid: req.query.id
-    }, function(err, results) {
-        if (!err) {
-            res.status(200).json({
-                "type": "Point",
-                "coordinates": [results.json.result.geometry.location.lng, results.json.result.geometry.location.lat]
-            });
-        }
-    });
+        })
+    } catch (err) {
+        console.log(err.stack)
+    }
 }
 
 function gazetteer_googleplaces(req, res) {
-    googleMapsClient.place({
-        placeid: req.query.id
-    }, function(err, results) {
-        if (!err) {
+    let q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
+          + `&key=${process.env.GKEY}`;
+
+    try {
+        request.get(q, (err, response, body) => {
+            let r = JSON.parse(body).result;
             res.status(200).json({
-                "type": "Point",
-                "coordinates": [results.json.result.geometry.location.lng, results.json.result.geometry.location.lat]
-            });
-        }
-    });
+                    type: 'Point',
+                    coordinates: [r.geometry.location.lng, r.geometry.location.lat]
+                })
+        })
+    } catch (err) {
+        console.log(err.stack)
+    }
 }
 
 module.exports = {
     gazetteer: gazetteer,
-    gazetteer_places: gazetteer_places,
-    gazetteer_mapboxplaces: gazetteer_mapboxplaces,
+    //gazetteer_places: gazetteer_places,
     gazetteer_googleplaces: gazetteer_googleplaces
 };

@@ -96,7 +96,7 @@ router.post('/q_delete', isLoggedIn, edit.deleteRecord);
 
 const gazetteer = require('./mod/gazetteer');
 router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);
-router.get('/q_gazetteer_places', gazetteer.gazetteer_places);
+//router.get('/q_gazetteer_places', gazetteer.gazetteer_places);
 router.get('/q_gazetteer_googleplaces', gazetteer.gazetteer_googleplaces);
 
 const report = require('./mod/report');

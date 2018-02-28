@@ -6,7 +6,6 @@
     "build": "webpack -p"
   },
   "dependencies": {
-    "@google/maps": "^0.3.1",
     "@turf/turf": "^5.0.4",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.15.2",
