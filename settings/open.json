@@ -154,6 +154,7 @@
               "style": {
                   "stroke": true,
                   "color": "#555",
+                  "opacity": 0.7,
                   "weight": 1,
                   "fillOpacity": 0
               }
