@@ -1,5 +1,5 @@
 {
-  "title": "XYZ Demo",
+  "title": "XYZ Open",
   "select": {
     "records": [
       {
@@ -114,7 +114,7 @@
   "country": "EU",
   "countries": {
     "EU": {
-      "name": "European Union",
+      "name": "Europe",
       "placeholder": "e.g. Brussels",
       "bounds": [
         [
@@ -127,6 +127,42 @@
         ]
       ],
       "minZoom": 3,
+      "maxZoom": 17,
+      "layers": {
+      }
+    },
+    "UK": {
+      "name": "United Kingdom",
+      "placeholder": "e.g. London",
+      "bounds": [
+        [
+          48,
+          -11.5
+        ],
+        [
+          62,
+          5
+        ]
+      ],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "layers": {
+      }
+    },
+    "London": {
+      "name": "London",
+      "placeholder": "e.g. King's Cross",
+      "bounds": [
+        [
+          51,
+          -1
+        ],
+        [
+          52,
+          1
+        ]
+      ],
+      "minZoom": 9,
       "maxZoom": 17,
       "layers": {
       }

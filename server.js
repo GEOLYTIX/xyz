@@ -5,27 +5,32 @@ const port = process.env.PORT || 3000;
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
-const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const helmet = require('helmet');
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+const morgan = require('morgan');
 
-if (cluster.isMaster && process.env.NODE_ENV === 'production') {
-    console.log(`Master ${process.pid} is running`);
+if (process.env.NODE_ENV === 'production') {
+    const cluster = require('cluster');
+    const numCPUs = require('os').cpus().length;
 
-    // Fork workers.
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
-
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`worker ${worker.process.pid} died`);
-    });
+    if (cluster.isMaster) {
+        console.log(`Master ${process.pid} is running`);
     
-} else {
+        // Fork workers.
+        for (let i = 0; i < numCPUs; i++) {
+            cluster.fork();
+        }
+    
+        cluster.on('exit', (worker, code, signal) => {
+            console.log(`worker ${worker.process.pid} died`);
+        });
+        
+    } 
+}
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     const app = express();
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'ejs');
@@ -49,6 +54,7 @@ if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+
     app.use('/' + process.env.SUBDIRECTORY, require('./router'));
 
     app.listen(port);

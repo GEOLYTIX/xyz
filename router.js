@@ -19,9 +19,9 @@ router.get('/', isLoggedIn, function (req, res) {
             title: appSettings.title,
             css: '<link rel="stylesheet" href="css/desktop.css"/>',
             module_layers: appSettings.layers ? './public/tmpl/layers.html' : null,
+            module_select: appSettings.select ? './public/tmpl/select.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
-            module_select: './public/tmpl/select.html',
-            admin_button: req.user.admin ? './public/tmpl/admin_button.html' : '',
+            admin_button: (req.user && req.user.admin) ? './public/tmpl/admin_button.html' : '',
             bundle_js: "build/xyz_bundle.js",
             hooks: req.session.hooks ? JSON.stringify(req.session.hooks) : false,
             catchments: false,
@@ -218,6 +218,10 @@ router.post('/delete_user', isAdmin, function (req, res) {
 });
 
 function isLoggedIn(req, res, next) {
+
+    // return next() if NOLOGIN is set in environment settings.
+    if (process.env.NOLOGIN) return next();
+
     if (req.isAuthenticated()) {
         if (req.user.approved && req.user.verified) {
             let o = {},
