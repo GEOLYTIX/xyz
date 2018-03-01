@@ -302,6 +302,78 @@ module.exports = (function () {
 
         svg.attr('height', y += 15);
     }
+    
+    function mvt(layer){
+        if(layer.categorized){
+            layer.categorize = {};
+            
+            Object.keys(layer.categorized).map(function(key){
+                // Category checkbox element.
+                let checkbox = utils.createElement('table', { className: 'checkbox' }),
+                    td = utils.createElement('td', { className: 'box' });
+                
+                layer.categorize[key] = utils.createElement('input', {
+                    type: 'checkbox',
+                    id: 'chk_' + key
+                });
+                
+                td.appendChild(layer.categorize[key]);
+                td.appendChild(utils.createElement('label', {
+                    htmlFor: 'chk_' + key
+                }));
+                checkbox.appendChild(td);
+                checkbox.appendChild(utils.createElement('td', {
+                    textContent: 'Categorize by ' + layer.categorized[key].label
+                }));
+                
+                layer.categorize[key].addEventListener('click', function(){
+                    layer.categorize[key].apply = this.checked;
+                    // redraw layer to apply style
+                    layer.getLayer();
+                    
+                    if(layer.categorize[key].apply){
+                        // add legend
+                        layer.legend = utils.createElement('div', {
+                            className: 'legend'
+                        });
+                        
+                        let svg = d3.select(layer.legend).append('svg')
+                        .attr('width', 290)
+                        .attr('height', 315);
+                        
+                        svg.append('text')
+                        .attr('x', 30)
+                        .attr('y', 30)
+                        .attr('alignment-baseline', 'middle')
+                        .attr('font-size', '30px')
+                        .style('color', 'black')
+                        .text('hello');
+                        
+                        layer.panel.appendChild(layer.legend);
+                        
+                        Object.keys(layer.categorized[key].style).map(function(item){
+                            /*svg.append("text")
+                            .attr('x', 15)
+                            .attr('y', y + 15)
+                            .style('color', 'black')
+                            .style('font-size', '12px')
+                            .text(item);*/
+                            
+                            console.log(item);
+                            //console.log(layer.categorized[key].style[item]);
+                        });
+                    } else {
+                        // remove legend here
+                    }
+                    
+                });
+                
+                // add checkbox
+                layer.panel.appendChild(checkbox);
+                
+            });
+        }
+    }
 
     function wrap(text, width) {
         text.each(function () {
@@ -332,6 +404,7 @@ module.exports = (function () {
 
     return {
         grid: grid,
-        cluster: cluster
+        cluster: cluster,
+        mvt: mvt
     };
 })();

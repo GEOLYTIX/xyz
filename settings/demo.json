@@ -146,11 +146,7 @@
           "qID": "country",
           "filter": "AND country = 'UK'",
           "arrayZoom": {
-            "1": "borders",
-            "2": "eurostat_nuts__13_lv_0_data",
-            "8": "eurostat_nuts__13_lv_1_data",
-            "10": "eurostat_nuts__13_lv_2_data",
-            "12": "eurostat_nuts__13_lv_3_data"
+            "1": "borders"
           },
           "style": {
             "stroke": true,
@@ -1122,7 +1118,8 @@
             "fillOpacity": 0
           }
         },
-        "retail_places_mvt": {          
+        "retail_places_mvt": {
+          "panel": true,
           "name": "Retail Places",
           "format": "mvt",
           "geom_3857": "geom_3857",

@@ -85,6 +85,7 @@ module.exports = function Select() {
         xhr.onload = function () {
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
+                console.log(json);
                 layer.geometry = JSON.parse(json.geomj);
                 layer.infoj = json.infoj;
                 layer.editable = _layer.editable;

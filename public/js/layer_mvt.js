@@ -29,6 +29,7 @@ function getLayer(){
                 table: layer.table,
                 qID: layer.qID,
                 filter: layer.filter || '',
+                properties: layer.properties || '',
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
                 geom: layer.geom,
@@ -45,20 +46,31 @@ function getLayer(){
                     return f.properties.id;
                 },
                 vectorTileLayerStyles: {
-                    'border': function (properties, zoom) {
-                        return {
-                            weight: 2,
-                            color: 'red',
-                            opacity: 1,
-                            fillColor: 'yellow',
-                            fill: true,
-                            radius: 6,
-                            fillOpacity: 0.7
-                        }
-                    }
+                    "retail_places_mvt": applyLayerStyle
                 }
             };
         //options.vectorTileLayerStyles[layer.layer] = layer.style;
+        
+        function applyLayerStyle(properties, zoom){
+            if(layer.categorized){
+                let _style = Object.keys(layer.categorized).map(function(key){
+                    return Object.keys(properties).map(function(property){
+                        if(key === property){
+                            if(layer.categorize[key].apply){
+                            return layer.categorized[property].style[properties[property]];
+                            } else {
+                                return layer.style;
+                            }
+                        }
+                    });
+                });
+                return _style[0][1];
+            } else {
+                return layer.style;
+            }
+        }
+        
+        if(this.L) _xyz.map.removeLayer(this.L);
         
         this.L = L.vectorGrid.protobuf(url, options)
             .on('load', function(){
@@ -78,7 +90,8 @@ function getLayer(){
                 this.setFeatureStyle(e.layer.properties.id, layer.styleHighlight);
             })
             .on('mouseout', function(e){
-                this.setFeatureStyle(e.layer.properties.id, layer.style);
+                //this.setFeatureStyle(e.layer.properties.id, layer.style);
+                this.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
             .addTo(_xyz.map);
     }
