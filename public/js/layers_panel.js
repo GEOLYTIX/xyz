@@ -357,7 +357,7 @@ module.exports = (function () {
                 Object.keys(layer.categorized[key].style).map(function(item){
                     y += 15;
                     
-                    console.log(layer.categorized[key].style[item]);
+                    //console.log(layer.categorized[key].style[item]);
                     
                     svg.append('rect')
                     .attr('x', 4)
