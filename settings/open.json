@@ -602,7 +602,6 @@
                           "opacity": 1,
                           "fillColor": "#D7263D",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Regional SC": {
@@ -611,7 +610,6 @@
                           "opacity": 1,
                           "fillColor": "#0197F6",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Shopping Park": {
@@ -620,7 +618,6 @@
                           "opacity": 1,
                           "fillColor": "#0C0A3E",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Small Town Centre": {
@@ -629,7 +626,6 @@
                           "opacity": 1,
                           "fillColor": "#7B1E7A",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Service Area": {
@@ -638,7 +634,6 @@
                           "opacity": 1,
                           "fillColor": "#F3C677",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3                          
                       },
                       "Town Centre": {
@@ -647,7 +642,6 @@
                           "opacity": 1,
                           "fillColor": "#4B88A2",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3                         
                       },
                       "Weak Parade": {
@@ -656,7 +650,6 @@
                           "opacity": 1,
                           "fillColor": "#972D07",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3                       
                       },
                       "Airport": {
@@ -665,7 +658,6 @@
                           "opacity": 1,
                           "fillColor": "#FFB20F",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3                          
                       },
                       "City Centre": {
@@ -674,7 +666,6 @@
                           "opacity": 1,
                           "fillColor": "#561643",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3                        
                       },
                       "Large Parade": {
@@ -683,7 +674,6 @@
                           "opacity": 1,
                           "fillColor": "#6C0E23",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3                         
                       },
                       "Parade": {
@@ -692,7 +682,6 @@
                           "opacity": 1,
                           "fillColor": "#EF7674",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Major City Centre": {
@@ -701,7 +690,6 @@
                           "opacity": 1,
                           "fillColor": "#C492B1",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Trade Park": {
@@ -710,7 +698,6 @@
                           "opacity": 1,
                           "fillColor": "#247BA0",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Large Town Centre": {
@@ -719,7 +706,6 @@
                           "opacity": 1,
                           "fillColor": "#5C9EAD",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Local Hub": {
@@ -728,7 +714,6 @@
                           "opacity": 1,
                           "fillColor": "#FF6F59",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Leisure Park": {
@@ -737,7 +722,6 @@
                           "opacity": 1,
                           "fillColor": "#FF7F11",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Rail Station": {
@@ -746,7 +730,6 @@
                           "opacity": 1,
                           "fillColor": "#2B2D42",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Outlet Centre": {
@@ -755,7 +738,6 @@
                           "opacity": 1,
                           "fillColor": "#8D99AE",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Planned Urban Centre": {
@@ -764,7 +746,6 @@
                           "opacity": 1,
                           "fillColor": "#AF5D63",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Rural": {
@@ -773,7 +754,6 @@
                           "opacity": 1,
                           "fillColor": "#846075",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Major Urban Centre": {
@@ -782,7 +762,6 @@
                           "opacity": 1,
                           "fillColor": "#3D315B",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Urban Centre": {
@@ -791,7 +770,6 @@
                           "opacity": 1,
                           "fillColor": "#563635",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       },
                       "Retail Park": {
@@ -800,7 +778,6 @@
                           "opacity": 1,
                           "fillColor": "#590004",
                           "fill": true,
-                          "radius": 6,
                           "fillOpacity": 0.3
                       }
                   }

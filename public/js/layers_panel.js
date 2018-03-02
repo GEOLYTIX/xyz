@@ -333,35 +333,6 @@ module.exports = (function () {
                     
                     if(layer.categorize[key].apply){
                         // add legend
-                        layer.legend = utils.createElement('div', {
-                            className: 'legend'
-                        });
-                        
-                        let svg = d3.select(layer.legend).append('svg')
-                        .attr('width', 290)
-                        .attr('height', 315);
-                        
-                        svg.append('text')
-                        .attr('x', 30)
-                        .attr('y', 30)
-                        .attr('alignment-baseline', 'middle')
-                        .attr('font-size', '30px')
-                        .style('color', 'black')
-                        .text('hello');
-                        
-                        layer.panel.appendChild(layer.legend);
-                        
-                        Object.keys(layer.categorized[key].style).map(function(item){
-                            /*svg.append("text")
-                            .attr('x', 15)
-                            .attr('y', y + 15)
-                            .style('color', 'black')
-                            .style('font-size', '12px')
-                            .text(item);*/
-                            
-                            console.log(item);
-                            //console.log(layer.categorized[key].style[item]);
-                        });
                     } else {
                         // remove legend here
                     }
@@ -370,6 +341,41 @@ module.exports = (function () {
                 
                 // add checkbox
                 layer.panel.appendChild(checkbox);
+                
+                layer.legend = utils.createElement('div', {
+                    className: 'legend'
+                });
+                
+                layer.panel.appendChild(layer.legend);
+                
+                let _height = 16*Object.keys(layer.categorized[key].style).length;
+                let svg = d3.select(layer.legend).append('svg')
+                .attr('width', 290)
+                .attr('height', _height),
+                    y = 0;
+                
+                Object.keys(layer.categorized[key].style).map(function(item){
+                    y += 15;
+                    
+                    console.log(layer.categorized[key].style[item]);
+                    
+                    svg.append('rect')
+                    .attr('x', 4)
+                    .attr('y', y)
+                    .attr('width', 12)
+                    .attr('height', 12)
+                    .style('fill', layer.categorized[key].style[item].fillColor)
+                    .style('fill-opacity', layer.categorized[key].style[item].fillOpacity)
+                    .style('stroke', layer.categorized[key].style[item].color);
+                    
+                    svg.append("text")
+                        .attr('x', 20)
+                        .attr('y', y+6)
+                        .attr('text-anchor', 'start')
+                        .attr('alignment-baseline', 'central')
+                        .style('font-size', '12px')
+                        .text(item);
+                });
                 
             });
         }

@@ -591,7 +591,8 @@ input[type=range]::-moz-range-thumb {
     -moz-transition: opacity 300ms ease-in-out;
     -webkit-transition: opacity 300ms ease-in-out;
     border-bottom: 1px solid #333;
-    padding-bottom: 5px; }
+    padding-bottom: 5px;
+    padding-top: 5px; }
   .module .content .range {
     width: 100%;
     width: calc(100% - 5px);
