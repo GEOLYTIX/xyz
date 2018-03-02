@@ -46,7 +46,9 @@ function getLayer(){
                     return f.properties.id;
                 },
                 vectorTileLayerStyles: {
-                    "retail_places_mvt": applyLayerStyle
+                    "retail_places_mvt": applyLayerStyle,
+                    "postal_areas": applyLayerStyle,
+                    "border": applyLayerStyle
                 }
             };
         //options.vectorTileLayerStyles[layer.layer] = layer.style;
