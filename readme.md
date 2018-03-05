@@ -78,6 +78,10 @@ A Google Maps API key which is required if Google Maps Services such as Distance
 
 A Mapbox API key which is required if Mapbox base maps and/or Mapbox services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
+`"NOLOGIN": "true"`
+
+The passport security middleware will execute the *next()* callback if NOLOGIN is set to true in the environment settings. There is no login view and the client application will open directly from the host address.
+
 ### Application Settings
 
 Application settings are stored in the [/settings](https://github.com/GEOLYTIX/xyz/tree/master/settings) directory. Application settings control instance specific settings for layers, styles, locales and which modules should be loaded by client applications. Below is a list of settings which are currently supported by the framework.
