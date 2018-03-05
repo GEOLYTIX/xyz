@@ -28,53 +28,52 @@ The environment settings which contain sensitive information such as data source
 
 We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
 
-*"NODE_ENV": "development"*
+`"NODE_ENV": "development"`
 
 Whether the application is run in a development or production environment.
 
-*"PORT": "3000"*
+`"PORT": "3000"`
 
 The port on which the application is run.
 
-*"HOST": "geolytix.xyz/demo"*
+`"HOST": "geolytix.xyz/demo"`
 
 The host is required in order to send correct verification or media links.
 
-*"LOCALHOST": "http://localhost:3000/xyz/"*
+`"LOCALHOST": "http://localhost:3000/xyz/"`
 
 The localhost is required for server side reporting.
 
-*"SUBDIRECTORY": "xyz"*
+`"SUBDIRECTORY": "xyz"`
 
 The name of the application root directory. This is required by the Express router to set the public directory.
 
-*"MONGODB": "mongodb://localhost:27017/database"*
+`"MONGODB": "mongodb://localhost:27017/database"`
 
 The location of the mongo database in which the user accounts are stored for applications and services which require passport authentication.
 
-*"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"*
+`"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"`
 
 An SMTP connection string which is required for the application to send emails. The passport security module uses this mail account to send verification requests to new registrants.
 
-*"OURSECRET": "ChinaCatSunflower"*
+`"OURSECRET": "ChinaCatSunflower"`
 
 A session secret which is used to compute the Hash.
 
-*"APPSETTINGS": "demo.json"*
+`"APPSETTINGS": "demo.json"`
 
 The name of the appsettings file ([in the settings subdirectory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The APPSETTINGS will be discussed in detail in the next section of this documentation.
 
-*"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"*
-
-*"DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"*
+`"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"
+"DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"`
 
 Keys beginning with DBS_ store PostGIS data source connections. Modules which require connections to PostGIS data sources via the [node-postgres](https://github.com/brianc/node-postgres) read the connection strings from the DBS_* keys, split the key and store the connection in a an object (DBS) with the remainder of the DBS_* key as key for the connection object. This key can be referenced in the dbs XHR request parameter where required. This allows different services and layers to connect to different data sources in the same hosted API. Any dbs keys defined in the application settings object (\_XYZ) must be referenced with a matching DBS_* key and connection string. E.g. A layer with dbs:XYZ requires DBS_XYZ with a valid connection string in the environment settings. Please reference [pg-connection-string] which is used by node-postgres to connect to a data source from a connection string.
 
-*"GKEY": "google maps api key"*
+`"GKEY": "google maps api key"`
 
 A Google Maps API key which is required if Google Maps Services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
-*"MAPBOX": "mapbox api key"*
+`"MAPBOX": "mapbox api key"`
 
 A Mapbox API key which is required if Mapbox base maps and/or Mapbox services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
@@ -85,6 +84,23 @@ The passport security middleware will execute the *next()* callback if NOLOGIN i
 ### Application Settings
 
 Application settings are stored in the [/settings](https://github.com/GEOLYTIX/xyz/tree/master/settings) directory. Application settings control instance specific settings for layers, styles, locales and which modules should be loaded by client applications. Below is a list of settings which are currently supported by the framework.
+
+`"title": "XYZ Demo"`
+
+The application title which will be inserted into the title tag in the client templates. `<title>GEOLYTIX | {{:title}}</title>`
+
+`"gazetteer": {
+   "provider": "google",
+   "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
+   "pane": ["gazetteer", 550],
+   "style": {
+     "stroke": true,
+     "color": "#090",
+     "weight": 2,
+     "fillColor": "#cf9",
+     "fillOpacity": 0.2
+   }
+ }`
 
 ## Server
 
