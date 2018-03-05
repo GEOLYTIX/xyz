@@ -45,28 +45,26 @@ function getLayer(){
                 getFeatureId: function (f) {
                     return f.properties.id;
                 },
-                vectorTileLayerStyles: {
-                    //"retail_places_mvt": applyLayerStyle,
-                    //"postal_areas": applyLayerStyle,
-                    //"border": applyLayerStyle
-                }
+                vectorTileLayerStyles: {}
             };
+        
         //options.vectorTileLayerStyles[layer.layer] = layer.style;
+        // set style for each layer
         options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
         
         function applyLayerStyle(properties, zoom){
+            
             if(layer.categorized){
                 let _style = Object.keys(layer.categorized).map(function(key){
                     return Object.keys(properties).map(function(property){
-                        if(key === property){
-                            let __style = layer.categorized[property].style[properties[property]] || layer.style;
+                        if(key === property) {
+                            let _item = layer.categorized[property].style[properties[property]], __style;
+                            _item ? __style = _item.style : __style = layer.style;
                             return __style;
-                            } else {
-                                return layer.style;
-                            }
+                        }
                     });
-                });
-                return _style[0][1];
+                })[0][1];
+                return _style;
             } else {
                 return layer.style;
             }

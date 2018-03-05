@@ -17,8 +17,8 @@ function fetch_tiles(req, res) {
             `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
              FROM (
                SELECT
-                 ${req.query.qID} AS id, 
-                 ${req.query.properties}
+                 ${req.query.qID} AS id 
+                 ${req.query.properties ? ', ' + req.query.properties + ', ' : ','}
                  ST_AsMVTGeom(
                     ${req.query.geom_3857},
                    TileBBox(${z},${x},${y}),
@@ -34,7 +34,7 @@ function fetch_tiles(req, res) {
                         ${req.query.east},
                         ${req.query.south},
                         4326))
-               ${req.query.filter}
+               ${req.query.filter? `AND ${req.query.properties} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
                ) tile;`;
 
     //console.log(q);

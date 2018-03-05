@@ -331,9 +331,9 @@ module.exports = (function () {
                     .attr('y', y)
                     .attr('width', 12)
                     .attr('height', 12)
-                    .style('fill', layer.categorized[key].style[item].fillColor)
-                    .style('fill-opacity', layer.categorized[key].style[item].fillOpacity)
-                    .style('stroke', layer.categorized[key].style[item].color);
+                    .style('fill', layer.categorized[key].style[item].style.fillColor)
+                    .style('fill-opacity', layer.categorized[key].style[item].style.fillOpacity)
+                    .style('stroke', layer.categorized[key].style[item].style.color);
                     
                     svg.append("text")
                         .attr('x', 20)
@@ -341,7 +341,24 @@ module.exports = (function () {
                         .attr('text-anchor', 'start')
                         .attr('alignment-baseline', 'central')
                         .style('font-size', '12px')
-                        .text(item);
+                        .style('cursor', 'pointer')
+                        .text(layer.categorized[key].style[item].label)
+                        .on('click', function(){
+                        
+                        if(this.style.opacity == 0.5){
+                            this.style.opacity = 1;
+                            layer.filter.splice(layer.filter.indexOf(item), 1);
+                            //console.log(layer.filter);
+                            
+                        } else {
+                            
+                            this.style.opacity = 0.5;
+                            if (!layer.filter) layer.filter = [];
+                            layer.filter.push(item);
+                            //console.log(layer.filter);
+                        }
+                        layer.getLayer();
+                    });
                 });
                 
                 svg.append('rect')
