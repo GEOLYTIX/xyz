@@ -853,6 +853,7 @@
       "maxZoom": 17,
       "layers": {
         "retail_places_mvt": {
+          "display": true,
           "panel": true,
           "name": "Retail Places",
           "properties": " rp_type, ",
