@@ -836,22 +836,308 @@
         }
       }
     },
-    "London": {
-      "name": "London",
-      "gazetteer": ["google","","'&location=51.5285582,-0.2416808&radius=50'","e.g. King's Cross"],
+    "Oxford": {
+      "name": "Oxford",
+      "gazetteer": ["google","","'&location=51.75,-1.25&radius=40'","e.g. Oxford University"],
       "bounds": [
         [
-          51,
-          -1
+          51.3,
+          -1.7
         ],
         [
-          52,
-          1
+          52.2,
+          -0.8
         ]
       ],
       "minZoom": 9,
       "maxZoom": 17,
       "layers": {
+        "retail_places_mvt": {
+          "panel": true,
+          "name": "Retail Places",
+          "properties": " rp_type, ",
+          "categorized": {
+              "rp_type": {
+                  "label": "Retail place type",
+                  "style": {
+                      "Village Centre": {
+                          "weight": 2,
+                          "color": "#D7263D",
+                          "opacity": 1,
+                          "fillColor": "#D7263D",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Regional SC": {
+                          "weight": 2,
+                          "color": "#0197F6",
+                          "opacity": 1,
+                          "fillColor": "#0197F6",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Shopping Park": {
+                          "weight": 2,
+                          "color": "#0C0A3E",
+                          "opacity": 1,
+                          "fillColor": "#0C0A3E",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Small Town Centre": {
+                          "weight": 2,
+                          "color": "#7B1E7A",
+                          "opacity": 1,
+                          "fillColor": "#7B1E7A",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Service Area": {
+                          "weight": 2,
+                          "color": "#F3C677",
+                          "opacity": 1,
+                          "fillColor": "#F3C677",
+                          "fill": true,
+                          "fillOpacity": 0.3                          
+                      },
+                      "Town Centre": {
+                          "weight": 2,
+                          "color": "#4B88A2",
+                          "opacity": 1,
+                          "fillColor": "#4B88A2",
+                          "fill": true,
+                          "fillOpacity": 0.3                         
+                      },
+                      "Weak Parade": {
+                          "weight": 2,
+                          "color": "#972D07",
+                          "opacity": 1,
+                          "fillColor": "#972D07",
+                          "fill": true,
+                          "fillOpacity": 0.3                       
+                      },
+                      "Airport": {
+                          "weight": 2,
+                          "color": "#FFB20F",
+                          "opacity": 1,
+                          "fillColor": "#FFB20F",
+                          "fill": true,
+                          "fillOpacity": 0.3                          
+                      },
+                      "City Centre": {
+                          "weight": 2,
+                          "color": "#561643",
+                          "opacity": 1,
+                          "fillColor": "#561643",
+                          "fill": true,
+                          "fillOpacity": 0.3                        
+                      },
+                      "Large Parade": {
+                          "weight": 2,
+                          "color": "#6C0E23",
+                          "opacity": 1,
+                          "fillColor": "#6C0E23",
+                          "fill": true,
+                          "fillOpacity": 0.3                         
+                      },
+                      "Parade": {
+                          "weight": 2,
+                          "color": "#EF7674",
+                          "opacity": 1,
+                          "fillColor": "#EF7674",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Major City Centre": {
+                          "weight": 2,
+                          "color": "#C492B1",
+                          "opacity": 1,
+                          "fillColor": "#C492B1",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Trade Park": {
+                          "weight": 2,
+                          "color": "#247BA0",
+                          "opacity": 1,
+                          "fillColor": "#247BA0",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Large Town Centre": {
+                         "weight": 2,
+                          "color": "#5C9EAD",
+                          "opacity": 1,
+                          "fillColor": "#5C9EAD",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Local Hub": {
+                         "weight": 2,
+                          "color": "#FF6F59",
+                          "opacity": 1,
+                          "fillColor": "#FF6F59",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Leisure Park": {
+                         "weight": 2,
+                          "color": "#FF7F11",
+                          "opacity": 1,
+                          "fillColor": "#FF7F11",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Rail Station": {
+                         "weight": 2,
+                          "color": "#2B2D42",
+                          "opacity": 1,
+                          "fillColor": "#2B2D42",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Outlet Centre": {
+                         "weight": 2,
+                          "color": "#8D99AE",
+                          "opacity": 1,
+                          "fillColor": "#8D99AE",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Planned Urban Centre": {
+                         "weight": 2,
+                          "color": "#AF5D63",
+                          "opacity": 1,
+                          "fillColor": "#AF5D63",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Rural": {
+                         "weight": 2,
+                          "color": "#846075",
+                          "opacity": 1,
+                          "fillColor": "#846075",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Major Urban Centre": {
+                         "weight": 2,
+                          "color": "#3D315B",
+                          "opacity": 1,
+                          "fillColor": "#3D315B",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Urban Centre": {
+                         "weight": 2,
+                          "color": "#563635",
+                          "opacity": 1,
+                          "fillColor": "#563635",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      },
+                      "Retail Park": {
+                         "weight": 2,
+                          "color": "#590004",
+                          "opacity": 1,
+                          "fillColor": "#590004",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      }
+                  }
+              }
+          },
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geom": "geom",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "pane": ["bounds", 510],
+          "dbs": "MVT",
+          "qID": "id",
+          "arrayZoom": {
+            "10": "ox_retailplace"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
+          "style": {
+            "stroke": true,
+            "color": "#ff9800",
+            "weight": 1,
+            "fillOpacity": 0
+          },
+          "styleHighlight": {
+            "stroke": true,
+            "color": "#ff9800",
+            "weight": 2,
+            "fill": true,
+            "fillColor": "#ff9800",
+            "fillOpacity": 0.2
+          }
+        }
       }
     }
   }
