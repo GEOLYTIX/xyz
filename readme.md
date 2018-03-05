@@ -64,8 +64,10 @@ A session secret which is used to compute the Hash.
 
 The name of the appsettings file ([in the settings subdirectory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The APPSETTINGS will be discussed in detail in the next section of this documentation.
 
-`"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"
-"DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"`
+```
+"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"
+"DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"
+```
 
 Keys beginning with DBS_ store PostGIS data source connections. Modules which require connections to PostGIS data sources via the [node-postgres](https://github.com/brianc/node-postgres) read the connection strings from the DBS_* keys, split the key and store the connection in a an object (DBS) with the remainder of the DBS_* key as key for the connection object. This key can be referenced in the dbs XHR request parameter where required. This allows different services and layers to connect to different data sources in the same hosted API. Any dbs keys defined in the application settings object (\_XYZ) must be referenced with a matching DBS_* key and connection string. E.g. A layer with dbs:XYZ requires DBS_XYZ with a valid connection string in the environment settings. Please reference [pg-connection-string] which is used by node-postgres to connect to a data source from a connection string.
 
@@ -89,10 +91,11 @@ Application settings are stored in the [/settings](https://github.com/GEOLYTIX/x
 
 The application title which will be inserted into the title tag in the client templates. `<title>GEOLYTIX | {{:title}}</title>`
 
-`"gazetteer": {
+```
+"gazetteer": {
    "provider": "google",
-   "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
    "pane": ["gazetteer", 550],
+   "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
    "style": {
      "stroke": true,
      "color": "#090",
@@ -100,7 +103,9 @@ The application title which will be inserted into the title tag in the client te
      "fillColor": "#cf9",
      "fillOpacity": 0.2
    }
- }`
+ }
+```
+The gazetteer settings for the client application. 'google' and 'mapbox' are currently supported as geocoding (with autocomplete) provider. The provider requires a matching key in the environment settings. The pane defines the z-index on which gazetteer results are drawn. Changing the pane index will control how the gazetteer results are drawn in relation to the data layers. The icon and style define which marker (point results) or polygon styles should be applied to gazetteer features drawn in the map canvas.
 
 ## Server
 
