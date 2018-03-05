@@ -304,51 +304,20 @@ module.exports = (function () {
     }
     
     function mvt(layer){
+        
         if(layer.categorized){
-            layer.categorize = {};
             
             Object.keys(layer.categorized).map(function(key){
-                // Category checkbox element.
-                let checkbox = utils.createElement('table', { className: 'checkbox' }),
-                    td = utils.createElement('td', { className: 'box' });
                 
-                layer.categorize[key] = utils.createElement('input', {
-                    type: 'checkbox',
-                    id: 'chk_' + key
-                });
-                
-                td.appendChild(layer.categorize[key]);
-                td.appendChild(utils.createElement('label', {
-                    htmlFor: 'chk_' + key
-                }));
-                checkbox.appendChild(td);
-                checkbox.appendChild(utils.createElement('td', {
-                    textContent: 'Categorize by ' + layer.categorized[key].label
-                }));
-                
-                layer.categorize[key].addEventListener('click', function(){
-                    layer.categorize[key].apply = this.checked;
-                    // redraw layer to apply style
-                    layer.getLayer();
+                layer.getLayer();
                     
-                    if(layer.categorize[key].apply){
-                        // add legend
-                    } else {
-                        // remove legend here
-                    }
-                    
-                });
-                
-                // add checkbox
-                layer.panel.appendChild(checkbox);
-                
                 layer.legend = utils.createElement('div', {
                     className: 'legend'
                 });
                 
                 layer.panel.appendChild(layer.legend);
                 
-                let _height = 16*Object.keys(layer.categorized[key].style).length;
+                let _height = 17*Object.keys(layer.categorized[key].style).length;
                 let svg = d3.select(layer.legend).append('svg')
                 .attr('width', 290)
                 .attr('height', _height),
@@ -356,9 +325,7 @@ module.exports = (function () {
                 
                 Object.keys(layer.categorized[key].style).map(function(item){
                     y += 15;
-                    
-                    //console.log(layer.categorized[key].style[item]);
-                    
+
                     svg.append('rect')
                     .attr('x', 4)
                     .attr('y', y)
@@ -376,6 +343,22 @@ module.exports = (function () {
                         .style('font-size', '12px')
                         .text(item);
                 });
+                
+                svg.append('rect')
+                .attr('x', 4)
+                .attr('y', y += 15)
+                .attr('width', 12)
+                .attr('height', 12)
+                .style('fill-opacity', layer.style.fillOpacity)
+                .style('stroke', layer.style.color);
+                
+                svg.append("text")
+                .attr('x', 20)
+                .attr('y', y + 6)
+                .attr('text-anchor', 'start')
+                .attr('alignment-baseline', 'central')
+                .style('font-size', '12px')
+                .text('other');
                 
             });
         }

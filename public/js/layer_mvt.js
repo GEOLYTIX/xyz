@@ -46,24 +46,24 @@ function getLayer(){
                     return f.properties.id;
                 },
                 vectorTileLayerStyles: {
-                    "retail_places_mvt": applyLayerStyle,
-                    "postal_areas": applyLayerStyle,
-                    "border": applyLayerStyle
+                    //"retail_places_mvt": applyLayerStyle,
+                    //"postal_areas": applyLayerStyle,
+                    //"border": applyLayerStyle
                 }
             };
         //options.vectorTileLayerStyles[layer.layer] = layer.style;
+        options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
         
         function applyLayerStyle(properties, zoom){
             if(layer.categorized){
                 let _style = Object.keys(layer.categorized).map(function(key){
                     return Object.keys(properties).map(function(property){
                         if(key === property){
-                            if(layer.categorize[key].apply){
-                            return layer.categorized[property].style[properties[property]];
+                            let __style = layer.categorized[property].style[properties[property]] || layer.style;
+                            return __style;
                             } else {
                                 return layer.style;
                             }
-                        }
                     });
                 });
                 return _style[0][1];
