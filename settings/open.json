@@ -139,7 +139,109 @@
           "format": "mvt",
           "geom_3857": "geom_3857",
           "geom": "geom",
+          "geomj": "ST_AsGeoJSON(geom)",
           "dbs": "LDN",
+          "qID": "nuts_id",
+          "infoj":[
+            {
+              "field": "pop__14",
+              "label": "Population",
+              "type": "numeric"
+            },
+            {
+              "field": "gen_f__14",
+              "label": "Female",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "gen_m__14",
+              "label": "Male",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "label": "Age groups"
+            },            
+            {
+              "field": "age_00to09__14",
+              "label": "9 years and younger",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_10to19__14",
+              "label": "10 to 19 years",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_20to29__14",
+              "label": "20 to 29 years",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_30to39__14",
+              "label": "30 to 39 years",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_40to49__14",
+              "label": "40 to 49 years",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_50to59__14",
+              "label": "10 to 19 years",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_60to69__14",
+              "label": "60 to 69 years",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "age_70pl__14",
+              "label": "70 years and above",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "label": "Flux"
+            }, 
+            {
+              "field": "births__14",
+              "label": "Births",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "deaths__14",
+              "label": "Deaths",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "label": "Economic Activity"
+            }, 
+            {
+              "field": "employed__14",
+              "label": "Employed",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "employee__14",
+              "label": "Employee",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
           "arrayZoom": {
             "7": "eu_nuts_data"
           },
@@ -604,307 +706,7 @@
             "#ddd"
           ],
           "competitors": []
-        },
-          "retail_places_mvt": {
-              "panel": true,
-              "name": "Retail Places",
-              "properties": " rp_type",
-              "categorized": {
-                  "rp_type": {
-                      "label": "Retail place type",
-                      "style": {
-                          "village_center": {
-                              "label": "Village Center",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#D7263D",
-                                  "opacity": 1,
-                                  "fillColor": "#D7263D",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "shopping_park": {
-                              "label": "Shopping Park",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#0C0A3E",
-                                  "opacity": 1,
-                                  "fillColor": "#0C0A3E",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "small_town_centre": {
-                              "label": "Small Town Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#7B1E7A",
-                                  "opacity": 1,
-                                  "fillColor": "#7B1E7A",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "city_centre": {
-                              "label": "City Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#561643",
-                                  "opacity": 1,
-                                  "fillColor": "#561643",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              } 
-                          },
-                          "town_centre": {
-                              "label": "Town Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#4B88A2",
-                                  "opacity": 1,
-                                  "fillColor": "#4B88A2",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "airport": {
-                              "label": "Airport",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#FFB20F",
-                                  "opacity": 1,
-                                  "fillColor": "#FFB20F",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "large_parade": {
-                              "label": "Large Parade",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#6C0E23",
-                                  "opacity": 1,
-                                  "fillColor": "#6C0E23",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "parade": {
-                              "label": "Parade",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#EF7674",
-                                  "opacity": 1,
-                                  "fillColor": "#EF7674",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "major_city_centre": {
-                              "label": "Major City Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#C492B1",
-                                  "opacity": 1,
-                                  "fillColor": "#C492B1",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "trade_park": {
-                              "label": "Trade Park",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#247BA0",
-                                  "opacity": 1,
-                                  "fillColor": "#247BA0",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "large_town_centre": {
-                              "label": "Large Town Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#5C9EAD",
-                                  "opacity": 1,
-                                  "fillColor": "#5C9EAD",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "leisure_park": {
-                              "label": "Leisure Park",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#FF7F11",
-                                  "opacity": 1,
-                                  "fillColor": "#FF7F11",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "rail_station": {
-                              "label": "Rail Station",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#2B2D42",
-                                  "opacity": 1,
-                                  "fillColor": "#2B2D42",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "outlet_centre": {
-                              "label": "Outlet Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#8D99AE",
-                                  "opacity": 1,
-                                  "fillColor": "#8D99AE",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "planned_urban_centre": {
-                              "label": "Planned Urban Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#AF5D63",
-                                  "opacity": 1,
-                                  "fillColor": "#AF5D63",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "major_urban_centre": {
-                              "label": "Major Urban Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#3D315B",
-                                  "opacity": 1,
-                                  "fillColor": "#3D315B",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "urban_centre": {
-                              "label": "Urban Centre",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#563635",
-                                  "opacity": 1,
-                                  "fillColor": "#563635",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "retail_park": {
-                              "label": "Retail Park",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#590004",
-                                  "opacity": 1,
-                                  "fillColor": "#590004",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          }
-                      }
-                  }
-              },
-              "format": "mvt",
-              "geom_3857": "geom_3857",
-              "geom": "geom",
-              "geomj": "ST_AsGeoJSON(geom)",
-              "pane": ["bounds", 510],
-              "dbs": "MVT",
-              "qID": "id",
-              "arrayZoom": {
-                  "10": "gb_retailplace"
-              },
-              "infoj": [
-            {
-              "field": "rp_name",
-              "label": "Name",
-              "type": "text"
-            },
-            {
-              "field": "rp_type",
-              "label": "Type",
-              "type": "text"
-            },
-            {
-              "field": "ref_pc",
-              "label": "Reference Postcode",
-              "type": "text",
-              "level": 1
-            },
-            {
-              "field": "comp_strgh",
-              "label": "Competition Strength",
-              "type": "integer",
-              "level": 1
-            },
-            {
-              "field": "est_units",
-              "label": "Estimate Units",
-              "type": "integer",
-              "level": 1
-            },
-            {
-              "field": "est_brands",
-              "label": "Estimate Brands",
-              "type": "integer",
-              "level": 1
-            },
-            {
-              "field": "comparison",
-              "label": "Comparison",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "conv",
-              "label": "Convenience",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "fbl",
-              "label": "Food, Beverage, Leisure",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "services",
-              "label": "Services",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "classbrass",
-              "label": "Class|Brass",
-              "type": "numeric",
-              "level": 1
-            }
-          ],
-              "style": {
-                  "stroke": true,
-                  "color": "#ff9800",
-                  "weight": 1,
-                  "fillOpacity": 0
-              },
-              "styleHighlight": {
-                  "stroke": true,
-                  "color": "#ff9800",
-                  "weight": 2,
-                  "fill": true,
-                  "fillColor": "#ff9800",
-                  "fillOpacity": 0.2
-              }
-          }
+        }
       }
     },
     "Oxford": {

@@ -47,17 +47,7 @@ function fetch_tiles(req, res) {
                ${req.query.filter? `AND ${req.query.properties} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
                ) tile;`;
 
-    console.log(q);
-
-    //TileBBox(${z},${x},${y}),
-
-    // ST_MakeEnvelope(
-    //     -${m + (x * r)},
-    //      ${m - (y * r)},
-    //     -${m + (x * r) + r},
-    //      ${m - (y * r) - r},
-    //     3857
-    // ),
+    //console.log(q);
 
     DBS[req.query.dbs].query(q)
         .then(result => {

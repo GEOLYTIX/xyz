@@ -126,21 +126,21 @@ function viewChangeEnd() {
 }
 
 // Add base layers
-L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token)
-    .addTo(_xyz.map)
-    .on('load', function () {
-        //layersCheck();
-    });
+// L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token)
+//     .addTo(_xyz.map)
+//     .on('load', function () {
+//         //layersCheck();
+//     });
 
 _xyz.map.createPane('labels');
 _xyz.map.getPane('labels').style.zIndex = 550;
 _xyz.map.getPane('labels').style.pointerEvents = 'none';
 
-L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token, { pane: 'labels' })
-    .addTo(_xyz.map)
-    .on('load', function () { 
-        //layersCheck();
-    });
+// L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token, { pane: 'labels' })
+//     .addTo(_xyz.map)
+//     .on('load', function () { 
+//         //layersCheck();
+//     });
 
 // Function to check whether all display layers are drawn.
 _xyz.layersCheck = layersCheck;

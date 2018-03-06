@@ -19,7 +19,24 @@ module.exports = function(){
     _xyz.layers.init = function (change_country) {
 
         // Remove the layers hook on change_country event.
-        if (change_country) _xyz.removeHook('layers');
+        if (change_country) {
+            _xyz.removeHook('layers');
+            _xyz.map.eachLayer(function(l){
+                _xyz.map.removeLayer(l);
+            })
+        };
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token)
+            .addTo(_xyz.map)
+            .on('load', function () {
+                //layersCheck();
+            });
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token, { pane: 'labels' })
+            .addTo(_xyz.map)
+            .on('load', function () {
+                //layersCheck();
+            });
 
         // Get the layers from the current country.
         let layers = _xyz.countries[_xyz.country].layers;
