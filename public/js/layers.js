@@ -3,7 +3,8 @@ const formats = {
     cluster: require('./layer_cluster'),
     mvt: require('./layer_mvt'),
     geojson: require('./layer_geojson'),
-    grid: require('./layer_grid')
+    grid: require('./layer_grid'),
+    tiles: require('./layer_tiles')
 };
 const layers_panel = require('./layers_panel');
 
@@ -25,18 +26,6 @@ module.exports = function(){
                 _xyz.map.removeLayer(l);
             })
         };
-
-        L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token)
-            .addTo(_xyz.map)
-            .on('load', function () {
-                //layersCheck();
-            });
-
-        L.tileLayer('https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=' + mapbox_token, { pane: 'labels' })
-            .addTo(_xyz.map)
-            .on('load', function () {
-                //layersCheck();
-            });
 
         // Get the layers from the current country.
         let layers = _xyz.countries[_xyz.country].layers;
@@ -99,6 +88,10 @@ module.exports = function(){
                     this.textContent = 'visibility_off';
                     _xyz.filterHook('layers', layer.layer);
                     if (layer.L) _xyz.map.removeLayer(layer.L);
+                    if (layer.base) {
+                        _xyz.map.removeLayer(layer.base);
+                        layer.base = null;
+                    }
                     _xyz.layersCheck();
                 }
             });
