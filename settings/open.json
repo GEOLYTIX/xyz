@@ -613,200 +613,172 @@
                   "rp_type": {
                       "label": "Retail place type",
                       "style": {
-                          "village_center": {
-                              "label": "Village Center",
+                          "Major City Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#D7263D",
+                                  "color": "#FC2F00", 
                                   "opacity": 1,
-                                  "fillColor": "#D7263D",
+                                  "fillColor": "#EF271B",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "shopping_park": {
-                              "label": "Shopping Park",
+                          "City Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#0C0A3E",
+                                  "color": "#BA2D0B", 
                                   "opacity": 1,
-                                  "fillColor": "#0C0A3E",
+                                  "fillColor": "#BA2D0B",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "small_town_centre": {
-                              "label": "Small Town Centre",
+                          "Large Town Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#7B1E7A",
+                                  "color": "#FE4E00", 
                                   "opacity": 1,
-                                  "fillColor": "#7B1E7A",
+                                  "fillColor": "#FE4E00",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "city_centre": {
-                              "label": "City Centre",
+                          "Major Urban Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#561643",
+                                  "color": "#E2711D",
                                   "opacity": 1,
-                                  "fillColor": "#561643",
+                                  "fillColor": "#E2711D", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               } 
                           },
-                          "town_centre": {
-                              "label": "Town Centre",
+                          "Town Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#4B88A2",
+                                  "color": "#F3A712",
                                   "opacity": 1,
-                                  "fillColor": "#4B88A2",
+                                  "fillColor": "#F3A712",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "airport": {
-                              "label": "Airport",
+                          "Urban Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#FFB20F",
+                                  "color": "#FADF63",
                                   "opacity": 1,
-                                  "fillColor": "#FFB20F",
+                                  "fillColor": "#FADF63", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "large_parade": {
-                              "label": "Large Parade",
+                          "Small Town Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#6C0E23",
+                                  "color": "#FFE74C",
                                   "opacity": 1,
-                                  "fillColor": "#6C0E23",
+                                  "fillColor": "#FFE74C", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "parade": {
-                              "label": "Parade",
+                          "Village Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#EF7674",
+                                  "color": "#DBFE87",
                                   "opacity": 1,
-                                  "fillColor": "#EF7674",
+                                  "fillColor": "#DBFE87",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "major_city_centre": {
-                              "label": "Major City Centre",
+                          "Regional SC": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#C492B1",
+                                  "color": "#8ED081",
                                   "opacity": 1,
-                                  "fillColor": "#C492B1",
+                                  "fillColor": "#8ED081",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "trade_park": {
-                              "label": "Trade Park",
+                          "Outlet Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#247BA0",
+                                  "color": "#7DDF64",
                                   "opacity": 1,
-                                  "fillColor": "#247BA0",
+                                  "fillColor": "#7DDF64", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "large_town_centre": {
-                              "label": "Large Town Centre",
+                          "Shopping Park": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#5C9EAD",
+                                  "color": "#074F57",
                                   "opacity": 1,
-                                  "fillColor": "#5C9EAD",
+                                  "fillColor": "#074F57",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "leisure_park": {
-                              "label": "Leisure Park",
+                          "Retail Park": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#FF7F11",
+                                  "color": "#32746D",
                                   "opacity": 1,
-                                  "fillColor": "#FF7F11",
+                                  "fillColor": "#32746D",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "rail_station": {
-                              "label": "Rail Station",
+                          "Leisure Park": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#2B2D42",
+                                  "color": "#41D3BD",
                                   "opacity": 1,
-                                  "fillColor": "#2B2D42",
+                                  "fillColor": "#41D3BD", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "outlet_centre": {
-                              "label": "Outlet Centre",
+                          "Local Hub": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#8D99AE",
+                                  "color": "#08B2E3",
                                   "opacity": 1,
-                                  "fillColor": "#8D99AE",
+                                  "fillColor": "#08B2E3", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "planned_urban_centre": {
-                              "label": "Planned Urban Centre",
+                          "Large Parade": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#AF5D63",
+                                  "color": "#1F487E",
                                   "opacity": 1,
-                                  "fillColor": "#AF5D63",
+                                  "fillColor": "#1F487E",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "major_urban_centre": {
-                              "label": "Major Urban Centre",
+                          "Parade": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#3D315B",
+                                  "color": "#541388",
                                   "opacity": 1,
-                                  "fillColor": "#3D315B",
+                                  "fillColor": "#541388",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "urban_centre": {
-                              "label": "Urban Centre",
+                          "Weak Parade": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#563635",
+                                  "color": "#D90368",
                                   "opacity": 1,
-                                  "fillColor": "#563635",
-                                  "fill": true,
-                                  "fillOpacity": 0.3
-                              }
-                          },
-                          "retail_park": {
-                              "label": "Retail Park",
-                              "style": {
-                                  "weight": 2,
-                                  "color": "#590004",
-                                  "opacity": 1,
-                                  "fillColor": "#590004",
+                                  "fillColor": "#D90368",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
@@ -932,200 +904,172 @@
               "rp_type": {
                   "label": "Retail place type",
                   "style": {
-                      "village_center": {
-                          "label": "Village Center",
-                          "style": {
-                              "weight": 2,
-                              "color": "#D7263D",
-                              "opacity": 1,
-                              "fillColor": "#D7263D",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "shopping_park": {
-                          "label": "Shopping Park",
-                          "style": {
-                              "weight": 2,
-                              "color": "#0C0A3E",
-                              "opacity": 1,
-                              "fillColor": "#0C0A3E",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "small_town_centre": {
-                          "label": "Small Town Centre",
-                          "style": {
-                              "weight": 2,
-                              "color": "#7B1E7A",
-                              "opacity": 1,
-                              "fillColor": "#7B1E7A",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "city_centre": {
-                          "label": "City Centre",
-                          "style": {
-                              "weight": 2,
-                              "color": "#561643",
-                              "opacity": 1,
-                              "fillColor": "#561643",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          } 
-                      },
-                      "town_centre": {
-                          "label": "Town Centre",
-                          "style": {
-                              "weight": 2,
-                              "color": "#4B88A2",
-                              "opacity": 1,
-                              "fillColor": "#4B88A2",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "airport": {
-                          "label": "Airport",
-                          "style": {
-                              "weight": 2,
-                              "color": "#FFB20F",
-                              "opacity": 1,
-                              "fillColor": "#FFB20F",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "Large Parade": {
-                          "label": "Large Parade",
-                          "style": {
-                              "weight": 2,
-                              "color": "#6C0E23",
-                              "opacity": 1,
-                              "fillColor": "#6C0E23",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "parade": {
-                          "label": "Parade",
-                          "style": {
-                              "weight": 2,
-                              "color": "#EF7674",
-                              "opacity": 1,
-                              "fillColor": "#EF7674",
-                              "fill": true,
-                              "fillOpacity": 0.3
-                          }
-                      },
-                      "major_city_centre": {
-                              "label": "Major City Centre",
+                          "Major City Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#C492B1",
+                                  "color": "#FC2F00", 
                                   "opacity": 1,
-                                  "fillColor": "#C492B1",
+                                  "fillColor": "#EF271B",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "Trade Park": {
-                              "label": "Trade Park",
+                          "City Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#247BA0",
+                                  "color": "#BA2D0B", 
                                   "opacity": 1,
-                                  "fillColor": "#247BA0",
+                                  "fillColor": "#BA2D0B",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "large_town_centre": {
-                              "label": "Large Town Centre",
+                          "Large Town Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#5C9EAD",
+                                  "color": "#FE4E00", 
                                   "opacity": 1,
-                                  "fillColor": "#5C9EAD",
+                                  "fillColor": "#FE4E00",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "leisure_park": {
-                              "label": "Leisure Park",
+                          "Major Urban Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#FF7F11",
+                                  "color": "#E2711D",
                                   "opacity": 1,
-                                  "fillColor": "#FF7F11",
+                                  "fillColor": "#E2711D", 
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              } 
+                          },
+                          "Town Centre": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#F3A712",
+                                  "opacity": 1,
+                                  "fillColor": "#F3A712",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "rail_station": {
-                              "label": "Rail Station",
+                          "Urban Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#2B2D42",
+                                  "color": "#FADF63",
                                   "opacity": 1,
-                                  "fillColor": "#2B2D42",
+                                  "fillColor": "#FADF63", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "outlet_centre": {
-                              "label": "Outlet Centre",
+                          "Small Town Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#8D99AE",
+                                  "color": "#FFE74C",
                                   "opacity": 1,
-                                  "fillColor": "#8D99AE",
+                                  "fillColor": "#FFE74C", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "planned_urban_centre": {
-                              "label": "Planned Urban Centre",
+                          "Village Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#AF5D63",
+                                  "color": "#DBFE87",
                                   "opacity": 1,
-                                  "fillColor": "#AF5D63",
+                                  "fillColor": "#DBFE87",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "major_urban_centre": {
-                              "label": "Major Urban Centre",
+                          "Regional SC": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#3D315B",
+                                  "color": "#8ED081",
                                   "opacity": 1,
-                                  "fillColor": "#3D315B",
+                                  "fillColor": "#8ED081",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "urban_centre": {
-                              "label": "Urban Centre",
+                          "Outlet Centre": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#563635",
+                                  "color": "#7DDF64",
                                   "opacity": 1,
-                                  "fillColor": "#563635",
+                                  "fillColor": "#7DDF64", 
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }
                           },
-                          "retail_park": {
-                              "label": "Retail Park",
+                          "Shopping Park": {
                               "style": {
                                   "weight": 2,
-                                  "color": "#590004",
+                                  "color": "#074F57",
                                   "opacity": 1,
-                                  "fillColor": "#590004",
+                                  "fillColor": "#074F57",
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              }
+                          },
+                          "Retail Park": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#32746D",
+                                  "opacity": 1,
+                                  "fillColor": "#32746D",
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              }
+                          },
+                          "Leisure Park": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#41D3BD",
+                                  "opacity": 1,
+                                  "fillColor": "#41D3BD", 
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              }
+                          },
+                          "Local Hub": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#08B2E3",
+                                  "opacity": 1,
+                                  "fillColor": "#08B2E3", 
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              }
+                          },
+                          "Large Parade": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#1F487E",
+                                  "opacity": 1,
+                                  "fillColor": "#1F487E",
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              }
+                          },
+                          "Parade": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#541388",
+                                  "opacity": 1,
+                                  "fillColor": "#541388",
+                                  "fill": true,
+                                  "fillOpacity": 0.3
+                              }
+                          },
+                          "Weak Parade": {
+                              "style": {
+                                  "weight": 2,
+                                  "color": "#D90368",
+                                  "opacity": 1,
+                                  "fillColor": "#D90368",
                                   "fill": true,
                                   "fillOpacity": 0.3
                               }

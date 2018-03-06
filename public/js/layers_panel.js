@@ -342,7 +342,7 @@ module.exports = (function () {
                         .attr('alignment-baseline', 'central')
                         .style('font-size', '12px')
                         .style('cursor', 'pointer')
-                        .text(layer.categorized[key].style[item].label)
+                        .text(item)
                         .on('click', function(){
                         
                         if(this.style.opacity == 0.5){
