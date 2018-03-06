@@ -49,13 +49,13 @@ function getLayer() {
                         let icon,
                             count = point.properties.infoj.length;
 
-                        if (count > 1) {
+                        // if (count > 1 && layer.arrayCompColours) {
                             // let competitorArr = [];
                             // for (let i = 0; i < point.properties.infoj.length || 0; i++) {
                             //     competitorArr.push(point.properties.infoj[i].competitor);
                             // }
 
-                            let vArr = [0];
+                            // let vArr = [0];
                             // for (let i = 0; i < layer.competitors.length || 0; i++) {
                             //     for (let ii = 0; ii < competitorArr.length; ii++) {
                             //         if (competitorArr[ii] === layer.competitors[i]) {
@@ -64,23 +64,26 @@ function getLayer() {
                             //     }
                             // }
 
-                            let dotArr = [[400, layer.arrayCompColours[0]]];
-                            for (let i = 0; i < vArr.length - 1; i++) {
-                                let vTot = 0;
-                                for (let ii = i; ii < vArr.length - 1; ii++) {
-                                    vTot += parseInt(vArr[ii])
-                                }
-                                dotArr.push([400 * vTot / count, layer.arrayCompColours[i + 1]]);
-                            }
+                            // let dotArr = [[400, layer.arrayCompColours[0]]];
+                            // for (let i = 0; i < vArr.length - 1; i++) {
+                            //     let vTot = 0;
+                            //     for (let ii = i; ii < vArr.length - 1; ii++) {
+                            //         vTot += parseInt(vArr[ii])
+                            //     }
+                            //     dotArr.push([400 * vTot / count, layer.arrayCompColours[i + 1]]);
+                            // }
                 
-                            icon = svg_symbols.target(dotArr);
+                            // icon = svg_symbols.target(dotArr);
 
-                        } else {                           
+                        // } else {                           
                             // icon = layer.cluster_competitor ?
                             //     svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker) :
                             //     layer.customMarker || svg_symbols.target(layer.defaultMarker);
-                            icon = svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker);
-                        }
+                        //     icon = svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker);
+                        //     icon = layer.defaultMarker;
+                        // }
+
+                        icon = layer.customMarker;
 
                         return L.marker(latlng, {
                             pane: layer.pane[0],

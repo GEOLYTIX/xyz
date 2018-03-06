@@ -65,7 +65,6 @@
     ]
   },
   "gazetteer": {
-    "provider": "google",
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "pane": ["gazetteer", 550],
     "style": {
@@ -111,9 +110,9 @@
     ],
    "imageMaxSize": 1024
   },
-  "country": "GB",
+  "country": "UK",
   "countries": {
-    "GB": {
+    "UK": {
       "name": "Great Britain",
       "gazetteer": ["google","GB","","e.g. Milton Keynes"],
       "bounds": [
@@ -129,12 +128,32 @@
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
+          "provider": "mapbox",
+          "pane": [
+            "base", 500
+          ]
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
+          "provider": "mapbox",
+          "pane": [
+            "base_labels", 550
+          ]
+        },
         "stores": {
           "display": true,
           "name": "Stores",
           "format": "cluster",
           "pane": ["stores", 520],
-          "dbs": "MVT",
+          "dbs": "XYZ",
           "table": "dominos_stores",
           "qID": "store_id",
           "cluster_label": "store_name",
@@ -209,7 +228,7 @@
           "geomj": "ST_AsGeoJSON(geom)",
           "geomdisplay": ",ST_AsGeoJSON(displaygeom) AS geomdisplay",
           "pane": ["bounds", 510],
-          "dbs": "MVT",
+          "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
             "10": "dominos_retailplace_select"
@@ -329,7 +348,7 @@
           "geom": "geom",
           "geomj": "ST_AsGeoJSON(geom)",
           "pane": ["bounds", 510],
-          "dbs": "MVT",
+          "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
             "10": "dominos_retailplace"
