@@ -168,7 +168,7 @@
           "geom_3857": "geom_3857",
           "geom": "geom",
           "geomj": "ST_AsGeoJSON(geom)",
-          "dbs": "LDN",
+          "dbs": "XYZ",
           "qID": "nuts_id",
           "infoj": [
             {
@@ -290,7 +290,7 @@
             "grid",
             515
           ],
-          "dbs": "LDN",
+          "dbs": "XYZ",
           "geom": "geomcntr",
           "arrayZoom": {
             "5": "eu_hx_128k",
@@ -329,6 +329,26 @@
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
+          "provider": "mapbox",
+          "pane": [
+            "base", 500
+          ]
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
+          "provider": "mapbox",
+          "pane": [
+            "base_labels", 550
+          ]
+        },
         "retail_points": {
           "display": true,
           "panel": true,
@@ -338,7 +358,7 @@
             "retail_points",
             540
           ],
-          "dbs": "MVT",
+          "dbs": "XYZ",
           "qID": "id",
           "table": "gb_retailpoint",
           "geomj": "ST_AsGeoJSON(geom)",
@@ -766,6 +786,26 @@
       "minZoom": 9,
       "maxZoom": 17,
       "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
+          "provider": "mapbox",
+          "pane": [
+            "base", 500
+          ]
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
+          "provider": "mapbox",
+          "pane": [
+            "base_labels", 550
+          ]
+        },
         "retail_places_mvt": {
           "display": true,
           "panel": true,
@@ -956,7 +996,7 @@
             "bounds",
             510
           ],
-          "dbs": "MVT",
+          "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
             "9": "ox_retailplace"
