@@ -18,8 +18,8 @@ function fetch_tiles(req, res) {
              FROM (
                SELECT
 
-                 ${req.query.qID} AS id 
-                 ${req.query.properties ? ', ' + req.query.properties + ', ' : ','}
+                 ${req.query.qID} AS id,
+                 ${req.query.properties ? req.query.properties + ', ' : ' '}
 
                  ST_AsMVTGeom(
                     ${req.query.geom_3857},
