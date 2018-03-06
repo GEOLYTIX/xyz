@@ -713,7 +713,7 @@ input[type=range]::-moz-range-thumb {
     transition: max-height 0.3s ease-out;
     margin: 15px 0; }
     .module .content .drawer .header {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       height: 30px; }
       .module .content .drawer .header .btn {
