@@ -20,14 +20,14 @@ async function newRecord(req, res) {
 
         q =
         `UPDATE ${req.body.table} SET
-            ${req.body.qID} = '${req.body.table + '.' + result.rows[0].id}'
+            ${req.body.qID} = '${result.rows[0].id}'
             WHERE id = '${result.rows[0].id}';`;
 
         //console.log(q);
 
         await DBS[req.body.dbs].query(q);
 
-        res.status(200).send(req.body.table + '.' + result.rows[0].id);
+        res.status(200).send(result.rows[0].id.toString());
 
     } catch (err) {
         console.log(err.stack)
