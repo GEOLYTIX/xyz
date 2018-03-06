@@ -765,7 +765,7 @@
         },
         "retail_points_editable": {
             "panel": true,
-            "editable": true,
+            "editable": "geometry",
             "name": "Retail Points (editable)",
             "format": "cluster",
             "pane": ["retail_points", 540],
@@ -789,7 +789,27 @@
             {
               "field": "retailer",
               "label": "Retailer",
-              "type": "text"
+              "type": "text",
+              "options": ["Aldi",
+                          "As Nature Indended",
+                          "Asda",
+                          "Booths",
+                          "Budgens",
+                          "The Co-operative Group",
+                          "Costco",
+                          "Farmfoods",
+                          "Heron",
+                          "Iceland",
+                          "Jack Fultons",
+                          "Lidl",
+                          "Makro",
+                          "Marks and Spencer",
+                          "Morrisons",
+                          "Sainsburys",
+                          "Tesco",
+                          "Waitrose",
+                          "Whole Foods Market"
+                         ],
             },
             {
               "field": "fascia",
