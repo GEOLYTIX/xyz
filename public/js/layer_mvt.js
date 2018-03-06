@@ -47,10 +47,15 @@ function getLayer(){
                 },
                 vectorTileLayerStyles: {}
             };
+<<<<<<< HEAD
+        options.vectorTileLayerStyles[layer.layer] = layer.style;
+        //options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
+=======
         
         //options.vectorTileLayerStyles[layer.layer] = layer.style;
         // set style for each layer
         options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
+>>>>>>> 82ff9173d58b4eb153b1690c112a5a6c37224be5
         
         function applyLayerStyle(properties, zoom){
             
