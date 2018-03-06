@@ -44,7 +44,7 @@ function fetch_tiles(req, res) {
                         ${req.query.east},
                         ${req.query.south},
                         4326))
-               ${req.query.filter? `AND ${req.query.properties} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
+               ${req.query.filter ? `AND ${req.query.properties} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
                ) tile;`;
 
     //console.log(q);

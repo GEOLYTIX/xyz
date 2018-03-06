@@ -261,13 +261,20 @@ module.exports = (function () {
         y += 50;
 
         // Add section for clusters and competitors title
-        for (let i = 0; i < layer.arrayCompColours.length; i++) {
-            svg.append('circle')
-                .attr('cx', 25)
-                .attr('cy', y)
-                .attr('r', 20 - 6 * i)
-                .style('fill', layer.arrayCompColours[i]);
-        }
+        // for (let i = 0; i < layer.arrayCompColours.length; i++) {
+        //     svg.append('circle')
+        //         .attr('cx', 25)
+        //         .attr('cy', y)
+        //         .attr('r', 20 - 6 * i)
+        //         .style('fill', layer.arrayCompColours[i]);
+        // }
+
+        svg.append('circle')
+            .attr('cx', 25)
+            .attr('cy', y)
+            .attr('r', 20)
+            .style('fill', '#C0C0C0');
+
         svg.append('text')
             .attr('x', 50)
             .attr('y', y)
@@ -280,25 +287,25 @@ module.exports = (function () {
         y += 10;
 
         // list competitors
-        for (let i = 0; i < layer.competitors.length; i++) {
+        // for (let i = 0; i < layer.competitors.length; i++) {
 
-            y += 25;
+        //     y += 25;
 
-            let key = layer.competitors[i];
+        //     let key = layer.competitors[i];
 
-            svg.append('circle')
-                .attr('cx', 35)
-                .attr('cy', y)
-                .attr('r', 7)
-                .style('fill', layer.arrayCompColours[i]);
+        //     svg.append('circle')
+        //         .attr('cx', 35)
+        //         .attr('cy', y)
+        //         .attr('r', 7)
+        //         .style('fill', layer.arrayCompColours[i]);
 
-            svg.append('text')
-                .attr('x', 50)
-                .attr('y', y + 1)
-                .attr('alignment-baseline', 'middle')
-                .style('font-size', '12px')
-                .text(layer.markerStyle[key].label);
-        }
+        //     svg.append('text')
+        //         .attr('x', 50)
+        //         .attr('y', y + 1)
+        //         .attr('alignment-baseline', 'middle')
+        //         .style('font-size', '12px')
+        //         .text(layer.markerStyle[key].label);
+        // }
 
         svg.attr('height', y += 15);
     }
