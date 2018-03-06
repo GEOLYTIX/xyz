@@ -998,7 +998,7 @@
                               "fillOpacity": 0.3
                           }
                       },
-                      "large_parade": {
+                      "Large Parade": {
                           "label": "Large Parade",
                           "style": {
                               "weight": 2,
@@ -1031,7 +1031,7 @@
                                   "fillOpacity": 0.3
                               }
                           },
-                          "trade_park": {
+                          "Trade Park": {
                               "label": "Trade Park",
                               "style": {
                                   "weight": 2,
