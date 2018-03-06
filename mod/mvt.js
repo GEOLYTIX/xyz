@@ -37,7 +37,7 @@ function fetch_tiles(req, res) {
                ${req.query.filter}
                ) tile;`;
 
-    console.log(q);
+    //console.log(q);
 
     DBS[req.query.dbs].query(q)
         .then(result => {

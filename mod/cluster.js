@@ -28,7 +28,7 @@ async function cluster(req, res) {
           ${req.query.geom},
         0.00001
       )
-      ${req.query.filter? `AND ${req.query.competitor} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
+      ${req.query.filter ? `AND ${req.query.competitor} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
     `
     let result = await DBS[req.query.dbs].query(q);
 

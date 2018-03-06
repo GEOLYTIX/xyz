@@ -27,7 +27,7 @@ function getLayer(){
             url = localhost + 'mvt/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
-                qID: layer.qID,
+                qID: layer.qID || null,
                 filter: layer.filter || '',
                 properties: layer.properties || '',
                 layer: layer.layer,
@@ -51,8 +51,8 @@ function getLayer(){
                     //"border": applyLayerStyle
                 }
             };
-        //options.vectorTileLayerStyles[layer.layer] = layer.style;
-        options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
+        options.vectorTileLayerStyles[layer.layer] = layer.style;
+        //options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
         
         function applyLayerStyle(properties, zoom){
             if(layer.categorized){

@@ -126,39 +126,56 @@
           60
         ]
       ],
-      "minZoom": 3,
-      "maxZoom": 17,
+      "minZoom": 5,
+      "maxZoom": 9,
       "layers": {
-          "border": {
-              "display": true,
-              "name": "Country Border",
-              "pane": ["bounds", 510],
-              "format": "mvt",
-              "geom_3857": "geom_3857",
-              "geom": "geom",
-              "dbs": "MVT",
-              "qID": "country",
-              "filter": "",
-              "arrayZoom": {
-                 "3": "eurostat_nuts__13_lv_0_data",
-                 "4": "eurostat_nuts__13_lv_0_data",
-                 "5": "eurostat_nuts__13_lv_0_data",
-                 "6": "eurostat_nuts__13_lv_1_data",
-                 "7": "eurostat_nuts__13_lv_1_data",
-                 "8": "eurostat_nuts__13_lv_2_data",
-                 "9": "eurostat_nuts__13_lv_2_data",
-                 "10": "eurostat_nuts__13_lv_3_data",
-                 "11": "eurostat_nuts__13_lv_3_data",
-                 "12": "eurostat_nuts__13_lv_3_data"
-              },
-              "style": {
-                  "stroke": true,
-                  "color": "#555",
-                  "opacity": 0.7,
-                  "weight": 1,
-                  "fillOpacity": 0
-              }
+        "NUTS3": {
+          "display": true,
+          "name": "NUTS3",
+          "pane": [
+            "bounds",
+            510
+          ],
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geom": "geom",
+          "dbs": "LDN",
+          "arrayZoom": {
+            "7": "eu_nuts_data"
+          },
+          "style": {
+            "stroke": true,
+            "color": "#555",
+            "opacity": 0.7,
+            "weight": 1,
+            "fillOpacity": 0
           }
+        },
+        "grid": {
+          "display": true,
+          "panel": true,
+          "name": "Eurostat Grid",
+          "format": "grid",
+          "pane": [
+            "grid",
+            515
+          ],
+          "dbs": "LDN",
+          "geom": "geomcntr",
+          "arrayZoom": {
+            "5": "eu_hx_128k",
+            "6": "eu_hx_64k",
+            "7": "eu_hx_32k",
+            "8": "eu_hx_16k",
+            "9": "eu_hx_8k"
+          },
+          "queryFields": [
+            [
+              "pop",
+              "Population"
+            ]
+          ]
+        }
       }
     },
     "UK": {

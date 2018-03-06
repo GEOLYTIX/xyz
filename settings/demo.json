@@ -143,15 +143,23 @@
           "geom_3857": "geom_3857",
           "geom": "geom",
           "dbs": "MVT",
-          "qID": "country",
           "filter": "AND country = 'UK'",
           "arrayZoom": {
-            "1": "borders"
+            "6": "eurostat_nuts__13_lv_0",
+            "7": "eurostat_nuts__13_lv_0",
+            "8": "eurostat_nuts__13_lv_0",
+            "9": "eurostat_nuts__13_lv_0",
+            "10": "eurostat_nuts__13_lv_0",
+            "11": "eurostat_nuts__13_lv_0",
+            "12": "eurostat_nuts__13_lv_0",
+            "13": "eurostat_nuts__13_lv_0",
+            "14": "eurostat_nuts__13_lv_0",
+            "15": null
           },
           "style": {
             "stroke": true,
             "color": "#555",
-            "weight": 1,
+            "weight": 1.5,
             "fillOpacity": 0
           }
         },
@@ -1748,23 +1756,22 @@
       "layers": {
         "border": {
           "name": "Country Border",
-          "pane": [
-            "bounds",
-            510
-          ],
+          "pane": ["bounds", 510],
           "format": "mvt",
           "geom_3857": "geom_3857",
           "geom": "geom",
           "dbs": "MVT",
-          "qID": "country",
           "arrayZoom": {
-            "1": "borders"
-          },
-          "style": {
-            "stroke": true,
-            "color": "#555",
-            "weight": 1,
-            "fillOpacity": 0
+            "6": "eurostat_nuts__13_lv_0",
+            "7": "eurostat_nuts__13_lv_0",
+            "8": "eurostat_nuts__13_lv_0",
+            "9": "eurostat_nuts__13_lv_0",
+            "10": "eurostat_nuts__13_lv_0",
+            "11": "eurostat_nuts__13_lv_0",
+            "12": "eurostat_nuts__13_lv_0",
+            "13": "eurostat_nuts__13_lv_0",
+            "14": "eurostat_nuts__13_lv_0",
+            "15": null
           }
         },
         "grid": {
