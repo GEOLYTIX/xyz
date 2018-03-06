@@ -13,6 +13,8 @@ function fetch_tiles(req, res) {
         x = parseInt(params[3]),
         y = parseInt(params[4]),
         z = parseInt(params[2]),
+        m = 20037508.34,
+        r = (m*2)/(Math.pow(2,z)),
         q =
             `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
              FROM (
@@ -23,10 +25,16 @@ function fetch_tiles(req, res) {
 
                  ST_AsMVTGeom(
                     ${req.query.geom_3857},
-                   TileBBox(${z},${x},${y}),
-                   4096,
-                   256,
-                   true) geom
+                    ST_MakeEnvelope(
+                        ${-m + (x * r)},
+                        ${ m - (y * r)},
+                        ${-m + (x * r) + r},
+                        ${ m - (y * r) - r},
+                        3857
+                    ),
+                    4096,
+                    256,
+                    true) geom
                FROM ${req.query.table}
                WHERE ST_Intersects(
                       ${req.query.geom},
@@ -39,7 +47,17 @@ function fetch_tiles(req, res) {
                ${req.query.filter? `AND ${req.query.properties} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
                ) tile;`;
 
-    //console.log(q);
+    console.log(q);
+
+    //TileBBox(${z},${x},${y}),
+
+    // ST_MakeEnvelope(
+    //     -${m + (x * r)},
+    //      ${m - (y * r)},
+    //     -${m + (x * r) + r},
+    //      ${m - (y * r) - r},
+    //     3857
+    // ),
 
     DBS[req.query.dbs].query(q)
         .then(result => {
