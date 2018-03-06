@@ -762,6 +762,415 @@
             "#ddd"
           ],
           "competitors": []
+        },
+        "retail_points_editable": {
+            "panel": true,
+            "editable": true,
+            "name": "Retail Points (editable)",
+            "format": "cluster",
+            "pane": ["retail_points", 540],
+            "dbs": "XYZ",
+            "qID": "id",
+            "table": "gb_retailpoint_editable",
+            "geomj": "ST_AsGeoJSON(geom)",
+            "geom": "geom",
+            "cluster_label": "store",
+            "cluster_competitor": "brand",
+            "cluster_kmeans": 4,
+            "cluster_dbscan": 0.0075,
+            "markerMin": 20,
+            "markerMax": 40,
+            "infoj": [
+            {
+              "field": "store",
+              "label": "Store",
+              "type": "text"
+            },
+            {
+              "field": "retailer",
+              "label": "Retailer",
+              "type": "text"
+            },
+            {
+              "field": "fascia",
+              "label": "Fascia",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "size_band",
+              "label": "Size",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "label": "Address",
+              "level": 1
+            },
+            {
+              "field": "address_1",
+              "type": "text"
+            },
+            {
+              "field": "address_2",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "type": "text"
+            },
+            {
+              "field": "pqi",
+              "label": "Positional Quality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1
+            }
+          ],
+            "markerStyle": {
+            "aldi": {
+              "style": [
+                [
+                  400,
+                  "#ffbf45"
+                ],
+                [
+                  350,
+                  "#fa6f08"
+                ],
+                [
+                  300,
+                  "#ef3c11"
+                ],
+                [
+                  250,
+                  "#001f79"
+                ],
+                [
+                  200,
+                  "#02bee3"
+                ],
+                [
+                  100,
+                  "#ffffff"
+                ]
+              ],
+              "label": "Aldi"
+            },
+            "asda": {
+              "style": [
+                [
+                  400,
+                  "#83b923"
+                ],
+                [
+                  200,
+                  "#ffffff"
+                ],
+                [
+                  150,
+                  "#fdb839"
+                ]
+              ],
+              "label": "Asda"
+            },
+            "booths": {
+              "style": [
+                [
+                  400,
+                  "#a12629"
+                ],
+                [
+                  200,
+                  "#ffffff"
+                ],
+                [
+                  150,
+                  "#a12629"
+                ]
+              ],
+              "label": "Booths"
+            },
+            "budgens": {
+              "style": [
+                [
+                  400,
+                  "#EEEEE0"
+                ],
+                [
+                  200,
+                  "#679a00"
+                ],
+                [
+                  150,
+                  "#cccb01"
+                ]
+              ],
+              "label": "Budgens"
+            },
+            "co_op": {
+              "style": [
+                [
+                  400,
+                  "#0b1e60"
+                ],
+                [
+                  250,
+                  "#ffffff"
+                ],
+                [
+                  200,
+                  "#a3d227"
+                ]
+              ],
+              "label": "The Co-Operative"
+            },
+            "costco": {
+              "style": [
+                [
+                  400,
+                  "#005daa"
+                ],
+                [
+                  350,
+                  "#ffffff"
+                ],
+                [
+                  250,
+                  "#e31837"
+                ]
+              ],
+              "label": "Costco"
+            },
+            "farmfoods": {
+              "style": [
+                [
+                  400,
+                  "#77a632"
+                ],
+                [
+                  300,
+                  "#f7f900"
+                ],
+                [
+                  200,
+                  "#ff0000"
+                ]
+              ],
+              "label": "Farm Foods"
+            },
+            "fultons_food": {
+              "style": [
+                [
+                  400,
+                  "#004a95"
+                ],
+                [
+                  300,
+                  "#ffffff"
+                ],
+                [
+                  200,
+                  "#004a95"
+                ],
+                [
+                  100,
+                  "#fff11f"
+                ]
+              ],
+              "label": "Fultons Food"
+            },
+            "heron_foods": {
+              "style": [
+                [
+                  400,
+                  "#ffffff"
+                ],
+                [
+                  300,
+                  "#313590"
+                ],
+                [
+                  100,
+                  "#ffcf00"
+                ]
+              ],
+              "label": "Heron Foods"
+            },
+            "iceland": {
+              "style": [
+                [
+                  400,
+                  "#ed1b2d"
+                ],
+                [
+                  300,
+                  "#f2552b"
+                ],
+                [
+                  200,
+                  "#f89128"
+                ],
+                [
+                  100,
+                  "#ffffff"
+                ]
+              ],
+              "label": "Iceland"
+            },
+            "lidl": {
+              "style": [
+                [
+                  400,
+                  "#d61408"
+                ],
+                [
+                  350,
+                  "#ffe502"
+                ],
+                [
+                  200,
+                  "#002d7a"
+                ],
+                [
+                  100,
+                  "#d61408"
+                ]
+              ],
+              "label": "Lidl"
+            },
+            "makro": {
+              "style": [
+                [
+                  400,
+                  "#00457a"
+                ],
+                [
+                  150,
+                  "#ffe811"
+                ]
+              ],
+              "label": "Makro"
+            },
+            "marks_spencer": {
+              "style": [
+                [
+                  400,
+                  "#0a0d10"
+                ],
+                [
+                  200,
+                  "#def036"
+                ],
+                [
+                  100,
+                  "#0a0d10"
+                ]
+              ],
+              "label": "Marks & Spencer"
+            },
+            "morrisons": {
+              "style": [
+                [
+                  400,
+                  "#ffe133"
+                ],
+                [
+                  200,
+                  "#00614e"
+                ]
+              ],
+              "label": "Morrisons"
+            },
+            "sainsburys": {
+              "style": [
+                [
+                  400,
+                  "#ee8a00"
+                ],
+                [
+                  250,
+                  "#ffffff"
+                ],
+                [
+                  150,
+                  "#ee8a00"
+                ]
+              ],
+              "label": "Sainsbury's"
+            },
+            "tesco": {
+              "style": [
+                [
+                  400,
+                  "#0055a8"
+                ],
+                [
+                  300,
+                  "#ffffff"
+                ],
+                [
+                  150,
+                  "#f02f26"
+                ]
+              ],
+              "label": "Tesco"
+            },
+            "waitrose": {
+              "style": [
+                [
+                  400,
+                  "#81ae37"
+                ],
+                [
+                  150,
+                  "#ffffff"
+                ]
+              ],
+              "label": "Waitrose"
+            },
+            "whole_foods": {
+              "style": [
+                [
+                  400,
+                  "#00674b"
+                ],
+                [
+                  350,
+                  "#ffffff"
+                ],
+                [
+                  200,
+                  "#00674b"
+                ]
+              ],
+              "label": "Whole Foods"
+            },
+            "other": {
+              "style": [
+                [
+                  400,
+                  "#999"
+                ],
+                [
+                  350,
+                  "#fff"
+                ]
+              ],
+              "label": "Other"
+            }
+          },
+            "arrayCompColours": ["#ddd"],
+            "competitors": []
         }
       }
     },
