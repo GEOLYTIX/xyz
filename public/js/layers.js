@@ -45,6 +45,7 @@ module.exports = function(){
         Object.keys(layers).map(function(layer){
             layers[layer].layer = layer;
             layer = layers[layer];
+            layer.base = null;
 
             // Set layer styles
             Object.keys(_xyz.layers).map(function(key){

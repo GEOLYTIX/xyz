@@ -1,7 +1,7 @@
 const utils = require('./utils');
 
 function getLayer() {
-    if (!this.base && this.display) {
+    if (this.display && !this.base) {
         this.base = L.tileLayer(this.URI + '?access_token=' + mapbox_token, {
             pane: this.pane[0]
         })

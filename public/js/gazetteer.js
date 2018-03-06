@@ -43,6 +43,12 @@ module.exports = function Gazetteer() {
                 dom.country.innerHTML = _xyz.country === 'Global' ?
                     '<i class="material-icons">language</i>' :
                     _xyz.country;
+
+                // Empty input value, results and set placeholder.
+                dom.input.value = '';
+                dom.input.placeholder = _xyz.countries[_xyz.country].gazetteer[3];
+                dom.result.innerHTML = '';
+
                 _xyz.removeHooks();
                 _xyz.setHook('country', _xyz.country);
                 _xyz.setView(true);
