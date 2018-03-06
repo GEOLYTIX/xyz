@@ -65,7 +65,6 @@
     ]
   },
   "gazetteer": {
-    "provider": "google",
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "pane": ["gazetteer", 550],
     "style": {
