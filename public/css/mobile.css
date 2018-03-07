@@ -553,6 +553,7 @@ input[type=range]::-moz-range-thumb {
   height: 30px; }
 
 .module .dev {
+  display: none;
   color: grey; }
   .module .dev select {
     color: grey; }
