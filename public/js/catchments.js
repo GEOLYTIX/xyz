@@ -166,6 +166,7 @@ module.exports = function catchments(){
                 if (dom.chkCatchmentsConstruction.checked) {
                     _xyz.catchments.layer_tin = L.geoJson(json.tin,{
                         interactive: false,
+                        pane: _xyz.catchments.pane[0],
                         style: {
                             stroke: true,
                             color: "#999",
@@ -175,26 +176,28 @@ module.exports = function catchments(){
                     }).addTo(_xyz.map);
     
                     _xyz.catchments.layer_circlePoints = L.geoJson(json.circlePoints,{
-                        interactive: false,
                         pointToLayer: function (feature, latlng) {
                             return new L.CircleMarker(latlng, {
                                 radius: 5,
                                 color: "#555",
                                 weight: 1,
-                                fill: false
+                                fill: false,
+                                interactive: false,
+                                pane: _xyz.catchments.pane[0]
                             });
                         }
                     }).addTo(_xyz.map);
     
                     _xyz.catchments.layer_samplePoints = L.geoJson(json.samplePoints,{
-                        interactive: false,
                         pointToLayer: function (feature, latlng) {
                             return new L.CircleMarker(latlng, {
                                 radius: 2,
                                 color: "#333",
                                 fillColor: "#333",
                                 fill: true,
-                                fillOpacity: 1
+                                fillOpacity: 1,
+                                interactive: false,
+                                pane: _xyz.catchments.pane[0]
                             });
                         }
                     }).addTo(_xyz.map);

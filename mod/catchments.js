@@ -229,6 +229,8 @@ function catchment_calc(req, res) {
         ],
         { zProperty: 'v' });
 
+    res.data.iso.features = res.data.iso.features.filter(f => f.geometry.coordinates.length > 0);
+
     // Remove holes from Isobands
     res.data.iso.features.map(f => f.geometry.coordinates[0] = [f.geometry.coordinates[0][0]]);
 
