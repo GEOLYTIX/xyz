@@ -618,7 +618,6 @@ input[type=range]::-moz-range-thumb {
     font-size: 50px; }
 
 .module .dev {
-  display: none;
   color: grey; }
   .module .dev select {
     color: grey; }
