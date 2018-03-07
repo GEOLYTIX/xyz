@@ -65,7 +65,7 @@ function getLayer(){
                             {
                                 icon: L.icon({
                                     iconSize: size,
-                                    iconUrl: svg_symbols.dot(layer.styleRange[parseInt(color)])
+                                    iconUrl: svg_symbols.dot(layer.styleRange[parseInt(color)] || '#C0C0C0')
                                 }),
                                 pane: layer.pane[0],
                                 interactive: false

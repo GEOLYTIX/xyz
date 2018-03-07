@@ -105,10 +105,6 @@
     "defaultMarker": [
       [
         400,
-        "#A9A9A9"
-      ],
-      [
-        360,
         "#C0C0C0"
       ]
     ],
@@ -268,6 +264,11 @@
               "label": "Employee",
               "type": "numeric",
               "level": 1
+            },
+            {
+              "field": "nama_10r_3gdp__14",
+              "label": "GDP",
+              "type": "numeric"
             }
           ],
           "arrayZoom": {
@@ -302,7 +303,71 @@
           "queryFields": [
             [
               "pop",
-              "Population"
+              "Population GHS"
+            ],
+            [
+              "pop__14",
+              "Population Eurostat"
+            ],
+            [
+              "gen_f__14",
+              "Female Population"
+            ],
+            [
+              "gen_m__14",
+              "Male Population"
+            ],
+            [
+              "age_00to09__14",
+              "Age 9 and younger"
+            ],
+            [
+              "age_10to19__14",
+              "Age 10 to 19"
+            ],
+            [
+              "age_20to29__14",
+              "Age 20 to 29"
+            ],
+            [
+              "age_30to39__14",
+              "Age 30 to 39"
+            ],
+            [
+              "age_40to49__14",
+              "Age 40 to 49"
+            ],
+            [
+              "age_50to59__14",
+              "Age 50 to 59"
+            ],
+            [
+              "age_60to69__14",
+              "Age 60 to 69"
+            ],
+            [
+              "age_70pl__14",
+              "Age 70 and older"
+            ],
+            [
+              "births__14",
+              "Births"
+            ],
+            [
+              "deaths__14",
+              "Deaths"
+            ],
+            [
+              "employed__14",
+              "Employed"
+            ],
+            [
+              "employee__14",
+              "Employee"
+            ],
+            [
+              "nama_10r_3gdp__14",
+              "GDP"
             ]
           ]
         }
@@ -838,12 +903,6 @@
                 "sublabel": "Fascia"
             },
             {
-              "field": "fascia",
-              "label": "Fascia",
-              "type": "text",
-              "level": 1
-            },
-            {
               "field": "size_band",
               "label": "Size",
               "type": "text",
@@ -870,16 +929,22 @@
               "type": "text"
             },
             {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1
+            },
+            {
               "field": "pqi",
               "label": "Positional Quality",
               "type": "text",
               "level": 1
             },
             {
-              "field": "locality",
-              "label": "Locality",
-              "type": "text",
-              "level": 1
+              "field": "images",
+              "label": "Images",
+              "type": "text[]",
+              "images": true
             }
           ],
             "markerStyle": {

@@ -134,9 +134,13 @@ module.exports = (function () {
         return -1;
     }
 
-    function getMath(_arr, _key, _type){
-        return Math[_type].apply(null, _arr.map(function (val) {
-            return val[_key];
+    function getMath(arr, key, type) {
+        let numbers  = arr.filter(function(n){
+            if (isFinite(n[key])) return n[key]
+        });
+
+        return Math[type].apply(null, numbers.map(function (val) {
+            return val[key]
         }))
     }
 
