@@ -2,6 +2,10 @@
 
 A Node.js framework to develop applications and APIs for spatial data.
 
+tl;dr Here is an open hosted version of the XYZ with some sample data for Europe, UK, and Oxford.
+
+[https://geolytix.xyz/open](https://geolytix.xyz/open)
+
 ## Introduction
 
 The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Pupetteer](https://github.com/GoogleChrome/puppeteer) to create PDF reports on the server-side.
