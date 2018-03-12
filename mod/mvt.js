@@ -7,6 +7,8 @@ Object.keys(process.env).map(function (key) {
     }
 });
 
+// const reqStack = [];
+
 function fetch_tiles(req, res) {
 
     let params = req.url.split('/'),
@@ -48,6 +50,18 @@ function fetch_tiles(req, res) {
                ) tile;`;
 
     //console.log(q);
+
+    // reqStack.unshift(q);
+
+    // let timeout;
+    // return function () {
+    //     clearTimeout(timeout);
+    //     timeout = setTimeout(function () {
+    //         timeout = null;
+    //         func.apply(this, arguments);
+    //     }, 100);
+    // };
+
 
     DBS[req.query.dbs].query(q)
         .then(result => {

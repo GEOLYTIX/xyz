@@ -306,7 +306,7 @@
             },
             {
               "field": "num_floor",
-              "label": "Floor number",
+              "label": "Floor number in venue",
               "type": "integer",
               "range": [
                 -5,
@@ -338,8 +338,8 @@
               "level": 1
             },
             {
-              "field": "floorspace_sportswear_products_pct",
-              "label": "Sportswear",
+              "field": "floorspace_sports_style_products_pct",
+              "label": "Sports Style",
               "type": "integer",
               "range": [
                 0,
@@ -370,6 +370,16 @@
             {
               "field": "floorspace_adidas_pct",
               "label": "Adidas floorspace",
+              "type": "integer",
+              "range": [
+                0,
+                100
+              ],
+              "level": 1
+            },
+            {
+              "field": "floorspace_nike_pct",
+              "label": "Nike floorspace",
               "type": "integer",
               "range": [
                 0,

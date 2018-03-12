@@ -490,11 +490,17 @@ input[type=range]::-moz-range-thumb {
 
 #gaz_group {
   display: none;
-  top: 0;
+  background-color: #fff;
   position: absolute;
+  width: calc(100% - 40px);
   z-index: 999;
-  left: 20px;
-  width: 290px; }
+  padding-top: 5px; }
+  #gaz_group table {
+    width: 100%; }
+  #gaz_group #gaz_clear {
+    color: #090; }
+  #gaz_group input {
+    width: 100%; }
   #gaz_group #gaz_result {
     -webkit-padding-start: 0;
     -webkit-margin-before: 0;
@@ -502,11 +508,10 @@ input[type=range]::-moz-range-thumb {
     list-style-type: none;
     position: absolute;
     background-color: white;
-    width: 100%;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #999;
-    box-shadow: 0 2px 2px -1px grey; }
+    box-shadow: 0 2px 2px -1px grey;
+    width: 100%; }
     #gaz_group #gaz_result li {
       list-style: none;
       line-height: 1.2em; }
@@ -520,11 +525,6 @@ input[type=range]::-moz-range-thumb {
     #gaz_group #gaz_result .gaz-result-selected {
       background-color: #ccff90; }
   #gaz_group #gaz_country {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 12px 0 10px 5px;
-    background-color: #fff;
     font-family: ffmark_bold, sans-serif;
     font-size: 18px; }
     #gaz_group #gaz_country.active {
@@ -548,9 +548,6 @@ input[type=range]::-moz-range-thumb {
       #gaz_group #gaz_countrylist li:hover {
         cursor: pointer;
         background-color: #cf9; }
-  #gaz_group input {
-    border: none;
-    padding: 10px 0; }
   #gaz_group .gaz-result-selected {
     background-color: #cf9; }
 
@@ -618,6 +615,7 @@ input[type=range]::-moz-range-thumb {
     font-size: 50px; }
 
 .module .dev {
+  display: none;
   color: grey; }
   .module .dev select {
     color: grey; }

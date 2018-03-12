@@ -1,14 +1,34 @@
 #gaz_group {
   display: none;
-  top: 0;
+  background-color: #fff;
 
   @if $desktop {
     position: absolute;
+    width: calc(100% - 40px);
     z-index: 999;
-    left: 20px;
-    width: 290px;
-  } @else {
+    padding-top: 5px;
+  }
+  
+  @if $mobile {
+    position: fixed;
     left: 0;
+    box-shadow: 0 3px 4px -1px grey;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  #gaz_clear {
+    color: $glxgreen;
+
+    @if $mobile {
+      padding-left: 60px;
+    }   
+  }
+
+  input {
+    width: 100%;
   }
 
   #gaz_result {
@@ -18,23 +38,13 @@
     list-style-type: none;
     position: absolute;
     background-color: white;
-    width: 100%;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #999;
     box-shadow: 0 2px 2px -1px grey;
 
-    @if $mobile {
-      padding-left: 70px;
+    @if $desktop {
+      width: 100%;
 
-      li {
-        font-size: 20px;
-        color: $glxgreen;
-        list-style: none;
-        line-height: 1.5em;
-      }
-
-    } @else {
       li {
         list-style: none;
         line-height: 1.2em;
@@ -54,24 +64,27 @@
       }
     }
 
+    @if $mobile {
+      padding-left: 70px;
+      width: calc(100% - 70px);
+
+      li {
+        font-size: 20px;
+        color: $glxgreen;
+        list-style: none;
+        line-height: 1.5em;
+      }
+    }
+
     .gaz-result-selected {
       background-color: #ccff90;
     }
   }
 
   #gaz_country {
-    position: absolute;
-    top: 0;
-    right: 0;
-    @if $desktop {
-      padding: 12px 0 10px 5px;
-      background-color: #fff;
-    } @else {
-      padding: 12px 10px 10px 10px;
-    }
     font-family: ffmark_bold, sans-serif;
     font-size: 18px;
-    
+
     &.active {
       color: #079e00;
 
@@ -92,6 +105,19 @@
     box-shadow: 0 3px 4px -1px grey;
     font-size: 20px;
 
+    @if $desktop {
+      li {
+        list-style: none;
+        line-height: 1.2em;
+        font-family: ffmark_bold;
+
+        &:hover {
+          cursor: pointer;
+          background-color: $glxlightgreen;
+        }
+      }
+    }
+
     @if $mobile {
       padding-right: 10px;
 
@@ -102,34 +128,6 @@
         padding-right: 10px;
         text-align: right;
       }
-
-    } @else {
-      li {
-        list-style: none;
-        line-height: 1.2em;
-        font-family: ffmark_bold;
-
-        &:hover {
-          cursor: pointer;
-          background-color: $glxlightgreen;
-
-        }
-      }
-    }
-  }
-
-  @if $mobile {
-    position: fixed;
-    box-shadow: 0 3px 4px -1px grey;
-  }
-
-  input {
-    border: none;
-    @if $desktop {
-      padding: 10px 0;
-    } @else {
-      width: calc(100% - 120px);
-      padding: 10px 50px 10px 70px;
     }
   }
 

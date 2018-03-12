@@ -12,6 +12,7 @@ module.exports = function Gazetteer() {
     let dom = {
         btnSearch: document.getElementById('btnSearch'),
         btnGeolocate: document.getElementById('btnGeolocate'),
+        btnClear: document.getElementById('gaz_clear'),
         group: document.getElementById('gaz_group'),
         input: document.getElementById('gaz_input'),
         result: document.getElementById('gaz_result'),
@@ -86,6 +87,11 @@ module.exports = function Gazetteer() {
         }
 
         if (dom.group.style.display === 'block') dom.input.focus();
+    });
+
+    // Toggle visibility of the gazetteer group
+    dom.btnClear.addEventListener('click', function () {
+        dom.input.value = '';
     });
 
     // Click event for results list
