@@ -460,6 +460,7 @@
           ]
         },
         "retail_points": {
+          "display": true,
           "panel": true,
           "name": "Retail Points",
           "format": "cluster",
