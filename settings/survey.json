@@ -161,7 +161,7 @@
           "geomj": "ST_AsGeoJson(geom)",
           "geom": "geom",
           "cluster_label": "retailer",
-          "cluster_competitor": "category",
+          "cluster_competitor": "retailer",
           "cluster_kmeans": 0.005,
           "cluster_dbscan": 0.0001,
           "markerMin": 15,
@@ -316,7 +316,7 @@
             },
             {
               "field": "total_floors",
-              "label": "Total number of floors",
+              "label": "Total number of floors in store",
               "type": "integer",
               "range": [
                 1,
@@ -407,7 +407,7 @@
             }
           ],
           "markerStyle": {
-            "adidas": {
+            "ADIDAS": {
               "style": [
                 [
                   400,
@@ -416,77 +416,50 @@
               ],
               "label": "adidas"
             },
-            "Department Stores": {
+            "NIKE": {
               "style": [
                 [
                   400,
-                  "#A362FD"
+                  "#f44336"
                 ]
               ],
-              "label": "Department Stores"
+              "label": "Nike"
             },
-            "Fashion Aspirational": {
+            "UNDER ARMOUR": {
               "style": [
                 [
                   400,
                   "#00B2F0"
                 ]
               ],
-              "label": "Fashion Aspirational"
+              "label": "Under Armour"
             },
-            "Fashion Mass": {
-              "style": [
-                [
-                  400,
-                  "#B9D8ED"
-                ]
-              ],
-              "label": "Fashion Mass"
-            },
-            "Fashion Premium": {
-              "style": [
-                [
-                  400,
-                  "#0074AE"
-                ]
-              ],
-              "label": "Fashion Premium"
-            },
-            "Footwear": {
+            "NEW BALANCE": {
               "style": [
                 [
                   400,
                   "#FF59C1"
                 ]
               ],
-              "label": "Footwear"
+              "label": "New Balance"
             },
-            "Mono Sports": {
+            "PUMA": {
               "style": [
                 [
                   400,
-                  "#FFBD00"
+                  "#009688"
                 ]
               ],
-              "label": "Mono Sports"
+              "label": "Puma"
             },
-            "Multi Sports": {
+            "REEBOK": {
               "style": [
                 [
                   400,
-                  "#FD7322"
+                  "#d4e157"
                 ]
               ],
-              "label": "Multi Sports"
-            },
-            "Outdoor": {
-              "style": [
-                [
-                  400,
-                  "#00B252"
-                ]
-              ],
-              "label": "Outdoor"
+              "label": "Reebok"
             },
             "other": {
               "style": [
