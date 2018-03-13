@@ -414,8 +414,52 @@
             "base_labels", 550
           ]
         },
+        "post_office": {
+          "panel": true,
+          "name": "Post Offices",
+          "format": "cluster",
+          "pane": [
+            "post_office",
+            540
+          ],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "post_office",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "geom": "geom",
+          "cluster_label": "branch",
+          "cluster_kmeans": 4,
+          "cluster_dbscan": 0.0075,
+          "markerMin": 20,
+          "markerMax": 60,
+          "markerStyle": {
+            "other": {
+              "style": [
+                [
+                  400,
+                  "#9D383A"
+                ],
+                [
+                  300,
+                  "#fff"
+                ],
+                [
+                  250,
+                  "#9D383A"
+                ]
+              ],
+              "label": "Post Office"
+            }
+          },
+          "infoj": [
+            {
+              "field": "branch",
+              "label": "Branch",
+              "type": "text"
+            }
+          ]
+        },
         "retail_points": {
-          "display": true,
           "panel": true,
           "name": "Retail Points",
           "format": "cluster",
