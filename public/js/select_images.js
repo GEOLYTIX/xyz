@@ -41,8 +41,10 @@ function addImages(record, images) {
         img_td = document.createElement('td');
         img_tr.appendChild(img_td);
         let _img = utils.createElement('img', {
-            id: image,
-            src: localhost + 'q_get_image?image=' + image
+            //id: image,
+            id: image_id(image),
+            //src: localhost + 'q_get_image?image=' + image
+            src: image
         });
         _img.style.border = '3px solid #EEE';
 
@@ -60,6 +62,15 @@ function addImages(record, images) {
 
         // append image to table cell
         img_td.appendChild(_img);
+    }
+    
+    function image_id(cloudinary_url){
+        let regex1 = /.*\//,
+            regex2 = /\.([\w-]{3})/;
+        
+        let id = cloudinary_url.replace(regex1, '').replace(regex2, '');
+        
+        return id;
     }
 
     // add change event 
@@ -122,6 +133,7 @@ function addImages(record, images) {
                     btn_del.remove();
                     btn_save.remove();
                     upload_image(record, _img, utils.dataURLToBlob(dataURL));
+                    //upload_image(record, _img, dataURL);
                 });
                 newImage.appendChild(btn_save);
 
@@ -142,17 +154,21 @@ function addImages(record, images) {
 }
 
 function upload_image(record, _img, blob) {
+    console.log(blob);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', localhost + 'q_save_image?' + utils.paramString({
         dbs: record.layer.dbs,
         table: record.layer.table,
         qID: record.layer.qID,
-        id: record.layer.id,
-        type: blob.type
+        id: record.layer.id//,
+        //type: blob.type
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = function () {
         if (this.status === 200) {
+            
+            console.log(this.responseText);
+            
             _img.style.border = '3px solid #eee';
 
             // add delete button / control
@@ -183,7 +199,8 @@ function remove_image(record, _img) {
         table: record.layer.table,
         qID: record.layer.qID,
         id: record.layer.id,
-        filename: _img.id
+        image_id: _img.id,
+        image_src: _img.src
     }));
     xhr.onload = function () {
         if (this.status === 200) {
