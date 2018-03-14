@@ -133,26 +133,17 @@
       "minZoom": 5,
       "maxZoom": 9,
       "layers": {
-        "base": {
+        "here": {
           "display": true,
-          "name": "Mapbox Baselayer",
+          "name": "Here Baselayer",
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8",
+          "provider": "here",
           "pane": [
             "base", 500
           ]
         },
-        "label": {
-          "display": true,
-          "name": "Mapbox Labels",
-          "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
-          "pane": [
-            "base_labels", 550
-          ]
-        },
+
         "NUTS3": {
           "display": true,
           "name": "NUTS3",
@@ -394,24 +385,14 @@
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
-        "base": {
+        "here": {
           "display": true,
-          "name": "Mapbox Baselayer",
+          "name": "Here Baselayer",
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8",
+          "provider": "here",
           "pane": [
             "base", 500
-          ]
-        },
-        "label": {
-          "display": true,
-          "name": "Mapbox Labels",
-          "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
-          "pane": [
-            "base_labels", 550
           ]
         },
         "post_office": {
@@ -1351,24 +1332,14 @@
       "minZoom": 9,
       "maxZoom": 17,
       "layers": {
-        "base": {
+        "here": {
           "display": true,
-          "name": "Mapbox Baselayer",
+          "name": "Here Baselayer",
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8",
+          "provider": "here",
           "pane": [
             "base", 500
-          ]
-        },
-        "label": {
-          "display": true,
-          "name": "Mapbox Labels",
-          "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
-          "pane": [
-            "base_labels", 550
           ]
         },
         "retail_places_mvt": {
