@@ -1,5 +1,7 @@
-// Evaluate _xyz.
+// The svg_symbols module is required in order to build svg symbols when they are evaluated in _xyz application settings.
 const svg_symbols = require('./svg_symbols');
+
+// Evaluates _xyz application settings.
 (function objectEval(_xyz) {
     Object.keys(_xyz).map(function (key) {
         if (typeof _xyz[key] === 'string') {
@@ -15,7 +17,7 @@ const svg_symbols = require('./svg_symbols');
     })
 })(_xyz)
 
-// Evaluate view_mode.
+// All mobile interface quirks are loaded here.
 if (view_mode === 'mobile') require('./mobile_interface')();
 
 // Initiate leaflet, utils and hooks.
@@ -26,11 +28,8 @@ require('./hooks')();
 // Initiate dom object.
 let dom = {
     btnZoomIn: document.getElementById('btnZoomIn'),
-    btnZoomOut: document.getElementById('btnZoomOut'),
-    initMask: document.querySelector('.initMask')
+    btnZoomOut: document.getElementById('btnZoomOut')
 };
-
-
 
 // Set country to hook, or set hook for country.
 if (_xyz.hooks.country) {
@@ -50,9 +49,6 @@ _xyz.map = L
         maxZoom: _xyz.countries[_xyz.country].maxZoom
     })
     .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
-
-// dom.initMask.style.width = '0';
-// dom.initMask.style.opacity = 0;
 
 // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
 _xyz.setView = function(fit) {

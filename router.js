@@ -8,6 +8,7 @@ router.use(function(req, res, next){
 const jsr = require('jsrender');
 const Md = require('mobile-detect');
 const appSettings = JSON.parse(require('fs').readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8');
+
 router.get('/', isLoggedIn, function (req, res) {
 
     let md = new Md(req.headers['user-agent']),
@@ -17,17 +18,20 @@ router.get('/', isLoggedIn, function (req, res) {
     res.send(
         tmpl.render({
             title: appSettings.title,
-            css: '<link rel="stylesheet" href="css/desktop.css"/>',
             module_layers: appSettings.layers ? './public/tmpl/layers.html' : null,
             module_select: appSettings.select ? './public/tmpl/select.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
-            admin_button: (req.user && req.user.admin) ? './public/tmpl/admin_button.html' : '',
             bundle_js: "build/xyz_bundle.js",
-            hooks: req.session.hooks ? JSON.stringify(req.session.hooks) : false,
-            catchments: false,
-            mapbox_token: process.env.MAPBOX,
-            //localhost: process.env.LOCALHOST,
-            settings: JSON.stringify(appSettings)
+            report_button: 'style="display: none;"',
+            logout_button: req.user ? '' : 'style="display: none;"',
+            admin_button: (req.user && req.user.admin) ? '' : 'style="display: none;"',
+            settings: `
+            <script>
+                const view_mode = 'desktop';
+                const localhost = '';
+                const hooks = ${req.session.hooks ? JSON.stringify(req.session.hooks) : false};
+                const _xyz = ${JSON.stringify(appSettings)};
+            </script>`
         }))
 });
 
@@ -72,6 +76,18 @@ router.get('/documentation', function (req, res) {
 // Vector layers with PGSQL MVT
 const mvt = require('./mod/mvt');
 router.get('/mvt/:z/:x/:y', mvt.fetch_tiles);
+
+// Proxy for 3rd party services
+const request = require('request');
+const KEYS = {};
+Object.keys(process.env).map(function (key) {
+    if (key.split('_')[0] === 'KEY') {
+        KEYS[key.split('_')[1]] = process.env[key];
+    }
+});
+router.get('/proxy_request', function (req, res) {
+    request(`${req.query.uri}${KEYS[req.query.provider]}`).pipe(res);
+});
 
 const grid = require('./mod/grid');
 router.get('/q_grid', grid.grid);

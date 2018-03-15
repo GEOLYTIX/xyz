@@ -22,26 +22,12 @@
         }
     </style>
     <link rel="stylesheet" href="css/mobile.css"/>
-    <script>
-        const view_mode = 'mobile';
-        const localhost = '{{:localhost}}';
-        const mapbox_token = '{{:mapbox_token}}';
-        const hooks = {{:hooks}};
-        const _xyz = {{:settings}};
-    </script>
+
+    {{:settings}}
+
 </head>
 
 <body>
-
-    <!-- <div class="initMask"></div> -->
-
-    <div id="loading__mask">
-        <div class="round1">
-            <div class="round2">
-                <div class="round3"></div>
-            </div>
-        </div>
-    </div>
 
     <div class="location_drop">
         <div class="location_table"></div>
@@ -49,6 +35,7 @@
     </div>
 
     <div id="map" class="map" style="margin-top: 0;">
+
         <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
         <div class="mapbox-attribution-container">
             <a href="http://leafletjs.com" target="_blank">
@@ -63,6 +50,7 @@
                 <strong>Improve this map</strong>
             </a>
         </div>
+
         <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
             <defs>
                 <filter id='dropshadow'>
@@ -75,6 +63,7 @@
                 </filter>
             </defs>
         </svg>
+
     </div>
 
     <a class="logo_link" href="https://geolytix.co.uk">GEOLYTIX</a>
@@ -113,17 +102,26 @@
             <i class="material-icons">remove</i>
         </button>
 
-        <button id="btnDocumentation" class="tooltip-right" data-tooltip="Open Documentation">
+        <button id="btnDocumentation" title="Open Documentation">
                 <a href="documentation"><i class="material-icons">school</i></a>
         </button>
 
-        <button id="btnLogout">
+        <button id="btnLogout" {{:logout_button}}>
             <a href="logout"><i class="material-icons">exit_to_app</i></a>
         </button>
+
+        <button id="btnAdmin" title="Open account admin panel" {{:admin_button}}>
+            <a href="admin">
+                <i class="material-icons">supervisor_account</i>
+            </a>
+        </button>
+
     </div>
 
     <div class="spacer_mobile"></div>
+
     <div class="module_container">
+
         <table class="tab_bar" cellpadding="0" cellspacing="0">
             <td class="tab_btn tab_layers active">
                 <i class="material-icons tab_icon">layers</i>

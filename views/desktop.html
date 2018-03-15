@@ -21,24 +21,20 @@
             src: url({{:localhost}}fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    {{:css}}
-    <script>
-        const view_mode = 'desktop';
-        const localhost = '{{:localhost}}';
-        const mapbox_token = '{{:mapbox_token}}';
-        const hooks = {{:hooks}};
-        const _xyz = {{:settings}};
-    </script>
+    <link rel="stylesheet" href="css/desktop.css"/>
+
+    {{:settings}}
+
 </head>
 
 <body>
     
-    {{include tmpl=report_container /}}
-    <!-- <div class="initMask"></div> -->
     <div class="module_container">
+
         <div class="scrollbar_container">
             <div class="scrollbar"></div>
         </div>
+
         <div id="gaz_group" class="input_group">
             <table>
                 <td>
@@ -56,6 +52,7 @@
             <ul id="gaz_result"></ul>
         </div>
         <div id="gaz_spacer"></div>
+
         <div id="ctrl_content" class="content">
             
             {{include tmpl=module_layers /}}
@@ -65,9 +62,11 @@
             {{include tmpl=module_catchments /}}
             
         </div>
+
     </div>
 
     <div class="map_container">
+
         <div id="map" class="map">
             <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
             <div class="mapbox-attribution-container">
@@ -75,6 +74,7 @@
                     <strong>Leaflet</strong> | </a>
                 <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
                 <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
+                <a href="https://legal.here.com/us-en/terms/end-user-license-agreement">© HERE | </a>
                 <a href="https://www.mapbox.com/map-feedback/" target="_blank">
                     <strong>Improve this map</strong>
                 </a>
@@ -93,8 +93,7 @@
             </svg>
         </div>
 
-        <a class="logo_link" class="noselect tooltip-top"
-           data-tooltip="Please visit our website and find out how we can assist you." href="https://geolytix.co.uk">GEOLYTIX</a>
+        <a class="logo_link" class="noselect" title="Please visit our website and find out how we can assist you." href="https://geolytix.co.uk">GEOLYTIX</a>
 
         <div class="map_button noselect">
             <button id="btnSearch" title="Open Gazetteer">
@@ -113,7 +112,7 @@
                 <i class="material-icons">remove</i>
             </button>
             
-            <button style="display: none" id="btnReport" title="Create PDF Report">
+            <button id="btnReport" title="Create PDF Report" {{:report_button}}>
                 <i class="material-icons">picture_as_pdf</i>
                 <div id="report-spinner">
                     <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
@@ -132,15 +131,19 @@
                 </div>
             </div>
 
-            <button id="btnDocumentation" class="tooltip-right" data-tooltip="Open Documentation">
+            <button id="btnDocumentation" title="Open Documentation">
                     <a href="documentation"><i class="material-icons">school</i></a>
             </button>
 
-            <button id="btnLogout" class="tooltip-right" data-tooltip="Log out from application">
+            <button id="btnLogout" title="Log out from application" {{:logout_button}}>
                 <a href="logout"><i class="material-icons">exit_to_app</i></a>
             </button>
 
-            {{include tmpl=admin_button /}}
+            <button id="btnAdmin" title="Open account admin panel" {{:admin_button}}>
+                <a href="admin">
+                    <i class="material-icons">supervisor_account</i>
+                </a>
+            </button>
 
         </div>
     </div>
