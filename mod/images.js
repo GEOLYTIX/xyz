@@ -1,5 +1,6 @@
 const fs = require('fs');
 const request = require('request');
+const crypto = require('crypto');
 
 const { Client } = require('pg');
 const DBS = {};
@@ -11,18 +12,26 @@ Object.keys(process.env).map(function (key) {
     }
 });
 
+// Cloudinary
+const cloudinary_options = {
+    cloud_name: process.env.NAME_CLOUDINARY,
+    api_key: process.env.KEY_CLOUDINARY,
+    api_secret: process.env.SECRET_CLOUDINARY,
+    upload_preset: process.env.UPLOAD_PRESET_CLOUDINARY
+}
+
 //const db = pgp(process.env.XYZ);
 
 function save(req, res){
     
     req.setEncoding('binary');
     
-    let dataURL = "data:image/jpeg;base64," + req.body.toString('base64'),
+    let dataURL = "data:image/jpeg;base64," + req.body.toString('base64');
         
-        url = "https://api.cloudinary.com/v1_1/" 
-    + process.env.CLOUD_NAME 
+    let url = "https://api.cloudinary.com/v1_1/" 
+    + cloudinary_options.cloud_name 
     + "/image/upload/?upload_preset=" 
-    + process.env.CLOUDINARY_UPLOAD_PRESET;
+    + cloudinary_options.upload_preset;
     
     request.post({
         url: url,
@@ -31,11 +40,11 @@ function save(req, res){
     }, function(err, response, body){
         if(err){ 
             console.log(err);
-        } else { 
+        } else {
             
             let image_data = {
-                'image_id': body.public_id,
-                'image_url': body.secure_url
+                "image_id": body.public_id,
+                "image_url": body.secure_url
             },
                 q = `UPDATE ${req.query.table} 
                      SET images = array_append(images, '${image_data.image_url}')
@@ -55,82 +64,47 @@ function save(req, res){
     });
 }
 
-
-
-/*function save(req, res) {
-
-    req.setEncoding('binary');
-
-    let filename = `${req.query.id.replace('.', '+')}+${Date.now()}.jpg`;
-
-    // save image to local drive
-    fs.writeFile(process.env.IMAGES + filename, req.body, function (err) {
-        if (err) throw err;
-        console.log(filename + ' saved.');
-    });
-
-    let q = `UPDATE ${req.query.table} 
-                SET images = array_append(images, '${filename}')
-                WHERE ${req.query.qID} = '${req.query.id}';`;
-
-    //console.log(q);
-
-    // add filename to images field
-    DBS[req.query.dbs].query(q)
-        .then(result => {
-            res.status(200).send({
-                'image': filename
-            });
-        })
-        .catch(err => console.log(err));
-
-    req.on('error', function (err) {
-        console.log(err);
-    });
-
-}*/
-
 function remove(req, res){
-    let q = `UPDATE ${req.query.table} 
-                SET images = array_remove(images, '${req.query.image_src}')
-                WHERE ${req.query.qID} = '${req.query.id}';`;
+    let image_src = decodeURIComponent(req.query.image_src),
+        q = `UPDATE ${req.query.table} 
+                SET images = array_remove(images, '${image_src}')
+                WHERE ${req.query.qID} = '${req.query.id}';`,
+        ts = Date.now(),
+        param_str = "public_id=" + req.query.id + "&timestamp=" + ts + cloudinary_options.api_secret,
+        
+        url = "https://api.cloudinary.com/v1_1/" 
+    + cloudinary_options.cloud_name + "/image/destroy?" 
+    + "api_key=" + cloudinary_options.api_key 
+    + "&public_id=" + req.query.id 
+    + "&timestamp=" + ts 
+    + "&signature=" + getSHA1(param_str);;
     
-    // add filename to images field
     DBS[req.query.dbs].query(q)
-        .then(result => {
-            res.status(200).send({
-                'image': req.query.image_src
-            });
-        })
-        .catch(err => console.log(err));
+    .then(function(data){
+        res.status(200);
+        
+        request.post({
+            url: url
+        }, function(err, response, body){
+            if(err){
+                console.log(err);
+            } else {
+                console.log(body);
+            }
+        });
+    })
+    .catch(function(err){ console.log(err);});
     
     req.on('error', function (err) {
         console.log(err);
     });
 }
 
-/*function remove(req, res) {
+// generate signature for cloudinary API
+function getSHA1(str){
+    return crypto.createHash('sha1').update(str).digest('hex');
+}
 
-    let q = `UPDATE ${req.query.table} 
-                SET images = array_remove(images, '${req.query.filename.replace(/ /g, '+')}')
-                WHERE ${req.query.qID} = '${req.query.id}';`;
-
-    //console.log(q);
-
-    // add filename to images field
-    DBS[req.query.dbs].query(q)
-        .then(result => {
-            res.status(200).send({
-                'image': req.query.filename.replace(/ /g, '+')
-            });
-        })
-        .catch(err => console.log(err));
-
-    req.on('error', function (err) {
-        console.log(err);
-    });
-
-}*/
 
 module.exports = {
     save: save,

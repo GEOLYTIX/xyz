@@ -55,8 +55,8 @@ function addImages(record, images) {
             innerHTML: '<i class="material-icons">delete_forever</i>'
         });
         btn_del.addEventListener('click', function () {
-            remove_image(record, _img);
             this.remove();
+            remove_image(record, _img);
         });
         img_td.appendChild(btn_del);
 
@@ -73,6 +73,11 @@ function addImages(record, images) {
         return id;
     }
 
+    // empty the file input value
+    add_img.addEventListener('click', function(){
+        this.value = '';
+    });
+    
     // add change event 
     add_img.addEventListener('change', function () {
 
@@ -133,7 +138,6 @@ function addImages(record, images) {
                     btn_del.remove();
                     btn_save.remove();
                     upload_image(record, _img, utils.dataURLToBlob(dataURL));
-                    //upload_image(record, _img, dataURL);
                 });
                 newImage.appendChild(btn_save);
 
@@ -144,7 +148,7 @@ function addImages(record, images) {
             img.src = readerOnload.target.result;
 
         }
-        reader.readAsDataURL(this.files[0])
+        reader.readAsDataURL(this.files[0]);
 
         // insert new image before last image
         img_tr.insertBefore(newImage, img_tr.childNodes[1]);
@@ -154,6 +158,7 @@ function addImages(record, images) {
 }
 
 function upload_image(record, _img, blob) {
+    console.log(_img);
     console.log(blob);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', localhost + 'q_save_image?' + utils.paramString({
@@ -167,9 +172,13 @@ function upload_image(record, _img, blob) {
     xhr.onload = function () {
         if (this.status === 200) {
             
+            let json = JSON.parse(this.responseText);
+            
             console.log(this.responseText);
             
             _img.style.border = '3px solid #eee';
+            _img.id = json.image_id;
+            _img.src = json.image_url;
 
             // add delete button / control
             let btn_del = utils.createElement('button', {
@@ -178,7 +187,8 @@ function upload_image(record, _img, blob) {
                 innerHTML: '<i class="material-icons">delete_forever</i>'
             });
             btn_del.addEventListener('click', function () {
-                _img.remove();
+                this.remove();
+                remove_image(record, _img);
             });
             _img.parentElement.appendChild(btn_del);
         }
@@ -193,6 +203,9 @@ function upload_image(record, _img, blob) {
 }
 
 function remove_image(record, _img) {
+    
+    document.getElementById(_img.id).remove();
+    
     let xhr = new XMLHttpRequest();
     xhr.open('GET', localhost + 'q_remove_image?' + utils.paramString({
         dbs: record.layer.dbs,
@@ -200,11 +213,10 @@ function remove_image(record, _img) {
         qID: record.layer.qID,
         id: record.layer.id,
         image_id: _img.id,
-        image_src: _img.src
+        image_src: encodeURIComponent(_img.src)
     }));
     xhr.onload = function () {
         if (this.status === 200) {
-            _img.remove();
             console.log(this.responseText);
         }
     }
