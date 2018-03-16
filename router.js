@@ -28,6 +28,7 @@ router.get('/', isLoggedIn, function (req, res) {
             settings: `
             <script>
                 const view_mode = 'desktop';
+                const node_env = '${process.env.NODE_ENV}';
                 const localhost = '';
                 const hooks = ${req.session.hooks ? JSON.stringify(req.session.hooks) : false};
                 const _xyz = ${JSON.stringify(appSettings)};
@@ -80,14 +81,13 @@ router.get('/mvt/:z/:x/:y', mvt.fetch_tiles);
 // Proxy for 3rd party services
 const request = require('request');
 const KEYS = {};
-Object.keys(process.env).map(function (key) {
+Object.keys(process.env).map(key => {
     if (key.split('_')[0] === 'KEY') {
         KEYS[key.split('_')[1]] = process.env[key];
     }
 });
-router.get('/proxy_request', function (req, res) {
-    request(`${req.query.uri}${KEYS[req.query.provider]}`).pipe(res);
-});
+
+router.get('/proxy_request', (req, res) => request(`${req.query.uri}${KEYS[req.query.provider]}`).pipe(res));
 
 const grid = require('./mod/grid');
 router.get('/q_grid', grid.grid);

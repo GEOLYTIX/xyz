@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 const DBS = {};
-Object.keys(process.env).map(function (key) {
+Object.keys(process.env).map(key => {
     if (key.split('_')[0] === 'DBS') {
         DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
         DBS[key.split('_')[1]].connect();
@@ -8,6 +8,12 @@ Object.keys(process.env).map(function (key) {
 });
 
 const request = require('request');
+const KEYS = {};
+Object.keys(process.env).map(key => {
+    if (key.split('_')[0] === 'KEY') {
+        KEYS[key.split('_')[1]] = process.env[key];
+    }
+});
 
 function gazetteer(req, res) {
 
@@ -42,13 +48,13 @@ function gazetteer(req, res) {
 //     });
 // }
 
-function mapbox_placesAutoComplete(req, res) {
+function MAPBOX_placesAutoComplete(req, res) {
 
     let q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
           + `${req.query.country ? 'country=' + req.query.country : ''}`
           + `${req.query.bounds ? 'bbox=' + req.query.bounds : ''}`
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
-          + `&access_token=${process.env.MAPBOX}`;
+          + `&${KEYS[req.query.provider]}`;
 
     try {
         request.get(q, (err, response, body) => {
@@ -65,11 +71,11 @@ function mapbox_placesAutoComplete(req, res) {
     }
 }
 
-function google_placesAutoComplete(req, res) {
+function GOOGLE_placesAutoComplete(req, res) {
     let q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
           + `${req.query.country ? '&components=country:' + req.query.country : ''}`
           + `${req.query.bounds ? decodeURIComponent(req.query.bounds) : ''}`
-          + `&key=${process.env.GKEY}`;
+          + `&${KEYS[req.query.provider]}`;
 
     try {
         request.get(q, (err, response, body) => {

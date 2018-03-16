@@ -1,5 +1,12 @@
-const request = require('request');
 const turf = require('@turf/turf');
+
+const request = require('request');
+const KEYS = {};
+Object.keys(process.env).map(key => {
+    if (key.split('_')[0] === 'KEY') {
+        KEYS[key.split('_')[1]] = process.env[key];
+    }
+});
 
 function catchments (req, res) {
 
@@ -109,39 +116,39 @@ function identifyOutliers(req, res, arr, sq_start) {
     }
 }
 
-function google_destinations(req, res) {
+function GOOGLE_destinations(req, res) {
     return res.data.samplePoints.map(pt => {
         return [parseFloat(pt.geometry.coordinates[1].toFixed(6)),parseFloat(pt.geometry.coordinates[0].toFixed(6))]
     })
 }
 
-function mapbox_destinations(req, res) {
+function MAPBOX_destinations(req, res) {
     return res.data.samplePoints.map(pt => {
         return [parseFloat(pt.geometry.coordinates[0].toFixed(6)), parseFloat(pt.geometry.coordinates[1].toFixed(6))]
     })
 }
 
-function google_request(req, res, i) {
+function GOOGLE_request(req, res, i) {
     return `https://maps.googleapis.com/maps/api/distancematrix/json?`
     + `units=imperial&`
     + `mode=${req.query.mode}&`
     + `origins=${parseFloat(req.query.lat).toFixed(6)},`
-    + `${parseFloat(req.query.lng).toFixed(6)}&`
-    + `destinations=${res.data.destinations.slice(i, i + 24).join('|')}&`
-    + `key=${process.env.GKEY}`
+    + `${parseFloat(req.query.lng).toFixed(6)}`
+    + `&destinations=${res.data.destinations.slice(i, i + 24).join('|')}`
+    + `&${KEYS[req.query.provider]}`
 }
 
-function mapbox_request(req, res, i) {
+function MAPBOX_request(req, res, i) {
     return `https://api.mapbox.com/directions-matrix/v1/mapbox/${req.query.mode}/`
     + `${parseFloat(req.query.lng).toFixed(6)},`
     + `${parseFloat(req.query.lat).toFixed(6)};`
     + `${res.data.destinations.slice(i, i + 24).join(';')}?`
     + `sources=0`
     + `&destinations=all`
-    + `&access_token=${process.env.MAPBOX}`
+    + `&${KEYS[req.query.provider]}`
 }
 
-function google_samplePoints(req, res, jbody, i, start) {
+function GOOGLE_samplePoints(req, res, jbody, i, start) {
     res.data.samplePoints[i].properties = {
         v: jbody.rows[0].elements[i - start].status === 'OK' ?
             jbody.rows[0].elements[i - start].duration.value :
@@ -149,7 +156,7 @@ function google_samplePoints(req, res, jbody, i, start) {
     };
 }
 
-function mapbox_samplePoints(req, res, jbody, i, start) {
+function MAPBOX_samplePoints(req, res, jbody, i, start) {
     res.data.samplePoints[i].properties = {
         v: jbody.durations[0][i - start + 1],
     };

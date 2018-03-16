@@ -11,7 +11,7 @@ const session = require('express-session');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'cluster') {
     const cluster = require('cluster');
     const numCPUs = require('os').cpus().length;
 

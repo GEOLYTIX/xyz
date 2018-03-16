@@ -114,7 +114,7 @@
     "EU": {
       "name": "Europe",
       "gazetteer": [
-        "mapbox",
+        "MAPBOX",
         "",
         "'-45,25,60,75'",
         "e.g. Brussels"
@@ -384,7 +384,7 @@
     "UK": {
       "name": "United Kingdom",
       "gazetteer": [
-        "google",
+        "GOOGLE",
         "GB",
         "",
         "e.g. London"
@@ -1350,7 +1350,7 @@
     "Oxford": {
       "name": "Oxford",
       "gazetteer": [
-        "google",
+        "GOOGLE",
         "",
         "'&location=51.75,-1.25&radius=40'",
         "e.g. Oxford University"

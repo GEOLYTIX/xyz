@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 const DBS = {};
-Object.keys(process.env).map(function (key) {
+Object.keys(process.env).map(key => {
     if (key.split('_')[0] === 'DBS') {
         DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
         DBS[key.split('_')[1]].connect();

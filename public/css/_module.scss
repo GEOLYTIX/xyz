@@ -1,6 +1,10 @@
 .module {
-    .dev {
+
+    .dev_display {
         display: none;
+    }
+    
+    .dev {
         color: grey;
 
         select {

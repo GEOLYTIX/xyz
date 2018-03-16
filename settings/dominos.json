@@ -114,7 +114,7 @@
   "countries": {
     "UK": {
       "name": "Great Britain",
-      "gazetteer": ["google","GB","","e.g. Milton Keynes"],
+      "gazetteer": ["GOOGLE","GB","","e.g. Milton Keynes"],
       "bounds": [
         [
            40,
@@ -132,8 +132,8 @@
           "display": true,
           "name": "Mapbox Baselayer",
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX",
           "pane": [
             "base", 500
           ]
@@ -142,10 +142,19 @@
           "display": true,
           "name": "Mapbox Labels",
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}",
-          "provider": "mapbox",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX",
           "pane": [
             "base_labels", 550
+          ]
+        },
+        "here": {
+          "name": "Here Baselayer",
+          "format": "tiles",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE",
+          "pane": [
+            "base", 500
           ]
         },
         "stores": {

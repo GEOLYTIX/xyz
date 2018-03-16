@@ -20,9 +20,17 @@ const svg_symbols = require('./svg_symbols');
 // All mobile interface quirks are loaded here.
 if (view_mode === 'mobile') require('./mobile_interface')();
 
-// Initiate leaflet, utils and hooks.
-const L = require('leaflet');
+// Initialise utils.
 const utils = require('./utils');
+
+// All mobile interface quirks are loaded here.
+if (node_env === 'development') {
+    let dev_elements = document.querySelectorAll('.dev');
+    utils.removeClass(dev_elements,'dev_display');
+};
+
+// Initiate leaflet and hooks.
+const L = require('leaflet');
 require('./hooks')();
 
 // Initiate dom object.
