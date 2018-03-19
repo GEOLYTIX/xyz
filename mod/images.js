@@ -18,13 +18,14 @@ function save(req, res){
     req.setEncoding('binary');
 
     let ts = Date.now(),
-        sig = crypto.createHash('sha1').update(`timestamp=${ts}${images[2]}`).digest('hex');
+        sig = crypto.createHash('sha1').update(`folder=${images[4]}&timestamp=${ts}${images[2]}`).digest('hex');
     
     request.post({
         url: `https://api.cloudinary.com/v1_1/${images[3]}/image/upload`,
         body: {
             'file': `data:image/jpeg;base64,${req.body.toString('base64')}`,
             'api_key': images[1],
+            'folder': images[4],
             'timestamp': ts,
             'signature': sig
         },
