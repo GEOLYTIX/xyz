@@ -18,10 +18,10 @@ router.get('/', isLoggedIn, (req, res) => {
     res.send(
         tmpl.render({
             title: appSettings.title,
-            module_layers: appSettings.layers ? './public/tmpl/layers.html' : null,
+            module_layers: './public/tmpl/layers.html',
             module_select: appSettings.select ? './public/tmpl/select.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
-            bundle_js: "build/xyz_bundle.js",
+            bundle_js: 'build/xyz_bundle.js',
             btnDocumentation: appSettings.documentation ? '' : 'style="display: none;"',
             hrefDocumentation: appSettings.documentation ? appSettings.documentation : '',
             btnReport: appSettings.report ? '' : 'style="display: none;"',

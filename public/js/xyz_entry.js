@@ -60,10 +60,10 @@ _xyz.map = L
 
 // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
 _xyz.setView = function(fit) {
-    _xyz.map.setMaxBounds(_xyz.countries[_xyz.country].bounds);
+    if (_xyz.countries[_xyz.country].bounds) _xyz.map.setMaxBounds(_xyz.countries[_xyz.country].bounds);
     _xyz.map.setMinZoom(_xyz.countries[_xyz.country].minZoom);
     _xyz.map.setMaxZoom(_xyz.countries[_xyz.country].maxZoom);
-    if (fit) _xyz.map.fitBounds(_xyz.countries[_xyz.country].bounds);
+    if (fit && _xyz.countries[_xyz.country].bounds) _xyz.map.fitBounds(_xyz.countries[_xyz.country].bounds);
 }
 _xyz.setView(!_xyz.hooks.z);
 
@@ -150,7 +150,7 @@ function layersCheck() {
 
 // Inititialise modules.
 if (_xyz.gazetteer) require('./gazetteer')(_xyz);
-if (_xyz.layers) require('./layers')(_xyz);
+require('./layers')(_xyz);
 if (_xyz.select) require('./select')(_xyz);
 if (_xyz.catchments) require('./catchments')(_xyz);
 if (_xyz.report) require('./report')(_xyz);

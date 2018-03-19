@@ -17,6 +17,7 @@ module.exports = function(){
     };
 
     // locale.layers is called upon initialisation and when the country is changed (change_country === true).
+    if (!_xyz.layers) _xyz.layers = {};
     _xyz.layers.init = function (change_country) {
 
         // Remove the layers hook on change_country event.
@@ -63,7 +64,7 @@ module.exports = function(){
                 textContent: layer.name,
                 className: 'header'
             });
-            header.style.borderBottom = '2px solid ' + layer.style.color;
+            header.style.borderBottom = '2px solid ' + (layer.style ? layer.style.color : '#333');
 
             // Create the pane and set layers function.
             _xyz.map.createPane(layer.pane[0]);

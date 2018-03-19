@@ -4,8 +4,10 @@ function getLayer() {
     let layer = this;
     if (layer.display && !layer.base) {
         layer.loader.style.display = 'block';
-        layer.base = L.tileLayer('proxy_request?uri=' + layer.URI
-        + '&provider=' + layer.provider, {
+
+        let uri = layer.provider ? 'proxy_request?uri=' + layer.URI + '&provider=' + layer.provider : layer.URI;
+
+        layer.base = L.tileLayer(uri, {
             pane: layer.pane[0]
         })
             .addTo(_xyz.map)
