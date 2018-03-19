@@ -89,11 +89,11 @@
     </div>
 
     <div class="map_button noselect">
-        <button id="btnSearch">
+        <button id="btnSearch" {{:btnSearch}}>
             <i class="material-icons">search</i>
         </button>
         
-        <button id="btnGeolocate" title="Current location">
+        <button id="btnGeolocate" title="Current location" {{:btnLocate}}>
             <i class="material-icons">gps_not_fixed</i>
         </button>
 
@@ -105,15 +105,22 @@
             <i class="material-icons">remove</i>
         </button>
 
-        <button id="btnDocumentation" title="Open Documentation">
+        <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
+            <i class="material-icons">picture_as_pdf</i>
+            <div id="report-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+        </button>
+
+        <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
                 <a href="documentation"><i class="material-icons">school</i></a>
         </button>
 
-        <button id="btnLogout" {{:logout_button}}>
+        <button id="btnLogout" {{:btnLogout}}>
             <a href="logout"><i class="material-icons">exit_to_app</i></a>
         </button>
 
-        <button id="btnAdmin" title="Open account admin panel" {{:admin_button}}>
+        <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
             <a href="admin">
                 <i class="material-icons">supervisor_account</i>
             </a>

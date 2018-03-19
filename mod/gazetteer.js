@@ -94,7 +94,7 @@ function GOOGLE_placesAutoComplete(req, res) {
 
 function gazetteer_googleplaces(req, res) {
     let q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
-          + `&key=${process.env.GKEY}`;
+          + `&${KEYS.GOOGLE}`;
 
     try {
         request.get(q, (err, response, body) => {

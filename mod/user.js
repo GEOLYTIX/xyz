@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB,{useMongoClient: true});
+if (process.env.LOGIN) mongoose.connect(process.env.LOGIN,{useMongoClient: true});
 
 const userSchema = mongoose.Schema({
     email: String,

@@ -64,6 +64,8 @@
       }
     ]
   },
+  "locate": true,
+  "documentation": "documentation",
   "gazetteer": {
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "pane": [

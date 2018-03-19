@@ -12,7 +12,7 @@ Object.keys(process.env).map(key => {
     }
 });
 
-const images = process.env.IMAGES.split(' ');
+const images = process.env.IMAGES ? process.env.IMAGES.split(' ') : [];
 
 function save(req, res){
     req.setEncoding('binary');

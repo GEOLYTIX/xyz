@@ -44,14 +44,18 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
      // for blobs that contain image
     app.use(bodyParser.raw({limit: '50mb'}));
 
-    const passport = require('./mod/' + 'passport');
+    // Set app to use session with secret provided in environment settings.
     app.use(session({
         secret: process.env.OURSECRET,
         resave: true,
         saveUninitialized: true
     }));
-    app.use(passport.initialize());
-    app.use(passport.session());
+
+    if (process.env.LOGIN) {
+        const passport = require('./mod/' + 'passport');
+        app.use(passport.initialize());
+        app.use(passport.session());
+    }
 
     app.use('/' + process.env.SUBDIRECTORY, require('./router'));
 

@@ -22,9 +22,13 @@ router.get('/', isLoggedIn, (req, res) => {
             module_select: appSettings.select ? './public/tmpl/select.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
             bundle_js: "build/xyz_bundle.js",
-            report_button: 'style="display: none;"',
-            logout_button: req.user ? '' : 'style="display: none;"',
-            admin_button: (req.user && req.user.admin) ? '' : 'style="display: none;"',
+            btnDocumentation: appSettings.documentation ? '' : 'style="display: none;"',
+            hrefDocumentation: appSettings.documentation ? appSettings.documentation : '',
+            btnReport: appSettings.report ? '' : 'style="display: none;"',
+            btnLogout: req.user ? '' : 'style="display: none;"',
+            btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
+            btnSearch: appSettings.gazetteer ? '' : 'style="display: none;"',
+            btnLocate: appSettings.locate ? '' : 'style="display: none;"',
             settings: `
             <script>
                 const node_env = '${process.env.NODE_ENV}';
@@ -165,7 +169,7 @@ router.post('/register',
     })
 );
 
-const user = require('./mod/user');
+//const user = require('./mod/user');
 router.get('/verify/:token', (req, res) => {
     user.findOne({
         verificationToken: req.params.token,
@@ -234,8 +238,8 @@ router.post('/delete_user', isAdmin, (req, res) => {
 
 function isLoggedIn(req, res, next) {
 
-    // return next() if NOLOGIN is set in environment settings.
-    if (process.env.NOLOGIN) return next();
+    // return next() if LOGIN is not set in environment settings.
+    if (!process.env.LOGIN) return next();
 
     if (req.isAuthenticated()) {
         if (req.user.approved && req.user.verified) {
