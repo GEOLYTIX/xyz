@@ -1,5 +1,5 @@
 const router = require('express').Router();
-router.use(function(req, res, next){
+router.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -9,7 +9,7 @@ const jsr = require('jsrender');
 const Md = require('mobile-detect');
 const appSettings = JSON.parse(require('fs').readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8');
 
-router.get('/', isLoggedIn, function (req, res) {
+router.get('/', isLoggedIn, (req, res) => {
 
     let md = new Md(req.headers['user-agent']),
         tmpl = (md.mobile() === null || md.tablet() !== null) ?
@@ -38,7 +38,7 @@ router.get('/', isLoggedIn, function (req, res) {
 
 const hljs = require('highlight.js');
 const markdown = require('markdown-it')({
-    highlight: function (str, lang) {
+    highlight: (str, lang) => {
         if (lang && hljs.getLanguage(lang)) {
             try {
                 return hljs.highlight(lang, str).value;
@@ -48,7 +48,7 @@ const markdown = require('markdown-it')({
     }
 });
 
-router.get('/readme', function (req, res) {
+router.get('/readme', (req, res) => {
     require('fs').readFile('../' + process.env.SUBDIRECTORY + '/readme.md', function (err, md) {
         if (err) throw err;
         res.send(
@@ -61,7 +61,7 @@ router.get('/readme', function (req, res) {
 });
 
 
-router.get('/documentation', function (req, res) {
+router.get('/documentation', (req, res) => {
     require('fs').readFile('../' + process.env.SUBDIRECTORY + '/public/documentation.md', function (err, md) {
         if (err) throw err;
 
@@ -120,22 +120,22 @@ router.post('/q_report_request', isLoggedIn, report.request);
 router.get('/q_report_ping', isLoggedIn, report.ping);
 
 const reportpath = require('path').join(__dirname, '/reports/');
-router.get('/q_pdf_open', isLoggedIn, function(req, res){
+router.get('/q_pdf_open', isLoggedIn, (req, res) => {
     res.sendFile(reportpath + req.query.report + '.pdf');
 });
-router.get('/q_pdf_download', isLoggedIn, function(req, res){
+router.get('/q_pdf_download', isLoggedIn, (req, res) => {
     res.download(reportpath + req.query.report + '.pdf');
 });
 
 const images = require('./mod/images');
 router.post('/q_save_image', isLoggedIn, images.save);
 router.get('/q_remove_image', isLoggedIn, images.remove);
-router.get('/q_get_image', isLoggedIn, function(req, res){
+router.get('/q_get_image', isLoggedIn, (req, res) => {
     res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'));
 });
 
 // ACCESS CONTROLL
-router.get('/login', function (req, res) {
+router.get('/login', (req, res) => {
     res.render('login.ejs', {
         user: req.user,
         session_messages: req.session.messages || [],
@@ -143,7 +143,7 @@ router.get('/login', function (req, res) {
     });
 });
 
-router.get('/logout', function (req, res) {
+router.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
     res.redirect('/' + process.env.SUBDIRECTORY + '/login');
@@ -167,7 +167,7 @@ router.post('/register',
 );
 
 const user = require('./mod/user');
-router.get('/verify/:token', function (req, res) {
+router.get('/verify/:token', (req, res) => {
     user.findOne({
         verificationToken: req.params.token,
         verificationTokenExpires: {$gt: Date.now()}
@@ -177,9 +177,9 @@ router.get('/verify/:token', function (req, res) {
         }
         _user.verified = true;
         _user.save();
-        user.find({admin: true}, function (err, admin) {
+        user.find({admin: true}, (err, admin) => {
             if (err) throw err;
-            let adminmail = admin.map(function (a) {
+            let adminmail = admin.map(a => {
                 return a.email;
             });
             require('./mod/mailer').mail({
@@ -193,8 +193,8 @@ router.get('/verify/:token', function (req, res) {
     });
 });
 
-router.get('/admin', isAdmin, function (req, res) {
-    user.find({}, function (err, _user) {
+router.get('/admin', isAdmin, (req, res) => {
+    user.find({}, (err, _user) => {
         if (err) {
             throw err;
         }
@@ -205,8 +205,8 @@ router.get('/admin', isAdmin, function (req, res) {
     });
 });
 
-router.post('/update_user', isAdmin, function (req, res) {
-    user.findOne({email: req.body.email}, function (err, _user) {
+router.post('/update_user', isAdmin, (req, res) => {
+    user.findOne({email: req.body.email}, (err, _user) => {
         if (!_user) {
             return res.json({update: false});
         }
@@ -223,8 +223,8 @@ router.post('/update_user', isAdmin, function (req, res) {
     });
 });
 
-router.post('/delete_user', isAdmin, function (req, res) {
-    user.findOne({email: req.body.email}, function (err, _user) {
+router.post('/delete_user', isAdmin, (req, res) => {
+    user.findOne({email: req.body.email}, (err, _user) => {
         if (!_user) {
             return res.json({delete: false});
         }

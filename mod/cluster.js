@@ -72,7 +72,7 @@ async function cluster(req, res) {
           ) dbscan
         GROUP BY kmeans_cid, dbscan_cid;`
 
-    console.log(q);
+    //console.log(q);
     result = await DBS[req.query.dbs].query(q);
 
     if (result.rows.length === 0) {
