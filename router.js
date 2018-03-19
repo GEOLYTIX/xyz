@@ -27,7 +27,6 @@ router.get('/', isLoggedIn, (req, res) => {
             admin_button: (req.user && req.user.admin) ? '' : 'style="display: none;"',
             settings: `
             <script>
-                const view_mode = 'desktop';
                 const node_env = '${process.env.NODE_ENV}';
                 const localhost = '';
                 const hooks = ${req.session.hooks ? JSON.stringify(req.session.hooks) : false};

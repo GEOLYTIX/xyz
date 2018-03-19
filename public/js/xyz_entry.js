@@ -153,9 +153,7 @@ if (_xyz.gazetteer) require('./gazetteer')(_xyz);
 if (_xyz.layers) require('./layers')(_xyz);
 if (_xyz.select) require('./select')(_xyz);
 if (_xyz.catchments) require('./catchments')(_xyz);
-
-// Load report module in desktop view.
-if (view_mode === 'desktop') require('./report')(_xyz);
+if (_xyz.report) require('./report')(_xyz);
 
 // Make blocks visible and set scrollbar left for desktop view.
 if (view_mode === 'desktop') require('./lscrolly')(document.querySelector('.module_container'));

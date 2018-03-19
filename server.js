@@ -4,7 +4,6 @@ dotenv.load();
 const port = process.env.PORT || 3000;
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -37,7 +36,6 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 
     app.use(helmet.noCache());
     app.use('/' + process.env.SUBDIRECTORY, express.static(path.join(__dirname, 'public')));
-    app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     app.use(morgan('dev'));
     app.use(cookieParser());
     app.use(bodyParser.json());
