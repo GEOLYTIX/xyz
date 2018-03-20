@@ -7,7 +7,24 @@ router.use((req, res, next) => {
 
 const jsr = require('jsrender');
 const Md = require('mobile-detect');
-const appSettings = JSON.parse(require('fs').readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8');
+
+const fs = require('fs');
+const appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
+    JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
+    {
+        "countries": {
+            "Global": {
+                "layers": {
+                    "base": {
+                        "display": true,
+                        "format": "tiles",
+                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    }
+                }
+            }
+        }
+    };
+
 
 router.get('/', isLoggedIn, (req, res) => {
 
@@ -17,7 +34,7 @@ router.get('/', isLoggedIn, (req, res) => {
 
     res.send(
         tmpl.render({
-            title: appSettings.title,
+            title: appSettings.title || 'GEOLYTIX | XYZ',
             module_layers: './public/tmpl/layers.html',
             module_select: appSettings.select ? './public/tmpl/select.html' : null,
             module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,

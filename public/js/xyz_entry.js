@@ -39,12 +39,19 @@ let dom = {
     btnZoomOut: document.getElementById('btnZoomOut')
 };
 
+// Set country default.
+_xyz.country = _xyz.country || Object.keys(_xyz.countries)[0];
+
 // Set country to hook, or set hook for country.
 if (_xyz.hooks.country) {
     _xyz.country = _xyz.hooks.country;
 } else {
     _xyz.setHook('country', _xyz.country);
 }
+
+// Set min/max zoom defaults.
+_xyz.countries[_xyz.country].minZoom = _xyz.countries[_xyz.country].minZoom || 0;
+_xyz.countries[_xyz.country].maxZoom = _xyz.countries[_xyz.country].maxZoom || 20;
 
 // Initiate map object.
 _xyz.map = L
@@ -63,7 +70,7 @@ _xyz.setView = function(fit) {
     if (_xyz.countries[_xyz.country].bounds) _xyz.map.setMaxBounds(_xyz.countries[_xyz.country].bounds);
     _xyz.map.setMinZoom(_xyz.countries[_xyz.country].minZoom);
     _xyz.map.setMaxZoom(_xyz.countries[_xyz.country].maxZoom);
-    if (fit && _xyz.countries[_xyz.country].bounds) _xyz.map.fitBounds(_xyz.countries[_xyz.country].bounds);
+    if (fit) _xyz.map.fitBounds(_xyz.countries[_xyz.country].bounds || [[-90,-180],[90,180]]);
 }
 _xyz.setView(!_xyz.hooks.z);
 
