@@ -8,7 +8,7 @@ tl;dr Here is an open hosted version of the XYZ with some sample data for Europe
 
 ## Introduction
 
-The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Pupetteer](https://github.com/GoogleChrome/puppeteer) to create PDF reports on the server-side.
+The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) to create PDF reports on the server-side.
 
 ## Licence
 
@@ -21,6 +21,10 @@ We are currently using Node.js version 8.4.
 Style sheets are written with SASS/SCSS. We are currently including compiled css in the repository. With SASS installed it is possible to compile all style sheets with following command `sass -update public/css` from the application root. It is envisagened to move to Stylus in a future build and drop the Ruby development dependency.
 
 The application is compiled with Webpack/Babel. We use Webpack 3.0 in the master branch and do not inlcude compiled bundles in this repository. The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
+
+### Puppeteer
+
+[Google Puppeteer](https://github.com/GoogleChrome/puppeteer) is used to generate PDF reports server-side. In it's current state the project install of Pupetteer takes 300mb out of a total 400mb worth of dependencies. It is recommended to install Puppeteer either global `sudo npm install puppeteer --global --unsafe-perm` and then set a link to the global install in the project folder `npm link puppeteer`. Otherwise Puppeteer can be installed local with `npm install puppeteer`.
 
 ## Settings
 
