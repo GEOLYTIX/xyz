@@ -1,9 +1,8 @@
 .idea/
 .vscode/
 .env
-node_modules/
-public/js/build/
 .DS_Store
-reports/1*.pdf
 .sass-cache/
+node_modules/
+reports/1*.pdf
 public/css/.sass-cache/

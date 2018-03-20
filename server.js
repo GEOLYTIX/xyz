@@ -1,5 +1,7 @@
-const dotenv = require('dotenv');
-dotenv.load();
+const req_res = (m) => { try { return require.resolve(m) } catch (e) { console.log('Cannot resolve ' + m); return false } }
+
+const dotenv = req_res('dotenv') ? require('dotenv') : null;
+if (dotenv) dotenv.load();
 
 const port = process.env.PORT || 3000;
 const express = require('express');
@@ -8,7 +10,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const helmet = require('helmet');
-const morgan = require('morgan');
+const morgan = req_res('morgan') ? require('morgan') : null;
 
 if (process.env.NODE_ENV === 'cluster') {
     const cluster = require('cluster');
@@ -36,7 +38,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 
     app.use(helmet.noCache());
     app.use('/' + process.env.SUBDIRECTORY, express.static(path.join(__dirname, 'public')));
-    app.use(morgan('dev'));
+    if (morgan) app.use(morgan('dev'));
     app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));

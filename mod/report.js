@@ -1,8 +1,5 @@
-try {
-    const puppeteer = require('puppeteer');
-} catch (err) {
-    console.error(err);
-}
+const req_res = (m) => { try { return require.resolve(m) } catch (e) { console.log('Cannot resolve ' + m); return false } }
+const puppeteer = req_res('puppeteer') ? require('puppeteer') : null;
 
 const jsr = require('jsrender');
 const appSettings = JSON.parse(require('fs').readFileSync(require('path').join(process.env.SUBDIRECTORY, '../settings/' + process.env.APPSETTINGS), 'utf8'));
