@@ -47,6 +47,8 @@ module.exports = function(){
             layers[layer].layer = layer;
             layer = layers[layer];
             layer.base = null;
+            //layer.name = typeof layer.name == 'undefined' ? layer.layer : layer.name;
+            layer.name = layer.name || layer.layer;
 
             // Set layer styles
             Object.keys(_xyz.layers).map(function(key){
@@ -67,10 +69,11 @@ module.exports = function(){
             header.style.borderBottom = '2px solid ' + (layer.style ? layer.style.color : '#333');
 
             // Create the pane and set layers function.
+            layer.pane = layer.pane || ['default', 501];
             _xyz.map.createPane(layer.pane[0]);
             _xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
-            layer.getLayer = formats[layer.format].getLayer;
 
+            layer.getLayer = formats[layer.format].getLayer;
 
             // Create control to toggle layer visibility.
             let i = utils.createElement('i', {

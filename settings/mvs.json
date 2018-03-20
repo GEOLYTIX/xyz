@@ -1,5 +1,4 @@
 {
-  "title": "XYZ Open",
   "country": "Global",
   "countries": {
     "Global": {
@@ -9,12 +8,8 @@
       "layers": {
         "base": {
           "display": true,
-          "name": "OSM Baselayer",
           "format": "tiles",
-          "URI" : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          "pane": [
-            "base", 500
-          ]
+          "URI" : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         }
       }
     }
