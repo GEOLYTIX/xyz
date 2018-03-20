@@ -7,4 +7,3 @@ public/js/build/
 reports/1*.pdf
 .sass-cache/
 public/css/.sass-cache/
-package-lock.json

@@ -1,6 +1,11 @@
 {
   "name": "maps",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geolytix/xyz"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "webpack -p"
   },
