@@ -186,7 +186,7 @@ router.post('/register',
     })
 );
 
-//const user = require('./mod/user');
+const user = require('./mod/user');
 router.get('/verify/:token', (req, res) => {
     user.findOne({
         verificationToken: req.params.token,
