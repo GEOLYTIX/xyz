@@ -56,7 +56,7 @@ passport.use('localRegister', new localStrategy({
                         mailer.mail({
                             to: newUser.email,
                             subject: 'Please verify your GEOLYTIX account',
-                            text: 'Click here to verify account: https://' + process.env.HOST || 'localhost:3000' + process.env.SUBDIRECTORY || '' + '/verify/' + newUser.verificationToken
+                            text: 'Click here to verify account: https://' + (process.env.HOST || 'localhost:3000') + (process.env.SUBDIRECTORY || '') + '/verify/' + newUser.verificationToken
                         });
                         return done(null, newUser);
                     });

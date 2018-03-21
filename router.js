@@ -69,7 +69,7 @@ const markdown = require('markdown-it')({
 });
 
 router.get('/readme', (req, res) => {
-    require('fs').readFile('..' + process.env.SUBDIRECTORY || '' + '/readme.md', function (err, md) {
+    require('fs').readFile('..' + (process.env.SUBDIRECTORY || '') + '/readme.md', function (err, md) {
         if (err) throw err;
         res.send(
             jsr.templates('./views/github.html').render({
@@ -82,7 +82,7 @@ router.get('/readme', (req, res) => {
 
 
 router.get('/documentation', (req, res) => {
-    require('fs').readFile('..' + process.env.SUBDIRECTORY || '' + '/public/documentation.md', function (err, md) {
+    require('fs').readFile('..' + (process.env.SUBDIRECTORY || '') + '/public/documentation.md', function (err, md) {
         if (err) throw err;
 
         res.send(
@@ -166,22 +166,22 @@ router.get('/login', (req, res) => {
 router.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
-    res.redirect(process.env.SUBDIRECTORY || '' + '/login');
+    res.redirect((process.env.SUBDIRECTORY || '') + '/login');
 });
 
 router.post('/login',
     require('./mod/passport').authenticate('localLogin', {
-        failureRedirect: process.env.SUBDIRECTORY || '' + '/login',
-        successRedirect: process.env.SUBDIRECTORY || '' + '/',
+        failureRedirect: (process.env.SUBDIRECTORY || '') + '/login',
+        successRedirect: (process.env.SUBDIRECTORY || '') + '/',
         failureMessage: 'Invalid username or password'
     })
 );
 
 router.post('/register',
     require('./mod/passport').authenticate('localRegister', {
-        failureRedirect: process.env.SUBDIRECTORY || '' + '/login',
+        failureRedirect: (process.env.SUBDIRECTORY || '') + '/login',
         successMessage: 'A verification email has been sent to the account email.',
-        successRedirect: process.env.SUBDIRECTORY || '' + '/login',
+        successRedirect: (process.env.SUBDIRECTORY || '') + '/login',
         failureMessage: 'Registration failure'
     })
 );
@@ -286,7 +286,8 @@ function isLoggedIn(req, res, next) {
         }
 
         req.session.hooks = Object.keys(o).length > 0 ? o : false;
-        res.redirect(process.env.SUBDIRECTORY || '' + '/login');
+        console.log((process.env.SUBDIRECTORY || '') + '/login');
+        res.redirect((process.env.SUBDIRECTORY || '') + '/login');
     }
 }
 
@@ -296,7 +297,8 @@ function isAdmin(req, res, next) {
             return next();
         }
     }
-    res.redirect(process.env.SUBDIRECTORY || '' + '/login');
+    console.log((process.env.SUBDIRECTORY || '') + '/login');
+    res.redirect((process.env.SUBDIRECTORY || '') + '/login');
 }
 
 module.exports = router;
