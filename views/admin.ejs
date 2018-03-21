@@ -120,7 +120,7 @@
                     while(user != null && user.nodeType == 3){
                         user = user.nextSibling;
                     }
-                    xhr.open('POST', '/<%= subdirectory %>/update_user');
+                    xhr.open('POST', '<%= subdirectory %>/update_user');
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
@@ -142,7 +142,7 @@
                 user = user.nextSibling;
             }
             if (confirm('Delete account ' + user.innerText)) {
-                xhr.open('POST', '/<%= subdirectory %>/delete_user');
+                xhr.open('POST', '<%= subdirectory %>/delete_user');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {

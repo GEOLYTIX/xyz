@@ -20,7 +20,7 @@ const appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETT
         }
     };
     
-const reportpath = require('path').join(process.env.SUBDIRECTORY, '../reports/');
+const reportpath = require('path').join(process.env.SUBDIRECTORY || '', '../reports/');
 const reports = {};
 
 async function request(req, res) {
@@ -42,7 +42,7 @@ async function request(req, res) {
         module_drivetime: './public/tmpl/drivetime.html',
         module_statistics: './public/tmpl/statistics.html',
         report_container: './public/tmpl/report.html',
-        localhost: process.env.LOCALHOST,
+        localhost: process.env.LOCALHOST || '//localhost:3000',
         hooks: JSON.stringify(req.body.hooks),
         drivetime: drivetime_flag,
         mapbox_token: process.env.MAPBOX,

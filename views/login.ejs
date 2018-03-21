@@ -98,7 +98,7 @@
 <body>
 <div>
     <!--<h1>Log in</h1>-->
-    <form action="/<%= subdirectory %>/login" method="post">
+    <form action="<%= subdirectory %>/login" method="post">
 
         <div class="input_group">
             <input id="auth_user_email" name="email" type="text" value="">
@@ -136,11 +136,11 @@
         <br>
 
         <button id="btnLogin" class="login" type="submit"
-                formaction="/<%= subdirectory %>/login">
+                formaction="<%= subdirectory %>/login">
             Log In
         </button>
         <button id="btnRegister" class="register" type="submit"
-                formaction="/<%= subdirectory %>/register" disabled>
+                formaction="<%= subdirectory %>/register" disabled>
             Confirm
         </button>
         <p class="login">Your account must be verified and approved by an administrator before you are able to log in.</p>

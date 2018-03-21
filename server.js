@@ -8,7 +8,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const session = process.env.OURSECRET ? require('express-session') : null;
 const helmet = require('helmet');
 const morgan = req_res('morgan') ? require('morgan') : null;
 
@@ -37,7 +37,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     app.set('view engine', 'ejs');
 
     app.use(helmet.noCache());
-    app.use('/' + process.env.SUBDIRECTORY, express.static(path.join(__dirname, 'public')));
+    app.use(process.env.SUBDIRECTORY || '', express.static(path.join(__dirname, 'public')));
     if (morgan) app.use(morgan('dev'));
     app.use(cookieParser());
     app.use(bodyParser.json());
@@ -47,7 +47,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     app.use(bodyParser.raw({limit: '50mb'}));
 
     // Set app to use session with secret provided in environment settings.
-    app.use(session({
+    if (process.env.OURSECRET) app.use(session({
         secret: process.env.OURSECRET,
         resave: true,
         saveUninitialized: true
@@ -59,7 +59,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         app.use(passport.session());
     }
 
-    app.use('/' + process.env.SUBDIRECTORY, require('./router'));
+    app.use(process.env.SUBDIRECTORY || '', require('./router'));
 
     app.listen(port);
     console.log('The magic happens on port ' + port);
