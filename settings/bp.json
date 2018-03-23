@@ -170,7 +170,7 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "bp_catalist_opp_scan_4326",
+          "table": "bp_catalist_opp",
           "geomj": "ST_AsGeoJSON(geom)",
           "geom": "geom",
           "cluster_label": "sitename",
@@ -441,6 +441,45 @@
             "#ddd"
           ],
           "competitors": []
+        },
+        "regions": {
+          "display": true,
+          "name": "Regions",
+          "pane": ["bounds",510],
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "dbs": "XYZ",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "regionname",
+              "label": "Region",
+              "type": "text"
+            }
+          ],
+          "arrayZoom": {
+            "6": "bp_region"
+          }
+        },
+        "oa": {
+          "name": "Output Area",
+          "pane": ["bounds",510],
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "dbs": "XYZ",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "oa_code",
+              "label": "Code",
+              "type": "text"
+            }
+          ],
+          "arrayZoom": {
+            "11": "bp_oa_opp_simple"
+          }
         }
       }
     }

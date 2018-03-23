@@ -23,20 +23,13 @@ function getLayer(){
         layer.xhr = new XMLHttpRequest();
 
         // Build xhr request.
-        let bounds = _xyz.map.getBounds(),
-            url = localhost + 'mvt/{z}/{x}/{y}?' + utils.paramString({
+        let url = localhost + 'mvt/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
                 qID: layer.qID || null,
-                filter: layer.filter || '',
                 properties: layer.properties || '',
                 layer: layer.layer,
-                geom_3857: layer.geom_3857,
-                geom: layer.geom,
-                west: bounds.getWest(),
-                south: bounds.getSouth(),
-                east: bounds.getEast(),
-                north: bounds.getNorth()
+                geom_3857: layer.geom_3857
             }),
             options = {
                 rendererFactory: L.canvas.tile,

@@ -7,8 +7,6 @@ Object.keys(process.env).map(key => {
     }
 });
 
-// const reqStack = [];
-
 function fetch_tiles(req, res) {
 
     let params = req.url.split('/'),
@@ -17,59 +15,58 @@ function fetch_tiles(req, res) {
         z = parseInt(params[2]),
         m = 20037508.34,
         r = (m*2)/(Math.pow(2,z)),
-        q =
-            `SELECT ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom')
-             FROM (
-               SELECT
+        tbl = req.query.table;
 
-                 ${req.query.qID} AS id,
-                 ${req.query.properties ? req.query.properties + ', ' : ' '}
-
-                 ST_AsMVTGeom(
-                    ${req.query.geom_3857},
-                    ST_MakeEnvelope(
-                        ${-m + (x * r)},
-                        ${ m - (y * r)},
-                        ${-m + (x * r) + r},
-                        ${ m - (y * r) - r},
-                        3857
-                    ),
-                    4096,
-                    256,
-                    true) geom
-               FROM ${req.query.table}
-               WHERE ST_Intersects(
-                      ${req.query.geom},
-                      ST_MakeEnvelope(
-                        ${req.query.west},
-                        ${req.query.north},
-                        ${req.query.east},
-                        ${req.query.south},
-                        4326))
-               ${req.query.filter ? `AND ${req.query.properties} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
-               ) tile;`;
-
-    //console.log(q);
-
-    // reqStack.unshift(q);
-
-    // let timeout;
-    // return function () {
-    //     clearTimeout(timeout);
-    //     timeout = setTimeout(function () {
-    //         timeout = null;
-    //         func.apply(this, arguments);
-    //     }, 100);
-    // };
-
-
-    DBS[req.query.dbs].query(q)
+    DBS[req.query.dbs].query(`SELECT mvt FROM ${tbl}__tc WHERE z = ${z} AND x = ${x} AND y = ${y}`)
         .then(result => {
             res.setHeader('Content-Type', 'application/x-protobuf');
             res.status(200);
-            res.send(result.rows[0].st_asmvt);
+            res.send(result.rows[0].mvt);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(`${z}/${x}/${y} not found in cache`);
+            let q = `
+            INSERT INTO ${tbl}__tc (z,x,y,mvt)
+            SELECT ${z},${x},${y}, ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom') mvt
+            FROM (
+                SELECT
+                    ${req.query.qID} AS id,
+                    ${req.query.properties ? req.query.properties + ', ' : ' '}
+                    ST_AsMVTGeom(
+                        ${req.query.geom_3857},
+                        ST_MakeEnvelope(
+                            ${-m + (x * r)},
+                            ${ m - (y * r)},
+                            ${-m + (x * r) + r},
+                            ${ m - (y * r) - r},
+                            3857
+                        ),
+                        4096,
+                        256,
+                        true) geom
+                FROM ${tbl}
+                WHERE ST_DWithin(ST_MakeEnvelope(
+                    ${-m + (x * r)},
+                    ${ m - (y * r)},
+                    ${-m + (x * r) + r},
+                    ${ m - (y * r) - r},
+                    3857
+                ),${req.query.geom_3857},0)
+            ) tile
+            RETURNING mvt;
+            `;
+
+            //console.log(q);
+
+            DBS[req.query.dbs].query(q)
+            .then(result => {
+                res.setHeader('Content-Type', 'application/x-protobuf');
+                res.status(200);
+                res.send(result.rows[0].mvt);
+            })
+            .catch(err => console.error(err));
+        
+        });
 }
 
 module.exports = {
