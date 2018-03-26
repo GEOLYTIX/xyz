@@ -86,11 +86,9 @@
       "fillOpacity": 0
     },
     "styleHighlight": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
+      "color": "#222",
+      "weight": 1,
+      "fill": false
     },
     "styleRange": [
       "#15773f",
@@ -442,8 +440,7 @@
           ],
           "competitors": []
         },
-        "regions": {
-          "display": true,
+        "region": {
           "name": "Regions",
           "pane": ["bounds",510],
           "format": "mvt",
@@ -463,11 +460,12 @@
           }
         },
         "oa": {
-          "name": "Output Area",
+          "name": "Output Area (rank regional)",
           "pane": ["bounds",510],
           "format": "mvt",
+          "panel": true,
           "geom_3857": "geom_3857",
-          "geomj": "ST_AsGeoJSON(geom)",
+          "geomj": "geomj",
           "dbs": "XYZ",
           "qID": "id",
           "infoj": [
@@ -475,11 +473,499 @@
               "field": "oa_code",
               "label": "Code",
               "type": "text"
+            },
+            {
+              "field": "region",
+              "label": "Region",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "rank_reg",
+              "label": "Regional Rank",
+              "type": "integer"
+            },
+            {
+              "field": "rank_tot",
+              "label": "Total Rank",
+              "type": "integer"
+            },
+            {
+              "field": "total_scor",
+              "label": "Score Total",
+              "type": "numeric"
+            },
+            {
+              "field": "ms_score",
+              "label": "Score MS",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "bp_score",
+              "label": "Score BP",
+              "type": "numeric",
+              "level": 1
             }
           ],
           "arrayZoom": {
-            "11": "bp_oa_opp_simple"
+            "9": "bp_oa_opp_simple"
+          },
+          "properties": "rank_reg",
+          "categorized": {
+            "rank_reg": {
+              "label": "something",
+              "style": {
+                "1": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#d7191c",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "2": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#e85b3a",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "3": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f99e59",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "4": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#fec981",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "5": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#ffedab",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "6": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#ecf7ad",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "7": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#c4e687",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "8": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#97d265",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "9": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#58b453",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "10": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#1a9641",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                }
+              },
+              "styleHighlight": {
+                "color": "#222",
+                "weight": 1,
+                "fill": false
+              }
+            }
           }
+        },
+        "oa_tot": {
+          "name": "Output Area (rank total)",
+          "pane": ["bounds",510],
+          "format": "mvt",
+          "panel": true,
+          "geom_3857": "geom_3857",
+          "geomj": "geomj",
+          "dbs": "XYZ",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "oa_code",
+              "label": "Code",
+              "type": "text"
+            },
+            {
+              "field": "region",
+              "label": "Region",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "rank_reg",
+              "label": "Regional Rank",
+              "type": "integer"
+            },
+            {
+              "field": "rank_tot",
+              "label": "Total Rank",
+              "type": "integer"
+            },
+            {
+              "field": "total_scor",
+              "label": "Score Total",
+              "type": "numeric"
+            },
+            {
+              "field": "ms_score",
+              "label": "Score MS",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "bp_score",
+              "label": "Score BP",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
+          "arrayZoom": {
+            "9": "bp_oa_total"
+          },
+          "properties": "rank_tot",
+          "categorized": {
+            "rank_tot": {
+              "label": "something",
+              "style": {
+                "1": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#d7191c",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "2": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#e85b3a",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "3": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f99e59",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "4": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#fec981",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "5": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#ffedab",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "6": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#ecf7ad",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "7": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#c4e687",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "8": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#97d265",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "9": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#58b453",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "10": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#1a9641",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                }
+              },
+              "styleHighlight": {
+                "color": "#222",
+                "weight": 1,
+                "fill": false
+              }
+            }
+          }
+        },
+        "traffic_count": {
+          "panel": true,
+          "name": "Traffic (major)",
+          "format": "cluster",
+          "pane": [
+            "traffic",
+            550
+          ],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "bp_traffic_counts",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "geom": "geom",
+          "cluster_label": "road_num",
+          "cluster_competitor": "traffic",
+          "cluster_kmeans": 4,
+          "cluster_dbscan": 0.0075,
+          "markerMin": 20,
+          "markerMax": 40,
+          "infoj": [
+            {
+              "field": "cp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "road_num",
+              "label": "Road Number",
+              "type": "text"
+            },
+            {
+              "field": "start_junc",
+              "label": "from junction",
+              "type": "text"
+            },
+            {
+              "field": "end_junc",
+              "label": "to junction",
+              "type": "text"
+            },
+            {
+              "field": "len_mi",
+              "label": "Segment (miles)",
+              "type": "numeric"
+            },
+            {
+              "field": "road_class",
+              "label": "Road Class",
+              "type": "text"
+            },
+            {
+              "field": "area_cat",
+              "label": "Area Category",
+              "type": "text"
+            },
+            {
+              "field": "all_mv_14",
+              "label": "Motor vehicles 2014",
+              "type": "integer"
+            },
+            {
+              "field": "all_mv_15",
+              "label": "Motor vehicles 2015",
+              "type": "integer"
+            },
+            {
+              "field": "all_mv_16",
+              "label": "Motor vehicles 2016",
+              "type": "integer"
+            }
+          ],
+          "markerStyle": {
+            "0": {
+              "style": [
+                [400,"#ffffcc"]
+              ],
+              "label": "Very Low"
+            },
+            "1": {
+              "style": [
+                [400,"#a1dab4"]
+              ],
+              "label": "Low"
+            },
+            "2": {
+              "style": [
+                [400,"#41b6c4"]
+              ],
+              "label": "Moderate"
+            },
+            "3": {
+              "style": [
+                [400,"#2c7fb8"]
+              ],
+              "label": "High"
+            },
+            "4": {
+              "style": [
+                [400,"#253494"]
+              ],
+              "label": "Very High"
+            }
+          },
+          "arrayCompColours": [
+            "#ddd"
+          ],
+          "competitors": []
+        },
+        "traffic_count_minor": {
+          "panel": true,
+          "name": "Traffic (minor)",
+          "format": "cluster",
+          "pane": [
+            "traffic",
+            550
+          ],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "bp_traffic_counts_minor",
+          "geomj": "ST_AsGeoJSON(geom)",
+          "geom": "geom",
+          "cluster_label": "cp_id",
+          "cluster_competitor": "traffic",
+          "cluster_kmeans": 4,
+          "cluster_dbscan": 0.0075,
+          "markerMin": 10,
+          "markerMax": 30,
+          "infoj": [
+            {
+              "field": "cp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "road_num",
+              "label": "Road Number",
+              "type": "text"
+            },
+            {
+              "field": "start_junc",
+              "label": "from junction",
+              "type": "text"
+            },
+            {
+              "field": "end_junc",
+              "label": "to junction",
+              "type": "text"
+            },
+            {
+              "field": "len_mi",
+              "label": "Segment (miles)",
+              "type": "numeric"
+            },
+            {
+              "field": "road_class",
+              "label": "Road Class",
+              "type": "text"
+            },
+            {
+              "field": "area_cat",
+              "label": "Area Category",
+              "type": "text"
+            },
+            {
+              "field": "all_mv_14",
+              "label": "Motor vehicles 2014",
+              "type": "integer"
+            },
+            {
+              "field": "all_mv_15",
+              "label": "Motor vehicles 2015",
+              "type": "integer"
+            },
+            {
+              "field": "all_mv_16",
+              "label": "Motor vehicles 2016",
+              "type": "integer"
+            }
+          ],
+          "markerStyle": {
+            "0": {
+              "style": [
+                [400,"#ffffcc"]
+              ],
+              "label": "Very Low"
+            },
+            "1": {
+              "style": [
+                [400,"#a1dab4"]
+              ],
+              "label": "Low"
+            },
+            "2": {
+              "style": [
+                [400,"#41b6c4"]
+              ],
+              "label": "Moderate"
+            },
+            "3": {
+              "style": [
+                [400,"#2c7fb8"]
+              ],
+              "label": "High"
+            },
+            "4": {
+              "style": [
+                [400,"#253494"]
+              ],
+              "label": "Very High"
+            }
+          },
+          "arrayCompColours": [
+            "#ddd"
+          ],
+          "competitors": []
         }
       }
     }

@@ -84,7 +84,7 @@ function getLayer() {
                             //     layer.customMarker || svg_symbols.target(layer.defaultMarker);
 
                             icon = layer.customMarker ? layer.customMarker :
-                                svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.markerStyle['other'].style || layer.defaultMarker);
+                                svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker);
                         }
 
                         return L.marker(latlng, {

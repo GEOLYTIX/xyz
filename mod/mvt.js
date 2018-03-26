@@ -26,8 +26,19 @@ function fetch_tiles(req, res) {
         .catch(err => {
             console.log(`${z}/${x}/${y} not found in cache`);
             let q = `
-            INSERT INTO ${tbl}__tc (z,x,y,mvt)
-            SELECT ${z},${x},${y}, ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom') mvt
+            INSERT INTO ${tbl}__tc (z, x, y, mvt, tile)
+            SELECT
+                ${z},
+                ${x},
+                ${y},
+                ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom') mvt,
+                ST_MakeEnvelope(
+                    ${-m + (x * r)},
+                    ${ m - (y * r)},
+                    ${-m + (x * r) + r},
+                    ${ m - (y * r) - r},
+                    3857
+                ) tile
             FROM (
                 SELECT
                     ${req.query.qID} AS id,

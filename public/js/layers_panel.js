@@ -368,21 +368,21 @@ module.exports = (function () {
                     });
                 });
                 
-                svg.append('rect')
-                .attr('x', 4)
-                .attr('y', y += 15)
-                .attr('width', 12)
-                .attr('height', 12)
-                .style('fill-opacity', layer.style.fillOpacity)
-                .style('stroke', layer.style.color);
+                // svg.append('rect')
+                // .attr('x', 4)
+                // .attr('y', y += 15)
+                // .attr('width', 12)
+                // .attr('height', 12)
+                // .style('fill-opacity', layer.style.fillOpacity)
+                // .style('stroke', layer.style.color);
                 
-                svg.append("text")
-                .attr('x', 20)
-                .attr('y', y + 6)
-                .attr('text-anchor', 'start')
-                .attr('alignment-baseline', 'central')
-                .style('font-size', '12px')
-                .text('other');
+                // svg.append("text")
+                // .attr('x', 20)
+                // .attr('y', y + 6)
+                // .attr('text-anchor', 'start')
+                // .attr('alignment-baseline', 'central')
+                // .style('font-size', '12px')
+                // .text('other');
                 
             });
         }

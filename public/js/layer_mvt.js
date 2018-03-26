@@ -83,7 +83,6 @@ function getLayer(){
                 this.setFeatureStyle(e.layer.properties.id, layer.styleHighlight);
             })
             .on('mouseout', function(e){
-                //this.setFeatureStyle(e.layer.properties.id, layer.style);
                 this.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
             .addTo(_xyz.map);
