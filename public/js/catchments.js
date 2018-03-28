@@ -147,7 +147,7 @@ module.exports = function catchments(){
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', localhost +  'q_catchments?' + utils.paramString({
+        xhr.open('GET', host +  'q_catchments?' + utils.paramString({
             lng: e.latlng.lng,
             lat: e.latlng.lat,
             distance: _distance,

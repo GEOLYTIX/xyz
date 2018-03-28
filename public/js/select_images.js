@@ -41,9 +41,7 @@ function addImages(record, images) {
         img_td = document.createElement('td');
         img_tr.appendChild(img_td);
         let _img = utils.createElement('img', {
-            //id: image,
             id: image_id(image),
-            //src: localhost + 'q_get_image?image=' + image
             src: image
         });
         _img.style.border = '3px solid #EEE';
@@ -161,7 +159,7 @@ function upload_image(record, _img, blob) {
     console.log(_img);
     console.log(blob);
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', localhost + 'q_save_image?' + utils.paramString({
+    xhr.open('POST', host + 'q_save_image?' + utils.paramString({
         dbs: record.layer.dbs,
         table: record.layer.table,
         qID: record.layer.qID,
@@ -207,7 +205,7 @@ function remove_image(record, _img) {
     document.getElementById(_img.id).remove();
     
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', localhost + 'q_remove_image?' + utils.paramString({
+    xhr.open('GET', host + 'q_remove_image?' + utils.paramString({
         dbs: record.layer.dbs,
         table: record.layer.table,
         qID: record.layer.qID,

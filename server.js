@@ -37,7 +37,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     app.set('view engine', 'ejs');
 
     app.use(helmet.noCache());
-    app.use(process.env.SUBDIRECTORY || '', express.static(path.join(__dirname, 'public')));
+    app.use(process.env.DIR || '', express.static(path.join(__dirname, 'public')));
     if (morgan) app.use(morgan('dev'));
     app.use(cookieParser());
     app.use(bodyParser.json());
@@ -59,7 +59,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         app.use(passport.session());
     }
 
-    app.use(process.env.SUBDIRECTORY || '', require('./router'));
+    app.use(process.env.DIR || '', require('./router'));
 
     app.listen(port);
     console.log('The magic happens on port ' + port);

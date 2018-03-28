@@ -23,13 +23,14 @@ function getLayer(){
         layer.xhr = new XMLHttpRequest();
 
         // Build xhr request.
-        let url = localhost + 'mvt/{z}/{x}/{y}?' + utils.paramString({
+        let url = host + 'mvt/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
                 qID: layer.qID || null,
                 properties: layer.properties || '',
                 layer: layer.layer,
-                geom_3857: layer.geom_3857
+                geom_3857: layer.geom_3857,
+                tilecache: layer.tilecache
             }),
             options = {
                 rendererFactory: L.canvas.tile,

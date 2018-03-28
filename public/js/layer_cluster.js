@@ -12,7 +12,7 @@ function getLayer() {
 
         // Build xhr request.
         let bounds = _xyz.map.getBounds();
-        layer.xhr.open('GET', localhost + 'q_cluster?' + utils.paramString({
+        layer.xhr.open('GET', host + 'q_cluster?' + utils.paramString({
             dbs: layer.dbs,
             layer: layer.table,
             qID: layer.qID,

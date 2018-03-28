@@ -52,7 +52,7 @@ The host is required in order to send correct verification or media links.
 
 The localhost is required for server side reporting.
 
-`"SUBDIRECTORY": "xyz"`
+`"DIR": "xyz"`
 
 The name of the application root directory. This is required by the Express router to set the public directory.
 
@@ -70,7 +70,7 @@ A session secret which is used to compute the Hash.
 
 `"APPSETTINGS": "demo.json"`
 
-The name of the appsettings file ([in the settings subdirectory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The APPSETTINGS will be discussed in detail in the next section of this documentation.
+The name of the appsettings file ([in the settings directory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The APPSETTINGS will be discussed in detail in the next section of this documentation.
 
 ```
 "DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"

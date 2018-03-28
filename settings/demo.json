@@ -1,5 +1,6 @@
 {
   "title": "GEOLYTIX | XYZ Demo",
+  "documentation": "documentation",
   "select": {
     "records": [
       {
@@ -64,6 +65,7 @@
       }
     ]
   },
+  "locate": true,
   "gazetteer": {
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
     "pane": ["gazetteer", 550],
@@ -1042,7 +1044,6 @@
           "name": "Postal Areas",
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geom": "geom",
           "geomj": "geomj",
           "pane": ["postal", 520],
           "dbs": "XYZ",
@@ -1052,6 +1053,7 @@
             "11": "gb_postaldistrict_census__11",
             "12": "gb_postalsector_census__11"
           },
+          "tilecache": "gb_postal_cache",
           "infoj": [
             {
               "field": "postal_label",

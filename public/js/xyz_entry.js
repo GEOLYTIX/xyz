@@ -114,7 +114,7 @@ _xyz.map.on('moveend', function () {
     viewChangeEnd();
 });
 
-_xyz.map.on('zoomend', function(){
+_xyz.map.on('zoomend', function() {
     viewChangeEnd();
 });
 
@@ -139,20 +139,20 @@ function viewChangeEnd() {
 // Function to check whether all display layers are drawn.
 _xyz.layersCheck = layersCheck;
 function layersCheck() {
-    let layers = _xyz.countries[_xyz.country].layers,
-        chkScore = 0;
+    if (typeof report !== 'undefined') {
+        let layers = _xyz.countries[_xyz.country].layers,
+            layersArray = [],
+            chkScore = 0;
 
-    let layersArray = [];
+        Object.keys(layers).map(function (layer) {
+            chkScore = layers[layer].display ? chkScore++ : chkScore;
+            chkScore = layers[layer].display && layers[layer].loaded ? chkScore-- : chkScore;
+            layersArray.push([layers[layer].name, layers[layer].display, layers[layer].loaded]);
+        });
 
-    Object.keys(layers).map(function (layer) {
-        chkScore = layers[layer].display ? chkScore++ : chkScore;
-        chkScore = layers[layer].display &&  layers[layer].loaded ? chkScore-- : chkScore;
-
-        layersArray.push([layers[layer].name, layers[layer].display, layers[layer].loaded]);
-    });
-
-    // Logs when all layers are ready. 
-    if(chkScore === 0) console.log(layersArray);
+        // Logs when all layers are ready. 
+        if (chkScore === 0) console.log(layersArray);
+    }
 }
 
 // Inititialise modules.

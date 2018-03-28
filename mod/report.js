@@ -3,24 +3,24 @@ const puppeteer = req_res('puppeteer') ? require('puppeteer') : null;
 
 const jsr = require('jsrender');
 
-const fs = require('fs');
-const appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
-    JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
-    {
-        "countries": {
-            "Global": {
-                "layers": {
-                    "base": {
-                        "display": true,
-                        "format": "tiles",
-                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    }
-                }
-            }
-        }
-    };
+// const fs = require('fs');
+// const appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
+//     JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
+//     {
+//         "countries": {
+//             "Global": {
+//                 "layers": {
+//                     "base": {
+//                         "display": true,
+//                         "format": "tiles",
+//                         "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//                     }
+//                 }
+//             }
+//         }
+//     };
     
-const reportpath = require('path').join(process.env.SUBDIRECTORY || '', '../reports/');
+const reportpath = require('path').join(process.env.DIR || '', '../reports/');
 const reports = {};
 
 async function request(req, res) {
@@ -46,7 +46,7 @@ async function request(req, res) {
         hooks: JSON.stringify(req.body.hooks),
         drivetime: drivetime_flag,
         mapbox_token: process.env.MAPBOX,
-        settings: JSON.stringify(appSettings)
+        settings: JSON.stringify(global.appSettings)
     }), { waitUntil: 'load' });
 
     await page.addStyleTag({ path: './public/css/report.css' });

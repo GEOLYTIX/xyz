@@ -117,7 +117,7 @@ module.exports = function Gazetteer() {
         console.log(_xyz.countries[_xyz.country].gazetteer[2]);
 
         _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
-        _xyz.gazetteer.xhrSearch.open('GET', localhost + 'q_gazetteer?' + utils.paramString({
+        _xyz.gazetteer.xhrSearch.open('GET', host + 'q_gazetteer?' + utils.paramString({
             provider: _xyz.countries[_xyz.country].gazetteer[0],
             country: _xyz.countries[_xyz.country].gazetteer[1],
             bounds: encodeURIComponent(_xyz.countries[_xyz.country].gazetteer[2]),
@@ -212,7 +212,7 @@ module.exports = function Gazetteer() {
             // Get the geometry from the gazetteer database.
             let xhr = new XMLHttpRequest();
             //let service = source === 'google'? 'q_gazetteer_googleplaces' : 'q_gazetteer_places';
-            xhr.open('GET', localhost
+            xhr.open('GET', host
                 + (source === 'google' ?
                     'q_gazetteer_googleplaces' :
                     'q_gazetteer_places')

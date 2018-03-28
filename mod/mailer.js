@@ -1,7 +1,8 @@
 function mail(options) {
+    if (!process.env.TRANSPORT) return console.log('Transport not set.');
+
     require('nodemailer').createTransport(process.env.TRANSPORT).sendMail({
-        //from: process.env.SUBDIRECTORY + '\@' + process.env.HOST + '\ \<geolytix@gmail.com\>',
-        from: '\<geolytix@gmail.com\>',
+        from: `\<${process.env.TRANSPORT.split(':')[1]}\>`,
         to: options.to,
         subject: options.subject,
         text: options.text

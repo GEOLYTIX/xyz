@@ -5,10 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        input:-webkit-autofill {
-            box-shadow: 0 0 0px 1000px white inset;
-            -webkit-box-shadow: 0 0 0px 1000px white inset;
-        }
+
         body {
             margin: 0;
             padding: 0;
@@ -30,6 +27,9 @@
         }
         input:focus {
             outline: none;
+        }
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px white inset;
         }
         .bar {
             position: relative;
@@ -80,7 +80,8 @@
         p {
             font-size: 20px;
         }
-        #switch2register, #switch2login {
+        #switch2register,
+        #switch2login {
             color: #079e00;
             font-weight: 700;
         }
@@ -98,8 +99,7 @@
 </head>
 <body>
 <div>
-    <!--<h1>Log in</h1>-->
-    <form action="<%= subdirectory %>/login" method="post">
+    <form action="<%= dir %>/login" method="post">
 
         <div class="input_group">
             <input id="auth_user_email" name="email" type="text" value="">
@@ -120,30 +120,31 @@
         <div class="input_group register">
             <input id="auth_user_password_retype" name="password_retype" type="password" value="" onkeyup="check();">
             <span class="bar"></span>
-            <label for="auth_user_password_retype">Retype password</label>
+            <label for="auth_user_password_retype">Re-type password</label>
         </div>
 
         <% if (user) { if (user.verified == false) { %>
         <span class="msg login">Account mail not yet verified.</span><br>
         <% } } %>
+
         <% if (user) { if (user.approved == false) { %>
         <span class="msg login">Account not yet approved.</span><br>
         <% } } %>
+
         <% if (session_messages.length > 0) { %>
-        <span class="msg login">
-        <%= session_messages[session_messages.length - 1] %></span><br>
+        <span class="msg login"><%= session_messages[session_messages.length - 1] %></span><br>
         <% } %>
 
         <br>
 
-        <button id="btnLogin" class="login" type="submit"
-                formaction="<%= subdirectory %>/login">
+        <button id="btnLogin" class="login" type="submit" formaction="<%= dir %>/login">
             Log In
         </button>
-        <button id="btnRegister" class="register" type="submit"
-                formaction="<%= subdirectory %>/register" disabled>
-            Confirm
+
+        <button id="btnRegister" class="register" type="submit" formaction="<%= dir %>/register" disabled>
+            Register
         </button>
+
         <p class="login">Your account must be verified and approved by an administrator before you are able to log in.</p>
         <p id="switch2register" class="login">Register a new account or reset your password.</p>
         <p class="register">A verification link will be sent to your email address. Follow the link to activate your account.</p>
@@ -151,30 +152,36 @@
     </form>
 </div>
 </body>
+
 <script>
-    setTimeout(function () {
-        let user_email = document.getElementById('auth_user_email');
-        if (user_email.value.length > 0) {
-            document.getElementById('auth_user_password').focus();
-        } else {
+    setTimeout(function() {
+        document.getElementById('auth_user_email').value.length > 0 ?
+            document.getElementById('auth_user_password').focus() :
             document.getElementById('auth_user_email').focus();
-        }
     }, 10);
-    const ar_map = f => x => Array.prototype.map.call(x, f);
-    const styleDisplayNone = (el) => el.style.display = 'none';
-    const styleDisplayBlock = (el) => el.style.display = 'block';
-    document.getElementById('switch2register').addEventListener('click', function(){
-        ar_map(styleDisplayNone)(document.getElementsByClassName('login'));
-        ar_map(styleDisplayBlock)(document.getElementsByClassName('register'));
+
+    function changeDisplay(arr, display) {
+        Array.prototype.map.call(arr, function(el){
+            el.style.display = display;
+        });
+    }
+
+    document.getElementById('switch2register').addEventListener('click', function() {
+        changeDisplay(document.getElementsByClassName('login'),'none');
+        changeDisplay(document.getElementsByClassName('register'),'block');
     });
-    document.getElementById('switch2login').addEventListener('click', function(){
-        ar_map(styleDisplayNone)(document.getElementsByClassName('register'));
-        ar_map(styleDisplayBlock)(document.getElementsByClassName('login'));
+
+    document.getElementById('switch2login').addEventListener('click', function() {
+        changeDisplay(document.getElementsByClassName('register'),'none');
+        changeDisplay(document.getElementsByClassName('login'),'block');
     });
+
     function check() {
-        let btnRegister = document.getElementById('btnRegister');
-        (document.getElementById('auth_user_password').value === document.getElementById('auth_user_password_retype').value && document.getElementById('auth_user_password').value.length > 0 )?
-            btnRegister.disabled = false : btnRegister.disabled = true;
+        document.getElementById('auth_user_password').value.length > 0
+            && document.getElementById('auth_user_password').value
+            === document.getElementById('auth_user_password_retype').value ?
+            document.getElementById('btnRegister').disabled = false :
+            document.getElementById('btnRegister').disabled = true;
     }
 </script>
 </html>

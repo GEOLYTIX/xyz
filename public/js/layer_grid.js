@@ -24,7 +24,7 @@ function getLayer(){
         // Open & send vector.xhr;
         let bounds = _xyz.map.getBounds();
 
-        layer.xhr.open('GET', localhost + 'q_grid?' + utils.paramString({
+        layer.xhr.open('GET', host + 'q_grid?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             geom: layer.geom,

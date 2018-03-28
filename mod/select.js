@@ -7,7 +7,19 @@ Object.keys(process.env).map(key => {
     }
 });
 
+function chkVals(vals, res) {
+    vals.forEach((val) => {
+        if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
+            console.log('Possible SQL injection detected');
+            res.redirect(301, 'https://giphy.com/gifs/newman-dennis-nedry-jurrasic-park-FmyCxAjnOP5Di/fullscreen');
+        }
+    })
+    return res;
+}
+
 function select(req, res) {
+
+    //if (await chkVals([], res).statusCode === 301) return;
 
     let fields = '';
     Object.keys(req.body.infoj).map(key => {

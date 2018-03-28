@@ -8,7 +8,6 @@
     <style>
         input:-webkit-autofill {
             box-shadow: 0 0 0px 1000px white inset;
-            -webkit-box-shadow: 0 0 0px 1000px white inset;
         }
         td:not(.email_field) {
             padding: 12px;
@@ -113,15 +112,17 @@
 
 </div>
 </body>
+
 <script>
     var xhr = new XMLHttpRequest();
+
     [].forEach.call(document.querySelectorAll('.checkbox_input'), function(el) {
                 el.addEventListener('click', function () {
                     var user = this.parentNode.parentNode.parentNode.firstChild;
                     while(user != null && user.nodeType == 3){
                         user = user.nextSibling;
                     }
-                    xhr.open('POST', '<%= subdirectory %>/update_user');
+                    xhr.open('POST', '<%= dir %>/update_user');
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
@@ -136,6 +137,7 @@
                     }));
                 }, false);
             });
+
     [].forEach.call(document.querySelectorAll('.delete_account'), function (el) {
         el.addEventListener('click', function () {
             var tr = this.parentNode.parentNode, user = tr.firstChild;
@@ -143,7 +145,7 @@
                 user = user.nextSibling;
             }
             if (confirm('Delete account ' + user.innerText)) {
-                xhr.open('POST', '<%= subdirectory %>/delete_user');
+                xhr.open('POST', '<%= dir %>/delete_user');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {

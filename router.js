@@ -1,61 +1,84 @@
+// Set express router.
 const router = require('express').Router();
+
+// Set header for CORS.
 router.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
-const jsr = require('jsrender');
-const Md = require('mobile-detect');
-
+// Set file stream, then read appSettings from file.
+// Use minimum viable settings with single OSM tile layer of settings fail to load.
 const fs = require('fs');
-const appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
-    JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
-    {
-        "countries": {
-            "Global": {
-                "layers": {
-                    "base": {
-                        "display": true,
-                        "format": "tiles",
-                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    }
+
+global.appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
+JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
+{
+    "countries": {
+        "Global": {
+            "layers": {
+                "base": {
+                    "display": true,
+                    "format": "tiles",
+                    "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 }
             }
         }
-    };
+    }
+};
 
+// Store all string keys in global array to check for SQL injections.
+global.appSettingsValues = [];
+(function objectEval(o) {
+    Object.keys(o).map(function (key) {
+        if (typeof o[key] === 'string') {
+            global.appSettingsValues.push(o[key]);
+        }
+        if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
+    })
+})(global.appSettings)
 
+// Create constructor for mobile detect module.
+const Md = require('mobile-detect');
+
+// Set jsrender module for server-side templates.
+const jsr = require('jsrender');
+
+// Request application bundle.
 router.get('/', isLoggedIn, (req, res) => {
 
+    // Check whether request comes from a mobile platform and set template.
     let md = new Md(req.headers['user-agent']),
         tmpl = (md.mobile() === null || md.tablet() !== null) ?
             jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
 
+    // Build the template with jsrender and send to client.
     res.send(
         tmpl.render({
-            title: appSettings.title || 'GEOLYTIX | XYZ',
+            title: global.appSettings.title || 'GEOLYTIX | XYZ',
             module_layers: './public/tmpl/layers.html',
-            module_select: appSettings.select ? './public/tmpl/select.html' : null,
-            module_catchments: appSettings.catchments ? './public/tmpl/catchments.html' : null,
+            module_select: global.appSettings.select ? './public/tmpl/select.html' : null,
+            module_catchments: global.appSettings.catchments ? './public/tmpl/catchments.html' : null,
             bundle_js: 'build/xyz_bundle.js',
-            btnDocumentation: appSettings.documentation ? '' : 'style="display: none;"',
-            hrefDocumentation: appSettings.documentation ? appSettings.documentation : '',
-            btnReport: appSettings.report ? '' : 'style="display: none;"',
+            btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
+            hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
+            btnReport: global.appSettings.report ? '' : 'style="display: none;"',
             btnLogout: req.user ? '' : 'style="display: none;"',
             btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
-            btnSearch: appSettings.gazetteer ? '' : 'style="display: none;"',
-            btnLocate: appSettings.locate ? '' : 'style="display: none;"',
+            btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
+            btnLocate: global.appSettings.locate && req.protocol == 'https' ? '' : 'style="display: none;"',
             settings: `
             <script>
                 const node_env = '${process.env.NODE_ENV}';
-                const localhost = '';
+                const host = '';
                 const hooks = ${req.session && req.session.hooks ? JSON.stringify(req.session.hooks) : false};
-                const _xyz = ${JSON.stringify(appSettings)};
+                const _xyz = ${JSON.stringify(global.appSettings)};
             </script>`
         }))
 });
 
+// Set highlight and and markdown-it to turn markdown into flavoured html.
 const hljs = require('highlight.js');
 const markdown = require('markdown-it')({
     highlight: (str, lang) => {
@@ -68,27 +91,12 @@ const markdown = require('markdown-it')({
     }
 });
 
-router.get('/readme', (req, res) => {
-    require('fs').readFile('..' + (process.env.SUBDIRECTORY || '') + '/readme.md', function (err, md) {
-        if (err) throw err;
-        res.send(
-            jsr.templates('./views/github.html').render({
-                css: '<link rel="stylesheet" href="css/github_markdown.css"/>',
-                highlight: '<link rel="stylesheet" href="css/github_highlight.css"/>',
-                md: markdown.render(md.toString())
-            }));
-    })
-});
-
-
+// Read documentation.md into file stream and send render of the github flavoured markdown template to client.
 router.get('/documentation', (req, res) => {
-    require('fs').readFile('..' + (process.env.SUBDIRECTORY || '') + '/public/documentation.md', function (err, md) {
+    fs.readFile('..' + (process.env.DIR || '') + '/public/documentation.md', function (err, md) {
         if (err) throw err;
-
         res.send(
             jsr.templates('./views/github.html').render({
-                css: '<link rel="stylesheet" href="css/github_markdown.css"/>',
-                highlight: '<link rel="stylesheet" href="css/github_highlight.css"/>',
                 md: markdown.render(md.toString())
             }));
     })
@@ -96,7 +104,7 @@ router.get('/documentation', (req, res) => {
 
 // Vector layers with PGSQL MVT
 const mvt = require('./mod/mvt');
-router.get('/mvt/:z/:x/:y', mvt.fetch_tiles);
+router.get('/mvt/:z/:x/:y', mvt.fetchTiles);
 
 // Proxy for 3rd party services
 const request = require('request');
@@ -154,84 +162,90 @@ router.get('/q_get_image', isLoggedIn, (req, res) => {
     res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'));
 });
 
+
+
 // ACCESS CONTROLL
 router.get('/login', (req, res) => {
     res.render('login.ejs', {
         user: req.user,
         session_messages: req.session.messages || [],
-        subdirectory: process.env.SUBDIRECTORY || ''
+        dir: process.env.DIR || ''
     });
 });
 
 router.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
-    res.redirect((process.env.SUBDIRECTORY || '') + '/login');
+    res.redirect((process.env.DIR || '') + '/login');
 });
 
 router.post('/login',
     require('./mod/passport').authenticate('localLogin', {
-        failureRedirect: (process.env.SUBDIRECTORY || '') + '/login',
-        successRedirect: (process.env.SUBDIRECTORY || '') + '/',
+        failureRedirect: (process.env.DIR || '') + '/login',
+        successRedirect: (process.env.DIR || '') + '/',
         failureMessage: 'Invalid username or password'
     })
 );
 
 router.post('/register',
     require('./mod/passport').authenticate('localRegister', {
-        failureRedirect: (process.env.SUBDIRECTORY || '') + '/login',
+        failureRedirect: (process.env.DIR || '') + '/login',
         successMessage: 'A verification email has been sent to the account email.',
-        successRedirect: (process.env.SUBDIRECTORY || '') + '/login',
+        successRedirect: (process.env.DIR || '') + '/login',
         failureMessage: 'Registration failure'
     })
 );
 
 const user = require('./mod/user');
+
 router.get('/verify/:token', (req, res) => {
     user.findOne({
         verificationToken: req.params.token,
-        verificationTokenExpires: {$gt: Date.now()}
-    }, function (err, _user) {
-        if (!_user) {
-            return res.send('The verification has failed.');
-        }
+        verificationTokenExpires: { $gt: Date.now() }
+    }, (err, _user) => {
+        if (!_user) return res.send('The verification has failed.')
+        
         _user.verified = true;
         _user.save();
-        user.find({admin: true}, (err, admin) => {
+
+        user.find({ admin: true }, (err, admin) => {
             if (err) throw err;
+
             let adminmail = admin.map(a => {
                 return a.email;
             });
+
             require('./mod/mailer').mail({
                 to: adminmail,
                 subject: 'A new account has been verified',
                 text: 'Please log into the admin panel to approve ' + _user.email
             });
         });
+
         req.session.messages = ['An email has been sent to the site administrator'];
+
         res.send('The account has been verified and is awaiting approval.');
     });
 });
 
 router.get('/admin', isAdmin, (req, res) => {
     user.find({}, (err, _user) => {
-        if (err) {
-            throw err;
-        }
+        if (err) throw err;
+
         res.render('admin.ejs', {
             data: _user,
-            subdirectory: process.env.SUBDIRECTORY || ''
+            dir: process.env.DIR || ''
         });
     });
 });
 
 router.post('/update_user', isAdmin, (req, res) => {
     user.findOne({email: req.body.email}, (err, _user) => {
-        if (!_user) {
-            return res.json({update: false});
-        }
+        if (!_user) return res.json({update: false});
+
         _user[req.body.role] = req.body.chk;
         _user.save();
+
         if (req.body.role === 'approved' && req.body.chk) {
             require('./mod/mailer').mail({
                 to: _user.email,
@@ -239,16 +253,17 @@ router.post('/update_user', isAdmin, (req, res) => {
                 text: 'Your account has been approved by a site administrator. You can now log into the application.'
             });
         }
+
         res.json({update: true});
     });
 });
 
 router.post('/delete_user', isAdmin, (req, res) => {
     user.findOne({email: req.body.email}, (err, _user) => {
-        if (!_user) {
-            return res.json({delete: false});
-        }
+        if (!_user) return res.json({delete: false});
+
         _user.remove();
+
         res.json({delete: true});
     });
 });
@@ -275,9 +290,11 @@ function isLoggedIn(req, res, next) {
             
             return next();
         }
+
     } else {
         let o = {},
             params = req.url.substring(2).split('&');
+
         if (params[0] !== '') {
             for (let i = 0; i < params.length; i++) {
                 let key_val = params[i].split('=');
@@ -286,19 +303,15 @@ function isLoggedIn(req, res, next) {
         }
 
         req.session.hooks = Object.keys(o).length > 0 ? o : false;
-        console.log((process.env.SUBDIRECTORY || '') + '/login');
-        res.redirect((process.env.SUBDIRECTORY || '') + '/login');
+
+        res.redirect((process.env.DIR || '') + '/login');
     }
 }
 
 function isAdmin(req, res, next) {
-    if (req.isAuthenticated()) {
-        if (req.user.admin) {
-            return next();
-        }
-    }
-    console.log((process.env.SUBDIRECTORY || '') + '/login');
-    res.redirect((process.env.SUBDIRECTORY || '') + '/login');
+    if (req.isAuthenticated() && req.user.admin) return next();
+
+    res.redirect((process.env.DIR || '') + '/login');
 }
 
 module.exports = router;
