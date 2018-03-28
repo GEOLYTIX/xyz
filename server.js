@@ -37,6 +37,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     app.set('view engine', 'ejs');
 
     app.use(helmet.noCache());
+    global.appRoot = path.resolve(__dirname);
     app.use(process.env.DIR || '', express.static(path.join(__dirname, 'public')));
     if (morgan) app.use(morgan('dev'));
     app.use(cookieParser());

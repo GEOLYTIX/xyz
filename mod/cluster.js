@@ -11,7 +11,7 @@ function chkVals(vals, res) {
   vals.forEach((val) => {
       if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
           console.log('Possible SQL injection detected');
-          res.redirect(301, 'https://giphy.com/gifs/newman-dennis-nedry-jurrasic-park-FmyCxAjnOP5Di/fullscreen');
+          res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
       }
   })
   return res;
@@ -22,7 +22,7 @@ const turf = require('@turf/turf');
 async function cluster(req, res) {
   try {
 
-    if (await chkVals([req.query.layer, req.query.geom], res).statusCode === 301) return;
+    if (await chkVals([req.query.layer, req.query.geom], res).statusCode === 406) return;
 
     let xDegree = turf.distance([req.query.west, req.query.north], [req.query.east, req.query.south], { units: 'degrees' });
 
