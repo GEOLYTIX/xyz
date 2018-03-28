@@ -1,12 +1,3 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'DBS') {
-        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-        DBS[key.split('_')[1]].connect();
-    }
-});
-
 async function newRecord(req, res) {
     try {
         let q =
@@ -16,7 +7,7 @@ async function newRecord(req, res) {
 
         //console.log(q);
 
-        let result = await DBS[req.body.dbs].query(q);
+        let result = await global.DBS[req.body.dbs].query(q);
 
         q =
         `UPDATE ${req.body.table} SET
@@ -25,7 +16,7 @@ async function newRecord(req, res) {
 
         //console.log(q);
 
-        await DBS[req.body.dbs].query(q);
+        await global.DBS[req.body.dbs].query(q);
 
         res.status(200).send(result.rows[0].id.toString());
 
@@ -52,31 +43,30 @@ function updateRecord(req, res) {
 
     //console.log(q);
              
-    DBS[req.body.dbs].query(q)
-    .then(result => {
-        //console.log(result);
-        res.status(200).send();
-    })
-    .catch(error => {
-        console.log(error);
-    });
+    global.DBS[req.body.dbs].query(q)
+        .then(result => {
+            //console.log(result);
+            res.status(200).send();
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 function deleteRecord(req, res) {
 
-    let q =
-    `DELETE FROM ${req.body.table} where ${req.body.qID} = '${req.body.id}';`;
+    let q = `DELETE FROM ${req.body.table} where ${req.body.qID} = '${req.body.id}';`;
 
     //console.log(q);
              
-    DBS[req.body.dbs].query(q)
-    .then(result => {
-        //console.log(result);
-        res.status(200).send();
-    })
-    .catch(error => {
-        console.log(error);
-    });
+    global.DBS[req.body.dbs].query(q)
+        .then(result => {
+            //console.log(result);
+            res.status(200).send();
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 module.exports = {

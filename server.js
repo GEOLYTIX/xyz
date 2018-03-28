@@ -37,7 +37,27 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     app.set('view engine', 'ejs');
 
     app.use(helmet.noCache());
+
+    // Set globals for API keys, Database connections, etc.
     global.appRoot = path.resolve(__dirname);
+    global.site = (process.env.HOST || ('localhost:' + (process.env.PORT || '3000'))) + process.env.DIR;
+
+    global.KEYS = {};
+    Object.keys(process.env).map(key => {
+        if (key.split('_')[0] === 'KEY') {
+            global.KEYS[key.split('_')[1]] = process.env[key];
+        }
+    });
+
+    const { Client } = require('pg');
+    global.DBS = {};
+    Object.keys(process.env).map(key => {
+        if (key.split('_')[0] === 'DBS') {
+            global.DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+            global.DBS[key.split('_')[1]].connect();
+        }
+    });
+
     app.use(process.env.DIR || '', express.static(path.join(__dirname, 'public')));
     if (morgan) app.use(morgan('dev'));
     app.use(cookieParser());

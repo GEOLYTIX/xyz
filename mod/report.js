@@ -2,23 +2,6 @@ const req_res = (m) => { try { return require.resolve(m) } catch (e) { console.l
 const puppeteer = req_res('puppeteer') ? require('puppeteer') : null;
 
 const jsr = require('jsrender');
-
-// const fs = require('fs');
-// const appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
-//     JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
-//     {
-//         "countries": {
-//             "Global": {
-//                 "layers": {
-//                     "base": {
-//                         "display": true,
-//                         "format": "tiles",
-//                         "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//                     }
-//                 }
-//             }
-//         }
-//     };
     
 const reportpath = require('path').join(process.env.DIR || '', '../reports/');
 const reports = {};

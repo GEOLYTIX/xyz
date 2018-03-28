@@ -1,20 +1,3 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'DBS') {
-        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-        DBS[key.split('_')[1]].connect();
-    }
-});
-
-const request = require('request');
-const KEYS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'KEY') {
-        KEYS[key.split('_')[1]] = process.env[key];
-    }
-});
-
 function gazetteer(req, res) {
 
     // let q = `SELECT label, qid id, source
@@ -26,7 +9,7 @@ function gazetteer(req, res) {
 
     eval(req.query.provider + '_placesAutoComplete')(req, res);
 
-    // DBS[req.query.dbs].any(q)
+    // global.DBS[req.query.dbs].any(q)
     //     .then(function (data) {
     //         if (data.length > 0) {
     //             res.status(200).json(data);
@@ -54,10 +37,10 @@ function MAPBOX_placesAutoComplete(req, res) {
           + `${req.query.country ? 'country=' + req.query.country : ''}`
           + `${req.query.bounds ? 'bbox=' + req.query.bounds : ''}`
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
-          + `&${KEYS[req.query.provider]}`;
+          + `&${global.KEYS[req.query.provider]}`;
 
     try {
-        request.get(q, (err, response, body) => {
+        require('request').get(q, (err, response, body) => {
             res.status(200).json(JSON.parse(body).features.map(f => {
                 return {
                     label: `${f.text} (${f.place_type[0]}) ${!req.query.country && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
@@ -75,10 +58,10 @@ function GOOGLE_placesAutoComplete(req, res) {
     let q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
           + `${req.query.country ? '&components=country:' + req.query.country : ''}`
           + `${req.query.bounds ? decodeURIComponent(req.query.bounds) : ''}`
-          + `&${KEYS[req.query.provider]}`;
+          + `&${global.KEYS[req.query.provider]}`;
 
     try {
-        request.get(q, (err, response, body) => {
+        require('request').get(q, (err, response, body) => {
             res.status(200).json(JSON.parse(body).predictions.map(f => {
                 return {
                     label: f.description,
@@ -94,10 +77,10 @@ function GOOGLE_placesAutoComplete(req, res) {
 
 function gazetteer_googleplaces(req, res) {
     let q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
-          + `&${KEYS.GOOGLE}`;
+          + `&${global.KEYS.GOOGLE}`;
 
     try {
-        request.get(q, (err, response, body) => {
+        require('request').get(q, (err, response, body) => {
             let r = JSON.parse(body).result;
             res.status(200).json({
                     type: 'Point',

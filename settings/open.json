@@ -282,8 +282,9 @@
             }
           ],
           "arrayZoom": {
-            "7": "eu_nuts_data"
+            "5": "eu_nuts_data"
           },
+          "tilecache": "eu_nuts_data__tc",
           "style": {
             "stroke": true,
             "color": "#555",
@@ -1420,11 +1421,12 @@
                 },
                 "City Centre": {
                   "style": {
+                    "stroke": false,
                     "weight": 2,
                     "color": "#BA2D0B",
                     "opacity": 1,
                     "fillColor": "#BA2D0B",
-                    "fill": true,
+                    "fill": false,
                     "fillOpacity": 0.3
                   }
                 },
@@ -1583,8 +1585,6 @@
           },
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geom": "geom",
-          "geomj": "ST_AsGeoJSON(geom)",
           "pane": [
             "bounds",
             510

@@ -1,12 +1,3 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'DBS') {
-        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-        DBS[key.split('_')[1]].connect();
-    }
-});
-
 function grid(req, res) {
     let q = `SELECT
                lon,
@@ -26,7 +17,7 @@ function grid(req, res) {
 
     //console.log(q);
 
-    DBS[req.query.dbs].query(q)
+    global.DBS[req.query.dbs].query(q)
         .then(result => {
             if (result.rows.length === 0) {
                 res.status(204).json({});
@@ -61,7 +52,7 @@ function info(req, res) {
 
     //console.log(q);
 
-    DBS[req.body.dbs].query(q)
+    global.DBS[req.body.dbs].query(q)
         .then(result => {
             if (result.rows.length === 0) {
                 res.status(204).json({});

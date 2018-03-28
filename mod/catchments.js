@@ -1,13 +1,5 @@
 const turf = require('@turf/turf');
 
-const request = require('request');
-const KEYS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'KEY') {
-        KEYS[key.split('_')[1]] = process.env[key];
-    }
-});
-
 function catchments (req, res) {
 
     // Distance of travel in seconds
@@ -55,7 +47,7 @@ function catchments (req, res) {
         if (i < res.data.destinations.length) {
             
             // Send request to the provider API
-            request(eval(req.query.provider + '_request')(req, res, i),
+            require('request')(eval(req.query.provider + '_request')(req, res, i),
                 (err, response, body) => {
                     if (err) {
                         console.log(err);
@@ -135,7 +127,7 @@ function GOOGLE_request(req, res, i) {
     + `origins=${parseFloat(req.query.lat).toFixed(6)},`
     + `${parseFloat(req.query.lng).toFixed(6)}`
     + `&destinations=${res.data.destinations.slice(i, i + 24).join('|')}`
-    + `&${KEYS[req.query.provider]}`
+    + `&${global.KEYS[req.query.provider]}`
 }
 
 function MAPBOX_request(req, res, i) {
@@ -145,7 +137,7 @@ function MAPBOX_request(req, res, i) {
     + `${res.data.destinations.slice(i, i + 24).join(';')}?`
     + `sources=0`
     + `&destinations=all`
-    + `&${KEYS[req.query.provider]}`
+    + `&${global.KEYS[req.query.provider]}`
 }
 
 function GOOGLE_samplePoints(req, res, jbody, i, start) {

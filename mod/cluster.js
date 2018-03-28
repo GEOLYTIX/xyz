@@ -1,18 +1,9 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-  if (key.split('_')[0] === 'DBS') {
-    DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-    DBS[key.split('_')[1]].connect();
-  }
-});
-
 function chkVals(vals, res) {
   vals.forEach((val) => {
-      if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
-          console.log('Possible SQL injection detected');
-          res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
-      }
+    if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
+      console.log('Possible SQL injection detected');
+      res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
+    }
   })
   return res;
 }
@@ -42,7 +33,7 @@ async function cluster(req, res) {
       )
       ${req.query.filter ? `AND ${req.query.competitor} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
     `
-    let result = await DBS[req.query.dbs].query(q);
+    let result = await global.DBS[req.query.dbs].query(q);
 
     let kmeans = parseInt(xDegree * req.query.kmeans) < parseInt(result.rows[0].count) ?
       parseInt(xDegree * req.query.kmeans) :
@@ -85,7 +76,7 @@ async function cluster(req, res) {
         GROUP BY kmeans_cid, dbscan_cid;`
 
     //console.log(q);
-    result = await DBS[req.query.dbs].query(q);
+    result = await global.DBS[req.query.dbs].query(q);
 
     if (result.rows.length === 0) {
       res.status(204).json({});

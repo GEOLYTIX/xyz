@@ -42,7 +42,6 @@ function getLayer(){
                 vectorTileLayerStyles: {}
             };
         
-        //options.vectorTileLayerStyles[layer.layer] = layer.style;
         // set style for each layer
         options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
         
@@ -62,6 +61,7 @@ function getLayer(){
             } else {
                 return layer.style;
             }
+
         }
         
         if(this.L) _xyz.map.removeLayer(this.L);
@@ -81,7 +81,9 @@ function getLayer(){
                 });
             })
             .on('mouseover', function(e){
-                this.setFeatureStyle(e.layer.properties.id, layer.styleHighlight);
+                let stylz = Object.assign({}, layer.categorized.rp_type.style[e.layer.properties.rp_type].style);
+                stylz.fillColor = '#e91e63';
+                this.setFeatureStyle(e.layer.properties.id, stylz);
             })
             .on('mouseout', function(e){
                 this.setFeatureStyle(e.layer.properties.id, applyLayerStyle);

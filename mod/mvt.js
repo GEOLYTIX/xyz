@@ -1,17 +1,8 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'DBS') {
-        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-        DBS[key.split('_')[1]].connect();
-    }
-});
-
 function chkVals(vals, res) {
     vals.forEach((val) => {
         if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
             console.log('Possible SQL injection detected');
-            res.redirect(301, 'https://giphy.com/gifs/newman-dennis-nedry-jurrasic-park-FmyCxAjnOP5Di/fullscreen');
+            res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
         }
     })
     return res;
@@ -30,9 +21,9 @@ async function fetchTiles(req, res) {
             tilecache = req.query.tilecache === 'undefined'? false : req.query.tilecache,
             result;
 
-        if (await chkVals([table, tilecache], res).statusCode === 301) return;
+        if (await chkVals([table, tilecache], res).statusCode === 406) return;
 
-        if (tilecache) result = await DBS[req.query.dbs].query(SQL`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+        if (tilecache) result = await global.DBS[req.query.dbs].query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
         if (result && result.rowCount === 1) {
             res.setHeader('Content-Type', 'application/x-protobuf');
             res.status(200);
@@ -83,7 +74,7 @@ async function fetchTiles(req, res) {
         ${tilecache ? 'RETURNING mvt;' : ';'}
         `;
 
-        result = await DBS[req.query.dbs].query(q);
+        result = await global.DBS[req.query.dbs].query(q);
 
         res.setHeader('Content-Type', 'application/x-protobuf');
         res.status(200);

@@ -1,17 +1,8 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'DBS') {
-        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-        DBS[key.split('_')[1]].connect();
-    }
-});
-
 function chkVals(vals, res) {
     vals.forEach((val) => {
         if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
             console.log('Possible SQL injection detected');
-            res.redirect(301, 'https://giphy.com/gifs/newman-dennis-nedry-jurrasic-park-FmyCxAjnOP5Di/fullscreen');
+            res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
         }
     })
     return res;
@@ -30,7 +21,7 @@ function select(req, res) {
     let q =
     `SELECT
         ${fields}
-        ${req.body.geomj} AS geomj
+        ${typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj} AS geomj
         ${req.body.geomdisplay}
      FROM ${req.body.table}
      WHERE
@@ -38,7 +29,7 @@ function select(req, res) {
 
     //console.log(q);
 
-    DBS[req.body.dbs].query(q)
+    global.DBS[req.body.dbs].query(q)
         .then(result => {
 
             Object.keys(req.body.infoj).map(key => {

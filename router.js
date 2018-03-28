@@ -102,69 +102,74 @@ router.get('/documentation', (req, res) => {
     })
 });
 
-// Vector layers with PGSQL MVT
-const mvt = require('./mod/mvt');
-router.get('/mvt/:z/:x/:y', mvt.fetchTiles);
+// Vector layers with PGSQL MVT.
+router.get('/mvt/:z/:x/:y', require('./mod/mvt').fetchTiles);
 
-// Proxy for 3rd party services
-const request = require('request');
-const KEYS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'KEY') {
-        KEYS[key.split('_')[1]] = process.env[key];
-    }
-});
+// Proxy for 3rd party services.
+router.get('/proxy_request', (req, res) => require('request')(`${req.query.uri}${global.KEYS[req.query.provider]}`).pipe(res));
 
-router.get('/proxy_request', (req, res) => request(`${req.query.uri}${KEYS[req.query.provider]}`).pipe(res));
+// Get grid data.
+router.get('/q_grid', require('./mod/grid').grid);
 
-const grid = require('./mod/grid');
-router.get('/q_grid', grid.grid);
-router.post('/q_grid_info', isLoggedIn, grid.info);
+// Get grid stats from geojson geometry.
+router.post('/q_grid_info', isLoggedIn, require('./mod/grid').info);
 
-const catchments = require('./mod/catchments');
-router.get('/q_catchments', isLoggedIn, catchments.catchments);
+// Calculate catchments from distance matrix.
+router.get('/q_catchments', isLoggedIn, require('./mod/catchments').catchments);
 
-const cluster = require('./mod/cluster');
-router.get('/q_cluster', isLoggedIn, cluster.cluster);
+// Get cluster layer data.
+router.get('/q_cluster', isLoggedIn, require('./mod/cluster').cluster);
 
-const geojson = require('./mod/geojson');
-router.get('/q_geojson', geojson.geojson);
+// Get geojson data.
+router.get('/q_geojson', isLoggedIn, require('./mod/geojson').geojson);
 
-const select = require('./mod/select');
-router.post('/q_select', isLoggedIn, select.select);
+// Get data for selected item.
+router.post('/q_select', isLoggedIn, require('./mod/select').select);
 
-const edit = require('./mod/edit');
-router.post('/q_save', isLoggedIn, edit.newRecord);
-router.post('/q_update', isLoggedIn, edit.updateRecord);
-router.post('/q_delete', isLoggedIn, edit.deleteRecord);
+// Create a new feature.
+router.post('/q_save', isLoggedIn, require('./mod/edit').newRecord);
 
-const gazetteer = require('./mod/gazetteer');
-router.get('/q_gazetteer', isLoggedIn, gazetteer.gazetteer);
-//router.get('/q_gazetteer_places', gazetteer.gazetteer_places);
-router.get('/q_gazetteer_googleplaces', gazetteer.gazetteer_googleplaces);
+// Update a feature.
+router.post('/q_update', isLoggedIn, require('./mod/edit').updateRecord);
 
-const report = require('./mod/report');
-router.post('/q_report_request', isLoggedIn, report.request);
-router.get('/q_report_ping', isLoggedIn, report.ping);
+// Delete a feature.
+router.post('/q_delete', isLoggedIn, require('./mod/edit').deleteRecord);
 
-const reportpath = require('path').join(__dirname, '/reports/');
-router.get('/q_pdf_open', isLoggedIn, (req, res) => {
-    res.sendFile(reportpath + req.query.report + '.pdf');
-});
-router.get('/q_pdf_download', isLoggedIn, (req, res) => {
-    res.download(reportpath + req.query.report + '.pdf');
-});
+// Get autocomplete records from search term.
+router.get('/q_gazetteer', isLoggedIn, require('./mod/gazetteer').gazetteer);
 
-const images = require('./mod/images');
-router.post('/q_save_image', isLoggedIn, images.save);
-router.get('/q_remove_image', isLoggedIn, images.remove);
-router.get('/q_get_image', isLoggedIn, (req, res) => {
-    res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'));
-});
+// Get place details from own data source.
+//router.get('/q_gazetteer_places', require('./mod/gazetteer').gazetteer_places);
+
+// Get place details from Google places.
+router.get('/q_gazetteer_googleplaces', require('./mod/gazetteer').gazetteer_googleplaces);
+
+// Request puppeteer to create a report.
+router.post('/q_report_request', isLoggedIn, require('./mod/report').request);
+
+// Ping whether a report is ready.
+router.get('/q_report_ping', isLoggedIn, require('./mod/report').ping);
+
+// Open a PDF report from local file.
+router.get('/q_pdf_open', isLoggedIn, (req, res) => res.sendFile(require('path').join(__dirname, '/reports/') + req.query.report + '.pdf'));
+
+// Download a PDF report.
+router.get('/q_pdf_download', isLoggedIn, (req, res) => res.download(require('path').join(__dirname, '/reports/') + req.query.report + '.pdf'));
+
+// Post a new image to be stored.
+router.post('/q_save_image', isLoggedIn, require('./mod/images').save);
+
+// Remove a stored image.
+router.get('/q_remove_image', isLoggedIn, require('./mod/images').remove);
+
+// Get a stored image.
+router.get('/q_get_image', isLoggedIn, (req, res) => res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+')));
 
 
 
 // ACCESS CONTROLL
+
+// Open the login / register view.
 router.get('/login', (req, res) => {
     res.render('login.ejs', {
         user: req.user,
@@ -173,12 +178,14 @@ router.get('/login', (req, res) => {
     });
 });
 
+// Logout from application and destroy session.
 router.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
     res.redirect((process.env.DIR || '') + '/login');
 });
 
+// Send login information for authentication to passport.
 router.post('/login',
     require('./mod/passport').authenticate('localLogin', {
         failureRedirect: (process.env.DIR || '') + '/login',
@@ -187,6 +194,7 @@ router.post('/login',
     })
 );
 
+// Send account information for registration to passport.
 router.post('/register',
     require('./mod/passport').authenticate('localRegister', {
         failureRedirect: (process.env.DIR || '') + '/login',
@@ -196,40 +204,82 @@ router.post('/register',
     })
 );
 
-const user = require('./mod/user');
-
+// Check verification token and verify account
 router.get('/verify/:token', (req, res) => {
-    user.findOne({
+
+    // Find user account from matching token and timestamp.
+    require('./mod/user').findOne({
         verificationToken: req.params.token,
         verificationTokenExpires: { $gt: Date.now() }
     }, (err, _user) => {
+
+        // Return if user account is not found.
         if (!_user) return res.send('The verification has failed.')
         
+        // Verify and save the account.
         _user.verified = true;
+
+        // Generate new verification token for administrator approval.
+        _user.verificationToken = require('crypto').randomBytes(20).toString('hex');
+        _user.verificationTokenExpires = Date.now() + 3600000;
+
         _user.save();
 
-        user.find({ admin: true }, (err, admin) => {
+        // Find all admin accounts.
+        require('./mod/user').find({ admin: true }, (err, admin) => {
             if (err) throw err;
 
+            // Create an array of all admin account emails.
             let adminmail = admin.map(a => {
                 return a.email;
             });
 
+            // Sent an email to all admin account emails with a request to approve the new user account.
             require('./mod/mailer').mail({
                 to: adminmail,
-                subject: 'A new account has been verified',
-                text: 'Please log into the admin panel to approve ' + _user.email
+                subject: `A new account has been verified on ${global.site}`,
+                text: `Please log into the admin panel to approve ${_user.email}
+                
+                You can also approve the account by following this link: ${req.protocol}://${global.site}/approve/${_user.verificationToken}`
             });
         });
 
+        // Update session messages and send success notification to client.
         req.session.messages = ['An email has been sent to the site administrator'];
-
-        res.send('The account has been verified and is awaiting approval.');
+        res.send('The account has been verified and is awaiting administrator approval.');
     });
 });
 
+// Check verification token and approve account
+router.get('/approve/:token', (req, res) => {
+
+    // Find user account from matching token and timestamp.
+    require('./mod/user').findOne({
+        verificationToken: req.params.token,
+        verificationTokenExpires: { $gt: Date.now() }
+    }, (err, _user) => {
+
+        // Return if user account is not found.
+        if (!_user) return res.send('The approval has failed.')
+       
+        // Verify and save the account.
+        _user.approved = true;
+        _user.save();
+
+        // Sent an email to the account holder to notify about the changes.
+        require('./mod/mailer').mail({
+            to: _user.email,
+            subject: `This account has been approved on ${global.site}`,
+            text: `You are now able to log on to ${req.protocol}://${global.site}`
+        });
+
+        res.send('The account has been approved by you. An email has been sent to the account holder.');
+    });
+});
+
+// Open the user admin panel and populate with list of all accounts (_user).
 router.get('/admin', isAdmin, (req, res) => {
-    user.find({}, (err, _user) => {
+    require('./mod/user').find({}, (err, _user) => {
         if (err) throw err;
 
         res.render('admin.ejs', {
@@ -239,35 +289,49 @@ router.get('/admin', isAdmin, (req, res) => {
     });
 });
 
+// Endpoint for update requests from admin panel.
 router.post('/update_user', isAdmin, (req, res) => {
-    user.findOne({email: req.body.email}, (err, _user) => {
+
+    // Find user from email address.
+    require('./mod/user').findOne({email: req.body.email}, (err, _user) => {
+
+        // Return if no user account is found.
         if (!_user) return res.json({update: false});
 
+        // Update role and save user account.
         _user[req.body.role] = req.body.chk;
         _user.save();
 
+        // Send email to the user account if an account has been approved.
         if (req.body.role === 'approved' && req.body.chk) {
             require('./mod/mailer').mail({
                 to: _user.email,
-                subject: 'Your account has been approved',
-                text: 'Your account has been approved by a site administrator. You can now log into the application.'
+                subject: `This account has been approved on ${global.site}`,
+                text: `You are now able to log on to ${req.protocol}://${global.site}`
             });
         }
 
+        // Return to admin panel.
         res.json({update: true});
     });
 });
 
+// Endpoint for deleting user accounts from admin panel.
 router.post('/delete_user', isAdmin, (req, res) => {
-    user.findOne({email: req.body.email}, (err, _user) => {
+
+    // Find user from email address.
+    require('./mod/user').findOne({email: req.body.email}, (err, _user) => {
+
+        // Return if no user account is found.
         if (!_user) return res.json({delete: false});
 
+        // Remove user account and return to admin panel.
         _user.remove();
-
         res.json({delete: true});
     });
 });
 
+// Middleware funtion to check whether a user is logged in.
 function isLoggedIn(req, res, next) {
 
     // return next() if LOGIN is not set in environment settings.
@@ -308,6 +372,7 @@ function isLoggedIn(req, res, next) {
     }
 }
 
+// Middleware funtion to check whether a user has administrator roles.
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.admin) return next();
 

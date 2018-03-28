@@ -1,12 +1,3 @@
-const { Client } = require('pg');
-const DBS = {};
-Object.keys(process.env).map(key => {
-    if (key.split('_')[0] === 'DBS') {
-        DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
-        DBS[key.split('_')[1]].connect();
-    }
-});
-
 function geojson(req, res) {
     let q =
     `SELECT 
@@ -24,7 +15,7 @@ function geojson(req, res) {
         ${req.query.geom},
         0.000001);`
 
-    DBS[req.query.dbs].query(q)
+    global.DBS[req.query.dbs].query(q)
         .then(result => {
             res.status(200).json(Object.keys(result.rows).map(row => {
                 return {

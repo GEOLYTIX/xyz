@@ -15,8 +15,7 @@ passport.use('localLogin',
     }, (req, email, password, done) => {
         user.findOne({ 'email': email }, (err, _user) => {
             if (err) return done(err)
-            if (!_user) return done(null, false)
-            if (!_user.validPassword(password)) return done(null, false);
+            if (!_user || !_user.validPassword(password)) return done(null, false)
 
             return done(null, _user);
         });
@@ -30,34 +29,67 @@ passport.use('localRegister',
     }, (req, email, password, done) => {
         process.nextTick(() => {
             user.findOne({ 'email': email }, (err, _user) => {
+
+                // return with err.
                 if (err) return done(err);
-                if (_user) return done(null, false);
 
-                let newUser = new user();
-                newUser.email = email;
-                newUser.password = newUser.generateHash(password);
-                newUser.verified = false;
-                newUser.approved = false;
-                newUser.admin = false;
-                newUser.verificationToken = require('crypto').randomBytes(20).toString('hex');
-                newUser.verificationTokenExpires = Date.now() + 3600000;
+                // set password for existing user and remove existing verification.
+                if (_user) {
+                    _user.verified = false;
+                    _user.password = _user.generateHash(password);
+                    _user.verificationToken = require('crypto').randomBytes(20).toString('hex');
+                    _user.verificationTokenExpires = Date.now() + 3600000;
 
-                newUser.save((err) => {
-                    if (err) throw err;
-
-                    let site = (process.env.HOST || ('localhost:' + (process.env.PORT || '3000'))) + process.env.DIR
-
-                    mailer.mail({
-                        to: newUser.email,
-                        subject: 'Please verify your GEOLYTIX account',
-                        text: `
-                        An account for this email has been registered with ${site}.
-                        Click here to verify account: ' + req.protocol + '://' + (process.env.HOST || 'localhost:3000') + (process.env.DIR || '') + '/verify/' + newUser.verificationToken
-                        `
+                    // update existing user account with new password and verification token.
+                    _user.save((err) => {
+                        if (err) throw err;
+     
+                        // sent mail with verification link.
+                        mailer.mail({
+                            to: _user.email,
+                            subject: `Please verify your GEOLYTIX account (password reset) on ${global.site}`,
+                            text: `A new password has been set for this account.
+                            
+                            Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${_user.verificationToken}`
+                        });
+    
+                        return done(null, _user);
                     });
+                }
 
-                    return done(null, newUser);
-                });
+                // create new user if no existing user is found for email address.
+                if (!_user) {
+                    let newUser = new user();
+                    newUser.email = email;
+                    newUser.password = newUser.generateHash(password);
+                    newUser.verified = false;
+                    newUser.approved = false;
+                    newUser.admin = false;
+                    newUser.verificationToken = require('crypto').randomBytes(20).toString('hex');
+                    newUser.verificationTokenExpires = Date.now() + 3600000;
+    
+                    // save new user account.
+                    newUser.save((err) => {
+
+                        // return with err.
+                        if (err) throw err;
+        
+                        // sent mail with verification link.
+                        mailer.mail({
+                            to: newUser.email,
+                            subject: `Please verify your GEOLYTIX account on ${global.site}`,
+                            text: `A new account for this email address has been registered with ${global.site}.
+                            
+                            Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${newUser.verificationToken}
+                            
+                            A site administrator must approve the account before you are able to login.
+                            
+                            You will be notified via email once an adimistrator has approved your account.`
+                        });
+    
+                        return done(null, newUser);
+                    });
+                }
             });
         });
     }));
