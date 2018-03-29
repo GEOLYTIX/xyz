@@ -1,13 +1,3 @@
-function chkVals(vals, res) {
-    vals.forEach((val) => {
-        if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
-            console.log('Possible SQL injection detected');
-            res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
-        }
-    })
-    return res;
-}
-
 async function fetchTiles(req, res) {
     try {
 
@@ -18,12 +8,17 @@ async function fetchTiles(req, res) {
             m = 20037508.34,
             r = (m * 2) / (Math.pow(2, z)),
             table = req.query.table,
+            layer = req.query.layer,
+            geom_3857 = req.query.geom_3857,
+            id = req.query.qID === 'undefined'? null : req.query.qID,
+            properties = req.query.properties === 'undefined'? '' : req.query.properties,
             tilecache = req.query.tilecache === 'undefined'? false : req.query.tilecache,
             result;
 
-        if (await chkVals([table, tilecache], res).statusCode === 406) return;
+        if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
 
         if (tilecache) result = await global.DBS[req.query.dbs].query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+        
         if (result && result.rowCount === 1) {
             res.setHeader('Content-Type', 'application/x-protobuf');
             res.status(200);
@@ -38,7 +33,7 @@ async function fetchTiles(req, res) {
             ${z},
             ${x},
             ${y},
-            ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom') mvt,
+            ST_AsMVT(tile, '${layer}', 4096, 'geom') mvt,
             ST_MakeEnvelope(
                 ${-m + (x * r)},
                 ${ m - (y * r)},
@@ -48,10 +43,10 @@ async function fetchTiles(req, res) {
             ) tile
         FROM (
             SELECT
-                ${req.query.qID} AS id,
-                ${req.query.properties ? req.query.properties + ', ' : ' '}
+                ${id} id,
+                ${properties}
                 ST_AsMVTGeom(
-                    ${req.query.geom_3857},
+                    ${geom_3857},
                     ST_MakeEnvelope(
                         ${-m + (x * r)},
                         ${ m - (y * r)},

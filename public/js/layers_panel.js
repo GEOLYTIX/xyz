@@ -311,80 +311,98 @@ module.exports = (function () {
     }
     
     function mvt(layer){
-        
-        if(layer.categorized){
-            
-            Object.keys(layer.categorized).map(function(key){
-                
-                layer.getLayer();
-                    
-                layer.legend = utils.createElement('div', {
-                    className: 'legend'
-                });
-                
-                layer.panel.appendChild(layer.legend);
-                
-                let _height = 17*Object.keys(layer.categorized[key].style).length;
-                let svg = d3.select(layer.legend).append('svg')
-                .attr('width', 290)
-                .attr('height', _height),
-                    y = 0;
-                
-                Object.keys(layer.categorized[key].style).map(function(item){
-                    y += 15;
 
-                    svg.append('rect')
-                    .attr('x', 4)
+        let width = layer.panel.clientWidth;
+        
+        if (layer.style.categorized) {
+
+            layer.legend = utils.createElement('div', {
+                className: 'legend'
+            });
+
+            layer.panel.appendChild(layer.legend);
+
+            let svg = d3
+                .select(layer.legend)
+                .append('svg')
+                .attr('width', width);
+
+            let y = 15;
+
+            if (layer.style.categorized.label) {
+                svg.append('text')
+                    .attr('x', 0)
+                    .attr('y', y)
+                    .style('font-weight', 600)
+                    .style('font-size', '12px')
+                    .text(layer.style.categorized.label);
+
+                y += 15;
+            }
+
+            Object.keys(layer.style.categorized.cat).map((item) => {
+
+                svg.append('rect')
+                    .attr('x', 0)
                     .attr('y', y)
                     .attr('width', 12)
                     .attr('height', 12)
-                    .style('fill', layer.categorized[key].style[item].style.fillColor)
-                    .style('fill-opacity', layer.categorized[key].style[item].style.fillOpacity)
-                    .style('stroke', layer.categorized[key].style[item].style.color);
-                    
-                    svg.append("text")
-                        .attr('x', 20)
-                        .attr('y', y+6)
-                        .attr('text-anchor', 'start')
-                        .attr('alignment-baseline', 'central')
-                        .style('font-size', '12px')
-                        .style('cursor', 'pointer')
-                        .text(item)
-                        .on('click', function(){
-                        
+                    .style('fill', layer.style.categorized.cat[item].style.fillColor)
+                    .style('fill-opacity', layer.style.categorized.cat[item].style.fillOpacity)
+                    .style('stroke', layer.style.categorized.cat[item].style.color);
+
+                svg.append('text')
+                    .attr('x', 20)
+                    .attr('y', y + 11)
+                    .style('font-size', '12px')
+                    .style('cursor', 'pointer')
+                    .text(item)
+                    .on('click', function () {
                         if(this.style.opacity == 0.5){
                             this.style.opacity = 1;
-                            layer.filter.splice(layer.filter.indexOf(item), 1);
-                            //console.log(layer.filter);
-                            
+                            layer.style.categorized.cat[item].style.stroke = true;
+                            layer.style.categorized.cat[item].style.fill = true;
                         } else {
-                            
                             this.style.opacity = 0.5;
-                            if (!layer.filter) layer.filter = [];
-                            layer.filter.push(item);
-                            //console.log(layer.filter);
+                            layer.style.categorized.cat[item].style.stroke = false;
+                            layer.style.categorized.cat[item].style.fill = false;
                         }
+
                         layer.getLayer();
                     });
-                });
-                
-                // svg.append('rect')
-                // .attr('x', 4)
-                // .attr('y', y += 15)
-                // .attr('width', 12)
-                // .attr('height', 12)
-                // .style('fill-opacity', layer.style.fillOpacity)
-                // .style('stroke', layer.style.color);
-                
-                // svg.append("text")
-                // .attr('x', 20)
-                // .attr('y', y + 6)
-                // .attr('text-anchor', 'start')
-                // .attr('alignment-baseline', 'central')
-                // .style('font-size', '12px')
-                // .text('other');
-                
+
+                y += 15;
             });
+
+            svg.append('rect')
+                .attr('x', 0)
+                .attr('y', y)
+                .attr('width', 12)
+                .attr('height', 12)
+                .style('fill-opacity', layer.style.default.fillOpacity)
+                .style('stroke', layer.style.default.color);
+
+            svg.append('text')
+                .attr('x', 20)
+                .attr('y', y + 11)
+                .style('font-size', '12px')
+                .text('other')
+                .on('click', function () {
+                    if(this.style.opacity == 0.5){
+                        this.style.opacity = 1;
+                        layer.style.default.stroke = true;
+                        layer.style.default.fill = true;
+                    } else {
+                        this.style.opacity = 0.5;
+                        layer.style.default.stroke = false;
+                        layer.style.default.fill = false;
+                    }
+
+                    layer.getLayer();
+                });
+
+            svg.attr('height', y += 15);
+
         }
     }
 

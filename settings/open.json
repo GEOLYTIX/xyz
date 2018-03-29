@@ -68,10 +68,7 @@
   "documentation": "documentation",
   "gazetteer": {
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-    "pane": [
-      "gazetteer",
-      550
-    ],
+    "pane": ["gazetteer", 550],
     "style": {
       "stroke": true,
       "color": "#090",
@@ -80,38 +77,7 @@
       "fillOpacity": 0.2
     }
   },
-  "layers": {
-    "style": {
-      "stroke": true,
-      "color": "#444",
-      "weight": 1,
-      "fillOpacity": 0
-    },
-    "styleHighlight": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    },
-    "styleRange": [
-      "#15773f",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027"
-    ],
-    "defaultMarker": [
-      [
-        400,
-        "#C0C0C0"
-      ]
-    ],
-    "imageMaxSize": 1024
-  },
-  "country": "EU",
+  "country": "Oxford",
   "countries": {
     "EU": {
       "name": "Europe",
@@ -165,16 +131,10 @@
         },
         "NUTS3": {
           "display": true,
-          "name": "NUTS3",
-          "pane": [
-            "bounds",
-            510
-          ],
+          "pane": ["bounds", 510],
           "format": "mvt",
-          "geom_3857": "geom_3857",
-          "geom": "geom",
-          "geomj": "ST_AsGeoJSON(geom)",
           "dbs": "XYZ",
+          "geom_3857": "geom_3857",
           "qID": "nuts_id",
           "infoj": [
             {
@@ -286,22 +246,20 @@
           },
           "tilecache": "eu_nuts_data__tc",
           "style": {
-            "stroke": true,
-            "color": "#555",
-            "opacity": 0.7,
-            "weight": 1,
-            "fillOpacity": 0
+            "default": {
+              "weight": 1,
+              "color": "#000"
+            },
+            "highlight": {
+              "color": "#e91e63"
+            }
           }
         },
         "grid": {
-          "display": true,
-          "panel": true,
+
           "name": "Eurostat Grid",
           "format": "grid",
-          "pane": [
-            "grid",
-            515
-          ],
+          "pane": ["grid", 515],
           "dbs": "XYZ",
           "geom": "geomcntr",
           "arrayZoom": {
@@ -1368,7 +1326,7 @@
           -0.8
         ]
       ],
-      "minZoom": 9,
+      "minZoom": 10,
       "maxZoom": 17,
       "layers": {
         "base": {
@@ -1376,43 +1334,118 @@
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX",
-          "pane": [
-            "base", 500
-          ]
+          "pane": ["base", 500]
         },
         "label": {
-          "display": true,
+
           "name": "Mapbox Labels",
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX",
-          "pane": [
-            "base_labels", 550
-          ]
+          "pane": ["base_labels", 550]
         },
         "here": {
-          "display": true,
+
           "name": "Here Baselayer",
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE",
-          "pane": [
-            "base", 500
-          ]
+          "pane": ["base", 500]
         },
         "retail_places_mvt": {
           "display": true,
-          "panel": true,
           "name": "Retail Places",
-          "properties": "rp_type",
-          "categorized": {
-            "rp_type": {
-              "label": "Retail place type",
-              "style": {
+          "properties": "rp_type,",
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "pane": ["bounds", 510],
+          "dbs": "XYZ",
+          "qID": "id",
+          "arrayZoom": {
+            "10": "ox_retailplace"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000"
+            },
+            "highlight": {
+              "color": "#e91e63"
+            },
+            "categorized": {
+              "label": "Retail Place type",
+              "field": "rp_type",
+              "cat": {
                 "Major City Centre": {
                   "style": {
                     "weight": 2,
-                    "color": "#FC2F00",
+                    "color": "#EF271B",
                     "opacity": 1,
                     "fillColor": "#EF271B",
                     "fill": true,
@@ -1421,12 +1454,11 @@
                 },
                 "City Centre": {
                   "style": {
-                    "stroke": false,
                     "weight": 2,
                     "color": "#BA2D0B",
                     "opacity": 1,
                     "fillColor": "#BA2D0B",
-                    "fill": false,
+                    "fill": true,
                     "fillOpacity": 0.3
                   }
                 },
@@ -1582,97 +1614,6 @@
                 }
               }
             }
-          },
-          "format": "mvt",
-          "geom_3857": "geom_3857",
-          "pane": [
-            "bounds",
-            510
-          ],
-          "dbs": "XYZ",
-          "qID": "id",
-          "arrayZoom": {
-            "9": "ox_retailplace"
-          },
-          "infoj": [
-            {
-              "field": "rp_name",
-              "label": "Name",
-              "type": "text"
-            },
-            {
-              "field": "rp_type",
-              "label": "Type",
-              "type": "text"
-            },
-            {
-              "field": "ref_pc",
-              "label": "Reference Postcode",
-              "type": "text",
-              "level": 1
-            },
-            {
-              "field": "comp_strgh",
-              "label": "Competition Strength",
-              "type": "integer",
-              "level": 1
-            },
-            {
-              "field": "est_units",
-              "label": "Estimate Units",
-              "type": "integer",
-              "level": 1
-            },
-            {
-              "field": "est_brands",
-              "label": "Estimate Brands",
-              "type": "integer",
-              "level": 1
-            },
-            {
-              "field": "comparison",
-              "label": "Comparison",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "conv",
-              "label": "Convenience",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "fbl",
-              "label": "Food, Beverage, Leisure",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "services",
-              "label": "Services",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "classbrass",
-              "label": "Class|Brass",
-              "type": "numeric",
-              "level": 1
-            }
-          ],
-          "style": {
-            "stroke": true,
-            "color": "#ff9800",
-            "weight": 1,
-            "fillOpacity": 0
-          },
-          "styleHighlight": {
-            "stroke": true,
-            "color": "#ff9800",
-            "weight": 2,
-            "fill": true,
-            "fillColor": "#ff9800",
-            "fillOpacity": 0.2
           }
         }
       }

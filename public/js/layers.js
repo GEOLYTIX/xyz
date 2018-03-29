@@ -66,7 +66,7 @@ module.exports = function(){
                 textContent: layer.name,
                 className: 'header'
             });
-            header.style.borderBottom = '2px solid ' + (layer.style ? layer.style.color : '#333');
+            header.style.borderBottom = '2px solid ' + (layer.style && layer.style.default && layer.style.default.color ? layer.style.default.color : '#333');
 
             // Create the pane and set layers function.
             layer.pane = layer.pane || ['default', 501];
@@ -111,8 +111,8 @@ module.exports = function(){
             layer.drawer.appendChild(layer.loader);
    
       
-            // Add panel to layer control.
-            if (layer.panel) {
+            //Add panel to layer control.
+            if (layers_panel[layer.format]) {
                 header.style.boxShadow = '0 3px 3px -3px black';
                 layer.panel = utils.createElement('div', {
                     className: 'panel'
@@ -122,7 +122,7 @@ module.exports = function(){
 
                 layers_panel[layer.format](layer);
 
-                let i = utils.createElement('i', {
+                i = utils.createElement('i', {
                     textContent: 'expand_more',
                     className: 'material-icons cursor noselect btn',
                     title: 'Collapse layer panel'

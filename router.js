@@ -32,9 +32,8 @@ JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 
 global.appSettingsValues = [];
 (function objectEval(o) {
     Object.keys(o).map(function (key) {
-        if (typeof o[key] === 'string') {
-            global.appSettingsValues.push(o[key]);
-        }
+        if (typeof key === 'string') global.appSettingsValues.push(key);
+        if (typeof o[key] === 'string') global.appSettingsValues.push(o[key]);
         if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
     })
 })(global.appSettings)
