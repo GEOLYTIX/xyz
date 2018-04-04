@@ -1,76 +1,67 @@
-function chkVals(vals, res) {
-  vals.forEach((val) => {
-    if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
-      console.log('Possible SQL injection detected');
-      res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
-    }
-  })
-  return res;
-}
-
 const turf = require('@turf/turf');
 
 async function cluster(req, res) {
   try {
 
-    if (await chkVals([req.query.layer, req.query.geom], res).statusCode === 406) return;
+    let
+      layer = req.query.layer,
+      id = req.query.qID === 'undefined' ? null : req.query.qID,
+      geom = req.query.geom,
+      label = req.query.label,
+      cat = req.query.cat === 'undefined' ? null : req.query.cat,
+      kmeans = parseFloat(req.query.kmeans),
+      dbscan = parseFloat(req.query.dbscan),
+      west = parseFloat(req.query.west),
+      south = parseFloat(req.query.south),
+      east = parseFloat(req.query.east),
+      north = parseFloat(req.query.north);
 
-    let xDegree = turf.distance([req.query.west, req.query.north], [req.query.east, req.query.south], { units: 'degrees' });
+    if (await require('./chk').chkVals([layer, id, geom, label, cat], res).statusCode === 406) return;
+
+    let xDegree = turf.distance([west, north], [east, south], { units: 'degrees' });
 
     let q = `
     SELECT count(1)
-    FROM ${req.query.layer}
+    FROM ${layer}
     WHERE
       ST_DWithin(
-        ST_MakeEnvelope(
-          ${req.query.west},
-          ${req.query.north},
-          ${req.query.east},
-          ${req.query.south},
-          4326),
-          ${req.query.geom},
+        ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+        ${geom},
         0.00001
-      )
-      ${req.query.filter ? `AND ${req.query.competitor} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
-    `
+      )`
+
     let result = await global.DBS[req.query.dbs].query(q);
 
-    let kmeans = parseInt(xDegree * req.query.kmeans) < parseInt(result.rows[0].count) ?
-      parseInt(xDegree * req.query.kmeans) :
+    kmeans = parseInt(xDegree * kmeans) < parseInt(result.rows[0].count) ?
+      parseInt(xDegree * kmeans) :
       parseInt(result.rows[0].count);
 
     q = `
         SELECT
-          ST_AsGeoJson(ST_PointOnSurface(ST_Union(${req.query.geom}))) geomj,
-          json_agg(json_build_object('id', id, ${req.query.competitor ? "'competitor', competitor," : ""} 'label', label)) infoj
+          ST_AsGeoJson(ST_PointOnSurface(ST_Union(${geom}))) geomj,
+          json_agg(json_build_object('id', id, ${cat ? "'cat', cat," : ""} 'label', label)) infoj
         FROM (
           SELECT
             id,
-            competitor,
+            cat,
             label,
             kmeans_cid,
-            ${req.query.geom},
-            ST_ClusterDBSCAN(${req.query.geom}, ${xDegree * req.query.dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+            ${geom},
+            ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
           FROM (
             SELECT
-              ${req.query.qID} AS id,
-              ${req.query.competitor} AS competitor,
-              ${req.query.label} AS label,
-              ST_ClusterKMeans(${req.query.geom}, ${kmeans}) OVER () kmeans_cid,
-              ${req.query.geom}
-            FROM ${req.query.layer}
+              ${id} as id,
+              ${cat} as cat,
+              ${label} as label,
+              ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
+              ${geom}
+            FROM ${layer}
             WHERE
               ST_DWithin(
-                ST_MakeEnvelope(
-                  ${req.query.west},
-                  ${req.query.north},
-                  ${req.query.east},
-                  ${req.query.south},
-                  4326),
-                  ${req.query.geom},
+                ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+                ${geom},
                 0.00001
               )
-              ${req.query.filter? `AND ${req.query.competitor} NOT IN ('${req.query.filter.replace(/,/g,"','")}')` : ``}
             ) kmeans
           ) dbscan
         GROUP BY kmeans_cid, dbscan_cid;`

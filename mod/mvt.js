@@ -1,7 +1,8 @@
 async function fetchTiles(req, res) {
     try {
 
-        let params = req.url.split('/'),
+        let
+            params = req.url.split('/'),
             x = parseInt(params[3]),
             y = parseInt(params[4]),
             z = parseInt(params[2]),
@@ -10,9 +11,9 @@ async function fetchTiles(req, res) {
             table = req.query.table,
             layer = req.query.layer,
             geom_3857 = req.query.geom_3857,
-            id = req.query.qID === 'undefined'? null : req.query.qID,
-            properties = req.query.properties === 'undefined'? '' : req.query.properties,
-            tilecache = req.query.tilecache === 'undefined'? false : req.query.tilecache,
+            id = req.query.qID === 'undefined' ? null : req.query.qID,
+            properties = req.query.properties === 'undefined' ? '' : req.query.properties,
+            tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache,
             result;
 
         if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;

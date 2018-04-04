@@ -24,7 +24,11 @@
 
     @if $mobile {
       padding-left: 60px;
-    }   
+    }
+
+    @if $desktop {
+      margin-left: -5px;
+    }
   }
 
   input {

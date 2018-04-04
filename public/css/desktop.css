@@ -498,7 +498,8 @@ input[type=range]::-moz-range-thumb {
   #gaz_group table {
     width: 100%; }
   #gaz_group #gaz_clear {
-    color: #090; }
+    color: #090;
+    margin-left: -5px; }
   #gaz_group input {
     width: 100%; }
   #gaz_group #gaz_result {
@@ -623,13 +624,7 @@ input[type=range]::-moz-range-thumb {
 .module .bold {
   font-weight: 800; }
 .module > .header {
-  position: relative;
-  background-color: #eee;
-  padding: 3px;
-  width: 99%;
-  border-top-right-radius: 14px;
-  border-bottom-right-radius: 14px;
-  box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2); }
+  position: relative; }
   .module > .header .spinner {
     position: absolute;
     display: none;
@@ -639,9 +634,8 @@ input[type=range]::-moz-range-thumb {
     font-family: ffmark_bold;
     font-size: 20px; }
   .module > .header i {
-    font-size: 30px;
+    font-size: 25px;
     margin-top: -5px;
-    margin-right: -5px;
     color: #090;
     float: right;
     display: none; }
@@ -659,6 +653,8 @@ input[type=range]::-moz-range-thumb {
     border-bottom: 1px solid #333;
     padding-bottom: 5px;
     padding-top: 5px; }
+    .module .content .panel .meta {
+      font-size: 12px; }
   .module .content .range {
     width: 100%;
     width: calc(100% - 5px);

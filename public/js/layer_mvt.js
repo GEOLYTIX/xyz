@@ -47,6 +47,11 @@ function getLayer(){
             if (layer.style && layer.style.categorized && layer.style.categorized.cat[properties[layer.style.categorized.field]])
                 return layer.style.categorized.cat[properties[layer.style.categorized.field]].style;
 
+                // layer.style && layer.style.categorized && layer.style.categorized.cat[properties[layer.style.categorized.field]]
+
+                // (((layer || {}).style || {}).categorized || {}).cat[properties[layer.style.categorized.field]]
+
+
             return layer.style.default;
         }
         

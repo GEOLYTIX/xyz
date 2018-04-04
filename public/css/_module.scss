@@ -18,22 +18,24 @@
 
     > .header {
         position: relative;
-        background-color: #eee;
-        @if $desktop {
-            padding: 3px;
-        }
-        @else {
+        // background-color: #eee;
+
+        // @if $desktop {
+        //     padding: 3px;
+        // }
+
+        @if $mobile {
             padding: 10px;
         }
         
 
-        @if $desktop {
-            width: 99%;
-            border-top-right-radius: 14px;
-            border-bottom-right-radius: 14px;
-        }
+        // @if $desktop {
+        //     width: 99%;
+        //     border-top-right-radius: 14px;
+        //     border-bottom-right-radius: 14px;
+        // }
 
-        box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2);
+        // box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2);
 
         .spinner {
             position: absolute;
@@ -55,9 +57,9 @@
 
         i {
             @if $desktop {
-                font-size: 30px;
+                font-size: 25px;
                 margin-top: -5px;
-                margin-right: -5px;
+                // margin-right: -5px;
             }
             @else {
                 font-size: 40px;
@@ -88,6 +90,10 @@
             border-bottom: 1px solid #333;
             padding-bottom: 5px;
             padding-top: 5px;
+
+            .meta {
+                font-size: 12px;
+            }
         }
 
         .range {

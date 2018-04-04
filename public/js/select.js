@@ -53,7 +53,7 @@ module.exports = function Select() {
     _xyz.select.resetModule = resetModule;
     function resetModule() {
         dom.btnOff.style.display = 'none';
-        dom.header.style.background = '#eee';
+        // dom.header.style.background = '#eee';
         dom.layers.innerHTML = '';
         _xyz.removeHook('select');
         _xyz.select.records.map(function (record) {
@@ -81,7 +81,7 @@ module.exports = function Select() {
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
-        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function () {
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
@@ -116,7 +116,7 @@ module.exports = function Select() {
         if (layer.geometry.type === 'Point') layer.marker = layer.geometry.coordinates;
 
         dom.btnOff.style.display = 'block';
-        dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((freeRecords.length - 1) / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+        // dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((freeRecords.length - 1) / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
         if (freeRecords.length > 0) {
             freeRecords[0].layer = layer;
@@ -132,7 +132,7 @@ module.exports = function Select() {
 
             addRecordToMap(freeRecords[0])
         }
-        if (freeRecords.length === 1) dom.header.style.background = '#ffcc80';
+        // if (freeRecords.length === 1) dom.header.style.background = '#ffcc80';
     }
     _xyz.select.addLayerToRecord = addLayerToRecord;
 

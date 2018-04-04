@@ -52,8 +52,8 @@ function getLayer(){
                             7 + 7 / layer.sizeAvg * feature.properties.size :
                             14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.size - layer.sizeAvg);
 
-                        // Distribute color index between min, avg and max. Reduce index by 1 if index exceeds styleRange.
-                        let n = layer.styleRange.length,
+                        // Distribute color index between min, avg and max. Reduce index by 1 if index exceeds style.range.
+                        let n = layer.style.range.length,
                             color = feature.properties.color <= layer.colorAvg ?
                                 n / 2 / layer.colorAvg * feature.properties.color :
                                 n / 2 + n / 2 / (layer.colorMax - layer.colorAvg) * (feature.properties.color - layer.colorAvg);
@@ -65,7 +65,7 @@ function getLayer(){
                             {
                                 icon: L.icon({
                                     iconSize: size,
-                                    iconUrl: svg_symbols.dot(layer.styleRange[parseInt(color)] || '#C0C0C0')
+                                    iconUrl: svg_symbols.dot(layer.style.range[parseInt(color)] || '#C0C0C0')
                                 }),
                                 pane: layer.pane[0],
                                 interactive: false

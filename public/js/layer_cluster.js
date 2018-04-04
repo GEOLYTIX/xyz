@@ -18,8 +18,7 @@ function getLayer() {
             qID: layer.qID,
             geom: layer.geom,
             label: layer.cluster_label,
-            competitor: layer.cluster_competitor || null,
-            filter: layer.cluster_filter || '',
+            cat: layer.cluster_cat,
             kmeans: layer.cluster_kmeans,
             dbscan: layer.cluster_dbscan,
             west: bounds.getWest(),
@@ -30,61 +29,84 @@ function getLayer() {
 
         layer.xhr.onload = function () {
             if (this.status === 200 && layer.display) {
+
+                // Create cluster object from parsing the response text.
                 let cluster = JSON.parse(this.responseText);
 
+                // Filter out cluster values which are in the filter array.
+                if (layer.style.categorized && layer.style.categorized.filter.length > 0) {
+                    cluster = cluster.filter(c => {
+                        c.properties.infoj = c.properties.infoj.filter(infoj => {
+                            if (layer.style.categorized.filter.indexOf(infoj.cat) < 0) return infoj;
+                        });
+                        if (c.properties.infoj.length > 0) return c
+                    });
+                }
+
+                // Filter out all values which are not in the cat array if filterOther is true.
+                if (layer.style.categorized && layer.style.categorized.filterOther) {
+                    cluster = cluster.filter(c => {
+                        c.properties.infoj = c.properties.infoj.filter(infoj => {
+                            if (layer.style.categorized.cat[infoj.cat]) return infoj;
+                        });
+                        if (c.properties.infoj.length > 0) return c
+                    });
+                }
+
                 // get max count value for size control
-                //let max = Math.max(...places.features.map(f => f.properties.infoj.length));
-                let max = cluster.reduce(function (max, c) {
-                    return Math.max(max, c.properties.infoj.length)
-                }, cluster[0].properties.infoj.length);
-
-                // places.features.sort((a, b) =>
-                //     a.properties.infoj.length > b.properties.infoj.length ? -1 :
-                //         a.properties.infoj.length < b.properties.infoj.length ? 1 : 0);
-
+                let max = cluster.reduce((max, c) => Math.max(max, c.properties.infoj.length), 0);
+           
                 // add layer
                 if (layer.L) _xyz.map.removeLayer(layer.L);
                 layer.L = L.geoJson(cluster, {
-                    pointToLayer: function (point, latlng) {
+                    pointToLayer: (point, latlng) => {
                         let icon,
                             count = point.properties.infoj.length;
 
                         if (count > 1) {
-                            // let competitorArr = [];
-                            // for (let i = 0; i < point.properties.infoj.length || 0; i++) {
-                            //     competitorArr.push(point.properties.infoj[i].competitor);
-                            // }
 
-                            // let vArr = [0];
-                            // for (let i = 0; i < layer.competitors.length || 0; i++) {
-                            //     for (let ii = 0; ii < competitorArr.length; ii++) {
-                            //         if (competitorArr[ii] === layer.competitors[i]) {
-                            //             vArr[i]++;
-                            //         }
-                            //     }
-                            // }
+                            let dotArr;
+                            if (layer.style.categorized && layer.style.categorized.competitors){
 
-                            // let dotArr = [[400, layer.arrayCompColours[0]]];
-                            // for (let i = 0; i < vArr.length - 1; i++) {
-                            //     let vTot = 0;
-                            //     for (let ii = i; ii < vArr.length - 1; ii++) {
-                            //         vTot += parseInt(vArr[ii])
-                            //     }
-                            //     dotArr.push([400 * vTot / count, layer.arrayCompColours[i + 1]]);
-                            // }
+                                let catArr = [];
 
-                            // icon = svg_symbols.target(dotArr);
+                                for (let iCat = 0; iCat < point.properties.infoj.length || 0; iCat++) {
+                                    catArr.push(point.properties.infoj[iCat].cat);
+                                }
+    
+                                let vArr = [];
+                                for (let iComp = 0; iComp < layer.style.categorized.competitors.length || 0; iComp++) {
+                                    vArr.push(0);
+                                    for (let iCompCat = 0; iCompCat < catArr.length; iCompCat++) {
+                                        if (catArr[iCompCat] === layer.style.categorized.competitors[iComp][0] && layer.style.categorized.filter.indexOf(catArr[iCompCat]) < 0) {
+                                            vArr[iComp]++;
+                                        }
+                                    }
+                                }
+    
+                                dotArr = [400, layer.style.markerMulti[1]];
+                                for (let i = 0; i < vArr.length; i++) {
+                                    let vTot = 0;
+                                    for (let ii = i; ii < vArr.length; ii++) {
+                                        vTot += parseInt(vArr[ii])
+                                    }
+                                    if (vTot > 0) {
+                                        dotArr.push(400 * vTot / count);
+                                        dotArr.push(layer.style.categorized.competitors[i][1]);
+                                    }
+                                }
+                            }
 
-                            icon = layer.customMarker ? layer.customMarker :
-                                svg_symbols.target(layer.defaultMarker);
+                            icon = svg_symbols.target(dotArr || layer.style.markerMulti || [400,'#333']);
+
+                            //icon = svg_symbols.target(dotArr) || layer.style.marker || svg_symbols.target([400,'#090']);
 
                         } else {
-                            // icon = layer.cluster_competitor ?
-                            //     svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker) :
-                            //     layer.customMarker || svg_symbols.target(layer.defaultMarker);
 
-                            icon = layer.customMarker ? layer.customMarker :
-                                svg_symbols.target((layer.markerStyle[point.properties.infoj[0].competitor] && layer.markerStyle[point.properties.infoj[0].competitor].style) || layer.defaultMarker);
+                            icon = layer.style.categorized && layer.style.categorized.cat[point.properties.infoj[0].cat] ?
+                                layer.style.categorized.cat[point.properties.infoj[0].cat].marker :
+                                layer.style.marker || svg_symbols.target([400,'#090']);
+
                         }
 
                         return L.marker(latlng, {
@@ -92,7 +114,7 @@ function getLayer() {
                             zIndexOffset: parseInt(1000 - 1000 / max * point.properties.infoj.length),
                             icon: L.icon({
                                 iconUrl: icon,
-                                iconSize: point.properties.infoj.length === 1 ? layer.markerMin : layer.markerMin + layer.markerMax / max * point.properties.infoj.length
+                                iconSize: point.properties.infoj.length === 1 ? layer.style.markerMin : layer.style.markerMin + layer.style.markerMax / max * point.properties.infoj.length
                                 //iconSize: 20 + 40 / Math.log(max) * Math.log(point.properties.c)
                             })
                         });
@@ -113,6 +135,7 @@ function getLayer() {
                         }
 
                         if (count > 1) {
+
                             // Draw a cirle marker
                             layer.layerSelectionCell = L.circleMarker(latlng, {
                                 radius: 30,
@@ -133,6 +156,7 @@ function getLayer() {
                             if (count > 100) table += '<caption><small>and ' + (count - 100).toString() + ' more.</small></caption>';
 
                             if (view_mode === 'desktop') {
+
                                 // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
                                 layer.popup = L.popup()
                                     .setLatLng(latlng)

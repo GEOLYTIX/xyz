@@ -77,20 +77,20 @@ module.exports = function(){
 
             // Create control to toggle layer visibility.
             let i = utils.createElement('i', {
-                textContent: layer.display ? 'visibility' : 'visibility_off',
+                textContent: layer.display ? 'layers' : 'layers_clear',
                 className: 'material-icons cursor noselect btn',
                 title: 'Toggle visibility'
             });
             i.addEventListener('click', function () {
-                if (this.textContent === 'visibility_off') {
+                if (this.textContent === 'layers_clear') {
                     layer.display = true;
-                    this.textContent = 'visibility';
+                    this.textContent = 'layers';
                     _xyz.pushHook('layers', layer.layer);
                     layer.getLayer();
                 } else {
                     layer.loader.style.display = 'none';
                     layer.display = false;
-                    this.textContent = 'visibility_off';
+                    this.textContent = 'layers_clear';
                     _xyz.filterHook('layers', layer.layer);
                     if (layer.L) _xyz.map.removeLayer(layer.L);
                     if (layer.base) {
@@ -110,25 +110,24 @@ module.exports = function(){
             });
             layer.drawer.appendChild(layer.loader);
    
-      
             //Add panel to layer control.
-            if (layers_panel[layer.format]) {
+            layer.panel = layers_panel.panel(layer);
+
+            // Add panel control when panel contains children.
+            if (layer.panel.children.length > 0) {
+
+                // Set the box shadow which indicates collapsed content.
                 header.style.boxShadow = '0 3px 3px -3px black';
-                layer.panel = utils.createElement('div', {
-                    className: 'panel'
-                });
                 layer.drawer.style.maxHeight = '35px';
                 layer.drawer.appendChild(layer.panel);
 
-                layers_panel[layer.format](layer);
-
+                // Add icon which allows to expand / collaps panel.
                 i = utils.createElement('i', {
                     textContent: 'expand_more',
                     className: 'material-icons cursor noselect btn',
                     title: 'Collapse layer panel'
                 });
-
-                layer.panelToggle = function () {
+                i.addEventListener('click', () => {
                     if (i.textContent === 'expand_less') {
                         layer.drawer.style.maxHeight = '35px';
                         header.style.boxShadow = '0 3px 3px -3px black';
@@ -140,13 +139,11 @@ module.exports = function(){
                         i.textContent = 'expand_less';
                         i.title = "Expand layer panel";
                     }
-                };
-              
-                i.addEventListener('click',layer.panelToggle);
+                });
                 header.appendChild(i);
             }
 
-            // Add panel to layer control.
+            // Add edit control to layer header.
             if (layer.editable && layer.editable === 'geometry') {
                 let i = utils.createElement('i', {
                     textContent: 'add_location',
@@ -203,10 +200,8 @@ module.exports = function(){
             }
 
             // Push hook for display:true layer (default).
-            if (layer.display) {
-                _xyz.pushHook('layers', layer.layer);
-                // layer.panelToggle();
-            }
+            if (layer.display) _xyz.pushHook('layers', layer.layer);
+
             layer.getLayer();
         });
         

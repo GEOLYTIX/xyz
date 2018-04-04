@@ -47,6 +47,7 @@ module.exports = (function () {
     }
 
     function target(style) {
+
         let svg = d3
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 1000)
@@ -57,17 +58,17 @@ module.exports = (function () {
             .append('circle')
             .attr('cx', 540)
             .attr('cy', 540)
-            .attr('r', style[0][0])
+            .attr('r', style[0])
             .style('fill', '#333')
             .style('opacity', 0.4);
 
-        for (let i = 0; i < style.length; i++) {
+        for (let i = 0; i < style.length - 1; i+=2) {
             svg
                 .append('circle')
                 .attr('cx', 500)
                 .attr('cy', 500)
-                .attr('r', style[i][0])
-                .style('fill', style[i][1]);
+                .attr('r', style[i])
+                .style('fill', style[i + 1]);
         }
 
         return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));

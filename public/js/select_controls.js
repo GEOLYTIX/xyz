@@ -21,7 +21,7 @@ function clear(dom, record) {
             if (!record.layer) return record
         });
 
-        dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+        //dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
         if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
     });
@@ -161,7 +161,7 @@ function trash(dom, record) {
                     if (!record.layer) return record
                 });
 
-                dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+                //dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
                 if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
             }

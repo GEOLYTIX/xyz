@@ -560,9 +560,7 @@ input[type=range]::-moz-range-thumb {
   font-weight: 800; }
 .module > .header {
   position: relative;
-  background-color: #eee;
-  padding: 10px;
-  box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2); }
+  padding: 10px; }
   .module > .header .spinner {
     position: absolute;
     display: none;
@@ -592,6 +590,8 @@ input[type=range]::-moz-range-thumb {
     border-bottom: 1px solid #333;
     padding-bottom: 5px;
     padding-top: 5px; }
+    .module .content .panel .meta {
+      font-size: 12px; }
   .module .content .range {
     width: 100%;
     width: calc(100% - 5px);
