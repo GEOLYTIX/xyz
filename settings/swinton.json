@@ -123,8 +123,8 @@
       520
     ]
   },
-  "country": "GB",
-  "countries": {
+  "locale": "GB",
+  "locales": {
     "GB": {
       "name": "Great Britain",
       "gazetteer": ["GOOGLE","GB","","e.g. Milton Keynes"],

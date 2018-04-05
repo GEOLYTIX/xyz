@@ -115,8 +115,8 @@
     ],
     "pane": ["catchments", 520]
   },
-  "country": "UK",
-  "countries": {
+  "locale": "UK",
+  "locales": {
     "UK": {
       "name": "United Kingdom",
       "gazetteer": ["GOOGLE","GB","","e.g. London"],
@@ -900,15 +900,15 @@
             ],
             [
               "rcz_africa__11",
-              "Citizen of African countries"
+              "Citizen of African country"
             ],
             [
               "rcz_asia__11",
-              "Citizen of Asian countries"
+              "Citizen of Asian country"
             ],
             [
               "rcz_central_america__11",
-              "Citizen of Central American countries"
+              "Citizen of Central American country"
             ],
             [
               "rcz_eu__11",
@@ -920,11 +920,11 @@
             ],
             [
               "rcz_north_america__11",
-              "Citizen of North American countries"
+              "Citizen of North American country"
             ],
             [
               "rcz_oceania__11",
-              "Citizen of countries belonging to Oceania"
+              "Citizen of country belonging to Oceania"
             ],
             [
               "rcz_roi__11",
@@ -932,7 +932,7 @@
             ],
             [
               "rcz_south_america__11",
-              "Citizen of South American countries"
+              "Citizen of South American country"
             ],
             [
               "rcz_stateless__11",

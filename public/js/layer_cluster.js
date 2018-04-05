@@ -28,7 +28,7 @@ function getLayer() {
         }));
 
         layer.xhr.onload = function () {
-            if (this.status === 200 && layer.display) {
+            if (this.status === 200 && layer.display && layer.locale === _xyz.locale) {
 
                 // Create cluster object from parsing the response text.
                 let cluster = JSON.parse(this.responseText);

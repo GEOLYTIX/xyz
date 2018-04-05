@@ -110,8 +110,8 @@
     ],
    "imageMaxSize": 1024
   },
-  "country": "UK",
-  "countries": {
+  "locale": "UK",
+  "locales": {
     "UK": {
       "name": "Great Britain",
       "gazetteer": ["GOOGLE","GB","","e.g. Milton Keynes"],

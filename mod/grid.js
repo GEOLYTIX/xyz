@@ -1,19 +1,29 @@
-function grid(req, res) {
-    let q = `SELECT
-               lon,
-               lat,
-               ${req.query.size} size,
-               ${req.query.color} color
-             FROM ${req.query.table}
-             WHERE ST_DWithin(
-                     ST_MakeEnvelope(
-                       ${req.query.west},
-                       ${req.query.south},
-                       ${req.query.east},
-                       ${req.query.north},
-                       4326),
-                       ${req.query.geom}, 0)
-               AND ${req.query.size} >= 1 LIMIT 10000;`
+async function grid(req, res) {
+    let
+        table = req.query.table,
+        geom = req.query.geom,
+        size = req.query.size,
+        color = req.query.color,
+        west = parseFloat(req.query.west),
+        south = parseFloat(req.query.south),
+        east = parseFloat(req.query.east),
+        north = parseFloat(req.query.north);
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, geom, size, color], res).statusCode === 406) return;
+
+    let q = `
+    SELECT
+        lon,
+        lat,
+        ${size} size,
+        ${color} color
+    FROM ${table}
+    WHERE
+        ST_DWithin(
+            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+            ${geom}, 0.000001)
+        AND ${size} >= 1 LIMIT 10000;`
 
     //console.log(q);
 
@@ -32,23 +42,29 @@ function grid(req, res) {
         .catch(err => console.log(err));
 }
 
-function info(req, res) {
+async function info(req, res) {
 
-    let fields = '';
+    let
+        table = req.body.table,
+        geom = req.body.geom,
+        fields = '';
+
     Object.keys(req.body.infoj).map(key => {
         if (req.body.infoj[key].type === 'numeric' || req.body.infoj[key].type === 'integer') fields += `sum(${req.body.infoj[key].fieldfx || req.body.infoj[key].field})::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
     });
 
-    let q =
-        `SELECT
-           ${fields} null
-             FROM ${req.body.table}
-             WHERE
-               ST_DWithin(
-                 ST_SetSRID(
-                   ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'),
-                   4326),
-                   ${req.body.geom}, 0);`
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, geom], res).statusCode === 406) return;
+
+    let q = `
+    SELECT ${fields} null
+    FROM ${table}
+    WHERE
+        ST_DWithin(
+            ST_SetSRID(
+                ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'),
+            4326),
+        ${geom}, 0);`
 
     //console.log(q);
 

@@ -110,8 +110,8 @@
     ],
    "imageMaxSize": 1024
   },
-  "country": "Global",
-  "countries": {
+  "locale": "Global",
+  "locales": {
     "Global": {
       "name": "Global",
       "gazetteer": ["GOOGLE","","","e.g. Hong Kong"],

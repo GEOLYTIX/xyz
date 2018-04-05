@@ -88,7 +88,7 @@ function addImages(record, images) {
             img.onload = function () {
 
                 let canvas = document.createElement('canvas'),
-                    max_size = _xyz.layers.imageMaxSize,
+                    max_size = 1024,
                     width = img.width,
                     height = img.height;
 

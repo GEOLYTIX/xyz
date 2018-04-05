@@ -1,6 +1,16 @@
-function select(req, res) {
+async function select(req, res) {
 
-    //if (await chkVals([], res).statusCode === 301) return;
+    let
+        table = req.body.table,
+        geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
+        geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
+        qID = req.body.qID,
+        id = req.body.id;
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
+
+    if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
     let fields = '';
     Object.keys(req.body.infoj).map(key => {
@@ -8,16 +18,15 @@ function select(req, res) {
         if (req.body.infoj[key].subfield) fields += `${req.body.infoj[key].subfield}::${req.body.infoj[key].type} AS ${req.body.infoj[key].subfield},`
     });
 
-    let q =
-    `SELECT
+    let q = `
+    SELECT
         ${fields}
-        ${typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj} AS geomj
-        ${req.body.geomdisplay}
-     FROM ${req.body.table}
-     WHERE
-        ${req.body.qID} = '${req.body.id}';`
+        ${geomj} AS geomj
+        ${geomdisplay}
+    FROM ${table}
+    WHERE ${qID} = '${id}';`
 
-    //console.log(q);
+    // console.log(q);
 
     global.DBS[req.body.dbs].query(q)
         .then(result => {
@@ -38,7 +47,7 @@ function select(req, res) {
             });
 
         })
-    .catch(err => console.log(err));
+        .catch(err => console.error(err));
 }
 
 module.exports = {

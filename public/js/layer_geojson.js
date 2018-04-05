@@ -15,7 +15,7 @@ function getLayer(){
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
     // Request layer data when table and display are true.
-    if(layer.table && layer.display){
+    if(layer.table && layer.display && layer.locale === _xyz.locale){
         layer.loaded = false;
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
@@ -26,7 +26,6 @@ function getLayer(){
             dbs: layer.dbs,
             table: layer.table,
             qID: layer.qID,
-            geomj: layer.geomj,
             geom: layer.geom,
             west: bounds.getWest(),
             south: bounds.getSouth(),
@@ -36,7 +35,7 @@ function getLayer(){
         
         // Draw layer on load event.
         layer.xhr.onload = function(){
-            if(this.status === 200 && layer.display){
+            if(this.status === 200 && layer.display && layer.locale === _xyz.locale){
 
                 // Create feature collection for vector features.
                 let features = JSON.parse(this.responseText);

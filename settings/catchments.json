@@ -113,8 +113,8 @@
     ],
     "pane": ["catchments", 520]
   },
-  "country": "Global",
-  "countries": {
+  "locale": "Global",
+  "locales": {
     "Global": {
       "name": "Global",
       "gazetteer": ["GOOGLE","","","e.g. London"],

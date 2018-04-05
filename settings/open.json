@@ -1,69 +1,6 @@
 {
   "title": "GEOLYTIX | XYZ Open",
-  "select": {
-    "records": [
-      {
-        "letter": "A",
-        "color": "#9c27b0"
-      },
-      {
-        "letter": "B",
-        "color": "#2196f3"
-      },
-      {
-        "letter": "C",
-        "color": "#009688"
-      },
-      {
-        "letter": "D",
-        "color": "#cddc39"
-      },
-      {
-        "letter": "E",
-        "color": "#ff9800"
-      },
-      {
-        "letter": "F",
-        "color": "#673ab7"
-      },
-      {
-        "letter": "G",
-        "color": "#03a9f4"
-      },
-      {
-        "letter": "H",
-        "color": "#4caf50"
-      },
-      {
-        "letter": "I",
-        "color": "#ffeb3b"
-      },
-      {
-        "letter": "J",
-        "color": "#ff5722"
-      },
-      {
-        "letter": "K",
-        "color": "#0d47a1"
-      },
-      {
-        "letter": "L",
-        "color": "#00bcd4"
-      },
-      {
-        "letter": "M",
-        "color": "#8bc34a"
-      },
-      {
-        "letter": "N",
-        "color": "#ffc107"
-      },
-      {
-        "letter": "O",
-        "color": "#d32f2f"
-      }
-    ]
-  },
+  "select": {},
   "locate": true,
   "documentation": "documentation",
   "gazetteer": {
@@ -77,8 +14,8 @@
       "fillOpacity": 0.2
     }
   },
-  "country": "UK",
-  "countries": {
+  "locale": "EU",
+  "locales": {
     "EU": {
       "name": "Europe",
       "gazetteer": ["MAPBOX", "", "'-45,25,60,75'", "e.g. Brussels"],
@@ -567,20 +504,20 @@
                 "Asda",
                 "Booths",
                 "Budgens",
-                "Co_op",
                 "Costco",
                 "Farmfoods",
-                "Fultons_Food",
-                "Heron_Foods",
+                "Fultons Food",
+                "Heron Foods",
                 "Iceland",
                 "Lidl",
                 "Makro",
-                "Marks_Spencer",
+                "Marks & Spencer",
                 "Morrisons",
                 "Sainsburys",
                 "Tesco",
+                "The Co-operative",
                 "Waitrose",
-                "Whole_Foods"
+                "Whole Foods"
               ]
             },
             {
@@ -665,75 +602,75 @@
               "label": "Retailer",
               "field": "brand",
               "cat": {
-                "aldi": {
+                "Aldi": {
                   "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
                   "label": "Aldi"
                 },
-                "asda": {
+                "Asda": {
                   "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
                   "label": "Asda"
                 },
-                "booths": {
+                "Booths": {
                   "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
                   "label": "Booths"
                 },
-                "budgens": {
+                "Budgens": {
                   "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
                   "label": "Budgens"
                 },
-                "co_op": {
+                "The Co-operative": {
                   "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
                   "label": "The Co-Operative"
                  },
-                "costco": {
+                "Costco": {
                   "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
                   "label": "Costco"
                 },
-                "farmfoods": {
+                "Farmfoods": {
                   "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
                   "label": "Farm Foods"
                 },
-                "fultons_food": {
+                "Fultons Food": {
                   "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
                   "label": "Fultons Food"
                 },
-                "heron_foods": {
+                "Heron Foods": {
                   "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
                   "label": "Heron Foods"
                 },
-                "iceland": {
+                "Iceland": {
                   "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
                   "label": "Iceland"
                 },
-                "lidl": {
+                "Lidl": {
                   "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
                   "label": "Lidl"
                 },
-                "makro": {
+                "Makro": {
                   "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
                   "label": "Makro"
                 },
-                "marks_spencer": {
+                "Marks & Spencer": {
                   "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
                   "label": "Marks & Spencer"
                 },
-                "morrisons": {
+                "Morrisons": {
                   "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
                   "label": "Morrisons"
                 },
-                "sainsburys": {
+                "Sainsburys": {
                   "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
                   "label": "Sainsbury's"
                 },
-                "tesco": {
+                "Tesco": {
                   "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
                   "label": "Tesco"
                 },
-                "waitrose": {
+                "Waitrose": {
                   "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
                   "label": "Waitrose"
                 },
-                "whole_foods": {
+                "Whole Foods": {
                   "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
                   "label": "Whole Foods"
                 }

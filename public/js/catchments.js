@@ -25,17 +25,17 @@ module.exports = function catchments(){
     _xyz.map.createPane(_xyz.catchments.pane[0]);
     _xyz.map.getPane(_xyz.catchments.pane[0]).style.zIndex = _xyz.catchments.pane[1];
 
-    // locale.catchments is called upon initialisation and when the country is changed (change_country === true).
-    _xyz.catchments.init = function (change_country) {
+    // init is called upon initialisation and when the locale is changed (change_locale === true).
+    _xyz.catchments.init = function (change_locale) {
 
-        if (!_xyz.countries[_xyz.country].catchments && view_mode === 'desktop') {
+        if (!_xyz.locales[_xyz.locale].catchments && view_mode === 'desktop') {
             document.getElementById('catchments_module').style.display = 'none';
             return
         } else if (view_mode === 'desktop') {
             document.getElementById('catchments_module').style.display = 'block';
         }
 
-        if (!_xyz.countries[_xyz.country].catchments && view_mode === 'mobile') {
+        if (!_xyz.locales[_xyz.locale].catchments && view_mode === 'mobile') {
             document.querySelector('.tab_catchments').style.display = 'none';
             return
         } else if (view_mode === 'mobile') {
@@ -54,7 +54,7 @@ module.exports = function catchments(){
 
         dom.selMode.innerHTML = '';
         
-        Object.keys(_xyz.countries[_xyz.country].catchments.modes).map(function(key){
+        Object.keys(_xyz.locales[_xyz.locale].catchments.modes).map(function(key){
             dom.selMode.insertAdjacentHTML('beforeend','<option value="'+key+'">'+key.charAt(0).toUpperCase()+key.slice(1)+'</option>');
         });
    
@@ -71,13 +71,13 @@ module.exports = function catchments(){
     }
 
     function setParams(mode){
-        dom.sliMinutes.min = _xyz.countries[_xyz.country].catchments.modes[mode].minMin;
-        dom.sliMinutes.max = _xyz.countries[_xyz.country].catchments.modes[mode].maxMin;
-        dom.sliMinutes.value = _xyz.countries[_xyz.country].catchments.modes[mode].defMin;
+        dom.sliMinutes.min = _xyz.locales[_xyz.locale].catchments.modes[mode].minMin;
+        dom.sliMinutes.max = _xyz.locales[_xyz.locale].catchments.modes[mode].maxMin;
+        dom.sliMinutes.value = _xyz.locales[_xyz.locale].catchments.modes[mode].defMin;
         dom.lblMinutes.innerHTML = dom.sliMinutes.value;
-        dom.sliDetail.value = _xyz.countries[_xyz.country].catchments.modes[mode].detail;
+        dom.sliDetail.value = _xyz.locales[_xyz.locale].catchments.modes[mode].detail;
         dom.lblDetail.innerHTML = dom.sliDetail.value;
-        let reach = _xyz.countries[_xyz.country].catchments.modes[mode].reach;
+        let reach = _xyz.locales[_xyz.locale].catchments.modes[mode].reach;
         dom.sliReach.min = parseInt(reach * 0.5);
         dom.sliReach.max = parseInt(reach * 1.5);
         dom.sliReach.value = reach;
@@ -204,7 +204,7 @@ module.exports = function catchments(){
                 }
 
                 _xyz.catchments.layer = L.geoJson(json.iso, {
-                    interactive: _xyz.countries[_xyz.country].catchments.infoj ? true : false,
+                    interactive: _xyz.select && _xyz.locales[_xyz.locale].catchments.infoj ? true : false,
                     pane: _xyz.catchments.pane[0],
                     onEachFeature: function (feature, layer) {
                         layer.on({
@@ -276,10 +276,10 @@ module.exports = function catchments(){
             }
         }
         xhr.send(JSON.stringify({
-            dbs: _xyz.countries[_xyz.country].catchments.dbs,
-            table: _xyz.countries[_xyz.country].catchments.table,
-            geom: _xyz.countries[_xyz.country].catchments.geom,
-            infoj: _xyz.countries[_xyz.country].catchments.infoj,
+            dbs: _xyz.locales[_xyz.locale].catchments.dbs,
+            table: _xyz.locales[_xyz.locale].catchments.table,
+            geom: _xyz.locales[_xyz.locale].catchments.geom,
+            infoj: _xyz.locales[_xyz.locale].catchments.infoj,
             geometry: feature.geometry
         }));
     }

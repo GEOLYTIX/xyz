@@ -15,7 +15,7 @@ function getLayer(){
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
       
-    if(layer.table && layer.display){
+    if(layer.table && layer.display && layer.locale === _xyz.locale){
 
         // Create new vector.xhr
         layer.loaded = false;
@@ -34,7 +34,7 @@ function getLayer(){
             }),
             options = {
                 rendererFactory: L.canvas.tile,
-                interactive: (layer.infoj && layer.qID) || false,
+                interactive: (_xyz.select && layer.infoj && layer.qID) || false,
                 pane: layer.pane[0],
                 getFeatureId: (f) => f.properties.id,
                 vectorTileLayerStyles: {}

@@ -39,19 +39,19 @@ let dom = {
     btnZoomOut: document.getElementById('btnZoomOut')
 };
 
-// Set country default.
-_xyz.country = _xyz.country || Object.keys(_xyz.countries)[0];
+// Set locale default.
+_xyz.locale = _xyz.locale || Object.keys(_xyz.locales)[0];
 
-// Set country to hook, or set hook for country.
-if (_xyz.hooks.country) {
-    _xyz.country = _xyz.hooks.country;
+// Set locale to hook, or set hook for locale.
+if (_xyz.hooks.locale) {
+    _xyz.locale = _xyz.hooks.locale;
 } else {
-    _xyz.setHook('country', _xyz.country);
+    _xyz.setHook('locale', _xyz.locale);
 }
 
 // Set min/max zoom defaults.
-_xyz.countries[_xyz.country].minZoom = _xyz.countries[_xyz.country].minZoom || 0;
-_xyz.countries[_xyz.country].maxZoom = _xyz.countries[_xyz.country].maxZoom || 20;
+_xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;
+_xyz.locales[_xyz.locale].maxZoom = _xyz.locales[_xyz.locale].maxZoom || 20;
 
 // Initiate map object.
 _xyz.map = L
@@ -60,25 +60,25 @@ _xyz.map = L
         scrollWheelZoom: true,
         zoomControl: false,
         attributionControl: false,
-        minZoom: _xyz.countries[_xyz.country].minZoom,
-        maxZoom: _xyz.countries[_xyz.country].maxZoom
+        minZoom: _xyz.locales[_xyz.locale].minZoom,
+        maxZoom: _xyz.locales[_xyz.locale].maxZoom
     })
     .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
 
 // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
 _xyz.setView = function(fit) {
-    if (_xyz.countries[_xyz.country].bounds) _xyz.map.setMaxBounds(_xyz.countries[_xyz.country].bounds);
-    _xyz.map.setMinZoom(_xyz.countries[_xyz.country].minZoom);
-    _xyz.map.setMaxZoom(_xyz.countries[_xyz.country].maxZoom);
-    if (fit) _xyz.map.fitBounds(_xyz.countries[_xyz.country].bounds || [[-90,-180],[90,180]]);
+    if (_xyz.locales[_xyz.locale].bounds) _xyz.map.setMaxBounds(_xyz.locales[_xyz.locale].bounds);
+    _xyz.map.setMinZoom(_xyz.locales[_xyz.locale].minZoom);
+    _xyz.map.setMaxZoom(_xyz.locales[_xyz.locale].maxZoom);
+    if (fit) _xyz.map.fitBounds(_xyz.locales[_xyz.locale].bounds || [[-90,-180],[90,180]]);
 }
 _xyz.setView(!_xyz.hooks.z);
 
 // Zoom functions
 chkZoomBtn(_xyz.map.getZoom());
 function chkZoomBtn(z){
-    dom.btnZoomIn.disabled = z < _xyz.countries[_xyz.country].maxZoom ?  false : true;
-    dom.btnZoomOut.disabled = z > _xyz.countries[_xyz.country].minZoom ? false : true;
+    dom.btnZoomIn.disabled = z < _xyz.locales[_xyz.locale].maxZoom ?  false : true;
+    dom.btnZoomOut.disabled = z > _xyz.locales[_xyz.locale].minZoom ? false : true;
 }
 
 dom.btnZoomIn.addEventListener('click', function () {
@@ -103,7 +103,7 @@ _xyz.map.on('resize', function(){
 });
 
 function viewChangeStart() {
-    let layers = _xyz.countries[_xyz.country].layers
+    let layers = _xyz.locales[_xyz.locale].layers
     Object.keys(layers).map(function (layer) {
         if(layers[layer].xhr) layers[layer].xhr.abort();
         if(layers[layer].L) _xyz.map.removeLayer(layers[layer].L);
@@ -128,7 +128,7 @@ function viewChangeEnd() {
         //Set the view hook.
         _xyz.setViewHook(_xyz.map.getCenter());
 
-        let layers = _xyz.countries[_xyz.country].layers
+        let layers = _xyz.locales[_xyz.locale].layers
         Object.keys(layers).map(function (layer) {
             if (layers[layer].loader) layers[layer].loader.style.display = 'none';
             layers[layer].getLayer();
@@ -140,7 +140,7 @@ function viewChangeEnd() {
 _xyz.layersCheck = layersCheck;
 function layersCheck() {
     if (typeof report !== 'undefined') {
-        let layers = _xyz.countries[_xyz.country].layers,
+        let layers = _xyz.locales[_xyz.locale].layers,
             layersArray = [],
             chkScore = 0;
 

@@ -35,6 +35,7 @@
 .leaflet-safari .leaflet-tile-container {
   width: 1600px;
   height: 1600px;
+  transform-origin: 0 0;
   -webkit-transform-origin: 0 0;
 }
 
@@ -59,6 +60,7 @@
 }
 
 .leaflet-container.leaflet-touch-drag {
+  touch-action: pinch-zoom;
   -ms-touch-action: pinch-zoom;
 }
 
@@ -78,6 +80,7 @@
 
 /* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
 .leaflet-overlay-pane svg {
+  user-select: none;
   -moz-user-select: none;
 }
 

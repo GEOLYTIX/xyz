@@ -21,14 +21,75 @@ module.exports = function Select() {
     _xyz.map.getPane('select_marker').style.zIndex = 601;
     _xyz.map.createPane('select_circle');
     _xyz.map.getPane('select_circle').style.zIndex = 602;
-    // let sheet = document.styleSheets[1];
-    // sheet.insertRule(".page_content { background-color: red; }", 1);
 
-    // init() is called upon initialisation and when the country is changed (change_country === true).
-    _xyz.select.init = function (change_country) {
+    // Create recordset if it doesn't exist yet.
+    if (!_xyz.select.records) _xyz.select.records = [
+        {
+          "letter": "A",
+          "color": "#9c27b0"
+        },
+        {
+          "letter": "B",
+          "color": "#2196f3"
+        },
+        {
+          "letter": "C",
+          "color": "#009688"
+        },
+        {
+          "letter": "D",
+          "color": "#cddc39"
+        },
+        {
+          "letter": "E",
+          "color": "#ff9800"
+        },
+        {
+          "letter": "F",
+          "color": "#673ab7"
+        },
+        {
+          "letter": "G",
+          "color": "#03a9f4"
+        },
+        {
+          "letter": "H",
+          "color": "#4caf50"
+        },
+        {
+          "letter": "I",
+          "color": "#ffeb3b"
+        },
+        {
+          "letter": "J",
+          "color": "#ff5722"
+        },
+        {
+          "letter": "K",
+          "color": "#0d47a1"
+        },
+        {
+          "letter": "L",
+          "color": "#00bcd4"
+        },
+        {
+          "letter": "M",
+          "color": "#8bc34a"
+        },
+        {
+          "letter": "N",
+          "color": "#ffc107"
+        },
+        {
+          "letter": "O",
+          "color": "#d32f2f"
+        }];
+    
+      // init() is called upon initialisation and when the locale is changed (change_locale === true).
+    _xyz.select.init = function (change_locale) {
 
-        // Remove the layers hook on change_country event.
-        if (change_country) _xyz.select.resetModule();
+        // Remove the layers hook on change_locale event.
+        if (change_locale) _xyz.select.resetModule();
 
         // Set the layer display from hooks if present; Overwrites the default setting.
         if (_xyz.hooks.select) _xyz.hooks.select.map(function (hook) {
@@ -77,7 +138,7 @@ module.exports = function Select() {
         // Make select tab active on mobile device.
         if (_xyz.activateSelectTab) _xyz.activateSelectTab();
 
-        let _layer = _xyz.countries[_xyz.country].layers[layer.layer];
+        let _layer = _xyz.locales[_xyz.locale].layers[layer.layer];
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
@@ -102,7 +163,7 @@ module.exports = function Select() {
             id: layer.id,
             infoj: _layer.infoj,
             geomj: _layer.geomj,
-            geomdisplay: _layer.geomdisplay || ''
+            geomdisplay: _layer.geomdisplay
         }));
     }
     _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
@@ -200,7 +261,7 @@ module.exports = function Select() {
                                 iconUrl: svg_symbols.circle(record.color)
                             }),
                             pane: 'select_circle',
-                            interactive: true,
+                            interactive: _xyz.select ? true : false,
                             draggable: record.layer.editable
                         });
                 }

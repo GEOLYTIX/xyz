@@ -13,7 +13,7 @@ Geolytix.xyz is a mapping web app designed to visualize and support outcome of s
 
 ## [2. Map view and URL hooks](#map)
 
-Map is the heart of the web app. It can be dragged and zoomed to desired location. Map extent is usually limited to selected country or region.
+Map is the heart of the web app. It can be dragged and zoomed to desired location. Map extent is usually limited to selected locale.
 
 ![alt text](https://user-images.githubusercontent.com/7070711/36906522-094477dc-1e2e-11e8-9828-7e3bab4fbdc3.png)
 
@@ -27,7 +27,7 @@ All actions performed on the map will be tracked by the page URL where map view 
 
 ## [3. Gazetteer](#gazetteer)
 
-Gazetteer is a core module that finds a desired location such as point of interest, geographic area or address depending on configuration. Search results are filtered by selected country or region.
+Gazetteer is a core module that finds a desired location such as point of interest, geographic area or address depending on configuration. Search results are filtered by selected locale.
 
 ![alt text](https://user-images.githubusercontent.com/7070711/33710873-d99f1fe6-db39-11e7-86d6-a82e37831873.png)
 

@@ -16,42 +16,42 @@ module.exports = function Gazetteer() {
         group: document.getElementById('gaz_group'),
         input: document.getElementById('gaz_input'),
         result: document.getElementById('gaz_result'),
-        country: document.getElementById('gaz_country'),
-        countrylist: document.getElementById('gaz_countrylist')
+        locale: document.getElementById('gaz_locale'),
+        localelist: document.getElementById('gaz_localelist')
     };
     
-    // Get list of country keys and assign to country drop down.
-    let countries = '';
-    for (let key in _xyz.countries) {
-        if (_xyz.countries.hasOwnProperty(key)) countries += '<li data-country="' + key + '">' + _xyz.countries[key].name + '</li>';
+    // Get list of locale keys and assign to locale drop down.
+    let locales = '';
+    for (let key in _xyz.locales) {
+        if (_xyz.locales.hasOwnProperty(key)) locales += '<li data-locale="' + key + '">' + _xyz.locales[key].name + '</li>';
     }
-    dom.countrylist.innerHTML = countries;
+    dom.localelist.innerHTML = locales;
 
-    if (Object.keys(_xyz.countries).length > 1) {
-        utils.addClass(dom.country, 'active');
+    if (Object.keys(_xyz.locales).length > 1) {
+        utils.addClass(dom.locale, 'active');
 
-        // Add click event to toggle country drop down display.
-        dom.country.addEventListener('click', function () {
-            dom.countrylist.style.display = dom.countrylist.style.display === 'block' ? 'none' : 'block';
+        // Add click event to toggle locale drop down display.
+        dom.locale.addEventListener('click', function () {
+            dom.localelist.style.display = dom.localelist.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Add click event to the countries in drop down.
-        let items = dom.countrylist.querySelectorAll('li');
+        // Add click event to the locales in drop down.
+        let items = dom.localelist.querySelectorAll('li');
         Object.keys(items).map(function (key) {
             items[key].addEventListener('click', function () {
-                dom.countrylist.style.display = 'none';
-                _xyz.country = this.dataset.country;
-                dom.country.innerHTML = _xyz.country == 'Global' ?
+                dom.localelist.style.display = 'none';
+                _xyz.locale = this.dataset.locale;
+                dom.locale.innerHTML = _xyz.locale == 'Global' ?
                     '<i class="material-icons">language</i>' :
-                    _xyz.country;
+                    _xyz.locale;
 
                 // Empty input value, results and set placeholder.
                 dom.input.value = '';
-                dom.input.placeholder = _xyz.countries[_xyz.country].gazetteer[3];
+                dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
                 dom.result.innerHTML = '';
 
                 _xyz.removeHooks();
-                _xyz.setHook('country', _xyz.country);
+                _xyz.setHook('locale', _xyz.locale);
                 _xyz.setView(true);
                 if (_xyz.layers) _xyz.layers.init(true);
                 if (_xyz.select) _xyz.select.init(true);
@@ -61,14 +61,12 @@ module.exports = function Gazetteer() {
         });
     }
 
-    // Set country text in the Gazetteer box.
-    dom.country.innerHTML = _xyz.country == 'Global' ?
-        '<i class="material-icons">language</i>' :
-        _xyz.country;
+    // Set locale text in the Gazetteer box.
+    dom.locale.innerHTML = _xyz.locale == 'Global' ? '<i class="material-icons">language</i>' : _xyz.locale;
 
     // Empty input value, results and set placeholder.
     dom.input.value = '';
-    dom.input.placeholder = _xyz.countries[_xyz.country].gazetteer[3];
+    dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
     dom.result.innerHTML = '';
 
     // Remove existing layer if exists
@@ -81,10 +79,7 @@ module.exports = function Gazetteer() {
             dom.group.style.display === 'block' ?
             'none' : 'block';
 
-        if (view_mode === 'desktop') {
-            document.getElementById('gaz_spacer').style.display = dom.group.style.display === 'block' ?
-                'block' : 'none';
-        }
+        if (view_mode === 'desktop') document.getElementById('gaz_spacer').style.display = dom.group.style.display === 'block' ? 'block' : 'none';
 
         if (dom.group.style.display === 'block') dom.input.focus();
     });
@@ -114,15 +109,14 @@ module.exports = function Gazetteer() {
     // Initiate search request
     function initiateSearch(searchValue){
 
-        console.log(_xyz.countries[_xyz.country].gazetteer[2]);
-
         _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
         _xyz.gazetteer.xhrSearch.open('GET', host + 'q_gazetteer?' + utils.paramString({
-            provider: _xyz.countries[_xyz.country].gazetteer[0],
-            country: _xyz.countries[_xyz.country].gazetteer[1],
-            bounds: encodeURIComponent(_xyz.countries[_xyz.country].gazetteer[2]),
+            provider: _xyz.locales[_xyz.locale].gazetteer[0],
+            locale: _xyz.locales[_xyz.locale].gazetteer[1],
+            bounds: encodeURIComponent(_xyz.locales[_xyz.locale].gazetteer[2]),
             q: encodeURIComponent(searchValue)
         }));
+
         _xyz.gazetteer.xhrSearch.onload = function () {
 
             // List results or show that no results were found
@@ -278,7 +272,7 @@ module.exports = function Gazetteer() {
             _xyz.gazetteer.geolocationMarker.addTo(_xyz.map);
             if (flyTo) _xyz.map.flyTo(
                 _xyz.gazetteer.geolocationMarker.getLatLng(),
-                _xyz.countries[_xyz.country].maxZoom);
+                _xyz.locales[_xyz.locale].maxZoom);
             flyTo = false;
         } else {
             _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
@@ -288,7 +282,7 @@ module.exports = function Gazetteer() {
             _xyz.gazetteer.geolocationWatcher = navigator.geolocation.watchPosition(
                 function (position) {
 
-                    console.log('position: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
+                    //console.log('position: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
 
                     if (utils.hasClass(dom.btnGeolocate, 'active')) {
                         _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
@@ -297,13 +291,12 @@ module.exports = function Gazetteer() {
 
                         if (flyTo) _xyz.map.flyTo(
                             [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
-                            _xyz.countries[_xyz.country].maxZoom);
+                            _xyz.locales[_xyz.locale].maxZoom);
                         flyTo = false;
                     }    
                 },
                 function (err) {
-                    //alert(err.message);
-                    console.log(err.message);
+                    console.error(err);
                 },
                 {
                     //enableHighAccuracy: false,

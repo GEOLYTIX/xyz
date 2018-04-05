@@ -16,20 +16,20 @@ module.exports = function(){
         layers: document.querySelector('#layers_module .layers')
     };
 
-    // locale.layers is called upon initialisation and when the country is changed (change_country === true).
+    // init is called upon initialisation and when the locale is changed (change_locale === true).
     if (!_xyz.layers) _xyz.layers = {};
-    _xyz.layers.init = function (change_country) {
+    _xyz.layers.init = function (change_locale) {
 
-        // Remove the layers hook on change_country event.
-        if (change_country) {
+        // Remove the layers hook on change_locale event.
+        if (change_locale) {
             _xyz.removeHook('layers');
             _xyz.map.eachLayer(function(l){
                 _xyz.map.removeLayer(l);
             })
         };
 
-        // Get the layers from the current country.
-        let layers = _xyz.countries[_xyz.country].layers;
+        // Get the layers from the current locale.
+        let layers = _xyz.locales[_xyz.locale].layers;
         
         // Set the layer display from hooks if present; Overwrites the default setting.
         if (_xyz.hooks.layers) Object.keys(layers).map(function(layer){
@@ -42,12 +42,12 @@ module.exports = function(){
         // Empty the layers table.
         dom.layers.innerHTML = '';
 
-        // Loop through the country layers and build layer control elements.
+        // Loop through the locale layers and build layer control elements.
         Object.keys(layers).map(function(layer){
             layers[layer].layer = layer;
             layer = layers[layer];
             layer.base = null;
-            //layer.name = typeof layer.name == 'undefined' ? layer.layer : layer.name;
+            layer.locale = _xyz.locale;
             layer.name = layer.name || layer.layer;
 
             // Set layer styles

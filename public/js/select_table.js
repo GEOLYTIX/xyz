@@ -64,7 +64,6 @@ function addInfojToList(record) {
 
         // Set field value if layer is not editable and return from object.map function.
         if (!record.layer.editable && record.layer.infoj[key].value) {
-            console.log(record.layer.grid? 0: 2);
             val.textContent = record.layer.infoj[key].type === 'numeric' ?
                 parseFloat(record.layer.infoj[key].value).toLocaleString('en-GB', { maximumFractionDigits: record.layer.grid? 0: 2}) :
                 record.layer.infoj[key].type === 'integer' ?
@@ -118,8 +117,6 @@ function addInfojToList(record) {
             
             // Create options with dataset list of sub options and append to select prime.
             Object.keys(record.layer.infoj[key].options).map(function (i) {
-                
-                if(String(record.layer.infoj[key].options[i]).split(';')[0] == record.layer.infoj[key].value) console.log(String(record.layer.infoj[key].options[i]).split(';')[0]);
                 let opt = utils.createElement('option', {
                     textContent: String(record.layer.infoj[key].options[i]).split(';')[0],
                     value: i,
@@ -253,25 +250,28 @@ function addInfojToList(record) {
 
                 // Clear subselect and add suboptions from select option dataset list.
                 let suboptions = String(select.options[select.selectedIndex].dataset.list).split(';');
-                suboptions.unshift("undefined");
+                
+                if (suboptions.length > 1) {
+                    suboptions.unshift("undefined");
 
-                // Remove last option if empty.
-                if (suboptions[1] == '') suboptions.pop();
-                suboptions.push('other');
-                subselect.innerHTML = '';
-                Object.keys(suboptions).map(function (i) {
-                    subselect.appendChild(utils.createElement('option', {
-                        textContent: suboptions[i],
-                        value: i,
-                        selected: (suboptions[i] == record.layer.infoj[key].subvalue)
-                    }));
-                });
-
-                // Check whether value exists but not found in list.
-                if ((subselect.selectedIndex == subselect.options.length - 1)
-                    || (subselect.selectedIndex == 0 && record.layer.infoj[key].subvalue)) {
-                    subselect.selectedIndex = subselect.options.length - 1;
-                    subselect_input.style.display = 'block';
+                    // Remove last option if empty.
+                    if (suboptions[1] == '') suboptions.pop();
+                    suboptions.push('other');
+                    subselect.innerHTML = '';
+                    Object.keys(suboptions).map(function (i) {
+                        subselect.appendChild(utils.createElement('option', {
+                            textContent: suboptions[i],
+                            value: i,
+                            selected: (suboptions[i] == record.layer.infoj[key].subvalue)
+                        }));
+                    });
+    
+                    // Check whether value exists but not found in list.
+                    if ((subselect.selectedIndex == subselect.options.length - 1)
+                        || (subselect.selectedIndex == 0 && record.layer.infoj[key].subvalue)) {
+                        subselect.selectedIndex = subselect.options.length - 1;
+                        subselect_input.style.display = 'block';
+                    }
                 }
 
                 // Add changed class and make cloud save visible.

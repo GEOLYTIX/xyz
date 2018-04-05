@@ -95,7 +95,7 @@ function update(dom, record) {
     record.upload.style.color = record.color;
     record.upload.addEventListener('click', function () {
 
-        let _layer = _xyz.countries[_xyz.country].layers[record.layer.layer];
+        let _layer = _xyz.locales[_xyz.locale].layers[record.layer.layer];
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_update');
@@ -141,7 +141,7 @@ function trash(dom, record) {
     i.style.color = record.color;
     i.addEventListener('click', function () {
 
-        let _layer = _xyz.countries[_xyz.country].layers[record.layer.layer];
+        let _layer = _xyz.locales[_xyz.locale].layers[record.layer.layer];
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_delete');

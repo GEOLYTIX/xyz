@@ -107,7 +107,7 @@
     ],
     "imageMaxSize": 1024
   },
-  "countries": {
+  "locales": {
     "GB": {
       "gazetteer": [
         "GOOGLE",

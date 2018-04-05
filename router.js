@@ -15,7 +15,7 @@ const fs = require('fs');
 global.appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
 JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
 {
-    "countries": {
+    "locales": {
         "Global": {
             "layers": {
                 "base": {

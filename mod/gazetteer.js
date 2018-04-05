@@ -34,7 +34,7 @@ function gazetteer(req, res) {
 function MAPBOX_placesAutoComplete(req, res) {
 
     let q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
-          + `${req.query.country ? 'country=' + req.query.country : ''}`
+          + `${req.query.locale ? 'locale=' + req.query.locale : ''}`
           + `${req.query.bounds ? 'bbox=' + req.query.bounds : ''}`
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
           + `&${global.KEYS[req.query.provider]}`;
@@ -43,7 +43,7 @@ function MAPBOX_placesAutoComplete(req, res) {
         require('request').get(q, (err, response, body) => {
             res.status(200).json(JSON.parse(body).features.map(f => {
                 return {
-                    label: `${f.text} (${f.place_type[0]}) ${!req.query.country && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
+                    label: `${f.text} (${f.place_type[0]}) ${!req.query.locale && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
                     id: f.center,
                     source: 'mapbox'
                 }
@@ -56,7 +56,7 @@ function MAPBOX_placesAutoComplete(req, res) {
 
 function GOOGLE_placesAutoComplete(req, res) {
     let q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
-          + `${req.query.country ? '&components=country:' + req.query.country : ''}`
+          + `${req.query.locale ? '&components=locale:' + req.query.locale : ''}`
           + `${req.query.bounds ? decodeURIComponent(req.query.bounds) : ''}`
           + `&${global.KEYS[req.query.provider]}`;
 
