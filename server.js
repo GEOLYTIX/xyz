@@ -82,6 +82,8 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 
     app.use(process.env.DIR || '', require('./router'));
 
+    process.on('unhandledRejection', err => console.error(err));
+
     app.listen(port);
     console.log('The magic happens on port ' + port);
 }

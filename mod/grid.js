@@ -1,4 +1,5 @@
 async function grid(req, res) {
+    
     let
         table = req.query.table,
         geom = req.query.geom,

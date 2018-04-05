@@ -101,6 +101,8 @@ router.get('/documentation', (req, res) => {
     })
 });
 
+const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
+
 // Vector layers with PGSQL MVT.
 router.get('/mvt/:z/:x/:y', require('./mod/mvt').fetchTiles);
 

@@ -45,7 +45,7 @@ function getLayer(){
                 
                 // Add geoJSON feature collection to the map.
                 layer.L = L.geoJSON(features, {
-                        style: layer.style,
+                        style: layer.style.default,
                         pane: layer.pane[0],
                         pointToLayer: function(point, latlng){
                             return L.circleMarker(latlng, {
@@ -64,10 +64,10 @@ function getLayer(){
                         });
                     })
                     .on('mouseover', function(e){
-                        e.layer.setStyle(layer.styleHighlight);
+                        e.layer.setStyle(layer.style.highlight);
                     })
                     .on('mouseout', function(e){
-                        e.layer.setStyle(layer.style);
+                        e.layer.setStyle(layer.style.default);
                     })
                     .addTo(_xyz.map);
 

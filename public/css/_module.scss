@@ -81,7 +81,15 @@
             width: 100%;
             margin: 5px 0;
             font-family: 'PT Mono', monospace;
+            background: white;
+            // border: 2px solid white;
+            // border-bottom: 2px solid #090;
         }
+
+        // select:active,
+        // select:hover {
+        //     outline: none
+        // }
 
         .panel {
             transition: opacity 300ms ease-in-out;

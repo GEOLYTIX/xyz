@@ -11,7 +11,7 @@ function chkVals(vals, res) {
 
 // Check whether an ID contains spaces.
 function chkID(id, res) {
-    if (id.indexOf(' ') >= 0) res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
+    if (String(id).indexOf(' ') >= 0) res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
     return res;
 }
 

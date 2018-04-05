@@ -1,70 +1,7 @@
 {
   "title": "GEOLYTIX | XYZ Demo",
   "documentation": "documentation",
-  "select": {
-    "records": [
-      {
-        "letter": "A",
-        "color": "#9c27b0"
-      },
-      {
-        "letter": "B",
-        "color": "#2196f3"
-      },
-      {
-        "letter": "C",
-        "color": "#009688"
-      },
-      {
-        "letter": "D",
-        "color": "#cddc39"
-      },
-      {
-        "letter": "E",
-        "color": "#ff9800"
-      },
-      {
-        "letter": "F",
-        "color": "#673ab7"
-      },
-      {
-        "letter": "G",
-        "color": "#03a9f4"
-      },
-      {
-        "letter": "H",
-        "color": "#4caf50"
-      },
-      {
-        "letter": "I",
-        "color": "#ffeb3b"
-      },
-      {
-        "letter": "J",
-        "color": "#ff5722"
-      },
-      {
-        "letter": "K",
-        "color": "#0d47a1"
-      },
-      {
-        "letter": "L",
-        "color": "#00bcd4"
-      },
-      {
-        "letter": "M",
-        "color": "#8bc34a"
-      },
-      {
-        "letter": "N",
-        "color": "#ffc107"
-      },
-      {
-        "letter": "O",
-        "color": "#d32f2f"
-      }
-    ]
-  },
+  "select": {},
   "locate": true,
   "gazetteer": {
     "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
@@ -76,37 +13,6 @@
       "fillColor": "#cf9",
       "fillOpacity": 0.2
     }
-  },
-  "layers": {
-    "style": {
-      "stroke": true,
-      "color": "#444",
-      "weight": 1,
-      "fillOpacity": 0
-    },
-    "styleHighlight": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    },
-    "styleRange": [
-      "#15773f",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027"
-    ],
-    "defaultMarker": [
-      [
-        400,
-        "#C0C0C0"
-      ]
-    ],
-   "imageMaxSize": 1024
   },
   "catchments": {
     "provider": [
@@ -136,38 +42,32 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base_labels", 550
-          ]
+          "provider": "MAPBOX"
         },
         "here": {
-          "name": "Here Baselayer",
+          "name": "HERE Imagery",
+          "meta": "Satellite Imagery layer provided by HERE.",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "HERE"
         },
         "border": {
           "name": "Country Border",
           "pane": ["bounds", 510],
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geom": "geom",
           "dbs": "XYZ",
           "arrayZoom": {
             "6": "eu_nuts_lv0",
@@ -181,15 +81,16 @@
             "14": "eu_nuts_lv0",
             "15": null
           },
+          "tilecache": "eu_nuts_lv0__tc",
           "style": {
-            "stroke": true,
-            "color": "#555",
-            "weight": 1.5,
-            "fillOpacity": 0
+            "default": {
+              "weight": 1.5,
+              "color": "#555"
+            }
+
           }
         },
-        "grid": {
-          "panel": true,          
+        "grid": {      
           "name": "Census Grid",
           "format": "grid",
           "pane": ["grid", 515],
@@ -1145,24 +1046,27 @@
             }
           ],
           "style": {
-            "stroke": true,
-            "color": "#666",
-            "weight": 1,
-            "fillOpacity": 0
+            "default": {
+              "weight": 1,
+              "color": "#000"
+            },
+            "highlight": {
+              "color": "#090"
+            }
           }
         },
         "retail_places_mvt": {
           "name": "Retail Places",
+          "properties": "rp_type,",
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geom": "geom",
-          "geomj": "ST_AsGeoJSON(geom)",
           "pane": ["bounds", 510],
           "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
             "12": "gb_retailplace"
           },
+          "tilecache": "gb_retailplace__tc",
           "infoj": [
             {
               "field": "rp_name",
@@ -1230,37 +1134,208 @@
             }
           ],
           "style": {
-            "stroke": true,
-            "color": "#ff9800",
-            "weight": 1,
-            "fillOpacity": 0
-          },
-          "styleHighlight": {
-            "stroke": true,
-            "color": "#ff9800",
-            "weight": 2,
-            "fill": true,
-            "fillColor": "#ff9800",
-            "fillOpacity": 0.2
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#000",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "color": "#e91e63"
+            },
+            "categorized": {
+              "label": "Retail Place type",
+              "field": "rp_type",
+              "cat": {
+                "Major City Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#EF271B",
+                    "opacity": 1,
+                    "fillColor": "#EF271B",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "City Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#BA2D0B",
+                    "opacity": 1,
+                    "fillColor": "#BA2D0B",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Large Town Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#FE4E00",
+                    "opacity": 1,
+                    "fillColor": "#FE4E00",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Major Urban Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#E2711D",
+                    "opacity": 1,
+                    "fillColor": "#E2711D",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Town Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#F3A712",
+                    "opacity": 1,
+                    "fillColor": "#F3A712",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Urban Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#FADF63",
+                    "opacity": 1,
+                    "fillColor": "#FADF63",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Small Town Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#FFE74C",
+                    "opacity": 1,
+                    "fillColor": "#FFE74C",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Village Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#DBFE87",
+                    "opacity": 1,
+                    "fillColor": "#DBFE87",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Regional SC": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#8ED081",
+                    "opacity": 1,
+                    "fillColor": "#8ED081",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "Regional Shopping Centre"
+                },
+                "Outlet Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#7DDF64",
+                    "opacity": 1,
+                    "fillColor": "#7DDF64",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Shopping Park": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#074F57",
+                    "opacity": 1,
+                    "fillColor": "#074F57",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Retail Park": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#32746D",
+                    "opacity": 1,
+                    "fillColor": "#32746D",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Leisure Park": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#41D3BD",
+                    "opacity": 1,
+                    "fillColor": "#41D3BD",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Local Hub": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#08B2E3",
+                    "opacity": 1,
+                    "fillColor": "#08B2E3",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Large Parade": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#1F487E",
+                    "opacity": 1,
+                    "fillColor": "#1F487E",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Parade": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#541388",
+                    "opacity": 1,
+                    "fillColor": "#541388",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Weak Parade": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#D90368",
+                    "opacity": 1,
+                    "fillColor": "#D90368",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                }
+              }
+            }
           }
         },
         "retail_points": {
           "display": true,
-          "panel": true,
           "name": "Retail Points",
-          "format": "cluster",
           "pane": ["retail_points", 540],
-          "dbs": "XYZ",         
-          "qID": "id",
+          "format": "cluster",
+          "dbs": "XYZ",
           "table": "gb_retailpoint",
-          "geomj": "ST_AsGeoJSON(geom)",
+          "qID": "id",
           "geom": "geom",
           "cluster_label": "store",
-          "cluster_competitor": "brand",
+          "cluster_cat": "brand",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
-          "markerMin": 20,
-          "markerMax": 40,
           "infoj": [
             {
               "field": "store",
@@ -1317,337 +1392,94 @@
               "level": 1
             }
           ],
-          "markerStyle": {
-            "aldi": {
-              "style": [
-                [
-                  400,
-                  "#ffbf45"
-                ],
-                [
-                  350,
-                  "#fa6f08"
-                ],
-                [
-                  300,
-                  "#ef3c11"
-                ],
-                [
-                  250,
-                  "#001f79"
-                ],
-                [
-                  200,
-                  "#02bee3"
-                ],
-                [
-                  100,
-                  "#ffffff"
-                ]
+          "style": {
+            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+            "markerMulti": [400,"#333"],
+            "markerMin": 20,
+            "markerMax": 40,
+            "categorized": {
+              "label": "Retailer",
+              "field": "brand",
+              "competitors": [
+                ["tesco","#0055a8","Tesco"],
+                ["sainsburys","#ee8a00","Sainsbury's"],
+                ["asda","#83b923","Asda"],
+                ["morrisons","#ffe133","Morrisons"]
               ],
-              "label": "Aldi"
-            },
-            "asda": {
-              "style": [
-                [
-                  400,
-                  "#83b923"
-                ],
-                [
-                  200,
-                  "#ffffff"
-                ],
-                [
-                  150,
-                  "#fdb839"
-                ]
-              ],
-              "label": "Asda"
-            },
-            "booths": {
-              "style": [
-                [
-                  400,
-                  "#a12629"
-                ],
-                [
-                  200,
-                  "#ffffff"
-                ],
-                [
-                  150,
-                  "#a12629"
-                ]
-              ],
-              "label": "Booths"
-            },
-            "budgens": {
-              "style": [
-                [
-                  400,
-                  "#EEEEE0"
-                ],
-                [
-                  200,
-                  "#679a00"
-                ],
-                [
-                  150,
-                  "#cccb01"
-                ]
-              ],
-              "label": "Budgens"
-            },
-            "co_op": {
-              "style": [
-                [
-                  400,
-                  "#0b1e60"
-                ],
-                [
-                  250,
-                  "#ffffff"
-                ],
-                [
-                  200,
-                  "#a3d227"
-                ]
-              ],
-              "label": "The Co-Operative"
-            },
-            "costco": {
-              "style": [
-                [
-                  400,
-                  "#005daa"
-                ],
-                [
-                  350,
-                  "#ffffff"
-                ],
-                [
-                  250,
-                  "#e31837"
-                ]
-              ],
-              "label": "Costco"
-            },
-            "farmfoods": {
-              "style": [
-                [
-                  400,
-                  "#77a632"
-                ],
-                [
-                  300,
-                  "#f7f900"
-                ],
-                [
-                  200,
-                  "#ff0000"
-                ]
-              ],
-              "label": "Farm Foods"
-            },
-            "fultons_food": {
-              "style": [
-                [
-                  400,
-                  "#004a95"
-                ],
-                [
-                  300,
-                  "#ffffff"
-                ],
-                [
-                  200,
-                  "#004a95"
-                ],
-                [
-                  100,
-                  "#fff11f"
-                ]
-              ],
-              "label": "Fultons Food"
-            },
-            "heron_foods": {
-              "style": [
-                [
-                  400,
-                  "#ffffff"
-                ],
-                [
-                  300,
-                  "#313590"
-                ],
-                [
-                  100,
-                  "#ffcf00"
-                ]
-              ],
-              "label": "Heron Foods"
-            },
-            "iceland": {
-              "style": [
-                [
-                  400,
-                  "#ed1b2d"
-                ],
-                [
-                  300,
-                  "#f2552b"
-                ],
-                [
-                  200,
-                  "#f89128"
-                ],
-                [
-                  100,
-                  "#ffffff"
-                ]
-              ],
-              "label": "Iceland"
-            },
-            "lidl": {
-              "style": [
-                [
-                  400,
-                  "#d61408"
-                ],
-                [
-                  350,
-                  "#ffe502"
-                ],
-                [
-                  200,
-                  "#002d7a"
-                ],
-                [
-                  100,
-                  "#d61408"
-                ]
-              ],
-              "label": "Lidl"
-            },
-            "makro": {
-              "style": [
-                [
-                  400,
-                  "#00457a"
-                ],
-                [
-                  150,
-                  "#ffe811"
-                ]
-              ],
-              "label": "Makro"
-            },
-            "marks_spencer": {
-              "style": [
-                [
-                  400,
-                  "#0a0d10"
-                ],
-                [
-                  200,
-                  "#def036"
-                ],
-                [
-                  100,
-                  "#0a0d10"
-                ]
-              ],
-              "label": "Marks & Spencer"
-            },
-            "morrisons": {
-              "style": [
-                [
-                  400,
-                  "#ffe133"
-                ],
-                [
-                  200,
-                  "#00614e"
-                ]
-              ],
-              "label": "Morrisons"
-            },
-            "sainsburys": {
-              "style": [
-                [
-                  400,
-                  "#ee8a00"
-                ],
-                [
-                  250,
-                  "#ffffff"
-                ],
-                [
-                  150,
-                  "#ee8a00"
-                ]
-              ],
-              "label": "Sainsbury's"
-            },
-            "tesco": {
-              "style": [
-                [
-                  400,
-                  "#0055a8"
-                ],
-                [
-                  300,
-                  "#ffffff"
-                ],
-                [
-                  150,
-                  "#f02f26"
-                ]
-              ],
-              "label": "Tesco"
-            },
-            "waitrose": {
-              "style": [
-                [
-                  400,
-                  "#81ae37"
-                ],
-                [
-                  150,
-                  "#ffffff"
-                ]
-              ],
-              "label": "Waitrose"
-            },
-            "whole_foods": {
-              "style": [
-                [
-                  400,
-                  "#00674b"
-                ],
-                [
-                  350,
-                  "#ffffff"
-                ],
-                [
-                  200,
-                  "#00674b"
-                ]
-              ],
-              "label": "Whole Foods"
-            },
-            "other": {
-              "style": [
-                [
-                  400,
-                  "#999"
-                ],
-                [
-                  350,
-                  "#fff"
-                ]
-              ],
-              "label": "Other"
+              "cat": {
+                "aldi": {
+                  "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                  "label": "Aldi"
+                },
+                "asda": {
+                  "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                  "label": "Asda"
+                },
+                "booths": {
+                  "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                  "label": "Booths"
+                },
+                "budgens": {
+                  "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                  "label": "Budgens"
+                },
+                "co_op": {
+                  "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                  "label": "The Co-Operative"
+                 },
+                "costco": {
+                  "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                  "label": "Costco"
+                },
+                "farmfoods": {
+                  "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                  "label": "Farm Foods"
+                },
+                "fultons_food": {
+                  "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                  "label": "Fultons Food"
+                },
+                "heron_foods": {
+                  "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                  "label": "Heron Foods"
+                },
+                "iceland": {
+                  "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                  "label": "Iceland"
+                },
+                "lidl": {
+                  "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                  "label": "Lidl"
+                },
+                "makro": {
+                  "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                  "label": "Makro"
+                },
+                "marks_spencer": {
+                  "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                  "label": "Marks & Spencer"
+                },
+                "morrisons": {
+                  "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                  "label": "Morrisons"
+                },
+                "sainsburys": {
+                  "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                  "label": "Sainsbury's"
+                },
+                "tesco": {
+                  "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                  "label": "Tesco"
+                },
+                "waitrose": {
+                  "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                  "label": "Waitrose"
+                },
+                "whole_foods": {
+                  "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                  "label": "Whole Foods"
+                }
+              }
             }
           }
         }
@@ -1778,38 +1610,32 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base_labels", 550
-          ]
+          "provider": "MAPBOX"
         },
         "here": {
-          "name": "Here Baselayer",
+          "name": "HERE Imagery",
+          "meta": "Satellite Imagery layer provided by HERE.",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "HERE"
         },
         "border": {
           "name": "Country Border",
           "pane": ["bounds", 510],
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geom": "geom",
           "dbs": "XYZ",
           "arrayZoom": {
             "6": "eu_nuts_lv0",
@@ -1822,10 +1648,17 @@
             "13": "eu_nuts_lv0",
             "14": "eu_nuts_lv0",
             "15": null
+          },
+          "tilecache": "eu_nuts_lv0__tc",
+          "style": {
+            "default": {
+              "weight": 1.5,
+              "color": "#555"
+            }
+
           }
         },
-        "grid": {
-          "panel": true,          
+        "grid": {        
           "name": "Census Grid",
           "format": "grid",
           "pane": ["grid", 515],
@@ -1840,17 +1673,19 @@
             "11": "ro_hx_2k",
             "12": "ro_hx_1k"
           },
-          "styleRange": [
-            "#3366FF",
-            "#4D59F2",
-            "#664DE6",
-            "#8040D9",
-            "#9933CC",
-            "#B326BF",
-            "#CC1AB3",
-            "#E60DA6",
-            "#FF0099"
-          ],
+          "style": {
+            "range": [
+              "#3366FF",
+              "#4D59F2",
+              "#664DE6",
+              "#8040D9",
+              "#9933CC",
+              "#B326BF",
+              "#CC1AB3",
+              "#E60DA6",
+              "#FF0099"
+            ]
+          },
           "queryFields": [
             [
               "pop__11",
@@ -2006,14 +1841,13 @@
           "name": "Communes",
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geom": "geom",
-          "geomj": "ST_AsGeoJSON(geom)",
           "pane": ["communes", 520],
           "dbs": "XYZ",
           "qID": "qid",
           "arrayZoom": {
             "9": "ro_commune_census__11"
           },
+          "tilecache": "ro_commune_census__11__tc",
           "infoj": [
             {
               "field": "commune",
@@ -2117,19 +1951,16 @@
         },
         "retail_fashion": {
           "display": true,
-          "panel": true,
           "name": "Fashion retail",
-          "format": "cluster",
           "pane": ["retail_points", 540],
+          "format": "cluster",
           "dbs": "XYZ",
           "qID": "qid",
           "table": "ro_fashion",
           "cluster_label": "store_name",
-          "cluster_competitor": "fascia",
+          "cluster_cat": "fascia",
           "cluster_kmeans": 2,
           "cluster_dbscan": 0.0075,
-          "markerMin": 20,
-          "markerMax": 40,
           "infoj": [
             {
               "field": "store_name",
@@ -2169,73 +2000,48 @@
           ],
           "geomj": "ST_AsGeoJSON(geomcntr)",
           "geom": "geomcntr",
-          "markerStyle": {
-            "SINSAY": {
-              "style": [
-                [
-                  400,
-                  "#8d6e63"
-                ]
+          "style": {
+            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+            "markerMulti": [400,"#333"],
+            "markerMin": 20,
+            "markerMax": 40,
+            "categorized": {
+              "label": "Retailer",
+              "field": "fascia",
+              "competitors": [
+                ["SINSAY","#8d6e63","Sinsay"],
+                ["MOHITO","#ffeb3b","Mohito"],
+                ["RESERVED","#dce775","Reserved"],
+                ["CROPP","#64b5f6","Cropp"],
+                ["HOUSE","#ab47bc","House"],
+                ["H&M","#f44336","H&M"]
               ],
-              "label": "Sinsay"
-            },
-            "MOHITO": {
-              "style": [
-                [
-                  400,
-                  "#ffeb3b"
-                ]
-              ],
-              "label": "Mohito"
-            },
-            "RESERVED": {
-              "style": [
-                [
-                  400,
-                  "#dce775"
-                ]
-              ],
-              "label": "Reserved"
-            },
-            "CROPP": {
-              "style": [
-                [
-                  400,
-                  "#64b5f6"
-                ]
-              ],
-              "label": "Cropp"
-            },
-            "HOUSE": {
-              "style": [
-                [
-                  400,
-                  "#ab47bc"
-                ]
-              ],
-              "label": "House"
-            },
-            "H&M": {
-              "style": [
-                [
-                  400,
-                  "#f44336"
-                ]
-              ],
-              "label": "H&M"
-            },
-            "other": {
-              "style": [
-                [
-                  400,
-                  "#A9A9A9"
-                ],
-                [
-                  360,
-                  "#C0C0C0"
-                ]
-              ],
-              "label": "other"
+              "cat": {
+                "SINSAY": {
+                  "marker": "svg_symbols.target([400,'#8d6e63'])",
+                  "label": "Sinsay"
+                },
+                "MOHITO": {
+                  "marker": "svg_symbols.target([400,'#ffeb3b'])",
+                  "label": "Mohito"
+                },
+                "RESERVED": {
+                  "marker": "svg_symbols.target([400,'#dce775'])",
+                  "label": "Reserved"
+                },
+                "CROPP": {
+                  "marker": "svg_symbols.target([400,'#64b5f6'])",
+                  "label": "Cropp"
+                },
+                "HOUSE": {
+                  "marker": "svg_symbols.target([400,'#ab47bc'])",
+                  "label": "House"
+                },
+                "H&M": {
+                  "marker": "svg_symbols.target([400,'#f44336'])",
+                  "label": "H&M"
+                }
+              }
             }
           }
         }

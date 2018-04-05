@@ -20,7 +20,7 @@ async function geojson(req, res) {
     WHERE
         ST_DWithin(
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
-            0.000001);`
+            ${geom}, 0.000001);`
 
     global.DBS[req.query.dbs].query(q)
         .then(result => {

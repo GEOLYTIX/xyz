@@ -106,7 +106,6 @@ function getLayer() {
                             icon = layer.style.categorized && layer.style.categorized.cat[point.properties.infoj[0].cat] ?
                                 layer.style.categorized.cat[point.properties.infoj[0].cat].marker :
                                 layer.style.marker || svg_symbols.target([400,'#090']);
-
                         }
 
                         return L.marker(latlng, {
@@ -114,7 +113,7 @@ function getLayer() {
                             zIndexOffset: parseInt(1000 - 1000 / max * point.properties.infoj.length),
                             icon: L.icon({
                                 iconUrl: icon,
-                                iconSize: point.properties.infoj.length === 1 ? layer.style.markerMin : layer.style.markerMin + layer.style.markerMax / max * point.properties.infoj.length
+                                iconSize: point.properties.infoj.length === 1 ? (layer.style.markerMin || 20) : (layer.style.markerMin || 20) + (layer.style.markerMax || 40) / max * point.properties.infoj.length
                                 //iconSize: 20 + 40 / Math.log(max) * Math.log(point.properties.c)
                             })
                         });
@@ -142,7 +141,8 @@ function getLayer() {
                                 fillColor: '#ccff90',
                                 fillOpacity: 0.4,
                                 stroke: false,
-                                interactive: false
+                                interactive: false,
+                                pane: layer.pane[0]
                             }).addTo(_xyz.map);
 
                             let table = '<table cellpadding="0" cellspacing="0">';
@@ -190,7 +190,7 @@ function getLayer() {
                                     map_dom__margin = parseInt(dom.map.style.marginTop),
                                     shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
 
-                                _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
+                                // _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
                                 _xyz.map.panBy([0, -shiftY]);
 
                                 // Draw line marker which connects hex cell with drop down.
@@ -215,7 +215,7 @@ function getLayer() {
                             }
 
                             // Zoom in one step.
-                            _xyz.map.setZoomAround(latlng, _xyz.map.getZoom() + 1);
+                            // _xyz.map.setZoomAround(latlng, _xyz.map.getZoom() + 1);
 
                             // Add event to query location info to the location list records.
                             let location_table_rows = document.querySelectorAll('.location_table tr');

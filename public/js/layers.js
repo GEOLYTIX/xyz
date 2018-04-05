@@ -49,6 +49,8 @@ module.exports = function(){
             layer.base = null;
             layer.locale = _xyz.locale;
             layer.name = layer.name || layer.layer;
+            if (!layer.style) layer.style = {};
+            if (!layer.style.default) layer.style.default = {"weight": 1, "color": "#000"};
 
             // Set layer styles
             Object.keys(_xyz.layers).map(function(key){
