@@ -38,6 +38,9 @@ global.appSettingsValues = [];
     })
 })(global.appSettings)
 
+// Push defaults into appSettingsValues
+Array.prototype.push.apply(global.appSettingsValues, ['geom'])
+
 // Create constructor for mobile detect module.
 const Md = require('mobile-detect');
 

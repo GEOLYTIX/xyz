@@ -2,17 +2,7 @@
   "title": "GEOLYTIX | XYZ Survey",
   "select": {},
   "locate": true,
-  "gazetteer": {
-    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-    "pane": ["gazetteer", 550],
-    "style": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    }
-  },
+  "gazetteer": {},
   "locale": "Global",
   "locales": {
     "Global": {
@@ -54,7 +44,6 @@
           "dbs": "XYZ",
           "qID": "id",
           "table": "store_survey",
-          "geom": "geom",
           "cluster_label": "retailer",
           "cluster_cat": "retailer",
           "cluster_kmeans": 0.005,
@@ -311,6 +300,7 @@
                 ["ADIDAS","#333","adidas"],
                 ["NIKE","#f44336","Nike"]
               ],
+              "other": true,
               "cat": {
                 "ADIDAS": {
                   "marker": "svg_symbols.target([400,'#333'])",
@@ -347,7 +337,6 @@
           "pane": ["venues", 500],
           "dbs": "XYZ",
           "qID": "id",
-          "geom": "geom",
           "arrayZoom": {
             "2": "store_survey_venues"
           },

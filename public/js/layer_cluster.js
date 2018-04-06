@@ -16,7 +16,7 @@ function getLayer() {
             dbs: layer.dbs,
             layer: layer.table,
             qID: layer.qID,
-            geom: layer.geom,
+            geom: layer.geom || 'geom',
             label: layer.cluster_label,
             cat: layer.cluster_cat,
             kmeans: layer.cluster_kmeans,
@@ -97,9 +97,9 @@ function getLayer() {
                                 }
                             }
 
-                            icon = svg_symbols.target(dotArr || layer.style.markerMulti || [400,'#333']);
-
-                            //icon = svg_symbols.target(dotArr) || layer.style.marker || svg_symbols.target([400,'#090']);
+                            icon = (dotArr || layer.style.markerMulti) ?
+                                svg_symbols.target(dotArr || layer.style.markerMulti) :
+                                layer.style.marker;
 
                         } else {
 

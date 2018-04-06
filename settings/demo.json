@@ -3,17 +3,7 @@
   "documentation": "documentation",
   "select": {},
   "locate": true,
-  "gazetteer": {
-    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-    "pane": ["gazetteer", 550],
-    "style": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    }
-  },
+  "gazetteer": {},
   "catchments": {
     "provider": [
       "MAPBOX",
@@ -26,16 +16,7 @@
     "UK": {
       "name": "United Kingdom",
       "gazetteer": ["GOOGLE","GB","","e.g. London"],
-      "bounds": [
-        [
-          48,
-          -13
-        ],
-        [
-          62,
-          5
-        ]
-      ],
+      "bounds": [[48, -13],[62, 5]],
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
@@ -1147,6 +1128,7 @@
             "categorized": {
               "label": "Retail Place type",
               "field": "rp_type",
+              "other": true,
               "cat": {
                 "Major City Centre": {
                   "style": {
@@ -1331,7 +1313,6 @@
           "dbs": "XYZ",
           "table": "gb_retailpoint",
           "qID": "id",
-          "geom": "geom",
           "cluster_label": "store",
           "cluster_cat": "brand",
           "cluster_kmeans": 4,
@@ -1406,6 +1387,7 @@
                 ["asda","#83b923","Asda"],
                 ["morrisons","#ffe133","Morrisons"]
               ],
+              "other": true,
               "cat": {
                 "aldi": {
                   "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
@@ -1594,16 +1576,7 @@
     "RO": {
       "name": "Romania",
       "gazetteer": ["GOOGLE","RO","","e.g. Constan\u021Ba"],
-      "bounds": [
-        [
-          43,
-          20
-        ],
-        [
-          49,
-          30
-        ]
-      ],
+      "bounds": [[43, 20],[49,30]],
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {

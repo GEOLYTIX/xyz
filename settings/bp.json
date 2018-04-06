@@ -1,182 +1,49 @@
 {
   "title": "GEOLYTIX | BP",
-  "select": {
-    "records": [
-      {
-        "letter": "A",
-        "color": "#9c27b0"
-      },
-      {
-        "letter": "B",
-        "color": "#2196f3"
-      },
-      {
-        "letter": "C",
-        "color": "#009688"
-      },
-      {
-        "letter": "D",
-        "color": "#cddc39"
-      },
-      {
-        "letter": "E",
-        "color": "#ff9800"
-      },
-      {
-        "letter": "F",
-        "color": "#673ab7"
-      },
-      {
-        "letter": "G",
-        "color": "#03a9f4"
-      },
-      {
-        "letter": "H",
-        "color": "#4caf50"
-      },
-      {
-        "letter": "I",
-        "color": "#ffeb3b"
-      },
-      {
-        "letter": "J",
-        "color": "#ff5722"
-      },
-      {
-        "letter": "K",
-        "color": "#0d47a1"
-      },
-      {
-        "letter": "L",
-        "color": "#00bcd4"
-      },
-      {
-        "letter": "M",
-        "color": "#8bc34a"
-      },
-      {
-        "letter": "N",
-        "color": "#ffc107"
-      },
-      {
-        "letter": "O",
-        "color": "#d32f2f"
-      }
-    ]
-  },
-  "gazetteer": {
-    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-    "pane": [
-      "gazetteer",
-      550
-    ],
-    "style": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    }
-  },
-  "layers": {
-    "style": {
-      "stroke": true,
-      "color": "#444",
-      "weight": 1,
-      "fillOpacity": 0
-    },
-    "styleHighlight": {
-      "color": "#222",
-      "weight": 1,
-      "fill": false
-    },
-    "styleRange": [
-      "#15773f",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027"
-    ],
-    "defaultMarker": [
-      [
-        400,
-        "#C0C0C0"
-      ]
-    ],
-    "imageMaxSize": 1024
-  },
+  "select": {},
+  "gazetteer": {},
   "locales": {
     "GB": {
-      "gazetteer": [
-        "GOOGLE",
-        "GB",
-        "",
-        "e.g. London"
-      ],
-      "bounds": [
-        [
-          48,
-          -11.5
-        ],
-        [
-          62,
-          5
-        ]
-      ],
+      "gazetteer": ["GOOGLE", "GB", "", "e.g. London"],
+      "bounds": [[48, -11.5],[62, 5]],
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "pane": ["base_labels", 560],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base_labels", 550
-          ]
+          "provider": "MAPBOX"
         },
         "here": {
-          "name": "Here Baselayer",
+          "name": "HERE Imagery",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "HERE"
         },
         "catalist_opp": {
           "display": true,
-          "panel": true,
           "name": "Stations",
           "format": "cluster",
-          "pane": [
-            "catalist_opp",
-            540
-          ],
+          "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
           "qID": "id",
           "table": "bp_catalist_opp",
-          "geomj": "ST_AsGeoJSON(geom)",
-          "geom": "geom",
           "cluster_label": "sitename",
-          "cluster_competitor": "sharebrand",
+          "cluster_cat": "sharebrand",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
-          "markerMin": 20,
-          "markerMax": 40,
           "infoj": [
             {
               "field": "sitename",
@@ -246,207 +113,120 @@
               "level": 1
             }
           ],
-          "markerStyle": {
-            "BP": {
-              "style": [
-                [400,"#0A9700"],
-                [300,"#98CB00"],
-                [200,"#FFFF00"],
-                [100,"#fff"]
+          "style": {
+            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+            "markerMulti": [400,"#333"],
+            "categorized": {
+              "field": "sharebrand",
+              "competitors": [
+                ["BP","#0A9700","BP"],
+                ["SHELL","#FFD400","Shell"],
+                ["ESSO","#1853A4 jh","ESSO"]
               ],
-              "label": "BP"
-            },
-            "APPLEGREEN": {
-              "style": [
-                [400,"#516E36"],
-                [300,"#7ABF46"]
-              ],
-              "label": "applegreen"
-            },
-            "ASDA": {
-              "style": [
-                [400,"#83b923"],
-                [200,"#ffffff"],
-                [150,"#fdb839"]
-              ],
-              "label": "ASDA"
-            },
-            "CERTAS ENERGY": {
-              "style": [
-                [400,"#4F2B82"],
-                [250,"#8ED4E0"],
-                [150,"#10B3CA"]
-              ],
-              "label": "certas energy"
-            },
-            "ESSAR": {
-              "style": [
-                [400,"#FD1900"],
-                [300,"#FE5D00"],
-                [200,"#222"]
-              ],
-              "label": "ESSAR"
-            },
-            "ESSO": {
-              "style": [
-                [400,"#1853A4"],
-                [300,"#FFF"],
-                [150,"#D90D18"]
-              ],
-              "label": "Esso"
-            },
-            "GLEANER": {
-              "style": [
-                [400,"#313584"],
-                [250,"#D90D18"],
-                [150,"#FFFF4D"]
-              ],
-              "label": "Gleaner"
-            },
-            "HARVEST ENERGY": {
-              "style": [
-                [400,"#0E77C9"],
-                [200,"#51B749"]
-              ],
-              "label": "Harvest energy"
-            },
-            "JET": {
-              "style": [
-                [400,"#0B4692"],
-                [300,"#FDC400"]
-              ],
-              "label": "JET"
-            },
-            "MAXOL": {
-              "style": [
-                [400,"#B20C5F"],
-                [300,"#EA5813"],
-                [250,"#FBD100"],
-                [150,"#125EA0"]
-              ],
-              "label": "MAXOL"
-            },
-            "MORRISONS": {
-              "style": [
-                [400,"#ffe133"],
-                [200,"#00614e"]
-              ],
-              "label": "Morrisons"
-            },
-            "MURCO": {
-              "style": [
-                [400,"#E42039"],
-                [200,"#fff"],
-                [100,"#0A407E"]
-              ],
-              "label": "MURCO"
-            },
-            "RIX": {
-              "style": [
-                [400,"#95B0DC"],
-                [250,"#EC2431"],
-                [150,"#5188C6"]
-              ],
-              "label": "Rix"
-            },
-            "SAINSBURYS": {
-              "style": [
-                [400,"#ee8a00"],
-                [250,"#ffffff"],
-                [150,"#ee8a00"]
-              ],
-              "label": "Sainsbury's"
-            },
-            "SHELL": {
-              "style": [
-                [400,"#EC2427"],
-                [300,"#FFD400"]
-              ],
-              "label": "Shell"
-            },
-            "SOLO": {
-              "style": [
-                [400,"#2D903A"],
-                [350,"#F06722"],
-                [200,"#E72E24"],
-                [100,"#65318D"]
-              ],
-              "label": "solo petroleum"
-            },
-            "STAR": {
-              "style": [
-                [400,"#E10D1E"],
-                [300,"#fff"],
-                [200,"#07603C"],
-                [100,"#E10D1E"]
-              ],
-              "label": "star"
-            },
-            "TESCO": {
-              "style": [
-                [400,"#0055a8"],
-                [300,"#ffffff"],
-                [250,"#f02f26"]
-              ],
-              "label": "Tesco"
-            },
-            "TEXACO": {
-              "style": [
-                [400,"#EA3231"],
-                [300,"#fff"],
-                [250,"#EA3231"],
-                [150,"#000"]
-              ],
-              "label": "TEXACO"
-            },
-            "THAMES": {
-              "style": [
-                [400,"#E73D41"],
-                [200,"#fff"],
-                [100,"#FFB18A"]
-              ],
-              "label": "Thames"
-            },
-            "TOPAZ": {
-              "style": [
-                [400,"#DAB02E"],
-                [350,"#376EB7"],
-                [200,"#88C068"],
-                [100,"#376EB7"]
-              ],
-              "label": "TOPAZ"
-            },
-            "CLOSED": {
-              "style": [
-                [400,"#C60000"]
-              ],
-              "label": "Closed"
-            },
-            "UNBRANDED": {
-              "style": [
-                [400,"#ddd"]
-              ],
-              "label": "Unbranded"
-            },
-            "other": {
-              "style": [
-                [400,"#999"]
-              ],
-              "label": "Other"
+              "other": true,
+              "cat": {
+                "BP": {
+                  "marker": "svg_symbols.target([400,'#0A9700',300,'#98CB00',200,'#FFFF00',100,'fff'])",
+                  "label": "BP"
+                },
+                "APPLEGREEN": {
+                  "marker": "svg_symbols.target([400,'#516E36',300,'#7ABF46'])",
+                  "label": "applegreen"
+                },
+                "ASDA": {
+                  "marker": "svg_symbols.target([400,'#83b923',200,'#fff',150,'#fdb839'])",
+                  "label": "ASDA"
+                },
+                "CERTAS ENERGY": {
+                  "marker": "svg_symbols.target([400,'#4F2B82',250,'#8ED4E0',150,'#10B3CA'])",
+                  "label": "certas energy"
+                },
+                "ESSAR": {
+                  "marker": "svg_symbols.target([400,'#FD1900',300,'#FE5D00',200,'#222'])",
+                  "label": "ESSAR"
+                },
+                "ESSO": {
+                  "marker": "svg_symbols.target([400,'#1853A4',300,'#FFF',150,'#D90D18'])",
+                  "label": "Esso"
+                },
+                "GLEANER": {
+                  "marker": "svg_symbols.target([400,'#313584',250,'#D90D18',150,'#FFFF4D'])",
+                  "label": "Gleaner"
+                },
+                "HARVEST ENERGY": {
+                  "marker": "svg_symbols.target([400,'#0E77C9',200,'#51B749'])",
+                  "label": "Harvest energy"
+                },
+                "JET": {
+                  "marker": "svg_symbols.target([400,'#0B4692',300,'#FDC400'])",
+                  "label": "JET"
+                },
+                "MAXOL": {
+                  "marker": "svg_symbols.target([400,'#B20C5F',300,'#EA5813',250,'#FBD100',150,'#125EA0'])",
+                  "label": "MAXOL"
+                },
+                "MORRISONS": {
+                  "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                  "label": "Morrisons"
+                },
+                "MURCO": {
+                  "marker": "svg_symbols.target([400,'#E42039',200,'#fff',100,'#0A407E'])",
+                  "label": "MURCO"
+                },
+                "RIX": {
+                  "marker": "svg_symbols.target([400,'#95B0DC',250,'#EC2431',150,'#5188C6'])",
+                  "label": "Rix"
+                },
+                "SAINSBURYS": {
+                  "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                  "label": "Sainsbury's"
+                },
+                "SHELL": {
+                  "marker": "svg_symbols.target([400,'#EC2427',300,'#FFD400'])",
+                  "label": "Shell"
+                },
+                "SOLO": {
+                  "marker": "svg_symbols.target([400,'#2D903A',350,'#F06722',200,'#E72E24',100,'#65318D'])",
+                  "label": "solo petroleum"
+                },
+                "STAR": {
+                  "marker": "svg_symbols.target([400,'#E10D1E',300,'#fff',200,'#07603C',100,'#E10D1E'])",
+                  "label": "star"
+                },
+                "TESCO": {
+                  "marker": "svg_symbols.target([400,'#0055a8',300,'#fff',250,'#f02f26'])",
+                  "label": "Tesco"
+                },
+                "TEXACO": {
+                  "marker": "svg_symbols.target([400,'#EA3231',300,'#fff',250,'#EA3231',150,'#000'])",
+                  "label": "TEXACO"
+                },
+                "THAMES": {
+                  "marker": "svg_symbols.target([400,'#E73D41',200,'#fff',100,'#FFB18A'])",
+                  "label": "Thames"
+                },
+                "TOPAZ": {
+                  "marker": "svg_symbols.target([400,'#DAB02E',350,'#376EB7',200,'#88C068',100,'#376EB7'])",
+                  "label": "TOPAZ"
+                },
+                "CLOSED": {
+                  "marker": "svg_symbols.target([400,'#C60000'])",
+                  "label": "Closed"
+                },
+                "UNBRANDED": {
+                  "marker": "svg_symbols.target([400,'#ddd'])",
+                  "label": "Unbranded"
+                }
+              }
             }
-          },
-          "arrayCompColours": [
-            "#ddd"
-          ],
-          "competitors": []
+          }
         },
         "region": {
           "name": "Regions",
           "pane": ["bounds",510],
           "format": "mvt",
-          "geom_3857": "geom_3857",
-          "geomj": "ST_AsGeoJSON(geom)",
           "dbs": "XYZ",
+          "geom_3857": "geom_3857",
           "qID": "id",
           "infoj": [
             {
@@ -457,17 +237,27 @@
           ],
           "arrayZoom": {
             "6": "bp_region"
+          },
+          "tilecache": "bp_region__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000"
+            },
+            "highlight": {
+              "color": "#e91e63"
+            }
           }
         },
         "oa": {
           "name": "Output Area (rank regional)",
           "pane": ["bounds",510],
           "format": "mvt",
-          "panel": true,
           "geom_3857": "geom_3857",
           "geomj": "geomj",
           "dbs": "XYZ",
           "qID": "id",
+          "properties": "rank_reg,",
           "infoj": [
             {
               "field": "oa_code",
@@ -511,11 +301,23 @@
           "arrayZoom": {
             "9": "bp_oa_opp_simple"
           },
-          "properties": "rank_reg",
-          "categorized": {
-            "rank_reg": {
-              "label": "something",
-              "style": {
+          "tilecache": "bp_oa_opp_simple__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#000",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "weight": 1,
+              "color": "#000"
+            },
+            "categorized": {
+              "label": "Rank Regional",
+              "field": "rank_reg",
+              "cat": {
                 "1": {
                   "style": {
                     "stroke": false,
@@ -596,11 +398,6 @@
                     "fillOpacity": 0.3
                   }
                 }
-              },
-              "styleHighlight": {
-                "color": "#222",
-                "weight": 1,
-                "fill": false
               }
             }
           }
@@ -609,11 +406,11 @@
           "name": "Output Area (rank total)",
           "pane": ["bounds",510],
           "format": "mvt",
-          "panel": true,
           "geom_3857": "geom_3857",
           "geomj": "geomj",
           "dbs": "XYZ",
           "qID": "id",
+          "properties": "rank_tot,",
           "infoj": [
             {
               "field": "oa_code",
@@ -657,11 +454,23 @@
           "arrayZoom": {
             "9": "bp_oa_total"
           },
-          "properties": "rank_tot",
-          "categorized": {
-            "rank_tot": {
-              "label": "something",
-              "style": {
+          "tilecache": "bp_oa_total__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#000",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "weight": 1,
+              "color": "#000"
+            },
+            "categorized": {
+              "label": "Rank National",
+              "field": "rank_tot",
+              "cat": {
                 "1": {
                   "style": {
                     "stroke": false,
@@ -742,34 +551,21 @@
                     "fillOpacity": 0.3
                   }
                 }
-              },
-              "styleHighlight": {
-                "color": "#222",
-                "weight": 1,
-                "fill": false
               }
             }
           }
         },
         "traffic_count": {
-          "panel": true,
           "name": "Traffic (major)",
           "format": "cluster",
-          "pane": [
-            "traffic",
-            550
-          ],
+          "pane": ["traffic", 550],
           "dbs": "XYZ",
           "qID": "id",
           "table": "bp_traffic_counts",
-          "geomj": "ST_AsGeoJSON(geom)",
-          "geom": "geom",
           "cluster_label": "road_num",
-          "cluster_competitor": "traffic",
+          "cluster_cat": "traffic",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
-          "markerMin": 20,
-          "markerMax": 40,
           "infoj": [
             {
               "field": "cp_type",
@@ -822,62 +618,48 @@
               "type": "integer"
             }
           ],
-          "markerStyle": {
-            "0": {
-              "style": [
-                [400,"#ffffcc"]
-              ],
-              "label": "Very Low"
-            },
-            "1": {
-              "style": [
-                [400,"#a1dab4"]
-              ],
-              "label": "Low"
-            },
-            "2": {
-              "style": [
-                [400,"#41b6c4"]
-              ],
-              "label": "Moderate"
-            },
-            "3": {
-              "style": [
-                [400,"#2c7fb8"]
-              ],
-              "label": "High"
-            },
-            "4": {
-              "style": [
-                [400,"#253494"]
-              ],
-              "label": "Very High"
+          "style": {
+            "marker": "svg_symbols.target([400,'#41b6c4'])",
+            "markerMulti": [400,"#41b6c4"],
+            "categorized": {
+              "label": "Traffic count",
+              "field": "traffic",
+              "cat": {
+                "very_low": {
+                  "marker": "svg_symbols.target([400,'#ffffcc'])",
+                  "label": "Very Low"
+                },
+                "low": {
+                  "marker": "svg_symbols.target([400,'#a1dab4'])",
+                  "label": "Low"
+                },
+                "moderate": {
+                  "marker": "svg_symbols.target([400,'#41b6c4'])",
+                  "label": "Moderate"
+                },
+                "high": {
+                  "marker": "svg_symbols.target([400,'#2c7fb8'])",
+                  "label": "High"
+                },
+                "very_high": {
+                  "marker": "svg_symbols.target([400,'#253494'])",
+                  "label": "Very High"
+                }
+              }
             }
-          },
-          "arrayCompColours": [
-            "#ddd"
-          ],
-          "competitors": []
+          }
         },
         "traffic_count_minor": {
-          "panel": true,
           "name": "Traffic (minor)",
           "format": "cluster",
-          "pane": [
-            "traffic",
-            550
-          ],
+          "pane": ["traffic", 550],
           "dbs": "XYZ",
           "qID": "id",
           "table": "bp_traffic_counts_minor",
-          "geomj": "ST_AsGeoJSON(geom)",
-          "geom": "geom",
           "cluster_label": "cp_id",
-          "cluster_competitor": "traffic",
+          "cluster_cat": "traffic",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
-          "markerMin": 10,
-          "markerMax": 30,
           "infoj": [
             {
               "field": "cp_type",
@@ -930,42 +712,38 @@
               "type": "integer"
             }
           ],
-          "markerStyle": {
-            "0": {
-              "style": [
-                [400,"#ffffcc"]
-              ],
-              "label": "Very Low"
-            },
-            "1": {
-              "style": [
-                [400,"#a1dab4"]
-              ],
-              "label": "Low"
-            },
-            "2": {
-              "style": [
-                [400,"#41b6c4"]
-              ],
-              "label": "Moderate"
-            },
-            "3": {
-              "style": [
-                [400,"#2c7fb8"]
-              ],
-              "label": "High"
-            },
-            "4": {
-              "style": [
-                [400,"#253494"]
-              ],
-              "label": "Very High"
+          "style": {
+            "markerMin": 10,
+            "markerMax": 30,
+            "marker": "svg_symbols.target([400,'#41b6c4'])",
+            "markerMulti": [400,"#41b6c4"],
+            "categorized": {
+              "label": "Traffic count",
+              "field": "traffic",
+              "cat": {
+                "0": {
+                  "marker": "svg_symbols.target([400,'#ffffcc'])",
+                  "label": "Very Low"
+                },
+                "1": {
+                  "marker": "svg_symbols.target([400,'#a1dab4'])",
+                  "label": "Low"
+                },
+                "2": {
+                  "marker": "svg_symbols.target([400,'#41b6c4'])",
+                  "label": "Moderate"
+                },
+                "3": {
+                  "marker": "svg_symbols.target([400,'#2c7fb8'])",
+                  "label": "High"
+                },
+                "4": {
+                  "marker": "svg_symbols.target([400,'#253494'])",
+                  "label": "Very High"
+                }
+              }
             }
-          },
-          "arrayCompColours": [
-            "#ddd"
-          ],
-          "competitors": []
+          }
         }
       }
     }

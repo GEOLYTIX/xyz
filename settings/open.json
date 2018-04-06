@@ -3,17 +3,7 @@
   "select": {},
   "locate": true,
   "documentation": "documentation",
-  "gazetteer": {
-    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-    "pane": ["gazetteer", 550],
-    "style": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    }
-  },
+  "gazetteer": {},
   "locale": "EU",
   "locales": {
     "EU": {
@@ -298,7 +288,6 @@
           "dbs": "XYZ",
           "qID": "id",
           "table": "post_office",
-          "geom": "geom",
           "cluster_label": "branch",
           "cluster_kmeans": 4,
           "cluster_dbscan": 0.0075,
@@ -324,7 +313,6 @@
           "dbs": "XYZ",
           "table": "gb_retailpoint",
           "qID": "id",
-          "geom": "geom",
           "cluster_label": "store",
           "cluster_cat": "brand",
           "cluster_kmeans": 4,
@@ -399,6 +387,7 @@
                 ["asda","#83b923","Asda"],
                 ["morrisons","#ffe133","Morrisons"]
               ],
+              "other": true,
               "cat": {
                 "aldi": {
                   "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
@@ -484,7 +473,6 @@
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
           "qID": "retailpoint_id",
-          "geom": "geom",
           "cluster_label": "store",
           "cluster_cat": "brand",
           "cluster_kmeans": 4,
@@ -804,6 +792,7 @@
             "categorized": {
               "label": "Retail Place type",
               "field": "rp_type",
+              "other": true,
               "cat": {
                 "Major City Centre": {
                   "style": {

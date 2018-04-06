@@ -4,10 +4,6 @@ const svg_symbols = require('./svg_symbols');
 
 module.exports = function Gazetteer() {
 
-    // Create the gazetteer pane.
-    _xyz.map.createPane(_xyz.gazetteer.pane[0]);
-    _xyz.map.getPane(_xyz.gazetteer.pane[0]).style.zIndex = _xyz.gazetteer.pane[1];
-
     // Declare DOM elements
     let dom = {
         btnSearch: document.getElementById('btnSearch'),
@@ -19,7 +15,22 @@ module.exports = function Gazetteer() {
         locale: document.getElementById('gaz_locale'),
         localelist: document.getElementById('gaz_localelist')
     };
-    
+
+    // Set gazetteer defaults if missing from appSettings.
+    if (!_xyz.gazetteer.icon) _xyz.gazetteer.icon = svg_symbols.markerColor('#64dd17', '#33691e');
+    if (!_xyz.gazetteer.pane) _xyz.gazetteer.pane = ["gazetteer", 550];
+    if (!_xyz.gazetteer.style) _xyz.gazetteer.style = {
+        "stroke": true,
+        "color": "#090",
+        "weight": 2,
+        "fillColor": "#cf9",
+        "fillOpacity": 0.2
+    };
+
+    // Create the gazetteer pane.
+    _xyz.map.createPane(_xyz.gazetteer.pane[0]);
+    _xyz.map.getPane(_xyz.gazetteer.pane[0]).style.zIndex = _xyz.gazetteer.pane[1];
+
     // Get list of locale keys and assign to locale drop down.
     let locales = '';
     for (let key in _xyz.locales) {

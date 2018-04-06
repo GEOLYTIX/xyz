@@ -84,36 +84,37 @@ function mvtCategorized(layer) {
     });
 
     // Attach box for other/default categories.
-    svg.append('rect')
-        .attr('x', 4)
-        .attr('y', y + 3)
-        .attr('width', 14)
-        .attr('height', 14)
-        .style('fill', layer.style.default.fillColor)
-        .style('fill-opacity', layer.style.default.fillOpacity)
-        .style('stroke', layer.style.default.color);
+    if (layer.style.categorized.other) {
+        svg.append('rect')
+            .attr('x', 4)
+            .attr('y', y + 3)
+            .attr('width', 14)
+            .attr('height', 14)
+            .style('fill', layer.style.default.fillColor)
+            .style('fill-opacity', layer.style.default.fillOpacity)
+            .style('stroke', layer.style.default.color);
 
-    // Attach text with filter on click for the other/default category.
-    svg.append('text')
-        .attr('x', 25)
-        .attr('y', y + 11)
-        .style('font-size', '12px')
-        .style('alignment-baseline', 'central')
-        .text('other')
-        .on('click', function () {
-            if (this.style.opacity == 0.5) {
-                this.style.opacity = 1;
-                layer.style.default.stroke = true;
-                layer.style.default.fill = true;
-            } else {
-                this.style.opacity = 0.5;
-                layer.style.default.stroke = false;
-                layer.style.default.fill = false;
-            }
+        // Attach text with filter on click for the other/default category.
+        svg.append('text')
+            .attr('x', 25)
+            .attr('y', y + 11)
+            .style('font-size', '12px')
+            .style('alignment-baseline', 'central')
+            .text('other')
+            .on('click', function () {
+                if (this.style.opacity == 0.5) {
+                    this.style.opacity = 1;
+                    layer.style.default.stroke = true;
+                    layer.style.default.fill = true;
+                } else {
+                    this.style.opacity = 0.5;
+                    layer.style.default.stroke = false;
+                    layer.style.default.fill = false;
+                }
 
-            layer.getLayer();
-        });
-        
+                layer.getLayer();
+            });
+    }       
 
     // Set height of the svg element.
     svg.attr('height', y += 20);
@@ -188,34 +189,39 @@ function clusterCategorized(layer) {
     });
 
     // Attach box for other/default categories.
-    svg.append('image')
-        .attr('x', 0)
-        .attr('y', y)
-        .attr('width', 20)
-        .attr('height', 20)
-        .attr('xlink:href', layer.style.marker);
+    if (layer.style.categorized.other) {
+        svg.append('image')
+            .attr('x', 0)
+            .attr('y', y)
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr('xlink:href', layer.style.marker);
 
-    // Attach text with filter on click for the other/default category.
-    svg.append('text')
-        .attr('x', 25)
-        .attr('y', y + 11)
-        .style('font-size', '12px')
-        .style('alignment-baseline', 'central')
-        .style('cursor', 'pointer')
-        .text('other')
-        .on('click', function () {
-            if (this.style.opacity == 0.5) {
-                this.style.opacity = 1;
-                layer.style.categorized.filterOther = false;
-            } else {
-                this.style.opacity = 0.5;
-                layer.style.categorized.filterOther = true;
-            }
+        // Attach text with filter on click for the other/default category.
+        svg.append('text')
+            .attr('x', 25)
+            .attr('y', y + 11)
+            .style('font-size', '12px')
+            .style('alignment-baseline', 'central')
+            .style('cursor', 'pointer')
+            .text('other')
+            .on('click', function () {
+                if (this.style.opacity == 0.5) {
+                    this.style.opacity = 1;
+                    layer.style.categorized.filterOther = false;
+                } else {
+                    this.style.opacity = 0.5;
+                    layer.style.categorized.filterOther = true;
+                }
 
-            layer.getLayer();
-        });
+                layer.getLayer();
+            });
+    }
 
     y += 45;
+
+    // Add markerMulti default colour if not set.
+    if (!layer.style.markerMulti) layer.style.markerMulti = [400,'#333']
 
     // Add section for clusters and competitors title
     svg.append('circle')

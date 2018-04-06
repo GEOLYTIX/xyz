@@ -1,111 +1,8 @@
 {
   "title": "GEOLYTIX | XYZ Catchments",
-  "select": {
-    "records": [
-      {
-        "letter": "A",
-        "color": "#9c27b0"
-      },
-      {
-        "letter": "B",
-        "color": "#2196f3"
-      },
-      {
-        "letter": "C",
-        "color": "#009688"
-      },
-      {
-        "letter": "D",
-        "color": "#cddc39"
-      },
-      {
-        "letter": "E",
-        "color": "#ff9800"
-      },
-      {
-        "letter": "F",
-        "color": "#673ab7"
-      },
-      {
-        "letter": "G",
-        "color": "#03a9f4"
-      },
-      {
-        "letter": "H",
-        "color": "#4caf50"
-      },
-      {
-        "letter": "I",
-        "color": "#ffeb3b"
-      },
-      {
-        "letter": "J",
-        "color": "#ff5722"
-      },
-      {
-        "letter": "K",
-        "color": "#0d47a1"
-      },
-      {
-        "letter": "L",
-        "color": "#00bcd4"
-      },
-      {
-        "letter": "M",
-        "color": "#8bc34a"
-      },
-      {
-        "letter": "N",
-        "color": "#ffc107"
-      },
-      {
-        "letter": "O",
-        "color": "#d32f2f"
-      }
-    ]
-  },
-  "gazetteer": {
-    "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-    "pane": ["gazetteer", 550],
-    "style": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    }
-  },
-  "layers": {
-    "style": {
-      "stroke": true,
-      "color": "#444",
-      "weight": 1,
-      "fillOpacity": 0
-    },
-    "styleHighlight": {
-      "stroke": true,
-      "color": "#090",
-      "weight": 2,
-      "fillColor": "#cf9",
-      "fillOpacity": 0.2
-    },
-    "styleRange": [
-      "#15773f",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027"
-    ],
-    "defaultMarker": [
-      [
-        400,
-        "#C0C0C0"
-      ]
-    ],
-   "imageMaxSize": 1024
-  },
+  "locate": true,
+  "documentation": "https://medium.com/@goldrydigital/creating-isochrone-catchments-from-a-distance-matrix-15f39e436d09",
+  "gazetteer": {},
   "catchments": {
     "provider": [
       "MAPBOX",
@@ -118,47 +15,24 @@
     "Global": {
       "name": "Global",
       "gazetteer": ["GOOGLE","","","e.g. London"],
-      "bounds": [
-        [
-          -80,
-          -180
-        ],
-        [
-          80,
-          180
-        ]
-      ],
       "minZoom": 3,
       "maxZoom": 17,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX",
-          "pane": [
-            "base_labels", 550
-          ]
-        },
-        "here": {
-          "name": "Here Baselayer",
-          "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE",
-          "pane": [
-            "base", 500
-          ]
+          "provider": "MAPBOX"
         }
       },
       "catchments": {
