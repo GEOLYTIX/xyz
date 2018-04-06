@@ -114,10 +114,12 @@ function mvtCategorized(layer) {
 
                 layer.getLayer();
             });
+
+        y += 20
     }       
 
     // Set height of the svg element.
-    svg.attr('height', y += 20);
+    svg.attr('height', y);
 
     return legend;
 }
@@ -216,9 +218,11 @@ function clusterCategorized(layer) {
 
                 layer.getLayer();
             });
+
+        y += 20;
     }
 
-    y += 45;
+    y += 25;
 
     // Add markerMulti default colour if not set.
     if (!layer.style.markerMulti) layer.style.markerMulti = [400,'#333']
