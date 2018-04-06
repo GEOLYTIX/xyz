@@ -69,7 +69,7 @@ router.get('/', isLoggedIn, (req, res) => {
             btnLogout: req.user ? '' : 'style="display: none;"',
             btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
             btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
-            btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
+            btnLocate: global.appSettings.locate && req.secure ? '' : 'style="display: none;"',
             settings: `
             <script>
                 const node_env = '${process.env.NODE_ENV}';
