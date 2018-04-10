@@ -395,7 +395,7 @@
                 "1": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#d7191c",
+                    "fillColor": "#0571b0",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -403,7 +403,7 @@
                 "2": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#e85b3a",
+                    "fillColor": "#4396c5",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -411,7 +411,7 @@
                 "3": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f99e59",
+                    "fillColor": "#82bcd9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -419,7 +419,7 @@
                 "4": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#fec981",
+                    "fillColor": "#b4d6e7",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -427,7 +427,7 @@
                 "5": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#ffedab",
+                    "fillColor": "#e1ecf2",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -435,7 +435,7 @@
                 "6": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#ecf7ad",
+                    "fillColor": "#f7e5dd",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -443,7 +443,7 @@
                 "7": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#c4e687",
+                    "fillColor": "#f5c1a9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -451,7 +451,7 @@
                 "8": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#97d265",
+                    "fillColor": "#f09377",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -459,7 +459,7 @@
                 "9": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#58b453",
+                    "fillColor": "#dd494b",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -467,7 +467,7 @@
                 "10": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#1a9641",
+                    "fillColor": "#ca0020",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -530,7 +530,7 @@
                 "1": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#d7191c",
+                    "fillColor": "#0571b0",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -538,7 +538,7 @@
                 "2": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#e85b3a",
+                    "fillColor": "#4396c5",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -546,7 +546,7 @@
                 "3": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f99e59",
+                    "fillColor": "#82bcd9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -554,7 +554,7 @@
                 "4": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#fec981",
+                    "fillColor": "#b4d6e7",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -562,7 +562,7 @@
                 "5": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#ffedab",
+                    "fillColor": "#e1ecf2",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -570,7 +570,7 @@
                 "6": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#ecf7ad",
+                    "fillColor": "#f7e5dd",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -578,7 +578,7 @@
                 "7": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#c4e687",
+                    "fillColor": "#f5c1a9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -586,7 +586,7 @@
                 "8": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#97d265",
+                    "fillColor": "#f09377",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -594,7 +594,7 @@
                 "9": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#58b453",
+                    "fillColor": "#dd494b",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -602,7 +602,7 @@
                 "10": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#1a9641",
+                    "fillColor": "#ca0020",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
