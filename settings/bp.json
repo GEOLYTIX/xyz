@@ -229,7 +229,6 @@
           }
         },
         "catalist_opp_bp": {
-          "display": true,
           "name": "Fuel Stations (Catalist) - BP",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
