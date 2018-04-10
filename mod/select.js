@@ -24,11 +24,11 @@ async function select(req, res) {
         ${geomj} AS geomj
         ${geomdisplay}
     FROM ${table}
-    WHERE ${qID} = '${id}';`
+    WHERE ${qID} = $1;`
 
     // console.log(q);
 
-    global.DBS[req.body.dbs].query(q)
+    global.DBS[req.body.dbs].query(q, [id])
         .then(result => {
 
             Object.keys(req.body.infoj).map(key => {

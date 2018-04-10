@@ -34,7 +34,7 @@ module.exports = function Gazetteer() {
     // Get list of locale keys and assign to locale drop down.
     let locales = '';
     for (let key in _xyz.locales) {
-        if (_xyz.locales.hasOwnProperty(key)) locales += '<li data-locale="' + key + '">' + _xyz.locales[key].name + '</li>';
+        if (_xyz.locales.hasOwnProperty(key)) locales += '<li data-locale="' + key + '">' + (_xyz.locales[key].name || key) + '</li>';
     }
     dom.localelist.innerHTML = locales;
 

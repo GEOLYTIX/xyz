@@ -32,9 +32,16 @@
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
+        "here_hybrid": {
+          "name": "HERE Hybrid",
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
         "catalist_opp": {
           "display": true,
-          "name": "Stations",
+          "name": "Fuel Stations (Catalist)",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
@@ -221,6 +228,91 @@
             }
           }
         },
+        "catalist_opp_bp": {
+          "display": true,
+          "name": "Fuel Stations (Catalist) - BP",
+          "format": "cluster",
+          "pane": ["catalist_opp", 540],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "bp_only_catalist_opp",
+          "cluster_label": "sitename",
+          "cluster_cat": "sharebrand",
+          "cluster_kmeans": 4,
+          "cluster_dbscan": 0.0075,
+          "infoj": [
+            {
+              "field": "sitename",
+              "label": "Site",
+              "type": "text"
+            },
+            {
+              "field": "sitestatus",
+              "label": "Status",
+              "type": "text"
+            },
+            {
+              "field": "brand",
+              "label": "Brand",
+              "type": "text"
+            },
+            {
+              "field": "sharebrand",
+              "label": "Brand (share)",
+              "type": "text"
+            },
+            {
+              "field": "shopbrand",
+              "label": "Brand (shop)",
+              "type": "text"
+            },
+            {
+              "field": "ownership",
+              "label": "Ownership",
+              "type": "text"
+            },
+            {
+              "field": "companynam",
+              "label": "Company",
+              "type": "text"
+            },
+            {
+              "field": "plotsizear",
+              "label": "Plot Size",
+              "type": "integer"
+            },
+            {
+              "field": "mfvolume",
+              "label": "MF Volume",
+              "type": "integer"
+            },
+            {
+              "field": "shoparea",
+              "label": "Shop area",
+              "type": "integer"
+            },
+            {
+              "field": "total_scor",
+              "label": "Score Total",
+              "type": "numeric"
+            },
+            {
+              "field": "ms_score",
+              "label": "Score MS",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "bp_score",
+              "label": "Score BP",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400,'#0A9700',300,'#98CB00',200,'#FFFF00',100,'fff'])"
+          }
+        },
         "region": {
           "name": "Regions",
           "pane": ["bounds",510],
@@ -250,7 +342,7 @@
           }
         },
         "oa": {
-          "name": "Output Area (rank regional)",
+          "name": "Opportunity Rank (regional)",
           "pane": ["bounds",510],
           "format": "mvt",
           "geom_3857": "geom_3857",
@@ -279,23 +371,6 @@
               "field": "rank_tot",
               "label": "Total Rank",
               "type": "integer"
-            },
-            {
-              "field": "total_scor",
-              "label": "Score Total",
-              "type": "numeric"
-            },
-            {
-              "field": "ms_score",
-              "label": "Score MS",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "bp_score",
-              "label": "Score BP",
-              "type": "numeric",
-              "level": 1
             }
           ],
           "arrayZoom": {
@@ -315,7 +390,6 @@
               "color": "#000"
             },
             "categorized": {
-              "label": "Rank Regional",
               "field": "rank_reg",
               "cat": {
                 "1": {
@@ -403,7 +477,7 @@
           }
         },
         "oa_tot": {
-          "name": "Output Area (rank total)",
+          "name": "Opportunity Rank (total)",
           "pane": ["bounds",510],
           "format": "mvt",
           "geom_3857": "geom_3857",
@@ -432,23 +506,6 @@
               "field": "rank_tot",
               "label": "Total Rank",
               "type": "integer"
-            },
-            {
-              "field": "total_scor",
-              "label": "Score Total",
-              "type": "numeric"
-            },
-            {
-              "field": "ms_score",
-              "label": "Score MS",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "bp_score",
-              "label": "Score BP",
-              "type": "numeric",
-              "level": 1
             }
           ],
           "arrayZoom": {
@@ -468,7 +525,6 @@
               "color": "#000"
             },
             "categorized": {
-              "label": "Rank National",
               "field": "rank_tot",
               "cat": {
                 "1": {
@@ -604,17 +660,17 @@
             },
             {
               "field": "all_mv_14",
-              "label": "Motor vehicles 2014",
+              "label": "Annual traffic count 2014",
               "type": "integer"
             },
             {
               "field": "all_mv_15",
-              "label": "Motor vehicles 2015",
+              "label": "Annual traffic count 2015",
               "type": "integer"
             },
             {
               "field": "all_mv_16",
-              "label": "Motor vehicles 2016",
+              "label": "Annual traffic count 2016",
               "type": "integer"
             }
           ],
@@ -698,17 +754,17 @@
             },
             {
               "field": "all_mv_14",
-              "label": "Motor vehicles 2014",
+              "label": "Annual traffic count 2014",
               "type": "integer"
             },
             {
               "field": "all_mv_15",
-              "label": "Motor vehicles 2015",
+              "label": "Annual traffic count 2015",
               "type": "integer"
             },
             {
               "field": "all_mv_16",
-              "label": "Motor vehicles 2016",
+              "label": "Annual traffic count 2016",
               "type": "integer"
             }
           ],

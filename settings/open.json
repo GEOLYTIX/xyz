@@ -6,6 +6,88 @@
   "gazetteer": {},
   "locale": "EU",
   "locales": {
+    "Global": {
+      "gazetteer": ["MAPBOX", "", "", "e.g. London"],
+      "minZoom": 3,
+      "maxZoom": 9,
+      "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "pane": ["base_labels", 550],
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "here": {
+          "name": "HERE Imagery",
+          "meta": "Satellite Imagery layer provided by HERE.",
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "sprawls": {
+          "display": true,
+          "name": "World Cities",
+          "meta": "Urban agglomerations with a population greater than 100,000.",
+          "pane": ["bounds", 510],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "nameascii",
+              "label": "City",
+              "type": "text"
+            },
+            {
+              "field": "sov0name",
+              "label": "Country",
+              "type": "text"
+            },
+            {
+              "field": "pop_max",
+              "label": "Population (max)",
+              "type": "integer"
+            },
+            {
+              "field": "pop_min",
+              "label": "Population (min)",
+              "type": "integer"
+            },
+            {
+              "field": "area",
+              "label": "Area (km2)",
+              "type": "numeric"
+            }
+          ],
+          "arrayZoom": {
+            "3": "glx_cities_of_the_world"
+          },
+          "tilecache": "glx_cities_of_the_world__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#090",
+              "fill": true
+            },
+            "highlight": {
+              "color": "#e91e63"
+            }
+          }
+        }
+      }
+    },
     "EU": {
       "name": "Europe",
       "gazetteer": ["MAPBOX", "", "'-45,25,60,75'", "e.g. Brussels"],
