@@ -14,10 +14,9 @@ function getLayer() {
         let bounds = _xyz.map.getBounds();
         layer.xhr.open('GET', host + 'q_cluster?' + utils.paramString({
             dbs: layer.dbs,
-            layer: layer.table,
+            table: layer.table,
             qID: layer.qID,
             geom: layer.geom || 'geom',
-            label: layer.cluster_label,
             cat: layer.cluster_cat,
             kmeans: layer.cluster_kmeans,
             dbscan: layer.cluster_dbscan,
@@ -36,84 +35,90 @@ function getLayer() {
                 // Filter out cluster values which are in the filter array.
                 if (layer.style.categorized && layer.style.categorized.filter.length > 0) {
                     cluster = cluster.filter(c => {
-                        c.properties.infoj = c.properties.infoj.filter(infoj => {
-                            if (layer.style.categorized.filter.indexOf(infoj.cat) < 0) return infoj;
+                        Object.keys(c.properties.infoj).map(key => {
+                            if (layer.style.categorized.filter.indexOf(key) >= 0) {
+                                c.properties.count -= c.properties.infoj[key];
+                                delete c.properties.infoj[key];
+                            }
                         });
-                        if (c.properties.infoj.length > 0) return c
+                        if (c.properties.count > 0) return c
                     });
                 }
 
                 // Filter out all values which are not in the cat array if filterOther is true.
                 if (layer.style.categorized && layer.style.categorized.filterOther) {
                     cluster = cluster.filter(c => {
-                        c.properties.infoj = c.properties.infoj.filter(infoj => {
-                            if (layer.style.categorized.cat[infoj.cat]) return infoj;
+                        Object.keys(c.properties.infoj).map(key => {
+                            if (!layer.style.categorized.cat[key]) {
+                                c.properties.count -= c.properties.infoj[key];
+                                delete c.properties.infoj[key];
+                            }
                         });
-                        if (c.properties.infoj.length > 0) return c
+                        if (c.properties.count > 0) return c
                     });
                 }
 
                 // get max count value for size control
-                let max = cluster.reduce((max, c) => Math.max(max, c.properties.infoj.length), 0);
+                let max = cluster.reduce((max, c) => Math.max(max, c.properties.count), 0);
            
                 // add layer
                 if (layer.L) _xyz.map.removeLayer(layer.L);
                 layer.L = L.geoJson(cluster, {
                     pointToLayer: (point, latlng) => {
-                        let icon,
-                            count = point.properties.infoj.length;
+                        
+                        let icon;
 
-                        if (count > 1) {
+                        // if (Object.keys(point.properties.infoj).length > 1) {
 
-                            let dotArr;
-                            if (layer.style.categorized && layer.style.categorized.competitors){
-
-                                let catArr = [];
-
-                                for (let iCat = 0; iCat < point.properties.infoj.length || 0; iCat++) {
-                                    catArr.push(point.properties.infoj[iCat].cat);
-                                }
+                        //     let dotArr;
+                        //     if (layer.style.categorized && layer.style.categorized.competitors){
     
-                                let vArr = [];
-                                for (let iComp = 0; iComp < layer.style.categorized.competitors.length || 0; iComp++) {
-                                    vArr.push(0);
-                                    for (let iCompCat = 0; iCompCat < catArr.length; iCompCat++) {
-                                        if (catArr[iCompCat] === layer.style.categorized.competitors[iComp][0] && layer.style.categorized.filter.indexOf(catArr[iCompCat]) < 0) {
-                                            vArr[iComp]++;
-                                        }
-                                    }
-                                }
+                        //         let vArr = [];
+
+                        //         for (let iComp = 0; iComp < layer.style.categorized.competitors.length || 0; iComp++) {
+                        //             vArr.push(point.properties.infoj[layer.style.categorized.competitors[iComp][0]] || 0);
+                        //         }
     
-                                dotArr = [400, layer.style.markerMulti[1]];
-                                for (let i = 0; i < vArr.length; i++) {
-                                    let vTot = 0;
-                                    for (let ii = i; ii < vArr.length; ii++) {
-                                        vTot += parseInt(vArr[ii])
-                                    }
-                                    if (vTot > 0) {
-                                        dotArr.push(400 * vTot / count);
-                                        dotArr.push(layer.style.categorized.competitors[i][1]);
-                                    }
-                                }
-                            }
+                        //         dotArr = [400, layer.style.markerMulti[1]];
 
-                            icon = (dotArr || layer.style.markerMulti) ?
-                                svg_symbols.target(dotArr || layer.style.markerMulti) :
-                                layer.style.marker;
+                        //         let vTot = 0;
+                        //         for (let i = 0; i < vArr.length; i++) {
+                        //             vTot += vArr[i];
+                        //             if (vArr[i] > 0) {
+                        //                 dotArr.splice(2,0,400 * vTot / point.properties.count);
+                        //                 dotArr.splice(3,0,layer.style.categorized.competitors[i][1]);
+                        //             }
+                        //         }
 
-                        } else {
+                        //     }
 
-                            icon = layer.style.categorized && layer.style.categorized.cat[point.properties.infoj[0].cat] ?
-                                layer.style.categorized.cat[point.properties.infoj[0].cat].marker :
-                                layer.style.marker || svg_symbols.target([400,'#090']);
-                        }
+                        //     icon = (dotArr || layer.style.markerMulti) ?
+                        //         svg_symbols.target(dotArr || layer.style.markerMulti) :
+                        //         layer.style.marker;
+
+                        // } else {
+
+                        //     icon = layer.style.categorized && layer.style.categorized.cat[Object.keys(point.properties.infoj)[0]] ?
+                        //         layer.style.categorized.cat[Object.keys(point.properties.infoj)[0]].marker :
+                        //         layer.style.marker || svg_symbols.target([400, '#090']);
+                        // }
+
+                        icon = svg_symbols.target([400,'#aaa']);
+
+                        // for (let i = 0; i < layer.style.graduated.cat.length; i++) {
+
+                        //     if (point.properties.infoj < layer.style.graduated.cat[i].val) break;
+
+                        //     icon = layer.style.graduated.cat[i].marker;
+
+                        // }
 
                         return L.marker(latlng, {
                             pane: layer.pane[0],
-                            zIndexOffset: parseInt(1000 - 1000 / max * point.properties.infoj.length),
+                            zIndexOffset: parseInt(1000 - 1000 / max * point.properties.count),
                             icon: L.icon({
                                 iconUrl: icon,
-                                iconSize: point.properties.infoj.length === 1 ? (layer.style.markerMin || 20) : (layer.style.markerMin || 20) + (layer.style.markerMax || 40) / max * point.properties.infoj.length
+                                iconSize: point.properties.count === 1 ? (layer.style.markerMin || 20) : (layer.style.markerMin || 20) + (layer.style.markerMax || 40) / max * point.properties.count
                                 //iconSize: 20 + 40 / Math.log(max) * Math.log(point.properties.c)
                             })
                         });
@@ -252,6 +257,8 @@ function getLayer() {
                 layer.loader.style.display = 'none';
                 layer.loaded = true;
                 _xyz.layersCheck();
+
+
             } else {
 
                 // Status 204. No features returned.

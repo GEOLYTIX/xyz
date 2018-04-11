@@ -1,11 +1,11 @@
 const turf = require('@turf/turf');
 
 async function cluster(req, res) {
+  
   let
-    layer = req.query.layer,
+    table = req.query.table,
     id = req.query.qID === 'undefined' ? null : req.query.qID,
     geom = req.query.geom,
-    label = req.query.label,
     cat = req.query.cat === 'undefined' ? null : req.query.cat,
     kmeans = parseFloat(req.query.kmeans),
     dbscan = parseFloat(req.query.dbscan),
@@ -16,12 +16,12 @@ async function cluster(req, res) {
     xDegree = turf.distance([west, north], [east, south], { units: 'degrees' });
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  if (await require('./chk').chkVals([layer, id, geom, label, cat], res).statusCode === 406) return;
+  if (await require('./chk').chkVals([table, id, geom, cat], res).statusCode === 406) return;
 
   // Query the feature count from lat/lng bounding box.
   let q = `
     SELECT count(1)
-    FROM ${layer}
+    FROM ${table}
     WHERE
       ST_DWithin(
         ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
@@ -40,45 +40,121 @@ async function cluster(req, res) {
     parseInt(xDegree * kmeans) :
     parseInt(result.rows[0].count);
 
-  // Use kmeans within dbscan function to query the cluster features.
   q = `
+  SELECT
+    COUNT(geom) count,
+    ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
+  FROM (
     SELECT
-      ST_AsGeoJson(ST_PointOnSurface(ST_Union(${geom}))) geomj,
-      json_agg(json_build_object('id', id, ${cat ? "'cat', cat," : ""} 'label', label)) infoj
+      kmeans_cid,
+      ${geom} AS geom,
+      ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
     FROM (
       SELECT
-        id,
-        cat,
-        label,
-        kmeans_cid,
-        ${geom},
-        ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
-      FROM (
-        SELECT
-          ${id} as id,
-          ${cat} as cat,
-          ${label} as label,
-          ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
-          ${geom}
-        FROM ${layer}
-        WHERE
-          ST_DWithin(
-            ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
-            ${geom}, 0.00001)
-      ) kmeans
-    ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
+        ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
+        ${geom}
+      FROM ${table}
+      WHERE
+        ST_DWithin(
+          ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+        ${geom}, 0.00001)
+    ) kmeans
+  ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
+
+  // Use kmeans within dbscan function to query the cluster features.
+  // q = `
+  // SELECT
+  //   SUM(count)::integer count,
+  //   JSON_Agg(JSON_Build_Object(cat, count)) infoj,
+  //   ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
+  // FROM (
+  //   SELECT
+  //     COUNT(cat) count,
+  //     ST_Union(geom) geom,
+  //     cat,
+  //     kmeans_cid,
+  //     dbscan_cid
+  //   FROM (
+  //     SELECT
+  //       id,
+  //       cat,
+  //       kmeans_cid,
+  //       ${geom} AS geom,
+  //       ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+  //     FROM (
+  //       SELECT
+  //         ${id} AS id,
+  //         ${cat} AS cat,
+  //         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
+  //         ${geom}
+  //       FROM ${table}
+  //       WHERE
+  //         ST_DWithin(
+  //           ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+  //         ${geom}, 0.00001)
+  //     ) kmeans
+  //   ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
+  // ) cluster GROUP BY kmeans_cid, dbscan_cid;`
+
+  // q = `
+  // SELECT
+  //   COUNT(cat) count,
+  //   SUM(cat) sum,
+  //   ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
+  // FROM (
+  //   SELECT
+  //     id,
+  //     cat,
+  //     kmeans_cid,
+  //     ${geom} AS geom,
+  //     ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+  //   FROM (
+  //     SELECT
+  //       ${id} AS id,
+  //       ${cat} AS cat,
+  //       ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
+  //       ${geom}
+  //     FROM ${table}
+  //     WHERE
+  //       ST_DWithin(
+  //         ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+  //       ${geom}, 0.00001)
+  //   ) kmeans
+  // ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
 
   //console.log(q);
 
   result = await global.DBS[req.query.dbs].query(q);
 
   // Map the records and return json to client.
+  // res.status(200).json(Object.keys(result.rows).map(record => {
+  //   return {
+  //     type: 'Feature',
+  //     geometry: JSON.parse(result.rows[record].geomj),
+  //     properties: {
+  //       count: result.rows[record].count,
+  //       infoj: Object.assign({}, ...result.rows[record].infoj)
+  //     }
+  //   }
+  // }));
+
+  // res.status(200).json(Object.keys(result.rows).map(record => {
+  //   return {
+  //     type: 'Feature',
+  //     geometry: JSON.parse(result.rows[record].geomj),
+  //     properties: {
+  //       count: result.rows[record].count,
+  //       infoj: result.rows[record].sum
+  //     }
+  //   }
+  // }));
+
   res.status(200).json(Object.keys(result.rows).map(record => {
     return {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
       properties: {
-        infoj: result.rows[record].infoj
+        count: result.rows[record].count
       }
     }
   }));
