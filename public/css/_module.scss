@@ -12,10 +12,6 @@
         }
     }
 
-    .bold {
-        font-weight: 800;
-    }
-
     > .header {
         position: relative;
         // background-color: #eee;
@@ -98,9 +94,29 @@
             border-bottom: 1px solid #333;
             padding-bottom: 5px;
             padding-top: 5px;
+            font-size: 12px;
+            line-height: 1.5;
 
             .meta {
                 font-size: 12px;
+            }
+
+            .settings {
+                border-bottom: 1px solid #999;
+                margin-bottom: 10px;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+
+                > div {
+                    line-height: 2;
+                    font-weight: 600;
+                    font-size: 14px;
+                    margin-bottom: 5px;
+                }
+
+                > table {
+                    margin-bottom: 5px;
+                }
             }
         }
 
@@ -189,13 +205,14 @@
             margin: 15px 0;
 
             .header {
-                font-size: 14px;
+                font-size: 15px;
+                line-height: 2;
                 font-weight: 600;
                 height: 30px;
 
                 .btn {
-                    font-size: 30px;
-                    margin: -2px 0 0 10px;
+                    font-size: 25px;
+                    margin-left: 5px;
                     float: right;
                     color: $glxgreen;
                     

@@ -45,12 +45,10 @@
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
-          "qID": "id",
           "table": "bp_catalist_opp",
+          "qID": "id",
           "cluster_label": "sitename",
           "cluster_cat": "sharebrand",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "sitename",
@@ -121,14 +119,25 @@
             }
           ],
           "style": {
-            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
-            "markerMulti": [400,"#333"],
-            "categorized": {
-              "competitors": [
-                ["BP","#0A9700","BP"],
-                ["SHELL","#FFD400","Shell"],
-                ["ESSO","#1853A4","ESSO"]
-              ],
+            "marker": "svg_symbols.target([400, '#fff', 350, '#fff'])",
+            "markerMulti": [400, "#333"],
+            "theme": {
+              "label": "Brand",
+              "type": "categorized",
+              "competitors": {
+                "BP": {
+                  "colour": "#0A9700",
+                  "label": "BP"
+                },
+                "SHELL": {
+                  "colour": "#FFD400",
+                  "label": "Shell"
+                },
+                "ESSO": {
+                  "colour": "#1853A4",
+                  "label": "ESSO"
+                }
+              },
               "other": true,
               "cat": {
                 "BP": {
@@ -228,7 +237,7 @@
           }
         },
         "catalist_opp_bp": {
-          "name": "Fuel Stations (Catalist) - BP",
+          "name": "BP Stations (Catalist)",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
@@ -236,8 +245,6 @@
           "table": "bp_only_catalist_opp",
           "cluster_label": "sitename",
           "cluster_cat": "sharebrand",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "sitename",
@@ -618,8 +625,6 @@
           "table": "bp_traffic_counts_all",
           "cluster_label": "road_num",
           "cluster_cat": "all_mv_000__16",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "cp_type",
@@ -673,8 +678,9 @@
             }
           ],
           "style": {
-            "graduated": {
+            "theme": {
               "label": "Motor vehicles 2016 (000's)",
+              "type": "graduated",
               "cat": [
                 {
                   "val": 1,
@@ -684,224 +690,34 @@
                 {
                   "val": 10,
                   "marker": "svg_symbols.target([400,'#8fd744'])",
-                  "label": "5"
+                  "label": "10"
                 },
                 {
                   "val": 25,
                   "marker": "svg_symbols.target([400,'#35b779'])",
-                  "label": "10"
+                  "label": "25"
                 },
                 {
                   "val": 50,
                   "marker": "svg_symbols.target([400,'#20908d'])",
-                  "label": "1"
+                  "label": "50"
                 },
                 {
                   "val": 75,
                   "marker": "svg_symbols.target([400,'#31688e'])",
-                  "label": "5"
+                  "label": "75"
                 },
                 {
                   "val": 100,
                   "marker": "svg_symbols.target([400,'#443a83'])",
-                  "label": "10"
+                  "label": "100"
                 },
                 {
                   "val": 150,
                   "marker": "svg_symbols.target([400,'#440154'])",
-                  "label": "10"
+                  "label": "150"
                 }
               ]
-            }
-          }
-        },
-        "traffic_count_major": {
-          "name": "Traffic (major)",
-          "format": "cluster",
-          "pane": ["traffic", 550],
-          "dbs": "XYZ",
-          "qID": "id",
-          "table": "bp_traffic_counts",
-          "cluster_label": "road_num",
-          "cluster_cat": "traffic",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
-          "infoj": [
-            {
-              "field": "cp_type",
-              "label": "Type",
-              "type": "text"
-            },
-            {
-              "field": "road_num",
-              "label": "Road Number",
-              "type": "text"
-            },
-            {
-              "field": "start_junc",
-              "label": "from junction",
-              "type": "text"
-            },
-            {
-              "field": "end_junc",
-              "label": "to junction",
-              "type": "text"
-            },
-            {
-              "field": "len_mi",
-              "label": "Segment (miles)",
-              "type": "numeric"
-            },
-            {
-              "field": "road_class",
-              "label": "Road Class",
-              "type": "text"
-            },
-            {
-              "field": "area_cat",
-              "label": "Area Category",
-              "type": "text"
-            },
-            {
-              "field": "all_mv_14",
-              "label": "Annual traffic count 2014",
-              "type": "integer"
-            },
-            {
-              "field": "all_mv_15",
-              "label": "Annual traffic count 2015",
-              "type": "integer"
-            },
-            {
-              "field": "all_mv_16",
-              "label": "Annual traffic count 2016",
-              "type": "integer"
-            }
-          ],
-          "style": {
-            "marker": "svg_symbols.target([400,'#41b6c4'])",
-            "markerMulti": [400,"#41b6c4"],
-            "categorized": {
-              "label": "Traffic count",
-              "field": "traffic",
-              "cat": {
-                "very_low": {
-                  "marker": "svg_symbols.target([400,'#ffffcc'])",
-                  "label": "Very Low"
-                },
-                "low": {
-                  "marker": "svg_symbols.target([400,'#a1dab4'])",
-                  "label": "Low"
-                },
-                "moderate": {
-                  "marker": "svg_symbols.target([400,'#41b6c4'])",
-                  "label": "Moderate"
-                },
-                "high": {
-                  "marker": "svg_symbols.target([400,'#2c7fb8'])",
-                  "label": "High"
-                },
-                "very_high": {
-                  "marker": "svg_symbols.target([400,'#253494'])",
-                  "label": "Very High"
-                }
-              }
-            }
-          }
-        },
-        "traffic_count_minor": {
-          "name": "Traffic (minor)",
-          "format": "cluster",
-          "pane": ["traffic", 550],
-          "dbs": "XYZ",
-          "qID": "id",
-          "table": "bp_traffic_counts_minor",
-          "cluster_label": "cp_id",
-          "cluster_cat": "traffic",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
-          "infoj": [
-            {
-              "field": "cp_type",
-              "label": "Type",
-              "type": "text"
-            },
-            {
-              "field": "road_num",
-              "label": "Road Number",
-              "type": "text"
-            },
-            {
-              "field": "start_junc",
-              "label": "from junction",
-              "type": "text"
-            },
-            {
-              "field": "end_junc",
-              "label": "to junction",
-              "type": "text"
-            },
-            {
-              "field": "len_mi",
-              "label": "Segment (miles)",
-              "type": "numeric"
-            },
-            {
-              "field": "road_class",
-              "label": "Road Class",
-              "type": "text"
-            },
-            {
-              "field": "area_cat",
-              "label": "Area Category",
-              "type": "text"
-            },
-            {
-              "field": "all_mv_14",
-              "label": "Annual traffic count 2014",
-              "type": "integer"
-            },
-            {
-              "field": "all_mv_15",
-              "label": "Annual traffic count 2015",
-              "type": "integer"
-            },
-            {
-              "field": "all_mv_16",
-              "label": "Annual traffic count 2016",
-              "type": "integer"
-            }
-          ],
-          "style": {
-            "markerMin": 10,
-            "markerMax": 30,
-            "marker": "svg_symbols.target([400,'#41b6c4'])",
-            "markerMulti": [400,"#41b6c4"],
-            "categorized": {
-              "label": "Traffic count",
-              "field": "traffic",
-              "cat": {
-                "0": {
-                  "marker": "svg_symbols.target([400,'#ffffcc'])",
-                  "label": "Very Low"
-                },
-                "1": {
-                  "marker": "svg_symbols.target([400,'#a1dab4'])",
-                  "label": "Low"
-                },
-                "2": {
-                  "marker": "svg_symbols.target([400,'#41b6c4'])",
-                  "label": "Moderate"
-                },
-                "3": {
-                  "marker": "svg_symbols.target([400,'#2c7fb8'])",
-                  "label": "High"
-                },
-                "4": {
-                  "marker": "svg_symbols.target([400,'#253494'])",
-                  "label": "Very High"
-                }
-              }
             }
           }
         }

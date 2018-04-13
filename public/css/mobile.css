@@ -559,8 +559,6 @@ input[type=range]::-moz-range-thumb {
   color: grey; }
   .module .dev select {
     color: grey; }
-.module .bold {
-  font-weight: 800; }
 .module > .header {
   position: relative;
   padding: 10px; }
@@ -593,9 +591,23 @@ input[type=range]::-moz-range-thumb {
     -webkit-transition: opacity 300ms ease-in-out;
     border-bottom: 1px solid #333;
     padding-bottom: 5px;
-    padding-top: 5px; }
+    padding-top: 5px;
+    font-size: 12px;
+    line-height: 1.5; }
     .module .content .panel .meta {
       font-size: 12px; }
+    .module .content .panel .settings {
+      border-bottom: 1px solid #999;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out; }
+      .module .content .panel .settings > div {
+        line-height: 2;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 5px; }
+      .module .content .panel .settings > table {
+        margin-bottom: 5px; }
   .module .content .range {
     width: 100%;
     width: calc(100% - 5px);
@@ -648,12 +660,13 @@ input[type=range]::-moz-range-thumb {
     transition: max-height 0.3s ease-out;
     margin: 15px 0; }
     .module .content .drawer .header {
-      font-size: 14px;
+      font-size: 15px;
+      line-height: 2;
       font-weight: 600;
       height: 30px; }
       .module .content .drawer .header .btn {
-        font-size: 30px;
-        margin: -2px 0 0 10px;
+        font-size: 25px;
+        margin-left: 5px;
         float: right;
         color: #079e00; }
         .module .content .drawer .header .btn.active {
@@ -790,6 +803,9 @@ i {
 button {
   border: none;
   outline: none; }
+
+.bold {
+  font-weight: 800; }
 
 .map_button {
   position: fixed;

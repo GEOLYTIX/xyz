@@ -64,11 +64,11 @@ module.exports = function(){
             dom.layers.appendChild(layer.drawer);
 
             // Create the header element to contain the control elements
-            let header = utils.createElement('div', {
+            layer.header = utils.createElement('div', {
                 textContent: layer.name,
                 className: 'header'
             });
-            header.style.borderBottom = '2px solid ' + (layer.style && layer.style.default && layer.style.default.color ? layer.style.default.color : '#333');
+            layer.header.style.borderBottom = '2px solid ' + (layer.style && layer.style.default && layer.style.default.color ? layer.style.default.color : '#333');
 
             // Create the pane and set layers function.
             layer.pane = layer.pane || ['default', 501];
@@ -102,8 +102,8 @@ module.exports = function(){
                     _xyz.layersCheck();
                 }
             });
-            header.appendChild(i);
-            layer.drawer.appendChild(header);
+            layer.header.appendChild(i);
+            layer.drawer.appendChild(layer.header);
 
 
             // Create loader element.
@@ -119,7 +119,7 @@ module.exports = function(){
             if (layer.panel.children.length > 0) {
 
                 // Set the box shadow which indicates collapsed content.
-                header.style.boxShadow = '0 3px 3px -3px black';
+                layer.header.style.boxShadow = '0 3px 3px -3px black';
                 layer.drawer.style.maxHeight = '35px';
                 layer.drawer.appendChild(layer.panel);
 
@@ -132,17 +132,17 @@ module.exports = function(){
                 i.addEventListener('click', () => {
                     if (i.textContent === 'expand_less') {
                         layer.drawer.style.maxHeight = '35px';
-                        header.style.boxShadow = '0 3px 3px -3px black';
+                        layer.header.style.boxShadow = '0 3px 3px -3px black';
                         i.textContent = 'expand_more';
                         i.title = "Collapse layer panel";
                     } else {
                         layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
-                        header.style.boxShadow = '';
+                        layer.header.style.boxShadow = '';
                         i.textContent = 'expand_less';
                         i.title = "Expand layer panel";
                     }
                 });
-                header.appendChild(i);
+                layer.header.appendChild(i);
             }
 
             // Add edit control to layer header.
@@ -198,7 +198,7 @@ module.exports = function(){
                         }));            
                     });
                 });
-                header.appendChild(i);
+                layer.header.appendChild(i);
             }
 
             // Push hook for display:true layer (default).

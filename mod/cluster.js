@@ -5,10 +5,12 @@ async function cluster(req, res) {
   let
     table = req.query.table,
     id = req.query.qID === 'undefined' ? null : req.query.qID,
-    geom = req.query.geom,
+    geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
     cat = req.query.cat === 'undefined' ? null : req.query.cat,
+    theme = req.query.theme === 'undefined' ? null : req.query.theme,
+    canvas = parseInt(req.query.canvas),
     kmeans = parseFloat(req.query.kmeans),
-    dbscan = parseFloat(req.query.dbscan),
+    dbscan = parseFloat(req.query.dbscan * canvas / 1000000),
     west = parseFloat(req.query.west),
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
@@ -36,11 +38,18 @@ async function cluster(req, res) {
   }
 
   // Use feature count with cross distance  to determine the kmeans factor.
-  kmeans = parseInt(xDegree * kmeans) < parseInt(result.rows[0].count) ?
-    parseInt(xDegree * kmeans) :
+  kmeans = parseInt(xDegree * kmeans * canvas / 1000000) < parseInt(result.rows[0].count) ?
+    parseInt(xDegree * kmeans * canvas / 1000000) :
     parseInt(result.rows[0].count);
 
-  q = `
+  // console.log({
+  //   'kmeans': kmeans,
+  //   'dbscan': dbscan,
+  //   'canvas': canvas,
+  //   'xDegree': xDegree
+  // });
+
+  if (!theme) q = `
   SELECT
     COUNT(geom) count,
     ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
@@ -61,95 +70,71 @@ async function cluster(req, res) {
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
 
-  // Use kmeans within dbscan function to query the cluster features.
-  // q = `
-  // SELECT
-  //   SUM(count)::integer count,
-  //   JSON_Agg(JSON_Build_Object(cat, count)) infoj,
-  //   ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
-  // FROM (
-  //   SELECT
-  //     COUNT(cat) count,
-  //     ST_Union(geom) geom,
-  //     cat,
-  //     kmeans_cid,
-  //     dbscan_cid
-  //   FROM (
-  //     SELECT
-  //       id,
-  //       cat,
-  //       kmeans_cid,
-  //       ${geom} AS geom,
-  //       ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
-  //     FROM (
-  //       SELECT
-  //         ${id} AS id,
-  //         ${cat} AS cat,
-  //         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
-  //         ${geom}
-  //       FROM ${table}
-  //       WHERE
-  //         ST_DWithin(
-  //           ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
-  //         ${geom}, 0.00001)
-  //     ) kmeans
-  //   ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
-  // ) cluster GROUP BY kmeans_cid, dbscan_cid;`
+  if (theme === 'categorized') q = `
+  SELECT
+    SUM(count)::integer count,
+    JSON_Agg(JSON_Build_Object(cat, count)) cat,
+    ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
+  FROM (
+    SELECT
+      COUNT(cat) count,
+      ST_Union(geom) geom,
+      cat,
+      kmeans_cid,
+      dbscan_cid
+    FROM (
+      SELECT
+        id,
+        cat,
+        kmeans_cid,
+        ${geom} AS geom,
+        ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      FROM (
+        SELECT
+          ${id} AS id,
+          ${cat} AS cat,
+          ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
+          ${geom}
+        FROM ${table}
+        WHERE
+          ST_DWithin(
+            ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+          ${geom}, 0.00001)
+      ) kmeans
+    ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
+  ) cluster GROUP BY kmeans_cid, dbscan_cid;`
 
-  // q = `
-  // SELECT
-  //   COUNT(cat) count,
-  //   SUM(cat) sum,
-  //   ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
-  // FROM (
-  //   SELECT
-  //     id,
-  //     cat,
-  //     kmeans_cid,
-  //     ${geom} AS geom,
-  //     ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
-  //   FROM (
-  //     SELECT
-  //       ${id} AS id,
-  //       ${cat} AS cat,
-  //       ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
-  //       ${geom}
-  //     FROM ${table}
-  //     WHERE
-  //       ST_DWithin(
-  //         ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
-  //       ${geom}, 0.00001)
-  //   ) kmeans
-  // ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
+  if (theme === 'graduated') q = `
+  SELECT
+    COUNT(cat) count,
+    SUM(cat) sum,
+    ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
+  FROM (
+    SELECT
+      id,
+      cat,
+      kmeans_cid,
+      ${geom} AS geom,
+      ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+    FROM (
+      SELECT
+        ${id} AS id,
+        ${cat} AS cat,
+        ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
+        ${geom}
+      FROM ${table}
+      WHERE
+        ST_DWithin(
+          ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+        ${geom}, 0.00001)
+    ) kmeans
+  ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
 
   //console.log(q);
 
   result = await global.DBS[req.query.dbs].query(q);
 
-  // Map the records and return json to client.
-  // res.status(200).json(Object.keys(result.rows).map(record => {
-  //   return {
-  //     type: 'Feature',
-  //     geometry: JSON.parse(result.rows[record].geomj),
-  //     properties: {
-  //       count: result.rows[record].count,
-  //       infoj: Object.assign({}, ...result.rows[record].infoj)
-  //     }
-  //   }
-  // }));
-
-  // res.status(200).json(Object.keys(result.rows).map(record => {
-  //   return {
-  //     type: 'Feature',
-  //     geometry: JSON.parse(result.rows[record].geomj),
-  //     properties: {
-  //       count: result.rows[record].count,
-  //       infoj: result.rows[record].sum
-  //     }
-  //   }
-  // }));
-
-  res.status(200).json(Object.keys(result.rows).map(record => {
+  if (!theme) res.status(200).json(Object.keys(result.rows).map(record => {
     return {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
@@ -158,6 +143,29 @@ async function cluster(req, res) {
       }
     }
   }));
+
+  if (theme === 'categorized') res.status(200).json(Object.keys(result.rows).map(record => {
+    return {
+      type: 'Feature',
+      geometry: JSON.parse(result.rows[record].geomj),
+      properties: {
+        count: result.rows[record].count,
+        cat: Object.assign({}, ...result.rows[record].cat)
+      }
+    }
+  }));
+
+  if (theme === 'graduated') res.status(200).json(Object.keys(result.rows).map(record => {
+    return {
+      type: 'Feature',
+      geometry: JSON.parse(result.rows[record].geomj),
+      properties: {
+        count: result.rows[record].count,
+        sum: result.rows[record].sum
+      }
+    }
+  }));
+
 }
 
 module.exports = {

@@ -15,11 +15,209 @@ function panel(layer) {
 
     if (layer.format === 'mvt' && layer.style && layer.style.categorized) panel.appendChild(mvtCategorized(layer));
 
-    if (layer.format === 'cluster' && layer.style && layer.style.categorized) panel.appendChild(clusterCategorized(layer));
+    if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
+
+    if (layer.format === 'cluster' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(clusterCategorized(layer));
+
+    if (layer.format === 'cluster' && layer.style && layer.style.theme && layer.style.theme.type === 'graduated') panel.appendChild(clusterGraduated(layer));
 
     if (layer.format === 'grid') panel.appendChild(gridControl(layer));
 
     return panel;
+}
+
+function clusterSettings(layer) {
+
+    // Add a settings div
+    let settings = utils.createElement('div', {
+        className: 'settings'
+    });
+
+    settings.style.maxHeight = '30px';
+
+    // Create control to toggle layer visibility.
+    let div = utils.createElement('div', {
+        textContent: 'Cluster Settings',
+        className: 'cursor noselect'
+    });
+
+    div.style.color = '#090';
+
+    div.addEventListener('click', function () {
+        if (settings.style.maxHeight === '30px') {
+            settings.style.maxHeight = '320px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 360) + 'px';
+            div.style.color = '#333';
+        } else {
+            settings.style.maxHeight = '30px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
+            div.style.color = '#090';
+        }
+    });
+    settings.appendChild(div);
+
+
+    // Set cluster defaults
+    if (!layer.cluster_kmeans) layer.cluster_kmeans = 10;
+    if (!layer.cluster_dbscan) layer.cluster_dbscan = 0.02;
+    if (!layer.style.markerMin) layer.style.markerMin = 20;
+    if (!layer.style.markerMax) layer.style.markerMax = 40;
+
+    // KMeans
+    settings.appendChild(utils.createElement('span', {
+        textContent: 'KMeans: '
+    }));
+
+    let lblKMeans = utils.createElement('span', {
+        textContent: layer.cluster_kmeans,
+        className: 'bold'
+    });
+    settings.appendChild(lblKMeans);
+
+    let sliKMeans = utils.createElement('input', {
+        type: 'range',
+        min: layer.cluster_kmeans / 2,
+        value: layer.cluster_kmeans,
+        max: layer.cluster_kmeans * 1.5
+    });
+    sliKMeans.addEventListener('input', function () {
+        lblKMeans.innerHTML = this.value;
+        layer.cluster_kmeans = this.value;
+        layer.getLayer();
+    });
+
+    let rKMeans = utils.createElement('div', {
+        className: 'range'
+    });
+    rKMeans.appendChild(sliKMeans);
+    settings.appendChild(rKMeans);
+
+
+    // DBScan
+    settings.appendChild(utils.createElement('span', {
+        textContent: 'DBScan: '
+    }));
+
+    let lblDBScan = utils.createElement('span', {
+        textContent: layer.cluster_dbscan,
+        className: 'bold'
+    });
+    settings.appendChild(lblDBScan);
+
+    let sliDBScan = utils.createElement('input', {
+        type: 'range',
+        min: layer.cluster_dbscan * 500,
+        value: layer.cluster_dbscan * 1000,
+        max: layer.cluster_dbscan * 1500
+    });
+    sliDBScan.addEventListener('input', function () {
+        lblDBScan.innerHTML = this.value / 1000;
+        layer.cluster_dbscan = this.value / 1000;
+        layer.getLayer();
+    });
+
+    let rDBScan = utils.createElement('div', {
+        className: 'range'
+    });
+    rDBScan.appendChild(sliDBScan);
+    settings.appendChild(rDBScan);
+
+
+    // markerMin
+    settings.appendChild(utils.createElement('span', {
+        textContent: 'Marker Min: '
+    }));
+
+    let lblMarkerMin = utils.createElement('span', {
+        textContent: layer.style.markerMin,
+        className: 'bold'
+    });
+    settings.appendChild(lblMarkerMin);
+
+    let sliMarkerMin = utils.createElement('input', {
+        type: 'range',
+        min: parseInt(layer.style.markerMin * 0.3),
+        value: parseInt(layer.style.markerMin),
+        max: parseInt(layer.style.markerMin * 3)
+    });
+    sliMarkerMin.addEventListener('input', function () {
+        lblMarkerMin.innerHTML = this.value;
+        layer.style.markerMin = parseInt(this.value);
+        layer.getLayer();
+    });
+
+    let rMarkerMin = utils.createElement('div', {
+        className: 'range'
+    });
+    rMarkerMin.appendChild(sliMarkerMin);
+    settings.appendChild(rMarkerMin);
+
+
+    // markerMax
+    settings.appendChild(utils.createElement('span', {
+        textContent: 'Marker Max: '
+    }));
+
+    let lblMarkerMax = utils.createElement('span', {
+        textContent: layer.style.markerMax,
+        className: 'bold'
+    });
+    settings.appendChild(lblMarkerMax);
+
+    let sliMarkerMax = utils.createElement('input', {
+        type: 'range',
+        min: parseInt(layer.style.markerMax * 0.3),
+        value: parseInt(layer.style.markerMax),
+        max: parseInt(layer.style.markerMax * 3)
+    });
+    sliMarkerMax.addEventListener('input', function () {
+        lblMarkerMax.innerHTML = this.value;
+        layer.style.markerMax = parseInt(this.value);
+        layer.getLayer();
+    });
+
+    let rMarkerMax = utils.createElement('div', {
+        className: 'range'
+    });
+    rMarkerMax.appendChild(sliMarkerMax);
+    settings.appendChild(rMarkerMax);
+
+
+    // Log scale cluster.
+    let table = utils.createElement('table', {
+        className: 'checkbox'
+    });
+
+    let td = utils.createElement('td', {
+        className: 'box'
+    });
+
+    layer.markerLog = utils.createElement('input', {
+        id: layer.layer + '_logscale',
+        type: 'checkbox'
+    });
+
+    layer.markerLog.checked = layer.style.markerLog;
+    layer.markerLog.addEventListener('click', function () {
+        layer.getLayer();
+    });
+
+    let label = utils.createElement('label', {
+        htmlFor: layer.layer + '_logscale'
+    });
+
+    td.appendChild(layer.markerLog);
+    td.appendChild(label);
+
+    table.appendChild(td);
+    table.appendChild(utils.createElement('td', {
+        textContent: 'Log scale cluster'
+    }));
+    
+    settings.appendChild(table);
+
+
+    return settings;
 }
 
 function mvtCategorized(layer) {
@@ -41,7 +239,7 @@ function mvtCategorized(layer) {
             .attr('x', 0)
             .attr('y', y)
             .style('font-weight', 600)
-            .style('font-size', '12px')
+            .style('font-size', '14px')
             .text(layer.style.categorized.label || 'Legend');
         y += 10;
     }
@@ -135,23 +333,23 @@ function clusterCategorized(layer) {
             .select(legend)
             .append('svg')
             .attr('width', width),
-        y = 10;
+        y = 15;
 
     // Create a legend title from the categorized.label property.
-    if (layer.style.categorized.label) {
+    if (layer.style.theme.label) {
         svg.append('text')
             .attr('x', 0)
             .attr('y', y)
             .style('font-weight', 600)
-            .style('font-size', '12px')
-            .text(layer.style.categorized.label || 'Legend');
+            .style('font-size', '14px')
+            .text(layer.style.theme.label);
         y += 10;
     }
 
-    layer.style.categorized.filter = [];
-    layer.style.categorized.filterOther = false;
+    layer.style.theme.filter = [];
+    layer.style.theme.filterOther = false;
 
-    Object.keys(layer.style.categorized.cat).map((item) => {
+    Object.keys(layer.style.theme.cat).map((item) => {
 
         // // two columns
         // for (let i = 0; i < keys.length; i++) {
@@ -165,7 +363,7 @@ function clusterCategorized(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', layer.style.categorized.cat[item].marker);
+            .attr('xlink:href', layer.style.theme.cat[item].marker);
 
         // Attach label with filter on click for the style category.
         svg.append('text')
@@ -174,14 +372,14 @@ function clusterCategorized(layer) {
             .style('font-size', '12px')
             .style('alignment-baseline', 'central')
             .style('cursor', 'pointer')
-            .text(layer.style.categorized.cat[item].label || item)
+            .text(layer.style.theme.cat[item].label || item)
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.style.categorized.filter.splice(layer.style.categorized.filter.indexOf(item),1);
+                    layer.style.theme.filter.splice(layer.style.theme.filter.indexOf(item),1);
                 } else {
                     this.style.opacity = 0.5;
-                    layer.style.categorized.filter.push(item);
+                    layer.style.theme.filter.push(item);
                 }
 
                 layer.getLayer();
@@ -191,7 +389,7 @@ function clusterCategorized(layer) {
     });
 
     // Attach box for other/default categories.
-    if (layer.style.categorized.other) {
+    if (layer.style.theme.other) {
         svg.append('image')
             .attr('x', 0)
             .attr('y', y)
@@ -210,10 +408,10 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.style.categorized.filterOther = false;
+                    layer.style.theme.filterOther = false;
                 } else {
                     this.style.opacity = 0.5;
-                    layer.style.categorized.filterOther = true;
+                    layer.style.theme.filterOther = true;
                 }
 
                 layer.getLayer();
@@ -242,38 +440,103 @@ function clusterCategorized(layer) {
         .style('cursor', 'pointer')
         .text('Multiple Locations');
 
-    if (layer.style.categorized.competitors) {
-        for (let i = 0; i < layer.style.categorized.competitors.length; i++) {
-            svg.append('circle')
-                .attr('cx', 20)
-                .attr('cy', y)
-                .attr('r', 20 - (i + 1) * 20 / (layer.style.categorized.competitors.length + 1))
-                .style('fill', layer.style.categorized.competitors[i][1]);
-        }
+    if (layer.style.theme.competitors) {
 
-        // list competitors
-        y += 15;
-        for (let i = 0; i < layer.style.categorized.competitors.length; i++) {
+        let competitors = Object.keys(layer.style.theme.competitors),
+            n = competitors.length,
+            i = 0;
 
-            y += 20;
+        competitors.map(comp => {
 
             svg.append('circle')
                 .attr('cx', 20)
                 .attr('cy', y)
+                .attr('r', 20 - (i + 1) * 20 / (n + 1))
+                .style('fill', layer.style.theme.competitors[comp].colour);
+
+            svg.append('circle')
+                .attr('cx', 20)
+                .attr('cy', y + 35 + (i * 20))
                 .attr('r', 8)
-                .style('fill', layer.style.categorized.competitors[i][1]);
+                .style('fill', layer.style.theme.competitors[comp].colour);
 
             svg.append('text')
                 .attr('x', 45)
-                .attr('y', y)
+                .attr('y', y + 35 + (i * 20))
                 .attr('alignment-baseline', 'central')
                 .style('font-size', '12px')
-                .text(layer.style.categorized.competitors[i][2]);
-        }
+                .text(layer.style.theme.competitors[comp].label);
+
+            i++;
+        });
+
+        y += 15 + (n * 20);
+
     } else { y += 15 };
         
     // Set height of the svg element.
     svg.attr('height', y += 10);
+
+    return legend;
+}
+
+function clusterGraduated(layer) {
+
+    // Get width from the layer drawer client width and create a new SVG for the legend.
+    let width = layer.drawer.clientWidth,
+        legend = utils.createElement('div', {
+            className: 'legend'
+        }),
+        svg = d3
+            .select(legend)
+            .append('svg')
+            .attr('width', width),
+        y = 15;
+
+    // Create a legend title from the categorized.label property.
+    if (layer.style.theme.label) {
+        svg.append('text')
+            .attr('x', 0)
+            .attr('y', y)
+            .style('font-weight', 600)
+            .style('font-size', '14px')
+            .text(layer.style.theme.label);
+        y += 10;
+    }
+
+    layer.style.theme.filter = [];
+    layer.style.theme.filterOther = false;
+
+    layer.style.theme.cat.map((cat) => {
+
+        // // two columns
+        // for (let i = 0; i < keys.length; i++) {
+        //     y = i % 2 ? y : y += 25;
+        //     x = i % 2 ? w / 2 + 15 : 15;
+        // }
+
+        // Attach box for the style category.
+        svg.append('image')
+            .attr('x', 0)
+            .attr('y', y)
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr('xlink:href', cat.marker || '');
+
+        // Attach label with filter on click for the style category.
+        svg.append('text')
+            .attr('x', 25)
+            .attr('y', y + 11)
+            .style('font-size', '12px')
+            .style('alignment-baseline', 'central')
+            .style('cursor', 'pointer')
+            .text(cat.label || '');
+
+        y += 20;
+    });  
+        
+    // Set height of the svg element.
+    svg.attr('height', y);
 
     return legend;
 }
