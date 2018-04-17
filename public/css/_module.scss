@@ -92,8 +92,6 @@
             -moz-transition: opacity 300ms ease-in-out;
             -webkit-transition: opacity 300ms ease-in-out;
             border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-            padding-top: 5px;
             font-size: 12px;
             line-height: 1.5;
 
@@ -101,9 +99,13 @@
                 font-size: 12px;
             }
 
+            .legend {
+                padding: 5px 0;
+            }
+
             .settings {
+                padding: 5px 0px;
                 border-bottom: 1px solid #999;
-                margin-bottom: 10px;
                 overflow: hidden;
                 transition: max-height 0.3s ease-out;
 

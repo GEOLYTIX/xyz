@@ -33,7 +33,7 @@ function clusterSettings(layer) {
         className: 'settings'
     });
 
-    settings.style.maxHeight = '30px';
+    settings.style.maxHeight = '35px';
 
     // Create control to toggle layer visibility.
     let div = utils.createElement('div', {
@@ -44,12 +44,12 @@ function clusterSettings(layer) {
     div.style.color = '#090';
 
     div.addEventListener('click', function () {
-        if (settings.style.maxHeight === '30px') {
+        if (settings.style.maxHeight === '35px') {
             settings.style.maxHeight = '320px';
             layer.drawer.style.maxHeight = (layer.panel.clientHeight + 360) + 'px';
             div.style.color = '#333';
         } else {
-            settings.style.maxHeight = '30px';
+            settings.style.maxHeight = '35px';
             layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
             div.style.color = '#090';
         }

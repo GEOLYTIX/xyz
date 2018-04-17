@@ -124,6 +124,9 @@ router.get('/q_catchments', isLoggedIn, require('./mod/catchments').catchments);
 // Get cluster layer data.
 router.get('/q_cluster', isLoggedIn, require('./mod/cluster').cluster);
 
+// Get id array from cluster layer.
+router.get('/q_cluster_select', isLoggedIn, require('./mod/cluster').cluster_select);
+
 // Get geojson data.
 router.get('/q_geojson', isLoggedIn, require('./mod/geojson').geojson);
 

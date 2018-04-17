@@ -165,9 +165,48 @@ async function cluster(req, res) {
       }
     }
   }));
+}
+
+async function cluster_select(req, res) {
+  
+  let
+    table = req.query.table,
+    id = req.query.qID,
+    dbs = req.query.dbs,
+    count = req.query.count,
+    latlng = req.query.latlng;
+
+  // Check whether string params are found in the settings to prevent SQL injections.
+  //if (await require('./chk').chkVals([table, id, geom, cat], res).statusCode === 406) return;
+
+  //console.log(req.query);
+
+  // Query the feature count from lat/lng bounding box.
+  let q = `
+    SELECT ${id} AS ID
+      FROM ${table}
+      ORDER BY ST_Point(${latlng}) <#> geom LIMIT ${count};`;
+
+  let result = await global.DBS[req.query.dbs].query(q);
+
+  console.log(result.rows);
+
+  res.status(200).json(Object.keys(result.rows));
+
+  // res.status(200).json(Object.keys(result.rows).map(record => {
+  //   return {
+  //     type: 'Feature',
+  //     geometry: JSON.parse(result.rows[record].geomj),
+  //     properties: {
+  //       count: result.rows[record].count,
+  //       sum: result.rows[record].sum
+  //     }
+  //   }
+  // }));
 
 }
 
 module.exports = {
-  cluster: cluster
+  cluster: cluster,
+  cluster_select: cluster_select
 };
