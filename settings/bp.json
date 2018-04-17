@@ -241,8 +241,8 @@
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
-          "qID": "id",
           "table": "bp_only_catalist_opp",
+          "qID": "id",
           "cluster_label": "sitename",
           "cluster_cat": "sharebrand",
           "infoj": [
