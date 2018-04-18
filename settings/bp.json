@@ -253,8 +253,9 @@
             },
             {
               "field": "sitestatus",
-              "label": "Status",
-              "type": "text"
+              "label": "Site status",
+              "type": "text",
+              "filter": ["Status", "Open", "Under Development", "Non-retail"]
             },
             {
               "field": "brand",
@@ -269,12 +270,14 @@
             {
               "field": "shopbrand",
               "label": "Brand (shop)",
-              "type": "text"
+              "type": "text",
+              "filter": "text"
             },
             {
               "field": "ownership",
               "label": "Ownership",
-              "type": "text"
+              "type": "text",
+              "filter": ["Ownership", "Dealer", "Company"]
             },
             {
               "field": "companynam",
@@ -284,12 +287,14 @@
             {
               "field": "plotsizear",
               "label": "Plot Size",
-              "type": "integer"
+              "type": "integer",
+              "filter": "numeric"
             },
             {
               "field": "mfvolume",
               "label": "MF Volume",
-              "type": "integer"
+              "type": "integer",
+              "filter": "numeric"
             },
             {
               "field": "shoparea",

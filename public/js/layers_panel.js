@@ -12,7 +12,9 @@ function panel(layer) {
         className: 'meta',
         textContent: layer.meta
     }));
-
+    
+    if(applyFilters(layer)) panel.appendChild(layerFilters(layer));
+    
     if (layer.format === 'mvt' && layer.style && layer.style.categorized) panel.appendChild(mvtCategorized(layer));
 
     if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
@@ -26,6 +28,166 @@ function panel(layer) {
     return panel;
 }
 
+function applyFilters(layer){
+    let enabled = false;
+    
+    if(layer.infoj){
+        Object.keys(layer.infoj).map(function(key){
+            if(layer.infoj[key].filter){
+                enabled = true;
+            }
+        });
+        return enabled;
+        
+    } else {
+        return false;
+    }
+}
+
+function layerFilters(layer){
+    
+    // Add a filters div
+    let filters = utils.createElement('div', {
+        className: 'settings'
+    });
+    
+    filters.style.maxHeight = '30px';
+
+    // Create control to toggle layer visibility.
+    let div = utils.createElement('div', {
+        textContent: 'Filtering',
+        className: 'cursor noselect'
+    });
+    
+    div.style.color = '#090';
+
+    div.addEventListener('click', function () {
+        if (filters.style.maxHeight === '30px') {
+            filters.style.maxHeight = '600px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 600) + 'px';
+            div.style.color = '#333';
+        } else {
+            filters.style.maxHeight = '30px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
+            div.style.color = '#090';
+        }
+    });
+    filters.appendChild(div);
+    
+    let numeric_div = utils.createElement('div'),
+        checkbox_div = utils.createElement('div'),
+        text_div = utils.createElement('div');
+
+    filters.style.color = '#090';
+    
+    Object.keys(layer.infoj).map(function(key){
+        
+        if(typeof(layer.infoj[key].filter) === "object"){
+            
+            Object.keys(layer.infoj[key].filter).map(function(_key){
+                if(_key === "0"){
+                    let title = utils.createElement('h4', {
+                       textContent: layer.infoj[key].filter[_key]
+                    });
+                    
+                    checkbox_div.appendChild(title);
+                } else {
+    
+                    let element = filter_checkbox(layer.infoj[key].field, layer.infoj[key].filter[_key], layer.table + "_" + layer.infoj[key].field + "_" + _key);
+                    
+                    element.style.marginLeft = '30px';
+                    
+                    checkbox_div.appendChild(element);
+                }
+                
+            });
+        } else {
+            
+            if(layer.infoj[key].filter === "numeric"){
+                let content = filter_numeric(layer.infoj[key].field, layer.infoj[key].label, layer.table); 
+                
+                content.style.marginLeft = '30px';
+                
+                numeric_div.appendChild(content);
+            }
+            
+            if(layer.infoj[key].filter === "text"){
+              // text filter
+            }
+        }
+        
+    });
+    
+    filters.appendChild(numeric_div);
+    filters.appendChild(checkbox_div);
+    
+    return filters;
+}
+
+
+// create numeric filter 
+function filter_numeric(field, label, table){
+    let div = utils.createElement('div');
+   
+    let title = utils.createElement('h4', {
+        textContent: label
+    });
+    
+    div.appendChild(title);
+    
+    let operators = [{name: "less than", val: "less"}, {name: "more than", val: "more"}];
+    
+    let select = utils.createElement('select', {
+        id: table + "_" + field + "_select"
+    });
+    
+    Object.keys(operators).map(function(key){
+        let operator = utils.createElement('option', {
+            value: operators[key].val,
+            textContent: operators[key].name
+        }); 
+        select.appendChild(operator);
+    });
+    
+    div.appendChild(select);
+    
+    let input = utils.createElement('input', {
+        id: table + "_" + field,
+        placeholder: 'Set value.'
+    });
+    
+    input.style.width = "100%";
+    
+    div.append(input);
+    
+    return div;
+}
+
+// create checkbox filter
+function filter_checkbox(field, label, id){
+    
+    function filter_checkbox_onclick(e){
+        console.log('filter checkbox checked');
+    }
+    
+    let checkbox = utils.checkbox(id, label, filter_checkbox_onclick);
+    
+    return checkbox;
+}
+
+
+// create filter text
+function filter_text(field, label, id){
+    let div = utils.createElement('div');
+    let p = utils.createElement('p', {
+        textContent: label
+    });
+    
+    div.appendChild(p);
+}
+
+
+
 function clusterSettings(layer) {
 
     // Add a settings div
@@ -33,7 +195,7 @@ function clusterSettings(layer) {
         className: 'settings'
     });
 
-    settings.style.maxHeight = '35px';
+    settings.style.maxHeight = '30px';
 
     // Create control to toggle layer visibility.
     let div = utils.createElement('div', {
@@ -44,12 +206,12 @@ function clusterSettings(layer) {
     div.style.color = '#090';
 
     div.addEventListener('click', function () {
-        if (settings.style.maxHeight === '35px') {
+        if (settings.style.maxHeight === '30px') {
             settings.style.maxHeight = '320px';
             layer.drawer.style.maxHeight = (layer.panel.clientHeight + 360) + 'px';
             div.style.color = '#333';
         } else {
-            settings.style.maxHeight = '35px';
+            settings.style.maxHeight = '30px';
             layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
             div.style.color = '#090';
         }
