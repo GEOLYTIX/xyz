@@ -509,7 +509,7 @@ function clusterCategorized(layer) {
     }
 
     layer.style.theme.filter = [];
-    layer.style.theme.filterOther = false;
+    layer.style.theme.filterOther = [];
 
     Object.keys(layer.style.theme.cat).map((item) => {
 
@@ -570,10 +570,10 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.style.theme.filterOther = false;
+                    layer.style.theme.filterOther = [];
                 } else {
                     this.style.opacity = 0.5;
-                    layer.style.theme.filterOther = true;
+                    layer.style.theme.filterOther = Object.keys(layer.style.theme.cat);
                 }
 
                 layer.getLayer();

@@ -4,10 +4,11 @@ async function cluster(req, res) {
   
   let
     table = req.query.table,
-    id = req.query.qID === 'undefined' ? null : req.query.qID,
     geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
     cat = req.query.cat === 'undefined' ? null : req.query.cat,
     theme = req.query.theme === 'undefined' ? null : req.query.theme,
+    filter = req.query.filter === 'undefined' ? null : req.query.filter.split(','),
+    filterOther = req.query.filterOther === 'undefined' ? null : req.query.filterOther.split(','),
     canvas = parseInt(req.query.canvas),
     kmeans = parseFloat(req.query.kmeans),
     dbscan = parseFloat(req.query.dbscan * canvas / 1000000),
@@ -18,7 +19,13 @@ async function cluster(req, res) {
     xDegree = turf.distance([west, north], [east, south], { units: 'degrees' });
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  if (await require('./chk').chkVals([table, id, geom, cat], res).statusCode === 406) return;
+  if (await require('./chk').chkVals([table, geom, cat, filter, filterOther], res).statusCode === 406) return;
+
+  // Build filter for to check whether cat is not in array of filtered categories.
+  filter = filter? ` AND ${cat} NOT IN ('${filter.join("','")}')`: '';
+
+  // Build filter to remove any cat which is in array of categories.
+  filterOther = filterOther? ` AND ${cat} IN ('${filterOther.join("','")}')`: '';
 
   // Query the feature count from lat/lng bounding box.
   let q = `
@@ -28,7 +35,9 @@ async function cluster(req, res) {
       ST_DWithin(
         ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
         ${geom},
-        0.00001);`;
+        0.00001)
+    ${filter} 
+    ${filterOther};`;
 
   let result = await global.DBS[req.query.dbs].query(q);
 
@@ -84,14 +93,12 @@ async function cluster(req, res) {
       dbscan_cid
     FROM (
       SELECT
-        id,
         cat,
         kmeans_cid,
         ${geom} AS geom,
         ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
       FROM (
         SELECT
-          ${id} AS id,
           ${cat} AS cat,
           ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
           ${geom}
@@ -100,6 +107,8 @@ async function cluster(req, res) {
           ST_DWithin(
             ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
           ${geom}, 0.00001)
+        ${filter} 
+        ${filterOther}
       ) kmeans
     ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
   ) cluster GROUP BY kmeans_cid, dbscan_cid;`
@@ -111,14 +120,12 @@ async function cluster(req, res) {
     ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
   FROM (
     SELECT
-      id,
       cat,
       kmeans_cid,
       ${geom} AS geom,
       ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
     FROM (
       SELECT
-        ${id} AS id,
         ${cat} AS cat,
         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
         ${geom}
@@ -171,38 +178,49 @@ async function cluster_select(req, res) {
   
   let
     table = req.query.table,
+    geom = req.query.geom || 'geom',
     id = req.query.qID,
+    filter = req.query.filter === 'undefined' ? null : req.query.filter.split(','),
+    filterOther = req.query.filterOther === 'undefined' ? null : req.query.filterOther.split(','),
+    label = req.query.label,
     dbs = req.query.dbs,
-    count = req.query.count,
-    latlng = req.query.latlng;
+    count = parseInt(req.query.count),
+    lnglat = req.query.lnglat.split(',');
+
+  lnglat = lnglat.map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  //if (await require('./chk').chkVals([table, id, geom, cat], res).statusCode === 406) return;
+  if (await require('./chk').chkVals([table, geom, id, label, filter, filterOther], res).statusCode === 406) return;
 
-  //console.log(req.query);
+  // Build filter for to check whether cat is not in array of filtered categories.
+  filter = filter? ` AND ${cat} NOT IN ('${filter.join("','")}')`: '';
+
+  // Build filter to remove any cat which is in array of categories.
+  filterOther = filterOther? ` AND ${cat} IN ('${filterOther.join("','")}')`: '';
 
   // Query the feature count from lat/lng bounding box.
   let q = `
-    SELECT ${id} AS ID
+    SELECT
+      ${id} AS ID,
+      ${label} AS label,
+      array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
       FROM ${table}
-      ORDER BY ST_Point(${latlng}) <#> geom LIMIT ${count};`;
+      WHERE true 
+      ${filter} 
+      ${filterOther}
+      ORDER BY ST_Point(${lnglat}) <#> geom LIMIT ${count};`;
 
   let result = await global.DBS[req.query.dbs].query(q);
 
-  console.log(result.rows);
+  //console.log(result.rows);
 
-  res.status(200).json(Object.keys(result.rows));
-
-  // res.status(200).json(Object.keys(result.rows).map(record => {
-  //   return {
-  //     type: 'Feature',
-  //     geometry: JSON.parse(result.rows[record].geomj),
-  //     properties: {
-  //       count: result.rows[record].count,
-  //       sum: result.rows[record].sum
-  //     }
-  //   }
-  // }));
+  res.status(200).json(Object.keys(result.rows).map(record => {
+    return {
+      id: result.rows[record].id,
+      label: result.rows[record].label,
+      lnglat: result.rows[record].lnglat
+    }
+  }));
 
 }
 

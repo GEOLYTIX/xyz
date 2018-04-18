@@ -132,6 +132,22 @@ i {
     width: 401px !important;
   }
 
+  .leaflet-popup-content{
+    width: 401px !important;
+  }
+
+  .tooltip {
+    font-family: 'PT Mono', monospace;
+    font-weight: 600;
+    font-size: 15px;
+    //text-shadow: 2px 2px 1px #fff;
+    //color: #090;
+    background-color: #fff;
+    padding: 5px 5px 3px 5px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px #555;
+  }
+
   .map_button {
     position: absolute;
     top: 0;

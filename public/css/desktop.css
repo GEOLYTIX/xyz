@@ -656,7 +656,8 @@ input[type=range]::-moz-range-thumb {
     font-size: 12px;
     line-height: 1.5; }
     .module .content .panel .meta {
-      font-size: 12px; }
+      font-size: 12px;
+      margin: 5px 0 0 0; }
     .module .content .panel .legend {
       padding: 5px 0; }
     .module .content .panel .settings {
@@ -1044,6 +1045,16 @@ i {
     display: none; }
   .map_container .leaflet-popup-content {
     width: 401px !important; }
+  .map_container .leaflet-popup-content {
+    width: 401px !important; }
+  .map_container .tooltip {
+    font-family: 'PT Mono', monospace;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: #fff;
+    padding: 5px 5px 3px 5px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px #555; }
   .map_container .map_button {
     position: absolute;
     top: 0;
