@@ -74,6 +74,8 @@ function addClusterToLayer(cluster, layer) {
             // Set icon to default marker. 
             let icon = layer.style.marker || svg_symbols.target([400, '#aaa']);
 
+            let tooltip = (layer.hover && view_mode === 'desktop') || false;
+
             // Check whether layer has categorized theme.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
 
@@ -104,6 +106,8 @@ function addClusterToLayer(cluster, layer) {
                     if (point.properties.sum < layer.style.theme.cat[i].val) break;
                     icon = layer.style.theme.cat[i].marker;
                 }
+
+                tooltip = tooltip? point.properties.sum.toLocaleString(): false;
             }
 
             let iconSize = layer.markerLog.checked ?
@@ -112,14 +116,25 @@ function addClusterToLayer(cluster, layer) {
                     layer.style.markerMin :
                     layer.style.markerMin + layer.style.markerMax / c_max * point.properties.count;
 
-            return L.marker(latlng, {
+            let marker = L.marker(latlng, {
                 pane: layer.pane[0],
                 zIndexOffset: parseInt(1000 - 1000 / c_max * point.properties.count),
                 icon: L.icon({
                     iconUrl: icon,
                     iconSize: iconSize
-                })
+                }),
+                interactive: (layer.infoj)? true: false
             });
+
+
+            if (tooltip) marker.bindTooltip(tooltip,{
+                sticky: true,
+                className: 'tooltip',
+                direction: 'top',
+                offset: [0,-10]
+            }).openTooltip();
+            
+            return marker;
         }
     })
     .on('click', e => clusterMouseClick(e, layer))
@@ -129,37 +144,20 @@ function addClusterToLayer(cluster, layer) {
 
 }
 
-function clusterMouseOver(e) {
-    e.layer.setIcon(L.icon({
-        iconUrl: e.layer.options.icon.options.iconUrl,
-        iconSize: e.layer.options.icon.options.iconSize,
-        shadowUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%221000%22%20height%3D%221000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Ccircle%20style%3D%22fill%3A%23090%3Bfill-opacity%3A0.2%3B%22%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22395%22%2F%3E%0A%3C%2Fsvg%3E',
-        shadowSize: e.layer.options.icon.options.iconSize + 20,
-    }));
-}
-
-function clusterMouseOut(e) {
-    e.layer.setIcon(L.icon({
-        iconUrl: e.layer.options.icon.options.iconUrl,
-        iconSize: e.layer.options.icon.options.iconSize
-    }));
-}
-
 function clusterMouseClick(e, layer) {
 
     let count = e.layer.feature.properties.count,
-        lnglat = e.layer.feature.geometry.coordinates;
-
-        //latlng = e.layer.feature.geometry.coordinates.reverse();
-
-    let xhr = new XMLHttpRequest();
+        lnglat = e.layer.feature.geometry.coordinates,
+        xhr = new XMLHttpRequest();
 
     xhr.open('GET', host + 'q_cluster_select?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
-        qID: layer.qID,
+        qID: layer.qID || 'id',
         label: layer.cluster_label,
-        count: count,
+        filter: layer.style.theme && layer.style.theme.filter.length > 0? layer.style.theme.filter: 'undefined',
+        filterOther: layer.style.theme && layer.style.theme.filterOther.length > 0? layer.style.theme.filterOther: 'undefined',
+        count: count > 99? 99: count,
         lnglat: lnglat
     }));
 
@@ -181,7 +179,7 @@ function clusterMouseClick(e, layer) {
 
             let table = '<table cellpadding="0" cellspacing="0">';
 
-            for (let i = 0; i < cluster.length && i < 100; i++) {
+            for (let i = 0; i < cluster.length; i++) {
                 table += '<tr '
                     + 'data-id="' + cluster[i].id + '" '
                     + 'data-marker="' + cluster[i].lnglat + '">'
@@ -190,7 +188,7 @@ function clusterMouseClick(e, layer) {
             }
             table += '</table>';
 
-            //if (count > 100) table += '<caption><small>and ' + (count - 100).toString() + ' more.</small></caption>';
+            if (cluster.length == 99) table += '<caption><small>Cluster selection is limited to 99 feature.</small></caption>';
 
             if (view_mode === 'desktop') {
 
@@ -200,10 +198,10 @@ function clusterMouseClick(e, layer) {
                     .setContent('<div class="scrollbar_container"><div class="scrollbar"></div></div><div class="content location_table">' + table + '</div>')
                     .openOn(_xyz.map);
                 require('./lscrolly')(document.querySelector('.leaflet-popup-content'));
-
             }
 
             if (view_mode === 'mobile') {
+
                 // Remove the line marker which connects the cell with the drop down list;
                 if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
@@ -227,7 +225,7 @@ function clusterMouseClick(e, layer) {
                 _xyz.map.panBy([0, -shiftY]);
 
                 // Draw line marker which connects hex cell with drop down.
-                layer.layerSelectionLine = L.marker(e.latlng, {
+                layer.layerSelectionLine = L.marker(lnglat.reverse(), {
                     icon: L.icon({
                         iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
                         iconSize: [3, 1000],
@@ -237,7 +235,6 @@ function clusterMouseClick(e, layer) {
 
                 // Button event to close the .location_drop.
                 dom.location_drop__close.addEventListener('click', function () {
-                    if (layer.layerSelectionCell) _xyz.map.removeLayer(layer.layerSelectionCell);
                     if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
                     _xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);

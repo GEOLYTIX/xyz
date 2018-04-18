@@ -42,11 +42,11 @@
         "catalist_opp": {
           "display": true,
           "name": "Fuel Stations (Catalist)",
+          "meta": "Station locations and branding from Experian-Catalist dataset.",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
           "table": "bp_catalist_opp",
-          "qID": "id",
           "cluster_label": "sitename",
           "cluster_cat": "sharebrand",
           "infoj": [
@@ -238,6 +238,7 @@
         },
         "catalist_opp_bp": {
           "name": "BP Stations (Catalist)",
+          "meta": "BP station locations from Experian-Catalist dataset.",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
@@ -618,6 +619,7 @@
         },
         "traffic_count": {
           "name": "Traffic",
+          "meta": "Department for transport count points.",
           "format": "cluster",
           "pane": ["traffic", 550],
           "dbs": "XYZ",
@@ -625,6 +627,7 @@
           "table": "bp_traffic_counts_all",
           "cluster_label": "road_num",
           "cluster_cat": "all_mv_000__16",
+          "hover": true,
           "infoj": [
             {
               "field": "cp_type",

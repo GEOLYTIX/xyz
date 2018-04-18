@@ -21,8 +21,10 @@ async function cluster(req, res) {
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, cat, filter, filterOther], res).statusCode === 406) return;
 
+  // Build filter for to check whether cat is not in array of filtered categories.
   filter = filter? ` AND ${cat} NOT IN ('${filter.join("','")}')`: '';
 
+  // Build filter to remove any cat which is in array of categories.
   filterOther = filterOther? ` AND ${cat} IN ('${filterOther.join("','")}')`: '';
 
   // Query the feature count from lat/lng bounding box.
@@ -178,13 +180,23 @@ async function cluster_select(req, res) {
     table = req.query.table,
     geom = req.query.geom || 'geom',
     id = req.query.qID,
+    filter = req.query.filter === 'undefined' ? null : req.query.filter.split(','),
+    filterOther = req.query.filterOther === 'undefined' ? null : req.query.filterOther.split(','),
     label = req.query.label,
     dbs = req.query.dbs,
-    count = req.query.count,
-    lnglat = req.query.lnglat;
+    count = parseInt(req.query.count),
+    lnglat = req.query.lnglat.split(',');
+
+  lnglat = lnglat.map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  //if (await require('./chk').chkVals([table, id, geom, cat], res).statusCode === 406) return;
+  if (await require('./chk').chkVals([table, geom, id, label, filter, filterOther], res).statusCode === 406) return;
+
+  // Build filter for to check whether cat is not in array of filtered categories.
+  filter = filter? ` AND ${cat} NOT IN ('${filter.join("','")}')`: '';
+
+  // Build filter to remove any cat which is in array of categories.
+  filterOther = filterOther? ` AND ${cat} IN ('${filterOther.join("','")}')`: '';
 
   // Query the feature count from lat/lng bounding box.
   let q = `
@@ -193,6 +205,9 @@ async function cluster_select(req, res) {
       ${label} AS label,
       array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
       FROM ${table}
+      WHERE true 
+      ${filter} 
+      ${filterOther}
       ORDER BY ST_Point(${lnglat}) <#> geom LIMIT ${count};`;
 
   let result = await global.DBS[req.query.dbs].query(q);
