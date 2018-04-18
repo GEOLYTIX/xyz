@@ -77,6 +77,10 @@ function layerFilters(layer){
     let numeric_div = utils.createElement('div'),
         checkbox_div = utils.createElement('div'),
         text_div = utils.createElement('div');
+    
+    numeric_div.style.marginLeft = "10px";
+    checkbox_div.style.marginLeft = "10px";
+    text_div.style.marginLeft = "10px";
 
     filters.style.color = '#090';
     
@@ -106,7 +110,7 @@ function layerFilters(layer){
             if(layer.infoj[key].filter === "numeric"){
                 let content = filter_numeric(layer.infoj[key].field, layer.infoj[key].label, layer.table); 
                 
-                content.style.marginLeft = '30px';
+                content.style.marginLeft = '10px';
                 
                 numeric_div.appendChild(content);
             }
