@@ -163,7 +163,6 @@ function clusterMouseClick(e, layer) {
 
     xhr.onload = () => {
 
-        console.log(JSON.parse(xhr.responseText));
         let cluster = JSON.parse(xhr.responseText);
 
         if (cluster.length === 1) {

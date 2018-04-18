@@ -159,7 +159,7 @@ module.exports = function Select() {
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
             table: layer.table,
-            qID: _layer.qID,
+            qID: _layer.qID || 'id',
             id: layer.id,
             infoj: _layer.infoj,
             geomj: _layer.geomj,
