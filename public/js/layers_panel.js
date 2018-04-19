@@ -553,9 +553,9 @@ function clusterCategorized(layer) {
         y += 10;
     }
 
-    if (!layer.filter.cat) layer.filter.cat = {};
-    if (!layer.filter.cat.in) layer.filter.cat.in = [];
-    if (!layer.filter.cat.ni) layer.filter.cat.ni = [];
+    if (!layer.filter[layer.cluster_cat]) layer.filter[layer.cluster_cat] = {};
+    if (!layer.filter[layer.cluster_cat].in) layer.filter[layer.cluster_cat].in = [];
+    if (!layer.filter[layer.cluster_cat].ni) layer.filter[layer.cluster_cat].ni = [];
 
     Object.keys(layer.style.theme.cat).map((item) => {
 
@@ -584,10 +584,10 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.filter.cat.in.splice(layer.filter.cat.in.indexOf(item),1);
+                    layer.filter.cat.ni.splice(layer.filter[layer.cluster_cat].ni.indexOf(item),1);
                 } else {
                     this.style.opacity = 0.5;
-                    layer.filter.cat.in.push(item);
+                    layer.filter[layer.cluster_cat].ni.push(item);
                 }
 
                 layer.getLayer();
@@ -616,10 +616,10 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.filter.cat.ni = [];
+                    layer.filter[layer.cluster_cat].in = [];
                 } else {
                     this.style.opacity = 0.5;
-                    layer.filter.cat.ni = Object.keys(layer.style.theme.cat);
+                    layer.filter[layer.cluster_cat].in = Object.keys(layer.style.theme.cat);
                 }
 
                 layer.getLayer();

@@ -154,7 +154,6 @@ function clusterMouseClick(e, layer) {
         table: layer.table,
         qID: layer.qID || 'id',
         label: layer.cluster_label,
-        cat: layer.cluster_cat,
         filter: JSON.stringify(layer.filter),
         count: count > 99? 99: count,
         lnglat: lnglat

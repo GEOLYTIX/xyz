@@ -23,11 +23,12 @@ async function cluster(req, res) {
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, cat], res).statusCode === 406) return;
 
-  // Add to filter_sql condition for for NOT IN cat array.
-  filter_sql += filter.cat && filter.cat.in.length > 0? ` AND ${cat} NOT IN ('${filter.cat.in.join("','")}')`: '';
+  Object.keys(filter).map(field => {
 
-  // Add to filter_sql condition for for IN cat array.
-  filter_sql += filter.cat && filter.cat.ni.length > 0? ` AND ${cat} IN ('${filter.cat.ni.join("','")}')`: '';
+    if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
+    if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
+
+  });
 
   // Query the feature count from lat/lng bounding box.
   let q = `
@@ -180,7 +181,6 @@ async function cluster_select(req, res) {
     table = req.query.table,
     geom = req.query.geom || 'geom',
     id = req.query.qID,
-    cat = req.query.cat === 'undefined' ? null : req.query.cat,
     filter = JSON.parse(req.query.filter),
     filter_sql = '',
     label = req.query.label,
@@ -193,11 +193,12 @@ async function cluster_select(req, res) {
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, id, label], res).statusCode === 406) return;
 
-  // Add to filter_sql condition for for NOT IN cat array.
-  filter_sql += filter.cat && filter.cat.in.length > 0? ` AND ${cat} NOT IN ('${filter.cat.in.join("','")}')`: '';
+  Object.keys(filter).map(field => {
 
-  // Add to filter_sql condition for for IN cat array.
-  filter_sql += filter.cat && filter.cat.ni.length > 0? ` AND ${cat} IN ('${filter.cat.ni.join("','")}')`: '';
+    if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
+    if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
+
+  });
 
   // Query the feature count from lat/lng bounding box.
   let q = `
