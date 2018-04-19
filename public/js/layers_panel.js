@@ -12,7 +12,9 @@ function panel(layer) {
         className: 'meta',
         textContent: layer.meta
     }));
-
+    
+    if(!!applyFilters(layer)) panel.appendChild(layerFilters(layer, applyFilters(layer)));
+    
     if (layer.format === 'mvt' && layer.style && layer.style.categorized) panel.appendChild(mvtCategorized(layer));
 
     if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
@@ -25,6 +27,211 @@ function panel(layer) {
 
     return panel;
 }
+
+function applyFilters(layer){
+    let enabled = 0;
+    
+    if(layer.infoj){
+        Object.keys(layer.infoj).map(function(key){
+            if(layer.infoj[key].filter){
+                if(layer.infoj[key].filter === "text"){
+                    enabled += 100;
+                }
+                if(layer.infoj[key].filter === "numeric"){
+                    enabled += 120;
+                }
+                if(typeof(layer.infoj[key].filter) === 'object'){
+                    enabled += 40*layer.infoj[key].filter.length + 50;
+                }
+            }
+        });
+        return enabled;
+        
+    } else {
+        return false;
+    }
+}
+
+function layerFilters(layer, height){
+    
+    // Add a filters div
+    let filters = utils.createElement('div', {
+        className: 'settings'
+    });
+    
+    filters.style.maxHeight = '30px';
+
+    // Create control to toggle layer visibility.
+    let div = utils.createElement('div', {
+        textContent: 'Filtering',
+        className: 'cursor noselect'
+    });
+    
+    div.style.color = '#090';
+
+    div.addEventListener('click', function () {
+        if (filters.style.maxHeight === '30px') {
+           
+            filters.style.maxHeight = height.toString() + 'px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + height) + 'px';
+            div.style.color = '#333';
+        } else {
+            filters.style.maxHeight = '30px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
+            div.style.color = '#090';
+        }
+    });
+    filters.appendChild(div);
+    
+    let numeric_div = utils.createElement('div'),
+        checkbox_div = utils.createElement('div'),
+        text_div = utils.createElement('div');
+    
+    numeric_div.style.marginLeft = "10px";
+    checkbox_div.style.marginLeft = "10px";
+    text_div.style.marginLeft = "10px";
+
+    filters.style.color = '#090';
+    
+    Object.keys(layer.infoj).map(function(key){
+        
+        if(typeof(layer.infoj[key].filter) === "object"){
+            
+            Object.keys(layer.infoj[key].filter).map(function(_key){
+                
+                let _field = layer.infoj[key].field,
+                    _label = layer.infoj[key].filter[_key],
+                    _id = layer.table + "--" + layer.infoj[key].field + "--" + _key,
+                    _table = layer.table,
+                    _content;
+                
+                
+                
+                if(_key === "0"){
+                    let _title = utils.createElement('h4', {
+                       textContent: layer.infoj[key].filter[_key]
+                    });
+                    
+                    checkbox_div.appendChild(_title);
+                } else {
+    
+                    _content = filter_checkbox(_field, _label, _id);
+                    
+                    _content.style.marginLeft = '30px';
+                    
+                    checkbox_div.appendChild(_content);
+                }
+                
+            });
+        } else {
+            
+            let _field = layer.infoj[key].field,
+                _label = layer.infoj[key].label,
+                _table = layer.table,
+                _content;
+            
+            
+            if(layer.infoj[key].filter === "numeric"){
+                
+                _content = filter_numeric(_field, _label, _table); 
+                
+                _content.style.marginLeft = '10px';
+                
+                numeric_div.appendChild(_content);
+            }
+            
+            if(layer.infoj[key].filter === "text"){
+                
+                let _content = filter_text(_field, _label, _table); 
+
+                _content.style.marginLeft = '10px';
+                
+                text_div.appendChild(_content);
+            }
+        }
+        
+    });
+    
+    filters.appendChild(numeric_div);
+    filters.appendChild(checkbox_div);
+    filters.appendChild(text_div);
+    
+    return filters;
+}
+
+function filter_text(field, label, table){
+    let div = utils.createElement('div');
+    
+    let title = utils.createElement('h4', {
+        textContent: label
+    });
+    
+    div.appendChild(title);
+    
+    let input = utils.createElement('input', {
+        id: table + "--" + field,
+        placeholder: 'Search.'
+    });
+    
+    input.style.width = "100%";
+    
+    div.appendChild(input);
+    
+    return div;
+}
+
+
+// create numeric filter 
+function filter_numeric(field, label, table){
+    let div = utils.createElement('div');
+   
+    let title = utils.createElement('h4', {
+        textContent: label
+    });
+    
+    div.appendChild(title);
+    
+    let operators = [{name: "less than", val: "less"}, {name: "more than", val: "more"}];
+    
+    let select = utils.createElement('select', {
+        id: table + "--" + field + "_select"
+    });
+    
+    Object.keys(operators).map(function(key){
+        let operator = utils.createElement('option', {
+            value: operators[key].val,
+            textContent: operators[key].name
+        }); 
+        select.appendChild(operator);
+    });
+    
+    div.appendChild(select);
+    
+    let input = utils.createElement('input', {
+        id: table + "--" + field,
+        placeholder: 'Set value.'
+    });
+    
+    input.style.width = "100%";
+    
+    div.append(input);
+    
+    return div;
+}
+
+// create checkbox filter
+function filter_checkbox(field, label, id){
+    
+    function filter_checkbox_onclick(e){
+        console.log('filter checkbox checked');
+    }
+    
+    let checkbox = utils.checkbox(id, label, filter_checkbox_onclick);
+    
+    return checkbox;
+}
+
+// Begin cluster settings
 
 function clusterSettings(layer) {
 

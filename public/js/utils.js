@@ -187,6 +187,43 @@ module.exports = (function () {
         return new Blob([uInt8Array], {type: contentType});
     }
     
+    function checkbox(id, caption, onclick){
+        let table = createElement('table', {
+            className: "checkbox"
+        });
+        
+        let td = createElement('td', {
+            className: "box"
+        });
+        
+        let input = createElement('input', {
+            id: id,
+            type: "checkbox"
+        });
+        
+        let label = createElement('label', {
+            htmlFor: id
+        });
+        
+        //label.setAttribute('for', id);
+        
+        let title = createElement('td', {
+            textContent: caption
+        }); 
+        
+        if(typeof(onclick) === 'function'){
+            input.addEventListener('click', onclick);
+        }
+        
+        td.appendChild(input);
+        td.appendChild(label);
+        
+        table.appendChild(td);
+        table.appendChild(title);
+        
+        return table;
+    }
+    
 
     return {
         scrollElement: scrollElement,
@@ -201,6 +238,7 @@ module.exports = (function () {
         getSelectOptionsIndex: getSelectOptionsIndex,
         getMath: getMath,
         createStatsTable: createStatsTable,
-        dataURLToBlob: dataURLToBlob
+        dataURLToBlob: dataURLToBlob,
+        checkbox: checkbox
     };
 })();
