@@ -56,7 +56,7 @@ function layerFilters(layer, height){
     
     // Add a filters div
     let filters = utils.createElement('div', {
-        className: 'settings'
+        classList: 'settings filters'
     });
     
     filters.style.maxHeight = '30px';
@@ -83,9 +83,15 @@ function layerFilters(layer, height){
     });
     filters.appendChild(div);
     
-    let numeric_div = utils.createElement('div'),
-        checkbox_div = utils.createElement('div'),
-        text_div = utils.createElement('div');
+    let numeric_div = utils.createElement('div', {
+        className: "filter--numeric"
+    }),
+        checkbox_div = utils.createElement('div', {
+            className: "filter--checkbox"
+        }),
+        text_div = utils.createElement('div', {
+            className: "filter--text"
+        });
     
     numeric_div.style.marginLeft = "10px";
     checkbox_div.style.marginLeft = "10px";
@@ -98,10 +104,10 @@ function layerFilters(layer, height){
         if(typeof(layer.infoj[key].filter) === "object"){
             
             Object.keys(layer.infoj[key].filter).map(function(_key){
-                
+            
                 let _field = layer.infoj[key].field,
                     _label = layer.infoj[key].filter[_key],
-                    _id = layer.table + "--" + layer.infoj[key].field + "--" + _key,
+                    _id = layer.table + "--" + layer.infoj[key].field + "--" + key + "--" + _key,
                     _table = layer.table,
                     _content;
                 
@@ -191,19 +197,22 @@ function filter_numeric(field, label, table){
     
     div.appendChild(title);
     
-    let operators = [{name: "less than", val: "less"}, {name: "more than", val: "more"}];
+    let operators = [{name: "less than", val: "<"}, {name: "more than", val: ">"}];
     
     let select = utils.createElement('select', {
-        id: table + "--" + field + "_select"
+        id: table + "--" + field + "--select",
     });
     
     Object.keys(operators).map(function(key){
+
         let operator = utils.createElement('option', {
             value: operators[key].val,
             textContent: operators[key].name
         }); 
         select.appendChild(operator);
     });
+    
+    select.selectedIndex = 0;
     
     div.appendChild(select);
     

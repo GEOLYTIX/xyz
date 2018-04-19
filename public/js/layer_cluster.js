@@ -48,6 +48,53 @@ function loadLayer(layer) {
 
     // Send XHR to middleware.
     layer.xhr.send();
+    
+    let filter_numeric = document.querySelectorAll('.filters .filter--numeric input');
+    let filter_checkbox = document.querySelectorAll('.filters .filter--checkbox input');
+    let filter_text = document.querySelectorAll('.filters .filter--text input');
+    
+    // numeric
+    for(let el of filter_numeric){
+        el.addEventListener('keyup', function(e){
+            let id = this.id;
+            let params = id.split("--");
+            let table = params[0], field = params[1];
+            
+            let operator = document.querySelector('.filters .filter--numeric select#' + id + "--select").value;
+            
+            let val = parseFloat(this.value);
+            
+            let item = {
+                id: id,
+                table: table,
+                field: field,
+                operator: operator,
+                value: val
+            }
+            console.log(item);
+        });
+    }
+    
+    for(let el of filter_checkbox){
+        el.addEventListener('click', function(e){
+            let id = this.id;
+            let params = id.split('--');
+            let table = params[0], 
+                field = params[1], 
+                index1 = params[2], 
+                index2 = params[3],
+                value = layer.infoj[index1].filter[index2];
+            
+            let item = {
+                table: table,
+                field: field,
+                value: value
+            }
+            console.log(item);
+        });
+    }
+   
+    
 }
 
 function loadLayer_complete(layer) {
@@ -148,6 +195,8 @@ function clusterMouseClick(e, layer) {
     let count = e.layer.feature.properties.count,
         lnglat = e.layer.feature.geometry.coordinates,
         xhr = new XMLHttpRequest();
+    
+    console.log(layer.filter);
 
     xhr.open('GET', host + 'q_cluster_select?' + utils.paramString({
         dbs: layer.dbs,
