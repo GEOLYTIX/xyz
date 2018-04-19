@@ -13,7 +13,7 @@ function panel(layer) {
         textContent: layer.meta
     }));
     
-    if(applyFilters(layer)) panel.appendChild(layerFilters(layer));
+    if(!!applyFilters(layer)) panel.appendChild(layerFilters(layer, applyFilters(layer)));
     
     if (layer.format === 'mvt' && layer.style && layer.style.categorized) panel.appendChild(mvtCategorized(layer));
 
@@ -29,12 +29,20 @@ function panel(layer) {
 }
 
 function applyFilters(layer){
-    let enabled = false;
+    let enabled = 0;
     
     if(layer.infoj){
         Object.keys(layer.infoj).map(function(key){
             if(layer.infoj[key].filter){
-                enabled = true;
+                if(layer.infoj[key].filter === "text"){
+                    enabled += 100;
+                }
+                if(layer.infoj[key].filter === "numeric"){
+                    enabled += 120;
+                }
+                if(typeof(layer.infoj[key].filter) === 'object'){
+                    enabled += 40*layer.infoj[key].filter.length + 50;
+                }
             }
         });
         return enabled;
@@ -44,7 +52,7 @@ function applyFilters(layer){
     }
 }
 
-function layerFilters(layer){
+function layerFilters(layer, height){
     
     // Add a filters div
     let filters = utils.createElement('div', {
@@ -63,8 +71,9 @@ function layerFilters(layer){
 
     div.addEventListener('click', function () {
         if (filters.style.maxHeight === '30px') {
-            filters.style.maxHeight = '600px';
-            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 600) + 'px';
+           
+            filters.style.maxHeight = height.toString() + 'px';
+            layer.drawer.style.maxHeight = (layer.panel.clientHeight + height) + 'px';
             div.style.color = '#333';
         } else {
             filters.style.maxHeight = '30px';
@@ -89,34 +98,55 @@ function layerFilters(layer){
         if(typeof(layer.infoj[key].filter) === "object"){
             
             Object.keys(layer.infoj[key].filter).map(function(_key){
+                
+                let _field = layer.infoj[key].field,
+                    _label = layer.infoj[key].filter[_key],
+                    _id = layer.table + "--" + layer.infoj[key].field + "--" + _key,
+                    _table = layer.table,
+                    _content;
+                
+                
+                
                 if(_key === "0"){
-                    let title = utils.createElement('h4', {
+                    let _title = utils.createElement('h4', {
                        textContent: layer.infoj[key].filter[_key]
                     });
                     
-                    checkbox_div.appendChild(title);
+                    checkbox_div.appendChild(_title);
                 } else {
     
-                    let element = filter_checkbox(layer.infoj[key].field, layer.infoj[key].filter[_key], layer.table + "_" + layer.infoj[key].field + "_" + _key);
+                    _content = filter_checkbox(_field, _label, _id);
                     
-                    element.style.marginLeft = '30px';
+                    _content.style.marginLeft = '30px';
                     
-                    checkbox_div.appendChild(element);
+                    checkbox_div.appendChild(_content);
                 }
                 
             });
         } else {
             
+            let _field = layer.infoj[key].field,
+                _label = layer.infoj[key].label,
+                _table = layer.table,
+                _content;
+            
+            
             if(layer.infoj[key].filter === "numeric"){
-                let content = filter_numeric(layer.infoj[key].field, layer.infoj[key].label, layer.table); 
                 
-                content.style.marginLeft = '10px';
+                _content = filter_numeric(_field, _label, _table); 
                 
-                numeric_div.appendChild(content);
+                _content.style.marginLeft = '10px';
+                
+                numeric_div.appendChild(_content);
             }
             
             if(layer.infoj[key].filter === "text"){
-              // text filter
+                
+                let _content = filter_text(_field, _label, _table); 
+
+                _content.style.marginLeft = '10px';
+                
+                text_div.appendChild(_content);
             }
         }
         
@@ -124,8 +154,30 @@ function layerFilters(layer){
     
     filters.appendChild(numeric_div);
     filters.appendChild(checkbox_div);
+    filters.appendChild(text_div);
     
     return filters;
+}
+
+function filter_text(field, label, table){
+    let div = utils.createElement('div');
+    
+    let title = utils.createElement('h4', {
+        textContent: label
+    });
+    
+    div.appendChild(title);
+    
+    let input = utils.createElement('input', {
+        id: table + "--" + field,
+        placeholder: 'Search.'
+    });
+    
+    input.style.width = "100%";
+    
+    div.appendChild(input);
+    
+    return div;
 }
 
 
@@ -142,7 +194,7 @@ function filter_numeric(field, label, table){
     let operators = [{name: "less than", val: "less"}, {name: "more than", val: "more"}];
     
     let select = utils.createElement('select', {
-        id: table + "_" + field + "_select"
+        id: table + "--" + field + "_select"
     });
     
     Object.keys(operators).map(function(key){
@@ -156,7 +208,7 @@ function filter_numeric(field, label, table){
     div.appendChild(select);
     
     let input = utils.createElement('input', {
-        id: table + "_" + field,
+        id: table + "--" + field,
         placeholder: 'Set value.'
     });
     
@@ -179,18 +231,7 @@ function filter_checkbox(field, label, id){
     return checkbox;
 }
 
-
-// create filter text
-function filter_text(field, label, id){
-    let div = utils.createElement('div');
-    let p = utils.createElement('p', {
-        textContent: label
-    });
-    
-    div.appendChild(p);
-}
-
-
+// Begin cluster settings
 
 function clusterSettings(layer) {
 
