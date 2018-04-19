@@ -19,6 +19,9 @@ function loadLayer(layer) {
     // Get bounds for request.
     let bounds = _xyz.map.getBounds();
 
+    console.log((window.innerWidth > 0) ? window.innerWidth : screen.width);
+    console.log(_xyz.map._container.clientWidth / (window.innerWidth > 0) ? window.innerWidth : screen.width);
+
     // Build XHR request.
     layer.xhr.open('GET', host + 'q_cluster?' + utils.paramString({
         dbs: layer.dbs,
@@ -27,7 +30,8 @@ function loadLayer(layer) {
         cat: layer.cluster_cat,
         kmeans: layer.cluster_kmeans,
         dbscan: layer.cluster_dbscan,
-        canvas: _xyz.map._container.clientWidth * _xyz.map._container.clientHeight,
+        canvas: (_xyz.map._container.clientWidth * _xyz.map._container.clientHeight),
+        test: window.screen.availWidth,
         theme: layer.style.theme && layer.style.theme.type? layer.style.theme.type: 'undefined',
         filter: JSON.stringify(layer.filter),
         west: bounds.getWest(),

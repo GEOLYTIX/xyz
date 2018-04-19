@@ -20,6 +20,8 @@ async function cluster(req, res) {
 
   //console.log(filter);
 
+console.log(req.query.test);
+
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, cat], res).statusCode === 406) return;
 
