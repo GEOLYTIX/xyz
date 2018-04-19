@@ -31,7 +31,7 @@ function loadLayer(layer) {
         kmeans: layer.cluster_kmeans,
         dbscan: layer.cluster_dbscan,
         canvas: (_xyz.map._container.clientWidth * _xyz.map._container.clientHeight),
-        test: window.screen.availWidth,
+        test: window.devicePixelRatio,
         theme: layer.style.theme && layer.style.theme.type? layer.style.theme.type: 'undefined',
         filter: JSON.stringify(layer.filter),
         west: bounds.getWest(),
