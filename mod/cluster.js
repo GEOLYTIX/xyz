@@ -53,12 +53,12 @@ async function cluster(req, res) {
     parseInt(xDegree * kmeans) :
     parseInt(result.rows[0].count);
 
-  console.log({
-    'kmeans': kmeans,
-    'dbscan': dbscan,
-    'canvas': canvas,
-    'xDegree': xDegree
-  });
+  // console.log({
+  //   'kmeans': kmeans,
+  //   'dbscan': dbscan,
+  //   'canvas': canvas,
+  //   'xDegree': xDegree
+  // });
 
   if (!theme) q = `
   SELECT

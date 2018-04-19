@@ -19,9 +19,6 @@ function loadLayer(layer) {
     // Get bounds for request.
     let bounds = _xyz.map.getBounds();
 
-    console.log((window.innerWidth > 0) ? window.innerWidth : screen.width);
-    console.log(_xyz.map._container.clientWidth / (window.innerWidth > 0) ? window.innerWidth : screen.width);
-
     // Build XHR request.
     layer.xhr.open('GET', host + 'q_cluster?' + utils.paramString({
         dbs: layer.dbs,
