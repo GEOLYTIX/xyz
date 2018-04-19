@@ -29,8 +29,7 @@ function loadLayer(layer) {
         dbscan: layer.cluster_dbscan,
         canvas: _xyz.map._container.clientWidth * _xyz.map._container.clientHeight,
         theme: layer.style.theme && layer.style.theme.type? layer.style.theme.type: 'undefined',
-        filter: layer.style.theme && layer.style.theme.filter.length > 0? layer.style.theme.filter: 'undefined',
-        filterOther: layer.style.theme && layer.style.theme.filterOther.length > 0? layer.style.theme.filterOther: 'undefined',
+        filter: JSON.stringify(layer.filter),
         west: bounds.getWest(),
         south: bounds.getSouth(),
         east: bounds.getEast(),
@@ -155,8 +154,8 @@ function clusterMouseClick(e, layer) {
         table: layer.table,
         qID: layer.qID || 'id',
         label: layer.cluster_label,
-        filter: layer.style.theme && layer.style.theme.filter.length > 0? layer.style.theme.filter: 'undefined',
-        filterOther: layer.style.theme && layer.style.theme.filterOther.length > 0? layer.style.theme.filterOther: 'undefined',
+        cat: layer.cluster_cat,
+        filter: JSON.stringify(layer.filter),
         count: count > 99? 99: count,
         lnglat: lnglat
     }));

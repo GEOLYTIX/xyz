@@ -346,8 +346,9 @@ function clusterCategorized(layer) {
         y += 10;
     }
 
-    layer.style.theme.filter = [];
-    layer.style.theme.filterOther = [];
+    if (!layer.filter.cat) layer.filter.cat = {};
+    if (!layer.filter.cat.in) layer.filter.cat.in = [];
+    if (!layer.filter.cat.ni) layer.filter.cat.ni = [];
 
     Object.keys(layer.style.theme.cat).map((item) => {
 
@@ -376,10 +377,10 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.style.theme.filter.splice(layer.style.theme.filter.indexOf(item),1);
+                    layer.filter.cat.in.splice(layer.filter.cat.in.indexOf(item),1);
                 } else {
                     this.style.opacity = 0.5;
-                    layer.style.theme.filter.push(item);
+                    layer.filter.cat.in.push(item);
                 }
 
                 layer.getLayer();
@@ -408,10 +409,10 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.style.theme.filterOther = [];
+                    layer.filter.cat.ni = [];
                 } else {
                     this.style.opacity = 0.5;
-                    layer.style.theme.filterOther = Object.keys(layer.style.theme.cat);
+                    layer.filter.cat.ni = Object.keys(layer.style.theme.cat);
                 }
 
                 layer.getLayer();

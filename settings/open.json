@@ -747,6 +747,113 @@
               }
             }
           }
+        },
+        "traffic_count": {
+          "name": "Traffic",
+          "meta": "Department for transport count points.",
+          "format": "cluster",
+          "pane": ["traffic", 550],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "bp_traffic_counts_all",
+          "cluster_label": "road_num",
+          "cluster_cat": "all_mv_000__16",
+          "hover": true,
+          "infoj": [
+            {
+              "field": "cp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "road_num",
+              "label": "Road Number",
+              "type": "text"
+            },
+            {
+              "field": "start_junc",
+              "label": "from junction",
+              "type": "text"
+            },
+            {
+              "field": "end_junc",
+              "label": "to junction",
+              "type": "text"
+            },
+            {
+              "field": "len_mi",
+              "label": "Segment (miles)",
+              "type": "numeric"
+            },
+            {
+              "field": "road_class",
+              "label": "Road Class",
+              "type": "text"
+            },
+            {
+              "field": "area_cat",
+              "label": "Area Category",
+              "type": "text"
+            },
+            {
+              "field": "all_mv_14",
+              "label": "Annual traffic count 2014",
+              "type": "integer"
+            },
+            {
+              "field": "all_mv_15",
+              "label": "Annual traffic count 2015",
+              "type": "integer"
+            },
+            {
+              "field": "all_mv_16",
+              "label": "Annual traffic count 2016",
+              "type": "integer"
+            }
+          ],
+          "style": {
+            "theme": {
+              "label": "Motor vehicles 2016 (000's)",
+              "type": "graduated",
+              "cat": [
+                {
+                  "val": 1,
+                  "marker": "svg_symbols.target([400,'#fde725'])",
+                  "label": "1"
+                },
+                {
+                  "val": 10,
+                  "marker": "svg_symbols.target([400,'#8fd744'])",
+                  "label": "10"
+                },
+                {
+                  "val": 25,
+                  "marker": "svg_symbols.target([400,'#35b779'])",
+                  "label": "25"
+                },
+                {
+                  "val": 50,
+                  "marker": "svg_symbols.target([400,'#20908d'])",
+                  "label": "50"
+                },
+                {
+                  "val": 75,
+                  "marker": "svg_symbols.target([400,'#31688e'])",
+                  "label": "75"
+                },
+                {
+                  "val": 100,
+                  "marker": "svg_symbols.target([400,'#443a83'])",
+                  "label": "100"
+                },
+                {
+                  "val": 150,
+                  "marker": "svg_symbols.target([400,'#440154'])",
+                  "label": "150"
+                }
+              ]
+            }
+          }
         }
       }
     },

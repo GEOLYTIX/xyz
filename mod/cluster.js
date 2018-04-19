@@ -7,25 +7,27 @@ async function cluster(req, res) {
     geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
     cat = req.query.cat === 'undefined' ? null : req.query.cat,
     theme = req.query.theme === 'undefined' ? null : req.query.theme,
-    filter = req.query.filter === 'undefined' ? null : req.query.filter.split(','),
-    filterOther = req.query.filterOther === 'undefined' ? null : req.query.filterOther.split(','),
+    filter = JSON.parse(req.query.filter),
+    filter_sql = '',
     canvas = parseInt(req.query.canvas),
-    kmeans = parseFloat(req.query.kmeans),
-    dbscan = parseFloat(req.query.dbscan * canvas / 1000000),
+    kmeans = parseFloat(req.query.kmeans * 1000000 / canvas),
+    dbscan = parseFloat(req.query.dbscan * 1000000 / canvas),
     west = parseFloat(req.query.west),
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
     north = parseFloat(req.query.north),
     xDegree = turf.distance([west, north], [east, south], { units: 'degrees' });
 
+  //console.log(filter);
+
   // Check whether string params are found in the settings to prevent SQL injections.
-  if (await require('./chk').chkVals([table, geom, cat, filter, filterOther], res).statusCode === 406) return;
+  if (await require('./chk').chkVals([table, geom, cat], res).statusCode === 406) return;
 
-  // Build filter for to check whether cat is not in array of filtered categories.
-  filter = filter? ` AND ${cat} NOT IN ('${filter.join("','")}')`: '';
+  // Add to filter_sql condition for for NOT IN cat array.
+  filter_sql += filter.cat && filter.cat.in.length > 0? ` AND ${cat} NOT IN ('${filter.cat.in.join("','")}')`: '';
 
-  // Build filter to remove any cat which is in array of categories.
-  filterOther = filterOther? ` AND ${cat} IN ('${filterOther.join("','")}')`: '';
+  // Add to filter_sql condition for for IN cat array.
+  filter_sql += filter.cat && filter.cat.ni.length > 0? ` AND ${cat} IN ('${filter.cat.ni.join("','")}')`: '';
 
   // Query the feature count from lat/lng bounding box.
   let q = `
@@ -36,8 +38,7 @@ async function cluster(req, res) {
         ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
         ${geom},
         0.00001)
-    ${filter} 
-    ${filterOther};`;
+    ${filter_sql};`;
 
   let result = await global.DBS[req.query.dbs].query(q);
 
@@ -47,16 +48,16 @@ async function cluster(req, res) {
   }
 
   // Use feature count with cross distance  to determine the kmeans factor.
-  kmeans = parseInt(xDegree * kmeans * canvas / 1000000) < parseInt(result.rows[0].count) ?
-    parseInt(xDegree * kmeans * canvas / 1000000) :
+  kmeans = parseInt(xDegree * kmeans) < parseInt(result.rows[0].count) ?
+    parseInt(xDegree * kmeans) :
     parseInt(result.rows[0].count);
 
-  // console.log({
-  //   'kmeans': kmeans,
-  //   'dbscan': dbscan,
-  //   'canvas': canvas,
-  //   'xDegree': xDegree
-  // });
+  console.log({
+    'kmeans': kmeans,
+    'dbscan': dbscan,
+    'canvas': canvas,
+    'xDegree': xDegree
+  });
 
   if (!theme) q = `
   SELECT
@@ -107,8 +108,7 @@ async function cluster(req, res) {
           ST_DWithin(
             ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
           ${geom}, 0.00001)
-        ${filter} 
-        ${filterOther}
+        ${filter_sql} 
       ) kmeans
     ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
   ) cluster GROUP BY kmeans_cid, dbscan_cid;`
@@ -180,8 +180,9 @@ async function cluster_select(req, res) {
     table = req.query.table,
     geom = req.query.geom || 'geom',
     id = req.query.qID,
-    filter = req.query.filter === 'undefined' ? null : req.query.filter.split(','),
-    filterOther = req.query.filterOther === 'undefined' ? null : req.query.filterOther.split(','),
+    cat = req.query.cat === 'undefined' ? null : req.query.cat,
+    filter = JSON.parse(req.query.filter),
+    filter_sql = '',
     label = req.query.label,
     dbs = req.query.dbs,
     count = parseInt(req.query.count),
@@ -190,13 +191,13 @@ async function cluster_select(req, res) {
   lnglat = lnglat.map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  if (await require('./chk').chkVals([table, geom, id, label, filter, filterOther], res).statusCode === 406) return;
+  if (await require('./chk').chkVals([table, geom, id, label], res).statusCode === 406) return;
 
-  // Build filter for to check whether cat is not in array of filtered categories.
-  filter = filter? ` AND ${cat} NOT IN ('${filter.join("','")}')`: '';
+  // Add to filter_sql condition for for NOT IN cat array.
+  filter_sql += filter.cat && filter.cat.in.length > 0? ` AND ${cat} NOT IN ('${filter.cat.in.join("','")}')`: '';
 
-  // Build filter to remove any cat which is in array of categories.
-  filterOther = filterOther? ` AND ${cat} IN ('${filterOther.join("','")}')`: '';
+  // Add to filter_sql condition for for IN cat array.
+  filter_sql += filter.cat && filter.cat.ni.length > 0? ` AND ${cat} IN ('${filter.cat.ni.join("','")}')`: '';
 
   // Query the feature count from lat/lng bounding box.
   let q = `
@@ -206,8 +207,7 @@ async function cluster_select(req, res) {
       array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
       FROM ${table}
       WHERE true 
-      ${filter} 
-      ${filterOther}
+      ${filter_sql} 
       ORDER BY ST_Point(${lnglat}) <#> geom LIMIT ${count};`;
 
   let result = await global.DBS[req.query.dbs].query(q);

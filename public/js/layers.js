@@ -51,6 +51,7 @@ module.exports = function(){
             layer.name = layer.name || layer.layer;
             if (!layer.style) layer.style = {};
             if (!layer.style.default) layer.style.default = {"weight": 1, "color": "#000"};
+            if (!layer.filter) layer.filter = {};
 
             // Set layer styles
             Object.keys(_xyz.layers).map(function(key){
