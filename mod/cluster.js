@@ -1,5 +1,3 @@
-const turf = require('@turf/turf');
-
 async function cluster(req, res) {
   
   let
@@ -9,14 +7,12 @@ async function cluster(req, res) {
     theme = req.query.theme === 'undefined' ? null : req.query.theme,
     filter = JSON.parse(req.query.filter),
     filter_sql = '',
-    canvas = parseInt(req.query.canvas),
-    kmeans = parseFloat(req.query.kmeans * 1000000 / canvas),
-    dbscan = parseFloat(req.query.dbscan * 1000000 / canvas),
+    kmeans = parseInt(req.query.kmeans),
+    dbscan = parseFloat(req.query.dbscan),
     west = parseFloat(req.query.west),
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
-    north = parseFloat(req.query.north),
-    xDegree = turf.distance([west, north], [east, south], { units: 'degrees' });
+    north = parseFloat(req.query.north);
 
   //console.log(filter);
 
@@ -32,11 +28,32 @@ async function cluster(req, res) {
 
   // Query the feature count from lat/lng bounding box.
   let q = `
-    SELECT count(1)
+    SELECT
+      count(1)::integer,
+      ST_Distance(
+        ST_Point(
+          ST_XMin(ST_Envelope(ST_Extent(${geom}))),
+          ST_YMin(ST_Envelope(ST_Extent(${geom})))
+        ),
+        ST_Point(
+          ST_XMax(ST_Envelope(ST_Extent(${geom}))),
+          ST_Ymin(ST_Envelope(ST_Extent(${geom})))
+        )
+      ) AS xExtent,
+      ST_Distance(
+        ST_Point(
+          ${west},
+          ${south}
+        ),
+        ST_Point(
+          ${east},
+          ${north}
+        )
+      ) AS xEnvelope
     FROM ${table}
     WHERE
       ST_DWithin(
-        ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+        ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom},
         0.00001)
     ${filter_sql};`;
@@ -48,16 +65,20 @@ async function cluster(req, res) {
     return
   }
 
-  // Use feature count with cross distance  to determine the kmeans factor.
-  kmeans = parseInt(xDegree * kmeans) < parseInt(result.rows[0].count) ?
-    parseInt(xDegree * kmeans) :
-    parseInt(result.rows[0].count);
+  let
+    count = result.rows[0].count,
+    xExtent = result.rows[0].xextent,
+    xEnvelope = result.rows[0].xenvelope;
+
+  // Multiply kmeans with the ratio of the cross extent (xExtent) and the cross envelope (xEnvelope).
+  kmeans *= xExtent / xEnvelope;
+
+  // Check that kmeans is below feature count.
+  kmeans = kmeans < count ? parseInt(kmeans): count;
 
   // console.log({
   //   'kmeans': kmeans,
-  //   'dbscan': dbscan,
-  //   'canvas': canvas,
-  //   'xDegree': xDegree
+  //   'dbscan': dbscan
   // });
 
   if (!theme) q = `
@@ -68,7 +89,7 @@ async function cluster(req, res) {
     SELECT
       kmeans_cid,
       ${geom} AS geom,
-      ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      ST_ClusterDBSCAN(${geom}, ${xExtent * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
     FROM (
       SELECT
         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
@@ -76,7 +97,7 @@ async function cluster(req, res) {
       FROM ${table}
       WHERE
         ST_DWithin(
-          ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+          ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom}, 0.00001)
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
@@ -98,7 +119,7 @@ async function cluster(req, res) {
         cat,
         kmeans_cid,
         ${geom} AS geom,
-        ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+        ST_ClusterDBSCAN(${geom}, ${xExtent * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
       FROM (
         SELECT
           ${cat} AS cat,
@@ -107,7 +128,7 @@ async function cluster(req, res) {
         FROM ${table}
         WHERE
           ST_DWithin(
-            ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
           ${geom}, 0.00001)
         ${filter_sql} 
       ) kmeans
@@ -124,7 +145,7 @@ async function cluster(req, res) {
       cat,
       kmeans_cid,
       ${geom} AS geom,
-      ST_ClusterDBSCAN(${geom}, ${xDegree * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      ST_ClusterDBSCAN(${geom}, ${xExtent * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
     FROM (
       SELECT
         ${cat} AS cat,
@@ -133,7 +154,7 @@ async function cluster(req, res) {
       FROM ${table}
       WHERE
         ST_DWithin(
-          ST_MakeEnvelope(${west}, ${north}, ${east}, ${south}, 4326),
+          ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom}, 0.00001)
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`

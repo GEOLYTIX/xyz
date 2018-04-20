@@ -368,11 +368,8 @@
           "format": "cluster",
           "pane": ["post_office", 540],
           "dbs": "XYZ",
-          "qID": "id",
           "table": "post_office",
           "cluster_label": "branch",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "branch",
@@ -382,9 +379,7 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#9D383A',300,'#fff',250,'#9D383A'])",
-            "markerMulti": [400,"#9D383A",300,"#fff",250,"#9D383A"],
-            "markerMin": 20,
-            "markerMax": 60
+            "markerMulti": [400,"#9D383A",300,"#fff",250,"#9D383A"]
           }
         },
         "retail_points": {
@@ -394,11 +389,8 @@
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint",
-          "qID": "id",
           "cluster_label": "store",
           "cluster_cat": "brand",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "store",
@@ -458,17 +450,27 @@
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
             "markerMulti": [400,"#333"],
-            "markerMin": 20,
-            "markerMax": 40,
-            "categorized": {
+            "theme": {
               "label": "Retailer",
-              "field": "brand",
-              "competitors": [
-                ["tesco","#0055a8","Tesco"],
-                ["sainsburys","#ee8a00","Sainsbury's"],
-                ["asda","#83b923","Asda"],
-                ["morrisons","#ffe133","Morrisons"]
-              ],
+              "type": "categorized",
+              "competitors": {
+                "tesco": {
+                  "colour": "#0055a8",
+                  "label": "Tesco"
+                },
+                "sainsburys": {
+                  "colour": "#ee8a00",
+                  "label": "Sainsbury's"
+                },
+                "asda": {
+                  "colour": "#83b923",
+                  "label": "Asda"
+                },
+                "morrisons": {
+                  "colour": "#ffe133",
+                  "label": "Morrisons"
+                }
+              },
               "other": true,
               "cat": {
                 "aldi": {
@@ -557,8 +559,6 @@
           "qID": "retailpoint_id",
           "cluster_label": "store",
           "cluster_cat": "brand",
-          "cluster_kmeans": 4,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "store",
@@ -666,11 +666,10 @@
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
             "markerMulti": [400,"#333"],
-            "markerMin": 20,
-            "markerMax": 40,
-            "categorized": {
+            "theme": {
               "label": "Retailer",
-              "field": "brand",
+              "type": "categorized",
+              "other": true,
               "cat": {
                 "Aldi": {
                   "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",

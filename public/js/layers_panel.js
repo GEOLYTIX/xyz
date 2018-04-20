@@ -112,7 +112,6 @@ function layerFilters(layer, height){
                     _content;
                 
                 
-                
                 if(_key === "0"){
                     let _title = utils.createElement('h4', {
                        textContent: layer.infoj[key].filter[_key]
@@ -274,8 +273,8 @@ function clusterSettings(layer) {
 
 
     // Set cluster defaults
-    if (!layer.cluster_kmeans) layer.cluster_kmeans = 10;
-    if (!layer.cluster_dbscan) layer.cluster_dbscan = 0.02;
+    if (!layer.cluster_kmeans) layer.cluster_kmeans = 100;
+    if (!layer.cluster_dbscan) layer.cluster_dbscan = 0.01;
     if (!layer.style.markerMin) layer.style.markerMin = 20;
     if (!layer.style.markerMax) layer.style.markerMax = 40;
 
