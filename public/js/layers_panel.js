@@ -295,11 +295,21 @@ function clusterSettings(layer) {
         value: layer.cluster_kmeans,
         max: layer.cluster_kmeans * 1.5
     });
+
+    let timeout;
     sliKMeans.addEventListener('input', function () {
         lblKMeans.innerHTML = this.value;
         layer.cluster_kmeans = this.value;
-        layer.getLayer();
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            timeout = null;
+            layer.getLayer();
+        }, 500);
     });
+
+    function getLayer(){
+        
+    }
 
     let rKMeans = utils.createElement('div', {
         className: 'range'
@@ -328,7 +338,11 @@ function clusterSettings(layer) {
     sliDBScan.addEventListener('input', function () {
         lblDBScan.innerHTML = this.value / 1000;
         layer.cluster_dbscan = this.value / 1000;
-        layer.getLayer();
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            timeout = null;
+            layer.getLayer();
+        }, 500);
     });
 
     let rDBScan = utils.createElement('div', {
