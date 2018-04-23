@@ -168,7 +168,7 @@ async function cluster(req, res) {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
       properties: {
-        count: result.rows[record].count
+        count: parseInt(result.rows[record].count)
       }
     }
   }));
@@ -178,7 +178,7 @@ async function cluster(req, res) {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
       properties: {
-        count: result.rows[record].count,
+        count: parseInt(result.rows[record].count),
         cat: Object.assign({}, ...result.rows[record].cat)
       }
     }
@@ -189,7 +189,7 @@ async function cluster(req, res) {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
       properties: {
-        count: result.rows[record].count,
+        count: parseInt(result.rows[record].count),
         sum: result.rows[record].sum
       }
     }

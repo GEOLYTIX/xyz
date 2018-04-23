@@ -1,0 +1,95 @@
+{
+    "title": "GEOLYTIX | CLINIQUE",
+    "select": {},
+    "gazetteer": {},
+    "locales": {
+        "KR": {
+            "gazetteer": ["GOOGLE", "KR", "", "e.g. Seoul"],
+            "bounds": [[31, 120],[41, 134]],
+            "minZoom": 7,
+            "maxZoom": 17,
+            "layers": {
+                "base": {
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+                    "provider": "MAPBOX"
+                },
+                "label": {
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "pane": [
+                        "base_labels",
+                        560
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+                    "provider": "MAPBOX"
+                },
+                "here": {
+                    "name": "HERE Imagery",
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "dong": {
+                    "name": "Dong",
+                    "pane": ["bounds",510],
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "geom_3857": "geom_3857",
+                    "qID": "dong_code",
+                    "infoj": [
+                      {
+                        "field": "dong_name",
+                        "label": "Dong",
+                        "type": "text"
+                      }
+                    ],
+                    "arrayZoom": {
+                      "7": "clinique_dong"
+                    },
+
+                    "style": {
+                        "default": {
+                          "weight": 1,
+                          "color": "#000",
+                          "fill": true,
+                          "fillColor": "#000",
+                          "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                          "weight": 1,
+                          "color": "#000"
+                        },
+                        "theme": {
+                            "type": "graduated",
+                            "field": "rank_reg",
+                            "cat": [
+                                {
+                                    "val": 1,
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#0571b0",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    },
+                                    "label": "1"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

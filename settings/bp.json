@@ -46,7 +46,7 @@
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
-          "table": "bp_catalist_opp",
+          "table": "bp_catalist_opp2",
           "cluster_label": "sitename",
           "cluster_cat": "sharebrand",
           "infoj": [
@@ -101,21 +101,14 @@
               "type": "integer"
             },
             {
-              "field": "total_scor",
-              "label": "Score Total",
+              "field": "ms_rank",
+              "label": "Rank MS",
               "type": "numeric"
             },
             {
-              "field": "ms_score",
-              "label": "Score MS",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "bp_score",
-              "label": "Score BP",
-              "type": "numeric",
-              "level": 1
+              "field": "bp_rank",
+              "label": "Rank BP",
+              "type": "numeric"
             }
           ],
           "style": {
@@ -237,87 +230,45 @@
           }
         },
         "catalist_opp_bp": {
-          "name": "BP Stations (Catalist)",
-          "meta": "BP station locations from Experian-Catalist dataset.",
+          "name": "BP/M&S sites",
+          "meta": "BP fuel station locations only.",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
-          "table": "bp_only_catalist_opp",
+          "table": "bp_ms_sites",
           "qID": "id",
-          "cluster_label": "sitename",
+          "cluster_label": "site_name",
           "cluster_cat": "sharebrand",
           "infoj": [
             {
-              "field": "sitename",
+              "field": "ms_id",
+              "label": "ID",
+              "type": "text"
+            },
+            {
+              "field": "site_name",
               "label": "Site",
               "type": "text"
             },
             {
-              "field": "sitestatus",
-              "label": "Site status",
-              "type": "text",
-              "filter": ["Status", "Open", "Under Development", "Non-retail"]
-            },
-            {
-              "field": "brand",
-              "label": "Brand",
+              "field": "street",
+              "label": "Street",
               "type": "text"
             },
             {
-              "field": "sharebrand",
-              "label": "Brand (share)",
+              "field": "postcode",
+              "label": "Postcode",
               "type": "text"
             },
             {
-              "field": "shopbrand",
-              "label": "Brand (shop)",
-              "type": "text",
-              "filter": "text"
-            },
-            {
-              "field": "ownership",
-              "label": "Ownership",
-              "type": "text",
-              "filter": ["Ownership", "Dealer", "Company"]
-            },
-            {
-              "field": "companynam",
-              "label": "Company",
+              "field": "suburb",
+              "label": "Suburb",
               "type": "text"
             },
             {
-              "field": "plotsizear",
-              "label": "Plot Size",
-              "type": "integer",
-              "filter": "numeric"
-            },
-            {
-              "field": "mfvolume",
-              "label": "MF Volume",
-              "type": "integer",
-              "filter": "numeric"
-            },
-            {
-              "field": "shoparea",
-              "label": "Shop area",
-              "type": "integer"
-            },
-            {
-              "field": "total_scor",
-              "label": "Score Total",
-              "type": "numeric"
-            },
-            {
-              "field": "ms_score",
-              "label": "Score MS",
-              "type": "numeric",
-              "level": 1
-            },
-            {
-              "field": "bp_score",
-              "label": "Score BP",
-              "type": "numeric",
-              "level": 1
+              "field": "town",
+              "label": "Town",
+              "type": "text"
             }
           ],
           "style": {
@@ -354,6 +305,7 @@
         },
         "oa": {
           "name": "Opportunity Rank (regional)",
+          "meta": "Rank from 1 to 10, with 1 being the top 10% of locations, 10 being in the lowest 10% of locations.",
           "pane": ["bounds",510],
           "format": "mvt",
           "geom_3857": "geom_3857",
@@ -400,13 +352,14 @@
               "weight": 1,
               "color": "#000"
             },
-            "categorized": {
+            "theme": {
+              "type": "categorized",
               "field": "rank_reg",
               "cat": {
                 "1": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#0571b0",
+                    "fillColor": "#ca0020",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -414,7 +367,7 @@
                 "2": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#4396c5",
+                    "fillColor": "#dd494b",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -422,7 +375,7 @@
                 "3": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#82bcd9",
+                    "fillColor": "#f09377",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -430,7 +383,7 @@
                 "4": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#b4d6e7",
+                    "fillColor": "#f5c1a9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -438,7 +391,7 @@
                 "5": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#e1ecf2",
+                    "fillColor": "#f7e5dd",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -446,7 +399,7 @@
                 "6": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f7e5dd",
+                    "fillColor": "#e1ecf2",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -454,7 +407,7 @@
                 "7": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f5c1a9",
+                    "fillColor": "#b4d6e7",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -462,7 +415,7 @@
                 "8": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f09377",
+                    "fillColor": "#82bcd9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -470,7 +423,7 @@
                 "9": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#dd494b",
+                    "fillColor": "#4396c5",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -478,7 +431,7 @@
                 "10": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#ca0020",
+                    "fillColor": "#0571b0",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -489,6 +442,7 @@
         },
         "oa_tot": {
           "name": "Opportunity Rank (total)",
+          "meta": "Rank from 1 to 10, with 1 being the top 10% of locations, 10 being in the lowest 10% of locations.",
           "pane": ["bounds",510],
           "format": "mvt",
           "geom_3857": "geom_3857",
@@ -535,13 +489,14 @@
               "weight": 1,
               "color": "#000"
             },
-            "categorized": {
+            "theme": {
               "field": "rank_tot",
+              "type": "categorized",
               "cat": {
                 "1": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#0571b0",
+                    "fillColor": "#ca0020",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -549,7 +504,7 @@
                 "2": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#4396c5",
+                    "fillColor": "#dd494b",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -557,7 +512,7 @@
                 "3": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#82bcd9",
+                    "fillColor": "#f09377",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -565,7 +520,7 @@
                 "4": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#b4d6e7",
+                    "fillColor": "#f5c1a9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -573,7 +528,7 @@
                 "5": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#e1ecf2",
+                    "fillColor": "#f7e5dd",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -581,7 +536,7 @@
                 "6": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f7e5dd",
+                    "fillColor": "#e1ecf2",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -589,7 +544,7 @@
                 "7": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f5c1a9",
+                    "fillColor": "#b4d6e7",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -597,7 +552,7 @@
                 "8": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#f09377",
+                    "fillColor": "#82bcd9",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -605,7 +560,7 @@
                 "9": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#dd494b",
+                    "fillColor": "#4396c5",
                     "fill": true,
                     "fillOpacity": 0.3
                   }
@@ -613,7 +568,7 @@
                 "10": {
                   "style": {
                     "stroke": false,
-                    "fillColor": "#ca0020",
+                    "fillColor": "#0571b0",
                     "fill": true,
                     "fillOpacity": 0.3
                   }

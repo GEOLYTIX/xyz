@@ -13,9 +13,11 @@ function panel(layer) {
         textContent: layer.meta
     }));
     
-    if(!!applyFilters(layer)) panel.appendChild(layerFilters(layer, applyFilters(layer)));
+    //if(!!applyFilters(layer)) panel.appendChild(layerFilters(layer, applyFilters(layer)));
     
-    if (layer.format === 'mvt' && layer.style && layer.style.categorized) panel.appendChild(mvtCategorized(layer));
+    if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
+
+    if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'graduated') panel.appendChild(mvtGraduated(layer));
 
     if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
 
@@ -528,17 +530,17 @@ function mvtCategorized(layer) {
         y = 10;
 
     // Create a legend title from the categorized.label property.
-    if (layer.style.categorized.label) {
+    if (layer.style.theme.label) {
         svg.append('text')
             .attr('x', 0)
             .attr('y', y)
             .style('font-weight', 600)
             .style('font-size', '14px')
-            .text(layer.style.categorized.label || 'Legend');
+            .text(layer.style.theme.label || 'Legend');
         y += 10;
     }
 
-    Object.keys(layer.style.categorized.cat).map((item) => {
+    Object.keys(layer.style.theme.cat).map((item) => {
 
         // Attach box for the style category.
         svg.append('rect')
@@ -546,9 +548,9 @@ function mvtCategorized(layer) {
             .attr('y', y + 3)
             .attr('width', 14)
             .attr('height', 14)
-            .style('fill', layer.style.categorized.cat[item].style.fillColor)
-            .style('fill-opacity', layer.style.categorized.cat[item].style.fillOpacity)
-            .style('stroke', layer.style.categorized.cat[item].style.color);
+            .style('fill', layer.style.theme.cat[item].style.fillColor)
+            .style('fill-opacity', layer.style.theme.cat[item].style.fillOpacity)
+            .style('stroke', layer.style.theme.cat[item].style.color);
 
         // Attach label with filter on click for the style category.
         svg.append('text')
@@ -557,16 +559,16 @@ function mvtCategorized(layer) {
             .style('font-size', '12px')
             .style('alignment-baseline', 'central')
             .style('cursor', 'pointer')
-            .text(layer.style.categorized.cat[item].label || item)
+            .text(layer.style.theme.cat[item].label || item)
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.style.categorized.cat[item].style.stroke = true;
-                    layer.style.categorized.cat[item].style.fill = true;
+                    layer.style.theme.cat[item].style.stroke = true;
+                    layer.style.theme.cat[item].style.fill = true;
                 } else {
                     this.style.opacity = 0.5;
-                    layer.style.categorized.cat[item].style.stroke = false;
-                    layer.style.categorized.cat[item].style.fill = false;
+                    layer.style.theme.cat[item].style.stroke = false;
+                    layer.style.theme.cat[item].style.fill = false;
                 }
 
                 layer.getLayer();
@@ -576,7 +578,7 @@ function mvtCategorized(layer) {
     });
 
     // Attach box for other/default categories.
-    if (layer.style.categorized.other) {
+    if (layer.style.theme.other) {
         svg.append('rect')
             .attr('x', 4)
             .attr('y', y + 3)
@@ -799,9 +801,6 @@ function clusterGraduated(layer) {
         y += 10;
     }
 
-    layer.style.theme.filter = [];
-    layer.style.theme.filterOther = false;
-
     layer.style.theme.cat.map((cat) => {
 
         // // two columns
@@ -817,6 +816,66 @@ function clusterGraduated(layer) {
             .attr('width', 20)
             .attr('height', 20)
             .attr('xlink:href', cat.marker || '');
+
+        // Attach label with filter on click for the style category.
+        svg.append('text')
+            .attr('x', 25)
+            .attr('y', y + 11)
+            .style('font-size', '12px')
+            .style('alignment-baseline', 'central')
+            .style('cursor', 'pointer')
+            .text(cat.label || '');
+
+        y += 20;
+    });  
+        
+    // Set height of the svg element.
+    svg.attr('height', y);
+
+    return legend;
+}
+
+function mvtGraduated(layer) {
+
+    // Get width from the layer drawer client width and create a new SVG for the legend.
+    let width = layer.drawer.clientWidth,
+        legend = utils.createElement('div', {
+            className: 'legend'
+        }),
+        svg = d3
+            .select(legend)
+            .append('svg')
+            .attr('width', width),
+        y = 15;
+
+    // Create a legend title from the categorized.label property.
+    if (layer.style.theme.label) {
+        svg.append('text')
+            .attr('x', 0)
+            .attr('y', y)
+            .style('font-weight', 600)
+            .style('font-size', '14px')
+            .text(layer.style.theme.label);
+        y += 10;
+    }
+
+    layer.style.theme.cat.map((cat) => {
+
+        // // two columns
+        // for (let i = 0; i < keys.length; i++) {
+        //     y = i % 2 ? y : y += 25;
+        //     x = i % 2 ? w / 2 + 15 : 15;
+        // }
+
+        // Attach box for the style category.
+        svg.append('rect')
+            .attr('x', 4)
+            .attr('y', y + 3)
+            .attr('width', 14)
+            .attr('height', 14)
+            .style('fill', cat.style.fillColor)
+            .style('fill-opacity', cat.style.fillOpacity)
+            .style('stroke', cat.style.color);
 
         // Attach label with filter on click for the style category.
         svg.append('text')
