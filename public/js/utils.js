@@ -187,7 +187,7 @@ module.exports = (function () {
         return new Blob([uInt8Array], {type: contentType});
     }
     
-    function checkbox(id, caption, onclick){
+    function checkbox(layer, id, caption, onchange){
         let table = createElement('table', {
             className: "checkbox"
         });
@@ -211,8 +211,8 @@ module.exports = (function () {
             textContent: caption
         }); 
         
-        if(typeof(onclick) === 'function'){
-            input.addEventListener('click', onclick);
+        if(typeof(onchange) === 'function'){
+            input.addEventListener('change', onchange);
         }
         
         td.appendChild(input);

@@ -120,7 +120,7 @@ function layerFilters(layer, height){
                     checkbox_div.appendChild(_title);
                 } else {
     
-                    _content = filter_checkbox(_field, _label, _id);
+                    _content = filter_checkbox(layer, _field, _label, _id);
                     
                     _content.style.marginLeft = '30px';
                     
@@ -164,6 +164,7 @@ function layerFilters(layer, height){
     return filters;
 }
 
+// create text filter
 function filter_text(field, label, table){
     let div = utils.createElement('div');
     
@@ -178,13 +179,32 @@ function filter_text(field, label, table){
         placeholder: 'Search.'
     });
     
+    function onkeyup(e){
+        let id = this.id;
+        let params = id.split("--");
+        
+        let table = params[0],
+            field = params[1];
+        let val = this.value;
+        
+        let item = {
+            table: table,
+            field: field,
+            value: val
+        };
+        // apply filter function
+        console.log(item);
+        
+    }
+    
+    input.addEventListener("keyup", onkeyup);
+    
     input.style.width = "100%";
     
     div.appendChild(input);
     
     return div;
 }
-
 
 // create numeric filter 
 function filter_numeric(field, label, table){
@@ -220,7 +240,29 @@ function filter_numeric(field, label, table){
         placeholder: 'Set value.'
     });
     
+    function onkeyup(e){
+        let id = this.id;
+        let params = id.split("--");
+        let table = params[0], field = params[1];
+        
+        let operator = document.querySelector('.filters .filter--numeric select#' + id + "--select").value;
+        
+        let val = parseFloat(this.value);
+        
+        let item = {
+            id: id,
+            table: table,
+            field: field,
+            operator: operator,
+            value: val
+        }
+        // apply filter to the layer;
+        console.log(item);
+    }
+    
     input.style.width = "100%";
+    
+    input.addEventListener("keyup", onkeyup);
     
     div.append(input);
     
@@ -228,16 +270,39 @@ function filter_numeric(field, label, table){
 }
 
 // create checkbox filter
-function filter_checkbox(field, label, id){
+function filter_checkbox(layer, field, label, id){
     
-    function filter_checkbox_onclick(e){
-        console.log('filter checkbox checked');
+    function filter_checkbox_onchange(e){
+        
+        let id = this.id;
+            let params = id.split("--");
+            let table = params[0],
+                field = params[1],
+                index1 = params[2],
+                index2 = params[3],
+                value = layer.infoj[index1].filter[index2];
+        
+        let item = {
+            table: table,
+            field: field,
+            value: value
+        };
+        
+        console.log(item);
+        
+        if(this.checked){    
+            // filter functions
+            console.log('filter checkbox checked. Apply filter.');
+        } else {
+            console.log('filter unchecked. Remove filter');
+        }
     }
     
-    let checkbox = utils.checkbox(id, label, filter_checkbox_onclick);
+    let checkbox = utils.checkbox(layer, id, label, filter_checkbox_onchange);
     
     return checkbox;
 }
+
 
 // Begin cluster settings
 
