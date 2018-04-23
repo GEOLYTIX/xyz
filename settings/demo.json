@@ -11,7 +11,6 @@
     ],
     "pane": ["catchments", 520]
   },
-  "locale": "UK",
   "locales": {
     "UK": {
       "name": "United Kingdom",
@@ -1038,11 +1037,11 @@
         },
         "retail_places_mvt": {
           "name": "Retail Places",
-          "properties": "rp_type,",
           "format": "mvt",
           "geom_3857": "geom_3857",
           "pane": ["bounds", 510],
           "dbs": "XYZ",
+          "properties": "rp_type,",
           "qID": "id",
           "arrayZoom": {
             "12": "gb_retailplace"
@@ -1125,8 +1124,9 @@
             "highlight": {
               "color": "#e91e63"
             },
-            "categorized": {
+            "theme": {
               "label": "Retail Place type",
+              "type": "categorized",
               "field": "rp_type",
               "other": true,
               "cat": {
@@ -2181,19 +2181,36 @@
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
             "markerMulti": [400,"#333"],
-            "markerMin": 20,
-            "markerMax": 40,
-            "categorized": {
+            "theme": {
               "label": "Retailer",
               "field": "fascia",
-              "competitors": [
-                ["SINSAY","#8d6e63","Sinsay"],
-                ["MOHITO","#ffeb3b","Mohito"],
-                ["RESERVED","#dce775","Reserved"],
-                ["CROPP","#64b5f6","Cropp"],
-                ["HOUSE","#ab47bc","House"],
-                ["H&M","#f44336","H&M"]
-              ],
+              "type": "categorized",
+              "competitors": {
+                "SINSAY": {
+                  "colour": "#8d6e63",
+                  "label": "Sinsay"
+                },
+                "MOHITO": {
+                  "colour": "#ffeb3b",
+                  "label": "Mohito"
+                },
+                "RESERVED": {
+                  "colour": "#dce775",
+                  "label": "Reserved"
+                },
+                "CROPP": {
+                  "colour": "#64b5f6",
+                  "label": "Cropp"
+                },
+                "HOUSE": {
+                  "colour": "#ab47bc",
+                  "label": "House"
+                },
+                "H&M": {
+                  "colour": "#f44336",
+                  "label": "H&M"
+                }
+              },
               "cat": {
                 "SINSAY": {
                   "marker": "svg_symbols.target([400,'#8d6e63'])",
