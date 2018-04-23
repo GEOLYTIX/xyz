@@ -67,7 +67,8 @@ _xyz.map = L
 
 // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
 _xyz.setView = function(fit) {
-    if (_xyz.locales[_xyz.locale].bounds) _xyz.map.setMaxBounds(_xyz.locales[_xyz.locale].bounds);
+    //if (_xyz.locales[_xyz.locale].bounds) _xyz.map.setMaxBounds(_xyz.locales[_xyz.locale].bounds);
+    _xyz.map.setMaxBounds(_xyz.locales[_xyz.locale].bounds || [[-90,-180],[90,180]]);
     _xyz.map.setMinZoom(_xyz.locales[_xyz.locale].minZoom);
     _xyz.map.setMaxZoom(_xyz.locales[_xyz.locale].maxZoom);
     if (fit) _xyz.map.fitBounds(_xyz.locales[_xyz.locale].bounds || [[-90,-180],[90,180]]);
