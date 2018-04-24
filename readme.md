@@ -2,13 +2,12 @@
 
 A Node.js framework to develop applications and APIs for spatial data.
 
-tl;dr Here is an open hosted version of the XYZ with some sample data for Europe, UK, and Oxford.
-
+tl;dr Here is a hosted version of the XYZ without login:
 [https://geolytix.xyz/open](https://geolytix.xyz/open)
 
 ## Introduction
 
-The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) to create PDF reports on the server-side.
+The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) to create server-side PDF reports.
 
 ## Licence
 
@@ -16,104 +15,120 @@ Free use of the code in this repository is allowed through a [MIT licence](https
 
 ## Dependencies
 
-We are currently using Node.js version 8.4.
+We are currently using Node.js version 8.5 in production.
 
-Style sheets are written with SASS/SCSS. We are currently including compiled css in the repository. With SASS installed it is possible to compile all style sheets with following command `sass -update public/css` from the application root. It is envisagened to move to Stylus in a future build and drop the Ruby development dependency.
+Style sheets for the browser interface are written in SASS/SCSS. We include the compiled css in the repository. With SASS installed it is possible to compile all style sheets with following command `sass -update public/css` from the application root.
 
-The application is compiled with Webpack/Babel. We use Webpack 3.0 in the master branch and do not inlcude compiled bundles in this repository. The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
+The application is compiled with Webpack (v3) and Babel.
+
+The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
 
 ### Puppeteer
 
 [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) is used to generate PDF reports server-side. In it's current state the project install of Pupetteer takes 300mb out of a total 400mb worth of dependencies. It is recommended to install Puppeteer either global `sudo npm install puppeteer --global --unsafe-perm` and then set a link to the global install in the project folder `npm link puppeteer`. Otherwise Puppeteer can be installed local with `npm install puppeteer`.
 
-## Settings
+## Environment Settings
 
-Two sets of settings are required to run the framework and host an application.
+The environment settings contain sensitive information such as data source connection strings, security information and API keys. These should never be made public and are not contained in this repository.
 
-### Environment Settings
+Running the application without any environment settings will host a sample application with a single OSM base layer on port 3000.
 
-The environment settings which contain sensitive information such as data source connection strings, security information and API keys are not contained in this repository. Below is a list of environment settings which are required to run the framework. In Visual Studio code this settings are usually stored in the debug .launch settings.
+In Visual Studio Code we recommend to store the environment settings in the env:{} object of the .launch file.
+
+During startup, server.js will check for [dotenv](https://www.npmjs.com/package/dotenv). If found the dotenv settings will be loaded as environment settings.
 
 We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
-
-`"NODE_ENV": "development"`
-
-Whether the application is run in a development or production environment.
 
 `"PORT": "3000"`
 
 The port on which the application is run.
 
-`"HOST": "geolytix.xyz/demo"`
+`"HOST": "geolytix.xyz"`
 
 The host is required in order to send correct verification or media links.
 
-`"LOCALHOST": "http://localhost:3000/xyz/"`
+`"LOCALHOST": "http://localhost:3000"`
 
 The localhost is required for server side reporting.
 
-`"DIR": "xyz"`
+`"DIR": "/xyz"`
 
 The name of the application root directory. This is required by the Express router to set the public directory.
-
-`"MONGODB": "mongodb://localhost:27017/database"`
-
-The location of the mongo database in which the user accounts are stored for applications and services which require passport authentication.
-
-`"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"`
-
-An SMTP connection string which is required for the application to send emails. The passport security module uses this mail account to send verification requests to new registrants.
-
-`"OURSECRET": "ChinaCatSunflower"`
-
-A session secret which is used to compute the Hash.
 
 `"APPSETTINGS": "demo.json"`
 
 The name of the appsettings file ([in the settings directory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The APPSETTINGS will be discussed in detail in the next section of this documentation.
+
+`"LOGIN": "mongodb://localhost:27017/xyz"`
+
+(optional) The location of a mongo database in which the user accounts are stored for applications and services which require passport authentication. No login is used if this param is not set.
+
+`"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"`
+
+(optional) An SMTP connection string which is required for the application to send emails. The passport security module uses this mail account to send verification requests to new registrants.
+
+`"OURSECRET": "ChinaCatSunflower"`
+
+(optional) A session secret which is required to compute the session hash.
 
 ```
 "DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"
 "DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"
 ```
 
-Keys beginning with DBS_ store PostGIS data source connections. Modules which require connections to PostGIS data sources via the [node-postgres](https://github.com/brianc/node-postgres) read the connection strings from the DBS_* keys, split the key and store the connection in a an object (DBS) with the remainder of the DBS_* key as key for the connection object. This key can be referenced in the dbs XHR request parameter where required. This allows different services and layers to connect to different data sources in the same hosted API. Any dbs keys defined in the application settings object (\_XYZ) must be referenced with a matching DBS_* key and connection string. E.g. A layer with dbs:XYZ requires DBS_XYZ with a valid connection string in the environment settings. Please reference [pg-connection-string] which is used by node-postgres to connect to a data source from a connection string.
+Keys beginning with DBS_ store PostGIS data source connections. During startup the keys are read and stored in the global.DBS object. The remainder of the DBS_* string is the key for the connection object. This key can be referenced as the  dbs parameter in XHR requests sent from the client. This allows different services and layers to connect to different data sources in the same hosted API. Any dbs keys defined in the application settings object (\_XYZ) must be referenced with a matching DBS_* key and connection string. E.g. A layer with dbs:XYZ requires DBS_XYZ with a valid connection string in the environment settings. Please reference [pg-connection-string] which is used by node-postgres to connect to a data source from a connection string.
 
-`"GKEY": "google maps api key"`
+Similar to the DBS connection strings the API keys which are defined in the environment settings are stored in the global.KEYS object. The remainder of the KEY_* string is the key for the request object. The key is provided as 'provider' parameter in XHR requests from the client.
+
+`"KEY_GOOGLE": "key=***"`
 
 A Google Maps API key which is required if Google Maps Services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
-`"MAPBOX": "mapbox api key"`
+`"KEY_MAPBOX": "access_token=pk.***"`
 
 A Mapbox API key which is required if Mapbox base maps and/or Mapbox services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
-`"NOLOGIN": "true"`
+`"KEY_HERE": "app_id=***&app_code=***"`
 
-The passport security middleware will execute the *next()* callback if NOLOGIN is set to true in the environment settings. There is no login view and the client application will open directly from the host address.
+A HERE API key which is required if HERE base maps are used.
 
-### Application Settings
+`"IMAGES": "cloudinary api_key api_secret cloud_name folder",`
 
-Application settings are stored in the [/settings](https://github.com/GEOLYTIX/xyz/tree/master/settings) directory. Application settings control instance specific settings for layers, styles, locales and which modules should be loaded by client applications. Below is a list of settings which are currently supported by the framework.
+We use (cloudinary)[https://cloudinary.com] to store images uploaded from the browser application interface. 
+
+## Application Settings
+
+Application settings are stored in the [/settings](https://github.com/GEOLYTIX/xyz/tree/dev/settings) directory. Application settings control instance specific settings for layers, styles, locales and which modules should be loaded by client applications. Below is a list of settings which are currently supported by the framework. Default minimum viable settings will be set if APPSETTINGS are not defined in the environment settings or if the settings cannot be opened by the node process.
 
 `"title": "XYZ Demo"`
 
-The application title which will be inserted into the title tag in the client templates. `<title>GEOLYTIX | {{:title}}</title>`
+(optional) The application title which will be inserted into the title meta tag in the HTML template.
 
-```
-"gazetteer": {
-   "provider": "google",
-   "pane": ["gazetteer", 550],
-   "icon": "svg_symbols.markerColor('#64dd17','#33691e')",
-   "style": {
-     "stroke": true,
-     "color": "#090",
-     "weight": 2,
-     "fillColor": "#cf9",
-     "fillOpacity": 0.2
-   }
- }
-```
-The gazetteer settings for the client application. 'google' and 'mapbox' are currently supported as geocoding (with autocomplete) provider. The provider requires a matching key in the environment settings. The pane defines the z-index on which gazetteer results are drawn. Changing the pane index will control how the gazetteer results are drawn in relation to the data layers. The icon and style define which marker (point results) or polygon styles should be applied to gazetteer features drawn in the map canvas.
+`"gazetteer": {}`
+
+(optional) Whether the gazetteer module should be enabled. Without the gazetteer module you will not be able to switch between locales
+
+`"select": {}`
+
+(optional) Whether the selection module should be enabled. Without the selection module you will not be able to select features and query their properties.
+
+`"locate": true,`
+
+(optional) Whether the geolocator should be enabled. *Note that the geolocator requires a secure connection via https.*
+
+`"documentation": "documentation"`
+
+(optional) Whether a documentation button should be enabled. If set to 'documentation' the [documentation.md](https://github.com/GEOLYTIX/xyz/tree/dev/public/documentation.md) markhub will be displayed in a github flavoured view. Any suitable link can be set instead of 'documentation'.
+
+`"locale": "UK"`
+
+(optional) The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
+
+`"locales": {}`
+
+### Locales
+
+
 
 ## Server
 
@@ -136,5 +151,6 @@ User accounts consist of an email address and password only. It is possible to c
 Account **approval** is an administrative process. Adminstrator accounts can send requests to the passport middleware that they recognise the email address of an account and approve access for the account.
 
 A new database will be created when the first user account is registered. In order to approve this user and give administrative rights to the account open a mongo console to use the database and manually update the account like so:
-
-`db.users.update({"email":"dennis.bauszus@geolytix.co.uk"},{$set:{"verified":true, "approved":true, "admin":true}})`
+```
+db.users.update({"email":"dennis.bauszus@geolytix.co.uk"},{$set:{"verified":true, "approved":true, "admin":true}})
+```
