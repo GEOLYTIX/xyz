@@ -3,7 +3,7 @@ async function geojson(req, res) {
     let
         table = req.query.table,
         id = req.query.qID === 'undefined' ? null : req.query.qID,
-        geom = req.query.geom,
+        geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),

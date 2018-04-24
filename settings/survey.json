@@ -42,12 +42,9 @@
           "format": "cluster",
           "pane": ["stores", 510],
           "dbs": "XYZ",
-          "qID": "id",
           "table": "store_survey",
           "cluster_label": "retailer",
           "cluster_cat": "retailer",
-          "cluster_kmeans": 0.005,
-          "cluster_dbscan": 0.0001,
           "infoj": [
             {
               "field": "category",
@@ -293,13 +290,20 @@
             "markerMulti": [400,"#999"],
             "markerMin": 15,
             "markerMax": 30,
-            "categorized": {
+            "theme": {
               "label": "Brand",
               "field": "retailer",
-              "competitors": [
-                ["ADIDAS","#333","adidas"],
-                ["NIKE","#f44336","Nike"]
-              ],
+              "type": "categorized",
+              "competitors": {
+                "ADIDAS": {
+                  "colour": "#333",
+                  "label": "adidas"
+                },
+                "NIKE": {
+                  "colour": "#f44336",
+                  "label": "Nike"
+                }
+              },
               "other": true,
               "cat": {
                 "ADIDAS": {

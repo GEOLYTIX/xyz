@@ -22,7 +22,7 @@ function getLayer(){
         
         // Build xhr request.
         let bounds = _xyz.map.getBounds();      
-        this.xhr.open('GET', host + 'q_geojson?' + utils.paramString({
+        layer.xhr.open('GET', host + 'q_geojson?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             qID: layer.qID,

@@ -72,6 +72,7 @@ async function cluster(req, res) {
 
   // Multiply kmeans with the ratio of the cross extent (xExtent) and the cross envelope (xEnvelope).
   kmeans *= xExtent / xEnvelope;
+  kmeans ++;
 
   // Check that kmeans is below feature count.
   kmeans = kmeans < count ? parseInt(kmeans): count;
