@@ -592,7 +592,8 @@
             {
               "field": "cp_type",
               "label": "Type",
-              "type": "text"
+              "type": "text",
+              "filter": ["Type", "Major", "Minor"]
             },
             {
               "field": "road_num",

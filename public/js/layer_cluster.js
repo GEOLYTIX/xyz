@@ -48,10 +48,6 @@ function loadLayer(layer) {
     // Send XHR to middleware.
     layer.xhr.send();
     
-    let filter_numeric = document.querySelectorAll('.filters .filter--numeric input');
-    let filter_checkbox = document.querySelectorAll('.filters .filter--checkbox input');
-    let filter_text = document.querySelectorAll('.filters .filter--text input');
-    
 }
 
 function loadLayer_complete(layer) {

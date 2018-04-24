@@ -13,7 +13,11 @@ function panel(layer) {
         textContent: layer.meta
     }));
     
-    //if(!!applyFilters(layer)) panel.appendChild(layerFilters(layer, applyFilters(layer)));
+    if(!!applyFilters(layer)) {
+        panel.appendChild(layerFilters(layer, applyFilters(layer)));
+        console.log('apply filters on');
+        console.log(layer);
+    }
     
     if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
 
@@ -35,15 +39,17 @@ function applyFilters(layer){
     
     if(layer.infoj){
         Object.keys(layer.infoj).map(function(key){
+            //enabled += 50;
             if(layer.infoj[key].filter){
+                enabled += 50;
                 if(layer.infoj[key].filter === "text"){
-                    enabled += 100;
+                    enabled += 70;
                 }
                 if(layer.infoj[key].filter === "numeric"){
-                    enabled += 120;
+                    enabled += 70;
                 }
                 if(typeof(layer.infoj[key].filter) === 'object'){
-                    enabled += 40*layer.infoj[key].filter.length + 50;
+                    enabled += 40*layer.infoj[key].filter.length;
                 }
             }
         });
