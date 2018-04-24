@@ -40,60 +40,47 @@ During startup, server.js will check for [dotenv](https://www.npmjs.com/package/
 We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
 
 `"PORT": "3000"`
-
 The port on which the application is run.
 
 `"HOST": "geolytix.xyz"`
-
-The host is required in order to send correct verification or media links.
+The host is required in order to send verification or media links.
 
 `"LOCALHOST": "http://localhost:3000"`
-
 The localhost is required for server side reporting.
 
 `"DIR": "/xyz"`
-
 The name of the application root directory. This is required by the Express router to set the public directory.
 
 `"APPSETTINGS": "demo.json"`
-
 The name of the appsettings file ([in the settings directory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The APPSETTINGS will be discussed in detail in the next section of this documentation.
 
 `"LOGIN": "mongodb://localhost:27017/xyz"`
-
 (optional) The location of a mongo database in which the user accounts are stored for applications and services which require passport authentication. No login is used if this param is not set.
 
 `"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"`
-
 (optional) An SMTP connection string which is required for the application to send emails. The passport security module uses this mail account to send verification requests to new registrants.
 
 `"OURSECRET": "ChinaCatSunflower"`
-
 (optional) A session secret which is required to compute the session hash.
 
 ```
 "DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"
 "DBS_MVT": "postgres://username:password@123.123.123.123:5432/database"
 ```
-
 Keys beginning with DBS_ store PostGIS data source connections. During startup the keys are read and stored in the global.DBS object. The remainder of the DBS_* string is the key for the connection object. This key can be referenced as the  dbs parameter in XHR requests sent from the client. This allows different services and layers to connect to different data sources in the same hosted API. Any dbs keys defined in the application settings object (\_XYZ) must be referenced with a matching DBS_* key and connection string. E.g. A layer with dbs:XYZ requires DBS_XYZ with a valid connection string in the environment settings. Please reference [pg-connection-string] which is used by node-postgres to connect to a data source from a connection string.
 
 Similar to the DBS connection strings the API keys which are defined in the environment settings are stored in the global.KEYS object. The remainder of the KEY_* string is the key for the request object. The key is provided as 'provider' parameter in XHR requests from the client.
 
 `"KEY_GOOGLE": "key=***"`
-
 A Google Maps API key which is required if Google Maps Services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
 `"KEY_MAPBOX": "access_token=pk.***"`
-
 A Mapbox API key which is required if Mapbox base maps and/or Mapbox services such as Distance Matrices or Geocoding are referenced by the XYZ api.
 
 `"KEY_HERE": "app_id=***&app_code=***"`
-
 A HERE API key which is required if HERE base maps are used.
 
 `"IMAGES": "cloudinary api_key api_secret cloud_name folder",`
-
 We use (cloudinary)[https://cloudinary.com] to store images uploaded from the browser application interface. 
 
 ## Application Settings
@@ -101,33 +88,60 @@ We use (cloudinary)[https://cloudinary.com] to store images uploaded from the br
 Application settings are stored in the [/settings](https://github.com/GEOLYTIX/xyz/tree/dev/settings) directory. Application settings control instance specific settings for layers, styles, locales and which modules should be loaded by client applications. Below is a list of settings which are currently supported by the framework. Default minimum viable settings will be set if APPSETTINGS are not defined in the environment settings or if the settings cannot be opened by the node process.
 
 `"title": "XYZ Demo"`
-
 (optional) The application title which will be inserted into the title meta tag in the HTML template.
 
 `"gazetteer": {}`
-
 (optional) Whether the gazetteer module should be enabled. Without the gazetteer module you will not be able to switch between locales
 
 `"select": {}`
-
 (optional) Whether the selection module should be enabled. Without the selection module you will not be able to select features and query their properties.
 
 `"locate": true,`
-
 (optional) Whether the geolocator should be enabled. *Note that the geolocator requires a secure connection via https.*
 
 `"documentation": "documentation"`
-
 (optional) Whether a documentation button should be enabled. If set to 'documentation' the [documentation.md](https://github.com/GEOLYTIX/xyz/tree/dev/public/documentation.md) markhub will be displayed in a github flavoured view. Any suitable link can be set instead of 'documentation'.
 
 `"locale": "UK"`
-
 (optional) The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
 
 `"locales": {}`
 
 ### Locales
 
+Locales are regional sub settings. Each locale is defined by it's name, bounds and a set of layers. A locale can be selected from the dropdown next to the input field in the gazetteer module. The dropdown will only be active if more than one locale object is defined in the APPSETTINGS. The locale 'Global' will be represented as a globe icon.
+
+The current local is defined as url_hook. For example [https://geolytix.xyz/open/?locale=Global](https://geolytix.xyz/open/?locale=Global) will open the Global locale from the settings for the /open instance.
+
+Each locale is a set of objects which are described here:
+
+`"name": "Europe"`
+(optional) The display name for the locale. The locale key will be used if not set.
+
+`"bounds": [[25,-45],[75,60]],`
+(optional) An array of \[lat,lon\] coordinate pairs which define the bounds of a locale. It will not be possible to pan the map outside the bounds. The default bounds are \[\[-90,-180\],\[90,180\]\].
+
+```
+"minZoom": 5,
+"maxZoom": 9
+```
+(optional) The min and max zoom for the leaflet map object. The defaults range is zoom 0 to 20 if not set.
+
+`"gazetteer": ["MAPBOX", "", "'-45,25,60,75'", "e.g. Brussels"]`
+The gazetteer to be used for the locale. The first entry in the array is the provider (MAPBOX or GOOGLE). A KEY setting is required in the environment settings in order to use the corresponding geocoding API. TO BE COMPLETED AFTER DATABASE GAZETTEER IMPLEMENTATION.
+
+`"layers": {}`
+
+### Layers
+
+Layers are a sub setting of a locale. Each layers object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window.
+
+Types of layers which are currently supported:
+
+grid
+cluster
+mvt
+base
 
 
 ## Server
