@@ -91,7 +91,7 @@ A HERE API key which is required if HERE base maps are used.
 
 `"IMAGES": "cloudinary api_key api_secret cloud_name folder",`
 
-We use (cloudinary)[https://cloudinary.com] to store images uploaded from the browser application interface. 
+We use [cloudinary](https://cloudinary.com) to store images uploaded from the browser application interface. 
 
 ## Application Settings
 
