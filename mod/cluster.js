@@ -14,8 +14,6 @@ async function cluster(req, res) {
     east = parseFloat(req.query.east),
     north = parseFloat(req.query.north);
 
-  //console.log(filter);
-
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, cat], res).statusCode === 406) return;
 
@@ -23,6 +21,10 @@ async function cluster(req, res) {
 
     if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
     if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
+    if((filter[field].gt)) filter_sql += ` AND ${field} > ${filter[field].gt}`;
+    if((filter[field].lt)) filter_sql += ` AND ${field} < ${filter[field].lt}`;
+    if((filter[field].like)) filter_sql += ` AND ${field} ILIKE '${filter[field].like}%'`;
+    if((filter[field].match)) filter_sql += ` AND ${field} ILIKE '${filter[field].match}'`;
 
   });
 
@@ -157,11 +159,12 @@ async function cluster(req, res) {
         ST_DWithin(
           ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom}, 0.00001)
+      ${filter_sql} 
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
 
   //console.log(q);
-
+    
   result = await global.DBS[req.query.dbs].query(q);
 
   if (!theme) res.status(200).json(Object.keys(result.rows).map(record => {

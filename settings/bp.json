@@ -592,12 +592,15 @@
             {
               "field": "cp_type",
               "label": "Type",
-              "type": "text"
+              "type": "text",
+              "filter": 
+                {"in": ["Major", "Minor"]}
             },
             {
               "field": "road_num",
               "label": "Road Number",
-              "type": "text"
+              "type": "text",
+              "filter": "like" 
             },
             {
               "field": "start_junc",
@@ -617,7 +620,8 @@
             {
               "field": "road_class",
               "label": "Road Class",
-              "type": "text"
+              "type": "text",
+              "filter": "match"
             },
             {
               "field": "area_cat",
@@ -627,17 +631,20 @@
             {
               "field": "all_mv_14",
               "label": "Annual traffic count 2014",
-              "type": "integer"
+              "type": "integer",
+              "filter": "numeric"
             },
             {
               "field": "all_mv_15",
               "label": "Annual traffic count 2015",
-              "type": "integer"
+              "type": "integer",
+              "filter": "numeric"
             },
             {
               "field": "all_mv_16",
               "label": "Annual traffic count 2016",
-              "type": "integer"
+              "type": "integer",
+              "filter": "numeric"
             }
           ],
           "style": {
