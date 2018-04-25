@@ -34,7 +34,7 @@ function loadLayer(layer) {
         east: bounds.getEast(),
         north: bounds.getNorth()
     }));
-
+    
     // Process XHR onload.
     layer.xhr.onload = () => {
 
