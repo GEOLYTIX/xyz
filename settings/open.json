@@ -44,6 +44,10 @@
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
           "qID": "id",
+          "arrayZoom": {
+            "3": "glx_cities_of_the_world"
+          },
+          "tilecache": "glx_cities_of_the_world__tc",
           "properties": "pop_density,",
           "infoj": [
             {
@@ -77,10 +81,6 @@
               "type": "numeric"
             }
           ],
-          "arrayZoom": {
-            "3": "glx_cities_of_the_world"
-          },
-          "tilecache": "glx_cities_of_the_world__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -892,6 +892,59 @@
                   "label": "Whole Foods"
                 }
               }
+            }
+          }
+        },
+        "region": {
+          "name": "Regions",
+          "pane": ["regions",520],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "regionname",
+              "label": "Region",
+              "type": "text"
+            },
+            {
+              "field": "all_mv_16",
+              "label": "Count",
+              "type": "integer",
+              "layer": "traffic_count",
+              "aggregate": "count"
+            },
+            {
+              "field": "all_mv_16",
+              "label": "Traffic count 2016 (sum)",
+              "type": "numeric",
+              "layer": "traffic_count",
+              "aggregate": "sum"
+            },
+            {
+              "field": "all_mv_16",
+              "label": "Traffic count 2016 (avg)",
+              "type": "numeric",
+              "layer": "traffic_count",
+              "aggregate": "avg"
+            }
+          ],
+          "arrayZoom": {
+            "6": "gb_region"
+          },
+          "tilecache": "gb_region__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillOpacity": 0.1
+            },
+            "highlight": {
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0.1
             }
           }
         },

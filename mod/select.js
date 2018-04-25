@@ -2,6 +2,7 @@ async function select(req, res) {
 
     let
         table = req.body.table,
+        geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
         geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
         qID = req.body.qID,
@@ -12,10 +13,28 @@ async function select(req, res) {
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
-    let fields = '';
-    Object.keys(req.body.infoj).map(key => {
-        if (req.body.infoj[key].type) fields += `${req.body.infoj[key].fieldfx || req.body.infoj[key].field}::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
-        if (req.body.infoj[key].subfield) fields += `${req.body.infoj[key].subfield}::${req.body.infoj[key].type} AS ${req.body.infoj[key].subfield},`
+    let fields = '',
+        sql_filter = '';
+
+    req.body.infoj.forEach(entry => {
+        if (entry.layer) {
+            fields += `
+            (SELECT ${entry.aggregate}(${entry.field})
+             FROM ${entry.layer.table}
+             WHERE ST_Intersects(${entry.layer.table}.${entry.layer.geom || 'geom'}, ${table}.${geom})
+             ${sql_filter}
+            ) AS ${entry.field},
+            `
+            return
+        }
+
+        if (entry.type) fields += `
+        ${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},
+        `
+
+        if (entry.subfield) fields += `
+        ${entry.subfield}::${entry.type} AS ${entry.subfield},
+        `
     });
 
     let q = `

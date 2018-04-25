@@ -140,6 +140,9 @@ module.exports = function Select() {
 
         let _layer = _xyz.locales[_xyz.locale].layers[layer.layer];
 
+        // infoj fields with a layer definition are queried from the reference layer.
+        setLayerReferences(_layer.infoj);
+
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -162,11 +165,26 @@ module.exports = function Select() {
             qID: _layer.qID || 'id',
             id: layer.id,
             infoj: _layer.infoj,
+            geom: _layer.geom,
             geomj: _layer.geomj,
             geomdisplay: _layer.geomdisplay
         }));
     }
     _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
+
+    function setLayerReferences(infoj) {
+        infoj.forEach((entry)=>{
+
+            // Create a layer reference for the layer defined in the infoj field.
+            if (typeof entry.layer === 'string'){
+                entry.layer = {
+                    table: _xyz.locales[_xyz.locale].layers[entry.layer].table,
+                    geom: _xyz.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
+                    filter: _xyz.locales[_xyz.locale].layers[entry.layer].filter || {}
+                }
+            }
+        })
+    }
 
     function addLayerToRecord(layer) {
         let freeRecords = _xyz.select.records.filter(function (record) {

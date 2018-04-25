@@ -33,7 +33,7 @@ function getLayer(){
                 tilecache: layer.tilecache
             }),
             options = {
-                rendererFactory: L.canvas.tile,
+                rendererFactory: L.svg.tile,
                 interactive: (_xyz.select && layer.infoj && layer.qID) || false,
                 pane: layer.pane[0],
                 getFeatureId: (f) => f.properties.id,
@@ -91,6 +91,9 @@ function getLayer(){
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
             .addTo(_xyz.map);
+
+
+
     }
 }
 
