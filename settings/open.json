@@ -909,25 +909,22 @@
               "type": "text"
             },
             {
-              "field": "all_mv_16",
+              "field": "count.all_mv_16",
               "label": "Count",
               "type": "integer",
-              "layer": "traffic_count",
-              "aggregate": "count"
+              "layer": "traffic_count"
             },
             {
-              "field": "all_mv_16",
+              "field": "sum.all_mv_16",
               "label": "Traffic count 2016 (sum)",
-              "type": "numeric",
-              "layer": "traffic_count",
-              "aggregate": "sum"
+              "type": "integer",
+              "layer": "traffic_count"
             },
             {
-              "field": "all_mv_16",
+              "field": "avg.all_mv_16",
               "label": "Traffic count 2016 (avg)",
-              "type": "numeric",
-              "layer": "traffic_count",
-              "aggregate": "avg"
+              "type": "integer",
+              "layer": "traffic_count"
             }
           ],
           "arrayZoom": {
