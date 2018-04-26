@@ -204,40 +204,16 @@ function clusterSettings(layer) {
     });
     rMarkerMax.appendChild(sliMarkerMax);
     settings.appendChild(rMarkerMax);
-
-
-    // Log scale cluster.
-    let table = utils.createElement('table', {
-        className: 'checkbox'
-    });
-
-    let td = utils.createElement('td', {
-        className: 'box'
-    });
-
-    layer.markerLog = utils.createElement('input', {
-        id: layer.layer + '_logscale',
-        type: 'checkbox'
-    });
-
-    layer.markerLog.checked = layer.style.markerLog;
-    layer.markerLog.addEventListener('click', function () {
-        layer.getLayer();
-    });
-
-    let label = utils.createElement('label', {
-        htmlFor: layer.layer + '_logscale'
-    });
-
-    td.appendChild(layer.markerLog);
-    td.appendChild(label);
-
-    table.appendChild(td);
-    table.appendChild(utils.createElement('td', {
-        textContent: 'Log scale cluster'
-    }));
     
-    settings.appendChild(table);
+    
+    // Log scale cluster.
+    let logScale = utils.checkbox(function(e){
+        layer.markerLog = e.target.checked;
+        layer.style.markerLog = layer.markerLog;
+        layer.getLayer();
+    }, {label: 'Log scale cluster', id: layer.layer + '_logscale'});
+    
+    settings.appendChild(logScale);
 
 
     return settings;

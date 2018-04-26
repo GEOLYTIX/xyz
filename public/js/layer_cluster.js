@@ -108,8 +108,8 @@ function addClusterToLayer(cluster, layer) {
 
                 tooltip = tooltip? point.properties.sum.toLocaleString(): false;
             }
-
-            let iconSize = layer.markerLog.checked ?
+            
+           let iconSize = layer.markerLog ?
                 layer.style.markerMin + layer.style.markerMax / Math.log(c_max) * Math.log(point.properties.count) :
                 point.properties.count === 1 ?
                     layer.style.markerMin :

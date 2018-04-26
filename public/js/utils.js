@@ -187,7 +187,7 @@ module.exports = (function () {
         return new Blob([uInt8Array], {type: contentType});
     }
     
-    function checkbox(layer, id, caption, onchange){
+    function checkbox(onchange, options){
         let table = createElement('table', {
             className: "checkbox"
         });
@@ -197,19 +197,18 @@ module.exports = (function () {
         });
         
         let input = createElement('input', {
-            id: id,
+            id: options.id,
             type: "checkbox"
         });
         
         let label = createElement('label', {
-            htmlFor: id
+            htmlFor: options.id
         });
         
-        //label.setAttribute('for', id);
-        
         let title = createElement('td', {
-            textContent: caption
+            textContent: options.label
         }); 
+
         
         if(typeof(onchange) === 'function'){
             input.addEventListener('change', onchange);
