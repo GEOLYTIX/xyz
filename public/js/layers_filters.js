@@ -92,11 +92,19 @@ function layerFilters(layer, height){
                 
                 for(let val of layer.infoj[key].filter[_key]){
                     
-                    let index = layer.infoj[key].filter[_key].indexOf(val);
-                    let _id = layer.table + "--" + key + "--" + _field + "--" + _key + "--" + index,
+                    let index = layer.infoj[key].filter[_key].indexOf(val),
                         _content;
                     
-                    _content = filter_checkbox(layer, _field, val, _id);
+                    let options = {
+                        id: layer.table + '--' + _field + "--" + index,
+                        table: layer.table,
+                        field: _field,
+                        label: _label,
+                        operator: 'in',
+                        value: val
+                    }
+                    
+                    _content = filter_checkbox(options, layer);
                     _content.style.marginLeft = '30px';
                     checkbox_div.appendChild(_content);
                 }
@@ -251,36 +259,25 @@ function filter_numeric(layer, field, label, table){
     return div;
 }
 
-
 // create checkbox filter
-function filter_checkbox(layer, field, label, id){
+function filter_checkbox(options, layer){
     
     function filter_checkbox_onchange(e){
         
-        let id = this.id;
+        if(!layer.filter[options.field]) 
+            layer.filter[options.field] = {
+                [options.operator]: []
+            };
         
-        let params = id.split("--");
-            let table = params[0],
-                field_idx = params[1], 
-                field = params[2],
-                operator = params[3],
-                idx = params[4],
-                value = layer.infoj[field_idx].filter[operator][idx];
-        
-        if(!layer.filter[field]) layer.filter[field] = {};
-        if(!layer.filter[field][operator]) layer.filter[field][operator] = [];
-        
-        if(this.checked){  
-            layer.filter[field][operator].push(value);
+        if(this.checked){
+            layer.filter[options.field][options.operator].push(options.value);
             layer.getLayer();
-           
         } else {
-            layer.filter[field][operator].splice(layer.filter[field][operator].indexOf(value), 1);
+            layer.filter[options.field][options.operator].splice(layer.filter[options.field][options.operator].indexOf(options.value), 1);
             layer.getLayer();
         }
     }
-    
-    let checkbox = utils.checkbox(id, label, filter_checkbox_onchange);
+    let checkbox = utils.checkbox(filter_checkbox_onchange, {label: options.value, id: options.id});
     
     return checkbox;
 }

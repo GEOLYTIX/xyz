@@ -204,16 +204,14 @@ function clusterSettings(layer) {
     });
     rMarkerMax.appendChild(sliMarkerMax);
     settings.appendChild(rMarkerMax);
-
-
+    
+    
     // Log scale cluster.
-    let logScale = utils.checkbox(layer.layer + '_logscale', 'Log scale cluster', function(e){
+    let logScale = utils.checkbox(function(e){
         layer.markerLog = e.target.checked;
-        
         layer.style.markerLog = layer.markerLog;
-        
         layer.getLayer();
-    });
+    }, {label: 'Log scale cluster', id: layer.layer + '_logscale'});
     
     settings.appendChild(logScale);
 
