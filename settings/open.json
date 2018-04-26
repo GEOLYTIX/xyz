@@ -902,6 +902,7 @@
           "format": "mvt",
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
+          "geomq": "qgeom",
           "qID": "id",
           "infoj": [
             {

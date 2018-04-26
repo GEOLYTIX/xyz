@@ -4,6 +4,7 @@ async function select(req, res) {
         table = req.body.table,
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
+        geomq = typeof req.body.geomq == 'undefined' ? 'geom' : req.body.geomq,
         geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
         qID = req.body.qID,
         id = req.body.id;
@@ -21,7 +22,7 @@ async function select(req, res) {
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
              FROM ${entry.layer.table}
-             WHERE ST_Intersects(${entry.layer.table}.${entry.layer.geom || 'geom'}, ${table}.${geom})
+             WHERE ST_Intersects(${entry.layer.table}.${entry.layer.geom || 'geom'}, ${table}.${geomq})
              ${sql_filter}
             ) AS "${entry.field}",
             `

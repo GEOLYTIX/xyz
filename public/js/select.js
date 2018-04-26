@@ -167,6 +167,7 @@ module.exports = function Select() {
             infoj: _layer.infoj,
             geom: _layer.geom,
             geomj: _layer.geomj,
+            geomq: _layer.geomq,
             geomdisplay: _layer.geomdisplay
         }));
     }
