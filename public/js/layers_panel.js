@@ -628,40 +628,30 @@ function gridControl(layer) {
     legend.appendChild(selColor);
 
     // Grid ration checkbox element.
-    let checkbox = utils.createElement('table', { className: 'checkbox' }),
-        td = utils.createElement('td', { className: 'box' });
-
-    layer.chkGridRatio = utils.createElement('input', {
-        type: 'checkbox',
-        id: 'chkGridRatio'
-    });
-
-    // Set checked from either hook.grid_ratio or layer.grid_ratio.
-    layer.chkGridRatio.checked = layer.grid_ratio || _xyz.hooks.grid_ratio;
-    layer.grid_ratio = layer.chkGridRatio.checked;
-    if (layer.chkGridRatio.checked) _xyz.setHook('grid_ratio', true);
-
-    // Checkbox click event to toggle grid_ratio.
-    layer.chkGridRatio.addEventListener('click', function () {
-        layer.grid_ratio = this.checked;
+    let gridRatio = utils.checkbox(function(e){
+        // Checkbox event to toggle grid_ratio.
+        layer.chkGridRatio = e.target.checked;
+        layer.grid_ratio = layer.chkGridRatio;
         if (layer.grid_ratio) {
             _xyz.setHook('grid_ratio', true);
         } else {
             _xyz.removeHook('grid_ratio');
         }
         layer.getLayer();
+        
+    },{
+        label: 'Display colour values as a ratio to the size value.', 
+        id: 'chkGridRatio',
+        checked: layer.grid_ratio || _xyz.hooks.grid_ratio
     });
 
-    // Add grid ratio checkbox to panel.
-    td.appendChild(layer.chkGridRatio);
-    td.appendChild(utils.createElement('label', {
-        htmlFor: 'chkGridRatio'
-    }));
-    checkbox.appendChild(td);
-    checkbox.appendChild(utils.createElement('td', {
-        textContent: 'Display colour values as a ratio to the size value.'
-    }));
-    legend.appendChild(checkbox);
+    // Set checked from either hook.grid_ratio or layer.grid_ratio.
+    layer.chkGridRatio = layer.grid_ratio || _xyz.hooks.grid_ratio;
+    layer.grid_ratio = layer.chkGridRatio;
+    
+    if (layer.chkGridRatio) _xyz.setHook('grid_ratio', true);
+
+    legend.appendChild(gridRatio);
 
     // Set dropdown values and events.
     function setDropDown(select, query) {
