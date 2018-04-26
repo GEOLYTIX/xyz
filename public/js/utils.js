@@ -208,6 +208,8 @@ module.exports = (function () {
         let title = createElement('td', {
             textContent: options.label
         }); 
+        
+        if(options.checked) input.checked = true;
 
         
         if(typeof(onchange) === 'function'){
