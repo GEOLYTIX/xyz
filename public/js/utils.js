@@ -187,7 +187,7 @@ module.exports = (function () {
         return new Blob([uInt8Array], {type: contentType});
     }
     
-    function checkbox(layer, id, caption, onchange){
+    function checkbox(id, caption, onchange){
         let table = createElement('table', {
             className: "checkbox"
         });

@@ -280,7 +280,7 @@ function filter_checkbox(layer, field, label, id){
         }
     }
     
-    let checkbox = utils.checkbox(layer, id, label, filter_checkbox_onchange);
+    let checkbox = utils.checkbox(id, label, filter_checkbox_onchange);
     
     return checkbox;
 }

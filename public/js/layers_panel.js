@@ -207,37 +207,15 @@ function clusterSettings(layer) {
 
 
     // Log scale cluster.
-    let table = utils.createElement('table', {
-        className: 'checkbox'
-    });
-
-    let td = utils.createElement('td', {
-        className: 'box'
-    });
-
-    layer.markerLog = utils.createElement('input', {
-        id: layer.layer + '_logscale',
-        type: 'checkbox'
-    });
-
-    layer.markerLog.checked = layer.style.markerLog;
-    layer.markerLog.addEventListener('click', function () {
+    let logScale = utils.checkbox(layer.layer + '_logscale', 'Log scale cluster', function(e){
+        layer.markerLog = e.target.checked;
+        
+        layer.style.markerLog = layer.markerLog;
+        
         layer.getLayer();
     });
-
-    let label = utils.createElement('label', {
-        htmlFor: layer.layer + '_logscale'
-    });
-
-    td.appendChild(layer.markerLog);
-    td.appendChild(label);
-
-    table.appendChild(td);
-    table.appendChild(utils.createElement('td', {
-        textContent: 'Log scale cluster'
-    }));
     
-    settings.appendChild(table);
+    settings.appendChild(logScale);
 
 
     return settings;
