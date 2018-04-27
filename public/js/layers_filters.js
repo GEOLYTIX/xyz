@@ -113,15 +113,25 @@ function layerFilters(layer, height){
             
         } else {
             
-            let _field = layer.infoj[key].field,
-                _label = layer.infoj[key].label,
-                _table = layer.table,
-                _content;
+            //let _field = layer.infoj[key].field,
+                //_label = layer.infoj[key].label,
+                //_table = layer.table,
+            let _content;
+            
+            let options = {
+                table: layer.table,
+                field: layer.infoj[key].field,
+                label: layer.infoj[key].label
+            }
             
             
             if(layer.infoj[key].filter === "numeric"){
                 
-                _content = filter_numeric(layer, _field, _label, _table); 
+                // numeric operators defined here
+                options.operators = [{name: "less than", val: "lt"},
+                                     {name: "greater than", val: "gt"}];
+                
+                _content = filter_numeric(layer, options); 
                 
                 _content.style.marginLeft = '10px';
                 
@@ -130,7 +140,9 @@ function layerFilters(layer, height){
             
             if(layer.infoj[key].filter === "like" || layer.infoj[key].filter ==="match"){
                 
-                let _content = filter_text(layer, layer.infoj[key].filter, _field, _label, _table); 
+                options.operator = layer.infoj[key].filter;
+                
+                let _content = filter_text(layer, options); 
 
                 _content.style.marginLeft = '10px';
                 
@@ -148,39 +160,30 @@ function layerFilters(layer, height){
 }
 
 // create text filter
-function filter_text(layer, mode, field, label, table){
+function filter_text(layer, options){
+    
     let div = utils.createElement('div');
     
     let title = utils.createElement('h4', {
-        textContent: label
+        textContent: options.label
     });
     
     div.appendChild(title);
     
     let input = utils.createElement('input', {
-        id: table + "--" + field,
+        id: layer.table + "--" + options.field,
         placeholder: 'Search.'
     });
     
     function onkeyup(e){
-        let id = this.id;
-        let params = id.split("--");
-        
-        let table = params[0],
-            field = params[1];
         
         let val = this.value;
         
-        // apply filter function
-        
-        if(!layer.filter[field]) layer.filter[field] = {};
-        layer.filter[field][mode] = val;
-        
-        //console.log(layer.filter);
-        
         // apply filter to the layer;
+        layer.filter[options.field] = {};
+        layer.filter[options.field][options.operator] = val;
+    
         layer.getLayer();
-        
     }
     
     input.addEventListener("keyup", onkeyup);
@@ -194,42 +197,44 @@ function filter_text(layer, mode, field, label, table){
 
 
 // create numeric filter 
-function filter_numeric(layer, field, label, table){
+function filter_numeric(layer, options){
+    
     let div = utils.createElement('div');
    
     let title = utils.createElement('h4', {
-        textContent: label
+        textContent: options.label
     });
     
     div.appendChild(title);
     
-    let operators = [{name: "less than", val: "lt"}, {name: "greater than", val: "gt"}];
+    let select = utils.createElement('select');
     
-    let select = utils.createElement('select', {
-        id: table + "--" + field + "--select",
-    });
-    
-    Object.keys(operators).map(function(key){
+    Object.keys(options.operators).map(function(key){
 
         let operator = utils.createElement('option', {
-            value: operators[key].val,
-            textContent: operators[key].name
+            value: options.operators[key].val,
+            textContent: options.operators[key].name
         }); 
         select.appendChild(operator);
     });
     
     select.selectedIndex = 0;
+    options.operator = select[select.selectedIndex].value;
     
     select.addEventListener('change', function(){
-        document.getElementById(table + "--" + field).value = null;
-        layer.filter[field] = {};
-        layer.getLayer();
+        let val = parseFloat(document.getElementById(options.table + "--" + options.field).value);
+        options.operator = this[this.selectedIndex].value;
+        
+        layer.filter[options.field] = {};
+        layer.filter[options.field][options.operator] = val;
+   
+        if(val) layer.getLayer();
     });
     
     div.appendChild(select);
     
     let input = utils.createElement('input', {
-        id: table + "--" + field,
+        id: options.table + "--" + options.field,
         placeholder: 'Set value.'
     });
     
@@ -238,16 +243,15 @@ function filter_numeric(layer, field, label, table){
         let params = id.split("--");
         let table = params[0], field = params[1];
         
-        let operator = document.querySelector('.filters .filter--numeric select#' + id + "--select").value;
-        
         let val = parseFloat(this.value);
         
-        if(!layer.filter[field]) layer.filter[field] = {};
-        layer.filter[field][operator] = val;
+        if(!layer.filter[options.field]) 
+            layer.filter[options.field] = {};
+        layer.filter[options.field][options.operator] = val;
         
         // apply filter to the layer;
         if(val) layer.getLayer();
-
+        console.log(layer.filter);
     }
     
     input.style.width = "100%";
