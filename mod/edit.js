@@ -1,72 +1,92 @@
 async function newRecord(req, res) {
-    try {
-        let q =
-        `INSERT INTO ${req.body.table} (geom)
-            SELECT ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326) AS geom
-            RETURNING id;`;
 
-        //console.log(q);
+    let q,
+        table = req.body.table,
+        geometry = JSON.stringify(req.body.geometry),
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
+        id = req.body.id;
 
-        let result = await global.DBS[req.body.dbs].query(q);
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
-        q =
-        `UPDATE ${req.body.table} SET
-            ${req.body.qID} = '${result.rows[0].id}'
-            WHERE id = '${result.rows[0].id}';`;
+    if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
-        //console.log(q);
+    q = `
+    INSERT INTO ${table} (geom)
+        SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
+    RETURNING id;`;
 
-        await global.DBS[req.body.dbs].query(q);
+    //console.log(q);
 
-        res.status(200).send(result.rows[0].id.toString());
+    let result = await global.DBS[req.body.dbs].query(q);
 
-    } catch (err) {
-        console.log(err.stack)
-    }
+    q = `
+    UPDATE ${table} SET
+        ${qID} = '${result.rows[0].id}'
+    WHERE id = '${result.rows[0].id}';`;
+
+    //console.log(q);
+
+    await global.DBS[req.body.dbs].query(q);
+
+    res.status(200).send(result.rows[0].id.toString());
 }
 
-function updateRecord(req, res) {
+async function updateRecord(req, res) {
 
-    let fields = '';
-    Object.keys(req.body.infoj).map(key => {
-        if (req.body.infoj[key].images) return
-        if (req.body.infoj[key].type === 'text') fields += `${req.body.infoj[key].field} = '${req.body.infoj[key].value}',`;
-        if (req.body.infoj[key].type === 'integer' && req.body.infoj[key].value) fields += `${req.body.infoj[key].field} = ${req.body.infoj[key].value},`
-        if (req.body.infoj[key].subfield && req.body.infoj[key].subvalue) fields += `${req.body.infoj[key].subfield} = '${req.body.infoj[key].subvalue}',`
+    let q,
+        table = req.body.table,
+        geometry = JSON.stringify(req.body.geometry),
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
+        id = req.body.id
+        fields = '';
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+
+    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+
+    Object.values(req.body.infoj).forEach(entry => {
+        if (entry.images) return
+        if (entry.type === 'text') fields += `${entry.field} = '${entry.value}',`;
+        if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
+        if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
     });
 
-    let q =
-    `UPDATE ${req.body.table} SET
-       ${fields}
-       geom = ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), 4326)
-       WHERE ${req.body.qID} = '${req.body.id}';`
+    q = `
+    UPDATE ${table} SET
+        ${fields}
+        geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
+    WHERE ${qID} = $1;`
 
     //console.log(q);
              
-    global.DBS[req.body.dbs].query(q)
-        .then(result => {
-            //console.log(result);
-            res.status(200).send();
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    global.DBS[req.body.dbs].query(q, [id])
+        .then(result =>  res.status(200).send())
+        .catch(err => console.error(err));
 }
 
-function deleteRecord(req, res) {
+async function deleteRecord(req, res) {
 
-    let q = `DELETE FROM ${req.body.table} where ${req.body.qID} = '${req.body.id}';`;
+    let q,
+        table = req.body.table,
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
+        id = req.body.id;
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+
+    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+
+    q = `
+    DELETE FROM ${table}
+    WHERE ${qID} = $1`;
 
     //console.log(q);
              
-    global.DBS[req.body.dbs].query(q)
-        .then(result => {
-            //console.log(result);
-            res.status(200).send();
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    global.DBS[req.body.dbs].query(q, [id])
+        .then(result => res.status(200).send())
+        .catch(err => console.error(err));
 }
 
 module.exports = {

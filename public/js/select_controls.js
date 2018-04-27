@@ -100,8 +100,8 @@ function update(dom, record) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_update');
         xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = function () {
-            if (this.status === 200) {
+        xhr.onload = () => {
+            if (xhr.status === 200) {
                 record.upload.style.display = 'none';
 
                 //let test = record.drawer.getElementsByClassName('changed');

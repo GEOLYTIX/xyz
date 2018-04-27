@@ -18,24 +18,35 @@ function save(req, res){
         },
         json: true
     },
-    (err, response, body) => {
-        if(err){ 
-            console.log(err);
+    async (err, response, body) => {
 
-        } else {           
-            let q = `UPDATE ${req.query.table} 
-                     SET images = array_append(images, '${body.secure_url}')
-                     WHERE ${req.query.qID} = '${req.query.id}';`;
-            
-            // add filename to images field
-            global.DBS[req.query.dbs]
-                .query(q)
-                .then(result => res.status(200).send({
-                    'image_id': body.public_id,
-                    'image_url': body.secure_url
-                }))
-                .catch(err => console.log(err));
+        if(err){
+            console.error(err);
+            return
         }
+
+        let q,
+            table = req.query.table,
+            qID = req.query.qID == 'undefined' ? 'id' : req.query.qID,
+            id = req.query.id;
+
+        // Check whether string params are found in the settings to prevent SQL injections.
+        if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+
+        if (await require('./chk').chkID(id, res).statusCode === 406) return;
+        
+        q = `
+        UPDATE ${table} SET
+            images = array_append(images, '${body.secure_url}')
+        WHERE ${qID} = $1;`;
+            
+        // add filename to images field
+        global.DBS[req.query.dbs]
+            .query(q, [id])
+            .then(result => res.status(200).send({
+                'image_id': body.public_id,
+                'image_url': body.secure_url}))
+            .catch(err => console.error(err));
     });
 }
 
@@ -54,21 +65,35 @@ function remove(req, res){
         },
         json: true
     },
-    (err, response, body) => {
-        if(err){ 
-            console.log(err);
+    async (err, response, body) => {
 
-        } else {  
-            let q = `UPDATE ${req.query.table}
-                        SET images = array_remove(images, '${decodeURIComponent(req.query.image_src)}')
-                        WHERE ${req.query.qID} = '${req.query.id}';`;
-            
-            // add filename to images field
-            global.DBS[req.query.dbs]
-                .query(q)
-                .then(result => res.status(200))
-                .catch(err => console.log(err));
+        if (err) {
+            console.error(err);
+            return
         }
+
+        let q,
+            table = req.query.table,
+            qID = req.query.qID == 'undefined' ? 'id' : req.query.qID,
+            id = req.query.id
+            image_src = decodeURIComponent(req.query.image_src);
+
+        // Check whether string params are found in the settings to prevent SQL injections.
+        if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+
+        if (await require('./chk').chkID(id, res).statusCode === 406) return;
+
+        q = `
+        UPDATE ${table} SET
+            images = array_remove(images, '${image_src}')
+        WHERE ${qID} = $1;`;
+
+        // add filename to images field
+        global.DBS[req.query.dbs]
+            .query(q, [id])
+            .then(result => res.status(200))
+            .catch(err => console.error(err));
+
     });
 }
 

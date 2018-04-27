@@ -41,7 +41,7 @@ function addImages(record, images) {
         img_td = document.createElement('td');
         img_tr.appendChild(img_td);
         let _img = utils.createElement('img', {
-            id: image_id(image),
+            id: image.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
             src: image
         });
         _img.style.border = '3px solid #EEE';
@@ -62,15 +62,6 @@ function addImages(record, images) {
         img_td.appendChild(_img);
     }
     
-    function image_id(cloudinary_url){
-        let regex1 = /.*\//,
-            regex2 = /\.([\w-]{3})/;
-        
-        let id = cloudinary_url.replace(regex1, '').replace(regex2, '');
-        
-        return id;
-    }
-
     // empty the file input value
     add_img.addEventListener('click', function(){
         this.value = '';
@@ -156,14 +147,14 @@ function addImages(record, images) {
 }
 
 function upload_image(record, _img, blob) {
-    console.log(_img);
-    console.log(blob);
+    //console.log(_img);
+    //console.log(blob);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', host + 'q_save_image?' + utils.paramString({
         dbs: record.layer.dbs,
         table: record.layer.table,
         qID: record.layer.qID,
-        id: record.layer.id//,
+        id: record.layer.id
         //type: blob.type
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
@@ -172,7 +163,7 @@ function upload_image(record, _img, blob) {
             
             let json = JSON.parse(this.responseText);
             
-            console.log(this.responseText);
+            //console.log(this.responseText);
             
             _img.style.border = '3px solid #eee';
             _img.id = json.image_id;
@@ -215,7 +206,7 @@ function remove_image(record, _img) {
     }));
     xhr.onload = function () {
         if (this.status === 200) {
-            console.log(this.responseText);
+            //console.log(this.responseText);
         }
     }
     xhr.send();

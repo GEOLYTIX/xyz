@@ -6,7 +6,7 @@ async function select(req, res) {
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
         geomq = typeof req.body.geomq == 'undefined' ? 'geom' : req.body.geomq,
         geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
-        qID = req.body.qID,
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id;
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -51,17 +51,8 @@ async function select(req, res) {
     global.DBS[req.body.dbs].query(q, [id])
         .then(result => {
 
-
-            // Object.keys(req.body.infoj).map(key => {
-            //     if (result.rows[0][req.body.infoj[key].field] || result.rows[0][req.body.infoj[key].field] == 0) {
-            //         req.body.infoj[key].value = result.rows[0][req.body.infoj[key].field];
-            //     }
-            //     if (result.rows[0][req.body.infoj[key].subfield]) {
-            //         req.body.infoj[key].subvalue = result.rows[0][req.body.infoj[key].subfield];
-            //     }
-            // });
-
-            Object.values(req.body.infoj).map(entry => {
+            // Iterate through the infoj object's entries and assign the values returned from the database query.
+            Object.values(req.body.infoj).forEach(entry => {
                 if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
                     entry.value = result.rows[0][entry.field];
                 }
@@ -70,7 +61,7 @@ async function select(req, res) {
                 }
             });
 
-
+            // Send the infoj object with values back to the client.
             res.status(200).json({
                 geomj: result.rows[0].geomj,
                 geomdisplay: result.rows[0].geomdisplay || false,

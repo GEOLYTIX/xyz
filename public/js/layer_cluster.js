@@ -73,13 +73,16 @@ function addClusterToLayer(cluster, layer) {
             // Set icon to default marker. 
             let icon = layer.style.marker || svg_symbols.target([400, '#aaa']);
 
+            // Set tooltip for desktop if corresponding layer has hover property.
             let tooltip = (layer.hover && view_mode === 'desktop') || false;
 
-            // Check whether layer has categorized theme.
+            // Check whether layer has categorized theme and more than a single location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
 
+                // Define a default dotArr.
                 let dotArr = [400, "#333"];
 
+                // Check whether categorized theme has competitors block defined.
                 if (layer.style.theme.competitors) {
                     let c = 0;
                     Object.keys(layer.style.theme.competitors).map(comp => {
@@ -92,29 +95,35 @@ function addClusterToLayer(cluster, layer) {
 
                 }
 
+                // Create icon svg from dotArr.
                 icon = svg_symbols.target(dotArr);
             }
 
+            // Check whether layer has  categorized theme and only 1 location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length === 1) {
                 icon = layer.style.theme.cat[Object.keys(point.properties.cat)[0]] ?
                     layer.style.theme.cat[Object.keys(point.properties.cat)[0]].marker : icon;
             }
 
+            // Graduated theme.
             if (layer.style.theme && layer.style.theme.type === 'graduated') {
                 for (let i = 0; i < layer.style.theme.cat.length; i++) {
                     if (point.properties.sum < layer.style.theme.cat[i].val) break;
                     icon = layer.style.theme.cat[i].marker;
                 }
 
+                // Set tooltip for graduated theme property (sum).
                 tooltip = tooltip? point.properties.sum.toLocaleString(): false;
             }
             
-           let iconSize = layer.markerLog ?
+            // Define iconSize from number of locations in cluster.
+            let iconSize = layer.markerLog ?
                 layer.style.markerMin + layer.style.markerMax / Math.log(c_max) * Math.log(point.properties.count) :
                 point.properties.count === 1 ?
                     layer.style.markerMin :
                     layer.style.markerMin + layer.style.markerMax / c_max * point.properties.count;
 
+            // Create marker from icon and iconSize.
             let marker = L.marker(latlng, {
                 pane: layer.pane[0],
                 zIndexOffset: parseInt(1000 - 1000 / c_max * point.properties.count),
@@ -122,10 +131,10 @@ function addClusterToLayer(cluster, layer) {
                     iconUrl: icon,
                     iconSize: iconSize
                 }),
-                interactive: (layer.infoj)? true: false
+                interactive: (layer.infoj) ? true : false
             });
 
-
+            // Bind tooltip to marker.
             if (tooltip) marker.bindTooltip(tooltip,{
                 sticky: true,
                 className: 'tooltip',
@@ -149,7 +158,7 @@ function clusterMouseClick(e, layer) {
         lnglat = e.layer.feature.geometry.coordinates,
         xhr = new XMLHttpRequest();
     
-    console.log(layer.filter);
+    //console.log(layer.filter);
 
     xhr.open('GET', host + 'q_cluster_select?' + utils.paramString({
         dbs: layer.dbs,

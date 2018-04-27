@@ -106,15 +106,12 @@ module.exports = function Select() {
     _xyz.select.init();
 
     // Reset the module on btnOff click.
-    dom.btnOff.addEventListener('click', function () {
-        _xyz.select.resetModule();
-    });
+    dom.btnOff.addEventListener('click', () => _xyz.select.resetModule());
 
     // Reset function for the module container.
     _xyz.select.resetModule = resetModule;
     function resetModule() {
         dom.btnOff.style.display = 'none';
-        // dom.header.style.background = '#eee';
         dom.layers.innerHTML = '';
         _xyz.removeHook('select');
         _xyz.select.records.map(function (record) {
@@ -130,9 +127,8 @@ module.exports = function Select() {
 
     // Get layer from data source
     function selectLayerFromEndpoint(layer) {
-        let freeRecords = _xyz.select.records.filter(function (record) {
-            if (!record.layer) return record
-        });
+        let freeRecords = _xyz.select.records.filter(record => !record.layer);
+
         if (freeRecords.length === 0) return
 
         // Make select tab active on mobile device.
@@ -162,7 +158,7 @@ module.exports = function Select() {
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
             table: layer.table,
-            qID: _layer.qID || 'id',
+            qID: _layer.qID,
             id: layer.id,
             infoj: _layer.infoj,
             geom: _layer.geom,
