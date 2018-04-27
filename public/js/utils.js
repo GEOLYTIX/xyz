@@ -2,8 +2,10 @@ module.exports = (function () {
 
     function scrollElement(element, to, duration) {
         if (duration <= 0) return;
+
         let difference = to - element.scrollTop,
             perTick = difference / duration * 10;
+
         setTimeout(function () {
             element.scrollTop = element.scrollTop + perTick;
             if (element.scrollTop === to) return;
@@ -119,11 +121,14 @@ module.exports = (function () {
         return encodedString;
     }
 
-    function createElement(tag, options) {
+    function createElement(tag, options, appendTo) {
         let el = document.createElement(tag);
-        if (options && typeof options === 'object') Object.keys(options).map(function (key) {
-            el[key] = options[key];
-        })
+
+        if (options && typeof options === 'object') Object.keys(options)
+            .map(key => el[key] = options[key]);
+
+        if (appendTo) appendTo.appendChild(el);
+
         return el;
     }
 
@@ -151,17 +156,6 @@ module.exports = (function () {
                 //statsTableGroup(infoj, key, 'title') :
                 table += '<tr><td class="lv-0">' + key + '</td><td class="val">' + infoj[key].toLocaleString('en-GB') + '</td></tr>';
         });
-
-        // // Add data to title groups
-        // function statsTableGroup(_data, _key, _class, _sub_class) {
-        //     if (_class) table += '<tr class="' + _class + '"><td>' + _key + '</td></tr>';
-        //     Object.keys(_data[_key]).map(function (key) {
-        //         typeof (_data[_key][key]) === 'object' ?
-        //             statsTableGroup(_data[_key], key, null, 'pad') :
-        //             table += '<tr><td class="' + _sub_class + '">' + key + '</td><td>' + _data[_key][key].toLocaleString('en-GB') + '</td></tr>';
-        //     });
-        // }
-
         return table;
     }
     
@@ -184,6 +178,7 @@ module.exports = (function () {
         for (let i = 0; i < rawLength; ++i) {
             uInt8Array[i] = raw.charCodeAt(i);
         }
+
         return new Blob([uInt8Array], {type: contentType});
     }
     

@@ -17,8 +17,8 @@ function addInfojToList(record) {
         // Create new table row at given level and append to table.
         let tr = utils.createElement('tr', {
             className: 'lv-' + (entry.level || 0)
-        });
-        table.appendChild(tr);
+        }, table);
+        //table.appendChild(tr);
 
         // Create new table cell for label and append to table.
         if (entry.label){
