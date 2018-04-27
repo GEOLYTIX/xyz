@@ -132,6 +132,22 @@ module.exports = (function () {
         return el;
     }
 
+    function _createElement(_el) {
+        let el = document.createElement(_el.tag);
+
+        if (_el.options)
+            Object.keys(_el.options)
+                .map(key => el[key] = _el.options[key]);
+
+        if (_el.appendTo)
+            _el.appendTo.appendChild(el);
+
+        if (_el.eventListener)
+            el.addEventListener(_el.eventListener.event, _el.eventListener.funct);
+
+        return el;
+    }
+
     function getSelectOptionsIndex(options, value) {
         for (let i=0; i < options.length; i++) {
             if (options[i].value == value) return i;
@@ -231,6 +247,7 @@ module.exports = (function () {
         paramString: paramString,
         debounce: debounce,
         createElement: createElement,
+        _createElement: _createElement,
         getSelectOptionsIndex: getSelectOptionsIndex,
         getMath: getMath,
         createStatsTable: createStatsTable,

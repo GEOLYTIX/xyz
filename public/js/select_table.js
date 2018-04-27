@@ -18,16 +18,24 @@ function addInfojToList(record) {
         let tr = utils.createElement('tr', {
             className: 'lv-' + (entry.level || 0)
         }, table);
-        //table.appendChild(tr);
 
         // Create new table cell for label and append to table.
         if (entry.label){
-            let label = utils.createElement('td', {
-                className: 'label lv-' + (entry.level || 0),
-                textContent: entry.label,
-                colSpan: (!entry.type || entry.type === 'text' ? '2' : '1')
+            // let label = utils.createElement('td', {
+            //     className: 'label lv-' + (entry.level || 0),
+            //     textContent: entry.label,
+            //     colSpan: (!entry.type || entry.type === 'text' ? '2' : '1')
+            // }, tr);
+
+            let label = utils._createElement({
+                tag: 'td',
+                options: {
+                    className: 'label lv-' + (entry.level || 0),
+                    textContent: entry.label,
+                    colSpan: (!entry.type || entry.type === 'text' ? '2' : '1') 
+                },
+                appendTo: tr
             });
-            tr.appendChild(label);
 
             // return from object.map function if field(label) has no type.
             if (!entry.type) return
@@ -40,17 +48,13 @@ function addInfojToList(record) {
         }
 
         // Create new row for text cells and append to table.
-        if (entry.type && (entry.type === 'text' || entry.type === 'text[]')) {
-            tr = document.createElement('tr');
-            table.appendChild(tr);
-        }
+        if (entry.type && (entry.type === 'text' || entry.type === 'text[]')) tr = utils.createElement('tr', null, table);
 
         // Create new table cell for values and append to tr.
         let val = utils.createElement('td', {
             className: 'val',
             colSpan: '2'
-        });
-        tr.appendChild(val);
+        }, tr);
 
         // If input is images create image control and return from object.map function.
         if (entry.images) {
@@ -73,25 +77,28 @@ function addInfojToList(record) {
         // Create range input for range fields.
         if (entry.range) {
             val.textContent = entry.value || entry.value == 0? parseInt(entry.value): entry.range[0];
-            tr = document.createElement('tr');
-            table.appendChild(tr);
+            tr = utils.createElement('tr', null, table);
+
             let range = utils.createElement('td', {
                 colSpan: '2',
                 className: 'range'        
-            })
-            tr.appendChild(range);
+            }, tr);
+
             let rangeInput = utils.createElement('input', {
                 type: 'range',
                 value: entry.value || entry.value == 0? parseInt(entry.value): entry.range[0],
                 min: entry.range[0],
                 max: entry.range[1]
-            })
+            }, range);
+
             rangeInput.addEventListener('input', function(){
                 utils.addClass(val, 'changed');
                 val.textContent = this.value;
                 record.upload.style.display = 'block';
                 entry.value = this.value;
-            });
+            }, range);
+
+            // click event on input.range
             // rangeInput.addEventListener('click', function (e) {
             //     this.value = parseInt(this.min + (e.offsetX / this.clientWidth * (this.max - this.min)));
             //     // utils.addClass(val, 'changed');
@@ -99,7 +106,7 @@ function addInfojToList(record) {
             //     // record.upload.style.display = 'block';
             //     // entry.value = this.value;
             // });
-            range.appendChild(rangeInput);
+
             return
         }
 
@@ -107,7 +114,28 @@ function addInfojToList(record) {
         if (entry.options) {
 
             // Create select prime element.
-            let select = document.createElement('select');
+            //let select = utils.createElement('select', null, val);
+
+            // select.addEventListener('change', e => {
+            //     utils.addClass(e.target, 'changed');
+            //     record.upload.style.display = 'block';
+            //     entry.value = e.target.options[e.target.value].textContent;
+            //     select_input.value = e.target.options[e.target.value].textContent;
+            // });
+
+            let select = utils._createElement({
+                tag: 'select',
+                appendTo: val,
+                eventListener: {
+                    event: 'change',
+                    funct: e => {
+                        utils.addClass(e.target, 'changed');
+                        record.upload.style.display = 'block';
+                        entry.value = e.target.options[e.target.value].textContent;
+                        select_input.value = e.target.options[e.target.value].textContent;
+                    }
+                }
+            });
 
             // Add undefined/other to the options array.
             entry.options.unshift("undefined");
@@ -119,37 +147,28 @@ function addInfojToList(record) {
                     textContent: String(entry.options[i]).split(';')[0],
                     value: i,
                     selected: (String(entry.options[i]).split(';')[0] == entry.value)
-                });
+                }, select);
+
                 opt.dataset.list = String(entry.options[i])
                     .split(';')
                     .slice(1)
                     .join(';');
-                select.appendChild(opt);
             });
-            val.appendChild(select);
 
             // Create select_input which holds the value of the select prime option.
             let select_input = utils.createElement('input', {
                 value: entry.value,
                 type: 'text'
-            });
+            }, val);
 
-            select_input.addEventListener('keyup', function () {
-                utils.addClass(this, 'changed');
+            select_input.addEventListener('keyup', e => {
+                utils.addClass(e.target, 'changed');
                 record.upload.style.display = 'block';
-                entry.value = this.value;
-            });
-
-            select.addEventListener('change', function () {
-                utils.addClass(this, 'changed');
-                record.upload.style.display = 'block';
-                entry.value = this.options[this.value].textContent;
-                select_input.value = this.options[this.value].textContent;
+                entry.value = e.target.value;
             });
 
             // This element should only be displayed when select prime is 'other'.
             select_input.style.display = 'none';
-            val.appendChild(select_input);
 
             // Check whether value exists but not found in list.
             if (select.selectedIndex == 0 && entry.value && entry.value != 'undefined') {
@@ -163,29 +182,25 @@ function addInfojToList(record) {
             if (entry.subfield) {
 
                 // Create a new table row for select sub label
-                tr = document.createElement('tr');
-                table.appendChild(tr);
+                tr = utils.createElement('tr', null, table);
 
                 // Add select sub label to new tabel row.
                 let label = utils.createElement('td', {
                     className: 'label lv-' + (entry.level || 0),
                     textContent: entry.sublabel,
                     colSpan: '2'
-                });
-                tr.appendChild(label);
+                }, tr);
 
                 // Create a new table row for select sub element.
-                tr = document.createElement('tr');
-                table.appendChild(tr);
+                tr = utils.createElement('tr', null, table);
 
                 // Create new td with subselect element and add to current table row.
                 let td = utils.createElement('td', {
                     className: 'val',
                     colSpan: '2'
-                });
-                tr.appendChild(td);
-                subselect = document.createElement('select');
-                td.appendChild(subselect);
+                }, tr);
+
+                subselect = utils.createElement('select', null, td);
 
                 // Create options for current data-list and append to subselect element.
                 let suboptions = String(select.options[select.selectedIndex].dataset.list).split(';');
@@ -194,19 +209,20 @@ function addInfojToList(record) {
                 // Remove last option if empty.
                 if (suboptions[1] == '') suboptions.pop();
                 suboptions.push('other');
+
                 Object.keys(suboptions).map(function (i) {
-                    subselect.appendChild(utils.createElement('option', {
+                    utils.createElement('option', {
                         textContent: suboptions[i],
                         value: i,
                         selected: (suboptions[i] == entry.subvalue)
-                    }));
+                    }, subselect);
                 });
 
                 // Create select_input which holds the value of the select prime option.
                 subselect_input = utils.createElement('input', {
                     value: entry.subvalue,
                     type: 'text'
-                });
+                }, td);
 
                 subselect_input.addEventListener('keyup', function () {
                     utils.addClass(this, 'changed');
@@ -223,14 +239,13 @@ function addInfojToList(record) {
 
                 // This element should only be displayed when subselect is 'other'.
                 subselect_input.style.display = 'none';
-                td.appendChild(subselect_input);
 
                 // Check whether value exists but not found in list.
-                if (subselect.selectedIndex == 0 && entry.subvalue && entry.subvalue != 'undefined') {
+                if (subselect.selectedIndex == 0 && entry.subvalue && entry.subvalue != 'undefined')
                     subselect.selectedIndex = subselect.options.length - 1;
-                }
 
-                if (subselect.selectedIndex == subselect.options.length - 1) subselect_input.style.display = 'block';
+                if (subselect.selectedIndex == subselect.options.length - 1)
+                    subselect_input.style.display = 'block';
                     
                               
             }
@@ -256,6 +271,7 @@ function addInfojToList(record) {
                     if (suboptions[1] == '') suboptions.pop();
                     suboptions.push('other');
                     subselect.innerHTML = '';
+
                     Object.keys(suboptions).map(function (i) {
                         subselect.appendChild(utils.createElement('option', {
                             textContent: suboptions[i],
@@ -304,13 +320,14 @@ function addInfojToList(record) {
             let textArea = utils.createElement('textarea', {
                 rows: 5,
                 value: entry.value || ''
-            });
-            val.appendChild(textArea);
+            }, val);
+
             textArea.addEventListener('keyup', function () {
                 utils.addClass(this, 'changed');
                 record.upload.style.display = 'block';
                 entry.value = this.value;
             });
+
             return
         }
 
@@ -319,8 +336,8 @@ function addInfojToList(record) {
             let input = utils.createElement('input', {
                 value: entry.value || '',
                 type: 'text'
-            });
-            val.appendChild(input);
+            }, val);
+
             input.addEventListener('keyup', function () {
                 utils.addClass(this, 'changed');
                 record.upload.style.display = 'block';
