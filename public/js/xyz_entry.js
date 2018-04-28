@@ -23,12 +23,6 @@ if (view_mode === 'mobile') require('./mobile_interface')();
 // Initialise utils.
 const utils = require('./utils');
 
-// All mobile interface quirks are loaded here.
-if (node_env === 'development') {
-    let dev_elements = document.querySelectorAll('.dev');
-    utils.removeClass(dev_elements,'dev_display');
-};
-
 // Initiate leaflet and hooks.
 const L = require('leaflet');
 require('./hooks')();

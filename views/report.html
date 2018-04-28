@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{{:title}}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        @font-face {
+            font-family: ffmark_black;
+            src: url({{:host}}fonts/MarkWeb-Black.woff) format("woff");
+        }
+    
+        @font-face {
+            font-family: ffmark;
+            src: url({{:host}}fonts/MarkWebPro.woff) format("woff");
+        }
+    
+        @font-face {
+            font-family: ffmark_bold;
+            src: url({{:host}}fonts/MarkWebPro-Bold.woff) format("woff");
+        }
+    </style>
+    <link rel="stylesheet" href="css/report.css"/>
+
+    <script>const view_mode = 'report';</script>
+
+    {{:settings}}
+
+</head>
+
+<body>
+
+    <div id="gaz_group" class="input_group">
+        <table>
+            <td>
+                <i id="gaz_clear" class="material-icons cursor">cancel</i>
+            </td>
+            <td>
+                <input id="gaz_input" type="text" required>
+                <span class="bar"></span>
+            </td>
+            <td id="gaz_locale">
+                <i class="material-icons">language</i>
+            </td>
+        </table>
+        <ul id="gaz_localelist"></ul>
+        <ul id="gaz_result"></ul>
+    </div>
+
+    <div class="layers_container">
+        {{include tmpl=module_layers /}}
+    </div>
+
+    <div class="select_container">
+        {{include tmpl=module_select /}}
+    </div>
+
+    <div class="map_container">
+        <div id="map" class="map">
+            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+                <defs>
+                    <filter id='dropshadow'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                        <feOffset dx='1' dy='1' result='offsetblur' />
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in='SourceGraphic' />
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="map_button noselect">
+            <button id="btnSearch" title="Open Gazetteer" {{:btnSearch}}>
+                <i class="material-icons">search</i>
+            </button>
+
+            <button id="btnGeolocate" title="Current location" {{:btnLocate}}>
+                <i class="material-icons">gps_not_fixed</i>
+            </button>
+
+            <button id="btnZoomIn">
+                <i class="material-icons">add</i>
+            </button>
+
+            <button id="btnZoomOut">
+                <i class="material-icons">remove</i>
+            </button>
+        </div>
+    </div>
+
+</body>
+
+<script type="application/javascript" src="js/{{:bundle_js}}"></script>
+
+</html>

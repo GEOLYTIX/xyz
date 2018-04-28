@@ -85,7 +85,7 @@ module.exports = function Select() {
           "color": "#d32f2f"
         }];
     
-      // init() is called upon initialisation and when the locale is changed (change_locale === true).
+    // init() is called upon initialisation and when the locale is changed (change_locale === true).
     _xyz.select.init = function (change_locale) {
 
         // Remove the layers hook on change_locale event.

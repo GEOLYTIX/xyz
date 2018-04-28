@@ -2,6 +2,7 @@
   "title": "GEOLYTIX | XYZ Open",
   "select": {},
   "locate": true,
+  "report": true,
   "documentation": "documentation",
   "gazetteer": {},
   "locale": "EU",

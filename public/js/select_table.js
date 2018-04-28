@@ -10,7 +10,7 @@ function addInfojToList(record) {
         cellSpacing: '0',
         style: 'border-bottom: 1px solid ' + record.color
     });
-            
+
     // Populate the table from the features infoj object.
     Object.values(record.layer.infoj).forEach(entry => {
 
@@ -21,12 +21,6 @@ function addInfojToList(record) {
 
         // Create new table cell for label and append to table.
         if (entry.label){
-            // let label = utils.createElement('td', {
-            //     className: 'label lv-' + (entry.level || 0),
-            //     textContent: entry.label,
-            //     colSpan: (!entry.type || entry.type === 'text' ? '2' : '1')
-            // }, tr);
-
             let label = utils._createElement({
                 tag: 'td',
                 options: {
@@ -114,15 +108,6 @@ function addInfojToList(record) {
         if (entry.options) {
 
             // Create select prime element.
-            //let select = utils.createElement('select', null, val);
-
-            // select.addEventListener('change', e => {
-            //     utils.addClass(e.target, 'changed');
-            //     record.upload.style.display = 'block';
-            //     entry.value = e.target.options[e.target.value].textContent;
-            //     select_input.value = e.target.options[e.target.value].textContent;
-            // });
-
             let select = utils._createElement({
                 tag: 'select',
                 appendTo: val,

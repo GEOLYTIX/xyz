@@ -50,14 +50,27 @@ const jsr = require('jsrender');
 // Request application bundle.
 router.get('/', isLoggedIn, (req, res) => {
 
+    // Get params from URL.
+    let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
+
+    // Assign session hooks from params.
+    req.session.hooks = {};
+    if (params[0] !== '')
+        params.forEach(p => {
+            let kv = p.split('=');
+            req.session.hooks[kv[0]] = kv[1];
+        });
+
     // Check whether request comes from a mobile platform and set template.
     let md = new Md(req.headers['user-agent']),
-        tmpl = (md.mobile() === null || md.tablet() !== null) ?
-            jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
+        tmpl = req.session.hooks.report ?
+            jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
+                jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
 
     // Build the template with jsrender and send to client.
     res.send(
         tmpl.render({
+            dir: process.env.DIR ? process.env.DIR + '/' : '/',
             title: global.appSettings.title || 'GEOLYTIX | XYZ',
             module_layers: './public/tmpl/layers.html',
             module_select: global.appSettings.select ? './public/tmpl/select.html' : null,
@@ -72,7 +85,6 @@ router.get('/', isLoggedIn, (req, res) => {
             btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
             settings: `
             <script>
-                const node_env = '${process.env.NODE_ENV}';
                 const host = '';
                 const hooks = ${req.session && req.session.hooks ? JSON.stringify(req.session.hooks) : false};
                 const _xyz = ${JSON.stringify(global.appSettings)};
@@ -366,12 +378,11 @@ function isLoggedIn(req, res, next) {
         let o = {},
             params = req.url.substring(2).split('&');
 
-        if (params[0] !== '') {
-            for (let i = 0; i < params.length; i++) {
-                let key_val = params[i].split('=');
+        if (params[0] !== '')
+            params.forEach(p => {
+                let key_val = p.split('=');
                 o[key_val[0]] = key_val[1];
-            }
-        }
+            });
 
         req.session.hooks = Object.keys(o).length > 0 ? o : false;
 

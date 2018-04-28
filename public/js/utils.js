@@ -124,8 +124,9 @@ module.exports = (function () {
     function createElement(tag, options, appendTo) {
         let el = document.createElement(tag);
 
-        if (options && typeof options === 'object') Object.keys(options)
-            .map(key => el[key] = options[key]);
+        if (options && typeof options === 'object')
+            Object.keys(options)
+                .map(key => el[key] = options[key]);
 
         if (appendTo) appendTo.appendChild(el);
 
@@ -138,6 +139,10 @@ module.exports = (function () {
         if (_el.options)
             Object.keys(_el.options)
                 .map(key => el[key] = _el.options[key]);
+
+        if (_el.style)
+            Object.keys(_el.style)
+                .map(key => el.style[key] = _el.style[key]);
 
         if (_el.appendTo)
             _el.appendTo.appendChild(el);

@@ -9,17 +9,17 @@
     <style>
         @font-face {
             font-family: ffmark_black;
-            src: url({{:host}}fonts/MarkWeb-Black.woff) format("woff");
+            src: url(fonts/MarkWeb-Black.woff) format("woff");
         }
     
         @font-face {
             font-family: ffmark;
-            src: url({{:host}}fonts/MarkWebPro.woff) format("woff");
+            src: url(fonts/MarkWebPro.woff) format("woff");
         }
     
         @font-face {
             font-family: ffmark_bold;
-            src: url({{:host}}fonts/MarkWebPro-Bold.woff) format("woff");
+            src: url(fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
     <link rel="stylesheet" href="css/desktop.css"/>
@@ -115,11 +115,15 @@
                 <i class="material-icons">remove</i>
             </button>
             
-            <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
+            <!-- <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
                 <i class="material-icons">picture_as_pdf</i>
                 <div id="report-spinner">
                     <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
                 </div>
+            </button> -->
+
+            <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
+                <i class="material-icons">picture_as_pdf</i>
             </button>
             
             <div id="report-toast">

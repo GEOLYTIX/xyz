@@ -1,36 +1,39 @@
-module.exports = function(_this){
+module.exports = () => {
       
     document.getElementById('btnReport').addEventListener('click', function () {
-        this.disabled = true;
-        document.getElementById('report-spinner').style.visibility = 'visible';
-        requestReport();
-    });
-    
-    document.getElementById('btnReportClose').addEventListener('click', function(){
-        document.getElementById('report-toast').style.visibility = 'hidden';
-        document.getElementById('btnReport').disabled = false;
-    });
-    
-    function requestReport(){
-        let xhr = new XMLHttpRequest();
+        //this.disabled = true;
+        //document.getElementById('report-spinner').style.visibility = 'visible';
+        //requestReport();
 
-        let payload = {
-            "hooks": _this.hooks
-        };
-        
-        if (_this.drivetime && _this.drivetime.layer){
-            let layers = _this.drivetime.layer.getLayers(),
-                drivetime = layers[0].feature;
-            payload["drivetime"] = drivetime;   
-        } 
+        let win = window.open(window.location.href + '&report=true', '_blank');
+        win.focus();
+    });
     
-        xhr.open('POST', 'q_report_request');
-        xhr.setRequestHeader("Content-Type","application/json");
-        xhr.onload = function(){
-            if(this.status === 200) pingReport(this.response);
-        }
-        xhr.send(JSON.stringify(payload));
-    }
+    // document.getElementById('btnReportClose').addEventListener('click', function(){
+    //     document.getElementById('report-toast').style.visibility = 'hidden';
+    //     document.getElementById('btnReport').disabled = false;
+    // });
+    
+    // function requestReport(){
+    //     let xhr = new XMLHttpRequest();
+
+    //     let payload = {
+    //         "hooks": _this.hooks
+    //     };
+        
+    //     if (_this.drivetime && _this.drivetime.layer){
+    //         let layers = _this.drivetime.layer.getLayers(),
+    //             drivetime = layers[0].feature;
+    //         payload["drivetime"] = drivetime;   
+    //     } 
+    
+    //     xhr.open('POST', 'q_report_request');
+    //     xhr.setRequestHeader("Content-Type","application/json");
+    //     xhr.onload = function(){
+    //         if(this.status === 200) pingReport(this.response);
+    //     }
+    //     xhr.send(JSON.stringify(payload));
+    // }
     
     function pingReport(report) {
         setTimeout(ping, 1000);
