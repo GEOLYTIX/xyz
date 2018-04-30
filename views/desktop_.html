@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>XYZ Desktop DEV</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        @font-face {
+            font-family: ffmark_black;
+            src: url(fonts/MarkWeb-Black.woff) format("woff");
+        }
+
+        @font-face {
+            font-family: ffmark;
+            src: url(fonts/MarkWebPro.woff) format("woff");
+        }
+
+        @font-face {
+            font-family: ffmark_bold;
+            src: url(fonts/MarkWebPro-Bold.woff) format("woff");
+        }
+    </style>
+    <link rel="stylesheet" href="css/desktop.css" />
+
+    <script>const view_mode = 'desktop';</script>
+
+</head>
+
+<body>
+
+    <div class="module_container">
+
+        <div class="scrollbar_container">
+            <div class="scrollbar" style="height: 970px; top: 0px;"></div>
+        </div>
+
+        <div id="gaz_group" class="input_group" style="display: block">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <i id="gaz_clear" class="material-icons cursor">cancel</i>
+                        </td>
+                        <td>
+                            <input id="gaz_input" type="text" required="" placeholder="e.g. Brussels">
+                            <span class="bar"></span>
+                        </td>
+                        <td id="gaz_locale" class=" active">EU</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul id="gaz_localelist">
+                <li data-locale="Global">Global</li>
+                <li data-locale="EU">Europe</li>
+                <li data-locale="UK">United Kingdom</li>
+                <li data-locale="Oxford">Oxford</li>
+            </ul>
+            <ul id="gaz_result"></ul>
+        </div>
+
+        <div id="ctrl_content" class="content">
+
+            <div id="layers_module" class="module">
+                <div class="header">
+                    <span>Layers</span>
+                </div>
+
+                <div class="content">
+                    <p>Display available layers. Select features in the map to display their demographic indicators in a table.</p>
+                    <div class="layers">
+                        <div class="drawer">
+                            <div class="header" style="border-bottom: 2px solid rgb(0, 0, 0);">Mapbox Baselayer
+                                <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
+                            </div>
+                            <div class="loader" style="display: none;"></div>
+                        </div>
+                        <div class="drawer">
+                            <div class="header" style="border-bottom: 2px solid rgb(0, 0, 0);">Mapbox Labels
+                                <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
+                            </div>
+                            <div class="loader" style="display: none;"></div>
+                        </div>
+                        <div class="drawer off" style="max-height: 35px;">
+                            <div class="header" style="border-bottom: 2px solid rgb(0, 0, 0); box-shadow: black 0px 3px 3px -3px;">HERE Imagery
+                                <i class="material-icons cursor noselect btn" title="Toggle visibility">layers_clear</i>
+                                <i class="material-icons cursor noselect btn" title="Collapse layer panel">expand_more</i>
+                            </div>
+                            <div class="loader"></div>
+                            <div class="panel">
+                                <p class="meta">Satellite Imagery layer provided by HERE.</p>
+                            </div>
+                        </div>
+                        <div class="drawer" style="opacity: 1;">
+                            <div class="header" style="border-bottom: 2px solid rgb(0, 0, 0);">NUTS3
+                                <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
+                            </div>
+                            <div class="loader" style="display: none;"></div>
+                        </div>
+                        <div class="drawer" style="max-height: 35px; opacity: 1;">
+                            <div class="header" style="border-bottom: 2px solid rgb(0, 0, 0); box-shadow: black 0px 3px 3px -3px;">Eurostat Grid
+                                <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
+                                <i class="material-icons cursor noselect btn" title="Collapse layer panel">expand_more</i>
+                            </div>
+                            <div class="loader" style="display: none;"></div>
+                            <div class="panel">
+                                <div class="legend">
+                                    <select class="selSize" name="selSize">
+                                        <option value="pop">Population GHS</option>
+                                        <option value="pop__14">Population Eurostat</option>
+                                        <option value="gen_f__14">Female Population</option>
+                                        <option value="gen_m__14">Male Population</option>
+                                        <option value="age_00to09__14">Age 9 and younger</option>
+                                        <option value="age_10to19__14">Age 10 to 19</option>
+                                        <option value="age_20to29__14">Age 20 to 29</option>
+                                        <option value="age_30to39__14">Age 30 to 39</option>
+                                        <option value="age_40to49__14">Age 40 to 49</option>
+                                        <option value="age_50to59__14">Age 50 to 59</option>
+                                        <option value="age_60to69__14">Age 60 to 69</option>
+                                        <option value="age_70pl__14">Age 70 and older</option>
+                                        <option value="births__14">Births</option>
+                                        <option value="deaths__14">Deaths</option>
+                                        <option value="employed__14">Employed</option>
+                                        <option value="employee__14">Employee</option>
+                                        <option value="nama_10r_3gdp__14">GDP</option>
+                                    </select>
+                                    <svg width="290" height="98">
+                                        <circle cx="21.714285714285715" cy="36" r="2.857142857142857" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="20.714285714285715" cy="35" r="2.857142857142857" style="fill: rgb(153, 153, 153);"></circle>
+                                        <text x="0" y="15" text-anchor="start" id="grid_legend_size__min" style="font-size: 13px; font-family: &quot;PT Mono&quot;, monospace;">7</text>
+                                        <circle cx="63.142857142857146" cy="36" r="4.285714285714286" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="62.142857142857146" cy="35" r="4.285714285714286" style="fill: rgb(153, 153, 153);"></circle>
+                                        <circle cx="104.57142857142858" cy="36" r="5.714285714285714" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="103.57142857142858" cy="35" r="5.714285714285714" style="fill: rgb(153, 153, 153);"></circle>
+                                        <circle cx="146" cy="36" r="7.142857142857143" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="145" cy="35" r="7.142857142857143" style="fill: rgb(153, 153, 153);"></circle>
+                                        <text x="145" y="15" text-anchor="middle" id="grid_legend_size__avg" style="font-size: 13px; font-family: &quot;PT Mono&quot;, monospace;">389,062</text>
+                                        <circle cx="187.42857142857144" cy="36" r="8.571428571428571" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="186.42857142857144" cy="35" r="8.571428571428571" style="fill: rgb(153, 153, 153);"></circle>
+                                        <circle cx="228.8571428571429" cy="36" r="10" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="227.8571428571429" cy="35" r="10" style="fill: rgb(153, 153, 153);"></circle>
+                                        <circle cx="270.2857142857143" cy="36" r="11.428571428571429" style="fill: rgb(51, 51, 51);"></circle>
+                                        <circle cx="269.2857142857143" cy="35" r="11.428571428571429" style="fill: rgb(153, 153, 153);"></circle>
+                                        <text x="290" y="15" text-anchor="end" id="grid_legend_size__max" style="font-size: 13px; font-family: &quot;PT Mono&quot;, monospace;">8,610,054</text>
+                                        <rect x="0" y="55" width="41.42857142857143" height="20" style="fill: rgb(21, 119, 63);"></rect>
+                                        <text x="0" y="95" text-anchor="start" id="grid_legend_color__min" style="font-size: 13px; font-family: &quot;PT Mono&quot;, monospace;">7</text>
+                                        <rect x="41.42857142857143" y="55" width="41.42857142857143" height="20"
+                                            style="fill: rgb(102, 189, 99);"></rect>
+                                        <rect x="82.85714285714286" y="55" width="41.42857142857143" height="20" style="fill: rgb(166, 217, 106);"></rect>
+                                        <rect x="124.28571428571429" y="55" width="41.42857142857143" height="20"
+                                            style="fill: rgb(217, 239, 139);"></rect>
+                                        <text x="145" y="95" text-anchor="middle" id="grid_legend_color__avg" style="font-size: 13px; font-family: &quot;PT Mono&quot;, monospace;">389,062</text>
+                                        <rect x="165.71428571428572" y="55" width="41.42857142857143" height="20"
+                                            style="fill: rgb(253, 174, 97);"></rect>
+                                        <rect x="207.14285714285717" y="55" width="41.42857142857143" height="20"
+                                            style="fill: rgb(244, 109, 67);"></rect>
+                                        <rect x="248.57142857142858" y="55" width="41.42857142857143" height="20"
+                                            style="fill: rgb(215, 48, 39);"></rect>
+                                        <text x="290" y="95" text-anchor="end" id="grid_legend_color__max" style="font-size: 13px; font-family: &quot;PT Mono&quot;, monospace;">8,610,054</text>
+                                    </svg>
+                                    <select class="selColor" name="selColor">
+                                        <option value="pop">Population GHS</option>
+                                        <option value="pop__14">Population Eurostat</option>
+                                        <option value="gen_f__14">Female Population</option>
+                                        <option value="gen_m__14">Male Population</option>
+                                        <option value="age_00to09__14">Age 9 and younger</option>
+                                        <option value="age_10to19__14">Age 10 to 19</option>
+                                        <option value="age_20to29__14">Age 20 to 29</option>
+                                        <option value="age_30to39__14">Age 30 to 39</option>
+                                        <option value="age_40to49__14">Age 40 to 49</option>
+                                        <option value="age_50to59__14">Age 50 to 59</option>
+                                        <option value="age_60to69__14">Age 60 to 69</option>
+                                        <option value="age_70pl__14">Age 70 and older</option>
+                                        <option value="births__14">Births</option>
+                                        <option value="deaths__14">Deaths</option>
+                                        <option value="employed__14">Employed</option>
+                                        <option value="employee__14">Employee</option>
+                                        <option value="nama_10r_3gdp__14">GDP</option>
+                                    </select>
+                                    <table class="checkbox">
+                                        <td class="box">
+                                            <input id="chkGridRatio" type="checkbox">
+                                            <label for="chkGridRatio"></label>
+                                        </td>
+                                        <td>Display colour values as a ratio to the size value.</td>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="select_module" class="module">
+                <div class="header">
+                    <i class="material-icons cursor page_backward btnOff" style="display: block;">cancel</i>
+                    <span>Select</span>
+                </div>
+
+                <div class="content">
+                    <p>Select locations in the map to display their properties here.</p>
+                    <div class="layers">
+                        <div class="drawer">
+                            <div class="header" style="border-bottom: 3px solid rgb(156, 39, 176);">A
+                                <i class="material-icons cursor noselect btn" title="Remove feature from selection" style="color: rgb(156, 39, 176); margin-right: -6px;">clear</i>
+                                <i class="material-icons cursor noselect btn" title="Zoom map to feature bounds"
+                                    style="color: rgb(156, 39, 176);">search</i>
+                                <i class="material-icons cursor noselect btn" title="Expand table" style="color: rgb(156, 39, 176);">expand_less</i>
+                                <i class="material-icons cursor noselect btn" title="Hide marker" style="color: rgb(156, 39, 176);">location_off</i>
+                            </div>
+                            <table class="infojTable" cellpadding="0" cellspacing="0" style="border-bottom: 1px solid rgb(156, 39, 176);">
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="1">Population</td>
+                                    <td class="val" colspan="2">171,450</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Female</td>
+                                    <td class="val" colspan="2">86,113</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Male</td>
+                                    <td class="val" colspan="2">85,337</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="2">Age groups</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">9 years and younger</td>
+                                    <td class="val" colspan="2">18,634</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">10 to 19 years</td>
+                                    <td class="val" colspan="2">21,486</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">20 to 29 years</td>
+                                    <td class="val" colspan="2">20,817</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">30 to 39 years</td>
+                                    <td class="val" colspan="2">19,428</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">40 to 49 years</td>
+                                    <td class="val" colspan="2">25,046</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">10 to 19 years</td>
+                                    <td class="val" colspan="2">23,126</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">60 to 69 years</td>
+                                    <td class="val" colspan="2">21,746</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">70 years and above</td>
+                                    <td class="val" colspan="2">21,167</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="2">Flux</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Births</td>
+                                    <td class="val" colspan="2">1,678</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Deaths</td>
+                                    <td class="val" colspan="2">1,683</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="2">Economic Activity</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Employed</td>
+                                    <td class="val" colspan="2">78,000</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Employee</td>
+                                    <td class="val" colspan="2">0</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="1">GDP</td>
+                                    <td class="val" colspan="2">44,900</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="drawer">
+                            <div class="header" style="border-bottom: 3px solid rgb(33, 150, 243);">B
+                                <i class="material-icons cursor noselect btn" title="Remove feature from selection" style="color: rgb(33, 150, 243); margin-right: -6px;">clear</i>
+                                <i class="material-icons cursor noselect btn" title="Zoom map to feature bounds"
+                                    style="color: rgb(33, 150, 243);">search</i>
+                                <i class="material-icons cursor noselect btn" title="Expand table" style="color: rgb(33, 150, 243);">expand_less</i>
+                                <i class="material-icons cursor noselect btn" title="Hide marker" style="color: rgb(33, 150, 243);">location_off</i>
+                            </div>
+                            <table class="infojTable" cellpadding="0" cellspacing="0" style="border-bottom: 1px solid rgb(33, 150, 243);">
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="1">Population</td>
+                                    <td class="val" colspan="2">1,274,069</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Female</td>
+                                    <td class="val" colspan="2">642,269</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Male</td>
+                                    <td class="val" colspan="2">631,800</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="2">Age groups</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">9 years and younger</td>
+                                    <td class="val" colspan="2">153,545</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">10 to 19 years</td>
+                                    <td class="val" colspan="2">136,633</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">20 to 29 years</td>
+                                    <td class="val" colspan="2">175,813</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">30 to 39 years</td>
+                                    <td class="val" colspan="2">166,055</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">40 to 49 years</td>
+                                    <td class="val" colspan="2">172,744</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">10 to 19 years</td>
+                                    <td class="val" colspan="2">151,121</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">60 to 69 years</td>
+                                    <td class="val" colspan="2">150,795</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">70 years and above</td>
+                                    <td class="val" colspan="2">167,363</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="2">Flux</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Births</td>
+                                    <td class="val" colspan="2">15,750</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Deaths</td>
+                                    <td class="val" colspan="2">11,753</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="2">Economic Activity</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Employed</td>
+                                    <td class="val" colspan="2">587,000</td>
+                                </tr>
+                                <tr class="lv-1">
+                                    <td class="label lv-1" colspan="1">Employee</td>
+                                    <td class="val" colspan="2">553,000</td>
+                                </tr>
+                                <tr class="lv-0">
+                                    <td class="label lv-0" colspan="1">GDP</td>
+                                    <td class="val" colspan="2">38,300</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div class="map_container" style="background-color: yellow;">
+
+        <div id="map" class="map">
+            <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
+            <div class="mapbox-attribution-container">
+                <a href="http://leafletjs.com" target="_blank">
+                    <strong>Leaflet</strong> | </a>
+                <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
+                <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
+                <a href="https://legal.here.com/us-en/terms/end-user-license-agreement">© HERE | </a>
+                <a href="https://www.mapbox.com/map-feedback/" target="_blank">
+                    <strong>Improve this map</strong>
+                </a>
+            </div>
+            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+                <defs>
+                    <filter id='dropshadow'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                        <feOffset dx='1' dy='1' result='offsetblur' />
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in='SourceGraphic' />
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+
+        <a class="logo_link" class="noselect" title="Please visit our website and find out how we can assist you." href="https://geolytix.co.uk">GEOLYTIX</a>
+
+        <div class="map_button noselect">
+            <button id="btnSearch" title="Open Gazetteer" {{:btnSearch}}>
+                <i class="material-icons">search</i>
+            </button>
+
+            <button id="btnGeolocate" title="Current location" {{:btnLocate}}>
+                <i class="material-icons">gps_not_fixed</i>
+            </button>
+
+            <button id="btnZoomIn">
+                <i class="material-icons">add</i>
+            </button>
+
+            <button id="btnZoomOut">
+                <i class="material-icons">remove</i>
+            </button>
+
+            <!-- <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
+                <i class="material-icons">picture_as_pdf</i>
+                <div id="report-spinner">
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+            </button> -->
+
+            <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
+                <i class="material-icons">picture_as_pdf</i>
+            </button>
+
+            <div id="report-toast">
+                <div>
+                    <a id="btnReportView" target="_blank" title="Open">
+                        <i class="material-icons">visibility</i>
+                    </a>
+                </div>
+                <div>
+                    <a id="btnReportDownload" title="Save PDF">
+                        <i class="material-icons">file_download</i>
+                    </a>
+                </div>
+                <div>
+                    <a id="btnReportClose" title="Open PDF in new tab">
+                        <i class="material-icons">clear</i>
+                    </a>
+                </div>
+            </div>
+
+            <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+                <a href="{{:hrefDocumentation}}">
+                    <i class="material-icons">school</i>
+                </a>
+            </button>
+
+            <button id="btnLogout" title="Log out from application" {{:btnLogout}}>
+                <a href="logout">
+                    <i class="material-icons">exit_to_app</i>
+                </a>
+            </button>
+
+            <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
+                <a href="admin">
+                    <i class="material-icons">supervisor_account</i>
+                </a>
+            </button>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

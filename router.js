@@ -92,6 +92,10 @@ router.get('/', isLoggedIn, (req, res) => {
         }))
 });
 
+router.get('/dev', (req, res) => {
+    res.sendFile('./views/desktop_.html', {root: __dirname });
+})
+
 // Set highlight and and markdown-it to turn markdown into flavoured html.
 const hljs = require('highlight.js');
 const markdown = require('markdown-it')({
