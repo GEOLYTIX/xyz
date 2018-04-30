@@ -1,0 +1,136 @@
+{
+  "title": "GEOLYTIX | BP",
+  "select": {},
+  "gazetteer": {},
+  "locales": {
+    "GB": {
+      "gazetteer": ["GOOGLE", "GB", "", "e.g. London"],
+      "bounds": [[48, -11.5],[62, 5]],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "pane": ["base_labels", 560],
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "here": {
+          "name": "HERE Imagery",
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "here_hybrid": {
+          "name": "HERE Hybrid",
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "williamhill": {
+          "display": true,
+          "name": "William Hill Shops",
+          "meta": "Shop locations from William Hill.",
+          "format": "cluster",
+          "pane": ["williamhill", 540],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "williamhill",
+          "cluster_label": "shop",
+          "cluster_cat": "mono_comp",
+          "infoj": [
+            {
+              "field": "lbo",
+              "label": "ID",
+              "type": "text"
+            },
+            {
+              "field": "shop",
+              "label": "Shop name",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "label": "Postal code",
+              "type": "text"
+            },
+            {
+              "field": "open_closed",
+              "label": "Shop status",
+              "type": "text"
+            },
+            {
+              "field": "mono_comp",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "freehold_lease",
+              "label": "Lease Type",
+              "type": "text"
+            },
+            {
+              "field": "rent_pa_k",
+              "label": "Rent p.a. in thousands",
+              "type": "numeric"
+            },
+            {
+              "field": "lease_break",
+              "label": "Lease break date",
+              "type": "text"
+            },
+            {
+              "field": "lease_expire",
+              "label": "Lease expiry date",
+              "type": "text"
+            },
+            {
+              "field": "nbv_k",
+              "label": "Net Book Value in thousands",
+              "type": "numeric"
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400, '#fff', 350, '#555'])",
+            "markerMulti": [400, "#777"],
+            "theme": {
+              "label": "Brand",
+              "type": "categorized",
+              "competitors": {},
+              "cat": {
+                "MONOPOLY": {
+                  "marker": "svg_symbols.target([400,'#FCB9B2',200,'#FFFF00'])",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "marker": "svg_symbols.target([400,'#832232',200,'#FADF63'])",
+                  "label": "Multi competition"
+                },
+                "SINGLE COMP": {
+                  "marker": "svg_symbols.target([400,'#2274A5',200,'#fff',150,'#fdb839'])",
+                  "label": "Single competition"
+                },
+                " ": {
+                  "marker": "svg_symbols.target([400,'#4F2B82',250,'#8ED4E0'])",
+                  "label": "other"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

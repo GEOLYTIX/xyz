@@ -45,6 +45,7 @@ function loadLayer(layer) {
         if (layer.xhr.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(layer.xhr.responseText), layer);
     }
 
+
     // Send XHR to middleware.
     layer.xhr.send();
     
@@ -80,7 +81,9 @@ function addClusterToLayer(cluster, layer) {
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
 
                 // Define a default dotArr.
-                let dotArr = [400, "#333"];
+                let dotArr = [];
+                layer.style.markerMulti ? dotArr = layer.style.markerMulti : dotArr = [400, "#333"];
+                //let dotArr = [400, "#333"];
 
                 // Check whether categorized theme has competitors block defined.
                 if (layer.style.theme.competitors) {
@@ -169,10 +172,13 @@ function clusterMouseClick(e, layer) {
         count: count > 99? 99: count,
         lnglat: lnglat
     }));
-
+    
     xhr.onload = () => {
-
+        
         let cluster = JSON.parse(xhr.responseText);
+        
+        console.log(cluster);
+        console.log(cluster.length);
 
         if (cluster.length === 1) {
             _xyz.select.selectLayerFromEndpoint({
