@@ -59,12 +59,14 @@
             {
               "field": "shop",
               "label": "Shop name",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "postcode",
               "label": "Postal code",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "region",
@@ -89,7 +91,8 @@
             {
               "field": "mono_comp",
               "label": "Type",
-              "type": "text"
+              "type": "text",
+              "filter": ""
             },
             {
               "label": "Lease status"
@@ -98,7 +101,10 @@
               "field": "freehold_lease",
               "label": "Lease Type",
               "type": "text",
-              "level": 1
+              "level": 1,
+              "filter": {
+                  "in": ["Freehold", "Leasehold"]
+              }
             },
             {
               "field": "lease_break",
@@ -395,7 +401,62 @@
               }
             }
           }
+        },
+        "region": {
+          "name": "Regions",
+          "pane": ["regions",520],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "geomq": "qgeom",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "regionname",
+              "label": "Region",
+              "type": "text"
+            },
+            {
+              "field": "count.shop_profit_2017_m",
+              "label": "Count Shop profit 2017",
+              "type": "integer",
+              "layer": "williamhill"
+            },
+            {
+              "field": "sum.shop_profit_2017_m",
+              "label": "Shop profit 2017 (sum)",
+              "type": "numeric",
+              "layer": "williamhill"
+            },
+            {
+              "field": "avg.shop_profit_2017_m",
+              "label": "Shop profit 2017 (avg)",
+              "type": "numeric",
+              "layer": "williamhill"
+            }
+          ],
+          "arrayZoom": {
+            "6": "gb_region"
+          },
+          "tilecache": "gb_region__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#333",
+              "fill": true,
+              "opacity": 0.5,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "color": "#EEBA0B",
+              "fill": true,
+              "opacity": 1,
+              "fillOpacity": 0,
+              "weight": 1.2
+            }
+          }
         }
+          
       }
     }
   }
