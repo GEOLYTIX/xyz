@@ -2,8 +2,8 @@
   "title": "GEOLYTIX | XYZ Open",
   "select": {},
   "locate": true,
-  "report": true,
   "documentation": "documentation",
+  "report": false,
   "gazetteer": {},
   "locale": "EU",
   "locales": {
@@ -387,16 +387,10 @@
           "style": {
             "default": {
               "weight": 1,
-              "color": "#000",
-              "fill": true,
-              "fillColor": "#fff",
-              "fillOpacity": 0
+              "color": "#000"
             },
             "highlight": {
-              "color": "#e91e63",
-              "fill": true,
-              "fillColor": "#fff",
-              "fillOpacity": 0
+              "color": "#e91e63"
             }
           }
         },
@@ -1039,14 +1033,17 @@
           "style": {
             "default": {
               "weight": 1,
-              "color": "#000",
+              "color": "#333",
               "fill": true,
-              "fillOpacity": 0.1
+              "opacity": 0.5,
+              "fillOpacity": 0
             },
             "highlight": {
-              "color": "#e91e63",
+              "color": "#EEBA0B",
               "fill": true,
-              "fillOpacity": 0.1
+              "opacity": 1,
+              "fillOpacity": 0,
+              "weight": 1.2
             }
           }
         },
