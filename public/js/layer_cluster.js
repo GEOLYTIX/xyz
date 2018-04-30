@@ -82,6 +82,7 @@ function addClusterToLayer(cluster, layer) {
 
                 // Define a default dotArr.
                 let dotArr = [];
+                
                 layer.style.markerMulti ? dotArr = layer.style.markerMulti : dotArr = [400, "#333"];
                 //let dotArr = [400, "#333"];
 
@@ -176,9 +177,6 @@ function clusterMouseClick(e, layer) {
     xhr.onload = () => {
         
         let cluster = JSON.parse(xhr.responseText);
-        
-        console.log(cluster);
-        console.log(cluster.length);
 
         if (cluster.length === 1) {
             _xyz.select.selectLayerFromEndpoint({

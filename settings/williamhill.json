@@ -77,29 +77,76 @@
               "type": "text"
             },
             {
+              "label": "Lease status"
+            },
+            {
               "field": "freehold_lease",
               "label": "Lease Type",
-              "type": "text"
+              "type": "text",
+              "level": 1
             },
             {
               "field": "rent_pa_k",
               "label": "Rent p.a. in thousands",
-              "type": "numeric"
+              "type": "numeric",
+              "level": 1
             },
             {
               "field": "lease_break",
               "label": "Lease break date",
-              "type": "text"
+              "type": "text",
+              "level": 1
             },
             {
               "field": "lease_expire",
               "label": "Lease expiry date",
-              "type": "text"
+              "type": "text",
+              "level": 1
             },
             {
               "field": "nbv_k",
               "label": "Net Book Value in thousands",
-              "type": "numeric"
+              "type": "numeric",
+              "level": 1
+            },  
+            {
+              "label": "Accounting by year 2017"
+            },
+            {
+              "field": "ebitda_shop_2017_m",
+              "label": "EBITDA Shop in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "stakes_2017_m",
+              "label": "Stakes in millions",
+              "type": "numeric",
+              "level": 2
+            }, 
+            {
+              "field": "gross_win_2017_m",
+              "label": "Gross win in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "margin_2017_pct",
+              "label": "Margin (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "gaming_2017_m",
+              "label": "Gaming in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "shop_profit_2017_m",
+              "label": "Shop profit in millions",
+              "type": "numeric",
+              "level": 2
             }
           ],
           "style": {
