@@ -19,7 +19,25 @@ async function request(req, res) {
     const browser = await puppeteer.launch({args: ['--no-sandbox'], headless: true});
     const page = await browser.newPage();
     await page.setContent(jsr.templates('./views/desktop.html').render({
-        view_mode: 'desktop',
+        title: global.appSettings.title || 'GEOLYTIX | XYZ',
+        module_layers: './public/tmpl/layers.html',
+        module_select: global.appSettings.select ? './public/tmpl/select.html' : null,
+        module_catchments: global.appSettings.catchments ? './public/tmpl/catchments.html' : null,
+        //btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
+        //hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
+        btnReport: global.appSettings.report ? '' : 'style="display: none;"',
+        btnLogout: req.user ? '' : 'style="display: none;"',
+        btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
+        btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
+        btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
+        settings: `
+        <script>
+            const node_env = '${process.env.NODE_ENV}';
+            const host = '';
+            const hooks = ${req.session && req.session.hooks ? JSON.stringify(req.session.hooks) : false};
+            const _xyz = ${JSON.stringify(global.appSettings)};
+        </script>`
+        /*view_mode: 'desktop',
         module_location: './public/tmpl/location.html',
         module_hxgrid: './public/tmpl/hxgrid.html',
         module_drivetime: './public/tmpl/drivetime.html',
@@ -29,8 +47,8 @@ async function request(req, res) {
         hooks: JSON.stringify(req.body.hooks),
         drivetime: drivetime_flag,
         mapbox_token: process.env.MAPBOX,
-        settings: JSON.stringify(global.appSettings)
-    }), { waitUntil: 'load' });
+        settings: JSON.stringify(global.appSettings)*/
+    }), { waitUntil: 'domcontentloaded' });
 
     await page.addStyleTag({ path: './public/css/report.css' });
     await page.addScriptTag({ path: './public/js/build/xyz_bundle.js' });
