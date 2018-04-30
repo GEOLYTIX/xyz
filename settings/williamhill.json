@@ -67,6 +67,21 @@
               "type": "text"
             },
             {
+              "field": "region",
+              "label": "Region",
+              "type": "numeric"
+            },
+            {
+              "field": "area",
+              "label": "Area",
+              "type": "numeric"
+            },
+            {
+              "field": "cluster",
+              "label": "Cluster",
+              "type": "numeric"
+            },
+            {
               "field": "open_closed",
               "label": "Shop status",
               "type": "text"
@@ -86,15 +101,15 @@
               "level": 1
             },
             {
-              "field": "rent_pa_k",
-              "label": "Rent p.a. in thousands",
-              "type": "numeric",
-              "level": 1
-            },
-            {
               "field": "lease_break",
               "label": "Lease break date",
               "type": "text",
+              "level": 1
+            },
+            {
+              "field": "rent_pa_k",
+              "label": "Rent p.a. in thousands",
+              "type": "numeric",
               "level": 1
             },
             {
@@ -109,6 +124,45 @@
               "type": "numeric",
               "level": 1
             },  
+            {
+              "label": "EBITDA in millions by year"
+            },  
+            {
+              "field": "ebitda_shop_2013_m",
+              "label": "2013",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "ebitda_shop_2014_m",
+              "label": "2014",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "ebitda_shop_2015_m",
+              "label": "2015",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "ebitda_shop_2016_m",
+              "label": "2016",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "ebitda_shop_2017_m",
+              "label": "2017",
+              "type": "numeric",
+              "level": 2              
+            },
+            {
+              "field": "ebitda_shop_plan_2018_m",
+              "label": "2018",
+              "type": "numeric",
+              "level": 2           
+            },
             {
               "label": "Accounting by year 2017"
             },
@@ -144,6 +198,171 @@
             },
             {
               "field": "shop_profit_2017_m",
+              "label": "Shop profit in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "label": "Plan for year 2018"
+            },
+            {
+              "field": "plan_stakes_2018_m",
+              "label": "Stakes in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "plan_gross_win_2018_m",
+              "label": "Gross win in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "plan_margin_2018_pct",
+              "label": "Margin (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "plan_gaming_2018_m",
+              "label": "Gaming in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "plan_shop_profit_2018_m",
+              "label": "Shop profit in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "label": "Forecast 2019"
+            },
+            {
+              "field": "rp_est_stakes_2019_m",
+              "label": "Stakes in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_2019_m",
+              "label": "Gross win in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_2019_pct",
+              "label": "Margin (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_2019_m",
+              "label": "Gaming in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_shop_profit_2019_m",
+              "label": "Shop profit in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "label": "Forecast 2020"
+            },            
+            {
+              "field": "rp_est_stakes_2020_m",
+              "label": "Stakes in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_2020_m",
+              "label": "Gross win in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_2020_pct",
+              "label": "Margin (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_2020_m",
+              "label": "Gaming in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_shop_profit_2020_m",
+              "label": "Shop profit in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "label": "Forecast 2021"
+            },
+            {
+              "field": "rp_est_stakes_2021_m",
+              "label": "Stakes in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_2021_m",
+              "label": "Gross win in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_2021_m",
+              "label": "Margin (in millions)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_2021_m",
+              "label": "Gaming in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_shop_profit_2021_m",
+              "label": "Shop profit in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "label": "Forecast 2022"
+            },
+            {
+              "field": "rp_est_stakes_2022_m",
+              "label": "Stakes in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_2022_m",
+              "label": "Gross win in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_2022_pct",
+              "label": "Margin (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_2022_m",
+              "label": "Gaming in millions",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_shop_profit_2022_m",
               "label": "Shop profit in millions",
               "type": "numeric",
               "level": 2
