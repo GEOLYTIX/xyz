@@ -343,9 +343,11 @@
   40% {
     -webkit-transform: scale(1);
     transform: scale(1); } }
-.module_input input {
-  padding: 10px 0; }
-
+/*.module_input {
+  input {
+    padding: 10px 0;
+  }
+}*/
 .input_group {
   width: 100%; }
   .input_group input {
@@ -379,117 +381,6 @@
       right: 50%; }
   .input_group input:focus ~ .bar:before, .input_group input:focus ~ .bar:after {
     width: 50%; }
-
-.md_button {
-  width: 100%;
-  color: white;
-  background-color: #090;
-  margin: 10px 0;
-  padding: 8px;
-  text-align: center;
-  font-family: ffmark_bold, sans-serif;
-  border-radius: 3px;
-  border: 2px solid #090;
-  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2); }
-  .md_button:hover {
-    cursor: pointer;
-    color: #090;
-    background-color: white;
-    border: 2px solid #090; }
-  .md_button.on {
-    color: #090;
-    background-color: white;
-    border: 2px solid #090; }
-    .md_button.on:hover {
-      cursor: pointer;
-      color: white;
-      background-color: #090;
-      border: 2px solid #090; }
-
-input[type=range] {
-  -webkit-appearance: none;
-  height: 5px;
-  border-radius: 5px;
-  background: #cf9;
-  outline: none; }
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background: #090;
-  cursor: pointer; }
-
-input[type=range]::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  border: 0;
-  border-radius: 50%;
-  background: #090;
-  cursor: pointer; }
-
-.md_drop {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-  list-style: none;
-  color: #090;
-  font-family: ffmark_bold, sans-serif; }
-  .md_drop:hover {
-    cursor: pointer; }
-  .md_drop ul {
-    width: 290px;
-    font-family: ffmark, sans-serif;
-    z-index: 999;
-    background: white;
-    position: absolute;
-    left: 0;
-    transition: all 0.3s ease;
-    display: none;
-    margin: 0;
-    padding: 0;
-    max-height: 150px;
-    overflow-y: auto;
-    transform-origin: 0 0;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12); }
-    .md_drop ul li {
-      display: block;
-      width: 100%;
-      padding: 5px 0; }
-      .md_drop ul li:hover {
-        background: #cf9;
-        cursor: pointer; }
-  .md_drop .ul--show {
-    display: block; }
-
-.checkbox {
-  border-spacing: 0;
-  font-size: small; }
-  .checkbox .box {
-    position: relative;
-    color: #090; }
-    .checkbox .box label {
-      cursor: pointer;
-      position: absolute;
-      width: 23px;
-      height: 23px;
-      top: 0;
-      left: -2px;
-      background: #fff;
-      content: '\E836';
-      font-family: "Material Icons";
-      font-size: 23px;
-      line-height: 23px; }
-    .checkbox .box label:after {
-      content: '\E835'; }
-    .checkbox .box input[type=checkbox]:checked + label:after {
-      content: '\E834'; }
-    .checkbox .box input[type=checkbox]:disabled + label:after {
-      color: grey; }
-  .checkbox .label {
-    font-family: ffmark, sans-serif;
-    font-size: 14px; }
 
 #gaz_group {
   display: none;
@@ -559,65 +450,6 @@ input[type=range]::-moz-range-thumb {
   display: none;
   height: 30px; }
 
-.leaflet-popup-content .scrollbar_container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  top: 0;
-  width: 10px;
-  background-color: lightgrey; }
-  .leaflet-popup-content .scrollbar_container > .scrollbar {
-    position: absolute;
-    width: 10px;
-    background: rgba(0, 0, 0, 0.5); }
-  .leaflet-popup-content .scrollbar_container:hover {
-    cursor: ns-resize; }
-.leaflet-popup-content .content::-webkit-scrollbar {
-  display: none; }
-
-.location_table {
-  min-height: 30px;
-  max-height: 300px;
-  width: 400px;
-  overflow-y: scroll; }
-  .location_table table {
-    width: 100%;
-    font-family: 'PT Mono', monospace; }
-    .location_table table td {
-      vertical-align: top !important;
-      text-align: left;
-      padding-right: 10px;
-      padding-left: 15px; }
-    .location_table table tr:hover {
-      background-color: #cf9;
-      cursor: pointer; }
-
-.location_drop {
-  display: none;
-  position: fixed;
-  max-height: 30%;
-  width: 100%;
-  z-index: 1;
-  background: white;
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-bottom: 2px solid #079e00;
-  box-shadow: 0 0 10px slategrey; }
-  .location_drop .location_table {
-    padding-right: 10px; }
-  .location_drop td {
-    padding: 5px 0 5px 10px;
-    font-size: 20px;
-    color: #090; }
-  .location_drop td:first-child {
-    font-size: 14px; }
-  .location_drop .location_drop__close {
-    position: fixed;
-    top: 0;
-    right: 0;
-    color: #090;
-    font-size: 50px; }
-
 .module .dev_display {
   display: none; }
 .module .dev {
@@ -642,7 +474,9 @@ input[type=range]::-moz-range-thumb {
     display: none; }
 .module .content {
   clear: both;
-  padding-top: 10px; }
+  padding-top: 10px;
+  /* Begin range input */
+  /* End range input */ }
   .module .content select {
     width: 100%;
     margin: 5px 0;
@@ -654,12 +488,16 @@ input[type=range]::-moz-range-thumb {
     -webkit-transition: opacity 300ms ease-in-out;
     border-bottom: 1px solid #333;
     font-size: 12px;
-    line-height: 1.5; }
+    line-height: 1.5;
+    /* Begin checkbox style */
+    /* End checkbox style */ }
     .module .content .panel .meta {
       font-size: 12px;
       margin: 5px 0 0 0; }
     .module .content .panel .legend {
       padding: 5px 0; }
+    .module .content .panel .cursor.noselect {
+      text-shadow: 1px 1px 4px #969696; }
     .module .content .panel .settings {
       padding: 5px 0px;
       border-bottom: 1px solid #999;
@@ -672,12 +510,59 @@ input[type=range]::-moz-range-thumb {
         margin-bottom: 5px; }
       .module .content .panel .settings > table {
         margin-bottom: 5px; }
+    .module .content .panel .checkbox {
+      border-spacing: 0;
+      font-size: small; }
+      .module .content .panel .checkbox .box {
+        position: relative;
+        color: #090; }
+        .module .content .panel .checkbox .box label {
+          cursor: pointer;
+          position: absolute;
+          width: 23px;
+          height: 23px;
+          top: 0;
+          left: -2px;
+          background: #fff;
+          content: '\E836';
+          font-family: "Material Icons";
+          font-size: 23px;
+          line-height: 23px; }
+        .module .content .panel .checkbox .box label:after {
+          content: '\E835'; }
+        .module .content .panel .checkbox .box input[type=checkbox]:checked + label:after {
+          content: '\E834'; }
+        .module .content .panel .checkbox .box input[type=checkbox]:disabled + label:after {
+          color: grey; }
+      .module .content .panel .checkbox .label {
+        font-family: ffmark, sans-serif;
+        font-size: 14px; }
   .module .content .range {
     width: 100%;
     width: calc(100% - 5px);
     padding: 5px 0; }
     .module .content .range input[type=range] {
       width: 100%; }
+    .module .content .range input[type=range] {
+      -webkit-appearance: none;
+      height: 5px;
+      border-radius: 5px;
+      background: #cf9;
+      outline: none; }
+    .module .content .range input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #090;
+      cursor: pointer; }
+    .module .content .range input[type=range]::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border: 0;
+      border-radius: 50%;
+      background: #090;
+      cursor: pointer; }
   .module .content .infojTable {
     width: 100%;
     font-size: 12px;
