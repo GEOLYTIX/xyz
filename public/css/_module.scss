@@ -106,6 +106,10 @@
             
             .cursor.noselect {
                 text-shadow: 1px 1px 4px rgba(150, 150, 150, 1);
+                font-size: 14px!important;
+                border-top: 10px!important;
+                font-weight: 600;
+                line-height: 2;
             }
 
             .settings {
@@ -124,6 +128,38 @@
                 > table {
                     margin-bottom: 5px;
                 }
+            }
+            
+            .filters {
+                padding: 5px 0px;
+                border-bottom: 1px solid #999;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                line-height: 1;
+                color: #333;
+
+                > div {
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                }
+                
+                .filter-title {
+                    line-height: 2;
+                    border-top: 10px!important;
+                    margin-bottom: 5px;
+                    margin-top: 5px;
+                }
+                
+                .filter {
+                    margin-left: 10px;
+                    font-size: 12px;
+                    padding-top: 5px;
+                    
+                    > div {
+                        margin-bottom: 5px;
+                    }
+                }
+
             }
             /* Begin checkbox style */
             .checkbox {

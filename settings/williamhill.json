@@ -116,7 +116,8 @@
               "field": "rent_pa_k",
               "label": "Rent p.a. in thousands",
               "type": "numeric",
-              "level": 1
+              "level": 1,
+              "filter": "numeric"
             },
             {
               "field": "lease_expire",
@@ -176,7 +177,8 @@
               "field": "ebitda_shop_2017_m",
               "label": "EBITDA Shop in millions",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "stakes_2017_m",

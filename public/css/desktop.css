@@ -497,7 +497,11 @@
     .module .content .panel .legend {
       padding: 5px 0; }
     .module .content .panel .cursor.noselect {
-      text-shadow: 1px 1px 4px #969696; }
+      text-shadow: 1px 1px 4px #969696;
+      font-size: 14px !important;
+      border-top: 10px !important;
+      font-weight: 600;
+      line-height: 2; }
     .module .content .panel .settings {
       padding: 5px 0px;
       border-bottom: 1px solid #999;
@@ -510,6 +514,27 @@
         margin-bottom: 5px; }
       .module .content .panel .settings > table {
         margin-bottom: 5px; }
+    .module .content .panel .filters {
+      padding: 5px 0px;
+      border-bottom: 1px solid #999;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      line-height: 1;
+      color: #333; }
+      .module .content .panel .filters > div {
+        font-size: 12px;
+        margin-bottom: 5px; }
+      .module .content .panel .filters .filter-title {
+        line-height: 2;
+        border-top: 10px !important;
+        margin-bottom: 5px;
+        margin-top: 5px; }
+      .module .content .panel .filters .filter {
+        margin-left: 10px;
+        font-size: 12px;
+        padding-top: 5px; }
+        .module .content .panel .filters .filter > div {
+          margin-bottom: 5px; }
     .module .content .panel .checkbox {
       border-spacing: 0;
       font-size: small; }
