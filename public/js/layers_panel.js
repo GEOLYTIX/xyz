@@ -429,11 +429,11 @@ function clusterCategorized(layer) {
     svg.append('circle')
         .attr('cx', 20)
         .attr('cy', y)
-        .attr('r', 20)
+        .attr('r', 12)
         .style('fill', layer.style.markerMulti[1]);
 
     svg.append('text')
-        .attr('x', 45)
+        .attr('x', 40)
         .attr('y', y)
         .style('font-size', '12px')
         .style('alignment-baseline', 'central')
