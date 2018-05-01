@@ -550,7 +550,8 @@
         line-height: 2;
         border-top: 10px !important;
         margin-bottom: 5px;
-        margin-top: 5px; }
+        margin-top: 5px;
+        display: block; }
       .module .content .panel .filters .filter {
         margin-left: 10px;
         font-size: 12px;

@@ -213,6 +213,11 @@ function filter_numeric(layer, options){
     });
     
     select.selectedIndex = 0;
+    
+    select.style.width = "44%";
+    select.style.display = "inline-block";
+    select.style.marginRight = "10px";
+    
     options.operator = select[select.selectedIndex].value;
     
     select.addEventListener('change', function(){
@@ -248,7 +253,8 @@ function filter_numeric(layer, options){
         //console.log(layer.filter);
     }
     
-    input.style.width = "100%";
+    input.style.width = "48%";
+    input.style.display = "inline-block";
     
     input.addEventListener("keyup", onkeyup);
     
