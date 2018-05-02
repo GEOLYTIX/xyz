@@ -1,42 +1,36 @@
 .checkbox {
-  border-spacing: 0;
-    font-size: small;
+  padding: 5px 0 5px 25px;
+  position: relative;
+  cursor: pointer;
+  display: block;
 
-  .box {
-    position: relative;
-    color: $glxgreen;
-
-    label {
-      cursor: pointer;
-      position: absolute;
-      width: 23px;
-      height: 23px;
-      top: 0;
-      left: -2px;
-      background: #fff;
-      content: '\E836';
-      font-family: "Material Icons";
-      font-size: 23px;
-      line-height: 23px;
-    }
+  input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    overflow: hidden;
+    display: none;
+  }
   
-    label:after {
-      content: '\E835';
-    }
-    
-    input[type=checkbox]:checked + label:after {
-      content: '\E834';
-    }
-      
-    input[type=checkbox]:disabled + label:after {
-      color: grey;
-    }
-
+  .checkbox_i {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+    font-size: 22px;
+    color: $glxgreen;
+    cursor: pointer;
   }
-
-  .label {
-    font-family: ffmark, sans-serif;
-    font-size: 14px;
+  
+  .checkbox_i:after {
+    font-family: "Material Icons";
+    content: '\E835';
   }
-
+  
+  input[type=checkbox]:checked + .checkbox_i:after {
+    font-family: "Material Icons";
+    content: '\E834';
+  }
 }
+
+

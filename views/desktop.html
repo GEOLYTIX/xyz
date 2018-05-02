@@ -22,7 +22,7 @@
             src: url(fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    <link rel="stylesheet" href="css/desktop.css"/>
+    <link rel="stylesheet" href="css/desktop_.css"/>
 
     <script>const view_mode = 'desktop';</script>
 
@@ -32,37 +32,25 @@
 
 <body>
     
-    <div class="module_container">
+    <div class="mod_container">
 
-        <div class="scrollbar_container">
-            <div class="scrollbar"></div>
-        </div>
-
-        <div id="gaz_group" class="input_group">
-            <table>
-                <td>
-                    <i id="gaz_clear" class="material-icons cursor">cancel</i>
-                </td>
-                <td>
-                    <input id="gaz_input" type="text" required>
-                    <span class="bar"></span>
-                </td>
-                <td id="gaz_locale">
-                    <i class="material-icons">language</i>
-                </td>
-            </table>
-            <ul id="gaz_localelist"></ul>
+        <div id="Gazetteer" class="input_group" style="display: block">
+            <input id="GazetteerInput" class="pane_shadow" type="text" required="" placeholder="e.g. Brussels">
+            <span class="bar"></span>
             <ul id="gaz_result"></ul>
         </div>
-        <div id="gaz_spacer"></div>
 
-        <div id="ctrl_content" class="content">
-            
-            {{include tmpl=module_layers /}}
-            
-            {{include tmpl=module_select /}}
+        <div class="scrolly">
 
-            {{include tmpl=module_catchments /}}
+            <div class="scrolly_track">
+                <div class="scrolly_bar"></div>
+            </div>
+            
+        {{include tmpl=module_layers /}}
+            
+        {{include tmpl=module_select /}}
+
+        {{include tmpl=module_catchments /}}
             
         </div>
 
@@ -71,17 +59,6 @@
     <div class="map_container">
 
         <div id="map" class="map">
-            <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
-            <div class="mapbox-attribution-container">
-                <a href="http://leafletjs.com" target="_blank">
-                    <strong>Leaflet</strong> | </a>
-                <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
-                <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
-                <a href="https://legal.here.com/us-en/terms/end-user-license-agreement">© HERE | </a>
-                <a href="https://www.mapbox.com/map-feedback/" target="_blank">
-                    <strong>Improve this map</strong>
-                </a>
-            </div>
             <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
                 <defs>
                     <filter id='dropshadow'>
@@ -96,9 +73,7 @@
             </svg>
         </div>
 
-        <a class="logo_link" class="noselect" title="Please visit our website and find out how we can assist you." href="https://geolytix.co.uk">GEOLYTIX</a>
-
-        <div class="map_button noselect">
+        <div class="btn_column noselect">
             <button id="btnSearch" title="Open Gazetteer" {{:btnSearch}}>
                 <i class="material-icons">search</i>
             </button>
@@ -115,35 +90,20 @@
                 <i class="material-icons">remove</i>
             </button>
             
-            <!-- <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
-                <i class="material-icons">picture_as_pdf</i>
-                <div id="report-spinner">
-                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-                </div>
-            </button> -->
-
             <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
                 <i class="material-icons">picture_as_pdf</i>
             </button>
             
-            <div id="report-toast">
-                <div>
-                    <a id="btnReportView" target="_blank" title="Open"><i class="material-icons">visibility</i></a>
-                </div>
-                <div>
-                    <a id="btnReportDownload" title="Save PDF"><i class="material-icons">file_download</i></a>
-                </div>
-                <div>
-                    <a id="btnReportClose" title="Open PDF in new tab"><i class="material-icons">clear</i></a>
-                </div>
-            </div>
-
             <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                    <a href="{{:hrefDocumentation}}"><i class="material-icons">school</i></a>
+                <a href="{{:hrefDocumentation}}">
+                    <i class="material-icons">school</i>
+                </a>
             </button>
 
             <button id="btnLogout" title="Log out from application" {{:btnLogout}}>
-                <a href="logout"><i class="material-icons">exit_to_app</i></a>
+                <a href="logout">
+                    <i class="material-icons">exit_to_app</i>
+                </a>
             </button>
 
             <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
@@ -151,8 +111,8 @@
                     <i class="material-icons">supervisor_account</i>
                 </a>
             </button>
-
         </div>
+        
     </div>
 
 </body>

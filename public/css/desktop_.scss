@@ -6,14 +6,22 @@ $glxlightgreen: #cf9;
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url('https://fonts.googleapis.com/css?family=PT+Mono');
 
+@import 'scrolly';
+
 @import 'input';
+@import 'button';
 @import 'range';
 @import 'dropdown';
-@import 'chkbox';
-@import 'module';
 @import 'images';
-@import 'scrolly';
+
 @import 'infoj';
+
+@import 'mod_container';
+@import 'map_container';
+
+@import 'leaflet';
+
+@import 'attribution';
 
 *, *::after, *::before {
   -webkit-box-sizing: border-box;
@@ -37,6 +45,13 @@ a {
   text-decoration: none;
 }
 
+select {
+  width: 100%;
+  margin: 5px 0;
+  font-family: 'PT Mono', monospace;
+  background: white;
+}
+
 i,
 .noselect {
   -webkit-touch-callout: none;
@@ -46,156 +61,15 @@ i,
   user-select: none;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .cursor:hover {
   cursor: pointer;
-}
-
-select {
-  width: 100%;
-  margin: 5px 0;
-  font-family: 'PT Mono', monospace;
-  background: white;
-}
-
-.range {
-  width: 100%;
-  width: calc(100% - 5px);
-  padding: 5px 0;
-
-  input[type=range] {
-      width: 100%;
-  }
 }
 
 #Gazetteer {
   background-color: #fff;
   padding-top: 5px;
-}
-
-.pane_shadow {
-  box-shadow: 0 3px 3px -3px #000;
-}
-
-.btn_text {
-  font-family: ffmark_bold;
-  font-size: 15px;
-  color: $glxgreen;
-  height: 30px;
-  // padding-bottom: 5px;
-  // line-height: 2;
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.mod_container {
-  position: fixed;
-  height: 100%;
-  padding: 0 20px;
-  width: 330px;
-}
-
-.map_container {
-  position: fixed;
-  right: 0;
-  width: calc(100% - 330px);
-  height: 100%;
-
-  .map {
-    width: 100%;
-    height: 100%;
-
-    div.leaflet-select-pane svg > g path {
-      filter: url(#dropshadow);
-    }    
-  }
-
-  .leaflet-control-attribution {
-    display: none;
-  }
-
-  .leaflet-popup-content{
-    width: 401px !important;
-  }
-
-  .leaflet-popup-content{
-    width: 401px !important;
-  }
-
-  .tooltip {
-    font-family: 'PT Mono', monospace;
-    font-weight: 600;
-    font-size: 15px;
-    background-color: #fff;
-    padding: 5px 5px 3px 5px;
-    border-radius: 3px;
-    box-shadow: 1px 1px 3px #555;
-  }
-
-  .map_button {
-    position: absolute;
-    top: 0;
-    left: -10px;
-    z-index: 999;
-
-    button {
-      margin-top: 10px;
-      float: left;
-      clear: both;
-      height: 50px;
-      width: 50px;
-      padding: 0;
-      color: $glxgreen;
-      background: #fff;
-      border-radius: 50%;
-      box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
-      text-align: center;
-      cursor: default;
-      border: none;
-      outline: none;
-
-      a {
-        color: $glxgreen;
-      }
-
-      i {
-        font-size: 30px;
-        line-height: 1.7;
-      }
-
-      &.active {
-        background: $glxgreen;
-        color: #fff;
-      }
-
-      &:disabled {
-        opacity: 0.3;
-      }
-
-      &:hover:enabled {
-        background: $glxgreen;
-        color: #fff;
-        cursor: pointer;
-
-        a {
-          color: #fff;
-        }
-      }
-    }
-  }
-
-  .logo_link {
-    position: absolute;
-    bottom: 30px;
-    right: 10px;
-    font-family: ffmark_black, sans-serif;
-    font-size: 60px;
-    z-index: 1001;
-    text-shadow: 0 7px 0 rgba(0, 150, 0, 0.2), 7px 0 rgba(0, 0, 0, 0.2);
-
-    @media screen and (max-width: 675px) {
-        display: none;
-    }
-  }
 }

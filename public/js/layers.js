@@ -13,7 +13,7 @@ module.exports = function(){
     // Assign dom objects.
     let dom = {
         map: document.getElementById('map'),
-        layers: document.querySelector('#layers_module .layers')
+        layers: document.querySelector('#Layers > .content')
     };
 
     // init is called upon initialisation and when the locale is changed (change_locale === true).

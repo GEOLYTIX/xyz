@@ -1,4 +1,11 @@
+.range {
+    width: 100%;
+    width: calc(100% - 5px);
+    padding: 5px 0;
+}
+
 input[type=range] {
+    width: 100%;
     -webkit-appearance: none;
     height: 5px;
     border-radius: 5px;

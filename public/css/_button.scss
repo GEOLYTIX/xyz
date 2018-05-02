@@ -1,34 +1,69 @@
-.md_button {
-  @if $desktop {
-    width: 100%;
-  }
-  color: white;
-  background-color: $glxgreen;
-  margin: 10px 0;
-  padding: 8px;
-  text-align: center;
-  font-family: ffmark_bold, sans-serif;
-  border-radius: 3px;
-  border: 2px solid $glxgreen;
-  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    cursor: pointer;
+.btn_text {
+    font-family: ffmark_bold;
+    font-size: 15px;
     color: $glxgreen;
-    background-color: white;
-    border: 2px solid $glxgreen;
+    height: 25px;
   }
 
-  &.on {
-    color: $glxgreen;
-    background-color: white;
-    border: 2px solid $glxgreen;
+.btn_column {
+    position: absolute;
+    top: 0;
+    left: -10px;
+    z-index: 999;
 
-    &:hover {
-      cursor: pointer;
-      color: white;
-      background-color: $glxgreen;
-      border: 2px solid $glxgreen;
+    button {
+      margin-top: 10px;
+      float: left;
+      clear: both;
+      height: 50px;
+      width: 50px;
+      padding: 0;
+      color: $glxgreen;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+      text-align: center;
+      cursor: default;
+      border: none;
+      outline: none;
+
+      a {
+        color: $glxgreen;
+      }
+
+      i {
+        font-size: 30px;
+        line-height: 1.7;
+      }
+
+      &.active {
+        background: $glxgreen;
+        color: #fff;
+      }
+
+      &:disabled {
+        opacity: 0.3;
+      }
+
+      &:hover:enabled {
+        background: $glxgreen;
+        color: #fff;
+        cursor: pointer;
+
+        a {
+          color: #fff;
+        }
+      }
     }
   }
+
+.btn_header {
+    font-size: 25px;
+    margin-left: 5px;
+    float: right;
+    color: $glxgreen;
+        
+    &.active {
+        text-shadow: 2px 2px 2px #cf9;
+    }
 }

@@ -7,9 +7,8 @@ module.exports = function Select() {
 
     // Set dom elements for the select module.
     let dom = {
-        header: document.querySelector('#select_module .header'),
-        btnOff: document.querySelector('#select_module .btnOff'),
-        layers: document.querySelector('#select_module .layers')
+        btnOff: document.querySelector('#ClearLocations'),
+        layers: document.querySelector('#Locations > .content')
     };
 
     // Create select pane. This pane has a shadow filter associated in the css.

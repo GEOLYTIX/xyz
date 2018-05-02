@@ -1,0 +1,13 @@
+.logo_link {
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    font-family: ffmark_black, sans-serif;
+    font-size: 60px;
+    z-index: 1001;
+    text-shadow: 0 7px 0 rgba(0, 150, 0, 0.2), 7px 0 rgba(0, 0, 0, 0.2);
+
+    @media screen and (max-width: 675px) {
+        display: none;
+    }
+  }

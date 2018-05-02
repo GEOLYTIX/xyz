@@ -46,8 +46,9 @@
             <div id="Layers" class="module">
                 <div class="title">Layers</div>
 
-                <div class="ctrl">Show layers for the following locale:</div>
-                <select class="ctrl selLocale" name="selLocale">
+                <div>Show layers for the following locale:</div>
+
+                <select id="Locale">
                     <option value="uk">United Kingdom</option>
                     <option value="global">Global</option>
                     <option value="eu">Europe</option>
@@ -58,15 +59,15 @@
 
                     <div class="drawer">
                         <div class="header" style="border-bottom: 2px solid rgb(0, 0, 0);">Mapbox Baselayer
-                            <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
+                            <i class="material-icons cursor noselect btn_header" title="Toggle visibility">layers</i>
                         </div>
-                        <div class="loader" style="display: none;"></div>
+                        <div class="loader" style="display: block;"></div>
                     </div>
 
                     <div class="drawer off">
-                        <div class="header expander" style="border-bottom: 2px solid rgb(0, 0, 0); box-shadow: black 0px 3px 3px -3px;">HERE Imagery
-                            <i class="material-icons cursor noselect btn" title="Toggle visibility">layers_clear</i>
-                            <i class="material-icons cursor noselect btn" title="Collapse layer panel">expand_more</i>
+                        <div class="header expander_accordeon pane_shadow" style="border-bottom: 2px solid rgb(0, 0, 0);">HERE Imagery
+                            <i class="material-icons cursor noselect btn_header" title="Toggle visibility">layers_clear</i>
+                            <i class="material-icons cursor noselect btn_header expander" title="Collapse layer panel"></i>
                         </div>
                         <div class="loader"></div>
                         <div class="panel">
@@ -75,25 +76,17 @@
                     </div>
 
                     <div class="drawer">
-                        <div class="header expander" style="border-bottom: 2px solid rgb(0, 0, 0);">Retail Points
-                            <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
-                            <i class="material-icons cursor noselect btn" title="Expand layer panel">expand_less</i>
+                        <div class="header expander_accordeon pane_shadow" style="border-bottom: 2px solid rgb(0, 0, 0);">Retail Points
+                            <i class="material-icons cursor noselect btn_header" title="Toggle visibility">layers</i>
+                            <i class="material-icons cursor noselect btn_header expander" title="Expand layer panel"></i>
                         </div>
                         <div class="loader" style="display: none;"></div>
                         <div class="panel">
+                            <div class="section">Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths,
+                                Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose,
+                                Wholefoods. Please download for free and use this data openly.</div>
                             <div class="section">
-                                <div class="cursor noselect expander btn_text" style="color: rgb(0, 153, 0);">Filtering</div>
-                                <div class="filter--numeric" style="margin-left: 10px;"></div>
-                                <div class="filter--checkbox" style="margin-left: 10px;"></div>
-                                <div class="filter--text" style="margin-left: 10px;">
-                                    <div style="margin-left: 10px;">
-                                        <h4>Retailer</h4>
-                                        <input id="gb_retailpoint--retailer" placeholder="Search." style="width: 100%;">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section">
-                                <div class="cursor noselect expander btn_text" style="color: rgb(0, 153, 0);">Cluster Settings</div>
+                                <div class="cursor noselect expander_accordeon btn_text" style="color: rgb(0, 153, 0);">Cluster Settings</div>
                                 <span>KMeans: </span>
                                 <span class="bold">100</span>
                                 <div class="range">
@@ -123,7 +116,53 @@
                                 </table>
                             </div>
                             <div class="section">
-                                <div class="cursor noselect expander btn_text" style="color: rgb(0, 153, 0);">Legend</div>
+                                <div class="cursor noselect expander_accordeon btn_text" style="color: rgb(0, 153, 0);">Filtering</div>
+
+                                <div class="block">
+                                    <div class="title">Rent p.a. in thousands</div>
+                                    <div class="label half">&gt greater than</div>
+                                    <div class="label half right">&lt lesser than</div>
+                                    <input class="half" placeholder="Set value.">
+                                    <input class="half right" placeholder="Set value.">
+                                </div>
+
+                                <div class="block">
+                                    <div class="title">EBITDA Shop in millions</div>
+                                    <div class="label half">&gt greater than</div>
+                                    <div class="label half right">&lt lesser than</div>
+                                    <input class="half" placeholder="Set value.">
+                                    <input class="half right" placeholder="Set value.">
+                                </div>
+
+                                <div class="block">
+                                    <div class="title">Lease Type</div>
+                                    <label class="checkbox">
+                                        <input type="checkbox" />
+                                        <div class="checkbox_i"></div>this little piggy went to morrisons
+                                    </label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" />
+                                        <div class="checkbox_i"></div>this little piggy cried "wee wee wee" all the way home.
+                                    </label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" />
+                                        <div class="checkbox_i"></div>this little piggy went to tesco
+                                    </label>
+                                </div>
+
+                                <div class="block">
+                                    <div class="title">Shop name</div>
+                                    <input id="williamhill--shop" placeholder="Search.">
+                                </div>
+
+                                <div class="block">
+                                    <div class="title">Postal code</div>
+                                    <input id="williamhill--postcode" placeholder="Search.">
+                                </div>
+
+                            </div>
+                            <div class="section expanded">
+                                <div class="cursor noselect expander_accordeon btn_text" style="color: rgb(0, 153, 0);">Legend</div>
                                 <svg width="290" height="535">
                                     <image x="0" y="25" width="20" height="20" xlink:href="data:image/svg+xml,%3Csvg%20width%3D%221000%22%20height%3D%221000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%22540%22%20cy%3D%22540%22%20r%3D%22400%22%20style%3D%22fill%3A%20rgb(51%2C%2051%2C%2051)%3B%20opacity%3A%200.4%3B%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22400%22%20style%3D%22fill%3A%20rgb(255%2C%20191%2C%2069)%3B%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22350%22%20style%3D%22fill%3A%20rgb(250%2C%20111%2C%208)%3B%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22300%22%20style%3D%22fill%3A%20rgb(239%2C%2060%2C%2017)%3B%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22250%22%20style%3D%22fill%3A%20rgb(0%2C%2031%2C%20121)%3B%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22200%22%20style%3D%22fill%3A%20rgb(2%2C%20190%2C%20227)%3B%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%22500%22%20r%3D%22100%22%20style%3D%22fill%3A%20rgb(255%2C%20255%2C%20255)%3B%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E"></image>
                                     <text x="25" y="36" style="font-size: 12px; alignment-baseline: central; cursor: pointer;">Aldi</text>
@@ -183,13 +222,14 @@
                     </div>
 
                     <div class="drawer">
-                        <div class="header expander" style="border-bottom: 2px solid rgb(0, 0, 0); box-shadow: black 0px 3px 3px -3px;">Eurostat Grid
-                            <i class="material-icons cursor noselect btn" title="Toggle visibility">layers</i>
-                            <i class="material-icons cursor noselect btn" title="Collapse layer panel">expand_more</i>
+                        <div class="header expander_accordeon pane_shadow" style="border-bottom: 2px solid rgb(0, 0, 0);">Eurostat Grid
+                            <i class="material-icons cursor noselect btn_header" title="Toggle visibility">layers</i>
+                            <i class="material-icons cursor noselect btn_header expander" title="Collapse layer panel"></i>
                         </div>
                         <div class="loader" style="display: none;"></div>
                         <div class="panel">
-                            <div class="legend">
+                            <div class="section">UK 2010 Census Data re-projected on the GHS population grid.</div>
+                            <div class="section">
                                 <select class="selSize" name="selSize">
                                     <option value="pop">Population GHS</option>
                                     <option value="pop__14">Population Eurostat</option>
@@ -231,17 +271,14 @@
                                     <option value="gen_f__14">Female Population</option>
                                     <option value="gen_m__14">Male Population</option>
                                 </select>
-                                <table class="checkbox">
-                                    <td class="box">
-                                        <input id="chkGridRatio" type="checkbox">
-                                        <label for="chkGridRatio"></label>
-                                    </td>
-                                    <td>Display colour values as a ratio to the size value.</td>
-                                </table>
+                                <label class="checkbox">
+                                    <input id="chkGridRatio" type="checkbox" />
+                                    <div class="checkbox_i"></div>Display colour values as a ratio to the size value.
+                                </label>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
             </div>
@@ -250,13 +287,13 @@
                 <div class="title">Locations</div>
                 <div class="btn_text cursor">Clear all locations.</div>
 
-                <div class="layers">
+                <div class="content">
                     <div class="drawer">
-                        <div class="header" style="border-bottom: 3px solid rgb(156, 39, 176);">A
-                            <i class="material-icons cursor noselect btn" title="Remove feature from selection" style="color: rgb(156, 39, 176); margin-right: -6px;">clear</i>
-                            <i class="material-icons cursor noselect btn" title="Zoom map to feature bounds" style="color: rgb(156, 39, 176);">search</i>
-                            <i class="material-icons cursor noselect btn" title="Expand table" style="color: rgb(156, 39, 176);">expand_less</i>
-                            <i class="material-icons cursor noselect btn" title="Hide marker" style="color: rgb(156, 39, 176);">location_off</i>
+                        <div class="header expander_accordeon pane_shadow" style="border-bottom: 3px solid rgb(156, 39, 176);">A
+                            <i class="material-icons cursor noselect btn_header" title="Remove feature from selection" style="color: rgb(156, 39, 176); margin-right: -6px;">clear</i>
+                            <i class="material-icons cursor noselect btn_header" title="Zoom map to feature bounds" style="color: rgb(156, 39, 176);">search</i>
+                            <i class="material-icons cursor noselect btn_header" title="Hide marker" style="color: rgb(156, 39, 176);">location_off</i>
+                            <i class="material-icons cursor noselect btn_header expander" title="Expand table" style="color: rgb(156, 39, 176);"></i>
                         </div>
                         <table class="infojTable" cellpadding="0" cellspacing="0" style="border-bottom: 1px solid rgb(156, 39, 176);">
                             <tr class="lv-0">
@@ -335,11 +372,11 @@
                         </table>
                     </div>
                     <div class="drawer">
-                        <div class="header" style="border-bottom: 3px solid rgb(33, 150, 243);">B
-                            <i class="material-icons cursor noselect btn" title="Remove feature from selection" style="color: rgb(33, 150, 243); margin-right: -6px;">clear</i>
-                            <i class="material-icons cursor noselect btn" title="Zoom map to feature bounds" style="color: rgb(33, 150, 243);">search</i>
-                            <i class="material-icons cursor noselect btn" title="Expand table" style="color: rgb(33, 150, 243);">expand_less</i>
-                            <i class="material-icons cursor noselect btn" title="Hide marker" style="color: rgb(33, 150, 243);">location_off</i>
+                        <div class="header expander_accordeon pane_shadow" style="border-bottom: 3px solid rgb(33, 150, 243);">B
+                            <i class="material-icons cursor noselect btn_header" title="Remove feature from selection" style="color: rgb(33, 150, 243); margin-right: -6px;">clear</i>
+                            <i class="material-icons cursor noselect btn_header" title="Zoom map to feature bounds" style="color: rgb(33, 150, 243);">search</i>
+                            <i class="material-icons cursor noselect btn_header" title="Hide marker" style="color: rgb(33, 150, 243);">location_off</i>
+                            <i class="material-icons cursor noselect btn_header expander" title="Expand table" style="color: rgb(33, 150, 243);"></i>
                         </div>
                         <table class="infojTable" cellpadding="0" cellspacing="0" style="border-bottom: 1px solid rgb(33, 150, 243);">
                             <tr class="lv-0">
@@ -418,8 +455,8 @@
                         </table>
                     </div>
                 </div>
-            </div>
 
+            </div>
 
         </div>
 
@@ -429,38 +466,38 @@
 
         <div id="map" class="map"></div>
 
-        <div class="map_button noselect">
-            <button id="btnSearch" title="Open Gazetteer">
+        <div class="btn_column noselect">
+            <button id="Search" title="Open Gazetteer">
                 <i class="material-icons">search</i>
             </button>
 
-            <button id="btnGeolocate" title="Current location">
+            <button id="Geolocate" title="Current location">
                 <i class="material-icons">gps_not_fixed</i>
             </button>
 
-            <button id="btnZoomIn">
+            <button id="ZoomIn">
                 <i class="material-icons">add</i>
             </button>
 
-            <button id="btnZoomOut">
+            <button id="ZoomOut">
                 <i class="material-icons">remove</i>
             </button>
-            <button id="btnReport" title="Create PDF Report">
+
+            <button id="Report" title="Create PDF Report">
                 <i class="material-icons">picture_as_pdf</i>
             </button>
 
-            <button id="btnDocumentation" title="Open Documentation">
+            <button id="Documentation" title="Open Documentation">
                 <i class="material-icons">school</i>
             </button>
 
-            <button id="btnLogout" title="Log out from application">
+            <button id="Logout" title="Log out from application">
                 <i class="material-icons">exit_to_app</i>
             </button>
 
-            <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
+            <button id="Admin" title="Open account admin panel">
                 <i class="material-icons">supervisor_account</i>
             </button>
-
         </div>
 
     </div>

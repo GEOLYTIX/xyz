@@ -1,0 +1,152 @@
+@import 'chkbox';
+
+.mod_container {
+    position: fixed;
+    height: 100%;
+    padding: 0 20px;
+    width: 330px;
+
+    .module {
+        padding: 10px 0;
+    
+        > .title {
+            font-family: ffmark_bold, sans-serif;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+       
+        .pane_shadow {
+            box-shadow: 0 3px 3px -3px #000;
+        }
+
+        input {
+            width: 100%;
+        }
+    
+        .drawer {
+            margin-top: 10px;
+
+            &.expandable {
+                max-height: 35px;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+        
+                .expander::before {
+                    content: "expand_more"
+                }
+            }
+        
+            &.expanded {
+                max-height: 1000px;
+        
+                .expander::before {
+                    content: "expand_less"
+                }
+            }
+    
+            .header {
+                font-size: 15px;
+                line-height: 2;
+                font-family: ffmark_bold, sans-serif;
+    
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+    
+            .panel {
+                border-bottom: 1px solid #333;
+                font-size: 13px;
+
+                .title {
+                    font-family: ffmark_bold, sans-serif;
+                    line-height: 1.5;
+                }
+        
+                .section {
+                    padding: 10px 0;
+                    border-bottom: 1px solid #555;
+
+                    &.expandable {
+                        max-height: 30px;
+                        overflow: hidden;
+                        transition: max-height 0.3s ease-out;
+                
+                        .expander::before {
+                            content: "expand_more"
+                        }
+                    }
+                
+                    &.expanded {
+                        max-height: 1000px;
+                
+                        .expander::before {
+                            content: "expand_less"
+                        }
+                    }
+                }
+                
+                .block {
+                    padding: 5px 0;
+                }
+
+                .half {
+                    width: 48%;
+                    display: inline-block;
+
+                    &.right {
+                        float: right;
+                    }
+                }
+
+            }
+
+            .loader {
+                height: 2px;
+                margin-top: -2px;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
+                display: none;
+            }
+    
+            .loader:before {
+                display: block;
+                position: absolute;
+                content: "";
+                left: -200px;
+                width: 200px;
+                height: 2px;
+                background-color: #fff;
+                animation: loading 2s linear infinite;
+            }
+    
+            @keyframes loading {
+                from {
+                    left: -200px;
+                    width: 30%;
+                }
+    
+                50% {
+                    width: 30%;
+                }
+    
+                70% {
+                    width: 70%;
+                }
+    
+                80% {
+                    left: 50%;
+                }
+    
+                95% {
+                    left: 120%;
+                }
+    
+                to {
+                    left: 100%;
+                }
+            }
+        }
+    }
+}

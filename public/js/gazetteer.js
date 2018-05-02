@@ -10,10 +10,9 @@ module.exports = function Gazetteer() {
         btnGeolocate: document.getElementById('btnGeolocate'),
         btnClear: document.getElementById('gaz_clear'),
         group: document.getElementById('gaz_group'),
-        input: document.getElementById('gaz_input'),
+        input: document.getElementById('GazetteerInput'),
         result: document.getElementById('gaz_result'),
-        locale: document.getElementById('gaz_locale'),
-        localelist: document.getElementById('gaz_localelist')
+        locale: document.getElementById('Locale')
     };
 
     // Set gazetteer defaults if missing from appSettings.
@@ -31,49 +30,37 @@ module.exports = function Gazetteer() {
     _xyz.map.createPane(_xyz.gazetteer.pane[0]);
     _xyz.map.getPane(_xyz.gazetteer.pane[0]).style.zIndex = _xyz.gazetteer.pane[1];
 
-    // Get list of locale keys and assign to locale drop down.
-    let locales = '';
-    for (let key in _xyz.locales) {
-        if (_xyz.locales.hasOwnProperty(key)) locales += '<li data-locale="' + key + '">' + (_xyz.locales[key].name || key) + '</li>';
-    }
-    dom.localelist.innerHTML = locales;
+    Object.keys(_xyz.locales).forEach(locale => {
+        utils._createElement({
+            tag: 'option',
+            options: {
+                textContent: _xyz.locales[locale].name || locale,
+                value: locale
+            },
+            appendTo: dom.locale
+        })
+    })
 
-    if (Object.keys(_xyz.locales).length > 1) {
-        utils.addClass(dom.locale, 'active');
+    // onchange event to set the hook and title.
+    dom.locale.onchange = e => {
+        _xyz.locale = e.target.value;
 
-        // Add click event to toggle locale drop down display.
-        dom.locale.addEventListener('click', function () {
-            dom.localelist.style.display = dom.localelist.style.display === 'block' ? 'none' : 'block';
-        });
+        // Empty input value, results and set placeholder.
+        dom.input.value = '';
+        dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
+        dom.result.innerHTML = '';
 
-        // Add click event to the locales in drop down.
-        let items = dom.localelist.querySelectorAll('li');
-        Object.keys(items).map(function (key) {
-            items[key].addEventListener('click', function () {
-                dom.localelist.style.display = 'none';
-                _xyz.locale = this.dataset.locale;
-                dom.locale.innerHTML = _xyz.locale == 'Global' ?
-                    '<i class="material-icons">language</i>' :
-                    _xyz.locale;
+        _xyz.removeHooks();
+        _xyz.setHook('locale', _xyz.locale);
+        _xyz.setView(true);
+        if (_xyz.layers) _xyz.layers.init(true);
+        if (_xyz.select) _xyz.select.init(true);
+        if (_xyz.grid) _xyz.grid.init(true);
+        if (_xyz.catchments) _xyz.catchments.init(true);
+    };
 
-                // Empty input value, results and set placeholder.
-                dom.input.value = '';
-                dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
-                dom.result.innerHTML = '';
-
-                _xyz.removeHooks();
-                _xyz.setHook('locale', _xyz.locale);
-                _xyz.setView(true);
-                if (_xyz.layers) _xyz.layers.init(true);
-                if (_xyz.select) _xyz.select.init(true);
-                if (_xyz.grid) _xyz.grid.init(true);
-                if (_xyz.catchments) _xyz.catchments.init(true);
-            })
-        });
-    }
-
-    // Set locale text in the Gazetteer box.
-    dom.locale.innerHTML = _xyz.locale == 'Global' ? '<i class="material-icons">language</i>' : _xyz.locale;
+    // Set the select from either hook[query] or layer[query].
+    dom.locale.selectedIndex = _xyz.hooks.locale ? utils.getSelectOptionsIndex(dom.locale, _xyz.hooks.locale) : 0;
 
     // Empty input value, results and set placeholder.
     dom.input.value = '';
@@ -96,7 +83,7 @@ module.exports = function Gazetteer() {
     });
 
     // Toggle visibility of the gazetteer group
-    dom.btnClear.addEventListener('click', function () {
+    if (dom.btnClear) dom.btnClear.addEventListener('click', e => {
         dom.input.value = '';
     });
 
