@@ -39,7 +39,7 @@ function clusterSettings(layer) {
 
     // Add a settings div
     let settings = utils.createElement('div', {
-        className: 'settings'
+        classList: 'settings ctrl'
     });
 
     settings.style.maxHeight = '30px';
@@ -47,7 +47,7 @@ function clusterSettings(layer) {
     // Create control to toggle layer visibility.
     let div = utils.createElement('div', {
         textContent: 'Cluster Settings',
-        className: 'cursor noselect'
+        classList: 'cursor noselect ctrl'
     });
 
     div.style.color = '#090';
@@ -429,11 +429,11 @@ function clusterCategorized(layer) {
     svg.append('circle')
         .attr('cx', 20)
         .attr('cy', y)
-        .attr('r', 20)
+        .attr('r', 12)
         .style('fill', layer.style.markerMulti[1]);
 
     svg.append('text')
-        .attr('x', 45)
+        .attr('x', 40)
         .attr('y', y)
         .style('font-size', '12px')
         .style('alignment-baseline', 'central')
@@ -607,7 +607,7 @@ function gridControl(layer) {
 
     // Select dropdown for size.
     let selSize = utils.createElement('select', {
-        className: 'selSize',
+        classList: 'selSize ctrl',
         name: 'selSize'
     });
     setDropDown(selSize, 'grid_size');
@@ -621,7 +621,7 @@ function gridControl(layer) {
 
     // Select dropdown for color.
     let selColor = utils.createElement('select', {
-        className: 'selColor',
+        classList: 'selColor ctrl',
         name: 'selColor'
     });
     setDropDown(selColor, 'grid_color');
@@ -642,6 +642,7 @@ function gridControl(layer) {
     },{
         label: 'Display colour values as a ratio to the size value.', 
         id: 'chkGridRatio',
+        className: 'ctrl',
         checked: layer.grid_ratio || _xyz.hooks.grid_ratio
     });
 

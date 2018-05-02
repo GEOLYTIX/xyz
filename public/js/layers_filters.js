@@ -32,7 +32,7 @@ function layerFilters(layer, height){
     
     // Add a filters div
     let filters = utils.createElement('div', {
-        classList: 'settings filters'
+        classList: 'filters ctrl'
     });
     
     filters.style.maxHeight = '30px';
@@ -40,7 +40,7 @@ function layerFilters(layer, height){
     // Create control to toggle layer visibility.
     let div = utils.createElement('div', {
         textContent: 'Filtering',
-        className: 'cursor noselect'
+        classList: 'cursor noselect ctrl'
     });
     
     div.style.color = '#090';
@@ -60,20 +60,14 @@ function layerFilters(layer, height){
     filters.appendChild(div);
     
     let numeric_div = utils.createElement('div', {
-        className: "filter--numeric"
+        classList: "filter ctrl"
     }),
         checkbox_div = utils.createElement('div', {
-            className: "filter--checkbox"
+            classList: "filter ctrl"
         }),
         text_div = utils.createElement('div', {
-            className: "filter--text"
+            classList: "filter ctrl"
         });
-    
-    numeric_div.style.marginLeft = "10px";
-    checkbox_div.style.marginLeft = "10px";
-    text_div.style.marginLeft = "10px";
-
-    filters.style.color = '#090';
     
     Object.keys(layer.infoj).map(function(key){
         
@@ -82,8 +76,9 @@ function layerFilters(layer, height){
             let _field = layer.infoj[key].field,
                 _label = layer.infoj[key].label;
             
-            let _title = utils.createElement('h4', {
-                textContent: _label
+            let _title = utils.createElement('span', {
+                textContent: _label,
+                classList: "filter-title"
             });
                     
             checkbox_div.appendChild(_title);
@@ -112,10 +107,7 @@ function layerFilters(layer, height){
             });
             
         } else {
-            
-            //let _field = layer.infoj[key].field,
-                //_label = layer.infoj[key].label,
-                //_table = layer.table,
+        
             let _content;
             
             let options = {
@@ -133,8 +125,6 @@ function layerFilters(layer, height){
                 
                 _content = filter_numeric(layer, options); 
                 
-                _content.style.marginLeft = '10px';
-                
                 numeric_div.appendChild(_content);
             }
             
@@ -142,9 +132,7 @@ function layerFilters(layer, height){
                 
                 options.operator = layer.infoj[key].filter;
                 
-                let _content = filter_text(layer, options); 
-
-                _content.style.marginLeft = '10px';
+                let _content = filter_text(layer, options);
                 
                 text_div.appendChild(_content);
             }
@@ -162,10 +150,13 @@ function layerFilters(layer, height){
 // create text filter
 function filter_text(layer, options){
     
-    let div = utils.createElement('div');
+    let div = utils.createElement('div', {
+        classList: "ctrl"
+    });
     
-    let title = utils.createElement('h4', {
-        textContent: options.label
+    let title = utils.createElement('span', {
+        textContent: options.label,
+        classList: "filter-title"
     });
     
     div.appendChild(title);
@@ -199,10 +190,13 @@ function filter_text(layer, options){
 // create numeric filter 
 function filter_numeric(layer, options){
     
-    let div = utils.createElement('div');
+    let div = utils.createElement('div', {
+        classList: "ctrl"
+    });
    
-    let title = utils.createElement('h4', {
-        textContent: options.label
+    let title = utils.createElement('span', {
+        textContent: options.label,
+        classList: "filter-title"
     });
     
     div.appendChild(title);
@@ -219,6 +213,11 @@ function filter_numeric(layer, options){
     });
     
     select.selectedIndex = 0;
+    
+    select.style.width = "44%";
+    select.style.display = "inline-block";
+    select.style.marginRight = "10px";
+    
     options.operator = select[select.selectedIndex].value;
     
     select.addEventListener('change', function(){
@@ -251,10 +250,11 @@ function filter_numeric(layer, options){
         
         // apply filter to the layer;
         if(val) layer.getLayer();
-        console.log(layer.filter);
+        //console.log(layer.filter);
     }
     
-    input.style.width = "100%";
+    input.style.width = "48%";
+    input.style.display = "inline-block";
     
     input.addEventListener("keyup", onkeyup);
     

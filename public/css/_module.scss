@@ -48,7 +48,86 @@
                 padding: 10px 0;
                 border-bottom: 1px solid #555;
             }
+            
+            .filters {
+                padding: 5px 0px;
+                border-bottom: 1px solid #999;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                line-height: 1;
+                color: #333;
+
+                > div {
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                }
+                
+                .filter-title {
+                    line-height: 2;
+                    border-top: 10px!important;
+                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    display: block;
+                }
+                
+                .filter {
+                    margin-left: 10px;
+                    font-size: 12px;
+                    padding-top: 5px;
+                    
+                    > div {
+                        margin-bottom: 5px;
+                    }
+
+                }
+
+            }
+            /* Begin checkbox style */
+            .checkbox {
+                border-spacing: 0;
+                font-size: small;
+                
+                .box {
+                    position: relative;
+                    color: $glxgreen;
+                    
+                    label {
+                        cursor: pointer;
+                        position: absolute;
+                        width: 23px;
+                        height: 23px;
+                        top: 0;
+                        left: -2px;
+                        background: #fff;
+                        content: '\E836';
+                        font-family: "Material Icons";
+                        font-size: 23px;
+                        line-height: 23px;
+                    }
+                    
+                    label:after {
+                        content: '\E835';
+                    }
+                    
+                    input[type=checkbox]:checked + label:after {
+                        content: '\E834';
+                    }
+
+                    input[type=checkbox]:disabled + label:after {
+                        color: grey;
+                    }
+                }
+                
+                .label {
+                    font-family: ffmark, sans-serif;
+                    font-size: 14px;
+                }
+            }
+            /* End checkbox style */
+            
         }
+        
+           /* Begin range input */  
 
         .loader {
             height: 2px;
@@ -58,6 +137,8 @@
             overflow: hidden;
             display: none;
         }
+        
+         /* End range input */
 
         .loader:before {
             display: block;
