@@ -77,12 +77,41 @@ function getLayer(){
                 _xyz.layersCheck();
             })
             .on('click', (e) => {
-                _xyz.select.selectLayerFromEndpoint({
-                    layer: layer.layer,
-                    table: layer.table,
-                    id: e.layer.properties.id,
-                    marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
-                });
+                if( e.layer.properties.selected) return;
+            
+                e.layer.properties.selected = true;
+            
+                function checkCurrentSelection(e){
+                    let check = false;
+                    if(_xyz.hooks.select){
+                        _xyz.hooks.select.map(item => {
+                            item = item.split('!');
+                            if(item[1] === layer.layer && item[2] === layer.table && item[3] === String(e.layer.properties.id)){
+                                check = true;
+                            } 
+                        });
+                    } 
+                    return check;
+                }
+            
+                if(!checkCurrentSelection(e)) {
+                    // set cursor to wait
+                    let els = document.querySelectorAll('#map .leaflet-interactive');
+                    for(let el of els){
+                        el.classList += ' wait-cursor-enabled';
+                    }
+                    // get selection
+                    _xyz.select.selectLayerFromEndpoint({
+                        layer: layer.layer,
+                        table: layer.table,
+                        id: e.layer.properties.id,
+                        marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+                    });
+                } else {
+                    //console.log('feature ' + e.layer.properties.id + ' already selected');
+                }
+            
+           
             })
             .on('mouseover', (e) => {
                 e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || {'color':'#090'});
@@ -91,8 +120,6 @@ function getLayer(){
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
             .addTo(_xyz.map);
-
-
 
     }
 }

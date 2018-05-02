@@ -126,6 +126,7 @@ module.exports = function Select() {
 
     // Get layer from data source
     function selectLayerFromEndpoint(layer) {
+    
         let freeRecords = _xyz.select.records.filter(record => !record.layer);
 
         if (freeRecords.length === 0) return
@@ -141,7 +142,17 @@ module.exports = function Select() {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
         xhr.setRequestHeader('Content-Type', 'application/json');
+        
         xhr.onload = function () {
+            
+            // remove wait cursor class if found
+            let els = document.querySelectorAll('#map .leaflet-interactive.wait-cursor-enabled');
+            //console.log("remove class " + els.length);
+            
+            for(let el of els){
+                el.classList.remove("wait-cursor-enabled");
+            }
+            
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
                 //console.log(json);
@@ -154,6 +165,7 @@ module.exports = function Select() {
                 addLayerToRecord(layer);
             }
         }
+        
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
             table: layer.table,
