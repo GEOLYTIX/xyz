@@ -205,7 +205,7 @@ function clusterMouseClick(e, layer) {
                     .setLatLng(lnglat.reverse())
                     .setContent('<div class="scrollbar_container"><div class="scrollbar"></div></div><div class="content location_table">' + table + '</div>')
                     .openOn(_xyz.map);
-                require('./lscrolly')(document.querySelector('.leaflet-popup-content'));
+                require('./scrolly')(document.querySelector('.leaflet-popup-content'));
             }
 
             if (view_mode === 'mobile') {

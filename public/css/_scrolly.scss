@@ -1,0 +1,29 @@
+.scrolly {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  
+    > .scrolly_track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 10px;
+      background-color: #aaa;
+  
+      > .scrolly_bar {
+        position: absolute;
+        width: 10px;
+        background: #666;
+      }
+  
+      &:hover {
+        cursor: ns-resize;
+      }
+    }
+  }

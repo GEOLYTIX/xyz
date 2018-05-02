@@ -157,4 +157,4 @@ if (_xyz.catchments) require('./catchments')(_xyz);
 if (_xyz.report) require('./report')(_xyz);
 
 // Make blocks visible and set scrollbar left for desktop view.
-if (view_mode === 'desktop') require('./lscrolly')(document.querySelector('.module_container'));
+if (view_mode === 'desktop') require('./scrolly')(document.querySelector('.module_container'));

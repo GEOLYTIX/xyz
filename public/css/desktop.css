@@ -618,131 +618,46 @@ input[type=range]::-moz-range-thumb {
     color: #090;
     font-size: 50px; }
 
-.module .dev_display {
-  display: none; }
-.module .dev {
-  color: grey; }
-  .module .dev select {
-    color: grey; }
-.module > .header {
-  position: relative; }
-  .module > .header .spinner {
-    position: absolute;
-    display: none;
-    right: 0;
-    top: 0; }
-  .module > .header span {
-    font-family: ffmark_bold;
-    font-size: 20px; }
-  .module > .header i {
-    font-size: 25px;
-    margin-top: -5px;
-    color: #090;
-    float: right;
-    display: none; }
-.module .content {
-  clear: both;
-  padding-top: 10px; }
-  .module .content select {
-    width: 100%;
-    margin: 5px 0;
-    font-family: 'PT Mono', monospace;
-    background: white; }
-  .module .content .panel {
-    transition: opacity 300ms ease-in-out;
-    -moz-transition: opacity 300ms ease-in-out;
-    -webkit-transition: opacity 300ms ease-in-out;
-    border-bottom: 1px solid #333;
-    font-size: 12px;
-    line-height: 1.5; }
-    .module .content .panel .meta {
-      font-size: 12px;
-      margin: 5px 0 0 0; }
-    .module .content .panel .legend {
-      padding: 5px 0; }
-    .module .content .panel .settings {
-      padding: 5px 0px;
-      border-bottom: 1px solid #999;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out; }
-      .module .content .panel .settings > div {
-        line-height: 2;
-        font-weight: 600;
-        font-size: 14px;
-        margin-bottom: 5px; }
-      .module .content .panel .settings > table {
-        margin-bottom: 5px; }
-  .module .content .range {
-    width: 100%;
-    width: calc(100% - 5px);
-    padding: 5px 0; }
-    .module .content .range input[type=range] {
-      width: 100%; }
-  .module .content .infojTable {
-    width: 100%;
-    font-size: 12px;
-    padding-top: 5px; }
-    .module .content .infojTable .changed {
-      color: #090; }
-    .module .content .infojTable .label {
-      padding-top: 5px; }
-    .module .content .infojTable textarea {
-      resize: none;
-      width: 100%; }
-    .module .content .infojTable input {
-      width: 100%;
-      font-family: 'PT Mono', monospace;
-      margin: 5px 0 7px 0;
-      box-sizing: border-box;
-      padding-left: 3px; }
-    .module .content .infojTable .range {
-      padding: 10px 0 10px 10px; }
-    .module .content .infojTable .lv-0 {
-      font-size: 14px;
-      font-weight: 700; }
-    .module .content .infojTable .lv-1 {
-      font-size: 13px; }
-    .module .content .infojTable .lv-2 {
-      font-size: 12px;
-      padding-left: 10px; }
-    .module .content .infojTable .val {
-      font-family: 'PT Mono', monospace;
-      font-weight: 400;
-      font-size: 12px; }
-    .module .content .infojTable .addImageCell {
-      vertical-align: middle;
-      height: 170px; }
-      .module .content .infojTable .addImageCell i {
-        color: #090;
-        font-size: 70px;
-        padding: 20px;
-        text-shadow: 2px 2px 1px #777; }
-      .module .content .infojTable .addImageCell input {
-        display: none; }
-  .module .content .drawer {
+.module {
+  padding: 10px 0; }
+  .module > .title {
+    font-family: ffmark_bold, sans-serif;
+    font-size: 18px;
+    margin-bottom: 10px; }
+  .module .expandable {
+    max-height: 35px;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    margin: 15px 0; }
-    .module .content .drawer .header {
+    transition: max-height 0.3s ease-out; }
+  .module .expanded {
+    max-height: 1000px; }
+  .module .drawer {
+    margin-top: 10px; }
+    .module .drawer .header {
       font-size: 15px;
       line-height: 2;
-      font-weight: 600;
-      height: 30px; }
-      .module .content .drawer .header .btn {
+      font-family: ffmark_bold, sans-serif; }
+      .module .drawer .header:hover {
+        cursor: pointer; }
+      .module .drawer .header .btn {
         font-size: 25px;
         margin-left: 5px;
         float: right;
         color: #090; }
-        .module .content .drawer .header .btn.active {
+        .module .drawer .header .btn.active {
           text-shadow: 2px 2px 2px #cf9; }
-    .module .content .drawer .loader {
+    .module .drawer .panel {
+      border-bottom: 1px solid #333; }
+      .module .drawer .panel .section {
+        padding: 10px 0;
+        border-bottom: 1px solid #555; }
+    .module .drawer .loader {
       height: 2px;
       margin-top: -2px;
       width: 100%;
       position: relative;
       overflow: hidden;
       display: none; }
-    .module .content .drawer .loader:before {
+    .module .drawer .loader:before {
       display: block;
       position: absolute;
       content: "";

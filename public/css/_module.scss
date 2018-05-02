@@ -1,276 +1,99 @@
 .module {
+    padding: 10px 0;
 
-    .dev_display {
-        display: none;
-    }
-    
-    .dev {
-        color: grey;
-
-        select {
-            color: grey;
-        }
+    > .title {
+        font-family: ffmark_bold, sans-serif;
+        font-size: 18px;
+        margin-bottom: 10px;
     }
 
-    > .header {
-        position: relative;
-        // background-color: #eee;
+    .expandable {
+        max-height: 35px;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
 
-        // @if $desktop {
-        //     padding: 3px;
-        // }
+    .expanded {
+        max-height: 1000px;
+    }
 
-        @if $mobile {
-            padding: 10px;
-        }
-        
+    .drawer {
+        margin-top: 10px;
 
-        // @if $desktop {
-        //     width: 99%;
-        //     border-top-right-radius: 14px;
-        //     border-bottom-right-radius: 14px;
-        // }
+        .header {
+            font-size: 15px;
+            line-height: 2;
+            font-family: ffmark_bold, sans-serif;
 
-        // box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.2);
-
-        .spinner {
-            position: absolute;
-            display: none;
-            right: 0;
-
-            @if $desktop {
-                top: 0;
+            &:hover {
+                cursor: pointer;
             }
-            @else {
-                top: 7px;
-            }
-        }
 
-        span {
-            font-family: ffmark_bold;
-            font-size: 20px;
-        }
-
-        i {
-            @if $desktop {
+            .btn {
                 font-size: 25px;
-                margin-top: -5px;
-                // margin-right: -5px;
+                margin-left: 5px;
+                float: right;
+                color: $glxgreen;
+                    
+                &.active {
+                    text-shadow: 2px 2px 2px #cf9;
+                }
             }
-            @else {
-                font-size: 40px;
-                margin-top: -10px;
-                margin-right: -10px;
-            }
-
-            color: $glxgreen;
-            float: right;
-            display: none;
         }
-    }
-
-    .content {
-        clear: both;
-        padding-top: 10px;
-
-        select {
-            width: 100%;
-            margin: 5px 0;
-            font-family: 'PT Mono', monospace;
-            background: white;
-            // border: 2px solid white;
-            // border-bottom: 2px solid #090;
-        }
-
-        // select:active,
-        // select:hover {
-        //     outline: none
-        // }
 
         .panel {
-            transition: opacity 300ms ease-in-out;
-            -moz-transition: opacity 300ms ease-in-out;
-            -webkit-transition: opacity 300ms ease-in-out;
             border-bottom: 1px solid #333;
-            font-size: 12px;
-            line-height: 1.5;
-
-            .meta {
-                font-size: 12px;
-                margin: 5px 0 0 0;
-            }
-
-            .legend {
-                padding: 5px 0;
-            }
-
-            .settings {
-                padding: 5px 0px;
-                border-bottom: 1px solid #999;
-                overflow: hidden;
-                transition: max-height 0.3s ease-out;
-
-                > div {
-                    line-height: 2;
-                    font-weight: 600;
-                    font-size: 14px;
-                    margin-bottom: 5px;
-                }
-
-                > table {
-                    margin-bottom: 5px;
-                }
+    
+            .section {
+                padding: 10px 0;
+                border-bottom: 1px solid #555;
             }
         }
 
-        .range {
+        .loader {
+            height: 2px;
+            margin-top: -2px;
             width: 100%;
-            width: calc(100% - 5px);
-            padding: 5px 0;
-
-            input[type=range] {
-                width: 100%;
-            }
-        }
-
-
-        .infojTable {
-            width: 100%;
-            font-size: 12px;
-            padding-top: 5px;
-
-            .changed {
-                color: #090;
-            }
-
-            .label {
-                padding-top: 5px;
-            }
-
-            textarea {
-                resize: none;
-                width: 100%;
-            }
-
-            input {
-                width: 100%;
-                font-family: 'PT Mono', monospace;
-                margin: 5px 0 7px 0;
-                box-sizing: border-box;
-                padding-left: 3px;
-            }
-
-            .range {
-                padding: 10px 0 10px 10px;
-            }
-
-            .lv-0 {
-                font-size: 14px;
-                font-weight: 700;
-            }
-
-            .lv-1 {
-                font-size: 13px;
-            }
-
-            .lv-2 {
-                font-size: 12px;
-                padding-left: 10px;
-            }
-
-            .val {
-                font-family: 'PT Mono', monospace;
-                // padding-left: 10px;
-                font-weight: 400;
-                font-size: 12px;
-            }
-
-            .addImageCell {
-                vertical-align: middle;
-                height: 170px;
-
-                i {
-                    color: #090;
-                    font-size: 70px;
-                    padding: 20px;
-                    text-shadow: 2px 2px 1px #777;
-                }
-
-                input {
-                    display: none;
-                }
-            }
-        }
-
-        .drawer {
+            position: relative;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            margin: 15px 0;
+            display: none;
+        }
 
-            .header {
-                font-size: 15px;
-                line-height: 2;
-                font-weight: 600;
-                height: 30px;
+        .loader:before {
+            display: block;
+            position: absolute;
+            content: "";
+            left: -200px;
+            width: 200px;
+            height: 2px;
+            background-color: #fff;
+            animation: loading 2s linear infinite;
+        }
 
-                .btn {
-                    font-size: 25px;
-                    margin-left: 5px;
-                    float: right;
-                    color: $glxgreen;
-                    
-                    &.active {
-                        text-shadow: 2px 2px 2px #cf9;
-                    }
-                }
-
-            }
-
-            .loader {
-                height: 2px;
-                margin-top: -2px;
-                width: 100%;
-                position: relative;
-                overflow: hidden;
-                display: none;
-            }
-
-            .loader:before {
-                display: block;
-                position: absolute;
-                content: "";
+        @keyframes loading {
+            from {
                 left: -200px;
-                width: 200px;
-                height: 2px;
-                background-color: #fff;
-                animation: loading 2s linear infinite;
+                width: 30%;
             }
 
-            @keyframes loading {
-                from {
-                    left: -200px;
-                    width: 30%;
-                }
+            50% {
+                width: 30%;
+            }
 
-                50% {
-                    width: 30%;
-                }
+            70% {
+                width: 70%;
+            }
 
-                70% {
-                    width: 70%;
-                }
+            80% {
+                left: 50%;
+            }
 
-                80% {
-                    left: 50%;
-                }
+            95% {
+                left: 120%;
+            }
 
-                95% {
-                    left: 120%;
-                }
-
-                to {
-                    left: 100%;
-                }
+            to {
+                left: 100%;
             }
         }
     }
