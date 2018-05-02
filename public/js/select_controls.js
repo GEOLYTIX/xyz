@@ -1,94 +1,120 @@
 const utils = require('./utils');
 
 function clear(dom, record) {
-    let i = utils.createElement('i', {
-        textContent: 'clear',
-        className: 'material-icons cursor noselect btn',
-        title: 'Remove feature from selection'
+    utils._createElement({
+        tag: 'i',
+        options: {
+            textContent: 'clear',
+            className: 'material-icons cursor noselect btn_header',
+            title: 'Remove feature from selection'
+        },
+        style: {
+            color: record.color,
+            marginRight: '-6px'
+        },
+        appendTo: record.drawer,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+
+                e.stopPropagation();
+                record.drawer.remove();
+
+                _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
+                if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
+                if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
+                if (record.layer.D) _xyz.map.removeLayer(record.layer.D);
+                record.layer = null;
+
+                let freeRecords = _xyz.select.records.filter(function (record) {
+                    if (!record.layer) return record
+                });
+
+                if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+            }
+        }
     });
-    i.style.color = record.color;
-    i.style.marginRight = '-6px';
-    i.addEventListener('click', function () {
-        record.drawer.remove();
-
-        _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
-        if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
-        if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
-        if (record.layer.D) _xyz.map.removeLayer(record.layer.D);
-        record.layer = null;
-
-        let freeRecords = _xyz.select.records.filter(function (record) {
-            if (!record.layer) return record
-        });
-
-        //dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
-
-        if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
-    });
-    record.header.appendChild(i);
 }
 
 function zoom(dom, record) {
-    let i = utils.createElement('i', {
-        textContent: 'search',
-        className: 'material-icons cursor noselect btn',
-        title: 'Zoom map to feature bounds'
+    utils._createElement({
+        tag: 'i',
+        options: {
+            textContent: 'search',
+            className: 'material-icons cursor noselect btn_header',
+            title: 'Zoom map to feature bounds'
+        },
+        style: {
+            color: record.color,
+            marginRight: '-6px'
+        },
+        appendTo: record.drawer,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                _xyz.map.flyToBounds(record.layer.L.getBounds());
+            }
+        }
     });
-    i.style.color = record.color;
-    i.addEventListener('click', function () {
-        _xyz.map.flyToBounds(record.layer.L.getBounds());
-    });
-    record.header.appendChild(i);
 }
 
 function expander(dom, record) {
-    let i = utils.createElement('i', {
-        textContent: 'expand_less',
-        className: 'material-icons cursor noselect btn',
-        title: 'Expand table'
-    });
-    i.style.color = record.color;
-    i.addEventListener('click', function () {
-        if (record.drawer.style.maxHeight != '35px') {
-            record.drawer.style.maxHeight = '35px';
-            record.header.style.boxShadow = '0 3px 3px -3px black';
-            this.textContent = 'expand_more';
-            i.title = "Hide table";
-        } else {
-            record.drawer.style.maxHeight = (record.header.nextSibling.clientHeight + this.clientHeight + 10) + 'px';
-            record.header.style.boxShadow = '';
-            this.textContent = 'expand_less';
-            i.title = "Expand table";
+    utils._createElement({
+        tag: 'i',
+        options: {
+            className: 'material-icons cursor noselect btn_header expander',
+            title: 'Zoom map to feature bounds'
+        },
+        style: {
+            color: record.color,
+            marginRight: '-6px'
+        },
+        appendTo: record.drawer,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                utils.toggleExpanderParent(e.target, record.drawer);
+            }
         }
     });
-    record.header.appendChild(i);
 }
 
 function marker(dom, record) {
-    let i = utils.createElement('i', {
-        textContent: 'location_off',
-        className: 'material-icons cursor noselect btn',
-        title: 'Hide marker'
-    });
-    i.style.color = record.color;
-    i.addEventListener('click', function () {
-        if (this.textContent === 'location_off') {
-            _xyz.map.removeLayer(record.layer.M);
-            this.textContent = 'location_on';
-            i.title = 'Show marker';
-        } else {
-            _xyz.map.addLayer(record.layer.M);
-            this.textContent = 'location_off';
-            i.title = 'Hide marker';
+    utils._createElement({
+        tag: 'i',
+        options: {
+            textContent: 'location_off',
+            className: 'material-icons cursor noselect btn_header',
+            title: 'Hide marker'
+        },
+        style: {
+            color: record.color
+        },
+        appendTo: record.drawer,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                if (e.target.textContent === 'location_off') {
+                    _xyz.map.removeLayer(record.layer.M);
+                    e.target.textContent = 'location_on';
+                    e.target.title = 'Show marker';
+                } else {
+                    _xyz.map.addLayer(record.layer.M);
+                    e.target.textContent = 'location_off';
+                    e.target.title = 'Hide marker';
+                }
+            }
         }
     });
-    record.header.appendChild(i);
 }
 
 function update(dom, record) {
     record.upload = utils.createElement('i', {
         textContent: 'cloud_upload',
-        className: 'material-icons cursor noselect btn',
+        className: 'material-icons cursor noselect btn_header',
         title: 'Save changes to cloud'
     });
     record.upload.style.display = 'none';
@@ -105,7 +131,7 @@ function update(dom, record) {
                 record.upload.style.display = 'none';
 
                 //let test = record.drawer.getElementsByClassName('changed');
-                utils.removeClass(record.drawer.querySelectorAll('.changed'),'changed');
+                utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
 
                 _layer.getLayer();
                 try {
@@ -115,7 +141,7 @@ function update(dom, record) {
                             .getLayers()[0]
                             .getLatLng()
                         );
-                } catch(err){}
+                } catch (err) { }
             }
         }
         xhr.send(JSON.stringify({
@@ -135,7 +161,7 @@ function update(dom, record) {
 function trash(dom, record) {
     let i = utils.createElement('i', {
         textContent: 'delete',
-        className: 'material-icons cursor noselect btn',
+        className: 'material-icons cursor noselect btn_header',
         title: 'Delete feature'
     });
     i.style.color = record.color;

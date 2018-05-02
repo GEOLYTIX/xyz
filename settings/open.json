@@ -387,10 +387,14 @@
           "style": {
             "default": {
               "weight": 1,
-              "color": "#000"
+              "color": "#000",
+              "fill": true,
+              "fillOpacity": 0 
             },
             "highlight": {
-              "color": "#e91e63"
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0
             }
           }
         },

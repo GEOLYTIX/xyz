@@ -13,6 +13,9 @@ function panel(layer) {
         className: 'meta',
         textContent: layer.meta
     }));
+
+
+    if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
     
     // apply filters if exist
     if(!!lfs.applyFilters(layer)) panel.appendChild(lfs.layerFilters(layer, lfs.applyFilters(layer)));
@@ -20,8 +23,6 @@ function panel(layer) {
     if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
 
     if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'graduated') panel.appendChild(mvtGraduated(layer));
-
-    if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
 
     if (layer.format === 'cluster' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(clusterCategorized(layer));
 
@@ -39,32 +40,24 @@ function clusterSettings(layer) {
 
     // Add a settings div
     let settings = utils.createElement('div', {
-        classList: 'settings ctrl'
+        classList: 'section expandable'
     });
 
-    settings.style.maxHeight = '30px';
-
-    // Create control to toggle layer visibility.
-    let div = utils.createElement('div', {
-        textContent: 'Cluster Settings',
-        classList: 'cursor noselect ctrl'
-    });
-
-    div.style.color = '#090';
-
-    div.addEventListener('click', function () {
-        if (settings.style.maxHeight === '30px') {
-            settings.style.maxHeight = '320px';
-            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 360) + 'px';
-            div.style.color = '#333';
-        } else {
-            settings.style.maxHeight = '30px';
-            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
-            div.style.color = '#090';
+    utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'btn_text cursor noselect',
+            textContent: 'Cluster Settings'
+        },
+        appendTo: settings,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                utils.toggleExpanderParent(e.target, settings, true)
+            }
         }
     });
-    settings.appendChild(div);
-
 
     // Set cluster defaults
     if (!layer.cluster_kmeans) layer.cluster_kmeans = 100;
@@ -224,24 +217,41 @@ function mvtCategorized(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'legend'
-        }),
-        svg = d3
-            .select(legend)
-            .append('svg')
-            .attr('width', width),
-        y = 10;
+            className: 'section expandable expanded'
+        });
+
+        utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'btn_text cursor noselect',
+                textContent: 'Legend'
+            },
+            appendTo: legend,
+            eventListener: {
+                event: 'click',
+                funct: e => {
+                    e.stopPropagation();
+                    utils.toggleExpanderParent(e.target, legend, true)
+                }
+            }
+        });
+
+    let svg = d3
+        .select(legend)
+        .append('svg')
+        .attr('width', width),
+        y = 0;
 
     // Create a legend title from the categorized.label property.
-    if (layer.style.theme.label) {
-        svg.append('text')
-            .attr('x', 0)
-            .attr('y', y)
-            .style('font-weight', 600)
-            .style('font-size', '14px')
-            .text(layer.style.theme.label || 'Legend');
-        y += 10;
-    }
+    // if (layer.style.theme.label) {
+    //     svg.append('text')
+    //         .attr('x', 0)
+    //         .attr('y', y)
+    //         .style('font-weight', 600)
+    //         .style('font-size', '14px')
+    //         .text(layer.style.theme.label || 'Legend');
+    //     y += 10;
+    // }
 
     Object.keys(layer.style.theme.cat).map((item) => {
 
@@ -326,24 +336,41 @@ function clusterCategorized(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'legend'
-        }),
-        svg = d3
-            .select(legend)
-            .append('svg')
-            .attr('width', width),
-        y = 15;
+            className: 'section expandable expanded'
+        });
+
+        utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'btn_text cursor noselect',
+                textContent: 'Legend'
+            },
+            appendTo: legend,
+            eventListener: {
+                event: 'click',
+                funct: e => {
+                    e.stopPropagation();
+                    utils.toggleExpanderParent(e.target, legend, true)
+                }
+            }
+        });
+
+    let svg = d3
+        .select(legend)
+        .append('svg')
+        .attr('width', width),
+        y = 0;
 
     // Create a legend title from the categorized.label property.
-    if (layer.style.theme.label) {
-        svg.append('text')
-            .attr('x', 0)
-            .attr('y', y)
-            .style('font-weight', 600)
-            .style('font-size', '14px')
-            .text(layer.style.theme.label);
-        y += 10;
-    }
+    // if (layer.style.theme.label) {
+    //     svg.append('text')
+    //         .attr('x', 0)
+    //         .attr('y', y)
+    //         .style('font-weight', 600)
+    //         .style('font-size', '14px')
+    //         .text(layer.style.theme.label);
+    //     y += 10;
+    // }
 
     if (!layer.filter[layer.cluster_cat]) layer.filter[layer.cluster_cat] = {};
     if (!layer.filter[layer.cluster_cat].in) layer.filter[layer.cluster_cat].in = [];
@@ -485,24 +512,41 @@ function clusterGraduated(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'legend'
-        }),
-        svg = d3
-            .select(legend)
-            .append('svg')
-            .attr('width', width),
-        y = 15;
+            className: 'section expandable expanded'
+        });
+
+        utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'btn_text cursor noselect',
+                textContent: 'Legend'
+            },
+            appendTo: legend,
+            eventListener: {
+                event: 'click',
+                funct: e => {
+                    e.stopPropagation();
+                    utils.toggleExpanderParent(e.target, legend, true)
+                }
+            }
+        });
+
+    let svg = d3
+        .select(legend)
+        .append('svg')
+        .attr('width', width),
+        y = 0;
 
     // Create a legend title from the categorized.label property.
-    if (layer.style.theme.label) {
-        svg.append('text')
-            .attr('x', 0)
-            .attr('y', y)
-            .style('font-weight', 600)
-            .style('font-size', '14px')
-            .text(layer.style.theme.label);
-        y += 10;
-    }
+    // if (layer.style.theme.label) {
+    //     svg.append('text')
+    //         .attr('x', 0)
+    //         .attr('y', y)
+    //         .style('font-weight', 600)
+    //         .style('font-size', '14px')
+    //         .text(layer.style.theme.label);
+    //     y += 10;
+    // }
 
     layer.style.theme.cat.map((cat) => {
 
@@ -543,24 +587,41 @@ function mvtGraduated(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'legend'
-        }),
-        svg = d3
-            .select(legend)
-            .append('svg')
-            .attr('width', width),
-        y = 15;
+            className: 'section expandable expanded'
+        });
+
+        utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'btn_text cursor noselect',
+                textContent: 'Legend'
+            },
+            appendTo: legend,
+            eventListener: {
+                event: 'click',
+                funct: e => {
+                    e.stopPropagation();
+                    utils.toggleExpanderParent(e.target, legend, true)
+                }
+            }
+        });
+
+    let svg = d3
+        .select(legend)
+        .append('svg')
+        .attr('width', width),
+        y = 0;
 
     // Create a legend title from the categorized.label property.
-    if (layer.style.theme.label) {
-        svg.append('text')
-            .attr('x', 0)
-            .attr('y', y)
-            .style('font-weight', 600)
-            .style('font-size', '14px')
-            .text(layer.style.theme.label);
-        y += 10;
-    }
+    // if (layer.style.theme.label) {
+    //     svg.append('text')
+    //         .attr('x', 0)
+    //         .attr('y', y)
+    //         .style('font-weight', 600)
+    //         .style('font-size', '14px')
+    //         .text(layer.style.theme.label);
+    //     y += 10;
+    // }
 
     layer.style.theme.cat.map((cat) => {
 
@@ -602,7 +663,7 @@ function gridControl(layer) {
 
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'legend'
+            className: 'section'
         });
 
     // Select dropdown for size.

@@ -22,7 +22,7 @@
             src: url(fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    <link rel="stylesheet" href="css/desktop_.css" />
+    <link rel="stylesheet" href="css/desktop.css" />
 
     <script>const view_mode = 'desktop';</script>
 
@@ -107,13 +107,10 @@
                                 <div class="range">
                                     <input type="range" min="12" max="120">
                                 </div>
-                                <table class="checkbox">
-                                    <td class="box">
-                                        <input id="retail_points_logscale" type="checkbox">
-                                        <label for="retail_points_logscale"></label>
-                                    </td>
-                                    <td>Log scale cluster</td>
-                                </table>
+                                <label class="checkbox">
+                                    <input type="checkbox" />
+                                    <div class="checkbox_i"></div>Log scale cluster
+                                </label>
                             </div>
                             <div class="section">
                                 <div class="cursor noselect expander_accordeon btn_text" style="color: rgb(0, 153, 0);">Filtering</div>

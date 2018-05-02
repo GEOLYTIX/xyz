@@ -4,34 +4,32 @@
 <head>
     <title>{{:title}}</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         @font-face {
             font-family: ffmark_black;
             src: url(fonts/MarkWeb-Black.woff) format("woff");
         }
-    
+
         @font-face {
             font-family: ffmark;
             src: url(fonts/MarkWebPro.woff) format("woff");
         }
-    
+
         @font-face {
             font-family: ffmark_bold;
             src: url(fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    <link rel="stylesheet" href="css/desktop_.css"/>
+    <link rel="stylesheet" href="css/desktop.css" />
 
-    <script>const view_mode = 'desktop';</script>
-
-    {{:settings}}
+    <script>const view_mode = 'desktop';</script> {{:settings}}
 
 </head>
 
 <body>
-    
+
     <div class="mod_container">
 
         <div id="Gazetteer" class="input_group" style="display: block">
@@ -45,13 +43,9 @@
             <div class="scrolly_track">
                 <div class="scrolly_bar"></div>
             </div>
-            
-        {{include tmpl=module_layers /}}
-            
-        {{include tmpl=module_select /}}
 
-        {{include tmpl=module_catchments /}}
-            
+            {{include tmpl=module_layers /}} {{include tmpl=module_select /}} {{include tmpl=module_catchments /}}
+
         </div>
 
     </div>
@@ -77,7 +71,7 @@
             <button id="btnSearch" title="Open Gazetteer" {{:btnSearch}}>
                 <i class="material-icons">search</i>
             </button>
-            
+
             <button id="btnGeolocate" title="Current location" {{:btnLocate}}>
                 <i class="material-icons">gps_not_fixed</i>
             </button>
@@ -89,11 +83,11 @@
             <button id="btnZoomOut">
                 <i class="material-icons">remove</i>
             </button>
-            
+
             <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
                 <i class="material-icons">picture_as_pdf</i>
             </button>
-            
+
             <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
                 <a href="{{:hrefDocumentation}}">
                     <i class="material-icons">school</i>
@@ -112,7 +106,7 @@
                 </a>
             </button>
         </div>
-        
+
     </div>
 
 </body>

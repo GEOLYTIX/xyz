@@ -8,8 +8,8 @@ const formats = {
 };
 const layers_panel = require('./layers_panel');
 
-module.exports = function(){
-    
+module.exports = function () {
+
     // Assign dom objects.
     let dom = {
         map: document.getElementById('map'),
@@ -28,9 +28,9 @@ module.exports = function(){
 
         // Get the layers from the current locale.
         let layers = _xyz.locales[_xyz.locale].layers;
-        
+
         // Set the layer display from hooks if present; Overwrites the default setting.
-        if (_xyz.hooks.layers) Object.keys(layers).map(function(layer){
+        if (_xyz.hooks.layers) Object.keys(layers).map(function (layer) {
             layers[layer].display = _xyz.hooks.layers.indexOf(layer) > -1 ? true : false;
         });
 
@@ -48,7 +48,7 @@ module.exports = function(){
             layer.locale = _xyz.locale;
             layer.name = layer.name || layer.layer;
             if (!layer.style) layer.style = {};
-            if (!layer.style.default) layer.style.default = {"weight": 1, "color": "#000"};
+            if (!layer.style.default) layer.style.default = { "weight": 1, "color": "#000" };
             if (!layer.filter) layer.filter = {};
 
             layer.drawer = utils._createElement({
@@ -81,15 +81,16 @@ module.exports = function(){
             // Create control to toggle layer visibility.
             utils._createElement({
                 tag: 'i',
-                options:{
+                options: {
                     textContent: layer.display ? 'layers' : 'layers_clear',
-                    className: 'material-icons cursor noselect btn',
+                    className: 'material-icons cursor noselect btn_header',
                     title: 'Toggle visibility'
                 },
                 appendTo: layer.header,
                 eventListener: {
                     event: 'click',
                     funct: e => {
+                        e.stopPropagation();
                         if (e.target.textContent === 'layers_clear') {
                             layer.display = true;
                             utils.removeClass(layer.drawer, 'off');
@@ -118,69 +119,31 @@ module.exports = function(){
                 className: 'loader'
             });
             layer.drawer.appendChild(layer.loader);
-   
-            //Add panel to layer control.
-            layer.panel = layers_panel.panel(layer);
-
-            // Add panel control when panel contains children.
-            if (layer.panel.children.length > 0) {
-
-                // Set the box shadow which indicates collapsed content.
-                layer.header.style.boxShadow = '0 3px 3px -3px black';
-                layer.drawer.style.maxHeight = '35px';
-                layer.drawer.appendChild(layer.panel);
-
-                // Add icon which allows to expand / collaps panel.
-                utils._createElement({
-                    tag: 'i',
-                    options:{
-                        textContent: 'expand_more',
-                        className: 'material-icons cursor noselect btn',
-                        title: 'Collapse layer panel'
-                    },
-                    appendTo: layer.header,
-                    eventListener: {
-                        event: 'click',
-                        funct: e => {
-                            if (e.target.textContent === 'expand_less') {
-                                layer.drawer.style.maxHeight = '35px';
-                                layer.header.style.boxShadow = '0 3px 3px -3px black';
-                                e.target.textContent = 'expand_more';
-                                e.target.title = 'Collapse layer panel';
-                            } else {
-                                layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
-                                layer.header.style.boxShadow = '';
-                                e.target.textContent = 'expand_less';
-                                e.target.title = 'Expand layer panel';
-                            }
-                        }
-                    }
-                });
-            }
 
             // Add edit control to layer header.
             if (layer.editable && layer.editable === 'geometry') {
 
                 utils._createElement({
                     tag: 'i',
-                    options:{
+                    options: {
                         textContent: 'add_location',
-                        className: 'material-icons cursor noselect btn',
+                        className: 'material-icons cursor noselect btn_header',
                         title: 'Create new location'
                     },
                     appendTo: layer.header,
                     eventListener: {
                         event: 'click',
                         funct: e => {
+                            e.stopPropagation();
                             let btn = e.target;
                             utils.toggleClass(btn, 'active');
 
-                            if (!utils.hasClass(btn, 'active')){
+                            if (!utils.hasClass(btn, 'active')) {
                                 _xyz.map.off('click');
                                 dom.map.style.cursor = '';
                                 return
                             }
-        
+
                             btn.style.textShadow = '2px 2px 2px #cf9;';
                             dom.map.style.cursor = 'crosshair';
 
@@ -189,16 +152,16 @@ module.exports = function(){
                                 utils.removeClass(btn, 'active');
                                 _xyz.map.off('click');
                                 dom.map.style.cursor = '';
-        
+
                                 // Make select tab active on mobile device.
                                 if (_xyz.activateSelectTab) _xyz.activateSelectTab();
-        
+
                                 let xhr = new XMLHttpRequest();
                                 xhr.open('POST', 'q_save');
                                 xhr.setRequestHeader("Content-Type", "application/json");
                                 xhr.onload = () => {
                                     if (xhr.status === 200) {
-                                        layer.getLayer();               
+                                        layer.getLayer();
                                         _xyz.select.selectLayerFromEndpoint({
                                             layer: layer.layer,
                                             table: layer.table,
@@ -216,8 +179,41 @@ module.exports = function(){
                                         type: 'Point',
                                         coordinates: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                                     }
-                                }));            
+                                }));
                             });
+                        }
+                    }
+                });
+            }
+
+            //Add panel to layer control.
+            layer.panel = layers_panel.panel(layer);
+
+            // Add panel control when panel contains children.
+            if (layer.panel.children.length > 0) {
+                
+                utils.addClass(layer.header, 'pane_shadow');
+                utils.addClass(layer.drawer, 'expandable');
+
+                layer.header.addEventListener('click', e => {
+                    utils.toggleExpanderParent(e.target, layer.drawer, true);
+                });
+
+                layer.drawer.appendChild(layer.panel);  
+
+                // Add icon which allows to expand / collaps panel.
+                utils._createElement({
+                    tag: 'i',
+                    options: {
+                        className: 'material-icons cursor noselect btn_header expander',
+                        title: 'Toggle layer panel'
+                    },
+                    appendTo: layer.header,
+                    eventListener: {
+                        event: 'click',
+                        funct: e => {
+                            e.stopPropagation();
+                            utils.toggleExpanderParent(e.target, layer.drawer);
                         }
                     }
                 });

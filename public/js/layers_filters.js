@@ -30,35 +30,26 @@ function applyFilters(layer){
 
 function layerFilters(layer, height){
     
-    // Add a filters div
     let filters = utils.createElement('div', {
-        classList: 'filters ctrl'
+        classList: 'section expandable'
     });
-    
-    filters.style.maxHeight = '30px';
 
-    // Create control to toggle layer visibility.
-    let div = utils.createElement('div', {
-        textContent: 'Filtering',
-        classList: 'cursor noselect ctrl'
-    });
-    
-    div.style.color = '#090';
-
-    div.addEventListener('click', function () {
-        if (filters.style.maxHeight === '30px') {
-           
-            filters.style.maxHeight = height.toString() + 'px';
-            layer.drawer.style.maxHeight = (layer.panel.clientHeight + height) + 'px';
-            div.style.color = '#333';
-        } else {
-            filters.style.maxHeight = '30px';
-            layer.drawer.style.maxHeight = (layer.panel.clientHeight + 40) + 'px';
-            div.style.color = '#090';
+    utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'btn_text cursor noselect',
+            textContent: 'Filter'
+        },
+        appendTo: filters,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                utils.toggleExpanderParent(e.target, filters, true)
+            }
         }
     });
-    filters.appendChild(div);
-    
+
     let numeric_div = utils.createElement('div', {
         classList: "filter ctrl"
     }),

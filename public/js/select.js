@@ -304,14 +304,26 @@ module.exports = function Select() {
 
         // Create drawer element to contain the header with controls and the infoj table with inputs.
         record.drawer = utils.createElement('div', {
-            className: 'drawer'
+            className: 'drawer expandable expanded'
         });
 
         // Create the header element to contain the control elements
-        record.header = utils.createElement('div', {
-            textContent: record.letter,
-            className: 'header',
-            style: 'border-bottom: 3px solid ' + record.color
+        record.header = utils._createElement({
+            tag: 'div',
+            options: {
+                textContent: record.letter,
+                className: 'header'
+            },
+            style: {
+                borderBottom: '3px solid ' + record.color
+            },
+            appendTo: record.drawer,
+            eventListener: {
+                event: 'click',
+                funct: e => {
+                    utils.toggleExpanderParent(e.target, record.drawer, true)
+                }
+            }
         });
 
         // Create the clear control element to control the removal of a feature from the select.layers.
@@ -320,11 +332,11 @@ module.exports = function Select() {
         // Create the zoom control element which zoom the map to the bounds of the feature.
         controls.zoom(dom, record);
 
-        // Create the expand control element which controls whether the data table is displayed for the feature.
-        controls.expander(dom, record);
-
         // Create control to toggle marker.
         controls.marker(dom, record);
+
+        // Create the expand control element which controls whether the data table is displayed for the feature.
+        controls.expander(dom, record);
 
         // Create control to update editable items.
         if (record.layer.editable) controls.update(dom, record);

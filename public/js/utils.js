@@ -202,43 +202,59 @@ module.exports = (function () {
 
         return new Blob([uInt8Array], {type: contentType});
     }
+
+    function toggleExpanderParent(el, expandable, accordeon){
+
+        // Check whether parent is expanded.
+        if (hasClass(expandable, 'expanded')) {
+            // Remove expanded class.
+            removeClass(expandable, 'expanded');
+            return
+        }
+    
+        // Accordion: Collapse the parents siblings which are expanded.
+        if (accordeon){
+            [...expandable.parentElement.children].forEach(expandable_sibling => {
+                removeClass(expandable_sibling,'expanded');
+            });
+        }
+    
+        // Add expanded class to expandable element.
+        if (hasClass(expandable, 'expandable')) addClass(expandable, 'expanded');
+    }
     
     function checkbox(onchange, options){
-        let table = createElement('table', {
-            className: "checkbox"
-        });
-        
-        let td = createElement('td', {
-            className: "box"
-        });
-        
-        let input = createElement('input', {
-            id: options.id,
-            type: "checkbox"
-        });
-        
-        let label = createElement('label', {
-            htmlFor: options.id
-        });
-        
-        let title = createElement('td', {
-            textContent: options.label
-        }); 
-        
-        if(options.checked) input.checked = true;
 
+        let checkbox = _createElement({
+            tag: 'label',
+            options: {
+                textContent: options.label,
+                className: 'checkbox'
+            }
+        });
+
+        let input = _createElement({
+            tag: 'input',
+            options: {
+                type: 'checkbox'
+            },
+            appendTo: checkbox
+        });
+
+        _createElement({
+            tag: 'div',
+            options: {
+                className: 'checkbox_i'
+            },
+            appendTo: checkbox
+        });
+
+        if(options.checked) input.checked = true;
         
-        if(typeof(onchange) === 'function'){
+        if (typeof (onchange) === 'function')
             input.addEventListener('change', onchange);
-        }
         
-        td.appendChild(input);
-        td.appendChild(label);
-        
-        table.appendChild(td);
-        table.appendChild(title);
-        
-        return table;
+        return checkbox;
     }
     
 
@@ -257,6 +273,7 @@ module.exports = (function () {
         getMath: getMath,
         createStatsTable: createStatsTable,
         dataURLToBlob: dataURLToBlob,
-        checkbox: checkbox
+        checkbox: checkbox,
+        toggleExpanderParent: toggleExpanderParent
     };
 })();
