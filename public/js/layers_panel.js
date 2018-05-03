@@ -403,7 +403,7 @@ function clusterCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.filter.cat.ni.splice(layer.filter[layer.cluster_cat].ni.indexOf(item),1);
+                    layer.filter[layer.cluster_cat].ni.splice(layer.filter[layer.cluster_cat].ni.indexOf(item), 1);
                 } else {
                     this.style.opacity = 0.5;
                     layer.filter[layer.cluster_cat].ni.push(item);
@@ -453,11 +453,15 @@ function clusterCategorized(layer) {
     if (!layer.style.markerMulti) layer.style.markerMulti = [400,'#333']
 
     // Add section for clusters and competitors title
-    svg.append('circle')
+    let len = layer.style.markerMulti.length; // create marker with multiple rings
+    
+    for(let i = 1; i < len; i += 2){    
+        svg.append('circle')
         .attr('cx', 20)
         .attr('cy', y)
-        .attr('r', 12)
-        .style('fill', layer.style.markerMulti[1]);
+        .attr('r', 12*layer.style.markerMulti[i-1]/400)
+        .attr('fill', layer.style.markerMulti[i]);
+    }
 
     svg.append('text')
         .attr('x', 40)
