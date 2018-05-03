@@ -378,7 +378,7 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#FFDE3B', 300, '#777'])",
-            "markerMulti": [400, "#143156", 200, "#FFDE3B", 100, "#FFF"],
+            "markerMulti": [400, "#FFDE3B"],
             "theme": {
               "label": "Game",
               "type": "categorized",
@@ -438,7 +438,7 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400, '#fff', 350, '#555'])",
-            "markerMulti": [400, "#777", 300, "#FFF"],
+            "markerMulti": [400, "#777"],
             "theme": {
                 "label": "Chain",
                 "type": "categorized",

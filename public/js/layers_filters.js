@@ -1,24 +1,13 @@
 const utils = require('./utils');
 
 function applyFilters(layer){
-    let enabled = 0;
+    let enabled = false;
     
     if(layer.infoj){
         Object.keys(layer.infoj).map(function(key){
 
             if(layer.infoj[key].filter){
-                enabled += 50;
-                if(layer.infoj[key].filter === "like" || layer.infoj[key].filter === 'match'){
-                    enabled += 80;
-                }
-                if(layer.infoj[key].filter === "numeric"){
-                    enabled += 80;
-                }
-                if(typeof(layer.infoj[key].filter) === 'object'){
-                    Object.keys(Object.keys(layer.infoj[key].filter)).map(function(__key){
-                        enabled += 50*Object.keys(Object.keys(layer.infoj[key].filter)).length;
-                    });
-                }
+                enabled = true;
             }
         });
         return enabled;
@@ -38,7 +27,7 @@ function layerFilters(layer, height){
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
-            textContent: 'Filter'
+            textContent: 'Filtering'
         },
         appendTo: filters,
         eventListener: {
@@ -49,209 +38,140 @@ function layerFilters(layer, height){
             }
         }
     });
-
-    let numeric_div = utils.createElement('div', {
-        classList: "filter ctrl"
-    }),
-        checkbox_div = utils.createElement('div', {
-            classList: "filter ctrl"
-        }),
-        text_div = utils.createElement('div', {
-            classList: "filter ctrl"
-        });
+    
+    let block, title, content;
     
     Object.keys(layer.infoj).map(function(key){
         
         if(typeof(layer.infoj[key].filter) === "object"){
             
-            let _field = layer.infoj[key].field,
-                _label = layer.infoj[key].label;
+            block = utils.createElement('div', {
+                classList: "block"
+            });
             
-            let _title = utils.createElement('span', {
-                textContent: _label,
-                classList: "filter-title"
+            title = utils.createElement('div', {
+                textContent: layer.infoj[key].label,
+                classList: "title"
             });
                     
-            checkbox_div.appendChild(_title);
+            block.appendChild(title);
             
             Object.keys(layer.infoj[key].filter).map(function(_key){
                 
                 for(let val of layer.infoj[key].filter[_key]){
                     
-                    let index = layer.infoj[key].filter[_key].indexOf(val),
-                        _content;
+                    let index = layer.infoj[key].filter[_key].indexOf(val);
                     
                     let options = {
-                        id: layer.table + '--' + _field + "--" + index,
-                        table: layer.table,
-                        field: _field,
-                        label: _label,
+                        field: layer.infoj[key].field,
                         operator: 'in',
                         value: val
                     }
                     
-                    _content = filter_checkbox(options, layer);
-                    _content.style.marginLeft = '30px';
-                    checkbox_div.appendChild(_content);
+                    content = filter_checkbox(options, layer);
+                    block.appendChild(content);
                 }
 
             });
+            filters.appendChild(block);
             
         } else {
-        
-            let _content;
+            
+            block = utils.createElement('div', {
+                classList: "block"
+            });
+            
+            title = utils.createElement('div', {
+                textContent: layer.infoj[key].label,
+                classList: "title"
+            });
+            
+            block.appendChild(title);
             
             let options = {
-                table: layer.table,
                 field: layer.infoj[key].field,
-                label: layer.infoj[key].label
+                label: layer.infoj[key].label,
+                appendTo: block
             }
             
             
             if(layer.infoj[key].filter === "numeric"){
                 
-                // numeric operators defined here
-                options.operators = [{name: "less than", val: "lt"},
-                                     {name: "greater than", val: "gt"}];
-                
-                _content = filter_numeric(layer, options); 
-                
-                numeric_div.appendChild(_content);
+                filter_numeric(layer, options); 
+                filters.appendChild(block);
             }
             
             if(layer.infoj[key].filter === "like" || layer.infoj[key].filter ==="match"){
                 
                 options.operator = layer.infoj[key].filter;
-                
-                let _content = filter_text(layer, options);
-                
-                text_div.appendChild(_content);
+
+                filter_text(layer, options);
+                filters.appendChild(block);
+
             }
         }
         
     });
-    
-    filters.appendChild(numeric_div);
-    filters.appendChild(checkbox_div);
-    filters.appendChild(text_div);
-    
+
     return filters;
 }
 
 // create text filter
 function filter_text(layer, options){
     
-    let div = utils.createElement('div', {
-        classList: "ctrl"
-    });
-    
-    let title = utils.createElement('span', {
-        textContent: options.label,
-        classList: "filter-title"
-    });
-    
-    div.appendChild(title);
-    
-    let input = utils.createElement('input', {
-        id: layer.table + "--" + options.field,
-        placeholder: 'Search.'
-    });
-    
     function onkeyup(e){
-        
         let val = this.value;
-        
-        // apply filter to the layer;
         layer.filter[options.field] = {};
-        layer.filter[options.field][options.operator] = val;
-    
+        layer.filter[options.field][this.name] = val;
         layer.getLayer();
     }
     
-    input.addEventListener("keyup", onkeyup);
+    let input = utils.createElement('input', {
+        placeholder: 'Search.',
+        onkeyup: onkeyup,
+        name: options.operator
+    }, options.appendTo);
     
-    input.style.width = "100%";
-    
-    div.appendChild(input);
-    
-    return div;
 }
-
 
 // create numeric filter 
 function filter_numeric(layer, options){
     
-    let div = utils.createElement('div', {
-        classList: "ctrl"
-    });
-   
-    let title = utils.createElement('span', {
-        textContent: options.label,
-        classList: "filter-title"
-    });
-    
-    div.appendChild(title);
-    
-    let select = utils.createElement('select');
-    
-    Object.keys(options.operators).map(function(key){
-
-        let operator = utils.createElement('option', {
-            value: options.operators[key].val,
-            textContent: options.operators[key].name
-        }); 
-        select.appendChild(operator);
-    });
-    
-    select.selectedIndex = 0;
-    
-    select.style.width = "44%";
-    select.style.display = "inline-block";
-    select.style.marginRight = "10px";
-    
-    options.operator = select[select.selectedIndex].value;
-    
-    select.addEventListener('change', function(){
-        let val = parseFloat(document.getElementById(options.table + "--" + options.field).value);
-        options.operator = this[this.selectedIndex].value;
-        
-        layer.filter[options.field] = {};
-        layer.filter[options.field][options.operator] = val;
-   
-        if(val) layer.getLayer();
-    });
-    
-    div.appendChild(select);
-    
-    let input = utils.createElement('input', {
-        id: options.table + "--" + options.field,
-        placeholder: 'Set value.'
-    });
-    
     function onkeyup(e){
-        let id = this.id;
-        let params = id.split("--");
-        let table = params[0], field = params[1];
         
         let val = parseFloat(this.value);
         
-        if(!layer.filter[options.field]) 
-            layer.filter[options.field] = {};
-        layer.filter[options.field][options.operator] = val;
+        if(!layer.filter[options.field]) layer.filter[options.field] = {};
         
-        // apply filter to the layer;
-        if(val) layer.getLayer();
-        //console.log(layer.filter);
+        if(val) {
+            layer.filter[options.field][this.name] = val;
+        }
+        layer.getLayer();
     }
     
-    input.style.width = "48%";
-    input.style.display = "inline-block";
+    let gt_label = utils.createElement('div', {
+        classList: "label half",
+        textContent: "> greater than"
+    }, options.appendTo);
     
-    input.addEventListener("keyup", onkeyup);
+    let lt_label = utils.createElement('div', {
+        classList: "label half right",
+        textContent: "< less than"
+    }, options.appendTo);
     
-    div.append(input);
+    let gt_input = utils.createElement('input', {
+        classList: "label half",
+        placeholder: 'Set value.',
+        name: "gt",
+        onkeyup: onkeyup
+    }, options.appendTo);
     
-    return div;
+    let lt_input = utils.createElement('input', {
+        classList: "label half right",
+        placeholder: 'Set value.',
+        onkeyup: onkeyup,
+        name: "lt"
+    }, options.appendTo);
 }
 
 // create checkbox filter
@@ -272,7 +192,7 @@ function filter_checkbox(options, layer){
             layer.getLayer();
         }
     }
-    let checkbox = utils.checkbox(filter_checkbox_onchange, {label: options.value, id: options.id});
+    let checkbox = utils.checkbox(filter_checkbox_onchange, {label: options.value});
     
     return checkbox;
 }

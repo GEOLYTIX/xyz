@@ -453,15 +453,13 @@ function clusterCategorized(layer) {
     if (!layer.style.markerMulti) layer.style.markerMulti = [400,'#333']
 
     // Add section for clusters and competitors title
-    let len = layer.style.markerMulti.length; // create marker with multiple rings
     
-    for(let i = 1; i < len; i += 2){    
         svg.append('circle')
         .attr('cx', 20)
         .attr('cy', y)
-        .attr('r', 12*layer.style.markerMulti[i-1]/400)
-        .attr('fill', layer.style.markerMulti[i]);
-    }
+        .attr('r', 12)
+        .attr('fill', layer.style.markerMulti[1]);
+
 
     svg.append('text')
         .attr('x', 40)
