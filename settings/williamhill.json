@@ -377,30 +377,95 @@
             }
           ],
           "style": {
-            "marker": "svg_symbols.target([400, '#fff', 350, '#555'])",
-            "markerMulti": [400, "#777"],
+            "marker": "svg_symbols.target([400,'#FFDE3B', 300, '#777'])",
+            "markerMulti": [400, "#143156", 200, "#FFDE3B", 100, "#FFF"],
             "theme": {
-              "label": "Brand",
+              "label": "Game",
               "type": "categorized",
               "competitors": {},
               "cat": {
                 "MONOPOLY": {
-                  "marker": "svg_symbols.target([400,'#FCB9B2',200,'#FFFF00'])",
+                  "marker": "svg_symbols.target([400, '#143156' ,200, '#FFDE3B', 100, '#FFF'])",
                   "label": "Monopoly"
                 },
                 "MULTI COMP": {
-                  "marker": "svg_symbols.target([400,'#832232',200,'#FADF63'])",
+                  "marker": "svg_symbols.target([400, '#FFF', 300, '#143156', 200, '#FFDE3B', 100, '#FFF'])",
                   "label": "Multi competition"
                 },
                 "SINGLE COMP": {
-                  "marker": "svg_symbols.target([400,'#2274A5',200,'#fff',150,'#fdb839'])",
+                  "marker": "svg_symbols.target([400,'#2274A5', 300, '#143156', 200, '#FFDE3B', 100, '#FFF'])",
                   "label": "Single competition"
-                },
-                " ": {
-                  "marker": "svg_symbols.target([400,'#4F2B82',250,'#8ED4E0'])",
-                  "label": "other"
                 }
-              }
+              },
+            "other": true
+            }
+          }
+        },
+        "competitors": {
+          "display": true,
+          "name": "Competitors",
+          "meta": "",
+          "format": "cluster",
+          "pane": ["competitors", 520],
+          "dbs": "XYZ",
+          "qID": "branchid",
+          "table": "williamhill_competitors",
+          "cluster_label": "competitor",
+          "cluster_cat": "competitor",
+          "infoj": [
+            {
+              "field": "branchid",
+              "label": "Branch ID",
+              "type": "text"
+            },{
+              "field": "competitor",
+              "label": "Competitor",
+              "type": "text"
+            },{
+              "field": "street_address",
+              "label": "Address",
+              "type": "text"
+            },{
+              "field": "town",
+              "type": "text"
+            },{
+              "field": "suburb",
+              "type": "text"
+            },{
+              "field": "postcode",
+              "type": "text"
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400, '#fff', 350, '#555'])",
+            "markerMulti": [400, "#777", 300, "#FFF"],
+            "theme": {
+                "label": "Chain",
+                "type": "categorized",
+                "competitors": {},
+                "cat": {
+                    "Betfred": {
+                        "marker": "svg_symbols.target([400, '#053770', 300, '#E61C40', 200, '#644588'])",
+                        "label": "Betfred"
+                    },
+                    "Coral": {
+                        "marker": "svg_symbols.target([400, '#68B95A', 300, '#FCD45A', 100, '#E84041'])",
+                        "label": ""
+                    },
+                    "JenningsBet": {
+                        "marker": "svg_symbols.target([400, '#000', 300, '#DB0E2F', 150, '#33DE38'])",
+                        "label": ""
+                    },
+                    "Ladbrokes": {
+                        "marker": "svg_symbols.target([400, '#FE162C', 250, '#FFF'])",
+                        "label": ""
+                    },
+                    "Paddy Power": {
+                        "marker": "svg_symbols.target([400, '#055041', 300, '#65BA50', 100, '#FEFC44'])",
+                        "label": ""
+                    }
+                },
+                "other": true
             }
           }
         },
