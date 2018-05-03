@@ -1,15 +1,49 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
-const controls = require('./select_controls');
+const select_controls = require('./select_controls');
 const select_table = require('./select_table');
 
-module.exports = function Select() {
+module.exports = () => {
 
-    // Set dom elements for the select module.
-    let dom = {
-        btnOff: document.querySelector('#ClearLocations'),
-        layers: document.querySelector('#Locations > .content')
-    };
+    let LocationsHeader = utils._createElement({
+        tag: 'div',
+        style: {
+            display: 'none'
+        },
+        appendTo: document.getElementById('Locations')
+    })
+
+    utils._createElement({
+        tag: 'div',
+        options: {
+            textContent: 'Locations',
+            className: 'title'
+        },
+        appendTo: LocationsHeader
+    })
+
+    utils._createElement({
+        tag: 'div',
+        options: {
+            textContent: 'Clear all locations.',
+            className: 'btn_text cursor'
+        },
+        appendTo: LocationsHeader,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                resetModule();
+            }
+        }
+    })
+
+    let locations = utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'content'
+        },
+        appendTo: document.getElementById('Locations')
+    });
 
     // Create select pane. This pane has a shadow filter associated in the css.
     _xyz.map.createPane('select_display');
@@ -84,60 +118,50 @@ module.exports = function Select() {
           "color": "#d32f2f"
         }];
     
-    // init() is called upon initialisation and when the locale is changed (change_locale === true).
-    _xyz.select.init = function (change_locale) {
-
-        // Remove the layers hook on change_locale event.
-        if (change_locale) _xyz.select.resetModule();
-
-        // Set the layer display from hooks if present; Overwrites the default setting.
-        if (_xyz.hooks.select) _xyz.hooks.select.map(function (hook) {
-            let selectionHook = hook.split('!');
-            selectLayerFromEndpoint({
-                layer: selectionHook[1],
-                table: selectionHook[2],
-                id: selectionHook[3],
-                marker: [selectionHook[4].split(';')[0], selectionHook[4].split(';')[1]]
-            });
+    // Set the layer display from hooks if present; Overwrites the default setting.
+    if (_xyz.hooks.select) _xyz.hooks.select.split(',').forEach(hook => {
+        let params = hook.split('!');
+        selectLayerFromEndpoint({
+            layer: params[1],
+            table: params[2],
+            id: params[3],
+            marker: [params[4].split(';')[0], params[4].split(';')[1]]
         });
-        _xyz.removeHook('select');
-    }
-    _xyz.select.init();
-
-    // Reset the module on btnOff click.
-    dom.btnOff.addEventListener('click', () => _xyz.select.resetModule());
+    });
+    _xyz.removeHook('select');
 
     // Reset function for the module container.
     _xyz.select.resetModule = resetModule;
     function resetModule() {
-        dom.btnOff.style.display = 'none';
-        dom.layers.innerHTML = '';
+        LocationsHeader.style.display = 'none';
+        locations.innerHTML = '';
         _xyz.removeHook('select');
         _xyz.select.records.map(function (record) {
-            if (record.layer && record.layer.L) _xyz.map.removeLayer(record.layer.L);
-            if (record.layer && record.layer.M) _xyz.map.removeLayer(record.layer.M);
-            if (record.layer && record.layer.D) _xyz.map.removeLayer(record.layer.D);
-            record.layer = null;
+            if (record.location && record.location.L) _xyz.map.removeLayer(record.location.L);
+            if (record.location && record.location.M) _xyz.map.removeLayer(record.location.M);
+            if (record.location && record.location.D) _xyz.map.removeLayer(record.location.D);
+            record.location = null;
         });
         
         // Make select tab active on mobile device.
         if (_xyz.activateLayersTab) _xyz.activateLayersTab();
     }
 
-    // Get layer from data source
-    function selectLayerFromEndpoint(layer) {
+    // Get location from data source
+    _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
+    function selectLayerFromEndpoint(location) {
     
-        let freeRecords = _xyz.select.records.filter(record => !record.layer);
+        let freeRecords = _xyz.select.records.filter(record => !record.location);
 
         if (freeRecords.length === 0) return
 
         // Make select tab active on mobile device.
         if (_xyz.activateSelectTab) _xyz.activateSelectTab();
 
-        let _layer = _xyz.locales[_xyz.locale].layers[layer.layer];
+        let layer = _xyz.locales[_xyz.locale].layers[location.layer];
 
         // infoj fields with a layer definition are queried from the reference layer.
-        setLayerReferences(_layer.infoj);
+        setLayerReferences(layer.infoj);
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
@@ -146,45 +170,41 @@ module.exports = function Select() {
         xhr.onload = function () {
             
             // remove wait cursor class if found
-            let els = document.querySelectorAll('#map .leaflet-interactive.wait-cursor-enabled');
-            //console.log("remove class " + els.length);
-            
+            let els = document.querySelectorAll('#map .leaflet-interactive.wait-cursor-enabled');        
             for(let el of els){
                 el.classList.remove("wait-cursor-enabled");
             }
             
             if (this.status === 200) {
                 let json = JSON.parse(this.responseText);
-                //console.log(json);
-                layer.geometry = JSON.parse(json.geomj);
-                layer.infoj = json.infoj;
-                layer.editable = _layer.editable;
-                layer.geomdisplay = _layer.geomdisplay ? JSON.parse(json.geomdisplay) : null;
-                layer.dbs = _layer.dbs;
-                layer.qID = _layer.qID;
-                addLayerToRecord(layer);
+                location.geometry = JSON.parse(json.geomj);
+                location.infoj = json.infoj;
+                location.editable = layer.editable;
+                location.geomdisplay = layer.geomdisplay ? JSON.parse(json.geomdisplay) : null;
+                location.dbs = layer.dbs;
+                location.qID = layer.qID;
+                addLayerToRecord(location);
             }
         }
         
         xhr.send(JSON.stringify({
-            dbs: _layer.dbs,
-            table: layer.table,
-            qID: _layer.qID,
-            id: layer.id,
-            infoj: _layer.infoj,
-            geom: _layer.geom,
-            geomj: _layer.geomj,
-            geomq: _layer.geomq,
-            geomdisplay: _layer.geomdisplay
+            dbs: layer.dbs,
+            table: location.table,
+            qID: layer.qID,
+            id: location.id,
+            infoj: layer.infoj,
+            geom: layer.geom,
+            geomj: layer.geomj,
+            geomq: layer.geomq,
+            geomdisplay: layer.geomdisplay
         }));
     }
-    _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
 
     function setLayerReferences(infoj) {
-        infoj.forEach((entry)=>{
+        infoj.forEach(entry => {
 
             // Create a layer reference for the layer defined in the infoj field.
-            if (typeof entry.layer === 'string'){
+            if (typeof entry.layer === 'string') {
                 entry.layer = {
                     table: _xyz.locales[_xyz.locale].layers[entry.layer].table,
                     geom: _xyz.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
@@ -194,41 +214,39 @@ module.exports = function Select() {
         })
     }
 
-    function addLayerToRecord(layer) {
+    function addLayerToRecord(location) {
         let freeRecords = _xyz.select.records.filter(function (record) {
-            if (!record.layer) return record
+            if (!record.location) return record
         });
 
         // Set marker coordinates from point geometry.
-        if (layer.geometry.type === 'Point') layer.marker = layer.geometry.coordinates;
+        if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
 
-        dom.btnOff.style.display = 'block';
-        // dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - (((freeRecords.length - 1) / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
+        LocationsHeader.style.display = 'block';
 
         if (freeRecords.length > 0) {
-            freeRecords[0].layer = layer;
-            if (layer.layer) {
+            freeRecords[0].location = location;
+            if (location.layer) {
                 _xyz.pushHook('select',
                     freeRecords[0].letter + '!' +
-                    freeRecords[0].layer.layer + '!' +
-                    freeRecords[0].layer.table + '!' +
-                    freeRecords[0].layer.id + '!' +
-                    freeRecords[0].layer.marker[0] + ';' +
-                    freeRecords[0].layer.marker[1]);
+                    freeRecords[0].location.layer + '!' +
+                    freeRecords[0].location.table + '!' +
+                    freeRecords[0].location.id + '!' +
+                    freeRecords[0].location.marker[0] + ';' +
+                    freeRecords[0].location.marker[1]);
             }
 
             addRecordToMap(freeRecords[0])
         }
-        // if (freeRecords.length === 1) dom.header.style.background = '#ffcc80';
     }
     _xyz.select.addLayerToRecord = addLayerToRecord;
 
     function addRecordToMap(record) {
-        if (record.layer.geomdisplay) {
-            record.layer.D = L.geoJson(
+        if (record.location.geomdisplay) {
+            record.location.D = L.geoJson(
                 {
                     type: 'Feature',
-                    geometry: record.layer.geomdisplay
+                    geometry: record.location.geomdisplay
                 }, {
                     interactive: false,
                     pane: 'select_display',
@@ -242,13 +260,13 @@ module.exports = function Select() {
                 }).addTo(_xyz.map);
         }
 
-        if (record.layer.marker) {
-            record.layer.M = L.geoJson(
+        if (record.location.marker) {
+            record.location.M = L.geoJson(
                 {
                     type: 'Feature',
                     geometry: {
                         type: 'Point',
-                        coordinates: record.layer.marker
+                        coordinates: record.location.marker
                     }
                 }, {
                     pointToLayer: function (feature, latlng) {
@@ -265,10 +283,10 @@ module.exports = function Select() {
                 }).addTo(_xyz.map);
         }
 
-        record.layer.L = L.geoJson(
+        record.location.L = L.geoJson(
             {
                 type: 'Feature',
-                geometry: record.layer.geometry
+                geometry: record.location.geometry
             }, {
                 interactive: false,
                 pane: 'select',
@@ -288,12 +306,12 @@ module.exports = function Select() {
                             }),
                             pane: 'select_circle',
                             interactive: _xyz.select ? true : false,
-                            draggable: record.layer.editable
+                            draggable: record.location.editable
                         });
                 }
             }).addTo(_xyz.map);
        
-        record.layer.L.getLayers()[0].on('dragend', function (e) {
+        record.location.L.getLayers()[0].on('dragend', function (e) {
             record.upload.style.display = 'block';
         });
 
@@ -301,6 +319,8 @@ module.exports = function Select() {
     }
 
     function addRecordToList(record) {
+
+        Object.values(locations.children).forEach(loc => utils.removeClass(loc, 'expanded'));
 
         // Create drawer element to contain the header with controls and the infoj table with inputs.
         record.drawer = utils.createElement('div', {
@@ -327,22 +347,22 @@ module.exports = function Select() {
         });
 
         // Create the clear control element to control the removal of a feature from the select.layers.
-        controls.clear(dom, record);
+        select_controls.clear(record);
 
         // Create the zoom control element which zoom the map to the bounds of the feature.
-        controls.zoom(dom, record);
+        select_controls.zoom(record);
 
         // Create control to toggle marker.
-        controls.marker(dom, record);
+        select_controls.marker(record);
 
         // Create the expand control element which controls whether the data table is displayed for the feature.
-        controls.expander(dom, record);
+        select_controls.expander(record);
 
         // Create control to update editable items.
-        if (record.layer.editable) controls.update(dom, record);
+        if (record.location.editable) select_controls.update(record);
 
         // Create control to trash editable items.
-        if (record.layer.editable && record.layer.editable === 'geometry') controls.trash(dom, record);
+        if (record.location.editable && record.location.editable === 'geometry') select_controls.trash(record);
 
         // Add header element to the drawer.
         record.drawer.appendChild(record.header);
@@ -352,9 +372,9 @@ module.exports = function Select() {
 
         // Find free space and insert record.
         let freeRecords = _xyz.select.records.filter(function (record) {
-            if (!record.layer) return record
+            if (!record.location) return record
         });
         let idx = _xyz.select.records.indexOf(record);
-        dom.layers.insertBefore(record.drawer, dom.layers.children[idx]);
+        locations.insertBefore(record.drawer, locations.children[idx]);
     }
 }

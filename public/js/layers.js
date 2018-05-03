@@ -8,7 +8,7 @@ const formats = {
 };
 const layers_panel = require('./layers_panel');
 
-module.exports = function () {
+module.exports = () => {
 
     // Assign dom objects.
     let dom = {

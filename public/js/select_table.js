@@ -12,7 +12,7 @@ function addInfojToList(record) {
     });
 
     // Populate the table from the features infoj object.
-    Object.values(record.layer.infoj).forEach(entry => {
+    Object.values(record.location.infoj).forEach(entry => {
 
         // Create new table row at given level and append to table.
         let tr = utils.createElement('tr', {
@@ -36,7 +36,7 @@ function addInfojToList(record) {
         }
 
         // Remove row if not editable and no value
-        if (!record.layer.editable && !entry.value) {
+        if (!record.location.editable && !entry.value) {
             tr.remove();
             return
         }
@@ -59,9 +59,9 @@ function addInfojToList(record) {
         }
 
         // Set field value if layer is not editable and return from object.map function.
-        if (!record.layer.editable && entry.value) {
+        if (!record.location.editable && entry.value) {
             val.textContent = entry.type === 'numeric' ?
-                parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: record.layer.grid? 0: 2}) :
+                parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: record.location.grid? 0: 2}) :
                 entry.type === 'integer' ?
                     parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
                     entry.value;
@@ -317,7 +317,7 @@ function addInfojToList(record) {
         }
 
         // Creat input for editable fields
-        if (record.layer.editable) {
+        if (record.location.editable) {
             let input = utils.createElement('input', {
                 value: entry.value || '',
                 type: 'text'

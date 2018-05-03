@@ -81,10 +81,7 @@ function addClusterToLayer(cluster, layer) {
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
 
                 // Define a default dotArr.
-                let dotArr = [];
-                
-                layer.style.markerMulti ? dotArr = layer.style.markerMulti : dotArr = [400, "#333"];
-                //let dotArr = [400, "#333"];
+                let dotArr = layer.style.markerMulti || [400, "#333"];
 
                 // Check whether categorized theme has competitors block defined.
                 if (layer.style.theme.competitors) {
@@ -96,7 +93,6 @@ function addClusterToLayer(cluster, layer) {
                             dotArr.splice(3, 0, layer.style.theme.competitors[comp].colour);
                         }
                     });
-
                 }
 
                 // Create icon svg from dotArr.

@@ -24,7 +24,7 @@ module.exports = () => {
         _xyz.setView(true);
         _xyz.gazetteer.init(true);
         _xyz.layers.init(true);
-        _xyz.select.init(true);
+        _xyz.select.resetModule();
     };
 
     Object.keys(_xyz.locales).forEach(loc => {

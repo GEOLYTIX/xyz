@@ -1,6 +1,6 @@
 const utils = require('./utils');
 
-function clear(dom, record) {
+function clear(record) {
     utils._createElement({
         tag: 'i',
         options: {
@@ -20,14 +20,14 @@ function clear(dom, record) {
                 e.stopPropagation();
                 record.drawer.remove();
 
-                _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
-                if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
-                if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
-                if (record.layer.D) _xyz.map.removeLayer(record.layer.D);
-                record.layer = null;
+                _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                if (record.location.L) _xyz.map.removeLayer(record.location.L);
+                if (record.location.M) _xyz.map.removeLayer(record.location.M);
+                if (record.location.D) _xyz.map.removeLayer(record.location.D);
+                record.location = null;
 
                 let freeRecords = _xyz.select.records.filter(function (record) {
-                    if (!record.layer) return record
+                    if (!record.location) return record
                 });
 
                 if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
@@ -36,7 +36,7 @@ function clear(dom, record) {
     });
 }
 
-function zoom(dom, record) {
+function zoom(record) {
     utils._createElement({
         tag: 'i',
         options: {
@@ -53,13 +53,13 @@ function zoom(dom, record) {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                _xyz.map.flyToBounds(record.layer.L.getBounds());
+                _xyz.map.flyToBounds(record.location.L.getBounds());
             }
         }
     });
 }
 
-function expander(dom, record) {
+function expander(record) {
     utils._createElement({
         tag: 'i',
         options: {
@@ -81,7 +81,7 @@ function expander(dom, record) {
     });
 }
 
-function marker(dom, record) {
+function marker(record) {
     utils._createElement({
         tag: 'i',
         options: {
@@ -98,11 +98,11 @@ function marker(dom, record) {
             funct: e => {
                 e.stopPropagation();
                 if (e.target.textContent === 'location_off') {
-                    _xyz.map.removeLayer(record.layer.M);
+                    _xyz.map.removeLayer(record.location.M);
                     e.target.textContent = 'location_on';
                     e.target.title = 'Show marker';
                 } else {
-                    _xyz.map.addLayer(record.layer.M);
+                    _xyz.map.addLayer(record.location.M);
                     e.target.textContent = 'location_off';
                     e.target.title = 'Hide marker';
                 }
@@ -111,7 +111,7 @@ function marker(dom, record) {
     });
 }
 
-function update(dom, record) {
+function update(record) {
     record.upload = utils.createElement('i', {
         textContent: 'cloud_upload',
         className: 'material-icons cursor noselect btn_header',
@@ -121,7 +121,7 @@ function update(dom, record) {
     record.upload.style.color = record.color;
     record.upload.addEventListener('click', function () {
 
-        let _layer = _xyz.locales[_xyz.locale].layers[record.layer.layer];
+        let _layer = _xyz.locales[_xyz.locale].layers[record.location.layer];
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_update');
@@ -135,9 +135,9 @@ function update(dom, record) {
 
                 _layer.getLayer();
                 try {
-                    record.layer.M
+                    record.location.M
                         .getLayers()[0]
-                        .setLatLng(record.layer.L
+                        .setLatLng(record.location.L
                             .getLayers()[0]
                             .getLatLng()
                         );
@@ -146,19 +146,19 @@ function update(dom, record) {
         }
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
-            table: record.layer.table,
+            table: record.location.table,
             dbs: _layer.dbs,
             qID: _layer.qID,
-            id: record.layer.id,
-            infoj: record.layer.infoj,
-            geometry: record.layer.L.toGeoJSON().features[0].geometry
+            id: record.location.id,
+            infoj: record.location.infoj,
+            geometry: record.location.L.toGeoJSON().features[0].geometry
         }));
 
     });
     record.header.appendChild(record.upload);
 }
 
-function trash(dom, record) {
+function trash(record) {
     let i = utils.createElement('i', {
         textContent: 'delete',
         className: 'material-icons cursor noselect btn_header',
@@ -167,7 +167,7 @@ function trash(dom, record) {
     i.style.color = record.color;
     i.addEventListener('click', function () {
 
-        let _layer = _xyz.locales[_xyz.locale].layers[record.layer.layer];
+        let _layer = _xyz.locales[_xyz.locale].layers[record.location.layer];
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_delete');
@@ -177,26 +177,24 @@ function trash(dom, record) {
                 _layer.getLayer();
                 record.drawer.remove();
 
-                _xyz.filterHook('select', record.letter + '!' + record.layer.layer + '!' + record.layer.table + '!' + record.layer.id + '!' + record.layer.marker[0] + ';' + record.layer.marker[1]);
-                if (record.layer.L) _xyz.map.removeLayer(record.layer.L);
-                if (record.layer.M) _xyz.map.removeLayer(record.layer.M);
-                if (record.layer.D) _xyz.map.removeLayer(record.layer.D);
-                record.layer = null;
+                _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                if (record.location.L) _xyz.map.removeLayer(record.location.L);
+                if (record.location.M) _xyz.map.removeLayer(record.location.M);
+                if (record.location.D) _xyz.map.removeLayer(record.location.D);
+                record.location = null;
 
                 let freeRecords = _xyz.select.records.filter(function (record) {
-                    if (!record.layer) return record
+                    if (!record.location) return record
                 });
-
-                //dom.header.style.background = 'linear-gradient(90deg, #cf9 ' + parseInt(100 - ((freeRecords.length / _xyz.select.records.length) * 100)) + '%, #eee 0%)';
 
                 if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
             }
         }
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
-            table: record.layer.table,
+            table: record.location.table,
             qID: _layer.qID,
-            id: record.layer.id
+            id: record.location.id
         }));
 
     });

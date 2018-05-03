@@ -12,6 +12,10 @@
       filter: url(#dropshadow);
     }    
   }
+
+  .leaflet-interactive.wait-cursor-enabled {
+    cursor: wait!important;
+  }
   
   .leaflet-control-attribution {
     display: none;

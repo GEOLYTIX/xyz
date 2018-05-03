@@ -142,7 +142,7 @@ _xyz.layersCheck = () => {
     });
 
     // Logs when all layers are ready. 
-    if (chkScore === 0) console.log(layersArray);
+    //if (chkScore === 0) console.log(layersArray);
 }
 
 // Inititialise modules.
