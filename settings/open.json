@@ -589,6 +589,7 @@
             },
             {
               "field": "postcode",
+              "label": "Postcode",
               "type": "text",
               "filter": "like"
             },
