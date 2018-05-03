@@ -12,6 +12,10 @@
       filter: url(#dropshadow);
     }    
   }
+    
+  .leaflet-interactive.wait-cursor-enabled {
+    cursor: wait!important;
+  }
   
   .leaflet-control-attribution {
     display: none;
@@ -35,3 +39,5 @@
     box-shadow: 1px 1px 3px #555;
   }
 }
+
+
