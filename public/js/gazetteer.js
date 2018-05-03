@@ -2,73 +2,44 @@ const L = require('leaflet');
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-module.exports = function Gazetteer() {
+module.exports = () => {
 
     // Declare DOM elements
     let dom = {
-        btnSearch: document.getElementById('btnSearch'),
-        btnGeolocate: document.getElementById('btnGeolocate'),
-        btnClear: document.getElementById('gaz_clear'),
-        group: document.getElementById('gaz_group'),
+        btnSearch: document.getElementById('btnGazetteer'),
+        btnClear: document.getElementById('GazetteerClearInput'),
+        group: document.getElementById('Gazetteer'),
         input: document.getElementById('GazetteerInput'),
-        result: document.getElementById('gaz_result'),
-        locale: document.getElementById('Locale')
+        result: document.getElementById('GazetteerResults')
     };
 
     // Set gazetteer defaults if missing from appSettings.
     if (!_xyz.gazetteer.icon) _xyz.gazetteer.icon = svg_symbols.markerColor('#64dd17', '#33691e');
-    if (!_xyz.gazetteer.pane) _xyz.gazetteer.pane = ["gazetteer", 550];
+    if (!_xyz.gazetteer.pane) _xyz.gazetteer.pane = ['gazetteer', 550];
     if (!_xyz.gazetteer.style) _xyz.gazetteer.style = {
-        "stroke": true,
-        "color": "#090",
-        "weight": 2,
-        "fillColor": "#cf9",
-        "fillOpacity": 0.2
+        stroke: true,
+        color: '#090',
+        weight: 2,
+        fillColor: '#cf9',
+        fillOpacity: 0.2
     };
 
     // Create the gazetteer pane.
     _xyz.map.createPane(_xyz.gazetteer.pane[0]);
     _xyz.map.getPane(_xyz.gazetteer.pane[0]).style.zIndex = _xyz.gazetteer.pane[1];
 
-    Object.keys(_xyz.locales).forEach(locale => {
-        utils._createElement({
-            tag: 'option',
-            options: {
-                textContent: _xyz.locales[locale].name || locale,
-                value: locale
-            },
-            appendTo: dom.locale
-        })
-    })
-
-    // onchange event to set the hook and title.
-    dom.locale.onchange = e => {
-        _xyz.locale = e.target.value;
+    // Gazetteer init which is called on change of locale.
+    _xyz.gazetteer.init = () => {
 
         // Empty input value, results and set placeholder.
         dom.input.value = '';
         dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
         dom.result.innerHTML = '';
 
-        _xyz.removeHooks();
-        _xyz.setHook('locale', _xyz.locale);
-        _xyz.setView(true);
-        if (_xyz.layers) _xyz.layers.init(true);
-        if (_xyz.select) _xyz.select.init(true);
-        if (_xyz.grid) _xyz.grid.init(true);
-        if (_xyz.catchments) _xyz.catchments.init(true);
-    };
-
-    // Set the select from either hook[query] or layer[query].
-    dom.locale.selectedIndex = _xyz.hooks.locale ? utils.getSelectOptionsIndex(dom.locale, _xyz.hooks.locale) : 0;
-
-    // Empty input value, results and set placeholder.
-    dom.input.value = '';
-    dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
-    dom.result.innerHTML = '';
-
-    // Remove existing layer if exists
-    if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
+        // Remove existing layer if exists
+        if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
+    }
+    _xyz.gazetteer.init();
 
     // Toggle visibility of the gazetteer group
     dom.btnSearch.addEventListener('click', function () {
@@ -76,8 +47,6 @@ module.exports = function Gazetteer() {
         dom.group.style.display =
             dom.group.style.display === 'block' ?
             'none' : 'block';
-
-        if (view_mode === 'desktop') document.getElementById('gaz_spacer').style.display = dom.group.style.display === 'block' ? 'block' : 'none';
 
         if (dom.group.style.display === 'block') dom.input.focus();
     });
@@ -248,59 +217,4 @@ module.exports = function Gazetteer() {
         // Zoom to the extent of the gazetteer layer
         _xyz.map.fitBounds(_xyz.gazetteer.layer.getBounds());
     }
-
-
-    // Geolocation control
-    dom.btnGeolocate.addEventListener('click', function () {
-        utils.toggleClass(this, 'active');
-        let flyTo = true;
-               
-        if (!_xyz.gazetteer.geolocationMarker) {
-            dom.btnGeolocate.children[0].textContent = 'gps_fixed';
-            _xyz.gazetteer.geolocationMarker = L.marker([0, 0], {
-                interactive: false,
-                icon: L.icon({
-                    iconUrl: svg_symbols.markerGeolocation(),
-                    iconSize: 30
-                })
-            });
-        }
-
-        if (utils.hasClass(this, 'active') && _xyz.gazetteer.geolocationMarker.getLatLng().lat !== 0) {
-            _xyz.gazetteer.geolocationMarker.addTo(_xyz.map);
-            if (flyTo) _xyz.map.flyTo(
-                _xyz.gazetteer.geolocationMarker.getLatLng(),
-                _xyz.locales[_xyz.locale].maxZoom);
-            flyTo = false;
-        } else {
-            _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
-        }          
-
-        if (!_xyz.gazetteer.geolocationWatcher) {
-            _xyz.gazetteer.geolocationWatcher = navigator.geolocation.watchPosition(
-                function (position) {
-
-                    //console.log('position: ' + [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-
-                    if (utils.hasClass(dom.btnGeolocate, 'active')) {
-                        _xyz.map.removeLayer(_xyz.gazetteer.geolocationMarker);
-                        _xyz.gazetteer.geolocationMarker.setLatLng([parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)]);
-                        _xyz.gazetteer.geolocationMarker.addTo(_xyz.map);
-
-                        if (flyTo) _xyz.map.flyTo(
-                            [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)],
-                            _xyz.locales[_xyz.locale].maxZoom);
-                        flyTo = false;
-                    }    
-                },
-                function (err) {
-                    console.error(err);
-                },
-                {
-                    //enableHighAccuracy: false,
-                    //timeout: 3000,
-                    //maximumAge: 0
-                });
-        }
-    });
 }

@@ -61,6 +61,8 @@ router.get('/', isLoggedIn, (req, res) => {
             req.session.hooks[kv[0]] = kv[1];
         });
 
+    global.appSettings.hooks = req.session.hooks;
+
     // Check whether request comes from a mobile platform and set template.
     let md = new Md(req.headers['user-agent']),
         tmpl = req.session.hooks.report ?
@@ -70,11 +72,7 @@ router.get('/', isLoggedIn, (req, res) => {
     // Build the template with jsrender and send to client.
     res.send(
         tmpl.render({
-            dir: process.env.DIR ? process.env.DIR + '/' : '/',
             title: global.appSettings.title || 'GEOLYTIX | XYZ',
-            module_layers: './public/tmpl/layers.html',
-            module_select: global.appSettings.select ? './public/tmpl/select.html' : null,
-            module_catchments: global.appSettings.catchments ? './public/tmpl/catchments.html' : null,
             bundle_js: 'build/xyz_bundle.js',
             btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
             hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
@@ -86,7 +84,6 @@ router.get('/', isLoggedIn, (req, res) => {
             settings: `
             <script>
                 const host = '';
-                const hooks = ${req.session && req.session.hooks ? JSON.stringify(req.session.hooks) : false};
                 const _xyz = ${JSON.stringify(global.appSettings)};
             </script>`
         }))

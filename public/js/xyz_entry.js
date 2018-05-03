@@ -23,8 +23,10 @@ if (view_mode === 'mobile') require('./mobile_interface')();
 // Initialise utils.
 const utils = require('./utils');
 
-// Initiate leaflet and hooks.
+// Initiate leaflet.
 const L = require('leaflet');
+
+// Initiate hooks component.
 require('./hooks')();
 
 // Initiate dom object.
@@ -34,14 +36,10 @@ let dom = {
 };
 
 // Set locale default.
-_xyz.locale = _xyz.locale || Object.keys(_xyz.locales)[0];
+_xyz.locale = _xyz.hooks.locale || _xyz.locale || Object.keys(_xyz.locales)[0];
 
 // Set locale to hook, or set hook for locale.
-if (_xyz.hooks.locale) {
-    _xyz.locale = _xyz.hooks.locale;
-} else {
-    _xyz.setHook('locale', _xyz.locale);
-}
+if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
 
 // Set min/max zoom defaults.
 _xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;
@@ -115,46 +113,45 @@ _xyz.map.on('zoomend', function() {
 let timer;
 function viewChangeEnd() {
     clearTimeout(timer);
-    timer = setTimeout(function () {
-        let z = _xyz.map.getZoom();
-        chkZoomBtn(z);
+    timer = setTimeout(() => {
+        chkZoomBtn(_xyz.map.getZoom());
 
         //Set the view hook.
         _xyz.setViewHook(_xyz.map.getCenter());
 
         let layers = _xyz.locales[_xyz.locale].layers
-        Object.keys(layers).map(function (layer) {
-            if (layers[layer].loader) layers[layer].loader.style.display = 'none';
-            layers[layer].getLayer();
+
+        Object.values(layers).forEach(layer => {
+            if (layer.loader) layer.loader.style.display = 'none';
+            layer.getLayer();
         });
+
     }, 100);
 }
 
 // Function to check whether all display layers are drawn.
-_xyz.layersCheck = layersCheck;
-function layersCheck() {
-    if (typeof report !== 'undefined') {
-        let layers = _xyz.locales[_xyz.locale].layers,
-            layersArray = [],
-            chkScore = 0;
+_xyz.layersCheck = () => {
 
-        Object.keys(layers).map(function (layer) {
-            chkScore = layers[layer].display ? chkScore++ : chkScore;
-            chkScore = layers[layer].display && layers[layer].loaded ? chkScore-- : chkScore;
-            layersArray.push([layers[layer].name, layers[layer].display, layers[layer].loaded]);
-        });
+    let layersArray = [],
+        chkScore = 0;
 
-        // Logs when all layers are ready. 
-        //if (chkScore === 0) console.log(layersArray);
-    }
+    Object.values(_xyz.locales[_xyz.locale].layers).forEach(layer => {
+        chkScore = layer.display ? chkScore++ : chkScore;
+        chkScore = layer.display && layer.loaded ? chkScore-- : chkScore;
+        layersArray.push([layer.name, layer.display, layer.loaded]);
+    });
+
+    // Logs when all layers are ready. 
+    if (chkScore === 0) console.log(layersArray);
 }
 
 // Inititialise modules.
-if (_xyz.gazetteer) require('./gazetteer')(_xyz);
-require('./layers')(_xyz);
-if (_xyz.select) require('./select')(_xyz);
-if (_xyz.catchments) require('./catchments')(_xyz);
-if (_xyz.report) require('./report')(_xyz);
+require('./locale')();
+require('./layers')();
+require('./select')();
+if (_xyz.gazetteer) require('./gazetteer')();
+if (_xyz.locate) require('./locate')();
+if (_xyz.report) require('./report')();
 
 // Make blocks visible and set scrollbar left for desktop view.
 if (view_mode === 'desktop') require('./scrolly')(document.querySelector('.mod_container'));

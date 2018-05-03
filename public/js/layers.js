@@ -13,7 +13,13 @@ module.exports = function () {
     // Assign dom objects.
     let dom = {
         map: document.getElementById('map'),
-        layers: document.querySelector('#Layers > .content')
+        layers: utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'content'
+            },
+            appendTo: document.getElementById('Layers')
+        })
     };
 
     // init is called upon initialisation and when the locale is changed (change_locale === true).

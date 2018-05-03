@@ -32,10 +32,10 @@
 
     <div class="mod_container">
 
-        <div id="Gazetteer" class="input_group" style="display: block">
+        <div id="Gazetteer" class="input_group" style="display: none">
             <input id="GazetteerInput" class="pane_shadow" type="text" required="" placeholder="e.g. Brussels">
             <span class="bar"></span>
-            <ul id="gaz_result"></ul>
+            <ul id="GazetteerResults" style="display: none"></ul>
         </div>
 
         <div class="scrolly">
@@ -44,7 +44,17 @@
                 <div class="scrolly_bar"></div>
             </div>
 
-            {{include tmpl=module_layers /}} {{include tmpl=module_select /}} {{include tmpl=module_catchments /}}
+            <div id="Layers" class="module">
+                <div class="title">Layers</div>
+            </div>
+
+            <div id="Locations" class="module">
+                <div class="title">Locations</div>
+                <div id="ClearLocations" class="btn_text cursor">Clear all locations.</div>
+            
+                <div class="content">
+                </div>
+            </div>
 
         </div>
 
@@ -68,11 +78,11 @@
         </div>
 
         <div class="btn_column noselect">
-            <button id="btnSearch" title="Open Gazetteer" {{:btnSearch}}>
+            <button id="btnGazetteer" title="Open Gazetteer" {{:btnSearch}}>
                 <i class="material-icons">search</i>
             </button>
 
-            <button id="btnGeolocate" title="Current location" {{:btnLocate}}>
+            <button id="btnLocate" title="Current location" {{:btnLocate}}>
                 <i class="material-icons">gps_not_fixed</i>
             </button>
 

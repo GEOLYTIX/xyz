@@ -6,6 +6,10 @@
     padding: 0 20px;
     width: 330px;
 
+    .pane_shadow {
+        box-shadow: 0 3px 3px -3px #000;
+    }
+
     .module {
         padding: 10px 0;
     
@@ -13,10 +17,6 @@
             font-family: ffmark_bold, sans-serif;
             font-size: 18px;
             margin-bottom: 10px;
-        }
-       
-        .pane_shadow {
-            box-shadow: 0 3px 3px -3px #000;
         }
 
         input {

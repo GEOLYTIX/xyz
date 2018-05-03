@@ -1,11 +1,8 @@
-#gaz_group {
+#Gazetteer {
   display: none;
   background-color: #fff;
 
   @if $desktop {
-    position: absolute;
-    width: calc(100% - 40px);
-    z-index: 999;
     padding-top: 5px;
   }
   
@@ -13,10 +10,6 @@
     position: fixed;
     left: 0;
     box-shadow: 0 3px 4px -1px grey;
-  }
-
-  table {
-    width: 100%;
   }
 
   #gaz_clear {
@@ -35,7 +28,7 @@
     width: 100%;
   }
 
-  #gaz_result {
+  #GazetteerResults {
     -webkit-padding-start: 0;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
@@ -81,66 +74,7 @@
     }
 
     .gaz-result-selected {
-      background-color: #ccff90;
+      background-color: $glxlightgreen;
     }
   }
-
-  #gaz_locale {
-    font-family: ffmark_bold, sans-serif;
-    font-size: 18px;
-
-    &.active {
-      color: #079e00;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-
-  #gaz_localelist {
-    display: none;
-    position: absolute;
-    background-color: white;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid #999;
-    box-shadow: 0 3px 4px -1px grey;
-    font-size: 20px;
-
-    @if $desktop {
-      li {
-        list-style: none;
-        line-height: 1.2em;
-        font-family: ffmark_bold;
-
-        &:hover {
-          cursor: pointer;
-          background-color: $glxlightgreen;
-        }
-      }
-    }
-
-    @if $mobile {
-      padding-right: 10px;
-
-      li {
-        color: $glxgreen;
-        list-style: none;
-        line-height: 1.5em;
-        padding-right: 10px;
-        text-align: right;
-      }
-    }
-  }
-
-  .gaz-result-selected {
-    background-color: $glxlightgreen;
-  }
-}
-
-#gaz_spacer {
-  display: none;
-  height: 30px;
 }
