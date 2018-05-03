@@ -77,17 +77,6 @@ function layerFilters(layer, height){
             
         } else {
             
-            block = utils.createElement('div', {
-                classList: "block"
-            });
-            
-            title = utils.createElement('div', {
-                textContent: layer.infoj[key].label,
-                classList: "title"
-            });
-            
-            block.appendChild(title);
-            
             let options = {
                 field: layer.infoj[key].field,
                 label: layer.infoj[key].label,
@@ -97,11 +86,33 @@ function layerFilters(layer, height){
             
             if(layer.infoj[key].filter === "numeric"){
                 
+                block = utils.createElement('div', {
+                classList: "block"
+                });
+                
+                title = utils.createElement('div', {
+                    textContent: layer.infoj[key].label,
+                    classList: "title"
+                });
+                
+                block.appendChild(title);
+                
                 filter_numeric(layer, options); 
                 filters.appendChild(block);
             }
             
             if(layer.infoj[key].filter === "like" || layer.infoj[key].filter ==="match"){
+                
+                block = utils.createElement('div', {
+                classList: "block"
+                });
+                
+                title = utils.createElement('div', {
+                    textContent: layer.infoj[key].label,
+                    classList: "title"
+                });
+                
+                block.appendChild(title);
                 
                 options.operator = layer.infoj[key].filter;
 

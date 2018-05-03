@@ -550,7 +550,8 @@
             {
               "field": "store",
               "label": "Store",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "retailer",
@@ -588,7 +589,8 @@
             },
             {
               "field": "postcode",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "pqi",
