@@ -18,7 +18,7 @@ function panel(layer) {
     if (layer.format === 'cluster') panel.appendChild(clusterSettings(layer));
     
     // apply filters if exist
-    if(!!lfs.applyFilters(layer)) panel.appendChild(lfs.layerFilters(layer, lfs.applyFilters(layer)));
+    if(!!lfs.applyFilters(layer)) panel.appendChild(lfs.layerFilters(layer));
         
     if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
 

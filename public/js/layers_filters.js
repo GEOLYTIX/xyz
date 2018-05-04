@@ -17,7 +17,7 @@ function applyFilters(layer){
     }
 }
 
-function layerFilters(layer, height){
+function layerFilters(layer){
     
     let filters = utils.createElement('div', {
         classList: 'section expandable'
@@ -56,9 +56,7 @@ function layerFilters(layer, height){
             title = utils.createElement('div', {
                 textContent: layer.infoj[key].label,
                 classList: "title"
-            });
-                    
-            block.appendChild(title);
+            }, block);
             
             Object.keys(layer.infoj[key].filter).map(function(_key){
                 
@@ -80,32 +78,44 @@ function layerFilters(layer, height){
             filters.appendChild(block);
             
         } else {
-            
-            block = utils.createElement('div', {
-                classList: "block"
-            });
-            
-            title = utils.createElement('div', {
-                textContent: layer.infoj[key].label,
-                classList: "title"
-            });
-            
-            block.appendChild(title);
-            
-            let options = {
-                field: layer.infoj[key].field,
-                label: layer.infoj[key].label,
-                appendTo: block
-            }
-            
-            
+
             if(layer.infoj[key].filter === "numeric"){
+                
+                block = utils.createElement('div', {
+                    classList: "block"
+                });
+                
+                title = utils.createElement('div', {
+                    textContent: layer.infoj[key].label,
+                    classList: "title"
+                }, block);
+                
+                let options = {
+                    field: layer.infoj[key].field,
+                    label: layer.infoj[key].label,
+                    appendTo: block
+                }
                 
                 filter_numeric(layer, options); 
                 filters.appendChild(block);
             }
             
             if(layer.infoj[key].filter === "like" || layer.infoj[key].filter ==="match"){
+                
+                block = utils.createElement('div', {
+                    classList: "block"
+                });
+                
+                title = utils.createElement('div', {
+                    textContent: layer.infoj[key].label,
+                    classList: "title"
+                }, block);
+                
+                let options = {
+                    field: layer.infoj[key].field,
+                    label: layer.infoj[key].label,
+                    appendTo: block
+                }
                 
                 options.operator = layer.infoj[key].filter;
 
