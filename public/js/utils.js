@@ -257,6 +257,14 @@ module.exports = (function () {
         return checkbox;
     }
     
+    function clone(_obj){
+        let _clone;
+        _obj instanceof Array ? _clone = [] : _clone = {};
+        Object.keys(_obj).map(function(key){
+            _clone[key] = _obj[key];
+        });
+        return _clone;
+    }
 
     return {
         scrollElement: scrollElement,
@@ -274,6 +282,7 @@ module.exports = (function () {
         createStatsTable: createStatsTable,
         dataURLToBlob: dataURLToBlob,
         checkbox: checkbox,
-        toggleExpanderParent: toggleExpanderParent
+        toggleExpanderParent: toggleExpanderParent,
+        clone: clone
     };
 })();

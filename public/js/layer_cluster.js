@@ -44,8 +44,6 @@ function loadLayer(layer) {
         // Data is returned and the layer is still current.
         if (layer.xhr.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(layer.xhr.responseText), layer);
     }
-
-
     // Send XHR to middleware.
     layer.xhr.send();
     
@@ -63,12 +61,13 @@ function addClusterToLayer(cluster, layer) {
 
     // Get max count in cluster.
     let c_max = cluster.reduce((c_max, f) => Math.max(c_max, f.properties.count), 0);
-
+    
     // Remove existing layer from Leaflet.
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
     // Add cluster as point layer to Leaflet.
     layer.L = L.geoJson(cluster, {
+        
         pointToLayer: (point, latlng) => {
 
             // Set icon to default marker. 
@@ -79,22 +78,24 @@ function addClusterToLayer(cluster, layer) {
 
             // Check whether layer has categorized theme and more than a single location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
-
+                 
                 // Define a default dotArr.
-                let dotArr = layer.style.markerMulti || [400, "#333"];
-
-                // Check whether categorized theme has competitors block defined.
+                let dotArr = utils.clone(layer.style.markerMulti) || [400, "#333"];
+               
                 if (layer.style.theme.competitors) {
+                    
                     let c = 0;
+
                     Object.keys(layer.style.theme.competitors).map(comp => {
+                        
                         if (point.properties.cat[comp]) {
+                            
                             c += point.properties.cat[comp];
-                            dotArr.splice(2, 0, 400 * c / point.properties.count);
-                            dotArr.splice(3, 0, layer.style.theme.competitors[comp].colour);
-                        }
+                    
+                            dotArr.splice(2, 0, 400 * c / point.properties.count, layer.style.theme.competitors[comp].colour);
+                        } 
                     });
                 }
-
                 // Create icon svg from dotArr.
                 icon = svg_symbols.target(dotArr);
             }
