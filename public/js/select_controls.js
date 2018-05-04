@@ -75,7 +75,10 @@ function expander(record) {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent(e.target, record.drawer);
+                utils.toggleExpanderParent({
+                    expandable: record.drawer,
+                    scrolly: document.querySelector('.mod_container > .scrolly')
+                });
             }
         }
     });

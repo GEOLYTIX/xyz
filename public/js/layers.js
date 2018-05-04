@@ -202,7 +202,11 @@ module.exports = () => {
                 utils.addClass(layer.drawer, 'expandable');
 
                 layer.header.addEventListener('click', e => {
-                    utils.toggleExpanderParent(e.target, layer.drawer, true);
+                    utils.toggleExpanderParent({
+                        expandable: layer.drawer,
+                        accordeon: true,
+                        scrolly: document.querySelector('.mod_container > .scrolly')
+                    });
                 });
 
                 layer.drawer.appendChild(layer.panel);  
@@ -219,7 +223,10 @@ module.exports = () => {
                         event: 'click',
                         funct: e => {
                             e.stopPropagation();
-                            utils.toggleExpanderParent(e.target, layer.drawer);
+                            utils.toggleExpanderParent({
+                                expandable: layer.drawer,
+                                scrolly: document.querySelector('.mod_container > .scrolly')
+                            });
                         }
                     }
                 });

@@ -54,7 +54,11 @@ function clusterSettings(layer) {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent(e.target, settings, true)
+                utils.toggleExpanderParent({
+                    expandable: settings,
+                    accordeon: true,
+                    scrolly: document.querySelector('.mod_container > .scrolly')
+                })
             }
         }
     });
@@ -231,7 +235,11 @@ function mvtCategorized(layer) {
                 event: 'click',
                 funct: e => {
                     e.stopPropagation();
-                    utils.toggleExpanderParent(e.target, legend, true)
+                    utils.toggleExpanderParent({
+                        expandable: legend,
+                        accordeon: true,
+                        scrolly: document.querySelector('.mod_container > .scrolly')
+                    })
                 }
             }
         });
@@ -350,7 +358,11 @@ function clusterCategorized(layer) {
                 event: 'click',
                 funct: e => {
                     e.stopPropagation();
-                    utils.toggleExpanderParent(e.target, legend, true)
+                    utils.toggleExpanderParent({
+                        expandable: legend,
+                        accordeon: true,
+                        scrolly: document.querySelector('.mod_container > .scrolly')
+                    })
                 }
             }
         });
@@ -528,7 +540,11 @@ function clusterGraduated(layer) {
                 event: 'click',
                 funct: e => {
                     e.stopPropagation();
-                    utils.toggleExpanderParent(e.target, legend, true)
+                    utils.toggleExpanderParent({
+                        expandable: legend,
+                        accordeon: true,
+                        scrolly: document.querySelector('.mod_container > .scrolly')
+                    })
                 }
             }
         });
@@ -603,7 +619,11 @@ function mvtGraduated(layer) {
                 event: 'click',
                 funct: e => {
                     e.stopPropagation();
-                    utils.toggleExpanderParent(e.target, legend, true)
+                    utils.toggleExpanderParent({
+                        expandable: legend,
+                        accordeon: true,
+                        scrolly: document.querySelector('.mod_container > .scrolly')
+                    })
                 }
             }
         });

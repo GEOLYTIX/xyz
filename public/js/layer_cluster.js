@@ -204,9 +204,10 @@ function clusterMouseClick(e, layer) {
                 // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
                 layer.popup = L.popup()
                     .setLatLng(lnglat.reverse())
-                    .setContent('<div class="scrollbar_container"><div class="scrollbar"></div></div><div class="content location_table">' + table + '</div>')
+                    .setContent('<div class="content scrolly location_table"><div class="scrolly_track"><div class="scrolly_bar"></div></div>' + table + '</div>')
                     .openOn(_xyz.map);
-                require('./scrolly')(document.querySelector('.leaflet-popup-content'));
+                
+                setTimeout(()=>utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')),300);
             }
 
             if (view_mode === 'mobile') {

@@ -7,10 +7,11 @@ module.exports = () => {
     // Declare DOM elements
     let dom = {
         btnSearch: document.getElementById('btnGazetteer'),
-        btnClear: document.getElementById('GazetteerClearInput'),
         group: document.getElementById('Gazetteer'),
-        input: document.getElementById('GazetteerInput'),
-        result: document.getElementById('GazetteerResults')
+        input: document.querySelector('#Gazetteer > input'),
+        clear: document.querySelector('#Gazetteer .clear'),
+        loader: document.querySelector('#Gazetteer > .loader'),
+        result: document.querySelector('#Gazetteer > ul')
     };
 
     // Set gazetteer defaults if missing from appSettings.
@@ -42,8 +43,8 @@ module.exports = () => {
     _xyz.gazetteer.init();
 
     // Toggle visibility of the gazetteer group
-    dom.btnSearch.addEventListener('click', function () {
-        utils.toggleClass(this, 'active');
+    dom.btnSearch.addEventListener('click', e => {
+        utils.toggleClass(e.target, 'active');
         dom.group.style.display =
             dom.group.style.display === 'block' ?
             'none' : 'block';
@@ -52,29 +53,34 @@ module.exports = () => {
     });
 
     // Toggle visibility of the gazetteer group
-    if (dom.btnClear) dom.btnClear.addEventListener('click', e => {
-        dom.input.value = '';
-    });
+    if (dom.clear) dom.clear.addEventListener('click', e => dom.input.value = '');
 
     // Click event for results list
-    dom.result.addEventListener('click', function(event){
-        selectResult(event.target.dataset.id, event.target.dataset.source, event.target.innerHTML);
+    dom.result.addEventListener('click', e => {
+        if (!e.target['data-source']) return;
+        selectResult(e.target['data-id'], e.target['data-source'], e.target.innerHTML);
     });
     
     // Initiate search on keyup with input value
-    dom.input.addEventListener('keyup', function (e) {
-        let key = e.keyCode || e.charCode;
-        if (key !== 37 && key !== 38 && key !== 39 && key !== 40 && key !== 13 && this.value.length > 0 && isNaN(this.value)) {
+    dom.input.addEventListener('keyup', e => {
+        let key = e.keyCode || e.charCode,
+            val = e.target.value;
+
+        if (key !== 37 && key !== 38 && key !== 39 && key !== 40 && key !== 13 && val.length > 0 && isNaN(val.value)) {
 
             //initiate search if either split value is not a number
-            let NaN_check = this.value.split(',').map(isNaN);
+            let NaN_check = e.target.value.split(',').map(isNaN);
             if (_xyz.gazetteer.xhrSearch) _xyz.gazetteer.xhrSearch.abort();
-            if (NaN_check[0] || NaN_check[1]) initiateSearch(this.value);
+            if (NaN_check[0] || NaN_check[1]) initiateSearch(val);
         }
     });
 
     // Initiate search request
     function initiateSearch(searchValue){
+
+        // Show loader while waiting for results from XHR.
+        dom.loader.style.display = 'block';
+        dom.result.innerHTML = '';
 
         _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
         _xyz.gazetteer.xhrSearch.open('GET', host + 'q_gazetteer?' + utils.paramString({
@@ -84,26 +90,46 @@ module.exports = () => {
             q: encodeURIComponent(searchValue)
         }));
 
-        _xyz.gazetteer.xhrSearch.onload = function () {
+        _xyz.gazetteer.xhrSearch.onload = e => {
+
+            dom.loader.style.display = 'none';
 
             // List results or show that no results were found
-            if (this.status === 200) {
-                let json = JSON.parse(this.responseText),
-                    results = json.length === 0 ? '<p><small>No results for this search.</small></p>' : '';
-                for (let key in json) {
-                    results += '<li data-id="'+ json[key].id +'" data-source="'+ json[key].source +'">' + json[key].label + '</li>';
+            if (e.target.status === 200) {
+                let json = JSON.parse(e.target.responseText);
+
+                if (json.length === 0) {
+                    utils._createElement({
+                        tag: 'li',
+                        options: {
+                            textContent: 'No results for this search.'
+                        },
+                        style: {
+                            padding: '5px 0'
+                        },
+                        appendTo: dom.result
+                    })
+                    return
                 }
-                dom.result.innerHTML = results;
+
+                for (let key in json) {
+                    utils._createElement({
+                        tag: 'li',
+                        options: {
+                            textContent: json[key].label,
+                            'data-id': json[key].id,
+                            'data-source': json[key].source
+                        },
+                        appendTo: dom.result
+                    })
+                }
             }
         };
         _xyz.gazetteer.xhrSearch.send();
-
-        // Display search animation
-        dom.result.innerHTML = '<li class="spinner"><span class="bounce1"></span><span class="bounce2"></span><span class="bounce3"></span></li>';
     }
 
     // Keydown events
-    dom.input.addEventListener('keydown', function (e) {
+    dom.input.addEventListener('keydown', e => {
         let key = e.keyCode || e.charCode,
             results = dom.result.querySelectorAll('li');
 
@@ -130,7 +156,7 @@ module.exports = () => {
         if (key === 13) {
 
             // Get possible coordinates from input and draw location if valid
-            let latlng = this.value.split(',').map(parseFloat);
+            let latlng = e.target.value.split(',').map(parseFloat);
             if ((latlng[1] > -90 && latlng[1] < 90) && (latlng[0] > -180 && latlng[0] < 180)) {
                 dom.result.innerHTML = '';
                 createFeature({
@@ -146,9 +172,9 @@ module.exports = () => {
     });
 
     // Cancel search and empty results on input focusout
-    dom.input.addEventListener('focusout', function (e) {
+    dom.input.addEventListener('focusout', e => {
         if (_xyz.gazetteer.xhrSearch) _xyz.gazetteer.xhrSearch.abort();
-        setTimeout(function () {
+        setTimeout(() => {
             dom.result.innerHTML = '';
         }, 400);
     });
@@ -160,33 +186,35 @@ module.exports = () => {
 
         if (id && source === 'vector' && _xyz.vector.display) {
             _xyz.vector.selectLayer(id, true);
-        } else if (id && source === 'mapbox') {
+            return;
+        }
+
+        if (id && source === 'mapbox') {
 
             // Create a point feature from the lat lon in the MapBox ID.
             createFeature({
                 "type": "Point",
                 "coordinates": id.split(',')
             })
-
-        } else {
-
-            // Get the geometry from the gazetteer database.
-            let xhr = new XMLHttpRequest();
-            //let service = source === 'google'? 'q_gazetteer_googleplaces' : 'q_gazetteer_places';
-            xhr.open('GET', host
-                + (source === 'google' ?
-                    'q_gazetteer_googleplaces' :
-                    'q_gazetteer_places')
-                + '?id=' + id);
-            xhr.onload = function () {
-
-                // Send results to createFeature
-                if (this.status === 200) {
-                    createFeature(JSON.parse(this.responseText))
-                }
-            };
-            xhr.send();
+            return;
         }
+
+        // Get the geometry from the gazetteer database.
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('GET', host
+            + (source === 'google' ?
+                'q_gazetteer_googleplaces' :
+                'q_gazetteer_places')
+            + '?id=' + id);
+
+        xhr.onload = e => {
+
+            // Send results to createFeature
+            if (e.target.status === 200) createFeature(JSON.parse(e.target.responseText));
+
+        };
+        xhr.send();
     }
 
     // Create a feature from geojson
