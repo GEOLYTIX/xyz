@@ -3,66 +3,64 @@
     font-size: 15px;
     color: $glxgreen;
     height: 25px;
-  }
+}
 
 .btn_column {
-    position: absolute;
     top: 0;
-    left: -10px;
     z-index: 999;
-
-    button {
-      margin-top: 10px;
-      float: left;
-      clear: both;
-      height: 50px;
-      width: 50px;
-      padding: 0;
-      color: $glxgreen;
-      background: #fff;
-      border-radius: 50%;
-      box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
-      text-align: center;
-      cursor: default;
-      border: none;
-      outline: none;
-
-      a {
-        color: $glxgreen;
-      }
-
-      i {
-        font-size: 30px;
-        line-height: 1.7;
-      }
-
-      &.active {
-        background: $glxgreen;
-        color: #fff;
-      }
-
-      &:disabled {
-        opacity: 0.3;
-      }
-
-      &:hover:enabled {
-        background: $glxgreen;
-        color: #fff;
-        cursor: pointer;
-
-        a {
-          color: #fff;
-        }
-      }
+    @if $desktop {
+        position: absolute;
+        left: -10px;
     }
-  }
+    @if $mobile {
+        position: fixed;
+        left: 10px;
+    }
+    button {
+        margin-top: 10px;
+        float: left;
+        clear: both;
+        height: 50px;
+        width: 50px;
+        padding: 0;
+        color: $glxgreen;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        cursor: default;
+        border: none;
+        outline: none;
+        a {
+            color: $glxgreen;
+        }
+        i {
+            font-size: 30px;
+            line-height: 1.7;
+        }
+        &.active {
+            background: $glxgreen;
+            color: #fff;
+        }
+        &:disabled {
+            opacity: 0.3;
+        }
+        &:hover:enabled {
+            background: $glxgreen;
+            color: #fff;
+            cursor: pointer;
+            a {
+                color: #fff;
+            }
+        }
+    }
+}
 
 .btn_header {
     font-size: 25px;
     margin-left: 5px;
     float: right;
     color: $glxgreen;
-        
     &.active {
         text-shadow: 2px 2px 2px #cf9;
     }

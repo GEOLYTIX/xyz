@@ -167,7 +167,10 @@ module.exports = () => {
 
             // Select active results record
             let activeRecord = results[utils.indexInParent(dom.result.querySelector('.active'))];
-            if (activeRecord) selectResult(activeRecord.dataset.id, activeRecord.dataset.source, activeRecord.innerText);
+
+            if(!activeRecord && results.length > 0) activeRecord = results[0];
+
+            if (activeRecord['data-id']) selectResult(activeRecord['data-id'], activeRecord['data-source'], activeRecord.innerText);
         }
     });
 

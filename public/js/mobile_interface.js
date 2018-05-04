@@ -7,7 +7,7 @@ module.exports = function(){
 
 //move map up on document scroll
     document.addEventListener('scroll', function () {
-        document.getElementById('map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px';
+        document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px';
     });
 
 //add shadow to module header on content scroll
@@ -24,9 +24,7 @@ module.exports = function(){
     const modules = document.querySelectorAll('.module');
     utils.addClass(modules, 'hidden');
     utils.removeClass(modules[0], 'hidden');
-
-    if (!_xyz.catchments) document.querySelector('.tab_catchments').remove();
-
+    
     _xyz.activateLayersTab = function (){
         let tab = document.querySelector('.tab_layers');
         utils.removeClass(tab.parentNode.children, 'active');

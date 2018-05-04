@@ -1,86 +1,74 @@
 @if $desktop {
-
-  .leaflet-popup-content {
-    .scrollbar_container {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      top: 0;
-      width: 10px;
-      background-color: lightgrey;
-
-      > .scrollbar {
-        position: absolute;
-        width: 10px;
-        background: rgba(0, 0, 0, 0.5);
-      }
-
-      &:hover {
-        cursor: ns-resize;
-      }
+    .leaflet-popup-content {
+        .scrollbar_container {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            top: 0;
+            width: 10px;
+            background-color: lightgrey;
+            >.scrollbar {
+                position: absolute;
+                width: 10px;
+                background: rgba(0, 0, 0, 0.5);
+            }
+            &:hover {
+                cursor: ns-resize;
+            }
+        }
+        .content::-webkit-scrollbar {
+            display: none;
+        }
     }
-
-    .content::-webkit-scrollbar {
-      display: none;
+    .location_table {
+        min-height: 30px;
+        max-height: 300px;
+        width: 400px;
+        overflow-y: scroll;
+        table {
+            width: 100%;
+            font-family: 'PT Mono', monospace;
+            td {
+                vertical-align: top !important;
+                text-align: left;
+                padding-right: 10px;
+                padding-left: 15px;
+            }
+            tr:hover {
+                background-color: $glxlightgreen;
+                cursor: pointer;
+            }
+        }
     }
-  }
-
-  .location_table {
-    min-height: 30px;
-    max-height: 300px;
-    width: 400px;
-    overflow-y: scroll;
-
-    table {
-      width: 100%;
-      font-family: 'PT Mono', monospace;
-
-      td {
-        vertical-align: top !important;
-        text-align: left;
-        padding-right: 10px;
-        padding-left: 15px;
-      }
-
-      tr:hover {
-        background-color: $glxlightgreen;
-        cursor: pointer;
-      }
-    }
-  }
 }
 
 .location_drop {
-  display: none;
-  position: fixed;
-  max-height: 30%;
-  width: 100%;
-  z-index: 1;
-  background: white;
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-bottom: 2px solid #079e00;
-  box-shadow: 0 0 10px slategrey;
-
-  .location_table {
-    padding-right: 10px;
-  }
-
-  td {
-    padding: 5px 0 5px 10px;
-    font-size: 20px;
-    color: $glxgreen;
-  }
-
-  td:first-child {
-    font-size: 14px;
-  }
-
-  .location_drop__close {
+    display: none;
     position: fixed;
-    top: 0;
-    right: 0;
-    color: $glxgreen;
-    font-size: 50px;
-  }
+    max-height: 30%;
+    width: 100%;
+    z-index: 1;
+    background: white;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-bottom: 2px solid #079e00;
+    box-shadow: 0 0 10px slategrey;
+    .location_table {
+        padding-right: 10px;
+    }
+    td {
+        padding: 5px 0 5px 10px;
+        font-size: 20px;
+        color: $glxgreen;
+    }
+    td:first-child {
+        font-size: 14px;
+    }
+    .location_drop__close {
+        position: fixed;
+        top: 0;
+        right: 0;
+        color: $glxgreen;
+        font-size: 50px;
+    }
 }

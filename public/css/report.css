@@ -312,7 +312,13 @@
   background: #fff;
   border: 1px solid #666; }
 
+<<<<<<< HEAD
 *, *::after, *::before {
+=======
+*,
+*::after,
+*::before {
+>>>>>>> origin/dev
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
