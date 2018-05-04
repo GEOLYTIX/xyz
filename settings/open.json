@@ -608,7 +608,7 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
-            "markerMulti": [400,"#333"],
+            "markerMulti": [400, "#333"],
             "theme": {
               "label": "Retailer",
               "type": "categorized",
