@@ -34,7 +34,11 @@ function layerFilters(layer, height){
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent(e.target, filters, true)
+                utils.toggleExpanderParent({
+                    expandable: filters,
+                    accordeon: true,
+                    scrolly: document.querySelector('.mod_container > .scrolly')
+                })
             }
         }
     });

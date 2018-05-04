@@ -12,23 +12,16 @@
     box-shadow: 0 3px 4px -1px grey;
   }
 
-  #gaz_clear {
+  .clear {
     color: $glxgreen;
-
-    @if $mobile {
-      padding-left: 60px;
-    }
-
-    @if $desktop {
-      margin-left: -5px;
-    }
+    padding-left: 60px;
   }
 
   input {
     width: 100%;
   }
 
-  #GazetteerResults {
+  > ul {
     -webkit-padding-start: 0;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
@@ -37,7 +30,7 @@
     background-color: white;
     margin: 0;
     padding: 0;
-    box-shadow: 0 2px 2px -1px grey;
+    box-shadow: 0 3px 3px -3px #000;
 
     @if $desktop {
       width: 100%;
@@ -45,6 +38,7 @@
       li {
         list-style: none;
         line-height: 1.2em;
+        white-space: nowrap;
 
         &:hover {
           cursor: pointer;
@@ -71,10 +65,6 @@
         list-style: none;
         line-height: 1.5em;
       }
-    }
-
-    .gaz-result-selected {
-      background-color: $glxlightgreen;
     }
   }
 }

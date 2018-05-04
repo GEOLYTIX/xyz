@@ -341,7 +341,11 @@ module.exports = () => {
             eventListener: {
                 event: 'click',
                 funct: e => {
-                    utils.toggleExpanderParent(e.target, record.drawer, true)
+                    utils.toggleExpanderParent({
+                        expandable: record.drawer,
+                        accordeon: true,
+                        scrolly: document.querySelector('.mod_container > .scrolly')
+                    })
                 }
             }
         });

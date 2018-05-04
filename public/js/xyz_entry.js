@@ -154,4 +154,5 @@ if (_xyz.locate) require('./locate')();
 if (_xyz.report) require('./report')();
 
 // Make blocks visible and set scrollbar left for desktop view.
-if (view_mode === 'desktop') require('./scrolly')(document.querySelector('.mod_container'));
+if (view_mode === 'desktop') utils.scrolly(document.querySelector('.mod_container > .scrolly'));
+if (view_mode === 'desktop') window.addEventListener('resize', () => utils.scrolly(document.querySelector('.mod_container > .scrolly')));

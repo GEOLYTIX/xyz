@@ -203,24 +203,71 @@ module.exports = (function () {
         return new Blob([uInt8Array], {type: contentType});
     }
 
-    function toggleExpanderParent(el, expandable, accordeon){
+    function toggleExpanderParent(params){
 
         // Check whether parent is expanded.
-        if (hasClass(expandable, 'expanded')) {
+        if (hasClass(params.expandable, 'expanded')) {
+
             // Remove expanded class.
-            removeClass(expandable, 'expanded');
+            removeClass(params.expandable, 'expanded');
+
+            // Actualize scrollbar of scrolly element.
+            if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
             return
         }
     
         // Accordion: Collapse the parents siblings which are expanded.
-        if (accordeon){
-            [...expandable.parentElement.children].forEach(expandable_sibling => {
+        if (params.accordeon){
+            [...params.expandable.parentElement.children].forEach(expandable_sibling => {
                 removeClass(expandable_sibling,'expanded');
+                if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
             });
         }
     
         // Add expanded class to expandable element.
-        if (hasClass(expandable, 'expandable')) addClass(expandable, 'expanded');
+        if (hasClass(params.expandable, 'expandable')) {
+            addClass(params.expandable, 'expanded');
+            if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
+        };
+    }
+
+    function scrolly(el) {
+
+        //let content = scrolly.querySelector('.scrolly'),
+        let track = el.querySelector('.scrolly_track'),
+            bar = el.querySelector('.scrolly_bar'),
+            scrollEvent = new Event('scroll');
+    
+        bar.style.height = track.clientHeight * el.clientHeight / el.scrollHeight + 'px';
+        bar.style.top = track.clientHeight * el.scrollTop / el.scrollHeight + 'px';
+    
+        // Update the bar when the scrolly element is scrolled.
+        el.addEventListener('scroll', () => {
+            bar.style.height = track.clientHeight * el.clientHeight / el.scrollHeight + 'px';
+            bar.style.top = track.clientHeight * el.scrollTop / el.scrollHeight + 'px';
+        });
+    
+        // Event when the bar is clicked.
+        bar.addEventListener('mousedown', e => {
+    
+            e.preventDefault();
+    
+            let bar_offsetTop = bar.offsetTop,
+                e_pageY = e.pageY;
+    
+            // Update the scroll position of scrolly element and the position of the bar when mouse is moved in y direction.
+            let onMove = e => {
+                bar.style.top = Math.min(
+                    track.clientHeight - bar.clientHeight,
+                    Math.max(0, bar_offsetTop + e.pageY - e_pageY)) + 'px';
+    
+                el.scrollTop = (el.scrollHeight * bar.offsetTop / track.clientHeight);
+            };
+    
+            document.addEventListener('mousemove', onMove);
+    
+            document.addEventListener('mouseup', () => document.removeEventListener('mousemove', onMove));
+        });
     }
     
     function checkbox(onchange, options){
@@ -274,6 +321,7 @@ module.exports = (function () {
         createStatsTable: createStatsTable,
         dataURLToBlob: dataURLToBlob,
         checkbox: checkbox,
-        toggleExpanderParent: toggleExpanderParent
+        toggleExpanderParent: toggleExpanderParent,
+        scrolly: scrolly
     };
 })();

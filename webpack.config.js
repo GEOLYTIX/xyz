@@ -2,8 +2,7 @@ let path = require('path');
 
 module.exports = {
     entry: {
-        xyz: './public/js/xyz_entry.js',
-        ux: './public/js/interface.js',
+        xyz: './public/js/xyz_entry.js'
     },
     output: {
         filename: 'build/[name]_bundle.js',
