@@ -1,70 +1,64 @@
 #Gazetteer {
-  display: none;
-  background-color: #fff;
-
-  @if $desktop {
-    padding-top: 5px;
-  }
-  
-  @if $mobile {
-    position: fixed;
-    left: 0;
-    box-shadow: 0 3px 4px -1px grey;
-  }
-
-  .clear {
-    color: $glxgreen;
-    padding-left: 60px;
-  }
-
-  input {
-    width: 100%;
-  }
-
-  > ul {
-    -webkit-padding-start: 0;
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    list-style-type: none;
-    position: absolute;
-    background-color: white;
-    margin: 0;
-    padding: 0;
-    box-shadow: 0 3px 3px -3px #000;
-
+    display: none;
+    background-color: #fff;
     @if $desktop {
-      width: 100%;
-
-      li {
-        list-style: none;
-        line-height: 1.2em;
-        white-space: nowrap;
-
-        &:hover {
-          cursor: pointer;
-          background-color: $glxlightgreen;
-        }
-
-        &:focus {
-          background-color: $glxlightgreen;
-        }
-
-        &.active {
-          background-color: $glxlightgreen;
-        }
-      }
+        padding-top: 5px;
     }
-
     @if $mobile {
-      padding-left: 70px;
-      width: calc(100% - 70px);
-
-      li {
-        font-size: 20px;
-        color: $glxgreen;
-        list-style: none;
-        line-height: 1.5em;
-      }
+        position: fixed;
+        left: 0;
+        box-shadow: 0 3px 3px -3px #000;
     }
-  }
+    .clear {
+        position: absolute;
+        right: 0;
+        font-size: 33px;
+        color: $glxgreen;
+    }
+    input {
+        width: 100%;
+        font-size: 20px;
+        @if $mobile {
+          padding: 5px 0 5px 70px;
+        }
+    }
+    >ul {
+        -webkit-padding-start: 0;
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+        list-style-type: none;
+        position: absolute;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        box-shadow: 0 3px 3px -3px #000;
+        width: 100%;
+        @if $desktop {
+            
+            li {
+                list-style: none;
+                line-height: 1.2em;
+                white-space: nowrap;
+                &:hover {
+                    cursor: pointer;
+                    background-color: $glxlightgreen;
+                }
+                &:focus {
+                    background-color: $glxlightgreen;
+                }
+                &.active {
+                    background-color: $glxlightgreen;
+                }
+            }
+        }
+        @if $mobile {
+            padding-left: 70px;
+            li {
+                font-size: 20px;
+                color: $glxgreen;
+                list-style: none;
+                line-height: 1.5em;
+            }
+        }
+    }
 }

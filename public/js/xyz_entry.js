@@ -47,7 +47,7 @@ _xyz.locales[_xyz.locale].maxZoom = _xyz.locales[_xyz.locale].maxZoom || 20;
 
 // Initiate map object.
 _xyz.map = L
-    .map('map', {
+    .map('Map', {
         renderer: L.svg(),
         scrollWheelZoom: true,
         zoomControl: false,

@@ -1,36 +1,30 @@
 .checkbox {
-  padding: 5px 0 5px 25px;
-  position: relative;
-  cursor: pointer;
-  display: block;
-
-  input[type=checkbox] {
-    position: absolute;
-    opacity: 0;
-    overflow: hidden;
-    display: none;
-  }
-  
-  .checkbox_i {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 0;
-    width: 0;
-    font-size: 22px;
-    color: $glxgreen;
+    padding: 5px 0 5px 25px;
+    position: relative;
     cursor: pointer;
-  }
-  
-  .checkbox_i:after {
-    font-family: "Material Icons";
-    content: '\E835';
-  }
-  
-  input[type=checkbox]:checked + .checkbox_i:after {
-    font-family: "Material Icons";
-    content: '\E834';
-  }
+    display: block;
+    input[type=checkbox] {
+        position: absolute;
+        opacity: 0;
+        overflow: hidden;
+        display: none;
+    }
+    .checkbox_i {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0;
+        width: 0;
+        font-size: 22px;
+        color: $glxgreen;
+        cursor: pointer;
+    }
+    .checkbox_i:after {
+        font-family: "Material Icons";
+        content: '\E835';
+    }
+    input[type=checkbox]:checked+.checkbox_i:after {
+        font-family: "Material Icons";
+        content: '\E834';
+    }
 }
-
-
