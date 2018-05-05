@@ -110,7 +110,8 @@
               "field": "lease_break",
               "label": "Lease break date",
               "type": "text",
-              "level": 1
+              "level": 1,
+              "filter": "date"
             },
             {
               "field": "rent_pa_k",
@@ -123,7 +124,8 @@
               "field": "lease_expire",
               "label": "Lease expiry date",
               "type": "text",
-              "level": 1
+              "level": 1,
+              "filter": "date"
             },
             {
               "field": "nbv_k",

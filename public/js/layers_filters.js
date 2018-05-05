@@ -123,6 +123,27 @@ function layerFilters(layer){
                 filters.appendChild(block);
 
             }
+            
+            if(layer.infoj[key].filter === "date"){
+                block = utils.createElement('div', {
+                    classList: "block"
+                });
+                
+                title = utils.createElement('div', {
+                    textContent: layer.infoj[key].label,
+                    classList: "title"
+                }, block);
+                
+                let options = {
+                    field: layer.infoj[key].field,
+                    label: layer.infoj[key].label,
+                    appendTo: block
+                }
+                
+                // filter date function
+                filter_date(layer, options);
+                filters.appendChild(block);
+            }
         }
         
     });
@@ -187,6 +208,58 @@ function filter_numeric(layer, options){
         name: "lt"
     }, options.appendTo);
 }
+
+function filter_date(layer, options){
+    // sql and keyups to do
+    let gt_label = utils.createElement('div', {
+        classList: "label half",
+        textContent: "> later than"
+    }, options.appendTo);
+    
+    let lt_label = utils.createElement('div', {
+        classList: "label half right",
+        textContent: "< earlier than"
+    }, options.appendTo);
+    
+    let gt_input_yy = utils.createElement('input', {
+        classList: "label third",
+        placeholder: 'yyyy',
+        onkeyup: "",
+        name: "gt"
+    }, options.appendTo);
+    
+    let gt_input_mm = utils.createElement('input', {
+        classList: "label third",
+        placeholder: 'mm',
+        onkeyup: ""
+    }, options.appendTo);
+    
+    let gt_input_dd = utils.createElement('input', {
+        classList: "label third",
+        placeholder: 'dd',
+        onkeyup: ""
+    }, options.appendTo);
+        
+    let lt_input_dd = utils.createElement('input', {
+        classList: "label third right",
+        placeholder: 'dd',
+        onkeyup: ""
+    }, options.appendTo);
+        
+    let lt_input_mm = utils.createElement('input', {
+        classList: "label third right",
+        placeholder: 'mm',
+        onkeyup: ""
+    }, options.appendTo);
+    
+    let lt_input_yy = utils.createElement('input', {
+        classList: "label third right",
+        placeholder: 'yyyy',
+        onkeyup: "",
+        name: "lt"
+    }, options.appendTo);
+}
+
 
 // create checkbox filter
 function filter_checkbox(options, layer){
