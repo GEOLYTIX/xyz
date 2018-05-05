@@ -88,7 +88,7 @@
 .range {
   width: 100%;
   width: calc(100% - 5px);
-  padding: 5px 0; }
+  padding: 10px 0; }
 
 input[type=range] {
   width: 100%;
@@ -879,7 +879,7 @@ body {
   font-family: ffmark, sans-serif; }
 
 a {
-  color: #090;
+  color: #000;
   text-decoration: none; }
 
 select {
