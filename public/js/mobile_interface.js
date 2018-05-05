@@ -1,53 +1,53 @@
 const utils = require('./utils');
 
-module.exports = function(){
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
+module.exports = function () {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+    //move map up on document scroll
+    document.addEventListener('scroll',
+        () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
+
+    let modules = document.querySelectorAll('.mod_container > .module'),
+        tabBar = document.querySelector('.tab_bar'),
+        tabLayers = document.getElementById('tabLayers'),
+        modLayers = document.getElementById('Layers'),
+        tabLocations = document.getElementById('tabLocations'),
+        modLocations = document.getElementById('Locations');
+
+    modLayers.addEventListener('scroll', e => checkOverlap (e.target));
+    modLocations.addEventListener('scroll', e => checkOverlap (e.target));
+
+    function checkOverlap (mod) {
+        if (mod.scrollTop > 0) {
+            utils.addClass(tabBar, 'pane_shadow');
+            return
+        }
+        utils.removeClass(tabBar, 'pane_shadow');
     }
 
-//move map up on document scroll
-    document.addEventListener('scroll', function () {
-        document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px';
-    });
+    _xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
+    _xyz.activateLocationsTab = () => {
+        utils.removeClass(tabLocations, 'hidden');
+        activateTab(tabLocations, modLocations)
+    };
 
-//add shadow to module header on content scroll
-    const page_content = document.querySelectorAll('.page_content');
-    for (let i = 0; i < page_content.length; i++) {
-        page_content[i].addEventListener('scroll', function(){
-            utils.addClass(this.previousElementSibling, 'shadow');
-            if (this.scrollTop === 0) utils.removeClass(this.previousElementSibling, 'shadow');
-        });
-    }
+    tabLayers.addEventListener('click',
+        () => activateTab(tabLayers, modLayers));
 
-//tab buttons
-    const body = document.querySelector('html, body');
-    const modules = document.querySelectorAll('.module');
-    utils.addClass(modules, 'hidden');
-    utils.removeClass(modules[0], 'hidden');
-    
-    _xyz.activateLayersTab = function (){
-        let tab = document.querySelector('.tab_layers');
-        utils.removeClass(tab.parentNode.children, 'active');
-        utils.addClass(tab, 'active');
+    tabLocations.addEventListener('click',
+        () => activateTab(tabLocations, modLocations));
+
+    function activateTab(target, mod) {
+        utils.removeClass(target.parentNode.children, 'active');
+        utils.addClass(target, 'active');
         utils.addClass(modules, 'hidden');
-        utils.removeClass(document.getElementById('layers_module'), 'hidden');
-    }
+        utils.removeClass(mod, 'hidden');
+        checkOverlap (mod);
 
-    _xyz.activateSelectTab = function (){
-        let tab = document.querySelector('.tab_select');
-        utils.removeClass(tab.parentNode.children, 'active');
-        utils.addClass(tab, 'active');
-        utils.addClass(modules, 'hidden');
-        utils.removeClass(document.getElementById('select_module'), 'hidden');
-    }
+        let locations = document.querySelector('#Locations > .content');
 
-    let tab_buttons = document.querySelectorAll('.tab_bar .tab_btn');
-    for (let i = 0; i < tab_buttons.length; i++) {
-        tab_buttons[i].addEventListener('click', function(){
-            utils.removeClass(this.parentNode.children, 'active');
-            utils.addClass(this, 'active');
-            utils.addClass(modules, 'hidden');
-            utils.removeClass(modules[i], 'hidden');
-        });
+        setTimeout(() => {
+            if (locations.children.length === 0) utils.addClass(tabLocations, 'hidden')
+        }, 300);
     }
 };

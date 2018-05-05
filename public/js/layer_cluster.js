@@ -216,11 +216,11 @@ function clusterMouseClick(e, layer) {
                 if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
                 let dom = {
-                    map: document.getElementById('map'),
+                    map: document.getElementById('Map'),
                     location_drop: document.querySelector('.location_drop'),
                     location_drop__close: document.querySelector('.location_drop__close'),
                     location_table: document.querySelector('.location_table'),
-                    map_button: document.querySelector('.map_button')
+                    map_button: document.querySelector('.btn_column')
                 };
                 dom.location_table.innerHTML = table;
                 dom.map_button.style['display'] = 'none';

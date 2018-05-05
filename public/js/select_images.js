@@ -151,10 +151,10 @@ function upload_image(record, _img, blob) {
     //console.log(blob);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', host + 'q_save_image?' + utils.paramString({
-        dbs: record.layer.dbs,
-        table: record.layer.table,
-        qID: record.layer.qID,
-        id: record.layer.id
+        dbs: record.location.dbs,
+        table: record.location.table,
+        qID: record.location.qID,
+        id: record.location.id
         //type: blob.type
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
@@ -197,10 +197,10 @@ function remove_image(record, _img) {
     
     let xhr = new XMLHttpRequest();
     xhr.open('GET', host + 'q_remove_image?' + utils.paramString({
-        dbs: record.layer.dbs,
-        table: record.layer.table,
-        qID: record.layer.qID,
-        id: record.layer.id,
+        dbs: record.location.dbs,
+        table: record.location.table,
+        qID: record.location.qID,
+        id: record.location.id,
         image_id: _img.id,
         image_src: encodeURIComponent(_img.src)
     }));

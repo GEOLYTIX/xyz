@@ -156,7 +156,7 @@ module.exports = () => {
         if (freeRecords.length === 0) return
 
         // Make select tab active on mobile device.
-        if (_xyz.activateSelectTab) _xyz.activateSelectTab();
+        if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
 
         let layer = _xyz.locales[_xyz.locale].layers[location.layer];
 
@@ -380,5 +380,10 @@ module.exports = () => {
         });
         let idx = _xyz.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
+
+        if (view_mode === 'desktop') {
+            let scrolly = document.querySelector('.mod_container > .scrolly');
+            scrolly.scrollTop = scrolly.scrollHeight;
+        }
     }
 }

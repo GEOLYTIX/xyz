@@ -12,7 +12,7 @@ module.exports = () => {
 
     // Assign dom objects.
     let dom = {
-        map: document.getElementById('map'),
+        map: document.getElementById('Map'),
         layers: utils._createElement({
             tag: 'div',
             options: {
@@ -160,7 +160,7 @@ module.exports = () => {
                                 dom.map.style.cursor = '';
 
                                 // Make select tab active on mobile device.
-                                if (_xyz.activateSelectTab) _xyz.activateSelectTab();
+                                if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
 
                                 let xhr = new XMLHttpRequest();
                                 xhr.open('POST', 'q_save');

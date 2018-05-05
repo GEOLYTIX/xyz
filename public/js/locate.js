@@ -4,8 +4,10 @@ const svg_symbols = require('./svg_symbols');
 
 module.exports = () => {
 
-    document.getElementById('btnLocate').addEventListener('click', e => {
-        utils.toggleClass(e.target, 'active');
+    let btnLocate = document.getElementById('btnLocate');
+
+    btnLocate.addEventListener('click', e => {
+        utils.toggleClass(btnLocate, 'active');
 
         let flyTo = true;
 
@@ -21,13 +23,13 @@ module.exports = () => {
         }
 
         // Remove the geolocation marker if btnLocate is not active.
-        if (!utils.hasClass(e.target, 'active')) {
+        if (!utils.hasClass(btnLocate, 'active')) {
             _xyz.map.removeLayer(_xyz.locate.L);
             return
         }
         
         // Add the geolocation marker if btnLocate is active and the latitude is not 0.
-        if (utils.hasClass(e.target, 'active') && _xyz.locate.L.getLatLng().lat !== 0) {
+        if (utils.hasClass(btnLocate, 'active') && _xyz.locate.L.getLatLng().lat !== 0) {
             _xyz.locate.L.addTo(_xyz.map);
 
             // Fly to marker location and set flyto to false to prevent map tracking.
@@ -45,10 +47,10 @@ module.exports = () => {
                     //console.log('pos: ' + [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)]);
                     
                     // Change icon to fixed location.
-                    e.target.textContent = 'gps_fixed';
+                    btnLocate.children[0].textContent = 'gps_fixed';
 
                     // Reposition marker if btnLocate is active
-                    if (utils.hasClass(e.target, 'active')) {
+                    if (utils.hasClass(btnLocate, 'active')) {
                         let pos_ll = [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)];
                         _xyz.map.removeLayer(_xyz.locate.L);
                         _xyz.locate.L.setLatLng(pos_ll);

@@ -2,7 +2,6 @@
   "title": "GEOLYTIX | XYZ Open",
   "select": {},
   "locate": {},
-  "documentation": "documentation",
   "report": false,
   "gazetteer": {},
   "locale": "EU",
@@ -708,10 +707,10 @@
             }
           }
         },
-        "retail_points_editable": {
+        "rp_editable": {
           "editable": "geometry",
           "name": "Retail Points (editable)",
-          "pane": ["retail_points", 540],
+          "pane": ["retail_points_editable", 540],
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",

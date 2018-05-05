@@ -324,8 +324,7 @@ input[type=range]::-moz-range-thumb {
     border-bottom: 1px solid #090;
     text-align: center;
     table-layout: fixed;
-    height: 50px;
-    box-shadow: 0 3px 3px -3px #000; }
+    height: 50px; }
     .mod_container .tab_bar .swipe_icon {
       display: none; }
     .mod_container .tab_bar .active {

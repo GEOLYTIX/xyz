@@ -21,7 +21,7 @@
         text-align: center;
         table-layout: fixed;
         height: 50px;
-        box-shadow: 0 3px 3px -3px #000;
+        // box-shadow: 0 3px 3px -3px #000;
         .swipe_icon {
             display: none;
         }
@@ -44,7 +44,7 @@
             padding: 10px 0;
         }
         @if $mobile {
-            padding: 10px;
+            padding: 20px;
             overflow-y: scroll;
             height: calc(100% - 50px);
         }

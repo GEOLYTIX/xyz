@@ -177,6 +177,8 @@ function trash(record) {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = function () {
             if (this.status === 200) {
+                
+                _xyz.map.removeLayer(_layer.L);
                 _layer.getLayer();
                 record.drawer.remove();
 
