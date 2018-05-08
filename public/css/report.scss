@@ -15,7 +15,6 @@ $glxlightgreen: #cf9;
 @import 'leaflet';
 @import 'location';
 @import 'attribution';
-
 *,
 *::after,
 *::before {
@@ -82,40 +81,30 @@ i,
 }
 
 .mod_container {
-
     .hidden {
         display: none;
     }
-
     .section {
         display: none;
     }
-
     .report-block {
         display: block;
     }
-
     .report-off {
         display: none;
     }
-
     .module {
         padding: 0 10px 0 0;
         width: 25%;
-
         .title {
             display: none;
         }
-        
         input {
             width: 100%;
         }
         .drawer {
-            margin-top: 10px;
-
             .header {
                 font-size: 15px;
-                line-height: 2;
                 font-family: ffmark_bold, sans-serif;
                 &:hover {
                     cursor: pointer;
@@ -131,7 +120,6 @@ i,
                 .section {
                     padding: 10px 0;
                     border-bottom: 1px solid #555;
-
                 }
                 .block {
                     padding: 5px 0;
@@ -154,7 +142,6 @@ i,
             }
         }
     }
-
     .loader {
         height: 2px;
         margin-top: -2px;
@@ -216,11 +203,18 @@ i,
 #Report {
     position: relative;
     width: 297mm;
-    height: 210mm;
+    height: 210mm; 
     // padding: 10mm;
-    margin: 10mm auto;
+    margin: 0 auto;
     background: white;
     box-shadow: 3px 3px 5px #999;
+
+    @media print {
+
+        width: 100%;
+        height: 100%;
+
+    }
 }
 
 .btn_text,
