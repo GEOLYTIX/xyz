@@ -23,9 +23,10 @@ async function cluster(req, res) {
     if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
     if((filter[field].gt)) filter_sql += ` AND ${field} > ${filter[field].gt}`;
     if((filter[field].lt)) filter_sql += ` AND ${field} < ${filter[field].lt}`;
+    if((filter[field].gte)) filter_sql += ` AND ${field} >= ${filter[field].gte}`;
+    if((filter[field].lte)) filter_sql += ` AND ${field} <= ${filter[field].lte}`;
     if((filter[field].like)) filter_sql += ` AND ${field} ILIKE '${filter[field].like}%'`;
     if((filter[field].match)) filter_sql += ` AND ${field} ILIKE '${filter[field].match}'`;
-
   });
 
   // Query the feature count from lat/lng bounding box.
@@ -59,6 +60,8 @@ async function cluster(req, res) {
         ${geom},
         0.00001)
     ${filter_sql};`;
+    
+    //console.log(q);
 
   let result = await global.DBS[req.query.dbs].query(q);
 

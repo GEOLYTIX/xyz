@@ -49,16 +49,16 @@
           "dbs": "XYZ",
           "qID": "id",
           "table": "williamhill",
-          "cluster_label": "shop",
-          "cluster_cat": "mono_comp",
+          "cluster_label": "shop_name",
+          "cluster_cat": "competition",
           "infoj": [
             {
-              "field": "lbo",
+              "field": "lbo_no",
               "label": "ID",
               "type": "text"
             },
             {
-              "field": "shop",
+              "field": "shop_name",
               "label": "Shop name",
               "type": "text",
               "filter": "like"
@@ -70,19 +70,37 @@
               "filter": "like"
             },
             {
+              "field": "wh_region",
+              "label": "WH Region",
+              "type": "text",
+              "filter": "match"
+            },
+            {
+              "field": "wh_area",
+              "label": "WH Area",
+              "type": "text",
+              "filter": "match"
+            },
+            {
+              "field": "wh_cluster",
+              "label": "WH Cluster",
+              "type": "text",
+              "filter": "match"
+            },
+            {
+              "field": "seamless_town",
+              "label": "Town",
+              "type": "text"
+            },
+            {
               "field": "region",
-              "label": "Region",
-              "type": "numeric"
-            },
-            {
-              "field": "area",
               "label": "Area",
-              "type": "numeric"
+              "type": "text"
             },
             {
-              "field": "cluster",
-              "label": "Cluster",
-              "type": "numeric"
+              "field": "Country",
+              "label": "country",
+              "type": "text"
             },
             {
               "field": "open_closed",
@@ -90,17 +108,16 @@
               "type": "text"
             },
             {
-              "field": "mono_comp",
+              "field": "competition",
               "label": "Type",
-              "type": "text",
-              "filter": ""
+              "type": "text"
             },
             {
-              "label": "Lease status"
+              "label": "Tenure"
             },
             {
-              "field": "freehold_lease",
-              "label": "Lease Type",
+              "field": "tenure",
+              "label": "Tenure type",
               "type": "text",
               "level": 1,
               "filter": {
@@ -108,68 +125,74 @@
               }
             },
             {
-              "field": "lease_break",
+              "field": "lease_break2",
               "label": "Lease break date",
               "type": "text",
               "level": 1,
               "filter": "date"
             },
             {
-              "field": "rent_pa_k",
-              "label": "Rent p.a. in thousands",
-              "type": "numeric",
-              "level": 1,
-              "filter": "numeric"
-            },
-            {
-              "field": "lease_expire",
+              "field": "lease_expire2",
               "label": "Lease expiry date",
               "type": "text",
               "level": 1,
               "filter": "date"
             },
             {
-              "field": "nbv_k",
-              "label": "Net Book Value in thousands",
+              "field": "break_v_expire2",
+              "label": "Break vs expire date",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "rent",
+              "label": "Rent p.a.",
+              "type": "numeric",
+              "level": 1,
+              "filter": "numeric"
+            },
+            {
+              "field": "nbv",
+              "label": "Net Book Value",
               "type": "numeric",
               "level": 1
             },  
             {
-              "label": "EBITDA in millions by year"
+              "label": "EBITDA by year"
             },  
             {
-              "field": "ebitda_shop_2013_m",
+              "field": "ebitda_2013",
               "label": "2013",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "ebitda_shop_2014_m",
+              "field": "ebitda_2014",
               "label": "2014",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "ebitda_shop_2015_m",
+              "field": "ebitda_2015",
               "label": "2015",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "ebitda_shop_2016_m",
+              "field": "ebitda_2016",
               "label": "2016",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "ebitda_shop_2017_m",
+              "field": "ebitda_2017",
               "label": "2017",
               "type": "numeric",
               "level": 2              
             },
             {
-              "field": "ebitda_shop_plan_2018_m",
-              "label": "2018",
+              "field": "ebitda_plan_2018",
+              "label": "Plan 2018",
               "type": "numeric",
               "level": 2           
             },
@@ -177,39 +200,32 @@
               "label": "Accounting by year 2017"
             },
             {
-              "field": "ebitda_shop_2017_m",
-              "label": "EBITDA Shop in millions",
-              "type": "numeric",
-              "level": 2,
-              "filter": "numeric"
-            },
-            {
-              "field": "stakes_2017_m",
-              "label": "Stakes in millions",
+              "field": "stakes_2017",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             }, 
             {
-              "field": "gross_win_2017_m",
-              "label": "Gross win in millions",
+              "field": "gross_win_2017",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "margin_2017_pct",
+              "field": "margin_pct_2017",
               "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "gaming_2017_m",
-              "label": "Gaming in millions",
+              "field": "gaming_2017",
+              "label": "Gaming",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "shop_profit_2017_m",
-              "label": "Shop profit in millions",
+              "field": "profit_2017",
+              "label": "Shop profit",
               "type": "numeric",
               "level": 2
             },
@@ -217,32 +233,32 @@
               "label": "Plan for year 2018"
             },
             {
-              "field": "plan_stakes_2018_m",
-              "label": "Stakes in millions",
+              "field": "plan_stakes_2018",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "plan_gross_win_2018_m",
-              "label": "Gross win in millions",
+              "field": "plan_gross_win_2018",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "plan_margin_2018_pct",
+              "field": "plan_margin_pct_2018",
               "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "plan_gaming_2018_m",
-              "label": "Gaming in millions",
+              "field": "plan_margin_2018",
+              "label": "Plan margin",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "plan_shop_profit_2018_m",
-              "label": "Shop profit in millions",
+              "field": "plan_profit_2018",
+              "label": "Plan profit",
               "type": "numeric",
               "level": 2
             },
@@ -250,32 +266,104 @@
               "label": "Forecast 2019"
             },
             {
-              "field": "rp_est_stakes_2019_m",
-              "label": "Stakes in millions",
+              "field": "rp_est_stakes_2019",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gross_win_2019_m",
-              "label": "Gross win in millions",
+              "field": "rp_est_gross_win_2019",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_margin_2019_pct",
+              "field": "rp_est_margin_pct_2019",
               "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gaming_2019_m",
-              "label": "Gaming in millions",
+              "field": "rp_est_gaming_2019",
+              "label": "Gaming",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_shop_profit_2019_m",
-              "label": "Shop profit in millions",
+              "field": "rp_est_profit_2019",
+              "label": "Shop profit",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_20_2019",
+              "label": "Stakes Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_20_2019",
+              "label": "Gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_20_2019",
+              "label": "Margin Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_20_2019",
+              "label": "Lost gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_20_2019",
+              "label": "Gaming Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_20_2019",
+              "label": "Profit Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_2_2019",
+              "label": "Stakes Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_2_2019",
+              "label": "Gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_2_2019",
+              "label": "Margin Tri £2 (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_2_2019",
+              "label": "Lost gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_2_2019",
+              "label": "Gaming Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_2_2019",
+              "label": "Profit Tri £2",
               "type": "numeric",
               "level": 2
             },
@@ -283,32 +371,104 @@
               "label": "Forecast 2020"
             },            
             {
-              "field": "rp_est_stakes_2020_m",
-              "label": "Stakes in millions",
+              "field": "rp_est_stakes_2020",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gross_win_2020_m",
-              "label": "Gross win in millions",
+              "field": "rp_est_gross_win_2020",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_margin_2020_pct",
+              "field": "rp_est_margin_pct_2020",
               "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gaming_2020_m",
-              "label": "Gaming in millions",
+              "field": "rp_est_gaming_2020",
+              "label": "Gaming",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_shop_profit_2020_m",
-              "label": "Shop profit in millions",
+              "field": "rp_est_profit_2020",
+              "label": "Shop profit",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_20_2020",
+              "label": "Stakes Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_20_2020",
+              "label": "Gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_20_2020",
+              "label": "Margin Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_20_2020",
+              "label": "Lost gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_20_2020",
+              "label": "Gaming Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_20_2020",
+              "label": "Profit Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_2_2020",
+              "label": "Stakes Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_2_2020",
+              "label": "Gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_2_2020",
+              "label": "Margin Tri £2 (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_2_2020",
+              "label": "Lost gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_2_2020",
+              "label": "Gaming Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_2_2020",
+              "label": "Profit Tri £2",
               "type": "numeric",
               "level": 2
             },
@@ -316,32 +476,104 @@
               "label": "Forecast 2021"
             },
             {
-              "field": "rp_est_stakes_2021_m",
-              "label": "Stakes in millions",
+              "field": "rp_est_stakes_2021",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gross_win_2021_m",
-              "label": "Gross win in millions",
+              "field": "rp_est_gross_win_2021",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_margin_2021_m",
-              "label": "Margin (in millions)",
+              "field": "rp_est_margin_pct_2021",
+              "label": "Margin",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gaming_2021_m",
-              "label": "Gaming in millions",
+              "field": "rp_est_gaming_2021",
+              "label": "Gaming",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_shop_profit_2021_m",
-              "label": "Shop profit in millions",
+              "field": "rp_est_profit_2021",
+              "label": "Shop profit",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_20_2021",
+              "label": "Stakes Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_20_2021",
+              "label": "Gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_20_2021",
+              "label": "Margin Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_20_2021",
+              "label": "Lost gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_20_2021",
+              "label": "Gaming Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_20_2021",
+              "label": "Profit Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_2_2021",
+              "label": "Stakes Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_2_2021",
+              "label": "Gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_2_2021",
+              "label": "Margin Tri £2 (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_2_2021",
+              "label": "Lost gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_2_2021",
+              "label": "Gaming Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_2_2021",
+              "label": "Profit Tri £2",
               "type": "numeric",
               "level": 2
             },
@@ -349,32 +581,104 @@
               "label": "Forecast 2022"
             },
             {
-              "field": "rp_est_stakes_2022_m",
-              "label": "Stakes in millions",
+              "field": "rp_est_stakes_2022",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gross_win_2022_m",
-              "label": "Gross win in millions",
+              "field": "rp_est_gross_win_2022",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_margin_2022_pct",
+              "field": "rp_est_margin_pct_2022",
               "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_gaming_2022_m",
-              "label": "Gaming in millions",
+              "field": "rp_est_gaming_2022",
+              "label": "Gaming",
               "type": "numeric",
               "level": 2
             },
             {
-              "field": "rp_est_shop_profit_2022_m",
-              "label": "Shop profit in millions",
+              "field": "rp_est_profit_2022",
+              "label": "Shop profit",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_20_2022",
+              "label": "Stakes Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_20_2022",
+              "label": "Gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_20_2022",
+              "label": "Margin Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_20_2022",
+              "label": "Lost gross win Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_20_2022",
+              "label": "Gaming Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_20_2022",
+              "label": "Profit Tri £20",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_stakes_tri_2_2022",
+              "label": "Stakes Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gross_win_tri_2_2022",
+              "label": "Gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_margin_pct_tri_2_2022",
+              "label": "Margin Tri £2 (%)",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "lost_gross_win_tri_2_2022",
+              "label": "Lost gross win Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_gaming_tri_2_2022",
+              "label": "Gaming Tri £2",
+              "type": "numeric",
+              "level": 2
+            },
+            {
+              "field": "rp_est_profit_tri_2_2022",
+              "label": "Profit Tri £2",
               "type": "numeric",
               "level": 2
             }
