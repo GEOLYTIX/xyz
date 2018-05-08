@@ -85,6 +85,12 @@
   .btn_header.active {
     text-shadow: 2px 2px 2px #cf9; }
 
+.btn_small {
+  font-family: sans-serif;
+  font-size: 11px;
+  color: #079e00;
+  height: 14px; }
+
 .range {
   width: 100%;
   width: calc(100% - 5px);

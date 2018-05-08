@@ -313,6 +313,23 @@ function filter_date(layer, options){
         onkeyup: yy_onkeyup,
         name: "lte"
     }, options.appendTo);
+    
+    let reset_onclick = function(){
+        let siblings = options.appendTo.children;
+        for(let sibling of siblings){
+            if(sibling.tagName === 'INPUT'){
+                sibling.value = '';
+            }
+        }
+        layer.filter[options.field] = {};
+        layer.getLayer();
+    }
+    
+    let reset = utils.createElement('div', {
+        classList: "btn_small cursor noselect",
+        textContent: "Reset",
+        onclick: reset_onclick
+    }, options.appendTo);
 }
 
 
