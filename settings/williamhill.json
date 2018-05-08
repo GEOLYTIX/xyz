@@ -78,14 +78,12 @@
             {
               "field": "wh_area",
               "label": "WH Area",
-              "type": "text",
-              "filter": "match"
+              "type": "text"
             },
             {
               "field": "wh_cluster",
               "label": "WH Cluster",
-              "type": "text",
-              "filter": "match"
+              "type": "text"
             },
             {
               "field": "seamless_town",
@@ -791,19 +789,19 @@
               "type": "text"
             },
             {
-              "field": "count.shop_profit_2017_m",
+              "field": "count.profit_2017",
               "label": "Count Shop profit 2017",
               "type": "integer",
               "layer": "williamhill"
             },
             {
-              "field": "sum.shop_profit_2017_m",
+              "field": "sum.profit_2017",
               "label": "Shop profit 2017 (sum)",
               "type": "numeric",
               "layer": "williamhill"
             },
             {
-              "field": "avg.shop_profit_2017_m",
+              "field": "avg.profit_2017",
               "label": "Shop profit 2017 (avg)",
               "type": "numeric",
               "layer": "williamhill"
