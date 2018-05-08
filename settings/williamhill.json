@@ -2,6 +2,7 @@
   "title": "GEOLYTIX | William Hill",
   "select": {},
   "gazetteer": {},
+  "report": {},
   "locales": {
     "GB": {
       "gazetteer": ["GOOGLE", "GB", "", "e.g. London"],

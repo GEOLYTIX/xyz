@@ -149,7 +149,7 @@ _xyz.layersCheck = () => {
 require('./locale')();
 require('./layers')();
 require('./select')();
-if (_xyz.gazetteer) require('./gazetteer')();
+if (_xyz.gazetteer && view_mode != 'report') require('./gazetteer')();
 if (_xyz.locate) require('./locate')();
 if (_xyz.report) require('./report')();
 

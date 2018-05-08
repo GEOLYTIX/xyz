@@ -4,94 +4,116 @@
 <head>
     <title>{{:title}}</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         @font-face {
             font-family: ffmark_black;
-            src: url({{:host}}fonts/MarkWeb-Black.woff) format("woff");
+            src: url(fonts/MarkWeb-Black.woff) format("woff");
         }
-    
+
         @font-face {
             font-family: ffmark;
-            src: url({{:host}}fonts/MarkWebPro.woff) format("woff");
+            src: url(fonts/MarkWebPro.woff) format("woff");
         }
-    
+
         @font-face {
             font-family: ffmark_bold;
-            src: url({{:host}}fonts/MarkWebPro-Bold.woff) format("woff");
+            src: url(fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    <link rel="stylesheet" href="css/report.css"/>
+    <link rel="stylesheet" href="css/report.css" />
 
-    <script>const view_mode = 'report';</script>
-
-    {{:settings}}
+    <script>const view_mode = 'report';</script> {{:settings}}
 
 </head>
 
 <body>
+    <div id="Report">
 
-    <div id="gaz_group" class="input_group">
-        <table>
-            <td>
-                <i id="gaz_clear" class="material-icons cursor">cancel</i>
-            </td>
-            <td>
-                <input id="gaz_input" type="text" required>
-                <span class="bar"></span>
-            </td>
-            <td id="gaz_locale">
-                <i class="material-icons">language</i>
-            </td>
-        </table>
-        <ul id="gaz_localelist"></ul>
-        <ul id="gaz_result"></ul>
-    </div>
+        <div class="mod_container">
 
-    <div class="layers_container">
-        {{include tmpl=module_layers /}}
-    </div>
+            <div id="Layers" class="module">
+                <div class="title">Layers</div>
+            </div>
 
-    <div class="select_container">
-        {{include tmpl=module_select /}}
-    </div>
+            <div id="Locations" class="module"></div>
 
-    <div class="map_container">
-        <div id="map" class="map">
-            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
-                <defs>
-                    <filter id='dropshadow'>
-                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                        <feOffset dx='1' dy='1' result='offsetblur' />
-                        <feMerge>
-                            <feMergeNode/>
-                            <feMergeNode in='SourceGraphic' />
-                        </feMerge>
-                    </filter>
-                </defs>
-            </svg>
         </div>
 
-        <div class="map_button noselect">
-            <button id="btnSearch" title="Open Gazetteer" {{:btnSearch}}>
-                <i class="material-icons">search</i>
-            </button>
+        <div class="map_container">
 
-            <button id="btnGeolocate" title="Current location" {{:btnLocate}}>
-                <i class="material-icons">gps_not_fixed</i>
-            </button>
+            <div id="Map" class="map">
+                <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
+                <div class="mapbox-attribution-container">
+                    <a href="http://leafletjs.com" target="_blank">
+                        <strong>Leaflet</strong> | </a>
+                    <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
+                    <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
+                    <a href="https://www.mapbox.com/map-feedback/" target="_blank">
+                        <strong>Improve this map</strong>
+                    </a>
+                </div>
+                <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+                    <defs>
+                        <filter id='dropshadow'>
+                            <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                            <feOffset dx='1' dy='1' result='offsetblur' />
+                            <feMerge>
+                                <feMergeNode/>
+                                <feMergeNode in='SourceGraphic' />
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
+            </div>
 
-            <button id="btnZoomIn">
-                <i class="material-icons">add</i>
-            </button>
+            <a class="logo_link" class="noselect tooltip-top" data-tooltip="Please visit our website and find out how we can assist you."
+                href="https://geolytix.co.uk">GEOLYTIX</a>
 
-            <button id="btnZoomOut">
-                <i class="material-icons">remove</i>
-            </button>
+            <div class="btn_column noselect">
+                <button id="btnGazetteer" title="Open Gazetteer" {{:btnSearch}}>
+                    <i class="material-icons">search</i>
+                </button>
+
+                <button id="btnLocate" title="Current location" {{:btnLocate}}>
+                    <i class="material-icons">gps_not_fixed</i>
+                </button>
+
+                <button id="btnZoomIn">
+                    <i class="material-icons">add</i>
+                </button>
+
+                <button id="btnZoomOut">
+                    <i class="material-icons">remove</i>
+                </button>
+
+                <button id="btnReport" title="Create PDF Report" {{:btnReport}}>
+                    <i class="material-icons">picture_as_pdf</i>
+                </button>
+
+                <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+                    <a href="{{:hrefDocumentation}}">
+                        <i class="material-icons">school</i>
+                    </a>
+                </button>
+
+                <button id="btnLogout" title="Log out from application" {{:btnLogout}}>
+                    <a href="logout">
+                        <i class="material-icons">exit_to_app</i>
+                    </a>
+                </button>
+
+                <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
+                    <a href="admin">
+                        <i class="material-icons">supervisor_account</i>
+                    </a>
+                </button>
+            </div>
+
         </div>
-    </div>
 
+    </div>
 </body>
 
 <script type="application/javascript" src="js/{{:bundle_js}}"></script>

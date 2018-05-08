@@ -71,7 +71,7 @@ function clusterSettings(layer) {
 
     // KMeans
     settings.appendChild(utils.createElement('span', {
-        textContent: 'KMeans: '
+        textContent: 'Minimum number of cluster (KMeans): '
     }));
 
     let lblKMeans = utils.createElement('span', {
@@ -98,10 +98,6 @@ function clusterSettings(layer) {
         }, 500);
     });
 
-    function getLayer(){
-        
-    }
-
     let rKMeans = utils.createElement('div', {
         className: 'range'
     });
@@ -111,7 +107,7 @@ function clusterSettings(layer) {
 
     // DBScan
     settings.appendChild(utils.createElement('span', {
-        textContent: 'DBScan: '
+        textContent: 'Maximum distance between locations in cluster (DBScan): '
     }));
 
     let lblDBScan = utils.createElement('span', {
@@ -221,7 +217,7 @@ function mvtCategorized(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'section expandable expanded'
+            className: 'section report-block expandable expanded'
         });
 
         utils._createElement({
@@ -344,7 +340,7 @@ function clusterCategorized(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'section expandable expanded'
+            className: 'section report-block expandable expanded'
         });
 
         utils._createElement({
@@ -526,7 +522,7 @@ function clusterGraduated(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'section expandable expanded'
+            className: 'section report-block expandable expanded'
         });
 
         utils._createElement({
@@ -605,7 +601,7 @@ function mvtGraduated(layer) {
     // Get width from the layer drawer client width and create a new SVG for the legend.
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'section expandable expanded'
+            className: 'section report-block expandable expanded'
         });
 
         utils._createElement({
@@ -685,7 +681,7 @@ function gridControl(layer) {
 
     let width = layer.drawer.clientWidth,
         legend = utils.createElement('div', {
-            className: 'section'
+            className: 'section report-block'
         });
 
     // Select dropdown for size.

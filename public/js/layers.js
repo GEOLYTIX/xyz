@@ -99,14 +99,14 @@ module.exports = () => {
                         e.stopPropagation();
                         if (e.target.textContent === 'layers_clear') {
                             layer.display = true;
-                            utils.removeClass(layer.drawer, 'off');
+                            utils.removeClass(layer.drawer, 'report-off');
                             e.target.textContent = 'layers';
                             _xyz.pushHook('layers', layer.layer);
                             layer.getLayer();
                         } else {
                             layer.loader.style.display = 'none';
                             layer.display = false;
-                            utils.addClass(layer.drawer, 'off');
+                            utils.addClass(layer.drawer, 'report-off');
                             e.target.textContent = 'layers_clear';
                             _xyz.filterHook('layers', layer.layer);
                             if (layer.L) _xyz.map.removeLayer(layer.L);
@@ -235,7 +235,7 @@ module.exports = () => {
             // Push hook for display:true layer (default).
             if (layer.display) _xyz.pushHook('layers', layer.layer);
 
-            if (!layer.display) utils.addClass(layer.drawer, 'off');
+            if (!layer.display) utils.addClass(layer.drawer, 'report-off');
 
             layer.getLayer();
         });

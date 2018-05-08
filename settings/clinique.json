@@ -1,378 +1,402 @@
 {
-    "title": "GEOLYTIX | CLINIQUE",
-    "select": {},
-    "gazetteer": {},
-    "locales": {
-        "KR": {
-            "gazetteer": ["GOOGLE", "KR", "", "e.g. Seoul"],
-            "bounds": [[31, 120],[41, 134]],
-            "minZoom": 7,
-            "maxZoom": 17,
-            "layers": {
-                "base": {
-                    "display": true,
-                    "name": "Mapbox Baselayer",
-                    "pane": [
-                        "base",
-                        500
-                    ],
-                    "format": "tiles",
-                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-                    "provider": "MAPBOX"
-                },
-                "label": {
-                    "display": true,
-                    "name": "Mapbox Labels",
-                    "pane": [
-                        "base_labels",
-                        560
-                    ],
-                    "format": "tiles",
-                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-                    "provider": "MAPBOX"
-                },
-                "here": {
-                    "name": "HERE Imagery",
-                    "pane": [
-                        "base",
-                        500
-                    ],
-                    "format": "tiles",
-                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-                    "provider": "HERE"
-                },
-                "dong": {
-                    "display": true,
-                    "name": "Dong",
-                    "pane": ["dong",510],
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "geom_3857": "geom_3857",
-                    "geomj": "ST_asGeoJson(ST_Transform(geom_3857, 4326))",
-                    "qID": "dong_code",
-                    "properties": "mkt_size,",
-                    "infoj": [
-                      {
-                        "field": "dong_name",
-                        "label": "Dong",
-                        "type": "text"
-                      },
-                      {
-                        "field": "district",
-                        "label": "District",
-                        "type": "text"
-                      },
-                      {
-                        "field": "province",
-                        "label": "Province",
-                        "type": "text"
-                      },
-                      {
-                        "field": "pop_15",
-                        "label": "Population '15",
-                        "type": "text"
-                      },
-                      {
-                        "field": "mkt_size",
-                        "label": "Market Size",
-                        "type": "integer"
-                      }
-                    ],
-                    "arrayZoom": {
-                      "7": "clinique_dong"
-                    },
-                    "tilecache": "clinique_dong__tc",
-                    "style": {
-                        "default": {
-                          "weight": 1,
-                          "color": "#000",
-                          "fill": true,
-                          "fillColor": "#fff",
-                          "fillOpacity": 0.3
-                        },
-                        "highlight": {
-                          "weight": 1,
-                          "color": "#090"
-                        },
-                        "theme": {
-                            "label": "Market Size",
-                            "type": "graduated",
-                            "field": "mkt_size",
-                            "cat": [
-                                {
-                                    "val": 250000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#fcfdbf",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "up to 250,000"
-                                },
-                                {
-                                    "val": 500000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#fec387",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "500,000"
-                                },
-                                {
-                                    "val": 1000000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#fc8761",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "1,000,000"
-                                },
-                                {
-                                    "val": 1500000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#e75163",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "1,500,000"
-                                },
-                                {
-                                    "val": 2000000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#b63679",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "2,000,000"
-                                },
-                                {
-                                    "val": 2500000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#822581",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "2,500,000"
-                                },
-                                {
-                                    "val": 5000000,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#50127b",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "5,000,000"
-                                },
-                                {
-                                    "val": 999999999,
-                                    "style": {
-                                        "stroke": false,
-                                        "fillColor": "#1c1046",
-                                        "fill": true,
-                                        "fillOpacity": 0.3
-                                    },
-                                    "label": "5,000,000 or more"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "grid": {        
-                    "name": "Demand Grid",
-                    "format": "grid",
-                    "pane": ["grid", 511],
-                    "dbs": "XYZ",
-                    "geom": "geomcntr",   
-                    "arrayZoom": {
-                        "13": "clinique_demand_hx500",
-                        "14": "clinique_demand_hx500",
-                        "15": "clinique_demand_hx500",
-                        "16": "clinique_demand_hx500",
-                        "17": "clinique_demand_hx500"
-                    },
-                    "style": {
-                      "range": [
-                        "#3366FF",
-                        "#4D59F2",
-                        "#664DE6",
-                        "#8040D9",
-                        "#9933CC",
-                        "#B326BF",
-                        "#CC1AB3",
-                        "#E60DA6",
-                        "#FF0099"
-                      ]
-                    },
-                    "grid_color": "hb_demand",
-                    "queryFields": [
-                      [
-                        "pop",
-                        "Population"
-                      ],
-                      [
-                        "hb_demand",
-                        "Demand"
-                      ]
-                    ]
-                  },
-                "rp_mvt": {
-                    "name": "Retail Place (vector)",
-                    "pane": ["rp_mvt",515],
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "geom_3857": "geom_3857",
-                    "geomj": "ST_asGeoJson(ST_Transform(geom_3857, 4326))",
-                    "qID": "rp_id",
-
-                    "infoj": [
-                      {
-                        "field": "rp_id",
-                        "label": "ID",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "no_general",
-                        "label": "no_general",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "no_smc",
-                        "label": "no_smc",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "no_hb",
-                        "label": "no_hb",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "no_prem",
-                        "label": "no_prem",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "no_premplu",
-                        "label": "no_premplu",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "score_v1",
-                        "label": "score_v1",
-                        "type": "numeric"
-                      },
-                      {
-                        "field": "attractiveness",
-                        "label": "attractiveness",
-                        "type": "integer"
-                      },
-                      {
-                        "field": "decay_alpha",
-                        "label": "decay_alpha",
-                        "type": "numeric"
-                      },
-                      {
-                        "field": "decay_beta",
-                        "label": "decay_beta",
-                        "type": "numeric"
-                      },
-                      {
-                        "field": "model_sales",
-                        "label": "model_sales",
-                        "type": "numeric"
-                      }
-                    ],
-                    "arrayZoom": {
-                      "7": "clinique_rp"
-                    },
-
-                    "style": {
-                        "default": {
-                          "weight": 1,
-                          "color": "#000",
-                          "fill": true,
-                          "fillColor": "#fff",
-                          "fillOpacity": 0.3
-                        },
-                        "highlight": {
-                          "weight": 1,
-                          "color": "#090"
-                        }
-                    }
-                },
-                "rp_cluster": {
-                  "display": true,
-                  "name": "Retail Place (cluster)",
-                  "format": "cluster",
-                  "pane": ["rp_cluster", 520],
-                  "dbs": "XYZ",
-                  "table": "clinique_rp",
-                  "qID": "rp_id",
-                  "cluster_label": "rp_id",
-                  "infoj": [
-                    {
-                      "field": "rp_id",
-                      "label": "ID",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "no_general",
-                      "label": "no_general",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "no_smc",
-                      "label": "no_smc",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "no_hb",
-                      "label": "no_hb",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "no_prem",
-                      "label": "no_prem",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "no_premplu",
-                      "label": "no_premplu",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "score_v1",
-                      "label": "score_v1",
-                      "type": "numeric"
-                    },
-                    {
-                      "field": "attractiveness",
-                      "label": "attractiveness",
-                      "type": "integer"
-                    },
-                    {
-                      "field": "decay_alpha",
-                      "label": "decay_alpha",
-                      "type": "numeric"
-                    },
-                    {
-                      "field": "decay_beta",
-                      "label": "decay_beta",
-                      "type": "numeric"
-                    },
-                    {
-                      "field": "model_sales",
-                      "label": "model_sales",
-                      "type": "numeric"
-                    }
-                  ]
-                }
+  "title": "GEOLYTIX | CLINIQUE",
+  "select": {},
+  "gazetteer": {},
+  "locales": {
+    "KR": {
+      "gazetteer": [
+        "GOOGLE",
+        "KR",
+        "",
+        "e.g. Seoul"
+      ],
+      "bounds": [
+        [
+          31,
+          120
+        ],
+        [
+          41,
+          134
+        ]
+      ],
+      "minZoom": 7,
+      "maxZoom": 17,
+      "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "pane": [
+            "base_labels",
+            560
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "here": {
+          "name": "HERE Imagery",
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "dong": {
+          "display": true,
+          "name": "Dong",
+          "pane": [
+            "dong",
+            510
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "geomj": "ST_asGeoJson(ST_Transform(geom_3857, 4326))",
+          "qID": "dong_code",
+          "properties": "mkt_size,",
+          "infoj": [
+            {
+              "field": "dong_name",
+              "label": "Dong",
+              "type": "text"
+            },
+            {
+              "field": "district",
+              "label": "District",
+              "type": "text"
+            },
+            {
+              "field": "province",
+              "label": "Province",
+              "type": "text"
+            },
+            {
+              "field": "pop_15",
+              "label": "Population '15",
+              "type": "text"
+            },
+            {
+              "field": "mkt_size",
+              "label": "Market Size",
+              "type": "integer"
             }
+          ],
+          "arrayZoom": {
+            "7": "clinique_dong"
+          },
+          "tilecache": "clinique_dong__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#fff",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "weight": 1,
+              "color": "#090"
+            },
+            "theme": {
+              "label": "Market Size",
+              "type": "graduated",
+              "field": "mkt_size",
+              "cat": [
+                {
+                  "val": 250000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#fcfdbf",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "up to 250,000"
+                },
+                {
+                  "val": 500000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#fec387",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "500,000"
+                },
+                {
+                  "val": 1000000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#fc8761",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "1,000,000"
+                },
+                {
+                  "val": 1500000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#e75163",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "1,500,000"
+                },
+                {
+                  "val": 2000000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#b63679",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "2,000,000"
+                },
+                {
+                  "val": 2500000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#822581",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "2,500,000"
+                },
+                {
+                  "val": 5000000,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#50127b",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "5,000,000"
+                },
+                {
+                  "val": 999999999,
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#1c1046",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  },
+                  "label": "5,000,000 or more"
+                }
+              ]
+            }
+          }
+        },
+        "grid": {
+          "name": "Demand Grid",
+          "format": "grid",
+          "pane": [
+            "grid",
+            511
+          ],
+          "dbs": "XYZ",
+          "geom": "geomcntr",
+          "arrayZoom": {
+            "9": "clinique_demand_hx8k",
+            "10": "clinique_demand_hx4k",
+            "11": "clinique_demand_hx2k",
+            "12": "clinique_demand_hx1k",
+            "13": "clinique_demand_hx500"
+          },
+          "style": {
+            "range": [
+              "#3366FF",
+              "#4D59F2",
+              "#664DE6",
+              "#8040D9",
+              "#9933CC",
+              "#B326BF",
+              "#CC1AB3",
+              "#E60DA6",
+              "#FF0099"
+            ]
+          },
+          "grid_color": "hb_demand",
+          "queryFields": [
+            [
+              "pop",
+              "Population"
+            ],
+            [
+              "hb_demand",
+              "Demand"
+            ]
+          ]
+        },
+        "rp_mvt": {
+          "name": "Retail Place (vector)",
+          "pane": [
+            "rp_mvt",
+            515
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "geomj": "ST_asGeoJson(ST_Transform(geom_3857, 4326))",
+          "qID": "rp_id",
+          "infoj": [
+            {
+              "field": "rp_id",
+              "label": "ID",
+              "type": "integer"
+            },
+            {
+              "field": "no_general",
+              "label": "no_general",
+              "type": "integer"
+            },
+            {
+              "field": "no_smc",
+              "label": "no_smc",
+              "type": "integer"
+            },
+            {
+              "field": "no_hb",
+              "label": "no_hb",
+              "type": "integer"
+            },
+            {
+              "field": "no_prem",
+              "label": "no_prem",
+              "type": "integer"
+            },
+            {
+              "field": "no_premplu",
+              "label": "no_premplu",
+              "type": "integer"
+            },
+            {
+              "field": "score_v1",
+              "label": "score_v1",
+              "type": "numeric"
+            },
+            {
+              "field": "attractiveness",
+              "label": "attractiveness",
+              "type": "integer"
+            },
+            {
+              "field": "decay_alpha",
+              "label": "decay_alpha",
+              "type": "numeric"
+            },
+            {
+              "field": "decay_beta",
+              "label": "decay_beta",
+              "type": "numeric"
+            },
+            {
+              "field": "model_sales",
+              "label": "model_sales",
+              "type": "numeric"
+            }
+          ],
+          "arrayZoom": {
+            "7": "clinique_rp"
+          },
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#fff",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "weight": 1,
+              "color": "#090"
+            }
+          }
+        },
+        "rp_cluster": {
+          "display": true,
+          "name": "Retail Place (cluster)",
+          "format": "cluster",
+          "pane": [
+            "rp_cluster",
+            520
+          ],
+          "dbs": "XYZ",
+          "table": "clinique_rp",
+          "qID": "rp_id",
+          "cluster_label": "rp_id",
+          "infoj": [
+            {
+              "field": "rp_id",
+              "label": "ID",
+              "type": "integer"
+            },
+            {
+              "field": "no_general",
+              "label": "no_general",
+              "type": "integer"
+            },
+            {
+              "field": "no_smc",
+              "label": "no_smc",
+              "type": "integer"
+            },
+            {
+              "field": "no_hb",
+              "label": "no_hb",
+              "type": "integer"
+            },
+            {
+              "field": "no_prem",
+              "label": "no_prem",
+              "type": "integer"
+            },
+            {
+              "field": "no_premplu",
+              "label": "no_premplu",
+              "type": "integer"
+            },
+            {
+              "field": "score_v1",
+              "label": "score_v1",
+              "type": "numeric"
+            },
+            {
+              "field": "attractiveness",
+              "label": "attractiveness",
+              "type": "integer"
+            },
+            {
+              "field": "decay_alpha",
+              "label": "decay_alpha",
+              "type": "numeric"
+            },
+            {
+              "field": "decay_beta",
+              "label": "decay_beta",
+              "type": "numeric"
+            },
+            {
+              "field": "model_sales",
+              "label": "model_sales",
+              "type": "numeric"
+            }
+          ]
         }
+      }
     }
+  }
 }
