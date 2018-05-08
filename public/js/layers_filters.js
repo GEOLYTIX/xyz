@@ -180,6 +180,8 @@ function filter_numeric(layer, options){
         
         if(val) {
             layer.filter[options.field][this.name] = val;
+        } else {
+            layer.filter[options.field][this.name] = null;
         }
         layer.getLayer();
     }
