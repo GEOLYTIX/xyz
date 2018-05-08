@@ -210,53 +210,106 @@ function filter_numeric(layer, options){
 }
 
 function filter_date(layer, options){
-    // sql and keyups to do
-    let gt_label = utils.createElement('div', {
+    
+    // default date strings
+    let def_dd = "01", def_mm = "01",
+        date_format = [];
+    
+    date_format[1] = def_mm;
+    date_format[2] = def_dd;
+    
+    function date_to_string(arr){
+        return "'" + arr.join("-") + "'";
+    }
+    
+    // sql and keyups
+    function yy_onkeyup(){
+        let yyyy = parseInt(this.value);
+        if(!layer.filter[options.field]) layer.filter[options.field] = {};
+        if(yyyy && yyyy > 99) {
+            date_format[0] = yyyy;
+            layer.filter[options.field][this.name] = date_to_string(date_format);
+        } else {
+            date_format[0] = null;
+            layer.filter[options.field] = {};
+        }
+        layer.getLayer();
+    }
+    
+    function mm_onkeyup(){
+        let mm = parseInt(this.value);
+
+        if(mm && mm > 0 && mm < 13){
+            if(mm < 10)  mm = '0' + String(mm);
+            date_format[1] = mm;
+            if(date_format[0]) layer.filter[options.field][this.name] = date_to_string(date_format);
+        } else {
+            date_format[1] = def_mm;
+        }
+        layer.getLayer();
+    }
+    
+    function dd_onkeyup(){
+        let dd = parseInt(this.value);
+        if(dd && dd > 0 && dd < 32){
+            if(dd < 10) dd = '0' + String(dd);
+            date_format[2] = dd;
+            if(date_format[0]) layer.filter[options.field][this.name] = date_to_string(date_format);
+        } else {
+            date_format[2] = def_dd;
+        }
+        layer.getLayer();
+    }
+    
+   // labels
+    let gte_label = utils.createElement('div', {
         classList: "label half",
-        textContent: "> later than"
+        textContent: "later than"
     }, options.appendTo);
     
-    let lt_label = utils.createElement('div', {
+    let lte_label = utils.createElement('div', {
         classList: "label half right",
-        textContent: "< earlier than"
+        textContent: "earlier than"
     }, options.appendTo);
     
-    let gt_input_yy = utils.createElement('input', {
+     // later or equal
+    let gte_input_yy = utils.createElement('input', {
         classList: "label third",
         placeholder: 'yyyy',
-        onkeyup: "",
-        name: "gt"
+        onkeyup: yy_onkeyup,
+        name: "gte"
     }, options.appendTo);
     
-    let gt_input_mm = utils.createElement('input', {
+    let gte_input_mm = utils.createElement('input', {
         classList: "label third",
         placeholder: 'mm',
-        onkeyup: ""
+        onkeyup: mm_onkeyup
     }, options.appendTo);
     
-    let gt_input_dd = utils.createElement('input', {
+    let gte_input_dd = utils.createElement('input', {
         classList: "label third",
         placeholder: 'dd',
-        onkeyup: ""
-    }, options.appendTo);
-        
-    let lt_input_dd = utils.createElement('input', {
-        classList: "label third right",
-        placeholder: 'dd',
-        onkeyup: ""
-    }, options.appendTo);
-        
-    let lt_input_mm = utils.createElement('input', {
-        classList: "label third right",
-        placeholder: 'mm',
-        onkeyup: ""
+        onkeyup: dd_onkeyup
     }, options.appendTo);
     
-    let lt_input_yy = utils.createElement('input', {
+    // earlier or equal 
+    let lte_input_dd = utils.createElement('input', {
+        classList: "label third right",
+        placeholder: 'dd',
+        onkeyup: dd_onkeyup
+    }, options.appendTo);
+        
+    let lte_input_mm = utils.createElement('input', {
+        classList: "label third right",
+        placeholder: 'mm',
+        onkeyup: mm_onkeyup
+    }, options.appendTo);
+    
+    let lte_input_yy = utils.createElement('input', {
         classList: "label third right",
         placeholder: 'yyyy',
-        onkeyup: "",
-        name: "lt"
+        onkeyup: yy_onkeyup,
+        name: "lte"
     }, options.appendTo);
 }
 
