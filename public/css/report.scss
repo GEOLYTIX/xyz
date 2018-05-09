@@ -105,7 +105,10 @@ i,
         .drawer {
             .header {
                 font-size: 15px;
-                font-family: ffmark_bold, sans-serif;
+                font-family: ffmark, sans-serif;
+                font-weight: 600;
+                height: 6mm;
+                
                 &:hover {
                     cursor: pointer;
                 }
@@ -197,6 +200,15 @@ i,
     }
     .leaflet-control-attribution {
         display: none;
+    }
+}
+
+.report-spacer {
+    height: 10mm;
+    @media print {
+
+        display: none;
+
     }
 }
 

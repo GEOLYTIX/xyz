@@ -31,8 +31,7 @@
             500
           ],
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
         },
         "label": {
           "display": true,
@@ -42,8 +41,7 @@
             560
           ],
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
         },
         "here": {
           "name": "HERE Imagery",
@@ -87,12 +85,12 @@
             {
               "field": "pop_15",
               "label": "Population '15",
-              "type": "text"
+              "type": "integer"
             },
             {
-              "field": "mkt_size",
-              "label": "Market Size",
-              "type": "integer"
+              "field": "mkt_size_bn",
+              "label": "Market Size (₩ billions)",
+              "type": "numeric"
             }
           ],
           "arrayZoom": {
@@ -109,10 +107,12 @@
             },
             "highlight": {
               "weight": 1,
-              "color": "#090"
+              "color": "#090",
+              "fill": true,
+              "fillOpacity": 0
             },
             "theme": {
-              "label": "Market Size",
+              "label": "Market Size 2016 (₩ billions)",
               "type": "graduated",
               "field": "mkt_size",
               "cat": [
@@ -124,7 +124,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "up to 250,000"
+                  "label": "up to .25"
                 },
                 {
                   "val": 500000,
@@ -134,7 +134,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "500,000"
+                  "label": ".5"
                 },
                 {
                   "val": 1000000,
@@ -144,7 +144,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "1,000,000"
+                  "label": "1"
                 },
                 {
                   "val": 1500000,
@@ -154,7 +154,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "1,500,000"
+                  "label": "1.5"
                 },
                 {
                   "val": 2000000,
@@ -164,7 +164,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "2,000,000"
+                  "label": "2"
                 },
                 {
                   "val": 2500000,
@@ -174,7 +174,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "2,500,000"
+                  "label": "2.5"
                 },
                 {
                   "val": 5000000,
@@ -184,7 +184,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "5,000,000"
+                  "label": "5"
                 },
                 {
                   "val": 999999999,
@@ -194,7 +194,7 @@
                     "fill": true,
                     "fillOpacity": 0.3
                   },
-                  "label": "5,000,000 or more"
+                  "label": "5 or more"
                 }
               ]
             }
@@ -241,91 +241,6 @@
             ]
           ]
         },
-        "rp_mvt": {
-          "name": "Retail Place (vector)",
-          "pane": [
-            "rp_mvt",
-            515
-          ],
-          "format": "mvt",
-          "dbs": "XYZ",
-          "geom_3857": "geom_3857",
-          "geomj": "ST_asGeoJson(ST_Transform(geom_3857, 4326))",
-          "qID": "rp_id",
-          "infoj": [
-            {
-              "field": "rp_id",
-              "label": "ID",
-              "type": "integer"
-            },
-            {
-              "field": "no_general",
-              "label": "no_general",
-              "type": "integer"
-            },
-            {
-              "field": "no_smc",
-              "label": "no_smc",
-              "type": "integer"
-            },
-            {
-              "field": "no_hb",
-              "label": "no_hb",
-              "type": "integer"
-            },
-            {
-              "field": "no_prem",
-              "label": "no_prem",
-              "type": "integer"
-            },
-            {
-              "field": "no_premplu",
-              "label": "no_premplu",
-              "type": "integer"
-            },
-            {
-              "field": "score_v1",
-              "label": "score_v1",
-              "type": "numeric"
-            },
-            {
-              "field": "attractiveness",
-              "label": "attractiveness",
-              "type": "integer"
-            },
-            {
-              "field": "decay_alpha",
-              "label": "decay_alpha",
-              "type": "numeric"
-            },
-            {
-              "field": "decay_beta",
-              "label": "decay_beta",
-              "type": "numeric"
-            },
-            {
-              "field": "model_sales",
-              "label": "model_sales",
-              "type": "numeric"
-            }
-          ],
-          "arrayZoom": {
-            "7": "clinique_rp"
-          },
-          "style": {
-            "default": {
-              "weight": 1,
-              "color": "#000",
-              "fill": true,
-              "fillColor": "#fff",
-              "fillOpacity": 0.3
-            },
-            "highlight": {
-              "weight": 1,
-              "color": "#090"
-            }
-          }
-        },
         "rp_cluster": {
           "display": true,
           "name": "Retail Place (cluster)",
@@ -335,66 +250,135 @@
             520
           ],
           "dbs": "XYZ",
-          "table": "clinique_rp",
+          "table": "clinique_rp_",
           "qID": "rp_id",
-          "cluster_label": "rp_id",
+          "geomdisplay": ",ST_AsGeoJSON(geom_4326) AS geomdisplay",
+          "cluster_label": "rp_name",
+          "cluster_cat": "model_sales_2016_krwb",
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.015,
+          "hover": true,
           "infoj": [
             {
-              "field": "rp_id",
-              "label": "ID",
-              "type": "integer"
+              "field": "rp_name",
+              "label": "Retail Place",
+              "type": "text"
             },
             {
-              "field": "no_general",
-              "label": "no_general",
-              "type": "integer"
+              "field": "province_name",
+              "label": "Province",
+              "type": "text"
             },
             {
               "field": "no_smc",
-              "label": "no_smc",
-              "type": "integer"
+              "label": "SMC Count",
+              "type": "integer",
+              "level": 1
             },
             {
               "field": "no_hb",
-              "label": "no_hb",
-              "type": "integer"
+              "label": "Mass H&B Count",
+              "type": "integer",
+              "level": 1
             },
             {
-              "field": "no_prem",
-              "label": "no_prem",
-              "type": "integer"
+              "field": "no_ds",
+              "label": "Department Store Count",
+              "type": "integer",
+              "level": 1
             },
             {
-              "field": "no_premplu",
-              "label": "no_premplu",
-              "type": "integer"
+              "field": "model_sales_2016_krwb",
+              "label": "Demand 2016 (₩ billions)",
+              "type": "numeric",
+              "level": 1
             },
             {
-              "field": "score_v1",
-              "label": "score_v1",
-              "type": "numeric"
+              "field": "model_sales_2021_krwb",
+              "label": "Demand 2021 (₩ billions)",
+              "type": "numeric",
+              "level": 1
             },
             {
-              "field": "attractiveness",
-              "label": "attractiveness",
-              "type": "integer"
+              "field": "cagr_2016_2021",
+              "label": "CAGR",
+              "type": "numeric",
+              "level": 1
             },
             {
-              "field": "decay_alpha",
-              "label": "decay_alpha",
-              "type": "numeric"
+              "field": "no_clinique_ds",
+              "label": "Clinique Doors (DS)",
+              "type": "integer",
+              "level": 1
             },
             {
-              "field": "decay_beta",
-              "label": "decay_beta",
-              "type": "numeric"
+              "field": "no_clinique_smc",
+              "label": "Clinique Doors (SMC)",
+              "type": "integer",
+              "level": 1
             },
             {
-              "field": "model_sales",
-              "label": "model_sales",
-              "type": "numeric"
+              "field": "no_clinique_smc_potential",
+              "label": "Potential Clinique Doors",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "no_clinique_smc_potential_exp",
+              "label": "Clinique Expansion Opportunity",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "priority_cluster_deliverability",
+              "label": "Priority Cluster",
+              "type": "text",
+              "level": 1
             }
-          ]
+          ],
+          "style": {
+            "theme": {
+              "label": "Demand 2016 (₩ billions)",
+              "type": "graduated",
+              "cat": [
+                {
+                  "val": 0.01,
+                  "marker": "svg_symbols.target([400,'#fcfdbf'])",
+                  "label": "0.01"
+                },
+                {
+                  "val": 5,
+                  "marker": "svg_symbols.target([400,'#fec387'])",
+                  "label": "5"
+                },
+                {
+                  "val": 10,
+                  "marker": "svg_symbols.target([400,'#fc8761'])",
+                  "label": "10"
+                },
+                {
+                  "val": 25,
+                  "marker": "svg_symbols.target([400,'#e75163'])",
+                  "label": "25"
+                },
+                {
+                  "val": 50,
+                  "marker": "svg_symbols.target([400,'#b63679'])",
+                  "label": "50"
+                },
+                {
+                  "val": 75,
+                  "marker": "svg_symbols.target([400,'#822581'])",
+                  "label": "75"
+                },
+                {
+                  "val": 100,
+                  "marker": "svg_symbols.target([400,'#50127b'])",
+                  "label": "100 and more"
+                }
+              ]
+            }
+          }
         }
       }
     }

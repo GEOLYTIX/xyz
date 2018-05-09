@@ -143,7 +143,7 @@ async function cluster(req, res) {
 
   if (theme === 'graduated') q = `
   SELECT
-    COUNT(cat) count,
+    COUNT(${geom}) count,
     SUM(cat) sum,
     ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
   FROM (

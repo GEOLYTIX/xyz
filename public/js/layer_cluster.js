@@ -114,7 +114,7 @@ function addClusterToLayer(cluster, layer) {
                 }
 
                 // Set tooltip for graduated theme property (sum).
-                tooltip = tooltip? point.properties.sum.toLocaleString(): false;
+                tooltip = tooltip ? parseFloat(point.properties.sum).toLocaleString(): false;
             }
             
             // Define iconSize from number of locations in cluster.

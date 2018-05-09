@@ -7,39 +7,56 @@
   "locale": "EU",
   "locales": {
     "Global": {
-      "gazetteer": ["MAPBOX", "", "", "e.g. London"],
+      "gazetteer": [
+        "MAPBOX",
+        "",
+        "",
+        "e.g. London"
+      ],
       "minZoom": 3,
       "maxZoom": 9,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "pane": ["base_labels", 550],
+          "pane": [
+            "base_labels",
+            550
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
           "name": "HERE Imagery",
           "meta": "Satellite Imagery layer provided by HERE.",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "sprawls": {
           "display": true,
           "name": "World Cities",
           "meta": "Urban agglomerations with a population greater than 100,000.",
-          "pane": ["bounds", 510],
+          "pane": [
+            "bounds",
+            510
+          ],
           "format": "mvt",
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
@@ -240,38 +257,64 @@
     },
     "EU": {
       "name": "Europe",
-      "gazetteer": ["MAPBOX", "", "'-45,25,60,75'", "e.g. Brussels"],
-      "bounds": [[25,-45],[75,60]],
+      "gazetteer": [
+        "MAPBOX",
+        "",
+        "'-45,25,60,75'",
+        "e.g. Brussels"
+      ],
+      "bounds": [
+        [
+          25,
+          -45
+        ],
+        [
+          75,
+          60
+        ]
+      ],
       "minZoom": 5,
       "maxZoom": 9,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "pane": ["base_labels", 550],
+          "pane": [
+            "base_labels",
+            550
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
           "name": "HERE Imagery",
           "meta": "Satellite Imagery layer provided by HERE.",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "NUTS3": {
           "display": true,
-          "pane": ["bounds", 510],
+          "pane": [
+            "bounds",
+            510
+          ],
           "format": "mvt",
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
@@ -390,7 +433,7 @@
               "weight": 1,
               "color": "#000",
               "fill": true,
-              "fillOpacity": 0 
+              "fillOpacity": 0
             },
             "highlight": {
               "color": "#e91e63",
@@ -403,7 +446,10 @@
           "display": true,
           "name": "Eurostat Grid",
           "format": "grid",
-          "pane": ["grid", 515],
+          "pane": [
+            "grid",
+            515
+          ],
           "dbs": "XYZ",
           "geom": "geomcntr",
           "arrayZoom": {
@@ -488,39 +534,65 @@
     },
     "UK": {
       "name": "United Kingdom",
-      "gazetteer": ["GOOGLE", "GB", "", "e.g. London"],
-      "bounds": [[48,-11.5],[62,5]],
+      "gazetteer": [
+        "GOOGLE",
+        "GB",
+        "",
+        "e.g. London"
+      ],
+      "bounds": [
+        [
+          48,
+          -11.5
+        ],
+        [
+          62,
+          5
+        ]
+      ],
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "pane": ["base_labels", 550],
+          "pane": [
+            "base_labels",
+            550
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
           "name": "HERE Imagery",
           "meta": "Satellite Imagery layer provided by HERE.",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "post_office": {
           "name": "Post Offices",
           "format": "cluster",
-          "pane": ["post_office", 540],
+          "pane": [
+            "post_office",
+            540
+          ],
           "dbs": "XYZ",
           "table": "post_office",
           "cluster_label": "branch",
@@ -533,13 +605,23 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#9D383A',300,'#fff',250,'#9D383A'])",
-            "markerMulti": [400,"#9D383A",300,"#fff",250,"#9D383A"]
+            "markerMulti": [
+              400,
+              "#9D383A",
+              300,
+              "#fff",
+              250,
+              "#9D383A"
+            ]
           }
         },
         "retail_points": {
           "display": true,
           "name": "Retail Points",
-          "pane": ["retail_points", 540],
+          "pane": [
+            "retail_points",
+            540
+          ],
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint",
@@ -607,7 +689,10 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
-            "markerMulti": [400, "#333"],
+            "markerMulti": [
+              400,
+              "#333"
+            ],
             "theme": {
               "label": "Retailer",
               "type": "categorized",
@@ -650,7 +735,7 @@
                 "co_op": {
                   "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
                   "label": "The Co-Operative"
-                 },
+                },
                 "costco": {
                   "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
                   "label": "Costco"
@@ -710,7 +795,10 @@
         "rp_editable": {
           "editable": "geometry",
           "name": "Retail Points (editable)",
-          "pane": ["retail_points_editable", 540],
+          "pane": [
+            "retail_points_editable",
+            540
+          ],
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
@@ -823,7 +911,10 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
-            "markerMulti": [400,"#333"],
+            "markerMulti": [
+              400,
+              "#333"
+            ],
             "theme": {
               "label": "Retailer",
               "type": "categorized",
@@ -848,7 +939,7 @@
                 "The Co-operative": {
                   "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
                   "label": "The Co-Operative"
-                 },
+                },
                 "Costco": {
                   "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
                   "label": "Costco"
@@ -905,10 +996,12 @@
             }
           }
         },
-
         "region": {
           "name": "Regions",
-          "pane": ["regions",520],
+          "pane": [
+            "regions",
+            520
+          ],
           "format": "mvt",
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
@@ -962,9 +1055,12 @@
         },
         "traffic_count": {
           "name": "Traffic",
-          "meta": "Department for transport count points.",
+          "meta": "Department for Transport Traffic Count Points",
           "format": "cluster",
-          "pane": ["traffic", 550],
+          "pane": [
+            "traffic",
+            550
+          ],
           "dbs": "XYZ",
           "qID": "id",
           "table": "bp_traffic_counts_all",
@@ -977,7 +1073,10 @@
               "label": "Type",
               "type": "text",
               "filter": {
-                  "in": ["Major", "Minor"]
+                "in": [
+                  "Major",
+                  "Minor"
+                ]
               }
             },
             {
@@ -1079,33 +1178,56 @@
     },
     "Oxford": {
       "name": "Oxford",
-      "gazetteer": ["GOOGLE", "", "'&location=51.75,-1.25&radius=40'", "e.g. Oxford University"],
-      "bounds": [[51.3,-1.7],[52.2,-0.8]],
+      "gazetteer": [
+        "GOOGLE",
+        "",
+        "'&location=51.75,-1.25&radius=40'",
+        "e.g. Oxford University"
+      ],
+      "bounds": [
+        [
+          51.3,
+          -1.7
+        ],
+        [
+          52.2,
+          -0.8
+        ]
+      ],
       "minZoom": 10,
       "maxZoom": 17,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "pane": ["base_labels", 550],
+          "pane": [
+            "base_labels",
+            550
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
           "name": "HERE Imagery",
           "meta": "Satellite Imagery layer provided by HERE.",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "retail_places_mvt": {
@@ -1115,7 +1237,10 @@
           "properties": "rp_type,",
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "pane": ["bounds", 510],
+          "pane": [
+            "bounds",
+            510
+          ],
           "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {

@@ -42,13 +42,18 @@ function addInfojToList(record) {
         }
 
         // Create new row for text cells and append to table.
-        if (entry.type && (entry.type === 'text' || entry.type === 'text[]')) tr = utils.createElement('tr', null, table);
+        if (entry.type && ((entry.type === 'text' && entry.value.length > 5) || entry.type === 'text[]')) tr = utils.createElement('tr', null, table);
 
         // Create new table cell for values and append to tr.
         let val = utils.createElement('td', {
             className: 'val',
             colSpan: '2'
         }, tr);
+
+        // Add num class to numeric values. Num class is right align.
+        if (entry.value && !isNaN(entry.value)) {
+            utils.addClass(val, 'num');
+        }
 
         // If input is images create image control and return from object.map function.
         if (entry.images) {

@@ -240,22 +240,21 @@ function mvtCategorized(layer) {
             }
         });
 
+            // Create a legend title from the categorized.label property.
+    if (layer.style.theme.label) utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'title',
+            textContent: layer.style.theme.label
+        },
+        appendTo: legend
+    });
+
     let svg = d3
         .select(legend)
         .append('svg')
         .attr('width', width),
         y = 0;
-
-    // Create a legend title from the categorized.label property.
-    // if (layer.style.theme.label) {
-    //     svg.append('text')
-    //         .attr('x', 0)
-    //         .attr('y', y)
-    //         .style('font-weight', 600)
-    //         .style('font-size', '14px')
-    //         .text(layer.style.theme.label || 'Legend');
-    //     y += 10;
-    // }
 
     Object.keys(layer.style.theme.cat).map((item) => {
 
@@ -363,22 +362,21 @@ function clusterCategorized(layer) {
             }
         });
 
+            // Create a legend title from the categorized.label property.
+    if (layer.style.theme.label) utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'title',
+            textContent: layer.style.theme.label
+        },
+        appendTo: legend
+    });
+
     let svg = d3
         .select(legend)
         .append('svg')
         .attr('width', width),
         y = 0;
-
-    // Create a legend title from the categorized.label property.
-    // if (layer.style.theme.label) {
-    //     svg.append('text')
-    //         .attr('x', 0)
-    //         .attr('y', y)
-    //         .style('font-weight', 600)
-    //         .style('font-size', '14px')
-    //         .text(layer.style.theme.label);
-    //     y += 10;
-    // }
 
     if (!layer.filter[layer.cluster_cat]) layer.filter[layer.cluster_cat] = {};
     if (!layer.filter[layer.cluster_cat].in) layer.filter[layer.cluster_cat].in = [];
@@ -525,25 +523,35 @@ function clusterGraduated(layer) {
             className: 'section report-block expandable expanded'
         });
 
-        utils._createElement({
-            tag: 'div',
-            options: {
-                className: 'btn_text cursor noselect',
-                textContent: 'Legend'
-            },
-            appendTo: legend,
-            eventListener: {
-                event: 'click',
-                funct: e => {
-                    e.stopPropagation();
-                    utils.toggleExpanderParent({
-                        expandable: legend,
-                        accordeon: true,
-                        scrolly: document.querySelector('.mod_container > .scrolly')
-                    })
-                }
+    utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'btn_text cursor noselect',
+            textContent: 'Legend'
+        },
+        appendTo: legend,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                utils.toggleExpanderParent({
+                    expandable: legend,
+                    accordeon: true,
+                    scrolly: document.querySelector('.mod_container > .scrolly')
+                })
             }
-        });
+        }
+    });
+
+    // Create a legend title from the categorized.label property.
+    if (layer.style.theme.label) utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'title',
+            textContent: layer.style.theme.label
+        },
+        appendTo: legend
+    });
 
     let svg = d3
         .select(legend)
@@ -551,18 +559,7 @@ function clusterGraduated(layer) {
         .attr('width', width),
         y = 0;
 
-    // Create a legend title from the categorized.label property.
-    // if (layer.style.theme.label) {
-    //     svg.append('text')
-    //         .attr('x', 0)
-    //         .attr('y', y)
-    //         .style('font-weight', 600)
-    //         .style('font-size', '14px')
-    //         .text(layer.style.theme.label);
-    //     y += 10;
-    // }
-
-    layer.style.theme.cat.map((cat) => {
+        layer.style.theme.cat.map((cat) => {
 
         // // two columns
         // for (let i = 0; i < keys.length; i++) {
@@ -624,22 +621,21 @@ function mvtGraduated(layer) {
             }
         });
 
+        // Create a legend title from the categorized.label property.
+        if (layer.style.theme.label) utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'title',
+                textContent: layer.style.theme.label
+            },
+            appendTo: legend
+        });
+
     let svg = d3
         .select(legend)
         .append('svg')
         .attr('width', width),
         y = 0;
-
-    // Create a legend title from the categorized.label property.
-    // if (layer.style.theme.label) {
-    //     svg.append('text')
-    //         .attr('x', 0)
-    //         .attr('y', y)
-    //         .style('font-weight', 600)
-    //         .style('font-size', '14px')
-    //         .text(layer.style.theme.label);
-    //     y += 10;
-    // }
 
     layer.style.theme.cat.map((cat) => {
 
