@@ -156,7 +156,7 @@ module.exports = () => {
         if (freeRecords.length === 0) return
 
         // Make select tab active on mobile device.
-        if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
+        if (_xyz.activateSelectTab) _xyz.activateSelectTab();
 
         let layer = _xyz.locales[_xyz.locale].layers[location.layer];
 
@@ -170,7 +170,7 @@ module.exports = () => {
         xhr.onload = function () {
             
             // remove wait cursor class if found
-            let els = document.querySelectorAll('#map .leaflet-interactive.wait-cursor-enabled');        
+            let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');        
             for(let el of els){
                 el.classList.remove("wait-cursor-enabled");
             }
@@ -380,10 +380,5 @@ module.exports = () => {
         });
         let idx = _xyz.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
-
-        if (view_mode === 'desktop') {
-            let scrolly = document.querySelector('.mod_container > .scrolly');
-            scrolly.scrollTop = scrolly.scrollHeight;
-        }
     }
 }

@@ -96,7 +96,8 @@ function getLayer(){
             
                 if(!checkCurrentSelection(e)) {
                     // set cursor to wait
-                    let els = document.querySelectorAll('#map .leaflet-interactive');
+                    let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
+                    
                     for(let el of els){
                         el.classList += ' wait-cursor-enabled';
                     }
@@ -108,7 +109,7 @@ function getLayer(){
                         marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                     });
                 } else {
-                    //console.log('feature ' + e.layer.properties.id + ' already selected');
+                    console.log('feature ' + e.layer.properties.id + ' already selected');
                 }
             
            

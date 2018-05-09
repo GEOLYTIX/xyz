@@ -224,9 +224,19 @@ function filter_date(layer, options){
         return "'" + arr.join("-") + "'";
     }
     
+    function show_reset(){
+        let siblings = options.appendTo.children;
+        for(let sibling of siblings){
+            if(sibling.tagName === 'DIV' && sibling.classList.contains("btn_small")){
+                sibling.style.display = "block";
+            }
+        }
+    }
+    
     // sql and keyups
     function yy_onkeyup(){
         let yyyy = parseInt(this.value);
+        if(this.value) show_reset();
         if(!layer.filter[options.field]) layer.filter[options.field] = {};
         if(yyyy && yyyy > 99) {
             date_format[0] = yyyy;
@@ -240,7 +250,7 @@ function filter_date(layer, options){
     
     function mm_onkeyup(){
         let mm = parseInt(this.value);
-
+        if(this.value) show_reset();
         if(mm && mm > 0 && mm < 13){
             if(mm < 10)  mm = '0' + String(mm);
             date_format[1] = mm;
@@ -253,6 +263,7 @@ function filter_date(layer, options){
     
     function dd_onkeyup(){
         let dd = parseInt(this.value);
+        if(this.value) show_reset();
         if(dd && dd > 0 && dd < 32){
             if(dd < 10) dd = '0' + String(dd);
             date_format[2] = dd;
@@ -321,6 +332,7 @@ function filter_date(layer, options){
                 sibling.value = '';
             }
         }
+        this.style.display = "none";
         layer.filter[options.field] = {};
         layer.getLayer();
     }

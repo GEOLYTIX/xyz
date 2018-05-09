@@ -685,7 +685,20 @@
             "theme": {
               "label": "Game",
               "type": "categorized",
-              "competitors": {},
+              "competitors": {
+                  "MONOPOLY": {
+                      "colour": "#143156",
+                      "label": "Monopoly"
+                  },
+                  "MULTI COMP": {
+                      "colour": "#FFDE3B",
+                      "label": "Multi competiton"
+                  },
+                  "SINGLE COMP": {
+                      "colour": "2274A5",
+                      "label": "Single competiton"
+                  }
+              },
               "cat": {
                 "MONOPOLY": {
                   "marker": "svg_symbols.target([400, '#143156' ,200, '#FFDE3B', 100, '#FFF'])",
@@ -745,7 +758,20 @@
             "theme": {
                 "label": "Chain",
                 "type": "categorized",
-                "competitors": {},
+                "competitors": {
+                    "Ladbrokes": {
+                        "colour": "#FE162C",
+                        "label": "Ladbrokes"
+                    },
+                    "Betfred": {
+                        "colour": "#644588",
+                        "label": "Betfred"
+                    },
+                    "Coral": {
+                        "colour": "#68B95A",
+                        "label": "Coral"
+                    }
+                },
                 "cat": {
                     "Betfred": {
                         "marker": "svg_symbols.target([400, '#053770', 300, '#E61C40', 200, '#644588'])",
