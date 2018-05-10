@@ -147,6 +147,43 @@ function layerFilters(layer){
         }
         
     });
+    
+    function apply_to_area_onclick(e){
+        //console.log('apply filter to layer');
+        layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
+            dbs: layer.dbs,
+            table_source: layer.table,
+            table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+            filter: JSON.stringify(layer.filter),
+            geom_target: undefined,
+            geom_source: undefined
+        }));
+        
+        layer.xhr.onload = function(){
+            let json = JSON.parse(this.response);
+            //console.log(json);
+            if(this.status === 200){
+                _xyz.select.selectLayerFromEndpoint({
+                            layer: layer.aggregate_layer,
+                            table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                            id: json.id,
+                            marker: [json.lng, json.lat],
+                            filter: JSON.stringify(layer.filter)
+                        });
+            }
+        };
+        layer.xhr.send();
+        
+    }
+    
+    let apply_to_area = utils.createElement('div', {
+        classList: "btn_small cursor noselect",
+        onclick: apply_to_area_onclick,
+        textContent: "Apply filters to area"
+    });
+    
+    apply_to_area.style.display = "block";
+    filters.appendChild(apply_to_area);
 
     return filters;
 }

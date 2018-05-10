@@ -196,7 +196,8 @@ module.exports = () => {
             geom: layer.geom,
             geomj: layer.geomj,
             geomq: layer.geomq,
-            geomdisplay: layer.geomdisplay
+            geomdisplay: layer.geomdisplay,
+            sql_filter: layer.sql_filter || null
         }));
     }
 

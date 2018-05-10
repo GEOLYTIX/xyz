@@ -38,8 +38,20 @@ async function newAggregate(req, res) {
         table_source = req.query.table_source,
         geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
         geom_source = req.query.geom_source === 'undefined' ? 'geom' : req.query.geom_source,
-        //filter = JSON.parse(req.query.filter),
+        filter = JSON.parse(req.query.filter),
         filter_sql = '';
+    
+  Object.keys(filter).map(field => {
+
+    if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
+    if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
+    if((filter[field].gt)) filter_sql += ` AND ${field} > ${filter[field].gt}`;
+    if((filter[field].lt)) filter_sql += ` AND ${field} < ${filter[field].lt}`;
+    if((filter[field].gte)) filter_sql += ` AND ${field} >= ${filter[field].gte}`;
+    if((filter[field].lte)) filter_sql += ` AND ${field} <= ${filter[field].lte}`;
+    if((filter[field].like)) filter_sql += ` AND ${field} ILIKE '${filter[field].like}%'`;
+    if((filter[field].match)) filter_sql += ` AND ${field} ILIKE '${filter[field].match}'`;
+  });
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table_target, table_source, geom_target, geom_source], res).statusCode === 406) return;
@@ -47,8 +59,8 @@ async function newAggregate(req, res) {
     // if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
     let q = `
-    INSERT INTO ${table_target} (${geom_target})
-    SELECT (
+    INSERT INTO ${table_target} (${geom_target}, sql_filter)
+    
         SELECT
         ST_Transform(
             ST_SetSRID(
@@ -75,17 +87,21 @@ async function newAggregate(req, res) {
                 3857)
                 ) * 0.1),
             3857),
-        4326) AS ${geom_target}
+        4326) AS ${geom_target}, '${filter_sql.replace(new RegExp("'", "g"), "''")}' as sql_filter
         FROM ${table_source}
         WHERE true ${filter_sql}
-    )
-    RETURNING id;`;
+    
+    RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
 
     console.log(q);
 
     let result = await global.DBS[req.query.dbs].query(q);
 
-    res.status(200).send(result.rows[0].id.toString());
+    //res.status(200).send(result.rows[0].id.toString());
+    res.status(200).send(
+        {"id": result.rows[0].id.toString(),
+         "lat": parseFloat(result.rows[0].lat),
+         "lng":  parseFloat(result.rows[0].lng)});
 }
 
 async function updateRecord(req, res) {

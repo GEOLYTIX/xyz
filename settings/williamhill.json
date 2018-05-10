@@ -181,12 +181,6 @@
               "filter": "numeric"
             },
             {
-              "field": "nbv",
-              "label": "Net Book Value",
-              "type": "numeric",
-              "level": 1
-            },
-            {
               "label": "EBITDA by year"
             },
             {
@@ -280,16 +274,11 @@
               "level": 2
             },
             {
-              "field": "plan_margin_2018",
-              "label": "Plan margin",
-              "type": "numeric",
-              "level": 2
-            },
-            {
               "field": "plan_profit_2018",
               "label": "Plan profit",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "label": "Forecast 2019"
@@ -903,12 +892,13 @@
           }
         },
         "scratch": {
-
+        "name": "Filter",
           "pane": [
             "scratch",
             520
           ],
           "format": "geojson",
+          "sql_filter": "sql_filter",
           "dbs": "XYZ",
           "table": "williamhill_scratch",
           "arrayZoom": {

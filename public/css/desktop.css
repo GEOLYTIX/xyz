@@ -376,7 +376,7 @@ input[type=range]::-moz-range-thumb {
         .mod_container .module .drawer.expandable .expander::before {
           content: "expand_more"; }
       .mod_container .module .drawer.expanded {
-        max-height: 1000px; }
+        max-height: 2000px; }
         .mod_container .module .drawer.expanded .expander::before {
           content: "expand_less"; }
       .mod_container .module .drawer .header {
@@ -403,7 +403,7 @@ input[type=range]::-moz-range-thumb {
             .mod_container .module .drawer .panel .section.expandable .expander::before {
               content: "expand_more"; }
           .mod_container .module .drawer .panel .section.expanded {
-            max-height: 1000px; }
+            max-height: 2000px; }
             .mod_container .module .drawer .panel .section.expanded .expander::before {
               content: "expand_less"; }
         .mod_container .module .drawer .panel .block {
