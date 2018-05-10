@@ -32,6 +32,62 @@ async function newRecord(req, res) {
     res.status(200).send(result.rows[0].id.toString());
 }
 
+async function newAggregate(req, res) {
+
+    let table_target = req.query.table_target,
+        table_source = req.query.table_source,
+        geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
+        geom_source = req.query.geom_source === 'undefined' ? 'geom' : req.query.geom_source,
+        //filter = JSON.parse(req.query.filter),
+        filter_sql = '';
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table_target, table_source, geom_target, geom_source], res).statusCode === 406) return;
+
+    // if (await require('./chk').chkID(id, res).statusCode === 406) return;
+
+    let q = `
+    INSERT INTO ${table_target} (${geom_target})
+    SELECT (
+        SELECT
+        ST_Transform(
+            ST_SetSRID(
+            ST_Buffer(
+                ST_Transform(
+                ST_SetSRID(
+                    ST_Extent(${geom_source}),
+                4326),
+                3857),
+                ST_Distance(
+                ST_Transform(
+                    ST_SetSRID(
+                    ST_Point(
+                        ST_XMin(ST_Envelope(ST_Extent(${geom_source}))),
+                        ST_YMin(ST_Envelope(ST_Extent(${geom_source})))),
+                    4326),
+                3857),
+                ST_Transform(
+                    ST_SetSRID(
+                    ST_Point(
+                        ST_XMax(ST_Envelope(ST_Extent(${geom_source}))),
+                        ST_Ymin(ST_Envelope(ST_Extent(${geom_source})))),
+                    4326),
+                3857)
+                ) * 0.1),
+            3857),
+        4326) AS ${geom_target}
+        FROM ${table_source}
+        WHERE true ${filter_sql}
+    )
+    RETURNING id;`;
+
+    console.log(q);
+
+    let result = await global.DBS[req.query.dbs].query(q);
+
+    res.status(200).send(result.rows[0].id.toString());
+}
+
 async function updateRecord(req, res) {
 
     let q,
@@ -91,6 +147,7 @@ async function deleteRecord(req, res) {
 
 module.exports = {
     newRecord: newRecord,
+    newAggregate: newAggregate,
     updateRecord: updateRecord,
     deleteRecord: deleteRecord
 };

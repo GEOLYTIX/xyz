@@ -49,6 +49,7 @@
           "table": "williamhill",
           "cluster_label": "shop_name",
           "cluster_cat": "competition",
+          "aggregate_layer": "scratch",
           "infoj": [
             {
               "field": "lbo_no",
@@ -851,8 +852,44 @@
               "weight": 1.2
             }
           }
+        },
+        "scratch": {
+          "hidden": true,
+          "pane": ["scratch",520],
+          "format": "geojson",
+          "dbs": "XYZ",
+          "table": "williamhill_scratch",
+          "arrayZoom": {
+            "6": "williamhill_scratch"
+          },
+          "geomq": "geom",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "id",
+              "label": "ID",
+              "type": "integer"
+            },
+            {
+              "field": "count.profit_2017",
+              "label": "Count Shop profit 2017",
+              "type": "integer",
+              "layer": "williamhill"
+            },
+            {
+              "field": "sum.profit_2017",
+              "label": "Shop profit 2017 (sum)",
+              "type": "numeric",
+              "layer": "williamhill"
+            },
+            {
+              "field": "avg.profit_2017",
+              "label": "Shop profit 2017 (avg)",
+              "type": "numeric",
+              "layer": "williamhill"
+            }
+          ]
         }
-          
       }
     }
   }

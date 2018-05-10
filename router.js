@@ -149,6 +149,9 @@ router.post('/q_select', isLoggedIn, require('./mod/select').select);
 // Create a new feature.
 router.post('/q_save', isLoggedIn, require('./mod/edit').newRecord);
 
+// Get cluster layer data.
+router.get('/q_aggregate', isLoggedIn, require('./mod/edit').newAggregate);
+
 // Update a feature.
 router.post('/q_update', isLoggedIn, require('./mod/edit').updateRecord);
 
