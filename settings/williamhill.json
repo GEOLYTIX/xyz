@@ -46,7 +46,7 @@
           "pane": ["williamhill", 540],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill",
+          "table": "williamhill_09052018",
           "cluster_label": "shop_name",
           "cluster_cat": "competition",
           "infoj": [
@@ -851,6 +851,70 @@
               "weight": 1.2
             }
           }
+        },
+        "seamless_town": {
+            "name": "Towns",
+            "pane": ["towns", 521],
+            "format": "mvt",
+            "dbs": "XYZ",
+            "geom_3857": "geom_3857",
+            "qID": "id",
+            "infoj": [
+                {
+                    "field": "shoptownid",
+                    "label": "Shop town ID",
+                    "type": "text"
+                },
+                {
+                    "field": "shop_town",
+                    "label": "Shop town",
+                    "type": "text",
+                    "filter": "like"
+                },
+                {
+                    "field": "u_townname",
+                    "label": "Town name",
+                    "type": "text"
+                },
+                {
+                    "field": "count.profit_2017",
+                    "label": "Count Shop profit 2017",
+                    "type": "integer",
+                    "layer": "williamhill"
+                },
+                {
+                    "field": "sum.profit_2017",
+                    "label": "Shop profit 2017 (sum)",
+                    "type": "numeric",
+                    "layer": "williamhill"
+                },
+                {
+                    "field": "avg.profit_2017",
+                    "label": "Shop profit 2017 (avg)",
+                    "type": "numeric",
+                    "layer": "williamhill"
+                }
+            ],
+            "arrayZoom": {
+                "11": "seamless_town"
+            },
+            "tilecache": "seamless_town__tc",
+            "style": {
+                "default": {
+                    "weight": 1,
+                    "color": "#777",
+                    "fill": true,
+                    "opacity": 0.5,
+                    "fillOpacity": 0
+                },
+                "highlight": {
+                    "color": "#CD8B76",
+                    "fill": true,
+                    "opacity": 1,
+                    "fillOpacity": 0.3,
+                    "weight": 1.2
+                }
+            }
         }
           
       }

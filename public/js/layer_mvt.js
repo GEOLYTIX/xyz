@@ -108,8 +108,9 @@ function getLayer(){
                         id: e.layer.properties.id,
                         marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                     });
+                     e.layer.properties.selected = false;
                 } else {
-                    console.log('feature ' + e.layer.properties.id + ' already selected');
+                    //console.log('feature ' + e.layer.properties.id + ' already selected');
                 }
             
            
