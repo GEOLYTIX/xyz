@@ -5,37 +5,63 @@
   "report": {},
   "locales": {
     "GB": {
-      "gazetteer": ["GOOGLE", "GB", "", "e.g. London"],
-      "bounds": [[48, -11.5],[62, 5]],
+      "gazetteer": [
+        "GOOGLE",
+        "GB",
+        "",
+        "e.g. London"
+      ],
+      "bounds": [
+        [
+          48,
+          -11.5
+        ],
+        [
+          62,
+          5
+        ]
+      ],
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
         },
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "pane": ["base_labels", 560],
+          "pane": [
+            "base_labels",
+            560
+          ],
           "format": "tiles",
-          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
         },
         "here": {
           "name": "HERE Imagery",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "here_hybrid": {
           "name": "HERE Hybrid",
-          "pane": ["base", 500],
+          "pane": [
+            "base",
+            500
+          ],
           "format": "tiles",
-          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "williamhill": {
@@ -43,10 +69,13 @@
           "name": "William Hill Shops",
           "meta": "Shop locations from William Hill.",
           "format": "cluster",
-          "pane": ["williamhill", 540],
+          "pane": [
+            "williamhill",
+            540
+          ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill",
+          "table": "williamhill_09052018",
           "cluster_label": "shop_name",
           "cluster_cat": "competition",
           "aggregate_layer": "scratch",
@@ -118,7 +147,10 @@
               "type": "text",
               "level": 1,
               "filter": {
-                  "in": ["Freehold", "Leasehold"]
+                "in": [
+                  "Freehold",
+                  "Leasehold"
+                ]
               }
             },
             {
@@ -153,10 +185,10 @@
               "label": "Net Book Value",
               "type": "numeric",
               "level": 1
-            },  
+            },
             {
               "label": "EBITDA by year"
-            },  
+            },
             {
               "field": "ebitda_2013",
               "label": "2013",
@@ -185,13 +217,13 @@
               "field": "ebitda_2017",
               "label": "2017",
               "type": "numeric",
-              "level": 2              
+              "level": 2
             },
             {
               "field": "ebitda_plan_2018",
               "label": "Plan 2018",
               "type": "numeric",
-              "level": 2           
+              "level": 2
             },
             {
               "label": "Accounting by year 2017"
@@ -201,7 +233,7 @@
               "label": "Stakes",
               "type": "numeric",
               "level": 2
-            }, 
+            },
             {
               "field": "gross_win_2017",
               "label": "Gross win",
@@ -366,7 +398,7 @@
             },
             {
               "label": "Forecast 2020"
-            },            
+            },
             {
               "field": "rp_est_stakes_2020",
               "label": "Stakes",
@@ -682,23 +714,26 @@
           ],
           "style": {
             "marker": "svg_symbols.target([400,'#FFDE3B', 300, '#777'])",
-            "markerMulti": [400, "#FFDE3B"],
+            "markerMulti": [
+              400,
+              "#FFDE3B"
+            ],
             "theme": {
               "label": "Game",
               "type": "categorized",
               "competitors": {
-                  "MONOPOLY": {
-                      "colour": "#143156",
-                      "label": "Monopoly"
-                  },
-                  "MULTI COMP": {
-                      "colour": "#FFDE3B",
-                      "label": "Multi competiton"
-                  },
-                  "SINGLE COMP": {
-                      "colour": "2274A5",
-                      "label": "Single competiton"
-                  }
+                "MONOPOLY": {
+                  "colour": "#143156",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "colour": "#FFDE3B",
+                  "label": "Multi competiton"
+                },
+                "SINGLE COMP": {
+                  "colour": "2274A5",
+                  "label": "Single competiton"
+                }
               },
               "cat": {
                 "MONOPOLY": {
@@ -714,7 +749,7 @@
                   "label": "Single competition"
                 }
               },
-            "other": true
+              "other": true
             }
           }
         },
@@ -723,7 +758,10 @@
           "name": "Competitors",
           "meta": "",
           "format": "cluster",
-          "pane": ["competitors", 520],
+          "pane": [
+            "competitors",
+            520
+          ],
           "dbs": "XYZ",
           "qID": "branchid",
           "table": "williamhill_competitors",
@@ -734,74 +772,85 @@
               "field": "branchid",
               "label": "Branch ID",
               "type": "text"
-            },{
+            },
+            {
               "field": "competitor",
               "label": "Competitor",
               "type": "text"
-            },{
+            },
+            {
               "field": "street_address",
               "label": "Address",
               "type": "text"
-            },{
+            },
+            {
               "field": "town",
               "type": "text"
-            },{
+            },
+            {
               "field": "suburb",
               "type": "text"
-            },{
+            },
+            {
               "field": "postcode",
               "type": "text"
             }
           ],
           "style": {
             "marker": "svg_symbols.target([400, '#fff', 350, '#555'])",
-            "markerMulti": [400, "#777"],
+            "markerMulti": [
+              400,
+              "#777"
+            ],
             "theme": {
-                "label": "Chain",
-                "type": "categorized",
-                "competitors": {
-                    "Ladbrokes": {
-                        "colour": "#FE162C",
-                        "label": "Ladbrokes"
-                    },
-                    "Betfred": {
-                        "colour": "#644588",
-                        "label": "Betfred"
-                    },
-                    "Coral": {
-                        "colour": "#68B95A",
-                        "label": "Coral"
-                    }
+              "label": "Chain",
+              "type": "categorized",
+              "competitors": {
+                "Ladbrokes": {
+                  "colour": "#FE162C",
+                  "label": "Ladbrokes"
                 },
-                "cat": {
-                    "Betfred": {
-                        "marker": "svg_symbols.target([400, '#053770', 300, '#E61C40', 200, '#644588'])",
-                        "label": "Betfred"
-                    },
-                    "Coral": {
-                        "marker": "svg_symbols.target([400, '#68B95A', 300, '#FCD45A', 100, '#E84041'])",
-                        "label": ""
-                    },
-                    "JenningsBet": {
-                        "marker": "svg_symbols.target([400, '#000', 300, '#DB0E2F', 150, '#33DE38'])",
-                        "label": ""
-                    },
-                    "Ladbrokes": {
-                        "marker": "svg_symbols.target([400, '#FE162C', 250, '#FFF'])",
-                        "label": ""
-                    },
-                    "Paddy Power": {
-                        "marker": "svg_symbols.target([400, '#055041', 300, '#65BA50', 100, '#FEFC44'])",
-                        "label": ""
-                    }
+                "Betfred": {
+                  "colour": "#644588",
+                  "label": "Betfred"
                 },
-                "other": true
+                "Coral": {
+                  "colour": "#68B95A",
+                  "label": "Coral"
+                }
+              },
+              "cat": {
+                "Betfred": {
+                  "marker": "svg_symbols.target([400, '#053770', 300, '#E61C40', 200, '#644588'])",
+                  "label": "Betfred"
+                },
+                "Coral": {
+                  "marker": "svg_symbols.target([400, '#68B95A', 300, '#FCD45A', 100, '#E84041'])",
+                  "label": ""
+                },
+                "JenningsBet": {
+                  "marker": "svg_symbols.target([400, '#000', 300, '#DB0E2F', 150, '#33DE38'])",
+                  "label": ""
+                },
+                "Ladbrokes": {
+                  "marker": "svg_symbols.target([400, '#FE162C', 250, '#FFF'])",
+                  "label": ""
+                },
+                "Paddy Power": {
+                  "marker": "svg_symbols.target([400, '#055041', 300, '#65BA50', 100, '#FEFC44'])",
+                  "label": ""
+                }
+              },
+              "other": true
             }
           }
         },
         "region": {
           "name": "Regions",
-          "pane": ["regions",520],
+          "pane": [
+            "regions",
+            520
+          ],
           "format": "mvt",
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
@@ -854,8 +903,11 @@
           }
         },
         "scratch": {
-          "hidden": true,
-          "pane": ["scratch",520],
+
+          "pane": [
+            "scratch",
+            520
+          ],
           "format": "geojson",
           "dbs": "XYZ",
           "table": "williamhill_scratch",
@@ -889,6 +941,73 @@
               "layer": "williamhill"
             }
           ]
+        },
+        "seamless_town": {
+          "name": "Towns",
+          "pane": [
+            "towns",
+            521
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "shoptownid",
+              "label": "Shop town ID",
+              "type": "text"
+            },
+            {
+              "field": "shop_town",
+              "label": "Shop town",
+              "type": "text",
+              "filter": "like"
+            },
+            {
+              "field": "u_townname",
+              "label": "Town name",
+              "type": "text"
+            },
+            {
+              "field": "count.profit_2017",
+              "label": "Count Shop profit 2017",
+              "type": "integer",
+              "layer": "williamhill"
+            },
+            {
+              "field": "sum.profit_2017",
+              "label": "Shop profit 2017 (sum)",
+              "type": "numeric",
+              "layer": "williamhill"
+            },
+            {
+              "field": "avg.profit_2017",
+              "label": "Shop profit 2017 (avg)",
+              "type": "numeric",
+              "layer": "williamhill"
+            }
+          ],
+          "arrayZoom": {
+            "11": "seamless_town"
+          },
+          "tilecache": "seamless_town__tc",
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#777",
+              "fill": true,
+              "opacity": 0.5,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "color": "#CD8B76",
+              "fill": true,
+              "opacity": 1,
+              "fillOpacity": 0.3,
+              "weight": 1.2
+            }
+          }
         }
       }
     }
