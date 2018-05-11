@@ -83,7 +83,7 @@
             {
               "field": "lbo_no",
               "label": "ID",
-              "type": "text"
+              "type": "integer"
             },
             {
               "field": "shop_name",

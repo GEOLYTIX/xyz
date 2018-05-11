@@ -16,7 +16,7 @@ async function select(req, res) {
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
     
-    let _q = `select ${sql_filter} from ${table} where id = $1;`;
+    let _q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
     
     let result = await global.DBS[req.body.dbs].query(_q, [id]);
     
