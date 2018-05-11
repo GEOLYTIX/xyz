@@ -177,7 +177,7 @@ function layerFilters(layer){
     }
     
     let apply_to_area = utils.createElement('div', {
-        classList: "btn_small cursor noselect",
+        classList: "btn_wide cursor noselect",
         onclick: apply_to_area_onclick,
         textContent: "Apply filters to area"
     });

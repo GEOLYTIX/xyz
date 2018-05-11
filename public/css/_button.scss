@@ -73,3 +73,14 @@
     height: 14px;
     display: none;
 }
+
+.btn_wide {
+    font-size: 13px;
+    border-radius: 2px;
+    line-height: 2;
+    text-align: center;
+    font-weight: 600;
+    color: $glxgreen;
+    box-shadow: 1px 1px 3px #666;
+    margin: 5px 2px 0 1px;
+}

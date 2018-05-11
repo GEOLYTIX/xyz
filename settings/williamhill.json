@@ -701,11 +701,15 @@
               "level": 2
             }
           ],
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.01,
           "style": {
-            "marker": "svg_symbols.target([400,'#FFDE3B', 300, '#777'])",
+            "markerMin": 15,
+            "markerMax": 70,
+            "marker": "svg_symbols.target([400,'#bbb'])",
             "markerMulti": [
               400,
-              "#FFDE3B"
+              "#bbb"
             ],
             "theme": {
               "label": "Game",
@@ -720,21 +724,21 @@
                   "label": "Multi competiton"
                 },
                 "SINGLE COMP": {
-                  "colour": "2274A5",
+                  "colour": "#2274A5",
                   "label": "Single competiton"
                 }
               },
               "cat": {
                 "MONOPOLY": {
-                  "marker": "svg_symbols.target([400, '#143156' ,200, '#FFDE3B', 100, '#FFF'])",
+                  "marker": "svg_symbols.target([400, '#143156'])",
                   "label": "Monopoly"
                 },
                 "MULTI COMP": {
-                  "marker": "svg_symbols.target([400, '#FFF', 300, '#143156', 200, '#FFDE3B', 100, '#FFF'])",
+                  "marker": "svg_symbols.target([400, '#FFDE3B'])",
                   "label": "Multi competition"
                 },
                 "SINGLE COMP": {
-                  "marker": "svg_symbols.target([400,'#2274A5', 300, '#143156', 200, '#FFDE3B', 100, '#FFF'])",
+                  "marker": "svg_symbols.target([400,'#2274A5'])",
                   "label": "Single competition"
                 }
               },
@@ -756,6 +760,7 @@
           "table": "williamhill_competitors",
           "cluster_label": "competitor",
           "cluster_cat": "competitor",
+          "cluster_dbscan": 0.01,
           "infoj": [
             {
               "field": "branchid",
