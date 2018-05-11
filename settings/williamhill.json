@@ -947,40 +947,76 @@
           "geom_3857": "geom_3857",
           "qID": "id",
           "infoj": [
-            {
-              "field": "shoptownid",
-              "label": "Shop town ID",
-              "type": "text"
-            },
-            {
-              "field": "shop_town",
-              "label": "Shop town",
-              "type": "text",
-              "filter": "like"
-            },
-            {
-              "field": "u_townname",
-              "label": "Town name",
-              "type": "text"
-            },
-            {
-              "field": "count.profit_2017",
-              "label": "Count Shop profit 2017",
-              "type": "integer",
-              "layer": "williamhill"
-            },
-            {
-              "field": "sum.profit_2017",
-              "label": "Shop profit 2017 (sum)",
-              "type": "numeric",
-              "layer": "williamhill"
-            },
-            {
-              "field": "avg.profit_2017",
-              "label": "Shop profit 2017 (avg)",
-              "type": "numeric",
-              "layer": "williamhill"
-            }
+              {
+                  "field": "shoptownid",
+                  "label": "Shop town ID",
+                  "type": "text"
+              },
+              {
+                  "field": "shop_town",
+                  "label": "Shop town",
+                  "type": "text",
+                  "filter": "like"
+              },
+              {
+                  "field": "u_townname",
+                  "label": "Town name",
+                  "type": "text"
+              },
+              {
+                  "field": "count.lbo_no",
+                  "label": "Count LBO ID",
+                  "type": "integer",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.stakes_2017",
+                  "label": "Total stakes 2017",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.gross_win_2017",
+                  "label": "Total gross win 2017",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.gaming_2017",
+                  "label": "Total gaming 2017",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.profit_2017",
+                  "label": "Total profit 2017",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.plan_stakes_2018",
+                  "label": "Total plan stakes 2018",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.plan_gross_win_2018",
+                  "label": "Total plan gross win 2018",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.plan_gaming_2018",
+                  "label": "Total plan gaming 2018",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              },
+              {
+                  "field": "sum.plan_profit_2018",
+                  "label": "Total plan profit 2018",
+                  "type": "numeric",
+                  "layer": "williamhill"
+              }
           ],
           "arrayZoom": {
             "11": "seamless_town"
