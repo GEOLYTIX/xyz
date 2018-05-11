@@ -32,7 +32,7 @@
             500
           ],
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
         },
         "label": {
           "display": true,
@@ -42,7 +42,7 @@
             560
           ],
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
         },
         "here": {
           "name": "HERE Imagery",
@@ -747,7 +747,6 @@
           }
         },
         "competitors": {
-          "display": true,
           "name": "Competitors",
           "meta": "",
           "format": "cluster",
