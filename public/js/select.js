@@ -333,10 +333,10 @@ module.exports = () => {
             tag: 'div',
             options: {
                 textContent: record.letter,
-                className: 'header'
+                className: 'header pane_shadow'
             },
             style: {
-                borderBottom: '3px solid ' + record.color
+                borderBottom: '2px solid ' + record.color
             },
             appendTo: record.drawer,
             eventListener: {

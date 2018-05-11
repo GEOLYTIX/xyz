@@ -44,17 +44,8 @@
 
         <div class="map_container">
 
-            <div id="Map" class="map">
-                <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
-                <div class="mapbox-attribution-container">
-                    <a href="http://leafletjs.com" target="_blank">
-                        <strong>Leaflet</strong> | </a>
-                    <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
-                    <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
-                    <a href="https://www.mapbox.com/map-feedback/" target="_blank">
-                        <strong>Improve this map</strong>
-                    </a>
-                </div>
+            <div id="Map" class="map unclickable" onclick="return false;">
+                <div class="attribution">mapbox | here | leaflet | openstreetmap | GEOLYTIX</div>
                 <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
                     <defs>
                         <filter id='dropshadow'>
@@ -69,8 +60,7 @@
                 </svg>
             </div>
 
-            <a class="logo_link" class="noselect tooltip-top" data-tooltip="Please visit our website and find out how we can assist you."
-                href="https://geolytix.co.uk">GEOLYTIX</a>
+            
 
             <div class="btn_column noselect">
                 <button id="btnGazetteer" title="Open Gazetteer" {{:btnSearch}}>
