@@ -106,7 +106,8 @@
             {
               "field": "wh_area",
               "label": "WH Area",
-              "type": "text"
+              "type": "text",
+              "filter": "match"
             },
             {
               "field": "wh_cluster",
@@ -136,7 +137,8 @@
             {
               "field": "competition",
               "label": "Type",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "label": "Tenure"
@@ -171,14 +173,14 @@
               "field": "break_v_expire2",
               "label": "Break vs expire date",
               "type": "text",
-              "level": 1
+              "level": 1,
+              "filter": "date"
             },
             {
               "field": "rent",
               "label": "Rent p.a.",
               "type": "numeric",
-              "level": 1,
-              "filter": "numeric"
+              "level": 1
             },
             {
               "label": "EBITDA by year"
@@ -220,56 +222,63 @@
               "level": 2
             },
             {
-              "label": "Accounting by year 2017"
-            },
-            {
               "field": "stakes_2017",
-              "label": "Stakes",
+              "label": "Stakes 2017",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "gross_win_2017",
-              "label": "Gross win",
+              "label": "Gross win 2017",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "margin_pct_2017",
-              "label": "Margin (%)",
+              "label": "Margin (%) 2017",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "gaming_2017",
-              "label": "Gaming",
+              "label": "Gaming 2017",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "profit_2017",
-              "label": "Shop profit",
+              "label": "Shop profit 2017",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
+            },
+            {
+              "field": "profitable_ex_gaming_2017",
+              "label": "Profitable Ex Gaming 2017",
+              "type": "numeric",
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "label": "Plan for year 2018"
             },
             {
               "field": "plan_stakes_2018",
-              "label": "Stakes",
+              "label": "Plan stakes",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "plan_gross_win_2018",
-              "label": "Gross win",
+              "label": "Plan gross win",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "plan_margin_pct_2018",
-              "label": "Margin (%)",
+              "label": "Margin (%) 2018",
               "type": "numeric",
               "level": 2
             },
