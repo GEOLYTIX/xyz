@@ -905,6 +905,7 @@
           }
         },
         "scratch": {
+
         "name": "Filter",
           "pane": [
             "scratch",
@@ -964,8 +965,7 @@
               {
                   "field": "shop_town",
                   "label": "Shop town",
-                  "type": "text",
-                  "filter": "like"
+                  "type": "text"
               },
               {
                   "field": "u_townname",

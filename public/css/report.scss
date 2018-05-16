@@ -14,7 +14,6 @@ $glxlightgreen: #cf9;
 @import 'gazetteer';
 @import 'leaflet';
 @import 'location';
-@import 'attribution';
 *,
 *::after,
 *::before {
@@ -93,9 +92,14 @@ i,
     .report-off {
         display: none;
     }
+    .drawer {
+        margin-bottom: 15px;
+    }
     .module {
         padding: 0 10px 0 0;
         width: 25%;
+        height: 100%;
+        overflow: hidden;
         .title {
             display: none;
         }
@@ -108,7 +112,6 @@ i,
                 font-family: ffmark, sans-serif;
                 font-weight: 600;
                 height: 6mm;
-                
                 &:hover {
                     cursor: pointer;
                 }
@@ -201,31 +204,37 @@ i,
     .leaflet-control-attribution {
         display: none;
     }
+    .attribution {
+        right: 0;
+        z-index: 9999;
+        position: absolute;
+        bottom: 0;
+        opacity: 0.7;
+        background-color: #fff;
+        width: 100%;
+        text-align: right;
+        padding: 5px;
+        font-family: ffmark_bold;
+    }
 }
 
 .report-spacer {
     height: 10mm;
     @media print {
-
         display: none;
-
     }
 }
 
 #Report {
     position: relative;
     width: 297mm;
-    height: 210mm; 
-    // padding: 10mm;
+    height: 210mm; // padding: 10mm;
     margin: 0 auto;
     background: white;
     box-shadow: 3px 3px 5px #999;
-
     @media print {
-
         width: 100%;
         height: 100%;
-
     }
 }
 

@@ -53,7 +53,6 @@ module.exports = () => {
             layer.base = null;
             layer.locale = _xyz.locale;
             layer.name = layer.name || layer.layer;
-            if (layer.hidden) return;
             if (!layer.style) layer.style = {};
             if (!layer.style.default) layer.style.default = { "weight": 1, "color": "#000" };
             if (!layer.filter) layer.filter = {};
@@ -65,6 +64,8 @@ module.exports = () => {
                 },
                 appendTo: dom.layers
             });
+
+            if (layer.hidden) layer.drawer.style.display = 'none';
 
             layer.header = utils._createElement({
                 tag: 'div',

@@ -54,7 +54,7 @@ router.get('/', isLoggedIn, (req, res) => {
     let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
 
     // Assign session hooks from params.
-    req.session.hooks = {};
+    if (!req.session.hooks) req.session.hooks = {};
     if (params[0] !== '')
         params.forEach(p => {
             let kv = p.split('=');
