@@ -52,17 +52,9 @@ function addInfojToList(record) {
             }, tr);
         } else {
             val = utils.createElement('td', {
-                className: 'val'
+                className: 'val num'
             }, tr);
         };
-
-        // Create new table cell for values and append to tr.
-
-
-        // Add num class to numeric values. Num class is right align.
-        if (entry.value && !isNaN(entry.value)) {
-            utils.addClass(val, 'num');
-        }
 
         // If input is images create image control and return from object.map function.
         if (entry.images) {

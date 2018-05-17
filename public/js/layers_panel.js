@@ -481,13 +481,20 @@ function clusterCategorized(layer) {
             n = competitors.length,
             i = 0;
 
-        competitors.map(comp => {
+        competitors.reverse().forEach(comp => {
 
             svg.append('circle')
                 .attr('cx', 20)
                 .attr('cy', y)
                 .attr('r', 20 - (i + 1) * 20 / (n + 1))
                 .style('fill', layer.style.theme.competitors[comp].colour);
+
+            i++;
+        });
+
+        i = 0;
+
+        competitors.reverse().forEach(comp => {
 
             svg.append('circle')
                 .attr('cx', 20)

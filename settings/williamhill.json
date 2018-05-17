@@ -726,7 +726,7 @@
           "cluster_dbscan": 0.01,
           "style": {
             "markerMin": 15,
-            "markerMax": 70,
+            "markerMax": 40,
             "marker": "svg_symbols.target([400,'#bbb'])",
             "markerMulti": [
               400,
@@ -786,12 +786,14 @@
             {
               "field": "branchid",
               "label": "Branch ID",
-              "type": "text"
+              "type": "text",
+              "inline": true
             },
             {
               "field": "detailfascia",
               "label": "Competitor",
-              "type": "text"
+              "type": "text",
+              "inline": true
             },
             {
               "label": "Address"
@@ -814,6 +816,8 @@
             }
           ],
           "style": {
+            "markerMin": 20,
+            "markerMax": 60,
             "marker": "svg_symbols.target([400, '#ddd'])",
             "markerMulti": [
               400,
@@ -823,6 +827,10 @@
               "label": "Chain",
               "type": "categorized",
               "competitors": {
+                "William Hill": {
+                  "colour": "#F2FF1F",
+                  "label": "William Hill"
+                },
                 "Ladbrokes": {
                   "colour": "#FE162C",
                   "label": "Ladbrokes"
@@ -838,10 +846,6 @@
                 "Paddy Power": {
                   "colour": "#63B84A",
                   "label": "Paddy Power"
-                },
-                "William Hill": {
-                  "colour": "#F2FF1F",
-                  "label": "William Hill"
                 }
               },
               "cat": {
