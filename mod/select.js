@@ -34,7 +34,7 @@ async function select(req, res) {
 
             ) AS "${entry.field}",
             `
-            console.log(fields);
+            //console.log(fields);
             return
         }
 
@@ -55,7 +55,7 @@ async function select(req, res) {
     FROM ${table}
     WHERE ${qID} = $1;`
 
-    console.log(q);
+    //console.log(q);
 
     global.DBS[req.body.dbs].query(q, [id])
         .then(result => {

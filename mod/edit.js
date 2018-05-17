@@ -93,7 +93,7 @@ async function newAggregate(req, res) {
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
 
-    console.log(q);
+    //console.log(q);
 
     let result = await global.DBS[req.query.dbs].query(q);
 

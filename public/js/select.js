@@ -346,7 +346,7 @@ module.exports = () => {
                         expandable: record.drawer,
                         accordeon: true,
                         scrolly: document.querySelector('.mod_container > .scrolly')
-                    })
+                    });
                 }
             }
         });
@@ -381,5 +381,10 @@ module.exports = () => {
         });
         let idx = _xyz.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
+
+        setTimeout(() => {
+            let el = document.querySelector('.mod_container > .scrolly');
+            el.scrollTop = el.clientHeight;
+        }, 500);
     }
 }

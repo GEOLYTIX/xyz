@@ -22,7 +22,7 @@
         ]
       ],
       "minZoom": 6,
-      "maxZoom": 24,
+      "maxZoom": 18,
       "layers": {
         "base": {
           "display": true,
@@ -66,7 +66,6 @@
         },
         "williamhill": {
           "display": true,
-          "streetview": true,
           "name": "William Hill Shops 2018",
           "meta": "Shop locations from William Hill.",
           "format": "cluster",
@@ -84,36 +83,42 @@
             {
               "field": "lbo_no",
               "label": "ID",
-              "type": "integer"
+              "type": "text",
+              "inline": true
             },
             {
               "field": "shop_name",
               "label": "Shop name",
               "type": "text",
+              "inline": true,
               "filter": "like"
             },
             {
               "field": "postcode",
               "label": "Postal code",
               "type": "text",
+              "inline": true,
               "filter": "like"
             },
             {
               "field": "wh_region",
               "label": "WH Region",
               "type": "text",
+              "inline": true,
               "filter": "match"
             },
             {
               "field": "wh_area",
               "label": "WH Area",
               "type": "text",
+              "inline": true,
               "filter": "match"
             },
             {
               "field": "wh_cluster",
               "label": "WH Cluster",
-              "type": "text"
+              "type": "text",
+              "inline": true
             },
             {
               "field": "seamless_town",
@@ -133,12 +138,14 @@
             {
               "field": "open_closed",
               "label": "Shop status",
-              "type": "text"
+              "type": "text",
+              "inline": true
             },
             {
               "field": "competition",
               "label": "Type",
               "type": "text",
+              "inline": true,
               "filter": "like"
             },
             {
@@ -148,6 +155,7 @@
               "field": "tenure",
               "label": "Tenure type",
               "type": "text",
+              "inline": true,
               "level": 1,
               "filter": {
                 "in": [
@@ -160,6 +168,7 @@
               "field": "lease_break2",
               "label": "Lease break date",
               "type": "text",
+              "inline": true,
               "level": 1,
               "filter": "date"
             },
@@ -167,6 +176,7 @@
               "field": "lease_expire2",
               "label": "Lease expiry date",
               "type": "text",
+              "inline": true,
               "level": 1,
               "filter": "date"
             },
@@ -174,6 +184,7 @@
               "field": "break_v_expire2",
               "label": "Break vs expire date",
               "type": "text",
+              "inline": true,
               "level": 1,
               "filter": "date"
             },
@@ -757,6 +768,7 @@
           }
         },
         "competitors": {
+          "streetview": true,
           "name": "Competitors",
           "meta": "",
           "format": "cluster",
@@ -777,13 +789,15 @@
               "type": "text"
             },
             {
-              "field": "competitor",
+              "field": "detailfascia",
               "label": "Competitor",
               "type": "text"
             },
             {
+              "label": "Address"
+            },
+            {
               "field": "street_address",
-              "label": "Address",
               "type": "text"
             },
             {
@@ -800,7 +814,7 @@
             }
           ],
           "style": {
-            "marker": "svg_symbols.target([400, '#fff', 350, '#555'])",
+            "marker": "svg_symbols.target([400, '#ddd'])",
             "markerMulti": [
               400,
               "#777"
@@ -813,35 +827,44 @@
                   "colour": "#FE162C",
                   "label": "Ladbrokes"
                 },
+                "Coral": {
+                  "colour": "#0B58A2",
+                  "label": "Coral"
+                },
                 "Betfred": {
-                  "colour": "#644588",
+                  "colour": "#6D3B6C",
                   "label": "Betfred"
                 },
-                "Coral": {
-                  "colour": "#68B95A",
-                  "label": "Coral"
+                "Paddy Power": {
+                  "colour": "#63B84A",
+                  "label": "Paddy Power"
+                },
+                "William Hill": {
+                  "colour": "#F2FF1F",
+                  "label": "William Hill"
                 }
               },
               "cat": {
-                "Betfred": {
-                  "marker": "svg_symbols.target([400, '#053770', 300, '#E61C40', 200, '#644588'])",
-                  "label": "Betfred"
-                },
-                "Coral": {
-                  "marker": "svg_symbols.target([400, '#68B95A', 300, '#FCD45A', 100, '#E84041'])",
-                  "label": ""
-                },
-                "JenningsBet": {
-                  "marker": "svg_symbols.target([400, '#000', 300, '#DB0E2F', 150, '#33DE38'])",
-                  "label": ""
+                "William Hill": {
+                  "marker": "svg_symbols.target([400, '#041C40', 300, '#2582B6', 200, '#fff', 100, '#F2FF1F'])"
                 },
                 "Ladbrokes": {
-                  "marker": "svg_symbols.target([400, '#FE162C', 250, '#FFF'])",
-                  "label": ""
+                  "marker": "svg_symbols.target([400, '#fff', 300, '#FE162C', 100, '#fff'])"
+                },
+                "Coral": {
+                  "marker": "svg_symbols.target([400, '#0B58A2', 300, '#60B849', 200, '#FFD421', 100, '#ED3E36'])"
+                },
+                "Betfred": {
+                  "marker": "svg_symbols.target([400, '#105C9A', 300, '#6D3B6C', 200, '#DC223E', 100, '#fff'])"
                 },
                 "Paddy Power": {
-                  "marker": "svg_symbols.target([400, '#055041', 300, '#65BA50', 100, '#FEFC44'])",
-                  "label": ""
+                  "marker": "svg_symbols.target([400, '#0C4838', 250, '#63B84A', 100, '#fff'])"
+                },
+                "JenningsBet": {
+                  "marker": "svg_symbols.target([400, '#000', 300, '#31DE14', 200, '#D51F32', 100, '#fff'])"
+                },
+                "Megabet": {
+                  "marker": "svg_symbols.target([400, '#333', 250, '#85EB6E', 100, '#fff'])"
                 }
               },
               "other": true

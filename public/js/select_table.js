@@ -27,8 +27,7 @@ function addInfojToList(record) {
                 tag: 'td',
                 options: {
                     className: 'label lv-' + (entry.level || 0),
-                    textContent: entry.label,
-                    colSpan: (!entry.type || entry.type === 'text' ? '2' : '1') 
+                    textContent: entry.label
                 },
                 appendTo: tr
             });
@@ -44,13 +43,21 @@ function addInfojToList(record) {
         }
 
         // Create new row for text cells and append to table.
-        if (entry.type && ((entry.type === 'text' && entry.value.length > 5) || entry.type === 'text[]')) tr = utils.createElement('tr', null, table);
+        let val;
+        if (entry.type && !entry.inline && !(entry.type === 'integer' || entry.type === 'numeric')) {
+            tr = utils.createElement('tr', null, table)
+            val = utils.createElement('td', {
+                className: 'val',
+                colSpan: '2'
+            }, tr);
+        } else {
+            val = utils.createElement('td', {
+                className: 'val'
+            }, tr);
+        };
 
         // Create new table cell for values and append to tr.
-        let val = utils.createElement('td', {
-            className: 'val',
-            colSpan: '2'
-        }, tr);
+
 
         // Add num class to numeric values. Num class is right align.
         if (entry.value && !isNaN(entry.value)) {
@@ -81,7 +88,6 @@ function addInfojToList(record) {
             tr = utils.createElement('tr', null, table);
 
             let range = utils.createElement('td', {
-                colSpan: '2',
                 className: 'range'        
             }, tr);
 
@@ -179,8 +185,7 @@ function addInfojToList(record) {
                 // Add select sub label to new tabel row.
                 let label = utils.createElement('td', {
                     className: 'label lv-' + (entry.level || 0),
-                    textContent: entry.sublabel,
-                    colSpan: '2'
+                    textContent: entry.sublabel
                 }, tr);
 
                 // Create a new table row for select sub element.
@@ -188,8 +193,7 @@ function addInfojToList(record) {
 
                 // Create new td with subselect element and add to current table row.
                 let td = utils.createElement('td', {
-                    className: 'val',
-                    colSpan: '2'
+                    className: 'val'
                 }, tr);
 
                 subselect = utils.createElement('select', null, td);
