@@ -66,7 +66,7 @@
         },
         "williamhill": {
           "display": true,
-          "name": "William Hill Shops 2018",
+          "name": "William Hill Shops",
           "meta": "All William Hill Shops May 2018.",
           "format": "cluster",
           "pane": [
@@ -832,7 +832,7 @@
           "style": {
             "markerMin": 20,
             "markerMax": 60,
-            "marker": "svg_symbols.target([400, '#ddd'])",
+            "marker": "svg_symbols.target([400, '#333'])",
             "markerMulti": [
               400,
               "#777"
@@ -842,7 +842,7 @@
               "type": "categorized",
               "competitors": {
                 "William Hill": {
-                  "colour": "#F2FF1F",
+                  "colour": "#ddd",
                   "label": "William Hill"
                 },
                 "Ladbrokes": {
@@ -864,7 +864,7 @@
               },
               "cat": {
                 "William Hill": {
-                  "marker": "svg_symbols.target([400, '#041C40', 300, '#2582B6', 200, '#fff', 100, '#F2FF1F'])"
+                  "marker": "svg_symbols.target([400, '#ddd'])"
                 },
                 "Ladbrokes": {
                   "marker": "svg_symbols.target([400, '#fff', 300, '#FE162C', 100, '#fff'])"
