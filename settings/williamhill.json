@@ -66,7 +66,7 @@
         },
         "williamhill": {
           "display": true,
-          "name": "William Hill Shops 2018",
+          "name": "William Hill Shops",
           "meta": "Shop locations from William Hill.",
           "format": "cluster",
           "pane": [
