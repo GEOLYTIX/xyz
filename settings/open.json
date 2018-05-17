@@ -616,6 +616,7 @@
           }
         },
         "retail_points": {
+          "streetview": true,
           "display": true,
           "name": "Retail Points",
           "pane": [

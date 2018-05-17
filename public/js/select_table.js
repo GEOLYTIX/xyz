@@ -11,6 +11,8 @@ function addInfojToList(record) {
         style: 'border-bottom: 1px solid ' + record.color
     });
 
+    if (_xyz.locales[_xyz.locale].layers[record.location.layer].streetview) insertStreetViewImage(record, table);
+
     // Populate the table from the features infoj object.
     Object.values(record.location.infoj).forEach(entry => {
 
@@ -338,6 +340,32 @@ function addInfojToList(record) {
     });
 
     return table;
+}
+
+function insertStreetViewImage(record, table) {
+    let tr = utils.createElement('tr', {
+        className: 'tr_streetview'
+    }, table);
+
+    let td = utils.createElement('td', {
+        className: 'td_streetview',
+        colSpan: '2'
+    }, tr);
+
+    let div = utils.createElement('div', {
+        className: 'div_streetview'
+    }, td);
+
+    let a = utils.createElement('a', {
+        className: 'a_streetview',
+        href: 'https://www.google.com/maps?cbll=' + record.location.marker[1] + ',' + record.location.marker[0] + '&layer=c',
+        target: '_blank'
+    }, td);
+
+    let img = utils.createElement('img', {
+        className: 'img_streetview',
+        src: 'https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230'
+    }, a);
 }
 
 module.exports = {
