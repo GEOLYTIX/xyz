@@ -867,7 +867,7 @@
             },
             {
               "field": "count.profit_2017",
-              "label": "Count Shop profit 2017",
+              "label": "Count of shops",
               "type": "integer",
               "layer": "williamhill"
             },
