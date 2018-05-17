@@ -890,7 +890,7 @@
             },
             {
               "field": "count.profit_2017",
-              "label": "Count Shop profit 2017",
+              "label": "Count of shops",
               "type": "integer",
               "layer": "williamhill"
             },
@@ -946,117 +946,72 @@
           "qID": "id",
           "infoj": [
             {
-              "field": "id",
-              "label": "ID",
-              "type": "integer"
-            },
-            {
-              "field": "count.profit_2017",
-              "label": "Count Shop profit 2017",
-              "type": "integer",
-              "layer": "williamhill"
-            },
-            {
-              "field": "sum.profit_2017",
-              "label": "Shop profit 2017 (sum)",
-              "type": "numeric",
-              "layer": "williamhill"
-            },
-            {
-              "field": "avg.profit_2017",
-              "label": "Shop profit 2017 (avg)",
-              "type": "numeric",
-              "layer": "williamhill"
-            }
-          ]
-        },
-        "seamless_town": {
-          "name": "Towns",
-          "pane": [
-            "towns",
-            521
-          ],
-          "format": "mvt",
-          "dbs": "XYZ",
-          "geom_3857": "geom_3857",
-          "qID": "id",
-          "infoj": [
-              {
-                  "field": "shoptownid",
-                  "label": "Shop town ID",
-                  "type": "text"
-              },
-              {
-                  "field": "shop_town",
-                  "label": "Shop town",
-                  "type": "text"
-              },
-              {
-                  "field": "u_townname",
-                  "label": "Town name",
-                  "type": "text"
-              },
-              {
                   "field": "count.lbo_no",
-                  "label": "Count LBO ID",
+                  "label": "Count of shops",
                   "type": "integer",
                   "layer": "williamhill"
               },
               {
+                  "label": "Figures 2017"
+              },
+              {
                   "field": "sum.stakes_2017",
-                  "label": "Total stakes 2017",
+                  "label": "Total stakes",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "field": "sum.gross_win_2017",
-                  "label": "Total gross win 2017",
+                  "label": "Total gross win",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "field": "sum.gaming_2017",
-                  "label": "Total gaming 2017",
+                  "label": "Total gaming",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "field": "sum.profit_2017",
-                  "label": "Total profit 2017",
+                  "label": "Total profit",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
+              },
+              {
+                  "label": "Plan figures 2018"
               },
               {
                   "field": "sum.plan_stakes_2018",
-                  "label": "Total plan stakes 2018",
+                  "label": "Total plan stakes",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "field": "sum.plan_gross_win_2018",
-                  "label": "Total plan gross win 2018",
+                  "label": "Total plan gross win",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "field": "sum.plan_gaming_2018",
-                  "label": "Total plan gaming 2018",
+                  "label": "Total plan gaming",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "field": "sum.plan_profit_2018",
-                  "label": "Total plan profit 2018",
+                  "label": "Total plan profit",
                   "type": "numeric",
                   "layer": "williamhill",
-                  "level": 1
+                  "level": 2
               },
               {
                   "label": "Estimates 2019"
@@ -1185,44 +1140,58 @@
               {
                   "label": "RP Estimates 2019"
               },
+              {   
+                  "field": "sum.rp_est_stakes_tri_20_2019",
+                  "label": "Stakes Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_20_2019",
+                  "label": "Gross win Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
               {
                   "field": "sum.rp_est_gaming_tri_20_2019",
-                  "label": "RP Estimate gaming Tri £20",
+                  "label": "Gaming Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_20_2019",
-                  "label": "RP Estimate shop profit",
+                  "label": "Profit Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_stakes_tri_2_2019",
-                  "label": "RP Estimate stakes Tri £2",
+                  "label": "Stakes Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_2_2019",
-                  "label": "RP Estimate gross win Tri £2",
+                  "label": "Gross win Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_tri_2_2019",
-                  "label": "RP Estimate gaming Tri £2",
+                  "label": "Gaming Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_2_2019",
-                  "label": "RP Estimate profit Tri £2",
+                  "label": "Profit Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1232,56 +1201,56 @@
               },
               {
                   "field": "sum.rp_est_stakes_tri_20_2020",
-                  "label": "RP Estimate stakes Tri £20",
+                  "label": "Stakes Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_20_2020",
-                  "label": "RP Estimate gross win Tri £20",
+                  "label": "Gross win Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_tri_20_2020",
-                  "label": "RP Estimate gaming Tri £20",
-                  "type": "numeric",
-                  "layer": "williamhill",
-                  "level": 2
-              },
-              {
-                  "field": "sum.rp_est_gaming_tri_2_2020",
-                  "label": "RP Estimate gaming Tri £2",
+                  "label": "Gaming Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_20_2020",
-                  "label": "RP Estimate profit Tri £20",
-                  "type": "numeric",
-                  "layer": "williamhill",
-                  "level": 2
-              },
-              {
-                  "field": "sum.rp_est_profit_tri_2_2020",
-                  "label": "RP Estimate profit Tri £2",
+                  "label": "Profit Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_stakes_tri_2_2020",
-                  "label": "RP Estimate stakes Tri £2",
+                  "label": "Stakes Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_2_2020",
-                  "label": "RP Estimate gross win Tri £2",
+                  "label": "Gross win Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_2_2020",
+                  "label": "Gaming Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_2_2020",
+                  "label": "Profit Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1291,63 +1260,56 @@
               },
               {
                   "field": "sum.rp_est_stakes_tri_20_2021",
-                  "label": "RP Estimate stakes Tri £20",
+                  "label": "Stakes Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_20_2021",
-                  "label": "RP Estimate gross win Tri £20",
+                  "label": "Gross win Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_tri_20_2021",
-                  "label": "RP Estimate gaming Tri £20",
+                  "label": "Gaming Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_20_2021",
-                  "label": "RP Estimate profit Tri £20",
+                  "label": "Profit Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_stakes_tri_2_2021",
-                  "label": "RP Estimate stakes Tri £2",
+                  "label": "Stakes Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_2_2021",
-                  "label": "RP Estimate gross win Tri £2",
+                  "label": "Gross win Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_tri_2_2021",
-                  "label": "RP Estimate gaming Tri £2",
-                  "type": "numeric",
-                  "layer": "williamhill",
-                  "level": 2
-              },
-              {
-                  "field": "sum.rp_est_profit_tri_20_2021",
-                  "label": "RP Estimate profit Tri £20",
+                  "label": "Gaming Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_2_2021",
-                  "label": "RP Estimate profit Tri £2",
+                  "label": "Profit Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1357,56 +1319,507 @@
               },
               {
                   "field": "sum.rp_est_stakes_tri_20_2022",
-                  "label": "RP Estimate stakes Tri £20",
+                  "label": "Stakes Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_20_2022",
-                  "label": "RP Estimate gross win Tri £20",
+                  "label": "Gross win Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_tri_20_2022",
-                  "label": "RP Estimate gaming Tri £20",
+                  "label": "Gaming Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_20_2022",
-                  "label": "RP Estimate profit Tri £20",
+                  "label": "Profit Tri £20",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_stakes_tri_2_2022",
-                  "label": "RP Estimate stakes Tri £2",
+                  "label": "Stakes Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_tri_2_2022",
-                  "label": "RP Estimate gross win Tri £2",
+                  "label": "Gross win Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_tri_2_2022",
-                  "label": "RP Estimate gaming Tri £2",
+                  "label": "Gaming Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_tri_2_2022",
-                  "label": "RP Estimate profit Tri £2",
+                  "label": "Profit Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              }
+          ]
+        },
+        "seamless_town": {
+          "name": "Towns",
+          "pane": [
+            "towns",
+            521
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "infoj": [
+              {
+                  "field": "shop_town",
+                  "label": "Shop town",
+                  "type": "text"
+              },
+              {
+                  "field": "u_townname",
+                  "label": "Town name",
+                  "type": "text"
+              },
+              {
+                  "field": "count.lbo_no",
+                  "label": "Count of shops",
+                  "type": "integer",
+                  "layer": "williamhill"
+              },
+              {
+                  "label": "Figures 2017"
+              },
+              {
+                  "field": "sum.stakes_2017",
+                  "label": "Total stakes",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.gross_win_2017",
+                  "label": "Total gross win",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.gaming_2017",
+                  "label": "Total gaming",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.profit_2017",
+                  "label": "Total profit",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "Plan figures 2018"
+              },
+              {
+                  "field": "sum.plan_stakes_2018",
+                  "label": "Total plan stakes",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.plan_gross_win_2018",
+                  "label": "Total plan gross win",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.plan_gaming_2018",
+                  "label": "Total plan gaming",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.plan_profit_2018",
+                  "label": "Total plan profit",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "Estimates 2019"
+              },
+              {
+                  "field": "sum.rp_est_stakes_2019",
+                  "label": "Estimate stakes",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_2019",
+                  "label": "Estimate gross win",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_2019",
+                  "label": "Estimate gaming",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_2019",
+                  "label": "Estimate profit",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "Estimates 2020"
+              },
+              {
+                  "field": "sum.rp_est_stakes_2020",
+                  "label": "Estimate stakes",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_2020",
+                  "label": "Estimate gross win",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_2020",
+                  "label": "Estimate gaming",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_2020",
+                  "label": "Estimate profit",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "Estimates 2021"
+              },
+              {
+                  "field": "sum.rp_est_stakes_2021",
+                  "label": "Estimate stakes",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_2021",
+                  "label": "Estimate gross win",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_2021",
+                  "label": "Estimate gaming",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_2021",
+                  "label": "Estimate profit",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "Estimates 2022"
+              },
+              {
+                  "field": "sum.rp_est_stakes_2022",
+                  "label": "Estimate stakes",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_2022",
+                  "label": "Estimate gross win",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_2022",
+                  "label": "Estimate gaming",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_2022",
+                  "label": "Estimate profit",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "RP Estimates 2019"
+              },
+              {   
+                  "field": "sum.rp_est_stakes_tri_20_2019",
+                  "label": "Stakes Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_20_2019",
+                  "label": "Gross win Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_20_2019",
+                  "label": "Gaming Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_20_2019",
+                  "label": "Profit Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_2_2019",
+                  "label": "Stakes Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_2_2019",
+                  "label": "Gross win Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_2_2019",
+                  "label": "Gaming Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_2_2019",
+                  "label": "Profit Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "RP Estimates 2020"
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_20_2020",
+                  "label": "Stakes Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_20_2020",
+                  "label": "Gross win Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_20_2020",
+                  "label": "Gaming Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_20_2020",
+                  "label": "Profit Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_2_2020",
+                  "label": "Stakes Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_2_2020",
+                  "label": "Gross win Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_2_2020",
+                  "label": "Gaming Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_2_2020",
+                  "label": "Profit Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "RP Estimates 2021"
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_20_2021",
+                  "label": "Stakes Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_20_2021",
+                  "label": "Gross win Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_20_2021",
+                  "label": "Gaming Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_20_2021",
+                  "label": "Profit Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_2_2021",
+                  "label": "Stakes Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_2_2021",
+                  "label": "Gross win Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_2_2021",
+                  "label": "Gaming Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_2_2021",
+                  "label": "Profit Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "label": "RP Estimates 2022"
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_20_2022",
+                  "label": "Stakes Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_20_2022",
+                  "label": "Gross win Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_20_2022",
+                  "label": "Gaming Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_20_2022",
+                  "label": "Profit Tri £20",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_stakes_tri_2_2022",
+                  "label": "Stakes Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gross_win_tri_2_2022",
+                  "label": "Gross win Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_gaming_tri_2_2022",
+                  "label": "Gaming Tri £2",
+                  "type": "numeric",
+                  "layer": "williamhill",
+                  "level": 2
+              },
+              {
+                  "field": "sum.rp_est_profit_tri_2_2022",
+                  "label": "Profit Tri £2",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
