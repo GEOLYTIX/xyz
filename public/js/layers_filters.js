@@ -215,7 +215,7 @@ function filter_numeric(layer, options){
         
         if(!layer.filter[options.field]) layer.filter[options.field] = {};
         
-        if(val) {
+        if(typeof(val) == "number") {
             layer.filter[options.field][this.name] = val;
         } else {
             layer.filter[options.field][this.name] = null;
