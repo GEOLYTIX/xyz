@@ -22,7 +22,7 @@
         ]
       ],
       "minZoom": 6,
-      "maxZoom": 24,
+      "maxZoom": 18,
       "layers": {
         "base": {
           "display": true,
