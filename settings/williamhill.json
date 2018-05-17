@@ -169,8 +169,7 @@
               "label": "Lease break date",
               "type": "text",
               "inline": true,
-              "level": 1,
-              "filter": "date"
+              "level": 1
             },
             {
               "field": "lease_expire2",
@@ -234,75 +233,78 @@
               "level": 2
             },
             {
+               "label": "Figures 2017"
+            },
+            {
               "field": "stakes_2017",
-              "label": "Stakes 2017",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "gross_win_2017",
-              "label": "Gross win 2017",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "margin_pct_2017",
-              "label": "Margin (%) 2017",
+              "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "gaming_2017",
-              "label": "Gaming 2017",
+              "label": "Gaming",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "profit_2017",
-              "label": "Shop profit 2017",
+              "label": "Shop profit",
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
             },
             {
               "field": "profitable_ex_gaming_2017",
-              "label": "Profitable Ex Gaming 2017",
+              "label": "Profitable Ex Gaming",
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
             },
             {
-              "label": "Plan for year 2018"
+              "label": "Planned 2018"
             },
             {
               "field": "plan_stakes_2018",
-              "label": "Plan stakes",
+              "label": "Stakes",
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
             },
             {
               "field": "plan_gross_win_2018",
-              "label": "Plan gross win",
+              "label": "Gross win",
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
             },
             {
               "field": "plan_margin_pct_2018",
-              "label": "Margin (%) 2018",
+              "label": "Margin (%)",
               "type": "numeric",
               "level": 2
             },
             {
               "field": "plan_profit_2018",
-              "label": "Plan profit",
+              "label": "Profit",
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
             },
             {
-              "label": "Forecast 2019"
+              "label": "Estimates 2019"
             },
             {
               "field": "rp_est_stakes_2019",
@@ -332,7 +334,8 @@
               "field": "rp_est_profit_2019",
               "label": "Shop profit",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_20_2019",
@@ -368,7 +371,8 @@
               "field": "rp_est_profit_tri_20_2019",
               "label": "Profit Tri £20",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_2_2019",
@@ -404,10 +408,11 @@
               "field": "rp_est_profit_tri_2_2019",
               "label": "Profit Tri £2",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
-              "label": "Forecast 2020"
+              "label": "Estimates 2020"
             },
             {
               "field": "rp_est_stakes_2020",
@@ -437,7 +442,8 @@
               "field": "rp_est_profit_2020",
               "label": "Shop profit",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_20_2020",
@@ -473,7 +479,8 @@
               "field": "rp_est_profit_tri_20_2020",
               "label": "Profit Tri £20",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_2_2020",
@@ -509,10 +516,11 @@
               "field": "rp_est_profit_tri_2_2020",
               "label": "Profit Tri £2",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
-              "label": "Forecast 2021"
+              "label": "Estimates 2021"
             },
             {
               "field": "rp_est_stakes_2021",
@@ -542,7 +550,8 @@
               "field": "rp_est_profit_2021",
               "label": "Shop profit",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_20_2021",
@@ -578,7 +587,8 @@
               "field": "rp_est_profit_tri_20_2021",
               "label": "Profit Tri £20",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_2_2021",
@@ -614,10 +624,11 @@
               "field": "rp_est_profit_tri_2_2021",
               "label": "Profit Tri £2",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
-              "label": "Forecast 2022"
+              "label": "Estimates 2022"
             },
             {
               "field": "rp_est_stakes_2022",
@@ -647,7 +658,8 @@
               "field": "rp_est_profit_2022",
               "label": "Shop profit",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_20_2022",
@@ -683,7 +695,8 @@
               "field": "rp_est_profit_tri_20_2022",
               "label": "Profit Tri £20",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             },
             {
               "field": "rp_est_stakes_tri_2_2022",
@@ -719,7 +732,8 @@
               "field": "rp_est_profit_tri_2_2022",
               "label": "Profit Tri £2",
               "type": "numeric",
-              "level": 2
+              "level": 2,
+              "filter": "numeric"
             }
           ],
           "cluster_kmeans": 50,
@@ -952,63 +966,63 @@
                   "layer": "williamhill"
               },
               {
-                  "label": "Figures 2017"
+                  "label": "Total 2017"
               },
               {
                   "field": "sum.stakes_2017",
-                  "label": "Total stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.gross_win_2017",
-                  "label": "Total gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.gaming_2017",
-                  "label": "Total gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.profit_2017",
-                  "label": "Total profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
-                  "label": "Plan figures 2018"
+                  "label": "Total planned 2018"
               },
               {
                   "field": "sum.plan_stakes_2018",
-                  "label": "Total plan stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.plan_gross_win_2018",
-                  "label": "Total plan gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.plan_gaming_2018",
-                  "label": "Total plan gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.plan_profit_2018",
-                  "label": "Total plan profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1018,28 +1032,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2019",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2019",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2019",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2019",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1049,28 +1063,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2020",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2020",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2020",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2020",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1080,28 +1094,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2021",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2021",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2021",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2021",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1111,28 +1125,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2022",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2022",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2022",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2022",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1403,63 +1417,63 @@
                   "layer": "williamhill"
               },
               {
-                  "label": "Figures 2017"
+                  "label": "Total 2017"
               },
               {
                   "field": "sum.stakes_2017",
-                  "label": "Total stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.gross_win_2017",
-                  "label": "Total gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.gaming_2017",
-                  "label": "Total gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.profit_2017",
-                  "label": "Total profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
-                  "label": "Plan figures 2018"
+                  "label": "Total planned 2018"
               },
               {
                   "field": "sum.plan_stakes_2018",
-                  "label": "Total plan stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.plan_gross_win_2018",
-                  "label": "Total plan gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.plan_gaming_2018",
-                  "label": "Total plan gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.plan_profit_2018",
-                  "label": "Total plan profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1469,28 +1483,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2019",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2019",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2019",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2019",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1500,28 +1514,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2020",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2020",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2020",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2020",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1531,28 +1545,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2021",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2021",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2021",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2021",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
@@ -1562,28 +1576,28 @@
               },
               {
                   "field": "sum.rp_est_stakes_2022",
-                  "label": "Estimate stakes",
+                  "label": "Stakes",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gross_win_2022",
-                  "label": "Estimate gross win",
+                  "label": "Gross win",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_gaming_2022",
-                  "label": "Estimate gaming",
+                  "label": "Gaming",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
               },
               {
                   "field": "sum.rp_est_profit_2022",
-                  "label": "Estimate profit",
+                  "label": "Profit",
                   "type": "numeric",
                   "layer": "williamhill",
                   "level": 2
