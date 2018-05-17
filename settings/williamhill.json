@@ -84,7 +84,7 @@
             {
               "field": "lbo_no",
               "label": "ID",
-              "type": "integer"
+              "type": "text"
             },
             {
               "field": "shop_name",
@@ -829,19 +829,19 @@
                 },
                 "Coral": {
                   "marker": "svg_symbols.target([400, '#68B95A', 300, '#FCD45A', 100, '#E84041'])",
-                  "label": ""
+                  "label": "Coral"
                 },
                 "JenningsBet": {
                   "marker": "svg_symbols.target([400, '#000', 300, '#DB0E2F', 150, '#33DE38'])",
-                  "label": ""
+                  "label": "Jennings Bet"
                 },
                 "Ladbrokes": {
                   "marker": "svg_symbols.target([400, '#FE162C', 250, '#FFF'])",
-                  "label": ""
+                  "label": "Ladbrokes"
                 },
                 "Paddy Power": {
                   "marker": "svg_symbols.target([400, '#055041', 300, '#65BA50', 100, '#FEFC44'])",
-                  "label": ""
+                  "label": "Paddy Power"
                 }
               },
               "other": true
@@ -925,7 +925,7 @@
             {
               "field": "id",
               "label": "ID",
-              "type": "integer"
+              "type": "text"
             },
             {
               "field": "count.profit_2017",
@@ -958,11 +958,6 @@
           "geom_3857": "geom_3857",
           "qID": "id",
           "infoj": [
-              {
-                  "field": "shoptownid",
-                  "label": "Shop town ID",
-                  "type": "text"
-              },
               {
                   "field": "shop_town",
                   "label": "Shop town",
