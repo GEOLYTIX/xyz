@@ -341,7 +341,7 @@ function addInfojToList(record) {
             next = element.children[i];
             prev = element.children[i-1];
             
-            if(next && next.children){
+            if(next && next.children && next.children.length == 1){
                 
                 if(next.children[0].classList.contains("label") && prev.children[prev.children.length-1].classList.contains("label")){
                     

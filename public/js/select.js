@@ -382,9 +382,12 @@ module.exports = () => {
         let idx = _xyz.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
 
-        setTimeout(() => {
+        if (view_mode === 'desktop') setTimeout(() => {
             let el = document.querySelector('.mod_container > .scrolly');
             el.scrollTop = el.clientHeight;
         }, 500);
+
+        // Make select tab active on mobile device.
+        if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
     }
 }
