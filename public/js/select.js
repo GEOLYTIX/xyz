@@ -56,6 +56,7 @@ module.exports = () => {
     _xyz.map.getPane('select_circle').style.zIndex = 602;
 
     // Create recordset if it doesn't exist yet.
+    if (!_xyz.select) _xyz.select = {};
     if (!_xyz.select.records) _xyz.select.records = [
         {
           "letter": "A",

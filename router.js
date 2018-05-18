@@ -13,20 +13,20 @@ router.use((req, res, next) => {
 const fs = require('fs');
 
 global.appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
-JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
-{
-    "locales": {
-        "Global": {
-            "layers": {
-                "base": {
-                    "display": true,
-                    "format": "tiles",
-                    "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
+    {
+        "locales": {
+            "Global": {
+                "layers": {
+                    "base": {
+                        "display": true,
+                        "format": "tiles",
+                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    }
                 }
             }
         }
-    }
-};
+    };
 
 // Store all string keys in global array to check for SQL injections.
 global.appSettingsValues = [];
@@ -54,18 +54,20 @@ router.get('/', isLoggedIn, (req, res) => {
     let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
 
     // Assign session hooks from params.
-    if (!req.session.hooks || !process.env.LOGIN) req.session.hooks = {};
-    if (params[0] !== '')
-        params.forEach(p => {
-            let kv = p.split('=');
-            req.session.hooks[kv[0]] = kv[1];
-        });
+    if (req.session) {
+        if (!req.session.hooks || !process.env.LOGIN) req.session.hooks = {};
+        if (params[0] !== '')
+            params.forEach(p => {
+                let kv = p.split('=');
+                req.session.hooks[kv[0]] = kv[1];
+            });
 
-    global.appSettings.hooks = req.session.hooks;
+        global.appSettings.hooks = req.session.hooks;
+    }
 
     // Check whether request comes from a mobile platform and set template.
     let md = new Md(req.headers['user-agent']),
-        tmpl = req.session.hooks.report ?
+        tmpl = req.session && req.session.hooks && req.session.hooks.report ?
             jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
                 jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
 
@@ -90,7 +92,7 @@ router.get('/', isLoggedIn, (req, res) => {
 });
 
 router.get('/dev', (req, res) => {
-    res.sendFile('./views/desktop_.html', {root: __dirname });
+    res.sendFile('./views/desktop_.html', { root: __dirname });
 })
 
 // Set highlight and and markdown-it to turn markdown into flavoured html.
@@ -238,7 +240,7 @@ router.get('/verify/:token', (req, res) => {
 
         // Return if user account is not found.
         if (!_user) return res.send('The verification has failed.')
-        
+
         // Verify and save the account.
         _user.verified = true;
 
@@ -284,7 +286,7 @@ router.get('/approve/:token', (req, res) => {
 
         // Return if user account is not found.
         if (!_user) return res.send('The approval has failed.')
-       
+
         // Verify and save the account.
         _user.approved = true;
         _user.save();
@@ -316,10 +318,10 @@ router.get('/admin', isAdmin, (req, res) => {
 router.post('/update_user', isAdmin, (req, res) => {
 
     // Find user from email address.
-    require('./mod/user').findOne({email: req.body.email}, (err, _user) => {
+    require('./mod/user').findOne({ email: req.body.email }, (err, _user) => {
 
         // Return if no user account is found.
-        if (!_user) return res.json({update: false});
+        if (!_user) return res.json({ update: false });
 
         // Update role and save user account.
         _user[req.body.role] = req.body.chk;
@@ -335,7 +337,7 @@ router.post('/update_user', isAdmin, (req, res) => {
         }
 
         // Return to admin panel.
-        res.json({update: true});
+        res.json({ update: true });
     });
 });
 
@@ -343,14 +345,14 @@ router.post('/update_user', isAdmin, (req, res) => {
 router.post('/delete_user', isAdmin, (req, res) => {
 
     // Find user from email address.
-    require('./mod/user').findOne({email: req.body.email}, (err, _user) => {
+    require('./mod/user').findOne({ email: req.body.email }, (err, _user) => {
 
         // Return if no user account is found.
-        if (!_user) return res.json({delete: false});
+        if (!_user) return res.json({ delete: false });
 
         // Remove user account and return to admin panel.
         _user.remove();
-        res.json({delete: true});
+        res.json({ delete: true });
     });
 });
 
@@ -371,10 +373,10 @@ function isLoggedIn(req, res, next) {
                 }
             }
 
-            req.session.hooks = Object.keys(o).length > 0 ?
+            if (req.session) req.session.hooks = Object.keys(o).length > 0 ?
                 o : req.session.hooks ?
                     req.session.hooks : false;
-            
+
             return next();
         }
 
@@ -388,7 +390,7 @@ function isLoggedIn(req, res, next) {
                 o[key_val[0]] = key_val[1];
             });
 
-        req.session.hooks = Object.keys(o).length > 0 ? o : false;
+        if (req.session) req.session.hooks = Object.keys(o).length > 0 ? o : false;
 
         res.redirect((process.env.DIR || '') + '/login');
     }

@@ -2,6 +2,8 @@ const utils = require('./utils');
 
 module.exports = function(){
 
+    if (!_xyz.hooks) _xyz.hooks = {};
+
     // Set view hook containing lat, lng and zoom.
     _xyz.setViewHook = (cntr) => {
         _xyz.hooks.lat = cntr.lat;
