@@ -197,7 +197,7 @@ module.exports = () => {
             // Create a point feature from the lat lon in the MapBox ID.
             createFeature({
                 "type": "Point",
-                "coordinates": id.split(',')
+                "coordinates": id
             })
             return;
         }
