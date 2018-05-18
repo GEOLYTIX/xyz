@@ -15,12 +15,11 @@ function addInfojToList(record) {
 
     // Populate the table from the features infoj object.
     Object.values(record.location.infoj).forEach(entry => {
-
         // Create new table row at given level and append to table.
         let tr = utils.createElement('tr', {
             className: 'lv-' + (entry.level || 0)
         }, table);
-
+        
         // Create new table cell for label and append to table.
         if (entry.label){
             let label = utils._createElement({
@@ -332,9 +331,30 @@ function addInfojToList(record) {
                 entry.value = this.value;
             });
         }
-
     });
-
+    
+    // hides rows which don't have data available
+    function hide_empty_sections(element){
+        let prev, next;
+        for(let i = 1; i < element.children.length; i++){
+            
+            next = element.children[i];
+            prev = element.children[i-1];
+            
+            if(next && next.children && next.children.length == 1){
+                
+                if(next.children[0].classList.contains("label") && prev.children[prev.children.length-1].classList.contains("label")){
+                    
+                    next.children[0].style.display = "none";
+                    prev.children[prev.children.length-1].style.display = "none";
+                }
+            }
+        
+        }
+        return element;
+    }
+    
+    hide_empty_sections(table);
     return table;
 }
 
