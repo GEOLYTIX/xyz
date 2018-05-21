@@ -108,6 +108,13 @@
                 }
                 .block {
                     padding: 5px 0;
+                    
+                    i {
+                        color: $glxgreen;
+                        font-size: 14px;
+                        float: right;
+                    }
+                    
                 }
                 .half {
                     width: 48%;
