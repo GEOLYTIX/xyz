@@ -36,7 +36,8 @@ let dom = {
 };
 
 // Set locale default.
-_xyz.locale = _xyz.hooks.locale || _xyz.locale || Object.keys(_xyz.locales)[0];
+if (!_xyz.locale) _xyz.locale = Object.keys(_xyz.locales)[0];
+_xyz.locale = _xyz.hooks.locale || _xyz.locale;
 
 // Set locale to hook, or set hook for locale.
 if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
