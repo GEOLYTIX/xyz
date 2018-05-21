@@ -1,3 +1,5 @@
+const filters = require('./filters');
+
 async function newRecord(req, res) {
 
     let q,
@@ -40,21 +42,11 @@ async function newAggregate(req, res) {
         geom_source = req.query.geom_source === 'undefined' ? 'geom' : req.query.geom_source,
         filter = JSON.parse(req.query.filter),
         filter_sql = '';
-    
-  Object.keys(filter).map(field => {
-
-    if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
-    if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
-    if((filter[field].gt)) filter_sql += ` AND ${field} > ${filter[field].gt}`;
-    if((filter[field].lt)) filter_sql += ` AND ${field} < ${filter[field].lt}`;
-    if((filter[field].gte)) filter_sql += ` AND ${field} >= ${filter[field].gte}`;
-    if((filter[field].lte)) filter_sql += ` AND ${field} <= ${filter[field].lte}`;
-    if((filter[field].like)) filter_sql += ` AND ${field} ILIKE '${filter[field].like}%'`;
-    if((filter[field].match)) filter_sql += ` AND ${field} ILIKE '${filter[field].match}'`;
-  });
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table_target, table_source, geom_target, geom_source], res).statusCode === 406) return;
+    
+    filter_sql = filters.sql_filter(filter, filter_sql);
 
     // if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
