@@ -44,23 +44,76 @@ function layerFilters(layer){
     
     let block, title, content, remove_filter;
     
+    function add_run_button(){
+        
+        function run_onclick(e){
+            layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
+                dbs: layer.dbs,
+                table_source: layer.table,
+                table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                filter: JSON.stringify(layer.filter),
+                geom_target: undefined,
+                geom_source: undefined
+            }));
+            
+            layer.xhr.onload = function(){
+                let json = JSON.parse(this.response);
+                //console.log(json);
+                if(this.status === 200){
+                    _xyz.select.selectLayerFromEndpoint({
+                        layer: layer.aggregate_layer,
+                        table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                        id: json.id,
+                        marker: [json.lng, json.lat],
+                        filter: JSON.stringify(layer.filter)
+                    });
+                }
+            };
+            layer.xhr.send();
+        }
+        
+        let run = utils.createElement('div', {
+            classList: "btn_wide cursor noselect",
+            onclick: run_onclick,
+            textContent: "Run Output"
+        });
+        
+        run.style.display = "none";
+        filters.appendChild(run);
+    }
+    
     function select_onchange(e){
         let _val = this.value, _select = this;
         
+        // disable selected option
         _select.options[_select.selectedIndex].disabled = true;
         
+        // show run button
+        filters.lastChild.style.display = "block";
+        
+        // show reset all button
+        _select.nextSibling.style.display = "block";
+        
+        // enable option back
         function enable_option(select, val){
             for(let opt of select.options){
                 if(opt.value === val) opt.disabled = false;
             }
         }
-        
+        // remove unwanted filter
         function remove_filter_onclick(e){
             e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
             delete layer.filter[_val];
             enable_option(_select, _val);
             layer.getLayer();
+            
+            // hide run button when last filter block is removed
+            if(!_select.nextSibling.nextSibling.classList.contains('block')) {
+                filters.lastChild.style.display = "none";
+                _select.nextSibling.style.display = "none";
+            };
         }
+        
         
         Object.keys(layer.infoj).map(function(key){
             if(layer.infoj[key].filter && layer.infoj[key].field === _val){
@@ -93,7 +146,7 @@ function layerFilters(layer){
                             block.appendChild(content);
                         }
                     });
-                    filters.appendChild(block);
+                   filters.insertBefore(block, filters.lastChild);
                 
                 } else {
                     
@@ -117,7 +170,7 @@ function layerFilters(layer){
                         }
                         
                         filter_numeric(layer, options); 
-                        filters.appendChild(block);
+                        filters.insertBefore(block, filters.lastChild);
                     }
                     
                     if(layer.infoj[key].filter === "like" || layer.infoj[key].filter ==="match"){
@@ -142,7 +195,7 @@ function layerFilters(layer){
                         options.operator = layer.infoj[key].filter;
                         
                         filter_text(layer, options);
-                        filters.appendChild(block);
+                        filters.insertBefore(block, filters.lastChild);
                     }
                     
                     if(layer.infoj[key].filter === "date"){
@@ -165,12 +218,12 @@ function layerFilters(layer){
                         
                         // filter date function
                         filter_date(layer, options);
-                        filters.appendChild(block);
+                        filters.insertBefore(block, filters.lastChild);
+                        
                     }
                 }
             }
         });
-        //this.value = null;
         this.selectedIndex = 0;
     }
     
@@ -188,239 +241,42 @@ function layerFilters(layer){
         }
     });
     
-    
-    function run_onclick(e){
-        //console.log('apply filter to layer');
-        layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
-            dbs: layer.dbs,
-            table_source: layer.table,
-            table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-            filter: JSON.stringify(layer.filter),
-            geom_target: undefined,
-            geom_source: undefined
-        }));
-        
-        layer.xhr.onload = function(){
-            let json = JSON.parse(this.response);
-            //console.log(json);
-            if(this.status === 200){
-                _xyz.select.selectLayerFromEndpoint({
-                            layer: layer.aggregate_layer,
-                            table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-                            id: json.id,
-                            marker: [json.lng, json.lat],
-                            filter: JSON.stringify(layer.filter)
-                        });
-            }
-        };
-        layer.xhr.send();
-        
-    }
-    
-    /*let reset_onclick = function(){
-        console.log('reset all filters');
-        /*let siblings = options.appendTo.children;
+    let reset_all_onclick = function(){ // to be redone
+        let siblings = this.parentNode.children;
+        console.log(siblings);
         for(let sibling of siblings){
-            if(sibling.tagName === 'INPUT'){
-                sibling.value = '';
+            if(sibling.classList.contains("block")){
+                //this.parentNode.removeChild(sibling);
+            } 
+            if(sibling.tagName == 'SELECT'){
+                for(let opt of sibling){
+                    //opt.disabled = false;
+                }
             }
         }
+        Object.keys(layer.infoj).map(function(key){
+            if(layer.infoj[key].filter){
+                layer.filter[layer.infoj[key].field] = {};
+            }
+        });
         this.style.display = "none";
-        layer.filter[options.field] = {};
-        layer.getLayer();*/
-    /*}
+        layer.getLayer();
+    }
     
-    let reset = utils.createElement('div', {
+    let reset_all = utils.createElement("div", {
         classList: "btn_small cursor noselect",
-        textContent: "Reset",
-        onclick: reset_onclick
-    }, filters);*/
-    
-    filters.appendChild(select);
-    
-    let run = utils.createElement('div', {
-        classList: "btn_wide cursor noselect",
-        onclick: run_onclick,
-        textContent: "Run Output"
+        textContent: "Reset all",
+        onclick: reset_all_onclick
     });
     
-    run.style.display = "block";
-    //run.style.display = "none";
-    filters.appendChild(run);
+    reset_all.style.display = "none";
+    
+    filters.appendChild(select);
+    filters.appendChild(reset_all);
+    add_run_button();
     
     return filters;
 }
-
-/*function layerFilters2(layer){
-    
-    let filters = utils.createElement('div', {
-        classList: 'section expandable'
-    });
-
-    utils._createElement({
-        tag: 'div',
-        options: {
-            className: 'btn_text cursor noselect',
-            textContent: 'Filtering'
-        },
-        appendTo: filters,
-        eventListener: {
-            event: 'click',
-            funct: e => {
-                e.stopPropagation();
-                utils.toggleExpanderParent({
-                    expandable: filters,
-                    accordeon: true,
-                    scrolly: document.querySelector('.mod_container > .scrolly')
-                })
-            }
-        }
-    });
-    
-    let block, title, content;
-    
-    Object.keys(layer.infoj).map(function(key){
-        
-        if(typeof(layer.infoj[key].filter) === "object"){
-            
-            block = utils.createElement('div', {
-                classList: "block"
-            });
-            
-            title = utils.createElement('div', {
-                textContent: layer.infoj[key].label,
-                classList: "title"
-            }, block);
-            
-            Object.keys(layer.infoj[key].filter).map(function(_key){
-                
-                for(let val of layer.infoj[key].filter[_key]){
-                    
-                    let index = layer.infoj[key].filter[_key].indexOf(val);
-                    
-                    let options = {
-                        field: layer.infoj[key].field,
-                        operator: 'in',
-                        value: val
-                    }
-                    
-                    content = filter_checkbox(options, layer);
-                    block.appendChild(content);
-                }
-
-            });
-            filters.appendChild(block);
-            
-        } else {
-
-            if(layer.infoj[key].filter === "numeric"){
-                
-                block = utils.createElement('div', {
-                    classList: "block"
-                });
-                
-                title = utils.createElement('div', {
-                    textContent: layer.infoj[key].label,
-                    classList: "title"
-                }, block);
-                
-                let options = {
-                    field: layer.infoj[key].field,
-                    label: layer.infoj[key].label,
-                    appendTo: block
-                }
-                
-                filter_numeric(layer, options); 
-                filters.appendChild(block);
-            }
-            
-            if(layer.infoj[key].filter === "like" || layer.infoj[key].filter ==="match"){
-                
-                block = utils.createElement('div', {
-                    classList: "block"
-                });
-                
-                title = utils.createElement('div', {
-                    textContent: layer.infoj[key].label,
-                    classList: "title"
-                }, block);
-                
-                let options = {
-                    field: layer.infoj[key].field,
-                    label: layer.infoj[key].label,
-                    appendTo: block
-                }
-                
-                options.operator = layer.infoj[key].filter;
-
-                filter_text(layer, options);
-                filters.appendChild(block);
-
-            }
-            
-            if(layer.infoj[key].filter === "date"){
-                block = utils.createElement('div', {
-                    classList: "block"
-                });
-                
-                title = utils.createElement('div', {
-                    textContent: layer.infoj[key].label,
-                    classList: "title"
-                }, block);
-                
-                let options = {
-                    field: layer.infoj[key].field,
-                    label: layer.infoj[key].label,
-                    appendTo: block
-                }
-                
-                // filter date function
-                filter_date(layer, options);
-                filters.appendChild(block);
-            }
-        }
-        
-    });
-    
-    function run_onclick(e){
-        //console.log('apply filter to layer');
-        layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
-            dbs: layer.dbs,
-            table_source: layer.table,
-            table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-            filter: JSON.stringify(layer.filter),
-            geom_target: undefined,
-            geom_source: undefined
-        }));
-        
-        layer.xhr.onload = function(){
-            let json = JSON.parse(this.response);
-            //console.log(json);
-            if(this.status === 200){
-                _xyz.select.selectLayerFromEndpoint({
-                            layer: layer.aggregate_layer,
-                            table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-                            id: json.id,
-                            marker: [json.lng, json.lat],
-                            filter: JSON.stringify(layer.filter)
-                        });
-            }
-        };
-        layer.xhr.send();
-        
-    }
-    
-    let run = utils.createElement('div', {
-        classList: "btn_wide cursor noselect",
-        onclick: run_onclick,
-        textContent: "Run Output"
-    });
-    
-    run.style.display = "block";
-    filters.appendChild(run);
-
-    return filters;
-}*/
 
 // create text filter
 function filter_text(layer, options){
