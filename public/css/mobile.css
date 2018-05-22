@@ -420,6 +420,10 @@ input[type=range]::-moz-range-thumb {
               content: "expand_less"; }
         .mod_container .module .drawer .panel .block {
           padding: 5px 0; }
+          .mod_container .module .drawer .panel .block i {
+            color: #079e00;
+            font-size: 14px;
+            float: right; }
         .mod_container .module .drawer .panel .half {
           width: 48%;
           display: inline-block; }
