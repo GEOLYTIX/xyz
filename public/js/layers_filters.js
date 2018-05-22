@@ -241,25 +241,31 @@ function layerFilters(layer){
         }
     });
     
-    let reset_all_onclick = function(){ // to be redone
-        let siblings = this.parentNode.children;
-        console.log(siblings);
+    let reset_all_onclick = function(e){ // to be redone
+        let siblings = this.parentNode.children, len = siblings.length;
+
+        // removes filter blocks
+        while (e.target.nextSibling !== e.target.parentNode.lastChild){
+            e.target.parentNode.removeChild(e.target.nextSibling);
+        }
+        
+        // enable select options
         for(let sibling of siblings){
-            if(sibling.classList.contains("block")){
-                //this.parentNode.removeChild(sibling);
-            } 
             if(sibling.tagName == 'SELECT'){
-                for(let opt of sibling){
-                    //opt.disabled = false;
+                for(let opt of sibling.options){
+                    opt.disabled = false;
                 }
             }
         }
+        // remove applied filters
         Object.keys(layer.infoj).map(function(key){
             if(layer.infoj[key].filter){
                 layer.filter[layer.infoj[key].field] = {};
             }
         });
+        // hide filtering buttons, reload layer.
         this.style.display = "none";
+        e.target.parentNode.lastChild.style.display = "none";
         layer.getLayer();
     }
     
@@ -268,8 +274,6 @@ function layerFilters(layer){
         textContent: "Reset all",
         onclick: reset_all_onclick
     });
-    
-    reset_all.style.display = "none";
     
     filters.appendChild(select);
     filters.appendChild(reset_all);
