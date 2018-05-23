@@ -73,6 +73,10 @@ function mvt_style(layer){
     return style_section;
 }
 
+function color_picker(layer){
+    
+}
+
 module.exports = {
     mvt_style: mvt_style
 }

@@ -131,8 +131,8 @@
               "type": "text"
             },
             {
-              "field": "Country",
-              "label": "country",
+              "field": "country",
+              "label": "Country",
               "type": "text"
             },
             {
@@ -143,7 +143,7 @@
             },
             {
               "field": "competition",
-              "label": "Type",
+              "label": "Competition",
               "type": "text",
               "inline": true,
               "filter": "like"
@@ -586,6 +586,145 @@
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
+            }
+          ],
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.01,
+          "style": {
+            "markerMin": 15,
+            "markerMax": 40,
+            "marker": "svg_symbols.target([400,'#bbb'])",
+            "markerMulti": [
+              400,
+              "#bbb"
+            ],
+            "theme": {
+              "label": "Competition Type",
+              "type": "categorized",
+              "competitors": {
+                "MONOPOLY": {
+                  "colour": "#143156",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "colour": "#FFDE3B",
+                  "label": "Multi competiton"
+                },
+                "SINGLE COMP": {
+                  "colour": "#2274A5",
+                  "label": "Single competiton"
+                }
+              },
+              "cat": {
+                "MONOPOLY": {
+                  "marker": "svg_symbols.target([400, '#143156'])",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "marker": "svg_symbols.target([400, '#FFDE3B'])",
+                  "label": "Multi competition"
+                },
+                "SINGLE COMP": {
+                  "marker": "svg_symbols.target([400,'#2274A5'])",
+                  "label": "Single competition"
+                }
+              }
+            }
+          }
+        },
+         "williamhill_editable": {
+          "editable": "geometry",
+          "display": true,
+          "name": "William Hill Shops (editable)",
+          "meta": "All William Hill Shops May 2018.",
+          "format": "cluster",
+          "pane": [
+            "williamhill",
+            540
+          ],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "williamhill_09052018",
+          "cluster_label": "shop_name",
+          "cluster_cat": "competition",
+          "aggregate_layer": "scratch",
+          "infoj": [
+            {
+              "field": "lbo_no",
+              "label": "ID",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "shop_name",
+              "label": "Shop name",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "postcode",
+              "label": "Postal code",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "seamless_town",
+              "label": "Town",
+              "type": "text"
+            },
+            {
+              "field": "region",
+              "label": "Area",
+              "type": "text"
+            },
+            {
+              "field": "country",
+              "label": "Country",
+              "type": "text"
+            },
+            {
+              "field": "open_closed",
+              "label": "Shop status",
+              "type": "text",
+              "inline": true,
+              "options": [
+                  "Open", "Closed"
+              ]
+            },
+            {
+              "field": "competition",
+              "label": "Competition",
+              "type": "text",
+              "inline": true,
+              "options": [
+                  "MONOPOLY", "SINGLE COMP", "MULTI COMP"
+              ]
+            },
+            {
+              "label": "Tenure"
+            },
+            {
+              "field": "tenure",
+              "label": "Tenure type",
+              "type": "text",
+              "inline": true,
+              "level": 1,
+              "options": [
+                  "Freehold", "Leasehold"
+              ]
+            },
+            {
+              "field": "break_v_expire2",
+              "label": "Break vs expire date",
+              "type": "text",
+              "inline": true,
+              "level": 1
+            },
+            {
+              "field": "rent",
+              "label": "Rent p.a.",
+              "type": "numeric",
+              "level": 1
             }
           ],
           "cluster_kmeans": 50,
