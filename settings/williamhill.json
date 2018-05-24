@@ -922,6 +922,7 @@
           "tilecache": "gb_region__tc",
           "style": {
             "default": {
+              "fillColor": "#eee",
               "weight": 1,
               "color": "#333",
               "fill": true,
