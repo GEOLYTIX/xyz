@@ -634,7 +634,7 @@
         },
          "williamhill_editable": {
           "editable": "geometry",
-          "display": true,
+          "display": false,
           "name": "William Hill Shops (editable)",
           "meta": "All William Hill Shops May 2018.",
           "format": "cluster",
