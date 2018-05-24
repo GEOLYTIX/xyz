@@ -54,6 +54,8 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     Object.keys(process.env).map(key => {
         if (key.split('_')[0] === 'DBS') {
             global.DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
+
+            // connect reconnect issue
             global.DBS[key.split('_')[1]].connect();
         }
     });

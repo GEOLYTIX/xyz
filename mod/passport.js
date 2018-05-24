@@ -1,24 +1,44 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const user = require('./user');
 const mailer = require('./mailer');
 
-passport.serializeUser((_user, done) => done(null, _user.id));
-
-passport.deserializeUser((id, done) => user.findById(id, (err, _user) => done(err, _user)));
+let user_model;
 
 passport.use('localLogin',
     new localStrategy({
         usernameField: 'email',
         passwordField: 'password',
         passReqToCallback: true
-    }, (req, email, password, done) => {
-        user.findOne({ 'email': email }, (err, _user) => {
-            if (err) return done(err)
-            if (!_user || !_user.validPassword(password)) return done(null, false)
+    }, async (req, email, password, done) => {
 
-            return done(null, _user);
-        });
+        let mongoose = require('mongoose'),
+            bcrypt = require('bcrypt-nodejs'),
+            userSchema = mongoose.Schema({
+                email: String,
+                password: String,
+                verified: Boolean,
+                approved: Boolean,
+                admin: Boolean,
+                verificationToken: String,
+                verificationTokenExpires: Date
+            });
+
+        userSchema.methods.generateHash = function (password) {
+            return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+        };
+
+        userSchema.methods.validPassword = function (password) {
+            return bcrypt.compareSync(password, this.password);
+        };
+
+        if (!user_model) user_model = mongoose.model('user', userSchema);
+
+        passport.serializeUser((_user, done) => done(null, _user.id));
+
+        passport.deserializeUser((id, done) => user_model.findById(id, (err, _user) => done(err, _user)));
+
+        await mongoose.connect(process.env.LOGIN);
+        done(null, await user_model.findOne({ 'email': email }));
     }));
 
 passport.use('localRegister',
@@ -28,7 +48,7 @@ passport.use('localRegister',
         passReqToCallback: true
     }, (req, email, password, done) => {
         process.nextTick(() => {
-            user.findOne({ 'email': email }, (err, _user) => {
+            user_model.findOne({ 'email': email }, (err, _user) => {
 
                 // return with err.
                 if (err) return done(err);

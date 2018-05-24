@@ -8,39 +8,6 @@ router.use((req, res, next) => {
     next();
 });
 
-// Set file stream, then read appSettings from file.
-// Use minimum viable settings with single OSM tile layer of settings fail to load.
-const fs = require('fs');
-
-global.appSettings = fs.existsSync(__dirname + '/settings/' + process.env.APPSETTINGS) ?
-    JSON.parse(fs.readFileSync(__dirname + '/settings/' + process.env.APPSETTINGS), 'utf8') :
-    {
-        "locales": {
-            "Global": {
-                "layers": {
-                    "base": {
-                        "display": true,
-                        "format": "tiles",
-                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    }
-                }
-            }
-        }
-    };
-
-// Store all string keys in global array to check for SQL injections.
-global.appSettingsValues = [];
-(function objectEval(o) {
-    Object.keys(o).map(function (key) {
-        if (typeof key === 'string') global.appSettingsValues.push(key);
-        if (typeof o[key] === 'string') global.appSettingsValues.push(o[key]);
-        if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
-    })
-})(global.appSettings)
-
-// Push defaults into appSettingsValues
-Array.prototype.push.apply(global.appSettingsValues, ['geom'])
-
 // Create constructor for mobile detect module.
 const Md = require('mobile-detect');
 
@@ -48,7 +15,9 @@ const Md = require('mobile-detect');
 const jsr = require('jsrender');
 
 // Request application bundle.
-router.get('/', isLoggedIn, (req, res) => {
+router.get('/', isLoggedIn, async (req, res) => {
+
+    await require('./mod/appsettings').getAppSettings();
 
     // Get params from URL.
     let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
@@ -66,8 +35,9 @@ router.get('/', isLoggedIn, (req, res) => {
     }
 
     // Check whether request comes from a mobile platform and set template.
-    let md = new Md(req.headers['user-agent']),
-        tmpl = req.session && req.session.hooks && req.session.hooks.report ?
+    let md = new Md(req.headers['user-agent']);
+
+    let tmpl = req.session && req.session.hooks && req.session.hooks.report ?
             jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
                 jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
 
@@ -110,7 +80,7 @@ const markdown = require('markdown-it')({
 
 // Read documentation.md into file stream and send render of the github flavoured markdown template to client.
 router.get('/documentation', (req, res) => {
-    fs.readFile('..' + (process.env.DIR || '') + '/public/documentation.md', function (err, md) {
+    require('fs').readFile('..' + (process.env.DIR || '') + '/public/documentation.md', function (err, md) {
         if (err) throw err;
         res.send(
             jsr.templates('./views/github.html').render({
@@ -125,7 +95,9 @@ const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.er
 router.get('/mvt/:z/:x/:y', require('./mod/mvt').fetchTiles);
 
 // Proxy for 3rd party services.
-router.get('/proxy_request', (req, res) => require('request')(`${req.query.uri}${global.KEYS[req.query.provider]}`).pipe(res));
+router.get('/proxy_request', (req, res) => {
+    require('request')(`${req.query.uri}${global.KEYS[req.query.provider]}`).pipe(res)
+});
 
 // Get grid data.
 router.get('/q_grid', require('./mod/grid').grid);
@@ -211,23 +183,19 @@ router.get('/logout', (req, res) => {
 });
 
 // Send login information for authentication to passport.
-router.post('/login',
-    require('./mod/passport').authenticate('localLogin', {
-        failureRedirect: (process.env.DIR || '') + '/login',
-        successRedirect: (process.env.DIR || '') + '/',
-        failureMessage: 'Invalid username or password'
-    })
-);
+router.post('/login', require('./mod/passport').authenticate('localLogin', {
+    failureRedirect: (process.env.DIR || '') + '/login',
+    successRedirect: (process.env.DIR || '') + '/',
+    failureMessage: 'Invalid username or password'
+}));
 
 // Send account information for registration to passport.
-router.post('/register',
-    require('./mod/passport').authenticate('localRegister', {
-        failureRedirect: (process.env.DIR || '') + '/login',
-        successMessage: 'A verification email has been sent to the account email.',
-        successRedirect: (process.env.DIR || '') + '/login',
-        failureMessage: 'Registration failure'
-    })
-);
+router.post('/register', require('./mod/passport').authenticate('localRegister', {
+    failureRedirect: (process.env.DIR || '') + '/login',
+    successMessage: 'A verification email has been sent to the account email.',
+    successRedirect: (process.env.DIR || '') + '/login',
+    failureMessage: 'Registration failure'
+}));
 
 // Check verification token and verify account
 router.get('/verify/:token', (req, res) => {
