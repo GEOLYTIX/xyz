@@ -304,6 +304,32 @@ module.exports = (function () {
         return checkbox;
     }
     
+    function slider(options){
+        
+        let title = createElement('span', {
+            textContent: options.title
+        }, options.appendTo);
+        
+        let span = createElement('span', {
+            textContent: options.default,
+            className: "bold"
+        }, options.appendTo);
+        
+        let range_div = createElement('div', {
+            className: "range"
+        });
+        
+        let slider = createElement('input', {
+            type: 'range',
+            min: options.min,
+            value: options.value,
+            max: options.max,
+            oninput: options.oninput
+        }, range_div);
+        
+        options.appendTo.appendChild(range_div);
+    }
+    
     function clone(_obj){
         let _clone;
         _obj instanceof Array ? _clone = [] : _clone = {};
@@ -331,7 +357,7 @@ module.exports = (function () {
         checkbox: checkbox,
         toggleExpanderParent: toggleExpanderParent,
         clone: clone,
-        scrolly: scrolly
-
+        scrolly: scrolly,
+        slider: slider
     };
 })();

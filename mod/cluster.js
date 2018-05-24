@@ -1,3 +1,5 @@
+const filters = require('./filters');
+
 async function cluster(req, res) {
   
   let
@@ -16,20 +18,8 @@ async function cluster(req, res) {
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, cat], res).statusCode === 406) return;
-
-  Object.keys(filter).map(field => {
-
-    if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
-    if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
     
-    if(typeof(filter[field].gt) == "number") filter_sql += ` AND ${field} > ${filter[field].gt}`;
-    if(typeof(filter[field].lt) == "number") filter_sql += ` AND ${field} < ${filter[field].lt}`;
-    if(typeof(filter[field].gte) == "number") filter_sql += ` AND ${field} >= ${filter[field].gte}`;
-    if(typeof(filter[field].lte) == "number") filter_sql += ` AND ${field} <= ${filter[field].lte}`;
-    
-    if((filter[field].like)) filter_sql += ` AND ${field} ILIKE '${filter[field].like}%'`;
-    if((filter[field].match)) filter_sql += ` AND ${field} ILIKE '${filter[field].match}'`;
-  });
+  filter_sql = filters.sql_filter(filter, filter_sql);
 
   // Query the feature count from lat/lng bounding box.
   let q = `
@@ -222,13 +212,8 @@ async function cluster_select(req, res) {
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if (await require('./chk').chkVals([table, geom, id, label], res).statusCode === 406) return;
-
-  Object.keys(filter).map(field => {
-
-    if (filter[field].ni && filter[field].ni.length > 0) filter_sql += ` AND ${field} NOT IN ('${filter[field].ni.join("','")}')`;
-    if (filter[field].in && filter[field].in.length > 0) filter_sql += ` AND ${field} IN ('${filter[field].in.join("','")}')`;
-
-  });
+    
+  filter_sql = filters.legend_filter(filter, filter_sql);
 
   // Query the feature count from lat/lng bounding box.
   let q = `

@@ -335,8 +335,8 @@ function addInfojToList(record) {
     
     // hides rows which don't have data available
     function hide_empty_sections(element){
-        let prev, next;
-        for(let i = 1; i < element.children.length; i++){
+        let prev, next, len = element.children.length;
+        for(let i = 1; i < len; i++){
             
             next = element.children[i];
             prev = element.children[i-1];
@@ -345,8 +345,9 @@ function addInfojToList(record) {
                 
                 if(next.children[0].classList.contains("label") && prev.children[prev.children.length-1].classList.contains("label")){
                     
-                    next.children[0].style.display = "none";
                     prev.children[prev.children.length-1].style.display = "none";
+                    
+                    if(i == len-1) next.children[0].style.display = "none";
                 }
             }
         

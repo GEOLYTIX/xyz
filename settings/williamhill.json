@@ -131,8 +131,8 @@
               "type": "text"
             },
             {
-              "field": "Country",
-              "label": "country",
+              "field": "country",
+              "label": "Country",
               "type": "text"
             },
             {
@@ -143,7 +143,7 @@
             },
             {
               "field": "competition",
-              "label": "Type",
+              "label": "Competition",
               "type": "text",
               "inline": true,
               "filter": "like"
@@ -338,43 +338,6 @@
               "filter": "numeric"
             },
             {
-              "field": "rp_est_stakes_tri_20_2019",
-              "label": "Stakes Tri £20 2019",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gross_win_tri_20_2019",
-              "label": "Gross win Tri £20 2019",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_margin_pct_tri_20_2019",
-              "label": "Margin Tri £20 2019",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "lost_gross_win_tri_20_2019",
-              "label": "Lost gross win Tri £20 2019",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gaming_tri_20_2019",
-              "label": "Gaming Tri £20 2019",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_profit_tri_20_2019",
-              "label": "Profit Tri £20 2019",
-              "type": "numeric",
-              "level": 2,
-              "filter": "numeric"
-            },
-            {
               "field": "rp_est_stakes_tri_2_2019",
               "label": "Stakes Tri £2 2019",
               "type": "numeric",
@@ -441,43 +404,6 @@
             {
               "field": "rp_est_profit_2020",
               "label": "Profit 2020",
-              "type": "numeric",
-              "level": 2,
-              "filter": "numeric"
-            },
-            {
-              "field": "rp_est_stakes_tri_20_2020",
-              "label": "Stakes Tri £20 2020",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gross_win_tri_20_2020",
-              "label": "Gross win Tri £20 2020",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_margin_pct_tri_20_2020",
-              "label": "Margin Tri £20 2020",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "lost_gross_win_tri_20_2020",
-              "label": "Lost gross win Tri £20 2020",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gaming_tri_20_2020",
-              "label": "Gaming Tri £20 2020",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_profit_tri_20_2020",
-              "label": "Profit Tri £20 2020",
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
@@ -554,43 +480,6 @@
               "filter": "numeric"
             },
             {
-              "field": "rp_est_stakes_tri_20_2021",
-              "label": "Stakes Tri £20 2021",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gross_win_tri_20_2021",
-              "label": "Gross win Tri £20 2021",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_margin_pct_tri_20_2021",
-              "label": "Margin Tri £20 2021",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "lost_gross_win_tri_20_2021",
-              "label": "Lost gross win Tri £20 2021",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gaming_tri_20_2021",
-              "label": "Gaming Tri £20 2021",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_profit_tri_20_2021",
-              "label": "Profit Tri £20 2021",
-              "type": "numeric",
-              "level": 2,
-              "filter": "numeric"
-            },
-            {
               "field": "rp_est_stakes_tri_2_2021",
               "label": "Stakes Tri £2 2021",
               "type": "numeric",
@@ -662,43 +551,6 @@
               "filter": "numeric"
             },
             {
-              "field": "rp_est_stakes_tri_20_2022",
-              "label": "Stakes Tri £20 2022",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gross_win_tri_20_2022",
-              "label": "Gross win Tri £20 2022",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_margin_pct_tri_20_2022",
-              "label": "Margin Tri £20 2022",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "lost_gross_win_tri_20_2022",
-              "label": "Lost gross win Tri £20 2022",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_gaming_tri_20_2022",
-              "label": "Gaming Tri £20 2022",
-              "type": "numeric",
-              "level": 2
-            },
-            {
-              "field": "rp_est_profit_tri_20_2022",
-              "label": "Profit Tri £20 2022",
-              "type": "numeric",
-              "level": 2,
-              "filter": "numeric"
-            },
-            {
               "field": "rp_est_stakes_tri_2_2022",
               "label": "Stakes Tri £2 2022",
               "type": "numeric",
@@ -734,6 +586,145 @@
               "type": "numeric",
               "level": 2,
               "filter": "numeric"
+            }
+          ],
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.01,
+          "style": {
+            "markerMin": 15,
+            "markerMax": 40,
+            "marker": "svg_symbols.target([400,'#bbb'])",
+            "markerMulti": [
+              400,
+              "#bbb"
+            ],
+            "theme": {
+              "label": "Competition Type",
+              "type": "categorized",
+              "competitors": {
+                "MONOPOLY": {
+                  "colour": "#143156",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "colour": "#FFDE3B",
+                  "label": "Multi competiton"
+                },
+                "SINGLE COMP": {
+                  "colour": "#2274A5",
+                  "label": "Single competiton"
+                }
+              },
+              "cat": {
+                "MONOPOLY": {
+                  "marker": "svg_symbols.target([400, '#143156'])",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "marker": "svg_symbols.target([400, '#FFDE3B'])",
+                  "label": "Multi competition"
+                },
+                "SINGLE COMP": {
+                  "marker": "svg_symbols.target([400,'#2274A5'])",
+                  "label": "Single competition"
+                }
+              }
+            }
+          }
+        },
+         "williamhill_editable": {
+          "editable": "geometry",
+          "display": true,
+          "name": "William Hill Shops (editable)",
+          "meta": "All William Hill Shops May 2018.",
+          "format": "cluster",
+          "pane": [
+            "williamhill",
+            540
+          ],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "williamhill_09052018",
+          "cluster_label": "shop_name",
+          "cluster_cat": "competition",
+          "aggregate_layer": "scratch",
+          "infoj": [
+            {
+              "field": "lbo_no",
+              "label": "ID",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "shop_name",
+              "label": "Shop name",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "postcode",
+              "label": "Postal code",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "seamless_town",
+              "label": "Town",
+              "type": "text"
+            },
+            {
+              "field": "region",
+              "label": "Area",
+              "type": "text"
+            },
+            {
+              "field": "country",
+              "label": "Country",
+              "type": "text"
+            },
+            {
+              "field": "open_closed",
+              "label": "Shop status",
+              "type": "text",
+              "inline": true,
+              "options": [
+                  "Open", "Closed"
+              ]
+            },
+            {
+              "field": "competition",
+              "label": "Competition",
+              "type": "text",
+              "inline": true,
+              "options": [
+                  "MONOPOLY", "SINGLE COMP", "MULTI COMP"
+              ]
+            },
+            {
+              "label": "Tenure"
+            },
+            {
+              "field": "tenure",
+              "label": "Tenure type",
+              "type": "text",
+              "inline": true,
+              "level": 1,
+              "options": [
+                  "Freehold", "Leasehold"
+              ]
+            },
+            {
+              "field": "break_v_expire2",
+              "label": "Break vs expire date",
+              "type": "text",
+              "inline": true,
+              "level": 1
+            },
+            {
+              "field": "rent",
+              "label": "Rent p.a.",
+              "type": "numeric",
+              "level": 1
             }
           ],
           "cluster_kmeans": 50,
@@ -1159,34 +1150,6 @@
               "label": "RP Estimates 2019"
             },
             {
-              "field": "sum.rp_est_stakes_tri_20_2019",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2019",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2019",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2019",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
               "field": "sum.rp_est_stakes_tri_2_2019",
               "label": "Stakes Tri £2",
               "type": "numeric",
@@ -1216,34 +1179,6 @@
             },
             {
               "label": "RP Estimates 2020"
-            },
-            {
-              "field": "sum.rp_est_stakes_tri_20_2020",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2020",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2020",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2020",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
             },
             {
               "field": "sum.rp_est_stakes_tri_2_2020",
@@ -1277,34 +1212,6 @@
               "label": "RP Estimates 2021"
             },
             {
-              "field": "sum.rp_est_stakes_tri_20_2021",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2021",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2021",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2021",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
               "field": "sum.rp_est_stakes_tri_2_2021",
               "label": "Stakes Tri £2",
               "type": "numeric",
@@ -1334,34 +1241,6 @@
             },
             {
               "label": "RP Estimates 2022"
-            },
-            {
-              "field": "sum.rp_est_stakes_tri_20_2022",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2022",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2022",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2022",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
             },
             {
               "field": "sum.rp_est_stakes_tri_2_2022",
@@ -1610,34 +1489,6 @@
               "label": "RP Estimates 2019"
             },
             {
-              "field": "sum.rp_est_stakes_tri_20_2019",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2019",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2019",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2019",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
               "field": "sum.rp_est_stakes_tri_2_2019",
               "label": "Stakes Tri £2",
               "type": "numeric",
@@ -1667,34 +1518,6 @@
             },
             {
               "label": "RP Estimates 2020"
-            },
-            {
-              "field": "sum.rp_est_stakes_tri_20_2020",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2020",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2020",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2020",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
             },
             {
               "field": "sum.rp_est_stakes_tri_2_2020",
@@ -1728,34 +1551,6 @@
               "label": "RP Estimates 2021"
             },
             {
-              "field": "sum.rp_est_stakes_tri_20_2021",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2021",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2021",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2021",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
               "field": "sum.rp_est_stakes_tri_2_2021",
               "label": "Stakes Tri £2",
               "type": "numeric",
@@ -1785,34 +1580,6 @@
             },
             {
               "label": "RP Estimates 2022"
-            },
-            {
-              "field": "sum.rp_est_stakes_tri_20_2022",
-              "label": "Stakes Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gross_win_tri_20_2022",
-              "label": "Gross win Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_gaming_tri_20_2022",
-              "label": "Gaming Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
-            },
-            {
-              "field": "sum.rp_est_profit_tri_20_2022",
-              "label": "Profit Tri £20",
-              "type": "numeric",
-              "layer": "williamhill",
-              "level": 2
             },
             {
               "field": "sum.rp_est_stakes_tri_2_2022",
@@ -1852,7 +1619,8 @@
               "weight": 1,
               "color": "#777",
               "fill": true,
-              "opacity": 0.5,
+              "fillColor": "#AAA",
+              "opacity": 0.4,
               "fillOpacity": 0
             },
             "highlight": {

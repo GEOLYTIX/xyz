@@ -1,6 +1,7 @@
 const utils = require('./utils');
 const d3 = require('d3');
 const lfs = require('./layers_filters');
+const lss = require('./layers_style');
 
 function panel(layer) {
 
@@ -19,6 +20,8 @@ function panel(layer) {
     
     // apply filters if exist
     if(!!lfs.applyFilters(layer)) panel.appendChild(lfs.layerFilters(layer));
+    
+    if (layer.format === 'mvt') panel.appendChild(lss.mvt_style(layer));
         
     if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
 
@@ -29,6 +32,7 @@ function panel(layer) {
     if (layer.format === 'cluster' && layer.style && layer.style.theme && layer.style.theme.type === 'graduated') panel.appendChild(clusterGraduated(layer));
 
     if (layer.format === 'grid') panel.appendChild(gridControl(layer));
+    
 
     return panel;
 }
