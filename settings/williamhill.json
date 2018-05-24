@@ -1619,12 +1619,12 @@
               "weight": 1,
               "color": "#777",
               "fill": true,
-              "fillColor": "#AAA",
+              "fillColor": "#aaa",
               "opacity": 0.4,
               "fillOpacity": 0
             },
             "highlight": {
-              "color": "#CD8B76",
+              "color": "#cd8B76",
               "fill": true,
               "opacity": 1,
               "fillOpacity": 0.3,
