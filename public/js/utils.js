@@ -330,6 +330,22 @@ module.exports = (function () {
         options.appendTo.appendChild(range_div);
     }
     
+    function rgbToHex(color) {
+        if (color.substr(0, 1) === '#') {
+            return color;
+        }
+        
+        let digits = /(.*?)rgb\((\d+), (\d+), (\d+)\)/.exec(color);
+        
+        let red = parseInt(digits[2]);
+        let green = parseInt(digits[3]);
+        let blue = parseInt(digits[4]);
+        
+        let rgb = blue | (green << 8) | (red << 16);
+        
+        return digits[1] + '#' + rgb.toString(16);
+    };
+    
     function clone(_obj){
         let _clone;
         _obj instanceof Array ? _clone = [] : _clone = {};
@@ -356,6 +372,7 @@ module.exports = (function () {
         dataURLToBlob: dataURLToBlob,
         checkbox: checkbox,
         toggleExpanderParent: toggleExpanderParent,
+        rgbToHex: rgbToHex,
         clone: clone,
         scrolly: scrolly,
         slider: slider
