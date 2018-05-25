@@ -160,7 +160,7 @@ function mvt_style(layer){
     
     color_picker(layer, {
          property: "color",
-         label: "Highlight hue",
+         label: "Highlight",
          style: "highlight",
          appendTo: style_section
      });
