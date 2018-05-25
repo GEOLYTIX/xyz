@@ -21,27 +21,20 @@ async function getAppSettings() {
     };
 
     await setAppSettingsValues(settings);
-
-    return;
 }
-
-let settings_model; 
 
 async function getSettingsFromMongo() {
-    let mongoose = require('mongoose');
-
-    if (!settings_model) settings_model = mongoose.model('settings', {});
-
-    await mongoose.connect(process.env.APPSETTINGS);
-    let settings = await settings_model.findOne();
-
-    return settings._doc;
+    let settings  = await global.ORM.collections.settings.find().limit(1);
+    return settings[0];
 }
 
-async function getSettingsFromFile(){
+async function getSettingsFromFile() {
     let fs = require('fs');
     return fs.existsSync('./settings/' + process.env.APPSETTINGS) ?
         JSON.parse(fs.readFileSync('./settings/' + process.env.APPSETTINGS), 'utf8') : {};
+
+
+    
 }
 
 function setAppSettingsValues(settings) {

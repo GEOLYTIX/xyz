@@ -38,8 +38,8 @@ router.get('/', isLoggedIn, async (req, res) => {
     let md = new Md(req.headers['user-agent']);
 
     let tmpl = req.session && req.session.hooks && req.session.hooks.report ?
-            jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
-                jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
+        jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
+            jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
 
     // Build the template with jsrender and send to client.
     res.send(
@@ -60,10 +60,6 @@ router.get('/', isLoggedIn, async (req, res) => {
             </script>`
         }))
 });
-
-router.get('/dev', (req, res) => {
-    res.sendFile('./views/desktop_.html', { root: __dirname });
-})
 
 // Set highlight and and markdown-it to turn markdown into flavoured html.
 const hljs = require('highlight.js');
@@ -182,15 +178,17 @@ router.get('/logout', (req, res) => {
     res.redirect((process.env.DIR || '') + '/login');
 });
 
+const security = require('./security');
+
 // Send login information for authentication to passport.
-router.post('/login', require('./mod/passport').authenticate('localLogin', {
+router.post('/login', security.passport.authenticate('localLogin', {
     failureRedirect: (process.env.DIR || '') + '/login',
     successRedirect: (process.env.DIR || '') + '/',
     failureMessage: 'Invalid username or password'
 }));
 
 // Send account information for registration to passport.
-router.post('/register', require('./mod/passport').authenticate('localRegister', {
+router.post('/register', security.passport.authenticate('localRegister', {
     failureRedirect: (process.env.DIR || '') + '/login',
     successMessage: 'A verification email has been sent to the account email.',
     successRedirect: (process.env.DIR || '') + '/login',
@@ -198,131 +196,29 @@ router.post('/register', require('./mod/passport').authenticate('localRegister',
 }));
 
 // Check verification token and verify account
-router.get('/verify/:token', (req, res) => {
-
-    // Find user account from matching token and timestamp.
-    require('./mod/user').findOne({
-        verificationToken: req.params.token,
-        verificationTokenExpires: { $gt: Date.now() }
-    }, (err, _user) => {
-
-        // Return if user account is not found.
-        if (!_user) return res.send('The verification has failed.')
-
-        // Verify and save the account.
-        _user.verified = true;
-
-        // Generate new verification token for administrator approval.
-        _user.verificationToken = require('crypto').randomBytes(20).toString('hex');
-        _user.verificationTokenExpires = Date.now() + 3600000;
-
-        _user.save();
-
-        // Find all admin accounts.
-        require('./mod/user').find({ admin: true }, (err, admin) => {
-            if (err) throw err;
-
-            // Create an array of all admin account emails.
-            let adminmail = admin.map(a => {
-                return a.email;
-            });
-
-            // Sent an email to all admin account emails with a request to approve the new user account.
-            require('./mod/mailer').mail({
-                to: adminmail,
-                subject: `A new account has been verified on ${global.site}`,
-                text: `Please log into the admin panel to approve ${_user.email}
-                
-                You can also approve the account by following this link: ${req.protocol}://${global.site}/approve/${_user.verificationToken}`
-            });
-        });
-
-        // Update session messages and send success notification to client.
-        req.session.messages = ['An email has been sent to the site administrator'];
-        res.send('The account has been verified and is awaiting administrator approval.');
-    });
-});
+router.get('/verify/:token', (req, res) => security.verify(req, res));
 
 // Check verification token and approve account
-router.get('/approve/:token', (req, res) => {
+router.get('/approve/:token', (req, res) => security.approve(req, res));
 
-    // Find user account from matching token and timestamp.
-    require('./mod/user').findOne({
-        verificationToken: req.params.token,
-        verificationTokenExpires: { $gt: Date.now() }
-    }, (err, _user) => {
+// Open the user admin panel with a list of all user accounts.
+router.get('/admin', isAdmin, async (req, res) => {
 
-        // Return if user account is not found.
-        if (!_user) return res.send('The approval has failed.')
+    // Get all user accounts from the ORM users collection.
+    let users = await global.ORM.collections.users.find();
 
-        // Verify and save the account.
-        _user.approved = true;
-        _user.save();
-
-        // Sent an email to the account holder to notify about the changes.
-        require('./mod/mailer').mail({
-            to: _user.email,
-            subject: `This account has been approved on ${global.site}`,
-            text: `You are now able to log on to ${req.protocol}://${global.site}`
-        });
-
-        res.send('The account has been approved by you. An email has been sent to the account holder.');
-    });
-});
-
-// Open the user admin panel and populate with list of all accounts (_user).
-router.get('/admin', isAdmin, (req, res) => {
-    require('./mod/user').find({}, (err, _user) => {
-        if (err) throw err;
-
-        res.render('admin.ejs', {
-            data: _user,
-            dir: process.env.DIR || ''
-        });
+    // Pass user accounts to the admin view.
+    res.render('admin.ejs', {
+        data: users,
+        dir: process.env.DIR || ''
     });
 });
 
 // Endpoint for update requests from admin panel.
-router.post('/update_user', isAdmin, (req, res) => {
-
-    // Find user from email address.
-    require('./mod/user').findOne({ email: req.body.email }, (err, _user) => {
-
-        // Return if no user account is found.
-        if (!_user) return res.json({ update: false });
-
-        // Update role and save user account.
-        _user[req.body.role] = req.body.chk;
-        _user.save();
-
-        // Send email to the user account if an account has been approved.
-        if (req.body.role === 'approved' && req.body.chk) {
-            require('./mod/mailer').mail({
-                to: _user.email,
-                subject: `This account has been approved on ${global.site}`,
-                text: `You are now able to log on to ${req.protocol}://${global.site}`
-            });
-        }
-
-        // Return to admin panel.
-        res.json({ update: true });
-    });
-});
+router.post('/update_user', isAdmin, (req, res) => security.update_user(req, res));
 
 // Endpoint for deleting user accounts from admin panel.
-router.post('/delete_user', isAdmin, (req, res) => {
-
-    // Find user from email address.
-    require('./mod/user').findOne({ email: req.body.email }, (err, _user) => {
-
-        // Return if no user account is found.
-        if (!_user) return res.json({ delete: false });
-
-        // Remove user account and return to admin panel.
-        _user.remove();
-        res.json({ delete: true });
-    });
-});
+router.post('/delete_user', isAdmin, (req, res) => security.delete_user(req, res));
 
 // Middleware funtion to check whether a user is logged in.
 function isLoggedIn(req, res, next) {
@@ -331,9 +227,11 @@ function isLoggedIn(req, res, next) {
     if (!process.env.LOGIN) return next();
 
     if (req.isAuthenticated()) {
+
         if (req.user.approved && req.user.verified) {
             let o = {},
                 params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
+
             if (params[0] !== '') {
                 for (let i = 0; i < params.length; i++) {
                     let key_val = params[i].split('=');
