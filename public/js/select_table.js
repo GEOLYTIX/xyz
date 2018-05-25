@@ -333,7 +333,7 @@ function addInfojToList(record) {
         }
     });
     
-    // hides rows which don't have data available
+    // hides label rows which don't have data available
     function hide_empty_sections(element){
         let prev, next, len = element.children.length;
         for(let i = 1; i < len; i++){

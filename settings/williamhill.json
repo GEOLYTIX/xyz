@@ -634,7 +634,7 @@
         },
          "williamhill_editable": {
           "editable": "geometry",
-          "display": true,
+          "display": false,
           "name": "William Hill Shops (editable)",
           "meta": "All William Hill Shops May 2018.",
           "format": "cluster",
@@ -644,7 +644,7 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill_09052018",
+          "table": "williamhill_09052018_editable",
           "cluster_label": "shop_name",
           "cluster_cat": "competition",
           "aggregate_layer": "scratch",
@@ -922,14 +922,15 @@
           "tilecache": "gb_region__tc",
           "style": {
             "default": {
+              "fillColor": "#aaa",
               "weight": 1,
-              "color": "#333",
+              "color": "#777",
               "fill": true,
               "opacity": 0.5,
               "fillOpacity": 0
             },
             "highlight": {
-              "color": "#EEBA0B",
+              "color": "#ffb300",
               "fill": true,
               "opacity": 1,
               "fillOpacity": 0,
@@ -1619,12 +1620,12 @@
               "weight": 1,
               "color": "#777",
               "fill": true,
-              "fillColor": "#AAA",
+              "fillColor": "#aaa",
               "opacity": 0.4,
               "fillOpacity": 0
             },
             "highlight": {
-              "color": "#CD8B76",
+              "color": "#f4511e",
               "fill": true,
               "opacity": 1,
               "fillOpacity": 0.3,
@@ -1634,5 +1635,30 @@
         }
       }
     }
+  },
+  "styles": {
+    "default_palette": [
+          {"hex": "#c62828", "name": "Fire Engine Red"},
+          {"hex": "#f50057", "name": "Folly"},
+          {"hex": "#9c27b0", "name": "Dark Orchid"},
+          {"hex": "#673ab7", "name": "Plump Purple"},
+          {"hex": "#3f51b5", "name": "Violet Blue"},
+          {"hex": "#2196f3", "name": "Dodger Blue"},
+          {"hex": "#03a9f4", "name": "Vivid Cerulean"},
+          {"hex": "#00bcd4", "name": "Turquoise Surf"},
+          {"hex": "#009688", "name": "Dark Cyan"},
+          {"hex": "#4caf50", "name": "Middle Green"},
+          {"hex": "#8bc34a", "name": "Dollar Bill"},
+          {"hex": "#cddc39", "name": "Pear"},
+          {"hex": "#ffeb3b", "name": "Banana Yellow"},
+          {"hex": "#ffb300", "name": "UCLA Gold"},
+          {"hex": "#fb8c00", "name": "Dark Orange"},
+          {"hex": "#f4511e", "name": "Orioles Orange"},
+          {"hex": "#8d6e63", "name": "Dark Chestnut"},
+          {"hex": "#777", "name": "Sonic Silver"},
+          {"hex": "#bdbdbd", "name": "X11 Gray"},
+          {"hex": "#aaa", "name": "Dark Medium Gray"}, 
+          {"hex": "#78909c", "name": "Light Slate Gray"}
+      ]
   }
 }

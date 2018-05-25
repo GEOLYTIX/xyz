@@ -330,6 +330,23 @@ module.exports = (function () {
         options.appendTo.appendChild(range_div);
     }
     
+    function rgbToHex(color) {
+        
+        let hexDigits = new Array
+        ("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"); 
+        
+        function hex(x) {
+            return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+        }
+        
+        if (color.substr(0, 1) === '#') {
+            return color;
+        } else {
+            color = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            return "#" + hex(color[1]) + hex(color[2]) + hex(color[3]);
+        }
+    }
+    
     function clone(_obj){
         let _clone;
         _obj instanceof Array ? _clone = [] : _clone = {};
@@ -337,6 +354,12 @@ module.exports = (function () {
             _clone[key] = _obj[key];
         });
         return _clone;
+    }
+    
+    function get_index_by_value(json_arr, key, val){
+        return json_arr.findIndex((item) => {
+            return item.hasOwnProperty(key) && item[key] === val;
+        });
     }
 
     return {
@@ -356,7 +379,9 @@ module.exports = (function () {
         dataURLToBlob: dataURLToBlob,
         checkbox: checkbox,
         toggleExpanderParent: toggleExpanderParent,
+        rgbToHex: rgbToHex,
         clone: clone,
+        get_index_by_value: get_index_by_value,
         scrolly: scrolly,
         slider: slider
     };
