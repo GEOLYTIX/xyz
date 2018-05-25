@@ -18,42 +18,42 @@ waterline.registerModel(
     })
 );
 
-waterline.registerModel(
-    Waterline.Collection.extend({
-        identity: 'users',
-        primaryKey: '_id',
-        datastore: 'mongo',
-        attributes: {
-            _id: { type: 'string' },
-            email: { type: 'string' },
-            password: { type: 'string' },
-            verified: { type: 'boolean' },
-            approved: { type: 'boolean' },
-            admin: { type: 'boolean' },
-            verificationtoken: { type: 'string' },
-            verificationtokenexpires: { type: 'number' }
-        }
-    })
-);
-
 // waterline.registerModel(
 //     Waterline.Collection.extend({
 //         identity: 'users',
-//         tableName: 'open_users',
-//         primaryKey: 'id',
-//         datastore: 'pg',
+//         primaryKey: '_id',
+//         datastore: 'mongo',
 //         attributes: {
-//             id: { type: 'string', autoMigrations: { autoIncrement: true } },
+//             _id: { type: 'string' },
 //             email: { type: 'string' },
 //             password: { type: 'string' },
 //             verified: { type: 'boolean' },
 //             approved: { type: 'boolean' },
 //             admin: { type: 'boolean' },
-//             verificationtoken: { type: 'string' },
-//             verificationtokenexpires: { type: 'string' }
+//             verificationToken: { type: 'string' },
+//             verificationTokenExpires: { type: 'number' }
 //         }
 //     })
 // );
+
+waterline.registerModel(
+    Waterline.Collection.extend({
+        identity: 'users',
+        tableName: 'open_users',
+        primaryKey: 'id',
+        datastore: 'pg',
+        attributes: {
+            id: { type: 'string', autoMigrations: { autoIncrement: true } },
+            email: { type: 'string' },
+            password: { type: 'string' },
+            verified: { type: 'boolean' },
+            approved: { type: 'boolean' },
+            admin: { type: 'boolean' },
+            verificationToken: { type: 'string', columnName: 'verificationtoken' },
+            verificationTokenExpires: { type: 'string', columnName: 'verificationtokenexpires' }
+        }
+    })
+);
 
 waterline.initialize({
     adapters: {
