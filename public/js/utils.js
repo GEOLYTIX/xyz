@@ -331,20 +331,21 @@ module.exports = (function () {
     }
     
     function rgbToHex(color) {
-        if (color.substr(0, 1) === '#') {
-            return color;
+        
+        let hexDigits = new Array
+        ("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"); 
+        
+        function hex(x) {
+            return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
         }
         
-        let digits = /(.*?)rgb\((\d+), (\d+), (\d+)\)/.exec(color);
-        
-        let red = parseInt(digits[2]);
-        let green = parseInt(digits[3]);
-        let blue = parseInt(digits[4]);
-        
-        let rgb = blue | (green << 8) | (red << 16);
-        
-        return digits[1] + '#' + rgb.toString(16);
-    };
+        if (color.substr(0, 1) === '#') {
+            return color;
+        } else {
+            color = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            return "#" + hex(color[1]) + hex(color[2]) + hex(color[3]);
+        }
+    }
     
     function clone(_obj){
         let _clone;
@@ -353,6 +354,12 @@ module.exports = (function () {
             _clone[key] = _obj[key];
         });
         return _clone;
+    }
+    
+    function get_index_by_value(json_arr, key, val){
+        return json_arr.findIndex((item) => {
+            return item.hasOwnProperty(key) && item[key] === val;
+        });
     }
 
     return {
@@ -374,6 +381,7 @@ module.exports = (function () {
         toggleExpanderParent: toggleExpanderParent,
         rgbToHex: rgbToHex,
         clone: clone,
+        get_index_by_value: get_index_by_value,
         scrolly: scrolly,
         slider: slider
     };

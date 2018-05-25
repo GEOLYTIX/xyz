@@ -1,5 +1,4 @@
 const utils = require('./utils');
-const d3 = require('d3');
 
 function mvt_style(layer){
     
@@ -32,7 +31,7 @@ function mvt_style(layer){
     function color_picker(layer, options){
         
         let block = utils.createElement('div', {
-            classList: "block",
+            classList: "block"
         });
         
         let title = utils.createElement('span', {
@@ -41,55 +40,24 @@ function mvt_style(layer){
         
         let span = utils.createElement('span', {
             classList: "bold",
-            textContent: layer.style[options.style][options.property]
+            textContent: _xyz.styles.default_palette[utils.get_index_by_value(_xyz.styles.default_palette, 'hex', layer.style[options.style][options.property])].name + " (" + 
+            layer.style[options.style][options.property] + ")" || layer.style[options.style][options.property]
         }, block);
         
-        /*function palette(options){
+        function palette(_options){
             
-            let dim_x = 8, dim_y = 2;
-            let a = 20;
-            let c = 0;
-           
-            let colors = ['#69c242', '#64bbe3', '#ffcc00', '#ff7300', '#cf2030'];
-            let color = d3.scaleOrdinal().range(colors);
-            let width = (dim_x + 0.5)*a;
-            let height = (dim_y + 0.5)*a;
-            
-            
-            //let svg = options.appendTo.append('svg').attr('width', width).attr('height', height);
-            let svg = d3.select(options.appendTo).append('svg').attr('width', width).attr('height', height);
-            
-            for(let i = 0; i < dim_x; i++){
-                for(let j = 0; j < dim_y; j++){
-                    
-                    svg.append('rect')
-                        .attr('width', a)
-                        .attr('height', a)
-                        .attr('x', i+i*a)
-                        .attr('y', j + j*a)
-                        .style('fill', color(c))
-                        .on('click', function(){
-                            console.log( this.style.fill);
-                            options.appendTo.style.display = "none";
-                    })
-                        .style('cursor', 'pointer')
-                        .append('title').text(color(c));
-                    c++;
-                }
-            }
-            //options.appendTo.style.display = "none";
-        }*/
-        
-        function palette2(_options){
-            let colors = ['#c62828', '#f50057', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b','#ffb300', '#fb8c00', '#f4511e', '#8d6e63', '#bdbdbd', '#78909c'];
-            
-            let color = d3.scaleOrdinal().range(colors);
+            let colors = _xyz.styles.default_palette;
             
             let _col_onclick = function(){
                 
+                let _color = this.style.background;
+                
                 _options.appendTo.style.display = "none";
-                _options.appendTo.previousSibling.style.background = this.style.background;
-                _options.appendTo.previousSibling.previousSibling.textContent = utils.rgbToHex(this.style.background);
+                _options.appendTo.previousSibling.style.background = _color;
+               
+                let idx = utils.get_index_by_value(colors, 'hex', utils.rgbToHex(_color));
+               
+                colors[idx].name ? _options.appendTo.previousSibling.previousSibling.textContent = colors[idx].name + " (" + colors[idx].hex + ")" : colors[idx].hex;
                 
                 layer.style[_options.style][_options.property] = utils.rgbToHex(this.style.background);
                 
@@ -105,37 +73,52 @@ function mvt_style(layer){
                     textContent: '&nbsp;',
                     onclick: _col_onclick
                 });
-                _col.style.background = color(i);
+                _col.style.background = colors[i].hex;
                 _col.style.color = "transparent";
                 _col.style.marginTop = '2px';
                 _col.style.cursor = 'pointer';
                 _col.style.borderRadius = '2px';
-                _col.title = color(i);
+                _col.title = colors[i].hex;
+                
+                colors[i].name ? _col.title = colors[i].name + " (" + colors[i].hex + ")" : _col.title = colors[i].hex;
                     
                 _options.appendTo.appendChild(_col);
             }
         }
         
-        let range_onclick = function(){
-            this.nextSibling.style.display == 'none' ? this.nextSibling.style.display = "block" :  this.nextSibling.style.display = 'none';
-        }
-        
         let range = utils.createElement('div', {
             textContent: '&nbsp;',
-            onclick: range_onclick
-        });
-        
+            onclick: function(){
+                this.nextSibling.style.display == 'none' ? this.nextSibling.style.display = "block" : this.nextSibling.style.display = 'none';
+            },
+            onmouseleave: function(e){
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    timeout = null;
+                    e.target.nextSibling.style.display = "none";
+                }, 1.5*1000);
+            }
+        });    
+
         range.style.color = 'transparent';
         range.style.background = layer.style[options.style][options.property];
         range.style.cursor = 'pointer';
         range.style.borderRadius = '2px';
+        range.style.boxShadow = "1px 1px 1px 1px rgba(0,0,0,0.3)";
         
         block.appendChild(range);
         
-        let color_pick = utils.createElement('div');
+        let color_pick = utils.createElement('div', {
+            onmouseleave: function(e){
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    timeout = null;
+                    e.target.style.display = "none";
+                }, 1.5*1000);
+            }
+        });
         
-        //palette({appendTo: color_pick});
-        palette2({appendTo: color_pick, style: options.style, property: options.property});
+        palette({appendTo: color_pick, style: options.style, property: options.property});
         
         color_pick.style.display = "none";
         block.appendChild(color_pick);
@@ -165,15 +148,6 @@ function mvt_style(layer){
          appendTo: style_section
      });
     
-    let opacity_slider_oninput = function(e){
-        this.parentNode.previousSibling.textContent = parseInt(this.value) + "%";
-        layer.style.default.opacity = (this.value/100).toFixed(2);
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            timeout = null;
-            layer.getLayer();
-        }, 500);
-    }
     
     let opacity_slider = utils.slider({
         title: "Stroke opacity: ",
@@ -182,18 +156,17 @@ function mvt_style(layer){
         value: 100*layer.style.default.opacity,
         max: 100,
         appendTo: style_section,
-        oninput: opacity_slider_oninput
+        oninput: function(e){
+            this.parentNode.previousSibling.textContent = parseInt(this.value) + "%";
+            layer.style.default.opacity = (this.value/100).toFixed(2);
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                timeout = null;
+                layer.getLayer();
+            }, 500);
+        }
     });
     
-    let fill_opacity_slider_oninput = function(e){
-        this.parentNode.previousSibling.textContent = parseInt(this.value) + "%";
-        layer.style.default.fillOpacity = (this.value/100).toFixed(2);
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            timeout = null;
-            layer.getLayer();
-        }, 500);
-    }
     
     let fill_opacity_slider = utils.slider({
         title: "Fill opacity: ",
@@ -202,15 +175,18 @@ function mvt_style(layer){
         value: 100*layer.style.default.fillOpacity,
         max: 100,
         appendTo: style_section,
-        oninput: fill_opacity_slider_oninput
+        oninput: function(e){
+            this.parentNode.previousSibling.textContent = parseInt(this.value) + "%";
+            layer.style.default.fillOpacity = (this.value/100).toFixed(2);
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                timeout = null;
+                layer.getLayer();
+            }, 500);
+        }
     });
     
-    
     return style_section;
-}
-
-function color_picker(layer){
-    
 }
 
 module.exports = {
