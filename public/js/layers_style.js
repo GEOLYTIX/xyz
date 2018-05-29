@@ -38,46 +38,47 @@ function mvt_style(layer){
             textContent: options.label + ": "
         }, block);
         
+        function get_colour(hex){
+            let index;
+            hex ? index = utils.get_index_by_value(_xyz.styles.default_palette, 'hex', hex) : index = utils.get_index_by_value(_xyz.styles.default_palette, 'hex', layer.style[options.style][options.property]);
+            return index == -1 ? layer.style[options.style][options.property] : _xyz.styles.default_palette[index].name ? _xyz.styles.default_palette[index].name + " (" + 
+            layer.style[options.style][options.property] + ")" : layer.style[options.style][options.property];
+        }
+        
         let span = utils.createElement('span', {
             classList: "bold",
-            textContent: _xyz.styles.default_palette[utils.get_index_by_value(_xyz.styles.default_palette, 'hex', layer.style[options.style][options.property])].name + " (" + 
-            layer.style[options.style][options.property] + ")" || layer.style[options.style][options.property]
+            textContent: get_colour() || 'default',
         }, block);
         
         function palette(_options){
             
-            let colors = _xyz.styles.default_palette;
+            let colours = _xyz.styles.default_palette;
             
             let _col_onclick = function(){
                 
-                let _color = this.style.background;
+                let _colour = this.style.background, _hex = utils.rgbToHex(_colour);
                 
                 _options.appendTo.style.display = "none";
-                _options.appendTo.previousSibling.style.background = _color;
-               
-                let idx = utils.get_index_by_value(colors, 'hex', utils.rgbToHex(_color));
-               
-                colors[idx].name ? _options.appendTo.previousSibling.previousSibling.textContent = colors[idx].name + " (" + colors[idx].hex + ")" : colors[idx].hex;
+                _options.appendTo.previousSibling.style.background = _colour;
+                _options.appendTo.previousSibling.previousSibling.textContent = get_colour(_hex) || _hex;
                 
-                layer.style[_options.style][_options.property] = utils.rgbToHex(this.style.background);
-                
+                layer.style[_options.style][_options.property] = _hex;
                 
                 layer.getLayer();
             }
             
-            for(let i = 0; i < colors.length; i++){
+            for(let i = 0; i < colours.length; i++){
                 let _col = utils.createElement('div', {
                     textContent: '&nbsp;',
                     onclick: _col_onclick
                 });
-                _col.style.background = colors[i].hex;
+                _col.style.background = colours[i].hex;
                 _col.style.color = "transparent";
                 _col.style.marginTop = '2px';
                 _col.style.cursor = 'pointer';
                 _col.style.borderRadius = '2px';
-                _col.title = colors[i].hex;
                 
-                colors[i].name ? _col.title = colors[i].name + " (" + colors[i].hex + ")" : _col.title = colors[i].hex;
+                colours[i].name ? _col.title = colours[i].name + " (" + colours[i].hex + ")" : colours[i].hex; 
                     
                 _options.appendTo.appendChild(_col);
             }
@@ -126,38 +127,44 @@ function mvt_style(layer){
 
     }
     
-     color_picker(layer, {
-         property: "fillColor",
-         label: "Fill",
-         style: "default",
-         appendTo: style_section
-     });
+    // if default palette is enabled on this layer
+    if(layer.style.palette) {
+        
+        color_picker(layer, {
+            property: "fillColor",
+            label: "Fill",
+            style: "default",
+            appendTo: style_section
+        });
+        
+        color_picker(layer, {
+            property: "color",
+            label: "Stroke",
+            style: "default",
+            appendTo: style_section
+        });
+        
+        color_picker(layer, {
+            property: "color",
+            label: "Highlight",
+            style: "highlight",
+            appendTo: style_section
+        });
     
-    color_picker(layer, {
-         property: "color",
-         label: "Stroke",
-         style: "default",
-         appendTo: style_section
-     });
-    
-    color_picker(layer, {
-         property: "color",
-         label: "Highlight",
-         style: "highlight",
-         appendTo: style_section
-     });
+    }
     
     
     let opacity_slider = utils.slider({
         title: "Stroke opacity: ",
-        default: 100*layer.style.default.opacity + "%",
+        default: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100) + "%",
         min: 0,
-        value: 100*layer.style.default.opacity,
+        value: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100),
         max: 100,
         appendTo: style_section,
         oninput: function(e){
-            this.parentNode.previousSibling.textContent = parseInt(this.value) + "%";
-            layer.style.default.opacity = (this.value/100).toFixed(2);
+            let opacity = this.value;
+            this.parentNode.previousSibling.textContent = parseInt(opacity) + "%";
+            layer.style.default.opacity = (opacity/100).toFixed(2);
             clearTimeout(timeout);
             timeout = setTimeout(() => {
                 timeout = null;
@@ -169,14 +176,15 @@ function mvt_style(layer){
     
     let fill_opacity_slider = utils.slider({
         title: "Fill opacity: ",
-        default: 100*layer.style.default.fillOpacity + "%",
+        default: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100) + "%",
         min: 0,
-        value: 100*layer.style.default.fillOpacity,
+        value: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100),
         max: 100,
         appendTo: style_section,
         oninput: function(e){
-            this.parentNode.previousSibling.textContent = parseInt(this.value) + "%";
-            layer.style.default.fillOpacity = (this.value/100).toFixed(2);
+            let fill_opacity = this.value;
+            this.parentNode.previousSibling.textContent = parseInt(fill_opacity) + "%";
+            layer.style.default.fillOpacity = (fill_opacity/100).toFixed(2);
             clearTimeout(timeout);
             timeout = setTimeout(() => {
                 timeout = null;
