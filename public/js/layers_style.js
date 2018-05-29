@@ -61,11 +61,8 @@ function mvt_style(layer){
                 
                 layer.style[_options.style][_options.property] = utils.rgbToHex(this.style.background);
                 
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    timeout = null;
-                    layer.getLayer();
-                }, 500);
+                
+                layer.getLayer();
             }
             
             for(let i = 0; i < colors.length; i++){
@@ -92,6 +89,7 @@ function mvt_style(layer){
                 this.nextSibling.style.display == 'none' ? this.nextSibling.style.display = "block" : this.nextSibling.style.display = 'none';
             },
             onmouseleave: function(e){
+                e.stopPropagation();
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
@@ -110,6 +108,7 @@ function mvt_style(layer){
         
         let color_pick = utils.createElement('div', {
             onmouseleave: function(e){
+                e.stopPropagation();
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
