@@ -42,8 +42,7 @@ passport.use(
                     .set({
                         verified: false,
                         password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)),
-                        verificationToken: require('crypto').randomBytes(20).toString('hex'),
-                        verificationTokenExpires: Date.now() + 3600000
+                        verificationToken: require('crypto').randomBytes(20).toString('hex')
                     })
                     .fetch();
 
@@ -52,9 +51,8 @@ passport.use(
                 mailer.mail({
                     to: user.email,
                     subject: `Please verify your GEOLYTIX account (password reset) on ${global.site}`,
-                    text: `A new password has been set for this account.
-                    
-                    Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${user.verificationToken}`
+                    text: `A new password has been set for this account. \n \n`
+                    + `Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${user.verificationToken}`
                 });
 
                 return done(null, user);
@@ -69,8 +67,7 @@ passport.use(
                     verified: false,
                     approved: false,
                     admin: false,
-                    verificationToken: require('crypto').randomBytes(20).toString('hex'),
-                    verificationTokenExpires: Date.now() + 3600000
+                    verificationToken: require('crypto').randomBytes(20).toString('hex')
                 }
 
                 user = await global.ORM.collections.users.create(user).fetch();
@@ -78,13 +75,10 @@ passport.use(
                 mailer.mail({
                     to: user.email,
                     subject: `Please verify your GEOLYTIX account on ${global.site}`,
-                    text: `A new account for this email address has been registered with ${global.site}.
-                    
-                    Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${user.verificationToken}
-                    
-                    A site administrator must approve the account before you are able to login.
-                
-                    You will be notified via email once an adimistrator has approved your account.`});
+                    text: `A new account for this email address has been registered with ${global.site}. \n \n`
+                    + `Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${user.verificationToken} \n \n`
+                    + `A site administrator must approve the account before you are able to login. \n \n`
+                    + `You will be notified via email once an adimistrator has approved your account.`});
 
                 return done(null, user);
             }
@@ -103,14 +97,11 @@ async function verify(req, res) {
     // Return if user account is not found.
     if (user.verified) return res.send('User account has already been verfied.');
 
-    if (Date.now() > user.verificationTokenExpires) return res.send('The verification token has expired.');
-
     user = await global.ORM.collections.users
         .update({ email: user.email })
         .set({
             verified: true,
-            verificationToken: require('crypto').randomBytes(20).toString('hex'),
-            verificationTokenExpires: Date.now() + 3600000
+            verificationToken: require('crypto').randomBytes(20).toString('hex')
         })
         .fetch();
 
@@ -131,9 +122,8 @@ async function verify(req, res) {
     mailer.mail({
         to: adminmail,
         subject: `A new account has been verified on ${global.site}`,
-        text: `Please log into the admin panel to approve ${user.email}
-            
-            You can also approve the account by following this link: ${req.protocol}://${global.site}/approve/${user.verificationToken}`
+        text: `Please log into the admin panel to approve ${user.email} \n \n`
+        +`You can also approve the account by following this link: ${req.protocol}://${global.site}/approve/${user.verificationToken}`
     });
 
     // Update session messages and send success notification to client.
