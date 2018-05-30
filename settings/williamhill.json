@@ -821,90 +821,111 @@
               "field": "postcode",
               "label": "Postcode",
               "type": "text",
-              "filter": "like"
+              "filter": "like",
+              "level": 1,
+              "inline": true
+            },
+            {
+              "label": "Store facilities"
             },
             {
               "field": "ssbt",
               "label": "SSBTs",
               "type": "text",
               "inline": true,
-              "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "10+"]
+              "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "10+"],
+              "level": 2
             },
             {
               "field": "gaming_machines",
               "label": "Gaming machines",
               "type": "integer",
               "inline": true,
-              "options": [0, 1, 2, 3, 4]
+              "options": [0, 1, 2, 3, 4],
+              "level": 2
             },
             {
               "field": "bandit_screen",
               "label": "Bandit screen",
               "type": "text",
               "inline": true,
-              "options": ["Yes", "No"]
+              "options": ["Yes", "No"],
+              "level": 2
             },
             {
               "field": "pod",
               "label": "POD",
               "type": "integer",
               "inline": true,
-              "options": [0, 1, 2, 3, 4]
+              "options": [0, 1, 2, 3, 4],
+              "level": 2
             },
             {
               "field": "tvs",
               "label": "TVs",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "toilet",
               "label": "Toilet",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
+            },
+            {
+              "label": "Opening times"    
             },
             {
               "field": "mon_fri_open",
-              "label": "Mon-Fri opening time",
+              "label": "Mon-Fri opening",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "mon_fri_closed",
-              "label": "Mon-Fri closing time",
+              "label": "Mon-Fri closing",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "sat_open",
-              "label": "Sat opening time",
+              "label": "Sat opening",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "sat_closed",
-              "label": "Sat closing time",
+              "label": "Sat closing",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "sun_open",
-              "label": "Sun opening time",
+              "label": "Sun opening",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "sun_closed",
-              "label": "Sun closing time",
+              "label": "Sun closing",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 2
             },
             {
               "field": "staffing_model",
               "label": "Staffing model",
               "type": "text",
               "inline": true,
-              "options": ["Single manned", "Dual manning"]
+              "options": ["Single manned", "Dual manning"],
+              "level": 1
             }
           ],
           "style": {
