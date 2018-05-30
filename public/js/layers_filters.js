@@ -270,10 +270,8 @@ function layerFilters(layer){
                 }
             }
             // remove applied filters
-            Object.keys(layer.infoj).map(function(key){
-                if(layer.infoj[key].filter){
-                    layer.filter[layer.infoj[key].field] = {};
-                }
+            Object.keys(layer.filter).map(function(key){
+                delete layer.filter[key];
             });
             // hide filtering buttons, reload layer.
             this.style.display = "none";
@@ -294,7 +292,7 @@ function filter_text(layer, options){
     
     function onkeyup(e){
         let val = this.value;
-        layer.filter[options.field] = {};
+        if(!layer.filter[options.field]) layer.filter[options.field] = {};
         layer.filter[options.field][this.name] = val;
         layer.getLayer();
     }
@@ -490,6 +488,7 @@ function filter_checkbox(options, layer){
             };
         
         if(this.checked){
+            if(!layer.filter[options.field][options.operator]) layer.filter[options.field][options.operator] = [];
             layer.filter[options.field][options.operator].push(options.value);
             layer.getLayer();
         } else {
