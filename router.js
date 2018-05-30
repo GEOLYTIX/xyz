@@ -61,6 +61,23 @@ router.get('/', isLoggedIn, async (req, res) => {
         }))
 });
 
+// Open the settings view.
+router.get('/settings', async (req, res) => {
+
+    await require('./mod/appsettings').getAppSettings();
+
+    res.send(
+        jsr.templates('./views/settings.html').render({
+            settings: `
+                <script>
+                    const _xyz = ${JSON.stringify(global.appSettings)};
+                </script>`
+        }));
+});
+
+// Get data for selected item.
+router.post('/q_settings_save', require('./mod/appsettings').saveAppSettings);
+
 // Set highlight and and markdown-it to turn markdown into flavoured html.
 const hljs = require('highlight.js');
 const markdown = require('markdown-it')({

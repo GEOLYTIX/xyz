@@ -2,9 +2,11 @@ async function getAppSettings() {
 
     let settings = {};
 
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.substr(0, 5) === 'mongo') settings = await getSettingsFromMongo();
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'mongodb') settings = await getSettingsFromMongo();
 
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.substr(-5) === '.json') settings = await getSettingsFromFile();
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') settings = await getSettingsFromDB();
+
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') settings = await getSettingsFromFile();
 
     if (Object.keys(settings).length === 0) settings = {
         "locales": {
@@ -23,9 +25,23 @@ async function getAppSettings() {
     await setAppSettingsValues(settings);
 }
 
+async function saveAppSettings(req, res) {
+    await global.ORM.collections.settings.update({})
+        .set({
+            settings: req.body.settings
+        })
+        .fetch();
+    console.log('done');
+}
+
 async function getSettingsFromMongo() {
-    let settings  = await global.ORM.collections.settings.find().limit(1);
-    return settings[0];
+    let settings = await global.ORM.collections.settings.find().limit(2);
+    return settings[1].settings;
+}
+
+async function getSettingsFromDB() {
+    let settings = await global.ORM.collections.settings.find().limit(1);
+    return settings[0].settings;
 }
 
 async function getSettingsFromFile() {
@@ -34,7 +50,7 @@ async function getSettingsFromFile() {
         JSON.parse(fs.readFileSync('./settings/' + process.env.APPSETTINGS), 'utf8') : {};
 
 
-    
+
 }
 
 function setAppSettingsValues(settings) {
@@ -55,5 +71,6 @@ function setAppSettingsValues(settings) {
 }
 
 module.exports = {
-    getAppSettings: getAppSettings
+    getAppSettings: getAppSettings,
+    saveAppSettings: saveAppSettings
 };
