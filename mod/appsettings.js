@@ -46,8 +46,8 @@ async function getSettingsFromDB() {
 
 async function getSettingsFromFile() {
     let fs = require('fs');
-    return fs.existsSync('./settings/' + process.env.APPSETTINGS) ?
-        JSON.parse(fs.readFileSync('./settings/' + process.env.APPSETTINGS), 'utf8') : {};
+    return fs.existsSync('./settings/' + process.env.APPSETTINGS.split(':').pop()) ?
+        JSON.parse(fs.readFileSync('./settings/' + process.env.APPSETTINGS.split(':').pop()), 'utf8') : {};
 
 
 
