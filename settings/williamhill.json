@@ -66,6 +66,7 @@
         },
         "williamhill": {
           "display": true,
+          "streetview": true,
           "name": "William Hill Shops",
           "meta": "All William Hill Shops May 2018.",
           "format": "cluster",
@@ -779,7 +780,7 @@
           "format": "cluster",
           "pane": [
             "competitors",
-            520
+            530
           ],
           "dbs": "XYZ",
           "qID": "branchid2",

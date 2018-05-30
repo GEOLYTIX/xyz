@@ -416,6 +416,7 @@ function clusterCategorized(layer) {
                     layer.filter[layer.cluster_cat].ni.splice(layer.filter[layer.cluster_cat].ni.indexOf(item), 1);
                 } else {
                     this.style.opacity = 0.5;
+                    if(!layer.filter[layer.cluster_cat].ni) layer.filter[layer.cluster_cat].ni = [];
                     layer.filter[layer.cluster_cat].ni.push(item);
                 }
 
