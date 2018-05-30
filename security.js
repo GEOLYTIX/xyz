@@ -41,7 +41,7 @@ passport.use(
                 user = await global.ORM.collections.users.update({ email: email })
                     .set({
                         verified: false,
-                        password: bcrypt.hashSync(password, bcrypt.genSaltSync(8), null),
+                        password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)),
                         verificationToken: require('crypto').randomBytes(20).toString('hex'),
                         verificationTokenExpires: Date.now() + 3600000
                     })
@@ -65,7 +65,7 @@ passport.use(
 
                 user = {
                     email: email,
-                    password: bcrypt.hashSync(password, bcrypt.genSaltSync(8), null),
+                    password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)),
                     verified: false,
                     approved: false,
                     admin: false,
