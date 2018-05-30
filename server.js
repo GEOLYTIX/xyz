@@ -12,26 +12,6 @@ const session = process.env.OURSECRET ? require('express-session') : null;
 const helmet = require('helmet');
 const morgan = req_res('morgan') ? require('morgan') : null;
 
-if (process.env.NODE_ENV === 'cluster') {
-    const cluster = require('cluster');
-    const numCPUs = require('os').cpus().length;
-
-    if (cluster.isMaster) {
-        console.log(`Master ${process.pid} is running`);
-
-        // Fork workers.
-        for (let i = 0; i < numCPUs; i++) {
-            cluster.fork();
-        }
-
-        cluster.on('exit', (worker, code, signal) => {
-            console.log(`worker ${worker.process.pid} died`);
-        });
-
-    }
-}
-
-
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

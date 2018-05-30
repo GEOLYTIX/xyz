@@ -58,8 +58,7 @@ if (process.env.LOGIN && process.env.LOGIN.split(':')[0] === 'postgres') {
                 verified: { type: 'boolean' },
                 approved: { type: 'boolean' },
                 admin: { type: 'boolean' },
-                verificationToken: { type: 'string', columnName: 'verificationtoken' },
-                verificationTokenExpires: { type: 'string', columnName: 'verificationtokenexpires' }
+                verificationToken: { type: 'string', columnName: 'verificationtoken' }
             }
         })
     );
@@ -82,8 +81,7 @@ if (process.env.LOGIN && process.env.LOGIN.split(':')[0] === 'mongo') {
                 verified: { type: 'boolean' },
                 approved: { type: 'boolean' },
                 admin: { type: 'boolean' },
-                verificationToken: { type: 'string' },
-                verificationTokenExpires: { type: 'number' }
+                verificationToken: { type: 'string' }
             }
         })
     );

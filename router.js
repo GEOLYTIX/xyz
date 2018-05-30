@@ -62,7 +62,7 @@ router.get('/', isLoggedIn, async (req, res) => {
 });
 
 // Open the settings view.
-router.get('/settings', async (req, res) => {
+router.get('/settings', isAdmin, async (req, res) => {
 
     await require('./mod/appsettings').getAppSettings();
 
@@ -76,7 +76,7 @@ router.get('/settings', async (req, res) => {
 });
 
 // Get data for selected item.
-router.post('/q_settings_save', require('./mod/appsettings').saveAppSettings);
+router.post('/q_settings_save', isAdmin, require('./mod/appsettings').saveAppSettings);
 
 // Set highlight and and markdown-it to turn markdown into flavoured html.
 const hljs = require('highlight.js');
