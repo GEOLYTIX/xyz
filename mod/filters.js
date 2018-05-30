@@ -8,8 +8,10 @@ function sql_filter(filter, _sql_filter){
         
         if(typeof(filter[field].gt) == "number") _sql_filter += ` AND ${field} > ${filter[field].gt}`;
         if(typeof(filter[field].lt) == "number") _sql_filter += ` AND ${field} < ${filter[field].lt}`;
-        if(typeof(filter[field].gte) == "number") _sql_filter += ` AND ${field} >= ${filter[field].gte}`;
-        if(typeof(filter[field].lte) == "number") _sql_filter += ` AND ${field} <= ${filter[field].lte}`;
+        
+        // must work for date string
+        if(filter[field].gte) _sql_filter += ` AND ${field} >= ${filter[field].gte}`;
+        if(filter[field].lte) _sql_filter += ` AND ${field} <= ${filter[field].lte}`;
         
         if((filter[field].like)) _sql_filter += ` AND ${field} ILIKE '${filter[field].like}%'`;
         if((filter[field].match)) _sql_filter += ` AND ${field} ILIKE '${filter[field].match}'`;
