@@ -30,6 +30,11 @@ function mvt_style(layer){
     
     function color_picker(layer, options){
         
+        let colours;
+        
+        // if palette is an object then apply it. Else just take the default.
+        layer.style.palette instanceof Object ? colours =  layer.style.palette : colours = _xyz.styles.default_palette;
+        
         let block = utils.createElement('div', {
             classList: "block"
         });
@@ -40,8 +45,8 @@ function mvt_style(layer){
         
         function get_colour(hex){
             let index;
-            hex ? index = utils.get_index_by_value(_xyz.styles.default_palette, 'hex', hex) : index = utils.get_index_by_value(_xyz.styles.default_palette, 'hex', layer.style[options.style][options.property]);
-            return index == -1 ? layer.style[options.style][options.property] : _xyz.styles.default_palette[index].name ? _xyz.styles.default_palette[index].name + " (" + 
+            hex ? index = utils.get_index_by_value(colours, 'hex', hex) : index = utils.get_index_by_value(colours, 'hex', layer.style[options.style][options.property]);
+            return index == -1 ? layer.style[options.style][options.property] : colours[index].name ? colours[index].name + " (" + 
             layer.style[options.style][options.property] + ")" : layer.style[options.style][options.property];
         }
         
@@ -51,8 +56,6 @@ function mvt_style(layer){
         }, block);
         
         function palette(_options){
-            
-            let colours = _xyz.styles.default_palette;
             
             let _col_onclick = function(){
                 
@@ -127,7 +130,7 @@ function mvt_style(layer){
 
     }
     
-    // if default palette is enabled on this layer
+    // if style palette is enabled on this layer, true or colour object
     if(layer.style.palette) {
         
         color_picker(layer, {
