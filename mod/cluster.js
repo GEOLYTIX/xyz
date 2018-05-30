@@ -55,7 +55,7 @@ async function cluster(req, res) {
         0.00001)
     ${filter_sql};`;
     
-    //console.log(q);
+  //console.log(q);
 
   let result = await global.DBS[req.query.dbs].query(q);
 
