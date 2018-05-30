@@ -1,5 +1,6 @@
 const utils = require('./utils');
 
+// check if filtering is enabled
 function applyFilters(layer){
     let enabled = false;
     
@@ -17,6 +18,7 @@ function applyFilters(layer){
     }
 }
 
+// create filters section
 function layerFilters(layer){
     
     let filters = utils.createElement('div', {
@@ -45,40 +47,46 @@ function layerFilters(layer){
     
     let block, title, content, remove_filter;
     
+    // disable the list if everything is selected
+    function toggle_select(select, title){
+        let _array = Array.from(select.options);
+        if(!title) _array.shift();
+        _array = _array.map((item) => item.disabled);
+        let _reducer = (acc, curr) => acc + curr;
+        _array.reduce(_reducer) == _array.length ? select.disabled = true : select.disabled = false;
+    }
+    
+    // add aggregate layer button
     function add_run_button(){
-        
-        function run_onclick(e){
-            layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
-                dbs: layer.dbs,
-                table_source: layer.table,
-                table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-                filter: JSON.stringify(layer.filter),
-                geom_target: undefined,
-                geom_source: undefined
-            }));
-            
-            layer.xhr.onload = function(){
-                let json = JSON.parse(this.response);
-                //console.log(json);
-                if(this.status === 200){
-                    _xyz.select.selectLayerFromEndpoint({
-                        layer: layer.aggregate_layer,
-                        table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-                        id: json.id,
-                        marker: [json.lng, json.lat],
-                        filter: JSON.stringify(layer.filter)
-                    });
-                }
-            };
-            layer.xhr.send();
-        }
         
         let run = utils.createElement('div', {
             classList: "btn_wide cursor noselect",
-            onclick: run_onclick,
-            textContent: "Run Output"
-        });
-        
+            textContent: "Run Output",
+            onclick: function(e){
+                layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
+                    dbs: layer.dbs,
+                    table_source: layer.table,
+                    table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                    filter: JSON.stringify(layer.filter),
+                    geom_target: undefined,
+                    geom_source: undefined
+                }));
+                
+                layer.xhr.onload = function(){
+                    let json = JSON.parse(this.response);
+                    if(this.status === 200){
+                        _xyz.select.selectLayerFromEndpoint({
+                            layer: layer.aggregate_layer,
+                            table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                            id: json.id,
+                            marker: [json.lng, json.lat],
+                            filter: JSON.stringify(layer.filter)
+                        });
+                    }
+                };
+                layer.xhr.send();
+            }
+        });  
         run.style.display = "none";
         filters.appendChild(run);
     }
@@ -100,9 +108,14 @@ function layerFilters(layer){
             for(let opt of select.options){
                 if(opt.value === val) opt.disabled = false;
             }
+            toggle_select(select);
         }
+        // check if list should be still active
+        toggle_select(_select);
+        
         // remove unwanted filter
         function remove_filter_onclick(e){
+            
             e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
             delete layer.filter[_val];
             enable_option(_select, _val);
@@ -114,7 +127,6 @@ function layerFilters(layer){
                 _select.nextSibling.style.display = "none";
             };
         }
-        
         
         Object.keys(layer.infoj).map(function(key){
             if(layer.infoj[key].filter && layer.infoj[key].field === _val){
@@ -158,7 +170,6 @@ function layerFilters(layer){
                         });
                         
                         title = utils.createElement('div', {
-                            //textContent: layer.infoj[key].label,
                             innerHTML: layer.infoj[key].label + '<i class="material-icons">clear</i>',
                             classList: "title",
                             onclick: remove_filter_onclick
@@ -181,7 +192,6 @@ function layerFilters(layer){
                         });
                         
                         title = utils.createElement('div', {
-                            //textContent: layer.infoj[key].label,
                             innerHTML: layer.infoj[key].label + '<i class="material-icons">clear</i>',
                             classList: "title",
                             onclick: remove_filter_onclick
@@ -205,7 +215,6 @@ function layerFilters(layer){
                         });
                         
                         title = utils.createElement('div', {
-                            //textContent: layer.infoj[key].label,
                             classList: "title",
                             innerHTML: layer.infoj[key].label + '<i class="material-icons">clear</i>',
                             onclick: remove_filter_onclick
@@ -242,38 +251,35 @@ function layerFilters(layer){
         }
     });
     
-    let reset_all_onclick = function(e){ // to be redone
-        let siblings = this.parentNode.children, len = siblings.length;
-
-        // removes filter blocks
-        while (e.target.nextSibling !== e.target.parentNode.lastChild){
-            e.target.parentNode.removeChild(e.target.nextSibling);
-        }
-        
-        // enable select options
-        for(let sibling of siblings){
-            if(sibling.tagName == 'SELECT'){
-                for(let opt of sibling.options){
-                    opt.disabled = false;
-                }
-            }
-        }
-        // remove applied filters
-        Object.keys(layer.infoj).map(function(key){
-            if(layer.infoj[key].filter){
-                layer.filter[layer.infoj[key].field] = {};
-            }
-        });
-        // hide filtering buttons, reload layer.
-        this.style.display = "none";
-        e.target.parentNode.lastChild.style.display = "none";
-        layer.getLayer();
-    }
-    
     let reset_all = utils.createElement("div", {
         classList: "btn_small cursor noselect",
         textContent: "Clear",
-        onclick: reset_all_onclick
+        onclick: function(e){
+            let siblings = this.parentNode.children, len = siblings.length;
+            
+            while (this.nextSibling !== this.parentNode.lastChild){
+                this.parentNode.removeChild(this.nextSibling);
+            }
+            // enable select options
+            for(let sibling of siblings){
+                if(sibling.tagName == 'SELECT'){
+                    for(let opt of sibling.options){
+                        opt.disabled = false;
+                    }
+                    toggle_select(sibling);
+                }
+            }
+            // remove applied filters
+            Object.keys(layer.infoj).map(function(key){
+                if(layer.infoj[key].filter){
+                    layer.filter[layer.infoj[key].field] = {};
+                }
+            });
+            // hide filtering buttons, reload layer.
+            this.style.display = "none";
+            this.parentNode.lastChild.style.display = "none";
+            layer.getLayer();
+        }
     });
     
     filters.appendChild(select);
@@ -457,22 +463,18 @@ function filter_date(layer, options){
         name: "lte"
     }, options.appendTo);
     
-    let reset_onclick = function(){
-        let siblings = options.appendTo.children;
-        for(let sibling of siblings){
-            if(sibling.tagName === 'INPUT'){
-                sibling.value = '';
-            }
-        }
-        this.style.display = "none";
-        layer.filter[options.field] = {};
-        layer.getLayer();
-    }
-    
     let reset = utils.createElement('div', {
         classList: "btn_small cursor noselect",
-        textContent: "Clear",
-        onclick: reset_onclick
+        textContent: "Reset",
+        onclick: function(){
+            let siblings = options.appendTo.children;
+            for(let sibling of siblings){
+                if(sibling.tagName === 'INPUT') sibling.value = '';
+            }
+            this.style.display = "none";
+            layer.filter[options.field] = {};
+            layer.getLayer();
+        }
     }, options.appendTo);
 }
 
