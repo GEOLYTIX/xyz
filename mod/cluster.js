@@ -1,6 +1,8 @@
 const filters = require('./filters');
 
 async function cluster(req, res) {
+    
+    //console.log(req.query);
   
   let
     table = req.query.table,

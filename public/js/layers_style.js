@@ -2,6 +2,33 @@ const utils = require('./utils');
 
 function mvt_style(layer){
     
+    // default colours for mvt styles
+    let default_colours = [
+          {"hex": "#c62828", "name": "Fire Engine Red"},
+          {"hex": "#f50057", "name": "Folly"},
+          {"hex": "#9c27b0", "name": "Dark Orchid"},
+          {"hex": "#673ab7", "name": "Plump Purple"},
+          {"hex": "#3f51b5", "name": "Violet Blue"},
+          {"hex": "#2196f3", "name": "Dodger Blue"},
+          {"hex": "#03a9f4", "name": "Vivid Cerulean"},
+          {"hex": "#00bcd4", "name": "Turquoise Surf"},
+          {"hex": "#009688", "name": "Dark Cyan"},
+          {"hex": "#4caf50", "name": "Middle Green"},
+          {"hex": "#8bc34a", "name": "Dollar Bill"},
+          {"hex": "#cddc39", "name": "Pear"},
+          {"hex": "#ffeb3b", "name": "Banana Yellow"},
+          {"hex": "#ffb300", "name": "UCLA Gold"},
+          {"hex": "#fb8c00", "name": "Dark Orange"},
+          {"hex": "#f4511e", "name": "Orioles Orange"},
+          {"hex": "#8d6e63", "name": "Dark Chestnut"},
+          {"hex": "#777", "name": "Sonic Silver"},
+          {"hex": "#bdbdbd", "name": "X11 Gray"},
+          {"hex": "#aaa", "name": "Dark Medium Gray"}, 
+          {"hex": "#78909c", "name": "Light Slate Gray"}
+      ];
+    
+    
+    // create style section
     let style_section = utils.createElement('div', {
         classList: 'section expandable'
     });
@@ -28,12 +55,13 @@ function mvt_style(layer){
     
     let timeout;
     
+    // creates colour picker to layer
     function color_picker(layer, options){
         
         let colours;
         
         // if palette is an object then apply it. Else just take the default.
-        layer.style.palette instanceof Object ? colours =  layer.style.palette : colours = _xyz.styles.default_palette;
+        layer.style.palette instanceof Object ? colours =  layer.style.palette : colours = default_colours;
         
         let block = utils.createElement('div', {
             classList: "block"
@@ -130,6 +158,7 @@ function mvt_style(layer){
 
     }
     
+    // begin add colour picker
     // if style palette is enabled on this layer, true or colour object
     if(layer.style.palette) {
         
@@ -155,8 +184,9 @@ function mvt_style(layer){
         });
     
     }
+    // end add colour picker
     
-    
+    // begin opacity tools
     let opacity_slider = utils.slider({
         title: "Stroke opacity: ",
         default: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100) + "%",
@@ -176,7 +206,6 @@ function mvt_style(layer){
         }
     });
     
-    
     let fill_opacity_slider = utils.slider({
         title: "Fill opacity: ",
         default: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100) + "%",
@@ -195,6 +224,7 @@ function mvt_style(layer){
             }, 500);
         }
     });
+    // end opacity tools
     
     return style_section;
 }
