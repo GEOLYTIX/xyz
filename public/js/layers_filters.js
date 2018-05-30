@@ -18,6 +18,7 @@ function applyFilters(layer){
 }
 
 function layerFilters(layer){
+    
     let filters = utils.createElement('div', {
         classList: 'section expandable'
     });
@@ -88,8 +89,8 @@ function layerFilters(layer){
         // disable selected option
         _select.options[_select.selectedIndex].disabled = true;
         
-        // show run button
-        filters.lastChild.style.display = "block";
+        // show run button only if aggregate layer enabled
+        if(layer.aggregate_layer) filters.lastChild.style.display = "block";
         
         // show reset all button
         _select.nextSibling.style.display = "block";
@@ -271,7 +272,7 @@ function layerFilters(layer){
     
     let reset_all = utils.createElement("div", {
         classList: "btn_small cursor noselect",
-        textContent: "Reset all",
+        textContent: "Clear",
         onclick: reset_all_onclick
     });
     
@@ -470,7 +471,7 @@ function filter_date(layer, options){
     
     let reset = utils.createElement('div', {
         classList: "btn_small cursor noselect",
-        textContent: "Reset",
+        textContent: "Clear",
         onclick: reset_onclick
     }, options.appendTo);
 }
