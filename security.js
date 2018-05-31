@@ -3,9 +3,13 @@ const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt-nodejs');
 const mailer = require('./mod/mailer');
 
-passport.serializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => {
+    done(null, user)
+});
 
-passport.deserializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => {
+    done(null, user)
+});
 
 passport.use(
     'localLogin',
