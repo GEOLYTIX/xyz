@@ -17,7 +17,7 @@ const jsr = require('jsrender');
 // Request application bundle.
 router.get('/', isLoggedIn, async (req, res) => {
 
-    await require('./mod/appsettings').getAppSettings();
+    await require('./mod/appsettings').getAppSettings(req);
 
     // Get params from URL.
     let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');

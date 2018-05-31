@@ -382,7 +382,6 @@ function insertStreetViewImage(record, table) {
     let img = utils.createElement('img', {
         className: 'img_streetview',
         src: 'proxy_uri?https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE'
-        //src: 'https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&key=AIzaSyDdqoJs8AOKlCcPIRsyLpTupnnQeHCYCiU'
     }, a);
 }
 
