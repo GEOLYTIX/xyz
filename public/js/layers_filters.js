@@ -99,7 +99,7 @@ function layerFilters(layer){
         // show run button only if aggregate layer enabled
         if(layer.aggregate_layer) filters.lastChild.style.display = "block";
         
-        // show reset all button
+        // show clear all button
         _select.nextSibling.style.display = "block";
         
         // enable option back

@@ -783,8 +783,9 @@
             530
           ],
           "dbs": "XYZ",
-          "qID": "branchid2",
-          "table": "williamhill_competitors",
+          "qID": "id",
+          "table": "williamhill_competitors_editable",
+          "log_table": "williamhill_competitors_editable_logs",
           "cluster_label": "competitor",
           "cluster_cat": "competitor",
           "cluster_kmeans": 50,
