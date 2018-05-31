@@ -1333,6 +1333,7 @@
             },
             {
               "field": "size_band",
+              "restriction": "admin",
               "label": "Size",
               "type": "text",
               "level": 1
@@ -1474,6 +1475,7 @@
         },
         "retail_points_editable": {
           "editable": "geometry",
+          "restriction": "admin",
           "name": "Retail Points (editable)",
           "pane": ["retail_points", 540],
           "format": "cluster",
