@@ -112,6 +112,13 @@ router.get('/proxy_request', (req, res) => {
     require('request')(`${req.query.uri}${global.KEYS[req.query.provider]}`).pipe(res)
 });
 
+// Proxy for 3rd party services.
+router.get('/proxy_uri', (req, res) => {
+    let uri = req.url.replace('/proxy_uri?', '');
+    uri = uri.split('provider=');
+    require('request')(`${uri[0]}${global.KEYS[uri[1]]}`).pipe(res)
+});
+
 // Get grid data.
 router.get('/q_grid', require('./mod/grid').grid);
 
