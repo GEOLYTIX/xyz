@@ -1,37 +1,43 @@
 const filters = require('./filters');
 
+const username = 'agata.brok@geolytix.co.uk'; // just for testing
+
 async function newRecord(req, res) {
 
     let q,
         table = req.body.table,
+        log_table = req.body.log_table,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id;
+        id = req.body.id,
+        cat = req.body.cluster_cat || null;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
-    q = `
-    INSERT INTO ${table} (geom)
-        SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
-    RETURNING id;`;
+    // check if cluster category and insert new geometry row 
+    if(cat) {
+        q = `INSERT INTO ${table} (${cat}, geom)
+            SELECT 'other' as ${cat}, ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
+            RETURNING id;`;
+    } else {
+        q = `INSERT INTO ${table} (geom)
+            SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
+            RETURNING id;`;
+    }
+    
+    global.DBS[req.body.dbs].query(q).then((result) => {
+        
+        q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = ${result.rows[0].id};`;
+        
+        global.DBS[req.body.dbs].query(q)
+            .then(_result => res.status(200).send(result.rows[0].id.toString()))
+            .catch(err => console.error(err));
+        
+    }).catch(err => console.error(err));
 
-    //console.log(q);
-
-    let result = await global.DBS[req.body.dbs].query(q);
-
-    q = `
-    UPDATE ${table} SET
-        ${qID} = '${result.rows[0].id}'
-    WHERE id = '${result.rows[0].id}';`;
-
-    //console.log(q);
-
-    await global.DBS[req.body.dbs].query(q);
-
-    res.status(200).send(result.rows[0].id.toString());
 }
 
 async function newAggregate(req, res) {
@@ -102,8 +108,9 @@ async function updateRecord(req, res) {
         table = req.body.table,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id
-        fields = '';
+        id = req.body.id,
+        fields = '',
+        log_table = req.body.log_table;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -124,9 +131,17 @@ async function updateRecord(req, res) {
     WHERE ${qID} = $1;`
 
     //console.log(q);
-             
+    
     global.DBS[req.body.dbs].query(q, [id])
-        .then(result =>  res.status(200).send())
+        .then((result) =>  {
+        q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = ${id};`;
+        
+        console.log(q);
+        
+        global.DBS[req.body.dbs].query(q)
+            .then(_result => res.status(200).send())
+            .catch(err => console.error(err));
+        })
         .catch(err => console.error(err));
 }
 
