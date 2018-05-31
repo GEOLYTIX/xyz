@@ -52,8 +52,7 @@ function layerFilters(layer){
         let _array = Array.from(select.options);
         if(!title) _array.shift();
         _array = _array.map((item) => item.disabled);
-        let _reducer = (acc, curr) => acc + curr;
-        _array.reduce(_reducer) == _array.length ? select.disabled = true : select.disabled = false;
+        _array.reduce((acc, curr) => acc + curr) == _array.length ? select.disabled = true : select.disabled = false;
     }
     
     // add aggregate layer button
@@ -251,15 +250,12 @@ function layerFilters(layer){
         }
     });
     
-    let reset_all = utils.createElement("div", {
+    let clear_all = utils.createElement("div", {
         classList: "btn_small cursor noselect",
         textContent: "Clear",
         onclick: function(e){
-            let siblings = this.parentNode.children, len = siblings.length;
+            let siblings = this.parentNode.children;
             
-            while (this.nextSibling !== this.parentNode.lastChild){
-                this.parentNode.removeChild(this.nextSibling);
-            }
             // enable select options
             for(let sibling of siblings){
                 if(sibling.tagName == 'SELECT'){
@@ -269,19 +265,25 @@ function layerFilters(layer){
                     toggle_select(sibling);
                 }
             }
+            
+            while (this.nextSibling !== this.parentNode.lastChild){
+                this.parentNode.removeChild(this.nextSibling);
+            }
+            
             // remove applied filters
             Object.keys(layer.filter).map(function(key){
                 delete layer.filter[key];
             });
             // hide filtering buttons, reload layer.
             this.style.display = "none";
-            this.parentNode.lastChild.style.display = "none";
+            // hide aggregate button if enabled 
+            if(layer.aggregate_layer) this.parentNode.lastChild.style.display = "none";
             layer.getLayer();
         }
     });
     
     filters.appendChild(select);
-    filters.appendChild(reset_all);
+    filters.appendChild(clear_all);
     add_run_button();
     
     return filters;
