@@ -40,15 +40,17 @@ if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'mongod
     );
 }
 
-if (process.env.LOGIN && process.env.LOGIN.split(':')[0] === 'postgres') {
+let login = process.env.LOGIN || process.env.ADMIN;
+
+if (login && login.split(':')[0] === 'postgres') {
     datastores.pg_users = {
         adapter: 'sails-postgresql',
-        url: process.env.LOGIN.split('|')[0]
+        url: login.split('|')[0]
     };
     waterline.registerModel(
         Waterline.Collection.extend({
             identity: 'users',
-            tableName: process.env.LOGIN.split('|').pop(),
+            tableName: login.split('|').pop(),
             primaryKey: '_id',
             datastore: 'pg_users',
             attributes: {
@@ -64,10 +66,10 @@ if (process.env.LOGIN && process.env.LOGIN.split(':')[0] === 'postgres') {
     );
 }
 
-if (process.env.LOGIN && process.env.LOGIN.split(':')[0] === 'mongo') {
+if (login && login.split(':')[0] === 'mongodb') {
     datastores.mongo_users = {
         adapter: 'sails-mongo',
-        url: process.env.LOGIN
+        url: login
     };
     waterline.registerModel(
         Waterline.Collection.extend({

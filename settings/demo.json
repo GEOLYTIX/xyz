@@ -3,6 +3,7 @@
   "documentation": "documentation",
   "select": {},
   "locate": true,
+  "report": true,
   "gazetteer": {},
   "catchments": {
     "provider": [

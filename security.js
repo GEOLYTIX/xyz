@@ -62,30 +62,27 @@ passport.use(
                 return done(null, user);
             }
 
-            // create new user if no existing user is found for email address.
-            if (!user) {
+            user = {
+                email: email,
+                password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)),
+                verified: false,
+                approved: false,
+                admin: false,
+                verificationToken: require('crypto').randomBytes(20).toString('hex')
+            }
 
-                user = {
-                    email: email,
-                    password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)),
-                    verified: false,
-                    approved: false,
-                    admin: false,
-                    verificationToken: require('crypto').randomBytes(20).toString('hex')
-                }
+            user = await global.ORM.collections.users.create(user).fetch();
 
-                user = await global.ORM.collections.users.create(user).fetch();
-
-                mailer.mail({
-                    to: user.email,
-                    subject: `Please verify your GEOLYTIX account on ${global.site}`,
-                    text: `A new account for this email address has been registered with ${global.site}. \n \n`
+            mailer.mail({
+                to: user.email,
+                subject: `Please verify your GEOLYTIX account on ${global.site}`,
+                text: `A new account for this email address has been registered with ${global.site}. \n \n`
                     + `Please verify that you are the account holder: ${req.protocol}://${global.site}/verify/${user.verificationToken} \n \n`
                     + `A site administrator must approve the account before you are able to login. \n \n`
-                    + `You will be notified via email once an adimistrator has approved your account.`});
+                    + `You will be notified via email once an adimistrator has approved your account.`
+            });
 
-                return done(null, user);
-            }
+            return done(null, user);
         }
     )
 );
