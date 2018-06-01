@@ -43,6 +43,7 @@
           "pane": ["stores", 510],
           "dbs": "XYZ",
           "table": "store_survey",
+          "log_table": "store_survey_logs",
           "cluster_label": "retailer",
           "cluster_cat": "retailer",
           "infoj": [

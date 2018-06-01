@@ -28,6 +28,8 @@ async function newRecord(req, res) {
             RETURNING id;`;
     }
     
+    //console.log(q);
+    
     global.DBS[req.body.dbs].query(q).then((result) => {
         
         q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = ${result.rows[0].id};`;
@@ -149,6 +151,7 @@ async function deleteRecord(req, res) {
 
     let q,
         table = req.body.table,
+        log_table = req.body.log_table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id;
 
@@ -156,16 +159,17 @@ async function deleteRecord(req, res) {
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
-
-    q = `
-    DELETE FROM ${table}
-    WHERE ${qID} = $1`;
-
-    //console.log(q);
-             
+    
+    q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = $1;`;
+    
     global.DBS[req.body.dbs].query(q, [id])
-        .then(result => res.status(200).send())
+    .then((result) => {
+        q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
+        
+        global.DBS[req.body.dbs].query(q, [id])
+        .then(_result => res.status(200).send())
         .catch(err => console.error(err));
+    }).catch(err => console.error(err));
 }
 
 module.exports = {
