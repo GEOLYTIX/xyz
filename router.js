@@ -23,16 +23,13 @@ router.get('/', isLoggedIn, async (req, res) => {
     let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
 
     // Assign session hooks from params.
-    if (req.session) {
-        if (!req.session.hooks || !process.env.LOGIN) req.session.hooks = {};
-        if (params[0] !== '')
-            params.forEach(p => {
-                let kv = p.split('=');
-                req.session.hooks[kv[0]] = kv[1];
-            });
+    req.session.hooks = {};
+    if (params[0] !== '') params.forEach(p => {
+        let kv = p.split('=');
+        req.session.hooks[kv[0]] = kv[1];
+    });
 
-        global.appSettings.hooks = req.session.hooks;
-    }
+    global.appSettings.hooks = req.session.hooks;
 
     // Check whether request comes from a mobile platform and set template.
     let md = new Md(req.headers['user-agent']);
@@ -64,7 +61,7 @@ router.get('/', isLoggedIn, async (req, res) => {
 // Open the settings view.
 router.get('/settings', isAdmin, async (req, res) => {
 
-    await require('./mod/appsettings').getAppSettings();
+    await require('./mod/appsettings').getAppSettings(req);
 
     res.send(
         jsr.templates('./views/settings.html').render({
@@ -188,6 +185,12 @@ router.get('/q_get_image', isLoggedIn, (req, res) => res.sendFile(process.env.IM
 
 // Open the login / register view.
 router.get('/login', (req, res) => {
+    
+    if (!global.ORM.collections.users) {
+        //req.session.messages = ['No account ORM found.'];
+        return res.send('No account ORM found.');//done(null, false);
+    }
+
     res.render('login.ejs', {
         user: req.user,
         session_messages: req.session.messages || [],
@@ -206,10 +209,11 @@ const security = require('./security');
 
 // Send login information for authentication to passport.
 router.post('/login', security.passport.authenticate('localLogin', {
-    failureRedirect: (process.env.DIR || '') + '/login',
-    successRedirect: (process.env.DIR || '') + '/',
-    failureMessage: 'Invalid username or password'
-}));
+    failureMessage: 'Invalid username or password',
+    failureRedirect: (process.env.DIR || '') + '/login'
+}), (req, res) => {
+    res.redirect(req.session.redirectTo || (process.env.DIR || '') + '/');
+});
 
 // Send account information for registration to passport.
 router.post('/register', security.passport.authenticate('localRegister', {
@@ -250,46 +254,26 @@ function isLoggedIn(req, res, next) {
     // return next() if LOGIN is not set in environment settings.
     if (!process.env.LOGIN) return next();
 
-    if (req.isAuthenticated()) {
+    // pass request on if request is authenticated and the user is approved an verified.
+    if (req.isAuthenticated() && req.user.approved && req.user.verified) return next();
 
-        if (req.user.approved && req.user.verified) {
-            let o = {},
-                params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
+    // store url in session redirectTo variable to return to after successful login.
+    req.session.redirectTo = req.originalUrl;
 
-            if (params[0] !== '') {
-                for (let i = 0; i < params.length; i++) {
-                    let key_val = params[i].split('=');
-                    o[key_val[0]] = key_val[1];
-                }
-            }
-
-            if (req.session) req.session.hooks = Object.keys(o).length > 0 ?
-                o : req.session.hooks ?
-                    req.session.hooks : false;
-
-            return next();
-        }
-
-    } else {
-        let o = {},
-            params = req.url.substring(2).split('&');
-
-        if (params[0] !== '')
-            params.forEach(p => {
-                let key_val = p.split('=');
-                o[key_val[0]] = key_val[1];
-            });
-
-        if (req.session) req.session.hooks = Object.keys(o).length > 0 ? o : false;
-
-        res.redirect((process.env.DIR || '') + '/login');
-    }
+    // FINALLY redirect to login
+    res.redirect((process.env.DIR || '') + '/login');
 }
 
 // Middleware funtion to check whether a user has administrator roles.
 function isAdmin(req, res, next) {
+
+    // pass on if the request is authenticated and the user has admin credentials.
     if (req.isAuthenticated() && req.user.admin) return next();
 
+    // set redirectTo on session to redirect client after successful login.
+    req.session.redirectTo = req.originalUrl;
+
+    // redirect to login.
     res.redirect((process.env.DIR || '') + '/login');
 }
 

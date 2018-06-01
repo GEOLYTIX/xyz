@@ -50,8 +50,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw({ limit: '50mb' }));
 
 // Set app to use session with secret provided in environment settings.
-if (process.env.OURSECRET) app.use(session({
-    secret: process.env.OURSECRET,
+app.use(session({
+    secret: process.env.OURSECRET || 'ChinaCatSunflower',
     resave: true,
     saveUninitialized: true
 }));
@@ -59,7 +59,7 @@ if (process.env.OURSECRET) app.use(session({
 // Initialise waterline ORM for appsettings and user profiles.
 require('./waterline');
 
-if (process.env.LOGIN) {
+if (process.env.LOGIN || process.env.ADMIN) {
     const security = require('./security');
     app.use(security.passport.initialize());
     app.use(security.passport.session());
