@@ -9,7 +9,7 @@ async function newRecord(req, res) {
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
         cat = req.body.cluster_cat || null,
-        username = req.session.passport.user.email;
+        username = req.session.passport.user.email || 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -112,7 +112,7 @@ async function updateRecord(req, res) {
         id = req.body.id,
         fields = '',
         log_table = req.body.log_table,
-        username = req.session.passport.user.email;
+        username = req.session.passport.user.email || 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -154,7 +154,7 @@ async function deleteRecord(req, res) {
         log_table = req.body.log_table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        username = req.session.passport.user.email;
+        username = req.session.passport.user.email || 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
