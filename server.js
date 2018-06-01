@@ -8,7 +8,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const session = process.env.OURSECRET ? require('express-session') : null;
+const session = require('express-session');
 const helmet = require('helmet');
 const morgan = req_res('morgan') ? require('morgan') : null;
 
