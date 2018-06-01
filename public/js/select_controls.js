@@ -199,6 +199,7 @@ function trash(record) {
         xhr.send(JSON.stringify({
             dbs: _layer.dbs,
             table: record.location.table,
+            log_table: _layer.log_table,
             qID: _layer.qID,
             id: record.location.id
         }));
