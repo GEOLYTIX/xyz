@@ -21,7 +21,7 @@ router.get('/', isLoggedIn, async (req, res) => {
 
     // Get params from URL.
     let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
-
+    
     // Assign session hooks from params.
     if (req.session) {
         if (!req.session.hooks || !process.env.LOGIN) req.session.hooks = {};
