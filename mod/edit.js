@@ -1,7 +1,5 @@
 const filters = require('./filters');
 
-const username = 'agata.brok@geolytix.co.uk'; // just for testing
-
 async function newRecord(req, res) {
 
     let q,
@@ -10,7 +8,8 @@ async function newRecord(req, res) {
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        cat = req.body.cluster_cat || null;
+        cat = req.body.cluster_cat || null,
+        username = req.session.passport.user.email;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -112,7 +111,8 @@ async function updateRecord(req, res) {
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
         fields = '',
-        log_table = req.body.log_table;
+        log_table = req.body.log_table,
+        username = req.session.passport.user.email;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -153,7 +153,8 @@ async function deleteRecord(req, res) {
         table = req.body.table,
         log_table = req.body.log_table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id;
+        id = req.body.id,
+        username = req.session.passport.user.email;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
