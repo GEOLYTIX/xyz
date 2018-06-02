@@ -21,6 +21,7 @@ passport.use(
         },
         async (req, email, password, done) => {
             let user = await global.ORM.collections.users.findOne({ email: email });
+            if (!user) return done(null, false);
             bcrypt.compareSync(password, user.password) ?
                 done(null, user) :
                 done(null, false);

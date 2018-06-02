@@ -59,33 +59,17 @@
 
     <div class="map_container">
 
-        <div id="Map" class="map">
-            <a href="http://mapbox.com/about/maps" class='mapbox-wordmark' target="_blank">Mapbox</a>
-            <div class="mapbox-attribution-container">
-                <a href="http://leafletjs.com" target="_blank">
-                    <strong>Leaflet</strong> | </a>
-                <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
-                <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
-                <a href="https://www.mapbox.com/map-feedback/" target="_blank">
-                    <strong>Improve this map</strong>
-                </a>
+        <div class="attribution">
+            <a class="logo" class="noselect tooltip-top" data-tooltip="Please visit our website and find out how we can assist you."
+                href="https://geolytix.co.uk">GEOLYTIX</a>
+            <div class="links">
+                <a class="here" href="https://legal.here.com/us-en/terms/serviceterms" target="_blank">© HERE</a>
+                <a class="osm" href="http://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a>
+                <a class="mapbox" href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a>
+                <a class="leaflet" href="http://leafletjs.com" target="_blank">
+                    <i class="material-icons">favorite</i> Leaflet</a>
             </div>
-            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
-                <defs>
-                    <filter id='dropshadow'>
-                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                        <feOffset dx='1' dy='1' result='offsetblur' />
-                        <feMerge>
-                            <feMergeNode/>
-                            <feMergeNode in='SourceGraphic' />
-                        </feMerge>
-                    </filter>
-                </defs>
-            </svg>
         </div>
-
-        <a class="logo_link" class="noselect tooltip-top"
-           data-tooltip="Please visit our website and find out how we can assist you." href="https://geolytix.co.uk">GEOLYTIX</a>
 
         <div class="btn_column noselect">
             <button id="btnGazetteer" title="Open Gazetteer" {{:btnSearch}}>
@@ -131,6 +115,21 @@
                     <i class="material-icons">settings</i>
                 </a>
             </button>
+        </div>
+
+        <div id="Map" class="map">
+            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+                <defs>
+                    <filter id='dropshadow'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                        <feOffset dx='1' dy='1' result='offsetblur' />
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in='SourceGraphic' />
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
         </div>
 
     </div>

@@ -42,6 +42,9 @@ _xyz.locale = _xyz.hooks.locale || _xyz.locale;
 // Set locale to hook, or set hook for locale.
 if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
 
+// Set the attribution array.
+_xyz.attribution = ['leaflet'];
+
 // Set min/max zoom defaults.
 _xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;
 _xyz.locales[_xyz.locale].maxZoom = _xyz.locales[_xyz.locale].maxZoom || 20;
@@ -132,7 +135,6 @@ function viewChangeEnd() {
 
 // Function to check whether all display layers are drawn.
 _xyz.layersCheck = () => {
-
     let layersArray = [],
         chkScore = 0;
 
@@ -141,9 +143,6 @@ _xyz.layersCheck = () => {
         chkScore = layer.display && layer.loaded ? chkScore-- : chkScore;
         layersArray.push([layer.name, layer.display, layer.loaded]);
     });
-
-    // Logs when all layers are ready. 
-    //if (chkScore === 0) console.log(layersArray);
 }
 
 // Inititialise modules.
