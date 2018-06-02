@@ -104,6 +104,8 @@ module.exports = () => {
                             utils.removeClass(layer.drawer, 'report-off');
                             e.target.textContent = 'layers';
                             _xyz.pushHook('layers', layer.layer);
+                            _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
+                            attributionCheck();
                             layer.getLayer();
                         } else {
                             layer.loader.style.display = 'none';
@@ -111,6 +113,13 @@ module.exports = () => {
                             utils.addClass(layer.drawer, 'report-off');
                             e.target.textContent = 'layers_clear';
                             _xyz.filterHook('layers', layer.layer);
+
+                            if (layer.attribution) layer.attribution.forEach(a => {
+                                let foo = _xyz.attribution.indexOf(a);
+                                _xyz.attribution.splice(foo,1);
+                            });
+                            attributionCheck();
+
                             if (layer.L) _xyz.map.removeLayer(layer.L);
                             if (layer.base) {
                                 _xyz.map.removeLayer(layer.base);
@@ -237,7 +246,11 @@ module.exports = () => {
             }
 
             // Push hook for display:true layer (default).
-            if (layer.display) _xyz.pushHook('layers', layer.layer);
+            if (layer.display) {
+                _xyz.pushHook('layers', layer.layer);
+                _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
+                attributionCheck();
+            }
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
 
@@ -245,4 +258,18 @@ module.exports = () => {
         });
     };
     _xyz.layers.init();
+
+    function attributionCheck() {
+        // get attribution links and check whether the className is in the attribution list.
+        let links = document.querySelectorAll('.attribution > .links > a');
+        for (i = 0; i < links.length; ++i) {
+            let me = links[i].className;
+            let me_i = _xyz.attribution.indexOf(me);
+            if (_xyz.attribution.indexOf(links[i].className) >= 0) {
+                links[i].style.display = 'inline-block';
+            } else {
+                links[i].style.display = 'none';
+            }
+        }
+    }
 }
