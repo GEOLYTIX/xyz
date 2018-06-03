@@ -805,13 +805,30 @@ input[type=range]::-moz-range-thumb {
     color: #079e00;
     font-size: 50px; }
 
-.logo_link {
-  position: fixed;
-  top: 5px;
+.attribution {
+  bottom: 5px;
   right: 5px;
-  font-family: ffmark_black, sans-serif;
-  font-size: 25px;
-  text-shadow: 0 5px 0 rgba(0, 150, 0, 0.2), 5px 0 rgba(0, 0, 0, 0.2); }
+  position: absolute;
+  z-index: 999; }
+  .attribution .links {
+    float: right;
+    clear: right;
+    font-family: ffmark_bold, sans-serif;
+    font-size: 18px;
+    text-shadow: 2px 2px #ccff90; }
+    .attribution .links i {
+      font-size: 14px; }
+    .attribution .links a {
+      border-bottom: 2px solid black;
+      margin-left: 5px;
+      display: none; }
+  .attribution .logo {
+    font-family: ffmark_black, sans-serif;
+    text-shadow: 2px 2px #ccff90;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    font-size: 35px; }
 
 *,
 *::after,
