@@ -882,10 +882,10 @@ input[type=range]::-moz-range-thumb {
       margin-left: 5px;
       display: none; }
   .attribution .logo {
-    float: right;
     font-family: ffmark_black, sans-serif;
-    font-size: 40px;
-    text-shadow: 3px 3px #cf9; }
+    text-shadow: 2px 2px #cf9;
+    float: right;
+    font-size: 40px; }
 
 *,
 *::after,
