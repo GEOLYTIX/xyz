@@ -670,21 +670,6 @@
               "inline": true
             },
             {
-              "field": "seamless_town",
-              "label": "Town",
-              "type": "text"
-            },
-            {
-              "field": "region",
-              "label": "Area",
-              "type": "text"
-            },
-            {
-              "field": "country",
-              "label": "Country",
-              "type": "text"
-            },
-            {
               "field": "open_closed",
               "label": "Shop status",
               "type": "text",
@@ -701,32 +686,6 @@
               "options": [
                   "MONOPOLY", "SINGLE COMP", "MULTI COMP"
               ]
-            },
-            {
-              "label": "Tenure"
-            },
-            {
-              "field": "tenure",
-              "label": "Tenure type",
-              "type": "text",
-              "inline": true,
-              "level": 1,
-              "options": [
-                  "Freehold", "Leasehold"
-              ]
-            },
-            {
-              "field": "break_v_expire2",
-              "label": "Break vs expire date",
-              "type": "text",
-              "inline": true,
-              "level": 1
-            },
-            {
-              "field": "rent",
-              "label": "Rent p.a.",
-              "type": "numeric",
-              "level": 1
             }
           ],
           "cluster_kmeans": 50,
@@ -771,6 +730,54 @@
                 }
               }
             }
+          }
+        },
+         "williamhill_editable_logs": {
+          "display": false,
+          "restriction": "admin",
+          "name": "William Hill Shops (edit log)",
+          "meta": "William Hill Shops editing history.",
+          "format": "geojson",
+          "pane": [
+            "williamhill",
+            540
+          ],
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "williamhill_09052018_editable_logs",
+          "arrayZoom": {
+              "6": "williamhill_09052018_editable_logs"
+          },
+          "geomq": "geom",
+          "infoj": [
+            {
+              "field": "id",
+              "label": "Log ID",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "username",
+              "label": "Edited by",
+              "type": "text"
+            },
+            {
+              "field": "edited",
+              "label": "Edited on",
+              "type": "text"
+            }
+          ],
+          "style": {
+              "default":{
+                 "color": "#5299D3",
+                 "weight": 2,
+              "fillOpacity": 0
+              },
+              "highlight": {
+                 "color": "#5299D3",
+                 "weight": 2,
+                 "fillOpacity": 0.3
+              }
           }
         },
         "competitors": {
@@ -988,6 +995,50 @@
                 }
               },
               "other": true
+            }
+          }
+        },
+        "competitors_edit_logs": {
+          "display": false,
+          "restriction": "admin",
+          "name": "Competitors (edit log)",
+          "meta": "Editing history",
+          "format": "geojson",
+          "pane": ["competitors", 530],
+          "dbs": "XYZ",
+          "qID": "id",
+          "arrayZoom": {
+              "6": "williamhill_competitors_editable_logs"
+          },
+          "geomq": "geom",
+          "infoj": [
+            {
+              "field": "id",
+              "label": "Log ID",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "username",
+              "label": "Edited by",
+              "type": "text"
+            },
+            {
+              "field": "edited",
+              "label": "Edited on",
+              "type": "text"
+            }
+          ],
+          "style": {
+              "default":{
+              "color": "#ff6f00",
+              "weight": 2,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "color": "#ff6f00",
+              "weight": 2,
+              "fillOpacity": 0.3
             }
           }
         },
