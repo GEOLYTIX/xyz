@@ -28,8 +28,8 @@ async function newRecord(req, res) {
     }
     
     //console.log(q);
-    
-    global.DBS[req.body.dbs].query(q).then((result) => {
+    // inserts geometry both into source table and log table 
+    /*global.DBS[req.body.dbs].query(q).then((result) => {
         
         q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = ${result.rows[0].id};`;
         
@@ -39,7 +39,12 @@ async function newRecord(req, res) {
             .then(_result => res.status(200).send(result.rows[0].id.toString()))
             .catch(err => console.error(err));
         
-    }).catch(err => console.error(err));
+    }).catch(err => console.error(err));*/
+    
+    // inserts only to the source table for editing.
+    global.DBS[req.body.dbs].query(q)
+        .then(result => res.status(200).send(result.rows[0].id.toString()))
+        .catch(err => console.error(err));
 
 }
 
