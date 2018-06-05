@@ -53,6 +53,7 @@ if (login && login.split(':')[0] === 'postgres') {
             tableName: login.split('|').pop(),
             primaryKey: '_id',
             datastore: 'pg_users',
+            migrate: 'safe',
             attributes: {
                 _id: { type: 'string', autoMigrations: { autoIncrement: true } },
                 email: { type: 'string' },

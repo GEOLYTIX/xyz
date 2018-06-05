@@ -28,6 +28,9 @@ async function getAppSettings(req) {
 }
 
 async function saveAppSettings(req, res) {
+
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') res.status(406).json({ file: true });
+
     let existingSettings = await global.ORM.collections.settings.find();
     if (existingSettings.length === 0) {
         await global.ORM.collections.settings.create({

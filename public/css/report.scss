@@ -14,6 +14,7 @@ $glxlightgreen: #cf9;
 @import 'gazetteer';
 @import 'leaflet';
 @import 'location';
+@import 'attribution';
 *,
 *::after,
 *::before {
@@ -203,18 +204,6 @@ i,
     }
     .leaflet-control-attribution {
         display: none;
-    }
-    .attribution {
-        right: 0;
-        z-index: 9999;
-        position: absolute;
-        bottom: 0;
-        opacity: 0.7;
-        background-color: #fff;
-        width: 100%;
-        text-align: right;
-        padding: 5px;
-        font-family: ffmark_bold;
     }
 }
 

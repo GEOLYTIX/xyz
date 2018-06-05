@@ -41,11 +41,21 @@
             <div id="Locations" class="module"></div>
 
         </div>
-
         <div class="map_container">
 
+            <div class="attribution">
+                <a class="logo" class="noselect tooltip-top" data-tooltip="Please visit our website and find out how we can assist you."
+                    href="https://geolytix.co.uk">GEOLYTIX</a>
+                <div class="links">
+                    <a class="here" href="https://legal.here.com/us-en/terms/serviceterms" target="_blank">© HERE</a>
+                    <a class="osm" href="http://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a>
+                    <a class="mapbox" href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a>
+                    <a class="leaflet" href="http://leafletjs.com" target="_blank">
+                        <i class="material-icons">favorite</i> Leaflet</a>
+                </div>
+            </div>
+
             <div id="Map" class="map unclickable" onclick="return false;">
-                <div class="attribution">mapbox | here | leaflet | openstreetmap | GEOLYTIX</div>
                 <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
                     <defs>
                         <filter id='dropshadow'>
@@ -59,8 +69,6 @@
                     </defs>
                 </svg>
             </div>
-
-            
 
             <div class="btn_column noselect">
                 <button id="btnGazetteer" title="Open Gazetteer" {{:btnSearch}}>

@@ -90,7 +90,7 @@ const markdown = require('markdown-it')({
 
 // Read documentation.md into file stream and send render of the github flavoured markdown template to client.
 router.get('/documentation', (req, res) => {
-    require('fs').readFile('..' + (process.env.DIR || '') + '/public/documentation.md', function (err, md) {
+    require('fs').readFile('./public/documentation.md', function (err, md) {
         if (err) throw err;
         res.send(
             jsr.templates('./views/github.html').render({
