@@ -1,6 +1,8 @@
 {
   "title": "GEOLYTIX | BP",
+  "documentation": "documentation",
   "select": {},
+  "report": {},
   "gazetteer": {},
   "locales": {
     "GB": {
@@ -12,6 +14,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
@@ -20,6 +23,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base_labels", 560],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
@@ -27,6 +31,7 @@
         },
         "here": {
           "name": "HERE Imagery",
+          "attribution": ["here"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
@@ -34,6 +39,7 @@
         },
         "here_hybrid": {
           "name": "HERE Hybrid",
+          "attribution": ["here"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
@@ -46,7 +52,7 @@
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
-          "table": "bp_catalist_opp2",
+          "table": "bp.catalist_opp",
           "cluster_label": "sitename",
           "cluster_cat": "sharebrand",
           "infoj": [
@@ -231,11 +237,11 @@
         },
         "catalist_opp_bp": {
           "name": "BP/M&S sites",
-          "meta": "BP fuel station locations only.",
+          "meta": "BP/M&S fuel station locations only.",
           "format": "cluster",
           "pane": ["catalist_opp", 540],
           "dbs": "XYZ",
-          "table": "bp_ms_sites",
+          "table": "bp.ms_sites",
           "qID": "id",
           "cluster_label": "site_name",
           "cluster_cat": "sharebrand",
@@ -290,9 +296,9 @@
             }
           ],
           "arrayZoom": {
-            "6": "bp_region"
+            "6": "bp.region"
           },
-          "tilecache": "bp_region__tc",
+          "tilecache": "bp.region__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -337,9 +343,9 @@
             }
           ],
           "arrayZoom": {
-            "9": "bp_oa_opp_simple"
+            "9": "bp.oa_opp_simple"
           },
-          "tilecache": "bp_oa_opp_simple__tc",
+          "tilecache": "bp.oa_opp_simple__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -474,9 +480,9 @@
             }
           ],
           "arrayZoom": {
-            "9": "bp_oa_total"
+            "9": "bp.oa_total"
           },
-          "tilecache": "bp_oa_total__tc",
+          "tilecache": "bp.oa_total__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -584,7 +590,7 @@
           "pane": ["traffic", 550],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "bp_traffic_counts_all",
+          "table": "bp.traffic_counts_all",
           "cluster_label": "road_num",
           "cluster_cat": "all_mv_000__16",
           "hover": true,

@@ -39,7 +39,7 @@ function MAPBOX_placesAutoComplete(req, res) {
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
           + `&${global.KEYS[req.query.provider]}`;
 
-    console.log(q);
+    //console.log(q);
 
     require('request').get(q, (err, response, body) => {
 
