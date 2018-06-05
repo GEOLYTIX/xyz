@@ -163,6 +163,9 @@ module.exports = () => {
 
         // infoj fields with a layer definition are queried from the reference layer.
         setLayerReferences(layer.infoj);
+        
+        // charts
+        setChartData(layer, location);
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'q_select');
@@ -214,6 +217,43 @@ module.exports = () => {
                 }
             }
         })
+    }
+    
+    function setChartData(layer, location){
+        layer.infoj.forEach(entry => {
+            if(typeof(entry.chart) == 'string'){
+                Object.keys(layer.charts).map(function(chart){
+                    let _arr = [];
+                    Object.keys(layer.charts[chart]).map(function(item){
+                        _arr.push(layer.charts[chart][item].field);
+                    });
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'q_chart_data');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onload = function(){
+                        if (this.status === 200){
+                            
+                            //console.log(layer.charts[chart]);
+                            
+                            Object.keys(layer.charts[chart]).map(function(key){
+                                let _field = layer.charts[chart][key].field,
+                                    _val = JSON.parse(xhr.responseText)[_field];
+                                
+                                layer.charts[chart][key].y = _val; 
+                            });
+                            console.log(layer.charts[chart]);
+                        }
+                    };
+                    if(_arr) xhr.send(JSON.stringify({
+                        dbs: layer.dbs,
+                        table: location.table,
+                        qID: layer.qID,
+                        id: location.id,
+                        series: _arr.join(",")
+                    }));
+                });
+            }
+        });
     }
 
     function addLayerToRecord(location) {

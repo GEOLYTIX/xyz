@@ -137,6 +137,9 @@ router.get('/q_geojson', isLoggedIn, require('./mod/geojson').geojson);
 // Get data for selected item.
 router.post('/q_select', isLoggedIn, require('./mod/select').select);
 
+// Get chart data for selected item.
+router.post('/q_chart_data', isLoggedIn, require('./mod/select').chart_data);
+
 // Create a new feature.
 router.post('/q_save', isLoggedIn, require('./mod/edit').newRecord);
 

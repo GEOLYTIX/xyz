@@ -1,5 +1,6 @@
 const utils = require('./utils');
 const images = require('./select_images');
+const charts = require('./charts');
 
 function addInfojToList(record) {
 
@@ -19,6 +20,13 @@ function addInfojToList(record) {
         let tr = utils.createElement('tr', {
             className: 'lv-' + (entry.level || 0)
         }, table);
+        
+        if(entry.chart) {
+            //console.log(record.location.layer);
+            table.appendChild(charts.bar_chart(record.location.layer, entry.chart));
+            
+        }
+        //console.log(record.location.infoj[entry]);
         
         // Create new table cell for label and append to table.
         if (entry.label){
@@ -317,6 +325,7 @@ function addInfojToList(record) {
 
             return
         }
+        
 
         // Creat input for editable fields
         if (record.location.editable) {

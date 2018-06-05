@@ -114,8 +114,11 @@
                         font-size: 14px;
                         float: right;
                     }
-                    
+
                 }
+                
+                
+                
                 .half {
                     width: 48%;
                     display: inline-block;
@@ -131,6 +134,26 @@
                         float: right;
                     }
                 }
+            }
+            
+            .bar {
+                fill: steelblue!important;
+                width: 10px;
+            }
+                    
+            .bar:hover{
+                fill: brown!important;
+            }
+                    
+            .axis {
+                font: 10px sans-serif;
+            }
+                    
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: #333;
+                shape-rendering: crispEdges;
             }
         }
     }

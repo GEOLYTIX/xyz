@@ -67,6 +67,7 @@
         "mb": {
           "display": true,
           "streetview": true,
+          "geomdisplay": ",ST_AsGeoJSON(displaygeom) AS geomdisplay",
           "name": "M&B Premises",
           "meta": "All M&B premises June 2018.",
           "format": "cluster",
@@ -80,6 +81,17 @@
           "cluster_label": "crmbrandname",
           "cluster_cat": "crmbrandname",
           "aggregate_layer": "mb.scratch",
+          "charts": {
+              "Bookings by day of week": [
+                  {"label": "Mondays", "x": 1, "field": "visits_mon"},
+                  {"label": "Tuesdays", "x": 2, "field": "visits_tue"},
+                  {"label": "Wednesdays", "x": 3, "field": "visits_wed"},
+                  {"label": "Thursdays", "x": 4, "field": "visits_thu"},
+                  {"label": "Fridays", "x": 5, "field": "visits_fri"},
+                  {"label": "Saturdays", "x": 6, "field": "visits_sat"},
+                  {"label": "Sundays", "x": 7, "field": "visits_sun"}
+              ]
+          },
           "infoj": [
             {
               "field": "buncode",
@@ -193,6 +205,9 @@
               "label": "Bookings by day of week"
             },
             {
+              "chart": "Bookings by day of week"
+            },
+            {
               "field": "visits_mon",
               "label": "Monday",
               "type": "integer",
@@ -229,7 +244,7 @@
               "level": 2
             },
             {
-              "field": "visits_sun",
+              "field": "visits_sat",
               "label": "Sunday",
               "type": "integer",
               "level": 2
