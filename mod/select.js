@@ -81,6 +81,27 @@ async function select(req, res) {
         .catch(err => console.error(err));
 }
 
+async function chart_data(req, res){
+    let table = req.body.table,
+        qID = req.body.qID,
+        id = req.body.id,
+        series = req.body.series;
+    
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
+
+    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+    
+    let q = `SELECT ${series} FROM ${table} WHERE ${qID} = ${id};`;
+    
+    //console.log(q);
+    
+     global.DBS[req.body.dbs].query(q)
+        .then(result => res.status(200).send(result.rows[0]))
+        .catch(err => console.error(err));
+}
+
 module.exports = {
-    select: select
+    select: select,
+    chart_data: chart_data 
 };

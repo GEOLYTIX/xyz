@@ -435,6 +435,18 @@ input[type=range]::-moz-range-thumb {
           margin: 1px; }
           .mod_container .module .drawer .panel .third.right {
             float: right; }
+      .mod_container .module .drawer .bar {
+        fill: steelblue !important;
+        width: 10px; }
+      .mod_container .module .drawer .bar:hover {
+        fill: brown !important; }
+      .mod_container .module .drawer .axis {
+        font: 10px sans-serif; }
+      .mod_container .module .drawer .axis path,
+      .mod_container .module .drawer .axis line {
+        fill: none;
+        stroke: #333;
+        shape-rendering: crispEdges; }
   .mod_container .pane_shadow {
     box-shadow: 0 3px 3px -3px #000; }
   .mod_container .loader {
