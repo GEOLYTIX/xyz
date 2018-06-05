@@ -2,6 +2,7 @@
   "title": "GEOLYTIX | DOMINOS",
   "select": {},
   "gazetteer": {},
+  "documentation": "documentation",
   "locales": {
     "UK": {
       "name": "Great Britain",
