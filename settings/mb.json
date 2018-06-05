@@ -233,9 +233,6 @@
               "label": "Sunday",
               "type": "integer",
               "level": 2
-            },
-            {
-              "fields": []
             }
           ],
           "cluster_kmeans": 50,
