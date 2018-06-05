@@ -27,6 +27,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
           "pane": [
             "base",
             500
@@ -37,6 +38,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
           "pane": [
             "base_labels",
             560
@@ -46,6 +48,7 @@
         },
         "here": {
           "name": "HERE Imagery",
+          "attribution": ["here"],
           "pane": [
             "base",
             500
@@ -56,6 +59,7 @@
         },
         "here_hybrid": {
           "name": "HERE Hybrid",
+          "attribution": ["here"],
           "pane": [
             "base",
             500
@@ -76,7 +80,7 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill_09052018",
+          "table": "wh.williamhill_09052018",
           "cluster_label": "shop_name",
           "cluster_cat": "competition",
           "aggregate_layer": "scratch",
@@ -645,8 +649,8 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill_09052018_editable",
-          "log_table": "williamhill_09052018_editable_logs",
+          "table": "wh.williamhill_09052018_editable",
+          "log_table": "wh.williamhill_09052018_editable_logs",
           "cluster_label": "shop_name",
           "cluster_cat": "competition",
           "aggregate_layer": "scratch",
@@ -744,9 +748,9 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill_09052018_editable_logs",
+          "table": "wh.williamhill_09052018_editable_logs",
           "arrayZoom": {
-              "6": "williamhill_09052018_editable_logs"
+              "6": "wh.williamhill_09052018_editable_logs"
           },
           "geomq": "geom",
           "infoj": [
@@ -828,8 +832,8 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "williamhill_competitors_editable",
-          "log_table": "williamhill_competitors_editable_logs",
+          "table": "wh.williamhill_competitors_editable",
+          "log_table": "wh.williamhill_competitors_editable_logs",
           "cluster_label": "competitor",
           "cluster_cat": "competitor",
           "cluster_kmeans": 50,
@@ -1044,7 +1048,7 @@
           "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
-              "6": "williamhill_competitors_editable_logs"
+              "6": "wh.williamhill_competitors_editable_logs"
           },
           "geomq": "geom",
           "infoj": [
@@ -1280,9 +1284,9 @@
           "format": "geojson",
           "sql_filter": "sql_filter",
           "dbs": "XYZ",
-          "table": "williamhill_scratch",
+          "table": "wh.williamhill_scratch",
           "arrayZoom": {
-            "6": "williamhill_scratch"
+            "6": "wh.williamhill_scratch"
           },
           "geomq": "geom",
           "qID": "id",
