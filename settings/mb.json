@@ -1,0 +1,550 @@
+{
+  "title": "GEOLYTIX | M&B",
+  "select": {},
+  "gazetteer": {},
+  "report": {},
+  "locales": {
+    "GB": {
+      "gazetteer": [
+        "GOOGLE",
+        "GB",
+        "",
+        "e.g. London"
+      ],
+      "bounds": [
+        [
+          48,
+          -11.5
+        ],
+        [
+          62,
+          5
+        ]
+      ],
+      "minZoom": 6,
+      "maxZoom": 18,
+      "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "pane": [
+            "base_labels",
+            560
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+        },
+        "here": {
+          "name": "HERE Imagery",
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "here_hybrid": {
+          "name": "HERE Hybrid",
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "mb": {
+          "display": true,
+          "streetview": true,
+          "name": "M&B Premises",
+          "meta": "All M&B premises June 2018.",
+          "format": "cluster",
+          "pane": [
+            "mb",
+            540
+          ],
+          "dbs": "XYZ",
+          "qID": "buncode",
+          "table": "mb.premises",
+          "cluster_label": "crmbrandname",
+          "cluster_cat": "crmbrandname",
+          "aggregate_layer": "mb.scratch",
+          "infoj": [
+            {
+              "field": "buncode",
+              "label": "ID",
+              "type": "text",
+              "inline": true,
+              "filter": "match"
+            },
+            {
+              "field": "outletbrandname",
+              "label": "Outlet brand",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "crmbrandname",
+              "label": "Brand",
+              "type": "text",
+              "inline": true,
+              "filter": "like"
+            },
+            {
+              "field": "segmentname",
+              "label": "Segment name",
+              "inline": true
+            },
+            {
+              "field": "place_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "street_address",
+              "label": "Address",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "label": "Postal code",
+              "type": "text",
+              "inline": true,
+              "filter": "like",
+              "level": 1
+            },
+            {
+              "field": "telephonenumber",
+              "label": "Telephone no.",
+              "type": "text",
+              "inline": true,
+              "level": 1
+            },
+            {
+              "field": "tradingstatusname",
+              "label": "Trading status",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "label": "Hierarchy"
+            },
+            {
+              "field": "hierarchy1name",
+              "label": "1",
+              "type": "text",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "hierarchy2name",
+              "label": "2",
+              "type": "text",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "hierarchy3name",
+              "type": "text",
+              "label": "3",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "menugroupingname",
+              "label": "Menu grouping",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "menustylename",
+              "label": "Menu style",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "postcodebookings",
+              "label": "Postcode bookings",
+              "type": "integer",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "postcodevouchers",
+              "label": "Postcode vouchers",
+              "type": "integer",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "label": "Bookings by day of week"
+            },
+            {
+              "field": "visits_mon",
+              "label": "Monday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_tue",
+              "label": "Tuesday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_wed",
+              "label": "Wednesday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_thu",
+              "label": "Thursday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_fri",
+              "label": "Friday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_sat",
+              "label": "Saturday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_sun",
+              "label": "Sunday",
+              "type": "integer",
+              "level": 2
+            }
+          ],
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.01,
+          "style": {
+            "markerMin": 25,
+            "markerMax": 40,
+            "marker": "svg_symbols.target([400,'#bbb'])",
+            "markerMulti": [
+              400,
+              "#bbb"
+            ],
+            "theme": {
+              "label": "",
+              "type": "categorized",
+              "competitors": null,
+              "cat": {
+                "Browns": {
+                  "marker": "svg_symbols.target([400, '#00412B', 300, '#FFF', 200, '#A90027'])",
+                  "label": "Browns"
+                },
+                "Premium Country Pubs": {
+                  "marker": "svg_symbols.target([400, '#9CE384', 320, '#FFF', 150, '#4E543C'])",
+                  "label": "Premium Country Pubs"
+                },
+                "Sizzling Pubs": {
+                  "marker": "svg_symbols.target([400,'#009DC0', 320, '#FFF', 240, '#009DC0'])",
+                  "label": "Sizzling Pubs"
+                },
+                "Son of Steak": {
+                  "marker": "svg_symbols.target([400, '#4D9BA7', 200, '#FFF'])",
+                  "label": "Son of Steak"
+                },
+                "Harvester": {
+                  "marker": "svg_symbols.target([400, '#006A45', 200, '#DCBF7E'])",
+                  "label": "Harvester"
+                },
+                "Chicken Society": {
+                  "marker": "svg_symbols.target([400, '#783A2D', 300, '#FFF', 200, '#0C5F94'])",
+                  "label": "Chicken Society"
+                },
+                "All Bar One": {
+                  "marker": "svg_symbols.target([400, '#917846', 300, '#FFF', 150, '#454545'])",
+                  "label": "All Bar One"
+                },
+                "Ember Inns": {
+                  "marker": "svg_symbols.target([400, '#535353', 300, '#FFF', 200, '#414045'])",
+                  "label": "Ember Inns"
+                },
+                "Stonehouse": {
+                  "marker": "svg_symbols.target([400, '#414045', 320, '#FFF', 220, '#0091A3'])",
+                  "label": "Stonehouse"
+                },
+                "Crown Carveries": {
+                  "marker": "svg_symbols.target([400, '#B90009', 300, '#EAA64B', 200, '#87000D'])",
+                  "label": "Crown Carveries"
+                },
+                "Castle": {
+                  "marker": "svg_symbols.target([400, '#5AB664', 200, '#FFF'])",
+                  "label": "Castle"
+                },
+                "Nicholsons": {
+                  "marker": "svg_symbols.target([400, '#D8BC8E', 200, '#282115'])",
+                  "label": "Nicholsons"
+                },
+                "Vintage Inns": {
+                  "marker": "svg_symbols.target([400, '#61264D', 300, '#AE8970', 100, '#FFF'])",
+                  "label": "Vintage Inns"
+                },
+                "Orchid Pubs & Dining": {
+                  "marker": "svg_symbols.target([400, '#4E0086', 300, '#A266BE', 200, '#FFF'])",
+                  "label": "Orchid Pubs & Dining"
+                },
+                "ONeills": {
+                  "marker": "svg_symbols.target([400, '#150DA5', 300, '#FFF', 200, '#150DA5'])",
+                  "label": "ONeills"
+                },
+                "Oak Tree pubs": {
+                  "marker": "svg_symbols.target([400, '#AFB08D', 200, '#19151C'])",
+                  "label": "Oak Tree pubs"
+                },
+                "Toby Carvery": {
+                  "marker": "svg_symbols.target([400, '#A90029', 300, '#FFF', 200, '#A90029'])",
+                  "label": "Toby Carvery"
+                }
+              }
+            }
+          }
+        },
+        "mb_scratch": {
+          "hidden": true,
+          "name": "MB Scratch",
+          "pane": ["scratch", 520],
+          "format": "geojson",
+          "sql_filter": "sql_filter",
+          "dbs": "XYZ",
+          "table": "mb.scratch",    
+          "arrayZoom": {
+              "6": "mb.scratch"
+          },
+          "geomq": "geom",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "count.buncode",
+              "label": "Count of premises",
+              "type": "integer",
+              "layer": "mb"
+            }
+          ]
+        },
+        "competition": {
+          "display": false,
+          "streetview": true,
+          "name": "Competition",
+          "meta": "Retail competitors",
+          "format": "cluster",
+          "pane": ["competition", 530],
+          "dbs": "XYZ",
+          "qID": "glxid",
+          "table": "mb.competition",
+          "cluster_label": "retailer",
+          "cluster_cat": "rlcategory",
+          "infoj": [
+              {
+                  "field": "glxid",
+                  "label": "Glx ID",
+                  "type": "text",
+                  "inline": true
+              },
+              {
+                  "field": "retailer",
+                  "label": "Retailer",
+                  "type": "text",
+                  "inline": true
+              },
+              {
+                  "field": "fascia",
+                  "label": "Fascia",
+                  "type": "text",
+                  "inline": true
+              },
+              {
+                  "field": "rlcategory",
+                  "label": "Category",
+                  "type": "text",
+                  "inline": true,
+                  "level": 1
+              },
+              {
+                  "field": "savgroup",
+                  "label": "Group",
+                  "type": "text",
+                  "inline": true,
+                  "level": 1
+              },
+              {
+                  "field": "rp_type",
+                  "label": "Retail place type",
+                  "type": "text",
+                  "inline": true
+              },
+              {
+                  "field": "address1",
+                  "label": "Address",
+                  "type": "text"
+              },
+              {
+                  "field": "locale_",
+                  "type": "text",
+                  "level": 1
+              },
+              {
+                  "field": "town",
+                  "type": "text",
+                  "level": 1
+              },
+              {
+                  "field": "postcode",
+                  "type": "text",
+                  "level": 1
+              }
+          ],
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.015,
+          "style": {
+            "markerMin": 20,
+            "markerMax": 40,
+            "marker": "svg_symbols.target([400,'#A2BCE0'])",
+            "markerMulti": [400, "#A2BCE0"],
+            "theme": {
+                "label": "Category",
+                "type": "categorized",
+                "competitors": null,
+                "cat": {
+                    "Restaurants": {
+                        "marker": "svg_symbols.target([400, '#A51C30', 300, '#F0B67F', 200, '#A51C30'])",
+                        "label": "Restaurants"
+                    },
+                    "Pubs / Restaurants": {
+                        "marker": "svg_symbols.target([400, '#254E70', 300, '#F0B67F', 200, '#254E70'])",
+                        "label": "Pubs / Restaurants"
+                    },
+                    "Bars & Clubs": {
+                        "marker": "svg_symbols.target([400, '#FF715B', 300, '#EFC9A5', 200, '#FF715B'])",
+                        "label": "Bars & Clubs"
+                    }
+                }
+            }
+          }
+        },
+        "admin": {
+           "name": "Output areas",
+            "pane": ["admin", 521],
+            "format": "mvt",
+            "dbs": "XYZ",
+            "geom_3857": "geom_3857",
+            "qID": "id",
+            "infoj": [
+                {
+                    "field": "oa_code",
+                    "label": "Output Area Code",
+                    "type": "text",
+                    "inline": true
+                }
+            ],
+            "arrayZoom": {
+                "13": "admin_output_area" 
+            },
+            "tilecache": "admin_output_area__tc",
+            "style": {
+                "palette": true,
+                "default": {
+                    "weight": 1,
+                    "color": "#777",
+                    "fill": true,
+                    "fillColor": "#aaa",
+                    "opacity": 0.4,
+                    "fillOpacity": 0
+                },
+                "highlight": {
+                    "color": "#f4511e",
+                    "fill": true,
+                    "opacity": 1,
+                    "fillOpacity": 0.3,
+                    "weight": 1
+                }
+            }
+        },
+          "seamless_town": {
+          "name": "Towns",
+          "pane": ["towns", 521],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "shop_town",
+              "label": "Shop town",
+              "type": "text"
+            },
+            {
+              "field": "u_townname",
+              "label": "Town name",
+              "type": "text"
+            },
+            {
+              "field": "count.buncode",
+              "label": "Count of locations",
+              "type": "integer",
+              "layer": "mb"
+            },
+            {
+              "field": "sum.postcodebookings",
+              "label": "Total postcode bookings",
+              "type": "numeric",
+              "layer": "mb",
+              "level": 2
+            },
+            {
+              "field": "sum.postcodevouchers",
+              "label": "Total postcode vouchers",
+              "type": "numeric",
+              "layer": "mb",
+              "level": 2
+            }
+          ],
+          "arrayZoom": {
+            "11": "seamless_town"
+          },
+          "tilecache": "seamless_town__tc",
+          "style": {
+            "palette": true,
+            "default": {
+              "weight": 1,
+              "color": "#777",
+              "fill": true,
+              "fillColor": "#aaa",
+              "opacity": 0.4,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "color": "#03a9f4",
+              "fill": true,
+              "opacity": 1,
+              "fillOpacity": 0.3,
+              "weight": 1.2
+            }
+          }
+        }
+      }
+    }
+  }
+}
