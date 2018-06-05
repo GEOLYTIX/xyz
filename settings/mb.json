@@ -233,6 +233,9 @@
               "label": "Sunday",
               "type": "integer",
               "level": 2
+            },
+            {
+              "fields": []
             }
           ],
           "cluster_kmeans": 50,
@@ -441,6 +444,106 @@
                         "label": "Bars & Clubs"
                     }
                 }
+            }
+          }
+        },
+        "admin": {
+           "name": "Output areas",
+            "pane": ["admin", 521],
+            "format": "mvt",
+            "dbs": "XYZ",
+            "geom_3857": "geom_3857",
+            "qID": "id",
+            "infoj": [
+                {
+                    "field": "oa_code",
+                    "label": "Output Area Code",
+                    "type": "text",
+                    "inline": true
+                }
+            ],
+            "arrayZoom": {
+                "13": "admin_output_area" 
+            },
+            "tilecache": "admin_output_area__tc",
+            "style": {
+                "palette": true,
+                "default": {
+                    "weight": 1,
+                    "color": "#777",
+                    "fill": true,
+                    "fillColor": "#aaa",
+                    "opacity": 0.4,
+                    "fillOpacity": 0
+                },
+                "highlight": {
+                    "color": "#f4511e",
+                    "fill": true,
+                    "opacity": 1,
+                    "fillOpacity": 0.3,
+                    "weight": 1
+                }
+            }
+        },
+          "seamless_town": {
+          "name": "Towns",
+          "pane": ["towns", 521],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "shop_town",
+              "label": "Shop town",
+              "type": "text"
+            },
+            {
+              "field": "u_townname",
+              "label": "Town name",
+              "type": "text"
+            },
+            {
+              "field": "count.buncode",
+              "label": "Count of locations",
+              "type": "integer",
+              "layer": "mb"
+            },
+            {
+              "field": "sum.postcodebookings",
+              "label": "Total postcode bookings",
+              "type": "numeric",
+              "layer": "mb",
+              "level": 2
+            },
+            {
+              "field": "sum.postcodevouchers",
+              "label": "Total postcode vouchers",
+              "type": "numeric",
+              "layer": "mb",
+              "level": 2
+            }
+          ],
+          "arrayZoom": {
+            "11": "seamless_town"
+          },
+          "tilecache": "seamless_town__tc",
+          "style": {
+            "palette": true,
+            "default": {
+              "weight": 1,
+              "color": "#777",
+              "fill": true,
+              "fillColor": "#aaa",
+              "opacity": 0.4,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "color": "#03a9f4",
+              "fill": true,
+              "opacity": 1,
+              "fillOpacity": 0.3,
+              "weight": 1.2
             }
           }
         }
