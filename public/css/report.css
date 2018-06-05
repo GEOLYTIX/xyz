@@ -624,6 +624,37 @@ input[type=range]::-moz-range-thumb {
     color: #090;
     font-size: 50px; }
 
+.attribution {
+  bottom: 5px;
+  right: 5px;
+  position: absolute;
+  z-index: 999;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 100%; }
+  .attribution .links {
+    float: right;
+    clear: right;
+    font-family: ffmark_bold, sans-serif;
+    font-size: 18px;
+    font-size: 15px;
+    text-shadow: 2px 2px #cf9; }
+    .attribution .links i {
+      font-size: 14px;
+      font-size: 10px; }
+    .attribution .links a {
+      border-bottom: 2px solid black;
+      margin-left: 5px;
+      display: none; }
+  .attribution .logo {
+    font-family: ffmark_black, sans-serif;
+    text-shadow: 2px 2px #cf9;
+    float: right;
+    font-size: 40px;
+    font-size: 30px; }
+
 *,
 *::after,
 *::before {
@@ -769,17 +800,6 @@ i,
       filter: url(#dropshadow); }
   .map_container .leaflet-control-attribution {
     display: none; }
-  .map_container .attribution {
-    right: 0;
-    z-index: 9999;
-    position: absolute;
-    bottom: 0;
-    opacity: 0.7;
-    background-color: #fff;
-    width: 100%;
-    text-align: right;
-    padding: 5px;
-    font-family: ffmark_bold; }
 
 .report-spacer {
   height: 10mm; }
