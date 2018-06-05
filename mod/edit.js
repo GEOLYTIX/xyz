@@ -9,7 +9,7 @@ async function newRecord(req, res) {
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
         cat = req.body.cluster_cat || null,
-        username = req.session.passport.user.email || 'nologin';
+        username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -28,16 +28,23 @@ async function newRecord(req, res) {
     }
     
     //console.log(q);
-    
-    global.DBS[req.body.dbs].query(q).then((result) => {
+    // inserts geometry both into source table and log table 
+    /*global.DBS[req.body.dbs].query(q).then((result) => {
         
         q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = ${result.rows[0].id};`;
+        
+        //console.log(q);
         
         global.DBS[req.body.dbs].query(q)
             .then(_result => res.status(200).send(result.rows[0].id.toString()))
             .catch(err => console.error(err));
         
-    }).catch(err => console.error(err));
+    }).catch(err => console.error(err));*/
+    
+    // inserts only to the source table for editing.
+    global.DBS[req.body.dbs].query(q)
+        .then(result => res.status(200).send(result.rows[0].id.toString()))
+        .catch(err => console.error(err));
 
 }
 
@@ -92,7 +99,7 @@ async function newAggregate(req, res) {
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
 
-    //console.log(q);
+    console.log(q);
 
     let result = await global.DBS[req.query.dbs].query(q);
 
@@ -112,7 +119,7 @@ async function updateRecord(req, res) {
         id = req.body.id,
         fields = '',
         log_table = req.body.log_table,
-        username = req.session.passport.user.email || 'nologin';
+        username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
@@ -154,7 +161,7 @@ async function deleteRecord(req, res) {
         log_table = req.body.log_table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        username = req.session.passport.user.email || 'nologin';
+        username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
