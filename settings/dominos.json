@@ -13,6 +13,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
@@ -21,6 +22,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
@@ -28,6 +30,7 @@
         },
         "here": {
           "name": "HERE Imagery",
+          "attribution": ["here"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
@@ -39,7 +42,7 @@
           "format": "cluster",
           "pane": ["stores", 520],
           "dbs": "XYZ",
-          "table": "dominos_stores",
+          "table": "dominos.stores",
           "qID": "store_id",
           "cluster_label": "store_name",
           "cluster_kmeans": 3,
@@ -114,7 +117,7 @@
           "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
-            "10": "dominos_retailplace_select"
+            "10": "dominos.retailplace_select"
           },
           "style": {
             "default": {
@@ -234,7 +237,7 @@
           "dbs": "XYZ",
           "qID": "id",
           "arrayZoom": {
-            "10": "dominos_retailplace"
+            "10": "dominos.retailplace"
           },
           "infoj": [
             {
