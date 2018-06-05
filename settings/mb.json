@@ -76,10 +76,10 @@
           ],
           "dbs": "XYZ",
           "qID": "buncode",
-          "table": "mb_premises",
+          "table": "mb.premises",
           "cluster_label": "crmbrandname",
           "cluster_cat": "crmbrandname",
-          "aggregate_layer": "mb_scratch",
+          "aggregate_layer": "mb.scratch",
           "infoj": [
             {
               "field": "buncode",
@@ -188,6 +188,51 @@
               "type": "integer",
               "inline": true,
               "level": 2
+            },
+            {
+              "label": "Bookings by day of week"
+            },
+            {
+              "field": "visits_mon",
+              "label": "Monday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_tue",
+              "label": "Tuesday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_wed",
+              "label": "Wednesday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_thu",
+              "label": "Thursday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_fri",
+              "label": "Friday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_sat",
+              "label": "Saturday",
+              "type": "integer",
+              "level": 2
+            },
+            {
+              "field": "visits_sun",
+              "label": "Sunday",
+              "type": "integer",
+              "level": 2
             }
           ],
           "cluster_kmeans": 50,
@@ -284,9 +329,9 @@
           "format": "geojson",
           "sql_filter": "sql_filter",
           "dbs": "XYZ",
-          "table": "mb_scratch",    
+          "table": "mb.scratch",    
           "arrayZoom": {
-              "6": "mb_scratch"
+              "6": "mb.scratch"
           },
           "geomq": "geom",
           "qID": "id",
@@ -308,7 +353,7 @@
           "pane": ["competition", 530],
           "dbs": "XYZ",
           "qID": "glxid",
-          "table": "mb_competition",
+          "table": "mb.competition",
           "cluster_label": "retailer",
           "cluster_cat": "rlcategory",
           "infoj": [
