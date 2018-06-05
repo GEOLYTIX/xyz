@@ -2,16 +2,9 @@
   "title": "GEOLYTIX | XYZ Demo",
   "documentation": "documentation",
   "select": {},
-  "locate": true,
-  "report": true,
+  "locate": {},
+  "report": {},
   "gazetteer": {},
-  "catchments": {
-    "provider": [
-      "MAPBOX",
-      "GOOGLE"
-    ],
-    "pane": ["catchments", 520]
-  },
   "locales": {
     "UK": {
       "name": "United Kingdom",
@@ -23,6 +16,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
@@ -31,6 +25,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
@@ -38,6 +33,7 @@
         },
         "here": {
           "name": "HERE Imagery",
+          "attribution": ["here"],
           "meta": "Satellite Imagery layer provided by HERE.",
           "pane": ["base", 500],
           "format": "tiles",
@@ -1315,6 +1311,7 @@
           "table": "gb_retailpoint",
           "cluster_label": "store",
           "cluster_cat": "brand",
+          "streetview": true,
           "infoj": [
             {
               "field": "store",
@@ -1674,7 +1671,6 @@
           }
         },
         "retail_points_aj_merger": {
-          "display": true,
           "name": "Asda / Sainsbury's",
           "pane": ["retail_points", 540],
           "format": "cluster",
@@ -1887,6 +1883,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
@@ -1895,6 +1892,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
           "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
@@ -1902,6 +1900,7 @@
         },
         "here": {
           "name": "HERE Imagery",
+          "attribution": ["here"],
           "meta": "Satellite Imagery layer provided by HERE.",
           "pane": ["base", 500],
           "format": "tiles",

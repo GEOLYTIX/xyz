@@ -21,9 +21,8 @@ btnSave.addEventListener('click', function () {
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function () {
-        if (this.status === 200) {
-            alert('Settings saved');
-        }
+        if (this.status === 406) alert('Cannot save file based settings.');
+        if (this.status === 200) alert('Settings saved.');
     }
 
     xhr.send(JSON.stringify({
