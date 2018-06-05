@@ -295,9 +295,9 @@
             }
           ],
           "arrayZoom": {
-            "6": "bp_region"
+            "6": "bp.region"
           },
-          "tilecache": "bp_region__tc",
+          "tilecache": "bp.region__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -342,9 +342,9 @@
             }
           ],
           "arrayZoom": {
-            "9": "bp_oa_opp_simple"
+            "9": "bp.oa_opp_simple"
           },
-          "tilecache": "bp_oa_opp_simple__tc",
+          "tilecache": "bp.oa_opp_simple__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -479,9 +479,9 @@
             }
           ],
           "arrayZoom": {
-            "9": "bp_oa_total"
+            "9": "bp.oa_total"
           },
-          "tilecache": "bp_oa_total__tc",
+          "tilecache": "bp.oa_total__tc",
           "style": {
             "default": {
               "weight": 1,
@@ -589,7 +589,7 @@
           "pane": ["traffic", 550],
           "dbs": "XYZ",
           "qID": "id",
-          "table": "bp_traffic_counts_all",
+          "table": "bp.traffic_counts_all",
           "cluster_label": "road_num",
           "cluster_cat": "all_mv_000__16",
           "hover": true,
