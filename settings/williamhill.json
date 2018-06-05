@@ -757,6 +757,42 @@
               "inline": true
             },
             {
+              "field": "lbo_no",
+              "label": "ID",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "shop_name",
+              "label": "Shop name",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "postcode",
+              "label": "Postal code",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "wh_region",
+              "label": "WH Region",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "wh_area",
+              "label": "WH Area",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "wh_cluster",
+              "label": "WH Cluster",
+              "type": "text",
+              "inline": true
+            },
+            {
               "field": "username",
               "label": "Edited by",
               "type": "text"
@@ -1017,6 +1053,139 @@
               "label": "Log ID",
               "type": "text",
               "inline": true
+            },
+            {
+              "field": "branchid2",
+              "label": "Branch ID",
+              "type": "text",
+              "inline": true,
+              "filter": "match"
+            },
+            {
+              "field": "detailfascia",
+              "label": "Competitor",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "label": "Address"
+            },
+            {
+              "field": "street_address",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "suburb",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "label": "Postcode",
+              "type": "text",
+              "filter": "like",
+              "level": 1,
+              "inline": true
+            },
+            {
+              "label": "Store facilities"
+            },
+            {
+              "field": "ssbt",
+              "label": "SSBTs",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "gaming_machines",
+              "label": "Gaming machines",
+              "type": "integer",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "bandit_screen",
+              "label": "Bandit screen",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "pod",
+              "label": "POD",
+              "type": "integer",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "tvs",
+              "label": "TVs",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "toilet",
+              "label": "Toilet",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "label": "Opening times"    
+            },
+            {
+              "field": "mon_fri_open",
+              "label": "Mon-Fri opening",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "mon_fri_closed",
+              "label": "Mon-Fri closing",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "sat_open",
+              "label": "Sat opening",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "sat_closed",
+              "label": "Sat closing",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "sun_open",
+              "label": "Sun opening",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "sun_closed",
+              "label": "Sun closing",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "staffing_model",
+              "label": "Staffing model",
+              "type": "text",
+              "inline": true,
+              "level": 1
             },
             {
               "field": "username",
