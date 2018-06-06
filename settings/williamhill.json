@@ -302,6 +302,12 @@
               "level": 2
             },
             {
+              "field": "plan_gaming_2018",
+              "label": "Gaming 2018",
+              "type": "numeric",
+              "level": 2
+            },
+            {
               "field": "plan_profit_2018",
               "label": "Profit 2018",
               "type": "numeric",
@@ -635,189 +641,6 @@
                 }
               }
             }
-          }
-        },
-         "williamhill_editable": {
-          "editable": "geometry",
-          "display": false,
-          "name": "William Hill Shops (editable)",
-          "meta": "All William Hill Shops May 2018.",
-          "format": "cluster",
-          "pane": [
-            "williamhill",
-            540
-          ],
-          "dbs": "XYZ",
-          "qID": "id",
-          "table": "wh.williamhill_09052018_editable",
-          "log_table": "wh.williamhill_09052018_editable_logs",
-          "cluster_label": "shop_name",
-          "cluster_cat": "competition",
-          "aggregate_layer": "scratch",
-          "infoj": [
-            {
-              "field": "lbo_no",
-              "label": "ID",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "shop_name",
-              "label": "Shop name",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "postcode",
-              "label": "Postal code",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "open_closed",
-              "label": "Shop status",
-              "type": "text",
-              "inline": true,
-              "options": [
-                  "Open", "Closed"
-              ]
-            },
-            {
-              "field": "competition",
-              "label": "Competition",
-              "type": "text",
-              "inline": true,
-              "options": [
-                  "MONOPOLY", "SINGLE COMP", "MULTI COMP"
-              ]
-            }
-          ],
-          "cluster_kmeans": 50,
-          "cluster_dbscan": 0.01,
-          "style": {
-            "markerMin": 15,
-            "markerMax": 40,
-            "marker": "svg_symbols.target([400,'#bbb'])",
-            "markerMulti": [
-              400,
-              "#bbb"
-            ],
-            "theme": {
-              "label": "Competition Type",
-              "type": "categorized",
-              "competitors": {
-                "MONOPOLY": {
-                  "colour": "#143156",
-                  "label": "Monopoly"
-                },
-                "MULTI COMP": {
-                  "colour": "#FFDE3B",
-                  "label": "Multi competiton"
-                },
-                "SINGLE COMP": {
-                  "colour": "#2274A5",
-                  "label": "Single competiton"
-                }
-              },
-              "cat": {
-                "MONOPOLY": {
-                  "marker": "svg_symbols.target([400, '#143156'])",
-                  "label": "Monopoly"
-                },
-                "MULTI COMP": {
-                  "marker": "svg_symbols.target([400, '#FFDE3B'])",
-                  "label": "Multi competition"
-                },
-                "SINGLE COMP": {
-                  "marker": "svg_symbols.target([400,'#2274A5'])",
-                  "label": "Single competition"
-                }
-              }
-            }
-          }
-        },
-         "williamhill_editable_logs": {
-          "display": false,
-          "restriction": "admin",
-          "name": "William Hill Shops (edit log)",
-          "meta": "William Hill Shops editing history.",
-          "format": "geojson",
-          "pane": [
-            "williamhill",
-            540
-          ],
-          "dbs": "XYZ",
-          "qID": "id",
-          "table": "wh.williamhill_09052018_editable_logs",
-          "arrayZoom": {
-              "6": "wh.williamhill_09052018_editable_logs"
-          },
-          "geomq": "geom",
-          "infoj": [
-            {
-              "field": "id",
-              "label": "Log ID",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "lbo_no",
-              "label": "ID",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "shop_name",
-              "label": "Shop name",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "postcode",
-              "label": "Postal code",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "wh_region",
-              "label": "WH Region",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "wh_area",
-              "label": "WH Area",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "wh_cluster",
-              "label": "WH Cluster",
-              "type": "text",
-              "inline": true
-            },
-            {
-              "field": "username",
-              "label": "Edited by",
-              "type": "text"
-            },
-            {
-              "field": "edited",
-              "label": "Edited on",
-              "type": "text"
-            }
-          ],
-          "style": {
-              "default":{
-                 "color": "#5299D3",
-                 "weight": 2,
-              "fillOpacity": 0
-              },
-              "highlight": {
-                 "color": "#5299D3",
-                 "weight": 2,
-                 "fillOpacity": 0.3
-              }
           }
         },
         "competitors": {
@@ -1214,6 +1037,133 @@
               "fillOpacity": 0.3
             }
           }
+        },
+        "gambling": {
+           "streetview": true,
+            "name": "Other gambling",
+            "meta": "© Retail Locations 2018",
+            "format": "cluster",
+            "pane": ["gambling", 528],
+            "dbs": "XYZ",
+            "qID": "id",
+            "table": "wh.gambling_commision_locations_20180599",
+            "cluster_label": "fascia",
+            "cluster_cat": "gamcom_a_1",
+            "infoj": [
+                {
+                    "field": "gamcom_acc",
+                    "label": "ID",
+                    "type": "text",
+                    "inline": true
+                },
+                {
+                    "field": "gamcom_a_1",
+                    "label": "Retailer",
+                    "type": "text",
+                    "inline": true
+                },
+                {
+                    "field": "fascia",
+                    "label": "Fascia",
+                    "type": "text",
+                    "inline": true
+                },
+                {
+                    "field": "sector",
+                    "label": "Sector",
+                    "type": "text",
+                    "inline": true
+                },
+                {
+                    "field": "address",
+                    "label": "Address",
+                    "type": "text"
+                },
+                {
+                    "field": "city",
+                    "type": "text"
+                },
+                {
+                    "field": "postcode",
+                    "type": "text"
+                },
+                {
+                    "field": "licence_st",
+                    "label": "Licence",
+                    "type": "text",
+                    "inline": true
+                },
+                {
+                    "field": "status_dat",
+                    "label": "Status date",
+                    "type": "date",
+                    "inline": true
+                },
+                {
+                    "field": "local_auth",
+                    "label": "Local authority",
+                    "type": "text"
+                }
+            ],
+            "cluster_kmeans": 50,
+            "cluster_dbscan": 0.01,
+            "style": {
+                "markerMin": 15,
+                "markerMax": 40,
+                "marker": "svg_symbols.target([400,'#EFC9A5'])",
+                "markerMulti": [400, "#EFC9A5"],
+                "theme": {
+                    "label": "Competitors",
+                    "type": "categorized",
+                    "cat": {
+                        "Talarius Limited": {
+                            "marker": "svg_symbols.target([400, '#CB3537', 300, '#021587', 200, '#9FCCFB'])",
+                            "label": "Talarius Limited"
+                        },
+                        "Cashino Gaming Limited": {
+                            "marker": "svg_symbols.target([400, '#FFD339', 300, '#FEFDF0', 200, '#00295F'])",
+                            "label": "Cashino Gaming Limited"
+                        },
+                        "Gala Leisure Limited": {
+                            "marker": "svg_symbols.target([400, '#FFE96F', 250, '#0B6EB3'])",
+                            "label": "Gala Leisure Limited"
+                        },
+                        "Luxury Leisure": {
+                            "marker": "svg_symbols.target([400, '#002959', 300, '#025185', 200, '#FFF'])",
+                            "label": "Luxury Leisure"
+                        },
+                        "Mecca Bingo Limited": {
+                            "marker": "svg_symbols.target([400, '#E50D7C', 300, '#EE7D24', 200, '#6F1E71'])",
+                            "label": "Mecca Bingo Limited"
+                        },
+                        "Park Resorts Limited": {
+                            "marker": "svg_symbols.target([400, '#F01D34', 300, '#F2B941', 200, '#1C8E74'])",
+                            "label": "Park Resorts Limited"
+                        },
+                        "Rank Leisure Limited": {
+                            "marker": "svg_symbols.target([400, '#025E9E', 300, '#F8E088'])",
+                            "label": "Rank Leisure Limited"
+                        },
+                        "Genting Casinos UK Limited": {
+                            "marker": "svg_symbols.target([400, '#E81D22', 300, '#FFF', 200, '#1F1F1F'])",
+                            "label": "Genting Casinos UK Limited"
+                        },
+                        "Grosvenor Casinos Limited": {
+                            "marker": "svg_symbols.target([400, '#1D2A32', 300, '#FFF', 200, '#1D2A32'])",
+                            "label": "Grosvenor Casinos Limited"
+                        },
+                        "Beacon Bingo Limited": {
+                            "marker": "svg_symbols.target([400, '#4682C0', 300, '#FFF', 200, '#EB282E'])",
+                            "label": "Beacon Bingo Limited"
+                        },
+                        "Moto Hospitality Limited": {
+                            "marker": "svg_symbols.target([400, '#373634', 300, '#0A9097'])",
+                            "label": "Moto Hospitality Limited"
+                        }
+                    },
+                    "other": true
+                }
+            }
         },
         "region": {
           "name": "Regions",
