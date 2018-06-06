@@ -92,7 +92,10 @@ function bar_chart(layer, chart){
       .style("text-anchor", "middle");
     
       // add the y Axis
-    svg.append("g").call(d3.axisLeft(y));
+    svg.append("g").call(d3.axisLeft(y).tickFormat(function(d, i){
+        return (d == Math.floor(d)) ? d : "";
+    }));
+    //.ticks(data.length));
     
      // text label for the y axis
     svg.append("text")
@@ -104,7 +107,6 @@ function bar_chart(layer, chart){
     
     td.appendChild(div);
     tr.appendChild(td);
-    console.log(tr);
     return tr;
 }
 
