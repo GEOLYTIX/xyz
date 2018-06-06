@@ -6,13 +6,17 @@ function bar_chart(layer, chart){
     let week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     
     let data = _xyz.locales[_xyz.locale].layers[layer].charts[chart];
-    console.log(data);
     
     let div = utils.createElement('div');
     let td = utils.createElement('td', {
         colSpan: "2"
     });
     let tr = utils.createElement('tr');
+    
+    // Define the div for the tooltip
+    let tltp = d3.select(div).append("div")	
+    .attr("class", "chart-tooltip")				
+    .style("opacity", 0);
     
     // set the dimensions of the canvas
     let margin = {top: 20, right: 10, bottom: 20, left: 30},
@@ -58,7 +62,21 @@ function bar_chart(layer, chart){
         })
         .attr("height", function(d){ 
             return height - y(d.y);
-        });
+        })
+        .on("mouseover", function(d){
+            tltp.transition()
+            .duration(200)
+            .style("opacity", .9);
+        
+           tltp.html(d.y)
+           .style("left", (d3.event.pageX - 18) + "px")
+           .style("top", (d3.event.pageY - 20) + "px");
+        }).on("mouseout", function(d){
+           tltp.transition()
+               .duration(500)
+               .style("opacity", 0);
+    });
+
     
       // add the x Axis
     svg.append("g")
