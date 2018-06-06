@@ -164,7 +164,7 @@ function MAPBOX_samplePoints(req, res, jbody, i, start) {
     if (displacement > 1) { res.data.samplePoints[i].properties.wide = true; }
 }
 
-function catchment_calc(req, res) {
+async function catchment_calc(req, res) {
 
     // Filter outlier from samplePoints
     res.data.samplePoints = res.data.samplePoints.filter(pt => {
@@ -243,19 +243,55 @@ function catchment_calc(req, res) {
     res.data.iso.features.reverse();
 
     // Return json to client
-    res.status(200).json({
-        properties: {
-            "Latitude": `${parseFloat(req.query.lat).toFixed(6)}`,
-            "Longitude": `${parseFloat(req.query.lng).toFixed(6)}`,
-            "Travel time": `${parseInt(req.query.distance / 60)} mins`,
-            "Transport mode": req.query.mode,
-            "Provider": req.query.provider
-        },
-        iso: res.data.iso,
-        tin: res.data.tin,
-        circlePoints: res.data.circlePoints,
-        samplePoints: res.data.samplePoints
-    });
+    // res.status(200).json({
+    //     properties: {
+    //         "Latitude": `${parseFloat(req.query.lat).toFixed(6)}`,
+    //         "Longitude": `${parseFloat(req.query.lng).toFixed(6)}`,
+    //         "Travel time": `${parseInt(req.query.distance / 60)} mins`,
+    //         "Transport mode": req.query.mode,
+    //         "Provider": req.query.provider
+    //     },
+    //     iso: res.data.iso,
+    //     tin: res.data.tin,
+    //     circlePoints: res.data.circlePoints,
+    //     samplePoints: res.data.samplePoints
+    // });
+
+    //console.log(JSON.stringify(res.data.iso.features[0].geometry));
+
+    let table_target = req.query.table_target,
+        geom_target = 'geom' //req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target;
+
+    let result = await storeFeatures(res.data.iso.features)
+
+    async function storeFeatures(features) {
+        let pArray = features.map(async f => {
+            let q = `
+            INSERT INTO ${table_target} (${geom_target})
+        
+                SELECT
+                    ST_SetSRID(
+                        ST_GeomFromGeoJSON('${JSON.stringify(f.geometry)}')
+                        , 4326
+                    ) as geom
+        
+            RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
+        
+            //console.log(q);
+        
+            let result = await global.DBS[req.query.dbs].query(q);
+            return result;
+        });
+        let result = await Promise.all(pArray);
+        return result;
+    }
+
+    res.status(200).send(
+        {
+            "id": result[0].rows[0].id.toString(),
+            "lat": parseFloat(result[0].rows[0].lat),
+            "lng": parseFloat(result[0].rows[0].lng)
+        });
 }
 
 module.exports = {

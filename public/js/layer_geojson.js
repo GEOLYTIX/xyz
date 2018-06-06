@@ -47,6 +47,7 @@ function getLayer(){
                 layer.L = L.geoJSON(features, {
                         style: layer.style.default,
                         pane: layer.pane[0],
+                        interactive: layer.infoj? true: false,
                         pointToLayer: function(point, latlng){
                             return L.circleMarker(latlng, {
                                 radius: 9,

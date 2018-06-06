@@ -6,6 +6,291 @@
   "report": {},
   "gazetteer": {},
   "locales": {
+    "Global": {
+      "gazetteer": [
+        "MAPBOX",
+        "",
+        "",
+        "e.g. London"
+      ],
+      "minZoom": 3,
+      "maxZoom": 15,
+      "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "attribution": ["mapbox","osm"],
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "label": {
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": ["mapbox","osm"],
+          "pane": [
+            "base_labels",
+            550
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "here": {
+          "name": "HERE Imagery",
+          "attribution": ["here"],
+          "meta": "Satellite Imagery layer provided by HERE.",
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "sprawls": {
+          "display": true,
+          "name": "World Cities",
+          "meta": "Urban agglomerations with a population greater than 100,000.",
+          "pane": [
+            "bounds",
+            510
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "geom_3857": "geom_3857",
+          "qID": "id",
+          "arrayZoom": {
+            "3": "glx_cities_of_the_world"
+          },
+          "tilecache": "glx_cities_of_the_world__tc",
+          "properties": "pop_density,",
+          "infoj": [
+            {
+              "field": "nameascii",
+              "label": "City",
+              "type": "text"
+            },
+            {
+              "field": "sov0name",
+              "label": "Country",
+              "type": "text"
+            },
+            {
+              "field": "pop_max",
+              "label": "Population (max)",
+              "type": "integer"
+            },
+            {
+              "field": "pop_min",
+              "label": "Population (min)",
+              "type": "integer"
+            },
+            {
+              "field": "area",
+              "label": "Area (km2)",
+              "type": "numeric"
+            },
+            {
+              "field": "pop_density",
+              "label": "Density",
+              "type": "numeric"
+            }
+          ],
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#000",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0
+            },
+            "theme": {
+              "label": "Population Density",
+              "type": "graduated",
+              "field": "pop_density",
+              "other": true,
+              "cat": [
+                {
+                  "val": 5000,
+                  "label": "up to 5,000 per km2 square",
+                  "style": {
+                    "weight": 1,
+                    "color": "#bcdf27",
+                    "opacity": 1,
+                    "fillColor": "#fde725",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 10000,
+                  "label": "10,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#7ad251",
+                    "opacity": 1,
+                    "fillColor": "#bcdf27",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 15000,
+                  "label": "15,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#43bf70",
+                    "opacity": 1,
+                    "fillColor": "#7ad251",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 20000,
+                  "label": "20,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#22a884",
+                    "opacity": 1,
+                    "fillColor": "#43bf70",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 25000,
+                  "label": "25,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#20908d",
+                    "opacity": 1,
+                    "fillColor": "#22a884",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 30000,
+                  "label": "30,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#29788e",
+                    "opacity": 1,
+                    "fillColor": "#20908d",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 35000,
+                  "label": "35,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#345f8d",
+                    "opacity": 1,
+                    "fillColor": "#29788e",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 40000,
+                  "label": "40,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#404387",
+                    "opacity": 1,
+                    "fillColor": "#345f8d",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 45000,
+                  "label": "45,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#482475",
+                    "opacity": 1,
+                    "fillColor": "#404387",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 50000,
+                  "label": "50,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#440154",
+                    "opacity": 1,
+                    "fillColor": "#482475",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 1000000,
+                  "label": "50,000 or more",
+                  "style": {
+                    "weight": 1,
+                    "color": "#000",
+                    "opacity": 1,
+                    "fillColor": "#440154",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "catchments": {
+          "name": "Catchments",
+          "meta": "Calculate catchments from a distance matrix.",
+          "pane": [
+            "scratch",
+            520
+          ],
+          "format": "geojson",
+          "dbs": "XYZ",
+          "table": "global_catchments",
+          "arrayZoom": {
+            "3": "global_catchments"
+          },
+          "catchments": {
+            "modes": {
+              "driving": {
+                "minMin": 15,
+                "defMin": 45,
+                "maxMin": 180,
+                "detail": 3,
+                "reach": 40
+              },
+              "walking": {
+                "minMin": 5,
+                "defMin": 15,
+                "maxMin": 45,
+                "detail": 2,
+                "reach": 600
+              }
+            },
+            "provider": ["GOOGLE","MAPBOX"]
+          }
+        }
+      }
+    },
     "UK": {
       "name": "United Kingdom",
       "gazetteer": ["GOOGLE","GB","","e.g. London"],
