@@ -222,13 +222,7 @@
               "level": 2
             },
             {
-              "label": "Bookings by time of day"
-            },
-            {
               "chart": "Bookings by time of day"
-            },
-            {
-              "label": "Bookings by day of week"
             },
             {
               "chart": "Bookings by day of week"

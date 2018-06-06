@@ -7,7 +7,10 @@ function bar_chart(layer, chart){
     
     let data = _xyz.locales[_xyz.locale].layers[layer].charts[chart];
     
+    if(!data[0].y) return;
+    
     let div = utils.createElement('div');
+    
     let td = utils.createElement('td', {
         colSpan: "2"
     });
@@ -19,7 +22,7 @@ function bar_chart(layer, chart){
     .style("opacity", 0);
     
     // set the dimensions of the canvas
-    let margin = {top: 20, right: 10, bottom: 20, left: 30},
+    let margin = {top: 30, right: 10, bottom: 20, left: 30},
         width = 290 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
     
@@ -32,12 +35,19 @@ function bar_chart(layer, chart){
     let yAxis = d3.axisLeft().scale(y);
     
     // add the SVG element
-    //let svg = d3.select("body").append("svg")
     let svg = d3.select(div).append('svg')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    svg.append("text")
+        .attr("x", 20 + margin.left)             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px") 
+        .style("text-decoration", "underline")  
+        .text(chart);
     
     // scale the range of the data
     x.domain(data.map(function(d){
@@ -78,7 +88,7 @@ function bar_chart(layer, chart){
     });
 
     
-      // add the x Axis
+    // add the x Axis
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).tickFormat(function(d, i){
@@ -86,7 +96,7 @@ function bar_chart(layer, chart){
     }));
     
     
-       // text label for the x axis
+    // text label for the x axis
     svg.append("text")             
       .attr("transform", "translate(" + (width/2) + " ," + (height + margin.top + 20) + ")")
       .style("text-anchor", "middle");
@@ -95,7 +105,6 @@ function bar_chart(layer, chart){
     svg.append("g").call(d3.axisLeft(y).tickFormat(function(d, i){
         return (d == Math.floor(d)) ? d : "";
     }));
-    //.ticks(data.length));
     
      // text label for the y axis
     svg.append("text")
