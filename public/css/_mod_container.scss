@@ -141,7 +141,19 @@
                 width: 10px;
             }
            
-                    
+            div.chart-tooltip {	
+                position: absolute;			
+                text-align: center;			
+                width: 40px;						
+                padding: 2px;				
+                font: 12px sans-serif;
+                background: #EFC9A5;	
+                border: 0px;		
+                border-radius: 2px;			
+                pointer-events: none;	
+                vertical-align: baseline;
+            }
+                     
             .bar:hover{
                 fill: #D8BC8E!important;
             }

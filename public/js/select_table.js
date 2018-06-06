@@ -22,8 +22,9 @@ function addInfojToList(record) {
         }, table);
         
         if(entry.chart) {
-            //console.log(record.location.layer);
-            table.appendChild(charts.bar_chart(record.location.layer, entry.chart));
+            let chart = charts.bar_chart(record.location.layer, entry.chart);
+            if(chart) table.appendChild(chart);
+            //table.appendChild(charts.bar_chart(record.location.layer, entry.chart));
             
         }
         //console.log(record.location.infoj[entry]);
