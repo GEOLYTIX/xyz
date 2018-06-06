@@ -1041,7 +1041,7 @@
         "gambling": {
            "streetview": true,
             "name": "Other gambling",
-            "meta": "© Retail Locations 2018",
+            "meta": "© Gambling Commission 2018",
             "format": "cluster",
             "pane": ["gambling", 528],
             "dbs": "XYZ",
