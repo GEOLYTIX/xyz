@@ -263,6 +263,7 @@
             "scratch",
             520
           ],
+          "qID": "id",
           "format": "geojson",
           "dbs": "XYZ",
           "table": "global_catchments",
@@ -287,7 +288,14 @@
               }
             },
             "provider": ["GOOGLE","MAPBOX"]
-          }
+          },
+          "infoj": [
+            {
+              "field": "id",
+              "label": "ID",
+              "type": "integer"
+            }
+          ]
         }
       }
     },
@@ -2049,113 +2057,111 @@
               }
             }
           }
-        }
-      },
-      "catchments": {
-        "modes": {
-          "walking": {
-            "minMin": 5,
-            "defMin": 15,
-            "maxMin": 45,
-            "detail": 2,
-            "reach": 600
-          },
-          "driving": {
-            "minMin": 15,
-            "defMin": 45,
-            "maxMin": 180,
-            "detail": 3,
-            "reach": 40
-          }
         },
-        "dbs": "XYZ",
-        "table": "gb_hx_1k",
-        "geom": "geomcntr",   
-        "infoj": [
-          {
-            "field": "pop__11",
-            "label": "Total Population",
-            "type": "numeric"
+        "catchments": {
+          "name": "Catchments",
+          "meta": "Calculate catchments from a distance matrix.",
+          "pane": [
+            "scratch",
+            520
+          ],
+          "format": "geojson",
+          "dbs": "XYZ",
+          "table": "uk_catchments",
+          "qID": "id",
+          "arrayZoom": {
+            "3": "uk_catchments"
           },
-          {
-            "field": "gen_female__11",
-            "label": "Female Population",
-            "type": "numeric",
-            "level": 1
+          "catchments": {
+            "modes": {
+              "driving": {
+                "minMin": 15,
+                "defMin": 45,
+                "maxMin": 180,
+                "detail": 3,
+                "reach": 40
+              },
+              "walking": {
+                "minMin": 5,
+                "defMin": 15,
+                "maxMin": 45,
+                "detail": 2,
+                "reach": 600
+              }
+            },
+            "provider": ["GOOGLE","MAPBOX"]
           },
-          {
-            "field": "gen_male__11",
-            "label": "Male Population",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "label": "Age Groups"
-          },
-          {
-            "field": "age_15un",
-            "fieldfx": "(age_05to07__11 + age_08to09__11 + age_10to14__11 + age_15__11)",
-            "label": "under 16",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "age_16pl__11",
-            "label": "16 and above",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "label": "Education"
-          },
-          {
-            "field": "edu_primary_i1__11",
-            "label": "Primary (IESCD 1)",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "edu_secondary",
-            "fieldfx": "(edu_secondary_i2__11 + edu_secondary_i2_l__11 + edu_secondary_i3__11 + edu_secondary_i3v__11)",
-            "label": "Secondary (IESCD 2)",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "edu_tertiary_i6__11",
-            "label": "Tertiary (IESCD 6)",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "label": "Economic Activity"
-          },
-          {
-            "field": "eac_employed__11",
-            "label": "Employed",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "eac_unemployed__11",
-            "label": "Unemployed",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "ea_student",
-            "fieldfx": "(eac_student__11 + ein_student__11)",
-            "label": "Student",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "ein_pensioner__11",
-            "label": "Pensioner",
-            "type": "numeric",
-            "level": 1
-          }
-        ]
+          "infoj": [
+            {
+              "field": "sum.pop__11",
+              "label": "Total Population",
+              "type": "numeric",
+              "layer": "grid"
+            },
+            {
+              "field": "sum.gen_female__11",
+              "label": "Female Population",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.gen_male__11",
+              "label": "Male Population",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.age_16pl__11",
+              "label": "16 and above",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "label": "Education"
+            },
+            {
+              "field": "sum.edu_primary_i1__11",
+              "label": "Primary (IESCD 1)",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.edu_tertiary_i6__11",
+              "label": "Tertiary (IESCD 6)",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "label": "Economic Activity"
+            },
+            {
+              "field": "sum.eac_employed__11",
+              "label": "Employed",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.eac_unemployed__11",
+              "label": "Unemployed",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.ein_pensioner__11",
+              "label": "Pensioner",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            }
+          ]
+        }
       }
     },
     "RO": {

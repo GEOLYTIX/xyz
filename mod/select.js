@@ -10,7 +10,6 @@ async function select(req, res) {
         id = req.body.id,
         sql_filter = typeof req.body.sql_filter == 'undefined ' ? null : req.body.sql_filter;
     
-
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
 
@@ -24,7 +23,6 @@ async function select(req, res) {
 
     let fields = '';
 
-    
     req.body.infoj.forEach(entry => {
         if (entry.layer) {
             fields += `
