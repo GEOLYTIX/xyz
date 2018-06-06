@@ -2,19 +2,9 @@ const d3 = require('d3');
 const utils = require('./utils');
 
 function bar_chart(layer, chart){
-    /*let data = [ // some test data
-        {"hour": 0, "count": 12},
-        {"hour": 1, "count": 2},
-        {"hour": 2, "count": 1},
-        {"hour": 3, "count": 7},
-        {"hour": 4, "count": 7},
-        {"hour": 5, "count": null},
-        {"hour": 6, "count": 19},
-        {"hour": 7, "count": 25},
-        {"hour": 8, "count": 100},
-        {"hour": 9, "count": 153}
-    ];*/
-    //let data = layer.charts[chart];
+    
+    let week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    
     let data = _xyz.locales[_xyz.locale].layers[layer].charts[chart];
     console.log(data);
     
@@ -36,19 +26,6 @@ function bar_chart(layer, chart){
     // define the axis
     let xAxis = d3.axisBottom(x);
     let yAxis = d3.axisLeft().scale(y);
-    
-    function get_labels(){
-        let _labels = [];
-        function sort_by_x(){
-            return function (x, y) {
-                return ((x.x === y.x) ? 0 : ((x.x > y.x) ? 1 : -1));
-            };
-        }
-        for(let item of data.sort(sort_by_x)){
-            _labels.push(item.label);
-        }
-        return _labels;
-    }
     
     // add the SVG element
     //let svg = d3.select("body").append("svg")
@@ -86,7 +63,9 @@ function bar_chart(layer, chart){
       // add the x Axis
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickValues(get_labels()));
+      .call(d3.axisBottom(x).tickFormat(function(d, i){
+        return data.length == week.length ? week[d] : d;
+    }));
     
     
        // text label for the x axis

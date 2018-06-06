@@ -436,12 +436,13 @@ input[type=range]::-moz-range-thumb {
           .mod_container .module .drawer .panel .third.right {
             float: right; }
       .mod_container .module .drawer .bar {
-        fill: steelblue !important;
+        fill: #5AB664 !important;
         width: 10px; }
       .mod_container .module .drawer .bar:hover {
-        fill: brown !important; }
+        fill: #D8BC8E !important; }
       .mod_container .module .drawer .axis {
-        font: 10px sans-serif; }
+        font: 10px sans-serif;
+        color: #333; }
       .mod_container .module .drawer .axis path,
       .mod_container .module .drawer .axis line {
         fill: none;

@@ -82,14 +82,34 @@
           "cluster_cat": "crmbrandname",
           "aggregate_layer": "mb.scratch",
           "charts": {
+              "Bookings by time of day": [
+                  {"x": 6, "field": "visits_6"},
+                  {"x": 7, "field": "visits_7"},
+                  {"x": 8, "field": "visits_8"},
+                  {"x": 9, "field": "visits_9"},
+                  {"x": 10, "field": "visits_10"},
+                  {"x": 11, "field": "visits_11"},
+                  {"x": 12, "field": "visits_12"},
+                  {"x": 13, "field": "visits_13"},
+                  {"x": 14, "field": "visits_14"},
+                  {"x": 15, "field": "visits_15"},
+                  {"x": 16, "field": "visits_16"},
+                  {"x": 17, "field": "visits_17"},
+                  {"x": 18, "field": "visits_18"},
+                  {"x": 19, "field": "visits_19"},
+                  {"x": 20, "field": "visits_20"},
+                  {"x": 21, "field": "visits_21"},
+                  {"x": 22, "field": "visits_22"},
+                  {"x": 23, "field": "visits_23"}
+              ],
               "Bookings by day of week": [
-                  {"label": "Mondays", "x": 1, "field": "visits_mon"},
-                  {"label": "Tuesdays", "x": 2, "field": "visits_tue"},
-                  {"label": "Wednesdays", "x": 3, "field": "visits_wed"},
-                  {"label": "Thursdays", "x": 4, "field": "visits_thu"},
-                  {"label": "Fridays", "x": 5, "field": "visits_fri"},
-                  {"label": "Saturdays", "x": 6, "field": "visits_sat"},
-                  {"label": "Sundays", "x": 7, "field": "visits_sun"}
+                  {"x": 0, "field": "visits_mon"},
+                  {"x": 1, "field": "visits_tue"},
+                  {"x": 2, "field": "visits_wed"},
+                  {"x": 3, "field": "visits_thu"},
+                  {"x": 4, "field": "visits_fri"},
+                  {"x": 5, "field": "visits_sat"},
+                  {"x": 6, "field": "visits_sun"}
               ]
           },
           "infoj": [
@@ -202,52 +222,16 @@
               "level": 2
             },
             {
+              "label": "Bookings by time of day"
+            },
+            {
+              "chart": "Bookings by time of day"
+            },
+            {
               "label": "Bookings by day of week"
             },
             {
               "chart": "Bookings by day of week"
-            },
-            {
-              "field": "visits_mon",
-              "label": "Monday",
-              "type": "integer",
-              "level": 2
-            },
-            {
-              "field": "visits_tue",
-              "label": "Tuesday",
-              "type": "integer",
-              "level": 2
-            },
-            {
-              "field": "visits_wed",
-              "label": "Wednesday",
-              "type": "integer",
-              "level": 2
-            },
-            {
-              "field": "visits_thu",
-              "label": "Thursday",
-              "type": "integer",
-              "level": 2
-            },
-            {
-              "field": "visits_fri",
-              "label": "Friday",
-              "type": "integer",
-              "level": 2
-            },
-            {
-              "field": "visits_sat",
-              "label": "Saturday",
-              "type": "integer",
-              "level": 2
-            },
-            {
-              "field": "visits_sat",
-              "label": "Sunday",
-              "type": "integer",
-              "level": 2
             }
           ],
           "cluster_kmeans": 50,
