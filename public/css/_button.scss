@@ -83,4 +83,8 @@
     color: $glxgreen;
     box-shadow: 1px 1px 3px #666;
     margin: 5px 2px 0 1px;
+
+    &.disabled {
+        opacity: 0.3;
+    }
 }

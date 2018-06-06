@@ -65,6 +65,12 @@ input[type=range]::-moz-range-thumb {
   background: #090;
   cursor: pointer; }
 
+.range_new {
+  margin: 15px 0 20px 0; }
+
+.range_label {
+  font-family: ffmark_bold; }
+
 .md_drop {
   position: relative;
   display: inline-block;

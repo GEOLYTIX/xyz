@@ -8,5 +8,4 @@ reports/1*.pdf
 public/css/.sass-cache/
 public/js/build/
 public/js/build/xyz_bundle.js
-
-public/js/build/xyz_bundle.js
+stats.json
