@@ -137,16 +137,18 @@
             }
             
             .bar {
-                fill: steelblue!important;
+                fill: #5AB664!important;
                 width: 10px;
             }
+           
                     
             .bar:hover{
-                fill: brown!important;
+                fill: #D8BC8E!important;
             }
                     
             .axis {
                 font: 10px sans-serif;
+                color: #333;
             }
                     
             .axis path,
