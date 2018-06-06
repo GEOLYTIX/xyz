@@ -241,7 +241,7 @@ module.exports = () => {
                                 
                                 layer.charts[chart][key].y = _val; 
                             });
-                            console.log(layer.charts[chart]);
+                            //console.log(layer.charts[chart]);
                         }
                     };
                     if(_arr) xhr.send(JSON.stringify({
