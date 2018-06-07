@@ -115,97 +115,112 @@ function marker(record) {
 }
 
 function update(record) {
-    record.upload = utils.createElement('i', {
-        textContent: 'cloud_upload',
-        className: 'material-icons cursor noselect btn_header',
-        title: 'Save changes to cloud'
-    });
-    record.upload.style.display = 'none';
-    record.upload.style.color = record.color;
-    record.upload.addEventListener('click', function () {
+    record.upload = utils._createElement({
+        tag: 'i',
+        options: {
+            textContent: 'cloud_upload',
+            className: 'material-icons cursor noselect btn_header',
+            title: 'Save changes to cloud'
+        },
+        style: {
+            display: 'none',
+            color: record.color
+        },
+        appendTo: record.header,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
 
-        let _layer = _xyz.locales[_xyz.locale].layers[record.location.layer];
+                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
+                    xhr = new XMLHttpRequest();
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'q_update');
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                record.upload.style.display = 'none';
+                xhr.open('POST', 'q_update');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = () => {
 
-                //let test = record.drawer.getElementsByClassName('changed');
-                utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
+                    // Hide upload symbol.
+                    record.upload.style.display = 'none';
 
-                _layer.getLayer();
-                try {
-                    record.location.M
-                        .getLayers()[0]
-                        .setLatLng(record.location.L
+                    // Remove changed class from all changed entries.
+                    utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
+
+                    layer.getLayer();
+                    try {
+                        record.location.M
                             .getLayers()[0]
-                            .getLatLng()
-                        );
-                } catch (err) { }
+                            .setLatLng(
+                                record.location.L
+                                    .getLayers()[0]
+                                    .getLatLng()
+                            );
+                    } catch (err) { }
+                }
+                xhr.send(JSON.stringify({
+                    dbs: layer.dbs,
+                    table: record.location.table,
+                    log_table: layer.log_table,
+                    dbs: layer.dbs,
+                    qID: layer.qID,
+                    id: record.location.id,
+                    infoj: record.location.infoj,
+                    geometry: record.location.L.toGeoJSON().features[0].geometry
+                }));
             }
         }
-        xhr.send(JSON.stringify({
-            dbs: _layer.dbs,
-            table: record.location.table,
-            log_table: _layer.log_table,
-            dbs: _layer.dbs,
-            qID: _layer.qID,
-            id: record.location.id,
-            infoj: record.location.infoj,
-            geometry: record.location.L.toGeoJSON().features[0].geometry
-        }));
-
     });
-    record.header.appendChild(record.upload);
 }
 
 function trash(record) {
-    let i = utils.createElement('i', {
-        textContent: 'delete',
-        className: 'material-icons cursor noselect btn_header',
-        title: 'Delete feature'
-    });
-    i.style.color = record.color;
-    i.addEventListener('click', function () {
+    utils._createElement({
+        tag: 'i',
+        options: {
+            textContent: 'delete',
+            className: 'material-icons cursor noselect btn_header',
+            title: 'Delete feature'
+        },
+        style: {
+            color: record.color
+        },
+        appendTo: record.header,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
 
-        let _layer = _xyz.locales[_xyz.locale].layers[record.location.layer];
+                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
+                    xhr = new XMLHttpRequest();
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'q_delete');
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = function () {
-            if (this.status === 200) {
-                
-                _xyz.map.removeLayer(_layer.L);
-                _layer.getLayer();
-                record.drawer.remove();
+                xhr.open('POST', 'q_delete');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = () => {
 
-                _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
-                if (record.location.L) _xyz.map.removeLayer(record.location.L);
-                if (record.location.M) _xyz.map.removeLayer(record.location.M);
-                if (record.location.D) _xyz.map.removeLayer(record.location.D);
-                record.location = null;
-
-                let freeRecords = _xyz.select.records.filter(function (record) {
-                    if (!record.location) return record
-                });
-
-                if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+                    _xyz.map.removeLayer(layer.L);
+                    layer.getLayer();
+                    record.drawer.remove();
+    
+                    _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                    if (record.location.L) _xyz.map.removeLayer(record.location.L);
+                    if (record.location.M) _xyz.map.removeLayer(record.location.M);
+                    if (record.location.D) _xyz.map.removeLayer(record.location.D);
+                    record.location = null;
+    
+                    let freeRecords = _xyz.select.records.filter(record => {
+                        if (!record.location) return record
+                    });
+    
+                    if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+                }
+                xhr.send(JSON.stringify({
+                    dbs: layer.dbs,
+                    table: record.location.table,
+                    log_table: layer.log_table,
+                    qID: layer.qID,
+                    id: record.location.id
+                }));
             }
         }
-        xhr.send(JSON.stringify({
-            dbs: _layer.dbs,
-            table: record.location.table,
-            log_table: _layer.log_table,
-            qID: _layer.qID,
-            id: record.location.id
-        }));
-
     });
-    record.header.appendChild(i);
 }
 
 module.exports = {

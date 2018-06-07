@@ -44,8 +44,8 @@ function addInfojToList(record) {
             if (!entry.type) return
         }
 
-        // Remove row if not editable and no value
-        if (!record.location.editable && !entry.value) {
+        // Remove row if not editable (or entry is locked) and entry has no value.
+        if ((!record.location.editable || entry.locked) && !entry.value) {
             tr.remove();
             return
         }
@@ -72,8 +72,8 @@ function addInfojToList(record) {
             return
         }
 
-        // Set field value if layer is not editable and return from object.map function.
-        if (!record.location.editable && entry.value) {
+        // Set field value if layer is not editable (or entry is locked) and return from object.map function.
+        if ((!record.location.editable || entry.locked) && entry.value) {
             val.textContent = entry.type === 'numeric' ?
                 parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: record.location.grid? 0: 2}) :
                 entry.type === 'integer' ?
@@ -313,32 +313,42 @@ function addInfojToList(record) {
         
         // Creat input text area for editable fields
         if (entry.text) {
-            let textArea = utils.createElement('textarea', {
-                rows: 5,
-                value: entry.value || ''
-            }, val);
-
-            textArea.addEventListener('keyup', function () {
-                utils.addClass(this, 'changed');
-                record.upload.style.display = 'block';
-                entry.value = this.value;
+            utils._createElement({
+                tag: 'textarea',
+                options: {
+                    value: entry.value || '',
+                    rows: 5
+                },
+                appendTo: val,
+                eventListener: {
+                    event: 'keyup',
+                    funct: e => {
+                        utils.addClass(e.target, 'changed');
+                        record.upload.style.display = 'block';
+                        entry.value = e.target.value;
+                    }
+                }
             });
-
             return
         }
         
-
         // Creat input for editable fields
-        if (record.location.editable) {
-            let input = utils.createElement('input', {
-                value: entry.value || '',
-                type: 'text'
-            }, val);
-
-            input.addEventListener('keyup', function () {
-                utils.addClass(this, 'changed');
-                record.upload.style.display = 'block';
-                entry.value = this.value;
+        if (record.location.editable && !entry.locked) {
+            utils._createElement({
+                tag: 'input',
+                options: {
+                    value: entry.value || '',
+                    type: 'text'
+                },
+                appendTo: val,
+                eventListener: {
+                    event: 'keyup',
+                    funct: e => {
+                        utils.addClass(e.target, 'changed');
+                        record.upload.style.display = 'block';
+                        entry.value = e.target.value;
+                    }
+                }
             });
         }
     });
