@@ -345,6 +345,7 @@
           "arrayZoom": {
             "2": "store_survey_venues"
           },
+          "log_table": "store_survey_venues_logs",
           "infoj": [
               {
                   "field": "venue_name",
