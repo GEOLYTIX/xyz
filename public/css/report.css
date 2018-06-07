@@ -124,7 +124,8 @@ input[type=range]::-moz-range-thumb {
     .img-container td button {
       display: block;
       background: none;
-      position: absolute; }
+      position: absolute;
+      border: none; }
       .img-container td button.btn_del {
         right: 6px;
         top: 10px; }
