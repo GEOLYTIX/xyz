@@ -346,6 +346,7 @@
           "arrayZoom": {
             "2": "adidas.store_survey_venues"
           },
+          "log_table": "store_survey_venues_logs",
           "infoj": [
               {
                   "field": "venue_name",
