@@ -52,7 +52,7 @@ function addInfojToList(record) {
 
         // Create new row for text cells and append to table.
         let val;
-        if (entry.type && !entry.inline && !(entry.type === 'integer' || entry.type === 'numeric')) {
+        if (entry.type && !entry.inline && !(entry.type === 'integer' || entry.type === 'numeric' || entry.type === 'date')) {
             tr = utils.createElement('tr', null, table)
             val = utils.createElement('td', {
                 className: 'val',

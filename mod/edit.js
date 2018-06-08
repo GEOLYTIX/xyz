@@ -18,16 +18,16 @@ async function newRecord(req, res) {
 
     // check if cluster category and insert new geometry row 
     if(cat) {
-        q = `INSERT INTO ${table} (${cat}, geom)
-            SELECT 'other' as ${cat}, ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
+        q = `INSERT INTO ${table} (${cat}, username, geom)
+            SELECT 'other' as ${cat}, '${username}' as username, ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
             RETURNING id;`;
     } else {
-        q = `INSERT INTO ${table} (geom)
-            SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
+        q = `INSERT INTO ${table} (username, geom)
+            SELECT '${username}' as username, ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
             RETURNING id;`;
     }
     
-    //console.log(q);
+    console.log(q);
     // inserts geometry both into source table and log table 
     /*global.DBS[req.body.dbs].query(q).then((result) => {
         
@@ -99,7 +99,7 @@ async function newAggregate(req, res) {
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
 
-    console.log(q);
+    //console.log(q);
 
     let result = await global.DBS[req.query.dbs].query(q);
 
@@ -130,22 +130,26 @@ async function updateRecord(req, res) {
         if (entry.images) return
         if (entry.type === 'text') fields += `${entry.field} = '${entry.value}',`;
         if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
+        if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`
         if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
+        if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`
+        if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`
     });
 
     q = `
     UPDATE ${table} SET
         ${fields}
-        geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
+        geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326),
+        username = '${username}'
     WHERE ${qID} = $1;`
 
     //console.log(q);
     
     global.DBS[req.body.dbs].query(q, [id])
         .then((result) =>  {
-        q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = ${id};`;
+        q = `INSERT INTO ${log_table} SELECT * FROM ${table} WHERE ${qID} = ${id};`;
         
-        console.log(q);
+        //console.log(q);
         
         global.DBS[req.body.dbs].query(q)
             .then(_result => res.status(200).send())
@@ -160,15 +164,15 @@ async function deleteRecord(req, res) {
         table = req.body.table,
         log_table = req.body.log_table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id,
-        username = req.session.passport ? req.session.passport.user.email : 'nologin';
+        id = req.body.id;
+        //username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
     
-    q = `INSERT INTO ${log_table} SELECT *, '${username}' AS username FROM ${table} WHERE ${qID} = $1;`;
+    q = `INSERT INTO ${log_table} SELECT * FROM ${table} WHERE ${qID} = $1;`;
     
     global.DBS[req.body.dbs].query(q, [id])
     .then((result) => {

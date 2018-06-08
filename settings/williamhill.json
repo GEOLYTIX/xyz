@@ -172,14 +172,14 @@
             {
               "field": "lease_break2",
               "label": "Lease break date",
-              "type": "text",
+              "type": "date",
               "inline": true,
               "level": 1
             },
             {
               "field": "lease_expire2",
               "label": "Lease expiry date",
-              "type": "text",
+              "type": "date",
               "inline": true,
               "level": 1,
               "filter": "date"
@@ -187,7 +187,7 @@
             {
               "field": "break_v_expire2",
               "label": "Break vs expire date",
-              "type": "text",
+              "type": "date",
               "inline": true,
               "level": 1,
               "filter": "date"
@@ -798,6 +798,19 @@
               "type": "text",
               "inline": true,
               "options": ["Single manned", "Dual manning"],
+              "level": 1
+            },
+            {
+              "field": "username",
+              "label": "Edited by",
+              "type": "text",
+              "inline": true,
+              "level": 1
+            },
+            {
+              "field": "edited",
+              "label": "Edited on",
+              "type": "text",
               "level": 1
             }
           ],
