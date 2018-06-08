@@ -408,7 +408,7 @@ module.exports = () => {
         if (record.location.editable) select_controls.update(record);
 
         // Create control to trash editable items.
-        if (record.location.editable && record.location.editable === 'geometry') select_controls.trash(record);
+        if (record.location.editable) select_controls.trash(record);
 
         // Add header element to the drawer.
         record.drawer.appendChild(record.header);

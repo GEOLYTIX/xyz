@@ -22,6 +22,9 @@ module.exports = () => {
         })
     };
 
+    _xyz.map.createPane('tmp');
+    _xyz.map.getPane('tmp').style.zIndex = 549;
+
     // init is called upon initialisation and when the locale is changed (change_locale === true).
     if (!_xyz.layers) _xyz.layers = {};
     _xyz.layers.init = function (change_locale) {

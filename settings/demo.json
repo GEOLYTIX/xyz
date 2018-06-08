@@ -263,7 +263,7 @@
             "scratch",
             520
           ],
-          "qID": "id",
+          "editable": true,
           "format": "geojson",
           "dbs": "XYZ",
           "table": "global_catchments",
@@ -293,7 +293,14 @@
             {
               "field": "id",
               "label": "ID",
-              "type": "integer"
+              "type": "integer",
+              "locked": true
+            },
+            {
+              "field": "notes",
+              "label": "Notes",
+              "type": "text",
+              "text": true
             }
           ]
         }
@@ -1772,7 +1779,6 @@
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
-          "qID": "retailpoint_id",
           "cluster_label": "store",
           "cluster_cat": "brand",
           "infoj": [
@@ -2059,6 +2065,7 @@
           }
         },
         "catchments": {
+          "editable": true,
           "name": "Catchments",
           "meta": "Calculate catchments from a distance matrix.",
           "pane": [
