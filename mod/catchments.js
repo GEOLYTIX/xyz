@@ -288,9 +288,12 @@ async function catchment_calc(req, res) {
 
     res.status(200).send(
         {
-            "id": result[0].rows[0].id.toString(),
-            "lat": parseFloat(result[0].rows[0].lat),
-            "lng": parseFloat(result[0].rows[0].lng)
+            id: result[0].rows[0].id.toString(),
+            lat: parseFloat(result[0].rows[0].lat),
+            lng: parseFloat(result[0].rows[0].lng),
+            tin: res.data.tin,
+            circlePoints: res.data.circlePoints,
+            samplePoints: res.data.samplePoints
         });
 }
 

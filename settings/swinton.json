@@ -3,16 +3,7 @@
   "documentation": "documentation",
   "select": {},
   "gazetteer": {},
-  "catchments": {
-    "provider": [
-      "MAPBOX",
-      "GOOGLE"
-    ],
-    "pane": [
-      "catchments",
-      520
-    ]
-  },
+  "report": {},
   "locales": {
     "GB": {
       "name": "Great Britain",
@@ -24,6 +15,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox","osm"],
           "pane": ["base", 500],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
@@ -32,6 +24,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox","osm"],
           "pane": ["base_labels", 550],
           "format": "tiles",
           "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
@@ -46,12 +39,12 @@
           "geom": "geomcntr",
           "grid_color": "target",
           "arrayZoom": {
-            "6": "gb_swinton_hx_64k",
-            "7": "gb_swinton_hx_32k",
-            "8": "gb_swinton_hx_16k",
-            "9": "gb_swinton_hx_8k",
-            "10": "gb_swinton_hx_4k",
-            "11": "gb_swinton_hx_2k"
+            "6": "swinton.hx_64k",
+            "7": "swinton.hx_32k",
+            "8": "swinton.hx_16k",
+            "9": "swinton.hx_8k",
+            "10": "swinton.hx_4k",
+            "11": "swinton.hx_2k"
           },
           "queryFields": [
             [
@@ -103,84 +96,115 @@
               "Stretch: Smart and Savvy"
             ]
           ]
-        }
-      },
-      "catchments": {
-        "modes": {
-          "driving": {
-            "minMin": 15,
-            "defMin": 45,
-            "maxMin": 90,
-            "detail": 3,
-            "reach": 40
-          }
         },
-        "dbs": "XYZ",
-        "table": "gb_swinton_hx_2k",
-        "geom": "geomcntr",   
-        "infoj": [
-          {
-            "field": "pop__01",
-            "label": "Population 2001",
-            "type": "numeric"
+        "catchments": {
+          "editable": true,
+          "name": "Catchments",
+          "meta": "Drivetime catchments",
+          "pane": [
+            "scratch",
+            520
+          ],
+          "format": "geojson",
+          "dbs": "XYZ",
+          "table": "swinton.catchments",
+          "qID": "id",
+          "arrayZoom": {
+            "3": "swinton.catchments"
           },
-          {
-            "field": "pop__11",
-            "label": "Population 2011",
-            "type": "numeric"
+          "catchments": {
+            "modes": {
+              "driving": {
+                "minMin": 15,
+                "defMin": 45,
+                "maxMin": 90,
+                "detail": 3,
+                "reach": 40
+              }
+            },
+            "provider": ["GOOGLE","MAPBOX"]
           },
-          {
-            "field": "pop__16",
-            "label": "Population 2016",
-            "type": "numeric"
-          },
-          {
-            "field": "core",
-            "label": "Core",
-            "type": "numeric"
-          },
-          {
-            "field": "core_cautious_middle_agers",
-            "label": "Cautious Middle Agers",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "core_deal_seekers",
-            "label": "Deal Seekers",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "core_older_relationship_seekers",
-            "label": "Older Relationship Seekers",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "stretch",
-            "label": "Stretch",
-            "type": "numeric"
-          },
-          {
-            "field": "stretch_added_value_affluents",
-            "label": "Added Value Affluents",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "stretch_loyal_traditionalists",
-            "label": "Loyal Traditionalists",
-            "type": "numeric",
-            "level": 1
-          },
-          {
-            "field": "stretch_smart_and_savvy",
-            "label": "Smart and Savvy",
-            "type": "numeric",
-            "level": 1
-          }
-        ]
+          "infoj": [
+            {
+              "field": "notes",
+              "label": "Notes",
+              "type": "text",
+              "text": true
+            },
+            {
+              "field": "sum.pop__01",
+              "label": "Population 2001",
+              "type": "numeric",
+              "layer": "grid"
+            },
+            {
+              "field": "sum.pop__11",
+              "label": "Population 2011",
+              "type": "numeric",
+              "layer": "grid"
+            },
+            {
+              "field": "sum.pop__16",
+              "label": "Population 2016",
+              "type": "numeric",
+              "layer": "grid"
+            },
+            {
+              "field": "sum.core",
+              "label": "Core",
+              "type": "numeric",
+              "layer": "grid"
+            },
+            {
+              "field": "sum.core_cautious_middle_agers",
+              "label": "Cautious Middle Agers",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.core_deal_seekers",
+              "label": "Deal Seekers",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.core_older_relationship_seekers",
+              "label": "Older Relationship Seekers",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.stretch",
+              "label": "Stretch",
+              "type": "numeric",
+              "layer": "grid"
+            },
+            {
+              "field": "sum.stretch_added_value_affluents",
+              "label": "Added Value Affluents",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.stretch_loyal_traditionalists",
+              "label": "Loyal Traditionalists",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            },
+            {
+              "field": "sum.stretch_smart_and_savvy",
+              "label": "Smart and Savvy",
+              "type": "numeric",
+              "level": 1,
+              "layer": "grid"
+            }
+          ]
+        }
       }
     }
   }
