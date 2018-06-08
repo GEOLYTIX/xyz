@@ -73,7 +73,7 @@ function addInfojToList(record) {
         }
 
         // Set field value if layer is not editable (or entry is locked) and return from object.map function.
-        if ((!record.location.editable || entry.locked) && entry.value) {
+        if ((!record.location.editable || entry.locked || entry.layer) && entry.value) {
             val.textContent = entry.type === 'numeric' ?
                 parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: record.location.grid? 0: 2}) :
                 entry.type === 'integer' ?
@@ -333,7 +333,7 @@ function addInfojToList(record) {
         }
         
         // Creat input for editable fields
-        if (record.location.editable && !entry.locked) {
+        if (record.location.editable && !entry.locked && !entry.layer) {
             utils._createElement({
                 tag: 'input',
                 options: {
