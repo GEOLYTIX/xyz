@@ -26,6 +26,7 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
+          "attribution": ["mapbox","osm"],
           "pane": [
             "base",
             500
@@ -36,6 +37,7 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
+          "attribution": ["mapbox","osm"],
           "pane": [
             "base_labels",
             560
@@ -45,6 +47,7 @@
         },
         "here": {
           "name": "HERE Imagery",
+          "attribution": ["here"],
           "pane": [
             "base",
             500

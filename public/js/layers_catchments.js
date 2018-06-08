@@ -4,7 +4,7 @@ const svg_symbols = require('./svg_symbols.js');
 function catchmentControl(layer) {
 
     let ctrl = utils.createElement('div', {
-        className: 'section report-block'
+        className: 'section'
     });
 
 
@@ -34,11 +34,11 @@ function catchmentControl(layer) {
         selMode.insertAdjacentHTML('beforeend', '<option value="' + key + '">' + key.charAt(0).toUpperCase() + key.slice(1) + '</option>');
     });
 
-    //selMode.disabled = selMode.childElementCount === 1 ? true : false;
-
+    selMode.disabled = selMode.childElementCount === 1 ? true : false;
     mode = selMode.options[selMode.selectedIndex].value;
 
 
+    // spacer
     utils._createElement({
         tag: 'br',
         appendTo: ctrl
@@ -180,17 +180,19 @@ function catchmentControl(layer) {
         selProvider.insertAdjacentHTML('beforeend', '<option value="' + key + '">' + key.charAt(0).toUpperCase() + key.slice(1) + '</option>');
     });
 
-    //selProvider.disabled = selProvider.childElementCount === 1 ? true : false;
+    selProvider.disabled = selProvider.childElementCount === 1 ? true : false;
 
 
-    // TIN construction
-    // let logScale = utils.checkbox(function (e) {
-    //     layer.markerLog = e.target.checked;
-    //     layer.style.markerLog = layer.markerLog;
-    //     layer.getLayer();
-    // }, { label: 'Display catchment sample points and TIN.', id: layer.layer + '_tin_construction' });
+    //TIN construction
+    let chkCatchmentsConstruction = utils.checkbox(
+        e => { },
+        {
+            label: 'Display catchment sample points and TIN.',
+            id: layer.layer + '_tin_construction'
+        }
+    );
 
-    // ctrl.appendChild(logScale);
+    ctrl.appendChild(chkCatchmentsConstruction);
 
     let btnCatchment = utils._createElement({
         tag: 'div',
@@ -240,10 +242,11 @@ function catchmentControl(layer) {
             }
         }, {
             interactive: false,
+            pane: "tmp",
             pointToLayer: function (feature, latlng) {
                 return new L.Marker(latlng, {
                     icon: L.icon({
-                        iconUrl: svg_symbols.markerColor('#888', '#444'),
+                        iconUrl: svg_symbols.markerColor('#444', '#888'),
                         iconSize: [40, 40],
                         iconAnchor: [20, 40]
                     })
@@ -267,93 +270,50 @@ function catchmentControl(layer) {
         
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = () => {
-            if (xhr.status === 200) {
+            utils.removeClass(btnCatchment, 'disabled');
 
-                utils.removeClass(btnCatchment,'disabled');
+            layer.getLayer();
 
-                layer.getLayer();
-                
-                //let json = JSON.parse(this.responseText);
+            let json = JSON.parse(xhr.responseText);
 
-                // if (dom.chkCatchmentsConstruction.checked) {
-                //     _xyz.catchments.layer_tin = L.geoJson(json.tin,{
-                //         interactive: false,
-                //         pane: _xyz.catchments.pane[0],
-                //         style: {
-                //             stroke: true,
-                //             color: "#999",
-                //             weight: 1,
-                //             fill: false
-                //           }
-                //     }).addTo(_xyz.map);
-    
-                //     _xyz.catchments.layer_circlePoints = L.geoJson(json.circlePoints,{
-                //         pointToLayer: function (feature, latlng) {
-                //             return new L.CircleMarker(latlng, {
-                //                 radius: 5,
-                //                 color: "#555",
-                //                 weight: 1,
-                //                 fill: false,
-                //                 interactive: false,
-                //                 pane: _xyz.catchments.pane[0]
-                //             });
-                //         }
-                //     }).addTo(_xyz.map);
-    
-                //     _xyz.catchments.layer_samplePoints = L.geoJson(json.samplePoints,{
-                //         pointToLayer: function (feature, latlng) {
-                //             return new L.CircleMarker(latlng, {
-                //                 radius: 2,
-                //                 color: "#333",
-                //                 fillColor: "#333",
-                //                 fill: true,
-                //                 fillOpacity: 1,
-                //                 interactive: false,
-                //                 pane: _xyz.catchments.pane[0]
-                //             });
-                //         }
-                //     }).addTo(_xyz.map);
-                // }
+            if (chkCatchmentsConstruction.control.checked) {
+                let layerTIN = L.geoJson(json.tin, {
+                    interactive: false,
+                    pane: 'tmp',
+                    style: {
+                        stroke: true,
+                        color: "#999",
+                        weight: 1,
+                        fill: false
+                    }
+                }).addTo(_xyz.map);
 
-                //let tmp = L.geoJson(json.iso, {
-                    //interactive: _xyz.select && _xyz.locales[_xyz.locale].catchments.infoj ? true : false,
-                    //pane: _xyz.catchments.pane[0],
-                    // onEachFeature: function (feature, layer) {
-                    //     layer.on({
-                    //         click: function(e) {
-                    //             feature.marker = [e.latlng.lng, e.latlng.lat];
-                    //             statFromGeoJSON(feature);
-                    //             this.setStyle(isoStyle(feature, _distance, 0));
-                    //         },
-                    //         mouseover: function () {
-                    //             this.setStyle(isoStyle(feature, _distance, 0.1));
-                    //         },
-                    //         mouseout: function () {
-                    //             this.setStyle(isoStyle(feature, _distance, 0));
-                    //         }
-                    //     });
-                    // },
-                    // style: function (feature) {
-                    //     return isoStyle(feature, _distance, 0)
-                    // }
-                //}).addTo(_xyz.map);
+                let layerPoints = L.geoJson(json.circlePoints, {
+                    pointToLayer: function (feature, latlng) {
+                        return new L.CircleMarker(latlng, {
+                            radius: 5,
+                            color: "#555",
+                            weight: 1,
+                            fill: false,
+                            interactive: false,
+                            pane: 'tmp'
+                        });
+                    }
+                }).addTo(_xyz.map);
 
-                // function isoStyle(feature, _distance, fillOpacity){
-                //     let style = feature.properties.v == parseInt(_distance * 0.33) ?
-                //         ['#999',1] : feature.properties.v == parseInt(_distance * 0.66) ?
-                //             ['#666',1.5] : feature.properties.v == parseInt(_distance) ?
-                //                ['#333',2] : ['#333',2];
-
-                //     return {
-                //         'stroke': true,
-                //         'color': style[0],
-                //         'weight': style[1],
-                //         'fill': true,
-                //         'fillOpacity': fillOpacity
-                //     }
-                // }
-
-                //_xyz.map.fitBounds(tmp.getBounds());
+                let layerSample = L.geoJson(json.samplePoints, {
+                    pointToLayer: function (feature, latlng) {
+                        return new L.CircleMarker(latlng, {
+                            radius: 2,
+                            color: "#333",
+                            fillColor: "#333",
+                            fill: true,
+                            fillOpacity: 1,
+                            interactive: false,
+                            pane: 'tmp'
+                        });
+                    }
+                }).addTo(_xyz.map);
             }
         };
         xhr.send();

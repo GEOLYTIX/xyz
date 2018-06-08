@@ -1,6 +1,8 @@
 async function select(req, res) {
 
     let
+        q,
+        result,
         table = req.body.table,
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
@@ -15,11 +17,11 @@ async function select(req, res) {
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
     
-    let _q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
-    
-    let result = await global.DBS[req.body.dbs].query(_q, [id]);
-    
-    sql_filter = result.rows[0].sql_filter || null;
+    if (sql_filter) {
+        q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
+        result = await global.DBS[req.body.dbs].query(_q, [id]);
+        sql_filter = result.rows[0].sql_filter;
+    }
 
     let fields = '';
 
@@ -45,38 +47,33 @@ async function select(req, res) {
         `
     });
 
-    let q = `
+    q = `
     SELECT
         ${fields}
         ${geomj} AS geomj
         ${geomdisplay}
     FROM ${table}
     WHERE ${qID} = $1;`
-
     //console.log(q);
 
-    global.DBS[req.body.dbs].query(q, [id])
-        .then(result => {
+    result = await global.DBS[req.body.dbs].query(q, [id])
 
-            // Iterate through the infoj object's entries and assign the values returned from the database query.
-            Object.values(req.body.infoj).forEach(entry => {
-                if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
-                    entry.value = result.rows[0][entry.field];
-                }
-                if (result.rows[0][entry.subfield]) {
-                    entry.subvalue = result.rows[0][entry.subfield];
-                }
-            });
+    // Iterate through the infoj object's entries and assign the values returned from the database query.
+    Object.values(req.body.infoj).forEach(entry => {
+        if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
+            entry.value = result.rows[0][entry.field];
+        }
+        if (result.rows[0][entry.subfield]) {
+            entry.subvalue = result.rows[0][entry.subfield];
+        }
+    });
 
-            // Send the infoj object with values back to the client.
-            res.status(200).json({
-                geomj: result.rows[0].geomj,
-                geomdisplay: result.rows[0].geomdisplay || false,
-                infoj: req.body.infoj
-            });
-
-        })
-        .catch(err => console.error(err));
+    // Send the infoj object with values back to the client.
+    res.status(200).json({
+        geomj: result.rows[0].geomj,
+        geomdisplay: result.rows[0].geomdisplay || false,
+        infoj: req.body.infoj
+    });
 }
 
 async function chart_data(req, res){
@@ -90,13 +87,11 @@ async function chart_data(req, res){
 
     if (await require('./chk').chkID(id, res).statusCode === 406) return;
     
-    let q = `SELECT ${series} FROM ${table} WHERE ${qID} = ${id};`;
-    
+    let q = `SELECT ${series} FROM ${table} WHERE ${qID} = $1;`;
     //console.log(q);
     
-     global.DBS[req.body.dbs].query(q)
-        .then(result => res.status(200).send(result.rows[0]))
-        .catch(err => console.error(err));
+    let result = await global.DBS[req.body.dbs].query(q, [id]);
+    res.status(200).send(result.rows[0]);
 }
 
 module.exports = {
