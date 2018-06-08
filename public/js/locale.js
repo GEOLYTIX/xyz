@@ -7,6 +7,7 @@ module.exports = () => {
     let locale = utils._createElement({
         tag: 'div',
         options: {
+            classList: 'report-off',
             textContent: 'Show layers for the following locale:'
         },
         appendTo: document.getElementById('Layers')

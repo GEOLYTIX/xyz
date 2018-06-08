@@ -2065,6 +2065,7 @@
           }
         },
         "catchments": {
+          "editable": true,
           "name": "Catchments",
           "meta": "Calculate catchments from a distance matrix.",
           "pane": [
