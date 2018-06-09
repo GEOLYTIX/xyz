@@ -3,6 +3,30 @@ function routes(fastify) {
     // Declare a route
     // fastify.get('/', (request, reply) => reply.send({ hello: 'world' }));
 
+    fastify
+        .decorate('testauth', function (req, res, done) {
+            // your validation logic
+
+            if (!req.query.auth) {
+                return done(new Error('missing auth query param'))
+            }
+            done() // pass an error if the authentication fails
+        })
+        .register(require('fastify-auth'))
+        .after(() => {
+            fastify.route({
+                method: 'GET',
+                url: '/auth',
+                beforeHandler: fastify.auth([
+                    fastify.testauth
+                ]),
+                handler: (req, res) => {
+                    //req.log.info('Auth route')
+                    res.send({ hello: 'world' })
+                }
+            })
+        });
+
     // Create constructor for mobile detect module.
     const Md = require('mobile-detect');
 

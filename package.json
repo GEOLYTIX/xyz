@@ -17,6 +17,7 @@
     "d3": "^4.12.0",
     "ejs": "^2.5.7",
     "fastify": "^1.5.0",
+    "fastify-auth": "^0.2.0",
     "fastify-postgres": "^1.0.0",
     "fastify-static": "^0.12.0",
     "highlight.js": "^9.12.0",
