@@ -2,10 +2,9 @@ async function fetchTiles(req, res) {
     try {
 
         let
-            params = req.url.split('/'),
-            x = parseInt(params[3]),
-            y = parseInt(params[4]),
-            z = parseInt(params[2]),
+            x = parseInt(req.params.x),
+            y = parseInt(req.params.y),
+            z = parseInt(req.params.z),
             m = 20037508.34,
             r = (m * 2) / (Math.pow(2, z)),
             table = req.query.table,
@@ -19,11 +18,12 @@ async function fetchTiles(req, res) {
         if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
 
         if (tilecache) result = await global.DBS[req.query.dbs].query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
-        
+
         if (result && result.rowCount === 1) {
-            res.setHeader('Content-Type', 'application/x-protobuf');
-            res.status(200);
-            res.send(result.rows[0].mvt);
+            res
+                .type('application/x-protobuf')
+                .code(200)
+                .send(result.rows[0].mvt);
             return
         }
 
@@ -72,9 +72,10 @@ async function fetchTiles(req, res) {
 
         result = await global.DBS[req.query.dbs].query(q);
 
-        res.setHeader('Content-Type', 'application/x-protobuf');
-        res.status(200);
-        res.send(result.rows[0].mvt);
+        res
+            .type('application/x-protobuf')
+            .code(200)
+            .send(result.rows[0].mvt);
 
     } catch (err) {
         console.error(err)
