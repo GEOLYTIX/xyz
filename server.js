@@ -5,13 +5,12 @@ const req_res = (m) => { try { return require.resolve(m) } catch (e) { console.l
 const dotenv = req_res('dotenv') ? require('dotenv') : null;
 if (dotenv) dotenv.load();
 
-const port = process.env.PORT || 3000;
 
-const path = require('path');
+const fastify = require('fastify')();
 
 
 // Set globals for API keys, Database connections, etc.
-global.appRoot = path.resolve(__dirname);
+global.appRoot = require('path').resolve(__dirname);
 global.site = (process.env.HOST || ('localhost:' + (process.env.PORT || '3000'))) + (process.env.DIR || '');
 
 global.KEYS = {};
@@ -21,16 +20,17 @@ Object.keys(process.env).map(key => {
     }
 });
 
-// const { Client } = require('pg');
-// global.DBS = {};
-// Object.keys(process.env).map(key => {
-//     if (key.split('_')[0] === 'DBS') {
-//         global.DBS[key.split('_')[1]] = new Client({ connectionString: process.env[key] });
 
-//         // connect reconnect issue
-//         global.DBS[key.split('_')[1]].connect();
-//     }
-// });
+global.DBS = {};
+Object.keys(process.env).forEach(async key => {
+    if (key.split('_')[0] === 'DBS') {
+        await fastify.register(require('fastify-postgres'), {
+            connectionString: process.env[key],
+            name: key.split('_')[1]
+        });
+        global.DBS[key.split('_')[1]] = await fastify.pg[key.split('_')[1]].connect()
+    }
+});
 
 
 
@@ -38,20 +38,18 @@ Object.keys(process.env).map(key => {
 // require('./waterline');
 
 
-// Require the framework and instantiate it
-const fastify = require('fastify')()
-
-// Declare a route
-fastify.get('/', function (request, reply) {
-  reply.send({ hello: 'world' })
+fastify.register(require('fastify-static'), {
+    root: require('path').join(__dirname, 'public'),
 });
 
-// Run the server!
-fastify.listen(port, function (err) {
-  if (err) {
-    fastify.log.error(err)
-    process.exit(1)
-  }
+require('./routes')(fastify);
 
-  console.log('The magic happens on port ' + port);
+const port = process.env.PORT || 3000;
+fastify.listen(port, err => {
+    if (err) {
+        fastify.log.error(err)
+        process.exit(1)
+    }
+
+    console.log('The magic happens on port ' + port);
 });
