@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>GEOLYTIX | passport</title>
+    <title>GEOLYTIX | register</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,19 +74,16 @@
             color: #079e00;
             background-color: white;
         }
-        .register {
-            display: none;
-        }
         p {
             font-size: 20px;
         }
-        #switch2register,
-        #switch2login {
+        .switch {
+            font-size: 20px;
+            text-decoration: none;
             color: #079e00;
             font-weight: 700;
         }
-        #switch2register:hover,
-        #switch2login:hover {
+        .switch:hover {
             cursor: pointer;
         }
         #btnRegister:disabled {
@@ -99,7 +96,7 @@
 </head>
 <body>
 <div>
-    <form action="<%= dir %>/login" method="post">
+    <form action="/register" method="post">
 
         <div class="input_group">
             <input id="auth_user_email" name="email" type="text" value="">
@@ -117,39 +114,21 @@
 
         <br>
 
-        <div class="input_group register">
+        <div class="input_group">
             <input id="auth_user_password_retype" name="password_retype" type="password" value="" onkeyup="check();">
             <span class="bar"></span>
             <label for="auth_user_password_retype">Re-type password</label>
         </div>
 
-        <% if (user) { if (user.verified == false) { %>
-        <span class="msg login">Account mail not yet verified.</span><br>
-        <% } } %>
-
-        <% if (user) { if (user.approved == false) { %>
-        <span class="msg login">Account not yet approved.</span><br>
-        <% } } %>
-
-        <% if (session_messages.length > 0) { %>
-        <span class="msg login"><%= session_messages[session_messages.length - 1] %></span><br>
-        <% } %>
-
         <br>
 
-        <button id="btnLogin" class="login" type="submit" formaction="<%= dir %>/login">
-            Log In
-        </button>
-
-        <button id="btnRegister" class="register" type="submit" formaction="<%= dir %>/register" disabled>
+        <button id="btnRegister" type="submit" formaction="/register" disabled>
             Register
         </button>
 
-        <p class="login">Your account must be verified by following a verification link sent to the email address and approved by an administrator before you are able to log in.</p>
-        <p id="switch2register" class="login">Register a new account or reset your password.</p>
-        <p class="register">A verification link will be sent to your email address. Follow the link to verify that you are the account holder.</p>
-        <p class="register">A site administrator needs to approve your account once you have verified that your are the account holder.</p>
-        <p id="switch2login" class="register">Already registered? Login.</p>
+        <p>A verification link will be sent to your email address. Follow the link to verify that you are the account holder.</p>
+        <p>A site administrator needs to approve your account once you have verified that your are the account holder.</p>
+        <a class="switch" href="/login">Already registered? Login.</p>
     </form>
 </div>
 </body>
@@ -160,22 +139,6 @@
             document.getElementById('auth_user_password').focus() :
             document.getElementById('auth_user_email').focus();
     }, 10);
-
-    function changeDisplay(arr, display) {
-        Array.prototype.map.call(arr, function(el){
-            el.style.display = display;
-        });
-    }
-
-    document.getElementById('switch2register').addEventListener('click', function() {
-        changeDisplay(document.getElementsByClassName('login'),'none');
-        changeDisplay(document.getElementsByClassName('register'),'block');
-    });
-
-    document.getElementById('switch2login').addEventListener('click', function() {
-        changeDisplay(document.getElementsByClassName('register'),'none');
-        changeDisplay(document.getElementsByClassName('login'),'block');
-    });
 
     function check() {
         document.getElementById('auth_user_password').value.length > 0
