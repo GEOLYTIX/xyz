@@ -33,6 +33,32 @@ Object.keys(process.env).forEach(async key => {
 });
 
 
+fastify.register(require('fastify-formbody'));
+
+fastify
+    .register(require('fastify-cookie'))
+    .register(require('fastify-caching'))
+    .register(require('fastify-server-session'), {
+        secretKey: 'some-secret-password-at-least-32-characters-long',
+        sessionMaxAge: 900000, // 15 minutes in milliseconds
+        sessionCookieName: 'glx-xyz-session',
+        cookie: {
+            //domain: '.example.com',
+            path: '/'
+        }
+    });
+
+let login = process.env.LOGIN || process.env.ADMIN;
+
+if (login && login.split(':')[0] === 'postgres') login_connect();
+
+async function login_connect(){
+    await fastify.register(require('fastify-postgres'), {
+        connectionString: login.split('|')[0],
+        name: 'LOGIN'
+    });
+    global.DBS['LOGIN'] = await fastify.pg['LOGIN'].connect();
+}
 
 // Initialise waterline ORM for appsettings and user profiles.
 // require('./waterline');
@@ -47,7 +73,7 @@ require('./routes')(fastify);
 const port = process.env.PORT || 3000;
 fastify.listen(port, err => {
     if (err) {
-        fastify.log.error(err)
+        console.error(err)
         process.exit(1)
     }
 

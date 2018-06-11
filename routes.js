@@ -1,83 +1,153 @@
-function routes(fastify) {
-
-    // Declare a route
-    // fastify.get('/', (request, reply) => reply.send({ hello: 'world' }));
-
-    fastify
-        .decorate('testauth', function (req, res, done) {
-            // your validation logic
-
-            if (!req.query.auth) {
-                return done(new Error('missing auth query param'))
-            }
-            done() // pass an error if the authentication fails
-        })
-        .register(require('fastify-auth'))
-        .after(() => {
-            fastify.route({
-                method: 'GET',
-                url: '/auth',
-                beforeHandler: fastify.auth([
-                    fastify.testauth
-                ]),
-                handler: (req, res) => {
-                    //req.log.info('Auth route')
-                    res.send({ hello: 'world' })
-                }
-            })
-        });
+async function routes(fastify) {
 
     // Create constructor for mobile detect module.
     const Md = require('mobile-detect');
 
     // Set jsrender module for server-side templates.
     const jsr = require('jsrender');
+    
+    // Declare a route
+    // fastify.get('/', (request, reply) => reply.send({ hello: 'world' }));
 
-    // Request application bundle.
-    fastify.get('/', async (req, res) => {
-
-        await require('./mod/appsettings').getAppSettings(req);
-
-        // Get params from URL.
-        // let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
-
-        // Assign session hooks from params.
-        // req.session.hooks = {};
-        // if (params[0] !== '') params.forEach(p => {
-        //     let kv = p.split('=');
-        //     req.session.hooks[kv[0]] = kv[1];
-        // });
-
-        // global.appSettings.hooks = req.session.hooks;
-
-        // Check whether request comes from a mobile platform and set template.
-        let md = new Md(req.headers['user-agent']);
-
-        let tmpl = req.session && req.session.hooks && req.session.hooks.report ?
-            jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
-                jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
-
-        // Build the template with jsrender and send to client.
-        res
-            .type('text/html')
-            .send(
-                tmpl.render({
-                    title: global.appSettings.title || 'GEOLYTIX | XYZ',
-                    bundle_js: 'build/xyz_bundle.js',
-                    btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
-                    hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
-                    btnReport: global.appSettings.report ? '' : 'style="display: none;"',
-                    btnLogout: req.user ? '' : 'style="display: none;"',
-                    btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
-                    btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
-                    btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
-                    settings: `
-                        <script>
-                            const host = '';
-                            const _xyz = ${JSON.stringify(global.appSettings)};
-                        </script>`
-                }))
+    fastify.route({
+        method: 'GET',
+        url: '/login',
+        handler: (req, res) => {
+            res
+                .type('text/html')
+                .send(jsr
+                    .templates('./views/login.html')
+                    .render())
+        }
     });
+
+    fastify.route({
+        method: 'GET',
+        url: '/register',
+        handler: (req, res) => {
+            res
+                .type('text/html')
+                .send(jsr
+                    .templates('./views/register.html')
+                    .render())
+        }
+    });    
+
+    fastify.route({
+        method: 'GET',
+        url: '/logout',
+        handler: (req, res) => {
+            //fastify.cache;
+
+            res.send({logout: true});
+        }
+    });
+
+    const bcrypt = require('bcrypt-nodejs');
+
+    fastify.route({
+        method: 'POST',
+        url: '/login',
+        handler: async (req, res) => {
+            result = await global.DBS.LOGIN.query(`SELECT * FROM open_users WHERE email = $1`,[req.body.email]);
+            if (bcrypt.compareSync(req.body.password, result.rows[0].password)) {
+                req.session.user = {
+                    email: result.rows[0].email,
+                    verified: result.rows[0].verified,
+                    approved: result.rows[0].approved,
+                    admin: result.rows[0].admin
+                };
+                res.redirect(req.session.redirect);
+            } else {
+                res.send({ result: 'farts' });
+            }                           
+        }
+    });
+
+
+    async function checkLogin(req, res, done){
+
+        req.session.redirect = req.req.originalUrl;
+
+        if (!req.session.user) {
+            // pass an error if the authentication fails
+            // return done(new Error('missing auth query param'))
+
+            return res.redirect('/login');
+
+        }
+        done();
+
+    }
+
+    fastify
+        .decorate('auth_auth', checkLogin)
+        .register(require('fastify-auth'))
+        .after(() => {
+            fastify.route({
+                method: 'GET',
+                url: '/auth',
+                beforeHandler: fastify.auth([fastify.auth_auth]),
+                handler: (req, res) => {
+                    res.send({ hello: 'glx' })
+                }
+            })
+        //});
+
+    // fastify
+    //     .decorate('auth_root', checkLogin)
+    //     .register(require('fastify-auth'))
+    //     .after(() => {
+            fastify.route({
+                method: 'GET',
+                url: '/',
+                beforeHandler: fastify.auth([fastify.auth_auth]),
+                handler: async (req, res) => {
+
+                    await require('./mod/appsettings').getAppSettings(req);
+
+                    // Get params from URL.
+                    // let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
+
+                    // Assign session hooks from params.
+                    // req.session.hooks = {};
+                    // if (params[0] !== '') params.forEach(p => {
+                    //     let kv = p.split('=');
+                    //     req.session.hooks[kv[0]] = kv[1];
+                    // });
+
+                    // global.appSettings.hooks = req.session.hooks;
+
+                    // Check whether request comes from a mobile platform and set template.
+                    let md = new Md(req.headers['user-agent']);
+
+                    let tmpl = req.session && req.session.hooks && req.session.hooks.report ?
+                        jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
+                            jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
+
+                    // Build the template with jsrender and send to client.
+                    res
+                        .type('text/html')
+                        .send(
+                            tmpl.render({
+                                title: global.appSettings.title || 'GEOLYTIX | XYZ',
+                                bundle_js: 'build/xyz_bundle.js',
+                                btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
+                                hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
+                                btnReport: global.appSettings.report ? '' : 'style="display: none;"',
+                                btnLogout: req.user ? '' : 'style="display: none;"',
+                                btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
+                                btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
+                                btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
+                                settings: `
+                                    <script>
+                                        const host = '';
+                                        const _xyz = ${JSON.stringify(global.appSettings)};
+                                    </script>`
+                            }));
+                }
+            })
+        });
 
     // Open the settings view.
     fastify.get('/settings', async (req, res) => {
