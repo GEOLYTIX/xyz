@@ -1,10 +1,71 @@
-async function getAppSettings(req) {
+module.exports = { routes, getAppSettings, saveAppSettings }
+
+function routes(fastify, auth) {
+
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
+        fastify.register(require('fastify-postgres'), {
+            connectionString: process.env.APPSETTINGS.split('|')[0],
+            name: 'settings'
+        });
+    }
+
+    fastify
+        .decorate('authSettings', (req, res, done) => auth.chkLogin(req, res, 'admin', done))
+        .after(() => {
+
+            fastify.route({
+                method: 'GET',
+                url: '/settings',
+                beforeHandler: fastify.auth([fastify.authSettings]),
+                handler: async (req, res) => {
+
+                    await getAppSettings(req, fastify);
+
+                    res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
+                        settings: `
+                        <script>
+                            const _xyz = ${JSON.stringify(global.appSettings)};
+                        </script>`
+                    }));
+                }
+            })
+
+            fastify.route({
+                method: 'POST',
+                url: '/q_settings_save',
+                beforeHandler: fastify.auth([fastify.authSettings]),
+                handler: (req, res) => {
+                    saveAppSettings(req, res);
+                }
+            })
+
+        });
+
+    // if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
+    //     datastores.pg_settings = {
+    //         adapter: 'sails-postgresql',
+    //         url: process.env.APPSETTINGS.split('|')[0]
+    //     };
+    //     waterline.registerModel(
+    //         Waterline.Collection.extend({
+    //             identity: 'settings',
+    //             primaryKey: '_id',
+    //             tableName: process.env.APPSETTINGS.split('|').pop(),
+    //             datastore: 'pg_settings',
+    //             attributes: {
+    //                 _id: { type: 'string', autoMigrations: { autoIncrement: true } },
+    //                 settings: { type: 'json' }
+    //             }
+    //         })
+    //     );
+    // }
+}
+
+async function getAppSettings(req, fastify) {
 
     let settings = {};
 
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'mongodb') settings = await getSettingsFromDB();
-
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') settings = await getSettingsFromDB();
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') settings = await getSettingsFromDB(fastify);
 
     if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') settings = await getSettingsFromFile();
 
@@ -47,10 +108,16 @@ async function saveAppSettings(req, res) {
     res.status(200).json({ ok: true });
 }
 
-async function getSettingsFromDB() {
-    let settings = await global.ORM.collections.settings.find().limit(1);
-    if (settings.length === 0) return {};
-    return settings[0].settings;
+async function getSettingsFromDB(fastify) {
+
+    let settings_db = await fastify.pg.settings.connect(),
+        settings_table = process.env.APPSETTINGS.split('|').pop(),
+        settings = await settings_db.query(`SELECT * FROM ${settings_table} LIMIT 1`);
+
+    settings_db.release();
+
+    if (settings.rows.length === 0) return {};
+    return settings.rows[0].settings;
 }
 
 async function getSettingsFromFile() {
@@ -65,7 +132,7 @@ function removeRestrictions(settings, req) {
         // check whether the object has restrictions.
         if (checkForRestrictions(o)) {
             // if the parent is an array splice the key index.
-            if (parent.length > 0) return parent.splice(parseInt(key),1);
+            if (parent.length > 0) return parent.splice(parseInt(key), 1);
 
             // if the parent is an object delete the key from the parent.
             return delete parent[key];
@@ -103,8 +170,3 @@ function setAppSettingsValues(settings) {
     // Push defaults into appSettingsValues
     Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id']);
 }
-
-module.exports = {
-    getAppSettings: getAppSettings,
-    saveAppSettings: saveAppSettings
-};
