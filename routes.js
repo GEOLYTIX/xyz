@@ -1,172 +1,68 @@
-async function routes(fastify) {
+module.exports = async fastify => {
+
+    const auth = require('./auth');
+
+    auth.routes(fastify);
+
+    const appsettings = require('./appsettings');
+
+    appsettings.routes(fastify, auth);
 
     // Create constructor for mobile detect module.
     const Md = require('mobile-detect');
 
     // Set jsrender module for server-side templates.
     const jsr = require('jsrender');
-    
-    // Declare a route
-    // fastify.get('/', (request, reply) => reply.send({ hello: 'world' }));
 
-    fastify.route({
-        method: 'GET',
-        url: '/login',
-        handler: (req, res) => {
-            res
-                .type('text/html')
-                .send(jsr
-                    .templates('./views/login.html')
-                    .render())
-        }
-    });
-
-    fastify.route({
-        method: 'GET',
-        url: '/register',
-        handler: (req, res) => {
-            res
-                .type('text/html')
-                .send(jsr
-                    .templates('./views/register.html')
-                    .render())
-        }
-    });    
-
-    fastify.route({
-        method: 'GET',
-        url: '/logout',
-        handler: (req, res) => {
-            //fastify.cache;
-
-            res.send({logout: true});
-        }
-    });
-
-    const bcrypt = require('bcrypt-nodejs');
-
-    fastify.route({
-        method: 'POST',
-        url: '/login',
-        handler: async (req, res) => {
-            result = await global.DBS.LOGIN.query(`SELECT * FROM open_users WHERE email = $1`,[req.body.email]);
-            if (bcrypt.compareSync(req.body.password, result.rows[0].password)) {
-                req.session.user = {
-                    email: result.rows[0].email,
-                    verified: result.rows[0].verified,
-                    approved: result.rows[0].approved,
-                    admin: result.rows[0].admin
-                };
-                res.redirect(req.session.redirect);
-            } else {
-                res.send({ result: 'farts' });
-            }                           
-        }
-    });
-
-
-    async function checkLogin(req, res, done){
-
-        req.session.redirect = req.req.originalUrl;
-
-        if (!req.session.user) {
-            // pass an error if the authentication fails
-            // return done(new Error('missing auth query param'))
-
-            return res.redirect('/login');
-
-        }
-        done();
-
-    }
+    // Universal error handler.
+    const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
 
     fastify
-        .decorate('auth_auth', checkLogin)
-        .register(require('fastify-auth'))
-        .after(() => {
-            fastify.route({
-                method: 'GET',
-                url: '/auth',
-                beforeHandler: fastify.auth([fastify.auth_auth]),
-                handler: (req, res) => {
-                    res.send({ hello: 'glx' })
-                }
-            })
-        //});
+        .decorate('authLogin', (req, res, done) =>
+            auth.chkLogin(req, res, process.env.LOGIN ? true : false, done))
+        .after(authLoginRoutes);
 
-    // fastify
-    //     .decorate('auth_root', checkLogin)
-    //     .register(require('fastify-auth'))
-    //     .after(() => {
-            fastify.route({
-                method: 'GET',
-                url: '/',
-                beforeHandler: fastify.auth([fastify.auth_auth]),
-                handler: async (req, res) => {
+    function authLoginRoutes() {
 
-                    await require('./mod/appsettings').getAppSettings(req);
+        fastify.route({
+            method: 'GET',
+            url: '/',
+            beforeHandler: fastify.auth([fastify.authLogin]),
+            handler: async (req, res) => {
 
-                    // Get params from URL.
-                    // let params = req.originalUrl.substring(req.baseUrl.length + 2).split('&');
+                await appsettings.getAppSettings(req);
 
-                    // Assign session hooks from params.
-                    // req.session.hooks = {};
-                    // if (params[0] !== '') params.forEach(p => {
-                    //     let kv = p.split('=');
-                    //     req.session.hooks[kv[0]] = kv[1];
-                    // });
+                global.appSettings.hooks = req.query;
 
-                    // global.appSettings.hooks = req.session.hooks;
+                // Check whether request comes from a mobile platform and set template.
+                let md = new Md(req.headers['user-agent']);
 
-                    // Check whether request comes from a mobile platform and set template.
-                    let md = new Md(req.headers['user-agent']);
+                let tmpl = req.session && req.session.hooks && req.session.hooks.report ?
+                    jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
+                        jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
 
-                    let tmpl = req.session && req.session.hooks && req.session.hooks.report ?
-                        jsr.templates('./views/report.html') : (md.mobile() === null || md.tablet() !== null) ?
-                            jsr.templates('./views/desktop.html') : jsr.templates('./views/mobile.html');
-
-                    // Build the template with jsrender and send to client.
-                    res
-                        .type('text/html')
-                        .send(
-                            tmpl.render({
-                                title: global.appSettings.title || 'GEOLYTIX | XYZ',
-                                bundle_js: 'build/xyz_bundle.js',
-                                btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
-                                hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
-                                btnReport: global.appSettings.report ? '' : 'style="display: none;"',
-                                btnLogout: req.user ? '' : 'style="display: none;"',
-                                btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
-                                btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
-                                btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
-                                settings: `
-                                    <script>
-                                        const host = '';
-                                        const _xyz = ${JSON.stringify(global.appSettings)};
-                                    </script>`
-                            }));
-                }
-            })
-        });
-
-    // Open the settings view.
-    fastify.get('/settings', async (req, res) => {
-
-        await require('./mod/appsettings').getAppSettings(req);
-
-        res
-            .type('text/html')
-            .send(
-                jsr.templates('./views/settings.html').render({
+                // Build the template with jsrender and send to client.
+                res.type('text/html').send(tmpl.render({
+                    title: global.appSettings.title || 'GEOLYTIX | XYZ',
+                    bundle_js: 'build/xyz_bundle.js',
+                    btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
+                    hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
+                    btnReport: global.appSettings.report ? '' : 'style="display: none;"',
+                    btnLogout: req.session.user ? '' : 'style="display: none;"',
+                    btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
+                    btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
+                    btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
                     settings: `
-                <script>
-                    const _xyz = ${JSON.stringify(global.appSettings)};
-                </script>`
+                            <script>
+                                const host = '';
+                                const _xyz = ${JSON.stringify(global.appSettings)};
+                            </script>`
                 }));
-    });
+            }
+        })
 
-    // Get data for selected item.
-    fastify.post('/q_settings_save', (req, res) => require('./mod/appsettings').saveAppSettings(req, res));
+
+    }
 
     // Set highlight and and markdown-it to turn markdown into flavoured html.
     const hljs = require('highlight.js');
@@ -193,8 +89,6 @@ async function routes(fastify) {
                     }));
         })
     });
-
-    const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
 
     // Vector layers with PGSQL MVT.
     fastify.get('/mvt/:z/:x/:y', (req, res) => require('./mod/mvt').fetchTiles(req, res));
@@ -277,7 +171,4 @@ async function routes(fastify) {
     // Get a stored image.
     fastify.get('/q_get_image', (req, res) => res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+')));
 
-
 }
-
-module.exports = routes;
