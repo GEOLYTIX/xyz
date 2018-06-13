@@ -19,7 +19,7 @@ async function select(req, res) {
     
     if (sql_filter) {
         q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
-        result = await global.DBS[req.body.dbs].query(_q, [id]);
+        result = await global.DBS[req.body.dbs].query(q, [id]);
         sql_filter = result.rows[0].sql_filter;
     }
 
