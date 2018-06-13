@@ -31,9 +31,9 @@ async function grid(req, res) {
     global.DBS[req.query.dbs].query(q)
         .then(result => {
             if (result.rows.length === 0) {
-                res.status(204).json({});
+                res.code(204).send({});
             } else {
-                res.status(200).json(Object.keys(result.rows).map(function (record) {
+                res.code(200).send(Object.keys(result.rows).map(function (record) {
                     return Object.keys(result.rows[record]).map(function (field) {
                         return result.rows[record][field];
                     });
@@ -72,7 +72,7 @@ async function info(req, res) {
     global.DBS[req.body.dbs].query(q)
         .then(result => {
             if (result.rows.length === 0) {
-                res.status(204).json({});
+                res.code(204).send({});
 
             } else {
                 Object.keys(req.body.infoj).map(key => {
@@ -81,7 +81,7 @@ async function info(req, res) {
                     }
                 });
     
-                res.status(200).json({
+                res.code(200).json({
                     geomj: result.rows[0].geomj,
                     infoj: req.body.infoj
                 });
