@@ -32,33 +32,24 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'POST',
-                url: '/q_settings_save',
+                url: '/settings/save',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: (req, res) => {
                     saveAppSettings(req, res);
                 }
             })
 
-        });
+            fastify.route({
+                method: 'GET',
+                url: '/settings/get',
+                beforeHandler: fastify.auth([fastify.authSettings]),
+                handler: async (req, res) => {
+                    await getAppSettings(req, fastify);
+                    res.send(global.appSettings);
+                }
+            })
 
-    // if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
-    //     datastores.pg_settings = {
-    //         adapter: 'sails-postgresql',
-    //         url: process.env.APPSETTINGS.split('|')[0]
-    //     };
-    //     waterline.registerModel(
-    //         Waterline.Collection.extend({
-    //             identity: 'settings',
-    //             primaryKey: '_id',
-    //             tableName: process.env.APPSETTINGS.split('|').pop(),
-    //             datastore: 'pg_settings',
-    //             attributes: {
-    //                 _id: { type: 'string', autoMigrations: { autoIncrement: true } },
-    //                 settings: { type: 'json' }
-    //             }
-    //         })
-    //     );
-    // }
+        });
 }
 
 async function getAppSettings(req, fastify) {
@@ -83,14 +74,27 @@ async function getAppSettings(req, fastify) {
         }
     };
 
-    if (req.user) settings = await removeRestrictions(settings, req);
+    if (req.session.user) settings = await removeRestrictions(settings, req);
 
-    await setAppSettingsValues(settings);
+    global.appSettings = settings;
+
+    // Store all string keys in global array to check for SQL injections.
+    global.appSettingsValues = [];
+    (function objectEval(o) {
+        Object.keys(o).forEach((key) => {
+            if (typeof key === 'string') global.appSettingsValues.push(key);
+            if (typeof o[key] === 'string') global.appSettingsValues.push(o[key]);
+            if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
+        })
+    })(global.appSettings)
+
+    // Push defaults into appSettingsValues
+    Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id']);
 }
 
 async function saveAppSettings(req, res) {
 
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') res.status(406).json({ file: true });
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') res.code(406).send({ file: true });
 
     let existingSettings = await global.ORM.collections.settings.find();
     if (existingSettings.length === 0) {
@@ -152,21 +156,4 @@ function removeRestrictions(settings, req) {
     };
 
     return settings;
-}
-
-function setAppSettingsValues(settings) {
-    global.appSettings = settings;
-
-    // Store all string keys in global array to check for SQL injections.
-    global.appSettingsValues = [];
-    (function objectEval(o) {
-        Object.keys(o).forEach((key) => {
-            if (typeof key === 'string') global.appSettingsValues.push(key);
-            if (typeof o[key] === 'string') global.appSettingsValues.push(o[key]);
-            if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
-        })
-    })(global.appSettings)
-
-    // Push defaults into appSettingsValues
-    Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id']);
 }
