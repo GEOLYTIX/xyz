@@ -1270,7 +1270,9 @@
               "fillOpacity": 0.3
             },
             "highlight": {
-              "color": "#e91e63"
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0.3
             },
             "theme": {
               "label": "Retail Place type",
@@ -1445,6 +1447,115 @@
                     "color": "#D90368",
                     "opacity": 1,
                     "fillColor": "#D90368",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                }
+              }
+            }
+          }
+        },
+        "retail_pitch": {
+            "display": true,
+            "name": "Retail Place Pitch",
+            "meta": "Comparitive strength within Retail Place area.",
+            "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec,",
+            "format": "geojson",
+            "pane": ["pitch", 540],
+            "dbs": "XYZ",
+            "qID": "id",
+            "arrayZoom": {
+                "16": "gb_retail_place_pitch"
+            },
+            "style": {
+                "default": {
+                "weight": 1,
+                "color": "#000",
+                "fill": true,
+                "fillColor": "#000",
+                "fillOpacity": 0.3
+              },
+              "theme": {
+                "type": "categorized",
+                "field": "pitch_dec",
+                "label": "Retail pitch rank in decimal scale",
+                "cat": {
+                  "1": {
+                    "style": {
+                      "stroke": false,
+                      "fillColor": "#ca0020",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "2": {
+                    "style": {
+                      "stroke": false,
+                      "fillColor": "#dd494b",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                "3": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f09377",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "4": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f5c1a9",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "5": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f7e5dd",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "6": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#e1ecf2",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "7": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#b4d6e7",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "8": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#82bcd9",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "9": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#4396c5",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "10": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#0571b0",
                     "fill": true,
                     "fillOpacity": 0.3
                   }

@@ -25,9 +25,9 @@ function panel(layer) {
     
     if (layer.format === 'mvt') panel.appendChild(lss.mvt_style(layer));
         
-    if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
+    if ((layer.format === 'mvt' || layer.format === 'geojson') && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(mvtCategorized(layer));
 
-    if (layer.format === 'mvt' && layer.style && layer.style.theme && layer.style.theme.type === 'graduated') panel.appendChild(mvtGraduated(layer));
+    if ((layer.format === 'mvt' || layer.format === 'geojson') && layer.style && layer.style.theme && layer.style.theme.type === 'graduated') panel.appendChild(mvtGraduated(layer));
 
     if (layer.format === 'cluster' && layer.style && layer.style.theme && layer.style.theme.type === 'categorized') panel.appendChild(clusterCategorized(layer));
 
