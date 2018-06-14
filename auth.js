@@ -19,19 +19,19 @@ function routes(fastify) {
 
     fastify.route({
         method: 'GET',
-        url: '/login',
+        url: global.dir + '/login',
         handler: (req, res) => {
             res
                 .type('text/html')
                 .send(require('jsrender')
                     .templates('./views/login.html')
-                    .render())
+                    .render({dir: global.dir}))
         }
     });
 
     fastify.route({
         method: 'POST',
-        url: '/login',
+        url: global.dir + '/login',
         handler: async (req, res) => {
 
             let user_db = await fastify.pg.users.connect();
@@ -59,7 +59,7 @@ function routes(fastify) {
 
     fastify.route({
         method: 'GET',
-        url: '/register',
+        url: global.dir + '/register',
         handler: (req, res) => {
             res
                 .type('text/html')
@@ -71,7 +71,7 @@ function routes(fastify) {
 
     fastify.route({
         method: 'POST',
-        url: '/register',
+        url: global.dir + '/register',
         handler: async (req, res) => {
 
             const email = req.body.email;
@@ -144,10 +144,10 @@ function routes(fastify) {
 
     fastify.route({
         method: 'GET',
-        url: '/logout',
+        url: global.dir + '/logout',
         handler: (req, res) => {
             req.session = {};
-            res.redirect('/');
+            res.redirect(global.dir || '/');
         }
     });
 
@@ -161,7 +161,7 @@ function routes(fastify) {
         // Open the user admin panel with a list of all user accounts.
         fastify.route({
             method: 'GET',
-            url: '/admin',
+            url: global.dir + '/admin',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: async (req, res) => {
 
@@ -193,7 +193,7 @@ function routes(fastify) {
         // Check verification token and verify account
         fastify.route({
             method: 'GET',
-            url: '/verify/:token',
+            url: global.dir + '/verify/:token',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: async (req, res) => {
 
@@ -245,7 +245,7 @@ function routes(fastify) {
         // Check verification token and approve account
         fastify.route({
             method: 'GET',
-            url: '/approve/:token',
+            url: global.dir + '/approve/:token',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: async (req, res) => {
 
@@ -278,7 +278,7 @@ function routes(fastify) {
         // Endpoint for update requests from admin panel.
         fastify.route({
             method: 'POST',
-            url: '/update_user',
+            url: global.dir + '/update_user',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: async (req, res) => {
 
@@ -311,7 +311,7 @@ function routes(fastify) {
         // Endpoint for deleting user accounts from admin panel.
         fastify.route({
             method: 'POST',
-            url: '/delete_user',
+            url: global.dir + '/delete_user',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: async (req, res) => {
 
@@ -336,9 +336,11 @@ function chkLogin(req, res, login, done) {
 
     if (!login) return done();
 
+    //uhm!
     req.session.redirect = req.req.url;
+
     if (!req.session.user) {
-        return res.redirect('/login');
+        return res.redirect(global.dir + '/login');
     }
 
     if (login === true && req.session.user.verified && req.session.user.approved) {
@@ -346,7 +348,7 @@ function chkLogin(req, res, login, done) {
     }
 
     if (login && !req.session.user[login] === true) {
-        return res.redirect('/login');
+        return res.redirect(global.dir + '/login');
     }
 
     done();

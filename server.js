@@ -8,6 +8,8 @@ if (dotenv) dotenv.load();
 
 const fastify = require('fastify')();
 
+// fastify._routePrefix = '/open';
+
 fastify
     .register(require('fastify-formbody'))
     .register(require('fastify-static'), {
@@ -17,7 +19,7 @@ fastify
     .register(require('fastify-caching'))
     .register(require('fastify-auth'))
     .register(require('fastify-server-session'), {
-        secretKey: process.env.PORT || 'some-secret-password-at-least-32-characters-long',
+        secretKey: process.env.SECRET || 'some-secret-password-at-least-32-characters-long',
         sessionMaxAge: 600000, // 10 minutes in milliseconds
         sessionCookieName: 'glx-xyz-session',
         cookie: {
