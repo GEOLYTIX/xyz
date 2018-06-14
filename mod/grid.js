@@ -33,7 +33,8 @@ async function grid(req, res) {
             if (result.rows.length === 0) {
                 res.code(204).send({});
             } else {
-                res.code(200).send(Object.keys(result.rows).map(function (record) {
+                res
+                .code(200).send(Object.keys(result.rows).map(function (record) {
                     return Object.keys(result.rows[record]).map(function (field) {
                         return result.rows[record][field];
                     });

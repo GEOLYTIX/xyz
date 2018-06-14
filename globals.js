@@ -3,6 +3,7 @@ module.exports = fastify => {
     // Set globals for API keys, Database connections, etc.
     global.appRoot = require('path').resolve(__dirname);
     global.site = (process.env.HOST || ('localhost:' + (process.env.PORT || '3000'))) + (process.env.DIR || '');
+    global.dir = process.env.DIR || '';
 
     global.KEYS = {};
     Object.keys(process.env).forEach(key => {

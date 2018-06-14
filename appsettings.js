@@ -15,7 +15,7 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'GET',
-                url: '/settings',
+                url: global.dir + '/settings',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: async (req, res) => {
 
@@ -32,7 +32,7 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'POST',
-                url: '/settings/save',
+                url: global.dir + '/settings/save',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: (req, res) => {
                     saveAppSettings(req, res);
@@ -41,7 +41,7 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'GET',
-                url: '/settings/get',
+                url: global.dir + '/settings/get',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: async (req, res) => {
                     await getAppSettings(req, fastify);
