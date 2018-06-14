@@ -1419,7 +1419,9 @@
               "fillOpacity": 0.3
             },
             "highlight": {
-              "color": "#e91e63"
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0.3
             },
             "theme": {
               "label": "Retail Place type",
