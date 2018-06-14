@@ -25,6 +25,7 @@ function getLayer(){
         layer.xhr.open('GET', host + 'q_geojson?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
+            properties: layer.properties,
             qID: layer.qID,
             geom: layer.geom,
             west: bounds.getWest(),
@@ -43,9 +44,33 @@ function getLayer(){
                 // Check for existing layer and remove from map.
                 if (layer.L) _xyz.map.removeLayer(layer.L);
                 
+                function applyLayerStyle(geojsonFeature){
+                    if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized'){
+
+                        let val = geojsonFeature.properties[layer.style.theme.field] || null;
+                        
+                        if(val) return layer.style.theme.cat[val].style;
+                        
+                    }
+                    
+                    if (layer.style && layer.style.theme && layer.style.theme.type === 'graduated') {
+                        
+                        let style = layer.style.theme.cat[0].style;
+                        
+                        let val = geojsonFeature.properties[layer.style.theme.field] || null;
+                        
+                        for (let i = 0; i < layer.style.theme.cat.length; i++) {
+                            if (val && val < layer.style.theme.cat[i].val) break;
+                            style = layer.style.theme.cat[i].style;
+                        }
+                        return style;
+                    }
+                    return layer.style.default;
+                }
+                
                 // Add geoJSON feature collection to the map.
                 layer.L = L.geoJSON(features, {
-                        style: layer.style.default,
+                        style: applyLayerStyle,
                         pane: layer.pane[0],
                         interactive: layer.infoj? true: false,
                         pointToLayer: function(point, latlng){

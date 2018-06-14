@@ -44,8 +44,9 @@ function getLayer(){
         options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
         
         function applyLayerStyle(properties, zoom){
-            if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]])
+            if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]]){
                 return layer.style.theme.cat[properties[layer.style.theme.field]].style;
+            }
 
             if (layer.style && layer.style.theme && layer.style.theme.type === 'graduated') {
 
@@ -59,11 +60,6 @@ function getLayer(){
                 return style;
 
             }
-
-                // layer.style && layer.style.categorized && layer.style.categorized.cat[properties[layer.style.categorized.field]]
-
-                // (((layer || {}).style || {}).categorized || {}).cat[properties[layer.style.categorized.field]]
-
 
             return layer.style.default;
         }
@@ -117,6 +113,7 @@ function getLayer(){
             })
             .on('mouseover', (e) => {
                 e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || {'color':'#090'});
+                
             })
             .on('mouseout', (e) => {
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
