@@ -11,6 +11,9 @@ const fastify = require('fastify')();
 // fastify._routePrefix = '/open';
 
 fastify
+    .register(require('fastify-helmet'), {
+        noCache: true
+    })
     .register(require('fastify-formbody'))
     .register(require('fastify-static'), {
         root: require('path').join(__dirname, 'public'),

@@ -13,10 +13,6 @@ function routes(fastify) {
         });
     }
 
-    const mailer = require('./mailer');
-
-    const bcrypt = require('bcrypt-nodejs');
-
     fastify.route({
         method: 'GET',
         url: global.dir + '/login',
@@ -25,7 +21,7 @@ function routes(fastify) {
                 .type('text/html')
                 .send(require('jsrender')
                     .templates('./views/login.html')
-                    .render({dir: global.dir}))
+                    .render({ dir: global.dir }))
         }
     });
 
@@ -43,7 +39,7 @@ function routes(fastify) {
 
             user_db.release();
 
-            if (bcrypt.compareSync(req.body.password, result.rows[0].password)) {
+            if (require('bcrypt-nodejs').compareSync(req.body.password, result.rows[0].password)) {
                 req.session.user = {
                     email: result.rows[0].email,
                     verified: result.rows[0].verified,
@@ -87,29 +83,22 @@ function routes(fastify) {
 
             let user = result.rows[0];
 
-            const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8));
+            const password = require('bcrypt-nodejs').hashSync(req.body.password, require('bcrypt-nodejs').genSaltSync(8));
             const verificationtoken = require('crypto').randomBytes(20).toString('hex');
 
             // set password for existing user and remove existing verification.
             if (user) {
                 var user_db = await fastify.pg.users.connect();
 
-                console.log(`
-                UPDATE ${user_table} SET
-                    verified = false,
-                    password = '${password}',
-                    verificationtoken = '${verificationtoken}'
-                WHERE email = '${email}';`);
-
                 await user_db.query(`
                 UPDATE ${user_table} SET
                     verified = false,
                     password = '${password}',
                     verificationtoken = '${verificationtoken}'
-                WHERE email = '${email}';`);
+                WHERE email = $1;`, [email]);
                 user_db.release();
-        
-                mailer.mail({
+
+                require('./mailer').mail({
                     to: user.email,
                     subject: `Please verify your GEOLYTIX account (password reset) on ${global.site}`,
                     text: `A new password has been set for this account. \n \n`
@@ -128,7 +117,7 @@ function routes(fastify) {
                 ${verificationtoken} AS verificationtoken;`);
             user_db.release();
 
-            mailer.mail({
+            require('./mailer').mail({
                 to: user.email,
                 subject: `Please verify your GEOLYTIX account on ${global.site}`,
                 text: `A new account for this email address has been registered with ${global.site}. \n \n`
@@ -152,8 +141,7 @@ function routes(fastify) {
     });
 
     fastify
-        .decorate('authAdmin', (req, res, done) =>
-            chkLogin(req, res, 'admin', done))
+        .decorate('authAdmin', (req, res, done) => chkLogin(req, res, 'admin', done))
         .after(authAdminRoutes);
 
     function authAdminRoutes() {
@@ -161,23 +149,19 @@ function routes(fastify) {
         // Open the user admin panel with a list of all user accounts.
         fastify.route({
             method: 'GET',
-            url: global.dir + '/admin',
+            url: global.dir + '/admin/user',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: async (req, res) => {
 
-                let user_db = await fastify.pg.users.connect();
-
-                result = await user_db.query(`
-                SELECT
-                    email,
-                    verified,
-                    approved,
-                    admin
-                FROM ${user_table};`);
-    
+                var user_db = await fastify.pg.users.connect();
+                let result = await user_db.query(`
+                    SELECT
+                        email,
+                        verified,
+                        approved,
+                        admin
+                    FROM ${user_table};`);
                 user_db.release();
-
-                let users = result.rows;
 
                 res
                     .type('text/html')
@@ -185,10 +169,65 @@ function routes(fastify) {
                         .templates('./views/admin.html')
                         .render({
                             users: result.rows,
-                            dir: process.env.DIR || ''
+                            dir: global.dir
                         }));
             }
         });
+
+        // Endpoint for update requests from admin panel.
+        fastify.route({
+            method: 'POST',
+            url: global.dir + '/admin/user/update',
+            beforeHandler: fastify.auth([fastify.authAdmin]),
+            handler: async (req, res) => {
+
+                var user_db = await fastify.pg.users.connect();
+                let update = await user_db.query(`
+                    UPDATE ${user_table} SET ${req.body.role} = ${req.body.chk}
+                    WHERE email = $1;`, [req.body.email]);
+                user_db.release();
+
+                // Send email to the user account if an account has been approved.
+                if (req.body.role === 'approved' && req.body.chk)
+                    await require('./mailer')({
+                        to: req.body.email,
+                        subject: `This account has been approved for ${req.headers.origin}`,
+                        text: `You are now able to log on to ${req.headers.origin}`
+                    });
+
+                if (update.rowCount === 0) res.code(500).send();
+                if (update.rowCount === 1) res.code(200).send();
+
+            }
+        });
+
+        // Endpoint for deleting user accounts from admin panel.
+        fastify.route({
+            method: 'POST',
+            url: global.dir + '/admin/user/delete',
+            beforeHandler: fastify.auth([fastify.authAdmin]),
+            handler: async (req, res) => {
+
+                var user_db = await fastify.pg.users.connect();
+                let update = await user_db.query(`
+                    DELETE FROM ${user_table}
+                    WHERE email = $1;`, [req.body.email]);
+                user_db.release();
+
+                if (update.rowCount === 0) res.code(500).send();
+                if (update.rowCount === 1) {
+
+                    await require('./mailer')({
+                        to: req.body.email,
+                        subject: `This ${req.headers.origin} account has been deleted.`,
+                        text: `You will no longer be able to log in to ${req.headers.origin}`
+                    });
+
+                    res.code(200).send()
+                };
+
+            }
+        });        
 
         // Check verification token and verify account
         fastify.route({
@@ -228,7 +267,7 @@ function routes(fastify) {
                 let adminmail = admins.map(admin => admin.email);
 
                 // Sent an email to all admin account emails with a request to approve the new user account.
-                mailer.mail({
+                require('./mailer').mail({
                     to: adminmail,
                     subject: `A new account has been verified on ${global.site}`,
                     text: `Please log into the admin panel to approve ${user.email} \n \n`
@@ -264,68 +303,13 @@ function routes(fastify) {
                 user = user[0];
 
                 // Sent an email to the account holder to notify about the changes.
-                mailer.mail({
+                require('./mailer').mail({
                     to: user.email,
                     subject: `This account has been approved on ${global.site}`,
                     text: `You are now able to log on to ${req.protocol}://${global.site}`
                 });
 
                 res.send('The account has been approved by you. An email has been sent to the account holder.');
-
-            }
-        });
-
-        // Endpoint for update requests from admin panel.
-        fastify.route({
-            method: 'POST',
-            url: global.dir + '/update_user',
-            beforeHandler: fastify.auth([fastify.authAdmin]),
-            handler: async (req, res) => {
-
-                // Find user by email and set role.
-                user = await global.ORM.collections.users
-                    .update({ email: req.body.email })
-                    .set({ [req.body.role]: req.body.chk })
-                    .fetch();
-
-                user = user[0];
-
-                // Return if no user account is found.
-                if (!user) return res.json({ update: false });
-
-                // Send email to the user account if an account has been approved.
-                if (req.body.role === 'approved' && req.body.chk) {
-                    mailer.mail({
-                        to: user.email,
-                        subject: `This account has been approved on ${global.site}`,
-                        text: `You are now able to log on to ${req.protocol}://${global.site}`
-                    });
-                }
-
-                // Return to admin panel.
-                res.json({ update: true });
-
-            }
-        });
-
-        // Endpoint for deleting user accounts from admin panel.
-        fastify.route({
-            method: 'POST',
-            url: global.dir + '/delete_user',
-            beforeHandler: fastify.auth([fastify.authAdmin]),
-            handler: async (req, res) => {
-
-                // Find user by email and set role.
-                user = await global.ORM.collections.users
-                    .destroy({ email: req.body.email })
-                    .fetch();
-
-                user = user[0];
-
-                // Return if no user account is found.
-                if (!user) return res.json({ delete: false });
-
-                res.json({ delete: true });
 
             }
         });

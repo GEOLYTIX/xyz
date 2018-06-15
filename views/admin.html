@@ -3,7 +3,7 @@
 
 <head>
     <title>GEOLYTIX | admin</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,6 +74,10 @@
             font-family: "Material Icons";
             content: '\E837';
         }
+
+        .checkbox input[type=checkbox]:disabled+.checkbox_i:after {
+            color: #999;
+        }
     </style>
 </head>
 
@@ -126,48 +130,50 @@
 </body>
 
 <script>
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
-    [].forEach.call(document.querySelectorAll('.checkbox_input'), function (el) {
-        el.addEventListener('click', function () {
-            var user = this.parentNode.parentNode.parentNode.firstChild;
-            while (user != null && user.nodeType == 3) {
-                user = user.nextSibling;
-            }
-            xhr.open('POST', '/update_user');
+    [].forEach.call(document.querySelectorAll('.checkbox > input'), el => {
+        el.addEventListener('click', e => {
+
+            el.disabled = true;
+
+            let user = el.parentNode.parentNode.parentNode.firstChild.nextSibling;
+
+            xhr.open('POST', '{{:dir}}/admin/user/update');
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var j = JSON.parse(this.responseText);
-                    j.update ? null : alert("Oops. Something went wrong with the update!");
-                }
+            xhr.onload = () => {
+                if (xhr.status === 500) alert('Soz. It\'s me not you.');
+                if (xhr.status === 200) el.disabled = false;
             }
             xhr.send(JSON.stringify({
                 email: user.innerText,
-                role: this.getAttribute('name'),
-                chk: this.checked
+                role: el.getAttribute('name'),
+                chk: el.checked
             }));
+
         }, false);
     });
 
-    [].forEach.call(document.querySelectorAll('.delete_account'), function (el) {
-        el.addEventListener('click', function () {
-            var tr = this.parentNode.parentNode, user = tr.firstChild;
-            while (user != null && user.nodeType == 3) {
-                user = user.nextSibling;
-            }
-            if (confirm('Delete account ' + user.innerText)) {
-                xhr.open('POST', '/delete_user');
+    [].forEach.call(document.querySelectorAll('.delete_account'), el => {
+        el.addEventListener('click', e => {
+
+            let row = el.parentNode.parentNode,
+                email = row.firstChild.nextSibling;
+
+            row.style.color = '#999';
+
+            if (confirm('Delete account ' + email.innerText)) {
+                xhr.open('POST', '{{:dir}}/admin/user/delete');
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var j = JSON.parse(this.responseText);
-                        j.delete ? tr.remove() : alert("Soz. Something went wrong with the delete!");
-                    }
+                xhr.onload = () => {
+                    if (xhr.status === 500) alert('Soz. It\'s me not you.');
+                    if (xhr.status === 200) row.remove();
                 }
                 xhr.send(JSON.stringify({
-                    email: user.innerText
+                    email: email.innerText
                 }));
+            } else {
+                row.style.color = '#000';
             }
         }, false);
     });

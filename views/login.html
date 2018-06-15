@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>GEOLYTIX | login</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -86,9 +86,6 @@
         .switch:hover {
             cursor: pointer;
         }
-        #btnRegister:disabled {
-            background-color: darkslategrey;
-        }
         .msg {
             color: orangered;
         }
@@ -99,7 +96,7 @@
     <form action="/login" method="post">
 
         <div class="input_group">
-            <input id="auth_user_email" name="email" type="text" value="">
+            <input name="email" type="text">
             <span class="bar"></span>
             <label for="auth_user_email">E-mail</label>
         </div>
@@ -107,14 +104,14 @@
         <br>
 
         <div class="input_group">
-            <input id="auth_user_password" name="password" type="password" value="" onkeyup="check();">
+            <input name="password" type="password">
             <span class="bar"></span>
             <label for="auth_user_password">Password</label>
         </div>
 
         <br>
 
-        <button id="btnLogin" type="submit" formaction="login">
+        <button type="submit" formaction="login">
             Log In
         </button>
 
