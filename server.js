@@ -6,7 +6,14 @@ const dotenv = req_res('dotenv') ? require('dotenv') : null;
 
 if (dotenv) dotenv.load();
 
-const fastify = require('fastify')();
+const fastify = require('fastify')({
+    // http2: true,
+    // https: {
+    //     allowHTTP1: true, // fallback support for HTTP1
+    //     key: require('fs').readFileSync('/home/dennis/.ssl/server.key'),
+    //     cert: require('fs').readFileSync('/home/dennis/.ssl/server.crt')
+    // }
+});
 
 // fastify._routePrefix = '/open';
 

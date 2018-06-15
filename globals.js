@@ -4,6 +4,7 @@ module.exports = fastify => {
     global.appRoot = require('path').resolve(__dirname);
     global.site = (process.env.HOST || ('localhost:' + (process.env.PORT || '3000'))) + (process.env.DIR || '');
     global.dir = process.env.DIR || '';
+    global.protocol = process.env.PROTOCOL || 'https';
 
     global.KEYS = {};
     Object.keys(process.env).forEach(key => {
