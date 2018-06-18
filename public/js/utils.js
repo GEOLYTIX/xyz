@@ -361,6 +361,16 @@ module.exports = (function () {
             return item.hasOwnProperty(key) && item[key] === val;
         });
     }
+    
+    function copy_to_clipboard(str){
+        let textArea = document.createElement("textarea");
+        textArea.style.visibility = 'none';
+        textArea.value = str;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+    }
 
     return {
         scrollElement: scrollElement,
@@ -383,6 +393,7 @@ module.exports = (function () {
         clone: clone,
         get_index_by_value: get_index_by_value,
         scrolly: scrolly,
-        slider: slider
+        slider: slider,
+        copy_to_clipboard: copy_to_clipboard
     };
 })();

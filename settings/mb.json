@@ -134,11 +134,6 @@
               "filter": "like"
             },
             {
-              "field": "segmentname",
-              "label": "Segment name",
-              "inline": true
-            },
-            {
               "field": "place_name",
               "label": "Name",
               "type": "text"

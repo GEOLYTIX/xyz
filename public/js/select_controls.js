@@ -84,6 +84,35 @@ function expander(record) {
     });
 }
 
+function clipboard(record){
+    utils._createElement({
+        tag: 'i',
+        options: {
+            textContent: 'file_copy',
+            className: 'material-icons cursor noselect btn_header',
+            title: 'Copy to clipboard'
+        },
+        style: {
+            color: record.color
+        },
+        appendTo: record.drawer,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                let data = [], row;
+                Object.keys(record.location.infoj).map(function(key){
+                    let lbl = record.location.infoj[key].label || '',
+                        val = record.location.infoj[key].value || '';
+                    row = lbl + '\t' + val;
+                    data.push(row);
+                });
+                utils.copy_to_clipboard(data.join('\n'));
+            }
+        }
+    });
+}
+
 function marker(record) {
     utils._createElement({
         tag: 'i',
@@ -228,6 +257,7 @@ module.exports = {
     zoom: zoom,
     expander: expander,
     marker: marker,
+    clipboard: clipboard,
     update: update,
     trash: trash
 }

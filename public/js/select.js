@@ -394,13 +394,16 @@ module.exports = () => {
 
         // Create the clear control element to control the removal of a feature from the select.layers.
         select_controls.clear(record);
+        
+        // Create copy to clipboard element
+        select_controls.clipboard(record);
 
         // Create the zoom control element which zoom the map to the bounds of the feature.
         select_controls.zoom(record);
 
         // Create control to toggle marker.
         select_controls.marker(record);
-
+        
         // Create the expand control element which controls whether the data table is displayed for the feature.
         select_controls.expander(record);
 
