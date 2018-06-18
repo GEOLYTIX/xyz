@@ -53,11 +53,13 @@ function addInfojToList(record) {
         // Create new row for text cells and append to table.
         let val;
         if (entry.type && !entry.inline && !(entry.type === 'integer' || entry.type === 'numeric' || entry.type === 'date')) {
-            tr = utils.createElement('tr', null, table)
+            tr = utils.createElement('tr', null, table);
+            
             val = utils.createElement('td', {
                 className: 'val',
                 colSpan: '2'
             }, tr);
+            
         } else {
             val = utils.createElement('td', {
                 className: 'val num'
@@ -77,8 +79,8 @@ function addInfojToList(record) {
             val.textContent = entry.type === 'numeric' ?
                 parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: record.location.grid? 0: 2}) :
                 entry.type === 'integer' ?
-                    parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
-                    entry.value;
+                    parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 })  : 
+                entry.type === 'date' ? new Date(entry.value).toLocaleDateString('en-GB') : entry.value;
             return
         }
 
