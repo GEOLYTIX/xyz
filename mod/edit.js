@@ -66,7 +66,8 @@ async function newAggregate(req, res) {
                 3857)
                 ) * 0.1),
             3857),
-        4326) AS ${geom_target}, '${filter_sql.replace(new RegExp("'", "g"), "''")}' as sql_filter
+        4326) AS ${geom_target},
+        '${filter_sql.replace(new RegExp("'", "g"), "''")}' as sql_filter
         FROM ${table_source}
         WHERE true ${filter_sql}
     
