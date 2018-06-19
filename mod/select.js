@@ -69,7 +69,7 @@ async function select(req, res) {
     });
 
     // Send the infoj object with values back to the client.
-    res.status(200).json({
+    res.code(200).send({
         geomj: result.rows[0].geomj,
         geomdisplay: result.rows[0].geomdisplay || false,
         infoj: req.body.infoj
@@ -91,7 +91,7 @@ async function chart_data(req, res){
     //console.log(q);
     
     let result = await global.DBS[req.body.dbs].query(q, [id]);
-    res.status(200).send(result.rows[0]);
+    res.code(200).send(result.rows[0]);
 }
 
 module.exports = {

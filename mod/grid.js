@@ -82,7 +82,7 @@ async function info(req, res) {
                     }
                 });
     
-                res.code(200).json({
+                res.code(200).send({
                     geomj: result.rows[0].geomj,
                     infoj: req.body.infoj
                 });
