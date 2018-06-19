@@ -15,7 +15,7 @@ async function fetchTiles(req, res) {
             tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache,
             result;
 
-        if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
+        //if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
 
         if (tilecache) result = await global.DBS[req.query.dbs].query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
