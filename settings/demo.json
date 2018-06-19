@@ -1225,6 +1225,7 @@
           "geomj": "geomj",
           "pane": ["postal", 520],
           "dbs": "XYZ",
+          "properties": "rank,",
           "qID": "qid",
           "arrayZoom": {
             "10": "gb_postaldistrict_census__11",
@@ -1237,6 +1238,12 @@
               "field": "postal_label",
               "label": "Name",
               "type": "text"
+            },
+            {
+              "field": "rank",
+              "label": "Rank",
+              "type": "text",
+              "inline": true
             },
             {
               "field": "pop__11",
@@ -1325,10 +1332,47 @@
           "style": {
             "default": {
               "weight": 1,
-              "color": "#000"
+              "color": "#000",
+              "fill": true,
+              "opacity": 0.3,
+              "fillOpacity": 0.1
             },
             "highlight": {
-              "color": "#090"
+              "color": "#090",
+              "fill": true,
+              "opacity": 0.3,
+              "fillOpacity": 0.1
+            },
+            "theme": {
+                "label": "Rank",
+                "type": "categorized",
+                "field": "rank",
+                "cat": {
+                    "Primary": {
+                        "style": {
+                            "stroke": false,
+                            "fill": true,
+                            "fillColor": "#A51C30",
+                            "fillOpacity": 0.4
+                        }
+                    },
+                    "Secondary": {
+                        "style": {
+                            "stroke": false,
+                            "fill": true,
+                            "fillColor": "#F58A07",
+                            "fillOpacity": 0.4
+                        }
+                    },
+                    "Tertiary": {
+                        "style": {
+                            "stroke": false,
+                            "fill": true,
+                            "fillColor": "#F9CB40",
+                            "fillOpacity": 0.4
+                        }
+                    }
+                }
             }
           }
         },
