@@ -13,9 +13,9 @@ async function select(req, res) {
         sql_filter = typeof req.body.sql_filter == 'undefined ' ? null : req.body.sql_filter;
     
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
 
-    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
     
     if (sql_filter) {
         q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
@@ -83,9 +83,9 @@ async function chart_data(req, res){
         series = req.body.series;
     
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
 
-    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
     
     let q = `SELECT ${series} FROM ${table} WHERE ${qID} = $1;`;
     //console.log(q);

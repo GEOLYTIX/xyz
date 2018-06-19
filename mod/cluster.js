@@ -19,7 +19,7 @@ async function cluster(req, res) {
     north = parseFloat(req.query.north);
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  if (await require('./chk').chkVals([table, geom, cat], res).statusCode === 406) return;
+  //if (await require('./chk').chkVals([table, geom, cat], res)) return res.code(406).send('Possible SQL injection detected');
     
   filter_sql = filters.sql_filter(filter, filter_sql);
 
@@ -213,7 +213,7 @@ async function cluster_select(req, res) {
   lnglat = lnglat.map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  if (await require('./chk').chkVals([table, geom, id, label], res).statusCode === 406) return;
+  //if (await require('./chk').chkVals([table, geom, id, label], res).statusCode === 406) return;
     
   filter_sql = filters.legend_filter(filter, filter_sql);
 

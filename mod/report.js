@@ -14,7 +14,7 @@ async function request(req, res) {
     
     let report = Date.now();
     reports[report] = false;
-    res.status(200).json(report);
+    res.code(200).send(report);
 
     const browser = await puppeteer.launch({args: ['--no-sandbox'], headless: true});
     const page = await browser.newPage();
@@ -69,7 +69,7 @@ async function request(req, res) {
 }
 
 function ping(req, res) {
-        res.status(200).send(reports[req.query.report]);
+        res.code(200).send(reports[req.query.report]);
 }
 
 module.exports = {

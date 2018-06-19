@@ -109,7 +109,7 @@ async function saveAppSettings(req, res) {
             });
         req.session.hooks = {};
     }
-    res.status(200).json({ ok: true });
+    res.code(200).send({ ok: true });
 }
 
 async function getSettingsFromDB(fastify) {

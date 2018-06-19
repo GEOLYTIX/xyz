@@ -10,9 +10,9 @@ async function newRecord(req, res) {
         username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
-    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
 
         q = `INSERT INTO ${table} (username, geom)
@@ -33,7 +33,7 @@ async function newAggregate(req, res) {
         filter_sql = '';
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table_target, table_source, geom_target, geom_source], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table_target, table_source, geom_target, geom_source], res).statusCode === 406) return;
 
     filter_sql = await require('./filters').sql_filter(filter, filter_sql);
 
@@ -94,9 +94,9 @@ async function updateRecord(req, res) {
         username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
-    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
     Object.values(req.body.infoj).forEach(entry => {
         if (entry.images) return
@@ -133,9 +133,9 @@ async function deleteRecord(req, res) {
         log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
-    if (await require('./chk').chkID(id, res).statusCode === 406) return;
+    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
     // Write into logtable if logging is enabled.
     if (log_table) await writeLog(req, log_table, table, qID, id);

@@ -11,7 +11,7 @@ async function grid(req, res) {
         north = parseFloat(req.query.north);
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, geom, size, color], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, geom, size, color], res).statusCode === 406) return;
 
     let q = `
     SELECT
@@ -56,7 +56,7 @@ async function info(req, res) {
     });
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, geom], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, geom], res).statusCode === 406) return;
 
     let q = `
     SELECT ${fields} null

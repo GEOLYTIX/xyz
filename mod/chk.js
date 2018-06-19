@@ -3,16 +3,15 @@ function chkVals(vals, res) {
     vals.forEach((val) => {
         if (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0) {
             console.log('Possible SQL injection detected');
-            res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
+            // res.code(406).sendFile('/public/dennis_nedry.gif');
+            return true;
         }
     })
-    return res;
 }
 
 // Check whether an ID contains spaces.
 function chkID(id, res) {
-    if (String(id).indexOf(' ') >= 0) res.status(406).sendFile(appRoot + '/public/dennis_nedry.gif');
-    return res;
+    if (String(id).indexOf(' ') >= 0) return true;
 }
 
 module.exports = {

@@ -243,7 +243,7 @@ async function catchment_calc(req, res) {
     res.data.iso.features.reverse();
 
     // Return json to client
-    // res.status(200).json({
+    // res.code(200).send({
     //     properties: {
     //         "Latitude": `${parseFloat(req.query.lat).toFixed(6)}`,
     //         "Longitude": `${parseFloat(req.query.lng).toFixed(6)}`,
@@ -286,7 +286,7 @@ async function catchment_calc(req, res) {
         return result;
     }
 
-    res.status(200).send(
+    res.code(200).send(
         {
             id: result[0].rows[0].id.toString(),
             lat: parseFloat(result[0].rows[0].lat),

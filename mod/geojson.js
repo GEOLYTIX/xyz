@@ -11,7 +11,7 @@ async function geojson(req, res) {
         north = parseFloat(req.query.north);
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if (await require('./chk').chkVals([table, id, geom, properties], res).statusCode === 406) return;
+    //if (await require('./chk').chkVals([table, id, geom, properties], res).statusCode === 406) return;
 
     let q = `
     SELECT

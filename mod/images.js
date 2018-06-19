@@ -31,9 +31,9 @@ function save(req, res){
             id = req.query.id;
 
         // Check whether string params are found in the settings to prevent SQL injections.
-        if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+        //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
-        if (await require('./chk').chkID(id, res).statusCode === 406) return;
+        //if (await require('./chk').chkID(id, res).statusCode === 406) return;
         
         q = `
         UPDATE ${table} SET
@@ -43,7 +43,7 @@ function save(req, res){
         // add filename to images field
         global.DBS[req.query.dbs]
             .query(q, [id])
-            .then(result => res.status(200).send({
+            .then(result => res.code(200).send({
                 'image_id': body.public_id,
                 'image_url': body.secure_url}))
             .catch(err => console.error(err));
@@ -79,9 +79,9 @@ function remove(req, res){
             image_src = decodeURIComponent(req.query.image_src);
 
         // Check whether string params are found in the settings to prevent SQL injections.
-        if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
+        //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
 
-        if (await require('./chk').chkID(id, res).statusCode === 406) return;
+        //if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
         q = `
         UPDATE ${table} SET
