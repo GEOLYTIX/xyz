@@ -60,7 +60,7 @@ async function cluster(req, res) {
   let result = await global.DBS[req.query.dbs].query(q);
 
   if (parseInt(result.rows[0].count) === 0) {
-    res.status(204).json({});
+    res.code(204).send();
     return
   }
 
@@ -164,7 +164,7 @@ async function cluster(req, res) {
     
   result = await global.DBS[req.query.dbs].query(q);
 
-  if (!theme) res.status(200).json(Object.keys(result.rows).map(record => {
+  if (!theme) res.code(200).send(Object.keys(result.rows).map(record => {
     return {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
@@ -174,7 +174,7 @@ async function cluster(req, res) {
     }
   }));
 
-  if (theme === 'categorized') res.status(200).json(Object.keys(result.rows).map(record => {
+  if (theme === 'categorized') res.code(200).send(Object.keys(result.rows).map(record => {
     return {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
@@ -185,7 +185,7 @@ async function cluster(req, res) {
     }
   }));
 
-  if (theme === 'graduated') res.status(200).json(Object.keys(result.rows).map(record => {
+  if (theme === 'graduated') res.code(200).send(Object.keys(result.rows).map(record => {
     return {
       type: 'Feature',
       geometry: JSON.parse(result.rows[record].geomj),
@@ -232,7 +232,7 @@ async function cluster_select(req, res) {
 
   //console.log(result.rows);
 
-  res.status(200).json(Object.keys(result.rows).map(record => {
+  res.code(200).send(Object.keys(result.rows).map(record => {
     return {
       id: result.rows[record].id,
       label: result.rows[record].label,
