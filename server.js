@@ -28,7 +28,7 @@ fastify
     .register(require('fastify-auth'))
     .register(require('fastify-server-session'), {
         secretKey: process.env.SECRET || 'some-secret-password-at-least-32-characters-long',
-        sessionMaxAge: 600000, // 10 minutes in milliseconds
+        sessionMaxAge: 6000000, // 10 minutes in milliseconds
         sessionCookieName: 'glx-xyz-session',
         cookie: {
             //domain: '.geolytix.xyz',

@@ -352,6 +352,8 @@ function chkLogin(req, res, login, done) {
 
     if (!login) return done();
 
+    //console.log(login);
+
     //uhm!
     req.session.redirect = req.req.url;
 
