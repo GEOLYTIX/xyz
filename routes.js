@@ -61,7 +61,7 @@ module.exports = fastify => {
                     title: global.appSettings.title || 'GEOLYTIX | XYZ',
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
-                    hrefDocumentation: global.appSettings.documentation ? global.appSettings.documentation : '',
+                    hrefDocumentation: global.appSettings.documentation ? global.dir + '/' + global.appSettings.documentation : '',
                     btnReport: global.appSettings.report ? '' : 'style="display: none;"',
                     btnLogout: req.session.user ? '' : 'style="display: none;"',
                     btnAdmin: (req.session.user && req.session.user.admin) ? '' : 'style="display: none;"',

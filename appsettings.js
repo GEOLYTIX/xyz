@@ -15,13 +15,14 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'GET',
-                url: global.dir + '/settings',
+                url: global.dir + '/admin/settings',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: async (req, res) => {
 
                     await getAppSettings(req, fastify);
 
                     res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
+                        dir: global.dir,
                         settings: `
                         <script>
                             const _xyz = ${JSON.stringify(global.appSettings)};
@@ -32,7 +33,7 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'POST',
-                url: global.dir + '/settings/save',
+                url: global.dir + '/admin/settings/save',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: (req, res) => {
                     saveAppSettings(req, res);
@@ -41,7 +42,7 @@ function routes(fastify, auth) {
 
             fastify.route({
                 method: 'GET',
-                url: global.dir + '/settings/get',
+                url: global.dir + '/admin/settings/get',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: async (req, res) => {
                     await getAppSettings(req, fastify);
