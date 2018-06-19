@@ -5,7 +5,9 @@ function getLayer() {
     if (layer.display && !layer.base) {
         layer.loader.style.display = 'block';
 
-        let uri = layer.provider ? host + 'proxy_request?uri=' + layer.URI + '&provider=' + layer.provider : layer.URI;
+        let uri = layer.provider ?
+            host + 'proxy_request?uri=' + layer.URI + '&provider=' + layer.provider :
+            layer.URI;
 
         layer.base = L.tileLayer(uri, {
             pane: layer.pane[0]
