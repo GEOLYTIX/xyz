@@ -188,43 +188,71 @@ function mvt_style(layer){
     // end add colour picker
     
     // begin opacity tools
-    let opacity_slider = utils.slider({
-        title: "Stroke opacity: ",
-        default: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100) + "%",
-        min: 0,
-        value: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100),
-        max: 100,
-        appendTo: style_section,
-        oninput: function(e){
-            let opacity = this.value;
-            this.parentNode.previousSibling.textContent = parseInt(opacity) + "%";
-            layer.style.default.opacity = (opacity/100).toFixed(2);
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                timeout = null;
-                layer.getLayer();
-            }, 500);
-        }
-    });
     
-    let fill_opacity_slider = utils.slider({
-        title: "Fill opacity: ",
-        default: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100) + "%",
-        min: 0,
-        value: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100),
-        max: 100,
-        appendTo: style_section,
-        oninput: function(e){
-            let fill_opacity = this.value;
-            this.parentNode.previousSibling.textContent = parseInt(fill_opacity) + "%";
-            layer.style.default.fillOpacity = (fill_opacity/100).toFixed(2);
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                timeout = null;
-                layer.getLayer();
-            }, 500);
+    if(layer.style.default.stroke || layer.style.default.color){
+        
+        function set_stroke_opacity(layer, opacity){
+            if(layer.style.theme){
+                Object.keys(layer.style.theme.cat).map(function(key){
+                    if(layer.style.theme.cat[key].style.stroke || layer.style.theme.cat[key].style.color) layer.style.theme.cat[key].style.opacity = (opacity/100).toFixed(2);
+                });
+            } else {
+                layer.style.default.opacity = (opacity/100).toFixed(2);
+            }
         }
-    });
+        
+        utils.slider({
+            title: "Stroke opacity: ",
+            default: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100) + "%",
+            min: 0,
+            value: (!isNaN(layer.style.default.opacity) ? 100*layer.style.default.opacity : 100),
+            max: 100,
+            appendTo: style_section,
+            oninput: function(e){
+                let opacity = this.value;
+                this.parentNode.previousSibling.textContent = parseInt(opacity) + "%";
+                set_stroke_opacity(layer, opacity);
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    timeout = null;
+                    layer.getLayer();
+                }, 500);
+            }
+        });
+    }
+    
+    if(layer.style.default.fill && layer.style.default.fillColor){
+        
+        function set_fill_opacity(layer, opacity){
+            if(layer.style.theme){
+                Object.keys(layer.style.theme.cat).map(function(key){
+                    if(layer.style.theme.cat[key].style.fill) layer.style.theme.cat[key].style.fillOpacity = (opacity/100).toFixed(2);
+                });
+            } else {
+                layer.style.default.fillOpacity = (opacity/100).toFixed(2);
+            }
+        }
+        
+        utils.slider({
+            title: "Fill opacity: ",
+            default: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100) + "%",
+            min: 0,
+            value: (!isNaN(layer.style.default.fillOpacity) ? 100*layer.style.default.fillOpacity : 100),
+            max: 100,
+            appendTo: style_section,
+            oninput: function(e){
+                let fill_opacity = this.value;
+                this.parentNode.previousSibling.textContent = parseInt(fill_opacity) + "%";
+                set_fill_opacity(layer, fill_opacity);
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    timeout = null;
+                    layer.getLayer();
+                }, 500);
+            }
+        });
+    }
+    
     // end opacity tools
     
     return style_section;
