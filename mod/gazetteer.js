@@ -48,7 +48,7 @@ function MAPBOX_placesAutoComplete(req, res) {
             return
         }
 
-        res.status(200).json(JSON.parse(body).features.map(f => {
+        res.code(200).send(JSON.parse(body).features.map(f => {
             return {
                 label: `${f.text} (${f.place_type[0]}) ${!req.query.locale && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
                 id: f.center,
@@ -65,7 +65,7 @@ function GOOGLE_placesAutoComplete(req, res) {
           + `&${global.KEYS[req.query.provider]}`;
 
     require('request').get(q, (err, response, body) => {
-        res.status(200).json(JSON.parse(body).predictions.map(f => {
+        res.code(200).send(JSON.parse(body).predictions.map(f => {
             return {
                 label: f.description,
                 id: f.place_id,
@@ -81,7 +81,7 @@ function gazetteer_googleplaces(req, res) {
 
     require('request').get(q, (err, response, body) => {
         let r = JSON.parse(body).result;
-        res.status(200).json({
+        res.code(200).send({
             type: 'Point',
             coordinates: [r.geometry.location.lng, r.geometry.location.lat]
         })
