@@ -2081,6 +2081,7 @@
           }
         },
         "retail_points_aj_merger": {
+          "restriction": "admin",
           "name": "Asda / Sainsbury's",
           "pane": ["retail_points", 540],
           "format": "cluster",
