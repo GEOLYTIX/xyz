@@ -75,6 +75,7 @@ async function getAppSettings(req, fastify) {
         }
     };
 
+    
     if (req.session.user) settings = await removeRestrictions(settings, req);
 
     global.appSettings = settings;
@@ -152,7 +153,7 @@ function removeRestrictions(settings, req) {
     function checkForRestrictions(o) {
         return Object.entries(o).some((e) => {
             // check whether an entry has 'restriction' as key and the value is not a member of the user object.
-            return e[0] === 'restriction' && !req.user[e[1]]
+            return e[0] === 'restriction' && !req.session.user[e[1]]
         })
     };
 
