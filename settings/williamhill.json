@@ -82,7 +82,7 @@
           "qID": "id",
           "table": "wh.williamhill_09052018",
           "cluster_label": "shop_name",
-          "cluster_cat": "competition",
+          "cluster_cat": "shop_bucket",
           "aggregate_layer": "scratch",
           "infoj": [
             {
@@ -207,9 +207,9 @@
                   "in": [
                       "Profitable ex Gaming",
                       "Profit >£100k after triennial hit",
-                      "Profit >£20k after triennial hit",
-                      "Profit >£50k after triennial hit",
                       "Profit >£75k after triennial hit",
+                      "Profit >£50k after triennial hit",
+                      "Profit >£20k after triennial hit",
                       "42 loss makers",
                       "Balance"
                   ]
@@ -627,34 +627,66 @@
               "#bbb"
             ],
             "theme": {
-              "label": "Competition Type",
+              "label": "Shop profit bucket",
               "type": "categorized",
               "competitors": {
-                "MONOPOLY": {
+                "Profitable ex Gaming": {
                   "colour": "#143156",
-                  "label": "Monopoly"
+                  "label": "Profitable ex Gaming"
                 },
-                "MULTI COMP": {
-                  "colour": "#FFDE3B",
-                  "label": "Multi competiton"
-                },
-                "SINGLE COMP": {
+                "Profit >£100k after triennial hit": {
                   "colour": "#2274A5",
-                  "label": "Single competiton"
+                  "label": "Profit >£100k after triennial hit"
+                },
+                "Profit >£75k after triennial hit": {
+                  "colour": "#95B8D1",
+                  "label": "Profit >£75k after triennial hit"
+                },
+                "Profit >£50k after triennial hit": {
+                  "colour": "#FFDE3B",
+                  "label": "Profit >£50k after triennial hit"
+                },
+                "Profit >£20k after triennial hit": {
+                  "colour": "#1C90DD",
+                  "label": "Profit >£20k after triennial hit"
+                },
+                "42 loss makers": {
+                  "colour": "#EFAB2D",
+                  "label": "42 loss makers"
+                },
+                "Balance": {
+                  "colour": "#A8B9C4",
+                  "label": "Balance"
                 }
               },
               "cat": {
-                "MONOPOLY": {
+                "Profitable ex Gaming": {
                   "marker": "svg_symbols.target([400, '#143156'])",
-                  "label": "Monopoly"
+                  "label": "Profitable ex Gaming"
                 },
-                "MULTI COMP": {
+                "Profit >£100k after triennial hit": {
+                  "marker": "svg_symbols.target([400, '#2274A5'])",
+                  "label": "Profit >£100k after triennial hit"
+                },
+                "Profit >£75k after triennial hit": {
+                  "marker": "svg_symbols.target([400,'#95B8D1'])",
+                  "label": "Profit >£75k after triennial hit"
+                },
+                "Profit >£50k after triennial hit": {
                   "marker": "svg_symbols.target([400, '#FFDE3B'])",
-                  "label": "Multi competition"
+                  "label": "Profit >£50k after triennial hit"
                 },
-                "SINGLE COMP": {
-                  "marker": "svg_symbols.target([400,'#2274A5'])",
-                  "label": "Single competition"
+                "Profit >£20k after triennial hit": {
+                  "marker": "svg_symbols.target([400, '#1C90DD'])",
+                  "label": "Profit >£20k after triennial hit"
+                },
+                "42 loss makers": {
+                  "marker": "svg_symbols.target([400, '#EFAB2D'])",
+                  "label": "42 loss makers"
+                },
+                "Balance": {
+                  "marker": "svg_symbols.target([400, '#A8B9C4'])",
+                  "label": "Balance"
                 }
               }
             }

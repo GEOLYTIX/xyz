@@ -42,10 +42,13 @@ function getLayer(){
         
         // set style for each layer
         options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
-        
+            
         function applyLayerStyle(properties, zoom){
+            
             if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]]){
+                
                 return layer.style.theme.cat[properties[layer.style.theme.field]].style;
+            
             }
 
             if (layer.style && layer.style.theme && layer.style.theme.type === 'graduated') {
@@ -63,6 +66,7 @@ function getLayer(){
 
             return layer.style.default;
         }
+        
         
         if(layer.L) _xyz.map.removeLayer(layer.L);
         
@@ -119,7 +123,6 @@ function getLayer(){
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
             .addTo(_xyz.map);
-
     }
 }
 
