@@ -199,6 +199,23 @@
               "level": 1
             },
             {
+              "field": "shop_bucket",
+              "label": "Shop profit bucket",
+              "type": "text",
+              "inline": true,
+              "filter": {
+                  "in": [
+                      "Profitable ex Gaming",
+                      "Profit >£100k after triennial hit",
+                      "Profit >£20k after triennial hit",
+                      "Profit >£50k after triennial hit",
+                      "Profit >£75k after triennial hit",
+                      "42 loss makers",
+                      "Balance"
+                  ]
+              }
+            },
+            {
               "label": "EBITDA by year"
             },
             {
