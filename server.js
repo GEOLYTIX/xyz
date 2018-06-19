@@ -15,8 +15,6 @@ const fastify = require('fastify')({
     // }
 });
 
-// fastify._routePrefix = '/open';
-
 fastify
     .register(require('fastify-helmet'), {
         noCache: true
