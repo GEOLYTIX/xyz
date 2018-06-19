@@ -20,7 +20,7 @@ function getLayer(){
         // Create new vector.xhr
         layer.loaded = false;
         layer.loader.style.display = 'block';
-        layer.xhr = new XMLHttpRequest();
+        //layer.xhr = new XMLHttpRequest();
 
         // Build xhr request.
         let url = host + 'mvt/{z}/{x}/{y}?' + utils.paramString({

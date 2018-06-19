@@ -53,7 +53,7 @@
           "provider": "HERE"
         },
         "sprawls": {
-          "display": true,
+
           "name": "World Cities",
           "meta": "Urban agglomerations with a population greater than 100,000.",
           "pane": [
