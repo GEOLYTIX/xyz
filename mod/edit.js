@@ -21,7 +21,7 @@ async function newRecord(req, res) {
 
     let result = await global.DBS[req.body.dbs].query(q);
 
-    res.status(200).send(result.rows[0].id.toString());
+    res.code(200).send(result.rows[0].id.toString());
 }
 
 async function newAggregate(req, res) {
@@ -77,7 +77,7 @@ async function newAggregate(req, res) {
 
     let result = await global.DBS[req.query.dbs].query(q);
 
-    res.status(200).send({
+    res.code(200).send({
         id: result.rows[0].id.toString(),
         lat: parseFloat(result.rows[0].lat),
         lng: parseFloat(result.rows[0].lng)
@@ -121,7 +121,7 @@ async function updateRecord(req, res) {
     // Write into logtable if logging is enabled.
     if (log_table) await writeLog(req, log_table, table, qID, id);
 
-    res.status(200).send();
+    res.code(200).send();
 
 }
 
@@ -144,7 +144,7 @@ async function deleteRecord(req, res) {
 
     await global.DBS[req.body.dbs].query(q, [id]);
     
-    res.status(200).send();
+    res.code(200).send();
 }
 
 async function writeLog(req, log_table, table, qID, id){

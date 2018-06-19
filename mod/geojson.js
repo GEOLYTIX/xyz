@@ -26,7 +26,7 @@ async function geojson(req, res) {
 
     global.DBS[req.query.dbs].query(q)
         .then(result => {
-            res.status(200).json(Object.keys(result.rows).map(row => {
+            res.code(200).send(Object.keys(result.rows).map(row => {
                 
                 let props = {};
                 
