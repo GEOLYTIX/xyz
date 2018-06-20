@@ -108,17 +108,7 @@ module.exports = fastify => {
         // Proxy for 3rd party services.
         fastify.route({
             method: 'GET',
-            url: global.dir + '/proxy_request',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                res.send(require('request')(`${req.query.uri}${global.KEYS[req.query.provider]}`));
-            }
-        });
-
-        // Proxy for 3rd party services.
-        fastify.route({
-            method: 'GET',
-            url: global.dir + '/proxy_uri',
+            url: global.dir + '/proxy/image',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
                 let uri = req.req.url.substring(req.req.url.indexOf('?')+1);
