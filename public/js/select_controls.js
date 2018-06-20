@@ -220,7 +220,7 @@ function trash(record) {
                 let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', 'q_delete');
+                xhr.open('POST', host + 'q_delete');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = () => {
 
