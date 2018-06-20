@@ -121,7 +121,7 @@ module.exports = fastify => {
             url: global.dir + '/proxy_uri',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
-                let uri = req.url.replace('/proxy_uri?', '');
+                let uri = req.req.url.substring(req.req.url.indexOf('?')+1);
                 uri = uri.split('provider=');
                 res.send(require('request')(`${uri[0]}${global.KEYS[uri[1]]}`))
             }

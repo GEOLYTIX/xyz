@@ -80,7 +80,7 @@ function routes(fastify) {
                 .type('text/html')
                 .send(require('jsrender')
                     .templates('./views/register.html')
-                    .render());
+                    .render({dir: global.dir}));
         }
     });
 

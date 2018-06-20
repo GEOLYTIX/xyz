@@ -12,8 +12,8 @@ const fastify = require('fastify')({
         //     allowHTTP1: true, // fallback support for HTTP1
         //     key: require('fs').readFileSync('/home/dennis/.ssl/server.key'),
         //     cert: require('fs').readFileSync('/home/dennis/.ssl/server.crt')
-        // }
-        logger: true
+        // },
+        //logger: true
     });
 
 fastify
@@ -42,7 +42,7 @@ require('./globals')(fastify);
 
 require('./routes')(fastify);
 
-fastify.listen(process.env.PORT || 3000, err => {
+fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
     if (err) {
         console.error(err)
         process.exit(1)
