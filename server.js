@@ -23,7 +23,7 @@ fastify
     .register(require('fastify-formbody'))
     .register(require('fastify-static'), {
         root: require('path').join(__dirname, 'public'),
-        prefix: '/demo/'
+        prefix: (process.env.DIR || '') + '/'
     })
     .register(require('fastify-cookie'))
     .register(require('fastify-caching'))
