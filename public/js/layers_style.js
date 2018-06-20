@@ -221,7 +221,7 @@ function mvt_style(layer){
         });
     }
     
-    if(layer.style.default.fill && layer.style.default.fillColor){
+    if(layer.style.default.fill){
         
         function set_fill_opacity(layer, opacity){
             if(layer.style.theme){
