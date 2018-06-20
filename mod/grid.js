@@ -44,54 +44,6 @@ async function grid(req, res) {
         .catch(err => console.log(err));
 }
 
-async function info(req, res) {
-
-    let
-        table = req.body.table,
-        geom = req.body.geom,
-        fields = '';
-
-    Object.keys(req.body.infoj).map(key => {
-        if (req.body.infoj[key].type === 'numeric' || req.body.infoj[key].type === 'integer') fields += `sum(${req.body.infoj[key].fieldfx || req.body.infoj[key].field})::${req.body.infoj[key].type} AS ${req.body.infoj[key].field},`
-    });
-
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, geom], res).statusCode === 406) return;
-
-    let q = `
-    SELECT ${fields} null
-    FROM ${table}
-    WHERE
-        ST_DWithin(
-            ST_SetSRID(
-                ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'),
-            4326),
-        ${geom}, 0);`
-
-    //console.log(q);
-
-    global.DBS[req.body.dbs].query(q)
-        .then(result => {
-            if (result.rows.length === 0) {
-                res.code(204).send({});
-
-            } else {
-                Object.keys(req.body.infoj).map(key => {
-                    if (result.rows[0][req.body.infoj[key].field]) {
-                        req.body.infoj[key].value = result.rows[0][req.body.infoj[key].field];
-                    }
-                });
-    
-                res.code(200).send({
-                    geomj: result.rows[0].geomj,
-                    infoj: req.body.infoj
-                });
-            }
-        })
-        .catch(err => console.log(err));
-}
-
 module.exports = {
-    grid: grid,
-    info: info
+    grid: grid
 }

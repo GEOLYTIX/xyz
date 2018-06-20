@@ -148,9 +148,9 @@ async function deleteRecord(req, res) {
 }
 
 async function writeLog(req, log_table, table, qID, id){
-    let username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
-    
+    //let username = req.session.passport ? req.session.passport.user.email : 'nologin';
+
     let q = `
     INSERT INTO ${log_table} 
     SELECT *
