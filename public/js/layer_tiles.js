@@ -6,7 +6,7 @@ function getLayer() {
         layer.loader.style.display = 'block';
 
         let uri = layer.provider ?
-            host + 'proxy_request?uri=' + layer.URI + '&provider=' + layer.provider :
+            host + 'proxy/image?' + layer.URI + '&provider=' + layer.provider :
             layer.URI;
 
         layer.base = L.tileLayer(uri, {
