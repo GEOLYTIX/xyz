@@ -302,10 +302,12 @@
           "style": {
             "default": {
               "weight": 1,
-              "color": "#000"
+              "color": "#000",
+              "fill": true
             },
             "highlight": {
-              "color": "#e91e63"
+              "color": "#e91e63",
+              "fill": true
             }
           }
         },
@@ -356,7 +358,8 @@
             },
             "highlight": {
               "weight": 1,
-              "color": "#000"
+              "color": "#000",
+              "fill": true
             },
             "theme": {
               "type": "categorized",
@@ -489,11 +492,13 @@
               "color": "#000",
               "fill": true,
               "fillColor": "#000",
-              "fillOpacity": 0.3
+              "fillOpacity": 0.3,
+              "opacity": 0.3
             },
             "highlight": {
               "weight": 1,
-              "color": "#000"
+              "color": "#000",
+              "fill": true
             },
             "theme": {
               "field": "rank_tot",

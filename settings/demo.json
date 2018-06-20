@@ -1342,10 +1342,11 @@
           "style": {
             "default": {
               "weight": 1,
-              "color": "#000",
+              "color": "#aaa",
               "fill": true,
-              "opacity": 0.3,
-              "fillOpacity": 0.1
+              "opacity": 0.2,
+              "fillOpacity": 0.4,
+              "fillColor": "#fff"
             },
             "highlight": {
               "color": "#090",
