@@ -3,26 +3,26 @@
 
 <head>
     <title>{{:title}}</title>
-    <link rel="icon" type="image/x-icon" href="{{:dir}}favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         @font-face {
             font-family: ffmark_black;
-            src: url({{:dir}}fonts/MarkWeb-Black.woff) format("woff");
+            src: url({{:dir}}/fonts/MarkWeb-Black.woff) format("woff");
         }
 
         @font-face {
             font-family: ffmark;
-            src: url({{:dir}}fonts/MarkWebPro.woff) format("woff");
+            src: url({{:dir}}/fonts/MarkWebPro.woff) format("woff");
         }
 
         @font-face {
             font-family: ffmark_bold;
-            src: url({{:dir}}fonts/MarkWebPro-Bold.woff) format("woff");
+            src: url({{:dir}}/fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    <link rel="stylesheet" href="{{:dir}}css/desktop.css" />
+    <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
 
     <script>const view_mode = 'desktop';</script> {{:settings}}
 
@@ -99,19 +99,19 @@
             </button>
 
             <button id="btnLogout" title="Log out from application" {{:btnLogout}}>
-                <a href="{{:dir}}logout">
+                <a href="{{:dir}}/logout">
                     <i class="material-icons">exit_to_app</i>
                 </a>
             </button>
 
             <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
-                <a href="{{:dir}}admin/user">
+                <a href="{{:dir}}/admin/user">
                     <i class="material-icons">supervisor_account</i>
                 </a>
             </button>
 
             <button id="btnSettings" title="Open application settings editor" {{:btnAdmin}}>
-                <a href="{{:dir}}admin/settings">
+                <a href="{{:dir}}/admin/settings">
                     <i class="material-icons">settings</i>
                 </a>
             </button>
@@ -136,6 +136,6 @@
 
 </body>
 
-<script src="{{:dir}}js/{{:bundle_js}}"></script>
+<script src="{{:dir}}/js/{{:bundle_js}}"></script>
 
 </html>

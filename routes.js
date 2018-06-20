@@ -67,7 +67,7 @@ module.exports = fastify => {
                     btnAdmin: (req.session.user && req.session.user.admin) ? '' : 'style="display: none;"',
                     btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
                     btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
-                    dir: global.dir + '/',
+                    dir: global.dir,
                     settings: `
                             <script>
                                 const host = '${(global.dir || '/').substring(1)}/';
@@ -149,7 +149,7 @@ module.exports = fastify => {
 
         // Calculate catchments from distance matrix.
         fastify.route({
-            method: 'POST',
+            method: 'GET',
             url: global.dir + '/q_catchments',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
