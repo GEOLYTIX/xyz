@@ -1360,15 +1360,19 @@
                 "cat": {
                     "Primary": {
                         "style": {
-                            "stroke": false,
                             "fill": true,
+                            "color": "#A51C30",
+                            "opacity": 0.2,
+                            "weight": 1,
                             "fillColor": "#A51C30",
                             "fillOpacity": 0.4
                         }
                     },
                     "Secondary": {
                         "style": {
-                            "stroke": false,
+                            "color": "#F58A07",
+                            "opacity": 0.2,
+                            "weight": 1,
                             "fill": true,
                             "fillColor": "#F58A07",
                             "fillOpacity": 0.4
@@ -1376,7 +1380,9 @@
                     },
                     "Tertiary": {
                         "style": {
-                            "stroke": false,
+                            "color": "#F9CB40",
+                            "opacity": 0.2,
+                            "weight": 1,
                             "fill": true,
                             "fillColor": "#F9CB40",
                             "fillOpacity": 0.4
