@@ -124,7 +124,7 @@
 
 <script>
     setTimeout(function() {
-        document.getElementById('auth_user_email').value.length > 0 ?
+        document.getElementById('auth_user_email').value && document.getElementById('auth_user_email').value.length > 0 ?
             document.getElementById('auth_user_password').focus() :
             document.getElementById('auth_user_email').focus();
     }, 10);

@@ -95,16 +95,6 @@ module.exports = fastify => {
             }
         });
 
-        // Vector layers with PGSQL MVT.
-        fastify.route({
-            method: 'GET',
-            url: global.dir + '/mvt/:z/:x/:y',
-            //beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/mvt').fetchTiles(req, res);
-            }
-        });
-
         // Proxy for 3rd party services.
         fastify.route({
             method: 'GET',
@@ -117,9 +107,21 @@ module.exports = fastify => {
             }
         });
 
+        // Vector layers with PGSQL MVT.
+        fastify.route({
+            method: 'GET',
+            //api/mvt/get/:z/:x/:y
+            url: global.dir + '/mvt/:z/:x/:y',
+            //beforeHandler: fastify.auth([fastify.authLogin]), !!!not working due to missing cookie in request
+            handler: async (req, res) => {
+                require('./mod/mvt').fetchTiles(req, res);
+            }
+        });        
+
         // Get grid data.
         fastify.route({
             method: 'GET',
+            //api/grid/get
             url: global.dir + '/q_grid',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -127,29 +129,21 @@ module.exports = fastify => {
             }
         });
 
-        // Get grid stats from geojson geometry.
-        fastify.route({
-            method: 'POST',
-            url: global.dir + '/q_grid_info',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/grid').info(req, res)
-            }
-        });
-
-        // Calculate catchments from distance matrix.
+        // Get geojson data.
         fastify.route({
             method: 'GET',
-            url: global.dir + '/q_catchments',
+            //api/geojson/get
+            url: global.dir + '/q_geojson',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
-                require('./mod/catchments').catchments(req, res)
+                require('./mod/geojson').geojson(req, res)
             }
         });
 
         // Get cluster layer data.
         fastify.route({
             method: 'GET',
+            //api/cluster/get
             url: global.dir + '/q_cluster',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -160,6 +154,7 @@ module.exports = fastify => {
         // Get id array from cluster layer.
         fastify.route({
             method: 'GET',
+            //api/cluster/select
             url: global.dir + '/q_cluster_select',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -167,19 +162,10 @@ module.exports = fastify => {
             }
         });
 
-        // Get geojson data.
-        fastify.route({
-            method: 'GET',
-            url: global.dir + '/q_geojson',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/geojson').geojson(req, res)
-            }
-        });
-
         // Get data for selected item.
         fastify.route({
             method: 'POST',
+            //api/location/select
             url: global.dir + '/q_select',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -188,6 +174,7 @@ module.exports = fastify => {
         });
 
         // Get chart data for selected item.
+        // !!!should be taken from /select infoj
         fastify.route({
             method: 'POST',
             url: global.dir + '/q_chart_data',
@@ -200,6 +187,7 @@ module.exports = fastify => {
         // Create a new feature.
         fastify.route({
             method: 'POST',
+            //api/location/new
             url: global.dir + '/q_save',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -207,19 +195,10 @@ module.exports = fastify => {
             }
         });
 
-        // Get cluster layer data.
-        fastify.route({
-            method: 'GET',
-            url: global.dir + '/q_aggregate',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/edit').newAggregate(req, res)
-            }
-        });
-
         // Update a feature.
         fastify.route({
             method: 'POST',
+            //api/location/update
             url: global.dir + '/q_update',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -229,7 +208,9 @@ module.exports = fastify => {
 
         // Delete a feature.
         fastify.route({
+            // !!!this should be a get route
             method: 'POST',
+            //api/location/delete
             url: global.dir + '/q_delete',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -237,9 +218,21 @@ module.exports = fastify => {
             }
         });
 
+        // Get cluster layer data.
+        fastify.route({
+            method: 'GET',
+            //api/location/aggregate
+            url: global.dir + '/q_aggregate',
+            beforeHandler: fastify.auth([fastify.authLogin]),
+            handler: async (req, res) => {
+                require('./mod/edit').newAggregate(req, res)
+            }
+        });    
+
         // Get autocomplete records from search term.
         fastify.route({
             method: 'GET',
+            //api/gazetteer/autocomplete
             url: global.dir + '/q_gazetteer',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
@@ -247,16 +240,61 @@ module.exports = fastify => {
             }
         });
 
-        // Get place details from own data source.
-        // fastify.get('/q_gazetteer_places', (req, res) => require('./mod/gazetteer').gazetteer_places(req, res));
-
         // Get place details from Google places.
         fastify.route({
             method: 'GET',
+            //api/gazetteer/googleplaces
             url: global.dir + '/q_gazetteer_googleplaces',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
                 require('./mod/gazetteer').gazetteer_googleplaces(req, res)
+            }
+        });
+
+        // Get place details from own data source.
+        // fastify.get('/q_gazetteer_places', (req, res) => require('./mod/gazetteer').gazetteer_places(req, res));
+
+        // Calculate catchments from distance matrix.
+        fastify.route({
+            method: 'GET',
+            //api/catchments
+            url: global.dir + '/q_catchments',
+            beforeHandler: fastify.auth([fastify.authLogin]),
+            handler: async (req, res) => {
+                require('./mod/catchments').catchments(req, res)
+            }
+        });        
+
+        // Get a stored image.
+        fastify.route({
+            method: 'GET',
+            //api/images/get
+            url: global.dir + '/q_get_image',
+            beforeHandler: fastify.auth([fastify.authLogin]),
+            handler: async (req, res) => {
+                res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'))
+            }
+        });            
+
+        // Post a new image to be stored.
+        fastify.route({
+            method: 'POST',
+            //api/images/new
+            url: global.dir + '/q_save_image',
+            beforeHandler: fastify.auth([fastify.authLogin]),
+            handler: async (req, res) => {
+                require('./mod/images').save(req, res)
+            }
+        });
+
+        // Remove a stored image.
+        fastify.route({
+            method: 'GET',
+            //api/images/delete
+            url: global.dir + '/q_remove_image',
+            beforeHandler: fastify.auth([fastify.authLogin]),
+            handler: async (req, res) => {
+                require('./mod/images').remove(req, res)
             }
         });
 
@@ -271,36 +309,5 @@ module.exports = fastify => {
 
         // Download a PDF report.
         // fastify.get('/q_pdf_download', (req, res) => res.download(require('path').join(__dirname, '/reports/') + req.query.report + '.pdf'));
-
-        // Post a new image to be stored.
-        fastify.route({
-            method: 'POST',
-            url: global.dir + '/q_save_image',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/images').save(req, res)
-            }
-        });
-
-        // Remove a stored image.
-        fastify.route({
-            method: 'GET',
-            url: global.dir + '/q_remove_image',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/images').remove(req, res)
-            }
-        });
-
-        // Get a stored image.
-        fastify.route({
-            method: 'GET',
-            url: global.dir + '/q_get_image',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'))
-            }
-        });
-
     }
 }
