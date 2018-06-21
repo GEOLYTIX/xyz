@@ -1,4 +1,4 @@
-async function newRecord(req, res) {
+async function newRecord(req, res, fastify) {
 
     let q,
         table = req.body.table,
@@ -14,17 +14,19 @@ async function newRecord(req, res) {
 
     //if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
-
-        q = `INSERT INTO ${table} (username, geom)
+    q = `
+        INSERT INTO ${table} (username, geom)
             SELECT '${username}' as username, ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
             RETURNING id;`;
 
-    let result = await global.DBS[req.body.dbs].query(q);
+    var db_connection = await fastify.pg[req.body.dbs].connect();
+    var result = await db_connection.query(q);
+    db_connection.release();
 
     res.code(200).send(result.rows[0].id.toString());
 }
 
-async function newAggregate(req, res) {
+async function newAggregate(req, res, fastify) {
     let table_target = req.query.table_target,
         table_source = req.query.table_source,
         geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
@@ -75,7 +77,9 @@ async function newAggregate(req, res) {
 
     //console.log(q);
 
-    let result = await global.DBS[req.query.dbs].query(q);
+    var db_connection = await fastify.pg[req.query.dbs].connect();
+    var result = await db_connection.query(q);
+    db_connection.release();
 
     res.code(200).send({
         id: result.rows[0].id.toString(),
@@ -84,7 +88,7 @@ async function newAggregate(req, res) {
     });
 }
 
-async function updateRecord(req, res) {
+async function updateRecord(req, res, fastify) {
     let table = req.body.table,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
@@ -113,19 +117,21 @@ async function updateRecord(req, res) {
         ${fields}
         geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
     WHERE ${qID} = $1;`
-    
+
     //console.log(q);
 
-    await global.DBS[req.body.dbs].query(q, [id]);
+    var db_connection = await fastify.pg[req.body.dbs].connect();
+    await db_connection.query(q, [id]);
+    db_connection.release();
 
     // Write into logtable if logging is enabled.
-    if (log_table) await writeLog(req, log_table, table, qID, id);
+    if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
 
     res.code(200).send();
 
 }
 
-async function deleteRecord(req, res) {
+async function deleteRecord(req, res, fastify) {
 
     let table = req.body.table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
@@ -138,16 +144,18 @@ async function deleteRecord(req, res) {
     //if (await require('./chk').chkID(id, res).statusCode === 406) return;
 
     // Write into logtable if logging is enabled.
-    if (log_table) await writeLog(req, log_table, table, qID, id);
+    if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
 
     let q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
 
-    await global.DBS[req.body.dbs].query(q, [id]);
-    
+    var db_connection = await fastify.pg[req.body.dbs].connect();
+    await db_connection.query(q, [id]);
+    db_connection.release();
+
     res.code(200).send();
 }
 
-async function writeLog(req, log_table, table, qID, id){
+async function writeLog(req, log_table, table, qID, id, fastify) {
 
     //let username = req.session.passport ? req.session.passport.user.email : 'nologin';
 
@@ -157,7 +165,9 @@ async function writeLog(req, log_table, table, qID, id){
     FROM ${table} WHERE ${qID} = $1;`;
     //console.log(q);
 
-    return await global.DBS[req.body.dbs].query(q, [id]);
+    var db_connection = await fastify.pg[req.body.dbs].connect();
+    await db_connection.query(q, [id]);
+    db_connection.release();
 }
 
 module.exports = {

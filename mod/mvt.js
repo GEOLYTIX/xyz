@@ -1,4 +1,4 @@
-async function fetchTiles(req, res) {
+async function fetchTiles(req, res, fastify) {
     try {
 
         let
@@ -17,7 +17,11 @@ async function fetchTiles(req, res) {
 
         //if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
 
-        if (tilecache) result = await global.DBS[req.query.dbs].query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+        if (tilecache) {
+            var db_connection = await fastify.pg[req.query.dbs].connect();
+            var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
+            db_connection.release();
+        }
 
         if (result && result.rowCount === 1) {
             res
@@ -70,7 +74,9 @@ async function fetchTiles(req, res) {
         ${tilecache ? 'RETURNING mvt;' : ';'}
         `;
 
-        result = await global.DBS[req.query.dbs].query(q);
+        var db_connection = await fastify.pg[req.query.dbs].connect();
+        var result = await db_connection.query(q);
+        db_connection.release();
 
         res
             .type('application/x-protobuf')

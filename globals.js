@@ -14,14 +14,12 @@ module.exports = fastify => {
     });
 
     global.DBS = {};
-    Object.keys(process.env).forEach(async key => {
+    Object.keys(process.env).forEach(key => {
         if (key.split('_')[0] === 'DBS') {
-            await fastify.register(require('fastify-postgres'), {
+            fastify.register(require('fastify-postgres'), {
                 connectionString: process.env[key],
                 name: key.split('_')[1]
             });
-            global.DBS[key.split('_')[1]] = await fastify.pg[key.split('_')[1]].connect()
         }
     });
-
 }

@@ -1,6 +1,6 @@
 const turf = require('@turf/turf');
 
-function catchments (req, res) {
+function catchments (req, res, fastify) {
 
     // Distance of travel in seconds
     req.query.distance = parseInt(req.query.distance);
@@ -71,7 +71,7 @@ function catchments (req, res) {
                     }
                 })
         } else {
-            catchment_calc(req, res)
+            catchment_calc(req, res, fastify)
         }
     })(0);
 }
@@ -164,7 +164,7 @@ function MAPBOX_samplePoints(req, res, jbody, i, start) {
     if (displacement > 1) { res.data.samplePoints[i].properties.wide = true; }
 }
 
-async function catchment_calc(req, res) {
+async function catchment_calc(req, res, fastify) {
 
     // Filter outlier from samplePoints
     res.data.samplePoints = res.data.samplePoints.filter(pt => {
@@ -278,8 +278,11 @@ async function catchment_calc(req, res) {
             RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
         
             //console.log(q);
+
+            var db_connection = await fastify.pg[req.query.dbs].connect();
+            var result = await db_connection.query(q);
+            db_connection.release();
         
-            let result = await global.DBS[req.query.dbs].query(q);
             return result;
         });
         let result = await Promise.all(pArray);

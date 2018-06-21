@@ -265,9 +265,9 @@
           "editable": true,
           "format": "geojson",
           "dbs": "XYZ",
-          "table": "global_catchments",
+          "table": "demo.global_catchments",
           "arrayZoom": {
-            "3": "global_catchments"
+            "3": "demo.global_catchments"
           },
           "catchments": {
             "modes": {
