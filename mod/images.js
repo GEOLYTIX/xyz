@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const images = process.env.IMAGES ? process.env.IMAGES.split(' ') : [];
 
-function save(req, res){
+function save(req, res, fastify){
     req.setEncoding('binary');
 
     let ts = Date.now(),
@@ -41,16 +41,18 @@ function save(req, res){
         WHERE ${qID} = $1;`;
             
         // add filename to images field
-        global.DBS[req.query.dbs]
-            .query(q, [id])
-            .then(result => res.code(200).send({
-                'image_id': body.public_id,
-                'image_url': body.secure_url}))
-            .catch(err => console.error(err));
+        var db_connection = await fastify.pg[req.query.dbs].connect();
+        await db_connection.query(q, [id]);
+        db_connection.release();
+
+        res.code(200).send({
+            'image_id': body.public_id,
+            'image_url': body.secure_url
+        });
     });
 }
 
-function remove(req, res){
+function remove(req, res, fastify){
 
     let ts = Date.now(),
         sig = crypto.createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${images[2]}`).digest('hex');
@@ -89,11 +91,13 @@ function remove(req, res){
         WHERE ${qID} = $1;`;
 
         // add filename to images field
-        global.DBS[req.query.dbs]
-            .query(q, [id])
-            .then(result => res.status(200))
-            .catch(err => console.error(err));
+        `SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`
 
+        var db_connection = await fastify.pg[req.query.dbs].connect();
+        await db_connection.query(q, [id]);
+        db_connection.release();
+
+        res.code(200).send();
     });
 }
 

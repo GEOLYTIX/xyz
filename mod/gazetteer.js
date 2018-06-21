@@ -9,7 +9,10 @@ function gazetteer(req, res) {
 
     eval(req.query.provider + '_placesAutoComplete')(req, res);
 
-    // global.DBS[req.query.dbs].any(q)
+    // var db_connection = await fastify.pg[req.query.dbs].connect();
+    // var result = await db_connection.query(q);
+    // db_connection.release();
+
     //     .then(function (data) {
     //         if (data.length > 0) {
     //             res.status(200).json(data);

@@ -1,6 +1,6 @@
 const filters = require('./filters');
 
-async function cluster(req, res) {
+async function cluster(req, res, fastify) {
     
     //console.log(req.query);
   
@@ -57,7 +57,9 @@ async function cluster(req, res) {
     
   //console.log(q);
 
-  let result = await global.DBS[req.query.dbs].query(q);
+  var db_connection = await fastify.pg[req.query.dbs].connect();
+  var result = await db_connection.query(q);
+  db_connection.release();
 
   if (parseInt(result.rows[0].count) === 0) {
     res.code(204).send();
@@ -162,7 +164,9 @@ async function cluster(req, res) {
 
   //console.log(q);
     
-  result = await global.DBS[req.query.dbs].query(q);
+  var db_connection = await fastify.pg[req.query.dbs].connect();
+  var result = await db_connection.query(q);
+  db_connection.release();
 
   if (!theme) res.code(200).send(Object.keys(result.rows).map(record => {
     return {
@@ -197,7 +201,7 @@ async function cluster(req, res) {
   }));
 }
 
-async function cluster_select(req, res) {
+async function cluster_select(req, res, fastify) {
   
   let
     table = req.query.table,
@@ -228,7 +232,9 @@ async function cluster_select(req, res) {
       ${filter_sql} 
       ORDER BY ST_Point(${lnglat}) <#> geom LIMIT ${count};`;
 
-  let result = await global.DBS[req.query.dbs].query(q);
+  var db_connection = await fastify.pg[req.query.dbs].connect();
+  var result = await db_connection.query(q);
+  db_connection.release();
 
   //console.log(result.rows);
 

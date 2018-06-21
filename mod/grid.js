@@ -1,5 +1,5 @@
-async function grid(req, res) {
-    
+async function grid(req, res, fastify) {
+
     let
         table = req.query.table,
         geom = req.query.geom,
@@ -28,20 +28,33 @@ async function grid(req, res) {
 
     //console.log(q);
 
-    global.DBS[req.query.dbs].query(q)
-        .then(result => {
-            if (result.rows.length === 0) {
-                res.code(204).send({});
-            } else {
-                res
-                .code(200).send(Object.keys(result.rows).map(function (record) {
-                    return Object.keys(result.rows[record]).map(function (field) {
-                        return result.rows[record][field];
-                    });
-                }));
-            }
-        })
-        .catch(err => console.log(err));
+    var db_connection = await fastify.pg[req.query.dbs].connect();
+    var result = await db_connection.query(q);
+    db_connection.release();
+
+    if (result.rows.length === 0) {
+        res.code(204).send({});
+    } else {
+        res.code(200).send(Object.keys(result.rows).map(function (record) {
+            return Object.keys(result.rows[record]).map(function (field) {
+                return result.rows[record][field];
+            });
+        }));
+    }
+
+    var db_connection = await fastify.pg[req.query.dbs].connect();
+    var result = await db_connection.query(q);
+    db_connection.release();
+
+    if (result.rows.length === 0) {
+        res.code(204).send({});
+    } else {
+        res.code(200).send(Object.keys(result.rows).map(function (record) {
+            return Object.keys(result.rows[record]).map(function (field) {
+                return result.rows[record][field];
+            });
+        }));
+    }
 }
 
 module.exports = {

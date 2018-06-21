@@ -1,4 +1,4 @@
-async function select(req, res) {
+async function select(req, res, fastify) {
 
     let
         q,
@@ -19,7 +19,9 @@ async function select(req, res) {
     
     if (sql_filter) {
         q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
-        result = await global.DBS[req.body.dbs].query(q, [id]);
+        var db_connection = await fastify.pg[req.body.dbs].connect();
+        var result = await db_connection.query(q, [id]);
+        db_connection.release();
         sql_filter = result.rows[0].sql_filter;
     }
 
@@ -56,7 +58,9 @@ async function select(req, res) {
     WHERE ${qID} = $1;`
     //console.log(q);
 
-    result = await global.DBS[req.body.dbs].query(q, [id])
+    var db_connection = await fastify.pg[req.body.dbs].connect();
+    var result = await db_connection.query(q, [id]);
+    db_connection.release();
 
     // Iterate through the infoj object's entries and assign the values returned from the database query.
     Object.values(req.body.infoj).forEach(entry => {
@@ -76,7 +80,7 @@ async function select(req, res) {
     });
 }
 
-async function chart_data(req, res){
+async function chart_data(req, res, fastify){
     let table = req.body.table,
         qID = req.body.qID,
         id = req.body.id,
@@ -90,7 +94,9 @@ async function chart_data(req, res){
     let q = `SELECT ${series} FROM ${table} WHERE ${qID} = $1;`;
     //console.log(q);
     
-    let result = await global.DBS[req.body.dbs].query(q, [id]);
+    var db_connection = await fastify.pg[req.body.dbs].connect();
+    var result = await db_connection.query(q, [id]);
+    db_connection.release();
     res.code(200).send(result.rows[0]);
 }
 
