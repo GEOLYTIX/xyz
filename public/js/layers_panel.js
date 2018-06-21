@@ -286,14 +286,15 @@ function mvtCategorized(layer) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    if(layer.style.theme.cat[item].style.stroke) layer.style.theme.cat[item].style.stroke = true;
+                    //if(layer.style.theme.cat[item].style.stroke) {
+                    layer.style.theme.cat[item].style.stroke = true;
+                    //}
                     layer.style.theme.cat[item].style.fill = true;
                 } else {
                     this.style.opacity = 0.5;
                     layer.style.theme.cat[item].style.stroke = false;
                     layer.style.theme.cat[item].style.fill = false;
                 }
-
                 layer.getLayer();
             });
 

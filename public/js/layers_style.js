@@ -196,6 +196,9 @@ function mvt_style(layer){
                 Object.keys(layer.style.theme.cat).map(function(key){
                     if(layer.style.theme.cat[key].style.stroke || layer.style.theme.cat[key].style.color) layer.style.theme.cat[key].style.opacity = (opacity/100).toFixed(2);
                 });
+                
+                if(layer.style.theme.other) layer.style.default.opacity = (opacity/100).toFixed(2);
+                
             } else {
                 layer.style.default.opacity = (opacity/100).toFixed(2);
             }
@@ -228,6 +231,8 @@ function mvt_style(layer){
                 Object.keys(layer.style.theme.cat).map(function(key){
                     if(layer.style.theme.cat[key].style.fill) layer.style.theme.cat[key].style.fillOpacity = (opacity/100).toFixed(2);
                 });
+                
+                if(layer.style.theme.other) layer.style.default.fillOpacity = (opacity/100).toFixed(2);
             } else {
                 layer.style.default.fillOpacity = (opacity/100).toFixed(2);
             }
