@@ -1,6 +1,8 @@
+module.exports = { get, select };
+
 const filters = require('./filters');
 
-async function cluster(req, res, fastify) {
+async function get(req, res, fastify) {
     
     //console.log(req.query);
   
@@ -201,7 +203,7 @@ async function cluster(req, res, fastify) {
   }));
 }
 
-async function cluster_select(req, res, fastify) {
+async function select(req, res, fastify) {
   
   let
     table = req.query.table,
@@ -247,8 +249,3 @@ async function cluster_select(req, res, fastify) {
   }));
 
 }
-
-module.exports = {
-  cluster: cluster,
-  cluster_select: cluster_select
-};

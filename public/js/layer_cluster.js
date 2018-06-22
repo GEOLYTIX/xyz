@@ -20,23 +20,31 @@ function loadLayer(layer) {
     let bounds = _xyz.map.getBounds();
 
     // Build XHR request.
-    layer.xhr.open('GET', host + 'q_cluster?' + utils.paramString({
+    layer.xhr.open('GET', host + 'api/cluster/get?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
         geom: layer.geom,
         cat: layer.cluster_cat,
         kmeans: layer.cluster_kmeans * window.devicePixelRatio,
         dbscan: layer.cluster_dbscan * window.devicePixelRatio,
-        theme: layer.style.theme && layer.style.theme.type? layer.style.theme.type: 'undefined',
+        theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : 'undefined',
         filter: JSON.stringify(layer.filter),
         west: bounds.getWest(),
         south: bounds.getSouth(),
         east: bounds.getEast(),
         north: bounds.getNorth()
     }));
-    
+
     // Process XHR onload.
     layer.xhr.onload = () => {
+
+        // Status 204. No features returned.
+        if (layer.xhr.status === 401) {
+            if (window.confirm('API request unauthorized. Redirect to login?')) {
+                return window.location.reload(true);
+            }
+            return loadLayer_complete(layer);
+        }
 
         // Status 204. No features returned.
         if (layer.xhr.status === 204) return loadLayer_complete(layer);
@@ -46,7 +54,7 @@ function loadLayer(layer) {
     }
     // Send XHR to middleware.
     layer.xhr.send();
-    
+
 }
 
 function loadLayer_complete(layer) {
@@ -61,13 +69,13 @@ function addClusterToLayer(cluster, layer) {
 
     // Get max count in cluster.
     let c_max = cluster.reduce((c_max, f) => Math.max(c_max, f.properties.count), 0);
-    
+
     // Remove existing layer from Leaflet.
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
     // Add cluster as point layer to Leaflet.
     layer.L = L.geoJson(cluster, {
-        
+
         pointToLayer: (point, latlng) => {
 
             // Set icon to default marker. 
@@ -78,22 +86,22 @@ function addClusterToLayer(cluster, layer) {
 
             // Check whether layer has categorized theme and more than a single location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
-                 
+
                 // Define a default dotArr.
                 let dotArr = utils.clone(layer.style.markerMulti) || [400, "#333"];
-               
+
                 if (layer.style.theme.competitors) {
-                    
+
                     let c = 0;
 
                     Object.keys(layer.style.theme.competitors).map(comp => {
-                        
+
                         if (point.properties.cat[comp]) {
-                            
+
                             c += point.properties.cat[comp];
-                    
+
                             dotArr.splice(2, 0, 400 * c / point.properties.count, layer.style.theme.competitors[comp].colour);
-                        } 
+                        }
                     });
                 }
                 // Create icon svg from dotArr.
@@ -114,9 +122,9 @@ function addClusterToLayer(cluster, layer) {
                 }
 
                 // Set tooltip for graduated theme property (sum).
-                tooltip = tooltip ? parseFloat(point.properties.sum).toLocaleString(): false;
+                tooltip = tooltip ? parseFloat(point.properties.sum).toLocaleString() : false;
             }
-            
+
             // Define iconSize from number of locations in cluster.
             let iconSize = layer.markerLog ?
                 layer.style.markerMin + layer.style.markerMax / Math.log(c_max) * Math.log(point.properties.count) :
@@ -136,18 +144,18 @@ function addClusterToLayer(cluster, layer) {
             });
 
             // Bind tooltip to marker.
-            if (tooltip) marker.bindTooltip(tooltip,{
+            if (tooltip) marker.bindTooltip(tooltip, {
                 sticky: true,
                 className: 'tooltip',
                 direction: 'top',
-                offset: [0,-10]
+                offset: [0, -10]
             }).openTooltip();
-            
+
             return marker;
         }
     })
-    .on('click', e => clusterMouseClick(e, layer))
-    .addTo(_xyz.map);
+        .on('click', e => clusterMouseClick(e, layer))
+        .addTo(_xyz.map);
 
     return loadLayer_complete(layer);
 
@@ -158,21 +166,21 @@ function clusterMouseClick(e, layer) {
     let count = e.layer.feature.properties.count,
         lnglat = e.layer.feature.geometry.coordinates,
         xhr = new XMLHttpRequest();
-    
+
     //console.log(layer.filter);
 
-    xhr.open('GET', host + 'q_cluster_select?' + utils.paramString({
+    xhr.open('GET', host + 'api/cluster/select?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
         qID: layer.qID || 'id',
         label: layer.cluster_label,
         filter: JSON.stringify(layer.filter),
-        count: count > 99? 99: count,
+        count: count > 99 ? 99 : count,
         lnglat: lnglat
     }));
-    
+
     xhr.onload = () => {
-        
+
         let cluster = JSON.parse(xhr.responseText);
 
         if (cluster.length === 1) {
@@ -206,8 +214,8 @@ function clusterMouseClick(e, layer) {
                     .setLatLng(lnglat.reverse())
                     .setContent('<div class="content scrolly location_table"><div class="scrolly_track"><div class="scrolly_bar"></div></div>' + table + '</div>')
                     .openOn(_xyz.map);
-                
-                setTimeout(()=>utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')),300);
+
+                setTimeout(() => utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')), 300);
             }
 
             if (view_mode === 'mobile') {
