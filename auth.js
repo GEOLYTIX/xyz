@@ -1,4 +1,4 @@
-module.exports = { routes, chkLogin }
+module.exports = { routes, chkLogin, authAPI }
 
 function routes(fastify) {
 
@@ -367,6 +367,18 @@ function chkLogin(req, res, login, done) {
 
     if (login && !req.session.user[login] === true) {
         return res.redirect(global.dir + '/login');
+    }
+
+    done();
+}
+
+function authAPI(req, res, login, done) {
+
+    if (!login) return done();
+
+    if (!req.session.user || !req.session.user.verified || !req.session.user.approved) {
+        req.session.redirect = req.req.url;
+        return res.code(401).send('Unauthorized API access.');
     }
 
     done();

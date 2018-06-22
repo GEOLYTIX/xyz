@@ -141,24 +141,24 @@ module.exports = fastify => {
         });
 
         // Get cluster layer data.
-        fastify.route({
-            method: 'GET',
-            //api/cluster/get
-            url: global.dir + '/q_cluster',
-            beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/cluster').cluster(req, res, fastify)
-            }
-        });
+        // fastify.route({
+        //     method: 'GET',
+        //     //api/cluster/get
+        //     url: global.dir + '/q_cluster',
+        //     beforeHandler: fastify.auth([fastify.authLogin]),
+        //     handler: async (req, res) => {
+        //         require('./mod/cluster').cluster(req, res, fastify)
+        //     }
+        // });
 
         // Get id array from cluster layer.
         fastify.route({
             method: 'GET',
             //api/cluster/select
-            url: global.dir + '/q_cluster_select',
+            url: global.dir + '/api/cluster/select',
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
-                require('./mod/cluster').cluster_select(req, res, fastify)
+                require('./mod/cluster').select(req, res, fastify)
             }
         });
 
@@ -310,4 +310,23 @@ module.exports = fastify => {
         // Download a PDF report.
         // fastify.get('/q_pdf_download', (req, res) => res.download(require('path').join(__dirname, '/reports/') + req.query.report + '.pdf'));
     }
+
+    fastify
+    .decorate('authAPI', (req, res, done) =>
+        auth.authAPI(req, res, process.env.LOGIN ? true : false, done))
+    .after(authAPIRoutes);
+
+    function authAPIRoutes() {
+
+        fastify.route({
+            method: 'GET',
+            url: global.dir + '/api/cluster/get',
+            beforeHandler: fastify.auth([fastify.authAPI]),
+            handler: async (req, res) => {
+                require('./mod/cluster').get(req, res, fastify)
+            }
+        });
+
+    }
+
 }
