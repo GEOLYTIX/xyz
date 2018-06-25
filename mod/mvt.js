@@ -1,6 +1,7 @@
-async function fetchTiles(req, res, fastify) {
-    try {
+module.exports = { fetchTiles };
 
+async function fetchTiles(req, res, fastify) {
+    // try {
         let
             x = parseInt(req.params.x),
             y = parseInt(req.params.y),
@@ -12,8 +13,7 @@ async function fetchTiles(req, res, fastify) {
             geom_3857 = req.query.geom_3857,
             id = req.query.qID === 'undefined' ? null : req.query.qID,
             properties = req.query.properties === 'undefined' ? '' : req.query.properties,
-            tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache,
-            result;
+            tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache;
 
         //if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
 
@@ -83,11 +83,7 @@ async function fetchTiles(req, res, fastify) {
             .code(200)
             .send(result.rows[0].mvt);
 
-    } catch (err) {
-        console.error(err)
-    }
+    // } catch (err) {
+    //     console.error(err)
+    // }
 }
-
-module.exports = {
-    fetchTiles: fetchTiles
-};
