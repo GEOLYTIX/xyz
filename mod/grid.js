@@ -1,3 +1,6 @@
+
+module.exports = { grid };
+
 async function grid(req, res, fastify) {
 
     let
@@ -55,8 +58,4 @@ async function grid(req, res, fastify) {
             });
         }));
     }
-}
-
-module.exports = {
-    grid: grid
 }

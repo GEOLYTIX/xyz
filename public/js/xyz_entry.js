@@ -43,7 +43,7 @@ _xyz.locale = _xyz.hooks.locale || _xyz.locale;
 if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
 
 // Set the attribution array.
-_xyz.attribution = ['leaflet'];
+_xyz.attribution = ['leaflet', 'xyz'];
 
 // Set min/max zoom defaults.
 _xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;

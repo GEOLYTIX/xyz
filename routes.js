@@ -31,8 +31,7 @@ module.exports = fastify => {
     const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
 
     fastify
-        .decorate('authLogin', (req, res, done) =>
-            auth.chkLogin(req, res, process.env.LOGIN ? true : false, done))
+        .decorate('authLogin', (req, res, done) => auth.chkLogin(req, res, process.env.LOGIN ? true : false, done))
         .after(authLoginRoutes);
 
     function authLoginRoutes() {
@@ -82,7 +81,7 @@ module.exports = fastify => {
             method: 'GET',
             url: global.dir + '/documentation',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
+            handler: (req, res) => {
                 require('fs').readFile('./public/documentation.md', function (err, md) {
                     if (err) throw err;
                     res
@@ -100,7 +99,7 @@ module.exports = fastify => {
             method: 'GET',
             url: global.dir + '/proxy/image',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
+            handler: (req, res) => {
                 let uri = req.req.url.substring(req.req.url.indexOf('?')+1);
                 uri = uri.split('provider=');
                 res.send(require('request')(`${uri[0]}${global.KEYS[uri[1]]}`))
@@ -113,8 +112,8 @@ module.exports = fastify => {
             //api/mvt/get/:z/:x/:y
             url: global.dir + '/mvt/:z/:x/:y',
             //beforeHandler: fastify.auth([fastify.authLogin]), !!!not working due to missing cookie in request
-            handler: async (req, res) => {
-                require('./mod/mvt').fetchTiles(req, res);
+            handler: (req, res) => {
+                require('./mod/mvt').fetchTiles(req, res, fastify);
             }
         });        
 
@@ -124,8 +123,8 @@ module.exports = fastify => {
             //api/grid/get
             url: global.dir + '/q_grid',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/grid').grid(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/grid').grid(req, res, fastify);
             }
         });
 
@@ -135,8 +134,8 @@ module.exports = fastify => {
             //api/geojson/get
             url: global.dir + '/q_geojson',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/geojson').geojson(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/geojson').geojson(req, res, fastify);
             }
         });
 
@@ -147,7 +146,7 @@ module.exports = fastify => {
         //     url: global.dir + '/q_cluster',
         //     beforeHandler: fastify.auth([fastify.authLogin]),
         //     handler: async (req, res) => {
-        //         require('./mod/cluster').cluster(req, res, fastify)
+        //         require('./mod/cluster').cluster(req, res, fastify);
         //     }
         // });
 
@@ -157,8 +156,8 @@ module.exports = fastify => {
             //api/cluster/select
             url: global.dir + '/api/cluster/select',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/cluster').select(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/cluster').select(req, res, fastify);
             }
         });
 
@@ -168,8 +167,8 @@ module.exports = fastify => {
             //api/location/select
             url: global.dir + '/q_select',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/select').select(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/select').select(req, res, fastify);
             }
         });
 
@@ -179,8 +178,8 @@ module.exports = fastify => {
             method: 'POST',
             url: global.dir + '/q_chart_data',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/select').chart_data(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/select').chart_data(req, res, fastify);
             }
         });
 
@@ -190,8 +189,8 @@ module.exports = fastify => {
             //api/location/new
             url: global.dir + '/q_save',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/edit').newRecord(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/edit').newRecord(req, res, fastify);
             }
         });
 
@@ -201,8 +200,8 @@ module.exports = fastify => {
             //api/location/update
             url: global.dir + '/q_update',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/edit').updateRecord(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/edit').updateRecord(req, res, fastify);
             }
         });
 
@@ -213,8 +212,8 @@ module.exports = fastify => {
             //api/location/delete
             url: global.dir + '/q_delete',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/edit').deleteRecord(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/edit').deleteRecord(req, res, fastify);
             }
         });
 
@@ -224,8 +223,8 @@ module.exports = fastify => {
             //api/location/aggregate
             url: global.dir + '/q_aggregate',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/edit').newAggregate(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/edit').newAggregate(req, res, fastify);
             }
         });    
 
@@ -235,8 +234,8 @@ module.exports = fastify => {
             //api/gazetteer/autocomplete
             url: global.dir + '/q_gazetteer',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/gazetteer').gazetteer(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/gazetteer').gazetteer(req, res, fastify);
             }
         });
 
@@ -246,8 +245,8 @@ module.exports = fastify => {
             //api/gazetteer/googleplaces
             url: global.dir + '/q_gazetteer_googleplaces',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/gazetteer').gazetteer_googleplaces(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/gazetteer').gazetteer_googleplaces(req, res, fastify);
             }
         });
 
@@ -260,8 +259,8 @@ module.exports = fastify => {
             //api/catchments
             url: global.dir + '/q_catchments',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/catchments').catchments(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/catchments').catchments(req, res, fastify);
             }
         });        
 
@@ -271,8 +270,8 @@ module.exports = fastify => {
             //api/images/get
             url: global.dir + '/q_get_image',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'))
+            handler: (req, res) => {
+                res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'));
             }
         });            
 
@@ -282,8 +281,8 @@ module.exports = fastify => {
             //api/images/new
             url: global.dir + '/q_save_image',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/images').save(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/images').save(req, res, fastify);
             }
         });
 
@@ -293,8 +292,8 @@ module.exports = fastify => {
             //api/images/delete
             url: global.dir + '/q_remove_image',
             beforeHandler: fastify.auth([fastify.authLogin]),
-            handler: async (req, res) => {
-                require('./mod/images').remove(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/images').remove(req, res, fastify);
             }
         });
 
@@ -312,8 +311,7 @@ module.exports = fastify => {
     }
 
     fastify
-    .decorate('authAPI', (req, res, done) =>
-        auth.authAPI(req, res, process.env.LOGIN ? true : false, done))
+    .decorate('authAPI', (req, res, done) => auth.authAPI(req, res, process.env.LOGIN ? true : false, done))
     .after(authAPIRoutes);
 
     function authAPIRoutes() {
@@ -322,8 +320,8 @@ module.exports = fastify => {
             method: 'GET',
             url: global.dir + '/api/cluster/get',
             beforeHandler: fastify.auth([fastify.authAPI]),
-            handler: async (req, res) => {
-                require('./mod/cluster').get(req, res, fastify)
+            handler: (req, res) => {
+                require('./mod/cluster').get(req, res, fastify);
             }
         });
 
