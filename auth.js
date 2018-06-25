@@ -44,7 +44,7 @@ function routes(fastify) {
         handler: async (req, res) => {
 
             var user_db = await fastify.pg.users.connect();
-            result = await user_db.query(
+            var result = await user_db.query(
                 `SELECT * FROM ${user_table} WHERE email = $1;`,
                 [req.body.email]
             );
@@ -67,6 +67,15 @@ function routes(fastify) {
                 };
                 return res.redirect(req.session.redirect || global.dir || '/');
             } else {
+
+                var user_db = await fastify.pg.users.connect();
+                var result = await user_db.query(`
+                UPDATE ${user_table} SET failedattempts = failedattempts + 1
+                WHERE email = $1
+                RETURNING failedattempts;`
+                [req.body.email]);
+                user_db.release();
+
                 return loginView(req, res, 'Wrong password.');
             }
         }
@@ -116,9 +125,9 @@ function routes(fastify) {
 
                 require('./mailer')({
                     to: user.email,
-                    subject: `Please verify your GEOLYTIX account (password reset) on ${global.site}`,
+                    subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${globals.dir}`,
                     text: `A new password has been set for this account. \n \n`
-                        + `Please verify that you are the account holder: ${global.protocol}://${global.site}/admin/user/verify/${verificationtoken}`
+                        + `Please verify that you are the account holder: ${req.headers.origin}${globals.dir}/admin/user/verify/${verificationtoken}`
                 });
 
                 return loginView(req, res, `You have reset the password <br />`
@@ -140,7 +149,7 @@ function routes(fastify) {
                 to: email,
                 subject: `Please verify your GEOLYTIX account on ${req.headers.host}${global.dir}`,
                 text: `A new account for this email address has been registered with ${req.headers.host}${global.dir} \n \n`
-                    + `Please verify that you are the account holder: ${global.protocol}://${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
+                    + `Please verify that you are the account holder: ${req.headers.origin}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
                     + `A site administrator must approve the account before you are able to login. \n \n`
                     + `You will be notified via email once an adimistrator has approved your account.`
             });
@@ -172,7 +181,8 @@ function routes(fastify) {
                         email,
                         verified,
                         approved,
-                        admin
+                        admin,
+                        failedattempts
                     FROM ${user_table};`);
                 user_db.release();
 
