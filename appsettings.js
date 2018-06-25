@@ -25,6 +25,26 @@ function routes(fastify, auth) {
                         dir: global.dir,
                         settings: `
                         <script>
+                            const mode = 'tree';
+                            const _xyz = ${JSON.stringify(global.appSettings)};
+                        </script>`
+                    }));
+                }
+            })
+
+            fastify.route({
+                method: 'GET',
+                url: global.dir + '/admin/settingsjson',
+                beforeHandler: fastify.auth([fastify.authSettings]),
+                handler: async (req, res) => {
+
+                    await getAppSettings(req, fastify);
+
+                    res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
+                        dir: global.dir,
+                        settings: `
+                        <script>
+                            const mode = 'code';
                             const _xyz = ${JSON.stringify(global.appSettings)};
                         </script>`
                     }));
@@ -36,7 +56,7 @@ function routes(fastify, auth) {
                 url: global.dir + '/admin/settings/save',
                 beforeHandler: fastify.auth([fastify.authSettings]),
                 handler: (req, res) => {
-                    saveAppSettings(req, res);
+                    saveAppSettings(req, res, fastify);
                 }
             })
 
@@ -57,10 +77,14 @@ async function getAppSettings(req, fastify) {
 
     let settings = {};
 
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') settings = await getSettingsFromDB(fastify);
-
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') settings = await getSettingsFromFile();
-
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
+        settings = await getSettingsFromDB(fastify);
+    }
+        
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') {
+        settings = await getSettingsFromFile();
+    }
+    
     if (Object.keys(settings).length === 0) settings = {
         "locales": {
             "Global": {
@@ -75,7 +99,6 @@ async function getAppSettings(req, fastify) {
         }
     };
 
-    
     if (req.session.user) settings = await removeRestrictions(settings, req);
 
     global.appSettings = settings;
@@ -94,31 +117,29 @@ async function getAppSettings(req, fastify) {
     Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id']);
 }
 
-async function saveAppSettings(req, res) {
+async function saveAppSettings(req, res, fastify) {
 
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') res.code(406).send({ file: true });
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file')
+        return res.code(406).send('Cannot save file based settings.');
 
-    let existingSettings = await global.ORM.collections.settings.find();
-    if (existingSettings.length === 0) {
-        await global.ORM.collections.settings.create({
-            settings: req.body.settings
-        });
-        req.session.hooks = {};
-    } else {
-        await global.ORM.collections.settings.update({})
-            .set({
-                settings: req.body.settings
-            });
-        req.session.hooks = {};
-    }
-    res.code(200).send({ ok: true });
+    let settings_db = await fastify.pg.settings.connect(),
+        q = `
+        INSERT INTO ${process.env.APPSETTINGS.split('|').pop()} (settings)
+        SELECT $1 AS settings;
+        `;
+
+    await settings_db.query(q,[JSON.stringify(req.body.settings)]);
+
+    settings_db.release();
+
+    res.code(200).send('Settings saved.');
 }
 
 async function getSettingsFromDB(fastify) {
 
     let settings_db = await fastify.pg.settings.connect(),
         settings_table = process.env.APPSETTINGS.split('|').pop(),
-        settings = await settings_db.query(`SELECT * FROM ${settings_table} LIMIT 1`);
+        settings = await settings_db.query(`SELECT * FROM ${settings_table} ORDER BY _id DESC LIMIT 1`);
 
     settings_db.release();
 
@@ -127,6 +148,7 @@ async function getSettingsFromDB(fastify) {
 }
 
 async function getSettingsFromFile() {
+
     let fs = require('fs');
     return fs.existsSync('./settings/' + process.env.APPSETTINGS.split(':').pop()) ?
         JSON.parse(fs.readFileSync('./settings/' + process.env.APPSETTINGS.split(':').pop()), 'utf8') : {};
