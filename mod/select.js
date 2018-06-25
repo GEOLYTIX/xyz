@@ -2,7 +2,6 @@ async function select(req, res, fastify) {
 
     let
         q,
-        result,
         table = req.body.table,
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
