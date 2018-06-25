@@ -32,8 +32,15 @@
             cursor: help;
         }
 
-        td:not(.email_field) {
-            padding: 0px 10px 12px 10px;
+        .email_field {
+            padding: 11px 10px 0 0;
+        }
+
+        .failedattempts {
+            padding: 11px 0 0 0;
+            text-align: center;
+            color: red;
+            font-weight: 800;
         }
 
         .delete_account {
@@ -68,11 +75,13 @@
         .checkbox .checkbox_i:after {
             font-family: "Material Icons";
             content: '\E836';
+            padding-left: 8px;
         }
 
         .checkbox input[type=checkbox]:checked+.checkbox_i:after {
             font-family: "Material Icons";
             content: '\E837';
+            padding-left: 8px;
         }
 
         .checkbox input[type=checkbox]:disabled+.checkbox_i:after {
@@ -97,10 +106,13 @@
             <th>
                 <i class="material-icons" title="The account is an admin account which can access this page and change other account credentials.">font_download</i>
             </th>
+            <th>
+                <i class="material-icons" title="Failed login attempts.">warning</i>
+            </th>
             <th></th>
             {{for users}}
             <tr>
-                <td class="email_field">{{:email}}</td>
+                <td class="email_field text">{{:email}}</td>
                 <td>
                     <label class="checkbox">
                         <input name="verified" type="checkbox" {{if verified}}checked{{/if}}>
@@ -119,6 +131,8 @@
                         <div class="checkbox_i"></div>
                     </label>
                 </td>
+            <td class="failedattempts text">{{:failedattempts}}
+            </td>
                 <td>
                     <i class="material-icons delete_account" title="The account will be deleted.">delete</i>
                 </td>
