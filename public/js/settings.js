@@ -1,4 +1,4 @@
-let editor = new JSONEditor(document.getElementById("jsoneditor"), {});
+let editor = new JSONEditor(document.getElementById("jsoneditor"), {mode: mode});
 
 let json = _xyz;
 
@@ -12,12 +12,12 @@ let search = document.querySelector('.jsoneditor-search');
 //add save button
 let btnSave = document.createElement('button');
 btnSave.style.background = 'none';
-btnSave.innerHTML = '<i class="material-icons">cloud_upload</i>';
+btnSave.innerHTML = '<i class="material-icons" title="Upload settings to data store.">cloud_upload</i>';
 editormenu.insertBefore(btnSave, search);
 
 btnSave.addEventListener('click', function () {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'q_settings_save');
+    xhr.open('POST', 'settings/save');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function () {
@@ -30,28 +30,30 @@ btnSave.addEventListener('click', function () {
     }));
 });
 
-let btnFile = document.createElement('button');
-btnFile.style.background = 'none';
-btnFile.innerHTML = '<i class="material-icons">description</i>';
-editormenu.insertBefore(btnFile, search);
-
-let fileSelector = document.createElement('input');
-fileSelector.style.display = 'none';
-fileSelector.setAttribute('type', 'file');
-fileSelector.setAttribute('accept', '.json');
-btnFile.appendChild(fileSelector);
-
-fileSelector.addEventListener('change', function () {
-    let reader = new FileReader();
-    reader.onload = function () {
-        editor.set(JSON.parse(this.result));
-    };
-    reader.readAsText(this.files[0])
-});
-
-btnFile.addEventListener('click', function () {
-    fileSelector.click();
-    return false;
-});
-
-editormenu.insertBefore(btnFile, search);
+if (mode === 'tree') {
+    let btnFile = document.createElement('button');
+    btnFile.style.background = 'none';
+    btnFile.innerHTML = '<i class="material-icons" title="Upload settings file.">description</i>';
+    editormenu.insertBefore(btnFile, search);
+    
+    let fileSelector = document.createElement('input');
+    fileSelector.style.display = 'none';
+    fileSelector.setAttribute('type', 'file');
+    fileSelector.setAttribute('accept', '.json');
+    btnFile.appendChild(fileSelector);
+    
+    fileSelector.addEventListener('change', function () {
+        let reader = new FileReader();
+        reader.onload = function () {
+            editor.set(JSON.parse(this.result));
+        };
+        reader.readAsText(this.files[0])
+    });
+    
+    btnFile.addEventListener('click', function () {
+        fileSelector.click();
+        //return false;
+    });
+    
+    editormenu.insertBefore(btnFile, search);
+}

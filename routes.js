@@ -42,7 +42,7 @@ module.exports = fastify => {
             beforeHandler: fastify.auth([fastify.authLogin]),
             handler: async (req, res) => {
 
-                await appsettings.getAppSettings(req);
+                await appsettings.getAppSettings(req, fastify);
 
                 global.appSettings.hooks = req.query;
 
