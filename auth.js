@@ -72,11 +72,35 @@ function routes(fastify) {
                 var result = await user_db.query(`
                 UPDATE ${user_table} SET failedattempts = failedattempts + 1
                 WHERE email = $1
-                RETURNING failedattempts;`
+                RETURNING failedattempts;`,
                 [req.body.email]);
                 user_db.release();
 
-                return loginView(req, res, 'Wrong password.');
+                if (result.rows[0].failedattempts >= 3) {
+                    const verificationtoken = require('crypto').randomBytes(20).toString('hex');
+                    var user_db = await fastify.pg.users.connect();
+                    await user_db.query(`
+                    UPDATE ${user_table} SET
+                        verified = false,
+                        verificationtoken = '${verificationtoken}'
+                    WHERE email = $1;`,
+                    [req.body.email]);
+                    user_db.release();
+
+                    require('./mailer')({
+                        to: user.email,
+                        subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${global.dir}`,
+                        text: `3 failed login attempts have been recorded on this account. \n \n`
+                            + `Please verify that you are the account holder: ${req.headers.origin}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
+                            + `Verifying the account will reset the failed login attempts.`
+                    });
+
+                    return loginView(req, res,
+                        `3 failed login attempts. Account verification has been removed. <br />`
+                        + `Please check your inbox and confirm that you are the account holder.`);
+                }
+
+                return loginView(req, res, `Wrong password. ${result.rows[0].failedattempts} failed login attempts.`);
             }
         }
     });
@@ -125,9 +149,9 @@ function routes(fastify) {
 
                 require('./mailer')({
                     to: user.email,
-                    subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${globals.dir}`,
+                    subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${global.dir}`,
                     text: `A new password has been set for this account. \n \n`
-                        + `Please verify that you are the account holder: ${req.headers.origin}${globals.dir}/admin/user/verify/${verificationtoken}`
+                        + `Please verify that you are the account holder: ${req.headers.origin}${global.dir}/admin/user/verify/${verificationtoken}`
                 });
 
                 return loginView(req, res, `You have reset the password <br />`
@@ -215,7 +239,7 @@ function routes(fastify) {
                     await require('./mailer')({
                         to: req.body.email,
                         subject: `This account has been approved for ${req.headers.host}${global.dir}`,
-                        text: `You are now able to log on to ${global.protocol}://${req.headers.host}${global.dir}`
+                        text: `You are now able to log on to ${req.headers.origin}${global.dir}`
                     });
 
                 if (update.rowCount === 0) res.code(500).send();
@@ -243,7 +267,7 @@ function routes(fastify) {
                     await require('./mailer')({
                         to: req.body.email,
                         subject: `This ${req.headers.host}${global.dir} account has been deleted.`,
-                        text: `You will no longer be able to log in to ${global.protocol}://${req.headers.host}${global.dir}`
+                        text: `You will no longer be able to log in to ${req.headers.origin}${global.dir}`
                     });
 
                     res.code(200).send()
@@ -281,6 +305,7 @@ function routes(fastify) {
                     let update = await user_db.query(`
                         UPDATE ${user_table} SET
                             verified = true,
+                            failedattempts = 0,
                             approvaltoken = '${approvaltoken}'
                         WHERE email = $1;`, [user.email]);
                     user_db.release();
@@ -302,15 +327,16 @@ function routes(fastify) {
                     require('./mailer')({
                         to: adminmail,
                         subject: `A new account has been verified on ${req.headers.host}${global.dir}`,
-                        text: `Please log into the admin panel ${global.protocol}://${req.headers.host}${global.dir}/admin/user to approve ${user.email} \n \n`
-                            + `You can also approve the account by following this link: ${global.protocol}://${req.headers.host}${global.dir}/admin/user/approve/${approvaltoken}`
+                        text: `Please log into the admin panel ${req.headers.origin}${global.dir}/admin/user to approve ${user.email} \n \n`
+                            + `You can also approve the account by following this link: ${req.headers.origin}${global.dir}/admin/user/approve/${approvaltoken}`
                     });
                 }
 
                 var user_db = await fastify.pg.users.connect();
                 let update = await user_db.query(`
                     UPDATE ${user_table} SET
-                        verified = true
+                        verified = true,
+                        failedattempts = 0
                     WHERE email = $1;`, [user.email]);
                 user_db.release();
 
@@ -349,7 +375,7 @@ function routes(fastify) {
                 require('./mailer')({
                     to: user.email,
                     subject: `This account has been approved on ${req.headers.host}${global.dir}`,
-                    text: `You are now able to log on to ${global.protocol}://${req.headers.host}${global.dir}`
+                    text: `You are now able to log on to ${req.headers.origin}${global.dir}`
                 });
 
                 res.send('The account has been approved by you. An email has been sent to the account holder.');
