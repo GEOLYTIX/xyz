@@ -1,4 +1,4 @@
-module.exports = { routes, getAppSettings, saveAppSettings }
+module.exports = { routes, get }
 
 function routes(fastify, auth) {
 
@@ -10,81 +10,81 @@ function routes(fastify, auth) {
     }
 
     fastify
-        .decorate('authSettings', (req, res, done) => auth.chkLogin(req, res, 'admin', done))
-        .after(() => {
+        .decorate('authSettings', (req, res, done) => auth.authToken(req, res, fastify, 'admin', done))
+        .after(register_routes);
 
-            fastify.route({
-                method: 'GET',
-                url: global.dir + '/admin/settings',
-                beforeHandler: fastify.auth([fastify.authSettings]),
-                handler: async (req, res) => {
+    function register_routes() {
 
-                    await getAppSettings(req, fastify);
+        fastify.route({
+            method: 'GET',
+            url: global.dir + '/admin/settings',
+            beforeHandler: fastify.auth([fastify.authSettings]),
+            handler: async (req, res) => {
 
-                    res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
-                        dir: global.dir,
-                        settings: `
+                await get(req, fastify);
+
+                res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
+                    dir: global.dir,
+                    settings: `
                         <script>
                             const mode = 'tree';
                             const _xyz = ${JSON.stringify(global.appSettings)};
                         </script>`
-                    }));
-                }
-            })
+                }));
+            }
+        })
 
-            fastify.route({
-                method: 'GET',
-                url: global.dir + '/admin/settingsjson',
-                beforeHandler: fastify.auth([fastify.authSettings]),
-                handler: async (req, res) => {
+        fastify.route({
+            method: 'GET',
+            url: global.dir + '/admin/settingsjson',
+            beforeHandler: fastify.auth([fastify.authSettings]),
+            handler: async (req, res) => {
 
-                    await getAppSettings(req, fastify);
+                await get(req, fastify);
 
-                    res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
-                        dir: global.dir,
-                        settings: `
+                res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
+                    dir: global.dir,
+                    settings: `
                         <script>
                             const mode = 'code';
                             const _xyz = ${JSON.stringify(global.appSettings)};
                         </script>`
-                    }));
-                }
-            })
+                }));
+            }
+        })
 
-            fastify.route({
-                method: 'POST',
-                url: global.dir + '/admin/settings/save',
-                beforeHandler: fastify.auth([fastify.authSettings]),
-                handler: (req, res) => {
-                    saveAppSettings(req, res, fastify);
-                }
-            })
+        fastify.route({
+            method: 'POST',
+            url: global.dir + '/admin/settings/save',
+            beforeHandler: fastify.auth([fastify.authSettings]),
+            handler: (req, res) => {
+                save(req, res, fastify);
+            }
+        })
 
-            fastify.route({
-                method: 'GET',
-                url: global.dir + '/admin/settings/get',
-                beforeHandler: fastify.auth([fastify.authSettings]),
-                handler: async (req, res) => {
-                    await getAppSettings(req, fastify);
-                    res.send(global.appSettings);
-                }
-            })
-
-        });
+        fastify.route({
+            method: 'GET',
+            url: global.dir + '/admin/settings/get',
+            beforeHandler: fastify.auth([fastify.authSettings]),
+            handler: async (req, res) => {
+                await get(req, fastify);
+                res.send(global.appSettings);
+            }
+        })
+    }
 }
 
-async function getAppSettings(req, fastify) {
-
+async function get(req, fastify) {
     let settings = {};
 
     if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
         settings = await getSettingsFromDB(fastify);
     }
-        
+
     if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file') {
         settings = await getSettingsFromFile();
     }
-    
+
     if (Object.keys(settings).length === 0) settings = {
         "locales": {
             "Global": {
@@ -99,7 +99,7 @@ async function getAppSettings(req, fastify) {
         }
     };
 
-    if (req.session.user) settings = await removeRestrictions(settings, req);
+    //if (req.session && req.session.user) settings = await removeRestrictions(settings, req);
 
     global.appSettings = settings;
 
@@ -117,18 +117,16 @@ async function getAppSettings(req, fastify) {
     Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id']);
 }
 
-async function saveAppSettings(req, res, fastify) {
-
+async function save(req, res, fastify) {
     if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'file')
         return res.code(406).send('Cannot save file based settings.');
 
     let settings_db = await fastify.pg.settings.connect(),
         q = `
         INSERT INTO ${process.env.APPSETTINGS.split('|').pop()} (settings)
-        SELECT $1 AS settings;
-        `;
+        SELECT $1 AS settings;`;
 
-    await settings_db.query(q,[JSON.stringify(req.body.settings)]);
+    await settings_db.query(q, [JSON.stringify(req.body.settings)]);
 
     settings_db.release();
 
@@ -136,7 +134,6 @@ async function saveAppSettings(req, res, fastify) {
 }
 
 async function getSettingsFromDB(fastify) {
-
     let settings_db = await fastify.pg.settings.connect(),
         settings_table = process.env.APPSETTINGS.split('|').pop(),
         settings = await settings_db.query(`SELECT * FROM ${settings_table} ORDER BY _id DESC LIMIT 1`);
@@ -144,11 +141,11 @@ async function getSettingsFromDB(fastify) {
     settings_db.release();
 
     if (settings.rows.length === 0) return {};
+    
     return settings.rows[0].settings;
 }
 
 async function getSettingsFromFile() {
-
     let fs = require('fs');
     return fs.existsSync('./settings/' + process.env.APPSETTINGS.split(':').pop()) ?
         JSON.parse(fs.readFileSync('./settings/' + process.env.APPSETTINGS.split(':').pop()), 'utf8') : {};

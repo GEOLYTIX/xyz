@@ -1,7 +1,9 @@
 module.exports = fastify => {
-
-    // Set globals for API keys, Database connections, etc.
     global.dir = process.env.DIR || '';
+
+    global.timeout = parseInt(process.env.TIMEOUT) || 30;
+
+    global.failed_attempts = parseInt(process.env.FAILED_ATTEMPTS) || 3;
 
     global.KEYS = {};
     Object.keys(process.env).forEach(key => {

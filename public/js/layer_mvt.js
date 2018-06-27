@@ -20,17 +20,22 @@ function getLayer(){
         // Create new vector.xhr
         layer.loaded = false;
         layer.loader.style.display = 'block';
-        //layer.xhr = new XMLHttpRequest();
 
-        // Build xhr request.
-        let url = host + 'mvt/{z}/{x}/{y}?' + utils.paramString({
+        let cookies = document.cookie.split(/[;] */).reduce((result, pairStr) => {
+            let arr = pairStr.split('=');
+            if (arr.length === 2) { result[arr[0]] = arr[1]; }
+            return result;
+        }, {});
+
+        let url = host + 'api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
                 qID: layer.qID,
                 properties: layer.properties,
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
-                tilecache: layer.tilecache
+                tilecache: layer.tilecache,
+                token: cookies.xyz_user
             }),
             options = {
                 rendererFactory: L.svg.tile,
@@ -71,12 +76,13 @@ function getLayer(){
         if(layer.L) _xyz.map.removeLayer(layer.L);
         
         layer.L = L.vectorGrid.protobuf(url, options)
-            .on('load', (e) => {
+        .on('error', err => console.error(err))
+            .on('load', e => {
                 layer.loaded = true;
                 layer.loader.style.display = 'none';
                 _xyz.layersCheck();
             })
-            .on('click', (e) => {
+            .on('click', e => {
                 if( e.layer.properties.selected) return;
             
                 e.layer.properties.selected = true;
