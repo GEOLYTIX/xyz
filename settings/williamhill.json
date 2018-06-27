@@ -725,6 +725,18 @@
               "inline": true
             },
             {
+                "field": "competitor_fascia",
+                "label": "Competitor fascia",
+                "type": "text",
+                "inline": true
+            },
+            {
+                "field": "new_competitor_fascia",
+                "label": "New competitor fascia",
+                "type": "text",
+                "inline": true
+            },
+            {
               "label": "Address"
             },
             {
@@ -748,14 +760,72 @@
               "inline": true
             },
             {
+                "field": "shop_status",
+                "label": "Status",
+                "type": "text",
+                "inline": true,
+                "level": 1,
+                "options": ["Open", "Closed"]
+            },
+            {
+                "field": "wh_contact",
+                "label": "WH contact",
+                "type": "text",
+                "level": 1
+            },
+            {
               "label": "Store facilities"
+            },
+            {
+                "field": "premises_type",
+                "label": "Premises type",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "options": ["1st floor", "Ground floor", "Basement",  "CLOSED"]
+            },
+            {
+                "field": "fabric_condition",
+                "label": "Fabric/shop fit condition",
+                "type": "text",
+                "level": 2,
+                "inline": true,
+                "options": ["Excellent", "Average", "Poor", "CLOSED"]
+            },
+            {
+                "field": "tills",
+                "label": "Number of tills",
+                "type": "text",
+                "inline": true,
+                "level": 2
+            },
+            {
+                "field": "tvs_gantry",
+                "label": "Number of TVs on the gantry",
+                "type": "text",
+                "inline": true,
+                "level": 2
+            },
+            {
+              "field": "tvs",
+              "label": "Number of TVs",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+                "field": "tvs_non_gantry",
+                "label": "Number of TVs separate to the gantry",
+                "type": "text",
+                "inline": true,
+                "level": 2
             },
             {
               "field": "ssbt",
               "label": "SSBTs",
               "type": "text",
               "inline": true,
-              "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "10+"],
+              "options": [0, 1, 2, 3, 4, "4 or more" , 5, 6, 7, 8, 9, 10, "10+", "CLOSED"],
               "level": 2
             },
             {
@@ -783,18 +853,57 @@
               "level": 2
             },
             {
-              "field": "tvs",
-              "label": "TVs",
-              "type": "text",
-              "inline": true,
-              "level": 2
-            },
-            {
               "field": "toilet",
               "label": "Toilet",
               "type": "text",
               "inline": true,
               "level": 2
+            },
+            {
+                "field": "free_parking",
+                "label": "Free parking",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "options": ["Yes", "No"]
+            },
+            {
+                "field": "paid_short_stay_parking",
+                "label": "Paid short stay parking",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "options": ["Yes", "No"]
+            },
+            {
+                "field": "new_technology",
+                "label": "New technology",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "options": ["Yes", "No"]
+            },
+            {
+                "field": "techn_description",
+                "label": "Technology description",
+                "type": "text",
+                "level": 1
+            },
+            {
+                "field": "bingo",
+                "label": "Bingo",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "options": ["Yes", "No"]
+            },
+            {
+                "field": "bingo_separate_gantry",
+                "label": "Bingo Separate to Gantry",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "options": ["Yes", "No"]
             },
             {
               "label": "Opening times"    
@@ -848,6 +957,26 @@
               "inline": true,
               "options": ["Single manned", "Dual manning"],
               "level": 1
+            },
+            {
+                "field": "reg_office_training_location",
+                "label": "Regional Office/ training location",
+                "type": "text",
+                "level": 1,
+                "options": ["Yes", "No", "Don't know", "Closed"],
+                "inline": true
+            },
+            {
+                "field": "comments",
+                "label": "Comments",
+                "type": "text",
+                "level": 1
+            },
+            {
+                "field": "investment_immediate_area",
+                "label": "Investment in immediate area",
+                "type": "text",
+                "level": 1
             },
             {
               "field": "username",
