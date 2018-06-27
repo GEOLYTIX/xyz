@@ -26,16 +26,9 @@ fastify
         prefix: (process.env.DIR || '') + '/'
     })
     .register(require('fastify-cookie'))
-    .register(require('fastify-caching'))
     .register(require('fastify-auth'))
-    .register(require('fastify-server-session'), {
-        secretKey: process.env.SECRET || 'some-secret-password-at-least-32-characters-long',
-        sessionMaxAge: 3000000, // 5 minutes in milliseconds
-        sessionCookieName: 'glx-xyz-session',
-        cookie: {
-            //domain: '.geolytix.xyz',
-            path: '/'
-        }
+    .register(require('fastify-jwt'), {
+        secret: process.env.SECRET || 'some-secret-password-at-least-32-characters-long'
     });
 
 require('./globals')(fastify);
