@@ -115,10 +115,11 @@
               "fill": true,
               "fillOpacity": 0
             },
-            "theme": {
+            "themes": [{
               "label": "Population Density",
               "type": "graduated",
               "field": "pop_density",
+              "applied": true,
               "other": true,
               "cat": [
                 {
@@ -254,7 +255,7 @@
                   }
                 }
               ]
-            }
+            }]
           }
         }
       }
@@ -703,9 +704,10 @@
               400,
               "#333"
             ],
-            "theme": {
+            "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "applied": true,
               "competitors": {
                 "tesco": {
                   "colour": "#0055a8",
@@ -799,7 +801,7 @@
                   "label": "Whole Foods"
                 }
               }
-            }
+            }]
           }
         },
         "rp_editable": {
@@ -925,10 +927,11 @@
               400,
               "#333"
             ],
-            "theme": {
+            "themes": [{
               "label": "Retailer",
               "type": "categorized",
               "other": true,
+              "applied": true,
               "cat": {
                 "Aldi": {
                   "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
@@ -1003,7 +1006,7 @@
                   "label": "Whole Foods"
                 }
               }
-            }
+            }]
           }
         },
         "region": {
@@ -1142,9 +1145,10 @@
             }
           ],
           "style": {
-            "theme": {
+            "themes": [{
               "label": "Motor vehicles 2016 (000's)",
               "type": "graduated",
+              "applied": true,
               "cat": [
                 {
                   "val": 1,
@@ -1182,7 +1186,7 @@
                   "label": "150"
                 }
               ]
-            }
+            }]
           }
         }
       }
@@ -1337,10 +1341,11 @@
             "highlight": {
               "color": "#e91e63"
             },
-            "theme": {
+            "themes": [{
               "label": "Retail Place type",
               "type": "categorized",
               "field": "rp_type",
+              "applied": true,
               "other": true,
               "cat": {
                 "Major City Centre": {
@@ -1515,7 +1520,7 @@
                   }
                 }
               }
-            }
+            }]
           }
         }
       }

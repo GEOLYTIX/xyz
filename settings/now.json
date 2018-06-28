@@ -78,10 +78,11 @@
                         "fill": true,
                         "fillOpacity": 0
                       },
-                      "theme": {
+                      "themes": [{
                         "label": "Population Density",
                         "type": "graduated",
                         "field": "pop_density",
+                        "applied": true,
                         "other": true,
                         "cat": [
                           {
@@ -217,7 +218,7 @@
                             }
                           }
                         ]
-                      }
+                      }]
                     }
                   }
             }
