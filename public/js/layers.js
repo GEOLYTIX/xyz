@@ -177,7 +177,7 @@ module.exports = () => {
                                 if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
 
                                 let xhr = new XMLHttpRequest();
-                                xhr.open('POST', 'api/location/new');
+                                xhr.open('POST', host + 'api/location/new');
                                 xhr.setRequestHeader("Content-Type", "application/json");
                                 xhr.onload = () => {
                                     if (xhr.status === 200) {
