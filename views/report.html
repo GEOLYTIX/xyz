@@ -3,26 +3,26 @@
 
 <head>
     <title>{{:title}}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         @font-face {
             font-family: ffmark_black;
-            src: url(fonts/MarkWeb-Black.woff) format("woff");
+            src: url({{:dir}}/fonts/MarkWeb-Black.woff) format("woff");
         }
 
         @font-face {
             font-family: ffmark;
-            src: url(fonts/MarkWebPro.woff) format("woff");
+            src: url({{:dir}}/fonts/MarkWebPro.woff) format("woff");
         }
 
         @font-face {
             font-family: ffmark_bold;
-            src: url(fonts/MarkWebPro-Bold.woff) format("woff");
+            src: url({{:dir}}/fonts/MarkWebPro-Bold.woff) format("woff");
         }
     </style>
-    <link rel="stylesheet" href="css/report.css" />
+    <link rel="stylesheet" href="{{:dir}}/css/report.css" />
 
     <script>const view_mode = 'report';</script> {{:settings}}
 
@@ -52,6 +52,7 @@
                     <a class="mapbox" href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a>
                     <a class="leaflet" href="http://leafletjs.com" target="_blank">
                         <i class="material-icons">favorite</i> Leaflet</a>
+                    <a class="xyz" href="https://github.com/geolytix/xyz" target="_blank"> XYZ</a>
                 </div>
             </div>
 
@@ -98,13 +99,13 @@
                 </button>
 
                 <button id="btnLogout" title="Log out from application" {{:btnLogout}}>
-                    <a href="logout">
+                    <a href="{{:dir}}/logout">
                         <i class="material-icons">exit_to_app</i>
                     </a>
                 </button>
 
                 <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
-                    <a href="admin">
+                    <a href="{{:dir}}/admin">
                         <i class="material-icons">supervisor_account</i>
                     </a>
                 </button>
@@ -115,6 +116,6 @@
     </div>
 </body>
 
-<script type="application/javascript" src="js/{{:bundle_js}}"></script>
+<script src="{{:dir}}/js/{{:bundle_js}}"></script>
 
 </html>

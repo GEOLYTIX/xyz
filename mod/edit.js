@@ -1,22 +1,16 @@
+module.exports = { newRecord, newAggregate, updateRecord, deleteRecord };
+
 async function newRecord(req, res, fastify) {
 
-    let q,
-        table = req.body.table,
-        log_table = req.body.log_table,
+    let table = req.body.table,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        cat = req.body.cluster_cat || 'other',
-        username = req.session.passport ? req.session.passport.user.email : 'nologin';
+        cat = req.body.cluster_cat || 'other';
 
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
-
-    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
-
-    q = `
-        INSERT INTO ${table} (username, geom)
-            SELECT '${username}' as username, ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
+    var q = `
+        INSERT INTO ${table} (geom)
+            SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
             RETURNING id;`;
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
@@ -33,9 +27,6 @@ async function newAggregate(req, res, fastify) {
         geom_source = req.query.geom_source === 'undefined' ? 'geom' : req.query.geom_source,
         filter = JSON.parse(req.query.filter),
         filter_sql = '';
-
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table_target, table_source, geom_target, geom_source], res).statusCode === 406) return;
 
     filter_sql = await require('./filters').sql_filter(filter, filter_sql);
 
@@ -89,18 +80,13 @@ async function newAggregate(req, res, fastify) {
 }
 
 async function updateRecord(req, res, fastify) {
+
     let table = req.body.table,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
         fields = '',
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
-        username = req.session.passport ? req.session.passport.user.email : 'nologin';
-
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
-
-    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
+        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
 
     Object.values(req.body.infoj).forEach(entry => {
         if (entry.images) return
@@ -112,7 +98,7 @@ async function updateRecord(req, res, fastify) {
         if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`
     });
 
-    let q = `
+    var q = `
     UPDATE ${table} SET
         ${fields}
         geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
@@ -128,7 +114,6 @@ async function updateRecord(req, res, fastify) {
     if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
 
     res.code(200).send();
-
 }
 
 async function deleteRecord(req, res, fastify) {
@@ -138,15 +123,10 @@ async function deleteRecord(req, res, fastify) {
         id = req.body.id,
         log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
 
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, qID], res).statusCode === 406) return;
-
-    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
-
     // Write into logtable if logging is enabled.
     if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
 
-    let q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
+    var q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
     await db_connection.query(q, [id]);
@@ -157,22 +137,17 @@ async function deleteRecord(req, res, fastify) {
 
 async function writeLog(req, log_table, table, qID, id, fastify) {
 
-    //let username = req.session.passport ? req.session.passport.user.email : 'nologin';
+    let user_token = fastify.jwt.decode(req.cookies.xyz_user),
+        username = user_token.email ? user_token.email : 'anonymous';
 
-    let q = `
+    var q = `
     INSERT INTO ${log_table} 
     SELECT *
     FROM ${table} WHERE ${qID} = $1;`;
+
     //console.log(q);
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
     await db_connection.query(q, [id]);
     db_connection.release();
 }
-
-module.exports = {
-    newRecord: newRecord,
-    newAggregate: newAggregate,
-    updateRecord: updateRecord,
-    deleteRecord: deleteRecord
-};

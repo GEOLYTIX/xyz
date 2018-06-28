@@ -164,7 +164,7 @@ function update(record) {
                 let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', 'api/location/update');
+                xhr.open('POST', host + 'api/location/update');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = () => {
 
@@ -185,6 +185,7 @@ function update(record) {
                             );
                     } catch (err) { }
                 }
+
                 xhr.send(JSON.stringify({
                     dbs: layer.dbs,
                     table: record.location.table,

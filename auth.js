@@ -494,11 +494,9 @@ function authToken(req, res, fastify, login, done) {
 
     // No user_token found.
     if (!user_token) {
-        user_token.status = 'No user token found in request.';
-
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign(user_token), {
+            .setCookie('xyz_user', fastify.jwt.sign({ status: 'No user token found in request.' }), {
                 path: process.env.DIR || '/'
             })
             .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {

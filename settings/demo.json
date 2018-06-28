@@ -1745,6 +1745,7 @@
             "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "field": "brand",
               "applied": true,
               "competitors": {
                 "tesco": {
@@ -1960,6 +1961,7 @@
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
+          "log_table": "gb_retailpoint_editable_logs",
           "cluster_label": "store",
           "cluster_cat": "brand",
           "infoj": [
@@ -2072,6 +2074,7 @@
             "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "field": "brand",
               "applied": true,
               "other": true,
               "cat": {
