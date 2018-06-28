@@ -233,10 +233,11 @@
               400,
               "#bbb"
             ],
-            "theme": {
-              "label": "",
+            "themes": [{
+              "label": "Brands",
               "type": "categorized",
               "competitors": null,
+              "applied": true,
               "cat": {
                 "Browns": {
                   "marker": "svg_symbols.target([400, '#00412B', 300, '#FFF', 200, '#A90027'])",
@@ -307,7 +308,7 @@
                   "label": "Toby Carvery"
                 }
               }
-            }
+            }]
           }
         },
         "mb_scratch": {
@@ -411,10 +412,11 @@
             "markerMax": 40,
             "marker": "svg_symbols.target([400,'#A2BCE0'])",
             "markerMulti": [400, "#A2BCE0"],
-            "theme": {
+            "themes": [{
                 "label": "Category",
                 "type": "categorized",
                 "competitors": null,
+                "applied": true,
                 "cat": {
                     "Restaurants": {
                         "marker": "svg_symbols.target([400, '#A51C30', 300, '#F0B67F', 200, '#A51C30'])",
@@ -429,7 +431,7 @@
                         "label": "Bars & Clubs"
                     }
                 }
-            }
+            }]
           }
         },
         "admin": {

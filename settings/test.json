@@ -92,9 +92,10 @@
                             400,
                             "#333"
                         ],
-                        "theme": {
+                        "themes": [{
                             "label": "Retailer",
                             "type": "categorized",
+                            "applied": true,
                             "competitors": {
                                 "tesco": {
                                     "colour": "#0055a8",
@@ -188,7 +189,7 @@
                                     "label": "Whole Foods"
                                 }
                             }
-                        }
+                        }]
                     }
                 }
             }

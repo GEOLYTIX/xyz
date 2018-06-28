@@ -101,10 +101,101 @@
           },
           "tilecache": "clinique_dong__tc",
           "style": {
+            "themes": [
+                {
+                    "label": "Market Size 2016 (₩ billions)",
+                    "type": "graduated",
+                    "field": "mkt_size",
+                    "applied": true,
+                    "cat": [
+                        {
+                            "val": 250000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#fcfdbf",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "up to .25"
+                        },
+                        {
+                            "val": 500000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#fec387",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": ".5"
+                        },
+                        {
+                            "val": 1000000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#fc8761",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "1"
+                        },
+                        {
+                            "val": 1500000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#e75163",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "1.5"
+                        },
+                        {
+                            "val": 2000000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#b63679",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "2"
+                        },
+                        {
+                            "val": 2500000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#822581",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "2.5"
+                        },
+                        {
+                            "val": 5000000,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#50127b",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "5"
+                        },
+                        {
+                            "val": 999999999,
+                            "style": {
+                                "stroke": false,
+                                "fillColor": "#1c1046",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "5 or more"
+                        }
+                    ]
+                }
+            ],
             "default": {
               "weight": 1,
-              "color": "#000",
+              "color": "#333",
               "fill": true,
+              "opacity": 0.3,
               "fillColor": "#fff",
               "fillOpacity": 0.3
             },
@@ -113,93 +204,6 @@
               "color": "#090",
               "fill": true,
               "fillOpacity": 0
-            },
-            "theme": {
-              "label": "Market Size 2016 (₩ billions)",
-              "type": "graduated",
-              "field": "mkt_size",
-              "cat": [
-                {
-                  "val": 250000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#fcfdbf",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "up to .25"
-                },
-                {
-                  "val": 500000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#fec387",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": ".5"
-                },
-                {
-                  "val": 1000000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#fc8761",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "1"
-                },
-                {
-                  "val": 1500000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#e75163",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "1.5"
-                },
-                {
-                  "val": 2000000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#b63679",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "2"
-                },
-                {
-                  "val": 2500000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#822581",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "2.5"
-                },
-                {
-                  "val": 5000000,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#50127b",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "5"
-                },
-                {
-                  "val": 999999999,
-                  "style": {
-                    "stroke": false,
-                    "fillColor": "#1c1046",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "5 or more"
-                }
-              ]
             }
           }
         },
@@ -338,47 +342,49 @@
             }
           ],
           "style": {
-            "theme": {
-              "label": "Demand 2016 (₩ billions)",
-              "type": "graduated",
-              "cat": [
+            "themes": [
                 {
-                  "val": 0.01,
-                  "marker": "svg_symbols.target([400,'#fcfdbf'])",
-                  "label": "0.01"
-                },
-                {
-                  "val": 5,
-                  "marker": "svg_symbols.target([400,'#fec387'])",
-                  "label": "5"
-                },
-                {
-                  "val": 10,
-                  "marker": "svg_symbols.target([400,'#fc8761'])",
-                  "label": "10"
-                },
-                {
-                  "val": 25,
-                  "marker": "svg_symbols.target([400,'#e75163'])",
-                  "label": "25"
-                },
-                {
-                  "val": 50,
-                  "marker": "svg_symbols.target([400,'#b63679'])",
-                  "label": "50"
-                },
-                {
-                  "val": 75,
-                  "marker": "svg_symbols.target([400,'#822581'])",
-                  "label": "75"
-                },
-                {
-                  "val": 100,
-                  "marker": "svg_symbols.target([400,'#50127b'])",
-                  "label": "100 and more"
+                    "label": "Demand 2016 (₩ billions)",
+                    "type": "graduated",
+                    "cat": [
+                        {
+                            "val": 0.01,
+                            "marker": "svg_symbols.target([400,'#fcfdbf'])",
+                            "label": "0.01"
+                        },
+                        {
+                            "val": 5,
+                            "marker": "svg_symbols.target([400,'#fec387'])",
+                            "label": "5"
+                        },
+                        {
+                            "val": 10,
+                            "marker": "svg_symbols.target([400,'#fc8761'])",
+                            "label": "10"
+                        },
+                        {
+                            "val": 25,
+                            "marker": "svg_symbols.target([400,'#e75163'])",
+                            "label": "25"
+                        },
+                        {
+                            "val": 50,
+                            "marker": "svg_symbols.target([400,'#b63679'])",
+                            "label": "50"
+                        },
+                        {
+                            "val": 75,
+                            "marker": "svg_symbols.target([400,'#822581'])",
+                            "label": "75"
+                        },
+                        {
+                            "val": 100,
+                            "marker": "svg_symbols.target([400,'#50127b'])",
+                            "label": "100 and more"
+                        }
+                    ]
                 }
-              ]
-            }
+            ]
           }
         }
       }

@@ -361,9 +361,10 @@
               "color": "#000",
               "fill": true
             },
-            "theme": {
+            "themes": [{
               "type": "categorized",
               "field": "rank_reg",
+              "applied": true,
               "cat": {
                 "1": {
                   "style": {
@@ -446,7 +447,7 @@
                   }
                 }
               }
-            }
+            }]
           }
         },
         "oa_tot": {
@@ -500,9 +501,10 @@
               "color": "#000",
               "fill": true
             },
-            "theme": {
+            "themes": [{
               "field": "rank_tot",
               "type": "categorized",
+              "applied": true,
               "cat": {
                 "1": {
                   "style": {
@@ -585,7 +587,7 @@
                   }
                 }
               }
-            }
+            }]
           }
         },
         "traffic_count": {
@@ -659,9 +661,10 @@
             }
           ],
           "style": {
-            "theme": {
+            "themes": [{
               "label": "Motor vehicles 2016 (000's)",
               "type": "graduated",
+              "applied": true,
               "cat": [
                 {
                   "val": 1,
@@ -699,7 +702,7 @@
                   "label": "150"
                 }
               ]
-            }
+            }]
           }
         }
       }
