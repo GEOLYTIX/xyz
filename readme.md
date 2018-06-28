@@ -7,7 +7,12 @@ tl;dr Here is a hosted version of the XYZ without login:
 
 ## Introduction
 
-The XYZ framework is designed around the idea to serve spatial data from PostGIS datasources without the need of additional services running elsewhere. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the authentication middleware [Passport](https://github.com/jaredhanson/passport), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) to create server-side PDF reports.
+The XYZ framework is designed to serve spatial data from PostGIS datasources without the need of additional services. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) to create server-side PDF reports.
+
+XYZ is build with a [PfaJn stack](https://medium.com/@goldrydigital/a-fine-pfajn-stack-to-put-maps-on-the-web-bf1a531cae93) which uses the [Fastify](https://www.fastify.io) web server and [JsRender](https://www.jsviews.com) for server side rendering of views.
+
+The code repository should work out of the box (zero-configuration) as serverless deployments with [Zeit Now]
+(https://zeit.co/now) and [Google App Engine](https://cloud.google.com/appengine).
 
 ## Licence
 
@@ -19,7 +24,7 @@ We are currently using Node.js version 8.5 in production.
 
 Style sheets for the browser interface are written in SASS/SCSS. We include the compiled css in the repository. With SASS installed it is possible to compile all style sheets with following command `sass -update public/css` from the application root.
 
-The application is compiled with Webpack (v3) and Babel.
+The application is compiled with Webpack (v4) and Babel.
 
 The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
 
@@ -29,9 +34,9 @@ The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entr
 
 ## Environment Settings
 
-The environment settings contain sensitive information such as data source connection strings, security information and API keys. These should never be made public and are not contained in this repository.
+Environment settings contain sensitive information such as connection strings for data sources, security information and API keys. These should never be made public and are not contained in this repository.
 
-Running the application without any environment settings will host a sample application with a single OSM base layer on port 3000.
+Running the application without any environment settings (zero-configuration) will host a sample application with a single OSM base layer on port 3000.
 
 In Visual Studio Code we recommend to store the environment settings in the env:{} object of the .launch file.
 
@@ -43,33 +48,37 @@ We use the [PM2](https://github.com/Unitech/pm2) process manager in our producti
 
 The port on which the application is run.
 
-`"HOST": "geolytix.xyz"`
-
-The host is required in order to send verification or media links.
-
-`"LOCALHOST": "http://localhost:3000"`
-
-The localhost is required for server side reporting.
-
 `"DIR": "/xyz"`
 
-The name of the application root directory. This is required by the Express router to set the public directory.
+The path for the application root.
 
-`"APPSETTINGS": "demo.json"`
+`"APPSETTINGS": "file:demo.json"`
 
 The name of the *appsettings* file ([in the settings directory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The *appsettings* will be discussed in detail in the next section of this documentation.
 
-`"LOGIN": "mongodb://localhost:27017/xyz"`
+It is recommended to store the appsettings in a Postgres table. In this case the table name will provided after a pipe in the Postgres connection string.
 
-(optional) The location of a Mongo database in which the user accounts are stored for applications and services which require passport authentication. No login is used if this param is not set.
+e.g. `"APPSETTINGS": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
-`"TRANSPORT": "smtps://geolytix%40gmail.com:password@smtp.gmail.com"`
+`"LOGIN": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
-(optional) An SMTP connection string which is required for the application to send emails. The passport security module uses this mail account to send verification requests to new registrants.
+The location of an Access Control List (ACL) table in Postgres. No login is required if this key is omitted. Only admin routes require authentication if the key is set to `"ADMIN"`.
 
-`"OURSECRET": "ChinaCatSunflower"`
+`"TRANSPORT": "smtps://xyz%40geolytix.co.uk:password@smtp.gmail.com"`
 
-(optional) A session secret which is required to compute the session hash.
+An SMTP connection string which is required for the application to send emails. The passport security module uses this mail account to send verification requests to new registrants.
+
+`"FAILED_ATTEMPTS": "3"`
+
+The maxmimum number of failed attempts before a user account is locked. Defaults to 3.
+
+`"SECRET": "ChinaCatSunflower"`
+
+A secret which is required to encrypt tokens which are used to store user credentials and session information. Should be longer than 32 characters!
+
+`"TIMEOUT": "30"`
+
+The maximum token age in seconds. Defaults to 30.
 
 `"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"`
 
@@ -99,27 +108,27 @@ Application settings are stored in the [/settings](https://github.com/GEOLYTIX/x
 
 `"title": "XYZ Demo"`
 
-(optional) The application title which will be inserted into the title meta tag in the HTML template.
+The application title which will be inserted into the title meta tag in the HTML template.
 
 `"gazetteer": {}`
 
-(optional) Whether the gazetteer module should be enabled. Without the gazetteer module you will not be able to switch between locales
+Whether the gazetteer module should be enabled. Without the gazetteer module you will not be able to switch between locales
 
 `"select": {}`
 
-(optional) Whether the selection module should be enabled. Without the selection module you will not be able to select features and query their properties.
+Whether the selection module should be enabled. Without the selection module you will not be able to select features and query their properties.
 
 `"locate": true`
 
-(optional) Whether the geolocator should be enabled. *Note that the geolocator requires a secure connection via https.*
+Whether the geolocator should be enabled. *Note that the geolocator requires a secure connection via https.*
 
 `"documentation": "documentation"`
 
-(optional) Whether a documentation button should be enabled. If set to 'documentation' the [documentation.md](https://github.com/GEOLYTIX/xyz/tree/dev/public/documentation.md) markhub will be displayed in a github flavoured view. Any suitable link can be set instead of 'documentation'.
+Whether a documentation button should be enabled. If set to 'documentation' the [documentation.md](https://github.com/GEOLYTIX/xyz/tree/dev/public/documentation.md) markhub will be displayed in a github flavoured view. Any suitable link can be set instead of 'documentation'.
 
 `"locale": "UK"`
 
-(optional) The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
+The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
 
 `"locales": {}`
 
@@ -133,18 +142,17 @@ Each locale is a set of objects which are described here:
 
 `"name": "Europe"`
 
-(optional) The display name for the locale. The locale key will be used if not set.
+The display name for the locale. The locale key will be used if not set.
 
 `"bounds": [[25,-45],[75,60]]`
 
-(optional) An array of \[lat,lon\] coordinate pairs which define the bounds of a locale. It will not be possible to pan the map outside the bounds. The default bounds are \[\[-90,-180\],\[90,180\]\].
-
+An array of \[lat,lon\] coordinate pairs which define the bounds of a locale. It will not be possible to pan the map outside the bounds. The default bounds are \[\[-90,-180\],\[90,180\]\].
 
 `"minZoom": 5`
 
 `"maxZoom": 9`
 
-(optional) The min and max zoom for the leaflet map object. The defaults range is zoom 0 to 20 if not set.
+The min and max zoom for the leaflet map object. The defaults range is zoom 0 to 20 if not set.
 
 `"gazetteer": ["MAPBOX", "", "'-45,25,60,75'", "e.g. Brussels"]`
 
@@ -166,11 +174,37 @@ base
 
 ## Server
 
-[server.js](https://github.com/GEOLYTIX/xyz/blob/master/server.js) starts an [Express](https://expressjs.com/) server on the specified port, sets the public directory, favicon and passport security from the environment settings. *Clustering is still very much in development and not fully supported yet.*
+[server.js](https://github.com/GEOLYTIX/xyz/blob/master/server.js) starts an [Fastify](https://www.fastify.io) web server on the specified port, sets the public directory, favicon and security from the environment settings.
 
-## Middleware
+## Routes
 
-[router.js](https://github.com/GEOLYTIX/xyz/blob/master/router.js) is the middlewares main entry point.
+### /
+
+The main route which serves a client application.
+
+### /documentation
+
+Serves the [documentation for the client application](https://github.com/GEOLYTIX/xyz/blob/master/public/documentation.md) as github flavoured markdown.
+
+### /proxy/image
+
+Proxy requests for image ressources such as Mapbox tiles or Google Streetview images. The provider parameter is replaced with a key value from the environment settings.
+
+### /api/mvt/get/:z/:x/:y
+
+Request vector tiles from a PostGIS data source.
+
+Query parameter:
+* dbs: The name of the Postgres database connection as defined in the environment settings.
+* table: The table name.
+* geom_3857: The name of the geometry field in the data table. SRID must be EPSG:3857.
+* qID: The ID field which is required to select locations from layer. Defaults to null.
+* properties: Comma seperated list of field names which are available to the leaflet.vectorGrid plugin for styling. Defaults to empty.
+* layer: The name of the layer.
+* tilecache: The name of a table used to cache vector tiles. Defaults to false.
+* token: The user token which is required to authenticate the route.
+
+### /api/
 
 ## Security
 
