@@ -1,6 +1,6 @@
 const utils = require('./utils');
 
-module.exports = function(){
+module.exports = () => {
 
     if (!_xyz.hooks) _xyz.hooks = {};
 

@@ -146,28 +146,24 @@ function addImages(record, images) {
     return img_container;
 }
 
-function upload_image(record, _img, blob) {
-    //console.log(_img);
-    //console.log(blob);
+function upload_image(record, img, blob) {
+
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', host + 'q_save_image?' + utils.paramString({
+    xhr.open('POST', host + 'api/images/new?' + utils.paramString({
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,
         id: record.location.id
-        //type: blob.type
     }));
-    xhr.setRequestHeader("Content-Type", "application/octet-stream");
+    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
     xhr.onload = function () {
         if (this.status === 200) {
             
             let json = JSON.parse(this.responseText);
-            
-            //console.log(this.responseText);
-            
-            _img.style.border = '3px solid #eee';
-            _img.id = json.image_id;
-            _img.src = json.image_url;
+                        
+            img.style.border = '3px solid #eee';
+            img.id = json.image_id;
+            img.src = json.image_url;
 
             // add delete button / control
             let btn_del = utils.createElement('button', {
@@ -177,32 +173,32 @@ function upload_image(record, _img, blob) {
             });
             btn_del.addEventListener('click', function () {
                 this.remove();
-                remove_image(record, _img);
+                remove_image(record, img);
             });
-            _img.parentElement.appendChild(btn_del);
+            img.parentElement.appendChild(btn_del);
         }
     }
-    _img.style.opacity = '0'
+    img.style.opacity = '0'
     xhr.onprogress = function (e) {
         if (e.lengthComputable) {
-            _img.style.opacity = e.loaded / e.total;
+            img.style.opacity = e.loaded / e.total;
         }
     }
     xhr.send(blob);
 }
 
-function remove_image(record, _img) {
+function remove_image(record, img) {
     
-    document.getElementById(_img.id).remove();
+    document.getElementById(img.id).remove();
     
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', host + 'q_remove_image?' + utils.paramString({
+    xhr.open('GET', host + 'api/images/delete?' + utils.paramString({
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,
         id: record.location.id,
-        image_id: _img.id,
-        image_src: encodeURIComponent(_img.src)
+        image_id: img.id,
+        image_src: encodeURIComponent(img.src)
     }));
     xhr.onload = function () {
         if (this.status === 200) {

@@ -168,7 +168,7 @@ module.exports = () => {
         setChartData(layer, location);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', host + 'q_select');
+        xhr.open('POST', host + 'api/location/select');
         xhr.setRequestHeader('Content-Type', 'application/json');
         
         xhr.onload = function () {

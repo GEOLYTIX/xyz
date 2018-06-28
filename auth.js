@@ -472,6 +472,8 @@ function authToken(req, res, fastify, login, done) {
 
     // Pass through if login is not required.
     if (!login) {
+
+        // Generate an anonymous user token and an empty session token.
         res.setCookie('xyz_user', fastify.jwt.sign({ anonymous: true }), {
             path: process.env.DIR || '/'
         })
@@ -501,8 +503,11 @@ function authToken(req, res, fastify, login, done) {
             })
             .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
                 path: process.env.DIR || '/'
-            })
-            .redirect(global.dir + '/login');
+            });
+
+        if (req.query.noredirect) return res.send('No user token found in request.');
+
+        return res.redirect(global.dir + '/login');
     }
 
     // Get the current time and the user_token age.
@@ -522,8 +527,7 @@ function authToken(req, res, fastify, login, done) {
                 path: process.env.DIR || '/'
             });
 
-        // No redirect if token is in query.
-        if (req.query.token) return res.send('User token timed out.');
+        if (req.query.noredirect) return res.send('User token timed out.');
 
         return res.redirect(global.dir + '/login');
     }
@@ -557,8 +561,7 @@ function authToken(req, res, fastify, login, done) {
                 path: process.env.DIR || '/'
             });
 
-        // No redirect if token is in query.
-        if (req.query.token) return res.send('User email not verified.');
+        if (req.query.noredirect) return res.send('User email not verified.');
 
         return res.redirect(global.dir + '/login');
     }
@@ -576,8 +579,7 @@ function authToken(req, res, fastify, login, done) {
                 path: process.env.DIR || '/'
             });
 
-        // No redirect if token is in query.
-        if (req.query.token) return res.send('User email not approved by administrator.');
+        if (req.query.noredirect) return res.send('User email not approved by administrator.');
 
         return res.redirect(global.dir + '/login');
     }

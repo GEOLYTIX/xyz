@@ -1,4 +1,6 @@
-async function geojson(req, res, fastify) {
+module.exports = { get };
+
+async function get(req, res, fastify) {
 
     let
         table = req.query.table,
@@ -11,7 +13,10 @@ async function geojson(req, res, fastify) {
         north = parseFloat(req.query.north);
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, id, geom, properties], res).statusCode === 406) return;
+    if ([table, geom, id, properties]
+        .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
 
     let q = `
     SELECT
@@ -29,7 +34,6 @@ async function geojson(req, res, fastify) {
     db_connection.release();
 
     res.code(200).send(Object.keys(result.rows).map(row => {
-
         let props = {};
 
         Object.keys(result.rows[row]).map(function (key) {
@@ -41,16 +45,9 @@ async function geojson(req, res, fastify) {
         return {
             type: 'Feature',
             geometry: JSON.parse(result.rows[row].geomj),
-            /*properties: {
-                id: result.rows[row].id
-            }*/
             properties: props || {
                 id: result.rows[row].id
             }
         }
     }));
 }
-
-module.exports = {
-    geojson: geojson
-};

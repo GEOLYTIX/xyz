@@ -1,6 +1,8 @@
 const turf = require('@turf/turf');
 
-function catchments (req, res, fastify) {
+module.exports = { get };
+
+function get (req, res, fastify) {
 
     // Distance of travel in seconds
     req.query.distance = parseInt(req.query.distance);
@@ -299,7 +301,3 @@ async function catchment_calc(req, res, fastify) {
             samplePoints: res.data.samplePoints
         });
 }
-
-module.exports = {
-    catchments: catchments
-};

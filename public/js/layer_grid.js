@@ -24,7 +24,7 @@ function getLayer(){
         // Open & send vector.xhr;
         let bounds = _xyz.map.getBounds();
 
-        layer.xhr.open('GET', host + 'q_grid?' + utils.paramString({
+        layer.xhr.open('GET', host + 'api/grid/get?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             geom: layer.geom,
@@ -33,18 +33,27 @@ function getLayer(){
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
-            north: bounds.getNorth()
+            north: bounds.getNorth(),
+            noredirect: true
         }));
 
         // Draw layer on load event.
-        layer.xhr.onload = function () {
-            if (this.status === 200 && layer.display && layer.locale === _xyz.locale) {
+        layer.xhr.onload = e => {
+
+            if (e.target.status === 401) {
+                if (window.confirm(e.target.response + ' Redirect to login?')) {
+                    return window.location.reload(true);
+                }
+                return loadLayer_complete(layer);
+            }
+
+            if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) {
 
                 // Check for existing layer and remove from map.
                 if (layer.L) _xyz.map.removeLayer(layer.L);
 
                 // Add geoJSON feature collection to the map.
-                layer.L = new L.geoJson(processGrid(JSON.parse(this.responseText)), {
+                layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
                     pointToLayer: function (feature, latlng) {
 
                         // Distribute size between min, avg and max.

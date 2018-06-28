@@ -32,25 +32,25 @@ function loadLayer(layer) {
         west: bounds.getWest(),
         south: bounds.getSouth(),
         east: bounds.getEast(),
-        north: bounds.getNorth()
+        north: bounds.getNorth(),
+        noredirect: true
     }));
 
     // Process XHR onload.
-    layer.xhr.onload = () => {
+    layer.xhr.onload = e => {
 
-        // Status 204. No features returned.
-        if (layer.xhr.status === 401) {
-            if (window.confirm('API request unauthorized. Redirect to login?')) {
+        if (e.target.status === 401) {
+            if (window.confirm(e.target.response + ' Redirect to login?')) {
                 return window.location.reload(true);
             }
             return loadLayer_complete(layer);
         }
 
         // Status 204. No features returned.
-        if (layer.xhr.status === 204) return loadLayer_complete(layer);
+        if (e.target.status === 204) return loadLayer_complete(layer);
 
         // Data is returned and the layer is still current.
-        if (layer.xhr.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(layer.xhr.responseText), layer);
+        if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
     }
     // Send XHR to middleware.
     layer.xhr.send();
@@ -176,105 +176,112 @@ function clusterMouseClick(e, layer) {
         label: layer.cluster_label,
         filter: JSON.stringify(layer.filter),
         count: count > 99 ? 99 : count,
-        lnglat: lnglat
+        lnglat: lnglat,
+        noredirect: true
     }));
 
-    xhr.onload = () => {
+    xhr.onload = e => {
 
-        let cluster = JSON.parse(xhr.responseText);
+        if (e.target.status === 401) return console.log(e.target.response);
 
-        if (cluster.length === 1) {
-            _xyz.select.selectLayerFromEndpoint({
-                layer: layer.layer,
-                table: layer.table,
-                id: cluster[0].id,
-                marker: cluster[0].lnglat
-            });
-        }
+        if (e.target.status === 200) {
 
-        if (cluster.length > 1) {
+            let cluster = JSON.parse(e.target.responseText);
 
-            let table = '<table cellpadding="0" cellspacing="0">';
-
-            for (let i = 0; i < cluster.length; i++) {
-                table += '<tr '
-                    + 'data-id="' + cluster[i].id + '" '
-                    + 'data-marker="' + cluster[i].lnglat + '">'
-                    + '<td>' + cluster[i].label + '</td>'
-                    + '</tr>';
-            }
-            table += '</table>';
-
-            if (cluster.length == 99) table += '<caption><small>Cluster selection is limited to 99 feature.</small></caption>';
-
-            if (view_mode === 'desktop') {
-
-                // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
-                layer.popup = L.popup()
-                    .setLatLng(lnglat.reverse())
-                    .setContent('<div class="content scrolly location_table"><div class="scrolly_track"><div class="scrolly_bar"></div></div>' + table + '</div>')
-                    .openOn(_xyz.map);
-
-                setTimeout(() => utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')), 300);
+            if (cluster.length === 1) {
+                _xyz.select.selectLayerFromEndpoint({
+                    layer: layer.layer,
+                    table: layer.table,
+                    id: cluster[0].id,
+                    marker: cluster[0].lnglat
+                });
             }
 
-            if (view_mode === 'mobile') {
+            if (cluster.length > 1) {
 
-                // Remove the line marker which connects the cell with the drop down list;
-                if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
+                let table = '<table cellpadding="0" cellspacing="0">';
 
-                let dom = {
-                    map: document.getElementById('Map'),
-                    location_drop: document.querySelector('.location_drop'),
-                    location_drop__close: document.querySelector('.location_drop__close'),
-                    location_table: document.querySelector('.location_table'),
-                    map_button: document.querySelector('.btn_column')
-                };
-                dom.location_table.innerHTML = table;
-                dom.map_button.style['display'] = 'none';
-                dom.location_drop.style['display'] = 'block';
+                for (let i = 0; i < cluster.length; i++) {
+                    table += '<tr '
+                        + 'data-id="' + cluster[i].id + '" '
+                        + 'data-marker="' + cluster[i].lnglat + '">'
+                        + '<td>' + cluster[i].label + '</td>'
+                        + '</tr>';
+                }
+                table += '</table>';
 
-                // Pan map according to the location of the cluster cell;
-                let map_dom__height = dom.map.clientHeight,
-                    map_dom__margin = parseInt(dom.map.style.marginTop),
-                    shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
+                if (cluster.length == 99) table += '<caption><small>Cluster selection is limited to 99 feature.</small></caption>';
 
-                // _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
-                _xyz.map.panBy([0, -shiftY]);
+                if (view_mode === 'desktop') {
 
-                // Draw line marker which connects hex cell with drop down.
-                layer.layerSelectionLine = L.marker(lnglat.reverse(), {
-                    icon: L.icon({
-                        iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
-                        iconSize: [3, 1000],
-                        iconAnchor: [2, 1000]
-                    })
-                }).addTo(_xyz.map);
+                    // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
+                    layer.popup = L.popup()
+                        .setLatLng(lnglat.reverse())
+                        .setContent('<div class="content scrolly location_table"><div class="scrolly_track"><div class="scrolly_bar"></div></div>' + table + '</div>')
+                        .openOn(_xyz.map);
 
-                // Button event to close the .location_drop.
-                dom.location_drop__close.addEventListener('click', function () {
+                    setTimeout(() => utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')), 300);
+                }
+
+                if (view_mode === 'mobile') {
+
+                    // Remove the line marker which connects the cell with the drop down list;
                     if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
 
-                    _xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);
+                    let dom = {
+                        map: document.getElementById('Map'),
+                        location_drop: document.querySelector('.location_drop'),
+                        location_drop__close: document.querySelector('.location_drop__close'),
+                        location_table: document.querySelector('.location_table'),
+                        map_button: document.querySelector('.btn_column')
+                    };
+                    dom.location_table.innerHTML = table;
+                    dom.map_button.style['display'] = 'none';
+                    dom.location_drop.style['display'] = 'block';
 
-                    dom.location_drop.style['display'] = 'none';
-                    dom.map_button.style['display'] = 'block';
-                });
-            }
+                    // Pan map according to the location of the cluster cell;
+                    let map_dom__height = dom.map.clientHeight,
+                        map_dom__margin = parseInt(dom.map.style.marginTop),
+                        shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
 
-            // Add event to query location info to the location list records.
-            let location_table_rows = document.querySelectorAll('.location_table tr');
+                    // _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
+                    _xyz.map.panBy([0, -shiftY]);
 
-            for (let i = 0; i < location_table_rows.length; i++) {
-                location_table_rows[i].addEventListener('click', function () {
-                    _xyz.select.selectLayerFromEndpoint({
-                        layer: layer.layer,
-                        table: layer.table,
-                        id: this.dataset.id,
-                        marker: this.dataset.marker.split(',')
+                    // Draw line marker which connects hex cell with drop down.
+                    layer.layerSelectionLine = L.marker(lnglat.reverse(), {
+                        icon: L.icon({
+                            iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
+                            iconSize: [3, 1000],
+                            iconAnchor: [2, 1000]
+                        })
+                    }).addTo(_xyz.map);
+
+                    // Button event to close the .location_drop.
+                    dom.location_drop__close.addEventListener('click', function () {
+                        if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
+
+                        _xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);
+
+                        dom.location_drop.style['display'] = 'none';
+                        dom.map_button.style['display'] = 'block';
                     });
-                });
+                }
+
+                // Add event to query location info to the location list records.
+                let location_table_rows = document.querySelectorAll('.location_table tr');
+
+                for (let i = 0; i < location_table_rows.length; i++) {
+                    location_table_rows[i].addEventListener('click', function () {
+                        _xyz.select.selectLayerFromEndpoint({
+                            layer: layer.layer,
+                            table: layer.table,
+                            id: this.dataset.id,
+                            marker: this.dataset.marker.split(',')
+                        });
+                    });
+                }
             }
+
         }
     }
 

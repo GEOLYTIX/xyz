@@ -62,7 +62,7 @@ function layerFilters(layer){
             classList: "btn_wide cursor noselect",
             textContent: "Run Output",
             onclick: function(e){
-                layer.xhr.open('GET', host + 'q_aggregate?' + utils.paramString({
+                layer.xhr.open('GET', host + 'api/location/aggregate?' + utils.paramString({
                     dbs: layer.dbs,
                     table_source: layer.table,
                     table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,

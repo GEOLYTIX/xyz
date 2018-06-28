@@ -35,7 +35,8 @@ function getLayer(){
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
                 tilecache: layer.tilecache,
-                token: cookies.xyz_user
+                token: cookies.xyz_user,
+                noredirect: true
             }),
             options = {
                 rendererFactory: L.svg.tile,
@@ -76,7 +77,7 @@ function getLayer(){
         if(layer.L) _xyz.map.removeLayer(layer.L);
         
         layer.L = L.vectorGrid.protobuf(url, options)
-        .on('error', err => console.error(err))
+            .on('error', err => console.error(err))
             .on('load', e => {
                 layer.loaded = true;
                 layer.loader.style.display = 'none';

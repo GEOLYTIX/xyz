@@ -3,9 +3,7 @@ module.exports = { get, select };
 const filters = require('./filters');
 
 async function get(req, res, fastify) {
-    
-    //console.log(req.query);
-  
+      
   let
     table = req.query.table,
     geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
@@ -21,8 +19,11 @@ async function get(req, res, fastify) {
     north = parseFloat(req.query.north);
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  //if (await require('./chk').chkVals([table, geom, cat], res)) return res.code(406).send('Possible SQL injection detected');
-    
+  if ([table, geom, cat]
+    .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+    return res.code(406).send('Parameter not acceptable.');
+  }  
+
   filter_sql = filters.sql_filter(filter, filter_sql);
 
   // Query the feature count from lat/lng bounding box.
@@ -212,14 +213,16 @@ async function select(req, res, fastify) {
     filter = JSON.parse(req.query.filter),
     filter_sql = '',
     label = req.query.label,
-    dbs = req.query.dbs,
     count = parseInt(req.query.count),
     lnglat = req.query.lnglat.split(',');
 
   lnglat = lnglat.map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
-  //if (await require('./chk').chkVals([table, geom, id, label], res).statusCode === 406) return;
+  if ([table, geom, id, label]
+    .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+    return res.code(406).send('Parameter not acceptable.');
+  }  
     
   filter_sql = filters.legend_filter(filter, filter_sql);
 

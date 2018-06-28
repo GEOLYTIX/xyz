@@ -164,7 +164,7 @@ function update(record) {
                 let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', 'q_update');
+                xhr.open('POST', 'api/location/update');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = () => {
 
@@ -220,7 +220,7 @@ function trash(record) {
                 let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', host + 'q_delete');
+                xhr.open('POST', host + 'api/location/delete');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = () => {
 
