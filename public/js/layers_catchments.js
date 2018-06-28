@@ -256,7 +256,7 @@ function catchmentControl(layer) {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', host +  'q_catchments?' + utils.paramString({
+        xhr.open('GET', host +  'api/catchments?' + utils.paramString({
             lng: e.latlng.lng,
             lat: e.latlng.lat,
             distance: sliMinutes.value * 60,

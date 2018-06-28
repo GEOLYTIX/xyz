@@ -83,7 +83,7 @@ module.exports = () => {
         dom.result.innerHTML = '';
 
         _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
-        _xyz.gazetteer.xhrSearch.open('GET', host + 'q_gazetteer?' + utils.paramString({
+        _xyz.gazetteer.xhrSearch.open('GET', host + 'api/gazetteer/autocomplete?' + utils.paramString({
             provider: _xyz.locales[_xyz.locale].gazetteer[0],
             locale: _xyz.locales[_xyz.locale].gazetteer[1],
             bounds: encodeURIComponent(_xyz.locales[_xyz.locale].gazetteer[2]),
@@ -207,8 +207,8 @@ module.exports = () => {
 
         xhr.open('GET', host
             + (source === 'google' ?
-                'q_gazetteer_googleplaces' :
-                'q_gazetteer_places')
+                'api/gazetteer/googleplaces' :
+                'api/gazetteer/glxplaces')
             + '?id=' + id);
 
         xhr.onload = e => {

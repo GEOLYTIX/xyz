@@ -6,17 +6,17 @@ function getLayer() {
         layer.loader.style.display = 'block';
 
         let uri = layer.provider ?
-            host + 'proxy/image?' + layer.URI + '&provider=' + layer.provider :
+            host + 'proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&noredirect=true':
             layer.URI;
 
         layer.base = L.tileLayer(uri, {
             pane: layer.pane[0]
         })
             .addTo(_xyz.map)
-            .on('loading', function () {
+            .on('loading', e => {
                 layer.loader.style.display = 'block';
             })
-            .on('load', function () {
+            .on('load', e => {
                 layer.loader.style.display = 'none';
                 //layersCheck();
             });

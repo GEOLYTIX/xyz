@@ -1,13 +1,6 @@
 module.exports = { routes, get }
 
-function routes(fastify, auth) {
-
-    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
-        fastify.register(require('fastify-postgres'), {
-            connectionString: process.env.APPSETTINGS.split('|')[0],
-            name: 'settings'
-        });
-    }
+async function routes(fastify, auth) {
 
     fastify
         .decorate('authSettings', (req, res, done) => auth.authToken(req, res, fastify, 'admin', done))
@@ -21,7 +14,7 @@ function routes(fastify, auth) {
             beforeHandler: fastify.auth([fastify.authSettings]),
             handler: async (req, res) => {
 
-                await get(req, fastify);
+                await get(fastify);
 
                 res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
                     dir: global.dir,
@@ -72,9 +65,20 @@ function routes(fastify, auth) {
             }
         })
     }
+
+    if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
+        await fastify.register(require('fastify-postgres'), {
+            connectionString: process.env.APPSETTINGS.split('|')[0],
+            name: 'settings'
+        });
+    }
+
+    await get(fastify);
+
+    console.log(global.appSettings);
 }
 
-async function get(req, fastify) {
+async function get(fastify) {
     let settings = {};
 
     if (process.env.APPSETTINGS && process.env.APPSETTINGS.split(':')[0] === 'postgres') {
@@ -170,7 +174,7 @@ function removeRestrictions(settings, req) {
     })(settings)
 
     function checkForRestrictions(o) {
-        return Object.entries(o).some((e) => {
+        return Object.entries(o).some(e => {
             // check whether an entry has 'restriction' as key and the value is not a member of the user object.
             return e[0] === 'restriction' && !req.session.user[e[1]]
         })

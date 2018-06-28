@@ -1,11 +1,10 @@
+module.exports = { get };
 
-module.exports = { grid };
-
-async function grid(req, res, fastify) {
+async function get(req, res, fastify) {
 
     let
         table = req.query.table,
-        geom = req.query.geom,
+        geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
         size = req.query.size,
         color = req.query.color,
         west = parseFloat(req.query.west),
@@ -14,7 +13,10 @@ async function grid(req, res, fastify) {
         north = parseFloat(req.query.north);
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, geom, size, color], res).statusCode === 406) return;
+    if ([table, geom, size, color]
+        .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
 
     let q = `
     SELECT
@@ -35,27 +37,11 @@ async function grid(req, res, fastify) {
     var result = await db_connection.query(q);
     db_connection.release();
 
-    if (result.rows.length === 0) {
-        res.code(204).send({});
-    } else {
-        res.code(200).send(Object.keys(result.rows).map(function (record) {
-            return Object.keys(result.rows[record]).map(function (field) {
-                return result.rows[record][field];
-            });
-        }));
-    }
+    if (result.rows.length === 0) return res.code(204).send();
 
-    var db_connection = await fastify.pg[req.query.dbs].connect();
-    var result = await db_connection.query(q);
-    db_connection.release();
-
-    if (result.rows.length === 0) {
-        res.code(204).send({});
-    } else {
-        res.code(200).send(Object.keys(result.rows).map(function (record) {
-            return Object.keys(result.rows[record]).map(function (field) {
-                return result.rows[record][field];
-            });
-        }));
-    }
+    res.code(200).send(Object.keys(result.rows).map(function (record) {
+        return Object.keys(result.rows[record]).map(function (field) {
+            return result.rows[record][field];
+        });
+    }));
 }

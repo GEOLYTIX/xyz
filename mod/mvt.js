@@ -1,6 +1,6 @@
-module.exports = { fetchTiles };
+module.exports = { get };
 
-async function fetchTiles(req, res, fastify) {
+async function get(req, res, fastify) {
     let
         x = parseInt(req.params.x),
         y = parseInt(req.params.y),
@@ -14,7 +14,10 @@ async function fetchTiles(req, res, fastify) {
         properties = req.query.properties === 'undefined' ? '' : req.query.properties,
         tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache;
 
-    //if (await require('./chk').chkVals([table, tilecache, layer, geom_3857, properties], res).statusCode === 406) return;
+    if ([id, table, tilecache, layer, geom_3857, properties]
+        .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
 
     if (tilecache) {
         var db_connection = await fastify.pg[req.query.dbs].connect();
@@ -31,7 +34,7 @@ async function fetchTiles(req, res, fastify) {
     }
 
     // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
-    let q = `
+    var q = `
         ${tilecache ? `INSERT INTO ${tilecache} (z, x, y, mvt, tile)` : ''}
         SELECT
             ${z},

@@ -22,7 +22,7 @@ function getLayer(){
         
         // Build xhr request.
         let bounds = _xyz.map.getBounds();      
-        layer.xhr.open('GET', host + 'q_geojson?' + utils.paramString({
+        layer.xhr.open('GET', host + 'api/geojson/get?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             properties: layer.properties,
@@ -31,15 +31,19 @@ function getLayer(){
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
-            north: bounds.getNorth()
+            north: bounds.getNorth(),
+            noredirect: true
         }));
         
         // Draw layer on load event.
-        layer.xhr.onload = function(){
-            if(this.status === 200 && layer.display && layer.locale === _xyz.locale){
+        layer.xhr.onload = e => {
+
+            if (e.target.status === 401) return console.log(e.target.response);
+
+            if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale){
 
                 // Create feature collection for vector features.
-                let features = JSON.parse(this.responseText);
+                let features = JSON.parse(e.target.responseText);
                 
                 // Check for existing layer and remove from map.
                 if (layer.L) _xyz.map.removeLayer(layer.L);
