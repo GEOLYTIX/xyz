@@ -203,6 +203,7 @@ module.exports = () => {
             geomdisplay: layer.geomdisplay,
             sql_filter: layer.sql_filter || null
         }));
+        
     }
 
     function setLayerReferences(infoj) {
