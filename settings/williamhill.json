@@ -626,70 +626,74 @@
               400,
               "#bbb"
             ],
-            "theme": {
-              "label": "Shop profit bucket",
-              "type": "categorized",
-              "competitors": {
-                "Profitable ex Gaming": {
-                  "colour": "#143156",
-                  "label": "Profitable ex Gaming"
-                },
-                "Profit >£100k after triennial hit": {
-                  "colour": "#2274A5",
-                  "label": "Profit >£100k after triennial hit"
-                },
-                "Profit >£75k after triennial hit": {
-                  "colour": "#95B8D1",
-                  "label": "Profit >£75k after triennial hit"
-                },
-                "Profit >£50k after triennial hit": {
-                  "colour": "#FFDE3B",
-                  "label": "Profit >£50k after triennial hit"
-                },
-                "Profit >£20k after triennial hit": {
-                  "colour": "#1C90DD",
-                  "label": "Profit >£20k after triennial hit"
-                },
-                "42 loss makers": {
-                  "colour": "#EFAB2D",
-                  "label": "42 loss makers"
-                },
-                "Balance": {
-                  "colour": "#A8B9C4",
-                  "label": "Balance"
+            "themes": [
+                {
+                    "label": "Shop profit bucket",
+                    "type": "categorized",
+                    "applied": true,
+                    "field": "shop_bucket",
+                    "competitors": {
+                        "Profitable ex Gaming": {
+                            "colour": "#143156",
+                            "label": "Profitable ex Gaming"
+                        },
+                        "Profit >£100k after triennial hit": {
+                            "colour": "#2274A5",
+                            "label": "Profit >£100k after triennial hit"
+                        },
+                        "Profit >£75k after triennial hit": {
+                            "colour": "#95B8D1",
+                            "label": "Profit >£75k after triennial hit"
+                        },
+                        "Profit >£50k after triennial hit": {
+                            "colour": "#FFDE3B",
+                            "label": "Profit >£50k after triennial hit"
+                        },
+                        "Profit >£20k after triennial hit": {
+                            "colour": "#1C90DD",
+                            "label": "Profit >£20k after triennial hit"
+                        },
+                        "42 loss makers": {
+                            "colour": "#EFAB2D",
+                            "label": "42 loss makers"
+                        },
+                        "Balance": {
+                            "colour": "#A8B9C4",
+                            "label": "Balance"
+                        }
+                    },
+                    "cat": {
+                        "Profitable ex Gaming": {
+                            "marker": "svg_symbols.target([400, '#143156'])",
+                            "label": "Profitable ex Gaming"
+                        },
+                        "Profit >£100k after triennial hit": {
+                            "marker": "svg_symbols.target([400, '#2274A5'])",
+                            "label": "Profit >£100k after triennial hit"
+                        },
+                        "Profit >£75k after triennial hit": {
+                            "marker": "svg_symbols.target([400,'#95B8D1'])",
+                            "label": "Profit >£75k after triennial hit"
+                        },
+                        "Profit >£50k after triennial hit": {
+                            "marker": "svg_symbols.target([400, '#FFDE3B'])",
+                            "label": "Profit >£50k after triennial hit"
+                        },
+                        "Profit >£20k after triennial hit": {
+                            "marker": "svg_symbols.target([400, '#1C90DD'])",
+                            "label": "Profit >£20k after triennial hit"
+                        },
+                        "42 loss makers": {
+                            "marker": "svg_symbols.target([400, '#EFAB2D'])",
+                            "label": "42 loss makers"
+                        },
+                        "Balance": {
+                            "marker": "svg_symbols.target([400, '#A8B9C4'])",
+                            "label": "Balance"
+                        }
+                    }
                 }
-              },
-              "cat": {
-                "Profitable ex Gaming": {
-                  "marker": "svg_symbols.target([400, '#143156'])",
-                  "label": "Profitable ex Gaming"
-                },
-                "Profit >£100k after triennial hit": {
-                  "marker": "svg_symbols.target([400, '#2274A5'])",
-                  "label": "Profit >£100k after triennial hit"
-                },
-                "Profit >£75k after triennial hit": {
-                  "marker": "svg_symbols.target([400,'#95B8D1'])",
-                  "label": "Profit >£75k after triennial hit"
-                },
-                "Profit >£50k after triennial hit": {
-                  "marker": "svg_symbols.target([400, '#FFDE3B'])",
-                  "label": "Profit >£50k after triennial hit"
-                },
-                "Profit >£20k after triennial hit": {
-                  "marker": "svg_symbols.target([400, '#1C90DD'])",
-                  "label": "Profit >£20k after triennial hit"
-                },
-                "42 loss makers": {
-                  "marker": "svg_symbols.target([400, '#EFAB2D'])",
-                  "label": "42 loss makers"
-                },
-                "Balance": {
-                  "marker": "svg_symbols.target([400, '#A8B9C4'])",
-                  "label": "Balance"
-                }
-              }
-            }
+            ]
           }
         },
         "competitors": {
@@ -1000,56 +1004,59 @@
               400,
               "#777"
             ],
-            "theme": {
-              "label": "Chain",
-              "type": "categorized",
-              "competitors": {
-                "William Hill": {
-                  "colour": "#ddd",
-                  "label": "William Hill"
-                },
-                "Ladbrokes": {
-                  "colour": "#FE162C",
-                  "label": "Ladbrokes"
-                },
-                "Coral": {
-                  "colour": "#0B58A2",
-                  "label": "Coral"
-                },
-                "Betfred": {
-                  "colour": "#6D3B6C",
-                  "label": "Betfred"
-                },
-                "Paddy Power": {
-                  "colour": "#63B84A",
-                  "label": "Paddy Power"
+            "themes": [
+                {
+                    "label": "Chain",
+                    "type": "categorized",
+                    "applied": true,
+                    "competitors": {
+                        "William Hill": {
+                            "colour": "#ddd",
+                            "label": "William Hill"
+                        },
+                        "Ladbrokes": {
+                            "colour": "#FE162C",
+                            "label": "Ladbrokes"
+                        },
+                        "Coral": {
+                            "colour": "#0B58A2",
+                            "label": "Coral"
+                        },
+                        "Betfred": {
+                            "colour": "#6D3B6C",
+                            "label": "Betfred"
+                        },
+                        "Paddy Power": {
+                            "colour": "#63B84A",
+                            "label": "Paddy Power"
+                        }
+                    },
+                    "cat": {
+                        "William Hill": {
+                            "marker": "svg_symbols.target([400, '#ddd'])"
+                        },
+                        "Ladbrokes": {
+                            "marker": "svg_symbols.target([400, '#fff', 300, '#FE162C', 100, '#fff'])"
+                        },
+                        "Coral": {
+                            "marker": "svg_symbols.target([400, '#0B58A2', 300, '#60B849', 200, '#FFD421', 100, '#ED3E36'])"
+                        },
+                        "Betfred": {
+                            "marker": "svg_symbols.target([400, '#105C9A', 300, '#6D3B6C', 200, '#DC223E', 100, '#fff'])"
+                        },
+                        "Paddy Power": {
+                            "marker": "svg_symbols.target([400, '#0C4838', 250, '#63B84A', 100, '#fff'])"
+                        },
+                        "JenningsBet": {
+                            "marker": "svg_symbols.target([400, '#000', 300, '#31DE14', 200, '#D51F32', 100, '#fff'])"
+                        },
+                        "Megabet": {
+                            "marker": "svg_symbols.target([400, '#333', 250, '#85EB6E', 100, '#fff'])"
+                        }
+                    },
+                    "other": true
                 }
-              },
-              "cat": {
-                "William Hill": {
-                  "marker": "svg_symbols.target([400, '#ddd'])"
-                },
-                "Ladbrokes": {
-                  "marker": "svg_symbols.target([400, '#fff', 300, '#FE162C', 100, '#fff'])"
-                },
-                "Coral": {
-                  "marker": "svg_symbols.target([400, '#0B58A2', 300, '#60B849', 200, '#FFD421', 100, '#ED3E36'])"
-                },
-                "Betfred": {
-                  "marker": "svg_symbols.target([400, '#105C9A', 300, '#6D3B6C', 200, '#DC223E', 100, '#fff'])"
-                },
-                "Paddy Power": {
-                  "marker": "svg_symbols.target([400, '#0C4838', 250, '#63B84A', 100, '#fff'])"
-                },
-                "JenningsBet": {
-                  "marker": "svg_symbols.target([400, '#000', 300, '#31DE14', 200, '#D51F32', 100, '#fff'])"
-                },
-                "Megabet": {
-                  "marker": "svg_symbols.target([400, '#333', 250, '#85EB6E', 100, '#fff'])"
-                }
-              },
-              "other": true
-            }
+            ]
           }
         },
         "competitors_edit_logs": {
@@ -1303,57 +1310,60 @@
                 "markerMax": 40,
                 "marker": "svg_symbols.target([400,'#EFC9A5'])",
                 "markerMulti": [400, "#EFC9A5"],
-                "theme": {
-                    "label": "Competitors",
-                    "type": "categorized",
-                    "cat": {
-                        "Talarius Limited": {
-                            "marker": "svg_symbols.target([400, '#CB3537', 300, '#021587', 200, '#9FCCFB'])",
-                            "label": "Talarius Limited"
+                "themes": [
+                    {
+                        "label": "Competitors",
+                        "type": "categorized",
+                        "applied": true,
+                        "cat": {
+                            "Talarius Limited": {
+                                "marker": "svg_symbols.target([400, '#CB3537', 300, '#021587', 200, '#9FCCFB'])",
+                                "label": "Talarius Limited"
+                            },
+                            "Cashino Gaming Limited": {
+                                "marker": "svg_symbols.target([400, '#FFD339', 300, '#FEFDF0', 200, '#00295F'])",
+                                "label": "Cashino Gaming Limited"
+                            },
+                            "Gala Leisure Limited": {
+                                "marker": "svg_symbols.target([400, '#FFE96F', 250, '#0B6EB3'])",
+                                "label": "Gala Leisure Limited"
+                            },
+                            "Luxury Leisure": {
+                                "marker": "svg_symbols.target([400, '#002959', 300, '#025185', 200, '#FFF'])",
+                                "label": "Luxury Leisure"
+                            },
+                            "Mecca Bingo Limited": {
+                                "marker": "svg_symbols.target([400, '#E50D7C', 300, '#EE7D24', 200, '#6F1E71'])",
+                                "label": "Mecca Bingo Limited"
+                            },
+                            "Park Resorts Limited": {
+                                "marker": "svg_symbols.target([400, '#F01D34', 300, '#F2B941', 200, '#1C8E74'])",
+                                "label": "Park Resorts Limited"
+                            },
+                            "Rank Leisure Limited": {
+                                "marker": "svg_symbols.target([400, '#025E9E', 300, '#F8E088'])",
+                                "label": "Rank Leisure Limited"
+                            },
+                            "Genting Casinos UK Limited": {
+                                "marker": "svg_symbols.target([400, '#E81D22', 300, '#FFF', 200, '#1F1F1F'])",
+                                "label": "Genting Casinos UK Limited"
+                            },
+                            "Grosvenor Casinos Limited": {
+                                "marker": "svg_symbols.target([400, '#1D2A32', 300, '#FFF', 200, '#1D2A32'])",
+                                "label": "Grosvenor Casinos Limited"
+                            },
+                            "Beacon Bingo Limited": {
+                                "marker": "svg_symbols.target([400, '#4682C0', 300, '#FFF', 200, '#EB282E'])",
+                                "label": "Beacon Bingo Limited"
+                            },
+                            "Moto Hospitality Limited": {
+                                "marker": "svg_symbols.target([400, '#373634', 300, '#0A9097'])",
+                                "label": "Moto Hospitality Limited"
+                            }
                         },
-                        "Cashino Gaming Limited": {
-                            "marker": "svg_symbols.target([400, '#FFD339', 300, '#FEFDF0', 200, '#00295F'])",
-                            "label": "Cashino Gaming Limited"
-                        },
-                        "Gala Leisure Limited": {
-                            "marker": "svg_symbols.target([400, '#FFE96F', 250, '#0B6EB3'])",
-                            "label": "Gala Leisure Limited"
-                        },
-                        "Luxury Leisure": {
-                            "marker": "svg_symbols.target([400, '#002959', 300, '#025185', 200, '#FFF'])",
-                            "label": "Luxury Leisure"
-                        },
-                        "Mecca Bingo Limited": {
-                            "marker": "svg_symbols.target([400, '#E50D7C', 300, '#EE7D24', 200, '#6F1E71'])",
-                            "label": "Mecca Bingo Limited"
-                        },
-                        "Park Resorts Limited": {
-                            "marker": "svg_symbols.target([400, '#F01D34', 300, '#F2B941', 200, '#1C8E74'])",
-                            "label": "Park Resorts Limited"
-                        },
-                        "Rank Leisure Limited": {
-                            "marker": "svg_symbols.target([400, '#025E9E', 300, '#F8E088'])",
-                            "label": "Rank Leisure Limited"
-                        },
-                        "Genting Casinos UK Limited": {
-                            "marker": "svg_symbols.target([400, '#E81D22', 300, '#FFF', 200, '#1F1F1F'])",
-                            "label": "Genting Casinos UK Limited"
-                        },
-                        "Grosvenor Casinos Limited": {
-                            "marker": "svg_symbols.target([400, '#1D2A32', 300, '#FFF', 200, '#1D2A32'])",
-                            "label": "Grosvenor Casinos Limited"
-                        },
-                        "Beacon Bingo Limited": {
-                            "marker": "svg_symbols.target([400, '#4682C0', 300, '#FFF', 200, '#EB282E'])",
-                            "label": "Beacon Bingo Limited"
-                        },
-                        "Moto Hospitality Limited": {
-                            "marker": "svg_symbols.target([400, '#373634', 300, '#0A9097'])",
-                            "label": "Moto Hospitality Limited"
-                        }
-                    },
-                    "other": true
-                }
+                        "other": true
+                    }
+                ]
             }
         },
         "retail_places_mvt": {
@@ -1452,185 +1462,188 @@
               "fill": true,
               "fillOpacity": 0.3
             },
-            "theme": {
-              "label": "Retail Place type",
-              "type": "categorized",
-              "field": "rp_type",
-              "other": true,
-              "cat": {
-                "Major City Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#EF271B",
-                    "opacity": 1,
-                    "fillColor": "#EF271B",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "City Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#BA2D0B",
-                    "opacity": 1,
-                    "fillColor": "#BA2D0B",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Large Town Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#FE4E00",
-                    "opacity": 1,
-                    "fillColor": "#FE4E00",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Major Urban Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#E2711D",
-                    "opacity": 1,
-                    "fillColor": "#E2711D",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Town Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#F3A712",
-                    "opacity": 1,
-                    "fillColor": "#F3A712",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Urban Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#FADF63",
-                    "opacity": 1,
-                    "fillColor": "#FADF63",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Small Town Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#FFE74C",
-                    "opacity": 1,
-                    "fillColor": "#FFE74C",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Village Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#DBFE87",
-                    "opacity": 1,
-                    "fillColor": "#DBFE87",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Regional SC": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#8ED081",
-                    "opacity": 1,
-                    "fillColor": "#8ED081",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  },
-                  "label": "Regional Shopping Centre"
-                },
-                "Outlet Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#7DDF64",
-                    "opacity": 1,
-                    "fillColor": "#7DDF64",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Shopping Park": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#074F57",
-                    "opacity": 1,
-                    "fillColor": "#074F57",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Retail Park": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#32746D",
-                    "opacity": 1,
-                    "fillColor": "#32746D",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Leisure Park": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#41D3BD",
-                    "opacity": 1,
-                    "fillColor": "#41D3BD",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Local Hub": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#08B2E3",
-                    "opacity": 1,
-                    "fillColor": "#08B2E3",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Large Parade": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#1F487E",
-                    "opacity": 1,
-                    "fillColor": "#1F487E",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Parade": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#541388",
-                    "opacity": 1,
-                    "fillColor": "#541388",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Weak Parade": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#D90368",
-                    "opacity": 1,
-                    "fillColor": "#D90368",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
+            "themes": [
+                {
+                    "label": "Retail Place type",
+                    "type": "categorized",
+                    "field": "rp_type",
+                    "applied": true,
+                    "other": true,
+                    "cat": {
+                        "Major City Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#EF271B",
+                                "opacity": 1,
+                                "fillColor": "#EF271B",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "City Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#BA2D0B",
+                                "opacity": 1,
+                                "fillColor": "#BA2D0B",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Large Town Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#FE4E00",
+                                "opacity": 1,
+                                "fillColor": "#FE4E00",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Major Urban Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#E2711D",
+                                "opacity": 1,
+                                "fillColor": "#E2711D",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Town Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#F3A712",
+                                "opacity": 1,
+                                "fillColor": "#F3A712",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Urban Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#FADF63",
+                                "opacity": 1,
+                                "fillColor": "#FADF63",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Small Town Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#FFE74C",
+                                "opacity": 1,
+                                "fillColor": "#FFE74C",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Village Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#DBFE87",
+                                "opacity": 1,
+                                "fillColor": "#DBFE87",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Regional SC": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#8ED081",
+                                "opacity": 1,
+                                "fillColor": "#8ED081",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            },
+                            "label": "Regional Shopping Centre"
+                        },
+                        "Outlet Centre": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#7DDF64",
+                                "opacity": 1,
+                                "fillColor": "#7DDF64",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Shopping Park": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#074F57",
+                                "opacity": 1,
+                                "fillColor": "#074F57",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Retail Park": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#32746D",
+                                "opacity": 1,
+                                "fillColor": "#32746D",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Leisure Park": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#41D3BD",
+                                "opacity": 1,
+                                "fillColor": "#41D3BD",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Local Hub": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#08B2E3",
+                                "opacity": 1,
+                                "fillColor": "#08B2E3",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Large Parade": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#1F487E",
+                                "opacity": 1,
+                                "fillColor": "#1F487E",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Parade": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#541388",
+                                "opacity": 1,
+                                "fillColor": "#541388",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        "Weak Parade": {
+                            "style": {
+                                "weight": 2,
+                                "color": "#D90368",
+                                "opacity": 1,
+                                "fillColor": "#D90368",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                            }
+                        }
+                    }
                 }
-              }
-            }
+            ]
           }
         },
         "retail_pitch": {
@@ -1653,9 +1666,10 @@
                 "fillColor": "#000",
                 "fillOpacity": 0.3
               },
-              "theme": {
+              "themes": [{
                 "type": "categorized",
                 "field": "pitch_dec",
+                "applied": true,
                 "label": "Retail pitch rank in decimal scale",
                 "cat": {
                   "1": {
@@ -1739,7 +1753,7 @@
                   }
                 }
               }
-            }
+            }]
           }
         },
         "region": {

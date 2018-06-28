@@ -113,10 +113,11 @@
               "fill": true,
               "fillOpacity": 0
             },
-            "theme": {
+            "themes": [{
               "label": "Population Density",
               "type": "graduated",
               "field": "pop_density",
+              "applied": true,
               "other": true,
               "cat": [
                 {
@@ -252,7 +253,7 @@
                   }
                 }
               ]
-            }
+            }]
           }
         },
         "catchments": {
@@ -1238,8 +1239,11 @@
           "properties": "rank,",
           "qID": "qid",
           "arrayZoom": {
-            "10": "gb_postaldistrict_census__11",
-            "11": "gb_postaldistrict_census__11",
+            "7": "gb_postaldistrict_census__11",
+            "8": "gb_postalsector_census__11",
+            "9": "gb_postalsector_census__11",
+            "10": "gb_postalsector_census__11",
+            "11": "gb_postalsector_census__11",
             "12": "gb_postalsector_census__11"
           },
           "tilecache": "gb_postal_cache",
@@ -1354,10 +1358,11 @@
               "opacity": 0.3,
               "fillOpacity": 0.1
             },
-            "theme": {
+            "themes": [{
                 "label": "Rank",
                 "type": "categorized",
                 "field": "rank",
+                "applied": true,
                 "other": true,
                 "cat": {
                     "Primary": {
@@ -1391,7 +1396,7 @@
                         }
                     }
                 }
-            }
+            }]
           }
         },
         "retail_places_mvt": {
@@ -1485,10 +1490,11 @@
               "fill": true,
               "fillOpacity": 0.3
             },
-            "theme": {
+            "themes": [{
               "label": "Retail Place type",
               "type": "categorized",
               "field": "rp_type",
+              "applied": true,
               "other": true,
               "cat": {
                 "Major City Centre": {
@@ -1663,7 +1669,7 @@
                   }
                 }
               }
-            }
+            }]
           }
         },
         "retail_points": {
@@ -1736,9 +1742,10 @@
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
             "markerMulti": [400,"#333"],
-            "theme": {
+            "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "applied": true,
               "competitors": {
                 "tesco": {
                   "colour": "#0055a8",
@@ -1832,7 +1839,7 @@
                   "label": "Whole Foods"
                 }
               }
-            }
+            }]
           }
         },
         "retail_pitch": {
@@ -1855,10 +1862,11 @@
                 "fillColor": "#000",
                 "fillOpacity": 0.3
               },
-              "theme": {
+              "themes": [{
                 "type": "categorized",
                 "field": "pitch_dec",
                 "label": "Retail pitch rank in decimal scale",
+                "applied": true,
                 "cat": {
                   "1": {
                     "style": {
@@ -1941,7 +1949,7 @@
                   }
                 }
               }
-            }
+            }]
           }
         },
         "retail_points_editable": {
@@ -2061,9 +2069,10 @@
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
             "markerMulti": [400,"#333"],
-            "theme": {
+            "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "applied": true,
               "other": true,
               "cat": {
                 "Aldi": {
@@ -2139,7 +2148,7 @@
                   "label": "Whole Foods"
                 }
               }
-            }
+            }]
           }
         },
         "catchments": {
@@ -2655,10 +2664,11 @@
           "style": {
             "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
             "markerMulti": [400,"#333"],
-            "theme": {
+            "themes": [{
               "label": "Retailer",
               "field": "fascia",
               "type": "categorized",
+              "applied": true,
               "competitors": {
                 "SINSAY": {
                   "colour": "#8d6e63",
@@ -2711,7 +2721,7 @@
                   "label": "H&M"
                 }
               }
-            }
+            }]
           }
         }
       }

@@ -293,10 +293,11 @@
             "markerMulti": [400,"#999"],
             "markerMin": 15,
             "markerMax": 30,
-            "theme": {
+            "themes": [{
               "label": "Brand",
               "field": "retailer",
               "type": "categorized",
+              "applied": true,
               "competitors": {
                 "ADIDAS": {
                   "colour": "#333",
@@ -334,7 +335,7 @@
                   "label": "Reebok"
                 }
               }
-            }
+            }]
           }
         },
         "venues": {
