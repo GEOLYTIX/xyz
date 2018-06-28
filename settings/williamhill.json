@@ -692,7 +692,40 @@
                             "label": "Balance"
                         }
                     }
+                },
+                {
+              "label": "Competition Type",
+              "type": "categorized",
+              "field": "competition",
+              "competitors": {
+                "MONOPOLY": {
+                  "colour": "#143156",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "colour": "#FFDE3B",
+                  "label": "Multi competiton"
+                },
+                "SINGLE COMP": {
+                  "colour": "#2274A5",
+                  "label": "Single competiton"
                 }
+              },
+              "cat": {
+                "MONOPOLY": {
+                  "marker": "svg_symbols.target([400, '#143156'])",
+                  "label": "Monopoly"
+                },
+                "MULTI COMP": {
+                  "marker": "svg_symbols.target([400, '#FFDE3B'])",
+                  "label": "Multi competition"
+                },
+                "SINGLE COMP": {
+                  "marker": "svg_symbols.target([400,'#2274A5'])",
+                  "label": "Single competition"
+                }
+              }
+            }
             ]
           }
         },

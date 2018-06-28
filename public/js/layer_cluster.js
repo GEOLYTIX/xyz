@@ -18,13 +18,13 @@ function loadLayer(layer) {
 
     // Get bounds for request.
     let bounds = _xyz.map.getBounds();
-
+    
     // Build XHR request.
     layer.xhr.open('GET', host + 'api/cluster/get?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
         geom: layer.geom,
-        cat: layer.cluster_cat,
+        cat: layer.style.theme ? layer.style.theme.field : layer.cluster_cat,
         kmeans: layer.cluster_kmeans * window.devicePixelRatio,
         dbscan: layer.cluster_dbscan * window.devicePixelRatio,
         theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : 'undefined',
