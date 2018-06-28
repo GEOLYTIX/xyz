@@ -471,7 +471,15 @@ function routes(fastify) {
 function authToken(req, res, fastify, login, done) {
 
     // Pass through if login is not required.
-    if (!login) return done();
+    if (!login) {
+        res.setCookie('xyz_user', fastify.jwt.sign({ anonymous: true }), {
+            path: process.env.DIR || '/'
+        })
+        .setCookie('xyz_session', fastify.jwt.sign({}), {
+            path: process.env.DIR || '/'
+        })
+        return done();
+    }
 
     // Get user_token from either the cookie or a query.
     let user_token;
