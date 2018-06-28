@@ -235,10 +235,16 @@ function clusterCategorized(layer, legend) {
     .attr("y", 20)
     .style("font-weight", "bold")  
     .attr("text-anchor", "left");
+    
+    let _field = layer.style.theme.field ? layer.style.theme.field : layer.cluster_cat;
 
-    if (!layer.filter[layer.cluster_cat]) layer.filter[layer.cluster_cat] = {};
+    /*if (!layer.filter[layer.cluster_cat]) layer.filter[layer.cluster_cat] = {};
     if (!layer.filter[layer.cluster_cat].in) layer.filter[layer.cluster_cat].in = [];
-    if (!layer.filter[layer.cluster_cat].ni) layer.filter[layer.cluster_cat].ni = [];
+    if (!layer.filter[layer.cluster_cat].ni) layer.filter[layer.cluster_cat].ni = [];*/
+    
+    if (!layer.filter[_field]) layer.filter[_field] = {};
+    if (!layer.filter[_field].in) layer.filter[_field].in = [];
+    if (!layer.filter[_field].ni) layer.filter[_field].ni = [];
 
     Object.keys(layer.style.theme.cat).map((item) => {
 

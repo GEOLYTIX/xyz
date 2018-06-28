@@ -191,11 +191,13 @@ module.exports = () => {
                                         });
                                     }
                                 }
+                                
                                 xhr.send(JSON.stringify({
                                     dbs: layer.dbs,
                                     table: layer.table,
                                     log_table: layer.log_table,
-                                    cluster_cat: layer.cluster_cat,
+                                    //cluster_cat: layer.cluster_cat,
+                                    cluster_cat: layer.style.theme ? layer.style.theme.field : layer.cluster_cat,
                                     qID: layer.qID,
                                     geometry: {
                                         type: 'Point',
