@@ -123,6 +123,7 @@
             "theme": {
               "label": "Brand",
               "type": "categorized",
+              "field": "sharebrand",
               "competitors": {
                 "BP": {
                   "colour": "#0A9700",
@@ -665,6 +666,7 @@
               "label": "Motor vehicles 2016 (000's)",
               "type": "graduated",
               "applied": true,
+              "field": "all_mv_000__16",
               "cat": [
                 {
                   "val": 1,

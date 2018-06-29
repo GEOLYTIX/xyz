@@ -346,6 +346,7 @@
                 {
                     "label": "Demand 2016 (₩ billions)",
                     "type": "graduated",
+                    "field": "model_sales_2016_krwb",
                     "cat": [
                         {
                             "val": 0.01,

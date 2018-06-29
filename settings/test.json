@@ -95,6 +95,7 @@
                         "themes": [{
                             "label": "Retailer",
                             "type": "categorized",
+                            "field": "brand",
                             "applied": true,
                             "competitors": {
                                 "tesco": {
