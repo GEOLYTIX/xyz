@@ -1041,6 +1041,7 @@
                 {
                     "label": "Chain",
                     "type": "categorized",
+                    "field": "competitor",
                     "applied": true,
                     "competitors": {
                         "William Hill": {
@@ -1348,6 +1349,7 @@
                         "label": "Competitors",
                         "type": "categorized",
                         "applied": true,
+                        "field": "gamcom_a_1",
                         "cat": {
                             "Talarius Limited": {
                                 "marker": "svg_symbols.target([400, '#CB3537', 300, '#021587', 200, '#9FCCFB'])",
@@ -1689,7 +1691,7 @@
             "dbs": "XYZ",
             "qID": "id",
             "arrayZoom": {
-                "14": "gb_retail_place_pitch"
+                "16": "gb_retail_place_pitch"
             },
             "style": {
                 "default": {
