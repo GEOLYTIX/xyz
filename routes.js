@@ -28,6 +28,11 @@ module.exports = fastify => {
     // Universal error handler.
     const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
 
+    // Add content type parser for octet stream.
+    fastify.addContentTypeParser('*', (req, done) => {
+        done();
+    });
+
     fastify
         .decorate('authRoutes', (req, res, done) => auth.authToken(req, res, fastify, process.env.LOGIN ? true : false, done))
         .after(register_routes);
@@ -257,7 +262,12 @@ module.exports = fastify => {
             url: global.dir + '/api/images/new',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
-                require('./mod/images').save(req, res, fastify);
+                var data = [];
+                req.req.on('data', chunk => data.push(chunk));
+                req.req.on('end', () => {
+                    req.body = Buffer.concat(data);
+                    require('./mod/images').save(req, res, fastify);
+                });
             }
         });
 

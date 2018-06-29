@@ -178,7 +178,7 @@ module.exports = () => {
 
                                 let xhr = new XMLHttpRequest();
                                 xhr.open('POST', host + 'api/location/new');
-                                xhr.setRequestHeader("Content-Type", "application/json");
+                                xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = () => {
                                     if (xhr.status === 200) {
                                         layer.getLayer();

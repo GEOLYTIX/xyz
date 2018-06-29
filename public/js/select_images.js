@@ -155,7 +155,7 @@ function upload_image(record, img, blob) {
         qID: record.location.qID,
         id: record.location.id
     }));
-    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+    xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = function () {
         if (this.status === 200) {
             
