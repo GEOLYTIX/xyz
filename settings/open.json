@@ -707,6 +707,7 @@
             "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "field": "brand",
               "applied": true,
               "competitors": {
                 "tesco": {
@@ -930,6 +931,7 @@
             "themes": [{
               "label": "Retailer",
               "type": "categorized",
+              "field": "brand",
               "other": true,
               "applied": true,
               "cat": {
@@ -1149,6 +1151,7 @@
               "label": "Motor vehicles 2016 (000's)",
               "type": "graduated",
               "applied": true,
+              "field": "all_mv_000__16",
               "cat": [
                 {
                   "val": 1,

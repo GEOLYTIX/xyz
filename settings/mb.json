@@ -237,6 +237,7 @@
               "label": "Brands",
               "type": "categorized",
               "competitors": null,
+              "field": "crmbrandname",
               "applied": true,
               "cat": {
                 "Browns": {
@@ -415,6 +416,7 @@
             "themes": [{
                 "label": "Category",
                 "type": "categorized",
+                "field": "rlcategory",
                 "competitors": null,
                 "applied": true,
                 "cat": {
