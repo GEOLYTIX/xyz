@@ -1262,6 +1262,12 @@
               "inline": true
             },
             {
+              "field": "rank",
+              "label": "Rank",
+              "type": "text",
+              "inline": true
+            },
+            {
               "field": "pop__11",
               "label": "Total Population",
               "type": "integer",
