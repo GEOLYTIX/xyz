@@ -866,37 +866,6 @@
               "level": 2
             },
             {
-              "field": "gaming_machines",
-              "label": "Gaming machines",
-              "type": "integer",
-              "inline": true,
-              "options": [0, 1, 2, 3, 4],
-              "level": 2
-            },
-            {
-              "field": "bandit_screen",
-              "label": "Bandit screen",
-              "type": "text",
-              "inline": true,
-              "options": ["Yes", "No"],
-              "level": 2
-            },
-            {
-              "field": "pod",
-              "label": "POD",
-              "type": "integer",
-              "inline": true,
-              "options": [0, 1, 2, 3, 4],
-              "level": 2
-            },
-            {
-              "field": "toilet",
-              "label": "Toilet",
-              "type": "text",
-              "inline": true,
-              "level": 2
-            },
-            {
                 "field": "free_parking",
                 "label": "Free parking",
                 "type": "text",
