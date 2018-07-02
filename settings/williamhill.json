@@ -905,7 +905,7 @@
             },
             {
                 "field": "bingo_separate_gantry",
-                "label": "Bingo Separate to Gantry",
+                "label": "Bingo Separate to gantry",
                 "type": "text",
                 "inline": true,
                 "level": 2,

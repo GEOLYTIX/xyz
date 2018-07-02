@@ -72,7 +72,8 @@
             {
               "field": "nameascii",
               "label": "City",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "sov0name",
@@ -1251,7 +1252,8 @@
             {
               "field": "postal_label",
               "label": "Name",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "rank",
@@ -1262,7 +1264,8 @@
             {
               "field": "pop__11",
               "label": "Total Population",
-              "type": "integer"
+              "type": "integer",
+              "filter": "numeric"
             },
             {
               "field": "gen_female__11",
@@ -1321,26 +1324,30 @@
               "field": "eac_employed__11",
               "label": "Employed",
               "type": "integer",
-              "level": 1
+              "level": 1,
+              "filter": "numeric"
             },
             {
               "field": "eac_unemployed__11",
               "label": "Unemployed",
               "type": "integer",
-              "level": 1
+              "level": 1,
+              "filter": "numeric"
             },
             {
               "field": "ea_student",
               "fieldfx": "(eac_student__11 + ein_student__11)",
               "label": "Student",
               "type": "integer",
-              "level": 1
+              "level": 1,
+              "filter": "numeric"
             },
             {
               "field": "ein_pensioner__11",
               "label": "Pensioner",
               "type": "integer",
-              "level": 1
+              "level": 1,
+              "filter": "numeric"
             }
           ],
           "style": {
@@ -1415,18 +1422,21 @@
             {
               "field": "rp_name",
               "label": "Name",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "rp_type",
               "label": "Type",
-              "type": "text"
+              "type": "text",
+              "filter": "match"
             },
             {
               "field": "ref_pc",
               "label": "Reference Postcode",
               "type": "text",
-              "level": 1
+              "level": 1,
+              "filter": "like"
             },
             {
               "field": "comp_strgh",
@@ -1691,7 +1701,8 @@
             {
               "field": "retailer",
               "label": "Retailer",
-              "type": "text"
+              "type": "text",
+              "filter": "like"
             },
             {
               "field": "fascia",
@@ -1736,7 +1747,8 @@
               "field": "locality",
               "label": "Locality",
               "type": "text",
-              "level": 1
+              "level": 1,
+              "filter": "like"
             }
           ],
           "style": {
@@ -1993,7 +2005,8 @@
                 "The Co-operative",
                 "Waitrose",
                 "Whole Foods"
-              ]
+              ],
+              "filter": "like"
             },
             {
               "field": "retailer",
@@ -2047,7 +2060,8 @@
             },
             {
               "field": "postcode",
-              "type": "text"
+              "type": "text",
+              "filer": "like"
             },
             {
               "field": "locality",
