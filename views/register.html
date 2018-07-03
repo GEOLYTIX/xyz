@@ -151,6 +151,7 @@
     function check() {
         email.validity.valid &&
         password.validity.valid &&
+        password.value.length > 0 &&
         password.value === password_retype.value
         ?
         btnRegister.disabled = false :
