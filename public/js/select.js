@@ -187,6 +187,7 @@ module.exports = () => {
                 location.geomdisplay = layer.geomdisplay ? JSON.parse(json.geomdisplay) : null;
                 location.dbs = layer.dbs;
                 location.qID = layer.qID;
+                location.geom = layer.geom;
                 addLayerToRecord(location);
             }
         }
@@ -203,7 +204,7 @@ module.exports = () => {
             geomdisplay: layer.geomdisplay,
             sql_filter: layer.sql_filter || null
         }));
-        
+
     }
 
     function setLayerReferences(infoj) {
@@ -258,6 +259,7 @@ module.exports = () => {
     }
 
     function addLayerToRecord(location) {
+
         let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.location) return record
         });

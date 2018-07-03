@@ -55,6 +55,7 @@ async function select(req, res, fastify) {
         ${geomdisplay}
     FROM ${table}
     WHERE ${qID} = $1;`
+    
     //console.log(q);
 
     var db_connection = await fastify.pg[req.body.dbs].connect();

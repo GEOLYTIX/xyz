@@ -206,9 +206,11 @@ async function get(req, res, fastify) {
 
 async function select(req, res, fastify) {
   
+console.log(req.query.geom);
+
   let
     table = req.query.table,
-    geom = req.query.geom || 'geom',
+    geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
     id = req.query.qID,
     filter = JSON.parse(req.query.filter),
     filter_sql = '',
@@ -235,7 +237,9 @@ async function select(req, res, fastify) {
       FROM ${table}
       WHERE true 
       ${filter_sql} 
-      ORDER BY ST_Point(${lnglat}) <#> geom LIMIT ${count};`;
+      ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
+
+     //console.log(q);
 
   var db_connection = await fastify.pg[req.query.dbs].connect();
   var result = await db_connection.query(q);
