@@ -195,6 +195,16 @@ function routes(fastify) {
 
             const email = req.body.email;
 
+            // Backend validation of email address.
+            if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+                return res
+                .setCookie('xyz_user', fastify.jwt.sign({
+                    email: email,
+                    status: `Not a valid email address.`
+                }), { path: process.env.DIR || '/' })
+                .redirect(global.dir + '/login');
+            }
+
             var user_db = await fastify.pg.users.connect();
             result = await user_db.query(
                 `SELECT * FROM ${user_table} WHERE email = $1;`,
@@ -256,7 +266,7 @@ function routes(fastify) {
 
             return res
                 .setCookie('xyz_user', fastify.jwt.sign({
-                    email: user.email,
+                    email: email,
                     status: `We registered your email address in the access control list. <br />`
                         + `A verification mail has been sent to your registered address. <br />`
                         + `Please follow the link in the email to verify that you are the account holder. <br />`

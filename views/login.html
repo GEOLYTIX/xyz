@@ -42,10 +42,13 @@
             width: 0;
             bottom: 0;
             position: absolute;
-            background: #079e00;
+            background: #090;
             transition: 0.2s ease all;
             -moz-transition: 0.2s ease all;
             -webkit-transition: 0.2s ease all;
+        }
+        input:invalid + .bar:before, input:invalid + .bar:after{
+            background: orangered;
         }
         .bar:before {
             left: 50%;
@@ -59,7 +62,7 @@
         }
         button {
             color: white;
-            background-color: #079e00;
+            background-color: #090;
             margin: 10px 0;
             padding: 8px;
             text-align: center;
@@ -71,7 +74,7 @@
         }
         button:hover:enabled {
             cursor: pointer;
-            color: #079e00;
+            color: #090;
             background-color: white;
         }
         p {
@@ -80,11 +83,14 @@
         .switch {
             font-size: 20px;
             text-decoration: none;
-            color: #079e00;
+            color: #090;
             font-weight: 700;
         }
         .switch:hover {
             cursor: pointer;
+        }
+        #btnLogin:disabled {
+            background-color: darkslategrey;
         }
         .msg {
             color: orangered;
@@ -96,7 +102,7 @@
     <form method="post">
 
         <div class="input_group">
-            <input name="email" type="text">
+            <input id="auth_user_email" name="email" type="email" maxlength="50" onkeyup="check();">
             <span class="bar"></span>
             <label for="auth_user_email">E-mail</label>
         </div>
@@ -104,7 +110,7 @@
         <br>
 
         <div class="input_group">
-            <input name="password" type="password">
+            <input id="auth_user_password" name="password" type="password" minlength="8" onkeyup="check();">
             <span class="bar"></span>
             <label for="auth_user_password">Password</label>
         </div>
@@ -112,7 +118,7 @@
         <br>
         <p class="msg">{{:msg}}</p>
 
-        <button type="submit" formaction="login">
+        <button id="btnLogin" type="submit" formaction="login" disabled>
             Log In
         </button>
 
@@ -123,10 +129,23 @@
 </body>
 
 <script>
-    setTimeout(function() {
-        document.getElementById('auth_user_email').value && document.getElementById('auth_user_email').value.length > 0 ?
-            document.getElementById('auth_user_password').focus() :
-            document.getElementById('auth_user_email').focus();
+    const email = document.getElementById('auth_user_email');
+    const password = document.getElementById('auth_user_password');
+    const btnLogin = document.getElementById('btnLogin');
+
+    setTimeout(function () {
+        email.value.length > 0 ?
+            password.focus() :
+            email.focus();
+        check();
     }, 10);
+
+    function check() {
+        email.validity.valid &&
+        password.validity.valid
+        ?
+        btnLogin.disabled = false :
+        btnLogin.disabled = true;
+    }
 </script>
 </html>
