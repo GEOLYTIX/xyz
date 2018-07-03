@@ -496,7 +496,7 @@ function authToken(req, res, fastify, login, done) {
     if (!user_token) {
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign({ status: 'No user token found in request.' }), {
+            .setCookie('xyz_user', fastify.jwt.sign({ anonymous: true }), {
                 path: process.env.DIR || '/'
             })
             .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
@@ -542,6 +542,22 @@ function authToken(req, res, fastify, login, done) {
             .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
                 path: process.env.DIR || '/'
             });
+
+        return res.redirect(global.dir + '/login');
+    }
+
+    // Check whether user token has an email field.
+    if (!user_token.email) {
+        res
+            .code(401)
+            .setCookie('xyz_user', fastify.jwt.sign({ anonymous: true }), {
+                path: process.env.DIR || '/'
+            })
+            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+                path: process.env.DIR || '/'
+            });
+
+        if (req.query.noredirect) return res.send('Email not defined in token.');
 
         return res.redirect(global.dir + '/login');
     }

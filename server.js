@@ -13,7 +13,9 @@ const fastify = require('fastify')({
         //     key: require('fs').readFileSync('/home/dennis/.ssl/server.key'),
         //     cert: require('fs').readFileSync('/home/dennis/.ssl/server.crt')
         // },
-        //logger: true
+        logger: {
+            level: 'debug'
+        }
     });
 
 fastify

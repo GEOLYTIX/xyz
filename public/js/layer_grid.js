@@ -41,9 +41,10 @@ function getLayer(){
         layer.xhr.onload = e => {
 
             if (e.target.status === 401) {
-                if (window.confirm(e.target.response + ' Redirect to login?')) {
-                    return window.location.reload(true);
-                }
+                document.getElementById('timeout_mask').style.display = 'block';
+                // if (window.confirm(e.target.response + ' Redirect to login?')) {
+                //     return window.location.reload(true);
+                // }
                 return loadLayer_complete(layer);
             }
 

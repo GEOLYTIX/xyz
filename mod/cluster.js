@@ -222,7 +222,7 @@ async function select(req, res, fastify) {
   if ([table, geom, id, label]
     .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
     return res.code(406).send('Parameter not acceptable.');
-  }  
+  }
     
   filter_sql = filters.legend_filter(filter, filter_sql);
 

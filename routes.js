@@ -29,19 +29,15 @@ module.exports = fastify => {
     const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
 
     // Add content type parser for octet stream.
-    fastify.addContentTypeParser('*', (req, done) => {
-        done();
-    });
+    fastify.addContentTypeParser('*', (req, done) => done());
 
     fastify
         .decorate('authRoutes', (req, res, done) => auth.authToken(req, res, fastify, process.env.LOGIN ? true : false, done))
-        .after(register_routes);
-
-    function register_routes() {
+        .register((fastify, opts, next) => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir || '/',
+            url: '/',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: async (req, res) => {
 
@@ -66,6 +62,7 @@ module.exports = fastify => {
                 // Build the template with jsrender and send to client.
                 res.type('text/html').send(tmpl.render({
                     title: global.appSettings.title || 'GEOLYTIX | XYZ',
+                    user: user_token.email || 'anonymous',
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
                     hrefDocumentation: global.appSettings.documentation ? global.dir + '/' + global.appSettings.documentation : '',
@@ -86,7 +83,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/documentation',
+            url: '/documentation',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('fs').readFile('./public/documentation.md', (err, md) => {
@@ -103,7 +100,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/proxy/image',
+            url: '/proxy/image',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 let q = `${req.query.uri}${req.query.size?'&size='+req.query.size+'&':''}${global.KEYS[req.query.provider]}`;
@@ -113,7 +110,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/mvt/get/:z/:x/:y',
+            url: '/api/mvt/get/:z/:x/:y',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/mvt').get(req, res, fastify);
@@ -122,7 +119,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/grid/get',
+            url: '/api/grid/get',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/grid').get(req, res, fastify);
@@ -131,7 +128,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/geojson/get',
+            url: '/api/geojson/get',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/geojson').get(req, res, fastify);
@@ -140,7 +137,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/cluster/get',
+            url: '/api/cluster/get',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/cluster').get(req, res, fastify);
@@ -149,7 +146,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/cluster/select',
+            url: '/api/cluster/select',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/cluster').select(req, res, fastify);
@@ -158,7 +155,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'POST',
-            url: global.dir + '/api/location/select',
+            url: '/api/location/select',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/select').select(req, res, fastify);
@@ -168,7 +165,7 @@ module.exports = fastify => {
         // !!!should be taken from /select infoj
         fastify.route({
             method: 'POST',
-            url: global.dir + '/q_chart_data',
+            url: '/q_chart_data',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/select').chart_data(req, res, fastify);
@@ -177,7 +174,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'POST',
-            url: global.dir + '/api/location/new',
+            url: '/api/location/new',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/edit').newRecord(req, res, fastify);
@@ -186,7 +183,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'POST',
-            url: global.dir + '/api/location/update',
+            url: '/api/location/update',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/edit').updateRecord(req, res, fastify);
@@ -196,7 +193,7 @@ module.exports = fastify => {
         // !!!this should be a get route
         fastify.route({
             method: 'POST',
-            url: global.dir + '/api/location/delete',
+            url: '/api/location/delete',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/edit').deleteRecord(req, res, fastify);
@@ -205,7 +202,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/location/aggregate',
+            url: '/api/location/aggregate',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/edit').newAggregate(req, res, fastify);
@@ -214,7 +211,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/gazetteer/autocomplete',
+            url: '/api/gazetteer/autocomplete',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/gazetteer').gazetteer(req, res, fastify);
@@ -223,7 +220,7 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/gazetteer/googleplaces',
+            url: '/api/gazetteer/googleplaces',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/gazetteer').gazetteer_googleplaces(req, res, fastify);
@@ -241,25 +238,16 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/catchments',
+            url: '/api/catchments',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/catchments').get(req, res, fastify);
             }
         });
 
-        // fastify.route({
-        //     method: 'GET',
-        //     url: global.dir + '/api/images/get',
-        //     beforeHandler: fastify.auth([fastify.authRoutes]),
-        //     handler: (req, res) => {
-        //         res.sendFile(process.env.IMAGES + req.query.image.replace(/ /g, '+'));
-        //     }
-        // });
-
         fastify.route({
             method: 'POST',
-            url: global.dir + '/api/images/new',
+            url: '/api/images/new',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 var data = [];
@@ -273,13 +261,15 @@ module.exports = fastify => {
 
         fastify.route({
             method: 'GET',
-            url: global.dir + '/api/images/delete',
+            url: '/api/images/delete',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/images').remove(req, res, fastify);
             }
         });
 
-    }
+        next();
+
+    }, { prefix: global.dir });
 
 }

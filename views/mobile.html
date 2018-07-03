@@ -96,19 +96,19 @@
         </button> -->
 
         <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-            <a href="documentation">
+            <a href="{{:hrefDocumentation}}">
                 <i class="material-icons">school</i>
             </a>
         </button>
 
         <button id="btnLogout" {{:btnLogout}}>
-            <a href="logout">
+            <a href="{{:dir}}/logout">
                 <i class="material-icons">exit_to_app</i>
             </a>
         </button>
 
         <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
-            <a href="admin">
+            <a href="{{:dir}}/admin/user">
                 <i class="material-icons">supervisor_account</i>
             </a>
         </button>
@@ -137,6 +137,8 @@
         <div id="Locations" class="module hidden"></div>
 
     </div>
+
+    <div id="timeout_mask">Session expired.</div>
 
 </body>
 
