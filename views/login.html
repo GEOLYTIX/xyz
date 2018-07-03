@@ -142,8 +142,7 @@
 
     function check() {
         email.validity.valid &&
-        password.validity.valid &&
-        password.value.length > 0
+        password.validity.valid
         ?
         btnLogin.disabled = false :
         btnLogin.disabled = true;
