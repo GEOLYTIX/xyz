@@ -153,7 +153,7 @@ function routes(fastify) {
                         to: user.email,
                         subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${global.dir}`,
                         text: `${global.failed_attempts} failed login attempts have been recorded on this account. \n \n`
-                            + `Please verify that you are the account holder: ${req.headers.origin}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
+                            + `Please verify that you are the account holder: ${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
                             + `Verifying the account will reset the failed login attempts.`
                     });
 
@@ -231,7 +231,7 @@ function routes(fastify) {
                     to: user.email,
                     subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${global.dir}`,
                     text: `A new password has been set for this account. \n \n`
-                        + `Please verify that you are the account holder: ${req.headers.origin}${global.dir}/admin/user/verify/${verificationtoken}`
+                        + `Please verify that you are the account holder: ${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken}`
                 });
 
                 return res
@@ -259,7 +259,7 @@ function routes(fastify) {
                 to: email,
                 subject: `Please verify your GEOLYTIX account on ${req.headers.host}${global.dir}`,
                 text: `A new account for this email address has been registered with ${req.headers.host}${global.dir} \n \n`
-                    + `Please verify that you are the account holder: ${req.headers.origin}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
+                    + `Please verify that you are the account holder: ${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
                     + `A site administrator must approve the account before you are able to login. \n \n`
                     + `You will be notified via email once an adimistrator has approved your account.`
             });
@@ -332,7 +332,7 @@ function routes(fastify) {
                     await require('./mailer')({
                         to: req.body.email,
                         subject: `This account has been approved for ${req.headers.host}${global.dir}`,
-                        text: `You are now able to log on to ${req.headers.origin}${global.dir}`
+                        text: `You are now able to log on to ${req.headers.host}${global.dir}`
                     });
 
                 if (update.rowCount === 0) res.code(500).send();
@@ -361,7 +361,7 @@ function routes(fastify) {
                     await require('./mailer')({
                         to: req.body.email,
                         subject: `This ${req.headers.host}${global.dir} account has been deleted.`,
-                        text: `You will no longer be able to log in to ${req.headers.origin}${global.dir}`
+                        text: `You will no longer be able to log in to ${req.headers.host}${global.dir}`
                     });
 
                     res.code(200).send()
@@ -421,8 +421,8 @@ function routes(fastify) {
                     require('./mailer')({
                         to: adminmail,
                         subject: `A new account has been verified on ${req.headers.host}${global.dir}`,
-                        text: `Please log into the admin panel ${req.headers.origin}${global.dir}/admin/user to approve ${user.email} \n \n`
-                            + `You can also approve the account by following this link: ${req.headers.origin}${global.dir}/admin/user/approve/${approvaltoken}`
+                        text: `Please log into the admin panel ${req.headers.host}${global.dir}/admin/user to approve ${user.email} \n \n`
+                            + `You can also approve the account by following this link: ${req.headers.host}${global.dir}/admin/user/approve/${approvaltoken}`
                     });
                 }
 
@@ -469,7 +469,7 @@ function routes(fastify) {
                 require('./mailer')({
                     to: user.email,
                     subject: `This account has been approved on ${req.headers.host}${global.dir}`,
-                    text: `You are now able to log on to ${req.headers.origin}${global.dir}`
+                    text: `You are now able to log on to ${req.headers.host}${global.dir}`
                 });
 
                 res.send('The account has been approved by you. An email has been sent to the account holder.');
