@@ -74,8 +74,6 @@ async function routes(fastify, auth) {
     }
 
     await get(fastify);
-
-    console.log(global.appSettings);
 }
 
 async function get(fastify) {
