@@ -4,7 +4,21 @@ const svg_symbols = require('./svg_symbols');
 function getLayer() {
 
     // Load layer if display is true.
-    if (this.display) return loadLayer(this);
+    if(this.display){
+
+        if(this.arrayZoom){
+            let zoom = _xyz.map.getZoom(),
+                zoomKeys = Object.keys(this.arrayZoom),
+                maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+            
+            this.table = zoom > maxZoomKey ?
+            this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
+                null : this.arrayZoom[zoom];
+        }
+        // Make drawer opaque if no table present.
+        this.drawer.style.opacity = !this.table ? 0.4 : 1;
+        if(this.table) return loadLayer(this);
+    }
 }
 
 function loadLayer(layer) {
