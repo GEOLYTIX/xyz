@@ -45,7 +45,14 @@
   z-index: 999;
   position: fixed;
   left: 10px; }
-  .btn_column button {
+  .btn_column div:hover {
+    background: #079e00;
+    color: #fff;
+    cursor: pointer; }
+    .btn_column div:hover a {
+      color: #fff; }
+  .btn_column button,
+  .btn_column > div {
     margin-top: 10px;
     float: left;
     clear: both;
@@ -60,21 +67,27 @@
     cursor: default;
     border: none;
     outline: none; }
-    .btn_column button a {
+    .btn_column button a,
+    .btn_column > div a {
       color: #079e00; }
-    .btn_column button i {
+    .btn_column button i,
+    .btn_column > div i {
       font-size: 30px;
       line-height: 1.7; }
-    .btn_column button.active {
+    .btn_column button.active,
+    .btn_column > div.active {
       background: #079e00;
       color: #fff; }
-    .btn_column button:disabled {
+    .btn_column button:disabled,
+    .btn_column > div:disabled {
       opacity: 0.3; }
-    .btn_column button:hover:enabled {
+    .btn_column button:hover:enabled,
+    .btn_column > div:hover:enabled {
       background: #079e00;
       color: #fff;
       cursor: pointer; }
-      .btn_column button:hover:enabled a {
+      .btn_column button:hover:enabled a,
+      .btn_column > div:hover:enabled a {
         color: #fff; }
 
 .btn_header {
@@ -222,6 +235,10 @@ input[type=range]::-moz-range-thumb {
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden; }
+  @supports (-moz-appearance: meterbar) and (background-blend-mode: difference, normal) {
+    .scrolly {
+      width: calc(100% + 50px);
+      padding-right: 35px; } }
   .scrolly::-webkit-scrollbar {
     display: none; }
   .scrolly > .scrolly_track {

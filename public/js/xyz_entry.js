@@ -29,11 +29,8 @@ const L = require('leaflet');
 // Initiate hooks component.
 require('./hooks')();
 
-// Initiate dom object.
-let dom = {
-    btnZoomIn: document.getElementById('btnZoomIn'),
-    btnZoomOut: document.getElementById('btnZoomOut')
-};
+const btnZoomIn = document.getElementById('btnZoomIn');
+const btnZoomOut = document.getElementById('btnZoomOut');
 
 // Set locale default.
 if (!_xyz.locale) _xyz.locale = Object.keys(_xyz.locales)[0];
@@ -73,17 +70,17 @@ _xyz.setView(!_xyz.hooks.z);
 // Zoom functions
 chkZoomBtn(_xyz.map.getZoom());
 function chkZoomBtn(z){
-    dom.btnZoomIn.disabled = z < _xyz.locales[_xyz.locale].maxZoom ?  false : true;
-    dom.btnZoomOut.disabled = z > _xyz.locales[_xyz.locale].minZoom ? false : true;
+    btnZoomIn.disabled = z < _xyz.locales[_xyz.locale].maxZoom ?  false : true;
+    btnZoomOut.disabled = z > _xyz.locales[_xyz.locale].minZoom ? false : true;
 }
 
-dom.btnZoomIn.addEventListener('click', function () {
+btnZoomIn.addEventListener('click', function () {
     let z = _xyz.map.getZoom() + 1;
     _xyz.map.setZoom(z);
     chkZoomBtn(z);
 });
 
-dom.btnZoomOut.addEventListener('click', function(){
+btnZoomOut.addEventListener('click', function(){
     let z = _xyz.map.getZoom() - 1;
     _xyz.map.setZoom(z);
     chkZoomBtn(z);

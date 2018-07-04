@@ -16,7 +16,16 @@
         position: fixed;
         left: 10px;
     }
-    button {
+    div:hover {
+        background: $glxgreen;
+        color: #fff;
+        cursor: pointer;
+        a {
+            color: #fff;
+        }
+    }
+    button,
+    >div {
         margin-top: 10px;
         float: left;
         clear: both;
@@ -83,7 +92,6 @@
     color: $glxgreen;
     box-shadow: 1px 1px 3px #666;
     margin: 5px 2px 0 1px;
-
     &.disabled {
         opacity: 0.3;
     }

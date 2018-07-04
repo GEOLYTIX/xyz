@@ -152,6 +152,10 @@ input[type=range]::-moz-range-thumb {
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden; }
+  @supports (-moz-appearance: meterbar) and (background-blend-mode: difference, normal) {
+    .scrolly {
+      width: calc(100% + 50px);
+      padding-right: 35px; } }
   .scrolly::-webkit-scrollbar {
     display: none; }
   .scrolly > .scrolly_track {

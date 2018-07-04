@@ -81,7 +81,7 @@
                 <i class="material-icons">gps_not_fixed</i>
             </button>
 
-            <button id="btnZoomIn">
+            <button type="button" id="btnZoomIn">
                 <i class="material-icons">add</i>
             </button>
 
@@ -93,29 +93,29 @@
                 <i class="material-icons">picture_as_pdf</i>
             </button>
 
-            <button id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+            <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
                 <a href="{{:hrefDocumentation}}">
                     <i class="material-icons">school</i>
                 </a>
-            </button>
+            </div>
 
-            <button id="btnLogout" title="Log out {{:user}}" {{:btnLogout}}>
+            <div id="btnLogout" title="Log out {{:user}}" {{:btnLogout}}>
                 <a href="{{:dir}}/logout">
                     <i class="material-icons">exit_to_app</i>
                 </a>
-            </button>
+            </div>
 
-            <button id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
+            <div type="button" id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
                 <a href="{{:dir}}/admin/user">
                     <i class="material-icons">supervisor_account</i>
                 </a>
-            </button>
+            </div>
 
-            <button id="btnSettings" title="Open application settings editor" {{:btnAdmin}}>
+            <div id="btnSettings" title="Open application settings editor" {{:btnAdmin}}>
                 <a href="{{:dir}}/admin/settings">
                     <i class="material-icons">settings</i>
                 </a>
-            </button>
+            </div>
         </div>
 
         <div id="Map" class="map">
