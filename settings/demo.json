@@ -365,15 +365,16 @@
                     "label": "Watsons",
                     "marker": "svg_symbols.target([400, '#0A94A6', 300, '#FFF', 150, '#D72F33'])"
                   },
-                  "Park'N'Shop": {
+                  "Park N Shop": {
                     "label": "Park'N'Shop",
-                    "marker": "svg_symbols.target([400, '#382596', 300, '#F02C24', 100, '#FDD03E'])"
+                    "marker": "svg_symbols.target([400, '#382596', 250, '#F02C24', 150, '#FDD03E'])"
                   },
                   "Holland & Barrett": {
                     "label": "Holland & Barrett",
                     "marker": "svg_symbols.target([400, '#056243', 200, '#FFF'])"
                   }
-                }
+                },
+                "competitors": {}
               }
             ]
           }

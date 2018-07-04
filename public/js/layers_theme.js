@@ -273,11 +273,11 @@ function clusterCategorized(layer, legend) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.filter[layer.cluster_cat].ni.splice(layer.filter[layer.cluster_cat].ni.indexOf(item), 1);
+                    layer.filter[_field].ni.splice(layer.filter[_field].ni.indexOf(item), 1);
                 } else {
                     this.style.opacity = 0.5;
-                    if(!layer.filter[layer.cluster_cat].ni) layer.filter[layer.cluster_cat].ni = [];
-                    layer.filter[layer.cluster_cat].ni.push(item);
+                    if(!layer.filter[_field].ni) layer.filter[_field].ni = [];
+                    layer.filter[_field].ni.push(item);
                 }
 
                 layer.getLayer();
