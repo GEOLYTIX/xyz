@@ -15,6 +15,8 @@ async function select(req, res, fastify) {
     //if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
 
     //if (await require('./chk').chkID(id, res).statusCode === 406) return;
+
+    //console.log(req.body);
     
     if (sql_filter) {
         q = `select ${sql_filter} from ${table} where ${qID} = $1;`;

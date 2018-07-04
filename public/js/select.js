@@ -191,7 +191,7 @@ module.exports = () => {
                 addLayerToRecord(location);
             }
         }
-        
+
         xhr.send(JSON.stringify({
             dbs: layer.dbs,
             table: location.table,

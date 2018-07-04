@@ -304,6 +304,79 @@
               "text": true
             }
           ]
+        },
+        "cn_retailpoints": {
+          "display": true,
+          "name": "Retail Shops",
+          "pane": ["cn_retailpoints", 539],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "cn_retailpoints",
+          "cluster_label": "brand",
+          "cluster_cat": "shopname",
+          "infoj": [
+            {
+              "field": "city",
+              "label": "City",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "brand",
+              "label": "Retailer",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "shopname",
+              "label": "Name",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "address",
+              "label": "Address",
+              "type": "text"
+            },
+            {
+              "field": "tel",
+              "label": "Telephone",
+              "type": "text",
+              "inline": true
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400,'#e0e0e0'])",
+            "markerMulti": [400, "#e0e0e0"],
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "applied": true,
+                "other": true,
+                "cat": {
+                  "Dr Martens": {
+                    "label": "Dr Martens",
+                    "marker": "svg_symbols.target([400,'#000', 300, '#fff176', 150, '#000'])"
+                  },
+                  "Watsons": {
+                    "label": "Watsons",
+                    "marker": "svg_symbols.target([400, '#0A94A6', 300, '#FFF', 150, '#D72F33'])"
+                  },
+                  "Park'N'Shop": {
+                    "label": "Park'N'Shop",
+                    "marker": "svg_symbols.target([400, '#382596', 300, '#F02C24', 100, '#FDD03E'])"
+                  },
+                  "Holland & Barrett": {
+                    "label": "Holland & Barrett",
+                    "marker": "svg_symbols.target([400, '#056243', 200, '#FFF'])"
+                  }
+                }
+              }
+            ]
+          }
         }
       }
     },
