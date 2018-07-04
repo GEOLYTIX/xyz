@@ -317,14 +317,14 @@
           "cluster_cat": "shopname",
           "infoj": [
             {
-              "field": "city",
-              "label": "City",
+              "field": "brand",
+              "label": "Retailer",
               "type": "text",
               "inline": true
             },
             {
-              "field": "brand",
-              "label": "Retailer",
+              "field": "brandname",
+              "label": "Brand",
               "type": "text",
               "inline": true
             },
@@ -340,8 +340,32 @@
               "type": "text"
             },
             {
+              "field": "district",
+              "label": "District",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "region",
+              "label": "Region",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "city",
+              "label": "City",
+              "type": "text",
+              "inline": true
+            },
+            {
               "field": "tel",
               "label": "Telephone",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "parking",
+              "label": "Parking",
               "type": "text",
               "inline": true
             }
