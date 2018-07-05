@@ -30,7 +30,7 @@ async function newAggregate(req, res, fastify) {
 
     filter_sql = await require('./filters').sql_filter(filter, filter_sql);
 
-    let q = `
+    var q = `
     INSERT INTO ${table_target} (${geom_target}, sql_filter)
     
         SELECT
@@ -65,8 +65,6 @@ async function newAggregate(req, res, fastify) {
         WHERE true ${filter_sql}
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
-
-    //console.log(q);
 
     var db_connection = await fastify.pg[req.query.dbs].connect();
     var result = await db_connection.query(q);
@@ -103,8 +101,6 @@ async function updateRecord(req, res, fastify) {
         ${fields}
         geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
     WHERE ${qID} = $1;`
-
-    //console.log(q);
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
     await db_connection.query(q, [id]);
@@ -144,8 +140,6 @@ async function writeLog(req, log_table, table, qID, id, fastify) {
     INSERT INTO ${log_table} 
     SELECT *
     FROM ${table} WHERE ${qID} = $1;`;
-
-    //console.log(q);
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
     await db_connection.query(q, [id]);

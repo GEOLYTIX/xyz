@@ -244,23 +244,7 @@ async function catchment_calc(req, res, fastify) {
     // Reverse order of Isobands in array
     res.data.iso.features.reverse();
 
-    // Return json to client
-    // res.code(200).send({
-    //     properties: {
-    //         "Latitude": `${parseFloat(req.query.lat).toFixed(6)}`,
-    //         "Longitude": `${parseFloat(req.query.lng).toFixed(6)}`,
-    //         "Travel time": `${parseInt(req.query.distance / 60)} mins`,
-    //         "Transport mode": req.query.mode,
-    //         "Provider": req.query.provider
-    //     },
-    //     iso: res.data.iso,
-    //     tin: res.data.tin,
-    //     circlePoints: res.data.circlePoints,
-    //     samplePoints: res.data.samplePoints
-    // });
-
-    //console.log(JSON.stringify(res.data.iso.features[0].geometry));
-
+    
     let table_target = req.query.table_target,
         geom_target = 'geom' //req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target;
 
@@ -268,7 +252,7 @@ async function catchment_calc(req, res, fastify) {
 
     async function storeFeatures(features) {
         let pArray = features.map(async f => {
-            let q = `
+            var q = `
             INSERT INTO ${table_target} (${geom_target})
         
                 SELECT
@@ -278,8 +262,6 @@ async function catchment_calc(req, res, fastify) {
                     ) as geom
         
             RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
-        
-            //console.log(q);
 
             var db_connection = await fastify.pg[req.query.dbs].connect();
             var result = await db_connection.query(q);

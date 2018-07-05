@@ -18,7 +18,7 @@ async function get(req, res, fastify) {
         return res.code(406).send('Parameter not acceptable.');
     }
 
-    let q = `
+    var q = `
     SELECT
         lon,
         lat,
@@ -29,9 +29,7 @@ async function get(req, res, fastify) {
         ST_DWithin(
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
             ${geom}, 0.000001)
-        AND ${size} >= 1 LIMIT 10000;`
-
-    //console.log(q);
+        AND ${size} >= 1 LIMIT 10000;`;
 
     var db_connection = await fastify.pg[req.query.dbs].connect();
     var result = await db_connection.query(q);

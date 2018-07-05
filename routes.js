@@ -103,7 +103,7 @@ module.exports = fastify => {
             url: '/proxy/image',
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
-                let q = `${req.query.uri}${req.query.size?'&size='+req.query.size+'&':''}${global.KEYS[req.query.provider]}`;
+                var q = `${req.query.uri}${req.query.size?'&size='+req.query.size+'&':''}${global.KEYS[req.query.provider]}`;
                 res.send(require('request')(q));
             }
         });

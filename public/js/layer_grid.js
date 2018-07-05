@@ -42,6 +42,7 @@ function getLayer(){
 
             if (e.target.status === 401) {
                 document.getElementById('timeout_mask').style.display = 'block';
+                console.log(e.target.response);
                 return loadLayer_complete(layer);
             }
 

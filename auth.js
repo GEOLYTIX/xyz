@@ -524,7 +524,7 @@ function authToken(req, res, fastify, login, done) {
 
     // Token age exceeds timeout.
     if (token_age >= global.timeout) {
-        user_token.status = 'User token timed out.';
+        user_token.status = 'Session timed out.';
 
         res
             .code(401)

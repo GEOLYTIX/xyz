@@ -7,6 +7,7 @@ async function get(req, res, fastify) {
         id = req.query.qID === 'undefined' ? 'id' : req.query.qID,
         properties = req.query.properties === 'undefined' ? '' : req.query.properties,
         geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
+        geomj = req.query.geomj === 'undefined' ? `ST_asGeoJson(${geom})` : req.query.geomj,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
@@ -18,11 +19,11 @@ async function get(req, res, fastify) {
         return res.code(406).send('Parameter not acceptable.');
     }
 
-    let q = `
+    var q = `
     SELECT
         ${id} AS id,
         ${properties}
-        ST_asGeoJson(${geom}) AS geomj
+        ${geomj} AS geomj
     FROM ${req.query.table}
     WHERE
         ST_DWithin(

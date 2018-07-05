@@ -1,7 +1,6 @@
 async function select(req, res, fastify) {
 
     let
-        q,
         table = req.body.table,
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
@@ -10,16 +9,9 @@ async function select(req, res, fastify) {
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
         sql_filter = typeof req.body.sql_filter == 'undefined ' ? null : req.body.sql_filter;
-    
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
 
-    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
-
-    //console.log(req.body);
-    
     if (sql_filter) {
-        q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
+        var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
         var db_connection = await fastify.pg[req.body.dbs].connect();
         var result = await db_connection.query(q, [id]);
         db_connection.release();
@@ -34,32 +26,23 @@ async function select(req, res, fastify) {
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
              FROM ${entry.layer.table}
              WHERE true ${sql_filter || `AND ST_Intersects(${entry.layer.table}.${entry.layer.geom || 'geom'}, ${table}.${geomq})`}
-
-            ) AS "${entry.field}",
-            `
-            //console.log(fields);
+            ) AS "${entry.field}",`;
             return
         }
 
-        if (entry.type) fields += `
-        ${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},
-        `
+        if (entry.type) fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},`
 
-        if (entry.subfield) fields += `
-        ${entry.subfield}::${entry.type} AS ${entry.subfield},
-        `
+        if (entry.subfield) fields += `${entry.subfield}::${entry.type} AS ${entry.subfield},`
     });
 
-    q = `
+    var q = `
     SELECT
         ${fields}
         ${geomj} AS geomj
         ${geomdisplay}
     FROM ${table}
-    WHERE ${qID} = $1;`
+    WHERE ${qID} = $1;`;
     
-    //console.log(q);
-
     var db_connection = await fastify.pg[req.body.dbs].connect();
     var result = await db_connection.query(q, [id]);
     db_connection.release();
@@ -88,14 +71,7 @@ async function chart_data(req, res, fastify){
         id = req.body.id,
         series = req.body.series;
     
-    // Check whether string params are found in the settings to prevent SQL injections.
-    //if (await require('./chk').chkVals([table, qID, req.body.geomj, req.body.geomdisplay], res).statusCode === 406) return;
-
-    //if (await require('./chk').chkID(id, res).statusCode === 406) return;
-    
-    let q = `SELECT ${series} FROM ${table} WHERE ${qID} = $1;`;
-    //console.log(q);
-    
+    var q = `SELECT ${series} FROM ${table} WHERE ${qID} = $1;`;  
     var db_connection = await fastify.pg[req.body.dbs].connect();
     var result = await db_connection.query(q, [id]);
     db_connection.release();

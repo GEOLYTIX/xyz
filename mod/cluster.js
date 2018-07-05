@@ -1,7 +1,5 @@
 module.exports = { get, select };
 
-const filters = require('./filters');
-
 async function get(req, res, fastify) {
       
   let
@@ -24,41 +22,33 @@ async function get(req, res, fastify) {
     return res.code(406).send('Parameter not acceptable.');
   }  
 
-  filter_sql = filters.sql_filter(filter, filter_sql);
+  filter_sql = require('./filters').sql_filter(filter, filter_sql);
 
   // Query the feature count from lat/lng bounding box.
-  let q = `
-    SELECT
-      count(1)::integer,
-      ST_Distance(
-        ST_Point(
-          ST_XMin(ST_Envelope(ST_Extent(${geom}))),
-          ST_YMin(ST_Envelope(ST_Extent(${geom})))
-        ),
-        ST_Point(
-          ST_XMax(ST_Envelope(ST_Extent(${geom}))),
-          ST_Ymin(ST_Envelope(ST_Extent(${geom})))
-        )
-      ) AS xExtent,
-      ST_Distance(
-        ST_Point(
-          ${west},
-          ${south}
-        ),
-        ST_Point(
-          ${east},
-          ${north}
-        )
-      ) AS xEnvelope
-    FROM ${table}
-    WHERE
-      ST_DWithin(
-        ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+  var q = `
+  SELECT
+    count(1)::integer,
+    ST_Distance(
+      ST_Point(
+        ST_XMin(ST_Envelope(ST_Extent(${geom}))),
+        ST_YMin(ST_Envelope(ST_Extent(${geom})))
+      ),
+      ST_Point(
+        ST_XMax(ST_Envelope(ST_Extent(${geom}))),
+        ST_Ymin(ST_Envelope(ST_Extent(${geom})))
+      )
+    ) AS xExtent,
+    ST_Distance(
+      ST_Point(${west}, ${south}),
+      ST_Point(${east}, ${north})
+    ) AS xEnvelope
+  FROM ${table}
+  WHERE
+    ST_DWithin(
+      ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom},
         0.00001)
     ${filter_sql};`;
-    
-  //console.log(q);
 
   var db_connection = await fastify.pg[req.query.dbs].connect();
   var result = await db_connection.query(q);
@@ -80,11 +70,6 @@ async function get(req, res, fastify) {
 
   // Check that kmeans is below feature count.
   kmeans = kmeans < count ? parseInt(kmeans): count;
-
-  // console.log({
-  //   'kmeans': kmeans,
-  //   'dbscan': dbscan
-  // });
 
   if (!theme) q = `
   SELECT
@@ -164,8 +149,6 @@ async function get(req, res, fastify) {
       ${filter_sql} 
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
-
-  //console.log(q);
     
   var db_connection = await fastify.pg[req.query.dbs].connect();
   var result = await db_connection.query(q);
@@ -206,15 +189,13 @@ async function get(req, res, fastify) {
 
 async function select(req, res, fastify) {
   
-//console.log(req.query);
-
   let
     table = req.query.table,
     geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
-    id = req.query.qID,
+    id = req.query.qID === 'undefined' ? 'id' : req.query.qID,
     filter = JSON.parse(req.query.filter),
     filter_sql = '',
-    label = req.query.label,
+    label = req.query.label === 'undefined' ? id : req.query.label,
     count = parseInt(req.query.count),
     lnglat = req.query.lnglat.split(',');
 
@@ -226,26 +207,22 @@ async function select(req, res, fastify) {
     return res.code(406).send('Parameter not acceptable.');
   }
     
-  filter_sql = filters.legend_filter(filter, filter_sql);
+  filter_sql = require('./filters').legend_filter(filter, filter_sql);
 
   // Query the feature count from lat/lng bounding box.
-  let q = `
-    SELECT
-      ${id} AS ID,
-      ${label} AS label,
-      array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
-      FROM ${table}
-      WHERE true 
-      ${filter_sql} 
-      ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
-
-     //console.log(q);
+  var q = `
+  SELECT
+    ${id} AS ID,
+    ${label} AS label,
+    array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
+  FROM ${table}
+  WHERE true 
+    ${filter_sql} 
+  ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
 
   var db_connection = await fastify.pg[req.query.dbs].connect();
   var result = await db_connection.query(q);
   db_connection.release();
-
-  //console.log(result.rows);
 
   res.code(200).send(Object.keys(result.rows).map(record => {
     return {
@@ -254,5 +231,4 @@ async function select(req, res, fastify) {
       lnglat: result.rows[record].lnglat
     }
   }));
-
 }

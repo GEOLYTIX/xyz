@@ -9,11 +9,12 @@ async function get(req, res, fastify) {
         r = (m * 2) / (Math.pow(2, z)),
         table = req.query.table,
         layer = req.query.layer,
-        geom_3857 = req.query.geom_3857,
+        geom_3857 = req.query.geom_3857 === 'undefined' ? 'geom_3857' : req.query.geom_3857
         id = req.query.qID === 'undefined' ? null : req.query.qID,
         properties = req.query.properties === 'undefined' ? '' : req.query.properties,
         tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache;
 
+    // Check whether string params are found in the settings to prevent SQL injections.
     if ([id, table, tilecache, layer, geom_3857, properties]
         .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');

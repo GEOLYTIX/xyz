@@ -1,6 +1,6 @@
 function gazetteer(req, res) {
 
-    // let q = `SELECT label, qid id, source
+    // var q = `SELECT label, qid id, source
     //            FROM gaz_${req.query.c}
     //            WHERE search LIKE '${decodeURIComponent(req.query.q).toUpperCase()}%'
     //            ORDER BY searchindex, search LIMIT 10`;
@@ -24,7 +24,7 @@ function gazetteer(req, res) {
 }
 
 // function gazetteer_places(req, res) {
-//     let q = "SELECT geomj FROM "
+//     var q = "SELECT geomj FROM "
 //             + req.query.id.split('.')[0] + " WHERE qid = '"
 //             + req.query.id + "'";
 //     //console.log(q);
@@ -36,7 +36,7 @@ function gazetteer(req, res) {
 
 function MAPBOX_placesAutoComplete(req, res) {
 
-    let q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
+    var q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
           + `${req.query.locale ? 'locale=' + req.query.locale : ''}`
           + `${req.query.bounds ? 'bbox=' + req.query.bounds : ''}`
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
@@ -62,7 +62,7 @@ function MAPBOX_placesAutoComplete(req, res) {
 }
 
 function GOOGLE_placesAutoComplete(req, res) {
-    let q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
+    var q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
           + `${req.query.locale ? '&components=country:' + req.query.locale : ''}`
           + `${req.query.bounds ? decodeURIComponent(req.query.bounds) : ''}`
           + `&${global.KEYS[req.query.provider]}`;
@@ -79,7 +79,7 @@ function GOOGLE_placesAutoComplete(req, res) {
 }
 
 function gazetteer_googleplaces(req, res) {
-    let q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
+    var q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
           + `&${global.KEYS.GOOGLE}`;
 
     require('request').get(q, (err, response, body) => {

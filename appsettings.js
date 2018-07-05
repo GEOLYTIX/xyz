@@ -33,7 +33,7 @@ async function routes(fastify, auth) {
             beforeHandler: fastify.auth([fastify.authSettings]),
             handler: async (req, res) => {
 
-                await get(req, fastify);
+                await get(fastify);
 
                 res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
                     dir: global.dir,

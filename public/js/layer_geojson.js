@@ -28,6 +28,7 @@ function getLayer(){
             properties: layer.properties,
             qID: layer.qID,
             geom: layer.geom,
+            geomj: layer.geomj,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),
@@ -38,7 +39,11 @@ function getLayer(){
         // Draw layer on load event.
         layer.xhr.onload = e => {
 
-            if (e.target.status === 401) return console.log(e.target.response);
+            if (e.target.status === 401) {
+                document.getElementById('timeout_mask').style.display = 'block';
+                console.log(e.target.response);
+                return loadLayer_complete(layer);
+            }
 
             if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale){
 

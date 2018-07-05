@@ -55,6 +55,7 @@ function loadLayer(layer) {
 
         if (e.target.status === 401) {
             document.getElementById('timeout_mask').style.display = 'block';
+            console.log(e.target.response);
             return loadLayer_complete(layer);
         }
 
@@ -103,19 +104,15 @@ function addClusterToLayer(cluster, layer) {
                 let dotArr = utils.clone(layer.style.markerMulti) || [400, "#333"];
 
                 if (layer.style.theme.competitors) {
-
                     let c = 0;
-
                     Object.keys(layer.style.theme.competitors).map(comp => {
-
                         if (point.properties.cat[comp]) {
-
                             c += point.properties.cat[comp];
-
                             dotArr.splice(2, 0, 400 * c / point.properties.count, layer.style.theme.competitors[comp].colour);
                         }
                     });
                 }
+
                 // Create icon svg from dotArr.
                 icon = svg_symbols.target(dotArr);
             }
@@ -184,7 +181,7 @@ function clusterMouseClick(e, layer) {
     xhr.open('GET', host + 'api/cluster/select?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
-        qID: layer.qID || 'id',
+        qID: layer.qID,
         geom: layer.geom,
         label: layer.cluster_label,
         filter: JSON.stringify(layer.filter),
@@ -195,7 +192,11 @@ function clusterMouseClick(e, layer) {
 
     xhr.onload = e => {
 
-        if (e.target.status === 401) return console.log(e.target.response);
+        if (e.target.status === 401) {
+            document.getElementById('timeout_mask').style.display = 'block';
+            console.log(e.target.response);
+            return loadLayer_complete(layer);
+        }
 
         if (e.target.status === 200) {
 
