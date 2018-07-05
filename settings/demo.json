@@ -540,7 +540,6 @@
                 "label": "Retail Place type",
                 "type": "categorized",
                 "field": "venue_type",
-                "other": true,
                 "cat": {
                   "Airport": {
                       "style": {
@@ -618,7 +617,6 @@
                   "label": "Main Market",
                   "type": "categorized",
                   "field": "main_market",
-                  "other": true,
                   "applied": true,
                   "cat": {
                       "Mass": {
