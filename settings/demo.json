@@ -52,7 +52,6 @@
           "provider": "HERE"
         },
         "sprawls": {
-
           "name": "World Cities",
           "meta": "Urban agglomerations with a population greater than 100,000.",
           "pane": [
@@ -315,6 +314,8 @@
           "table": "cn_retailpoints",
           "cluster_label": "brand",
           "cluster_cat": "city",
+          "cluster_kmeans": 50,
+          "cluster_dbscan": 0.015,
           "infoj": [
             {
               "field": "brand",
@@ -391,13 +392,26 @@
                     "marker": "svg_symbols.target([400, '#056243', 200, '#FFF'])"
                   }
                 },
-                "competitors": {}
+                "competitors": {
+                  "watsons": {
+                    "label": "Watsons",
+                    "colour": "#0A94A6"
+                  },
+                  "park_n_shop": {
+                    "label": "Park'N'Shop",
+                    "colour": "#FCE28D"
+                  },
+                  "other": {
+                    "label": "other",
+                    "colour": "#e0e0e0"
+                  }
+                }
               }
             ]
           }
         },
         "cn_sh_retail_venues": {
-          "name": "Shanghai retail places",
+          "name": "Shanghai Retail Places",
           "format": "mvt",
           "geom_3857": "geom_3857",
           "pane": ["cn_sh_retail_venues", 510],
@@ -411,25 +425,28 @@
           "infoj": [
             {
               "field": "venue_name",
-              "label": "Venue name",
+              "label": "Venue",
               "type": "text"
             },
             {
               "field": "name_cn",
               "label": "Name",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 1
             },
             {
               "field": "venue_type",
               "label": "Venue type",
               "type": "text",
-              "inline": true
+              "inline": true,
+              "level": 1
             },
             {
               "field": "address",
               "label": "Address",
-              "type": "text"
+              "type": "text",
+              "level": 1
             },
             {
               "label": "About"
@@ -505,7 +522,159 @@
               "level": 2
             }
           ],
-          "style": {}
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#ddd",
+              "fill": true,
+              "fillColor": "#1e88e5",
+              "fillOpacity": 0.5
+            },
+            "highlight": {
+              "color": "#FE5F55",
+              "fill": true,
+              "fillOpacity": 0.3
+            },
+            "themes": [
+              {
+                "label": "Retail Place type",
+                "type": "categorized",
+                "field": "venue_type",
+                "other": true,
+                "cat": {
+                  "Airport": {
+                      "style": {
+                          "weight": 1,
+                          "color": "#D90368",
+                          "opacity": 1,
+                          "fillColor": "#D90368",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                      }
+                  },
+                  "Department Store": {
+                      "style": {
+                      "weight": 1,
+                      "color": "#FE4E00",
+                      "opacity": 1,
+                      "fillColor": "#FE4E00",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                      }
+                  },
+                  "Supermarket": {
+                    "style": {
+                        "weight": 1,
+                        "color": "#ffd740",
+                        "opacity": 1,
+                        "fillColor": "#ffd740",
+                        "fill": true,
+                        "fillOpacity": 0.3
+                    }
+                  },
+                  "Railway Station": {
+                    "style": {
+                        "weight": 1,
+                        "color": "#074F57",
+                        "opacity": 1,
+                        "fillColor": "#074F57",
+                        "fill": true,
+                        "fillOpacity": 0.3                        
+                    }
+                  },
+                  "Mall": {
+                    "style": {
+                        "weight": 1,
+                        "color": "#08B2E3",
+                        "opacity": 1,
+                        "fillColor": "#08B2E3",
+                        "fill": true,
+                        "fillOpacity": 0.3
+                    }
+                  },
+                  "Street": {
+                    "style": {
+                        "weight": 1,
+                        "color": "#55505C",
+                        "opacity": 1,
+                        "fillColor": "#55505C",
+                        "fill": true,
+                        "fillOpacity": 0.3
+                    }
+                  },
+                  "Outlet": {
+                    "style": {
+                        "weight": 1,
+                        "color": "#541388",
+                        "opacity": 1,
+                        "fillColor": "#541388",
+                        "fill": true,
+                        "fillOpacity": 0.3
+                    }
+                  }
+                }
+              },
+              {
+                  "label": "Main Market",
+                  "type": "categorized",
+                  "field": "main_market",
+                  "other": true,
+                  "applied": true,
+                  "cat": {
+                      "Mass": {
+                          "style": {
+                              "weight": 1,
+                              "color": "#129490",
+                              "opacity": 1,
+                              "fillColor": "#129490",
+                              "fill": true,
+                              "fillOpacity": 0.3
+                          }
+                      },
+                      "Mass+": {
+                          "style": {
+                              "weight": 1,
+                              "color": "#F7B2BD",
+                              "opacity": 1,
+                              "fillColor": "#F7B2BD",
+                              "fill": true,
+                              "fillOpacity": 0.3
+                          }
+                      },
+                      "Premium": {    
+                          "style": {
+                              "weight": 1,
+                              "color": "#698996",
+                              "opacity": 1,
+                              "fillColor": "#698996",
+                              "fill": true,
+                              "fillOpacity": 0.3
+                          }
+                      },
+                      "Luxury": {
+                          "style": {
+                              "weight": 1,
+                              "color": "#87BCDE",
+                              "opacity": 1,
+                              "fillColor": "#87BCDE",
+                              "fill": true,
+                              "fillOpacity": 0.3
+                          }
+                      },
+                      "Unknown": {
+                          "style": {
+                              "weight": 1,
+                              "color": "#C1B098",
+                              "opacity": 1,
+                              "fillColor": "#C1B098",
+                              "fill": true,
+                              "fillOpacity": 0.3
+                          }
+                      }
+                  }
+              }
+            ]
+          }
         }
       }
     },
