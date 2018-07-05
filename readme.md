@@ -276,11 +276,11 @@ We are using the [fastify-auth](https://github.com/fastify/fastify-auth) module 
 
 By default the framework is public with full access to all data sources defined in the environmental settings.
 
-By setting the LOGIN key in the environmental settings with a PostgreSQL connection string (plus table name seperated by a |) it is possible to restrict access. The table is an access control list (ACL) which must be stored in a PostgreSQL database.
+By setting the LOGIN key in the environmental settings with a PostgreSQL connection string (plus a table name seperated by a | pipe) it is possible to restrict access. The access control list (ACL) table must be stored in a PostgreSQL database.
 
-It is possible to set an ADMIN *instead of* the LOGIN key with the same connection string. Only admin routes are restricted if the admin key is set. The admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or in the database.
+It is possible to set ADMIN *instead of* the LOGIN key with the same connection string. Only admin routes are restricted if the admin key is set. Admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or database. ADMIN is the prefered option for an open application which allows administrators to change the application settings through the application interface.
 
-Below is the table schema for the ACL:
+An ACL must have following table schema:
 
 ```
 create table if not exists acl
@@ -301,11 +301,13 @@ The [login](https://github.com/GEOLYTIX/xyz/blob/master/views/login.html) and [r
 
 ### Registration
 
-New accounts consist of an email address and password. It is possible to create user accounts which are not email addresses. These accounts must be verified by an administrator.
+New accounts consist of an email address and password.
 
-Once a record for the account is stored in the ACL an email with a link that contains a verification token is sent. The account holder of the email account must follow this link to verify that access rights to the email account are given. This serves as verification of identity to site administrators.
+Once a record for the account is stored in the ACL an email with a link that contains a verification token is sent. The account holder of the email account must follow this link to verify that access rights to the email account are given.
 
-Once the account is **verified** (true) an email is sent to all site administrators. The email provides a link with the newly generated approval token for the verified user record in the ACL. The account will be **approved** if an administrator validates the link. Login credentials will have to be provided by the administrator if not already logged in (valid JWT cookie).
+Once the account is **verified** an email is sent to all site administrators. The email provides a link with the newly generated approval token for the verified user record in the ACL. The account will be **approved** if an administrator validates the link. Login credentials will have to be provided by the administrator if not already logged in (valid JWT cookie).
+
+It is possible to create user accounts which are not email addresses. These accounts must be verified by an administrator.
 
 An email will be sent to inform whether an account has been deleted or approved.
 
@@ -315,7 +317,8 @@ We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to
 
 ### Password reset
 
-Password reset works the same way as the registration. It is possible to set the new password to the old password. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. Administrator do not need to approve the account again. Changing the password resets failed login attempts to 0.
+Password reset works the same way as the registration. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. Administrator do not need to approve the account again. Changing the password resets failed login attempts to 0.
+* It is possible to set the new password to the old password.
 
 ### Failed login attempts
 
