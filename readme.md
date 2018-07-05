@@ -278,7 +278,7 @@ By default the framework is public with full access to all data sources defined 
 
 By setting the LOGIN key in the environmental settings with a PostgreSQL connection string (plus a table name seperated by a | pipe) it is possible to restrict access. The access control list (ACL) table must be stored in a PostgreSQL database.
 
-It is possible to set ADMIN *instead of* the LOGIN key with the same connection string. Only admin routes are restricted if the admin key is set. Admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or database. ADMIN is the prefered option for an open application which allows administrators to change the application settings through the application interface.
+*It is possible to set ADMIN instead of the LOGIN key with the same connection string.* Only admin routes are restricted if the admin key is set. Admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or database. ADMIN is the prefered option for an open application which allows administrators to change the application settings through the application interface.
 
 An ACL must have following table schema:
 
@@ -307,7 +307,7 @@ Once a record for the account is stored in the ACL an email with a link that con
 
 Once the account is **verified** an email is sent to all site administrators. The email provides a link with the newly generated approval token for the verified user record in the ACL. The account will be **approved** if an administrator validates the link. Login credentials will have to be provided by the administrator if not already logged in (valid JWT cookie).
 
-It is possible to create user accounts which are not email addresses. These accounts must be verified by an administrator.
+*It is possible to create user accounts which are not email addresses. These accounts must be verified by an administrator.*
 
 An email will be sent to inform whether an account has been deleted or approved.
 
@@ -317,8 +317,7 @@ We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to
 
 ### Password reset
 
-Password reset works the same way as the registration. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. Administrator do not need to approve the account again. Changing the password resets failed login attempts to 0.
-* It is possible to set the new password to the old password.
+Password reset works the same way as the registration. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. *Administrator do **not** need to approve the account again.* Changing the password resets failed login attempts to 0.
 
 ### Failed login attempts
 
