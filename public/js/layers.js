@@ -133,6 +133,30 @@ module.exports = () => {
                     }
                 }
             });
+            
+            // Create zoom to layer control
+            if(layer.cntr){
+                utils._createElement({
+                    tag: 'i',
+                    options: {
+                        textContent: "search",
+                        className: 'material-icons cursor noselect btn_header',
+                        title: 'Zoom map to layer'
+                    },
+                    appendTo: layer.header,
+                    eventListener: {
+                        event: 'click',
+                        funct: e => {
+                            e.stopPropagation();
+                            if(layer.display){
+                                _xyz.map.panTo(L.latLng(layer.cntr));
+                            } else {
+                                return false;
+                            }
+                        }
+                    } 
+                });
+            }
 
             // Create loader element.
             layer.loader = utils.createElement('div', {

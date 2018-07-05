@@ -308,6 +308,7 @@
           "display": true,
           "name": "Retail Shops",
           "pane": ["cn_retailpoints", 539],
+          "cntr": [35.31694,113.79759],
           "format": "cluster",
           "dbs": "XYZ",
           "qID": "id",
@@ -413,6 +414,7 @@
         "cn_sh_retail_venues": {
           "name": "Shanghai Retail Places",
           "format": "mvt",
+          "cntr": [31.24738, 121.46578],
           "geom_3857": "geom_3857",
           "pane": ["cn_sh_retail_venues", 510],
           "dbs": "XYZ",
