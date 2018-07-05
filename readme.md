@@ -270,19 +270,63 @@ Query parameter:
 
 ### /api/images/delete
 
-## Security
+## [Security](#security)
 
-Access to any method or data source served through the XYZ framework can be restricted through the authentication middleware [Passport](http://www.passportjs.org/). The [passport-local](https://github.com/jaredhanson/passport-local) strategy in combination with cookie sessions is used as default authentication method. *The implementation of JSON Web Tokens is planned for a future feature release.*  
+By default the framework is public with full access to all data sources defined in the environmental settings.
 
-The default strategy uses a local MongoDB database in which users account are registered. XYZ endpoints allow for accounts to be created, removed, authenticated, approved and authorized.  
+By setting the LOGIN key in the environmental settings with a PostgreSQL connection string (plus table name seperated by a |) it is possible to restrict access. The table is an access control list (ACL) which must be stored in a PostgreSQL database.
 
-User accounts consist of an email address and password only. It is possible to create user accounts which are not email addresses. These accounts must be authenticated by an administrator or directly in the database.  
+It is possible to set an ADMIN *instead of* the LOGIN key with the same connection string. Only admin routes are restricted if the admin key is set. The admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or in the database.
 
-**Authentication** is the process of ascertaining that somebody really is who he claims to be. Once a user creates a new account an automated email will be sent from the passport module to the email address provided by the user. This email contains a link which is valid for 1 hour. Users authenticate accounts by following the link and thus proving that they have access to the email account which has been provided in the registration request.
+Below is the table schema for the ACL:
 
-Account **approval** is an administrative process. Adminstrator accounts can send requests to the passport middleware that they recognise the email address of an account and approve access for the account.
-
-A new database will be created when the first user account is registered. In order to approve this user and give administrative rights to the account open a mongo console to use the database and manually update the account like so:
 ```
-db.users.update({"email":"dennis.bauszus@geolytix.co.uk"},{$set:{"verified":true, "approved":true, "admin":true}})
+create table if not exists acl
+(
+	"_id" serial not null,
+	email text not null,
+	password text not null,
+	verified boolean,
+	approved boolean,
+	admin boolean,
+	verificationtoken text,
+	approvaltoken text,
+	failedattempts integer default 0
+);
 ```
+We are using a javascript implementation of the OpenBDS [Blowfish (cipher)](https://en.wikipedia.org/wiki/Blowfish_(cipher)) to encrypt passwords at rest in the ACL.
+The [login](https://github.com/GEOLYTIX/xyz/blob/master/views/login.html) and [register](https://github.com/GEOLYTIX/xyz/blob/master/views/register.html) views use [input form validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#Validation) for the email (max 50 character) and password (min 8 character). These are also validated on the backend.
+
+The [auth.js](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) module deals with onboarding and session authentication.
+
+### Registration
+
+New accounts consist of an email address and password. It is possible to create user accounts which are not email addresses. These accounts must be verified by an administrator.
+
+Once a record for the account is stored in the ACL an email with a link that contains a verification token is sent. The account holder of the email account must follow this link to verify that access rights to the email account are given. This serves as verification of identity to site administrators.
+
+Once the account is **verified** (true) an email is sent to all site administrators. The email provides a link with the newly generated approval token for the verified user record in the ACL. By following the link an administrator **approves** the account knowing that the email address has already been verified.
+
+The [admin view](https://github.com/GEOLYTIX/xyz/blob/master/views/admin.html) lists all ACL records. The view is accessible through an admin route. The admin panel allows administrator to elevate accounts to be administrator, delete, verify or approve accounts.
+
+An email will be sent to inform whether an account has been deleted or approved.
+
+### Emails
+
+We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to send emails through the [node-mailer](https://nodemailer.com) module. For this to work an SMTPS protocol string must be defined in the TRANSPORT key in the environment settings.
+
+### Password reset
+
+Password reset works the same way as the registration. It is possible to set the new password to the old password. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. Administrator do not need to approve the account again. Changing the password resets failed login attempts to 0.
+
+### Failed login attempts
+
+Failed login attempts are stored with the record in the ACL. The verification will be removed once a maximum number of failed attempts has been recorded. The maximum number for failed login attempts can be set in the FAILED_ATTEMPTS environment setting. The default is 3 attempts. Having the verification removed an account holder is forced to re-register. Setting a new (or the old) password in the registration on an existing account (email) will reset the failed attempts record and generating a new verification token to be sent via email. After verifying the account the user is able to login once again.
+
+### JWT token
+
+### Strategy
+
+### Timeout
+
+### Logout
