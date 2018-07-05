@@ -305,13 +305,11 @@ New accounts consist of an email address and password. It is possible to create 
 
 Once a record for the account is stored in the ACL an email with a link that contains a verification token is sent. The account holder of the email account must follow this link to verify that access rights to the email account are given. This serves as verification of identity to site administrators.
 
-Once the account is **verified** (true) an email is sent to all site administrators. The email provides a link with the newly generated approval token for the verified user record in the ACL. By following the link an administrator **approves** the account knowing that the email address has already been verified.
-
-The [admin view](https://github.com/GEOLYTIX/xyz/blob/master/views/admin.html) lists all ACL records. The view is accessible through an admin route. The admin panel allows administrator to elevate accounts to be administrator, delete, verify or approve accounts.
+Once the account is **verified** (true) an email is sent to all site administrators. The email provides a link with the newly generated approval token for the verified user record in the ACL. The account will be **approved** if an administrator validates the link. Login credentials will have to be provided by the administrator if not already logged in (valid JWT cookie).
 
 An email will be sent to inform whether an account has been deleted or approved.
 
-### Emails
+### Email transport
 
 We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to send emails through the [node-mailer](https://nodemailer.com) module. For this to work an SMTPS protocol string must be defined in the TRANSPORT key in the environment settings.
 
@@ -325,7 +323,29 @@ Failed login attempts are stored with the record in the ACL. The verification wi
 
 ### JWT token
 
+[JSON Web Token (JWT)](https://jwt.io) are used to store session and user data. The token themselves will be held in a cookie on the browser. The backend will *not* store these cookies in order to horizontally scale the application in a serverless environment.
+
+The **user cookie** stores the email address as well as user access priviliges (verified, approved, admin).
+
+The **session cookie** holds a redirect address which allows the application to return to a specific parameterized address from the login view. This allows the auth module to respond with a redirect instead of passing the original request to the login function.
+
 ### Strategy
+
+Following strategy is applied by the authToken() function which validates token before passing on requests.
+
+1. **!login**
+
+   An anonymous user token and empty session token will be signed and sent to client if no login is required. The authentication process is complete and the request is passed on.
+
+2. **decode token**
+
+   If exists a user token will be decoded from the request cookie or request parameter (in case the request is generated without the capabilitity to assign cookies.
+
+3. **!token**
+
+   The authentication strategy will fail if no decoded token exists at this stage. A 401 response (*No user token found in request.*) will be sent as response to API calls (no redirect parameter in request). Otherwise a redirect to the login endpoint will be sent as response. An anonymous user token and a session token with the original request URL will be signed to the redirect.
+
+4. 
 
 ### Timeout
 
