@@ -40,6 +40,12 @@
   color: #090;
   height: 25px; }
 
+.btn_subtext {
+  font-family: ffmark;
+  font-size: 14px;
+  color: #090;
+  padding: 8px 0px 8px 0px; }
+
 .btn_column {
   top: 0;
   z-index: 999;

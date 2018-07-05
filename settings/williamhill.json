@@ -1801,7 +1801,6 @@
           },
           "tilecache": "gb_region__tc",
           "style": {
-            "palette": true,
             "default": {
               "fillColor": "#aaa",
               "weight": 1,
@@ -2497,7 +2496,6 @@
           },
           "tilecache": "seamless_town__tc",
           "style": {
-            "palette": true,
             "default": {
               "weight": 1,
               "color": "#777",

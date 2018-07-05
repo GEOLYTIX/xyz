@@ -456,7 +456,6 @@
             },
             "tilecache": "admin_output_area__tc",
             "style": {
-                "palette": true,
                 "default": {
                     "weight": 1,
                     "color": "#777",
@@ -518,7 +517,6 @@
           },
           "tilecache": "seamless_town__tc",
           "style": {
-            "palette": true,
             "default": {
               "weight": 1,
               "color": "#777",

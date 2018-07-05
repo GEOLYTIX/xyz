@@ -160,35 +160,54 @@ function mvt_style(layer){
     }
     
     // begin add colour picker
-    // if style palette is enabled on this layer, true or colour object
-    if(layer.style.palette) {
-        
-        color_picker(layer, {
-            property: "fillColor",
-            label: "Fill",
-            style: "default",
-            appendTo: style_section
-        });
-        
-        color_picker(layer, {
-            property: "color",
-            label: "Stroke",
-            style: "default",
-            appendTo: style_section
-        });
-        
-        color_picker(layer, {
-            property: "color",
-            label: "Highlight",
-            style: "highlight",
-            appendTo: style_section
-        });
+   
+    utils._createElement({
+        tag: "div",
+        options: {
+            className: "bold btn_subtext",
+            textContent: "Default colours"
+        },
+        appendTo: style_section
+    });
     
-    }
+    color_picker(layer, {
+        property: "fillColor",
+        label: "Fill",
+        style: "default",
+        appendTo: style_section
+    });
+        
+    color_picker(layer, {
+        property: "color",
+        label: "Stroke",
+        style: "default",
+        appendTo: style_section
+    });
+        
+    color_picker(layer, {
+        property: "color",
+        label: "Highlight",
+        style: "highlight",
+        appendTo: style_section
+    });
+    
     // end add colour picker
     
     // begin opacity tools
+    // Add group title
+    if(layer.style.default.stroke || layer.style.default.color || layer.style.default.fill) {
+                
+        utils._createElement({
+            tag: "div",
+            options: {
+                className: "bold btn_subtext",
+                textContent: "Layer opacity"
+            },
+            appendTo: style_section
+        });
+    }
     
+    // add opacity sliders
     if(layer.style.default.stroke || layer.style.default.color){
         
         function set_stroke_opacity(layer, opacity){

@@ -416,7 +416,7 @@
           "format": "mvt",
           "cntr": [31.24738, 121.46578],
           "geom_3857": "geom_3857",
-          "pane": ["cn_sh_retail_venues", 510],
+          "pane": ["cn_sh_retail_venues", 530],
           "dbs": "XYZ",
           "properties": "venue_name, name_cn, venue_type, address, mass_count, massplus_count, luxury_count, mass, premium, luxury, main_market, secondary,",
           "qID": "id",
