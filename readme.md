@@ -270,6 +270,12 @@ Query parameter:
 
 ### /api/images/delete
 
+## SQL Injections
+
+All queries to the PostgreSQL database are parsed through the node-postgres module. [Queries](https://node-postgres.com/features/queries) use a battle-tested parameter substitution code.
+
+Additionally all field and table names are checked against a lookup table which includes values from the current application settings only. A query to a table or a query with a fieldname which is not defined in the application settings is not acceptable ([http code 406](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406)).
+
 ## [Security](#security)
 
 We are using the [fastify-auth](https://github.com/fastify/fastify-auth) module for authentication in XYZ. All authentication is handled in XYZ's [auth.js](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) module.
