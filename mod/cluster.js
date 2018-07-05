@@ -206,7 +206,7 @@ async function get(req, res, fastify) {
 
 async function select(req, res, fastify) {
   
-console.log(req.query.geom);
+//console.log(req.query);
 
   let
     table = req.query.table,

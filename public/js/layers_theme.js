@@ -306,10 +306,10 @@ function clusterCategorized(layer, legend) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    layer.filter[layer.cluster_cat].in = [];
+                    layer.filter[_field].in = [];
                 } else {
                     this.style.opacity = 0.5;
-                    layer.filter[layer.cluster_cat].in = Object.keys(layer.style.theme.cat);
+                    layer.filter[_field].in = Object.keys(layer.style.theme.cat);
                 }
 
                 layer.getLayer();

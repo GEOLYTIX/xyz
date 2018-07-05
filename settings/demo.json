@@ -314,7 +314,7 @@
           "qID": "id",
           "table": "cn_retailpoints",
           "cluster_label": "brand",
-          "cluster_cat": "shopname",
+          "cluster_cat": "city",
           "infoj": [
             {
               "field": "brand",
@@ -346,12 +346,6 @@
               "inline": true
             },
             {
-              "field": "region",
-              "label": "Region",
-              "type": "text",
-              "inline": true
-            },
-            {
               "field": "city",
               "label": "City",
               "type": "text",
@@ -377,23 +371,22 @@
               {
                 "label": "Retailer",
                 "type": "categorized",
-                "field": "brand",
+                "field": "brand2",
                 "applied": true,
-                "other": true,
                 "cat": {
-                  "Dr Martens": {
+                  "dr_martens": {
                     "label": "Dr Martens",
                     "marker": "svg_symbols.target([400,'#000', 300, '#fff176', 150, '#000'])"
                   },
-                  "Watsons": {
+                  "watsons": {
                     "label": "Watsons",
                     "marker": "svg_symbols.target([400, '#0A94A6', 300, '#FFF', 150, '#D72F33'])"
                   },
-                  "Park N Shop": {
+                  "park_n_shop": {
                     "label": "Park'N'Shop",
                     "marker": "svg_symbols.target([400, '#382596', 250, '#F02C24', 150, '#FDD03E'])"
                   },
-                  "Holland & Barrett": {
+                  "holland_and_barrett": {
                     "label": "Holland & Barrett",
                     "marker": "svg_symbols.target([400, '#056243', 200, '#FFF'])"
                   }
@@ -402,6 +395,117 @@
               }
             ]
           }
+        },
+        "cn_sh_retail_venues": {
+          "name": "Shanghai retail places",
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "pane": ["cn_sh_retail_venues", 510],
+          "dbs": "XYZ",
+          "properties": "venue_name, name_cn, venue_type, address, mass_count, massplus_count, luxury_count, mass, premium, luxury, main_market, secondary,",
+          "qID": "id",
+          "arrayZoom": {
+            "12": "cn_sh_retail_venues"
+          },
+          "tilecache": "cn_sh_retail_venues__tc",
+          "infoj": [
+            {
+              "field": "venue_name",
+              "label": "Venue name",
+              "type": "text"
+            },
+            {
+              "field": "name_cn",
+              "label": "Name",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "venue_type",
+              "label": "Venue type",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "address",
+              "label": "Address",
+              "type": "text"
+            },
+            {
+              "label": "About"
+            },
+            {
+              "field": "main_market",
+              "label": "Main market",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "secondary",
+              "label": "Secondary market",
+              "type": "text",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "mass",
+              "label": "Mass count",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "massplus_count",
+              "label": "Mass plus count",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "prem_count",
+              "label": "Premium count",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "luxury_count",
+              "label": "Luxury count",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "mass",
+              "label": "Mass",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "mass_plus",
+              "label": "Mass plus",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "premium",
+              "label": "Premium",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            },
+            {
+              "field": "luxury",
+              "label": "Luxury",
+              "type": "numeric",
+              "inline": true,
+              "level": 2
+            }
+          ],
+          "style": {}
         }
       }
     },
