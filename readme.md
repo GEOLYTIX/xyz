@@ -272,6 +272,8 @@ Query parameter:
 
 ## [Security](#security)
 
+We are using the [fastify-auth](https://github.com/fastify/fastify-auth) module for authentication in XYZ. All authentication is handled in XYZ's [auth.js](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) module.
+
 By default the framework is public with full access to all data sources defined in the environmental settings.
 
 By setting the LOGIN key in the environmental settings with a PostgreSQL connection string (plus table name seperated by a |) it is possible to restrict access. The table is an access control list (ACL) which must be stored in a PostgreSQL database.
@@ -296,8 +298,6 @@ create table if not exists acl
 ```
 We are using a javascript implementation of the OpenBDS [Blowfish (cipher)](https://en.wikipedia.org/wiki/Blowfish_(cipher)) to encrypt passwords at rest in the ACL.
 The [login](https://github.com/GEOLYTIX/xyz/blob/master/views/login.html) and [register](https://github.com/GEOLYTIX/xyz/blob/master/views/register.html) views use [input form validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#Validation) for the email (max 50 character) and password (min 8 character). These are also validated on the backend.
-
-The [auth.js](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) module deals with onboarding and session authentication.
 
 ### Registration
 
@@ -331,22 +331,52 @@ The **session cookie** holds a redirect address which allows the application to 
 
 ### Strategy
 
-Following strategy is applied by the authToken() function which validates token before passing on requests.
+*fastify-auth* does not provide an authentication strategy. The strategy which is applied by the authToken() function will be detailed in this section.
 
-1. **!login**
+Request will be passed on if the authentication succeeds. A redirect to the login will be sent if the authentication fails. A fail message will be assigned to the status field in the user token. A [401 http code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) will be assigned to the response of requests which fail to authenticate. Redirection can be surpressed with the *noredirect* parameter on the request. This allows for API calls from the client application to not receive a redirect response but only the fail message. The application interface will be masked if a request fails to authenticate.
 
-   An anonymous user token and empty session token will be signed and sent to client if no login is required. The authentication process is complete and the request is passed on.
+The individual steps in the authentication strategy sequence are as follows.
+
+1. **no login**
+
+   Success. An anonymous user token and empty session token will be signed and sent to the client if no login is required.
 
 2. **decode token**
 
-   If exists a user token will be decoded from the request cookie or request parameter (in case the request is generated without the capabilitity to assign cookies.
+   If exists a user token will be decoded from the request cookie or request parameter (in case the request is generated without the capabilitity to assign cookies).
 
-3. **!token**
+3. **no token**
 
-   The authentication strategy will fail if no decoded token exists at this stage. A 401 response (*No user token found in request.*) will be sent as response to API calls (no redirect parameter in request). Otherwise a redirect to the login endpoint will be sent as response. An anonymous user token and a session token with the original request URL will be signed to the redirect.
+   Fail. *No user token found in request.* Authentication will fail if no decoded token exists at this stage. An anonymous user token and a session token with the request URL as redirect will be signed to the response.
 
-4. 
+4. **token timeout**
+
+   The time from when the token was issued is compared to the current time to establish the tokens age. The authentication will fail if the token's age exceeds the timeout limit.
+
+5. **no admin**
+
+   Fail. *Admin authorization required for the requested route.* This stage is only checked for requests to endpoints which require admin level authorization. Authorization will fail if the user token does not carry admin privileges.
+
+6. **no email**
+
+   Fail. *Email not defined in token.* Authorization will fail at this stage if the user token does not carry an email field in the payload.
+
+7. **user not verified**
+
+   Fail. *User email not verified.* Authorization will fail if the user token does not carry information that the account email has been verified.
+
+8. **user not approved**
+
+   Fail. *User email not approved by administrator.* Authorization will fail at this stage if the user token does not carry the *approved* field.
+   
+9. **issue new token**
+
+   Authorization has succeeded. The user token issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.
 
 ### Timeout
 
+The default timeout value is 30 (seconds). A different value can be provided in the TIMEOUT environment setting.
+
 ### Logout
+
+The user and session token will be emptied by following the /logout route.
