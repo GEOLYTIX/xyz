@@ -308,7 +308,7 @@
           "display": true,
           "name": "Retail Shops",
           "pane": ["cn_retailpoints", 539],
-          "cntr": [34.17943, 111.42094],
+          "cntr": [34.83001,116.10712],
           "format": "cluster",
           "dbs": "XYZ",
           "qID": "id",

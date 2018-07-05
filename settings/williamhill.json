@@ -800,8 +800,7 @@
               "field": "loc_used",
               "label": "Rooftop source",
               "type": "text",
-              "level": 1,
-              "inline": true
+              "level": 1
             },
             {
                 "field": "shop_status",
