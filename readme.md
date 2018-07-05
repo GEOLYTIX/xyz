@@ -197,7 +197,7 @@ Request vector tiles from a PostGIS data source.
 Query parameter:
 * dbs: The name of the Postgres database connection as defined in the environment settings.
 * table: The table name.
-* geom_3857: The name of the geometry field in the data table. SRID must be EPSG:3857.
+* geom_3857: The name of the geometry field in the data table. SRID must be EPSG:3857. Defaults to 'geom_3857'.
 * qID: The ID field which is required to select locations from layer. Defaults to null.
 * properties: Comma seperated list of field names which are available to the leaflet.vectorGrid plugin for styling. Defaults to empty.
 * layer: The name of the layer.
@@ -228,6 +228,7 @@ Query parameter:
 * dbs: The name of the Postgres database connection as defined in the environment settings.
 * table: The table name.
 * geom: The name of the geometry field in the data table. SRID must be EPSG:4326. Defaults to 'geom'.
+* geomj: The geojson geometry to be returned from the data table. Must be geojson with EPSG:4326. Defaults to 'ST_asGeoJson(${geom})'.
 * properties: Comma seperated list of field names which are available to the leaflet.vectorGrid plugin for styling. Defaults to empty.
 * west: The western bounds for the request (float).
 * south: The southern bounds for the request (float).
@@ -241,7 +242,15 @@ Request cluster as json from PostGIS table within bounding box.
 Query parameter:
 * dbs: The name of the Postgres database connection as defined in the environment settings.
 * table: The table name.
-*
+* cat: The name of the field which is used to group cluster.
+* theme: A theme which is applied to the clustering ('categorized' or 'graduated').
+* filter: A json object which will be used to create an SQL filter to be applied before features are read for clustering.
+* kmeans: An integer value which defined the minimum number of cluster to be created.
+* dbscan: A float value which will be applied to define the maximum distance within a cluster.
+* west: The western bounds for the request (float).
+* south: The southern bounds for the request (float).
+* east: The eastern bounds for the request (float).
+* north: The northern bounds for the request (float).
 
 ### /api/cluster/select
 
@@ -250,7 +259,26 @@ Request array of location from a cluster.
 Query parameter:
 * dbs: The name of the Postgres database connection as defined in the environment settings.
 * table: The table name.
-*
+* qID: The ID field which is required to select individual locations from cluster. Defaults to 'id'.
+* geom: The name of the geometry field in the data table. SRID must be EPSG:4326. Defaults to 'geom'.
+* label: The name of the field which returns the list values for locations in cluster. Defaults to '${qID}'.
+* filter: A json object which will be used to create an SQL filter to be applied in the query.
+* count: The number of items to be listed in the array.
+* lnglat: Array of longitude and latitude from where to query the nearest count cluster features.
+
+### /api/location/select
+
+Request location data from a PostgreSQL table by ID.
+
+Query parameter:
+* table:
+* geom:
+* geomj:
+* geomq:
+* geomdisplay:
+* qID:
+* id:
+* sql_filter:
 
 ### /api/location/new
 
