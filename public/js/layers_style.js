@@ -61,7 +61,7 @@ function mvt_style(layer){
         let colours;
         
         // if palette is an object then apply it. Else just take the default.
-        layer.style.palette instanceof Object ? colours =  layer.style.palette : colours = default_colours;
+        layer.style.palette && layer.style.palette instanceof Object ? colours =  layer.style.palette : colours = default_colours;
         
         let block = utils.createElement('div', {
             classList: "block"
@@ -160,36 +160,37 @@ function mvt_style(layer){
     }
     
     // begin add colour picker
-   
-    utils._createElement({
-        tag: "div",
-        options: {
-            className: "bold btn_subtext",
-            textContent: "Default colours"
-        },
-        appendTo: style_section
-    });
-    
-    color_picker(layer, {
-        property: "fillColor",
-        label: "Fill",
-        style: "default",
-        appendTo: style_section
-    });
-        
-    color_picker(layer, {
-        property: "color",
-        label: "Stroke",
-        style: "default",
-        appendTo: style_section
-    });
-        
-    color_picker(layer, {
-        property: "color",
-        label: "Highlight",
-        style: "highlight",
-        appendTo: style_section
-    });
+   if(layer.style.palette){
+       utils._createElement({
+           tag: "div",
+           options: {
+               className: "bold btn_subtext",
+               textContent: "Default colours"
+           },
+           appendTo: style_section
+       });
+       
+       color_picker(layer, {
+           property: "fillColor",
+           label: "Fill",
+           style: "default",
+           appendTo: style_section
+       });
+       
+       color_picker(layer, {
+           property: "color",
+           label: "Stroke",
+           style: "default",
+           appendTo: style_section
+       });
+       
+       color_picker(layer, {
+           property: "color",
+           label: "Highlight",
+           style: "highlight",
+           appendTo: style_section
+       });
+   }
     
     // end add colour picker
     
