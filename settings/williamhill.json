@@ -749,7 +749,7 @@
           "cluster_dbscan": 0.01,
           "infoj": [
             {
-              "field": "branchid2",
+              "field": "branchid",
               "label": "Branch ID",
               "type": "text",
               "inline": true,
@@ -768,8 +768,8 @@
                 "inline": true
             },
             {
-                "field": "new_competitor_fascia",
-                "label": "New competitor fascia",
+                "field": "previous_competitor_fascia",
+                "label": "Previous competitor fascia",
                 "type": "text",
                 "inline": true
             },
@@ -793,6 +793,13 @@
               "label": "Postcode",
               "type": "text",
               "filter": "like",
+              "level": 1,
+              "inline": true
+            },
+            {
+              "field": "loc_used",
+              "label": "Rooftop source",
+              "type": "text",
               "level": 1,
               "inline": true
             },
@@ -1083,7 +1090,7 @@
               "inline": true
             },
             {
-              "field": "branchid2",
+              "field": "branchid",
               "label": "Branch ID",
               "type": "text",
               "inline": true,

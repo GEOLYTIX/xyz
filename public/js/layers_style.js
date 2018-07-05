@@ -30,10 +30,7 @@ function mvt_style(layer){
     
     let timeout;
     
-    // creates colour picker to layer
-    function color_picker(layer, options){
-        
-            // default colours for mvt styles
+    // default colours for mvt styles
     let default_colours = [
           {"hex": "#c62828", "name": "Fire Engine Red"},
           {"hex": "#f50057", "name": "Folly"},
@@ -58,10 +55,11 @@ function mvt_style(layer){
           {"hex": "#78909c", "name": "Light Slate Gray"}
       ];
         
-        let colours;
-        
-        // if palette is an object then apply it. Else just take the default.
-        layer.style.palette && layer.style.palette instanceof Object ? colours =  layer.style.palette : colours = default_colours;
+    // if palette is an object then apply it. Else just take the default.
+    let colours = (layer.style.palette || layer.style.palette instanceof Object) ? layer.style.palette : default_colours;
+    
+    // creates colour picker to layer
+    function color_picker(layer, options){
         
         let block = utils.createElement('div', {
             classList: "block"
@@ -159,8 +157,8 @@ function mvt_style(layer){
 
     }
     
-    // begin add colour picker
-   if(layer.style.palette){
+   // begin add colour picker
+   if(colours){
        utils._createElement({
            tag: "div",
            options: {
