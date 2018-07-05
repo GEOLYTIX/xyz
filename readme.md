@@ -321,11 +321,11 @@ Password reset works the same way as the registration. The hashed password is ov
 
 ### Failed login attempts
 
-Failed login attempts are stored with the record in the ACL. The verification will be removed once a maximum number of failed attempts has been recorded. The maximum number for failed login attempts can be set in the FAILED_ATTEMPTS environment setting. The default is 3 attempts. Having the verification removed an account holder is forced to re-register. Setting a new (or the old) password in the registration on an existing account (email) will reset the failed attempts record and generating a new verification token to be sent via email. After verifying the account the user is able to login once again.
+Failed login attempts are stored with the record in the ACL. The verification will be removed once a maximum number of failed attempts has been recorded. The maximum number for failed login attempts can be set in the FAILED_ATTEMPTS environment setting. The default is 3 attempts. Having the verification removed, an account holder is forced to re-register. Setting a new (or old) password in the registration form for an existing account will reset the failed attempts and generate a new verification token to be sent via email. After verifying the account the user is able to login once again.
 
 ### JWT token
 
-[JSON Web Token (JWT)](https://jwt.io) are used to store session and user data. The token themselves will be held in a cookie on the browser. The backend will *not* store these cookies in order to horizontally scale the application in a serverless environment.
+[JSON Web Token (JWT)](https://jwt.io) are used to store session and user data. Token themselves will be held in a cookie on the browser. The backend will *not* store these cookies in order to horizontally scale the application in a serverless environment.
 
 The **user cookie** stores the email address as well as user access priviliges (verified, approved, admin).
 
@@ -335,7 +335,7 @@ The **session cookie** holds a redirect address which allows the application to 
 
 *fastify-auth* does not provide an authentication strategy. The strategy which is applied by the authToken() function will be detailed in this section.
 
-Request will be passed on if the authentication succeeds. A redirect to the login will be sent if the authentication fails. A fail message will be assigned to the status field in the user token. A [401 http code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) will be assigned to the response of requests which fail to authenticate. Redirection can be surpressed with the *noredirect* parameter on the request. This allows for API calls from the client application to not receive a redirect response but only the fail message. The application interface will be masked if a request fails to authenticate.
+Requests will be passed on if the authentication succeeds. A redirect to the login will be sent if the authentication fails. A fail message will be assigned to the status field in the user token. A [401 http code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) will be assigned to the response of a requests which fails to authenticate. Redirection can be surpressed with the *noredirect* parameter on the request. This allows for API calls from the client application to not receive a redirect response but only a fail message. The application interface will be masked if a request fails to authenticate.
 
 The individual steps in the authentication strategy sequence are as follows.
 
@@ -353,7 +353,7 @@ The individual steps in the authentication strategy sequence are as follows.
 
 4. **token timeout**
 
-   The time from when the token was issued is compared to the current time to establish the tokens age. The authentication will fail if the token's age exceeds the timeout limit.
+   Fail. *Session timeout.* The time from when the token was issued at (iat) is compared to the current time to establish the token's age. The authentication will fail if the token's age exceeds the timeout limit.
 
 5. **no admin**
 
@@ -373,7 +373,7 @@ The individual steps in the authentication strategy sequence are as follows.
    
 9. **issue new token**
 
-   Authorization has succeeded. The user token issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.
+   Success. Authorization has completed and the user token's issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.
 
 ### Timeout
 
