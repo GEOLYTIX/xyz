@@ -141,7 +141,7 @@ module.exports = () => {
                     options: {
                         textContent: "search",
                         className: 'material-icons cursor noselect btn_header',
-                        title: 'Zoom map to layer'
+                        title: 'Pan to layer'
                     },
                     appendTo: layer.header,
                     eventListener: {
