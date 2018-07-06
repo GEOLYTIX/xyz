@@ -321,7 +321,16 @@ Post request body:
 
 ### /api/location/aggregate
 
+Creates an aggreagte location in the database.
 
+Post request body:
+* dbs: The name of the Postgres database connection as defined in the environment settings.
+* table_source: The table name from where to aggregate locations.
+* table_target: The table name where to store the aggregate location.
+* qID: ?
+* geom_source: The geometry field of the source table.
+* geom_target: The geometry field of the target table.
+* filter: A json object which generates the filter to be applied for the aggregation.
 
 ### /api/gazetteer/autocomplete
 
@@ -333,15 +342,41 @@ Post request body:
 
 ### /api/catchments
 
+Request array of location from a cluster.
 
+Query parameter:
+* dbs: The name of the Postgres database connection as defined in the environment settings.
+* table_target: The table name to store the catchment areas.
+* geom_target: The geometry field in the target table. Defaults to 'geom'.
+* qID: ?
+* lng: The longitude for the catchment origin.
+* lat: The latitude for the catchment origin.
+* distance: The distance in seconds to be applied for the catchments.
+* detail: The detail level for the catchment calculation.
+* reach: The reach of the catchments.
+* mode: The travel mode for the catchment calculation.
+* provider: The provider to use for the catchment calculation.
 
 ### /api/images/new
 
+Uploads an image to cloudinary and attaches the image reference to a location.
 
+Post request body:
+* dbs: The name of the Postgres database connection as defined in the environment settings.
+* table: The table name of the location.
+* qID: The id field of the location. Defaults to 'id'.
+* id: The id of the location.
+* The image data itself is send as an octet stream in the payload.
 
 ### /api/images/delete
 
+Removes the reference of an image from a location.
 
+Query parameter:
+* dbs: The name of the Postgres database connection as defined in the environment settings.
+* table: The table name of the location.
+* qID: The id field of the location. Defaults to 'id'.
+* id: The id of the location.
 
 ## SQL Injections
 
