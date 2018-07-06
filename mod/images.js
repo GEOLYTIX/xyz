@@ -24,6 +24,12 @@ function save(req, res, fastify){
         let table = req.query.table,
             qID = req.query.qID == 'undefined' ? 'id' : req.query.qID,
             id = req.query.id;
+
+        // Check whether string params are found in the settings to prevent SQL injections.
+        if ([table, qID]
+            .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+            return res.code(406).send('Parameter not acceptable.');
+        }
        
         var q = `
         UPDATE ${table} SET
@@ -65,6 +71,12 @@ function remove(req, res, fastify){
             qID = req.query.qID == 'undefined' ? 'id' : req.query.qID,
             id = req.query.id
             image_src = decodeURIComponent(req.query.image_src);
+
+        // Check whether string params are found in the settings to prevent SQL injections.
+        if ([table, qID]
+            .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+            return res.code(406).send('Parameter not acceptable.');
+        }
 
         var q = `
         UPDATE ${table} SET

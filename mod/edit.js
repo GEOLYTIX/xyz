@@ -34,6 +34,12 @@ async function newAggregate(req, res, fastify) {
         filter = JSON.parse(req.query.filter),
         filter_sql = '';
 
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if ([table_target, table_source, geom_target, geom_source]
+        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
+
     filter_sql = await require('./filters').sql_filter(filter, filter_sql);
 
     var q = `

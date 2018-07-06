@@ -265,16 +265,24 @@ function catchmentControl(layer) {
             mode: selMode.options[selMode.selectedIndex].value,
             provider: selProvider.options[selProvider.selectedIndex].value,
             dbs: layer.dbs,
-            table_target: layer.table
+            table_target: layer.table,
+            geom_target: layer.geom
         }));
         
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = () => {
+        xhr.onload = e => {
+
+            if (e.target.status === 401) {
+                document.getElementById('timeout_mask').style.display = 'block';
+                console.log(e.target.response);
+                return;
+            }
+
             utils.removeClass(btnCatchment, 'disabled');
 
             layer.getLayer();
 
-            let json = JSON.parse(xhr.responseText);
+            let json = JSON.parse(e.target.responseText);
 
             if (chkCatchmentsConstruction.control.checked) {
                 let layerTIN = L.geoJson(json.tin, {

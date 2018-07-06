@@ -71,9 +71,17 @@ function layerFilters(layer){
                     geom_source: undefined
                 }));
                 
-                layer.xhr.onload = function(){
-                    let json = JSON.parse(this.response);
-                    if(this.status === 200){
+                layer.xhr.onload = e => {
+
+                    if (e.target.status === 401) {
+                        document.getElementById('timeout_mask').style.display = 'block';
+                        console.log(e.target.response);
+                        return loadLayer_complete(layer);
+                    }
+
+                    let json = JSON.parse(e.target.response);
+
+                    if(e.target.status === 200){
                         _xyz.select.selectLayerFromEndpoint({
                             layer: layer.aggregate_layer,
                             table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
