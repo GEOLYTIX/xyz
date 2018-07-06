@@ -2,12 +2,11 @@ async function select(req, res, fastify) {
 
     let
         table = req.body.table,
-        geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
+        id = req.body.id,
         geomj = typeof req.body.geomj == 'undefined' ? 'ST_asGeoJson(geom)' : req.body.geomj,
         geomq = typeof req.body.geomq == 'undefined' ? 'geom' : req.body.geomq,
         geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
-        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id,
         sql_filter = typeof req.body.sql_filter == 'undefined ' ? null : req.body.sql_filter;
 
     if (sql_filter) {

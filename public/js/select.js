@@ -171,16 +171,22 @@ module.exports = () => {
         xhr.open('POST', host + 'api/location/select');
         xhr.setRequestHeader('Content-Type', 'application/json');
         
-        xhr.onload = function () {
-            
+        xhr.onload = e => {
+
             // remove wait cursor class if found
-            let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');        
-            for(let el of els){
+            let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
+            for (let el of els) {
                 el.classList.remove("wait-cursor-enabled");
             }
             
-            if (this.status === 200) {
-                let json = JSON.parse(this.responseText);
+            if (e.target.status === 401) {
+                document.getElementById('timeout_mask').style.display = 'block';
+                console.log(e.target.response);
+                return loadLayer_complete(layer);
+            }
+            
+            if (e.target.status === 200) {
+                let json = JSON.parse(e.target.responseText);
                 location.geometry = JSON.parse(json.geomj);
                 location.infoj = json.infoj;
                 location.editable = layer.editable;
@@ -198,11 +204,10 @@ module.exports = () => {
             qID: layer.qID,
             id: location.id,
             infoj: layer.infoj,
-            geom: layer.geom,
             geomj: layer.geomj,
             geomq: layer.geomq,
             geomdisplay: layer.geomdisplay,
-            sql_filter: layer.sql_filter || null
+            sql_filter: layer.sql_filter
         }));
 
     }
