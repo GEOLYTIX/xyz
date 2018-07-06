@@ -189,6 +189,11 @@
                             "type": "text"
                         },
                         {
+                            "field": "website",
+                            "label": "Website",
+                            "type": "text"
+                        },
+                        {
                             "field": "owner",
                             "label": "Owner",
                             "type": "text"

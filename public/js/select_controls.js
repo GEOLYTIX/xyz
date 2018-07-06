@@ -166,7 +166,13 @@ function update(record) {
 
                 xhr.open('POST', host + 'api/location/update');
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onload = () => {
+                xhr.onload = e => {
+
+                    if (e.target.status === 401) {
+                        document.getElementById('timeout_mask').style.display = 'block';
+                        console.log(e.target.response);
+                        return;
+                    }
 
                     // Hide upload symbol.
                     record.upload.style.display = 'none';
@@ -189,12 +195,12 @@ function update(record) {
                 xhr.send(JSON.stringify({
                     dbs: layer.dbs,
                     table: record.location.table,
-                    log_table: layer.log_table,
-                    dbs: layer.dbs,
                     qID: layer.qID,
                     id: record.location.id,
+                    geom: layer.geom,
                     infoj: record.location.infoj,
-                    geometry: record.location.L.toGeoJSON().features[0].geometry
+                    geometry: record.location.L.toGeoJSON().features[0].geometry,
+                    log_table: layer.log_table
                 }));
             }
         }
@@ -223,7 +229,13 @@ function trash(record) {
 
                 xhr.open('POST', host + 'api/location/delete');
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onload = () => {
+                xhr.onload = e => {
+
+                    if (e.target.status === 401) {
+                        document.getElementById('timeout_mask').style.display = 'block';
+                        console.log(e.target.response);
+                        return;
+                    }
 
                     _xyz.map.removeLayer(layer.L);
                     layer.getLayer();
@@ -244,9 +256,9 @@ function trash(record) {
                 xhr.send(JSON.stringify({
                     dbs: layer.dbs,
                     table: record.location.table,
-                    log_table: layer.log_table,
                     qID: layer.qID,
-                    id: record.location.id
+                    id: record.location.id,
+                    log_table: layer.log_table
                 }));
             }
         }

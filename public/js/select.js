@@ -182,7 +182,7 @@ module.exports = () => {
             if (e.target.status === 401) {
                 document.getElementById('timeout_mask').style.display = 'block';
                 console.log(e.target.response);
-                return loadLayer_complete(layer);
+                return;
             }
             
             if (e.target.status === 200) {
@@ -204,6 +204,7 @@ module.exports = () => {
             qID: layer.qID,
             id: location.id,
             infoj: layer.infoj,
+            geom: layer.geom,
             geomj: layer.geomj,
             geomq: layer.geomq,
             geomdisplay: layer.geomdisplay,

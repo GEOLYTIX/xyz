@@ -483,11 +483,17 @@ function authToken(req, res, fastify, login, done) {
     // Pass through if login is not required.
     if (!login) {
 
+        var user_cookie = fastify.jwt.sign({ anonymous: true });
+        var session_cookie = fastify.jwt.sign({});
+
+        if (!req.cookies.xyz_user) req.cookies.xyz_user = user_cookie;
+        if (!req.cookies.xyz_session) req.cookies.xyz_session = session_cookie;
+
         // Generate an anonymous user token and an empty session token.
-        res.setCookie('xyz_user', fastify.jwt.sign({ anonymous: true }), {
+        res.setCookie('xyz_user', user_cookie, {
             path: process.env.DIR || '/'
         })
-        .setCookie('xyz_session', fastify.jwt.sign({}), {
+        .setCookie('xyz_session', session_cookie, {
             path: process.env.DIR || '/'
         })
         return done();

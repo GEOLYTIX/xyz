@@ -193,6 +193,8 @@ module.exports = () => {
 
                             _xyz.map.on('click', e => {
 
+                                let marker = [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)];
+
                                 utils.removeClass(btn, 'active');
                                 _xyz.map.off('click');
                                 dom.map.style.cursor = '';
@@ -204,13 +206,19 @@ module.exports = () => {
                                 xhr.open('POST', host + 'api/location/new');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = e => {
-                                    if (xhr.status === 200) {
+                                    if (e.target.status === 401) {
+                                        document.getElementById('timeout_mask').style.display = 'block';
+                                        console.log(e.target.response);
+                                        return;
+                                    }
+
+                                    if (e.target.status === 200) {
                                         layer.getLayer();
                                         _xyz.select.selectLayerFromEndpoint({
                                             layer: layer.layer,
                                             table: layer.table,
                                             id: e.target.response,
-                                            marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
+                                            marker: marker,
                                             editable: true
                                         });
                                     }
@@ -219,13 +227,12 @@ module.exports = () => {
                                 xhr.send(JSON.stringify({
                                     dbs: layer.dbs,
                                     table: layer.table,
+                                    qID: layer.qID,
                                     geom: layer.geom,
                                     log_table: layer.log_table,
-                                    cluster_cat: layer.style.theme ? layer.style.theme.field : layer.cluster_cat,
-                                    qID: layer.qID,
                                     geometry: {
                                         type: 'Point',
-                                        coordinates: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+                                        coordinates: marker
                                     }
                                 }));
                             });

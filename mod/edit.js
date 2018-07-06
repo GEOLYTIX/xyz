@@ -5,7 +5,14 @@ async function newRecord(req, res, fastify) {
     let table = req.body.table,
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geometry = JSON.stringify(req.body.geometry),
-        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID;
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
+        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if ([table, qID, geom, log_table]
+        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
 
     var q = `
     INSERT INTO ${table} (${geom})
@@ -78,12 +85,19 @@ async function newAggregate(req, res, fastify) {
 async function updateRecord(req, res, fastify) {
 
     let table = req.body.table,
+        geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        fields = '',
         log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
 
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if ([table, geom, qID, log_table]
+        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
+
+    let fields = '';
     Object.values(req.body.infoj).forEach(entry => {
         if (entry.images) return
         if (entry.type === 'text') fields += `${entry.field} = '${entry.value}',`;
@@ -97,7 +111,7 @@ async function updateRecord(req, res, fastify) {
     var q = `
     UPDATE ${table} SET
         ${fields}
-        geom = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
+        ${geom} = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
     WHERE ${qID} = $1;`
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
@@ -116,6 +130,12 @@ async function deleteRecord(req, res, fastify) {
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
         log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
+
+    // Check whether string params are found in the settings to prevent SQL injections.
+    if ([table, qID, log_table]
+        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        return res.code(406).send('Parameter not acceptable.');
+    }
 
     // Write into logtable if logging is enabled.
     if (log_table) await writeLog(req, log_table, table, qID, id, fastify);

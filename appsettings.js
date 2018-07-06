@@ -116,7 +116,7 @@ async function get(fastify) {
     })(global.appSettings)
 
     // Push defaults into appSettingsValues
-    Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id']);
+    Array.prototype.push.apply(global.appSettingsValues, ['geom', 'id', 'ST_asGeoJson(geom)']);
 }
 
 async function save(req, res, fastify) {
