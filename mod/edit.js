@@ -3,15 +3,14 @@ module.exports = { newRecord, newAggregate, updateRecord, deleteRecord };
 async function newRecord(req, res, fastify) {
 
     let table = req.body.table,
+        geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geometry = JSON.stringify(req.body.geometry),
-        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id,
-        cat = req.body.cluster_cat || 'other';
+        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID;
 
     var q = `
-        INSERT INTO ${table} (geom)
-            SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS geom
-            RETURNING id;`;
+    INSERT INTO ${table} (${geom})
+        SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS ${geom}
+        RETURNING ${qID} AS id;`;
 
     var db_connection = await fastify.pg[req.body.dbs].connect();
     var result = await db_connection.query(q);
@@ -32,7 +31,6 @@ async function newAggregate(req, res, fastify) {
 
     var q = `
     INSERT INTO ${table_target} (${geom_target}, sql_filter)
-    
         SELECT
         ST_Transform(
             ST_SetSRID(

@@ -203,13 +203,13 @@ module.exports = () => {
                                 let xhr = new XMLHttpRequest();
                                 xhr.open('POST', host + 'api/location/new');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
-                                xhr.onload = () => {
+                                xhr.onload = e => {
                                     if (xhr.status === 200) {
                                         layer.getLayer();
                                         _xyz.select.selectLayerFromEndpoint({
                                             layer: layer.layer,
                                             table: layer.table,
-                                            id: xhr.response,
+                                            id: e.target.response,
                                             marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
                                             editable: true
                                         });
@@ -219,8 +219,8 @@ module.exports = () => {
                                 xhr.send(JSON.stringify({
                                     dbs: layer.dbs,
                                     table: layer.table,
+                                    geom: layer.geom,
                                     log_table: layer.log_table,
-                                    //cluster_cat: layer.cluster_cat,
                                     cluster_cat: layer.style.theme ? layer.style.theme.field : layer.cluster_cat,
                                     qID: layer.qID,
                                     geometry: {
