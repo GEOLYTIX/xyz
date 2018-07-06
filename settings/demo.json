@@ -745,9 +745,9 @@
           "style": {
             "default": {
               "weight": 1.5,
-              "color": "#555"
+              "color": "#555",
+              "fill": true
             }
-
           }
         },
         "grid": {      

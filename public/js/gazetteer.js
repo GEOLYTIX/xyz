@@ -22,7 +22,8 @@ module.exports = () => {
         color: '#090',
         weight: 2,
         fillColor: '#cf9',
-        fillOpacity: 0.2
+        fillOpacity: 0.2,
+        fill: true
     };
 
     // Create the gazetteer pane.
