@@ -1,6 +1,15 @@
 const utils = require('./utils');
 
 function mvt_style(layer){
+    
+    if(layer.style && !layer.style.highlight) layer.style.highlight = {
+        stroke: true,
+        color: '#090',
+        weight: 2,
+        fillColor: '#cf9',
+        fillOpacity: 0.2,
+        fill: true
+    };
 
         
     // create style section
@@ -56,7 +65,7 @@ function mvt_style(layer){
       ];
         
     // if palette is an object then apply it. Else just take the default.
-    let colours = (layer.style.palette || layer.style.palette instanceof Object) ? layer.style.palette : default_colours;
+    let colours = (layer.style.palette && layer.style.palette instanceof Object) ? layer.style.palette : default_colours;
     
     // creates colour picker to layer
     function color_picker(layer, options){
@@ -70,14 +79,11 @@ function mvt_style(layer){
         }, block);
         
         function get_colour(hex){
-
-            let index = hex ?
-                utils.get_index_by_value(colours, 'hex', hex) :
-                utils.get_index_by_value(colours, 'hex', layer.style[options.style][options.property]);
-
-            return index == -1 ?
-                layer.style[options.style][options.property] :
-                colours[index].name ? colours[index].name + " (" + colours[index].hex + ")" : colours[index].hex;
+            let index;
+            hex ? index = utils.get_index_by_value(colours, 'hex', hex) : index = utils.get_index_by_value(colours, 'hex', layer.style[options.style][options.property]);
+        
+            return index == -1 ? layer.style[options.style][options.property] : colours[index].name ? colours[index].name + " (" + 
+            colours[index].hex + ")" : colours[index].hex;
         }
         
         let span = utils.createElement('span', {
