@@ -414,7 +414,7 @@
         "cn_sh_retail_venues": {
           "name": "Shanghai Retail Places",
           "format": "mvt",
-          "cntr": [31.24738, 121.46578],
+          "cntr": [34.07093,114.80507],
           "geom_3857": "geom_3857",
           "pane": ["cn_sh_retail_venues", 530],
           "dbs": "XYZ",

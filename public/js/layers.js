@@ -135,7 +135,7 @@ module.exports = () => {
             });
             
             // Create zoom to layer control
-            if(layer.cntr){
+            if(layer.cntr || layer.bounds){
                 utils._createElement({
                     tag: 'i',
                     options: {
@@ -149,7 +149,9 @@ module.exports = () => {
                         funct: e => {
                             e.stopPropagation();
                             if(layer.display){
-                                _xyz.map.panTo(L.latLng(layer.cntr));
+                                layer.bounds ? _xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) : _xyz.map.panTo(L.latLng(layer.cntr));
+                                attributionCheck();
+                                _xyz.layersCheck();
                             } else {
                                 return false;
                             }
