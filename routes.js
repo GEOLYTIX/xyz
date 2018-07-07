@@ -26,7 +26,13 @@ module.exports = fastify => {
     });
 
     // Universal error handler.
-    const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
+    //const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
+
+    const errHandler = f => {
+        (...params) => {
+            f(...params);
+        }
+    }
 
     // Add content type parser for octet stream.
     fastify.addContentTypeParser('*', (req, done) => done());
@@ -187,6 +193,7 @@ module.exports = fastify => {
             beforeHandler: fastify.auth([fastify.authRoutes]),
             handler: (req, res) => {
                 require('./mod/edit').updateRecord(req, res, fastify);
+                //errHandler(require('./mod/edit').updateRecord(req, res, fastify));
             }
         });
 

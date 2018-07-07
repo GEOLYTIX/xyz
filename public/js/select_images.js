@@ -168,6 +168,7 @@ function upload_image(record, img, blob) {
             
             let json = JSON.parse(e.target.responseText);
                         
+            img.style.opacity = 1;
             img.style.border = '3px solid #eee';
             img.id = json.image_id;
             img.src = json.image_url;
@@ -186,7 +187,7 @@ function upload_image(record, img, blob) {
         }
     }
     img.style.opacity = '0'
-    xhr.onprogress = function (e) {
+    xhr.onprogress = e => {
         if (e.lengthComputable) {
             img.style.opacity = e.loaded / e.total;
         }

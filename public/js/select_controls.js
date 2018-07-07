@@ -168,6 +168,11 @@ function update(record) {
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
+                    if (e.target.status === 500) {
+                        console.log(e.target.response);
+                        return;
+                    }
+
                     if (e.target.status === 401) {
                         document.getElementById('timeout_mask').style.display = 'block';
                         console.log(e.target.response);

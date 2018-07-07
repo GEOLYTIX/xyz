@@ -4,11 +4,10 @@ async function get(req, res, fastify) {
       
   let
     table = req.query.table,
-    geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
-    cat = req.query.cat === 'undefined' ? null : req.query.cat,
-    theme = req.query.theme === 'undefined' ? null : req.query.theme,
-    filter = JSON.parse(req.query.filter),
-    filter_sql = '',
+    geom = typeof req.query.geom == 'undefined' || req.query.geom == 'undefined' ? 'geom' : req.query.geom,
+    cat = typeof req.query.cat == 'undefined' || req.query.cat == 'undefined' ? null : req.query.cat,
+    theme = typeof req.query.theme == 'undefined' || req.query.theme == 'undefined' ? null : req.query.theme,
+    filter = typeof req.query.filter == 'undefined' || req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
     kmeans = parseInt(req.query.kmeans),
     dbscan = parseFloat(req.query.dbscan),
     west = parseFloat(req.query.west),
@@ -22,7 +21,7 @@ async function get(req, res, fastify) {
     return res.code(406).send('Parameter not acceptable.');
   }  
 
-  filter_sql = require('./filters').sql_filter(filter, filter_sql);
+  let filter_sql = filter ? require('./filters').sql_filter(filter) : '';
 
   // Query the feature count from lat/lng bounding box.
   var q = `
@@ -193,8 +192,7 @@ async function select(req, res, fastify) {
     table = req.query.table,
     geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
     id = req.query.qID === 'undefined' ? 'id' : req.query.qID,
-    filter = JSON.parse(req.query.filter),
-    filter_sql = '',
+    filter = typeof req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
     label = req.query.label === 'undefined' ? id : req.query.label,
     count = parseInt(req.query.count),
     lnglat = req.query.lnglat.split(',');
@@ -206,8 +204,8 @@ async function select(req, res, fastify) {
     .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
     return res.code(406).send('Parameter not acceptable.');
   }
-    
-  filter_sql = require('./filters').legend_filter(filter, filter_sql);
+
+  let filter_sql = filter ? require('./filters').legend_filter(filter) : '';
 
   // Query the feature count from lat/lng bounding box.
   var q = `

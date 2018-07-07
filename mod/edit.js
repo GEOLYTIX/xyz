@@ -89,8 +89,9 @@ async function newAggregate(req, res, fastify) {
 }
 
 async function updateRecord(req, res, fastify) {
+    try {
 
-    let table = req.body.table,
+        let table = req.body.table,
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
@@ -106,7 +107,7 @@ async function updateRecord(req, res, fastify) {
     let fields = '';
     Object.values(req.body.infoj).forEach(entry => {
         if (entry.images) return
-        if (entry.type === 'text') fields += `${entry.field} = '${entry.value}',`;
+        if (entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/\'/g,"''")}',`;
         if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
         if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`
         if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
@@ -128,6 +129,11 @@ async function updateRecord(req, res, fastify) {
     if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
 
     res.code(200).send();
+
+    } catch(err){
+        console.error(err);
+        res.code(500).send("soz. it's not you. it's me.");
+    }
 }
 
 async function deleteRecord(req, res, fastify) {
