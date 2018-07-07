@@ -69,6 +69,7 @@ module.exports = fastify => {
                 res.type('text/html').send(tmpl.render({
                     title: global.appSettings.title || 'GEOLYTIX | XYZ',
                     user: user_token.email || 'anonymous',
+                    //bundle_js: 'es2015.js',
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
                     hrefDocumentation: global.appSettings.documentation ? global.dir + '/' + global.appSettings.documentation : '',

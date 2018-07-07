@@ -300,7 +300,7 @@ module.exports = () => {
     function attributionCheck() {
         // get attribution links and check whether the className is in the attribution list.
         let links = document.querySelectorAll('.attribution > .links > a');
-        for (i = 0; i < links.length; ++i) {
+        for (let i = 0; i < links.length; ++i) {
             let me = links[i].className;
             let me_i = _xyz.attribution.indexOf(me);
             if (_xyz.attribution.indexOf(links[i].className) >= 0) {

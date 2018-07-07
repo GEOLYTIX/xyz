@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
   entry: {
-    xyz: './public/js/xyz_entry.js'
+    xyz: ['babel-polyfill', './public/js/xyz_entry.js']
   },
   output: {
     path: path.resolve(__dirname, 'public/js/build'),
@@ -14,7 +14,10 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader",
+          options: {
+            presets: ['es2015']
+          }
         }
       }
     ]
