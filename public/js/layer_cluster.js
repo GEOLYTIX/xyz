@@ -60,7 +60,10 @@ function loadLayer(layer) {
         }
 
         // Status 204. No features returned.
-        if (e.target.status === 204) return loadLayer_complete(layer);
+        if (e.target.status === 204) {
+            if (layer.L) _xyz.map.removeLayer(layer.L);
+            return loadLayer_complete(layer);
+        }
 
         // Data is returned and the layer is still current.
         if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);

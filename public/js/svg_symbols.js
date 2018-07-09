@@ -1,4 +1,5 @@
 const d3 = require('d3');
+const xmlSerializer = new XMLSerializer();
 
 module.exports = (function () {
 
@@ -7,6 +8,7 @@ module.exports = (function () {
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 866)
             .attr('height', 1000)
+            .attr('viewBox', '0 0 866 1000')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         svg
@@ -23,7 +25,7 @@ module.exports = (function () {
             .attr('r', 395)
             .style('fill', d3.rgb(color));
 
-        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+        return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
     function circle(color) {
@@ -31,6 +33,7 @@ module.exports = (function () {
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 1000)
             .attr('height', 1000)
+            .attr('viewBox', '0 0 1000 1000')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         svg
@@ -43,7 +46,7 @@ module.exports = (function () {
             .style('opacity', 0.5)
             .style('fill', 'none');
 
-        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+        return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
     function target(style) {
@@ -52,6 +55,7 @@ module.exports = (function () {
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 1000)
             .attr('height', 1000)
+            .attr('viewBox', '0 0 1000 1000')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         svg
@@ -71,7 +75,7 @@ module.exports = (function () {
                 .style('fill', style[i + 1]);
         }
 
-        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+        return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
     function markerLetter(colorMarker, letter) {
@@ -79,6 +83,7 @@ module.exports = (function () {
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 1000)
             .attr('height', 1000)
+            .attr('viewBox', '0 0 1000 1000')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         let p = d3.path();
@@ -132,7 +137,7 @@ module.exports = (function () {
             .style('fill', '#555')
             .text(letter);
 
-        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+        return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
     function markerColor(colorMarker, colorDot) {
@@ -140,6 +145,7 @@ module.exports = (function () {
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 1000)
             .attr('height', 1000)
+            .attr('viewBox', '0 0 1000 1000')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         let p = d3.path();
@@ -188,7 +194,7 @@ module.exports = (function () {
             .attr('cy', 360)
             .attr('r', 180);
 
-        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+        return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
     
     function markerGeolocation(){
@@ -196,6 +202,7 @@ module.exports = (function () {
             .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
             .attr('width', 1000)
             .attr('height', 1000)
+            .attr('viewBox', '0 0 1000 1000')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
         
         svg
@@ -237,7 +244,7 @@ module.exports = (function () {
             .style('stroke-width', 75)
             .attr('d', p.toString());
         
-        return ('data:image/svg+xml,' + encodeURIComponent(svg.node().outerHTML));
+        return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
     return {

@@ -1,15 +1,20 @@
 .scrolly {
-    height: 100%;
-    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
-    @supports (-moz-appearance:meterbar) and (background-blend-mode:difference,normal) {
-        width: calc(100% + 50px);
-        padding-right: 35px;
-    }
-    &::-webkit-scrollbar {
-        display: none;
-    }
+    height: 100%;
+
+    width: calc(100% + 50px);
+    padding-right: 35px;
+
+    // @supports (-webkit-scrollbar:display) {
+    //     width: 100%;
+    //     padding-right: 0;
+
+    //     &::-webkit-scrollbar {
+    //         display: none;
+    //     }
+    // }
+
     >.scrolly_track {
         position: absolute;
         top: 0;

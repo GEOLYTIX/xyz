@@ -148,16 +148,11 @@ input[type=range]::-moz-range-thumb {
         box-shadow: 2px 2px 1px #cf7; }
 
 .scrolly {
-  height: 100%;
-  width: 100%;
   overflow-y: scroll;
-  overflow-x: hidden; }
-  @supports (-moz-appearance: meterbar) and (background-blend-mode: difference, normal) {
-    .scrolly {
-      width: calc(100% + 50px);
-      padding-right: 35px; } }
-  .scrolly::-webkit-scrollbar {
-    display: none; }
+  overflow-x: hidden;
+  height: 100%;
+  width: calc(100% + 50px);
+  padding-right: 35px; }
   .scrolly > .scrolly_track {
     position: absolute;
     top: 0;

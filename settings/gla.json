@@ -1,6 +1,5 @@
 {
-    "title": "GEOLYTIX | XYZ Demo",
-    "documentation": "documentation",
+    "title": "London Needs You Alive",
     "select": {},
     "locate": {},
     "gazetteer": {},
@@ -196,7 +195,11 @@
                         {
                             "field": "owner",
                             "label": "Owner",
-                            "type": "text"
+                            "type": "text",
+                            "options": [
+                                "MOPAC",
+                                "StreetGames"
+                            ]
                         },
                         {
                             "field": "images",
@@ -206,7 +209,7 @@
                         }
                     ],
                     "style": {
-                        "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+                        "marker": "svg_symbols.target([400,'#999',350,'#ffd54f'])",
                         "markerMulti": [
                             400,
                             "#333"
@@ -259,6 +262,54 @@
                                     },
                                     "Youth Activities": {
                                         "marker": "svg_symbols.target([400,'#009688'])"
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Age Groups",
+                                "type": "categorized",
+                                "field": "age_group",
+                                "other": true,
+                                "competitors": {
+                                    "All Ages": {
+                                        "colour": "#c62828",
+                                        "label": "All Ages"
+                                    },
+                                    "Adults (26 to 65)": {
+                                        "colour": "#03a9f4",
+                                        "label": "Adults (26 to 65)"
+                                    }
+                                },
+                                "cat": {
+                                    "All Ages": {
+                                        "marker": "svg_symbols.target([400,'#c62828'])"
+                                    },
+                                    "Primary School and Secondary School Ages": {
+                                        "marker": "svg_symbols.target([400,'#f50057'])"
+                                    },
+                                    "Children (5 to 12)": {
+                                        "marker": "svg_symbols.target([400,'#9c27b0'])"
+                                    },
+                                    "Young People (8 to 18)": {
+                                        "marker": "svg_symbols.target([400,'#673ab7'])"
+                                    },
+                                    "Young People (8 to 21)": {
+                                        "marker": "svg_symbols.target([400,'#3f51b5'])"
+                                    },
+                                    "Young Girls (11 to 16)": {
+                                        "marker": "svg_symbols.target([400,'#2196f3'])"
+                                    },
+                                    "Young People (13 to 18)": {
+                                        "marker": "svg_symbols.target([400,'#03a9f4'])"
+                                    },
+                                    "Young People (15 to 21)": {
+                                        "marker": "svg_symbols.target([400,'#00bcd4'])"
+                                    },
+                                    "Young Adults (19 to 25)": {
+                                        "marker": "svg_symbols.target([400,'#009688'])"
+                                    },
+                                    "Adults (26 to 65)": {
+                                        "marker": "svg_symbols.target([400,'#4caf50'])"
                                     }
                                 }
                             }

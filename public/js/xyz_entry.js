@@ -1,3 +1,12 @@
+// IE polyfills
+if (!('remove' in Element.prototype)) {
+    Element.prototype.remove = function() {
+        if (this.parentNode) {
+            this.parentNode.removeChild(this);
+        }
+    };
+}
+
 // The svg_symbols module is required in order to build svg symbols when they are evaluated in _xyz application settings.
 const svg_symbols = require('./svg_symbols');
 
