@@ -123,15 +123,15 @@ function layerFilters(layer){
         // remove unwanted filter
         function remove_filter_onclick(e){
             
-            e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
+            if(e.target.parentNode.parentNode.classList.contains("block")) e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
+            
             delete layer.filter[_val];
             enable_option(_select, _val);
             layer.getLayer();
             
             // hide run button when last filter block is removed
             if(!_select.nextSibling.nextSibling.classList.contains('block')) {
-                filters.lastChild.style.display = "none";
-                _select.nextSibling.style.display = "none";
+                if(!filters.lastChild.classList.contains("block")) filters.lastChild.style.display = "none";
             };
         }
         

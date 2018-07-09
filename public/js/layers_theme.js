@@ -276,6 +276,7 @@ function clusterCategorized(layer, legend) {
                     layer.filter[_field].ni.splice(layer.filter[_field].ni.indexOf(item), 1);
                 } else {
                     this.style.opacity = 0.5;
+                    if(!layer.filter[_field]) layer.filter[_field] = {};
                     if(!layer.filter[_field].ni) layer.filter[_field].ni = [];
                     layer.filter[_field].ni.push(item);
                 }
@@ -306,6 +307,7 @@ function clusterCategorized(layer, legend) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
+                    if(!layer.filter[_field]) layer.filter[_field] = {};
                     layer.filter[_field].in = [];
                 } else {
                     this.style.opacity = 0.5;
