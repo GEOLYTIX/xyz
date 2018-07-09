@@ -24,6 +24,10 @@ function themes(layer, element, val){
             options: {
                 innerHTML: "<option selected>Default</option>",
                 onchange: function(){
+                   
+                   // clear applied filters when theme changes 
+                   layer.filter[layer.style.theme.field].ni = {};
+                    
                     
                    if(this.nextSibling && this.nextSibling instanceof SVGElement){
                        this.nextSibling.remove();
@@ -238,10 +242,6 @@ function clusterCategorized(layer, legend) {
     
     let _field = layer.style.theme.field ? layer.style.theme.field : layer.cluster_cat;
 
-    /*if (!layer.filter[layer.cluster_cat]) layer.filter[layer.cluster_cat] = {};
-    if (!layer.filter[layer.cluster_cat].in) layer.filter[layer.cluster_cat].in = [];
-    if (!layer.filter[layer.cluster_cat].ni) layer.filter[layer.cluster_cat].ni = [];*/
-    
     if (!layer.filter[_field]) layer.filter[_field] = {};
     if (!layer.filter[_field].in) layer.filter[_field].in = [];
     if (!layer.filter[_field].ni) layer.filter[_field].ni = [];
@@ -276,8 +276,8 @@ function clusterCategorized(layer, legend) {
                     layer.filter[_field].ni.splice(layer.filter[_field].ni.indexOf(item), 1);
                 } else {
                     this.style.opacity = 0.5;
-                    if(!layer.filter[_field]) layer.filter[_field] = {};
-                    if(!layer.filter[_field].ni) layer.filter[_field].ni = [];
+                    //if(!layer.filter[_field]) layer.filter[_field] = {};
+                    //if(!layer.filter[_field].ni) layer.filter[_field].ni = [];
                     layer.filter[_field].ni.push(item);
                 }
 
@@ -307,7 +307,7 @@ function clusterCategorized(layer, legend) {
             .on('click', function () {
                 if (this.style.opacity == 0.5) {
                     this.style.opacity = 1;
-                    if(!layer.filter[_field]) layer.filter[_field] = {};
+                    //if(!layer.filter[_field]) layer.filter[_field] = {};
                     layer.filter[_field].in = [];
                 } else {
                     this.style.opacity = 0.5;
