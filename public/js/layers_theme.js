@@ -26,7 +26,7 @@ function themes(layer, element, val){
                 onchange: function(){
                     
                     // clear any applied 'ni' filters when theme changes
-                   if(layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
+                   if(layer.style.theme && layer.filter[layer.style.theme.field] && layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
                    
                     
                    if(this.nextSibling && this.nextSibling instanceof SVGElement){
