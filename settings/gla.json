@@ -99,7 +99,20 @@
                                 "Music",
                                 "Performing Arts",
                                 "Youth Activities"
-                            ]
+                            ],
+                            "filter": {
+                                "in": [
+                                    "Open Day",
+                                    "Community",
+                                    "Workshop",
+                                    "Sports",
+                                    "Events",
+                                    "Fundraising",
+                                    "Music",
+                                    "Performing Arts",
+                                    "Youth Activities"
+                                ]
+                            }
                         },
                         {
                             "field": "organisation",
@@ -121,7 +134,20 @@
                                 "Young People (15 to 21)",
                                 "Young Adults (19 to 25)",
                                 "Adults (26 to 65)"
-                            ]
+                            ],
+                            "filter": {
+                                "in": [
+                                    "Primary School and Secondary School Ages",
+                                    "Children (5 to 12)",
+                                    "Young People (8 to 18)",
+                                    "Young People (8 to 21)",
+                                    "Young Girls (11 to 16)",
+                                    "Young People (13 to 18)",
+                                    "Young People (15 to 21)",
+                                    "Young Adults (19 to 25)",
+                                    "Adults (26 to 65)"
+                                ]
+                            }
                         },
                         {
                             "field": "borough",
@@ -165,7 +191,8 @@
                         {
                             "field": "area",
                             "label": "Area",
-                            "type": "text"
+                            "type": "text",
+                            "filter": "like"
                         },
                         {
                             "field": "street",
@@ -175,7 +202,8 @@
                         {
                             "field": "postcode",
                             "label": "Postcode",
-                            "type": "text"
+                            "type": "text",
+                            "filter": "like"
                         },
                         {
                             "field": "phone",
@@ -199,7 +227,13 @@
                             "options": [
                                 "MOPAC",
                                 "StreetGames"
-                            ]
+                            ],
+                            "filter": {
+                                "in": [
+                                    "MOPAC",
+                                    "StreetGames"
+                                ]
+                            }
                         },
                         {
                             "field": "images",

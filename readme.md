@@ -100,7 +100,7 @@ A HERE API key which is required if HERE base maps are used.
 
 `"IMAGES": "cloudinary api_key api_secret cloud_name folder",`
 
-We use [cloudinary](https://cloudinary.com) to store images uploaded from the browser application interface. 
+We use [cloudinary](https://cloudinary.com) to store images uploaded from the browser application interface.
 
 ## Application Settings
 
@@ -164,13 +164,62 @@ The gazetteer to be used for the locale. The first entry in the array is the pro
 
 Layers are a sub setting of a locale. Each layers object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window.
 
+All layer types share the following parameters:
+
+```javascript
+ <layer identifier, SQL legal name recommended> : {
+	 "name": <layer name to display>,
+	 "meta": <meta string>,
+	 "pane": [<pane name>], 500], // Leaflet equivalent to z-index
+	 "format": <"base", "mvt", "geojson" or "cluster">,
+	 "dbs": <reference to connection string>,
+	 "display": <boolean, if set to true layer is initially displayed>,
+	 "qID": <field for feature identifier within dataset, default: "id">, // if undefined layer is non-interactive
+	 "geom": <geometry field SRID 4326, default: "geom">
+ }
+```
+
+Each layer needs `table` or `arrayZoom` property defined in order to access the source table.
+
+```javascript
+layer.table: <table name>
+```
+`arrayZoom` is an object that groups tables assigned to respective zoom levels. This was designed for hierarchy datasets which are subject to geographic generalization.
+
+```javascript
+layer.arrayZoom: {
+	"10": <source table for zoom level 10>,
+	"11": <source table for zoom level 11>,
+	"12": <source table for zoom level 12 and higher>,
+}
+```
+
 Types of layers which are currently supported:
 
-grid
-cluster
-mvt
-base
+#### cluster
+#### geojson
+#### grid
+#### mvt
+#### tiles
 
+`tiles` layer is a base map layer used both for map tiles and label tiles. It usually requires tile provider attribution. `URI` is base url for request from tile provider. Below default xyz configuration for base map provided by <a href="https://www.mapbox.com/" target="_blank">Mapbox</a>:
+
+```json
+"base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "attribution": ["mapbox","osm"],
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/style_name/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        }
+```
+
+Another base map provider available out of the box is <a href="https://www.here.com/en" target="_blank">Here</a>. This configuration also applies to labels displayed as tiles alongside base map tiles.
 
 ## Server
 
@@ -484,7 +533,7 @@ The individual steps in the authentication strategy sequence are as follows.
 8. **user not approved**
 
    Fail. *User email not approved by administrator.* Authorization will fail at this stage if the user token does not carry the *approved* field.
-   
+
 9. **issue new token**
 
    Success. Authorization has completed and the user token's issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.

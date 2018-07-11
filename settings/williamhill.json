@@ -632,6 +632,7 @@
                     "type": "categorized",
                     "applied": true,
                     "field": "shop_bucket",
+                    "other": true,
                     "competitors": {
                         "Profitable ex Gaming": {
                             "colour": "#143156",
@@ -697,6 +698,7 @@
               "label": "Competition Type",
               "type": "categorized",
               "field": "competition",
+              "other": true,
               "competitors": {
                 "MONOPOLY": {
                   "colour": "#143156",
