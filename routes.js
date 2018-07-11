@@ -1,11 +1,5 @@
 module.exports = fastify => {
 
-    const auth = require('./auth');
-    auth.routes(fastify);
-
-    const appsettings = require('./appsettings');
-    appsettings.routes(fastify, auth);
-
     // Create constructor for mobile detect module.
     const Md = require('mobile-detect');
 
@@ -28,38 +22,36 @@ module.exports = fastify => {
     // Universal error handler.
     //const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
 
-    const errHandler = f => {
-        (...params) => {
-            f(...params);
-        }
-    }
+    // const errHandler = f => {
+    //     (...params) => {
+    //         f(...params);
+    //     }
+    // }
 
     // Add content type parser for octet stream.
     fastify.addContentTypeParser('*', (req, done) => done());
 
-    fastify
-        .decorate('authRoutes', (req, res, done) => auth.authToken(req, res, fastify, process.env.LOGIN ? true : false, done))
-        .register((fastify, opts, next) => {
+    fastify.register((fastify, opts, next) => {
 
         fastify.route({
             method: 'GET',
             url: '/',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: async (req, res) => {
 
-                await appsettings.get(fastify);
+                const user = fastify.jwt.decode(req.cookies.xyz_user);
+                const session = fastify.jwt.decode(req.cookies.xyz_session);
 
-                const user_token = fastify.jwt.decode(req.cookies.xyz_user);
-                const session_token = fastify.jwt.decode(req.cookies.xyz_session);
+                let hooks = { hooks: Object.assign(req.query, session) };
 
-                global.appSettings.hooks = Object.assign(req.query, session_token);
+                delete hooks.hooks.iat;
 
-                delete global.appSettings.hooks.iat;
+                let config = Object.assign(global.workspace[user.access].config, hooks);
 
                 // Check whether request comes from a mobile platform and set template.
                 let md = new Md(req.headers['user-agent']);
 
-                let tmpl = global.appSettings.hooks.report ?
+                let tmpl = config.hooks.report ?
                     jsr.templates('./views/report.html') :
                     (md.mobile() === null || md.tablet() !== null) ?
                         jsr.templates('./views/desktop.html') :
@@ -67,23 +59,23 @@ module.exports = fastify => {
 
                 // Build the template with jsrender and send to client.
                 res.type('text/html').send(tmpl.render({
-                    title: global.appSettings.title || 'GEOLYTIX | XYZ',
-                    user: user_token.email || 'anonymous',
-                    //bundle_js: 'es2015.js',
+                    title: config.title || 'GEOLYTIX | XYZ',
+                    user: user.email || 'anonymous',
                     bundle_js: 'build/xyz_bundle.js',
-                    btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
-                    hrefDocumentation: global.appSettings.documentation ? global.dir + '/' + global.appSettings.documentation : '',
-                    btnReport: global.appSettings.report ? '' : 'style="display: none;"',
-                    btnLogout: user_token.email ? '' : 'style="display: none;"',
-                    btnAdmin: user_token.admin ? '' : 'style="display: none;"',
-                    btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
-                    btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
+                    btnDocumentation: config.documentation ? '' : 'style="display: none;"',
+                    hrefDocumentation: config.documentation ? global.dir + '/' + config.documentation : '',
+                    btnReport: config.report ? '' : 'style="display: none;"',
+                    btnLogin: !user.email ? '' : 'style="display: none;"',
+                    btnLogout: user.email ? '' : 'style="display: none;"',
+                    btnAdmin: user.admin ? '' : 'style="display: none;"',
+                    btnSearch: config.gazetteer ? '' : 'style="display: none;"',
+                    btnLocate: config.locate ? '' : 'style="display: none;"',
                     dir: global.dir,
                     settings: `
-                            <script>
-                                const host = '${(global.dir || '/').substring(1)}/';
-                                const _xyz = ${JSON.stringify(global.appSettings)};
-                            </script>`
+                        <script>
+                            const host = '${(global.dir || '/').substring(1)}/';
+                            const _xyz = ${JSON.stringify(config)};
+                        </script>`
                 }));
             }
         });
@@ -91,7 +83,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/documentation',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('fs').readFile('./public/documentation.md', (err, md) => {
                     if (err) throw err;
@@ -108,7 +100,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/proxy/image',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 var q = `${req.query.uri}${req.query.size?'&size='+req.query.size+'&':''}${global.KEYS[req.query.provider]}`;
                 res.send(require('request')(q));
@@ -118,7 +110,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/mvt/get/:z/:x/:y',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/mvt').get(req, res, fastify);
             }
@@ -127,7 +119,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/grid/get',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/grid').get(req, res, fastify);
             }
@@ -136,7 +128,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/geojson/get',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/geojson').get(req, res, fastify);
             }
@@ -145,7 +137,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/cluster/get',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/cluster').get(req, res, fastify);
             }
@@ -154,7 +146,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/cluster/select',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/cluster').select(req, res, fastify);
             }
@@ -163,7 +155,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'POST',
             url: '/api/location/select',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/select').select(req, res, fastify);
             }
@@ -173,7 +165,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'POST',
             url: '/q_chart_data',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/select').chart_data(req, res, fastify);
             }
@@ -182,7 +174,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'POST',
             url: '/api/location/new',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/edit').newRecord(req, res, fastify);
             }
@@ -191,7 +183,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'POST',
             url: '/api/location/update',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/edit').updateRecord(req, res, fastify);
                 //errHandler(require('./mod/edit').updateRecord(req, res, fastify));
@@ -202,7 +194,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'POST',
             url: '/api/location/delete',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/edit').deleteRecord(req, res, fastify);
             }
@@ -211,7 +203,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/location/aggregate',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/edit').newAggregate(req, res, fastify);
             }
@@ -220,7 +212,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/gazetteer/autocomplete',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/gazetteer').gazetteer(req, res, fastify);
             }
@@ -229,25 +221,16 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/gazetteer/googleplaces',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/gazetteer').gazetteer_googleplaces(req, res, fastify);
             }
         });
 
-        // fastify.route({
-        //     method: 'GET',
-        //     url: global.dir + '/api/gazetteer/glxplaces',
-        //     beforeHandler: fastify.auth([fastify.authRoutes]),
-        //     handler: (req, res) => {
-        //         require('./mod/gazetteer').gazetteer_places(req, res, fastify);
-        //     }
-        // });
-
         fastify.route({
             method: 'GET',
             url: '/api/catchments',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/catchments').get(req, res, fastify);
             }
@@ -256,7 +239,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'POST',
             url: '/api/images/new',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 var data = [];
                 req.req.on('data', chunk => data.push(chunk));
@@ -270,7 +253,7 @@ module.exports = fastify => {
         fastify.route({
             method: 'GET',
             url: '/api/images/delete',
-            beforeHandler: fastify.auth([fastify.authRoutes]),
+            beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/images').remove(req, res, fastify);
             }
@@ -279,5 +262,4 @@ module.exports = fastify => {
         next();
 
     }, { prefix: global.dir });
-
 }

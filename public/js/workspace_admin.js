@@ -17,7 +17,7 @@ editormenu.insertBefore(btnSave, search);
 
 btnSave.addEventListener('click', function () {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'settings/save');
+    xhr.open('POST', 'workspace/save');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function () {

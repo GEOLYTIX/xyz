@@ -9,7 +9,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development",
-    "start": "node server.js"
+    "start": "node server.js",
+    "debug": "nodemon --inspect server.js"
   },
   "dependencies": {
     "@turf/turf": "^5.1.6",

@@ -1,7 +1,7 @@
 module.exports = { get, select };
 
 async function get(req, res, fastify) {
-      
+
   let
     table = req.query.table,
     geom = typeof req.query.geom == 'undefined' || req.query.geom == 'undefined' ? 'geom' : req.query.geom,
@@ -13,11 +13,12 @@ async function get(req, res, fastify) {
     west = parseFloat(req.query.west),
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
-    north = parseFloat(req.query.north);
+    north = parseFloat(req.query.north),
+    user = fastify.jwt.decode(req.cookies.xyz_user);
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, cat]
-    .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+    .some(val => (typeof val === 'string' && global.workspace[user.access].values.indexOf(val) < 0))) {
     return res.code(406).send('Parameter not acceptable.');
   }  
 
@@ -195,13 +196,14 @@ async function select(req, res, fastify) {
     filter = typeof req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
     label = req.query.label === 'undefined' ? id : req.query.label,
     count = parseInt(req.query.count),
-    lnglat = req.query.lnglat.split(',');
+    lnglat = req.query.lnglat.split(','),
+    user = fastify.jwt.decode(req.cookies.xyz_user);
 
   lnglat = lnglat.map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, id, label]
-    .some(val => (typeof val === 'string' && global.appSettingsValues.indexOf(val) < 0))) {
+    .some(val => (typeof val === 'string' && global.workspace[user.access].values.indexOf(val) < 0))) {
     return res.code(406).send('Parameter not acceptable.');
   }
 

@@ -94,8 +94,14 @@
             </button>
 
             <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                <a href="{{:hrefDocumentation}}">
+                <a href="{{:hrefDocumentation}}" target="_blank">
                     <i class="material-icons">school</i>
+                </a>
+            </div>
+
+            <div id="btnLogin" title="Login to private area" {{:btnLogin}}>
+                <a href="{{:dir}}/login">
+                    <i class="material-icons">face</i>
                 </a>
             </div>
 
@@ -105,14 +111,14 @@
                 </a>
             </div>
 
-            <div type="button" id="btnAdmin" title="Open account admin panel" {{:btnAdmin}}>
-                <a href="{{:dir}}/admin/user">
+            <div type="button" id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
+                <a href="{{:dir}}/admin/user" target="_blank">
                     <i class="material-icons">supervisor_account</i>
                 </a>
             </div>
 
-            <div id="btnSettings" title="Open application settings editor" {{:btnAdmin}}>
-                <a href="{{:dir}}/admin/settings">
+            <div id="btnWorkspace" title="Open workspace configuration view" {{:btnAdmin}}>
+                <a href="{{:dir}}/admin/workspace" target="_blank">
                     <i class="material-icons">settings</i>
                 </a>
             </div>

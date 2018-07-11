@@ -1,11 +1,7 @@
-// IE polyfills
-if (!('remove' in Element.prototype)) {
-    Element.prototype.remove = function() {
-        if (this.parentNode) {
-            this.parentNode.removeChild(this);
-        }
-    };
-}
+// Initialise utils.
+const utils = require('./utils');
+
+utils.IEpolyfills();
 
 // The svg_symbols module is required in order to build svg symbols when they are evaluated in _xyz application settings.
 const svg_symbols = require('./svg_symbols');
@@ -28,9 +24,6 @@ const svg_symbols = require('./svg_symbols');
 
 // All mobile interface quirks are loaded here.
 if (view_mode === 'mobile') require('./mobile_interface')();
-
-// Initialise utils.
-const utils = require('./utils');
 
 // Initiate leaflet.
 const L = require('leaflet');

@@ -8,11 +8,12 @@ async function select(req, res, fastify) {
         geomj = typeof req.body.geomj == 'undefined' ? `ST_asGeoJson(${geom})` : req.body.geomj,
         geomq = typeof req.body.geomq == 'undefined' ? 'geom' : req.body.geomq,
         geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
-        sql_filter = typeof req.body.sql_filter == 'undefined' ? '' : req.body.sql_filter;
+        sql_filter = typeof req.body.sql_filter == 'undefined' ? '' : req.body.sql_filter,
+        user = fastify.jwt.decode(req.cookies.xyz_user);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, qID, geomj, geomq, geomdisplay, sql_filter]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 

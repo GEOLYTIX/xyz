@@ -1,3 +1,5 @@
+module.exports = { getLayer };
+
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
@@ -304,8 +306,4 @@ function clusterMouseClick(e, layer) {
 
     // Send XHR to middleware.
     xhr.send();
-}
-
-module.exports = {
-    getLayer: getLayer
 }

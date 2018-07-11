@@ -6,11 +6,12 @@ async function newRecord(req, res, fastify) {
         geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
+        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
+        user = fastify.jwt.decode(req.cookies.xyz_user);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, qID, geom, log_table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 
@@ -32,11 +33,12 @@ async function newAggregate(req, res, fastify) {
         geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
         geom_source = req.query.geom_source === 'undefined' ? 'geom' : req.query.geom_source,
         filter = JSON.parse(req.query.filter),
-        filter_sql = '';
+        filter_sql = '',
+        user = fastify.jwt.decode(req.cookies.xyz_user);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table_target, table_source, geom_target, geom_source]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 
@@ -96,11 +98,12 @@ async function updateRecord(req, res, fastify) {
         geometry = JSON.stringify(req.body.geometry),
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
+        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
+        user = fastify.jwt.decode(req.cookies.xyz_user);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, geom, qID, log_table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 
@@ -141,11 +144,12 @@ async function deleteRecord(req, res, fastify) {
     let table = req.body.table,
         qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
         id = req.body.id,
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table;
+        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
+        user = fastify.jwt.decode(req.cookies.xyz_user);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, qID, log_table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.appSettingsValues.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 

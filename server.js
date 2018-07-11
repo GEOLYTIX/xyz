@@ -29,9 +29,15 @@ fastify
     .register(require('fastify-auth'))
     .register(require('fastify-jwt'), {
         secret: process.env.SECRET || 'some-secret-password-at-least-32-characters-long'
-    });
+    })
+    .decorate('authAccess', (req, res, done) => require('./auth').authToken(req, res, fastify, global.access, done))
+    .decorate('authAdmin', (req, res, done) => require('./auth').authToken(req, res, fastify, 'admin', done));
 
 require('./globals')(fastify);
+
+require('./workspace')(fastify);
+
+require('./auth').init(fastify);
 
 require('./routes')(fastify);
 
