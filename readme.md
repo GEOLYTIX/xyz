@@ -162,7 +162,7 @@ The gazetteer to be used for the locale. The first entry in the array is the pro
 
 ### Layers
 
-Layers are a sub setting of a locale. Each layers object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window.
+Layers are a sub setting of a locale. Each layers object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window. `access` is a layer-specific privilege given to user role. Defaults to `"public"` which does not require login.
 
 All layer types share the following parameters:
 
@@ -175,7 +175,10 @@ All layer types share the following parameters:
 	 "dbs": <reference to connection string>,
 	 "display": <boolean, if set to true layer is initially displayed>,
 	 "qID": <field for feature identifier within dataset, default: "id">, // if undefined layer is non-interactive
-	 "geom": <geometry field SRID 4326, default: "geom">
+	 "geom": <geometry field SRID 4326, default: "geom">,
+	 "access": <"public", "private" or "admin", defaults to "public">,
+	 "properties": <SQL list of additional fields to select and include within feature followed by comma, optional>,
+	 "style": {}
  }
 ```
 
@@ -194,12 +197,85 @@ layer.arrayZoom: {
 }
 ```
 
-Types of layers which are currently supported:
+Types of layers currently supported:
 
-#### cluster
-#### geojson
-#### grid
+* ### cluster
+
+A `cluster` layer is a GeoJSON point layer which automatically clusters based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
+
+`cluster` layer further takes the following parameters:
+
+__Editing parameters__
+```javascript
+"editable": <"true", "geometry", defaults to false>,
+"log_table": <log table name defaults to undefined>
+```
+`"editable": true` allows editing feature attributes.
+
+`"editable": "geometry"` allows editing geometries.
+
+`"log_table"` is a reference to a table that stores edit logs. This table has the same structure as layer source table.
+
+__Clustering parameters__
+
+Cluster layer recognizes the following `style` parameters:
+```javascript
+"style": {
+	"cluster_label": <field used as label for a single feature>,
+  "cluster_cat": <field with clustering property>,
+  "cluster_kmeans": <numeric, minimum number of clusters, defaults to 100>,
+  "cluster_dbscan": <numeric, maximum distance between locations in cluster (DBScan), defaults  to 0.01>,
+	"themes": [] // container for thematic styling
+}
+```
+
+__Styling__
+Cluster style supports custom marker and marker size. Markers can be created with `svg_symbols` module or defined as *svg data URL*.
+
+```javascript
+"markerMin": <numeric, smallest marker size, defaults to 20>,
+"markerMax": <numeric, largest marker size, defaults to 40>,
+"marker": <svg_module string input or dataURL>, // default marker for single feature
+"markerMulti": <array with pairs radius and hex colour, input for svg_module> // markerMulti is a cluster of features
+```
+__Theme__
+In order to display classified clusters `themes` parameters within layer style must be defined. `themes` is an array of theme objects.
+Cluster layer supports theme object with the following parameters:
+
+```javascript
+{
+	"label": "<theme title to display>",
+	"field": "<column name to classify against>",
+	"type": "<categorized (based on string), graduated (based on number)>",
+	"other": "<boolean, defaults to false, if set true layer includes unclassified features>"
+	"applied": "<boolean, if set to true the theme is applied initially>",
+	"competitors": {},
+	"cat": {}
+}
+```
+
+`"competitors"` is a container for competitors configuration. If competitors are defined,`markerMulti` will indicate share of each competitor within a cluster based on `"field"` defined in the parent theme object.
+
+```javascript
+"competitors": {
+	"value 1": {
+		"colour": "<hex colour>",
+		"label": "label for value 1"
+	},
+	"value 2": {
+		"colour": "<hex colour>",
+		"label": "label for value 2"
+	},
+	{...}
+}
+```
+
+`"cat"` is a container for theme categories.
+
 #### mvt
+
+#### grid
+#### geojson
 #### tiles
 
 `tiles` layer is a base map layer used both for map tiles and label tiles. It usually requires tile provider attribution. `URI` is base url for request from tile provider. Below default xyz configuration for base map provided by <a href="https://www.mapbox.com/" target="_blank">Mapbox</a>:
