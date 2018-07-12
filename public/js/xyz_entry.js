@@ -25,14 +25,8 @@ const svg_symbols = require('./svg_symbols');
 // All mobile interface quirks are loaded here.
 if (view_mode === 'mobile') require('./mobile_interface')();
 
-// Initiate leaflet.
-const L = require('leaflet');
-
 // Initiate hooks component.
 require('./hooks')();
-
-const btnZoomIn = document.getElementById('btnZoomIn');
-const btnZoomOut = document.getElementById('btnZoomOut');
 
 // Set locale default.
 if (!_xyz.locale) _xyz.locale = Object.keys(_xyz.locales)[0];
@@ -47,6 +41,9 @@ _xyz.attribution = ['leaflet', 'xyz'];
 // Set min/max zoom defaults.
 _xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;
 _xyz.locales[_xyz.locale].maxZoom = _xyz.locales[_xyz.locale].maxZoom || 20;
+
+// Initiate leaflet.
+const L = require('leaflet');
 
 // Initiate map object.
 _xyz.map = L
@@ -70,6 +67,9 @@ _xyz.setView = fit => {
 _xyz.setView(!_xyz.hooks.z);
 
 // Zoom functions
+const btnZoomIn = document.getElementById('btnZoomIn');
+const btnZoomOut = document.getElementById('btnZoomOut');
+
 chkZoomBtn(_xyz.map.getZoom());
 function chkZoomBtn(z){
     btnZoomIn.disabled = z < _xyz.locales[_xyz.locale].maxZoom ?  false : true;
@@ -119,7 +119,6 @@ function viewChangeEnd() {
     timer = setTimeout(() => {
         chkZoomBtn(_xyz.map.getZoom());
 
-        //Set the view hook.
         _xyz.setViewHook(_xyz.map.getCenter());
 
         let layers = _xyz.locales[_xyz.locale].layers
