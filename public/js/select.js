@@ -236,7 +236,7 @@ module.exports = () => {
                         _arr.push(layer.charts[chart][item].field);
                     });
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'q_chart_data');
+                    xhr.open('POST', host + 'api/location/chart');
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onload = function(){
                         if (this.status === 200){

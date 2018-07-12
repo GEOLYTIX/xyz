@@ -174,7 +174,7 @@ The gazetteer to be used for the locale. The first entry in the array is the pro
 
 ### Layers
 
-Layers are a sub setting of a locale. Each layers object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window. `access` is a layer-specific privilege given to user role. Defaults to `"public"` which does not require login.
+Layers are a sub setting of a locale. Each layer object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window. `access` is a layer-specific privilege given to user role. Defaults to `"public"` which does not require login.
 
 All layer types share the following parameters:
 
@@ -188,9 +188,14 @@ All layer types share the following parameters:
 	 "display": <boolean, if set to true layer is initially displayed>,
 	 "qID": <field for feature identifier within dataset, default: "id">, // if undefined layer is non-interactive
 	 "geom": <geometry field SRID 4326, default: "geom">,
+	 "geom_3857": <geometry field SRID 3857, defaults to "geom_3857", parameter required for MVT layer only>,
 	 "access": <"public", "private" or "admin", defaults to "public">,
 	 "properties": <SQL list of additional fields to select and include within feature followed by comma, optional>,
-	 "style": {}
+	 "streetview": <supported by cluster layer, displays Google StreetView in data table for selected feature>,
+     "hover": <boolean, enables tooltip on features, cluster layer only>,
+     "geomdisplay": <field name for buffer geometry>,
+	 "style": {},
+     "infoj": []
  }
 ```
 
@@ -219,14 +224,14 @@ A `cluster` layer is a GeoJSON point layer which automatically clusters based on
 
 __Editing parameters__
 ```javascript
-"editable": <"true", "geometry", defaults to false>,
+"editable": <true, "geometry", defaults to false>,
 "log_table": <log table name defaults to undefined>
 ```
 `"editable": true` allows editing feature attributes.
 
 `"editable": "geometry"` allows editing geometries.
 
-`"log_table"` is a reference to a table that stores edit logs. This table has the same structure as layer source table.
+`"log_table"` is a reference to a table that stores edit logs. This table has the same structure as layer source table and stores each change made to a feature along with last update timestamp and username who made the change.
 
 __Clustering parameters__
 
@@ -261,12 +266,42 @@ Cluster layer supports theme object with the following parameters:
 	"type": "<categorized (based on string), graduated (based on number)>",
 	"other": "<boolean, defaults to false, if set true layer includes unclassified features>"
 	"applied": "<boolean, if set to true the theme is applied initially>",
-	"competitors": {},
-	"cat": {}
+	"cat": {},
+	"competitors": {}
 }
 ```
 
-`"competitors"` is a container for competitors configuration. If competitors are defined,`markerMulti` will indicate share of each competitor within a cluster based on `"field"` defined in the parent theme object.
+`"cat"` is a container for thematic categories. Features are classified and styled by categories (categorized) or numeric values (graduated) defined inside the  `"cat"` object.
+
+```javascript
+// configuration for categorized clusters
+"cat": {
+	"value 1": {
+		"marker": "SVG data URL, array of radius between 0 and 400 and a hex colour or svg_symbols module declaration",
+		"label": "label for value 1"
+	},
+	"value 2": {
+		"marker": "svg_symbols.target([400, '#2274A5'])", // example value using svg_symbol.target() function
+		"label": "label for value 2"
+	},
+	{...}
+}
+
+// configuration for graduated clusters
+"cat": [
+	{
+		"val": 10,
+		"marker": "hex colour, array of radius between 0 and 400 and hex colour, SVG data URL or svg_symbols.target()",,
+		"label": "10"
+	},
+	{
+		"val": 20,
+		"marker": "svg_symbols.target([400,'#fcfdbf'])",
+	}
+]
+```
+
+`"competitors"` is a container for competitors configuration. If competitors are defined,`markerMulti` will indicate share of each competitor within a cluster based on `"field"` defined in the parent theme object. Size of rings in the marker show share of each competitor group.
 
 ```javascript
 "competitors": {
@@ -282,12 +317,14 @@ Cluster layer supports theme object with the following parameters:
 }
 ```
 
-`"cat"` is a container for theme categories.
-
 #### mvt
 
 #### grid
 #### geojson
+
+* ### infoj
+
+
 #### tiles
 
 `tiles` layer is a base map layer used both for map tiles and label tiles. It usually requires tile provider attribution. `URI` is base url for request from tile provider. Below default xyz configuration for base map provided by <a href="https://www.mapbox.com/" target="_blank">Mapbox</a>:
@@ -308,6 +345,8 @@ Cluster layer supports theme object with the following parameters:
 ```
 
 Another base map provider available out of the box is <a href="https://www.here.com/en" target="_blank">Here</a>. This configuration also applies to labels displayed as tiles alongside base map tiles.
+
+
 
 ## Server
 

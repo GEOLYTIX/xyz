@@ -16,6 +16,8 @@ async function select(req, res, fastify) {
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
+    
+    if(geomdisplay) geomdisplay = `,ST_AsGeoJSON(${req.body.geomdisplay}) as geomdisplay`;
 
     if (sql_filter) {
         var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;

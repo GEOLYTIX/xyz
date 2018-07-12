@@ -67,7 +67,7 @@
         "mb": {
           "display": true,
           "streetview": true,
-          "geomdisplay": ",ST_AsGeoJSON(displaygeom) AS geomdisplay",
+          "geomdisplay": "displaygeom",
           "name": "M&B Premises",
           "meta": "All M&B premises June 2018.",
           "format": "cluster",

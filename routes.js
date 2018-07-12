@@ -164,7 +164,7 @@ module.exports = fastify => {
         // !!!should be taken from /select infoj
         fastify.route({
             method: 'POST',
-            url: '/q_chart_data',
+            url: '/api/location/chart',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/select').chart_data(req, res, fastify);

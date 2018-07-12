@@ -113,7 +113,7 @@
           "name": "Retail Place Catchments",
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "geomdisplay": ",ST_AsGeoJSON(displaygeom) AS geomdisplay",
+          "geomdisplay": "displaygeom",
           "pane": ["bounds", 515],
           "dbs": "XYZ",
           "qID": "id",
