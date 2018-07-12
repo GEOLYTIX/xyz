@@ -106,7 +106,15 @@ We use [cloudinary](https://cloudinary.com) to store images uploaded from the br
 
 ## Workspaces
 
-A workspace is the configuration of services, styles, layers and locations to be used in a deployment. File based configuration are stored in the [/workspaces](https://github.com/GEOLYTIX/xyz/tree/master/workspaces) directory. It is recommended to store the workspace configurastion in a database in order manage the configurastion through admin views.
+A workspace is the configuration of services, styles, layers and locations to be used in a deployment. File based configuration are stored in the [/workspaces](https://github.com/GEOLYTIX/xyz/tree/master/workspaces) directory. It is recommended to store the configuration object in a database in order manage the configurastion through admin views.
+
+/admin/workspace
+
+A [jsoneditor](https://github.com/josdejong/jsoneditor) tree view which allows modification of config keys, uploading configuration files into the view and saving the workspace configuragtion to a PostgreSQL table.
+
+/admin/workspacejson
+
+A code view (json) of the configuration object.
 
 Below is a list of config keys which are currently supported. Default minimum viable settings will be set if no *workspace* has been defined in the deployment environment.
 
@@ -303,7 +311,51 @@ Another base map provider available out of the box is <a href="https://www.here.
 
 ## Server
 
-[server.js](https://github.com/GEOLYTIX/xyz/blob/master/server.js) starts an [Fastify](https://www.fastify.io) web server on the specified port, sets the public directory, favicon and security from the environment settings.
+[server.js](https://github.com/GEOLYTIX/xyz/blob/master/server.js) starts an [Fastify](https://www.fastify.io) web server on the specified port.
+
+The startup procedure is as follows.
+
+1. Declare the Fastify server object.
+
+2. Register the Fastify Helmet module.
+
+3. Register the Fastify Formbody module.
+
+4. Register the Fastify Static module.
+
+5. Register the Fastify Cookie module.
+
+6. Register the Fastify Auth module.
+
+7. Register the Fastify JWT module.
+
+8. Decorate routes with the authToken function.
+
+9. Setting [globals](https://github.com/GEOLYTIX/xyz/blob/master/globals.js) from environment settings.
+
+10. Register [workspace](https://github.com/GEOLYTIX/xyz/blob/master/workspace.js) admin routes.
+
+11. Load the admin workspace configuration into the global scope.
+
+12. Remove admin workspace configuration for private access.
+
+13. Remove private workspace confirguration for public access.
+
+14. Load value array for SQL Injection and access lookup.
+
+15. Register [auth](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) routes.
+
+16. Register all other [routes](https://github.com/GEOLYTIX/xyz/blob/master/routes.js).
+
+17. Listen to incoming requests.
+
+## Client Application
+
+The root route will check whether the incoming requests come from a mobile platform using the [mobile-detect](https://github.com/hgoebl/mobile-detect.js) node module. The user and session token are decoded for the access key to the workspace configuration. Based on the user, session and configuration [JSRender assembles](http://www.jsviews.com/#jsr-node-quickstart) the website template ([desktop](https://github.com/GEOLYTIX/xyz/blob/master/views/desktop.html) or [mobile](https://github.com/GEOLYTIX/xyz/blob/master/views/mobile.html)) with the script bundle and workspace configuration.
+
+[xyz_entry](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) is the entry point in the script bundle.
+
+We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.svg).
 
 ## Routes
 
@@ -519,9 +571,9 @@ We are using the [fastify-auth](https://github.com/fastify/fastify-auth) module 
 
 By default the framework is public with full access to all data sources defined in the environmental settings.
 
-By setting the LOGIN key in the environmental settings with a PostgreSQL connection string (plus a table name seperated by a | pipe) it is possible to restrict access. The access control list (ACL) table must be stored in a PostgreSQL database.
+By setting the access key (PUBLIC or PRIVATE) in the environmental settings with a PostgreSQL connection string (plus a table name seperated by a | pipe) it is possible to restrict access. The access control list (ACL) table must be stored in a PostgreSQL database.
 
-*It is possible to set ADMIN instead of the LOGIN key with the same connection string.* Only admin routes are restricted if the admin key is set. Admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or database. ADMIN is the prefered option for an open application which allows administrators to change the application settings through the application interface.
+If set to PRIVATE a login is required to open the application or access any endpoint. If set to public login is optional for routes which are not restricted for administrator. Admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or database.
 
 An ACL must have following table schema:
 
