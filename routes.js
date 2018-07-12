@@ -1,11 +1,5 @@
 module.exports = fastify => {
 
-    // Create constructor for mobile detect module.
-    const Md = require('mobile-detect');
-
-    // Set jsrender module for server-side templates.
-    const jsr = require('jsrender');
-
     // Set highlight and and markdown-it to turn markdown into flavoured html.
     const hljs = require('highlight.js');
     const markdown = require('markdown-it')({
@@ -27,6 +21,12 @@ module.exports = fastify => {
     //         f(...params);
     //     }
     // }
+
+    // Create constructor for mobile detect module.
+    const Md = require('mobile-detect');
+
+    // Set jsrender module for server-side templates.
+    const jsr = require('jsrender');
 
     // Add content type parser for octet stream.
     fastify.addContentTypeParser('*', (req, done) => done());

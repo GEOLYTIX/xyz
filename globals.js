@@ -25,6 +25,4 @@ module.exports = fastify => {
         }
     });
 
-    
-
 }

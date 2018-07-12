@@ -30,7 +30,7 @@ module.exports = async fastify => {
             url: '/admin/workspacejson',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: (req, res) => {
-                res.type('text/html').send(require('jsrender').templates('./views/settings.html').render({
+                res.type('text/html').send(require('jsrender').templates('./views/workspace_admin.html').render({
                     dir: global.dir,
                     settings: `
                         <script>
