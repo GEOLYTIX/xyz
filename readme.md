@@ -64,7 +64,7 @@ e.g. `"WORKSPACE": "postgres://username:password@123.123.123.123:5432/database|s
 
 `"PUBLIC": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
-The location of an Access Control List (ACL) table in Postgres. No login is required if this key is omitted. Setting the key to public allows user to login to a private workspace and administrator to the admin views for the management of the workspace and ACL. Setting the key to PRIVATE will prevent access without login. 
+The location of an Access Control List (ACL) table in Postgres. No login is required if this key is omitted. Setting the key to public allows user to login to a private workspace and administrator to the admin views for the management of the workspace and ACL. Setting the key to PRIVATE will prevent access without login.
 
 `"TRANSPORT": "smtps://xyz%40geolytix.co.uk:password@smtp.gmail.com"`
 
@@ -174,16 +174,16 @@ The gazetteer to be used for the locale. The first entry in the array is the pro
 
 ### Layers
 
-Layers are a sub setting of a locale. Each layer object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window. `access` is a layer-specific privilege given to user role. Defaults to `"public"` which does not require login.
+Layers are a sub setting of a locale. Each layer object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window. `access` is a layer-specific privilege given to user role. Defaults to `"public"` which does not require login. Access set to `"private"` requires login in order to view content. Value `"admin"` allows all administrative operations and app configuration.
 
-All layer types share the following parameters:
+A layer may support the following parameters:
 
 ```javascript
  <layer identifier, SQL legal name recommended> : {
 	 "name": <layer name to display>,
-	 "meta": <meta string>,
+	 "meta": <meta string, data description>,
 	 "pane": [<pane name>], 500], // Leaflet equivalent to z-index
-	 "format": <"base", "mvt", "geojson" or "cluster">,
+	 "format": <"tiles", "mvt", "geojson" or "cluster">,
 	 "dbs": <reference to connection string>,
 	 "display": <boolean, if set to true layer is initially displayed>,
 	 "qID": <field for feature identifier within dataset, default: "id">, // if undefined layer is non-interactive
@@ -193,21 +193,23 @@ All layer types share the following parameters:
 	 "properties": <SQL list of additional fields to select and include within feature followed by comma, optional>,
 	 "streetview": <supported by cluster layer, displays Google StreetView in data table for selected feature>,
      "hover": <boolean, enables tooltip on features, cluster layer only>,
-     "geomdisplay": <field name for buffer geometry>,
+     "geomdisplay": <field name for associated geometry for cluster layers if available, such as buffer or catchment, expected format PostGIS geometry SRID 4326, defaults to false>,
+     "aggregate_layer": <table to store output of aggregate data filtering>,
+     "charts": {},
 	 "style": {},
      "infoj": []
  }
 ```
 
-Each layer needs `table` or `arrayZoom` property defined in order to access the source table.
+Each layer object needs `"table"` or `"arrayZoom"` property defined in order to access the source table.
 
 ```javascript
-layer.table: <table name>
+"table": <table name>
 ```
-`arrayZoom` is an object that groups tables assigned to respective zoom levels. This was designed for hierarchy datasets which are subject to geographic generalization.
+`"arrayZoom"` is an object that groups tables assigned to respective zoom levels. This was designed for hierarchy datasets which are subject to geographic generalization.
 
 ```javascript
-layer.arrayZoom: {
+"arrayZoom": {
 	"10": <source table for zoom level 10>,
 	"11": <source table for zoom level 11>,
 	"12": <source table for zoom level 12 and higher>,
@@ -247,6 +249,7 @@ Cluster layer recognizes the following `style` parameters:
 ```
 
 __Styling__
+
 Cluster style supports custom marker and marker size. Markers can be created with `svg_symbols` module or defined as *svg data URL*.
 
 ```javascript
@@ -256,19 +259,23 @@ Cluster style supports custom marker and marker size. Markers can be created wit
 "markerMulti": <array with pairs radius and hex colour, input for svg_module> // markerMulti is a cluster of features
 ```
 __Theme__
-In order to display classified clusters `themes` parameters within layer style must be defined. `themes` is an array of theme objects.
+
+In order to display classified clusters `themes` parameters within layer style must be defined. `themes` is an array of theme objects. Currently there are 2 supported classification types: categorized and graduated.
 Cluster layer supports theme object with the following parameters:
 
 ```javascript
-{
-	"label": "<theme title to display>",
-	"field": "<column name to classify against>",
-	"type": "<categorized (based on string), graduated (based on number)>",
-	"other": "<boolean, defaults to false, if set true layer includes unclassified features>"
-	"applied": "<boolean, if set to true the theme is applied initially>",
-	"cat": {},
-	"competitors": {}
-}
+"themes": [
+  {
+    "label": "<theme title to display>",
+    "field": "<column name to classify against>",
+	  "type": "<categorized (based on string), graduated (based on number)>",
+	  "other": "<boolean, defaults to false, if set true layer includes unclassified features>"
+	  "applied": "<boolean, if set to true the theme is applied initially>",
+	  "cat": {},
+	  "competitors": {}
+  },
+  {...}
+]
 ```
 
 `"cat"` is a container for thematic categories. Features are classified and styled by categories (categorized) or numeric values (graduated) defined inside the  `"cat"` object.
@@ -292,11 +299,12 @@ Cluster layer supports theme object with the following parameters:
 	{
 		"val": 10,
 		"marker": "hex colour, array of radius between 0 and 400 and hex colour, SVG data URL or svg_symbols.target()",,
-		"label": "10"
+		"label": "label for value 10"
 	},
 	{
 		"val": 20,
 		"marker": "svg_symbols.target([400,'#fcfdbf'])",
+    "label": "label for value 20"
 	}
 ]
 ```
@@ -323,6 +331,59 @@ Cluster layer supports theme object with the following parameters:
 #### geojson
 
 * ### infoj
+
+`"infoj"` is a container for data associated with each feature displayed on selection and interaction that requires reading feature properties. This is an array of objects with the following structure:
+
+```javascript
+"infoj": [
+  {
+    "field": <field name>,
+    "label": <label for the field>, // optional
+    "type": <currently supported: "text", "numeric", "integer", "date">,
+    "level": <small integer, defines row indent, defaults to 0>,
+    "filter": <filter type>,
+    "options": <array of drop down values for editable properties>,
+    "inline": <boolean, displays table row in one line, defaults to false>
+  },
+  {
+    "label": <set label only when needed a section title>
+  },
+  {
+    "chart": <chart name> // in order to add chart
+  },
+  {...}
+]
+```
+`"options"` parameter can also support hierarchy of selections:
+
+```javascript
+"options": [
+  "parent value 1;child value 1 for value 1;child value 2 for value 1",
+  "parent value 2;child value 1 for value 2;child value 1 for value 2",
+  (...)
+]
+```
+
+First value before semicolon will determine subsequent choice.
+
+__Filtering__
+
+In order to enable filtering data `"filter"` property in an `"infoj"` item must be defined. The following filter types are supported by cluster and geojson layers:
+
+`"like"` - search for text pattern
+
+`"match"` - search for exact text match
+
+`"date"` - date filtering, later and earlier than
+
+`"numeric"` - number filtering, greater and less than
+
+Filtering by checkbox:
+```javascript
+"filter": {
+      "in": [<array of values>]
+  }
+  ```
 
 
 #### tiles

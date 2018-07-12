@@ -1,0 +1,989 @@
+{
+    "title": "GEOLYTIX | XYZ Geodata",
+    "select": {},
+    "locate": {},
+    "report": {},
+    "gazetteer": {},
+    "documentation": "documentation",
+    "locale": "UK",
+    "locales": {
+        "UK": {
+            "name": "United Kingdom",
+            "gazetteer": ["GOOGLE", "GB", "", "e.g. London"],
+            "bounds": [[48, -11.5],[62, 5]],
+            "minZoom": 6,
+            "maxZoom": 17,
+            "layers": {
+                "base": {
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": ["mapbox", "osm"],
+                    "pane": ["base", 500],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+                    "provider": "MAPBOX"
+                },
+                "label": {
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": ["mapbox", "osm"],
+                    "pane": ["base_labels", 550],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+                    "provider": "MAPBOX"
+                },
+                "here": {
+                    "name": "HERE Imagery",
+                    "attribution": ["here"],
+                    "meta": "Satellite Imagery layer provided by HERE.",
+                    "pane": ["base", 500],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "admin_census_pcode": {
+                   "name": "Census postcode",
+                   "format": "cluster",
+                   "meta": "Population and household count at postcode level from 2011 census.",
+                   "attribution": ["Admin Geography. Geolytix License."],
+                   "pane": ["admin_census_pcode", 520],
+                   "dbs": "GEODATA",
+                   "cluster_label": "postcode",
+                   "cluster_cat": "oa11_ons",
+                   "properties": "postcode, pop_11, hhd_occ_11, oa11_ons, oa11_pip,",
+                   "qID": "id",
+                   "geom": "geom_4326",
+                   "geomj": "ST_asGeoJson(geom_4326)",
+                   "arrayZoom": {
+                       "15": "admin_census_pcode"
+                   },
+                   "infoj": [
+                       {
+                           "field": "postcode",
+                           "label": "Postcode",
+                           "type": "text"
+                        },
+                        {
+                            "field": "pop_11",
+                            "label": "Population 2011",
+                            "type": "integer"
+                        },
+                        {
+                            "field": "hhd_occ_11",
+                            "label": "Households occupied 2011",
+                            "type": "integer"
+                        },
+                        {
+                            "field": "oa11_ons",
+                            "label": "Output area ONS",
+                            "type": "text"
+                        },
+                        {
+                            "field": "oa11_pip",
+                            "label": "Output area PIP",
+                            "type": "text"
+                        }
+                    ],
+                   "style": {
+                       "default": {},
+                       "highlight": {},
+                       "themes": []
+                   }
+                },
+                "admin_county": {
+                    "name": "County",
+                    "format": "mvt",
+                    "meta": "The 85 ‘traditional counties’ of the UK.",
+                    "attribution": ["Admin Geography. Geolytix License."],
+                    "pane": ["admin_country", 508],
+                    "dbs": "GEODATA",
+                    "arrayZoom": {
+                        "6": "admin_county"
+                    },
+                    "qID": "id",
+                    "geom_3857": "geom_3857",
+                    "geomj": "geomj",
+                    "properties": "countyname,",
+                    "infoj": [
+                        {
+                            "field": "countyname",
+                            "label": "County name",
+                            "type": "text"
+                        }
+                    ],
+                    "style": {
+                        "themes": []
+                    }
+                },
+                "admin_hybrid_zone": {
+                    "name": "Hybrid Zone",
+                    "format": "mvt",
+                    "meta": "Hybrid Zones are designed to contain consistent numbers of workers, based on where people work.",
+                    "attribution": ["Admin Geography. Geolytix License."],
+                    "pane": ["admin_hybrid_zone", 513],
+                    "dbs": "GEODATA",
+                    "arrayZoom": {
+                        "16": "admin_hybrid_zone"
+                    },
+                    "qID": "id",
+                    "geom_3857": "geom_3857",
+                    "geom": "geom_4326",
+                    "geomj": "ST_asGeoJson(geom_4326)",
+                    "properties": "wz11code, oasplitper, oa11code, wzsplitper,",
+                    "infoj": [
+                        {
+                            "field": "wz11code",
+                            "label": "WZ 11 Code",
+                            "type": "text"
+                        },
+                        {
+                            "field": "oa11code",
+                            "label": "OA 11 Code",
+                            "type": "text"
+                        },
+                        {
+                            "field": "oasplitper",
+                            "label": "OA Split per",
+                            "type": "numeric"
+                        },
+                        {
+                            "field": "wzsplitper",
+                            "label": "WZ Split per",
+                            "type": "numeric"
+                        }
+                    ],
+                    "style": {
+                        "themes": []
+                    }
+                },
+                "retail_place_outline_mvt": {
+                    "name": "Retail Place Outline",
+                    "format": "mvt",
+                    "geom_3857": "geom_3857",
+                    "geom": "geom_4326",
+                    "pane": ["retail_place_outline", 520],
+                    "dbs": "GEODATA",
+                    "properties": "rp_type,",
+                    "qID": "id",
+                    "arrayZoom": {
+                        "12": "retail_place_outline"
+                    },
+                    "infoj": [
+                        {
+                            "field": "rp_name",
+                            "label": "Name",
+                            "type": "text",
+                            "filter": "like"
+                        },
+                        {
+                            "field": "rp_type",
+                            "label": "Type",
+                            "type": "text",
+                            "filter": "match"
+                        },
+                        {
+                            "field": "ref_pc",
+                            "label": "Reference Postcode",
+                            "type": "text",
+                            "level": 1,
+                            "filter": "like"
+                        },
+                        {
+                            "field": "comp_strgh",
+                            "label": "Competition Strength",
+                            "type": "integer",
+                            "level": 1
+                        },
+                        {
+                          "field": "est_units",
+                          "label": "Estimate Units",
+                          "type": "integer",
+                          "level": 1
+                        },
+                        {
+                          "field": "est_brands",
+                          "label": "Estimate Brands",
+                          "type": "integer",
+                          "level": 1
+                        },
+                        {
+                          "field": "comparison",
+                          "label": "Comparison",
+                          "type": "numeric",
+                          "level": 1
+                        },
+                        {
+                          "field": "conv",
+                          "label": "Convenience",
+                          "type": "numeric",
+                          "level": 1
+                        },
+                        {
+                          "field": "fbl",
+                          "label": "Food, Beverage, Leisure",
+                          "type": "numeric",
+                          "level": 1
+                        },
+                        {
+                          "field": "services",
+                          "label": "Services",
+                          "type": "numeric",
+                          "level": 1
+                        },
+                        {
+                          "field": "classbrass",
+                          "label": "Class|Brass",
+                          "type": "numeric",
+                          "level": 1
+                        }
+                      ],
+                      "style": {
+                        "default": {
+                          "weight": 1,
+                          "color": "#000",
+                          "fill": true,
+                          "fillColor": "#000",
+                          "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                          "color": "#e91e63",
+                          "fill": true,
+                          "fillOpacity": 0.3
+                        },
+                        "themes": [{
+                          "label": "Retail Place type",
+                          "type": "categorized",
+                          "field": "rp_type",
+                          "applied": true,
+                          "other": true,
+                          "cat": {
+                            "Major City Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#EF271B",
+                                "opacity": 1,
+                                "fillColor": "#EF271B",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "City Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#BA2D0B",
+                                "opacity": 1,
+                                "fillColor": "#BA2D0B",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Large Town Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#FE4E00",
+                                "opacity": 1,
+                                "fillColor": "#FE4E00",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Major Urban Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#E2711D",
+                                "opacity": 1,
+                                "fillColor": "#E2711D",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Town Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#F3A712",
+                                "opacity": 1,
+                                "fillColor": "#F3A712",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Urban Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#FADF63",
+                                "opacity": 1,
+                                "fillColor": "#FADF63",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Small Town Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#FFE74C",
+                                "opacity": 1,
+                                "fillColor": "#FFE74C",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Village Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#DBFE87",
+                                "opacity": 1,
+                                "fillColor": "#DBFE87",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Regional SC": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#8ED081",
+                                "opacity": 1,
+                                "fillColor": "#8ED081",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              },
+                              "label": "Regional Shopping Centre"
+                            },
+                            "Outlet Centre": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#7DDF64",
+                                "opacity": 1,
+                                "fillColor": "#7DDF64",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Shopping Park": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#074F57",
+                                "opacity": 1,
+                                "fillColor": "#074F57",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Retail Park": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#32746D",
+                                "opacity": 1,
+                                "fillColor": "#32746D",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Leisure Park": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#41D3BD",
+                                "opacity": 1,
+                                "fillColor": "#41D3BD",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Local Hub": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#08B2E3",
+                                "opacity": 1,
+                                "fillColor": "#08B2E3",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Large Parade": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#1F487E",
+                                "opacity": 1,
+                                "fillColor": "#1F487E",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Parade": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#541388",
+                                "opacity": 1,
+                                "fillColor": "#541388",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            },
+                            "Weak Parade": {
+                              "style": {
+                                "weight": 2,
+                                "color": "#D90368",
+                                "opacity": 1,
+                                "fillColor": "#D90368",
+                                "fill": true,
+                                "fillOpacity": 0.3
+                              }
+                            }
+                          }
+                        }]
+                      }
+                },
+                "retail_place_shopcent": {
+                    "display": true,
+                    "name": "Retail Place Shopping Centre",
+                    "meta": "Geolytix License",
+                    "properties": "rp_id, sc_name, rp_name, rp_type, unit_count, sc_type, area_curt,",
+                    "format": "mvt",
+                    "geom_3857": "geom_3857",
+                    "geom": "geom_4326",
+                    "pane": ["pitch", 540],
+                    "dbs": "GEODATA",
+                    "qID": "id",
+                    "arrayZoom": {
+                        "13": "retail_place_shopcent"
+                    },
+                    "infoj": [
+                        {
+                            "field": "rp_id",
+                            "label": "Retail place ID",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "sc_name",
+                            "label": "Shopping centre name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "rp_name",
+                            "label": "Retail place name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "rp_type",
+                            "label": "Retail place type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "unit_count",
+                            "label": "Unit count",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "sc_type",
+                            "label": "Shopping centre type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "area_curt",
+                            "label": "Area",
+                            "type": "integer",
+                            "inline": true
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#",
+                            "fill": true,
+                            "fillColor": "#444",
+                            "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                            "color": "#e91e63",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        },
+                        "themes": [
+                            {
+                                "label": "Retail Place type",
+                                "type": "categorized",
+                                "field": "rp_type",
+                                "applied": true,
+                                "other": true,
+                                "cat": {
+                                    "Major City Centre": {
+                                        "style": {
+                                        "weight": 2,
+                                        "color": "#EF271B",
+                                        "opacity": 1,
+                                        "fillColor": "#EF271B",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "City Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#BA2D0B",
+                                            "opacity": 1,
+                                            "fillColor": "#BA2D0B",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Large Town Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#FE4E00",
+                                            "opacity": 1,
+                                            "fillColor": "#FE4E00",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Major Urban Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#E2711D",
+                                            "opacity": 1,
+                                            "fillColor": "#E2711D",
+                                            "fill": true,
+                                           "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Town Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#F3A712",
+                                            "opacity": 1,
+                                            "fillColor": "#F3A712",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Urban Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#FADF63",
+                                            "opacity": 1,
+                                            "fillColor": "#FADF63",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Small Town Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#FFE74C",
+                                            "opacity": 1,
+                                            "fillColor": "#FFE74C",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Village Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#DBFE87",
+                                            "opacity": 1,
+                                            "fillColor": "#DBFE87",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Regional SC": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#8ED081",
+                                            "opacity": 1,
+                                            "fillColor": "#8ED081",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        },
+                                        "label": "Regional Shopping Centre"
+                                    },
+                                    "Outlet Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#7DDF64",
+                                            "opacity": 1,
+                                            "fillColor": "#7DDF64",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Shopping Park": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#074F57",
+                                            "opacity": 1,
+                                            "fillColor": "#074F57",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Retail Park": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#32746D",
+                                            "opacity": 1,
+                                            "fillColor": "#32746D",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Leisure Park": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#41D3BD",
+                                            "opacity": 1,
+                                            "fillColor": "#41D3BD",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Local Hub": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#08B2E3",
+                                            "opacity": 1,
+                                            "fillColor": "#08B2E3",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Large Parade": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#1F487E",
+                                            "opacity": 1,
+                                            "fillColor": "#1F487E",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Parade": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#541388",
+                                            "opacity": 1,
+                                            "fillColor": "#541388",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Weak Parade": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#D90368",
+                                            "opacity": 1,
+                                            "fillColor": "#D90368",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Shopping Centre type",
+                                "field": "sc_type",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "Arcades/Buildings": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#D90368",
+                                            "opacity": 1,
+                                            "fillColor": "#D90368",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Aspirational Brand": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#541388",
+                                            "opacity": 1,
+                                            "fillColor": "#541388",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "City Centre Monsters": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#1F487E",
+                                            "opacity": 1,
+                                            "fillColor": "#1F487E",
+                                            "fill": true,
+                                            "fillOpacity": 0.3    
+                                        }
+                                    },
+                                    "Large Classics": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#08B2E3",
+                                            "opacity": 1,
+                                            "fillColor": "#08B2E3",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "New Town Centres": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#32746D",
+                                            "opacity": 1,
+                                            "fillColor": "#32746D",
+                                            "fill": true,
+                                            "fillOpacity": 0.3 
+                                        }
+                                    },
+                                    "Outlet Centres": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#074F57",
+                                            "opacity": 1,
+                                            "fillColor": "#074F57",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                            
+                                        }
+                                    },
+                                    "Planned Urban Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#7DDF64",
+                                            "opacity": 1,
+                                            "fillColor": "#7DDF64",
+                                            "fill": true,
+                                            "fillOpacity": 0.3}
+                                    },
+                                    "Regional Mall": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#8ED081",
+                                            "opacity": 1,
+                                            "fillColor": "#8ED081",
+                                            "fill": true,
+                                            "fillOpacity": 0.3}
+                                    },
+                                    "Small Classic": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#DBFE87",
+                                            "opacity": 1,
+                                            "fillColor": "#DBFE87",
+                                            "fill": true,
+                                            "fillOpacity": 0.3}
+                                    },
+                                    "Small Classics": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#FFE74C",
+                                            "opacity": 1,
+                                            "fillColor": "#FFE74C",
+                                            "fill": true,
+                                            "fillOpacity": 0.3}
+                                    },
+                                    "Standalone Shopping": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#FADF63",
+                                            "opacity": 1,
+                                            "fillColor": "#FADF63",
+                                            "fill": true,
+                                            "fillOpacity": 0.3}
+                                    },
+                                    "Urban Entertainment Centre": {
+                                        "style": {
+                                            "weight": 2,
+                                            "color": "#E2711D",
+                                            "opacity": 1,
+                                            "fillColor": "#E2711D",
+                                            "fill": true,
+                                            "fillOpacity": 0.3}
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "retailpoints": {
+                    "display": true,
+                    "name": "Retail Points",
+                    "pane": ["retail_points", 540],
+                    "format": "cluster",
+                    "dbs": "GEODATA",
+                    "table": "retail_point_dec17_v11",
+                    "geom": "geom_4326",
+                    "cluster_label": "store_name",
+                    "cluster_cat": "retailer",
+                    "streetview": true,
+                    "infoj": [
+                        {
+                            "field": "id",
+                            "label": "ID",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "retailer",
+                            "label": "Retailer",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "fascia",
+                            "label": "Fascia",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "address_on",
+                            "label": "Address",
+                            "type": "text"
+                        },
+                        {
+                            "field": "address_tw",
+                            "type": "text"
+                        },
+                        {
+                            "field": "town", 
+                            "type": "text"
+                        },
+                        {
+                            "field": "locality",
+                            "type": "text"
+                        },
+                        {
+                            "field": "postcode",
+                            "type": "text"
+                        },
+                        {
+                            "field": "size_band",
+                            "label": "Size band",
+                            "type": "text"
+                        }
+                    ],
+                    "style": {
+                    "marker": "svg_symbols.target([400,'#77a632', 300, '#666'])",
+                    "markerMulti": [400,"#77a632"]
+                    }
+                },
+                "retail_place_pitch": {
+                    "display": true,
+                    "name": "Retail Place Pitch",
+                    "meta": "Comparitive strength within Retail Place area.",
+                    "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec,",
+                    "format": "geojson",
+                    "pane": ["pitch", 540],
+                    "dbs": "GEODATA",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                    "arrayZoom": {
+                        "16": "retail_place_pitch"
+                    },
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#000",
+                            "fill": true,
+                            "fillColor": "#000",
+                            "fillOpacity": 0.3
+                        },
+                        "themes": [{
+                            "type": "categorized",
+                            "field": "pitch_dec",
+                            "label": "Retail pitch rank in decimal scale",
+                            "applied": true,
+                            "cat": {
+                                "1": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#ca0020",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "2": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#dd494b",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "3": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#f09377",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "4": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#f5c1a9",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "5": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#f7e5dd",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "6": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#e1ecf2",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "7": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#b4d6e7",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "8": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#82bcd9",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "9": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#4396c5",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                },
+                                "10": {
+                                    "style": {
+                                        "stroke": false,
+                                        "fillColor": "#0571b0",
+                                        "fill": true,
+                                        "fillOpacity": 0.3
+                                    }
+                                }
+                            }
+                        }]
+                    }
+                }
+            }
+        }
+    }
+}
