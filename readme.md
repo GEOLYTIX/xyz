@@ -24,9 +24,9 @@ We are currently using Node.js version 8.5 in production.
 
 Style sheets for the browser interface are written in SASS/SCSS. We include the compiled css in the repository. With SASS installed it is possible to compile all style sheets with following command `sass -update public/css` from the application root.
 
-The application is compiled with Webpack (v4) and Babel.
+The application is compiled with Webpack (v4) and Babel. We target ES2015 with Babel polyfills for compatibility with Internet Explorer 11.
 
-The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
+The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
 
 ### Puppeteer
 
@@ -34,7 +34,7 @@ The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entr
 
 ## Environment Settings
 
-Environment settings contain sensitive information such as connection strings for data sources, security information and API keys. These should never be made public and are not contained in this repository.
+The process environment contains sensitive information such as connection strings for data sources, security information and API keys. These should never be made public and are not contained in this repository.
 
 Running the application without any environment settings (zero-configuration) will host a sample application with a single OSM base layer on port 3000.
 
@@ -44,25 +44,27 @@ During startup, server.js will check for [dotenv](https://www.npmjs.com/package/
 
 We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
 
+Following environment keys are recognised:
+
 `"PORT": "3000"`
 
-The port on which the application is run.
+The port on which the application is run. Defaults to 3000.
 
 `"DIR": "/xyz"`
 
 The path for the application root.
 
-`"APPSETTINGS": "file:demo.json"`
+`"WORKSPACE": "file:demo.json"`
 
-The name of the *appsettings* file ([in the settings directory](https://github.com/GEOLYTIX/xyz/tree/master/settings)) which holds the settings for the application and/or services which are hosted in this instance of the framework. The *appsettings* will be discussed in detail in the next section of this documentation.
+The name of a *workspace* configuration file ([in the workspaces directory](https://github.com/GEOLYTIX/xyz/tree/master/workspaces)) which holds the settings for the application and/or services which are hosted in a deployment.
 
-It is recommended to store the appsettings in a Postgres table. In this case the table name will provided after a pipe in the Postgres connection string.
+It is recommended to store the workspace configuration in a Postgres table. In this case the table name must be declared after a pipe in the Postgres connection string.
 
-e.g. `"APPSETTINGS": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
+e.g. `"WORKSPACE": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
-`"LOGIN": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
+`"PUBLIC": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
-The location of an Access Control List (ACL) table in Postgres. No login is required if this key is omitted. Only admin routes require authentication if the key is set to `"ADMIN"`.
+The location of an Access Control List (ACL) table in Postgres. No login is required if this key is omitted. Setting the key to public allows user to login to a private workspace and administrator to the admin views for the management of the workspace and ACL. Setting the key to PRIVATE will prevent access without login. 
 
 `"TRANSPORT": "smtps://xyz%40geolytix.co.uk:password@smtp.gmail.com"`
 
@@ -102,9 +104,11 @@ A HERE API key which is required if HERE base maps are used.
 
 We use [cloudinary](https://cloudinary.com) to store images uploaded from the browser application interface.
 
-## Application Settings
+## Workspaces
 
-Application settings are stored in the [/settings](https://github.com/GEOLYTIX/xyz/tree/dev/settings) directory. Application settings control instance specific settings for layers, styles, locales and which modules should be loaded by client applications. Below is a list of settings which are currently supported by the framework. Default minimum viable settings will be set if *appsettings* are not defined in the environment settings or if the settings cannot be opened by the node process.
+A workspace is the configuration of services, styles, layers and locations to be used in a deployment. File based configuration are stored in the [/workspaces](https://github.com/GEOLYTIX/xyz/tree/master/workspaces) directory. It is recommended to store the workspace configurastion in a database in order manage the configurastion through admin views.
+
+Below is a list of config keys which are currently supported. Default minimum viable settings will be set if no *workspace* has been defined in the deployment environment.
 
 `"title": "XYZ Demo"`
 
