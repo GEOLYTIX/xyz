@@ -453,7 +453,49 @@ The startup procedure is as follows.
 
 The root route will check whether the incoming requests come from a mobile platform using the [mobile-detect](https://github.com/hgoebl/mobile-detect.js) node module. The user and session token are decoded for the access key to the workspace configuration. Based on the user, session and configuration [JSRender assembles](http://www.jsviews.com/#jsr-node-quickstart) the website template ([desktop](https://github.com/GEOLYTIX/xyz/blob/master/views/desktop.html) or [mobile](https://github.com/GEOLYTIX/xyz/blob/master/views/mobile.html)) with the script bundle and workspace configuration.
 
+The application consits of two containers. The control container which is on the left (desktop) or a slider at the bottom (mobile) and the map container.
+
+The control container has a section for layers and (selected) locations. Layers and locations are displayed as expandable drawers. The map container holds attribution as well as the main interface buttons (zoom, access, locate, gazetteer, report).
+
+The gazetteer input is displayed at the top of the control container (desktop) or at the top of the map container (mobile).
+
 [xyz_entry](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) is the entry point in the script bundle.
+
+The client application initialisation flow is as follows:
+
+1. Require utils and svg_symbols.
+
+2. Apply IE polyfills.
+
+3. Process workspace configuration.
+
+4. Apply mobile interface.
+
+5. Initialize hooks.
+
+6. Set locale.
+
+7. Initialise Leaflet map.
+
+8. Set map view.
+
+9. Declare zoom functions.
+
+10. Declare view change functions.
+
+11. Initialise locales module.
+
+12. Initialise layers module.
+
+13. Initialise locations module.
+
+14. Initialise gazetteer module.
+
+15. Initialise locate module.
+
+16. Initialise report module.
+
+17. Set scrolly on control container.
 
 We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.svg).
 
