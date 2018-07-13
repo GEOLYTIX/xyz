@@ -449,7 +449,7 @@ The startup procedure is as follows.
 
 17. Listen to incoming requests.
 
-## Client Application
+## [Client Application](#client-application)
 
 The root route will check whether the incoming requests come from a mobile platform using the [mobile-detect](https://github.com/hgoebl/mobile-detect.js) node module. The user and session token are decoded for the access key to the workspace configuration. Based on the user, session and configuration [JSRender assembles](http://www.jsviews.com/#jsr-node-quickstart) the website template ([desktop](https://github.com/GEOLYTIX/xyz/blob/master/views/desktop.html) or [mobile](https://github.com/GEOLYTIX/xyz/blob/master/views/mobile.html)) with the script bundle and workspace configuration.
 
@@ -463,15 +463,15 @@ The gazetteer input is displayed at the top of the control container (desktop) o
 
 The client application initialisation flow is as follows:
 
-1. Require utils and svg_symbols.
+1. Require [utils](https://github.com/GEOLYTIX/xyz/blob/master/public/js/utils.js) and [svg_symbols](https://github.com/GEOLYTIX/xyz/blob/master/public/js/svg_symbols.js).
 
 2. Process workspace configuration.
 
-3. Apply browser interface (mobile / desktop) methods.
+3. Apply browser interface ([mobile](https://github.com/GEOLYTIX/xyz/blob/master/public/js/mobile_interface.js) / [desktop](https://github.com/GEOLYTIX/xyz/blob/master/public/js/desktop_interface.js)) methods.
 
-4. Initialize hooks.
+4. Initialize [hooks](https://github.com/GEOLYTIX/xyz/blob/master/public/js/hooks.js).
 
-5. Initialize locales.
+5. Initialize [locales](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locales.js).
 
 6. Initialise Leaflet map.
 
@@ -481,17 +481,17 @@ The client application initialisation flow is as follows:
 
 9. Declare map view state functions.
 
-10. Initialise layers module.
+10. Initialise [layers](https://github.com/GEOLYTIX/xyz/blob/master/public/js/layers.js) module.
 
-11. Initialise locations module.
+11. Initialise [locations](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locations.js) module.
 
-12. Initialise gazetteer module.
+12. Initialise [gazetteer](https://github.com/GEOLYTIX/xyz/blob/master/public/js/gazetteer.js) module.
 
-13. Initialise locate module.
+13. Initialise [locate](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locate.js) module.
 
-14. Initialise report module.
+14. Initialise [report](https://github.com/GEOLYTIX/xyz/blob/master/public/js/report.js) module.
 
-We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.svg).
+We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.svg).
 
 ## Routes
 
