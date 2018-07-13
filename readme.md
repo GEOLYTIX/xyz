@@ -11,8 +11,7 @@ The XYZ framework is designed to serve spatial data from PostGIS datasources wit
 
 XYZ is build with a [PfaJn stack](https://medium.com/@goldrydigital/a-fine-pfajn-stack-to-put-maps-on-the-web-bf1a531cae93) which uses the [Fastify](https://www.fastify.io) web server and [JsRender](https://www.jsviews.com) for server side rendering of views.
 
-The code repository should work out of the box (zero-configuration) as serverless deployments with [Zeit Now]
-(https://zeit.co/now) and [Google App Engine](https://cloud.google.com/appengine).
+The code repository should work out of the box (zero-configuration) as serverless deployments with [Zeit Now](https://zeit.co/now) and [Google App Engine](https://cloud.google.com/appengine).
 
 ## Licence
 
@@ -206,7 +205,7 @@ Each layer object needs `"table"` or `"arrayZoom"` property defined in order to 
 ```javascript
 "table": <table name>
 ```
-`"arrayZoom"` is an object that groups tables assigned to respective zoom levels. This was designed for hierarchy datasets which are subject to geographic generalization.
+`"arrayZoom"` is an object that groups related tables assigned to respective zoom levels. This was designed for hierarchical datasets which are subject to geographic generalization.
 
 ```javascript
 "arrayZoom": {
@@ -220,7 +219,7 @@ Types of layers currently supported:
 
 * ### cluster
 
-A `cluster` layer is a GeoJSON point layer which automatically clusters based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
+A `cluster` layer is a GeoJSON point layer which automatically clusters features based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
 
 `cluster` layer further takes the following parameters:
 
@@ -384,7 +383,54 @@ Filtering by checkbox:
       "in": [<array of values>]
   }
   ```
+Filtering by checkbox adds checkboxes for each value added to "in" array within filter object. Applied filters are logically conjunctive.
 
+__Aggregate filtering__
+
+Filtered features can be spatially aggregated if `"aggregate_layer"` property is defined. Aggregate functions support count of features with spatial unit on aggregate layer, sum of numeric attributes and average value.
+Aggregate layer is a layer object defined within `"layers"` container with the following parameters:
+
+```javascript
+"layers": {
+  "<filtered layer>": {
+    ...
+    "aggregate_layer": "scratch",
+    ...
+  },
+  "scratch": {
+    "hidden": true,
+    "name": "<layer name for reference>",
+    "pane": ["<pane settings>"],
+    "format": "geojson",
+    "sql_filter": "<field name to store applied filter>",
+    "table": "<source table name>",
+    "geomq": "<name for layer geometry field, expected SRID 4326>",
+    "qID": "<id field name>",
+    "infoj": [
+      {
+        "field": "count.<field name to count>", // count function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      {
+        "field": "sum.<field name to sum>", // sum function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      ,
+      {
+        "field": "avg.<field name to get average>", // average function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      {...}
+    ]
+  }
+}
+```
 
 #### tiles
 
@@ -453,7 +499,7 @@ The startup procedure is as follows.
 
 The root route will check whether the incoming requests come from a mobile platform using the [mobile-detect](https://github.com/hgoebl/mobile-detect.js) node module. The user and session token are decoded for the access key to the workspace configuration. Based on the user, session and configuration [JSRender assembles](http://www.jsviews.com/#jsr-node-quickstart) the website template ([desktop](https://github.com/GEOLYTIX/xyz/blob/master/views/desktop.html) or [mobile](https://github.com/GEOLYTIX/xyz/blob/master/views/mobile.html)) with the script bundle and workspace configuration.
 
-The application consits of two containers. The control container which is on the left (desktop) or a slider at the bottom (mobile) and the map container.
+The application consists of two containers. The control container which is on the left (desktop) or a slider at the bottom (mobile) and the map container.
 
 The control container has a section for layers and (selected) locations. Layers and locations are displayed as expandable drawers. The map container holds attribution as well as the main interface buttons (zoom, access, locate, gazetteer, report).
 
@@ -461,7 +507,7 @@ The gazetteer input is displayed at the top of the control container (desktop) o
 
 [xyz_entry](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) is the entry point in the script bundle.
 
-The client application initialisation flow is as follows:
+The client application initialization flow is as follows:
 
 1. Require [utils](https://github.com/GEOLYTIX/xyz/blob/master/public/js/utils.js) and [svg_symbols](https://github.com/GEOLYTIX/xyz/blob/master/public/js/svg_symbols.js).
 
@@ -473,7 +519,7 @@ The client application initialisation flow is as follows:
 
 5. Initialize [locales](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locales.js).
 
-6. Initialise Leaflet map.
+6. Initialize Leaflet map.
 
 7. Set map view.
 
@@ -481,15 +527,15 @@ The client application initialisation flow is as follows:
 
 9. Declare map view state functions.
 
-10. Initialise [layers](https://github.com/GEOLYTIX/xyz/blob/master/public/js/layers.js) module.
+10. Initialize [layers](https://github.com/GEOLYTIX/xyz/blob/master/public/js/layers.js) module.
 
-11. Initialise [locations](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locations.js) module.
+11. Initialize [locations](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locations.js) module.
 
-12. Initialise [gazetteer](https://github.com/GEOLYTIX/xyz/blob/master/public/js/gazetteer.js) module.
+12. Initialize [gazetteer](https://github.com/GEOLYTIX/xyz/blob/master/public/js/gazetteer.js) module.
 
-13. Initialise [locate](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locate.js) module.
+13. Initialize [locate](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locate.js) module.
 
-14. Initialise [report](https://github.com/GEOLYTIX/xyz/blob/master/public/js/report.js) module.
+14. Initialize [report](https://github.com/GEOLYTIX/xyz/blob/master/public/js/report.js) module.
 
 We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.svg).
 
@@ -505,7 +551,7 @@ Serves the [documentation for the client application](https://github.com/GEOLYTI
 
 ### /proxy/image
 
-Proxy requests for image ressources such as Mapbox tiles or Google Streetview images. The provider parameter is replaced with a key value from the environment settings.
+Proxy requests for image resources such as Mapbox tiles or Google StreetView images. The provider parameter is replaced with a key value from the environment settings.
 
 ### /api/mvt/get/:z/:x/:y
 
@@ -516,7 +562,7 @@ Query parameter:
 * table: The table name.
 * geom_3857: The name of the geometry field in the data table. SRID must be EPSG:3857. Defaults to 'geom_3857'.
 * qID: The ID field which is required to select locations from layer. Defaults to null.
-* properties: Comma seperated list of field names which are available to the leaflet.vectorGrid plugin for styling. Defaults to empty.
+* properties: Comma separated list of field names which are available to the leaflet.vectorGrid plugin for styling. Defaults to empty.
 * layer: The name of the layer.
 * tilecache: The name of a table used to cache vector tiles. Defaults to false.
 * token: The user token which is required to authenticate the route.
@@ -638,7 +684,7 @@ Post request body:
 
 ### /api/location/aggregate
 
-Creates an aggreagte location in the database.
+Creates an aggregate location in the database.
 
 Post request body:
 * dbs: The name of the Postgres database connection as defined in the environment settings.
@@ -707,7 +753,7 @@ We are using the [fastify-auth](https://github.com/fastify/fastify-auth) module 
 
 By default the framework is public with full access to all data sources defined in the environmental settings.
 
-By setting the access key (PUBLIC or PRIVATE) in the environmental settings with a PostgreSQL connection string (plus a table name seperated by a | pipe) it is possible to restrict access. The access control list (ACL) table must be stored in a PostgreSQL database.
+By setting the access key (PUBLIC or PRIVATE) in the environmental settings with a PostgreSQL connection string (plus a table name separated by a | pipe) it is possible to restrict access. The access control list (ACL) table must be stored in a PostgreSQL database.
 
 If set to PRIVATE a login is required to open the application or access any endpoint. If set to public login is optional for routes which are not restricted for administrator. Admin routes are not available if no ACL is provided. Without the admin route all changes to the settings need to be done in the code repository or database.
 
@@ -758,7 +804,7 @@ Failed login attempts are stored with the record in the ACL. The verification wi
 
 [JSON Web Token (JWT)](https://jwt.io) are used to store session and user data. Token themselves will be held in a cookie on the browser. The backend will *not* store these cookies in order to horizontally scale the application in a serverless environment.
 
-The **user cookie** stores the email address as well as user access priviliges (verified, approved, admin).
+The **user cookie** stores the email address as well as user access privileges (verified, approved, admin).
 
 The **session cookie** holds a redirect address which allows the application to return to a specific parameterized address from the login view. This allows the auth module to respond with a redirect instead of passing the original request to the login function.
 
@@ -776,7 +822,7 @@ The individual steps in the authentication strategy sequence are as follows.
 
 2. **decode token**
 
-   If exists a user token will be decoded from the request cookie or request parameter (in case the request is generated without the capabilitity to assign cookies).
+   If exists a user token will be decoded from the request cookie or request parameter (in case the request is generated without the capability to assign cookies).
 
 3. **no token**
 
