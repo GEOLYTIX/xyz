@@ -1,51 +1,69 @@
-function gazetteer(req, res) {
+module.exports = { autocomplete, googleplaces }
 
-    // var q = `SELECT label, qid id, source
-    //            FROM gaz_${req.query.c}
-    //            WHERE search LIKE '${decodeURIComponent(req.query.q).toUpperCase()}%'
-    //            ORDER BY searchindex, search LIMIT 10`;
+async function autocomplete(req, res, fastify) {
 
-    //console.log(q);
+    let user = fastify.jwt.decode(req.cookies.xyz_user),
+        locale = global.workspace[user.access].config.locales[req.query.locale];
 
-    eval(req.query.provider + '_placesAutoComplete')(req, res);
+    if (!locale.gazetteer) return res.code(406).send('Parameter not acceptable.');
 
-    // var db_connection = await fastify.pg[req.query.dbs].connect();
-    // var result = await db_connection.query(q);
-    // db_connection.release();
+    //if (locale.gazetteer.datasets) placesAutoComplete(req, res, locale, fastify);
 
-    //     .then(function (data) {
-    //         if (data.length > 0) {
-    //             res.status(200).json(data);
-    //         } else {
-    //             eval(req.query.p + '_placesAutoComplete')(req, res);
-    //         }
-    //     })
-    //     .catch(() => eval(req.query.p + '_placesAutoComplete')(req, res));
+    eval(locale.gazetteer.provider + '_placesAutoComplete')(req, res, locale.gazetteer);
 }
 
-// function gazetteer_places(req, res) {
-//     var q = "SELECT geomj FROM "
-//             + req.query.id.split('.')[0] + " WHERE qid = '"
-//             + req.query.id + "'";
-//     //console.log(q);
+async function placesAutoComplete(req, res, locale, fastify) {
 
-//     db.any(q).then(function (data) {
-//         res.status(200).json(data[0].geomj);
-//     });
-// }
+    let result;
+    for (let dataset of locale.gazetteer.datasets){
 
-function MAPBOX_placesAutoComplete(req, res) {
+        var q = `
+        SELECT
+            ${dataset.label} AS label,
+            ${locale.layers[dataset.layer].qID || 'id'} AS id
+            FROM ${dataset.table}
+            WHERE ${dataset.label} ILIKE '${decodeURIComponent(req.query.q)}%'
+            LIMIT 10`;
 
+        // ORDER BY searchindex, search
+     
+        var db_connection = await fastify.pg[locale.layers[dataset.layer].dbs].connect();
+        result = await db_connection.query(q);
+        db_connection.release();
+
+        if (result.rows.length > 0) break;
+
+    }
+
+    let foo = Object.values(result.rows).map(row => {
+        return {
+            label: row.label,
+            id: row.id,
+            source: 'glx'
+        }
+    });
+
+    res.code(200).send(foo);
+
+    // res.code(200).send(JSON.parse(body).features.map(f => {
+    //     return {
+    //         label: `${f.text} (${f.place_type[0]}) ${!gazetteer.code && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
+    //         id: f.center,
+    //         source: 'mapbox'
+    //     }
+    // }))
+
+    //return result;
+}
+
+function MAPBOX_placesAutoComplete(req, res, gazetteer) {
     var q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
-          + `${req.query.locale ? 'locale=' + req.query.locale : ''}`
-          + `${req.query.bounds ? 'bbox=' + req.query.bounds : ''}`
+          + `${gazetteer.code ? 'locale=' + gazetteer.code : ''}`
+          + `${gazetteer.bounds ? 'bbox=' + gazetteer.bounds : ''}`
           + `&types=postcode,district,locality,place,neighborhood,address,poi`
-          + `&${global.KEYS[req.query.provider]}`;
-
-    //console.log(q);
+          + `&${global.KEYS[gazetteer.provider]}`;
 
     require('request').get(q, (err, response, body) => {
-
         if (err) {
             console.error(err);
             return
@@ -53,7 +71,7 @@ function MAPBOX_placesAutoComplete(req, res) {
 
         res.code(200).send(JSON.parse(body).features.map(f => {
             return {
-                label: `${f.text} (${f.place_type[0]}) ${!req.query.locale && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
+                label: `${f.text} (${f.place_type[0]}) ${!gazetteer.code && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
                 id: f.center,
                 source: 'mapbox'
             }
@@ -61,13 +79,18 @@ function MAPBOX_placesAutoComplete(req, res) {
     })
 }
 
-function GOOGLE_placesAutoComplete(req, res) {
+function GOOGLE_placesAutoComplete(req, res, gazetteer) {
     var q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
-          + `${req.query.locale ? '&components=country:' + req.query.locale : ''}`
-          + `${req.query.bounds ? decodeURIComponent(req.query.bounds) : ''}`
-          + `&${global.KEYS[req.query.provider]}`;
+          + `${gazetteer.code ? '&components=country:' + gazetteer.code : ''}`
+          + `${gazetteer.bounds ? decodeURIComponent(gazetteer.bounds) : ''}`
+          + `&${global.KEYS[gazetteer.provider]}`;
 
     require('request').get(q, (err, response, body) => {
+        if (err) {
+            console.error(err);
+            return
+        }
+
         res.code(200).send(JSON.parse(body).predictions.map(f => {
             return {
                 label: f.description,
@@ -78,11 +101,16 @@ function GOOGLE_placesAutoComplete(req, res) {
     })
 }
 
-function gazetteer_googleplaces(req, res) {
+function googleplaces(req, res) {
     var q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
           + `&${global.KEYS.GOOGLE}`;
 
     require('request').get(q, (err, response, body) => {
+        if (err) {
+            console.error(err);
+            return
+        }
+
         let r = JSON.parse(body).result;
         res.code(200).send({
             type: 'Point',
@@ -90,9 +118,3 @@ function gazetteer_googleplaces(req, res) {
         })
     })
 }
-
-module.exports = {
-    gazetteer: gazetteer,
-    //gazetteer_places: gazetteer_places,
-    gazetteer_googleplaces: gazetteer_googleplaces
-};

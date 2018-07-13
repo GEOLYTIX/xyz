@@ -1,0 +1,691 @@
+{
+  "title": "GEOLYTIX | DEV",
+  "locales": {
+    "Global": {
+      "layers": {
+        "base": {
+          "display": true,
+          "format": "tiles",
+          "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        }
+      }
+    },
+    "UK": {
+      "name": "United Kingdom",
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "code": "GB",
+        "bounds": "",
+        "placeholder": "e.g. London",
+        "datasets": [
+          {
+            "layer": "retail_points_public",
+            "table": "gb_retailpoint_editable",
+            "label": "store"
+          }
+        ]
+      },
+      "bounds": [
+        [
+          48,
+          -13
+        ],
+        [
+          62,
+          5
+        ]
+      ],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "layers": {
+        "base": {
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
+          "pane": [
+            "base",
+            500
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "retail_points_public": {
+          "display": true,
+          "name": "Retail Points (public)",
+          "pane": [
+            "retail_points",
+            540
+          ],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "gb_retailpoint_editable",
+          "log_table": "gb_retailpoint_editable_logs",
+          "cluster_label": "store",
+          "cluster_cat": "brand",
+          "infoj": [
+            {
+              "field": "store",
+              "label": "Store",
+              "type": "text"
+            },
+            {
+              "field": "brand",
+              "label": "Brand (for styling)",
+              "type": "text",
+              "options": [
+                "Aldi",
+                "Asda",
+                "Booths",
+                "Budgens",
+                "Costco",
+                "Farmfoods",
+                "Fultons Food",
+                "Heron Foods",
+                "Iceland",
+                "Lidl",
+                "Makro",
+                "Marks & Spencer",
+                "Morrisons",
+                "Sainsburys",
+                "Tesco",
+                "The Co-operative",
+                "Waitrose",
+                "Whole Foods"
+              ],
+              "filter": "like"
+            },
+            {
+              "field": "retailer",
+              "label": "Retailer",
+              "type": "text",
+              "options": [
+                "Aldi;Aldi",
+                "As Nature Indended;As Nature Indended",
+                "Asda;Asda;Asda Living;Asda PFS;Asda Supercentre;Asda Supermarket",
+                "Booths;Booths",
+                "Budgens;Budgens",
+                "The Co-operative Group;The Co-operative Food",
+                "Costco;Costco",
+                "Farmfoods;Farmfoods",
+                "Heron;Cooltrader;Heron",
+                "Iceland;Iceland",
+                "Jack Fultons;Fultons Foods",
+                "Lidl;Lidl",
+                "Makro;Makro",
+                "Marks and Spencer;Marks and Spencer;Marks and Spencer BP;Marks and Spencer Foodhall;Marks and Spencer Food To Go;Marks and Spencer Home;Marks and Spencer MSA;Marks and Spencer Outlet;Marks and Spencer Simply Food;Marks and Spencer Travel SF",
+                "Morrisons;Morrisons",
+                "Sainsburys;Sainsburys;Sainsburys Local",
+                "Tesco;Tesco;Tesco Express;Tesco Express Esso;Tesco Extra;Tesco Metro",
+                "Waitrose;Little Waitrose;Little Waitrose Shell;Waitrose;Waitrose MSA",
+                "Whole Foods Market;Whole Foods Market"
+              ],
+              "subfield": "fascia",
+              "sublabel": "Fascia"
+            },
+            {
+              "field": "size_band",
+              "label": "Size",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "label": "Address",
+              "level": 1
+            },
+            {
+              "field": "address_1",
+              "type": "text"
+            },
+            {
+              "field": "address_2",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "type": "text",
+              "filer": "like"
+            },
+            {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "pqi",
+              "label": "Positional Quality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "images",
+              "label": "Images",
+              "type": "text[]",
+              "images": true
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+            "markerMulti": [
+              400,
+              "#333"
+            ],
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "applied": true,
+                "other": true,
+                "cat": {
+                  "Aldi": {
+                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                    "label": "Aldi"
+                  },
+                  "Asda": {
+                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                    "label": "Asda"
+                  },
+                  "Booths": {
+                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                    "label": "Booths"
+                  },
+                  "Budgens": {
+                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                    "label": "Budgens"
+                  },
+                  "The Co-operative": {
+                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                    "label": "The Co-Operative"
+                  },
+                  "Costco": {
+                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                    "label": "Costco"
+                  },
+                  "Farmfoods": {
+                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                    "label": "Farm Foods"
+                  },
+                  "Fultons Food": {
+                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                    "label": "Fultons Food"
+                  },
+                  "Heron Foods": {
+                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                    "label": "Heron Foods"
+                  },
+                  "Iceland": {
+                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                    "label": "Iceland"
+                  },
+                  "Lidl": {
+                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                    "label": "Lidl"
+                  },
+                  "Makro": {
+                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                    "label": "Makro"
+                  },
+                  "Marks & Spencer": {
+                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                    "label": "Marks & Spencer"
+                  },
+                  "Morrisons": {
+                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                    "label": "Morrisons"
+                  },
+                  "Sainsburys": {
+                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                    "label": "Sainsbury's"
+                  },
+                  "Tesco": {
+                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                    "label": "Tesco"
+                  },
+                  "Waitrose": {
+                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                    "label": "Waitrose"
+                  },
+                  "Whole Foods": {
+                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                    "label": "Whole Foods"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "retail_points_private": {
+          "access": "private",
+          "editable": "geometry",
+          "name": "Retail Points - editable (private)",
+          "pane": [
+            "retail_points",
+            540
+          ],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "gb_retailpoint_editable",
+          "log_table": "gb_retailpoint_editable_logs",
+          "cluster_label": "store",
+          "cluster_cat": "brand",
+          "infoj": [
+            {
+              "field": "store",
+              "label": "Store",
+              "type": "text"
+            },
+            {
+              "field": "brand",
+              "label": "Brand (for styling)",
+              "type": "text",
+              "options": [
+                "Aldi",
+                "Asda",
+                "Booths",
+                "Budgens",
+                "Costco",
+                "Farmfoods",
+                "Fultons Food",
+                "Heron Foods",
+                "Iceland",
+                "Lidl",
+                "Makro",
+                "Marks & Spencer",
+                "Morrisons",
+                "Sainsburys",
+                "Tesco",
+                "The Co-operative",
+                "Waitrose",
+                "Whole Foods"
+              ],
+              "filter": "like"
+            },
+            {
+              "field": "retailer",
+              "label": "Retailer",
+              "type": "text",
+              "options": [
+                "Aldi;Aldi",
+                "As Nature Indended;As Nature Indended",
+                "Asda;Asda;Asda Living;Asda PFS;Asda Supercentre;Asda Supermarket",
+                "Booths;Booths",
+                "Budgens;Budgens",
+                "The Co-operative Group;The Co-operative Food",
+                "Costco;Costco",
+                "Farmfoods;Farmfoods",
+                "Heron;Cooltrader;Heron",
+                "Iceland;Iceland",
+                "Jack Fultons;Fultons Foods",
+                "Lidl;Lidl",
+                "Makro;Makro",
+                "Marks and Spencer;Marks and Spencer;Marks and Spencer BP;Marks and Spencer Foodhall;Marks and Spencer Food To Go;Marks and Spencer Home;Marks and Spencer MSA;Marks and Spencer Outlet;Marks and Spencer Simply Food;Marks and Spencer Travel SF",
+                "Morrisons;Morrisons",
+                "Sainsburys;Sainsburys;Sainsburys Local",
+                "Tesco;Tesco;Tesco Express;Tesco Express Esso;Tesco Extra;Tesco Metro",
+                "Waitrose;Little Waitrose;Little Waitrose Shell;Waitrose;Waitrose MSA",
+                "Whole Foods Market;Whole Foods Market"
+              ],
+              "subfield": "fascia",
+              "sublabel": "Fascia"
+            },
+            {
+              "field": "size_band",
+              "label": "Size",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "label": "Address",
+              "level": 1
+            },
+            {
+              "field": "address_1",
+              "type": "text"
+            },
+            {
+              "field": "address_2",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "type": "text",
+              "filer": "like"
+            },
+            {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "pqi",
+              "label": "Positional Quality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "images",
+              "label": "Images",
+              "type": "text[]",
+              "images": true
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+            "markerMulti": [
+              400,
+              "#333"
+            ],
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "applied": true,
+                "other": true,
+                "cat": {
+                  "Aldi": {
+                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                    "label": "Aldi"
+                  },
+                  "Asda": {
+                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                    "label": "Asda"
+                  },
+                  "Booths": {
+                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                    "label": "Booths"
+                  },
+                  "Budgens": {
+                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                    "label": "Budgens"
+                  },
+                  "The Co-operative": {
+                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                    "label": "The Co-Operative"
+                  },
+                  "Costco": {
+                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                    "label": "Costco"
+                  },
+                  "Farmfoods": {
+                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                    "label": "Farm Foods"
+                  },
+                  "Fultons Food": {
+                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                    "label": "Fultons Food"
+                  },
+                  "Heron Foods": {
+                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                    "label": "Heron Foods"
+                  },
+                  "Iceland": {
+                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                    "label": "Iceland"
+                  },
+                  "Lidl": {
+                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                    "label": "Lidl"
+                  },
+                  "Makro": {
+                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                    "label": "Makro"
+                  },
+                  "Marks & Spencer": {
+                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                    "label": "Marks & Spencer"
+                  },
+                  "Morrisons": {
+                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                    "label": "Morrisons"
+                  },
+                  "Sainsburys": {
+                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                    "label": "Sainsbury's"
+                  },
+                  "Tesco": {
+                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                    "label": "Tesco"
+                  },
+                  "Waitrose": {
+                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                    "label": "Waitrose"
+                  },
+                  "Whole Foods": {
+                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                    "label": "Whole Foods"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "retail_points_admin": {
+          "access": "admin",
+          "editable": "geometry",
+          "name": "Retail Points - logs (admin)",
+          "pane": [
+            "retail_points",
+            540
+          ],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "gb_retailpoint_editable",
+          "log_table": "gb_retailpoint_editable_logs",
+          "cluster_label": "store",
+          "cluster_cat": "brand",
+          "infoj": [
+            {
+              "field": "store",
+              "label": "Store",
+              "type": "text"
+            },
+            {
+              "field": "brand",
+              "label": "Brand (for styling)",
+              "type": "text",
+              "options": [
+                "Aldi",
+                "Asda",
+                "Booths",
+                "Budgens",
+                "Costco",
+                "Farmfoods",
+                "Fultons Food",
+                "Heron Foods",
+                "Iceland",
+                "Lidl",
+                "Makro",
+                "Marks & Spencer",
+                "Morrisons",
+                "Sainsburys",
+                "Tesco",
+                "The Co-operative",
+                "Waitrose",
+                "Whole Foods"
+              ],
+              "filter": "like"
+            },
+            {
+              "field": "retailer",
+              "label": "Retailer",
+              "type": "text",
+              "options": [
+                "Aldi;Aldi",
+                "As Nature Indended;As Nature Indended",
+                "Asda;Asda;Asda Living;Asda PFS;Asda Supercentre;Asda Supermarket",
+                "Booths;Booths",
+                "Budgens;Budgens",
+                "The Co-operative Group;The Co-operative Food",
+                "Costco;Costco",
+                "Farmfoods;Farmfoods",
+                "Heron;Cooltrader;Heron",
+                "Iceland;Iceland",
+                "Jack Fultons;Fultons Foods",
+                "Lidl;Lidl",
+                "Makro;Makro",
+                "Marks and Spencer;Marks and Spencer;Marks and Spencer BP;Marks and Spencer Foodhall;Marks and Spencer Food To Go;Marks and Spencer Home;Marks and Spencer MSA;Marks and Spencer Outlet;Marks and Spencer Simply Food;Marks and Spencer Travel SF",
+                "Morrisons;Morrisons",
+                "Sainsburys;Sainsburys;Sainsburys Local",
+                "Tesco;Tesco;Tesco Express;Tesco Express Esso;Tesco Extra;Tesco Metro",
+                "Waitrose;Little Waitrose;Little Waitrose Shell;Waitrose;Waitrose MSA",
+                "Whole Foods Market;Whole Foods Market"
+              ],
+              "subfield": "fascia",
+              "sublabel": "Fascia"
+            },
+            {
+              "field": "size_band",
+              "label": "Size",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "label": "Address",
+              "level": 1
+            },
+            {
+              "field": "address_1",
+              "type": "text"
+            },
+            {
+              "field": "address_2",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "type": "text",
+              "filer": "like"
+            },
+            {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "pqi",
+              "label": "Positional Quality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "images",
+              "label": "Images",
+              "type": "text[]",
+              "images": true
+            }
+          ],
+          "style": {
+            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
+            "markerMulti": [
+              400,
+              "#333"
+            ],
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "applied": true,
+                "other": true,
+                "cat": {
+                  "Aldi": {
+                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                    "label": "Aldi"
+                  },
+                  "Asda": {
+                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                    "label": "Asda"
+                  },
+                  "Booths": {
+                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                    "label": "Booths"
+                  },
+                  "Budgens": {
+                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                    "label": "Budgens"
+                  },
+                  "The Co-operative": {
+                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                    "label": "The Co-Operative"
+                  },
+                  "Costco": {
+                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                    "label": "Costco"
+                  },
+                  "Farmfoods": {
+                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                    "label": "Farm Foods"
+                  },
+                  "Fultons Food": {
+                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                    "label": "Fultons Food"
+                  },
+                  "Heron Foods": {
+                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                    "label": "Heron Foods"
+                  },
+                  "Iceland": {
+                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                    "label": "Iceland"
+                  },
+                  "Lidl": {
+                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                    "label": "Lidl"
+                  },
+                  "Makro": {
+                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                    "label": "Makro"
+                  },
+                  "Marks & Spencer": {
+                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                    "label": "Marks & Spencer"
+                  },
+                  "Morrisons": {
+                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                    "label": "Morrisons"
+                  },
+                  "Sainsburys": {
+                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                    "label": "Sainsbury's"
+                  },
+                  "Tesco": {
+                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                    "label": "Tesco"
+                  },
+                  "Waitrose": {
+                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                    "label": "Waitrose"
+                  },
+                  "Whole Foods": {
+                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                    "label": "Whole Foods"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

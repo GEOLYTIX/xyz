@@ -1,4 +1,3 @@
-const L = require('leaflet');
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
@@ -15,6 +14,7 @@ module.exports = () => {
     };
 
     // Set gazetteer defaults if missing from appSettings.
+    if (!_xyz.gazetteer) _xyz.gazetteer = {};
     if (!_xyz.gazetteer.icon) _xyz.gazetteer.icon = svg_symbols.markerColor('#64dd17', '#33691e');
     if (!_xyz.gazetteer.pane) _xyz.gazetteer.pane = ['gazetteer', 550];
     if (!_xyz.gazetteer.style) _xyz.gazetteer.style = {
@@ -33,9 +33,19 @@ module.exports = () => {
     // Gazetteer init which is called on change of locale.
     _xyz.gazetteer.init = () => {
 
+        if (!_xyz.locales[_xyz.locale].gazetteer) {
+            utils.removeClass(dom.btnSearch, 'active');
+            dom.btnSearch.style.display = 'none';
+            dom.group.style.display = 'none';
+            return;
+
+        } else {
+            dom.btnSearch.style.display = 'block';
+        }
+
         // Empty input value, results and set placeholder.
         dom.input.value = '';
-        dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer[3];
+        dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer.placeholder || '';
         dom.result.innerHTML = '';
 
         // Remove existing layer if exists
@@ -85,9 +95,7 @@ module.exports = () => {
 
         _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
         _xyz.gazetteer.xhrSearch.open('GET', host + 'api/gazetteer/autocomplete?' + utils.paramString({
-            provider: _xyz.locales[_xyz.locale].gazetteer[0],
-            locale: _xyz.locales[_xyz.locale].gazetteer[1],
-            bounds: encodeURIComponent(_xyz.locales[_xyz.locale].gazetteer[2]),
+            locale: _xyz.locale,
             q: encodeURIComponent(searchValue)
         }));
 

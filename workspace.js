@@ -13,7 +13,6 @@ module.exports = async fastify => {
             url: '/admin/workspace',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: (req, res) => {
-
                 res.type('text/html').send(require('jsrender').templates('./views/workspace_admin.html').render({
                     dir: global.dir,
                     settings: `
@@ -81,6 +80,7 @@ module.exports = async fastify => {
     }, { prefix: global.dir });
 
     if (process.env.WORKSPACE && process.env.WORKSPACE.split(':')[0] === 'postgres') {
+        global.workspace.name = process.env.WORKSPACE.split('|').pop();
         await fastify.register(require('fastify-postgres'), {
             connectionString: process.env.WORKSPACE.split('|')[0],
             name: 'workspace'
@@ -100,6 +100,7 @@ module.exports = async fastify => {
     }
 
     if (process.env.WORKSPACE && process.env.WORKSPACE.split(':')[0] === 'file') {
+        global.workspace.name = process.env.WORKSPACE;
         workspace.load = () => {
             let fs = require('fs');
             return fs.existsSync('./workspaces/' + process.env.WORKSPACE.split(':').pop()) ?
@@ -108,6 +109,7 @@ module.exports = async fastify => {
     };
 
     if (!process.env.WORKSPACE) {
+        global.workspace.name = 'zero config';
         workspace.load = () => defaultWorkspace
     }
 

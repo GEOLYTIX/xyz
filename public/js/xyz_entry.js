@@ -138,10 +138,10 @@ require('./layers')();
 require('./locations')();
 
 // Initialize gazetteer module.
-if (_xyz.gazetteer && view_mode != 'report') require('./gazetteer')();
+if (view_mode != 'report') require('./gazetteer')();
 
 // Initialize locate module.
-if (_xyz.locate) require('./locate')();
+if (_xyz.locate && view_mode != 'report') require('./locate')();
 
 // Initialize report module.
 if (_xyz.report) require('./report')();
