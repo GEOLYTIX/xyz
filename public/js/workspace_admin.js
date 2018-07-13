@@ -1,4 +1,4 @@
-let editor = new JSONEditor(document.getElementById("jsoneditor"), {mode: mode});
+let editor = new JSONEditor(document.getElementById("jsoneditor"), { mode: mode });
 
 let json = _xyz;
 
@@ -56,4 +56,26 @@ if (mode === 'tree') {
     });
     
     editormenu.insertBefore(btnFile, search);
+}
+
+if (mode === 'tree') {
+    let btnCode = document.createElement('button');
+    btnCode.style.background = 'none';
+    btnCode.innerHTML = '<i class="material-icons" title="Upload settings file.">code</i>';
+    editormenu.insertBefore(btnCode, search);
+
+    btnCode.addEventListener('click', function () {
+        window.location.replace('workspacejson');
+    });
+}
+
+if (mode === 'code') {
+    let btnTree = document.createElement('button');
+    btnTree.style.background = 'none';
+    btnTree.innerHTML = '<i class="material-icons" title="Upload settings file.">list</i>';
+    editormenu.insertBefore(btnTree, search);
+
+    btnTree.addEventListener('click', function () {
+        window.location.replace('workspace');
+    });
 }

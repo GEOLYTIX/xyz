@@ -24,7 +24,6 @@
           },
           "retail_points_public": {
             "display": true,
-            "editable": "geometry",
             "name": "Retail Points (public)",
             "pane": ["retail_points", 540],
             "format": "cluster",
@@ -226,10 +225,9 @@
             }
           },
           "retail_points_private": {
-            "display": true,
             "access": "private",
             "editable": "geometry",
-            "name": "Retail Points (private)",
+            "name": "Retail Points - editable (private)",
             "pane": ["retail_points", 540],
             "format": "cluster",
             "dbs": "XYZ",
@@ -430,10 +428,9 @@
             }
           },
           "retail_points_admin": {
-            "display": true,
             "access": "admin",
             "editable": "geometry",
-            "name": "Retail Points (admin)",
+            "name": "Retail Points - logs (admin)",
             "pane": ["retail_points", 540],
             "format": "cluster",
             "dbs": "XYZ",

@@ -13,15 +13,6 @@ module.exports = fastify => {
         }
     });
 
-    // Universal error handler.
-    //const errHandler = ourFunc => (...params) => ourFunc(...params).catch(console.error);
-
-    // const errHandler = f => {
-    //     (...params) => {
-    //         f(...params);
-    //     }
-    // }
-
     // Create constructor for mobile detect module.
     const Md = require('mobile-detect');
 
