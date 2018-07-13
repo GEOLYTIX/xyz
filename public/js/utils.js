@@ -21,19 +21,7 @@ module.exports = {
     scrolly,
     slider,
     copy_to_clipboard,
-    wrap,
-    IEpolyfills
-}
-
-function IEpolyfills() {
-    if (!('remove' in Element.prototype)) {
-        Element.prototype.remove = function () {
-            if (this.parentNode) {
-                this.parentNode.removeChild(this);
-            }
-        };
-    }
-
+    wrap
 }
 
 function scrollElement(element, to, duration) {

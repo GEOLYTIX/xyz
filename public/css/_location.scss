@@ -1,5 +1,6 @@
 @if $desktop {
     .leaflet-popup-content {
+        overflow-x: hidden;
         .scrollbar_container {
             position: absolute;
             left: 0;
@@ -23,8 +24,7 @@
     .location_table {
         min-height: 30px;
         max-height: 300px;
-        width: 400px;
-        overflow-y: scroll;
+        width: 450px;
         table {
             width: 100%;
             font-family: 'PT Mono', monospace;

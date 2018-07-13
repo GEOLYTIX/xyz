@@ -1,6 +1,7 @@
 const utils = require('./utils');
 
-module.exports = function () {
+module.exports = () => {
+    
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
     //move map up on document scroll

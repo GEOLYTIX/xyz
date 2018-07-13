@@ -151,7 +151,6 @@ input[type=range]::-moz-range-thumb {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
-  width: calc(100% + 50px);
   padding-right: 35px; }
   .scrolly > .scrolly_track {
     position: absolute;
@@ -570,27 +569,28 @@ input[type=range]::-moz-range-thumb {
   background: #fff;
   border: 1px solid #666; }
 
-.leaflet-popup-content .scrollbar_container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  top: 0;
-  width: 10px;
-  background-color: lightgrey; }
-  .leaflet-popup-content .scrollbar_container > .scrollbar {
+.leaflet-popup-content {
+  overflow-x: hidden; }
+  .leaflet-popup-content .scrollbar_container {
     position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
     width: 10px;
-    background: rgba(0, 0, 0, 0.5); }
-  .leaflet-popup-content .scrollbar_container:hover {
-    cursor: ns-resize; }
-.leaflet-popup-content .content::-webkit-scrollbar {
-  display: none; }
+    background-color: lightgrey; }
+    .leaflet-popup-content .scrollbar_container > .scrollbar {
+      position: absolute;
+      width: 10px;
+      background: rgba(0, 0, 0, 0.5); }
+    .leaflet-popup-content .scrollbar_container:hover {
+      cursor: ns-resize; }
+  .leaflet-popup-content .content::-webkit-scrollbar {
+    display: none; }
 
 .location_table {
   min-height: 30px;
   max-height: 300px;
-  width: 400px;
-  overflow-y: scroll; }
+  width: 450px; }
   .location_table table {
     width: 100%;
     font-family: 'PT Mono', monospace; }

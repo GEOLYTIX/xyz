@@ -240,7 +240,6 @@ input[type=range]::-moz-range-thumb {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
-  width: calc(100% + 50px);
   padding-right: 35px; }
   .scrolly > .scrolly_track {
     position: absolute;

@@ -1,8 +1,6 @@
 // Initialise utils.
 const utils = require('./utils');
 
-utils.IEpolyfills();
-
 // The svg_symbols module is required in order to build svg symbols when they are evaluated in _xyz application settings.
 const svg_symbols = require('./svg_symbols');
 
@@ -22,8 +20,9 @@ const svg_symbols = require('./svg_symbols');
     })
 })(_xyz)
 
-// All mobile interface quirks are loaded here.
+// Set platform specific interface functions.
 if (view_mode === 'mobile') require('./mobile_interface')();
+if (view_mode === 'desktop') require('./desktop_interface')();
 
 // Initiate hooks component.
 require('./hooks')();
@@ -144,13 +143,9 @@ _xyz.layersCheck = () => {
 }
 
 // Inititialise modules.
-require('./locale')();
+require('./locales')();
 require('./layers')();
-require('./select')();
+require('./locations')();
 if (_xyz.gazetteer && view_mode != 'report') require('./gazetteer')();
 if (_xyz.locate) require('./locate')();
 if (_xyz.report) require('./report')();
-
-// Make blocks visible and set scrollbar left for desktop view.
-if (view_mode === 'desktop') utils.scrolly(document.querySelector('.mod_container > .scrolly'));
-if (view_mode === 'desktop') window.addEventListener('resize', () => utils.scrolly(document.querySelector('.mod_container > .scrolly')));
