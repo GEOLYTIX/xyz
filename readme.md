@@ -465,37 +465,31 @@ The client application initialisation flow is as follows:
 
 1. Require utils and svg_symbols.
 
-2. Apply IE polyfills.
+2. Process workspace configuration.
 
-3. Process workspace configuration.
+3. Apply browser interface (mobile / desktop) methods.
 
-4. Apply mobile interface.
+4. Initialize hooks.
 
-5. Initialize hooks.
+5. Initialize locales.
 
-6. Set locale.
+6. Initialise Leaflet map.
 
-7. Initialise Leaflet map.
+7. Set map view.
 
-8. Set map view.
+8. Declare zoom functions.
 
-9. Declare zoom functions.
+9. Declare map view state functions.
 
-10. Declare view change functions.
+10. Initialise layers module.
 
-11. Initialise locales module.
+11. Initialise locations module.
 
-12. Initialise layers module.
+12. Initialise gazetteer module.
 
-13. Initialise locations module.
+13. Initialise locate module.
 
-14. Initialise gazetteer module.
-
-15. Initialise locate module.
-
-16. Initialise report module.
-
-17. Set scrolly on control container.
+14. Initialise report module.
 
 We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/dev/public/js/xyz_entry.svg).
 
