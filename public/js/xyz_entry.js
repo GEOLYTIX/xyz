@@ -24,22 +24,11 @@ const svg_symbols = require('./svg_symbols');
 if (view_mode === 'mobile') require('./mobile_interface')();
 if (view_mode === 'desktop') require('./desktop_interface')();
 
-// Initiate hooks component.
+// Initiate hooks module.
 require('./hooks')();
 
-// Set locale default.
-if (!_xyz.locale) _xyz.locale = Object.keys(_xyz.locales)[0];
-_xyz.locale = _xyz.hooks.locale || _xyz.locale;
-
-// Set locale to hook, or set hook for locale.
-if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
-
-// Set the attribution array.
-_xyz.attribution = ['leaflet', 'xyz'];
-
-// Set min/max zoom defaults.
-_xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;
-_xyz.locales[_xyz.locale].maxZoom = _xyz.locales[_xyz.locale].maxZoom || 20;
+// Initiate locales module.
+require('./locales')();
 
 // Initiate leaflet.
 const L = require('leaflet');
@@ -87,7 +76,7 @@ btnZoomOut.addEventListener('click', () => {
     chkZoomBtn(z);
 });
 
-// Map state functions
+// Map view state functions
 _xyz.map.on('movestart', () => {
     viewChangeStart();
 });
@@ -96,22 +85,24 @@ _xyz.map.on('resize', () => {
     utils.debounce(viewChangeStart, 100);
 });
 
+// Cancel xhr and remove layer data from map object on view change start.
 function viewChangeStart() {
     let layers = _xyz.locales[_xyz.locale].layers
-    Object.keys(layers).map(layer => {
+    Object.keys(layers).forEach(layer => {
         if(layers[layer].xhr) layers[layer].xhr.abort();
         if(layers[layer].L) _xyz.map.removeLayer(layers[layer].L);
     });
 }
 
+// Fire viewChangeEnd after map move and zoomend
 _xyz.map.on('moveend', () => {
     viewChangeEnd();
 });
-
 _xyz.map.on('zoomend', () => {
     viewChangeEnd();
 });
 
+// Use timeout to prevent the viewChangeEvent to be executed multiple times.
 let timer;
 function viewChangeEnd() {
     clearTimeout(timer);
@@ -120,13 +111,11 @@ function viewChangeEnd() {
 
         _xyz.setViewHook(_xyz.map.getCenter());
 
-        let layers = _xyz.locales[_xyz.locale].layers
-
-        Object.values(layers).forEach(layer => {
+        // Reset the load inidicator and trigger get layer on all layers.
+        Object.values(_xyz.locales[_xyz.locale].layers).forEach(layer => {
             if (layer.loader) layer.loader.style.display = 'none';
             layer.getLayer();
         });
-
     }, 100);
 }
 
@@ -142,10 +131,17 @@ _xyz.layersCheck = () => {
     });
 }
 
-// Inititialise modules.
-require('./locales')();
+// Initialize layers module.
 require('./layers')();
+
+// Initialize locations module.
 require('./locations')();
+
+// Initialize gazetteer module.
 if (_xyz.gazetteer && view_mode != 'report') require('./gazetteer')();
+
+// Initialize locate module.
 if (_xyz.locate) require('./locate')();
+
+// Initialize report module.
 if (_xyz.report) require('./report')();

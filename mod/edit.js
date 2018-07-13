@@ -133,7 +133,7 @@ async function updateRecord(req, res, fastify) {
 
     res.code(200).send();
 
-    } catch(err){
+    } catch(err) {
         console.error(err);
         res.code(500).send("soz. it's not you. it's me.");
     }

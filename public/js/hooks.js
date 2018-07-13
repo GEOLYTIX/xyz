@@ -5,7 +5,7 @@ module.exports = () => {
     if (!_xyz.hooks) _xyz.hooks = {};
 
     // Set view hook containing lat, lng and zoom.
-    _xyz.setViewHook = (cntr) => {
+    _xyz.setViewHook = cntr => {
         _xyz.hooks.lat = cntr.lat;
         _xyz.hooks.lng = cntr.lng;
         _xyz.hooks.z = _xyz.map.getZoom();
@@ -23,7 +23,7 @@ module.exports = () => {
     };
 
     // Remove hook from _xyz.hooks and URI.
-    _xyz.removeHook = (key) => {
+    _xyz.removeHook = key => {
         delete _xyz.hooks[key];
         try {
             history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));
@@ -32,9 +32,7 @@ module.exports = () => {
 
     // Remove all hooks.
     _xyz.removeHooks = () => {
-        Object.keys(_xyz.hooks).map(function (key) {
-            delete _xyz.hooks[key];
-        });    
+        Object.keys(_xyz.hooks).map(key => delete _xyz.hooks[key]);    
         try {
             history.pushState({ hooks: true }, 'hooks', '?' + utils.paramString(_xyz.hooks));
         } catch (me) { }
@@ -55,9 +53,7 @@ module.exports = () => {
     // Filter key from an array hook.
     _xyz.filterHook = (key, val) => {
         if (_xyz.hooks[key]) {
-            _xyz.hooks[key] = _xyz.hooks[key].filter(function(el){
-                return el !== val;
-            });
+            _xyz.hooks[key] = _xyz.hooks[key].filter(el => el !== val);
             if (_xyz.hooks[key].length === 0) delete _xyz.hooks[key];
             try {
                 history.pushState({hooks: true}, 'hooks', '?' + utils.paramString(_xyz.hooks));

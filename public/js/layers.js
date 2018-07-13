@@ -29,6 +29,8 @@ module.exports = () => {
     if (!_xyz.layers) _xyz.layers = {};
     _xyz.layers.init = function (change_locale) {
 
+        _xyz.attribution = ['leaflet', 'xyz'];
+
         // Remove the layers hook on change_locale event.
         if (change_locale) {
             _xyz.removeHook('layers');
