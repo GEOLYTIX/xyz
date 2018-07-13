@@ -205,7 +205,7 @@ Each layer object needs `"table"` or `"arrayZoom"` property defined in order to 
 ```javascript
 "table": <table name>
 ```
-`"arrayZoom"` is an object that groups tables assigned to respective zoom levels. This was designed for hierarchy datasets which are subject to geographic generalization.
+`"arrayZoom"` is an object that groups related tables assigned to respective zoom levels. This was designed for hierarchical datasets which are subject to geographic generalization.
 
 ```javascript
 "arrayZoom": {
@@ -219,7 +219,7 @@ Types of layers currently supported:
 
 * ### cluster
 
-A `cluster` layer is a GeoJSON point layer which automatically clusters based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
+A `cluster` layer is a GeoJSON point layer which automatically clusters features based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
 
 `cluster` layer further takes the following parameters:
 
@@ -383,7 +383,54 @@ Filtering by checkbox:
       "in": [<array of values>]
   }
   ```
+Filtering by checkbox adds checkboxes for each value added to "in" array within filter object. Applied filters are logically conjunctive.
 
+__Aggregate filtering__
+
+Filtered features can be spatially aggregated if `"aggregate_layer"` property is defined. Aggregate functions support count of features with spatial unit on aggregate layer, sum of numeric attributes and average value.
+Aggregate layer is a layer object defined within `"layers"` container with the following parameters:
+
+```javascript
+"layers": {
+  "<filtered layer>": {
+    ...
+    "aggregate_layer": "scratch",
+    ...
+  },
+  "scratch": {
+    "hidden": true,
+    "name": "<layer name for reference>",
+    "pane": ["<pane settings>"],
+    "format": "geojson",
+    "sql_filter": "<field name to store applied filter>",
+    "table": "<source table name>",
+    "geomq": "<name for layer geometry field, expected SRID 4326>",
+    "qID": "<id field name>",
+    "infoj": [
+      {
+        "field": "count.<field name to count>", // count function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      {
+        "field": "sum.<field name to sum>", // sum function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      ,
+      {
+        "field": "avg.<field name to get average>", // average function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      {...}
+    ]
+  }
+}
+```
 
 #### tiles
 
