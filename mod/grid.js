@@ -38,8 +38,8 @@ async function get(req, res, fastify) {
 
     if (result.rows.length === 0) return res.code(204).send();
 
-    res.code(200).send(Object.keys(result.rows).map(function (record) {
-        return Object.keys(result.rows[record]).map(function (field) {
+    res.code(200).send(Object.keys(result.rows).map(record => {
+        return Object.keys(result.rows[record]).map(field => {
             return result.rows[record][field];
         });
     }));

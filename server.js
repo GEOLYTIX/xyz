@@ -7,14 +7,10 @@ const dotenv = req_res('dotenv') ? require('dotenv') : null;
 if (dotenv) dotenv.load();
 
 const fastify = require('fastify')({
-        // http2: true,
-        // https: {
-            // allowHTTP1: true // fallback support for HTTP1
-            // key: require('fs').readFileSync('/home/dennis/.ssl/server.key'),
-            // cert: require('fs').readFileSync('/home/dennis/.ssl/server.crt')
-        // },
-        logger: {level: 'error'}
-    });
+    logger: {
+        level: 'error'
+    }
+});
 
 fastify
     .register(require('fastify-helmet'), {
@@ -47,5 +43,5 @@ fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
         process.exit(1)
     }
 
-    console.log('Black alert: Fastify ready to engage.');
+    console.log(`Serving ${global.workspace.name} workspace.`);
 });

@@ -59,7 +59,6 @@ module.exports = fastify => {
                     btnLogin: !user.email ? '' : 'style="display: none;"',
                     btnLogout: user.email ? '' : 'style="display: none;"',
                     btnAdmin: user.admin ? '' : 'style="display: none;"',
-                    btnSearch: config.gazetteer ? '' : 'style="display: none;"',
                     btnLocate: config.locate ? '' : 'style="display: none;"',
                     dir: global.dir,
                     settings: `
@@ -148,7 +147,7 @@ module.exports = fastify => {
             url: '/api/location/select',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
-                require('./mod/select').select(req, res, fastify);
+                require('./mod/location').select(req, res, fastify);
             }
         });
 
@@ -177,7 +176,6 @@ module.exports = fastify => {
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/edit').updateRecord(req, res, fastify);
-                //errHandler(require('./mod/edit').updateRecord(req, res, fastify));
             }
         });
 
@@ -205,7 +203,7 @@ module.exports = fastify => {
             url: '/api/gazetteer/autocomplete',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
-                require('./mod/gazetteer').gazetteer(req, res, fastify);
+                require('./mod/gazetteer').autocomplete(req, res, fastify);
             }
         });
 
@@ -214,7 +212,7 @@ module.exports = fastify => {
             url: '/api/gazetteer/googleplaces',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
-                require('./mod/gazetteer').gazetteer_googleplaces(req, res, fastify);
+                require('./mod/gazetteer').googleplaces(req, res, fastify);
             }
         });
 
