@@ -1382,7 +1382,7 @@
           "display": true,
           "name": "Retail Places",
           "meta": "Profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.",
-          "properties": "rp_type,",
+          "properties": "rp_type",
           "format": "mvt",
           "geom_3857": "geom_3857",
           "pane": [
@@ -1662,7 +1662,7 @@
             "display": true,
             "name": "Retail Place Pitch",
             "meta": "Comparitive strength within Retail Place area.",
-            "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec,",
+            "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec",
             "format": "geojson",
             "pane": ["pitch", 540],
             "dbs": "XYZ",

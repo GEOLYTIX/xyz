@@ -32,7 +32,7 @@
                       "3": "glx_cities_of_the_world"
                     },
                     "tilecache": "glx_cities_of_the_world__tc",
-                    "properties": "pop_density,",
+                    "properties": "pop_density",
                     "infoj": [
                       {
                         "field": "nameascii",

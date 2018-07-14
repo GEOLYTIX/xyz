@@ -50,7 +50,7 @@
                    "dbs": "GEODATA",
                    "cluster_label": "postcode",
                    "cluster_cat": "oa11_ons",
-                   "properties": "postcode, pop_11, hhd_occ_11, oa11_ons, oa11_pip,",
+                   "properties": "postcode, pop_11, hhd_occ_11, oa11_ons, oa11_pip",
                    "qID": "id",
                    "geom": "geom_4326",
                    "geomj": "ST_asGeoJson(geom_4326)",
@@ -103,7 +103,7 @@
                     "qID": "id",
                     "geom_3857": "geom_3857",
                     "geomj": "geomj",
-                    "properties": "countyname,",
+                    "properties": "countyname",
                     "infoj": [
                         {
                             "field": "countyname",
@@ -129,7 +129,7 @@
                     "geom_3857": "geom_3857",
                     "geom": "geom_4326",
                     "geomj": "ST_asGeoJson(geom_4326)",
-                    "properties": "wz11code, oasplitper, oa11code, wzsplitper,",
+                    "properties": "wz11code, oasplitper, oa11code, wzsplitper",
                     "infoj": [
                         {
                             "field": "wz11code",
@@ -163,7 +163,7 @@
                     "geom": "geom_4326",
                     "pane": ["retail_place_outline", 520],
                     "dbs": "GEODATA",
-                    "properties": "rp_type,",
+                    "properties": "rp_type",
                     "qID": "id",
                     "arrayZoom": {
                         "12": "retail_place_outline"
@@ -436,7 +436,7 @@
                     "display": true,
                     "name": "Retail Place Shopping Centre",
                     "meta": "Geolytix License",
-                    "properties": "rp_id, sc_name, rp_name, rp_type, unit_count, sc_type, area_curt,",
+                    "properties": "rp_id, sc_name, rp_name, rp_type, unit_count, sc_type, area_curt",
                     "format": "mvt",
                     "geom_3857": "geom_3857",
                     "geom": "geom_4326",
@@ -876,7 +876,7 @@
                     "display": true,
                     "name": "Retail Place Pitch",
                     "meta": "Comparitive strength within Retail Place area.",
-                    "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec,",
+                    "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec",
                     "format": "geojson",
                     "pane": ["pitch", 540],
                     "dbs": "GEODATA",

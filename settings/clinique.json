@@ -68,7 +68,7 @@
           "geom_3857": "geom_3857",
           "geomj": "ST_asGeoJson(ST_Transform(geom_3857, 4326))",
           "qID": "dong_code",
-          "properties": "mkt_size,",
+          "properties": "mkt_size",
           "infoj": [
             {
               "field": "dong_name",

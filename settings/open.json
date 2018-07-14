@@ -69,7 +69,7 @@
             "3": "glx_cities_of_the_world"
           },
           "tilecache": "glx_cities_of_the_world__tc",
-          "properties": "pop_density,",
+          "properties": "pop_density",
           "infoj": [
             {
               "field": "nameascii",
@@ -1254,7 +1254,7 @@
           "display": true,
           "name": "Retail Places",
           "meta": "Profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.",
-          "properties": "rp_type,",
+          "properties": "rp_type",
           "format": "mvt",
           "geom_3857": "geom_3857",
           "pane": [

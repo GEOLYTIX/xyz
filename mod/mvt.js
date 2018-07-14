@@ -20,6 +20,8 @@ async function get(req, res, fastify) {
         .some(val => (typeof val === 'string' && global.workspace[user.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
+    
+    if(properties) properties = `${properties},`;
 
     if (tilecache) {
         var db_connection = await fastify.pg[req.query.dbs].connect();
