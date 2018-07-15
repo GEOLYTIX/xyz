@@ -69,7 +69,7 @@ module.exports = () => {
     // Click event for results list
     dom.result.addEventListener('click', e => {
         if (!e.target['data-source']) return;
-        selectResult(e.target['data-id'], e.target['data-source'], e.target.innerHTML);
+        selectResult(e.target);
     });
     
     // Initiate search on keyup with input value
@@ -127,6 +127,9 @@ module.exports = () => {
                         options: {
                             textContent: json[key].label,
                             'data-id': json[key].id,
+                            'data-layer': json[key].layer || '',
+                            'data-table': json[key].table || '',
+                            'data-marker': json[key].marker || '',
                             'data-source': json[key].source
                         },
                         appendTo: dom.result
@@ -179,7 +182,7 @@ module.exports = () => {
 
             if(!activeRecord && results.length > 0) activeRecord = results[0];
 
-            if (activeRecord['data-id']) selectResult(activeRecord['data-id'], activeRecord['data-source'], activeRecord.innerText);
+            if (activeRecord['data-id']) selectResult(activeRecord);
         }
     });
 
@@ -192,41 +195,45 @@ module.exports = () => {
     });
 
     // Query the geometry via the select id from backend.
-    function selectResult(id, source, label) {
+    function selectResult(record) {
         dom.result.innerHTML = '';
-        dom.input.value = label;
+        dom.input.value = record.innerText;
 
-        if (id && source === 'vector' && _xyz.vector.display) {
-            _xyz.vector.selectLayer(id, true);
+        if (record['data-id'] && record['data-source'] === 'glx') {
+            _xyz.select.selectLayerFromEndpoint({
+                layer: record['data-layer'],
+                table: record['data-table'],
+                id: record['data-id'],
+                marker: record['data-marker'].split(',')
+            });
             return;
         }
 
-        if (id && source === 'mapbox') {
+        if (record['data-id'] && record['data-source'] === 'mapbox') {
 
             // Create a point feature from the lat lon in the MapBox ID.
             createFeature({
-                "type": "Point",
-                "coordinates": id
+                type: 'Point',
+                coordinates: record['data-id']
             })
             return;
         }
 
-        // Get the geometry from the gazetteer database.
-        let xhr = new XMLHttpRequest();
+        if (record['data-id'] && record['data-source'] === 'google') {
 
-        xhr.open('GET', host
-            + (source === 'google' ?
-                'api/gazetteer/googleplaces' :
-                'api/gazetteer/glxplaces')
-            + '?id=' + id);
+            // Get the geometry from the gazetteer database.
+            let xhr = new XMLHttpRequest();
 
-        xhr.onload = e => {
+            xhr.open('GET', host + 'api/gazetteer/googleplaces?id=' + record['data-id']);
 
-            // Send results to createFeature
-            if (e.target.status === 200) createFeature(JSON.parse(e.target.responseText));
+            xhr.onload = e => {
 
-        };
-        xhr.send();
+                // Send results to createFeature
+                if (e.target.status === 200) createFeature(JSON.parse(e.target.responseText));
+
+            };
+            xhr.send();
+        }
     }
 
     // Create a feature from geojson

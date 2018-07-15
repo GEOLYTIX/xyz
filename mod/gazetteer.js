@@ -20,7 +20,9 @@ async function placesAutoComplete(req, res, locale, fastify) {
         var q = `
         SELECT
             ${dataset.label} AS label,
-            ${locale.layers[dataset.layer].qID || 'id'} AS id
+            ${locale.layers[dataset.layer].qID || 'id'} AS id,
+            ST_X(ST_Centroid(${locale.layers[dataset.layer].geom || 'geom'})) AS lng,
+            ST_Y(ST_Centroid(${locale.layers[dataset.layer].geom || 'geom'})) AS lat
             FROM ${dataset.table}
             WHERE ${dataset.label} ILIKE '${decodeURIComponent(req.query.q)}%'
             LIMIT 10`;
@@ -31,29 +33,24 @@ async function placesAutoComplete(req, res, locale, fastify) {
         result = await db_connection.query(q);
         db_connection.release();
 
-        if (result.rows.length > 0) break;
+        if (result.rows.length > 0) {
+            let foo = Object.values(result.rows).map(row => {
+                return {
+                    label: row.label,
+                    id: row.id,
+                    table: dataset.table,
+                    layer: dataset.layer,
+                    marker: `${row.lng},${row.lat}`,
+                    source: 'glx'
+                }
+            });
+        
+            res.code(200).send(foo);
+
+            break;
+        }
 
     }
-
-    let foo = Object.values(result.rows).map(row => {
-        return {
-            label: row.label,
-            id: row.id,
-            source: 'glx'
-        }
-    });
-
-    res.code(200).send(foo);
-
-    // res.code(200).send(JSON.parse(body).features.map(f => {
-    //     return {
-    //         label: `${f.text} (${f.place_type[0]}) ${!gazetteer.code && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
-    //         id: f.center,
-    //         source: 'mapbox'
-    //     }
-    // }))
-
-    //return result;
 }
 
 function MAPBOX_placesAutoComplete(req, res, gazetteer) {
