@@ -66,7 +66,7 @@
             "3": "glx_cities_of_the_world"
           },
           "tilecache": "glx_cities_of_the_world__tc",
-          "properties": "pop_density,",
+          "properties": "pop_density",
           "infoj": [
             {
               "field": "nameascii",
@@ -418,7 +418,7 @@
           "geom_3857": "geom_3857",
           "pane": ["cn_sh_retail_venues", 530],
           "dbs": "XYZ",
-          "properties": "venue_name, name_cn, venue_type, address, mass_count, massplus_count, luxury_count, mass, premium, luxury, main_market, secondary,",
+          "properties": "venue_name, name_cn, venue_type, address, mass_count, massplus_count, luxury_count, mass, premium, luxury, main_market, secondary",
           "qID": "id",
           "arrayZoom": {
             "12": "cn_sh_retail_venues"
@@ -1608,7 +1608,7 @@
           "geomj": "geomj",
           "pane": ["postal", 520],
           "dbs": "XYZ",
-          "properties": "rank,",
+          "properties": "rank",
           "qID": "qid",
           "arrayZoom": {
             "7": "gb_postaldistrict_census__11",
@@ -1789,7 +1789,7 @@
           "geom_3857": "geom_3857",
           "pane": ["bounds", 510],
           "dbs": "XYZ",
-          "properties": "rp_type,",
+          "properties": "rp_type",
           "qID": "id",
           "arrayZoom": {
             "12": "gb_retailplace"
@@ -2236,7 +2236,7 @@
             "display": true,
             "name": "Retail Place Pitch",
             "meta": "Comparitive strength within Retail Place area.",
-            "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec,",
+            "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec",
             "format": "geojson",
             "pane": ["pitch", 540],
             "dbs": "XYZ",

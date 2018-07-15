@@ -321,7 +321,7 @@
           "geomj": "geomj",
           "dbs": "XYZ",
           "qID": "id",
-          "properties": "rank_reg,",
+          "properties": "rank_reg",
           "infoj": [
             {
               "field": "oa_code",
@@ -460,7 +460,7 @@
           "geomj": "geomj",
           "dbs": "XYZ",
           "qID": "id",
-          "properties": "rank_tot,",
+          "properties": "rank_tot",
           "infoj": [
             {
               "field": "oa_code",
