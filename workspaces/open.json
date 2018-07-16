@@ -1,19 +1,21 @@
 {
   "title": "GEOLYTIX | XYZ Open",
-  "select": {},
   "locate": {},
-  "report": {},
-  "gazetteer": {},
   "documentation": "documentation",
   "locale": "EU",
   "locales": {
     "Global": {
-      "gazetteer": [
-        "MAPBOX",
-        "",
-        "",
-        "e.g. London"
-      ],
+      "gazetteer": {
+        "provider": "MAPBOX",
+        "placeholder": "e.g. London",
+        "datasets": [
+          {
+            "layer": "sprawls",
+            "table": "glx_cities_of_the_world",
+            "label": "nameascii"
+          }
+        ]
+      },
       "minZoom": 3,
       "maxZoom": 9,
       "layers": {
@@ -38,7 +40,7 @@
             550
           ],
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnZGsyaDhwMmpjaDMzbnBiNzJiaHR5NyJ9.C6zuLjG4Q3dmflE-LQZY4g",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
@@ -262,12 +264,11 @@
     },
     "EU": {
       "name": "Europe",
-      "gazetteer": [
-        "MAPBOX",
-        "",
-        "'-45,25,60,75'",
-        "e.g. Brussels"
-      ],
+      "gazetteer": {
+        "provider": "MAPBOX",
+        "placeholder": "e.g. Brussels",
+        "bounds": "'-45,25,60,75'"
+      },
       "bounds": [
         [
           25,
@@ -542,12 +543,18 @@
     },
     "UK": {
       "name": "United Kingdom",
-      "gazetteer": [
-        "GOOGLE",
-        "GB",
-        "",
-        "e.g. London"
-      ],
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "code": "GB",
+        "placeholder": "e.g. London",
+        "datasets": [
+          {
+            "layer": "retail_points",
+            "table": "gb_retailpoint",
+            "label": "store"
+          }
+        ]
+      },
       "bounds": [
         [
           48,
@@ -1195,12 +1202,11 @@
     },
     "Oxford": {
       "name": "Oxford",
-      "gazetteer": [
-        "GOOGLE",
-        "",
-        "'&location=51.75,-1.25&radius=40'",
-        "e.g. Oxford University"
-      ],
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "bounds": "'&location=51.75,-1.25&radius=40'",
+        "placeholder": "e.g. Oxford University"
+      },
       "bounds": [
         [
           51.3,

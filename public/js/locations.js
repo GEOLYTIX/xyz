@@ -154,7 +154,7 @@ module.exports = () => {
     
         let freeRecords = _xyz.select.records.filter(record => !record.location);
 
-        if (freeRecords.length === 0) return
+        if (freeRecords.length === 0) return;
 
         // Make select tab active on mobile device.
         if (_xyz.activateSelectTab) _xyz.activateSelectTab();
@@ -391,7 +391,7 @@ module.exports = () => {
             appendTo: record.drawer,
             eventListener: {
                 event: 'click',
-                funct: e => {
+                funct: () => {
                     utils.toggleExpanderParent({
                         expandable: record.drawer,
                         accordeon: true,

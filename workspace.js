@@ -172,7 +172,7 @@ function removeAccess(access) {
 function createLookup(workspace) {
 
         // store all workspace string values in lookup arrays.
-        workspace.values = ['geom', 'id', 'ST_asGeoJson(geom)'];
+        workspace.values = ['', 'geom', 'geom_3857', 'id', 'ST_asGeoJson(geom)'];
         (function objectEval(o) {
             Object.keys(o).forEach((key) => {
                 if (typeof key === 'string') workspace.values.push(key);

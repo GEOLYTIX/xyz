@@ -13,9 +13,8 @@
     "UK": {
       "name": "United Kingdom",
       "gazetteer": {
-        "provider": "GOOGLE",
+        "provider": "MAPBOX",
         "code": "GB",
-        "bounds": "",
         "placeholder": "e.g. London",
         "datasets": [
           {

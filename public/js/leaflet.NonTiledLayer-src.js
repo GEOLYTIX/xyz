@@ -476,7 +476,7 @@
                     i.src = this.emptyImageUrl;
                     this.key = i.key = '<empty>';
                     i.tag = null;
-                    return;
+                    return
                 }
 
                 // create a key identifying the current request

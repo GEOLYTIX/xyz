@@ -12,8 +12,8 @@ const svg_symbols = require('./svg_symbols');
                 let tmp = eval(_xyz[key]);
                 _xyz[key] = typeof tmp != 'undefined'? tmp: _xyz[key];
             }
-            catch(me){
-                //console.log(me);
+            catch(err){
+                //console.error(err);
             }
         }
         if (_xyz[key] && typeof _xyz[key] === 'object') objectEval(_xyz[key]);
