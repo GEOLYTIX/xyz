@@ -121,17 +121,9 @@ Below is a list of config keys which are currently supported. Default minimum vi
 
 The application title which will be inserted into the title meta tag in the HTML template.
 
-`"gazetteer": {}`
-
-Whether the gazetteer module should be enabled. Without the gazetteer module you will not be able to switch between locales
-
-`"select": {}`
-
-Whether the selection module should be enabled. Without the selection module you will not be able to select features and query their properties.
-
 `"locate": true`
 
-Whether the geolocator should be enabled. *Note that the geolocator requires a secure connection via https.*
+Whether the geolocator should be enabled.
 
 `"documentation": "documentation"`
 
@@ -165,9 +157,27 @@ An array of \[lat,lon\] coordinate pairs which define the bounds of a locale. It
 
 The min and max zoom for the leaflet map object. The defaults range is zoom 0 to 20 if not set.
 
-`"gazetteer": ["MAPBOX", "", "'-45,25,60,75'", "e.g. Brussels"]`
+### Gazetteer
 
-The gazetteer to be used for the locale. The first entry in the array is the provider (MAPBOX or GOOGLE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service. TO BE COMPLETED AFTER DATABASE GAZETTEER IMPLEMENTATION.
+```
+"gazetteer": {
+  "provider": "MAPBOX",
+  "placeholder": "e.g. London",
+  "datasets": [
+    {
+      "layer": "sprawls",
+      "table": "glx_cities_of_the_world",
+      "label": "nameascii"
+    }
+  ]
+},
+```
+
+The gazetteer to be used for a locale. The gazeetteer inputs will be hidden on the view if no gazetteer is set for the locale. The gazetteer configuration object is structured into several configuration keys.
+
+`"provider": "MAPBOX"`
+
+If no gazetteer is set the The first entry in the array is the provider (MAPBOX or GOOGLE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service. TO BE COMPLETED AFTER DATABASE GAZETTEER IMPLEMENTATION.
 
 `"layers": {}`
 
