@@ -1,18 +1,21 @@
 {
   "title": "GEOLYTIX | XYZ Demo",
   "documentation": "documentation",
-  "select": {},
   "locate": {},
   "report": {},
-  "gazetteer": {},
   "locales": {
     "Global": {
-      "gazetteer": [
-        "MAPBOX",
-        "",
-        "",
-        "e.g. London"
-      ],
+      "gazetteer": {
+        "provider": "MAPBOX",
+        "placeholder": "e.g. London",
+        "datasets": [
+          {
+            "layer": "sprawls",
+            "table": "glx_cities_of_the_world",
+            "label": "nameascii"
+          }
+        ]
+      },
       "minZoom": 3,
       "maxZoom": 15,
       "layers": {
@@ -680,7 +683,23 @@
     },
     "UK": {
       "name": "United Kingdom",
-      "gazetteer": ["GOOGLE","GB","","e.g. London"],
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "code": "GB",
+        "placeholder": "e.g. London",
+        "datasets": [
+          {
+            "layer": "retail_points",
+            "table": "gb_retailpoint",
+            "label": "store"
+          },
+          {
+            "layer": "postal_areas",
+            "table": "gb_postalsector_census__11",
+            "label": "postal_label"
+          }
+        ]
+      },
       "bounds": [[48, -13],[62, 5]],
       "minZoom": 6,
       "maxZoom": 17,
@@ -2654,7 +2673,11 @@
     },
     "RO": {
       "name": "Romania",
-      "gazetteer": ["GOOGLE","RO","","e.g. Constan\u021Ba"],
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "code": "RO",
+        "placeholder": "e.g. Constan\u021Ba"
+      },
       "bounds": [[43, 20],[49,30]],
       "minZoom": 6,
       "maxZoom": 17,

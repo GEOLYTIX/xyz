@@ -612,7 +612,9 @@ function authToken(req, res, fastify, access, done) {
 
     // Issue a new user token with current time.
     user_token.iat = time_now;
-    res.setCookie('xyz_user', fastify.jwt.sign(user_token), {
+    user_token = fastify.jwt.sign(user_token);
+
+    res.setCookie('xyz_user', user_token, {
         path: process.env.DIR || '/'
     });
 

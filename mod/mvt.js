@@ -13,7 +13,7 @@ async function get(req, res, fastify) {
         id = req.query.qID === 'undefined' ? null : req.query.qID,
         properties = req.query.properties === 'undefined' ? '' : req.query.properties,
         tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache,
-        user = fastify.jwt.decode(req.cookies.xyz_user);
+        user = fastify.jwt.decode(req.cookies.xyz_user || req.query.token);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([id, table, tilecache, layer, geom_3857, properties]
