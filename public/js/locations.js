@@ -1,7 +1,6 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 const select_controls = require('./select_controls');
-const select_table = require('./select_table');
 
 module.exports = () => {
 
@@ -162,7 +161,17 @@ module.exports = () => {
         let layer = _xyz.locales[_xyz.locale].layers[location.layer];
 
         // infoj fields with a layer definition are queried from the reference layer.
-        setLayerReferences(layer.infoj);
+        layer.infoj.forEach(entry => {
+
+            // Create a layer reference for the layer defined in the infoj field.
+            if (typeof entry.layer === 'string') {
+                entry.layer = {
+                    table: _xyz.locales[_xyz.locale].layers[entry.layer].table,
+                    geom: _xyz.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
+                    filter: _xyz.locales[_xyz.locale].layers[entry.layer].filter || {}
+                }
+            }
+        })
         
         // charts
         setChartData(layer, location);
@@ -211,20 +220,6 @@ module.exports = () => {
             sql_filter: layer.sql_filter
         }));
 
-    }
-
-    function setLayerReferences(infoj) {
-        infoj.forEach(entry => {
-
-            // Create a layer reference for the layer defined in the infoj field.
-            if (typeof entry.layer === 'string') {
-                entry.layer = {
-                    table: _xyz.locales[_xyz.locale].layers[entry.layer].table,
-                    geom: _xyz.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
-                    filter: _xyz.locales[_xyz.locale].layers[entry.layer].filter || {}
-                }
-            }
-        })
     }
     
     function setChartData(layer, location){
@@ -426,7 +421,7 @@ module.exports = () => {
         record.drawer.appendChild(record.header);
 
         // Add create and append infoj table to drawer.
-        record.drawer.appendChild(select_table.addInfojToList(record));
+        record.drawer.appendChild(require('./select_table').addInfojToList(record));
 
         // Find free space and insert record.
         let freeRecords = _xyz.select.records.filter(function (record) {

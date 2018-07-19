@@ -1,6 +1,8 @@
 const d3 = require('d3');
 const utils = require('./utils');
 
+module.exports = { bar_chart };
+
 function bar_chart(layer, chart){
     
     let week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -117,8 +119,4 @@ function bar_chart(layer, chart){
     td.appendChild(div);
     tr.appendChild(td);
     return tr;
-}
-
-module.exports = {
-    bar_chart: bar_chart
 }

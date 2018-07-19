@@ -58,6 +58,11 @@ function MAPBOX_placesAutoComplete(req, res, gazetteer) {
             return
         }
 
+        if (response.statusCode === 422) {
+            console.log(JSON.parse(body).message);
+            return
+        }
+
         res.code(200).send(JSON.parse(body).features.map(f => {
             return {
                 label: `${f.text} (${f.place_type[0]}) ${!gazetteer.code && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,

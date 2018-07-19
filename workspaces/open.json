@@ -22,7 +22,10 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": ["mapbox","osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base",
             500
@@ -34,7 +37,10 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "attribution": ["mapbox","osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base_labels",
             550
@@ -45,7 +51,9 @@
         },
         "here": {
           "name": "HERE Imagery",
-          "attribution": ["here"],
+          "attribution": [
+            "here"
+          ],
           "meta": "Satellite Imagery layer provided by HERE.",
           "pane": [
             "base",
@@ -117,147 +125,149 @@
               "fill": true,
               "fillOpacity": 0
             },
-            "themes": [{
-              "label": "Population Density",
-              "type": "graduated",
-              "field": "pop_density",
-              "applied": true,
-              "other": true,
-              "cat": [
-                {
-                  "val": 5000,
-                  "label": "up to 5,000 per km2 square",
-                  "style": {
-                    "weight": 1,
-                    "color": "#bcdf27",
-                    "opacity": 1,
-                    "fillColor": "#fde725",
-                    "fill": true,
-                    "fillOpacity": 0.3
+            "themes": [
+              {
+                "label": "Population Density",
+                "type": "graduated",
+                "field": "pop_density",
+                "applied": true,
+                "other": true,
+                "cat": [
+                  {
+                    "val": 5000,
+                    "label": "up to 5,000 per km2 square",
+                    "style": {
+                      "weight": 1,
+                      "color": "#bcdf27",
+                      "opacity": 1,
+                      "fillColor": "#fde725",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 10000,
+                    "label": "10,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#7ad251",
+                      "opacity": 1,
+                      "fillColor": "#bcdf27",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 15000,
+                    "label": "15,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#43bf70",
+                      "opacity": 1,
+                      "fillColor": "#7ad251",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 20000,
+                    "label": "20,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#22a884",
+                      "opacity": 1,
+                      "fillColor": "#43bf70",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 25000,
+                    "label": "25,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#20908d",
+                      "opacity": 1,
+                      "fillColor": "#22a884",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 30000,
+                    "label": "30,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#29788e",
+                      "opacity": 1,
+                      "fillColor": "#20908d",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 35000,
+                    "label": "35,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#345f8d",
+                      "opacity": 1,
+                      "fillColor": "#29788e",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 40000,
+                    "label": "40,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#404387",
+                      "opacity": 1,
+                      "fillColor": "#345f8d",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 45000,
+                    "label": "45,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#482475",
+                      "opacity": 1,
+                      "fillColor": "#404387",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 50000,
+                    "label": "50,000",
+                    "style": {
+                      "weight": 1,
+                      "color": "#440154",
+                      "opacity": 1,
+                      "fillColor": "#482475",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  {
+                    "val": 1000000,
+                    "label": "50,000 or more",
+                    "style": {
+                      "weight": 1,
+                      "color": "#000",
+                      "opacity": 1,
+                      "fillColor": "#440154",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
                   }
-                },
-                {
-                  "val": 10000,
-                  "label": "10,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#7ad251",
-                    "opacity": 1,
-                    "fillColor": "#bcdf27",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 15000,
-                  "label": "15,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#43bf70",
-                    "opacity": 1,
-                    "fillColor": "#7ad251",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 20000,
-                  "label": "20,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#22a884",
-                    "opacity": 1,
-                    "fillColor": "#43bf70",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 25000,
-                  "label": "25,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#20908d",
-                    "opacity": 1,
-                    "fillColor": "#22a884",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 30000,
-                  "label": "30,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#29788e",
-                    "opacity": 1,
-                    "fillColor": "#20908d",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 35000,
-                  "label": "35,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#345f8d",
-                    "opacity": 1,
-                    "fillColor": "#29788e",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 40000,
-                  "label": "40,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#404387",
-                    "opacity": 1,
-                    "fillColor": "#345f8d",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 45000,
-                  "label": "45,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#482475",
-                    "opacity": 1,
-                    "fillColor": "#404387",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 50000,
-                  "label": "50,000",
-                  "style": {
-                    "weight": 1,
-                    "color": "#440154",
-                    "opacity": 1,
-                    "fillColor": "#482475",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                {
-                  "val": 1000000,
-                  "label": "50,000 or more",
-                  "style": {
-                    "weight": 1,
-                    "color": "#000",
-                    "opacity": 1,
-                    "fillColor": "#440154",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                }
-              ]
-            }]
+                ]
+              }
+            ]
           }
         }
       }
@@ -267,7 +277,12 @@
       "gazetteer": {
         "provider": "MAPBOX",
         "placeholder": "e.g. Brussels",
-        "bounds": "'-45,25,60,75'"
+        "bounds": [
+          -45,
+          25,
+          60,
+          75
+        ]
       },
       "bounds": [
         [
@@ -285,7 +300,10 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": ["mapbox", "osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base",
             500
@@ -297,7 +315,10 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "attribution": ["mapbox", "osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base_labels",
             550
@@ -308,7 +329,9 @@
         },
         "here": {
           "name": "HERE Imagery",
-          "attribution": ["here"],
+          "attribution": [
+            "here"
+          ],
           "meta": "Satellite Imagery layer provided by HERE.",
           "pane": [
             "base",
@@ -571,7 +594,10 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": ["mapbox", "osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base",
             500
@@ -583,7 +609,10 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "attribution": ["mapbox", "osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base_labels",
             550
@@ -594,7 +623,9 @@
         },
         "here": {
           "name": "HERE Imagery",
-          "attribution": ["here"],
+          "attribution": [
+            "here"
+          ],
           "meta": "Satellite Imagery layer provided by HERE.",
           "pane": [
             "base",
@@ -711,105 +742,107 @@
               400,
               "#333"
             ],
-            "themes": [{
-              "label": "Retailer",
-              "type": "categorized",
-              "field": "brand",
-              "applied": true,
-              "competitors": {
-                "tesco": {
-                  "colour": "#0055a8",
-                  "label": "Tesco"
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "applied": true,
+                "competitors": {
+                  "tesco": {
+                    "colour": "#0055a8",
+                    "label": "Tesco"
+                  },
+                  "sainsburys": {
+                    "colour": "#ee8a00",
+                    "label": "Sainsbury's"
+                  },
+                  "asda": {
+                    "colour": "#83b923",
+                    "label": "Asda"
+                  },
+                  "morrisons": {
+                    "colour": "#ffe133",
+                    "label": "Morrisons"
+                  }
                 },
-                "sainsburys": {
-                  "colour": "#ee8a00",
-                  "label": "Sainsbury's"
-                },
-                "asda": {
-                  "colour": "#83b923",
-                  "label": "Asda"
-                },
-                "morrisons": {
-                  "colour": "#ffe133",
-                  "label": "Morrisons"
-                }
-              },
-              "other": true,
-              "cat": {
-                "aldi": {
-                  "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
-                  "label": "Aldi"
-                },
-                "asda": {
-                  "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
-                  "label": "Asda"
-                },
-                "booths": {
-                  "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
-                  "label": "Booths"
-                },
-                "budgens": {
-                  "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
-                  "label": "Budgens"
-                },
-                "co_op": {
-                  "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
-                  "label": "The Co-Operative"
-                },
-                "costco": {
-                  "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
-                  "label": "Costco"
-                },
-                "farmfoods": {
-                  "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
-                  "label": "Farm Foods"
-                },
-                "fultons_food": {
-                  "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
-                  "label": "Fultons Food"
-                },
-                "heron_foods": {
-                  "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
-                  "label": "Heron Foods"
-                },
-                "iceland": {
-                  "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
-                  "label": "Iceland"
-                },
-                "lidl": {
-                  "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
-                  "label": "Lidl"
-                },
-                "makro": {
-                  "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
-                  "label": "Makro"
-                },
-                "marks_spencer": {
-                  "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
-                  "label": "Marks & Spencer"
-                },
-                "morrisons": {
-                  "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
-                  "label": "Morrisons"
-                },
-                "sainsburys": {
-                  "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
-                  "label": "Sainsbury's"
-                },
-                "tesco": {
-                  "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
-                  "label": "Tesco"
-                },
-                "waitrose": {
-                  "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
-                  "label": "Waitrose"
-                },
-                "whole_foods": {
-                  "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
-                  "label": "Whole Foods"
+                "other": true,
+                "cat": {
+                  "aldi": {
+                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                    "label": "Aldi"
+                  },
+                  "asda": {
+                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                    "label": "Asda"
+                  },
+                  "booths": {
+                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                    "label": "Booths"
+                  },
+                  "budgens": {
+                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                    "label": "Budgens"
+                  },
+                  "co_op": {
+                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                    "label": "The Co-Operative"
+                  },
+                  "costco": {
+                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                    "label": "Costco"
+                  },
+                  "farmfoods": {
+                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                    "label": "Farm Foods"
+                  },
+                  "fultons_food": {
+                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                    "label": "Fultons Food"
+                  },
+                  "heron_foods": {
+                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                    "label": "Heron Foods"
+                  },
+                  "iceland": {
+                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                    "label": "Iceland"
+                  },
+                  "lidl": {
+                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                    "label": "Lidl"
+                  },
+                  "makro": {
+                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                    "label": "Makro"
+                  },
+                  "marks_spencer": {
+                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                    "label": "Marks & Spencer"
+                  },
+                  "morrisons": {
+                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                    "label": "Morrisons"
+                  },
+                  "sainsburys": {
+                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                    "label": "Sainsbury's"
+                  },
+                  "tesco": {
+                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                    "label": "Tesco"
+                  },
+                  "waitrose": {
+                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                    "label": "Waitrose"
+                  },
+                  "whole_foods": {
+                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                    "label": "Whole Foods"
+                  }
                 }
               }
-            }]
+            ]
           }
         },
         "rp_editable": {
@@ -935,87 +968,89 @@
               400,
               "#333"
             ],
-            "themes": [{
-              "label": "Retailer",
-              "type": "categorized",
-              "field": "brand",
-              "other": true,
-              "applied": true,
-              "cat": {
-                "Aldi": {
-                  "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
-                  "label": "Aldi"
-                },
-                "Asda": {
-                  "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
-                  "label": "Asda"
-                },
-                "Booths": {
-                  "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
-                  "label": "Booths"
-                },
-                "Budgens": {
-                  "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
-                  "label": "Budgens"
-                },
-                "The Co-operative": {
-                  "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
-                  "label": "The Co-Operative"
-                },
-                "Costco": {
-                  "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
-                  "label": "Costco"
-                },
-                "Farmfoods": {
-                  "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
-                  "label": "Farm Foods"
-                },
-                "Fultons Food": {
-                  "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
-                  "label": "Fultons Food"
-                },
-                "Heron Foods": {
-                  "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
-                  "label": "Heron Foods"
-                },
-                "Iceland": {
-                  "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
-                  "label": "Iceland"
-                },
-                "Lidl": {
-                  "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
-                  "label": "Lidl"
-                },
-                "Makro": {
-                  "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
-                  "label": "Makro"
-                },
-                "Marks & Spencer": {
-                  "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
-                  "label": "Marks & Spencer"
-                },
-                "Morrisons": {
-                  "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
-                  "label": "Morrisons"
-                },
-                "Sainsburys": {
-                  "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
-                  "label": "Sainsbury's"
-                },
-                "Tesco": {
-                  "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
-                  "label": "Tesco"
-                },
-                "Waitrose": {
-                  "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
-                  "label": "Waitrose"
-                },
-                "Whole Foods": {
-                  "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
-                  "label": "Whole Foods"
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "other": true,
+                "applied": true,
+                "cat": {
+                  "Aldi": {
+                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                    "label": "Aldi"
+                  },
+                  "Asda": {
+                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                    "label": "Asda"
+                  },
+                  "Booths": {
+                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                    "label": "Booths"
+                  },
+                  "Budgens": {
+                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                    "label": "Budgens"
+                  },
+                  "The Co-operative": {
+                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                    "label": "The Co-Operative"
+                  },
+                  "Costco": {
+                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                    "label": "Costco"
+                  },
+                  "Farmfoods": {
+                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                    "label": "Farm Foods"
+                  },
+                  "Fultons Food": {
+                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                    "label": "Fultons Food"
+                  },
+                  "Heron Foods": {
+                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                    "label": "Heron Foods"
+                  },
+                  "Iceland": {
+                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                    "label": "Iceland"
+                  },
+                  "Lidl": {
+                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                    "label": "Lidl"
+                  },
+                  "Makro": {
+                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                    "label": "Makro"
+                  },
+                  "Marks & Spencer": {
+                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                    "label": "Marks & Spencer"
+                  },
+                  "Morrisons": {
+                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                    "label": "Morrisons"
+                  },
+                  "Sainsburys": {
+                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                    "label": "Sainsbury's"
+                  },
+                  "Tesco": {
+                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                    "label": "Tesco"
+                  },
+                  "Waitrose": {
+                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                    "label": "Waitrose"
+                  },
+                  "Whole Foods": {
+                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                    "label": "Whole Foods"
+                  }
                 }
               }
-            }]
+            ]
           }
         },
         "region": {
@@ -1153,49 +1188,51 @@
             }
           ],
           "style": {
-            "themes": [{
-              "label": "Motor vehicles 2016 (000's)",
-              "type": "graduated",
-              "applied": true,
-              "field": "all_mv_000__16",
-              "cat": [
-                {
-                  "val": 1,
-                  "marker": "svg_symbols.target([400,'#fde725'])",
-                  "label": "1"
-                },
-                {
-                  "val": 10,
-                  "marker": "svg_symbols.target([400,'#8fd744'])",
-                  "label": "10"
-                },
-                {
-                  "val": 25,
-                  "marker": "svg_symbols.target([400,'#35b779'])",
-                  "label": "25"
-                },
-                {
-                  "val": 50,
-                  "marker": "svg_symbols.target([400,'#20908d'])",
-                  "label": "50"
-                },
-                {
-                  "val": 75,
-                  "marker": "svg_symbols.target([400,'#31688e'])",
-                  "label": "75"
-                },
-                {
-                  "val": 100,
-                  "marker": "svg_symbols.target([400,'#443a83'])",
-                  "label": "100"
-                },
-                {
-                  "val": 150,
-                  "marker": "svg_symbols.target([400,'#440154'])",
-                  "label": "150"
-                }
-              ]
-            }]
+            "themes": [
+              {
+                "label": "Motor vehicles 2016 (000's)",
+                "type": "graduated",
+                "applied": true,
+                "field": "all_mv_000__16",
+                "cat": [
+                  {
+                    "val": 1,
+                    "marker": "svg_symbols.target([400,'#fde725'])",
+                    "label": "1"
+                  },
+                  {
+                    "val": 10,
+                    "marker": "svg_symbols.target([400,'#8fd744'])",
+                    "label": "10"
+                  },
+                  {
+                    "val": 25,
+                    "marker": "svg_symbols.target([400,'#35b779'])",
+                    "label": "25"
+                  },
+                  {
+                    "val": 50,
+                    "marker": "svg_symbols.target([400,'#20908d'])",
+                    "label": "50"
+                  },
+                  {
+                    "val": 75,
+                    "marker": "svg_symbols.target([400,'#31688e'])",
+                    "label": "75"
+                  },
+                  {
+                    "val": 100,
+                    "marker": "svg_symbols.target([400,'#443a83'])",
+                    "label": "100"
+                  },
+                  {
+                    "val": 150,
+                    "marker": "svg_symbols.target([400,'#440154'])",
+                    "label": "150"
+                  }
+                ]
+              }
+            ]
           }
         }
       }
@@ -1223,7 +1260,10 @@
         "base": {
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": ["mapbox", "osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base",
             500
@@ -1235,7 +1275,10 @@
         "label": {
           "display": true,
           "name": "Mapbox Labels",
-          "attribution": ["mapbox", "osm"],
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
           "pane": [
             "base_labels",
             550
@@ -1246,7 +1289,9 @@
         },
         "here": {
           "name": "HERE Imagery",
-          "attribution": ["here"],
+          "attribution": [
+            "here"
+          ],
           "meta": "Satellite Imagery layer provided by HERE.",
           "pane": [
             "base",
@@ -1351,186 +1396,188 @@
               "fill": true,
               "fillOpacity": 0
             },
-            "themes": [{
-              "label": "Retail Place type",
-              "type": "categorized",
-              "field": "rp_type",
-              "applied": true,
-              "other": true,
-              "cat": {
-                "Major City Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#EF271B",
-                    "opacity": 1,
-                    "fillColor": "#EF271B",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "City Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#BA2D0B",
-                    "opacity": 1,
-                    "fillColor": "#BA2D0B",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Large Town Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#FE4E00",
-                    "opacity": 1,
-                    "fillColor": "#FE4E00",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Major Urban Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#E2711D",
-                    "opacity": 1,
-                    "fillColor": "#E2711D",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Town Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#F3A712",
-                    "opacity": 1,
-                    "fillColor": "#F3A712",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Urban Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#FADF63",
-                    "opacity": 1,
-                    "fillColor": "#FADF63",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Small Town Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#FFE74C",
-                    "opacity": 1,
-                    "fillColor": "#FFE74C",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Village Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#DBFE87",
-                    "opacity": 1,
-                    "fillColor": "#DBFE87",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Regional SC": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#8ED081",
-                    "opacity": 1,
-                    "fillColor": "#8ED081",
-                    "fill": true,
-                    "fillOpacity": 0.3
+            "themes": [
+              {
+                "label": "Retail Place type",
+                "type": "categorized",
+                "field": "rp_type",
+                "applied": true,
+                "other": true,
+                "cat": {
+                  "Major City Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#EF271B",
+                      "opacity": 1,
+                      "fillColor": "#EF271B",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
                   },
-                  "label": "Regional Shopping Centre"
-                },
-                "Outlet Centre": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#7DDF64",
-                    "opacity": 1,
-                    "fillColor": "#7DDF64",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Shopping Park": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#074F57",
-                    "opacity": 1,
-                    "fillColor": "#074F57",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Retail Park": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#32746D",
-                    "opacity": 1,
-                    "fillColor": "#32746D",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Leisure Park": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#41D3BD",
-                    "opacity": 1,
-                    "fillColor": "#41D3BD",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Local Hub": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#08B2E3",
-                    "opacity": 1,
-                    "fillColor": "#08B2E3",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Large Parade": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#1F487E",
-                    "opacity": 1,
-                    "fillColor": "#1F487E",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Parade": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#541388",
-                    "opacity": 1,
-                    "fillColor": "#541388",
-                    "fill": true,
-                    "fillOpacity": 0.3
-                  }
-                },
-                "Weak Parade": {
-                  "style": {
-                    "weight": 2,
-                    "color": "#D90368",
-                    "opacity": 1,
-                    "fillColor": "#D90368",
-                    "fill": true,
-                    "fillOpacity": 0.3
+                  "City Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#BA2D0B",
+                      "opacity": 1,
+                      "fillColor": "#BA2D0B",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Large Town Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#FE4E00",
+                      "opacity": 1,
+                      "fillColor": "#FE4E00",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Major Urban Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#E2711D",
+                      "opacity": 1,
+                      "fillColor": "#E2711D",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Town Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#F3A712",
+                      "opacity": 1,
+                      "fillColor": "#F3A712",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Urban Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#FADF63",
+                      "opacity": 1,
+                      "fillColor": "#FADF63",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Small Town Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#FFE74C",
+                      "opacity": 1,
+                      "fillColor": "#FFE74C",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Village Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#DBFE87",
+                      "opacity": 1,
+                      "fillColor": "#DBFE87",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Regional SC": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#8ED081",
+                      "opacity": 1,
+                      "fillColor": "#8ED081",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    },
+                    "label": "Regional Shopping Centre"
+                  },
+                  "Outlet Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#7DDF64",
+                      "opacity": 1,
+                      "fillColor": "#7DDF64",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Shopping Park": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#074F57",
+                      "opacity": 1,
+                      "fillColor": "#074F57",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Retail Park": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#32746D",
+                      "opacity": 1,
+                      "fillColor": "#32746D",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Leisure Park": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#41D3BD",
+                      "opacity": 1,
+                      "fillColor": "#41D3BD",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Local Hub": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#08B2E3",
+                      "opacity": 1,
+                      "fillColor": "#08B2E3",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Large Parade": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#1F487E",
+                      "opacity": 1,
+                      "fillColor": "#1F487E",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Parade": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#541388",
+                      "opacity": 1,
+                      "fillColor": "#541388",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Weak Parade": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#D90368",
+                      "opacity": 1,
+                      "fillColor": "#D90368",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
                   }
                 }
               }
-            }]
+            ]
           }
         }
       }
