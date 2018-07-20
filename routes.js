@@ -157,7 +157,7 @@ module.exports = fastify => {
             url: '/api/location/chart',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
-                require('./mod/select').chart_data(req, res, fastify);
+                require('./mod/location').chart_data(req, res, fastify);
             }
         });
 

@@ -40,9 +40,10 @@ function init(fastify) {
                     msg = user_token.status;
 
                     // Empty status in user token.
-                    res.setCookie('xyz_user', fastify.jwt.sign({ status: '' }), {
-                        path: process.env.DIR || '/'
-                    });
+                    res.setCookie('xyz_user', fastify.jwt.sign({
+                        access: 'public',
+                        status: ''
+                    }), { path: process.env.DIR || '/' });
                 }
 
                 // Render login view with status msg.
