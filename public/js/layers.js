@@ -6,7 +6,6 @@ const formats = {
     grid: require('./layer_grid'),
     tiles: require('./layer_tiles')
 };
-const layers_panel = require('./layers_panel');
 
 module.exports = () => {
 
@@ -52,7 +51,7 @@ module.exports = () => {
         dom.layers.innerHTML = '';
 
         // Loop through the locale layers and build layer control elements.
-        Object.keys(layers).map(layer => {
+        Object.keys(layers).forEach(layer => {
             layers[layer].layer = layer;
             layer = layers[layer];
             layer.base = null;
@@ -62,6 +61,7 @@ module.exports = () => {
             if (!layer.style.default) layer.style.default = { "weight": 1, "color": "#000" };
             if (!layer.filter) layer.filter = {};
 
+            // Create layer drawer.
             layer.drawer = utils._createElement({
                 tag: 'div',
                 options: {
@@ -72,6 +72,7 @@ module.exports = () => {
 
             if (layer.hidden) layer.drawer.style.display = 'none';
 
+            // Create layer header.
             layer.header = utils._createElement({
                 tag: 'div',
                 options: {
@@ -89,6 +90,7 @@ module.exports = () => {
             _xyz.map.createPane(layer.pane[0]);
             _xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
 
+            // Assign getLayer function from format.
             layer.getLayer = formats[layer.format].getLayer;
 
             // Create control to toggle layer visibility.
@@ -163,10 +165,13 @@ module.exports = () => {
             }
 
             // Create loader element.
-            layer.loader = utils.createElement('div', {
-                className: 'loader'
+            layer.loader = utils._createElement({
+                tag: 'div',
+                options: {
+                    className: 'loader'
+                },
+                appendTo: layer.drawer
             });
-            layer.drawer.appendChild(layer.loader);
 
             // Add edit control to layer header.
             if (layer.editable && layer.editable === 'geometry') {
@@ -246,44 +251,7 @@ module.exports = () => {
             }
 
             //Add panel to layer control.
-            layer.panel = layers_panel.panel(layer);
-
-            // Add panel control when panel contains children.
-            if (layer.panel.children.length > 0) {
-                
-                utils.addClass(layer.header, 'pane_shadow');
-                utils.addClass(layer.drawer, 'expandable');
-
-                layer.header.addEventListener('click', e => {
-                    utils.toggleExpanderParent({
-                        expandable: layer.drawer,
-                        accordeon: true,
-                        scrolly: document.querySelector('.mod_container > .scrolly')
-                    });
-                });
-
-                layer.drawer.appendChild(layer.panel);  
-
-                // Add icon which allows to expand / collaps panel.
-                utils._createElement({
-                    tag: 'i',
-                    options: {
-                        className: 'material-icons cursor noselect btn_header expander',
-                        title: 'Toggle layer panel'
-                    },
-                    appendTo: layer.header,
-                    eventListener: {
-                        event: 'click',
-                        funct: e => {
-                            e.stopPropagation();
-                            utils.toggleExpanderParent({
-                                expandable: layer.drawer,
-                                scrolly: document.querySelector('.mod_container > .scrolly')
-                            });
-                        }
-                    }
-                });
-            }
+            require('./layers_panel')(layer);
 
             // Push hook for display:true layer (default).
             if (layer.display) {
@@ -294,22 +262,24 @@ module.exports = () => {
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
 
+            // get layer data.
             layer.getLayer();
         });
     };
+    
     _xyz.layers.init();
+}
 
-    function attributionCheck() {
-        // get attribution links and check whether the className is in the attribution list.
-        let links = document.querySelectorAll('.attribution > .links > a');
-        for (let i = 0; i < links.length; ++i) {
-            let me = links[i].className;
-            let me_i = _xyz.attribution.indexOf(me);
-            if (_xyz.attribution.indexOf(links[i].className) >= 0) {
-                links[i].style.display = 'inline-block';
-            } else {
-                links[i].style.display = 'none';
-            }
+function attributionCheck() {
+    // get attribution links and check whether the className is in the attribution list.
+    let links = document.querySelectorAll('.attribution > .links > a');
+    for (let i = 0; i < links.length; ++i) {
+        let me = links[i].className;
+        let me_i = _xyz.attribution.indexOf(me);
+        if (_xyz.attribution.indexOf(links[i].className) >= 0) {
+            links[i].style.display = 'inline-block';
+        } else {
+            links[i].style.display = 'none';
         }
     }
 }

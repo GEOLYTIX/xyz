@@ -1,11 +1,15 @@
 const utils = require('./utils');
 const d3 = require('d3');
 
-function gridControl(layer) {
+module.exports = (layer, panel) => {
 
     let width = layer.drawer.clientWidth,
-        legend = utils.createElement('div', {
-            className: 'section report-block'
+        legend = utils._createElement({
+            tag: 'div',
+            options: {
+                className: 'section report-block'
+            },
+            appendTo: panel
         });
 
     // Select dropdown for size.
@@ -31,7 +35,7 @@ function gridControl(layer) {
     legend.appendChild(selColor);
 
     // Grid ration checkbox element.
-    let gridRatio = utils.checkbox(function(e){
+    let gridRatio = utils.checkbox(function (e) {
         // Checkbox event to toggle grid_ratio.
         layer.chkGridRatio = e.target.checked;
         layer.grid_ratio = layer.chkGridRatio;
@@ -41,18 +45,18 @@ function gridControl(layer) {
             _xyz.removeHook('grid_ratio');
         }
         layer.getLayer();
-        
-    },{
-        label: 'Display colour values as a ratio to the size value.', 
-        id: 'chkGridRatio',
-        className: 'ctrl',
-        checked: layer.grid_ratio || _xyz.hooks.grid_ratio
-    });
+
+    }, {
+            label: 'Display colour values as a ratio to the size value.',
+            id: 'chkGridRatio',
+            className: 'ctrl',
+            checked: layer.grid_ratio || _xyz.hooks.grid_ratio
+        });
 
     // Set checked from either hook.grid_ratio or layer.grid_ratio.
     layer.chkGridRatio = layer.grid_ratio || _xyz.hooks.grid_ratio;
     layer.grid_ratio = layer.chkGridRatio;
-    
+
     if (layer.chkGridRatio) _xyz.setHook('grid_ratio', true);
 
     legend.appendChild(gridRatio);
@@ -150,7 +154,6 @@ function gridControl(layer) {
             .style('font-family', '"PT Mono", monospace')
             .text('max')
             .attr('id', 'grid_legend_size__max');
-
     }
 
     yTrack += 20;
@@ -201,10 +204,4 @@ function gridControl(layer) {
     }
 
     svg.attr('height', yTrack + 43);
-
-    return legend;
-}
-
-module.exports = {
-    gridControl: gridControl
 }

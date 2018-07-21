@@ -4,11 +4,12 @@ async function get(req, res, fastify) {
 
   let
     table = req.query.table,
-    geom = typeof req.query.geom == 'undefined' || req.query.geom == 'undefined' ? 'geom' : req.query.geom,
-    cat = typeof req.query.cat == 'undefined' || req.query.cat == 'undefined' ? null : req.query.cat,
-    theme = typeof req.query.theme == 'undefined' || req.query.theme == 'undefined' ? null : req.query.theme,
-    filter = typeof req.query.filter == 'undefined' || req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
-    kmeans = parseInt(req.query.kmeans),
+    geom = req.query.geom == 'undefined' ? 'geom' : req.query.geom,
+    cat = req.query.cat == 'undefined' ? null : req.query.cat,
+    size = req.query.size == 'undefined' ? 1 : req.query.size,
+    theme = req.query.theme == 'undefined' ? null : req.query.theme,
+    filter = req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
+    kmeans = parseInt(1 / req.query.kmeans),
     dbscan = parseFloat(req.query.dbscan),
     west = parseFloat(req.query.west),
     south = parseFloat(req.query.south),
@@ -54,22 +55,19 @@ async function get(req, res, fastify) {
   var result = await db_connection.query(q);
   db_connection.release();
 
-  if (parseInt(result.rows[0].count) === 0) {
-    res.code(204).send();
-    return
-  }
+  // return 204 if no locations found within the envelope.
+  if (parseInt(result.rows[0].count) === 0) return res.code(204).send();
 
   let
     count = result.rows[0].count,
     xExtent = result.rows[0].xextent,
     xEnvelope = result.rows[0].xenvelope;
 
-  // Multiply kmeans with the ratio of the cross extent (xExtent) and the cross envelope (xEnvelope).
-  kmeans *= xExtent / xEnvelope;
-  kmeans ++;
+  if (kmeans >= count) kmeans = count;
 
-  // Check that kmeans is below feature count.
-  kmeans = kmeans < count ? parseInt(kmeans): count;
+  if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
+
+  dbscan *= xEnvelope;
 
   if (!theme) q = `
   SELECT
@@ -79,7 +77,7 @@ async function get(req, res, fastify) {
     SELECT
       kmeans_cid,
       ${geom} AS geom,
-      ST_ClusterDBSCAN(${geom}, ${xExtent * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      ST_ClusterDBSCAN(${geom}, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
     FROM (
       SELECT
         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
@@ -109,7 +107,7 @@ async function get(req, res, fastify) {
         cat,
         kmeans_cid,
         ${geom} AS geom,
-        ST_ClusterDBSCAN(${geom}, ${xExtent * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+        ST_ClusterDBSCAN(${geom}, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
       FROM (
         SELECT
           ${cat} AS cat,
@@ -128,17 +126,20 @@ async function get(req, res, fastify) {
   if (theme === 'graduated') q = `
   SELECT
     COUNT(${geom}) count,
+    SUM(size) size,
     SUM(cat) sum,
     ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
   FROM (
     SELECT
       cat,
+      size,
       kmeans_cid,
       ${geom} AS geom,
-      ST_ClusterDBSCAN(${geom}, ${xExtent * dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      ST_ClusterDBSCAN(${geom}, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
     FROM (
       SELECT
         ${cat} AS cat,
+        ${size} AS size,
         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
         ${geom}
       FROM ${table}
@@ -181,6 +182,7 @@ async function get(req, res, fastify) {
       geometry: JSON.parse(result.rows[record].geomj),
       properties: {
         count: parseInt(result.rows[record].count),
+        size: parseInt(result.rows[record].size),
         sum: result.rows[record].sum
       }
     }

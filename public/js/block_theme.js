@@ -1,96 +1,152 @@
 const utils = require('./utils');
 const d3 = require('d3');
 
-function themes(layer, element, val){
-    if(layer.style.themes){
-        
-        let block = utils._createElement({
-            tag: "div",
-            options: {
-                classList: "block"
+module.exports = (layer, panel) => {
+
+    // Create panel block.
+    let block = utils._createElement({
+        tag: 'div',
+        options: {
+            classList: 'section expandable'
+        },
+        appendTo: panel
+    });
+
+    // Create block title expander.
+    utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'btn_text cursor noselect',
+            textContent: 'Themes'
+        },
+        appendTo: block,
+        eventListener: {
+            event: 'click',
+            funct: e => {
+                e.stopPropagation();
+                utils.toggleExpanderParent({
+                    expandable: block,
+                    accordeon: true,
+                    scrolly: document.querySelector('.mod_container > .scrolly')
+                })
             }
-        });
-        
-        let title = utils._createElement({
-            tag: "span",
+        }
+    });
+
+    // Create panel block.
+    layer.legend = utils._createElement({
+        tag: 'div',
+        options: {
+            classList: 'legend'
+        }
+    });
+
+    // set theme to first theme from array
+    if (!layer.style.theme) layer.style.theme = layer.style.themes[0];
+
+    if (layer.style.themes) {
+
+        // Theme drop down
+        utils._createElement({
+            tag: 'span',
             options: {
-                textContent: "Select thematic style…"
+                textContent: 'Select thematic style…'
             },
             appendTo: block
         });
-        
+
         let select = utils._createElement({
-            tag: "select",
+            tag: 'select',
             options: {
-                innerHTML: "<option selected>Default</option>",
-                onchange: function(){
-                    
+                onchange: e => {
+
                     // clear any applied 'ni' filters when theme changes
-                   if(layer.style.theme && layer.filter[layer.style.theme.field] && layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
-                   
-                    
-                   if(this.nextSibling && this.nextSibling instanceof SVGElement){
-                       this.nextSibling.remove();
-                   } 
-                    
-                    this.selected ? layer.style.theme = false : layer.style.theme = layer.style.themes[this.value];
-                    
-                    applyThemes(layer, this.parentNode);
-                    
+                    if (layer.style.theme && layer.filter[layer.style.theme.field] && layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
+
+
+                    // if (e.target.nextSibling && e.target.nextSibling instanceof SVGElement) {
+                    //     e.target.nextSibling.remove();
+                    // }
+
+                    // e.target.selected ? layer.style.theme = false : layer.style.theme = layer.style.themes[this.value];
+
+                    // applyThemes(layer, e.target.parentNode);
+
                     layer.getLayer();
                 }
-            }
+            },
+            appendTo: block
         });
-        
-        Object.keys(layer.style.themes).map(function(key){
-            let opt = utils._createElement({
+
+        // add themes to dropdown
+        Object.keys(layer.style.themes).forEach(key => {
+            utils._createElement({
                 tag: 'option',
                 options: {
                     value: key,
-                    textContent: layer.style.themes[key].label   
+                    textContent: layer.style.themes[key].label || key
                 },
                 appendTo: select
             });
         });
-        
-        utils._createElement({
-            tag: "option",
+
+        if (layer.style.themes.length === 1) select.disabled = true;
+
+        // utils._createElement({
+        //     tag: 'option',
+        //     options: {
+        //         textContent: 'Create new theme…'
+        //     },
+        //     appendTo: select
+        // });
+
+    } else {
+
+        // Single theme title.
+        if (layer.style.theme.label) utils._createElement({
+            tag: 'span',
             options: {
-                disabled: true,
-                textContent: "Create new theme…"
+                classList: 'title',
+                textContent: layer.style.theme.label
             },
-            appendTo: select
+            appendTo: block
         });
-        
-        block.appendChild(select);
-        element.appendChild(block);
-        
-        if(val){
-            select.value = val;
-            applyThemes(layer, block, element);
-        }
-    } 
-    return element;
+    }
+
+    block.appendChild(layer.legend);
+
+    applyTheme(layer);
+
+    function applyTheme(layer) {
+
+        layer.legend.innerHtml = '';
+
+        if ((layer.format === 'mvt' || layer.format === 'geojson')
+            && layer.style.theme.type === 'categorized') polyCategorized(layer);
+
+        if ((layer.format === 'mvt' || layer.format === 'geojson')
+            && layer.style.theme.type === 'graduated') polyGraduated(layer);
+
+        if (layer.format === 'cluster'
+            && layer.style.theme.type === 'categorized') clusterCategorized(layer);
+
+        if (layer.format === 'cluster'
+            && layer.style.theme.type === 'graduated') clusterGraduated(layer);
+
+    }
 }
 
-function mvtGraduated(layer, legend) {
-    
+function polyGraduated(layer) {
+
     let width = layer.drawer.clientWidth;
-    
+
     let svg = d3
-        .select(legend)
+        .select(layer.legend)
         .append('svg')
         .attr('width', width),
-        y = 30;
-    
-    svg.append("text")
-    .text(layer.style.theme.label)
-    .attr("x", 0)
-    .attr("y", 20)
-    .style("font-weight", "bold")  
-    .attr("text-anchor", "left");
+        y = 10;
 
-    layer.style.theme.cat.map((cat) => {
+    layer.style.theme.cat.forEach(cat => {
 
         // // two columns
         // for (let i = 0; i < keys.length; i++) {
@@ -118,33 +174,23 @@ function mvtGraduated(layer, legend) {
             .text(cat.label || '');
 
         y += 20;
-    });  
-        
+    });
+
     // Set height of the svg element.
     svg.attr('height', y);
-
-    return legend;
 }
 
-function mvtCategorized(layer, legend) {
+function polyCategorized(layer) {
 
-    
     let width = layer.drawer.clientWidth;
 
     let svg = d3
-        .select(legend)
+        .select(layer.legend)
         .append('svg')
         .attr('width', width),
-        y = 30;
-    
-    svg.append("text")
-    .text(layer.style.theme.label)
-    .attr("x", 0)
-    .attr("y", 20)
-    .style("font-weight", "bold")  
-    .attr("text-anchor", "left");
+        y = 10;
 
-    Object.keys(layer.style.theme.cat).map((item) => {
+    Object.keys(layer.style.theme.cat).forEach(item => {
 
         // Attach box for the style category.
         svg.append('rect')
@@ -215,38 +261,31 @@ function mvtCategorized(layer, legend) {
             });
 
         y += 20
-    }       
+    }
 
     // Set height of the svg element.
     svg.attr('height', y);
-    
-    return legend;
 }
 
-function clusterCategorized(layer, legend) {
+function clusterCategorized(layer) {
 
     let width = layer.drawer.clientWidth;
 
     let svg = d3
-        .select(legend)
+        .select(layer.legend)
         .append('svg')
         .attr('width', width),
-        y = 30;
-    
-    svg.append("text")
-    .text(layer.style.theme.label)
-    .attr("x", 0)
-    .attr("y", 20)
-    .style("font-weight", "bold")  
-    .attr("text-anchor", "left");
-    
-    let _field = layer.style.theme.field ? layer.style.theme.field : layer.cluster_cat;
+        y = 10;
+
+    if (!layer.style.theme.field) return;
+
+    let _field = layer.style.theme.field;
 
     if (!layer.filter[_field]) layer.filter[_field] = {};
     if (!layer.filter[_field].in) layer.filter[_field].in = [];
     if (!layer.filter[_field].ni) layer.filter[_field].ni = [];
 
-    Object.keys(layer.style.theme.cat).map((item) => {
+    Object.keys(layer.style.theme.cat).forEach(item => {
 
         // // two columns
         // for (let i = 0; i < keys.length; i++) {
@@ -323,11 +362,11 @@ function clusterCategorized(layer, legend) {
     y += 25;
 
     // Add markerMulti default colour if not set.
-    if (!layer.style.markerMulti) layer.style.markerMulti = [400,'#333']
+    if (!layer.style.markerMulti) layer.style.markerMulti = [400, '#333']
 
     // Add section for clusters and competitors title
-    
-        svg.append('circle')
+
+    svg.append('circle')
         .attr('cx', 20)
         .attr('cy', y)
         .attr('r', 18)
@@ -382,31 +421,22 @@ function clusterCategorized(layer, legend) {
         y += 15 + (n * 20);
 
     } else { y += 15 };
-        
+
     // Set height of the svg element.
     svg.attr('height', y += 10);
-
-    return legend;
 }
 
-function clusterGraduated(layer, legend) {
-    
+function clusterGraduated(layer) {
+
     let width = layer.drawer.clientWidth;
 
     let svg = d3
-        .select(legend)
+        .select(layer.legend)
         .append('svg')
         .attr('width', width),
-        y = 30;
-    
-    svg.append("text")
-    .text(layer.style.theme.label)
-    .attr("x", 0)
-    .attr("y", 20)
-    .style("font-weight", "bold")  
-    .attr("text-anchor", "left");
+        y = 10;
 
-        layer.style.theme.cat.map((cat) => {
+    layer.style.theme.cat.forEach(cat => {
 
         // // two columns
         // for (let i = 0; i < keys.length; i++) {
@@ -432,44 +462,8 @@ function clusterGraduated(layer, legend) {
             .text(cat.label || '');
 
         y += 20;
-    });  
-        
+    });
+
     // Set height of the svg element.
     svg.attr('height', y);
-
-    return legend;
-}
-
-/* Apply themes to layer */
-function applyThemes(layer, container, parent){
-    
-    let _parent;
-    
-    parent ? _parent = parent :  _parent = container.parentNode; 
-    
-    if(layer.style && layer.style.theme){
-        if(layer.format === 'mvt' || layer.format === 'geojson'){
-            
-            if(layer.style.theme.type === 'categorized'){
-                _parent.appendChild(mvtCategorized(layer, container));
-            } 
-            else if(layer.style.theme.type === 'graduated'){
-                _parent.appendChild(mvtGraduated(layer, container));
-            }
-        }
-        if(layer.format === "cluster"){
-            if(layer.style.theme.type === 'categorized'){
-                _parent.appendChild(clusterCategorized(layer, container));
-            }
-            else if(layer.style.theme.type === 'graduated'){
-                _parent.appendChild(clusterGraduated(layer, container));
-            }
-        }
-    }
-}
-
-
-module.exports = {
-    themes: themes,
-    applyThemes: applyThemes
 }

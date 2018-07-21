@@ -14,11 +14,13 @@ function getLayer() {
                 maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
             
             this.table = zoom > maxZoomKey ?
-            this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
-                null : this.arrayZoom[zoom];
+                this.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
+                    null : this.arrayZoom[zoom];
         }
+
         // Make drawer opaque if no table present.
         this.drawer.style.opacity = !this.table ? 0.4 : 1;
+
         if(this.table) return loadLayer(this);
     }
 }
@@ -40,9 +42,10 @@ function loadLayer(layer) {
         dbs: layer.dbs,
         table: layer.table,
         geom: layer.geom,
-        cat: layer.style.theme ? layer.style.theme.field : layer.cluster_cat,
-        kmeans: layer.cluster_kmeans * window.devicePixelRatio,
-        dbscan: layer.cluster_dbscan * window.devicePixelRatio,
+        cat: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : 'undefined',
+        size: layer.style.theme && layer.style.theme.size ? layer.style.theme.size : 'undefined',
+        kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
+        dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
         theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : 'undefined',
         filter: JSON.stringify(layer.filter),
         west: bounds.getWest(),
@@ -88,6 +91,9 @@ function addClusterToLayer(cluster, layer) {
     // Get max count in cluster.
     let c_max = cluster.reduce((c_max, f) => Math.max(c_max, f.properties.count), 0);
 
+    let csize_max = layer.style.theme && layer.style.theme.size ?
+        cluster.reduce((csize_max, f) => Math.max(c_max, f.properties.size), 0) : null;
+
     // Remove existing layer from Leaflet.
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
@@ -100,7 +106,7 @@ function addClusterToLayer(cluster, layer) {
             let icon = layer.style.marker || svg_symbols.target([400, '#aaa']);
 
             // Set tooltip for desktop if corresponding layer has hover property.
-            let tooltip = (layer.hover && view_mode === 'desktop') || false;
+            let tooltip = (layer.theme && layer.theme.hover && view_mode === 'desktop') || false;
 
             // Check whether layer has categorized theme and more than a single location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
@@ -145,6 +151,15 @@ function addClusterToLayer(cluster, layer) {
                 point.properties.count === 1 ?
                     layer.style.markerMin :
                     layer.style.markerMin + layer.style.markerMax / c_max * point.properties.count;
+
+            if (csize_max) {
+            // Define iconSize from number of locations in cluster.
+            iconSize = layer.markerLog ?
+                layer.style.markerMin + layer.style.markerMax / Math.log(csize_max) * Math.log(point.properties.size) :
+                point.properties.size === 1 ?
+                    layer.style.markerMin :
+                    layer.style.markerMin + layer.style.markerMax / csize_max * point.properties.size;
+            }
 
             // Create marker from icon and iconSize.
             let marker = L.marker(latlng, {

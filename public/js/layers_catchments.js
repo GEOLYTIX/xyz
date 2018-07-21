@@ -1,12 +1,15 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols.js');
 
-function catchmentControl(layer) {
+module.exports = (layer, panel) => {
 
-    let ctrl = utils.createElement('div', {
-        className: 'section'
+    let ctrl = utils._createElement({
+        tag: 'div',
+        options: {
+            className: 'section'
+        },
+        appendTo: panel
     });
-
 
     // Mode
     utils._createElement({
@@ -204,8 +207,8 @@ function catchmentControl(layer) {
         eventListener: {
             event: 'click',
             funct: e => {
-                if (!utils.hasClass(btnCatchment,'disabled')) {
-                    utils.addClass(btnCatchment,'disabled')
+                if (!utils.hasClass(btnCatchment, 'disabled')) {
+                    utils.addClass(btnCatchment, 'disabled')
                     document.getElementById('Map').style.cursor = 'crosshair';
                     _xyz.map.on('click', (e) => getCatchments(e));
                 }
@@ -214,7 +217,8 @@ function catchmentControl(layer) {
     });
 
     setParams();
-    function setParams(){
+
+    function setParams() {
         sliMinutes.min = layer.catchments.modes[mode].minMin;
         sliMinutes.max = layer.catchments.modes[mode].maxMin;
         sliMinutes.value = layer.catchments.modes[mode].defMin;
@@ -227,20 +231,21 @@ function catchmentControl(layer) {
         sliReach.value = reach;
         lblReach.innerHTML = reach;
     }
+}
 
-    function getCatchments(e, distance){
-        layer.loader.style.display = 'block';
-        _xyz.map.off('click');
-        document.getElementById('Map').style.cursor = '';
+function getCatchments(e) {
+    layer.loader.style.display = 'block';
+    _xyz.map.off('click');
+    document.getElementById('Map').style.cursor = '';
 
-        // Set layerMark on origin
-        let layerMark = L.geoJson({
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [e.latlng.lng, e.latlng.lat]
-            }
-        }, {
+    // Set layerMark on origin
+    let layerMark = L.geoJson({
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [e.latlng.lng, e.latlng.lat]
+        }
+    }, {
             interactive: false,
             pane: "tmp",
             pointToLayer: function (feature, latlng) {
@@ -254,82 +259,75 @@ function catchmentControl(layer) {
             }
         }).addTo(_xyz.map);
 
-        let xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', host +  'api/catchments?' + utils.paramString({
-            lng: e.latlng.lng,
-            lat: e.latlng.lat,
-            distance: sliMinutes.value * 60,
-            detail: sliDetail.value,
-            reach: sliReach.value,
-            mode: selMode.options[selMode.selectedIndex].value,
-            provider: selProvider.options[selProvider.selectedIndex].value,
-            dbs: layer.dbs,
-            table_target: layer.table,
-            geom_target: layer.geom
-        }));
-        
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = e => {
+    xhr.open('GET', host + 'api/catchments?' + utils.paramString({
+        lng: e.latlng.lng,
+        lat: e.latlng.lat,
+        distance: sliMinutes.value * 60,
+        detail: sliDetail.value,
+        reach: sliReach.value,
+        mode: selMode.options[selMode.selectedIndex].value,
+        provider: selProvider.options[selProvider.selectedIndex].value,
+        dbs: layer.dbs,
+        table_target: layer.table,
+        geom_target: layer.geom
+    }));
 
-            if (e.target.status === 401) {
-                document.getElementById('timeout_mask').style.display = 'block';
-                console.log(e.target.response);
-                return;
-            }
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = e => {
 
-            utils.removeClass(btnCatchment, 'disabled');
+        if (e.target.status === 401) {
+            document.getElementById('timeout_mask').style.display = 'block';
+            console.log(e.target.response);
+            return;
+        }
 
-            layer.getLayer();
+        utils.removeClass(btnCatchment, 'disabled');
 
-            let json = JSON.parse(e.target.responseText);
+        layer.getLayer();
 
-            if (chkCatchmentsConstruction.control.checked) {
-                let layerTIN = L.geoJson(json.tin, {
-                    interactive: false,
-                    pane: 'tmp',
-                    style: {
-                        stroke: true,
-                        color: "#999",
+        let json = JSON.parse(e.target.responseText);
+
+        if (chkCatchmentsConstruction.control.checked) {
+            let layerTIN = L.geoJson(json.tin, {
+                interactive: false,
+                pane: 'tmp',
+                style: {
+                    stroke: true,
+                    color: "#999",
+                    weight: 1,
+                    fill: false
+                }
+            }).addTo(_xyz.map);
+
+            let layerPoints = L.geoJson(json.circlePoints, {
+                pointToLayer: function (feature, latlng) {
+                    return new L.CircleMarker(latlng, {
+                        radius: 5,
+                        color: "#555",
                         weight: 1,
-                        fill: false
-                    }
-                }).addTo(_xyz.map);
+                        fill: false,
+                        interactive: false,
+                        pane: 'tmp'
+                    });
+                }
+            }).addTo(_xyz.map);
 
-                let layerPoints = L.geoJson(json.circlePoints, {
-                    pointToLayer: function (feature, latlng) {
-                        return new L.CircleMarker(latlng, {
-                            radius: 5,
-                            color: "#555",
-                            weight: 1,
-                            fill: false,
-                            interactive: false,
-                            pane: 'tmp'
-                        });
-                    }
-                }).addTo(_xyz.map);
-
-                let layerSample = L.geoJson(json.samplePoints, {
-                    pointToLayer: function (feature, latlng) {
-                        return new L.CircleMarker(latlng, {
-                            radius: 2,
-                            color: "#333",
-                            fillColor: "#333",
-                            fill: true,
-                            fillOpacity: 1,
-                            interactive: false,
-                            pane: 'tmp'
-                        });
-                    }
-                }).addTo(_xyz.map);
-            }
-        };
-        xhr.send();
-    }
-
-    return ctrl;
-}
-
-module.exports = {
-    catchmentControl: catchmentControl
+            let layerSample = L.geoJson(json.samplePoints, {
+                pointToLayer: function (feature, latlng) {
+                    return new L.CircleMarker(latlng, {
+                        radius: 2,
+                        color: "#333",
+                        fillColor: "#333",
+                        fill: true,
+                        fillOpacity: 1,
+                        interactive: false,
+                        pane: 'tmp'
+                    });
+                }
+            }).addTo(_xyz.map);
+        }
+    };
+    xhr.send();
 }
