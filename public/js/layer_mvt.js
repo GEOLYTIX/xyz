@@ -31,7 +31,7 @@ function getLayer(){
                 dbs: layer.dbs,
                 table: layer.table,
                 qID: layer.qID,
-                properties: layer.properties,
+                properties: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : 'undefined',
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
                 tilecache: layer.tilecache,

@@ -59,19 +59,13 @@ module.exports = (layer, panel) => {
             tag: 'select',
             options: {
                 onchange: e => {
+                    layer.legend.innerHTML = '';
 
                     // clear any applied 'ni' filters when theme changes
                     if (layer.style.theme && layer.filter[layer.style.theme.field] && layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
 
-
-                    // if (e.target.nextSibling && e.target.nextSibling instanceof SVGElement) {
-                    //     e.target.nextSibling.remove();
-                    // }
-
-                    // e.target.selected ? layer.style.theme = false : layer.style.theme = layer.style.themes[this.value];
-
-                    // applyThemes(layer, e.target.parentNode);
-
+                    layer.style.theme = layer.style.themes[e.target.selectedIndex];
+                    applyTheme(layer);
                     layer.getLayer();
                 }
             },
