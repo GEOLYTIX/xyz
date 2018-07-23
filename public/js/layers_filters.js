@@ -55,8 +55,8 @@ module.exports = (layer, panel) => {
                     table_source: layer.table,
                     table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
                     filter: JSON.stringify(layer.filter),
-                    geom_target: undefined,
-                    geom_source: undefined
+                    geom_target:  _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].geomq || undefined,
+                    geom_source: layer.geom || undefined
                 }));
 
                 layer.xhr.onload = e => {

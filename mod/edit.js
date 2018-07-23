@@ -78,6 +78,8 @@ async function newAggregate(req, res, fastify) {
         WHERE true ${filter_sql}
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
+    
+    //console.log(q);
 
     var db_connection = await fastify.pg[req.query.dbs].connect();
     var result = await db_connection.query(q);
