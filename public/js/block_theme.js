@@ -42,7 +42,7 @@ module.exports = (layer, panel) => {
     });
 
     // set theme to first theme from array
-    if (!layer.style.theme) layer.style.theme = layer.style.themes[0];
+    if (!layer.style.theme) layer.style.theme = layer.style.themes[0] || undefined;
 
     if (layer.style.themes) {
 
@@ -108,25 +108,27 @@ module.exports = (layer, panel) => {
     }
 
     block.appendChild(layer.legend);
-
+    
     applyTheme(layer);
-
+    
     function applyTheme(layer) {
-
-        layer.legend.innerHtml = '';
-
-        if ((layer.format === 'mvt' || layer.format === 'geojson')
+        
+        if(layer.style.theme){
+            
+            layer.legend.innerHtml = '';
+            
+            if ((layer.format === 'mvt' || layer.format === 'geojson')
             && layer.style.theme.type === 'categorized') polyCategorized(layer);
-
-        if ((layer.format === 'mvt' || layer.format === 'geojson')
+            
+            if ((layer.format === 'mvt' || layer.format === 'geojson')
             && layer.style.theme.type === 'graduated') polyGraduated(layer);
-
-        if (layer.format === 'cluster'
+            
+            if (layer.format === 'cluster'
             && layer.style.theme.type === 'categorized') clusterCategorized(layer);
-
-        if (layer.format === 'cluster'
+            
+            if (layer.format === 'cluster'
             && layer.style.theme.type === 'graduated') clusterGraduated(layer);
-
+        }
     }
 }
 
@@ -141,7 +143,6 @@ function polyGraduated(layer) {
         y = 10;
 
     layer.style.theme.cat.forEach(cat => {
-
         // // two columns
         // for (let i = 0; i < keys.length; i++) {
         //     y = i % 2 ? y : y += 25;
@@ -185,7 +186,6 @@ function polyCategorized(layer) {
         y = 10;
 
     Object.keys(layer.style.theme.cat).forEach(item => {
-
         // Attach box for the style category.
         svg.append('rect')
             .attr('x', 4)

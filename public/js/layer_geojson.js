@@ -7,7 +7,7 @@ function getLayer(){
         zoom = _xyz.map.getZoom();
     
     if(!layer.table){
-        zoomKeys = Object.keys(layer.arrayZoom),
+        let zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
         layer.table = zoom > maxZoomKey ?
         layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
