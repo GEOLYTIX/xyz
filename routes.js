@@ -31,7 +31,9 @@ module.exports = fastify => {
             handler: async (req, res) => {
 
                 const user = fastify.jwt.decode(req.cookies.xyz_user);
-                const session = fastify.jwt.decode(req.cookies.xyz_session);
+
+                let session = {};
+                if (req.cookies.xyz_session) session = fastify.jwt.decode(req.cookies.xyz_session);
 
                 let hooks = { hooks: Object.assign(req.query, session) };
 
@@ -148,6 +150,15 @@ module.exports = fastify => {
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
                 require('./mod/location').select(req, res, fastify);
+            }
+        });
+
+        fastify.route({
+            method: 'GET',
+            url: '/api/location/select_ll',
+            beforeHandler: fastify.auth([fastify.authAccess]),
+            handler: (req, res) => {
+                require('./mod/location').select_ll(req, res, fastify);
             }
         });
 

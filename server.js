@@ -14,6 +14,16 @@ const fastify = require('fastify')({
 
 fastify
     .register(require('fastify-helmet'), {
+        // contentSecurityPolicy: {
+        //     directives: {
+        //         defaultSrc: ["'self'"],
+        //         scriptSrc: ["'self'"],
+        //         styleSrc: ["'self'"]
+        //     },
+        //     loose: true,
+        //     setAllHeaders: true,
+        //     browserSniff: true
+        // },
         noCache: true
     })
     .register(require('fastify-formbody'))
