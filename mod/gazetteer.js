@@ -12,7 +12,7 @@ async function autocomplete(req, res, fastify) {
     if (!res.sent && locale.gazetteer.provider) await eval(locale.gazetteer.provider + '_placesAutoComplete')(req, res, locale.gazetteer);
 
     //if (!res.sent) res.code(200).send([{label: 'no results'}]);
-    if (!res.sent) res.code(200).send([]);
+    if (!res.sent && !locale.gazetteer.provider) res.code(200).send([]);
 }
 
 async function placesAutoComplete(req, res, locale, fastify) {
@@ -21,8 +21,8 @@ async function placesAutoComplete(req, res, locale, fastify) {
         SELECT
             ${dataset.label} AS label,
             ${locale.layers[dataset.layer].qID || 'id'} AS id,
-            ST_X(ST_Centroid(${locale.layers[dataset.layer].geom || 'geom'})) AS lng,
-            ST_Y(ST_Centroid(${locale.layers[dataset.layer].geom || 'geom'})) AS lat
+            ST_X(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lng,
+            ST_Y(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lat
             FROM ${dataset.table}
             WHERE ${dataset.label} ILIKE '${decodeURIComponent(req.query.q)}%'
             ORDER BY length(${dataset.label})
