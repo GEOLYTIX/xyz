@@ -70,8 +70,8 @@ module.exports = async fastify => {
             url: '/admin/workspace/get',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {
-                const user = fastify.jwt.decode(req.cookies.xyz_user);
-                res.send(global.workspace[user.access].config);
+                const token = fastify.jwt.decode(req.cookies.xyz_token);
+                res.send(global.workspace[token.access].config);
             }
         });
 

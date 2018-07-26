@@ -35,7 +35,7 @@ function getLayer(){
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
                 tilecache: layer.tilecache,
-                token: cookies.xyz_user,
+                token: cookies.xyz_token,
                 noredirect: true
             }),
             options = {

@@ -12,11 +12,11 @@ async function get(req, res, fastify) {
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north),
-        user = fastify.jwt.decode(req.cookies.xyz_user);
+        token = fastify.jwt.decode(req.cookies.xyz_token);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, geom, id, properties]
-        .some(val => (typeof val === 'string' && global.workspace[user.access].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
     
