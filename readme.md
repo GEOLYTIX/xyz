@@ -793,6 +793,10 @@ Post request body:
 * sql_filter: Field name for stored SQL lookup filter.
 * infoj: The infoj object describes the structured property data to be queried and returned for the location.
 
+### /api/location/select_ll
+
+Request location data from a PostgreSQL table by Latitude and Longitude.
+
 ### /api/location/new
 
 Creates a new location record in database.

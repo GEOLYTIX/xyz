@@ -9,7 +9,10 @@ async function autocomplete(req, res, fastify) {
 
     if (!res.sent && locale.gazetteer.datasets) await placesAutoComplete(req, res, locale, fastify);
 
-    if (!res.sent) eval(locale.gazetteer.provider + '_placesAutoComplete')(req, res, locale.gazetteer);
+    if (!res.sent && locale.gazetteer.provider) await eval(locale.gazetteer.provider + '_placesAutoComplete')(req, res, locale.gazetteer);
+
+    //if (!res.sent) res.code(200).send([{label: 'no results'}]);
+    if (!res.sent) res.code(200).send([]);
 }
 
 async function placesAutoComplete(req, res, locale, fastify) {

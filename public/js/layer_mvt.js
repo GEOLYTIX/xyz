@@ -40,7 +40,7 @@ function getLayer(){
             }),
             options = {
                 rendererFactory: L.svg.tile,
-                interactive: (_xyz.select && layer.infoj && layer.qID) || false,
+                interactive: (layer.infoj && layer.qID) || false,
                 pane: layer.pane[0],
                 getFeatureId: (f) => f.properties.id,
                 vectorTileLayerStyles: {}
@@ -122,11 +122,10 @@ function getLayer(){
             
            
             })
-            .on('mouseover', (e) => {
+            .on('mouseover', e => {
                 e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || {'color':'#090'});
-                
             })
-            .on('mouseout', (e) => {
+            .on('mouseout', e => {
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
             .addTo(_xyz.map);

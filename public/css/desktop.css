@@ -332,6 +332,7 @@ input[type=range]::-moz-range-thumb {
     background-color: white;
     margin: 0;
     padding: 0;
+    z-index: 999;
     box-shadow: 0 3px 3px -3px #000;
     width: 100%; }
     #Gazetteer > ul li {
