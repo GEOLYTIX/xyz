@@ -9,7 +9,7 @@ function bar_chart(layer, chart){
     
     let data = _xyz.locales[_xyz.locale].layers[layer].charts[chart];
     
-    if(!data[0].y) return;
+    if(!data[0] || !data[0].y) return;
     
     let div = utils.createElement('div');
     
@@ -21,10 +21,11 @@ function bar_chart(layer, chart){
     // Define the div for the tooltip
     let tltp = d3.select(div).append("div")	
     .attr("class", "chart-tooltip")				
-    .style("opacity", 0);
+    .style("opacity", 0)
+    .style("width", "auto");
     
     // set the dimensions of the canvas
-    let margin = {top: 30, right: 10, bottom: 20, left: 30},
+    let margin = {top: 30, right: 20, bottom: 20, left: 35},
         width = 290 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
     
@@ -44,7 +45,7 @@ function bar_chart(layer, chart){
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     svg.append("text")
-        .attr("x", 20 + margin.left)             
+        .attr("x", margin.left)             
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")  
         .style("font-size", "12px") 
@@ -89,6 +90,7 @@ function bar_chart(layer, chart){
                .style("opacity", 0);
     });
 
+    let formatValue = d3.format(".2s");
     
     // add the x Axis
     svg.append("g")
@@ -105,7 +107,9 @@ function bar_chart(layer, chart){
     
       // add the y Axis
     svg.append("g").call(d3.axisLeft(y).tickFormat(function(d, i){
-        return (d == Math.floor(d)) ? d : "";
+        if(d > 999) d = formatValue(d);
+        if(d < 1000) d = (d == Math.floor(d)) ? d : "";
+        return d;
     }));
     
      // text label for the y axis

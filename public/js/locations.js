@@ -247,10 +247,11 @@ module.exports = () => {
                             //console.log(layer.charts[chart]);
                         }
                     };
+                    
                     if(_arr) xhr.send(JSON.stringify({
                         dbs: layer.dbs,
                         table: location.table,
-                        qID: layer.qID,
+                        qID: layer.qID || 'id',
                         id: location.id,
                         series: _arr.join(",")
                     }));
