@@ -247,11 +247,11 @@ async function catchment_calc(req, res, fastify) {
     
     let table_target = req.query.table_target,
         geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
-        user = fastify.jwt.decode(req.cookies.xyz_user);
+        token = fastify.jwt.decode(req.cookies.xyz_token);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table_target, geom_target]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 

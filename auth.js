@@ -22,8 +22,11 @@ function init(fastify) {
             url: '/logout',
             handler: (req, res) => {
                 return res
-                    .setCookie('xyz_session', fastify.jwt.sign({ redirect: global.dir + '/' }), { path: process.env.DIR || '/' })
-                    .setCookie('xyz_user', fastify.jwt.sign({ access: 'public', status: 'Logged out from application' }), { path: process.env.DIR || '/' })
+                    .setCookie('xyz_token', fastify.jwt.sign({
+                        redirect: global.dir + '/',
+                        access: 'public',
+                        status: 'Logged out from application'
+                    }), { path: process.env.DIR || '/' })
                     .redirect(process.env.DIR || '/');
             }
         });
@@ -33,25 +36,21 @@ function init(fastify) {
             url: '/login',
             handler: (req, res) => {
 
-                // Get status from user token.
-                let msg = '';
-                if (req.cookies && req.cookies.xyz_user) {
-                    const user_token = fastify.jwt.decode(req.cookies.xyz_user);
-                    msg = user_token.status;
+                const token = (req.cookies && req.cookies.xyz_token) ?
+                    fastify.jwt.decode(req.cookies.xyz_token) : { access: 'public', status: '' };
 
-                    // Empty status in user token.
-                    res.setCookie('xyz_user', fastify.jwt.sign({
-                        access: 'public',
-                        status: ''
-                    }), { path: process.env.DIR || '/' });
-                }
+                // Empty status in user token.
+                // res.setCookie('xyz_token', fastify.jwt.sign({
+                //     access: 'public',
+                //     status: ''
+                // }), { path: process.env.DIR || '/' });
 
                 // Render login view with status msg.
                 res
                     .type('text/html')
                     .send(require('jsrender')
                         .templates('./views/login.html')
-                        .render({ dir: global.dir, msg: msg }));
+                        .render({ dir: global.dir, msg: token.status }));
             }
         });
 
@@ -61,13 +60,13 @@ function init(fastify) {
             handler: async (req, res) => {
 
                 let redirect = '';
-                if (req.cookies && req.cookies.xyz_session) {
-                    const session_token = fastify.jwt.decode(req.cookies.xyz_session);
-                    redirect = session_token.redirect;
-                    delete session_token.redirect;
+                if (req.cookies && req.cookies.xyz_token) {
+                    const token = fastify.jwt.decode(req.cookies.xyz_token);
+                    redirect = token.redirect;
+                    delete token.redirect;
 
                     // Empty status in user token.
-                    res.setCookie('xyz_session', fastify.jwt.sign(session_token), {
+                    res.setCookie('xyz_token', fastify.jwt.sign(token), {
                         path: process.env.DIR || '/'
                     });
                 }
@@ -83,7 +82,7 @@ function init(fastify) {
 
                 if (!user) {
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             status: 'User account not found in access control list.'
                         }), { path: process.env.DIR || '/' })
                         .redirect(global.dir + '/login');
@@ -91,7 +90,7 @@ function init(fastify) {
 
                 if (!user.verified) {
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             email: user.email,
                             status: 'User account email not yet verified.'
                         }), { path: process.env.DIR || '/' })
@@ -100,7 +99,7 @@ function init(fastify) {
 
                 if (!user.approved) {
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             email: user.email,
                             status: 'User account not yet approved by site administrator.'
                         }), { path: process.env.DIR || '/' })
@@ -112,7 +111,7 @@ function init(fastify) {
 
                     // Password match
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             email: user.email,
                             verified: user.verified,
                             approved: user.approved,
@@ -126,9 +125,9 @@ function init(fastify) {
                     // Password does NOT match.
                     var user_db = await fastify.pg.users.connect();
                     var result = await user_db.query(`
-                UPDATE ${user_table} SET failedattempts = failedattempts + 1
-                WHERE email = $1
-                RETURNING failedattempts;`,
+                        UPDATE ${user_table} SET failedattempts = failedattempts + 1
+                        WHERE email = $1
+                        RETURNING failedattempts;`,
                         [req.body.email]);
                     user_db.release();
 
@@ -139,10 +138,10 @@ function init(fastify) {
                         const verificationtoken = require('crypto').randomBytes(20).toString('hex');
                         var user_db = await fastify.pg.users.connect();
                         await user_db.query(`
-                    UPDATE ${user_table} SET
-                        verified = false,
-                        verificationtoken = '${verificationtoken}'
-                    WHERE email = $1;`,
+                            UPDATE ${user_table} SET
+                                verified = false,
+                                verificationtoken = '${verificationtoken}'
+                            WHERE email = $1;`,
                             [req.body.email]);
                         user_db.release();
 
@@ -156,7 +155,7 @@ function init(fastify) {
                         });
 
                         return res
-                            .setCookie('xyz_user', fastify.jwt.sign({
+                            .setCookie('xyz_token', fastify.jwt.sign({
                                 email: user.email,
                                 status: `${global.failed_attempts} failed login attempts. Account verification has been removed. <br />`
                                     + `Please check your inbox and confirm that you are the account holder.`
@@ -165,7 +164,7 @@ function init(fastify) {
                     }
 
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             email: user.email,
                             status: `Wrong password. ${result.rows[0].failedattempts} failed login attempts.`
                         }), { path: process.env.DIR || '/' })
@@ -196,7 +195,7 @@ function init(fastify) {
                 // Backend validation of email address.
                 if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             email: email,
                             status: `Not a valid email address.`
                         }), { path: process.env.DIR || '/' })
@@ -233,7 +232,7 @@ function init(fastify) {
                     });
 
                     return res
-                        .setCookie('xyz_user', fastify.jwt.sign({
+                        .setCookie('xyz_token', fastify.jwt.sign({
                             email: user.email,
                             status: `You have reset the password <br />`
                                 + `A verification mail has been sent to your registered address. <br />`
@@ -263,7 +262,7 @@ function init(fastify) {
                 });
 
                 return res
-                    .setCookie('xyz_user', fastify.jwt.sign({
+                    .setCookie('xyz_token', fastify.jwt.sign({
                         email: email,
                         status: `We registered your email address in the access control list. <br />`
                             + `A verification mail has been sent to your registered address. <br />`
@@ -478,41 +477,36 @@ function authToken(req, res, fastify, access, done) {
     // Pass through if access is public.
     if (access === 'public') {
 
-        var user_cookie = fastify.jwt.sign({ access: 'public' });
-        var session_cookie = fastify.jwt.sign({});
+        var cookie = fastify.jwt.sign({ access: 'public' });
 
-        if (!req.cookies.xyz_user) req.cookies.xyz_user = user_cookie;
-        if (!req.cookies.xyz_session) req.cookies.xyz_session = session_cookie;
+        if (!req.cookies.xyz_token) req.cookies.xyz_token = cookie;
 
         // Generate an anonymous user token and an empty session token.
         res
-            .setCookie('xyz_user', user_cookie, {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', session_cookie, {
+            .setCookie('xyz_token', cookie, {
                 path: process.env.DIR || '/'
             });
 
         return done();
     }
 
-    // Get user_token from either the cookie or a query.
-    let user_token;
-    if (req.cookies && req.cookies.xyz_user) {
-        user_token = fastify.jwt.decode(req.cookies.xyz_user);
+    // Get token from either the cookie or a query.
+    let token;
+    if (req.cookies && req.cookies.xyz_token) {
+        token = fastify.jwt.decode(req.cookies.xyz_token);
     }
     if (req.query.token) {
-        user_token = fastify.jwt.decode(req.query.token);
+        token = fastify.jwt.decode(req.query.token);
     }
 
-    // No user_token found.
-    if (!user_token) {
+    // No token found.
+    if (!token) {
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign({ anonymous: true }), {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+            .setCookie('xyz_token', fastify.jwt.sign({ 
+                anonymous: true,
+                redirect: req.req.url
+             }), {
                 path: process.env.DIR || '/'
             });
 
@@ -521,20 +515,18 @@ function authToken(req, res, fastify, access, done) {
         return res.redirect(global.dir + '/login');
     }
 
-    // Get the current time and the user_token age.
+    // Get the current time and the token age.
     let time_now = parseInt(Date.now() / 1000),
-        token_age = time_now - user_token.iat;
+        token_age = time_now - token.iat;
 
     // Token age exceeds timeout.
     if (token_age >= global.timeout) {
-        user_token.status = 'Session timed out.';
+        token.status = 'Session timed out.';
+        token.redirect = req.req.url;
 
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign(user_token), {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+            .setCookie('xyz_token', fastify.jwt.sign(token), {
                 path: process.env.DIR || '/'
             });
 
@@ -544,15 +536,13 @@ function authToken(req, res, fastify, access, done) {
     }
 
     // Check admin privileges.
-    if (access === 'admin' && !user_token.admin) {
-        user_token.status = 'Admin authorization required for the requested route.';
+    if (access === 'admin' && !token.admin) {
+        token.status = 'Admin authorization required for the requested route.';
+        token.redirect = req.req.url;
 
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign(user_token), {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+            .setCookie('xyz_token', fastify.jwt.sign(token), {
                 path: process.env.DIR || '/'
             });
 
@@ -560,13 +550,14 @@ function authToken(req, res, fastify, access, done) {
     }
 
     // Check whether user token has an email field.
-    if (!user_token.email) {
+    if (!token.email) {
+
+        token.access = 'public';
+        token.redirect = req.req.url;
+
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign({ access: 'public' }), {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+            .setCookie('xyz_token', fastify.jwt.sign(token), {
                 path: process.env.DIR || '/'
             });
 
@@ -576,15 +567,13 @@ function authToken(req, res, fastify, access, done) {
     }
 
     // Check whether user token is verified.
-    if (!user_token.verified) {
-        user_token.status = 'User email not verified.';
+    if (!token.verified) {
+        token.status = 'User email not verified.';
+        token.redirect = req.req.url;
 
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign(user_token), {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+            .setCookie('xyz_token', fastify.jwt.sign(token), {
                 path: process.env.DIR || '/'
             });
 
@@ -594,15 +583,13 @@ function authToken(req, res, fastify, access, done) {
     }
 
     // Check whether user token is verified and approved.
-    if (!user_token.approved) {
-        user_token.status = 'User email not approved by administrator.';
+    if (!token.approved) {
+        token.status = 'User email not approved by administrator.';
+        token.redirect = req.req.url;
 
         res
             .code(401)
-            .setCookie('xyz_user', fastify.jwt.sign(user_token), {
-                path: process.env.DIR || '/'
-            })
-            .setCookie('xyz_session', fastify.jwt.sign({ redirect: req.req.url }), {
+            .setCookie('xyz_token', fastify.jwt.sign(token), {
                 path: process.env.DIR || '/'
             });
 
@@ -612,10 +599,9 @@ function authToken(req, res, fastify, access, done) {
     }
 
     // Issue a new user token with current time.
-    user_token.iat = time_now;
-    user_token = fastify.jwt.sign(user_token);
+    token.iat = time_now;
 
-    res.setCookie('xyz_user', user_token, {
+    res.setCookie('xyz_token', fastify.jwt.sign(token), {
         path: process.env.DIR || '/'
     });
 

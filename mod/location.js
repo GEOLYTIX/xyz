@@ -15,11 +15,11 @@ async function select(req, res, fastify) {
         geomq = typeof req.body.geomq == 'undefined' ? 'geom' : req.body.geomq,
         geomdisplay = typeof req.body.geomdisplay == 'undefined' ? '' : req.body.geomdisplay,
         sql_filter = typeof req.body.sql_filter == 'undefined' ? '' : req.body.sql_filter,
-        user = fastify.jwt.decode(req.cookies.xyz_user);
+        token = fastify.jwt.decode(req.cookies.xyz_token);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, qID, geomj, geomq, geomdisplay, sql_filter]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
     
@@ -91,17 +91,17 @@ async function select_ll(req, res, fastify) {
         geomq = typeof req.query.geomq == 'undefined' ? 'geom' : req.query.geomq,
         lat = parseFloat(req.query.lat),
         lng = parseFloat(req.query.lng),
-        user = fastify.jwt.decode(req.cookies.xyz_user);
+        token = fastify.jwt.decode(req.cookies.xyz_token);
 
     //http://localhost:3000/coop/api/location/select_ll?dbs=XYZ&locale=UK&layer=seamless_towns&table=coop.sl&geom=geom_4326&geomq=geom_4326&lat=51.046466499419935&lng=0.36126136779785156
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, geom, geomj, geomq, locale, layer]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[user.access].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
     
-    let infoj = global.workspace[user.access].config.locales[locale].layers[layer].infoj;
+    let infoj = global.workspace[token.access].config.locales[locale].layers[layer].infoj;
         fields = '';
 
     infoj.forEach(entry => {

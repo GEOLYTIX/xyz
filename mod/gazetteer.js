@@ -2,8 +2,8 @@ module.exports = { autocomplete, googleplaces }
 
 async function autocomplete(req, res, fastify) {
 
-    let user = fastify.jwt.decode(req.cookies.xyz_user),
-        locale = global.workspace[user.access].config.locales[req.query.locale];
+    let token = fastify.jwt.decode(req.cookies.xyz_token),
+        locale = global.workspace[token.access].config.locales[req.query.locale];
 
     if (!locale.gazetteer) return res.code(406).send('Parameter not acceptable.');
 

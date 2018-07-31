@@ -30,16 +30,11 @@ module.exports = fastify => {
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: async (req, res) => {
 
-                const user = fastify.jwt.decode(req.cookies.xyz_user);
+                const token = fastify.jwt.decode(req.cookies.xyz_token);
 
-                let session = {};
-                if (req.cookies.xyz_session) session = fastify.jwt.decode(req.cookies.xyz_session);
+                let hooks = { hooks: Object.assign(req.query, token.hooks || {}) };
 
-                let hooks = { hooks: Object.assign(req.query, session) };
-
-                delete hooks.hooks.iat;
-
-                let config = Object.assign(global.workspace[user.access].config, hooks);
+                let config = Object.assign(global.workspace[token.access].config, hooks);
 
                 // Check whether request comes from a mobile platform and set template.
                 let md = new Md(req.headers['user-agent']);
@@ -53,14 +48,14 @@ module.exports = fastify => {
                 // Build the template with jsrender and send to client.
                 res.type('text/html').send(tmpl.render({
                     title: config.title || 'GEOLYTIX | XYZ',
-                    user: user.email || 'anonymous',
+                    user: token.email || 'anonymous',
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
                     hrefDocumentation: config.documentation ? global.dir + '/' + config.documentation : '',
                     btnReport: config.report ? '' : 'style="display: none;"',
-                    btnLogin: !user.email ? '' : 'style="display: none;"',
-                    btnLogout: user.email ? '' : 'style="display: none;"',
-                    btnAdmin: user.admin ? '' : 'style="display: none;"',
+                    btnLogin: !token.email ? '' : 'style="display: none;"',
+                    btnLogout: token.email ? '' : 'style="display: none;"',
+                    btnAdmin: token.admin ? '' : 'style="display: none;"',
                     btnLocate: config.locate ? '' : 'style="display: none;"',
                     dir: global.dir,
                     settings: `
