@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./xyz_utilities/utils');
 
 module.exports = (layer, panel) => {
 

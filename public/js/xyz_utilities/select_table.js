@@ -1,6 +1,6 @@
 const utils = require('./utils');
-const images = require('./select_images');
-const charts = require('./charts');
+const images = require('../select_images');
+const charts = require('../charts');
 
 function addInfojToList(record) {
 

@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./xyz_utilities/utils');
 const d3 = require('d3');
 
 module.exports = layer => {

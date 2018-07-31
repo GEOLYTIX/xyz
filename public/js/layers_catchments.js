@@ -1,5 +1,5 @@
-const utils = require('./utils');
-const svg_symbols = require('./svg_symbols.js');
+const utils = require('./xyz_utilities/utils');
+const svg_symbols = require('./xyz_utilities/svg_symbols.js');
 
 module.exports = (layer, panel) => {
 

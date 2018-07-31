@@ -1,5 +1,5 @@
 const d3 = require('d3');
-const utils = require('./utils');
+const utils = require('./xyz_utilities/utils');
 
 module.exports = { bar_chart };
 

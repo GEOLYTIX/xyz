@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./xyz_utilities/utils');
 const formats = {
     cluster: require('./layer_cluster'),
     mvt: require('./layer_mvt'),

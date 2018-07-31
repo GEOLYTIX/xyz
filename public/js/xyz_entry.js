@@ -1,8 +1,8 @@
 // Initialise utils.
-const utils = require('./utils');
+const utils = require('./xyz_utilities/utils');
 
 // The svg_symbols module is required in order to build svg symbols when they are evaluated in _xyz application settings.
-const svg_symbols = require('./svg_symbols');
+const svg_symbols = require('./xyz_utilities/svg_symbols');
 
 // Evaluates _xyz application settings.
 (function objectEval(_xyz) {
@@ -135,7 +135,7 @@ _xyz.layersCheck = () => {
 require('./layers')();
 
 // Initialize locations module.
-require('./locations')();
+require('./xyz_utilities/locations')();
 
 // Initialize gazetteer module.
 if (view_mode != 'report') require('./gazetteer')();
