@@ -12,7 +12,8 @@ function getLayer(){
         layer.table = zoom > maxZoomKey ?
         layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
             null : layer.arrayZoom[zoom];
-    
+    }
+        
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
@@ -111,7 +112,7 @@ function getLayer(){
                     layer.loader.style.display = 'none';
                     layer.loaded = true;
                     _xyz.layersCheck();
-
+                
                 // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
                 if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
             }
