@@ -59,6 +59,7 @@
         input {
             width: 100%;
         }
+
         .drawer {
             margin-top: 10px;
             &.expandable {
@@ -75,10 +76,34 @@
                     content: "expand_less"
                 }
             }
+            &.drawer-group {
+                .header-group {
+                    font-family: ffmark_bold, sans-serif!important;
+                    font-size: 15px!important;
+                    line-height: 2;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+                &.expandable-group {
+                    max-height: 30px;
+                    overflow: hidden;
+                    transition: max-height 0.3s ease-out;
+                    .expander-group::before {
+                        content: "expand_more"
+                    }
+                }
+                &.expanded-group {
+                    max-height: 2500px;
+                    .expander-group::before {
+                        content: "expand_less"
+                    }
+                }
+            }
             .header {
-                font-size: 15px;
+                font-size: 14px;
                 line-height: 2;
-                font-family: ffmark_bold, sans-serif;
+                font-family: ffmark, sans-serif;
                 &:hover {
                     cursor: pointer;
                 }

@@ -418,10 +418,26 @@ input[type=range]::-moz-range-thumb {
         max-height: 2500px; }
         .mod_container .module .drawer.expanded .expander::before {
           content: "expand_less"; }
+      .mod_container .module .drawer.drawer-group .header-group {
+        font-family: ffmark_bold, sans-serif !important;
+        font-size: 15px !important;
+        line-height: 2; }
+        .mod_container .module .drawer.drawer-group .header-group:hover {
+          cursor: pointer; }
+      .mod_container .module .drawer.drawer-group.expandable-group {
+        max-height: 30px;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out; }
+        .mod_container .module .drawer.drawer-group.expandable-group .expander-group::before {
+          content: "expand_more"; }
+      .mod_container .module .drawer.drawer-group.expanded-group {
+        max-height: 2500px; }
+        .mod_container .module .drawer.drawer-group.expanded-group .expander-group::before {
+          content: "expand_less"; }
       .mod_container .module .drawer .header {
-        font-size: 15px;
+        font-size: 14px;
         line-height: 2;
-        font-family: ffmark_bold, sans-serif; }
+        font-family: ffmark, sans-serif; }
         .mod_container .module .drawer .header:hover {
           cursor: pointer; }
       .mod_container .module .drawer .panel {

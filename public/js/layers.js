@@ -38,6 +38,7 @@ module.exports = () => {
 
         // Get the layers from the current locale.
         let layers = _xyz.locales[_xyz.locale].layers;
+        let groups = _xyz.locales[_xyz.locale].groups || {};
 
         // Set the layer display from hooks if present; Overwrites the default setting.
         if (_xyz.hooks.layers) Object.keys(layers).map(function (layer) {
@@ -49,6 +50,59 @@ module.exports = () => {
 
         // Empty the layers table.
         dom.layers.innerHTML = '';
+        
+        // Add layer groups
+        Object.keys(groups).forEach(group => {
+            groups[group].container = utils._createElement({
+                tag: 'div',
+                options: {
+                    className: 'drawer drawer-group expandable-group'
+                },
+                appendTo: dom.layers
+            });
+            
+            groups[group].header = utils._createElement({
+                tag: 'div',
+                options: {
+                    textContent: groups[group].label,
+                    className: 'header-group'
+                },
+                appendTo: groups[group].container,
+                eventListener: {
+                    event: "click",
+                    funct: e => {
+                        utils.toggleExpanderParent({
+                            expandable: e.target.parentNode,
+                            expandedTag: "expanded-group",
+                            expandableTag: "expandable-group",
+                            accordeon: true,
+                            scrolly: document.querySelector('.mod_container > .scrolly')
+                        });
+                    }
+                }
+            });
+            
+            utils._createElement({ // add group expander
+                tag: 'i',
+                options: {
+                    className: 'material-icons cursor noselect btn_header expander-group',
+                    title: 'Toggle group panel'
+                },
+                appendTo: groups[group].header,
+                eventListener: {
+                    event: 'click',
+                    funct: e => {
+                        e.stopPropagation();
+                        utils.toggleExpanderParent({
+                            expandable: groups[group].container,
+                            expandedTag: "expanded-group",
+                            expandableTag: "expandable-group",
+                            scrolly: document.querySelector('.mod_container > .scrolly')
+                        });
+                    }
+                }
+            });
+        });
 
         // Loop through the locale layers and build layer control elements.
         Object.keys(layers).forEach(layer => {
@@ -60,6 +114,7 @@ module.exports = () => {
             if (!layer.style) layer.style = {};
             if (!layer.style.default) layer.style.default = { "weight": 1, "color": "#000" };
             if (!layer.filter) layer.filter = {};
+            
 
             // Create layer drawer.
             layer.drawer = utils._createElement({
@@ -67,7 +122,7 @@ module.exports = () => {
                 options: {
                     className: 'drawer'
                 },
-                appendTo: dom.layers
+                appendTo: (layer.group ? groups[layer.group].container : dom.layers) // add to group if defined
             });
 
             if (layer.hidden) layer.drawer.style.display = 'none';

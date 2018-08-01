@@ -228,12 +228,15 @@ function dataURLToBlob(dataURL) {
 }
 
 function toggleExpanderParent(params) {
+    
+    if(!params.expandedTag) params.expandedTag = 'expanded';
+    if(!params.expandableTag) params.expandableTag = 'expandable';
 
     // Check whether parent is expanded.
-    if (hasClass(params.expandable, 'expanded')) {
+    if (hasClass(params.expandable, params.expandedTag)) {
 
         // Remove expanded class.
-        removeClass(params.expandable, 'expanded');
+        removeClass(params.expandable, params.expandedTag);
 
         // Actualize scrollbar of scrolly element.
         if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
@@ -243,14 +246,14 @@ function toggleExpanderParent(params) {
     // Accordion: Collapse the parents siblings which are expanded.
     if (params.accordeon) {
         [...params.expandable.parentElement.children].forEach(expandable_sibling => {
-            removeClass(expandable_sibling, 'expanded');
+            removeClass(expandable_sibling, params.expandedTag);
             if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
         });
     }
 
     // Add expanded class to expandable element.
-    if (hasClass(params.expandable, 'expandable')) {
-        addClass(params.expandable, 'expanded');
+    if (hasClass(params.expandable, params.expandableTag)) {
+        addClass(params.expandable, params.expandedTag);
         if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
     };
 }
