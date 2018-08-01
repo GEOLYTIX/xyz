@@ -13,6 +13,22 @@ function addInfojToList(record) {
     });
 
     if (_xyz.locales[_xyz.locale].layers[record.location.layer].streetview) insertStreetViewImage(record, table);
+    
+    // Adds info about layer and group to infoj
+    record.location.infoj.unshift({
+        "label": "Layer",
+        "value": _xyz.locales[_xyz.locale].layers[record.location.layer].name,
+        "type": "text",
+        "inline": true
+    });
+    
+    if(_xyz.locales[_xyz.locale].layers[record.location.layer].group) record.location.infoj.unshift({
+        "label": "Group",
+        "value": _xyz.locales[_xyz.locale].groups[_xyz.locales[_xyz.locale].layers[record.location.layer].group].label,
+        "type": "text",
+        "inline": true
+    });
+
 
     // Populate the table from the features infoj object.
     Object.values(record.location.infoj).forEach(entry => {
