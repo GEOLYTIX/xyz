@@ -2,7 +2,7 @@ const L = require('leaflet');
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-module.exports = () => {
+module.exports = _xyz => {
 
     let btnLocate = document.getElementById('btnLocate');
 

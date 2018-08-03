@@ -2,7 +2,7 @@ const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 const select_controls = require('./select_controls');
 
-module.exports = () => {
+module.exports = _xyz => {
 
     let LocationsHeader = utils._createElement({
         tag: 'div',
@@ -177,7 +177,7 @@ module.exports = () => {
         setChartData(layer, location);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', host + 'api/location/select');
+        xhr.open('POST', _xyz.host + '/api/location/select');
         xhr.setRequestHeader('Content-Type', 'application/json');
         
         xhr.onload = e => {
@@ -231,7 +231,7 @@ module.exports = () => {
                         _arr.push(layer.charts[chart][item].field);
                     });
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST', host + 'api/location/chart');
+                    xhr.open('POST', _xyz.host + '/api/location/chart');
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onload = function(){
                         if (this.status === 200){
@@ -430,7 +430,7 @@ module.exports = () => {
         let idx = _xyz.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
 
-        if (view_mode === 'desktop') setTimeout(() => {
+        if (_xyz.view_mode === 'desktop') setTimeout(() => {
             let el = document.querySelector('.mod_container > .scrolly');
             el.scrollTop = el.clientHeight;
         }, 500);

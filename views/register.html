@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<head>
+<head data-dir = "{{:dir}}">
     <title>GEOLYTIX | register</title>
     <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="utf-8">
@@ -102,7 +102,7 @@
     <form method="post">
 
         <div class="input_group">
-            <input id="auth_user_email" name="email" type="email" value="" maxlength="50" onkeyup="check();">
+            <input id="auth_user_email" name="email" type="email" value="" maxlength="50">
             <span class="bar"></span>
             <label for="auth_user_email">E-mail</label>
         </div>
@@ -110,7 +110,7 @@
         <br>
 
         <div class="input_group">
-            <input id="auth_user_password" name="password" type="password" value="" minlength="8" onkeyup="check();">
+            <input id="auth_user_password" name="password" type="password" value="" minlength="8">
             <span class="bar"></span>
             <label for="auth_user_password">Password (min. length 8 character)</label>
         </div>
@@ -118,7 +118,7 @@
         <br>
 
         <div class="input_group">
-            <input id="auth_user_password_retype" name="password_retype" type="password" value="" onkeyup="check();">
+            <input id="auth_user_password_retype" name="password_retype" type="password" value="">
             <span class="bar"></span>
             <label for="auth_user_password_retype">Re-type password</label>
         </div>
@@ -136,26 +136,6 @@
 </div>
 </body>
 
-<script>
-    const email = document.getElementById('auth_user_email');
-    const password = document.getElementById('auth_user_password');
-    const password_retype = document.getElementById('auth_user_password_retype');
-    const btnRegister = document.getElementById('btnRegister');
+<script src="{{:dir}}/js/register.js"></script>
 
-    setTimeout(function () {
-        email.value.length > 0 ?
-            password.focus() :
-            email.focus();
-    }, 10);
-
-    function check() {
-        email.validity.valid &&
-        password.validity.valid &&
-        password.value.length > 0 &&
-        password.value === password_retype.value
-        ?
-        btnRegister.disabled = false :
-        btnRegister.disabled = true;
-    }
-</script>
 </html>

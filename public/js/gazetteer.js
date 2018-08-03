@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-module.exports = () => {
+module.exports = _xyz => {
 
     // Declare DOM elements
     const dom = {
@@ -147,7 +147,7 @@ function initiateSearch(searchValue, dom) {
     dom.result.innerHTML = '';
 
     _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
-    _xyz.gazetteer.xhrSearch.open('GET', host + 'api/gazetteer/autocomplete?' + utils.paramString({
+    _xyz.gazetteer.xhrSearch.open('GET', _xyz.host + '/api/gazetteer/autocomplete?' + utils.paramString({
         locale: _xyz.locale,
         q: encodeURIComponent(searchValue)
     }));
@@ -218,7 +218,7 @@ function selectResult(record, dom) {
         // Get the geometry from the gazetteer database.
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', host + 'api/gazetteer/googleplaces?id=' + record['data-id']);
+        xhr.open('GET', _xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id']);
 
         xhr.onload = e => {
 

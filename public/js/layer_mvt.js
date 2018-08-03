@@ -1,7 +1,11 @@
 require('leaflet.vectorgrid');
 const utils = require('./utils');
 
-function getLayer(){
+let _xyz;
+
+module.exports = function(xyz) {
+
+    _xyz = xyz;
         
     // Assign the table based on the zoom array.
     let layer = this,
@@ -27,7 +31,7 @@ function getLayer(){
             return result;
         }, {});
 
-        let url = host + 'api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
+        let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
                 qID: layer.qID,
@@ -130,8 +134,4 @@ function getLayer(){
             })
             .addTo(_xyz.map);
     }
-}
-
-module.exports = {
-    getLayer: getLayer
 }

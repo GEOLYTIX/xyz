@@ -1,6 +1,6 @@
 const utils = require('./utils');
 
-module.exports = () => {
+module.exports = _xyz => {
 
     // Set locale default.
     if (!_xyz.locale) _xyz.locale = Object.keys(_xyz.locales)[0];
@@ -9,7 +9,7 @@ module.exports = () => {
     // Set locale to hook, or set hook for locale.
     if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
 
-    setLocaleDefaults();
+    setLocaleDefaults(_xyz);
 
     if (Object.keys(_xyz.locales).length === 1) return
 
@@ -31,7 +31,7 @@ module.exports = () => {
         _xyz.locale = e.target.value;
         _xyz.removeHooks();
         _xyz.setHook('locale', _xyz.locale);
-        setLocaleDefaults();
+        setLocaleDefaults(_xyz);
         _xyz.setView(true);
         _xyz.gazetteer.init(true);
         _xyz.layers.init(true);
@@ -53,7 +53,7 @@ module.exports = () => {
     selLocale.selectedIndex = utils.getSelectOptionsIndex(selLocale, _xyz.locale);
 }
 
-function setLocaleDefaults(){
+function setLocaleDefaults(_xyz){
 
     // Set min/max zoom defaults.
     _xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;

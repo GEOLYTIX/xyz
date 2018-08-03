@@ -1,7 +1,11 @@
 const utils = require('./utils');
 const d3 = require('d3');
 
-module.exports = (layer, panel) => {
+let _xyz;
+
+module.exports = (layer, panel, xyz) => {
+
+    _xyz = xyz;
 
     let width = layer.drawer.clientWidth,
         legend = utils._createElement({
@@ -44,7 +48,7 @@ module.exports = (layer, panel) => {
         } else {
             _xyz.removeHook('grid_ratio');
         }
-        layer.getLayer();
+        layer.getLayer(_xyz);
 
     }, {
             label: 'Display colour values as a ratio to the size value.',
@@ -83,7 +87,7 @@ module.exports = (layer, panel) => {
         select.onchange = function () {
             _xyz.setHook(query, event.target.value);
             layer[query] = event.target.value;
-            layer.getLayer();
+            layer.getLayer(_xyz);
         };
     }
 

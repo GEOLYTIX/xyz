@@ -10,16 +10,25 @@ module.exports = async fastify => {
 
         fastify.route({
             method: 'GET',
+            url: '/workspace/get',
+            beforeHandler: fastify.auth([fastify.authAccess]),
+            handler: (req, res) => {
+                const token = req.query.token ?
+                    fastify.jwt.decode(req.query.token) :
+                    fastify.jwt.decode(req.cookies.xyz_token);
+
+                res.send(global.workspace[token.access].config);
+            }
+        });
+
+        fastify.route({
+            method: 'GET',
             url: '/admin/workspace',
             beforeHandler: fastify.auth([fastify.authAdmin]),
             handler: (req, res) => {
                 res.type('text/html').send(require('jsrender').templates('./views/workspace_admin.html').render({
                     dir: global.dir,
-                    settings: `
-                        <script>
-                            const mode = 'tree';
-                            const _xyz = ${JSON.stringify(global.workspace.admin.config)};
-                        </script>`
+                    mode: 'tree'
                 }));
             }
         });
@@ -31,11 +40,7 @@ module.exports = async fastify => {
             handler: (req, res) => {
                 res.type('text/html').send(require('jsrender').templates('./views/workspace_admin.html').render({
                     dir: global.dir,
-                    settings: `
-                        <script>
-                            const mode = 'code';
-                            const _xyz = ${JSON.stringify(global.workspace.admin.config)};
-                        </script>`
+                    mode: 'code'
                 }));
             }
         });

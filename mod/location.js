@@ -95,9 +95,7 @@ async function select_ll(req, res, fastify) {
     let token = req.query.token ?
         fastify.jwt.decode(req.query.token) :
         fastify.jwt.decode(req.cookies.xyz_token);
-
-    //http://localhost:3000/coop/api/location/select_ll?dbs=XYZ&locale=UK&layer=seamless_towns&table=coop.sl&geom=geom_4326&geomq=geom_4326&lat=51.046466499419935&lng=0.36126136779785156
-
+        
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, geom, geomj, geomq, locale, layer]
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {

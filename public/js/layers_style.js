@@ -1,6 +1,6 @@
 const utils = require('./utils');
 
-module.exports = (layer, panel) => {
+module.exports = (layer, panel, _xyz) => {
 
     if (layer.style && !layer.style.highlight) layer.style.highlight = {
         stroke: true,
@@ -106,7 +106,7 @@ module.exports = (layer, panel) => {
 
                 layer.style[_options.style][_options.property] = _hex;
 
-                layer.getLayer();
+                layer.getLayer(_xyz);
             }
 
             for (let i = 0; i < colours.length; i++) {
@@ -252,7 +252,7 @@ module.exports = (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                 }, 500);
             }
         });
@@ -286,7 +286,7 @@ module.exports = (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                 }, 500);
             }
         });

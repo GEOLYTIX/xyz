@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols.js');
 
-module.exports = (layer, panel) => {
+module.exports = (layer, panel, _xyz) => {
 
     let ctrl = utils._createElement({
         tag: 'div',
@@ -210,7 +210,7 @@ module.exports = (layer, panel) => {
                 if (!utils.hasClass(btnCatchment, 'disabled')) {
                     utils.addClass(btnCatchment, 'disabled')
                     document.getElementById('Map').style.cursor = 'crosshair';
-                    _xyz.map.on('click', (e) => getCatchments(e));
+                    _xyz.map.on('click', (e) => getCatchments(e, _xyz));
                 }
             }
         }
@@ -233,7 +233,7 @@ module.exports = (layer, panel) => {
     }
 }
 
-function getCatchments(e) {
+function getCatchments(e, _xyz) {
     layer.loader.style.display = 'block';
     _xyz.map.off('click');
     document.getElementById('Map').style.cursor = '';
@@ -261,7 +261,7 @@ function getCatchments(e) {
 
     let xhr = new XMLHttpRequest();
 
-    xhr.open('GET', host + 'api/catchments?' + utils.paramString({
+    xhr.open('GET', _xyz.host + '/api/catchments?' + utils.paramString({
         lng: e.latlng.lng,
         lat: e.latlng.lat,
         distance: sliMinutes.value * 60,
@@ -285,7 +285,7 @@ function getCatchments(e) {
 
         utils.removeClass(btnCatchment, 'disabled');
 
-        layer.getLayer();
+        layer.getLayer(_xyz);
 
         let json = JSON.parse(e.target.responseText);
 

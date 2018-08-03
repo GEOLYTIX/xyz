@@ -318,8 +318,6 @@
           "table": "cn_retailpoints",
           "cluster_label": "brand",
           "cluster_cat": "city",
-          "cluster_kmeans": 50,
-          "cluster_dbscan": 0.015,
           "infoj": [
             {
               "field": "brand",
@@ -2727,7 +2725,6 @@
             "14": "eu_nuts_lv0",
             "15": null
           },
-          "tilecache": "eu_nuts_lv0__tc",
           "style": {
             "default": {
               "weight": 1.5,
@@ -2743,13 +2740,13 @@
           "dbs": "XYZ",
           "geom": "geomcntr",   
           "arrayZoom": {
-            "6": "ro_hx_64k",
-            "7": "ro_hx_32k",
-            "8": "ro_hx_16k",
-            "9": "ro_hx_8k",
-            "10": "ro_hx_4k",
-            "11": "ro_hx_2k",
-            "12": "ro_hx_1k"
+            "6": "demo.ro_hx_64k",
+            "7": "demo.ro_hx_32k",
+            "8": "demo.ro_hx_16k",
+            "9": "demo.ro_hx_8k",
+            "10": "demo.ro_hx_4k",
+            "11": "demo.ro_hx_2k",
+            "12": "demo.ro_hx_1k"
           },
           "style": {
             "range": [
@@ -2923,9 +2920,9 @@
           "dbs": "XYZ",
           "qID": "qid",
           "arrayZoom": {
-            "9": "ro_commune_census__11"
+            "9": "demo.ro_commune_census__11"
           },
-          "tilecache": "ro_commune_census__11__tc",
+          "tilecache": "demo.ro_commune_census__11__tc",
           "infoj": [
             {
               "field": "commune",
@@ -3034,11 +3031,9 @@
           "format": "cluster",
           "dbs": "XYZ",
           "qID": "qid",
-          "table": "ro_fashion",
+          "table": "demo.ro_fashion",
           "cluster_label": "store_name",
           "cluster_cat": "fascia",
-          "cluster_kmeans": 2,
-          "cluster_dbscan": 0.0075,
           "infoj": [
             {
               "field": "store_name",

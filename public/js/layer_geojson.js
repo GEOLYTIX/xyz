@@ -1,6 +1,10 @@
 const utils = require('./utils');
 
-function getLayer(){
+let _xyz;
+
+module.exports = function(xyz) {
+
+    _xyz = xyz;
   
     // Assign the table based on the zoom array.
     let layer = this,
@@ -26,7 +30,7 @@ function getLayer(){
         
         // Build xhr request.
         let bounds = _xyz.map.getBounds();      
-        layer.xhr.open('GET', host + 'api/geojson/get?' + utils.paramString({
+        layer.xhr.open('GET', _xyz.host + '/api/geojson/get?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             properties: layer.properties,
@@ -120,8 +124,4 @@ function getLayer(){
         }
         layer.xhr.send();
     }
-}
-
-module.exports = {
-    getLayer: getLayer
 }
