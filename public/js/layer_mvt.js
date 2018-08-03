@@ -25,11 +25,11 @@ module.exports = function(xyz) {
         layer.loaded = false;
         layer.loader.style.display = 'block';
 
-        let cookies = document.cookie.split(/[;] */).reduce((result, pairStr) => {
-            let arr = pairStr.split('=');
-            if (arr.length === 2) { result[arr[0]] = arr[1]; }
-            return result;
-        }, {});
+        // let cookies = document.cookie.split(/[;] */).reduce((result, pairStr) => {
+        //     let arr = pairStr.split('=');
+        //     if (arr.length === 2) { result[arr[0]] = arr[1]; }
+        //     return result;
+        // }, {});
 
         let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
@@ -39,7 +39,7 @@ module.exports = function(xyz) {
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
                 tilecache: layer.tilecache,
-                token: cookies.xyz_token,
+                //token: cookies.xyz_token,
                 noredirect: true
             }),
             options = {
