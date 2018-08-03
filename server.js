@@ -22,7 +22,7 @@ fastify
                 scriptSrc: ["'self'", "'unsafe-eval'"],
                 imgSrc: ["'self'", "*.tile.openstreetmap.org", 'data:']
             },
-            reportOnly: true,
+            //reportOnly: true,
             setAllHeaders: true,
             browserSniff: true
         },
