@@ -20,7 +20,7 @@ fastify
                 styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
                 fontSrc: ["'self'", 'fonts.gstatic.com'],
                 scriptSrc: ["'self'", "'unsafe-eval'"],
-                imgSrc: ["'self'", "*.tile.openstreetmap.org", 'data:']
+                imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'data:']
             },
             //reportOnly: true,
             setAllHeaders: true,
