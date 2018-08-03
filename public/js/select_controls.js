@@ -164,7 +164,7 @@ function update(record) {
                 let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', host + 'api/location/update');
+                xhr.open('POST', _xyz.host + '/api/location/update');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -185,7 +185,7 @@ function update(record) {
                     // Remove changed class from all changed entries.
                     utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
 
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                     try {
                         record.location.M
                             .getLayers()[0]
@@ -232,7 +232,7 @@ function trash(record) {
                 let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', host + 'api/location/delete');
+                xhr.open('POST', _xyz.host + '/api/location/delete');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -243,7 +243,7 @@ function trash(record) {
                     }
 
                     _xyz.map.removeLayer(layer.L);
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                     record.drawer.remove();
     
                     _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);

@@ -1,7 +1,11 @@
 const utils = require('./utils');
 const d3 = require('d3');
 
-module.exports = (layer, panel) => {
+let _xyz;
+
+module.exports = (layer, panel, xyz) => {
+
+    _xyz = xyz;
 
     // Create panel block.
     let block = utils._createElement({
@@ -66,7 +70,7 @@ module.exports = (layer, panel) => {
 
                     layer.style.theme = layer.style.themes[e.target.selectedIndex];
                     applyTheme(layer);
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                 }
             },
             appendTo: block
@@ -216,7 +220,7 @@ function polyCategorized(layer) {
                     layer.style.theme.cat[item].style.stroke = false;
                     layer.style.theme.cat[item].style.fill = false;
                 }
-                layer.getLayer();
+                layer.getLayer(_xyz);
             });
 
         y += 20;
@@ -251,7 +255,7 @@ function polyCategorized(layer) {
                     layer.style.default.fill = false;
                 }
 
-                layer.getLayer();
+                layer.getLayer(_xyz);
             });
 
         y += 20
@@ -314,7 +318,7 @@ function clusterCategorized(layer) {
                     layer.filter[_field].ni.push(item);
                 }
 
-                layer.getLayer();
+                layer.getLayer(_xyz);
             });
 
         y += 20;
@@ -347,7 +351,7 @@ function clusterCategorized(layer) {
                     layer.filter[_field].in = Object.keys(layer.style.theme.cat);
                 }
 
-                layer.getLayer();
+                layer.getLayer(_xyz);
             });
 
         y += 20;

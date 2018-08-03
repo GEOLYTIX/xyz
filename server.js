@@ -14,16 +14,18 @@ const fastify = require('fastify')({
 
 fastify
     .register(require('fastify-helmet'), {
-        // contentSecurityPolicy: {
-        //     directives: {
-        //         defaultSrc: ["'self'"],
-        //         scriptSrc: ["'self'"],
-        //         styleSrc: ["'self'"]
-        //     },
-        //     loose: true,
-        //     setAllHeaders: true,
-        //     browserSniff: true
-        // },
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+                fontSrc: ["'self'", 'fonts.gstatic.com'],
+                scriptSrc: ["'self'", "'unsafe-eval'"],
+                imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'data:']
+            },
+            //reportOnly: true,
+            setAllHeaders: true,
+            browserSniff: true
+        },
         noCache: true
     })
     .register(require('fastify-formbody'))

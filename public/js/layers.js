@@ -7,7 +7,7 @@ const formats = {
     tiles: require('./layer_tiles')
 };
 
-module.exports = () => {
+module.exports = _xyz => {
 
     // Assign dom objects.
     let dom = {
@@ -146,7 +146,8 @@ module.exports = () => {
             _xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
 
             // Assign getLayer function from format.
-            layer.getLayer = formats[layer.format].getLayer;
+            //layer.getLayer = formats[layer.format].getLayer;
+            layer.getLayer = formats[layer.format];
 
             // Create control to toggle layer visibility.
             utils._createElement({
@@ -167,8 +168,8 @@ module.exports = () => {
                             e.target.textContent = 'layers';
                             _xyz.pushHook('layers', layer.layer);
                             _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
-                            attributionCheck();
-                            layer.getLayer();
+                            attributionCheck(_xyz);
+                            layer.getLayer(_xyz);
                         } else {
                             layer.loader.style.display = 'none';
                             layer.display = false;
@@ -180,7 +181,7 @@ module.exports = () => {
                                 let foo = _xyz.attribution.indexOf(a);
                                 _xyz.attribution.splice(foo,1);
                             });
-                            attributionCheck();
+                            attributionCheck(_xyz);
 
                             if (layer.L) _xyz.map.removeLayer(layer.L);
                             if (layer.base) {
@@ -209,7 +210,7 @@ module.exports = () => {
                             e.stopPropagation();
                             if(layer.display){
                                 layer.bounds ? _xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) : _xyz.map.panTo(L.latLng(layer.cntr));
-                                attributionCheck();
+                                attributionCheck(_xyz);
                                 _xyz.layersCheck();
                             } else {
                                 return false;
@@ -267,7 +268,7 @@ module.exports = () => {
                                 if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
 
                                 let xhr = new XMLHttpRequest();
-                                xhr.open('POST', host + 'api/location/new');
+                                xhr.open('POST', _xyz.host + '/api/location/new');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = e => {
                                     if (e.target.status === 401) {
@@ -277,7 +278,7 @@ module.exports = () => {
                                     }
 
                                     if (e.target.status === 200) {
-                                        layer.getLayer();
+                                        layer.getLayer(_xyz);
                                         _xyz.select.selectLayerFromEndpoint({
                                             layer: layer.layer,
                                             table: layer.table,
@@ -306,26 +307,26 @@ module.exports = () => {
             }
 
             //Add panel to layer control.
-            require('./layers_panel')(layer);
+            require('./layers_panel')(layer, _xyz);
 
             // Push hook for display:true layer (default).
             if (layer.display) {
                 _xyz.pushHook('layers', layer.layer);
                 _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
-                attributionCheck();
+                attributionCheck(_xyz);
             }
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
 
             // get layer data.
-            layer.getLayer();
+            layer.getLayer(_xyz);
         });
     };
     
     _xyz.layers.init();
 }
 
-function attributionCheck() {
+function attributionCheck(_xyz) {
     // get attribution links and check whether the className is in the attribution list.
     let links = document.querySelectorAll('.attribution > .links > a');
     for (let i = 0; i < links.length; ++i) {

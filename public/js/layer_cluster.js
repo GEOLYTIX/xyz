@@ -1,9 +1,11 @@
-module.exports = { getLayer };
-
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-function getLayer() {
+let _xyz;
+
+module.exports = function(xyz) {
+
+    _xyz = xyz;
 
     // Load layer if display is true.
     if(this.display){
@@ -38,7 +40,7 @@ function loadLayer(layer) {
     let bounds = _xyz.map.getBounds();
     
     // Build XHR request.
-    layer.xhr.open('GET', host + 'api/cluster/get?' + utils.paramString({
+    layer.xhr.open('GET', _xyz.host + '/api/cluster/get?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
         geom: layer.geom,
@@ -106,7 +108,7 @@ function addClusterToLayer(cluster, layer) {
             let icon = layer.style.marker || svg_symbols.target([400, '#aaa']);
 
             // Set tooltip for desktop if corresponding layer has hover property.
-            let tooltip = (layer.theme && layer.theme.hover && view_mode === 'desktop') || false;
+            let tooltip = (layer.theme && layer.theme.hover && _xyz.view_mode === 'desktop') || false;
 
             // Check whether layer has categorized theme and more than a single location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
@@ -198,7 +200,7 @@ function clusterMouseClick(e, layer) {
 
     //console.log(layer.filter);
 
-    xhr.open('GET', host + 'api/cluster/select?' + utils.paramString({
+    xhr.open('GET', _xyz.host + '/api/cluster/select?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
         qID: layer.qID,
@@ -246,7 +248,7 @@ function clusterMouseClick(e, layer) {
 
                 if (cluster.length == 99) table += '<caption><small>Cluster selection is limited to 99 feature.</small></caption>';
 
-                if (view_mode === 'desktop') {
+                if (_xyz.view_mode === 'desktop') {
 
                     // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
                     layer.popup = L.popup()
@@ -257,7 +259,7 @@ function clusterMouseClick(e, layer) {
                     setTimeout(() => utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')), 300);
                 }
 
-                if (view_mode === 'mobile') {
+                if (_xyz.view_mode === 'mobile') {
 
                     // Remove the line marker which connects the cell with the drop down list;
                     if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);

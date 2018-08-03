@@ -269,10 +269,10 @@
             style="fill:#ce93d8; stroke:#444; stroke-width:1" />                
             <polygon points="50,988.5 80,958.5 110,988.5 80,1018.5"
             style="fill:#ce93d8; stroke:#444; stroke-width:1" />
-            <title>(view_mode === &apos;mobile&apos;)</title>
+            <title>(_xyz.view_mode === &apos;mobile&apos;)</title>
             <text x="125" y="993.5"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="125" y="993.5">(view_mode === &apos;mobile&apos;)</tspan>
+                <tspan x="125" y="993.5">(_xyz.view_mode === &apos;mobile&apos;)</tspan>
             </text>
             
             <text x="72.2" y="993.5"
@@ -298,10 +298,10 @@
             style="fill:#ce93d8; stroke:#444; stroke-width:1" />                
             <polygon points="50,1108.5 80,1078.5 110,1108.5 80,1138.5"
             style="fill:#ce93d8; stroke:#444; stroke-width:1" />
-            <title>(view_mode === &apos;desktop&apos;)</title>
+            <title>(_xyz.view_mode === &apos;desktop&apos;)</title>
             <text x="125" y="1113.5"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="125" y="1113.5">(view_mode === &apos;desktop&apos;)</tspan>
+                <tspan x="125" y="1113.5">(_xyz.view_mode === &apos;desktop&apos;)</tspan>
             </text>
             
             <text x="72.2" y="1113.5"
@@ -1334,10 +1334,10 @@
             width="154.8" height="30"
             rx="2" ry="2"
             style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
-                   <title>layer.getLayer()</title>
+                   <title>layer.getLayer(_xyz)</title>
             <text x="250" y="4925.5"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="250" y="4925.5">layer.getLayer()</tspan>
+                <tspan x="250" y="4925.5">layer.getLayer(_xyz)</tspan>
             </text>
                    
                    
@@ -1586,10 +1586,10 @@
             style="fill:#ce93d8; stroke:#444; stroke-width:1" />                
             <polygon points="50,5772.5 80,5742.5 110,5772.5 80,5802.5"
             style="fill:#ce93d8; stroke:#444; stroke-width:1" />
-            <title>(_xyz.gazetteer &amp;&amp; view_mode != &apos;report&apos;)</title>
+            <title>(_xyz.gazetteer &amp;&amp; _xyz.view_mode != &apos;report&apos;)</title>
             <text x="125" y="5777.5"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="125" y="5777.5">(_xyz.gazetteer &amp;&amp; view_mode != &apos;report&apos;)</tspan>
+                <tspan x="125" y="5777.5">(_xyz.gazetteer &amp;&amp; _xyz.view_mode != &apos;report&apos;)</tspan>
             </text>
             
             <text x="72.2" y="5777.5"

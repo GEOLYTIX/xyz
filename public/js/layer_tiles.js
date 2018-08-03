@@ -1,12 +1,11 @@
-const utils = require('./utils');
-
-function getLayer() {
+module.exports = function(_xyz) {
+    
     let layer = this;
     if (layer.display && !layer.base) {
         layer.loader.style.display = 'block';
 
         let uri = layer.provider ?
-            host + 'proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&noredirect=true':
+        _xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&noredirect=true':
             layer.URI;
 
         layer.base = L.tileLayer(uri, {
@@ -21,8 +20,4 @@ function getLayer() {
                 //layersCheck();
             });
     }
-}
-
-module.exports = {
-    getLayer: getLayer
 }

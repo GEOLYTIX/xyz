@@ -1,14 +1,19 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-function getLayer(){
+let _xyz;
+
+module.exports = function(xyz) {
+
+    _xyz = xyz;
 
     // Assign the table based on the zoom array.
     let layer = this,
         zoom = _xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-        layer.table = zoom > maxZoomKey ?
+
+    layer.table = zoom > maxZoomKey ?
         layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
             null : layer.arrayZoom[zoom];
     
@@ -24,7 +29,7 @@ function getLayer(){
         // Open & send vector.xhr;
         let bounds = _xyz.map.getBounds();
 
-        layer.xhr.open('GET', host + 'api/grid/get?' + utils.paramString({
+        layer.xhr.open('GET', _xyz.host + '/api/grid/get?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             geom: layer.geom,
@@ -147,8 +152,4 @@ function getLayer(){
 
         return dots
     }
-}
-
-module.exports = {
-    getLayer: getLayer
 }

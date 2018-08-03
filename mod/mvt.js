@@ -24,10 +24,14 @@ async function get(req, res, fastify) {
     if(properties) properties = `${properties},`;
 
     if (tilecache) {
-        
-        var db_connection = await fastify.pg[req.query.dbs].connect();
-        var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
-        db_connection.release();
+        try {
+            var db_connection = await fastify.pg[req.query.dbs].connect();
+            var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
+            db_connection.release();
+        } catch(err) {
+            console.error(err);
+            res.code(500).send("soz. it's not you. it's me.");
+        }
     }
 
     if (result && result.rowCount === 1) {

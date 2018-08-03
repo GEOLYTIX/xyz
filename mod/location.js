@@ -23,7 +23,7 @@ async function select(req, res, fastify) {
         return res.code(406).send('Parameter not acceptable.');
     }
     
-    if(geomdisplay) geomdisplay = `,ST_AsGeoJSON(${req.body.geomdisplay}) as geomdisplay`;
+    if(geomdisplay) geomdisplay = `, ST_AsGeoJSON(${req.body.geomdisplay}) AS geomdisplay`;
 
     if (sql_filter) {
         var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
@@ -90,11 +90,12 @@ async function select_ll(req, res, fastify) {
         geomj = typeof req.query.geomj == 'undefined' ? `ST_asGeoJson(${geom})` : req.body.geomj,
         geomq = typeof req.query.geomq == 'undefined' ? 'geom' : req.query.geomq,
         lat = parseFloat(req.query.lat),
-        lng = parseFloat(req.query.lng),
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+        lng = parseFloat(req.query.lng);
 
-    //http://localhost:3000/coop/api/location/select_ll?dbs=XYZ&locale=UK&layer=seamless_towns&table=coop.sl&geom=geom_4326&geomq=geom_4326&lat=51.046466499419935&lng=0.36126136779785156
-
+    let token = req.query.token ?
+        fastify.jwt.decode(req.query.token) :
+        fastify.jwt.decode(req.cookies.xyz_token);
+        
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, geom, geomj, geomq, locale, layer]
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {

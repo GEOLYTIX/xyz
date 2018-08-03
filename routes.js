@@ -32,18 +32,24 @@ module.exports = fastify => {
 
                 const token = fastify.jwt.decode(req.cookies.xyz_token);
 
-                let hooks = { hooks: Object.assign(req.query, token.hooks || {}) };
+                //let hooks = { hooks: Object.assign(req.query, token.hooks || {}) };
 
-                let config = Object.assign(global.workspace[token.access].config, hooks);
+                //let config = Object.assign(global.workspace[token.access].config, hooks);
+
+                let config = global.workspace[token.access].config;
 
                 // Check whether request comes from a mobile platform and set template.
                 let md = new Md(req.headers['user-agent']);
 
-                let tmpl = config.hooks.report ?
-                    jsr.templates('./views/report.html') :
-                    (md.mobile() === null || md.tablet() !== null) ?
-                        jsr.templates('./views/desktop.html') :
-                        jsr.templates('./views/mobile.html');
+                // let tmpl = config.hooks.report ?
+                //     jsr.templates('./views/report.html') :
+                //     (md.mobile() === null || md.tablet() !== null) ?
+                //         jsr.templates('./views/desktop.html') :
+                //         jsr.templates('./views/mobile.html');
+
+                let tmpl = (md.mobile() === null || md.tablet() !== null) ?
+                    jsr.templates('./views/desktop.html') :
+                    jsr.templates('./views/mobile.html');                        
 
                 // Build the template with jsrender and send to client.
                 res.type('text/html').send(tmpl.render({
@@ -57,12 +63,7 @@ module.exports = fastify => {
                     btnLogout: token.email ? '' : 'style="display: none;"',
                     btnAdmin: token.admin ? '' : 'style="display: none;"',
                     btnLocate: config.locate ? '' : 'style="display: none;"',
-                    dir: global.dir,
-                    settings: `
-                        <script>
-                            const host = '${(global.dir || '/').substring(1)}/';
-                            const _xyz = ${JSON.stringify(config)};
-                        </script>`
+                    dir: global.dir
                 }));
             }
         });

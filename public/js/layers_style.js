@@ -1,18 +1,22 @@
 const utils = require('./utils');
 
-module.exports = (layer, panel) => {
-    
-    if(!layer.style) layer.style = {};
-    
-    if(layer.style && !layer.style.default) layer.style.default = {
-        "weight": 1,
-        "color": "#333",
-        "fill": true,
-        "fillColor": "#333",
-        "fillOpacity": 0.3
-    };
+module.exports = (layer, panel, _xyz) => {
 
-    if (layer.style && !layer.style.highlight) layer.style.highlight = {
+if(!layer.style) layer.style = {};
+
+    if(!layer.style.default) {
+        
+        layer.style.default = {
+            "weight": 1,
+            "color": "#333",
+            "fill": true,
+            "fillColor": "#333",
+            "fillOpacity": 0.3
+        };
+        
+    }
+
+    if (!layer.style.highlight) layer.style.highlight = {
         stroke: true,
         color: '#090',
         weight: 2,
@@ -116,7 +120,7 @@ module.exports = (layer, panel) => {
 
                 layer.style[_options.style][_options.property] = _hex;
 
-                layer.getLayer();
+                layer.getLayer(_xyz);
             }
 
             for (let i = 0; i < colours.length; i++) {
@@ -262,7 +266,7 @@ module.exports = (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                 }, 500);
             }
         });
@@ -296,7 +300,7 @@ module.exports = (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer();
+                    layer.getLayer(_xyz);
                 }, 500);
             }
         });
