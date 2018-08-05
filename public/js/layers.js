@@ -7,7 +7,7 @@ const formats = {
     tiles: require('./layer_tiles')
 };
 
-module.exports = _xyz => {
+module.exports = () => {
 
     // Assign dom objects.
     let dom = {
@@ -21,31 +21,31 @@ module.exports = _xyz => {
         })
     };
 
-    _xyz.map.createPane('tmp');
-    _xyz.map.getPane('tmp').style.zIndex = 549;
+    global._xyz.map.createPane('tmp');
+    global._xyz.map.getPane('tmp').style.zIndex = 549;
 
     // init is called upon initialisation and when the locale is changed (change_locale === true).
-    if (!_xyz.layers) _xyz.layers = {};
-    _xyz.layers.init = function (change_locale) {
+    if (!global._xyz.layers) global._xyz.layers = {};
+    global._xyz.layers.init = function (change_locale) {
 
-        _xyz.attribution = ['leaflet', 'xyz'];
+        global._xyz.attribution = ['leaflet', 'xyz'];
 
         // Remove the layers hook on change_locale event.
         if (change_locale) {
-            _xyz.removeHook('layers');
-            _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer))
+            global._xyz.removeHook('layers');
+            global._xyz.map.eachLayer(layer => global._xyz.map.removeLayer(layer))
         };
 
         // Get the layers from the current locale.
-        let layers = _xyz.locales[_xyz.locale].layers;
+        let layers = global._xyz.locales[global._xyz.locale].layers;
 
         // Set the layer display from hooks if present; Overwrites the default setting.
-        if (_xyz.hooks.layers) Object.keys(layers).map(function (layer) {
-            layers[layer].display = _xyz.hooks.layers.indexOf(layer) > -1 ? true : false;
+        if (global._xyz.hooks.layers) Object.keys(layers).map(function (layer) {
+            layers[layer].display = global._xyz.hooks.layers.indexOf(layer) > -1 ? true : false;
         });
 
         // Remove the layers hook.
-        _xyz.removeHook('layers');
+        global._xyz.removeHook('layers');
 
         // Empty the layers table.
         dom.layers.innerHTML = '';
@@ -55,7 +55,7 @@ module.exports = _xyz => {
             layers[layer].layer = layer;
             layer = layers[layer];
             layer.base = null;
-            layer.locale = _xyz.locale;
+            layer.locale = global._xyz.locale;
             layer.name = layer.name || layer.layer;
             if (!layer.style) layer.style = {};
             if (!layer.style.default) layer.style.default = { "weight": 1, "color": "#000" };
@@ -87,8 +87,8 @@ module.exports = _xyz => {
 
             // Create the pane and set layers function.
             layer.pane = layer.pane || ['default', 501];
-            _xyz.map.createPane(layer.pane[0]);
-            _xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
+            global._xyz.map.createPane(layer.pane[0]);
+            global._xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
 
             // Assign getLayer function from format.
             //layer.getLayer = formats[layer.format].getLayer;
@@ -111,29 +111,29 @@ module.exports = _xyz => {
                             layer.display = true;
                             utils.removeClass(layer.drawer, 'report-off');
                             e.target.textContent = 'layers';
-                            _xyz.pushHook('layers', layer.layer);
-                            _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
-                            attributionCheck(_xyz);
-                            layer.getLayer(_xyz);
+                            global._xyz.pushHook('layers', layer.layer);
+                            global._xyz.attribution = global._xyz.attribution.concat(layer.attribution || []);
+                            attributionCheck();
+                            layer.getLayer();
                         } else {
                             layer.loader.style.display = 'none';
                             layer.display = false;
                             utils.addClass(layer.drawer, 'report-off');
                             e.target.textContent = 'layers_clear';
-                            _xyz.filterHook('layers', layer.layer);
+                            global._xyz.filterHook('layers', layer.layer);
 
                             if (layer.attribution) layer.attribution.forEach(a => {
-                                let foo = _xyz.attribution.indexOf(a);
-                                _xyz.attribution.splice(foo,1);
+                                let foo = global._xyz.attribution.indexOf(a);
+                                global._xyz.attribution.splice(foo,1);
                             });
-                            attributionCheck(_xyz);
+                            attributionCheck();
 
-                            if (layer.L) _xyz.map.removeLayer(layer.L);
+                            if (layer.L) global._xyz.map.removeLayer(layer.L);
                             if (layer.base) {
-                                _xyz.map.removeLayer(layer.base);
+                                global._xyz.map.removeLayer(layer.base);
                                 layer.base = null;
                             }
-                            _xyz.layersCheck();
+                            global._xyz.layersCheck();
                         }
                     }
                 }
@@ -154,9 +154,9 @@ module.exports = _xyz => {
                         funct: e => {
                             e.stopPropagation();
                             if(layer.display){
-                                layer.bounds ? _xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) : _xyz.map.panTo(L.latLng(layer.cntr));
-                                attributionCheck(_xyz);
-                                _xyz.layersCheck();
+                                layer.bounds ? global._xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) : global._xyz.map.panTo(L.latLng(layer.cntr));
+                                attributionCheck();
+                                global._xyz.layersCheck();
                             } else {
                                 return false;
                             }
@@ -193,7 +193,7 @@ module.exports = _xyz => {
                             utils.toggleClass(btn, 'active');
 
                             if (!utils.hasClass(btn, 'active')) {
-                                _xyz.map.off('click');
+                                global._xyz.map.off('click');
                                 dom.map.style.cursor = '';
                                 return
                             }
@@ -201,19 +201,19 @@ module.exports = _xyz => {
                             btn.style.textShadow = '2px 2px 2px #cf9;';
                             dom.map.style.cursor = 'crosshair';
 
-                            _xyz.map.on('click', e => {
+                            global._xyz.map.on('click', e => {
 
                                 let marker = [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)];
 
                                 utils.removeClass(btn, 'active');
-                                _xyz.map.off('click');
+                                global._xyz.map.off('click');
                                 dom.map.style.cursor = '';
 
                                 // Make select tab active on mobile device.
-                                if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
+                                if (global._xyz.activateLocationsTab) global._xyz.activateLocationsTab();
 
                                 let xhr = new XMLHttpRequest();
-                                xhr.open('POST', _xyz.host + '/api/location/new');
+                                xhr.open('POST', global._xyz.host + '/api/location/new');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = e => {
                                     if (e.target.status === 401) {
@@ -223,8 +223,8 @@ module.exports = _xyz => {
                                     }
 
                                     if (e.target.status === 200) {
-                                        layer.getLayer(_xyz);
-                                        _xyz.select.selectLayerFromEndpoint({
+                                        layer.getLayer();
+                                        global._xyz.select.selectLayerFromEndpoint({
                                             layer: layer.layer,
                                             table: layer.table,
                                             id: e.target.response,
@@ -252,32 +252,32 @@ module.exports = _xyz => {
             }
 
             //Add panel to layer control.
-            require('./layers_panel')(layer, _xyz);
+            require('./layers_panel')(layer, global._xyz);
 
             // Push hook for display:true layer (default).
             if (layer.display) {
-                _xyz.pushHook('layers', layer.layer);
-                _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
-                attributionCheck(_xyz);
+                global._xyz.pushHook('layers', layer.layer);
+                global._xyz.attribution = global._xyz.attribution.concat(layer.attribution || []);
+                attributionCheck();
             }
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
 
             // get layer data.
-            layer.getLayer(_xyz);
+            layer.getLayer();
         });
     };
     
-    _xyz.layers.init();
+    global._xyz.layers.init();
 }
 
-function attributionCheck(_xyz) {
+function attributionCheck() {
     // get attribution links and check whether the className is in the attribution list.
     let links = document.querySelectorAll('.attribution > .links > a');
     for (let i = 0; i < links.length; ++i) {
         let me = links[i].className;
-        let me_i = _xyz.attribution.indexOf(me);
-        if (_xyz.attribution.indexOf(links[i].className) >= 0) {
+        let me_i = global._xyz.attribution.indexOf(me);
+        if (global._xyz.attribution.indexOf(links[i].className) >= 0) {
             links[i].style.display = 'inline-block';
         } else {
             links[i].style.display = 'none';

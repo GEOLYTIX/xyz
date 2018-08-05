@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols.js');
 
-module.exports = (layer, panel, _xyz) => {
+module.exports = (layer, panel) => {
 
     let ctrl = utils._createElement({
         tag: 'div',
@@ -210,7 +210,7 @@ module.exports = (layer, panel, _xyz) => {
                 if (!utils.hasClass(btnCatchment, 'disabled')) {
                     utils.addClass(btnCatchment, 'disabled')
                     document.getElementById('Map').style.cursor = 'crosshair';
-                    _xyz.map.on('click', (e) => getCatchments(e, _xyz));
+                    global._xyz.map.on('click', (e) => getCatchments(e));
                 }
             }
         }
@@ -233,9 +233,9 @@ module.exports = (layer, panel, _xyz) => {
     }
 }
 
-function getCatchments(e, _xyz) {
+function getCatchments(e) {
     layer.loader.style.display = 'block';
-    _xyz.map.off('click');
+    global._xyz.map.off('click');
     document.getElementById('Map').style.cursor = '';
 
     // Set layerMark on origin
@@ -257,11 +257,11 @@ function getCatchments(e, _xyz) {
                     })
                 });
             }
-        }).addTo(_xyz.map);
+        }).addTo(global._xyz.map);
 
     let xhr = new XMLHttpRequest();
 
-    xhr.open('GET', _xyz.host + '/api/catchments?' + utils.paramString({
+    xhr.open('GET', global._xyz.host + '/api/catchments?' + utils.paramString({
         lng: e.latlng.lng,
         lat: e.latlng.lat,
         distance: sliMinutes.value * 60,
@@ -285,7 +285,7 @@ function getCatchments(e, _xyz) {
 
         utils.removeClass(btnCatchment, 'disabled');
 
-        layer.getLayer(_xyz);
+        layer.getLayer();
 
         let json = JSON.parse(e.target.responseText);
 
@@ -299,7 +299,7 @@ function getCatchments(e, _xyz) {
                     weight: 1,
                     fill: false
                 }
-            }).addTo(_xyz.map);
+            }).addTo(global._xyz.map);
 
             let layerPoints = L.geoJson(json.circlePoints, {
                 pointToLayer: function (feature, latlng) {
@@ -312,7 +312,7 @@ function getCatchments(e, _xyz) {
                         pane: 'tmp'
                     });
                 }
-            }).addTo(_xyz.map);
+            }).addTo(global._xyz.map);
 
             let layerSample = L.geoJson(json.samplePoints, {
                 pointToLayer: function (feature, latlng) {
@@ -326,7 +326,7 @@ function getCatchments(e, _xyz) {
                         pane: 'tmp'
                     });
                 }
-            }).addTo(_xyz.map);
+            }).addTo(global._xyz.map);
         }
     };
     xhr.send();

@@ -1,4 +1,4 @@
-module.exports = _xyz => {
+module.exports = () => {
       
     document.getElementById('btnReport').addEventListener('click', function () {
         //this.disabled = true;

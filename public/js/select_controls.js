@@ -20,17 +20,17 @@ function clear(record) {
                 e.stopPropagation();
                 record.drawer.remove();
 
-                _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
-                if (record.location.L) _xyz.map.removeLayer(record.location.L);
-                if (record.location.M) _xyz.map.removeLayer(record.location.M);
-                if (record.location.D) _xyz.map.removeLayer(record.location.D);
+                global._xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                if (record.location.L) global._xyz.map.removeLayer(record.location.L);
+                if (record.location.M) global._xyz.map.removeLayer(record.location.M);
+                if (record.location.D) global._xyz.map.removeLayer(record.location.D);
                 record.location = null;
 
-                let freeRecords = _xyz.select.records.filter(function (record) {
+                let freeRecords = global._xyz.select.records.filter(function (record) {
                     if (!record.location) return record
                 });
 
-                if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+                if (freeRecords.length === global._xyz.select.records.length) global._xyz.select.resetModule();
             }
         }
     });
@@ -53,7 +53,7 @@ function zoom(record) {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                _xyz.map.flyToBounds(record.location.L.getBounds());
+                global._xyz.map.flyToBounds(record.location.L.getBounds());
             }
         }
     });
@@ -130,11 +130,11 @@ function marker(record) {
             funct: e => {
                 e.stopPropagation();
                 if (e.target.textContent === 'location_off') {
-                    _xyz.map.removeLayer(record.location.M);
+                    global._xyz.map.removeLayer(record.location.M);
                     e.target.textContent = 'location_on';
                     e.target.title = 'Show marker';
                 } else {
-                    _xyz.map.addLayer(record.location.M);
+                    global._xyz.map.addLayer(record.location.M);
                     e.target.textContent = 'location_off';
                     e.target.title = 'Hide marker';
                 }
@@ -161,10 +161,10 @@ function update(record) {
             funct: e => {
                 e.stopPropagation();
 
-                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
+                let layer = global._xyz.locales[global._xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', _xyz.host + '/api/location/update');
+                xhr.open('POST', global._xyz.host + '/api/location/update');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -185,7 +185,7 @@ function update(record) {
                     // Remove changed class from all changed entries.
                     utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
 
-                    layer.getLayer(_xyz);
+                    layer.getLayer();
                     try {
                         record.location.M
                             .getLayers()[0]
@@ -229,10 +229,10 @@ function trash(record) {
             funct: e => {
                 e.stopPropagation();
 
-                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
+                let layer = global._xyz.locales[global._xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', _xyz.host + '/api/location/delete');
+                xhr.open('POST', global._xyz.host + '/api/location/delete');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -242,21 +242,21 @@ function trash(record) {
                         return;
                     }
 
-                    _xyz.map.removeLayer(layer.L);
-                    layer.getLayer(_xyz);
+                    global._xyz.map.removeLayer(layer.L);
+                    layer.getLayer();
                     record.drawer.remove();
     
-                    _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
-                    if (record.location.L) _xyz.map.removeLayer(record.location.L);
-                    if (record.location.M) _xyz.map.removeLayer(record.location.M);
-                    if (record.location.D) _xyz.map.removeLayer(record.location.D);
+                    global._xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                    if (record.location.L) global._xyz.map.removeLayer(record.location.L);
+                    if (record.location.M) global._xyz.map.removeLayer(record.location.M);
+                    if (record.location.D) global._xyz.map.removeLayer(record.location.D);
                     record.location = null;
     
-                    let freeRecords = _xyz.select.records.filter(record => {
+                    let freeRecords = global._xyz.select.records.filter(record => {
                         if (!record.location) return record
                     });
     
-                    if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+                    if (freeRecords.length === global._xyz.select.records.length) global._xyz.select.resetModule();
                 }
                 xhr.send(JSON.stringify({
                     dbs: layer.dbs,

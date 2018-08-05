@@ -149,7 +149,7 @@ function addImages(record, images) {
 function upload_image(record, img, blob) {
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', _xyz.host + '/api/images/new?' + utils.paramString({
+    xhr.open('POST', global._xyz.host + '/api/images/new?' + utils.paramString({
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,
@@ -200,7 +200,7 @@ function remove_image(record, img) {
     document.getElementById(img.id).remove();
     
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', _xyz.host + '/api/images/delete?' + utils.paramString({
+    xhr.open('GET', global._xyz.host + '/api/images/delete?' + utils.paramString({
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,

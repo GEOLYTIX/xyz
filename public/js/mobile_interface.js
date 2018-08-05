@@ -26,8 +26,8 @@ module.exports = () => {
         utils.removeClass(tabBar, 'pane_shadow');
     }
 
-    _xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
-    _xyz.activateLocationsTab = () => {
+    global._xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
+    global._xyz.activateLocationsTab = () => {
         utils.removeClass(tabLocations, 'hidden');
         activateTab(tabLocations, modLocations)
     };

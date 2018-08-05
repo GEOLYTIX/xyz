@@ -1,15 +1,11 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-let _xyz;
-
-module.exports = function(xyz) {
-
-    _xyz = xyz;
+module.exports = function() {
 
     // Assign the table based on the zoom array.
     let layer = this,
-        zoom = _xyz.map.getZoom(),
+        zoom = global._xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
@@ -21,15 +17,15 @@ module.exports = function(xyz) {
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
     // Request layer data when table and display are true.
-    if(layer.table && layer.display && layer.locale === _xyz.locale){
+    if(layer.table && layer.display && layer.locale === global._xyz.locale){
         layer.loaded = false;
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
         
         // Open & send vector.xhr;
-        let bounds = _xyz.map.getBounds();
+        let bounds = global._xyz.map.getBounds();
 
-        layer.xhr.open('GET', _xyz.host + '/api/grid/get?' + utils.paramString({
+        layer.xhr.open('GET', global._xyz.host + '/api/grid/get?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             geom: layer.geom,
@@ -51,10 +47,10 @@ module.exports = function(xyz) {
                 return loadLayer_complete(layer);
             }
 
-            if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) {
+            if (e.target.status === 200 && layer.display && layer.locale === global._xyz.locale) {
 
                 // Check for existing layer and remove from map.
-                if (layer.L) _xyz.map.removeLayer(layer.L);
+                if (layer.L) global._xyz.map.removeLayer(layer.L);
 
                 // Add geoJSON feature collection to the map.
                 layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
@@ -84,16 +80,16 @@ module.exports = function(xyz) {
                                 interactive: false
                             });
                     }
-                }).addTo(_xyz.map);
+                }).addTo(global._xyz.map);
 
                 layer.loader.style.display = 'none';
                 layer.loaded = true;
-                _xyz.layersCheck();
+                global._xyz.layersCheck();
 
             }
         };
         layer.xhr.send();
-        //_xyz.layersCheck();
+        //global._xyz.layersCheck();
         
     }
 

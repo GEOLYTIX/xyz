@@ -2,6 +2,7 @@
 const svg_symbols = require('./svg_symbols');
 
 module.exports = init => {
+
     let xhr = new XMLHttpRequest();
 
     // let host = document.URL.split('?')[0].replace(window.origin, '');
@@ -31,7 +32,8 @@ module.exports = init => {
 
         _xyz.view_mode = document.body.dataset.viewmode;
         _xyz.host = document.head.dataset.dir;
-        init(_xyz);
+        global._xyz = _xyz;
+        init();
     }
 
     xhr.send();

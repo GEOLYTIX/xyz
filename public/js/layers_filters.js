@@ -1,10 +1,6 @@
 const utils = require('./utils');
 
-let _xyz;
-
-module.exports = (layer, panel, xyz) => {
-
-    _xyz = xyz;
+module.exports = (layer, panel) => {
 
     // Add filter block to layer panel.
     let filters = utils._createElement({
@@ -54,12 +50,12 @@ module.exports = (layer, panel, xyz) => {
             textContent: "Run Output",
             onclick: () => {
 
-                layer.xhr.open('GET', _xyz.host + '/api/location/aggregate?' + utils.paramString({
+                layer.xhr.open('GET', global._xyz.host + '/api/location/aggregate?' + utils.paramString({
                     dbs: layer.dbs,
                     table_source: layer.table,
-                    table_target: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                    table_target: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
                     filter: JSON.stringify(layer.filter),
-                    geom_target:  _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].geomq || undefined,
+                    geom_target:  global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].geomq || undefined,
                     geom_source: layer.geom || undefined
                 }));
 
@@ -72,9 +68,9 @@ module.exports = (layer, panel, xyz) => {
 
                     let json = JSON.parse(e.target.response);
                     if (e.target.status === 200) {
-                        _xyz.select.selectLayerFromEndpoint({
+                        global._xyz.select.selectLayerFromEndpoint({
                             layer: layer.aggregate_layer,
-                            table: _xyz.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                            table: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
                             id: json.id,
                             marker: [json.lng, json.lat],
                             filter: JSON.stringify(layer.filter)
@@ -120,7 +116,7 @@ module.exports = (layer, panel, xyz) => {
 
             delete layer.filter[_val];
             enable_option(_select, _val);
-            layer.getLayer(_xyz);
+            layer.getLayer();
 
             // hide run button when last filter block is removed
             if (!_select.nextSibling.nextSibling.classList.contains('block')) {
@@ -283,7 +279,7 @@ module.exports = (layer, panel, xyz) => {
             
             // hide aggregate button if enabled 
             if (layer.aggregate_layer) this.parentNode.lastChild.style.display = "none";
-            layer.getLayer(_xyz);
+            layer.getLayer();
         }
     });
 
@@ -300,7 +296,7 @@ function filter_text(layer, options) {
         let val = this.value;
         if (!layer.filter[options.field]) layer.filter[options.field] = {};
         layer.filter[options.field][this.name] = val;
-        layer.getLayer(_xyz);
+        layer.getLayer();
     }
 
     let input = utils.createElement('input', {
@@ -321,7 +317,7 @@ function filter_numeric(layer, options) {
         } else {
             layer.filter[options.field][this.name] = null;
         }
-        layer.getLayer(_xyz);
+        layer.getLayer();
     }
 
     let gt_label = utils.createElement('div', {
@@ -385,7 +381,7 @@ function filter_date(layer, options) {
             date_format[0] = null;
             layer.filter[options.field] = {};
         }
-        layer.getLayer(_xyz);
+        layer.getLayer();
     }
 
     function mm_onkeyup() {
@@ -398,7 +394,7 @@ function filter_date(layer, options) {
         } else {
             date_format[1] = def_mm;
         }
-        layer.getLayer(_xyz);
+        layer.getLayer();
     }
 
     function dd_onkeyup() {
@@ -411,7 +407,7 @@ function filter_date(layer, options) {
         } else {
             date_format[2] = def_dd;
         }
-        layer.getLayer(_xyz);
+        layer.getLayer();
     }
 
     // labels
@@ -475,7 +471,7 @@ function filter_date(layer, options) {
             }
             this.style.display = "none";
             layer.filter[options.field] = {};
-            layer.getLayer(_xyz);
+            layer.getLayer();
         }
     }, options.appendTo);
 }
@@ -493,11 +489,11 @@ function filter_checkbox(options, layer) {
         if (this.checked) {
             if (!layer.filter[options.field][options.operator]) layer.filter[options.field][options.operator] = [];
             layer.filter[options.field][options.operator].push(options.value);
-            layer.getLayer(_xyz);
+            layer.getLayer();
 
         } else {
             layer.filter[options.field][options.operator].splice(layer.filter[options.field][options.operator].indexOf(options.value), 1);
-            layer.getLayer(_xyz);
+            layer.getLayer();
         }
 
     }

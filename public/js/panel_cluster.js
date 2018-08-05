@@ -85,7 +85,7 @@ module.exports = (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer(_xyz);
+                    layer.getLayer();
                 }, 500); 
             }
         }
@@ -136,7 +136,7 @@ module.exports = (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer(_xyz);
+                    layer.getLayer();
                 }, 500);
             }
         }
@@ -183,7 +183,7 @@ module.exports = (layer, panel) => {
             funct: e => {
                 lblMarkerMin.innerHTML = e.target.value;
                 layer.style.markerMin = parseInt(e.target.value);
-                layer.getLayer(_xyz);
+                layer.getLayer();
             }
         }
     });
@@ -229,7 +229,7 @@ module.exports = (layer, panel) => {
             funct: e => {
                 lblMarkerMax.innerHTML = e.target.value;
                 layer.style.markerMax = parseInt(e.target.value);
-                layer.getLayer(_xyz);
+                layer.getLayer();
             }
         }
     });
@@ -239,7 +239,7 @@ module.exports = (layer, panel) => {
     let logScale = utils.checkbox(function (e) {
         layer.markerLog = e.target.checked;
         layer.style.markerLog = layer.markerLog;
-        layer.getLayer(_xyz);
+        layer.getLayer();
     }, { label: 'Log scale cluster', id: layer.layer + '_logscale' });
 
     block.appendChild(logScale);
