@@ -13,7 +13,7 @@ email.addEventListener('keyup', () => check());
 
 password.addEventListener('keyup', () => check());
 
-password_retype.addEventListener('change', () => check());
+password_retype.addEventListener('keyup', () => check());
 
 function check() {    
     btnRegister.disabled =
