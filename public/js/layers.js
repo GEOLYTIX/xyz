@@ -321,7 +321,7 @@ module.exports = _xyz => {
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
             
-            if(layer.format === 'cluster') {
+            if(layer.format === 'cluster' && layer.style.marker) {
                 utils._createElement({
                     tag: "img",
                     options: {
