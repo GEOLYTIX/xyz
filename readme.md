@@ -217,6 +217,7 @@ A layer may support the following parameters:
 
 ```javascript
  <layer identifier, SQL legal name recommended> : {
+   "group": <group name>, // optional
 	 "name": <layer name to display>,
 	 "meta": <meta string, data description>,
 	 "pane": [<pane name>], 500], // Leaflet equivalent to z-index
@@ -237,6 +238,23 @@ A layer may support the following parameters:
      "infoj": []
  }
 ```
+
+Layers can be arranged into `groups`.`groups` is a parameter defined inside `locale` object as a `layers` sibling. The following snippet shows definition of a `basemaps` group. Using this key in layer `group` property will display layer as a `basemaps` group member:
+
+```javascript
+"locales": {
+  "UK": {
+    "groups": {
+      "basemaps": {
+        "label": "Base maps"
+      },
+      {...}
+    }
+  }
+}
+```
+
+`group` parameter is optional. Ungrouped layers will be displayed below the defined groups.
 
 Each layer object needs `"table"` or `"arrayZoom"` property defined in order to access the source table.
 
