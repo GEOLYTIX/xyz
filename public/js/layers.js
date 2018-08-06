@@ -7,6 +7,8 @@ const formats = {
     tiles: require('./layer_tiles')
 };
 
+const svg_symbols = require('./svg_symbols');
+
 module.exports = _xyz => {
 
     // Assign dom objects.
@@ -193,6 +195,7 @@ module.exports = _xyz => {
                     }
                 }
             });
+    
             
             // Create zoom to layer control
             if(layer.cntr || layer.bounds){
@@ -317,11 +320,27 @@ module.exports = _xyz => {
             }
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
+            
+            if(layer.format === 'cluster') {
+                utils._createElement({
+                    tag: "img",
+                    options: {
+                        src: layer.style.marker,
+                        width: 20,
+                        height: 20
+                    },
+                    style: {
+                        float: "right" 
+                    },
+                    appendTo: layer.header
+                });
+            }
 
             // get layer data.
             layer.getLayer(_xyz);
         });
     };
+
     
     _xyz.layers.init();
 }
