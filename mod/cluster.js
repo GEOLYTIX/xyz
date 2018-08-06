@@ -24,7 +24,7 @@ async function get(req, res, fastify) {
     return res.code(406).send('Parameter not acceptable.');
   }
 
-  let access_filter = layer.access_filter && layer.access_filter[token.email] ?
+  let access_filter = layer.access_filter && layer.access_filter[token.email.toLowerCase()] ?
     layer.access_filter[token.email] : null;
 
   let filter_sql = filter ? require('./filters').sql_filter(filter) : '';

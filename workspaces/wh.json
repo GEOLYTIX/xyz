@@ -93,7 +93,7 @@
                         "tgiles@williamhill.co.uk": "wh_region = '03'",
                         "dbushell@williamhill.co.uk": "wh_region = '04'",
                         "libbotson@williamhill.co.uk": "wh_region = '05'",
-                        "swright@williamhill.co.uk": "wh_region = '06'",
+                        "stuartwright@williamhill.co.uk": "wh_region = '06'",
                         "lbyers@williamhill.co.uk": "wh_region = '07'",
                         "nsears@williamhill.co.uk": "wh_region = '08'",
                         "nbradley@williamhill.co.uk": "wh_region = '09'",
@@ -2417,6 +2417,5 @@
                 }
             }
         }
-    },
-    "hooks": {}
+    }
 }

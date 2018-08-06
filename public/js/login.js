@@ -9,9 +9,9 @@ setTimeout(() => {
     check();
 }, 10);
 
-email.addEventListener('change', () => check());
+email.addEventListener('keyup', () => check());
 
-password.addEventListener('change', () => check());
+password.addEventListener('keyup', () => check());
 
 function check() {
     btnLogin.disabled =
