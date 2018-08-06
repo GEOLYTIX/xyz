@@ -12,8 +12,7 @@ function init(fastify) {
 
     // Get ACL table name from env settings.
     const user_table = (process.env.PUBLIC || process.env.PRIVATE) ?
-        (process.env.PUBLIC || process.env.PRIVATE).split('|')[1] :
-        null;
+        (process.env.PUBLIC || process.env.PRIVATE).split('|')[1] : null;
 
     // Register the ACL database from env settings connection string.
     if (user_table) {
@@ -79,7 +78,7 @@ function init(fastify) {
 
                 var user_db = await fastify.pg.users.connect();
                 var result = await user_db.query(
-                    `SELECT * FROM ${user_table} WHERE email = $1;`,
+                    `SELECT * FROM ${user_table} WHERE lower(email) = lower($1);`,
                     [req.body.email]
                 );
                 user_db.release();
@@ -132,7 +131,7 @@ function init(fastify) {
                     var user_db = await fastify.pg.users.connect();
                     var result = await user_db.query(`
                         UPDATE ${user_table} SET failedattempts = failedattempts + 1
-                        WHERE email = $1
+                        WHERE lower(email) = lower($1)
                         RETURNING failedattempts;`,
                         [req.body.email]);
                     user_db.release();
@@ -147,7 +146,7 @@ function init(fastify) {
                             UPDATE ${user_table} SET
                                 verified = false,
                                 verificationtoken = '${verificationtoken}'
-                            WHERE email = $1;`,
+                            WHERE lower(email) = lower($1);`,
                             [req.body.email]);
                         user_db.release();
 
@@ -210,7 +209,7 @@ function init(fastify) {
 
                 var user_db = await fastify.pg.users.connect();
                 result = await user_db.query(
-                    `SELECT * FROM ${user_table} WHERE email = $1;`,
+                    `SELECT * FROM ${user_table} WHERE lower(email) = lower($1);`,
                     [email]
                 );
                 user_db.release();
@@ -227,7 +226,7 @@ function init(fastify) {
                     verified = false,
                     password = '${password}',
                     verificationtoken = '${verificationtoken}'
-                WHERE email = $1;`, [email]);
+                WHERE lower(email) = lower($1);`, [email]);
                     user_db.release();
 
                     require('./mailer')({
@@ -321,7 +320,7 @@ function init(fastify) {
                 var user_db = await fastify.pg.users.connect();
                 let update = await user_db.query(`
                     UPDATE ${user_table} SET ${req.body.role} = ${req.body.chk}
-                    WHERE email = $1;`, [req.body.email]);
+                    WHERE lower(email) = lower($1);`, [req.body.email]);
                 user_db.release();
 
                 // Send email to the user account if an account has been approved.
@@ -348,7 +347,7 @@ function init(fastify) {
                 var user_db = await fastify.pg.users.connect();
                 let update = await user_db.query(`
                     DELETE FROM ${user_table}
-                    WHERE email = $1;`, [req.body.email]);
+                    WHERE lower(email) = lower($1);`, [req.body.email]);
                 user_db.release();
 
                 if (update.rowCount === 0) res.code(500).send();
@@ -398,7 +397,7 @@ function init(fastify) {
                             verified = true,
                             failedattempts = 0,
                             approvaltoken = '${approvaltoken}'
-                        WHERE email = $1;`, [user.email]);
+                        WHERE lower(email) = lower($1);`, [user.email]);
                     user_db.release();
 
                     // Get all admin accounts from the ACL.
@@ -428,7 +427,7 @@ function init(fastify) {
                     UPDATE ${user_table} SET
                         verified = true,
                         failedattempts = 0
-                    WHERE email = $1;`, [user.email]);
+                    WHERE lower(email) = lower($1);`, [user.email]);
                 user_db.release();
 
                 if (user.approved) return res.redirect(global.dir || '/');
@@ -460,7 +459,7 @@ function init(fastify) {
                                     UPDATE ${user_table} SET
                                         approved = true,
                                         approvaltoken = '${user.approvaltoken}'
-                                    WHERE email = $1;`, [user.email]);
+                                    WHERE lower(email) = lower($1);`, [user.email]);
                 user_db.release();
 
                 require('./mailer')({

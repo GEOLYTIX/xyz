@@ -7,7 +7,7 @@ const xhr = new XMLHttpRequest();
 
         let user = el.parentNode.parentNode.parentNode.firstChild.nextSibling;
 
-        xhr.open('POST', '{{:dir}}/admin/user/update');
+        xhr.open('POST', document.head.dataset.dir + '/admin/user/update');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = () => {
             if (xhr.status === 500) alert('Soz. It\'s me not you.');
@@ -31,7 +31,7 @@ const xhr = new XMLHttpRequest();
         row.style.color = '#999';
 
         if (confirm('Delete account ' + email.innerText)) {
-            xhr.open('POST', '{{:dir}}/admin/user/delete');
+            xhr.open('POST', document.head.dataset.dir + '/admin/user/delete');
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = () => {
                 if (xhr.status === 500) alert('Soz. It\'s me not you.');

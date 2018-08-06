@@ -17,9 +17,10 @@ fastify
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
+                frameSrc: ["'self'", 'www.google.com', 'www.gstatic.com'],
                 styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
                 fontSrc: ["'self'", 'fonts.gstatic.com'],
-                scriptSrc: ["'self'", "'unsafe-eval'"],
+                scriptSrc: ["'self'", 'www.google.com', 'www.gstatic.com', "'unsafe-eval'"],
                 imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'data:']
             },
             //reportOnly: true,
