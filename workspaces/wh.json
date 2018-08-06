@@ -88,7 +88,7 @@
                     "qID": "id",
                     "table": "wh.williamhill_09052018",
                     "access_filter": {
-                        "dennis.bauszus@geolytix.co.uk": "wh_region = '01'",
+                        "sarah.hitchcock@geolytix.co.uk": "wh_region = '01'",
                         "pclancy@williamhill.co.uk": "wh_region = '02'",
                         "tgiles@williamhill.co.uk": "wh_region = '03'",
                         "dbushell@williamhill.co.uk": "wh_region = '04'",
