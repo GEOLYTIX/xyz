@@ -37,6 +37,8 @@ function loadLayer(layer) {
     
     // Build XHR request.
     layer.xhr.open('GET', global._xyz.host + '/api/cluster/get?' + utils.paramString({
+        locale: _xyz.locale,
+        layer: layer.layer,
         dbs: layer.dbs,
         table: layer.table,
         geom: layer.geom,

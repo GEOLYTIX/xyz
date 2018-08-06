@@ -3,18 +3,18 @@ const utils = require('./utils');
 module.exports = function() {
   
     // Assign the table based on the zoom array.
-    let layer = this,
-        zoom = global._xyz.map.getZoom();
-    
-    if (!layer.table) {
-        let zoomKeys = Object.keys(layer.arrayZoom),
+    let layer = this;
+
+    if (layer.arrayZoom) {
+        let zoom = global._xyz.map.getZoom(),
+            zoomKeys = Object.keys(layer.arrayZoom),
             maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-        
-            layer.table = zoom > maxZoomKey ?
+
+        layer.table = zoom > maxZoomKey ?
             layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
                 null : layer.arrayZoom[zoom];
     }
-    
+   
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 

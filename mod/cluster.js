@@ -15,13 +15,17 @@ async function get(req, res, fastify) {
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
     north = parseFloat(req.query.north),
-    token = fastify.jwt.decode(req.cookies.xyz_token);
+    token = fastify.jwt.decode(req.cookies.xyz_token),
+    layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer];
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, cat]
     .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
     return res.code(406).send('Parameter not acceptable.');
-  }  
+  }
+
+  let access_filter = layer.access_filter && layer.access_filter[token.email] ?
+    layer.access_filter[token.email] : null;
 
   let filter_sql = filter ? require('./filters').sql_filter(filter) : '';
 
