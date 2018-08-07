@@ -1,36 +1,32 @@
 const utils = require('./utils');
 
-let _xyz;
-
-module.exports = function(xyz) {
-
-    _xyz = xyz;
-
+module.exports = function() {
+  
     // Assign the table based on the zoom array.
-    let layer = this,
-        zoom = _xyz.map.getZoom();
+    let layer = this;
 
-    if (!layer.table) {
-        let zoomKeys = Object.keys(layer.arrayZoom),
+    if (layer.arrayZoom) {
+        let zoom = global._xyz.map.getZoom(),
+            zoomKeys = Object.keys(layer.arrayZoom),
             maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
         layer.table = zoom > maxZoomKey ?
             layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
             null : layer.arrayZoom[zoom];
     }
-
+    
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
     // Request layer data when table and display are true.
-    if(layer.table && layer.display && layer.locale === _xyz.locale){
+    if(layer.table && layer.display && layer.locale === global._xyz.locale){
         layer.loaded = false;
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
 
         // Build xhr request.
-        let bounds = _xyz.map.getBounds();      
-        layer.xhr.open('GET', _xyz.host + '/api/geojson/get?' + utils.paramString({
+        let bounds = global._xyz.map.getBounds();      
+        layer.xhr.open('GET', global._xyz.host + '/api/geojson/get?' + utils.paramString({
             dbs: layer.dbs,
             table: layer.table,
             properties: layer.properties,
@@ -53,14 +49,19 @@ module.exports = function(xyz) {
                 return loadLayer_complete(layer);
             }
 
-            if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale){
+            if (e.target.status === 200 && layer.display && layer.locale === global._xyz.locale){
 
                 // Create feature collection for vector features.
                 let features = JSON.parse(e.target.responseText);
 
                 // Check for existing layer and remove from map.
+<<<<<<< HEAD
                 if (layer.L) _xyz.map.removeLayer(layer.L);
 
+=======
+                if (layer.L) global._xyz.map.removeLayer(layer.L);
+                
+>>>>>>> 8124e04ff9e52d3e392b8e12708e23d8e2d0b44f
                 function applyLayerStyle(geojsonFeature){
                     if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized'){
 
@@ -87,6 +88,7 @@ module.exports = function(xyz) {
 
                 // Add geoJSON feature collection to the map.
                 layer.L = L.geoJSON(features, {
+<<<<<<< HEAD
                     style: applyLayerStyle,
                     pane: layer.pane[0],
                     interactive: layer.infoj? true: false,
@@ -94,6 +96,25 @@ module.exports = function(xyz) {
                         return L.circleMarker(latlng, {
                             radius: 9,
                             pane: layer.pane[0]
+=======
+                        style: applyLayerStyle,
+                        pane: layer.pane[0],
+                        interactive: layer.infoj? true: false,
+                        pointToLayer: function(point, latlng){
+                            return L.circleMarker(latlng, {
+                                radius: 9,
+                                pane: layer.pane[0]
+                            });
+                        }
+                    })
+                    .on('click', function(e){
+                        global._xyz.select.selectLayerFromEndpoint({
+                            layer: layer.layer,
+                            table: layer.table,
+                            id: e.layer.feature.properties.id,
+                            marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
+                            editable: layer.editable
+>>>>>>> 8124e04ff9e52d3e392b8e12708e23d8e2d0b44f
                         });
                     }
                 })
@@ -110,6 +131,7 @@ module.exports = function(xyz) {
                     e.layer.setStyle(layer.style.highlight);
                 })
                     .on('mouseout', function(e){
+<<<<<<< HEAD
                     e.layer.setStyle(layer.style.default);
                 })
                     .addTo(_xyz.map);
@@ -118,8 +140,18 @@ module.exports = function(xyz) {
                 layer.loaded = true;
                 _xyz.layersCheck();
 
+=======
+                        e.layer.setStyle(layer.style.default);
+                    })
+                    .addTo(global._xyz.map);
+
+                    layer.loader.style.display = 'none';
+                    layer.loaded = true;
+                    global._xyz.layersCheck();
+                
+>>>>>>> 8124e04ff9e52d3e392b8e12708e23d8e2d0b44f
                 // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
-                if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
+                if (!layer.table || !layer.display) global._xyz.map.removeLayer(layer.L);
             }
         }
         layer.xhr.send();

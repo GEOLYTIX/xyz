@@ -1,4 +1,6 @@
 const path = require('path');
+//const webpack = require('webpack');
+
 module.exports = {
   entry: {
     xyz: ['babel-polyfill', './public/js/xyz_entry.js']
@@ -22,4 +24,9 @@ module.exports = {
       }
     ]
   }
+  // plugins: [
+  //   new webpack.ProvidePlugin({
+  //     utils: 'utils.js'
+  //   })
+  // ]
 };

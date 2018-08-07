@@ -15,13 +15,17 @@ async function get(req, res, fastify) {
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
     north = parseFloat(req.query.north),
-    token = fastify.jwt.decode(req.cookies.xyz_token);
+    token = fastify.jwt.decode(req.cookies.xyz_token),
+    layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer];
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, cat]
     .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
     return res.code(406).send('Parameter not acceptable.');
-  }  
+  }
+
+  let access_filter = layer.access_filter && layer.access_filter[token.email.toLowerCase()] ?
+    layer.access_filter[token.email] : null;
 
   let filter_sql = filter ? require('./filters').sql_filter(filter) : '';
 
@@ -49,7 +53,8 @@ async function get(req, res, fastify) {
       ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom},
         0.00001)
-    ${filter_sql};`;
+    ${filter_sql}
+    ${access_filter ? 'and ' + access_filter : ''};`;
 
   var db_connection = await fastify.pg[req.query.dbs].connect();
   var result = await db_connection.query(q);
@@ -118,7 +123,8 @@ async function get(req, res, fastify) {
           ST_DWithin(
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
           ${geom}, 0.00001)
-        ${filter_sql} 
+        ${filter_sql}
+        ${access_filter ? 'and ' + access_filter : ''}
       ) kmeans
     ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
   ) cluster GROUP BY kmeans_cid, dbscan_cid;`
@@ -147,7 +153,8 @@ async function get(req, res, fastify) {
         ST_DWithin(
           ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom}, 0.00001)
-      ${filter_sql} 
+      ${filter_sql}
+      ${access_filter ? 'and ' + access_filter : ''}
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
     

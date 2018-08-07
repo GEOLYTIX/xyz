@@ -1,15 +1,11 @@
 require('leaflet.vectorgrid');
 const utils = require('./utils');
 
-let _xyz;
-
-module.exports = function(xyz) {
-
-    _xyz = xyz;
+module.exports = function() {
         
     // Assign the table based on the zoom array.
     let layer = this,
-        zoom = _xyz.map.getZoom(),
+        zoom = global._xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
         layer.table = zoom > maxZoomKey ?
@@ -19,19 +15,19 @@ module.exports = function(xyz) {
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
       
-    if(layer.table && layer.display && layer.locale === _xyz.locale){
+    if(layer.table && layer.display && layer.locale === global._xyz.locale){
 
         // Create new vector.xhr
         layer.loaded = false;
         layer.loader.style.display = 'block';
 
-        let cookies = document.cookie.split(/[;] */).reduce((result, pairStr) => {
-            let arr = pairStr.split('=');
-            if (arr.length === 2) { result[arr[0]] = arr[1]; }
-            return result;
-        }, {});
+        // let cookies = document.cookie.split(/[;] */).reduce((result, pairStr) => {
+        //     let arr = pairStr.split('=');
+        //     if (arr.length === 2) { result[arr[0]] = arr[1]; }
+        //     return result;
+        // }, {});
 
-        let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
+        let url = global._xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
                 dbs: layer.dbs,
                 table: layer.table,
                 qID: layer.qID,
@@ -39,7 +35,7 @@ module.exports = function(xyz) {
                 layer: layer.layer,
                 geom_3857: layer.geom_3857,
                 tilecache: layer.tilecache,
-                token: cookies.xyz_token,
+                //token: cookies.xyz_token,
                 noredirect: true
             }),
             options = {
@@ -78,14 +74,14 @@ module.exports = function(xyz) {
         }
         
         
-        if(layer.L) _xyz.map.removeLayer(layer.L);
+        if(layer.L) global._xyz.map.removeLayer(layer.L);
         
         layer.L = L.vectorGrid.protobuf(url, options)
             .on('error', err => console.error(err))
             .on('load', e => {
                 layer.loaded = true;
                 layer.loader.style.display = 'none';
-                _xyz.layersCheck();
+                global._xyz.layersCheck();
             })
             .on('click', e => {
                 if( e.layer.properties.selected) return;
@@ -94,8 +90,8 @@ module.exports = function(xyz) {
             
                 function checkCurrentSelection(e){
                     let check = false;
-                    if(_xyz.hooks.select){
-                        _xyz.hooks.select.map(item => {
+                    if(global._xyz.hooks.select){
+                        global._xyz.hooks.select.map(item => {
                             item = item.split('!');
                             if(item[1] === layer.layer && item[2] === layer.table && item[3] === String(e.layer.properties.id)){
                                 check = true;
@@ -107,13 +103,13 @@ module.exports = function(xyz) {
             
                 if(!checkCurrentSelection(e)) {
                     // set cursor to wait
-                    let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
+                    let els = global._xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
                     
                     for(let el of els){
                         el.classList += ' wait-cursor-enabled';
                     }
                     // get selection
-                    _xyz.select.selectLayerFromEndpoint({
+                    global._xyz.select.selectLayerFromEndpoint({
                         layer: layer.layer,
                         table: layer.table,
                         id: e.layer.properties.id,
@@ -132,6 +128,6 @@ module.exports = function(xyz) {
             .on('mouseout', e => {
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
-            .addTo(_xyz.map);
+            .addTo(global._xyz.map);
     }
 }

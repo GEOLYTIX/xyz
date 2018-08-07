@@ -1,6 +1,6 @@
 const utils = require('./utils');
 
-module.exports = (layer, panel, _xyz) => {
+module.exports = (layer, panel) => {
 
 if(!layer.style) layer.style = {};
 
@@ -120,7 +120,7 @@ if(!layer.style) layer.style = {};
 
                 layer.style[_options.style][_options.property] = _hex;
 
-                layer.getLayer(_xyz);
+                layer.getLayer();
             }
 
             for (let i = 0; i < colours.length; i++) {
@@ -266,7 +266,7 @@ if(!layer.style) layer.style = {};
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer(_xyz);
+                    layer.getLayer();
                 }, 500);
             }
         });
@@ -300,7 +300,7 @@ if(!layer.style) layer.style = {};
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer(_xyz);
+                    layer.getLayer();
                 }, 500);
             }
         });

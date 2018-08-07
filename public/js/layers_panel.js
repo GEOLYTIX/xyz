@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const d3 = require('d3');
 
-module.exports = (layer, _xyz) => {
+module.exports = layer => {
 
     // create panel element.
     let panel = utils._createElement({
@@ -22,22 +22,22 @@ module.exports = (layer, _xyz) => {
     });
 
     // add cluster control block.
-    if (layer.format === 'cluster') require('./panel_cluster')(layer, panel, _xyz);
+    if (layer.format === 'cluster') require('./panel_cluster')(layer, panel);
 
     // add filters block.
-    if (layer.infoj && layer.infoj.some( entry => entry.filter )) require('./layers_filters')(layer, panel, _xyz);
+    if (layer.infoj && layer.infoj.some( entry => entry.filter )) require('./layers_filters')(layer, panel);
 
     // add mvt style block.
-    if (layer.format === 'mvt') require('./layers_style')(layer, panel, _xyz);
+    if (layer.format === 'mvt') require('./layers_style')(layer, panel);
 
     // applay themes control.
-    if (layer.style.theme || layer.style.themes) require('./block_theme')(layer, panel, _xyz);
+    if (layer.style.theme || layer.style.themes) require('./block_theme')(layer, panel);
 
     // add grid control block to panel.
-    if (layer.format === 'grid') require('./layers_grid')(layer, panel, _xyz);
+    if (layer.format === 'grid') require('./layers_grid')(layer, panel);
 
     // add catchment block to panel.
-    if (layer.catchments) require('./layers_catchments')(layer, panel, _xyz);
+    if (layer.catchments) require('./layers_catchments')(layer, panel);
 
     // Add panel control when panel contains children.
     if (panel.children.length > 0) {

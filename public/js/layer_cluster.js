@@ -1,17 +1,13 @@
 const utils = require('./utils');
 const svg_symbols = require('./svg_symbols');
 
-let _xyz;
-
-module.exports = function(xyz) {
-
-    _xyz = xyz;
+module.exports = function() {
 
     // Load layer if display is true.
     if(this.display){
 
         if(this.arrayZoom){
-            let zoom = _xyz.map.getZoom(),
+            let zoom = global._xyz.map.getZoom(),
                 zoomKeys = Object.keys(this.arrayZoom),
                 maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
             
@@ -37,10 +33,12 @@ function loadLayer(layer) {
     layer.xhr = new XMLHttpRequest();
 
     // Get bounds for request.
-    let bounds = _xyz.map.getBounds();
+    let bounds = global._xyz.map.getBounds();
     
     // Build XHR request.
-    layer.xhr.open('GET', _xyz.host + '/api/cluster/get?' + utils.paramString({
+    layer.xhr.open('GET', global._xyz.host + '/api/cluster/get?' + utils.paramString({
+        locale: _xyz.locale,
+        layer: layer.layer,
         dbs: layer.dbs,
         table: layer.table,
         geom: layer.geom,
@@ -68,12 +66,12 @@ function loadLayer(layer) {
 
         // Status 204. No features returned.
         if (e.target.status === 204) {
-            if (layer.L) _xyz.map.removeLayer(layer.L);
+            if (layer.L) global._xyz.map.removeLayer(layer.L);
             return loadLayer_complete(layer);
         }
 
         // Data is returned and the layer is still current.
-        if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
+        if (e.target.status === 200 && layer.display && layer.locale === global._xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
     }
     // Send XHR to middleware.
     layer.xhr.send();
@@ -85,7 +83,7 @@ function loadLayer_complete(layer) {
     // Hide loader animation and run layers check.
     layer.loader.style.display = 'none';
     layer.loaded = true;
-    return _xyz.layersCheck();
+    return global._xyz.layersCheck();
 }
 
 function addClusterToLayer(cluster, layer) {
@@ -97,7 +95,7 @@ function addClusterToLayer(cluster, layer) {
         cluster.reduce((csize_max, f) => Math.max(c_max, f.properties.size), 0) : null;
 
     // Remove existing layer from Leaflet.
-    if (layer.L) _xyz.map.removeLayer(layer.L);
+    if (layer.L) global._xyz.map.removeLayer(layer.L);
 
     // Add cluster as point layer to Leaflet.
     layer.L = L.geoJson(cluster, {
@@ -108,7 +106,7 @@ function addClusterToLayer(cluster, layer) {
             let icon = layer.style.marker || svg_symbols.target([400, '#aaa']);
 
             // Set tooltip for desktop if corresponding layer has hover property.
-            let tooltip = (layer.theme && layer.theme.hover && _xyz.view_mode === 'desktop') || false;
+            let tooltip = (layer.theme && layer.theme.hover && global._xyz.view_mode === 'desktop') || false;
 
             // Check whether layer has categorized theme and more than a single location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
@@ -186,7 +184,7 @@ function addClusterToLayer(cluster, layer) {
         }
     })
         .on('click', e => clusterMouseClick(e, layer))
-        .addTo(_xyz.map);
+        .addTo(global._xyz.map);
 
     return loadLayer_complete(layer);
 
@@ -200,7 +198,7 @@ function clusterMouseClick(e, layer) {
 
     //console.log(layer.filter);
 
-    xhr.open('GET', _xyz.host + '/api/cluster/select?' + utils.paramString({
+    xhr.open('GET', global._xyz.host + '/api/cluster/select?' + utils.paramString({
         dbs: layer.dbs,
         table: layer.table,
         qID: layer.qID,
@@ -225,7 +223,7 @@ function clusterMouseClick(e, layer) {
             let cluster = JSON.parse(e.target.responseText);
 
             if (cluster.length === 1) {
-                _xyz.select.selectLayerFromEndpoint({
+                global._xyz.select.selectLayerFromEndpoint({
                     layer: layer.layer,
                     table: layer.table,
                     id: cluster[0].id,
@@ -248,21 +246,21 @@ function clusterMouseClick(e, layer) {
 
                 if (cluster.length == 99) table += '<caption><small>Cluster selection is limited to 99 feature.</small></caption>';
 
-                if (_xyz.view_mode === 'desktop') {
+                if (global._xyz.view_mode === 'desktop') {
 
                     // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
                     layer.popup = L.popup()
                         .setLatLng(lnglat.reverse())
                         .setContent('<div class="content scrolly location_table"><div class="scrolly_track"><div class="scrolly_bar"></div></div>' + table + '</div>')
-                        .openOn(_xyz.map);
+                        .openOn(global._xyz.map);
 
                     setTimeout(() => utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')), 300);
                 }
 
-                if (_xyz.view_mode === 'mobile') {
+                if (global._xyz.view_mode === 'mobile') {
 
                     // Remove the line marker which connects the cell with the drop down list;
-                    if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
+                    if (layer.layerSelectionLine) global._xyz.map.removeLayer(layer.layerSelectionLine);
 
                     let dom = {
                         map: document.getElementById('Map'),
@@ -280,8 +278,8 @@ function clusterMouseClick(e, layer) {
                         map_dom__margin = parseInt(dom.map.style.marginTop),
                         shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
 
-                    // _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
-                    _xyz.map.panBy([0, -shiftY]);
+                    // global._xyz.map.setZoomAround(e.latlng, global._xyz.map.getZoom() + 1, { animate: false });
+                    global._xyz.map.panBy([0, -shiftY]);
 
                     // Draw line marker which connects hex cell with drop down.
                     layer.layerSelectionLine = L.marker(lnglat.reverse(), {
@@ -290,13 +288,13 @@ function clusterMouseClick(e, layer) {
                             iconSize: [3, 1000],
                             iconAnchor: [2, 1000]
                         })
-                    }).addTo(_xyz.map);
+                    }).addTo(global._xyz.map);
 
                     // Button event to close the .location_drop.
                     dom.location_drop__close.addEventListener('click', function () {
-                        if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
+                        if (layer.layerSelectionLine) global._xyz.map.removeLayer(layer.layerSelectionLine);
 
-                        _xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);
+                        global._xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);
 
                         dom.location_drop.style['display'] = 'none';
                         dom.map_button.style['display'] = 'block';
@@ -308,7 +306,7 @@ function clusterMouseClick(e, layer) {
 
                 for (let i = 0; i < location_table_rows.length; i++) {
                     location_table_rows[i].addEventListener('click', function () {
-                        _xyz.select.selectLayerFromEndpoint({
+                        global._xyz.select.selectLayerFromEndpoint({
                             layer: layer.layer,
                             table: layer.table,
                             id: this.dataset.id,

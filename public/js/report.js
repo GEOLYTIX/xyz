@@ -1,6 +1,8 @@
-module.exports = _xyz => {
+module.exports = () => {
+    
+    let btn = document.getElementById('btnReport');
       
-    document.getElementById('btnReport').addEventListener('click', function () {
+    if (btn) btn.addEventListener('click', function () {
         //this.disabled = true;
         //document.getElementById('report-spinner').style.visibility = 'visible';
         //requestReport();

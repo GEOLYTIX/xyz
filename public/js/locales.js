@@ -1,17 +1,17 @@
 const utils = require('./utils');
 
-module.exports = _xyz => {
+module.exports = () => {
 
     // Set locale default.
-    if (!_xyz.locale) _xyz.locale = Object.keys(_xyz.locales)[0];
-    _xyz.locale = _xyz.hooks.locale || _xyz.locale;
+    if (!global._xyz.locale) global._xyz.locale = Object.keys(global._xyz.locales)[0];
+    global._xyz.locale = global._xyz.hooks.locale || global._xyz.locale;
 
     // Set locale to hook, or set hook for locale.
-    if (!_xyz.hooks.locale) _xyz.setHook('locale', _xyz.locale);
+    if (!global._xyz.hooks.locale) global._xyz.setHook('locale', global._xyz.locale);
 
-    setLocaleDefaults(_xyz);
+    setLocaleDefaults();
 
-    if (Object.keys(_xyz.locales).length === 1) return
+    if (Object.keys(global._xyz.locales).length === 1) return
 
     let locale = utils._createElement({
         tag: 'div',
@@ -28,21 +28,21 @@ module.exports = _xyz => {
     });
 
     selLocale.onchange = e => {
-        _xyz.locale = e.target.value;
-        _xyz.removeHooks();
-        _xyz.setHook('locale', _xyz.locale);
-        setLocaleDefaults(_xyz);
-        _xyz.setView(true);
-        _xyz.gazetteer.init(true);
-        _xyz.layers.init(true);
-        _xyz.select.resetModule();
+        global._xyz.locale = e.target.value;
+        global._xyz.removeHooks();
+        global._xyz.setHook('locale', global._xyz.locale);
+        setLocaleDefaults();
+        global._xyz.setView(true);
+        global._xyz.gazetteer.init(true);
+        global._xyz.layers.init(true);
+        global._xyz.select.resetModule();
     };
 
-    Object.keys(_xyz.locales).forEach(loc => {
+    Object.keys(global._xyz.locales).forEach(loc => {
         utils._createElement({
             tag: 'option',
             options: {
-                textContent: _xyz.locales[loc].name || loc,
+                textContent: global._xyz.locales[loc].name || loc,
                 value: loc
             },
             appendTo: selLocale
@@ -50,12 +50,12 @@ module.exports = _xyz => {
     })
 
     // Set the select from either hook[query] or layer[query].
-    selLocale.selectedIndex = utils.getSelectOptionsIndex(selLocale, _xyz.locale);
+    selLocale.selectedIndex = utils.getSelectOptionsIndex(selLocale, global._xyz.locale);
 }
 
-function setLocaleDefaults(_xyz){
+function setLocaleDefaults(){
 
     // Set min/max zoom defaults.
-    _xyz.locales[_xyz.locale].minZoom = _xyz.locales[_xyz.locale].minZoom || 0;
-    _xyz.locales[_xyz.locale].maxZoom = _xyz.locales[_xyz.locale].maxZoom || 20;
+    global._xyz.locales[global._xyz.locale].minZoom = global._xyz.locales[global._xyz.locale].minZoom || 0;
+    global._xyz.locales[global._xyz.locale].maxZoom = global._xyz.locales[global._xyz.locale].maxZoom || 20;
 };

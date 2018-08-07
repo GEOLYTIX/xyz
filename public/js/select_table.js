@@ -12,7 +12,7 @@ function addInfojToList(record) {
         style: 'border-bottom: 1px solid ' + record.color
     });
 
-    if (_xyz.locales[_xyz.locale].layers[record.location.layer].streetview) insertStreetViewImage(record, table);
+    if (global._xyz.locales[global._xyz.locale].layers[record.location.layer].streetview) insertStreetViewImage(record, table);
     
     // Adds info about layer and group to infoj
     record.location.infoj.unshift({
@@ -28,7 +28,6 @@ function addInfojToList(record) {
         "type": "text",
         "inline": true
     });
-
 
     // Populate the table from the features infoj object.
     Object.values(record.location.infoj).forEach(entry => {
@@ -419,7 +418,7 @@ function insertStreetViewImage(record, table) {
 
     let img = utils.createElement('img', {
         className: 'img_streetview',
-        src: _xyz.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE'
+        src: global._xyz.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE'
     }, a);
 }
 
