@@ -21,11 +21,10 @@ fastify
                 styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
                 fontSrc: ["'self'", 'fonts.gstatic.com'],
                 scriptSrc: ["'self'", 'www.google.com', 'www.gstatic.com', "'unsafe-eval'"],
-                imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'data:']
+                imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'data:']
             },
-            //reportOnly: true,
-            setAllHeaders: true,
-            browserSniff: true
+            setAllHeaders: true
+            // reportOnly: true
         },
         noCache: true
     })

@@ -28,6 +28,7 @@ function init(fastify) {
             method: 'GET',
             url: '/logout',
             handler: (req, res) => {
+
                 return res
                     .setCookie('xyz_token', fastify.jwt.sign({
                         redirect: global.dir + '/',
@@ -480,7 +481,7 @@ function init(fastify) {
 function authToken(req, res, fastify, access, done) {
 
     // Pass through if access is public.
-    if (access === 'public') {
+    if (access === 'public' && !req.cookies.xyz_token) {
 
         var cookie = fastify.jwt.sign({ access: 'public' }, token_options);
 
@@ -518,6 +519,9 @@ function authToken(req, res, fastify, access, done) {
             fastify.log.error(err);
             return res.redirect(global.dir + '/login');
         }
+
+        // Pass through if access is public.
+        if (access === 'public' && token.access === 'public') return done();
 
         // Get the current time and the token age.
         let time_now = parseInt(Date.now() / 1000),
