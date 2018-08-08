@@ -27,12 +27,9 @@ module.exports = function() {
         // Build xhr request.
         let bounds = global._xyz.map.getBounds();      
         layer.xhr.open('GET', global._xyz.host + '/api/geojson/get?' + utils.paramString({
-            dbs: layer.dbs,
+            locale: _xyz.locale,
+            layer: layer.layer,
             table: layer.table,
-            properties: layer.properties,
-            qID: layer.qID,
-            geom: layer.geom,
-            geomj: layer.geomj,
             west: bounds.getWest(),
             south: bounds.getSouth(),
             east: bounds.getEast(),

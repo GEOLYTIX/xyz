@@ -1,21 +1,21 @@
 require('leaflet.vectorgrid');
 const utils = require('./utils');
 
-module.exports = function() {
-        
+module.exports = function () {
+
     // Assign the table based on the zoom array.
     let layer = this,
         zoom = global._xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-        layer.table = zoom > maxZoomKey ?
+    layer.table = zoom > maxZoomKey ?
         layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
             null : layer.arrayZoom[zoom];
 
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
-      
-    if(layer.table && layer.display && layer.locale === global._xyz.locale){
+
+    if (layer.table && layer.display && layer.locale === global._xyz.locale) {
 
         // Create new vector.xhr
         layer.loaded = false;
@@ -28,16 +28,13 @@ module.exports = function() {
         // }, {});
 
         let url = global._xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
-                dbs: layer.dbs,
-                table: layer.table,
-                qID: layer.qID,
-                properties: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : 'undefined',
-                layer: layer.layer,
-                geom_3857: layer.geom_3857,
-                tilecache: layer.tilecache,
-                //token: cookies.xyz_token,
-                noredirect: true
-            }),
+            locale: _xyz.locale,
+            layer: layer.layer,
+            table: layer.table,
+            properties: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : null,
+            noredirect: true,
+            //token: cookies.xyz_token,
+        }),
             options = {
                 rendererFactory: L.svg.tile,
                 interactive: (layer.infoj && layer.qID) || false,
@@ -45,16 +42,16 @@ module.exports = function() {
                 getFeatureId: (f) => f.properties.id,
                 vectorTileLayerStyles: {}
             };
-        
+
         // set style for each layer
         options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
-            
-        function applyLayerStyle(properties, zoom){
-            
-            if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]]){
-                
+
+        function applyLayerStyle(properties, zoom) {
+
+            if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]]) {
+
                 return layer.style.theme.cat[properties[layer.style.theme.field]].style;
-            
+
             }
 
             if (layer.style && layer.style.theme && layer.style.theme.type === 'graduated') {
@@ -72,10 +69,10 @@ module.exports = function() {
 
             return layer.style.default;
         }
-        
-        
-        if(layer.L) global._xyz.map.removeLayer(layer.L);
-        
+
+
+        if (layer.L) global._xyz.map.removeLayer(layer.L);
+
         layer.L = L.vectorGrid.protobuf(url, options)
             .on('error', err => console.error(err))
             .on('load', e => {
@@ -84,28 +81,28 @@ module.exports = function() {
                 global._xyz.layersCheck();
             })
             .on('click', e => {
-                if( e.layer.properties.selected) return;
-            
+                if (e.layer.properties.selected) return;
+
                 e.layer.properties.selected = true;
-            
-                function checkCurrentSelection(e){
+
+                function checkCurrentSelection(e) {
                     let check = false;
-                    if(global._xyz.hooks.select){
+                    if (global._xyz.hooks.select) {
                         global._xyz.hooks.select.map(item => {
                             item = item.split('!');
-                            if(item[1] === layer.layer && item[2] === layer.table && item[3] === String(e.layer.properties.id)){
+                            if (item[1] === layer.layer && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
                                 check = true;
-                            } 
+                            }
                         });
-                    } 
+                    }
                     return check;
                 }
-            
-                if(!checkCurrentSelection(e)) {
+
+                if (!checkCurrentSelection(e)) {
                     // set cursor to wait
                     let els = global._xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
-                    
-                    for(let el of els){
+
+                    for (let el of els) {
                         el.classList += ' wait-cursor-enabled';
                     }
                     // get selection
@@ -115,15 +112,15 @@ module.exports = function() {
                         id: e.layer.properties.id,
                         marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
                     });
-                     e.layer.properties.selected = false;
+                    e.layer.properties.selected = false;
                 } else {
                     //console.log('feature ' + e.layer.properties.id + ' already selected');
                 }
-            
-           
+
+
             })
             .on('mouseover', e => {
-                e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || {'color':'#090'});
+                e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || { 'color': '#090' });
             })
             .on('mouseout', e => {
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);

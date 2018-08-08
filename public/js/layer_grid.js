@@ -26,9 +26,9 @@ module.exports = function() {
         let bounds = global._xyz.map.getBounds();
 
         layer.xhr.open('GET', global._xyz.host + '/api/grid/get?' + utils.paramString({
-            dbs: layer.dbs,
+            locale: _xyz.locale,
+            layer: layer.layer,
             table: layer.table,
-            geom: layer.geom,
             size: layer.grid_size,
             color: layer.grid_color,
             west: bounds.getWest(),

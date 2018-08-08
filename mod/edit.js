@@ -2,12 +2,13 @@ module.exports = { newRecord, newAggregate, updateRecord, deleteRecord };
 
 async function newRecord(req, res, fastify) {
 
-    let table = req.body.table,
-        geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
+    let token = fastify.jwt.decode(req.cookies.xyz_token),
+        layer = global.workspace[token.access].config.locales[req.body.locale].layers[req.body.layer],
+        table = req.body.table,
+        geom = layer.geom ? layer.geom : 'geom',
         geometry = JSON.stringify(req.body.geometry),
-        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+        qID = layer.qID ? layer.qID : 'id',
+        log_table = layer.log_table ? layer.log_table : null;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, qID, geom, log_table]
@@ -20,7 +21,7 @@ async function newRecord(req, res, fastify) {
         SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS ${geom}
         RETURNING ${qID} AS id;`;
 
-    var db_connection = await fastify.pg[req.body.dbs].connect();
+    var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q);
     db_connection.release();
 
@@ -28,13 +29,16 @@ async function newRecord(req, res, fastify) {
 }
 
 async function newAggregate(req, res, fastify) {
-    let table_target = req.query.table_target,
-        table_source = req.query.table_source,
-        geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
-        geom_source = req.query.geom_source === 'undefined' ? 'geom' : req.query.geom_source,
+    let
+        token = fastify.jwt.decode(req.cookies.xyz_token),
+        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+        target_layer = global.workspace[token.access].config.locales[req.query.locale].layers[layer.aggregate_layer],
+        table_source = layer.table,
+        table_target = target_layer.table,
+        geom_source = layer.geom ? layer.geom : 'geom',
+        geom_target = target_layer.geomq ? target_layer.geomq : 'geom',
         filter = JSON.parse(req.query.filter),
-        filter_sql = '',
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+        filter_sql = '';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table_target, table_source, geom_target, geom_source]
@@ -81,7 +85,7 @@ async function newAggregate(req, res, fastify) {
     
     //console.log(q);
 
-    var db_connection = await fastify.pg[req.query.dbs].connect();
+    var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q);
     db_connection.release();
 
@@ -95,47 +99,49 @@ async function newAggregate(req, res, fastify) {
 async function updateRecord(req, res, fastify) {
     try {
 
-        let table = req.body.table,
-        geom = typeof req.body.geom == 'undefined' ? 'geom' : req.body.geom,
-        geometry = JSON.stringify(req.body.geometry),
-        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id,
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+        let
+            token = fastify.jwt.decode(req.cookies.xyz_token),
+            layer = global.workspace[token.access].config.locales[req.body.locale].layers[req.body.layer],
+            table = req.body.table,
+            qID = layer.qID ? layer.qID : 'id',
+            id = req.body.id,
+            geom = layer.geom ? layer.geom : 'geom';
+            geometry = JSON.stringify(req.body.geometry),
+            log_table = layer.log_table ? layer.log_table : null;
 
-    // Check whether string params are found in the settings to prevent SQL injections.
-    if ([table, geom, qID, log_table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Parameter not acceptable.');
-    }
+        // Check whether string params are found in the settings to prevent SQL injections.
+        if ([table, geom, qID, log_table]
+            .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
+            return res.code(406).send('Parameter not acceptable.');
+        }
 
-    let fields = '';
-    Object.values(req.body.infoj).forEach(entry => {
-        if (entry.images) return
-        if (entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/\'/g,"''")}',`;
-        if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
-        if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`
-        if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
-        if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`
-        if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`
-    });
+        let fields = '';
+        Object.values(req.body.infoj).forEach(entry => {
+            if (entry.images) return
+            if (entry.field && entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/\'/g, "''")}',`;
+            if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
+            if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`
+            if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
+            if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`
+            if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`
+        });
 
-    var q = `
-    UPDATE ${table} SET
-        ${fields}
-        ${geom} = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
-    WHERE ${qID} = $1;`
+        var q = `
+            UPDATE ${table} SET
+                ${fields}
+                ${geom} = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
+            WHERE ${qID} = $1;`;
 
-    var db_connection = await fastify.pg[req.body.dbs].connect();
-    await db_connection.query(q, [id]);
-    db_connection.release();
+        var db_connection = await fastify.pg[layer.dbs].connect();
+        await db_connection.query(q, [id]);
+        db_connection.release();
 
-    // Write into logtable if logging is enabled.
-    if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
+        // Write into logtable if logging is enabled.
+        if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
 
-    res.code(200).send();
+        res.code(200).send();
 
-    } catch(err) {
+    } catch (err) {
         console.error(err);
         res.code(500).send("soz. it's not you. it's me.");
     }
@@ -143,11 +149,13 @@ async function updateRecord(req, res, fastify) {
 
 async function deleteRecord(req, res, fastify) {
 
-    let table = req.body.table,
-        qID = typeof req.body.qID == 'undefined' ? 'id' : req.body.qID,
-        id = req.body.id,
-        log_table = typeof req.body.log_table == 'undefined' ? null : req.body.log_table,
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+    let
+        token = fastify.jwt.decode(req.cookies.xyz_token),
+        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+        table = req.query.table,
+        qID = layer.qID ? layer.qID : 'id',
+        id = req.query.id,
+        log_table = layer.log_table ? layer.log_table : null;
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, qID, log_table]
@@ -160,7 +168,7 @@ async function deleteRecord(req, res, fastify) {
 
     var q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
 
-    var db_connection = await fastify.pg[req.body.dbs].connect();
+    var db_connection = await fastify.pg[layer.dbs].connect();
     await db_connection.query(q, [id]);
     db_connection.release();
 
@@ -176,7 +184,7 @@ async function writeLog(req, log_table, table, qID, id, fastify) {
     SELECT *
     FROM ${table} WHERE ${qID} = $1;`;
 
-    var db_connection = await fastify.pg[req.body.dbs].connect();
+    var db_connection = await fastify.pg[layer.dbs].connect();
     await db_connection.query(q, [id]);
     db_connection.release();
 }

@@ -39,14 +39,12 @@ function loadLayer(layer) {
     layer.xhr.open('GET', global._xyz.host + '/api/cluster/get?' + utils.paramString({
         locale: _xyz.locale,
         layer: layer.layer,
-        dbs: layer.dbs,
         table: layer.table,
-        geom: layer.geom,
-        cat: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : 'undefined',
-        size: layer.style.theme && layer.style.theme.size ? layer.style.theme.size : 'undefined',
         kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
         dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
-        theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : 'undefined',
+        theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : null,
+        cat: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : null,
+        size: layer.style.theme && layer.style.theme.size ? layer.style.theme.size : null,
         filter: JSON.stringify(layer.filter),
         west: bounds.getWest(),
         south: bounds.getSouth(),
@@ -196,14 +194,10 @@ function clusterMouseClick(e, layer) {
         lnglat = e.layer.feature.geometry.coordinates,
         xhr = new XMLHttpRequest();
 
-    //console.log(layer.filter);
-
     xhr.open('GET', global._xyz.host + '/api/cluster/select?' + utils.paramString({
-        dbs: layer.dbs,
+        locale: _xyz.locale,
+        layer: layer.layer,
         table: layer.table,
-        qID: layer.qID,
-        geom: layer.geom,
-        label: layer.cluster_label,
         filter: JSON.stringify(layer.filter),
         count: count > 99 ? 99 : count,
         lnglat: lnglat,

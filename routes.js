@@ -186,9 +186,8 @@ module.exports = fastify => {
             }
         });
 
-        // !!!this should be a get route
         fastify.route({
-            method: 'POST',
+            method: 'GET',
             url: '/api/location/delete',
             beforeHandler: fastify.auth([fastify.authAccess]),
             handler: (req, res) => {

@@ -207,19 +207,16 @@ module.exports = () => {
             }
         }
 
-        xhr.send(JSON.stringify({
-            dbs: layer.dbs,
+        let body = {
+            locale: _xyz.locale,
+            layer: layer.layer,
             table: location.table,
-            qID: layer.qID,
-            id: location.id,
-            infoj: layer.infoj,
-            geom: layer.geom,
-            geomj: layer.geomj,
-            geomq: layer.geomq,
-            geomdisplay: layer.geomdisplay,
-            sql_filter: layer.sql_filter
-        }));
+            id: location.id
+        };
 
+        if (layer.sql_filter) body.sql_filter = layer.sql_filter;
+
+        xhr.send(JSON.stringify(body));
     }
     
     function setChartData(layer, location){

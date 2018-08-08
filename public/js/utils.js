@@ -138,9 +138,9 @@ function debounce(func, wait) {
 
 function paramString(param) {
     let encodedString = '';
-    Object.keys(param).map(function (key) {
-        if (encodedString.length > 0) encodedString += '&';
-        encodedString += encodeURI(key + '=' + param[key]);
+    Object.keys(param).forEach(key => {
+        if (param[key] && encodedString.length > 0) encodedString += '&';
+        if (param[key]) encodedString += encodeURI(key + '=' + param[key]);
     });
     return encodedString;
 }

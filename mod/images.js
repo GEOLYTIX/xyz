@@ -68,11 +68,12 @@ function remove(req, res, fastify){
 
         if (err) return console.error(err);
 
-        let table = req.query.table,
-            qID = req.query.qID == 'undefined' ? 'id' : req.query.qID,
-            id = req.query.id
-            image_src = decodeURIComponent(req.query.image_src),
-            token = fastify.jwt.decode(req.cookies.xyz_token);
+        let token = fastify.jwt.decode(req.cookies.xyz_token),
+            layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+            table = req.query.table,
+            qID = layer.qID ? layer.qID : 'id',
+            id = req.query.id,
+            image_src = decodeURIComponent(req.query.image_src);
 
         // Check whether string params are found in the settings to prevent SQL injections.
         if ([table, qID]
@@ -85,7 +86,7 @@ function remove(req, res, fastify){
             images = array_remove(images, '${image_src}')
         WHERE ${qID} = $1;`;
 
-        var db_connection = await fastify.pg[req.query.dbs].connect();
+        var db_connection = await fastify.pg[layer.dbs].connect();
         await db_connection.query(q, [id]);
         db_connection.release();
 

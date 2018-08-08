@@ -221,14 +221,20 @@ async function catchment_calc(req, res, fastify) {
     );
 
     // Create ISO bands on the point grid
-    res.data.iso = turf.isobands(tag,
-        [
-            0,
-            parseInt(req.query.distance * 0.33),
-            parseInt(req.query.distance * 0.66),
-            parseInt(req.query.distance)
-        ],
-        { zProperty: 'v' });
+    try {
+        res.data.iso = turf.isobands(tag,
+            [
+                0,
+                parseInt(req.query.distance * 0.33),
+                parseInt(req.query.distance * 0.66),
+                parseInt(req.query.distance)
+            ],
+            { zProperty: 'v' });
+    } catch (error) {
+        console.error(error);
+        return res.code(502).send('Problem with provider');
+    }
+
 
     res.data.iso.features = res.data.iso.features.filter(f => f.geometry.coordinates.length > 0);
 
@@ -244,10 +250,11 @@ async function catchment_calc(req, res, fastify) {
     // Reverse order of Isobands in array
     res.data.iso.features.reverse();
 
-    
-    let table_target = req.query.table_target,
-        geom_target = req.query.geom_target === 'undefined' ? 'geom' : req.query.geom_target,
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+    let
+        token = fastify.jwt.decode(req.cookies.xyz_token),
+        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+        table_target = layer.table,
+        geom_target = layer.geom_target ? layer.geom_target : 'geom';
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table_target, geom_target]
@@ -270,7 +277,7 @@ async function catchment_calc(req, res, fastify) {
         
             RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
 
-            var db_connection = await fastify.pg[req.query.dbs].connect();
+            var db_connection = await fastify.pg[layer.dbs].connect();
             var result = await db_connection.query(q);
             db_connection.release();
         

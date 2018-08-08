@@ -294,11 +294,9 @@ module.exports = () => {
                                 }
                                 
                                 xhr.send(JSON.stringify({
-                                    dbs: layer.dbs,
+                                    locale: _xyz.locale,
+                                    layer: layer.layer,
                                     table: layer.table,
-                                    qID: layer.qID,
-                                    geom: layer.geom,
-                                    log_table: layer.log_table,
                                     geometry: {
                                         type: 'Point',
                                         coordinates: marker
