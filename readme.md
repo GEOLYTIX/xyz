@@ -17,6 +17,12 @@ The code repository should work out of the box (zero-configuration) as serverles
 
 Free use of the code in this repository is allowed through a [MIT licence](https://github.com/GEOLYTIX/xyz/blob/master/LICENSE).
 
+## Testing
+
+We use BrowserStack to test browser compliance of the client shell and map control.
+
+![alt text](https://user-images.githubusercontent.com/22201617/43830268-ce4cf53a-9af8-11e8-9bde-9e2526333eb3.png)
+
 ## Dependencies
 
 We are currently using Node.js version 8.5 in production.
