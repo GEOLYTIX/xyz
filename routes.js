@@ -158,6 +158,24 @@ module.exports = fastify => {
             }
         });
 
+        fastify.route({
+            method: 'GET',
+            url: '/api/location/select_ll_nnearest',
+            beforeHandler: fastify.auth([fastify.authAccess]),
+            handler: (req, res) => {
+                require('./mod/location').select_ll_nnearest(req, res, fastify);
+            }
+        });
+
+        fastify.route({
+            method: 'GET',
+            url: '/api/location/select_ll_intersect',
+            beforeHandler: fastify.auth([fastify.authAccess]),
+            handler: (req, res) => {
+                require('./mod/location').select_ll_intersect(req, res, fastify);
+            }
+        });
+
         // !!!should be taken from /select infoj
         fastify.route({
             method: 'POST',
