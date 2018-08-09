@@ -49,7 +49,7 @@ async function get(req, res, fastify) {
             ${z},
             ${x},
             ${y},
-            ST_AsMVT(tile, '${layer}', 4096, 'geom') mvt,
+            ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom') mvt,
             ST_MakeEnvelope(
                 ${-m + (x * r)},
                 ${ m - (y * r)},
@@ -80,7 +80,7 @@ async function get(req, res, fastify) {
                 ${-m + (x * r) + r},
                 ${ m - (y * r) - r},
                 3857
-            ),${req.query.geom_3857},0)
+            ),${geom_3857},0)
         ) tile
         ${tilecache ? 'RETURNING mvt;' : ';'}
         `;

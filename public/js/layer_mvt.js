@@ -8,6 +8,7 @@ module.exports = function () {
         zoom = global._xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+
     layer.table = zoom > maxZoomKey ?
         layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
             null : layer.arrayZoom[zoom];
@@ -31,7 +32,7 @@ module.exports = function () {
             locale: _xyz.locale,
             layer: layer.layer,
             table: layer.table,
-            properties: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : null,
+            properties: layer.properties,
             noredirect: true,
             //token: cookies.xyz_token,
         }),
@@ -76,6 +77,7 @@ module.exports = function () {
         layer.L = L.vectorGrid.protobuf(url, options)
             .on('error', err => console.error(err))
             .on('load', e => {
+                //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
                 layer.loaded = true;
                 layer.loader.style.display = 'none';
                 global._xyz.layersCheck();
