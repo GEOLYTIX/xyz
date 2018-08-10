@@ -36,6 +36,9 @@ async function select(req, res, fastify) {
         db_connection.release();
         sql_filter = result.rows[0].sql_filter;
     }
+    
+    let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
+        layer.access_filter[token.email] : null;
 
     let fields = '';
 
@@ -46,6 +49,7 @@ async function select(req, res, fastify) {
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
              FROM ${entry_layer.table}
              WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
+             ${access_filter ? 'AND ' + access_filter : ''}
             ) AS "${entry.field}",`;
             return
         }
@@ -62,6 +66,9 @@ async function select(req, res, fastify) {
         ${geomdisplay}
     FROM ${table}
     WHERE ${qID} = $1;`;
+    
+    //console.log(q);
+    
     
     var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q, [id]);

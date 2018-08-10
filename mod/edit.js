@@ -45,6 +45,9 @@ async function newAggregate(req, res, fastify) {
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
+    
+    let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
+        layer.access_filter[token.email] : null;
 
     filter_sql = await require('./filters').sql_filter(filter, filter_sql);
 
@@ -79,7 +82,7 @@ async function newAggregate(req, res, fastify) {
         4326) AS ${geom_target},
         '${filter_sql.replace(new RegExp("'", "g"), "''")}' as sql_filter
         FROM ${table_source}
-        WHERE true ${filter_sql}
+        WHERE true ${filter_sql} ${access_filter ? 'and ' + access_filter : ''}
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
     
