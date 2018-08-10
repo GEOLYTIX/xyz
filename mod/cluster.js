@@ -26,6 +26,8 @@ async function get(req, res, fastify) {
 
   let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
     layer.access_filter[token.email] : null;
+    
+    if(access_filter && layer.aggregate_layer) global.workspace[token.access].config.locales[req.query.locale].layers[layer.aggregate_layer].access_filter = access_filter;
 
   let filter_sql = filter ? require('./filters').sql_filter(filter) : '';
 
