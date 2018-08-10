@@ -19,14 +19,16 @@ function addInfojToList(record) {
         "label": "Layer",
         "value": _xyz.locales[_xyz.locale].layers[record.location.layer].name,
         "type": "text",
-        "inline": true
+        "inline": true,
+        "locked": true 
     });
     
     if(_xyz.locales[_xyz.locale].layers[record.location.layer].group) record.location.infoj.unshift({
         "label": "Group",
         "value": _xyz.locales[_xyz.locale].groups[_xyz.locales[_xyz.locale].layers[record.location.layer].group].label,
         "type": "text",
-        "inline": true
+        "inline": true,
+        "locked": true
     });
 
     // Populate the table from the features infoj object.

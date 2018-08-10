@@ -2,18 +2,18 @@ const utils = require('./utils');
 
 module.exports = (layer, panel) => {
 
-if(!layer.style) layer.style = {};
+    if (!layer.style) layer.style = {};
 
-    if(!layer.style.default) {
-        
+    if (!layer.style.default) {
+
         layer.style.default = {
             "weight": 1,
             "color": "#333",
             "fill": true,
             "fillColor": "#333",
-            "fillOpacity": 0.3
+            "fillOpacity": 0.1
         };
-        
+
     }
 
     if (!layer.style.highlight) layer.style.highlight = {

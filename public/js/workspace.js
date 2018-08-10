@@ -1,6 +1,8 @@
 // The svg_symbols module is required in order to build svg symbols when they are evaluated in _xyz application settings.
 const svg_symbols = require('./svg_symbols');
 
+// import * as _utils from './_utils';
+
 module.exports = init => {
 
     let xhr = new XMLHttpRequest();

@@ -3,16 +3,17 @@ module.exports = { get };
 async function get(req, res, fastify) {
 
     let
+        token = fastify.jwt.decode(req.cookies.xyz_token),
+        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+        geom = layer.geom ? layer.geom : 'geom',
         table = req.query.table,
-        id = req.query.qID === 'undefined' ? 'id' : req.query.qID,
-        properties = req.query.properties === 'undefined' ? '' : req.query.properties,
-        geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
-        geomj = req.query.geomj === 'undefined' ? `ST_asGeoJson(${geom})` : req.query.geomj,
+        id = layer.qID ? layer.qID : 'id',
+        properties = layer.properties ? layer.properties : '',
+        geomj = layer.geomj ? layer.geomj : `ST_asGeoJson(${geom})`,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north),
-        token = fastify.jwt.decode(req.cookies.xyz_token);
+        north = parseFloat(req.query.north);
 
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([table, geom, id, properties]
@@ -33,7 +34,7 @@ async function get(req, res, fastify) {
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
             ${geom}, 0.000001);`
 
-    var db_connection = await fastify.pg[req.query.dbs].connect();
+    var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q);
     db_connection.release();
 

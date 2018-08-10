@@ -51,12 +51,14 @@ module.exports = (layer, panel) => {
             onclick: () => {
 
                 layer.xhr.open('GET', global._xyz.host + '/api/location/aggregate?' + utils.paramString({
-                    dbs: layer.dbs,
-                    table_source: layer.table,
-                    table_target: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
-                    filter: JSON.stringify(layer.filter),
-                    geom_target:  global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].geomq || undefined,
-                    geom_source: layer.geom || undefined
+                    locale: _xyz.locale,
+                    layer: layer.layer,
+                    filter: JSON.stringify(layer.filter)
+                    // dbs: layer.dbs,
+                    // table_source: layer.table,
+                    // table_target: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
+                    // geom_target:  global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].geomq || undefined,
+                    // geom_source: layer.geom || undefined
                 }));
 
                 layer.xhr.onload = e => {

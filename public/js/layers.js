@@ -115,7 +115,13 @@ module.exports = () => {
             layer.locale = global._xyz.locale;
             layer.name = layer.name || layer.layer;
             if (!layer.style) layer.style = {};
-            if (!layer.style.default) layer.style.default = { "weight": 1, "color": "#000" };
+            if (!layer.style.default) layer.style.default = {
+                "weight": 1,
+                "color": "#333",
+                "fill": true,
+                "fillColor": "#333",
+                "fillOpacity": 0.1
+            };
             if (!layer.filter) layer.filter = {};
             
 
@@ -294,11 +300,9 @@ module.exports = () => {
                                 }
                                 
                                 xhr.send(JSON.stringify({
-                                    dbs: layer.dbs,
+                                    locale: _xyz.locale,
+                                    layer: layer.layer,
                                     table: layer.table,
-                                    qID: layer.qID,
-                                    geom: layer.geom,
-                                    log_table: layer.log_table,
                                     geometry: {
                                         type: 'Point',
                                         coordinates: marker

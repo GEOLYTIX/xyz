@@ -198,14 +198,12 @@ function update(record) {
                 }
 
                 xhr.send(JSON.stringify({
-                    dbs: layer.dbs,
+                    locale: _xyz.locale,
+                    layer: layer.layer,
                     table: record.location.table,
-                    qID: layer.qID,
                     id: record.location.id,
-                    geom: layer.geom,
                     infoj: record.location.infoj,
-                    geometry: record.location.L.toGeoJSON().features[0].geometry,
-                    log_table: layer.log_table
+                    geometry: record.location.L.toGeoJSON().features[0].geometry
                 }));
             }
         }
@@ -232,8 +230,14 @@ function trash(record) {
                 let layer = global._xyz.locales[global._xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', global._xyz.host + '/api/location/delete');
-                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.open('GET', global._xyz.host + '/api/location/delete?' + utils.paramString({
+                    locale: _xyz.locale,
+                    layer: layer.layer,
+                    table: record.location.table,
+                    id: record.location.id,
+                    noredirect: true
+                }));
+
                 xhr.onload = e => {
 
                     if (e.target.status === 401) {
@@ -258,13 +262,7 @@ function trash(record) {
     
                     if (freeRecords.length === global._xyz.select.records.length) global._xyz.select.resetModule();
                 }
-                xhr.send(JSON.stringify({
-                    dbs: layer.dbs,
-                    table: record.location.table,
-                    qID: layer.qID,
-                    id: record.location.id,
-                    log_table: layer.log_table
-                }));
+                xhr.send();
             }
         }
     });

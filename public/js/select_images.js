@@ -201,9 +201,9 @@ function remove_image(record, img) {
     
     let xhr = new XMLHttpRequest();
     xhr.open('GET', global._xyz.host + '/api/images/delete?' + utils.paramString({
-        dbs: record.location.dbs,
+        locale: _xyz.locale,
+        layer: record.location.layer,
         table: record.location.table,
-        qID: record.location.qID,
         id: record.location.id,
         image_id: img.id,
         image_src: encodeURIComponent(img.src)

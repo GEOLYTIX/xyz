@@ -2,18 +2,18 @@ module.exports = { get };
 
 async function get(req, res, fastify) {
     let
+        token = fastify.jwt.decode(req.cookies.xyz_token),
+        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+        table = req.query.table,
+        geom_3857 = layer.geom_3857 ? layer.geom_3857 : 'geom_3857',
+        properties = layer.properties ? layer.properties : '',
+        tilecache = layer.tilecache ? layer.tilecache : null,
+        id = layer.qID ? layer.qID : null,
         x = parseInt(req.params.x),
         y = parseInt(req.params.y),
         z = parseInt(req.params.z),
         m = 20037508.34,
-        r = (m * 2) / (Math.pow(2, z)),
-        table = req.query.table,
-        layer = req.query.layer,
-        geom_3857 = req.query.geom_3857 === 'undefined' ? 'geom_3857' : req.query.geom_3857,
-        id = req.query.qID === 'undefined' ? null : req.query.qID,
-        properties = req.query.properties === 'undefined' ? '' : req.query.properties,
-        tilecache = req.query.tilecache === 'undefined' ? false : req.query.tilecache,
-        token = fastify.jwt.decode(req.cookies.xyz_token || req.query.token);
+        r = (m * 2) / (Math.pow(2, z));
     
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([id, table, tilecache, layer, geom_3857, properties]
@@ -25,7 +25,7 @@ async function get(req, res, fastify) {
 
     if (tilecache) {
         try {
-            var db_connection = await fastify.pg[req.query.dbs].connect();
+            var db_connection = await fastify.pg[layer.dbs].connect();
             var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
             db_connection.release();
         } catch(err) {
@@ -49,7 +49,7 @@ async function get(req, res, fastify) {
             ${z},
             ${x},
             ${y},
-            ST_AsMVT(tile, '${layer}', 4096, 'geom') mvt,
+            ST_AsMVT(tile, '${req.query.layer}', 4096, 'geom') mvt,
             ST_MakeEnvelope(
                 ${-m + (x * r)},
                 ${ m - (y * r)},
@@ -80,12 +80,12 @@ async function get(req, res, fastify) {
                 ${-m + (x * r) + r},
                 ${ m - (y * r) - r},
                 3857
-            ),${req.query.geom_3857},0)
+            ),${geom_3857},0)
         ) tile
         ${tilecache ? 'RETURNING mvt;' : ';'}
         `;
 
-    var db_connection = await fastify.pg[req.query.dbs].connect();
+    var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q);
     db_connection.release();
 

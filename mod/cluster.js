@@ -3,20 +3,20 @@ module.exports = { get, select };
 async function get(req, res, fastify) {
 
   let
+    token = fastify.jwt.decode(req.cookies.xyz_token),
+    layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+    geom = layer.geom ? layer.geom : 'geom',
     table = req.query.table,
-    geom = req.query.geom == 'undefined' ? 'geom' : req.query.geom,
-    cat = req.query.cat == 'undefined' ? null : req.query.cat,
-    size = req.query.size == 'undefined' ? 1 : req.query.size,
-    theme = req.query.theme == 'undefined' ? null : req.query.theme,
-    filter = req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
+    cat = req.query.cat ? req.query.cat : null,
+    size = req.query.size ? req.query.size : 1,
+    theme = req.query.theme ? req.query.theme : null,
+    filter = req.query.filter ? JSON.parse(req.query.filter) : null,
     kmeans = parseInt(1 / req.query.kmeans),
     dbscan = parseFloat(req.query.dbscan),
     west = parseFloat(req.query.west),
     south = parseFloat(req.query.south),
     east = parseFloat(req.query.east),
-    north = parseFloat(req.query.north),
-    token = fastify.jwt.decode(req.cookies.xyz_token),
-    layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer];
+    north = parseFloat(req.query.north);
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, cat]
@@ -56,7 +56,7 @@ async function get(req, res, fastify) {
     ${filter_sql}
     ${access_filter ? 'and ' + access_filter : ''};`;
 
-  var db_connection = await fastify.pg[req.query.dbs].connect();
+  var db_connection = await fastify.pg[layer.dbs].connect();
   var result = await db_connection.query(q);
   db_connection.release();
 
@@ -158,7 +158,7 @@ async function get(req, res, fastify) {
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
     
-  var db_connection = await fastify.pg[req.query.dbs].connect();
+  var db_connection = await fastify.pg[layer.dbs].connect();
   var result = await db_connection.query(q);
   db_connection.release();
 
@@ -197,18 +197,17 @@ async function get(req, res, fastify) {
 }
 
 async function select(req, res, fastify) {
-  
-  let
-    table = req.query.table,
-    geom = req.query.geom === 'undefined' ? 'geom' : req.query.geom,
-    id = req.query.qID === 'undefined' ? 'id' : req.query.qID,
-    filter = typeof req.query.filter == 'undefined' ? null : JSON.parse(req.query.filter),
-    label = req.query.label === 'undefined' ? id : req.query.label,
-    count = parseInt(req.query.count),
-    lnglat = req.query.lnglat.split(','),
-    token = fastify.jwt.decode(req.cookies.xyz_token);
 
-  lnglat = lnglat.map(ll => parseFloat(ll));
+  let
+    token = fastify.jwt.decode(req.cookies.xyz_token),
+    layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+    geom = layer.geom ? layer.geom : 'geom',
+    table = req.query.table,
+    id = layer.qID ? layer.qID : 'id';
+    filter = req.query.filter ? JSON.parse(req.query.filter) : null,
+    label = layer.cluster_label ? layer.cluster_label : id,
+    count = parseInt(req.query.count),
+    lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, id, label]
@@ -229,7 +228,7 @@ async function select(req, res, fastify) {
     ${filter_sql} 
   ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
 
-  var db_connection = await fastify.pg[req.query.dbs].connect();
+  var db_connection = await fastify.pg[layer.dbs].connect();
   var result = await db_connection.query(q);
   db_connection.release();
 
