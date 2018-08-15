@@ -233,15 +233,12 @@ module.exports = () => {
                     xhr.onload = function(){
                         if (this.status === 200){
                             
-                            //console.log(layer.charts[chart]);
-                            
                             Object.keys(layer.charts[chart]).map(function(key){
                                 let _field = layer.charts[chart][key].field,
                                     _val = JSON.parse(xhr.responseText)[_field];
                                 
                                 layer.charts[chart][key].y = _val; 
                             });
-                            //console.log(layer.charts[chart]);
                         }
                     };
                     
@@ -316,7 +313,13 @@ module.exports = () => {
                     pointToLayer: function (feature, latlng) {
                         return new L.Marker(latlng, {
                             icon: L.icon({
-                                iconUrl: svg_symbols.markerLetter(record.color, record.letter),
+                                iconUrl: svg_symbols.create({
+                                    type: "markerLetter",
+                                    style: {
+                                        color: record.color,
+                                        letter: record.letter
+                                    }
+                                }),
                                 iconSize: [40, 40],
                                 iconAnchor: [20, 40]
                             }),
@@ -346,7 +349,12 @@ module.exports = () => {
                         {
                             icon: L.icon({
                                 iconSize: 35,
-                                iconUrl: svg_symbols.circle(record.color)
+                                iconUrl: svg_symbols.create({
+                                    type: "circle",
+                                    style: {
+                                        color: record.color
+                                    }
+                                })
                             }),
                             pane: 'select_circle',
                             interactive: global._xyz.select ? true : false,

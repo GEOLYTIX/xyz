@@ -228,7 +228,13 @@ module.exports = (layer, panel) => {
                                 pointToLayer: function (feature, latlng) {
                                     return new L.Marker(latlng, {
                                         icon: L.icon({
-                                            iconUrl: svg_symbols.markerColor('#444', '#888'),
+                                            iconUrl: svg_symbols.create({
+                                                type: "markerColor",
+                                                style: {
+                                                    colorMarker: "#444",
+                                                    colorDot: "#888"
+                                                }
+                                            }),
                                             iconSize: [40, 40],
                                             iconAnchor: [20, 40]
                                         })

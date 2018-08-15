@@ -1,47 +1,69 @@
 const d3 = require('d3');
 const xmlSerializer = new XMLSerializer();
 
-module.exports = (function () {
+module.exports = (function(){
+    
+    function create(marker){
+        
+        //console.log(marker);
+        
+        if(typeof(marker) == 'string') return marker;
+        
+        let type = marker.type,
+            style = marker.style;
+        
+        this.markers = {
+            dot: dot(style),
+            circle: circle(style),
+            target: target(style),
+            markerLetter: markerLetter(style),
+            markerColor: markerColor(style),
+            geo: geolocation()
+        }
+        
+        return type ? this.markers[type] : false;
+    }
 
-    function dot(color) {
+
+    function dot(style){
         let svg = d3
-            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-            .attr('width', 866)
-            .attr('height', 1000)
-            .attr('viewBox', '0 0 866 1000')
-            .attr('xmlns', 'http://www.w3.org/2000/svg');
+        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+        .attr('width', 866)
+        .attr('height', 1000)
+        .attr('viewBox', '0 0 866 1000')
+        .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         svg
             .append('circle')
             .attr('cx', 466)
             .attr('cy', 532)
             .attr('r', 395)
-            .style('fill', d3.rgb(color).darker(0.5));
+            .style('fill', d3.rgb(style.color).darker(0.5));
 
         svg
             .append('circle')
             .attr('cx', 400)
             .attr('cy', 468)
             .attr('r', 395)
-            .style('fill', d3.rgb(color));
+            .style('fill', d3.rgb(style.color));
 
         return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
-    function circle(color) {
+    function circle(style){
         let svg = d3
-            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-            .attr('width', 1000)
-            .attr('height', 1000)
-            .attr('viewBox', '0 0 1000 1000')
-            .attr('xmlns', 'http://www.w3.org/2000/svg');
+        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+        .attr('width', 1000)
+        .attr('height', 1000)
+        .attr('viewBox', '0 0 1000 1000')
+        .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         svg
             .append('circle')
             .attr('cx', 500)
             .attr('cy', 500)
             .attr('r', 350)
-            .style('stroke', color)
+            .style('stroke', style.color)
             .style('stroke-width', 250)
             .style('opacity', 0.5)
             .style('fill', 'none');
@@ -49,14 +71,13 @@ module.exports = (function () {
         return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
-    function target(style) {
-
+    function target(style){
         let svg = d3
-            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-            .attr('width', 1000)
-            .attr('height', 1000)
-            .attr('viewBox', '0 0 1000 1000')
-            .attr('xmlns', 'http://www.w3.org/2000/svg');
+        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+        .attr('width', 1000)
+        .attr('height', 1000)
+        .attr('viewBox', '0 0 1000 1000')
+        .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         svg
             .append('circle')
@@ -74,17 +95,16 @@ module.exports = (function () {
                 .attr('r', style[i])
                 .style('fill', style[i + 1]);
         }
-
         return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
-    function markerLetter(colorMarker, letter) {
+    function markerLetter(style) {//colorMarker, letter
         let svg = d3
-            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-            .attr('width', 1000)
-            .attr('height', 1000)
-            .attr('viewBox', '0 0 1000 1000')
-            .attr('xmlns', 'http://www.w3.org/2000/svg');
+        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+        .attr('width', 1000)
+        .attr('height', 1000)
+        .attr('viewBox', '0 0 1000 1000')
+        .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         let p = d3.path();
         p.moveTo(570, 20);
@@ -98,7 +118,7 @@ module.exports = (function () {
 
         svg
             .append('path')
-            .style('fill', colorMarker)
+            .style('fill', style.color)
             .style('opacity', 0.5)
             .attr('d', p.toString());
 
@@ -114,7 +134,7 @@ module.exports = (function () {
 
         svg
             .append('path')
-            .style('fill', colorMarker)
+            .style('fill', style.color)
             .attr('d', p.toString());
 
         svg
@@ -126,27 +146,27 @@ module.exports = (function () {
             .attr('r', 250);
 
         let text = svg
-            .append('text')
-            .attr('x', 500)
-            .attr('y', 360)
-            .style('text-anchor', 'middle')
-            .style('alignment-baseline', 'central')
-            .style('font-weight', 600)
-            .style('font-size', '470px')
-            .style('font-family', 'sans-serif')
-            .style('fill', '#555')
-            .text(letter);
+        .append('text')
+        .attr('x', 500)
+        .attr('y', 360)
+        .style('text-anchor', 'middle')
+        .style('alignment-baseline', 'central')
+        .style('font-weight', 600)
+        .style('font-size', '470px')
+        .style('font-family', 'sans-serif')
+        .style('fill', '#555')
+        .text(style.letter);
 
         return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
 
-    function markerColor(colorMarker, colorDot) {
+    function markerColor(style) {//colorMarker, colorDot
         let svg = d3
-            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-            .attr('width', 1000)
-            .attr('height', 1000)
-            .attr('viewBox', '0 0 1000 1000')
-            .attr('xmlns', 'http://www.w3.org/2000/svg');
+        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+        .attr('width', 1000)
+        .attr('height', 1000)
+        .attr('viewBox', '0 0 1000 1000')
+        .attr('xmlns', 'http://www.w3.org/2000/svg');
 
         let p = d3.path();
         p.moveTo(570, 20);
@@ -160,7 +180,7 @@ module.exports = (function () {
 
         svg
             .append('path')
-            .style('fill', colorMarker)
+            .style('fill', style.colorMarker)
             .style('opacity', 0.5)
             .attr('d', p.toString());
 
@@ -176,7 +196,7 @@ module.exports = (function () {
 
         svg
             .append('path')
-            .style('fill', colorMarker)
+            .style('fill', style.colorMarker)
             .attr('d', p.toString());
 
         svg
@@ -189,22 +209,22 @@ module.exports = (function () {
 
         svg
             .append('circle')
-            .style('fill', colorDot)
+            .style('fill', style.colorDot)
             .attr('cx', 500)
             .attr('cy', 360)
             .attr('r', 180);
 
         return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
-    
-    function markerGeolocation(){
+
+    function geolocation(){
         let svg = d3
-            .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-            .attr('width', 1000)
-            .attr('height', 1000)
-            .attr('viewBox', '0 0 1000 1000')
-            .attr('xmlns', 'http://www.w3.org/2000/svg');
-        
+        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+        .attr('width', 1000)
+        .attr('height', 1000)
+        .attr('viewBox', '0 0 1000 1000')
+        .attr('xmlns', 'http://www.w3.org/2000/svg');
+
         svg
             .append('circle')
             .attr('cx', 500)
@@ -214,7 +234,7 @@ module.exports = (function () {
             .style('opacity', 0.8)
             .style('stroke-width', 75)
             .style('fill', 'none');
-        
+
         svg
             .append('circle')
             .attr('cx', 500)
@@ -222,37 +242,33 @@ module.exports = (function () {
             .attr('r', 200)
             .style('fill', '#090')
             .style('opacity', 0.8);
-        
+
         let p = d3.path();
-        
+
         p.moveTo(500,150);
         p.lineTo(500,0);
-        
+
         p.moveTo(500,850);
         p.lineTo(500,1000);
-        
+
         p.moveTo(0,500);
         p.lineTo(150,500);
-        
+
         p.moveTo(850,500);
         p.lineTo(1000,500);
-        
+
         svg
             .append('path')
             .style('stroke', '#090')
             .style('opacity', 0.8)
             .style('stroke-width', 75)
             .attr('d', p.toString());
-        
+
         return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
     }
-
+    
     return {
-        dot: dot,
-        target: target,
-        circle: circle,
-        markerLetter: markerLetter,
-        markerColor: markerColor,
-        markerGeolocation: markerGeolocation
-    };
+        create: create
+    }
+
 })();

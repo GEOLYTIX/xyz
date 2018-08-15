@@ -330,7 +330,7 @@ module.exports = () => {
                 utils._createElement({
                     tag: "img",
                     options: {
-                        src: layer.style.marker,
+                        src: svg_symbols.create(layer.style.marker),
                         width: 20,
                         height: 20
                     },
