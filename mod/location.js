@@ -7,7 +7,7 @@ module.exports = {
 };
 
 async function select(req, res, fastify) {
-
+    
     let
         token = fastify.jwt.decode(req.cookies.xyz_token),
         layer = global.workspace[token.access].config.locales[req.body.locale].layers[req.body.layer],
@@ -18,7 +18,7 @@ async function select(req, res, fastify) {
         geomj = layer.geomj ? layer.geomj : `ST_asGeoJson(${geom})`,
         geomq = layer.geomq ? layer.geomq : geom,
         geomdisplay = layer.geomdisplay ? layer.geomdisplay : '',
-        sql_filter = req.body.sql_filter ? req.body.sql_filter : ''
+        sql_filter = req.body.sql_filter ? req.body.sql_filter : '',
         infoj = JSON.parse(JSON.stringify(layer.infoj));
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -43,8 +43,17 @@ async function select(req, res, fastify) {
     let fields = '';
 
     infoj.forEach(entry => {
+        
+        //console.log(entry);
+        if(entry.type == 'group'){
+            entry.items.forEach(item => {
+                if (item.type && item.type !== 'group') fields += `${item.fieldfx || item.field}::${item.type} AS ${item.field},`;
+            });
+        }
+        
         if (entry.layer) {
             let entry_layer = global.workspace[token.access].config.locales[req.body.locale].layers[entry.layer];
+            
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
              FROM ${entry_layer.table}
@@ -54,7 +63,7 @@ async function select(req, res, fastify) {
             return
         }
 
-        if (entry.type) fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},`
+        if (entry.type && entry.type !== 'group') fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},`
 
         if (entry.subfield) fields += `${entry.subfield}::${entry.type} AS ${entry.subfield},`
     });
@@ -76,14 +85,32 @@ async function select(req, res, fastify) {
 
     // Iterate through the infoj object's entries and assign the values returned from the database query.
     Object.values(infoj).forEach(entry => {
+    
+        if(entry.type == 'group'){
+            Object.values(entry.items).forEach(item => {
+                setValues(result, item);
+            });
+        }
+        setValues(result, entry);
+        /*if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
+            entry.value = result.rows[0][entry.field];
+        }
+        if (result.rows[0][entry.subfield]) {
+            entry.subvalue = result.rows[0][entry.subfield];
+        }*/
+    });
+    
+    function setValues(result, entry){
         if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
             entry.value = result.rows[0][entry.field];
         }
         if (result.rows[0][entry.subfield]) {
             entry.subvalue = result.rows[0][entry.subfield];
         }
-    });
+    }
 
+    //console.log(JSON.stringify(infoj));
+    
     // Send the infoj object with values back to the client.
     res.code(200).send({
         geomj: result.rows[0].geomj,
