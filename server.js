@@ -23,8 +23,8 @@ fastify
                 scriptSrc: ["'self'", 'www.google.com', 'www.gstatic.com', "'unsafe-eval'"],
                 imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'data:']
             },
+            //reportOnly: true,
             setAllHeaders: true
-            // reportOnly: true
         },
         noCache: true
     })
@@ -33,13 +33,14 @@ fastify
         root: require('path').join(__dirname, 'public'),
         prefix: (process.env.DIR || '') + '/'
     })
-    .register(require('fastify-cookie'))
     .register(require('fastify-auth'))
     .register(require('fastify-jwt'), {
         secret: process.env.SECRET || 'some-secret-password-at-least-32-characters-long'
     })
-    .decorate('authAccess', (req, res, done) => require('./auth').authToken(req, res, fastify, global.access, done))
-    .decorate('authAdmin', (req, res, done) => require('./auth').authToken(req, res, fastify, 'admin', done));
+    .decorate('authAccess', (req, res, done) => require('./auth').authToken(req, res, fastify, {lv: global.access, API: false}, done))
+    .decorate('authAPI', (req, res, done) => require('./auth').authToken(req, res, fastify, {lv: global.access, API: true}, done))
+    .decorate('authAdmin', (req, res, done) => require('./auth').authToken(req, res, fastify, {lv: 'admin', API: false}, done))
+    .decorate('authAdminAPI', (req, res, done) => require('./auth').authToken(req, res, fastify, {lv: 'admin', API: true}, done));
 
 require('./globals')(fastify);
 

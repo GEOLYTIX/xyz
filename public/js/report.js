@@ -37,22 +37,22 @@ module.exports = () => {
     //     xhr.send(JSON.stringify(payload));
     // }
     
-    function pingReport(report) {
-        setTimeout(ping, 1000);
-        function ping(){
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', 'q_report_ping?report=' + report);
-            xhr.onload = function () {
-                if (this.status === 200 && this.response === 'false') {
-                    setTimeout(ping, 1000);
-                } else if (this.status === 200 && this.response === 'true') {
-                    document.getElementById('btnReportDownload').href = 'q_pdf_download/?report=' + report;
-                    document.getElementById('btnReportView').href = 'q_pdf_open/?report=' + report;
-                    document.getElementById('report-spinner').style.visibility = 'hidden';
-                    document.getElementById('report-toast').style.visibility = 'visible';
-                }
-            }
-            xhr.send();
-        }
-    }
+    // function pingReport(report) {
+    //     setTimeout(ping, 1000);
+    //     function ping(){
+    //         let xhr = new XMLHttpRequest();
+    //         xhr.open('GET', 'q_report_ping?report=' + report);
+    //         xhr.onload = function () {
+    //             if (this.status === 200 && this.response === 'false') {
+    //                 setTimeout(ping, 1000);
+    //             } else if (this.status === 200 && this.response === 'true') {
+    //                 document.getElementById('btnReportDownload').href = 'q_pdf_download/?report=' + report;
+    //                 document.getElementById('btnReportView').href = 'q_pdf_open/?report=' + report;
+    //                 document.getElementById('report-spinner').style.visibility = 'hidden';
+    //                 document.getElementById('report-toast').style.visibility = 'visible';
+    //             }
+    //         }
+    //         xhr.send();
+    //     }
+    // }
 }

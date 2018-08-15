@@ -2,8 +2,10 @@ module.exports = { get, select };
 
 async function get(req, res, fastify) {
 
+  const token = req.query.token ?
+    fastify.jwt.decode(req.query.token) : { access: 'public' };
+
   let
-    token = fastify.jwt.decode(req.cookies.xyz_token),
     layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
     geom = layer.geom ? layer.geom : 'geom',
     table = req.query.table,
@@ -26,8 +28,8 @@ async function get(req, res, fastify) {
 
   let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
     layer.access_filter[token.email] : null;
-    
-    if(access_filter && layer.aggregate_layer) global.workspace[token.access].config.locales[req.query.locale].layers[layer.aggregate_layer].access_filter = access_filter;
+
+  if (access_filter && layer.aggregate_layer) global.workspace[token.access].config.locales[req.query.locale].layers[layer.aggregate_layer].access_filter = access_filter;
 
   let filter_sql = filter ? require('./filters').sql_filter(filter) : '';
 
@@ -159,7 +161,7 @@ async function get(req, res, fastify) {
       ${access_filter ? 'and ' + access_filter : ''}
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
-    
+
   var db_connection = await fastify.pg[layer.dbs].connect();
   var result = await db_connection.query(q);
   db_connection.release();
@@ -200,13 +202,15 @@ async function get(req, res, fastify) {
 
 async function select(req, res, fastify) {
 
+  const token = req.query.token ?
+    fastify.jwt.decode(req.query.token) : { access: 'public' };
+
   let
-    token = fastify.jwt.decode(req.cookies.xyz_token),
     layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
     geom = layer.geom ? layer.geom : 'geom',
     table = req.query.table,
     id = layer.qID ? layer.qID : 'id';
-    filter = req.query.filter ? JSON.parse(req.query.filter) : null,
+  filter = req.query.filter ? JSON.parse(req.query.filter) : null,
     label = layer.cluster_label ? layer.cluster_label : id,
     count = parseInt(req.query.count),
     lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));

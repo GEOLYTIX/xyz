@@ -78,7 +78,7 @@
                 <i class="material-icons">gps_not_fixed</i>
             </button>
 
-            <button type="button" id="btnZoomIn">
+            <button id="btnZoomIn">
                 <i class="material-icons">add</i>
             </button>
 
@@ -96,19 +96,11 @@
                 </a>
             </div>
 
-            <div id="btnLogin" title="Login to private area" {{:btnLogin}}>
-                <a href="{{:dir}}/login">
-                    <i class="material-icons">face</i>
-                </a>
+            <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
+                <i class="material-icons">{{:btnLogin_style}}</i>
             </div>
 
-            <div onclick='suaidia' id="btnLogout" title="Log out {{:user}}" {{:btnLogout}}>
-                <a href="{{:dir}}/logout">
-                    <i class="material-icons">exit_to_app</i>
-                </a>
-            </div>
-
-            <div type="button" id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
+            <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
                 <a href="{{:dir}}/admin/user" target="_blank">
                     <i class="material-icons">supervisor_account</i>
                 </a>

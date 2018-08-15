@@ -1,4 +1,5 @@
-require('./workspace')(init);
+//require('./workspace')(init);
+require('./token')(init);
 
 function init() {
 
@@ -131,4 +132,7 @@ function init() {
     // Initialize report module.
     if (global._xyz.report) require('./report')();
 
+    document.getElementById('btnLogin').addEventListener('click', () => {
+        window.location = document.head.dataset.dir + '/login?redirect=' + (document.head.dataset.dir || '/') + window.location.search;
+    });
 }

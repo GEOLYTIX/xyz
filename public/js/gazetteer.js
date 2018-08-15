@@ -149,7 +149,8 @@ function initiateSearch(searchValue, dom) {
     global._xyz.gazetteer.xhrSearch = new XMLHttpRequest();
     global._xyz.gazetteer.xhrSearch.open('GET', global._xyz.host + '/api/gazetteer/autocomplete?' + utils.paramString({
         locale: global._xyz.locale,
-        q: encodeURIComponent(searchValue)
+        q: encodeURIComponent(searchValue),
+        token: global._xyz.token
     }));
 
     global._xyz.gazetteer.xhrSearch.onload = e => {
@@ -218,7 +219,7 @@ function selectResult(record, dom) {
         // Get the geometry from the gazetteer database.
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', global._xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id']);
+        xhr.open('GET', global._xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id'] + '&token=' + global._xyz.token);
 
         xhr.onload = e => {
 

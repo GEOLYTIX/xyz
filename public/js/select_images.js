@@ -153,7 +153,8 @@ function upload_image(record, img, blob) {
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,
-        id: record.location.id
+        id: record.location.id,
+        token: global._xyz.token
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = e => {
@@ -206,7 +207,8 @@ function remove_image(record, img) {
         table: record.location.table,
         id: record.location.id,
         image_id: img.id,
-        image_src: encodeURIComponent(img.src)
+        image_src: encodeURIComponent(img.src),
+        token: global._xyz.token
     }));
     xhr.onload = e => {
 

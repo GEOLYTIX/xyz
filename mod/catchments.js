@@ -250,8 +250,10 @@ async function catchment_calc(req, res, fastify) {
     // Reverse order of Isobands in array
     res.data.iso.features.reverse();
 
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
     let
-        token = fastify.jwt.decode(req.cookies.xyz_token),
         layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
         table_target = layer.table,
         geom_target = layer.geom_target ? layer.geom_target : 'geom';

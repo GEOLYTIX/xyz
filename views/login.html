@@ -99,7 +99,7 @@
 </head>
 <body>
 <div>
-    <form method="post">
+    <form action="{{:action}}" method="post">
 
         <div class="input_group">
             <input id="auth_user_email" name="email" type="email" autocomplete="username" maxlength="50">
@@ -118,7 +118,7 @@
         <br>
         <p class="msg">{{:msg}}</p>
 
-        <button id="btnLogin" type="submit" formaction="login" disabled>
+        <button id="btnLogin" type="submit" disabled>
             Log In
         </button>
 

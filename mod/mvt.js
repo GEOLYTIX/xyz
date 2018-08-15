@@ -1,8 +1,11 @@
 module.exports = { get };
 
 async function get(req, res, fastify) {
+
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
     let
-        token = fastify.jwt.decode(req.cookies.xyz_token),
         layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
         table = req.query.table,
         geom_3857 = layer.geom_3857 ? layer.geom_3857 : 'geom_3857',
@@ -14,21 +17,21 @@ async function get(req, res, fastify) {
         z = parseInt(req.params.z),
         m = 20037508.34,
         r = (m * 2) / (Math.pow(2, z));
-    
+
     // Check whether string params are found in the settings to prevent SQL injections.
     if ([id, table, tilecache, layer, geom_3857, properties]
         .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
-    
-    if(properties) properties = `${properties},`;
+
+    if (properties) properties = `${properties},`;
 
     if (tilecache) {
         try {
             var db_connection = await fastify.pg[layer.dbs].connect();
             var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
             db_connection.release();
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             res.code(500).send("soz. it's not you. it's me.");
         }

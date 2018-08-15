@@ -2,7 +2,10 @@ module.exports = { newRecord, newAggregate, updateRecord, deleteRecord };
 
 async function newRecord(req, res, fastify) {
 
-    let token = fastify.jwt.decode(req.cookies.xyz_token),
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
+    let
         layer = global.workspace[token.access].config.locales[req.body.locale].layers[req.body.layer],
         table = req.body.table,
         geom = layer.geom ? layer.geom : 'geom',
@@ -29,8 +32,11 @@ async function newRecord(req, res, fastify) {
 }
 
 async function newAggregate(req, res, fastify) {
+
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
     let
-        token = fastify.jwt.decode(req.cookies.xyz_token),
         layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
         target_layer = global.workspace[token.access].config.locales[req.query.locale].layers[layer.aggregate_layer],
         table_source = layer.table,
@@ -45,7 +51,7 @@ async function newAggregate(req, res, fastify) {
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
-    
+
     let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
         layer.access_filter[token.email] : null;
 
@@ -85,7 +91,7 @@ async function newAggregate(req, res, fastify) {
         WHERE true ${filter_sql} ${access_filter ? 'and ' + access_filter : ''}
     
     RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
-    
+
     //console.log(q);
 
     var db_connection = await fastify.pg[layer.dbs].connect();
@@ -102,14 +108,16 @@ async function newAggregate(req, res, fastify) {
 async function updateRecord(req, res, fastify) {
     try {
 
+        const token = req.query.token ?
+            fastify.jwt.decode(req.query.token) : { access: 'public' };
+
         let
-            token = fastify.jwt.decode(req.cookies.xyz_token),
             layer = global.workspace[token.access].config.locales[req.body.locale].layers[req.body.layer],
             table = req.body.table,
             qID = layer.qID ? layer.qID : 'id',
             id = req.body.id,
             geom = layer.geom ? layer.geom : 'geom';
-            geometry = JSON.stringify(req.body.geometry),
+        geometry = JSON.stringify(req.body.geometry),
             log_table = layer.log_table ? layer.log_table : null;
 
         // Check whether string params are found in the settings to prevent SQL injections.
@@ -152,8 +160,10 @@ async function updateRecord(req, res, fastify) {
 
 async function deleteRecord(req, res, fastify) {
 
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
     let
-        token = fastify.jwt.decode(req.cookies.xyz_token),
         layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
         table = req.query.table,
         qID = layer.qID ? layer.qID : 'id',
@@ -179,8 +189,6 @@ async function deleteRecord(req, res, fastify) {
 }
 
 async function writeLog(req, log_table, table, qID, id, fastify) {
-
-    let token = fastify.jwt.decode(req.cookies.xyz_token);
 
     var q = `
     INSERT INTO ${log_table} 

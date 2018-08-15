@@ -34,7 +34,7 @@ module.exports = function() {
             south: bounds.getSouth(),
             east: bounds.getEast(),
             north: bounds.getNorth(),
-            noredirect: true
+            token: global._xyz.token
         }));
 
         // Draw layer on load event.

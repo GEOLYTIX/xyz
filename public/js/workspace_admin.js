@@ -1,6 +1,28 @@
+let token = window.location.search.replace('?token=','');
+
+history.pushState({ token: true }, 'token', document.head.dataset.dir + '/admin/workspace');
+
+const _xhr = new XMLHttpRequest();
+_xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + token);
+_xhr.onload = e => {
+    token = e.target.response
+    setTimeout(renewToken, 6000);
+}
+_xhr.send();
+
+const renewToken = () => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + token);
+    xhr.onload = e => {
+        token = e.target.response;
+        setTimeout(renewToken, 6000);
+    }
+    xhr.send();
+}
+
 let xhr = new XMLHttpRequest();
 
-xhr.open('GET', document.head.dataset.dir + '/workspace/get?noredirect=true');
+xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + token);
 
 xhr.onload = e => init(JSON.parse(e.target.response));
 
@@ -28,7 +50,7 @@ function init(json) {
     
     btnSave.addEventListener('click', function () {
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'workspace/save');
+        xhr.open('POST', 'workspace/save?token=' + token);
         xhr.setRequestHeader('Content-Type', 'application/json');
     
         xhr.onload = function () {

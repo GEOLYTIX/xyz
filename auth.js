@@ -1,13 +1,5 @@
 module.exports = { init, authToken }
 
-const cookie_options = {
-    httpOnly: true,
-    //secure: true,
-    path: process.env.DIR || '/'
-};
-
-const token_options = {};
-
 function init(fastify) {
 
     // Get ACL table name from env settings.
@@ -26,39 +18,27 @@ function init(fastify) {
 
         fastify.route({
             method: 'GET',
-            url: '/logout',
-            handler: (req, res) => {
-
-                return res
-                    .setCookie('xyz_token', fastify.jwt.sign({
-                        redirect: global.dir + '/',
-                        access: 'public',
-                        status: 'Logged out from application'
-                    }, token_options), cookie_options)
-                    .redirect(process.env.DIR || '/');
-            }
-        });
-
-        fastify.route({
-            method: 'GET',
             url: '/login',
             handler: (req, res) => {
 
-                const token = (req.cookies && req.cookies.xyz_token) ?
-                    fastify.jwt.decode(req.cookies.xyz_token) : { access: 'public', status: '' };
+                const msgs = {
+                    fail: `Login has failed.<br />`
+                        + `This may be due to insufficient priviliges or the account being locked.<br />`
+                        + `More details will have been sent via mail to prevent user enumeration.`,
+                    validation: `Redirect from registry or password reset.<br />`
+                        + `Please check your inbox for an email with additional details.`,
+                    reset: `The password has been reset for this account.`
+                };
 
-                // Empty status in user token.
-                // res.setCookie('xyz_token', fastify.jwt.sign({
-                //     access: 'public',
-                //     status: ''
-                // }, token_options), cookie_options);
-
-                // Render login view with status msg.
                 res
                     .type('text/html')
                     .send(require('jsrender')
                         .templates('./views/login.html')
-                        .render({ dir: global.dir, msg: token.status }));
+                        .render({
+                            dir: global.dir,
+                            action: req.req.url,
+                            msg: req.query.msg ? msgs[req.query.msg] : null
+                        }));
             }
         });
 
@@ -67,16 +47,7 @@ function init(fastify) {
             url: '/login',
             handler: async (req, res) => {
 
-                let redirect = '';
-                if (req.cookies && req.cookies.xyz_token) {
-                    const token = fastify.jwt.decode(req.cookies.xyz_token);
-                    redirect = token.redirect;
-                    delete token.redirect;
-
-                    // Empty status in user token.
-                    res.setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
-                }
-
+                // Get user from ACL.
                 var user_db = await fastify.pg.users.connect();
                 var result = await user_db.query(
                     `SELECT * FROM ${user_table} WHERE lower(email) = lower($1);`,
@@ -87,44 +58,48 @@ function init(fastify) {
                 const user = result.rows[0];
 
                 if (!user) {
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            status: 'User account not found in access control list.'
-                        }, token_options), cookie_options)
-                        .redirect(global.dir + '/login');
+                    return res.redirect(global.dir + '/login?msg=fail');
                 }
 
-                if (!user.verified) {
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            email: user.email,
-                            status: 'User account email not yet verified.'
-                        }, token_options), cookie_options)
-                        .redirect(global.dir + '/login');
-                }
+                if (!user.verified || !user.approved) {
 
-                if (!user.approved) {
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            email: user.email,
-                            status: 'User account not yet approved by site administrator.'
-                        }, token_options), cookie_options)
-                        .redirect(global.dir + '/login');
+                    // Sent fail mail.
+                    require('./mailer')({
+                        to: user.email,
+                        subject: `A failed login attempt was made on ${req.headers.host}${global.dir}`,
+                        text: `${user.verified ? 'The account is verified. \n \n' : 'The account is NOT verified. \n \n'}`
+                            + `${user.approved ? 'The account is approved. \n \n' : 'The account is NOT approved. \n \n'}`
+                            + `The failed attempt occured from this remote address ${req.req.connection.remoteAddress} \n \n`
+                            + `This wasn't you? Please let your manager know. \n \n`
+                    });
+
+                    return res.redirect(global.dir + '/login?msg=fail');
                 }
 
                 // Check password from post body against encrypted password from ACL.
                 if (require('bcrypt-nodejs').compareSync(req.body.password, user.password)) {
 
-                    // Password match
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            email: user.email,
-                            verified: user.verified,
-                            approved: user.approved,
-                            admin: user.admin,
-                            access: user.admin ? 'admin' : 'private'
-                        }, token_options), cookie_options)
-                        .redirect(redirect || global.dir || '/');
+                    // Create initial token which expires in 10 seconds.
+                    const token = fastify.jwt.sign({
+                        email: user.email,
+                        verified: user.verified,
+                        approved: user.approved,
+                        admin: user.admin,
+                        access: user.admin ? 'admin' : 'private'
+                    }, { expiresIn: 10 });
+
+                    // attach token to redirect from query
+                    if (req.query.redirect) {
+                        let url = req.req.url.replace(global.dir + '/login?redirect=', ''),
+                            sign = url.indexOf('?') === -1 ? '?' : '&';
+                        return res.redirect(url + sign + 'token=' + token);
+                    }
+
+                    // attach token
+                    return res.redirect(req.req.url
+                        .replace('login?', '?token=' + token + '&')
+                        .replace('login', '?token=' + token)
+                        .replace('/?', '?'));
 
                 } else {
 
@@ -154,27 +129,28 @@ function init(fastify) {
                         // Sent email with verification link to user.
                         require('./mailer')({
                             to: user.email,
-                            subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${global.dir}`,
+                            subject: `Too many failed login attempts occured on ${req.headers.host}${global.dir}`,
                             text: `${global.failed_attempts} failed login attempts have been recorded on this account. \n \n`
+                                + `This account has now been locked until verified. \n \n`
                                 + `Please verify that you are the account holder: https://${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
-                                + `Verifying the account will reset the failed login attempts.`
+                                + `Verifying the account will reset the failed login attempts. \n \n`
+                                + `The failed attempt occured from this remote address ${req.req.connection.remoteAddress} \n \n`
+                                + `This wasn't you? Please let your manager know. \n \n`
                         });
 
-                        return res
-                            .setCookie('xyz_token', fastify.jwt.sign({
-                                email: user.email,
-                                status: `${global.failed_attempts} failed login attempts. Account verification has been removed. <br />`
-                                    + `Please check your inbox and confirm that you are the account holder.`
-                            }, token_options), cookie_options)
-                            .redirect(global.dir + '/login');
+                    } else {
+                        // Sent fail mail.
+                        require('./mailer')({
+                            to: user.email,
+                            subject: `A failed login attempt was made on ${req.headers.host}${global.dir}`,
+                            text: `An incorrect password was entered! \n \n`
+                                + `The failed attempt occured from this remote address ${req.req.connection.remoteAddress} \n \n`
+                                + `This wasn't you? Please let your manager know. \n \n`
+                        });
                     }
 
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            email: user.email,
-                            status: `Wrong password. ${result.rows[0].failedattempts} failed login attempts.`
-                        }, token_options), cookie_options)
-                        .redirect(global.dir + '/login');
+                    return res.redirect(global.dir + '/login?msg=fail');
+
                 }
             }
         });
@@ -200,12 +176,8 @@ function init(fastify) {
 
                 // Backend validation of email address.
                 if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            email: email,
-                            status: `Not a valid email address.`
-                        }, token_options), cookie_options)
-                        .redirect(global.dir + '/login');
+
+                    return res.redirect(global.dir + '/login?msg=validation');
                 }
 
                 var user_db = await fastify.pg.users.connect();
@@ -223,60 +195,47 @@ function init(fastify) {
                 if (user) {
                     var user_db = await fastify.pg.users.connect();
                     await user_db.query(`
-                UPDATE ${user_table} SET
-                    verified = false,
-                    password = '${password}',
-                    verificationtoken = '${verificationtoken}'
-                WHERE lower(email) = lower($1);`, [email]);
+                        UPDATE ${user_table} SET
+                            password_reset = '${password}',
+                            verificationtoken = '${verificationtoken}'
+                        WHERE lower(email) = lower($1);`, [email]);
                     user_db.release();
 
                     require('./mailer')({
                         to: user.email,
-                        subject: `Please verify your GEOLYTIX account (password reset) on ${req.headers.host}${global.dir}`,
+                        subject: `Please verify your password reset for ${req.headers.host}${global.dir}`,
                         text: `A new password has been set for this account. \n \n`
-                            + `Please verify that you are the account holder: https://${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken}`
+                            + `Please verify that you are the account holder: https://${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
+                            + `The reset occured from this remote address ${req.req.connection.remoteAddress} \n \n`
+                            + `This wasn't you? Please let your manager know. \n \n`
                     });
 
-                    return res
-                        .setCookie('xyz_token', fastify.jwt.sign({
-                            email: user.email,
-                            status: `You have reset the password <br />`
-                                + `A verification mail has been sent to your registered address. <br />`
-                                + `Please follow the link in the email to verify that you are the account holder. <br />`
-                                + `You must verify your account before you are able to login with your new password.`
-                        }, token_options), cookie_options)
-                        .redirect(global.dir + '/login');
+                    return res.redirect(global.dir + '/login?msg=validation');
                 }
 
                 // Create new user account
                 var user_db = await fastify.pg.users.connect();
                 await user_db.query(`
-            INSERT INTO ${user_table} (email, password, verificationtoken)
-            SELECT
-                '${email}' AS email,
-                '${password}' AS password,
-                '${verificationtoken}' AS verificationtoken;`);
+                    INSERT INTO ${user_table} (email, password, verificationtoken)
+                    SELECT
+                        '${email}' AS email,
+                        '${password}' AS password,
+                        '${verificationtoken}' AS verificationtoken;`);
                 user_db.release();
 
                 require('./mailer')({
                     to: email,
-                    subject: `Please verify your GEOLYTIX account on ${req.headers.host}${global.dir}`,
+                    subject: `Please verify your account on ${req.headers.host}${global.dir}`,
                     text: `A new account for this email address has been registered with ${req.headers.host}${global.dir} \n \n`
                         + `Please verify that you are the account holder: https://${req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
                         + `A site administrator must approve the account before you are able to login. \n \n`
-                        + `You will be notified via email once an adimistrator has approved your account.`
+                        + `You will be notified via email once an adimistrator has approved your account. \n \n`
+                        + `The account was registered from this remote address ${req.req.connection.remoteAddress} \n \n`
+                        + `This wasn't you? Do NOT verify the account and let your manager know. \n \n`
+
                 });
 
-                return res
-                    .setCookie('xyz_token', fastify.jwt.sign({
-                        email: email,
-                        status: `We registered your email address in the access control list. <br />`
-                            + `A verification mail has been sent to your registered address. <br />`
-                            + `Please follow the link in the email to verify that you are the account holder. <br />`
-                            + `A site administrator must approve the account before you are able to login. <br />`
-                            + `You will be notified via email once an adimistrator has approved your account.`
-                    }, token_options), cookie_options)
-                    .redirect(global.dir + '/login');
+                return res.redirect(global.dir + '/login?msg=validation');
             }
         });
 
@@ -314,7 +273,7 @@ function init(fastify) {
         fastify.route({
             method: 'POST',
             url: '/admin/user/update',
-            beforeHandler: fastify.auth([fastify.authAdmin]),
+            beforeHandler: fastify.auth([fastify.authAdminAPI]),
             handler: async (req, res) => {
 
                 // Get user to update from ACL.
@@ -341,7 +300,7 @@ function init(fastify) {
         fastify.route({
             method: 'POST',
             url: '/admin/user/delete',
-            beforeHandler: fastify.auth([fastify.authAdmin]),
+            beforeHandler: fastify.auth([fastify.authAdminAPI]),
             handler: async (req, res) => {
 
                 // Delete user account in ACL.
@@ -385,15 +344,26 @@ function init(fastify) {
 
                 if (!user) return res.send('Token not found.');
 
+                if (user.password_reset) {
+                    var user_db = await fastify.pg.users.connect();
+                    await user_db.query(`
+                        UPDATE ${user_table} SET
+                            verified = true,
+                            password = '${user.password_reset}'
+                        WHERE lower(email) = lower($1);`, [user.email]);
+                    user_db.release();
+                    return res.redirect(global.dir + '/login?msg=reset');
+                }
+
                 if (user.verified && user.admin) return res.redirect(global.dir || '/');
 
-                if (user.verified) return res.send('User account has already been verfied but is still awaiting administrator approval.');
+                if (user.verified) return res.send('User account is verfied but still awaiting administrator approval.');
 
                 if (!user.approved) {
                     let approvaltoken = require('crypto').randomBytes(20).toString('hex');
 
                     var user_db = await fastify.pg.users.connect();
-                    let update = await user_db.query(`
+                    await user_db.query(`
                         UPDATE ${user_table} SET
                             verified = true,
                             failedattempts = 0,
@@ -424,7 +394,7 @@ function init(fastify) {
                 }
 
                 var user_db = await fastify.pg.users.connect();
-                let update = await user_db.query(`
+                await user_db.query(`
                     UPDATE ${user_table} SET
                         verified = true,
                         failedattempts = 0
@@ -456,11 +426,11 @@ function init(fastify) {
                 if (!user) return res.send('Token not found.');
 
                 var user_db = await fastify.pg.users.connect();
-                let update = await user_db.query(`
-                                    UPDATE ${user_table} SET
-                                        approved = true,
-                                        approvaltoken = '${user.approvaltoken}'
-                                    WHERE lower(email) = lower($1);`, [user.email]);
+                await user_db.query(`
+                    UPDATE ${user_table} SET
+                        approved = true,
+                        approvaltoken = '${user.approvaltoken}'
+                    WHERE lower(email) = lower($1);`, [user.email]);
                 user_db.release();
 
                 require('./mailer')({
@@ -473,135 +443,73 @@ function init(fastify) {
             }
         });
 
-        next();
+        // Check verification token and approve account
+        fastify.route({
+            method: 'GET',
+            url: '/token/renew',
+            handler: async (req, res) => {
+                fastify.jwt.verify(req.query.token, (err, token) => {
+                    if (err) {
+                        fastify.log.error(err);
+                        return res.redirect(global.dir + '/login');
+                    }
+                    delete token.iat;
+                    delete token.exp;
+                    res.send(fastify.jwt.sign(token, { expiresIn: 90 }));
+                });
+            }
+        });
 
+        next();
+ 
     }, { prefix: global.dir });
 }
 
 function authToken(req, res, fastify, access, done) {
 
-    // Pass through if access is public.
-    if (access === 'public' && !req.cookies.xyz_token) {
-
-        var cookie = fastify.jwt.sign({ access: 'public' }, token_options);
-
-        if (!req.cookies.xyz_token) req.cookies.xyz_token = cookie;
-
-        // Generate an anonymous user token and an empty session token.
-        res.setCookie('xyz_token', cookie, cookie_options);
-
+    // Public access
+    if (access.lv === 'public') {
+        req.query.token = req.query.token && req.query.token !== 'null' ? req.query.token : null;
         return done();
     }
 
-    // Get token from either the cookie or a query.
-    const token = (req.cookies && req.cookies.xyz_token) ?
-        req.cookies.xyz_token :
-        (req.query.token) ?
-            req.query.token :
-            null;
-
     // No token found.
-    if (!token) {
-        res
-            .code(401)
-            .setCookie('xyz_token', fastify.jwt.sign({
-                anonymous: true,
-                redirect: req.req.url
-            }, token_options), cookie_options);
+    if (!req.query.token) {
 
-        if (req.query.noredirect) return res.send('No user token found in request.');
+        // Do not redirect API calls.
+        if (access.API) return res.code(401).send();
 
-        return res.redirect(global.dir + '/login');
+        // Redirect to login with request URL as redirect parameter
+        return res.redirect(global.dir + '/login?redirect=' + req.req.url);
     }
 
-    fastify.jwt.verify(token, (err, token) => {
+    // Verify token (checks token expiry)
+    fastify.jwt.verify(req.query.token, (err, token) => {
         if (err) {
             fastify.log.error(err);
-            return res.redirect(global.dir + '/login');
-        }
-
-        // Pass through if access is public.
-        if (access === 'public' && token.access === 'public') return done();
-
-        // Get the current time and the token age.
-        let time_now = parseInt(Date.now() / 1000),
-            token_age = time_now - token.iat;
-
-        // Token age exceeds timeout.
-        if (token_age >= global.timeout) {
-            token.status = 'Session timed out.';
-            token.redirect = req.req.url;
-
-            res
-                .code(401)
-                .setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
-
-            if (req.query.noredirect) return res.send('User token timed out.');
-
-            return res.redirect(global.dir + '/login');
+            return res.code(401).send();
         }
 
         // Check admin privileges.
-        if (access === 'admin' && !token.admin) {
-            token.status = 'Admin authorization required for the requested route.';
-            token.redirect = req.req.url;
+        if (access.lv === 'admin' && !token.admin) {
 
-            res
-                .code(401)
-                .setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
+            // Do not redirect API calls.
+            if (access.API) return res.code(401).send();
 
-            return res.redirect(global.dir + '/login');
+            // Redirect to login.
+            return res.redirect(global.dir + '/login?msg=fail');
         }
 
-        // Check whether user token has an email field.
-        if (!token.email) {
+        // Check whether account in token is valid.
+        if (!token.email || !token.verified || !token.approved) {
 
-            token.access = 'public';
-            token.redirect = req.req.url;
+            // Do not redirect API calls.
+            if (access.API) return res.code(401).send();
 
-            res
-                .code(401)
-                .setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
-
-            if (req.query.noredirect) return res.send('Email not defined in token.');
-
+            // Redirect to login.
             return res.redirect(global.dir + '/login');
         }
-
-        // Check whether user token is verified.
-        if (!token.verified) {
-            token.status = 'User email not verified.';
-            token.redirect = req.req.url;
-
-            res
-                .code(401)
-                .setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
-
-            if (req.query.noredirect) return res.send('User email not verified.');
-
-            return res.redirect(global.dir + '/login');
-        }
-
-        // Check whether user token is verified and approved.
-        if (!token.approved) {
-            token.status = 'User email not approved by administrator.';
-            token.redirect = req.req.url;
-
-            res
-                .code(401)
-                .setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
-
-            if (req.query.noredirect) return res.send('User email not approved by administrator.');
-
-            return res.redirect(global.dir + '/login');
-        }
-
-        // Issue a new user token with current time.
-        token.iat = time_now;
-
-        res.setCookie('xyz_token', fastify.jwt.sign(token, token_options), cookie_options);
 
         done();
-
     });
 }

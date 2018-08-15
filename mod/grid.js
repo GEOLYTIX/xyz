@@ -2,8 +2,10 @@ module.exports = { get };
 
 async function get(req, res, fastify) {
 
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
     let
-        token = fastify.jwt.decode(req.cookies.xyz_token),
         layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
         geom = layer.geom ? layer.geom : 'geom',
         table = req.query.table,

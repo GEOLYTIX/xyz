@@ -3,14 +3,11 @@ const svg_symbols = require('./svg_symbols');
 
 // import * as _utils from './_utils';
 
-module.exports = init => {
+module.exports = (next, token) => {
 
     let xhr = new XMLHttpRequest();
 
-    // let host = document.URL.split('?')[0].replace(window.origin, '');
-    // host = host === '/' ? '' : host;
-
-    xhr.open('GET', document.head.dataset.dir + '/workspace/get?noredirect=true');
+    xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + token);
 
     xhr.onload = e => {
         
@@ -32,10 +29,11 @@ module.exports = init => {
             })
         })(_xyz)
 
+        _xyz.token = token;
         _xyz.view_mode = document.body.dataset.viewmode;
         _xyz.host = document.head.dataset.dir;
         global._xyz = _xyz;
-        init();
+        next();
     }
 
     xhr.send();

@@ -50,7 +50,7 @@ function loadLayer(layer) {
         south: bounds.getSouth(),
         east: bounds.getEast(),
         north: bounds.getNorth(),
-        noredirect: true
+        token: global._xyz.token
     }));
 
     // Process XHR onload.
@@ -201,7 +201,7 @@ function clusterMouseClick(e, layer) {
         filter: JSON.stringify(layer.filter),
         count: count > 99 ? 99 : count,
         lnglat: lnglat,
-        noredirect: true
+        token: global._xyz.token
     }));
 
     xhr.onload = e => {

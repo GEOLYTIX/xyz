@@ -247,7 +247,8 @@ module.exports = (layer, panel) => {
                             detail: sliDetail.value,
                             reach: sliReach.value,
                             mode: selMode.options[selMode.selectedIndex].value,
-                            provider: selProvider.options[selProvider.selectedIndex].value
+                            provider: selProvider.options[selProvider.selectedIndex].value,
+                            token: global._xyz.token
                         }));
                     
                         xhr.setRequestHeader('Content-Type', 'application/json');

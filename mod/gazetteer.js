@@ -2,9 +2,8 @@ module.exports = { autocomplete, googleplaces }
 
 async function autocomplete(req, res, fastify) {
 
-    let token = req.query.token ?
-        fastify.jwt.decode(req.query.token) :
-        fastify.jwt.decode(req.cookies.xyz_token);
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
 
     let locale = global.workspace[token.access].config.locales[req.query.locale];
 
@@ -19,7 +18,7 @@ async function autocomplete(req, res, fastify) {
 }
 
 async function placesAutoComplete(req, res, locale, fastify) {
-    for (let dataset of locale.gazetteer.datasets){
+    for (let dataset of locale.gazetteer.datasets) {
         var q = `
         SELECT
             ${dataset.label} AS label,
@@ -30,12 +29,12 @@ async function placesAutoComplete(req, res, locale, fastify) {
             WHERE ${dataset.label} ILIKE '${decodeURIComponent(req.query.q)}%'
             ORDER BY length(${dataset.label})
             LIMIT 10`;
-     
+
         var db_connection = await fastify.pg[locale.layers[dataset.layer].dbs].connect();
         var result = await db_connection.query(q);
         db_connection.release();
 
-        if (result.rows.length > 0) {       
+        if (result.rows.length > 0) {
             res.code(200).send(Object.values(result.rows).map(row => {
                 return {
                     label: row.label,
@@ -53,10 +52,10 @@ async function placesAutoComplete(req, res, locale, fastify) {
 
 function MAPBOX_placesAutoComplete(req, res, gazetteer) {
     var q = `https://api.mapbox.com/geocoding/v5/mapbox.places/${req.query.q}.json?`
-          + `${gazetteer.code ? 'country=' + gazetteer.code : ''}`
-          + `${gazetteer.bounds ? 'bbox=' + gazetteer.bounds : ''}`
-          + `&types=postcode,district,locality,place,neighborhood,address,poi`
-          + `&${global.KEYS[gazetteer.provider]}`;
+        + `${gazetteer.code ? 'country=' + gazetteer.code : ''}`
+        + `${gazetteer.bounds ? 'bbox=' + gazetteer.bounds : ''}`
+        + `&types=postcode,district,locality,place,neighborhood,address,poi`
+        + `&${global.KEYS[gazetteer.provider]}`;
 
     require('request').get(q, (err, response, body) => {
         if (err) {
@@ -82,9 +81,9 @@ function MAPBOX_placesAutoComplete(req, res, gazetteer) {
 
 function GOOGLE_placesAutoComplete(req, res, gazetteer) {
     var q = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.q}`
-          + `${gazetteer.code ? '&components=country:' + gazetteer.code : ''}`
-          + `${gazetteer.bounds ? decodeURIComponent(gazetteer.bounds) : ''}`
-          + `&${global.KEYS[gazetteer.provider]}`;
+        + `${gazetteer.code ? '&components=country:' + gazetteer.code : ''}`
+        + `${gazetteer.bounds ? decodeURIComponent(gazetteer.bounds) : ''}`
+        + `&${global.KEYS[gazetteer.provider]}`;
 
     require('request').get(q, (err, response, body) => {
         if (err) {
@@ -104,7 +103,7 @@ function GOOGLE_placesAutoComplete(req, res, gazetteer) {
 
 function googleplaces(req, res) {
     var q = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}`
-          + `&${global.KEYS.GOOGLE}`;
+        + `&${global.KEYS.GOOGLE}`;
 
     require('request').get(q, (err, response, body) => {
         if (err) {

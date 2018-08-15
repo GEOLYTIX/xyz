@@ -2,8 +2,6 @@ module.exports = fastify => {
 
     global.dir = process.env.DIR || '';
 
-    global.timeout = parseInt(process.env.TIMEOUT) || 30;
-
     global.failed_attempts = parseInt(process.env.FAILED_ATTEMPTS) || 3;
 
     global.access = process.env.PRIVATE ? 'private' : 'public';

@@ -177,7 +177,7 @@ module.exports = () => {
         setChartData(layer, location);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', global._xyz.host + '/api/location/select');
+        xhr.open('POST', global._xyz.host + '/api/location/select?token=' + global._xyz.token);
         xhr.setRequestHeader('Content-Type', 'application/json');
         
         xhr.onload = e => {
@@ -228,7 +228,7 @@ module.exports = () => {
                         _arr.push(layer.charts[chart][item].field);
                     });
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST', global._xyz.host + '/api/location/chart');
+                    xhr.open('POST', global._xyz.host + '/api/location/chart?token=' + global._xyz.token);
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onload = function(){
                         if (this.status === 200){

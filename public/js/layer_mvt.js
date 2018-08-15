@@ -22,19 +22,12 @@ module.exports = function () {
         layer.loaded = false;
         layer.loader.style.display = 'block';
 
-        // let cookies = document.cookie.split(/[;] */).reduce((result, pairStr) => {
-        //     let arr = pairStr.split('=');
-        //     if (arr.length === 2) { result[arr[0]] = arr[1]; }
-        //     return result;
-        // }, {});
-
         let url = global._xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
             locale: _xyz.locale,
             layer: layer.layer,
             table: layer.table,
             properties: layer.properties,
-            noredirect: true,
-            //token: cookies.xyz_token,
+            token: global._xyz.token
         }),
             options = {
                 rendererFactory: L.svg.tile,

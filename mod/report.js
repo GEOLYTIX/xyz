@@ -26,7 +26,6 @@ async function request(req, res) {
         //btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
         //hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
         btnReport: global.appSettings.report ? '' : 'style="display: none;"',
-        btnLogout: req.user ? '' : 'style="display: none;"',
         btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
         btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
         btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',

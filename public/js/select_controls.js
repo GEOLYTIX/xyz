@@ -164,7 +164,7 @@ function update(record) {
                 let layer = global._xyz.locales[global._xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', global._xyz.host + '/api/location/update');
+                xhr.open('POST', global._xyz.host + '/api/location/update?token=' + global._xyz.token);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -235,7 +235,7 @@ function trash(record) {
                     layer: layer.layer,
                     table: record.location.table,
                     id: record.location.id,
-                    noredirect: true
+                    token: global._xyz.token
                 }));
 
                 xhr.onload = e => {

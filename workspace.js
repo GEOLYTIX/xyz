@@ -11,11 +11,10 @@ module.exports = async fastify => {
         fastify.route({
             method: 'GET',
             url: '/workspace/get',
-            beforeHandler: fastify.auth([fastify.authAccess]),
+            beforeHandler: fastify.auth([fastify.authAPI]),
             handler: (req, res) => {
                 const token = req.query.token ?
-                    fastify.jwt.decode(req.query.token) :
-                    fastify.jwt.decode(req.cookies.xyz_token);
+                    fastify.jwt.decode(req.query.token) : { access: 'public' };
 
                 res.send(global.workspace[token.access].config);
             }
@@ -48,7 +47,7 @@ module.exports = async fastify => {
         fastify.route({
             method: 'POST',
             url: '/admin/workspace/save',
-            beforeHandler: fastify.auth([fastify.authAdmin]),
+            beforeHandler: fastify.auth([fastify.authAdminAPI]),
             handler: async (req, res) => {
 
                 if (process.env.WORKSPACE && process.env.WORKSPACE.split(':')[0] === 'file')
@@ -67,16 +66,6 @@ module.exports = async fastify => {
 
                 res.code(200).send('Settings saved.');
 
-            }
-        });
-
-        fastify.route({
-            method: 'GET',
-            url: '/admin/workspace/get',
-            beforeHandler: fastify.auth([fastify.authAccess]),
-            handler: (req, res) => {
-                const token = fastify.jwt.decode(req.cookies.xyz_token);
-                res.send(global.workspace[token.access].config);
             }
         });
 
