@@ -1,5 +1,6 @@
 const utils = require('./utils');
 const d3 = require('d3');
+const svg_symbols = require('./svg_symbols');
 
 module.exports = (layer, panel) => {
 
@@ -293,7 +294,7 @@ function clusterCategorized(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', layer.style.theme.cat[item].marker);
+            .attr('xlink:href', svg_symbols.create(layer.style.theme.cat[item].marker));
 
         // Attach label with filter on click for the style category.
         svg.append('text')
@@ -327,7 +328,7 @@ function clusterCategorized(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', layer.style.marker);
+            .attr('xlink:href', svg_symbols.create(layer.style.marker));
 
         // Attach text with filter on click for the other/default category.
         svg.append('text')
@@ -356,7 +357,7 @@ function clusterCategorized(layer) {
     y += 25;
 
     // Add markerMulti default colour if not set.
-    if (!layer.style.markerMulti) layer.style.markerMulti = [400, '#333']
+    if (!layer.style.markerMulti) layer.style.markerMulti = {type: "target", style: [400, '#333']};
 
     // Add section for clusters and competitors title
 
@@ -364,7 +365,7 @@ function clusterCategorized(layer) {
         .attr('cx', 20)
         .attr('cy', y)
         .attr('r', 18)
-        .attr('fill', layer.style.markerMulti[1]);
+        .attr('fill', layer.style.markerMulti.style[1]);
 
 
     svg.append('text')
@@ -444,8 +445,8 @@ function clusterGraduated(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', cat.marker || '');
-
+            .attr('xlink:href', svg_symbols.create(cat.marker) || '');
+        
         // Attach label with filter on click for the style category.
         svg.append('text')
             .attr('x', 25)

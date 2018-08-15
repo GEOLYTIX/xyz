@@ -16,7 +16,7 @@ module.exports = () => {
             global._xyz.locate.L = L.marker([0, 0], {
                 interactive: false,
                 icon: L.icon({
-                    iconUrl: svg_symbols.markerGeolocation(),
+                    iconUrl: svg_symbols.create({type: "geo"}),
                     iconSize: 30
                 })
             });

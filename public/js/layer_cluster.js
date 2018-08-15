@@ -99,9 +99,11 @@ function addClusterToLayer(cluster, layer) {
     layer.L = L.geoJson(cluster, {
 
         pointToLayer: (point, latlng) => {
-
+        
             // Set icon to default marker. 
-            let icon = layer.style.marker || svg_symbols.target([400, '#aaa']);
+            let marker_style = layer.style.marker ? layer.style.marker : {type: "target", style: [400, '#aaa']};
+
+            let icon = svg_symbols.create(marker_style);
 
             // Set tooltip for desktop if corresponding layer has hover property.
             let tooltip = (layer.theme && layer.theme.hover && global._xyz.view_mode === 'desktop') || false;
@@ -110,7 +112,7 @@ function addClusterToLayer(cluster, layer) {
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
 
                 // Define a default dotArr.
-                let dotArr = layer.style.markerMulti instanceof Array ? utils.clone(layer.style.markerMulti) : [400, "#333"];
+                let dotArr = layer.style.markerMulti.style instanceof Array ? utils.clone(layer.style.markerMulti.style) : [400, "#333"];
 
                 if (layer.style.theme.competitors) {
                     let c = 0;
@@ -123,20 +125,22 @@ function addClusterToLayer(cluster, layer) {
                 }
 
                 // Create icon svg from dotArr.
-                icon = svg_symbols.target(dotArr);
+                icon = svg_symbols.create({type: "target", style: dotArr});
             }
 
             // Check whether layer has  categorized theme and only 1 location in cluster.
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length === 1) {
+                
                 icon = layer.style.theme.cat[Object.keys(point.properties.cat)[0]] ?
-                    layer.style.theme.cat[Object.keys(point.properties.cat)[0]].marker : icon;
+                    svg_symbols.create(layer.style.theme.cat[Object.keys(point.properties.cat)[0]].marker) : icon;
+                
             }
 
             // Graduated theme.
             if (layer.style.theme && layer.style.theme.type === 'graduated') {
                 for (let i = 0; i < layer.style.theme.cat.length; i++) {
                     if (point.properties.sum < layer.style.theme.cat[i].val) break;
-                    icon = layer.style.theme.cat[i].marker;
+                    icon = svg_symbols.create(layer.style.theme.cat[i].marker);
                 }
 
                 // Set tooltip for graduated theme property (sum).
@@ -177,7 +181,7 @@ function addClusterToLayer(cluster, layer) {
                 direction: 'top',
                 offset: [0, -10]
             }).openTooltip();
-
+            
             return marker;
         }
     })

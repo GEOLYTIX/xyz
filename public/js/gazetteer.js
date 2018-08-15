@@ -15,7 +15,7 @@ module.exports = () => {
 
     // Set gazetteer defaults if missing from appSettings.
     if (!global._xyz.gazetteer) global._xyz.gazetteer = {};
-    if (!global._xyz.gazetteer.icon) global._xyz.gazetteer.icon = svg_symbols.markerColor('#64dd17', '#33691e');
+    if (!global._xyz.gazetteer.icon) global._xyz.gazetteer.icon = svg_symbols.create({type: "markerColor", style: {colorMarker: '#64dd17', colorDot: '#33691e'}});
     if (!global._xyz.gazetteer.pane) global._xyz.gazetteer.pane = 550;
     if (!global._xyz.gazetteer.style) global._xyz.gazetteer.style = {
         stroke: true,

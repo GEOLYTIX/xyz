@@ -74,7 +74,7 @@ module.exports = function() {
                             {
                                 icon: L.icon({
                                     iconSize: size,
-                                    iconUrl: svg_symbols.dot(layer.style.range[parseInt(color)] || '#C0C0C0')
+                                    iconUrl: svg_symbols.create({type: "dot", style: {color: layer.style.range[parseInt(color)] || '#C0C0C0'}})
                                 }),
                                 pane: layer.pane[0],
                                 interactive: false

@@ -300,6 +300,22 @@ input[type=range]::-moz-range-thumb {
       text-shadow: 2px 2px 1px #777; }
     .infojTable .addImageCell input {
       display: none; }
+  .infojTable .table-section {
+    margin-top: 10px; }
+    .infojTable .table-section .t-expander {
+      vertical-align: bottom;
+      float: right;
+      font-size: 15px; }
+    .infojTable .table-section.expandable {
+      max-height: 35px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out; }
+      .infojTable .table-section.expandable .t-expander::before {
+        content: "expand_more"; }
+    .infojTable .table-section.expanded {
+      max-height: 2500px; }
+      .infojTable .table-section.expanded .t-expander::before {
+        content: "expand_less"; }
 
 #Gazetteer {
   display: none;

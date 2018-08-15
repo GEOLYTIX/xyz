@@ -54,4 +54,29 @@
             display: none;
         }
     }
+    
+    .table-section {
+        margin-top: 10px;
+        
+        .t-expander {
+            vertical-align: bottom;
+            float: right;
+            font-size: 15px;
+        }
+        
+        &.expandable {
+            max-height: 35px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            .t-expander::before {
+                content: "expand_more"
+            }
+        }
+        &.expanded {
+            max-height: 2500px;
+            .t-expander::before {
+               content: "expand_less"
+            }
+        }
+    }
 }
