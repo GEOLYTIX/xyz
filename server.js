@@ -18,7 +18,7 @@ fastify
             directives: {
                 defaultSrc: ["'self'"],
                 frameSrc: ["'self'", 'www.google.com', 'www.gstatic.com'],
-                styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+                styleSrc: ["'self'", 'fonts.googleapis.com'],
                 fontSrc: ["'self'", 'fonts.gstatic.com'],
                 scriptSrc: ["'self'", 'www.google.com', 'www.gstatic.com'],
                 imgSrc: ["'self'", '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'data:']
