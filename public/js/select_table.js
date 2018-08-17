@@ -69,8 +69,8 @@ function addInfojToList(record){
             let group_header = utils._createElement({
                 tag: "div",
                 options: {
-                    className: 'btn_subtext cursor noselect',
-                    textContent: entry.label
+                    className: 'btn_subtext cursor noselect'//,
+                    //textContent: entry.label
                 },
                 style: {
                     textAlign: "left",
@@ -89,6 +89,14 @@ function addInfojToList(record){
                         }
                     }
                 });
+            
+            utils._createElement({
+                tag: "span",
+                options: {
+                    textContent: entry.label
+                },
+                appendTo: group_header
+            });
             
             // Add icon which allows to expand / collaps panel.
             utils._createElement({
@@ -192,6 +200,9 @@ function populateTable(record, entry, tr, table){
 
     // Set field value if layer is not editable (or entry is locked) and return from object.map function.
     if ((!record.location.editable || entry.locked || entry.layer) && entry.value) {
+        
+        //console.log(entry);
+        
         val.textContent = entry.type === 'numeric' ? 
             parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: record.location.grid? 0: 2}) : entry.type === 'integer' ? 
             parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) : entry.type === 'date' ? 

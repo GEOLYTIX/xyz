@@ -43,31 +43,34 @@ async function select(req, res, fastify) {
         layer.access_filter[token.email] : null;
 
     let fields = '';
-
-    infoj.forEach(entry => {
-        
-        //console.log(entry);
-        if(entry.type == 'group'){
-            entry.items.forEach(item => {
-                if (item.type && item.type !== 'group') fields += `${item.fieldfx || item.field}::${item.type} AS ${item.field},`;
-            });
-        }
+    
+    function processInfoj(entry){
         
         if (entry.layer) {
             let entry_layer = global.workspace[token.access].config.locales[req.body.locale].layers[entry.layer];
-            
+
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
-             FROM ${entry_layer.table}
-             WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
-             ${access_filter ? 'AND ' + access_filter : ''}
+            FROM ${entry_layer.table}
+            WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
+            ${access_filter ? 'AND ' + access_filter : ''}
             ) AS "${entry.field}",`;
             return
         }
-
-        if (entry.type && entry.type !== 'group') fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},`
-
+        
+        if (entry.type && entry.type !== 'group') fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},`;
+        
         if (entry.subfield) fields += `${entry.subfield}::${entry.type} AS ${entry.subfield},`
+    }
+
+    infoj.forEach(entry => {
+        if(entry.type == "group"){
+            Object.values(entry.items).forEach(item => {
+                processInfoj(item);
+            });
+        } else {
+            processInfoj(entry);
+        }
     });
 
     var q = `
@@ -94,12 +97,7 @@ async function select(req, res, fastify) {
             });
         }
         setValues(result, entry);
-        /*if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
-            entry.value = result.rows[0][entry.field];
-        }
-        if (result.rows[0][entry.subfield]) {
-            entry.subvalue = result.rows[0][entry.subfield];
-        }*/
+        
     });
     
     function setValues(result, entry){
