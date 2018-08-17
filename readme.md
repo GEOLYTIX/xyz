@@ -311,14 +311,97 @@ Cluster layer recognizes the following `style` parameters:
 
 __Styling__
 
-Cluster style supports custom marker and marker size. Markers can be created with `svg_symbols` module or defined as *svg data URL*.
+Cluster style supports custom marker and marker size. Markers can be created with `svg_symbols` module or defined as *svg data URI*.
 
 ```javascript
 "markerMin": <numeric, smallest marker size, defaults to 20>,
 "markerMax": <numeric, largest marker size, defaults to 40>,
-"marker": <svg_module string input or dataURL>, // default marker for single feature
-"markerMulti": <array with pairs radius and hex colour, input for svg_module> // markerMulti is a cluster of features
+"marker": <svg_symbols options or dataURI>, // default marker for single feature
+"markerMulti": <dataURI or svg_symbols options> // markerMulti is a cluster of features
 ```
+
+__svg_symbols__
+
+This module creates SVG symbols for cluster features and associated layer legend. Each marker needs `type` and `style` properties.
+
+```javascript
+{"type": "", "style": <Object>}
+```
+The following marker types are supported:
+
+- `target`
+
+Type `target` is a round icon made of colorful concentric rings. Style for target is an array made of pairs of radius size and hex colour.
+Radius size starts at maximum 400. Each ring is made of size and colour.
+```javascript
+{
+  "type": "target",
+  "style": [400, "#000", 300, "#FFF", 200, "#000"]
+}
+```
+- `dot`
+
+`dot` is a simple dot marker used fo visualizing grid layers. Style is a object with property `color` only expected as hex colour.
+
+```javascript
+{
+  "type": "dot",
+  "style": {
+    "color": "#333" // dark gray dot
+  }
+}
+```
+
+- `circle`
+
+`circle` is a generic no-fill marker which needs `style.color` property.
+```javascript
+{
+  "type": "circle",
+  "style": {
+    "color": "#000" // black-stroke no-fill circle
+  }
+}
+```
+
+- `markerLetter`
+
+`markerLetter` is a pin icon used for selection. Pin is created with a colour and a selection reference letter.
+
+```javascript
+{
+  "type": "markerLetter",
+  "style": {
+    "color": "#333",
+    "letter": "A"
+  }
+}
+```
+
+- `markerColor`
+
+`markerColor` is a pin icon with generic use for gazetteer search. Style takes two parameters `colorMarker` and `colorDot` that make up color scheme for the pin.
+
+```javascript
+{
+  "type": "markerColor",
+  "style": {
+    "colorMarker": "#FF0000", // red and yellow pin
+    "colorDot": "#FFFF00"
+  }
+}
+```
+
+- `geo`
+
+`geo` is a generic location pin used by navigator.
+
+```javascript
+{
+  "type": "geo" // no style property
+}
+```
+
 __Theme__
 
 In order to display classified clusters `themes` parameters within layer style must be defined. `themes` is an array of theme objects. Currently there are 2 supported classification types: categorized and graduated.
@@ -493,7 +576,7 @@ Thematic MVT style configuration:
         {...}
       ]
     }
-]
+  ]
 ```
 
 Styles defined in `"themes"` array can also be used as default MVT style.
@@ -533,6 +616,17 @@ Styles defined in `"themes"` array can also be used as default MVT style.
   "parent value 2;child value 1 for value 2;child value 1 for value 2",
   (...)
 ]
+```
+
+`infoj` supports groups of items organized in collapsible sections.
+To define a group type `group` is used:
+
+```javascript
+{
+  "label": "Group name",
+  "type": "group",
+  "items": [] // items takes array of infoj objects described above.
+}
 ```
 
 First value before semicolon will determine subsequent choice.
