@@ -6,6 +6,8 @@ module.exports = fastify => {
 
     global.access = process.env.PRIVATE ? 'private' : 'public';
 
+    global.alias = process.env.ALIAS ? process.env.ALIAS : null;
+
     global.KEYS = {};
     Object.keys(process.env).forEach(key => {
         if (key.split('_')[0] === 'KEY') {

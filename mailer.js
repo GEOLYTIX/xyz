@@ -4,7 +4,7 @@ module.exports = mail => {
     require('nodemailer').createTransport(process.env.TRANSPORT).sendMail({
         from: `\<${process.env.TRANSPORT.split(':')[1]}\>`,
         to: mail.to,
-        subject: mail.subject,
-        text: mail.text
+        subject: mail.subject.replace(/”/g,""),
+        text: mail.text.replace(/”/g,"")
     });
 }

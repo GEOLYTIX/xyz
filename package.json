@@ -23,7 +23,6 @@
     "fastify-helmet": "^1.0.3",
     "fastify-jwt": "^0.3.0",
     "fastify-postgres": "^1.0.0",
-    "fastify-session": "^1.0.0",
     "fastify-static": "^0.12.0",
     "highlight.js": "^9.12.0",
     "jsrender": "^0.9.90",
