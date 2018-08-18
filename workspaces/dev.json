@@ -175,11 +175,19 @@
           "style": {
             "marker": {
               "type": "target",
-              "style": [400,"#999",350,"#fff"]
+              "style": [
+                400,
+                "#999",
+                350,
+                "#fff"
+              ]
             },
             "markerMulti": {
               "type": "target",
-              "style": [400,"#333"]
+              "style": [
+                400,
+                "#333"
+              ]
             },
             "themes": [
               {
@@ -192,126 +200,258 @@
                   "Aldi": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffbf45",350,"#fa6f08",300,"#ef3c11",250,"#001f79",200,"#02bee3",100,"#ffffff"]
+                      "style": [
+                        400,
+                        "#ffbf45",
+                        350,
+                        "#fa6f08",
+                        300,
+                        "#ef3c11",
+                        250,
+                        "#001f79",
+                        200,
+                        "#02bee3",
+                        100,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Aldi"
                   },
                   "Asda": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#83b923",200,"#ffffff",150,"#fdb839"]
+                      "style": [
+                        400,
+                        "#83b923",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#fdb839"
+                      ]
                     },
                     "label": "Asda"
                   },
                   "Booths": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#a12629",200,"#ffffff",150,"#a12629"]
+                      "style": [
+                        400,
+                        "#a12629",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#a12629"
+                      ]
                     },
                     "label": "Booths"
                   },
                   "Budgens": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#EEEEE0",200,"#679a00",150,"#cccb01"]
+                      "style": [
+                        400,
+                        "#EEEEE0",
+                        200,
+                        "#679a00",
+                        150,
+                        "#cccb01"
+                      ]
                     },
                     "label": "Budgens"
                   },
                   "The Co-operative": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0b1e60",250,"#ffffff",200,"#a3d227"]
+                      "style": [
+                        400,
+                        "#0b1e60",
+                        250,
+                        "#ffffff",
+                        200,
+                        "#a3d227"
+                      ]
                     },
                     "label": "The Co-Operative"
                   },
                   "Costco": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#005daa",350,"#ffffff",250,"#e31837"]
+                      "style": [
+                        400,
+                        "#005daa",
+                        350,
+                        "#ffffff",
+                        250,
+                        "#e31837"
+                      ]
                     },
                     "label": "Costco"
                   },
                   "Farmfoods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#77a632",300,"#f7f900",200,"#ff0000"]
+                      "style": [
+                        400,
+                        "#77a632",
+                        300,
+                        "#f7f900",
+                        200,
+                        "#ff0000"
+                      ]
                     },
                     "label": "Farm Foods"
                   },
                   "Fultons Food": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#004a95",300,"#ffffff",200,"#004a95",100,"#fff11f"]
+                      "style": [
+                        400,
+                        "#004a95",
+                        300,
+                        "#ffffff",
+                        200,
+                        "#004a95",
+                        100,
+                        "#fff11f"
+                      ]
                     },
                     "label": "Fultons Food"
                   },
                   "Heron Foods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffffff",300,"#313590",100,"#ffcf00"]
+                      "style": [
+                        400,
+                        "#ffffff",
+                        300,
+                        "#313590",
+                        100,
+                        "#ffcf00"
+                      ]
                     },
                     "label": "Heron Foods"
                   },
                   "Iceland": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ed1b2d",300,"#f2552b",200,"#f89128",100,"#ffffff"]
+                      "style": [
+                        400,
+                        "#ed1b2d",
+                        300,
+                        "#f2552b",
+                        200,
+                        "#f89128",
+                        100,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Iceland"
                   },
                   "Lidl": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#d61408",350,"#ffe502",200,"#002d7a",100,"#d61408"]
+                      "style": [
+                        400,
+                        "#d61408",
+                        350,
+                        "#ffe502",
+                        200,
+                        "#002d7a",
+                        100,
+                        "#d61408"
+                      ]
                     },
                     "label": "Lidl"
                   },
                   "Makro": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#00457a",150,"#ffe811"]
+                      "style": [
+                        400,
+                        "#00457a",
+                        150,
+                        "#ffe811"
+                      ]
                     },
                     "label": "Makro"
                   },
                   "Marks & Spencer": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0a0d10",200,"#def036",100,"#0a0d10"]
+                      "style": [
+                        400,
+                        "#0a0d10",
+                        200,
+                        "#def036",
+                        100,
+                        "#0a0d10"
+                      ]
                     },
                     "label": "Marks & Spencer"
                   },
                   "Morrisons": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffe133",200,"#00614e"]
+                      "style": [
+                        400,
+                        "#ffe133",
+                        200,
+                        "#00614e"
+                      ]
                     },
                     "label": "Morrisons"
                   },
                   "Sainsburys": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ee8a00",250,"#ffffff",150,"#ee8a00"]
+                      "style": [
+                        400,
+                        "#ee8a00",
+                        250,
+                        "#ffffff",
+                        150,
+                        "#ee8a00"
+                      ]
                     },
                     "label": "Sainsbury's"
                   },
                   "Tesco": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0055a8",300,"#ffffff",150,"#f02f26"]
+                      "style": [
+                        400,
+                        "#0055a8",
+                        300,
+                        "#ffffff",
+                        150,
+                        "#f02f26"
+                      ]
                     },
                     "label": "Tesco"
                   },
                   "Waitrose": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#81ae37",150,"#ffffff"]
+                      "style": [
+                        400,
+                        "#81ae37",
+                        150,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Waitrose"
                   },
                   "Whole Foods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#00674b",350,"#ffffff",200,"#00674b"]
+                      "style": [
+                        400,
+                        "#00674b",
+                        350,
+                        "#ffffff",
+                        200,
+                        "#00674b"
+                      ]
                     },
                     "label": "Whole Foods"
                   }
@@ -443,11 +583,19 @@
           "style": {
             "marker": {
               "type": "target",
-              "style": [400,"#999",350,"#fff"]
+              "style": [
+                400,
+                "#999",
+                350,
+                "#fff"
+              ]
             },
             "markerMulti": {
               "type": "target",
-              "style":[400,"#333"]
+              "style": [
+                400,
+                "#333"
+              ]
             },
             "themes": [
               {
@@ -460,126 +608,258 @@
                   "Aldi": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffbf45",350,"#fa6f08",300,"#ef3c11",250,"#001f79",200,"#02bee3",100,"#ffffff"]
+                      "style": [
+                        400,
+                        "#ffbf45",
+                        350,
+                        "#fa6f08",
+                        300,
+                        "#ef3c11",
+                        250,
+                        "#001f79",
+                        200,
+                        "#02bee3",
+                        100,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Aldi"
                   },
                   "Asda": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#83b923",200,"#ffffff",150,"#fdb839"]
+                      "style": [
+                        400,
+                        "#83b923",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#fdb839"
+                      ]
                     },
                     "label": "Asda"
                   },
                   "Booths": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#a12629",200,"#ffffff",150,"#a12629"]
+                      "style": [
+                        400,
+                        "#a12629",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#a12629"
+                      ]
                     },
                     "label": "Booths"
                   },
                   "Budgens": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#EEEEE0",200,"#679a00",150,"#cccb01"]
+                      "style": [
+                        400,
+                        "#EEEEE0",
+                        200,
+                        "#679a00",
+                        150,
+                        "#cccb01"
+                      ]
                     },
                     "label": "Budgens"
                   },
                   "The Co-operative": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0b1e60",250,"#ffffff",200,"#a3d227"]
+                      "style": [
+                        400,
+                        "#0b1e60",
+                        250,
+                        "#ffffff",
+                        200,
+                        "#a3d227"
+                      ]
                     },
                     "label": "The Co-Operative"
                   },
                   "Costco": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#005daa",350,"#ffffff",250,"#e31837"]
+                      "style": [
+                        400,
+                        "#005daa",
+                        350,
+                        "#ffffff",
+                        250,
+                        "#e31837"
+                      ]
                     },
                     "label": "Costco"
                   },
                   "Farmfoods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#77a632",300,"#f7f900",200,"#ff0000"]
+                      "style": [
+                        400,
+                        "#77a632",
+                        300,
+                        "#f7f900",
+                        200,
+                        "#ff0000"
+                      ]
                     },
                     "label": "Farm Foods"
                   },
                   "Fultons Food": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#004a95",300,"#ffffff",200,"#004a95",100,"#fff11f"]
+                      "style": [
+                        400,
+                        "#004a95",
+                        300,
+                        "#ffffff",
+                        200,
+                        "#004a95",
+                        100,
+                        "#fff11f"
+                      ]
                     },
                     "label": "Fultons Food"
                   },
                   "Heron Foods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffffff",300,"#313590",100,"#ffcf00"]
+                      "style": [
+                        400,
+                        "#ffffff",
+                        300,
+                        "#313590",
+                        100,
+                        "#ffcf00"
+                      ]
                     },
                     "label": "Heron Foods"
                   },
                   "Iceland": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ed1b2d",300,"#f2552b",200,"#f89128",100,"#ffffff"]
+                      "style": [
+                        400,
+                        "#ed1b2d",
+                        300,
+                        "#f2552b",
+                        200,
+                        "#f89128",
+                        100,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Iceland"
                   },
                   "Lidl": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#d61408",350,"#ffe502",200,"#002d7a",100,"#d61408"]
+                      "style": [
+                        400,
+                        "#d61408",
+                        350,
+                        "#ffe502",
+                        200,
+                        "#002d7a",
+                        100,
+                        "#d61408"
+                      ]
                     },
                     "label": "Lidl"
                   },
                   "Makro": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#00457a",150,"#ffe811"]
+                      "style": [
+                        400,
+                        "#00457a",
+                        150,
+                        "#ffe811"
+                      ]
                     },
                     "label": "Makro"
                   },
                   "Marks & Spencer": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0a0d10",200,"#def036",100,"#0a0d10"]
+                      "style": [
+                        400,
+                        "#0a0d10",
+                        200,
+                        "#def036",
+                        100,
+                        "#0a0d10"
+                      ]
                     },
                     "label": "Marks & Spencer"
                   },
                   "Morrisons": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffe133",200,"#00614e"]
+                      "style": [
+                        400,
+                        "#ffe133",
+                        200,
+                        "#00614e"
+                      ]
                     },
                     "label": "Morrisons"
                   },
                   "Sainsburys": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ee8a00",250,"#ffffff",150,"#ee8a00"]
+                      "style": [
+                        400,
+                        "#ee8a00",
+                        250,
+                        "#ffffff",
+                        150,
+                        "#ee8a00"
+                      ]
                     },
                     "label": "Sainsbury's"
                   },
                   "Tesco": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0055a8",300,"#ffffff",150,"#f02f26"]
+                      "style": [
+                        400,
+                        "#0055a8",
+                        300,
+                        "#ffffff",
+                        150,
+                        "#f02f26"
+                      ]
                     },
                     "label": "Tesco"
                   },
                   "Waitrose": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#81ae37",150,"#ffffff"]
+                      "style": [
+                        400,
+                        "#81ae37",
+                        150,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Waitrose"
                   },
                   "Whole Foods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#00674b",350,"#ffffff",200,"#00674b"]
+                      "style": [
+                        400,
+                        "#00674b",
+                        350,
+                        "#ffffff",
+                        200,
+                        "#00674b"
+                      ]
                     },
                     "label": "Whole Foods"
                   }
@@ -711,11 +991,19 @@
           "style": {
             "marker": {
               "type": "target",
-              "style": [400,"#999",350,"#fff"]
+              "style": [
+                400,
+                "#999",
+                350,
+                "#fff"
+              ]
             },
             "markerMulti": {
               "type": "target",
-              "style": [400,"#333"]
+              "style": [
+                400,
+                "#333"
+              ]
             },
             "themes": [
               {
@@ -728,126 +1016,258 @@
                   "Aldi": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffbf45",350,"#fa6f08",300,"#ef3c11",250,"#001f79",200,"#02bee3",100,"#ffffff"]
+                      "style": [
+                        400,
+                        "#ffbf45",
+                        350,
+                        "#fa6f08",
+                        300,
+                        "#ef3c11",
+                        250,
+                        "#001f79",
+                        200,
+                        "#02bee3",
+                        100,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Aldi"
                   },
                   "Asda": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#83b923",200,"#ffffff",150,"#fdb839"]
+                      "style": [
+                        400,
+                        "#83b923",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#fdb839"
+                      ]
                     },
                     "label": "Asda"
                   },
                   "Booths": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#a12629",200,"#ffffff",150,"#a12629"]
+                      "style": [
+                        400,
+                        "#a12629",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#a12629"
+                      ]
                     },
                     "label": "Booths"
                   },
                   "Budgens": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#EEEEE0",200,"#679a00",150,"#cccb01"]
+                      "style": [
+                        400,
+                        "#EEEEE0",
+                        200,
+                        "#679a00",
+                        150,
+                        "#cccb01"
+                      ]
                     },
                     "label": "Budgens"
                   },
                   "The Co-operative": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0b1e60",250,"#ffffff",200,"#a3d227"]
+                      "style": [
+                        400,
+                        "#0b1e60",
+                        250,
+                        "#ffffff",
+                        200,
+                        "#a3d227"
+                      ]
                     },
                     "label": "The Co-Operative"
                   },
                   "Costco": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#005daa",350,"#ffffff",250,"#e31837"]
+                      "style": [
+                        400,
+                        "#005daa",
+                        350,
+                        "#ffffff",
+                        250,
+                        "#e31837"
+                      ]
                     },
                     "label": "Costco"
                   },
                   "Farmfoods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#77a632",300,"#f7f900",200,"#ff0000"]
+                      "style": [
+                        400,
+                        "#77a632",
+                        300,
+                        "#f7f900",
+                        200,
+                        "#ff0000"
+                      ]
                     },
                     "label": "Farm Foods"
                   },
                   "Fultons Food": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#004a95",300,"#ffffff",200,"#004a95",100,"#fff11f"]
+                      "style": [
+                        400,
+                        "#004a95",
+                        300,
+                        "#ffffff",
+                        200,
+                        "#004a95",
+                        100,
+                        "#fff11f"
+                      ]
                     },
                     "label": "Fultons Food"
                   },
                   "Heron Foods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffffff",300,"#313590",100,"#ffcf00"]
+                      "style": [
+                        400,
+                        "#ffffff",
+                        300,
+                        "#313590",
+                        100,
+                        "#ffcf00"
+                      ]
                     },
                     "label": "Heron Foods"
                   },
                   "Iceland": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ed1b2d",300,"#f2552b",200,"#f89128",100,"#ffffff"]
+                      "style": [
+                        400,
+                        "#ed1b2d",
+                        300,
+                        "#f2552b",
+                        200,
+                        "#f89128",
+                        100,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Iceland"
                   },
                   "Lidl": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#d61408",350,"#ffe502",200,"#002d7a",100,"#d61408"]
+                      "style": [
+                        400,
+                        "#d61408",
+                        350,
+                        "#ffe502",
+                        200,
+                        "#002d7a",
+                        100,
+                        "#d61408"
+                      ]
                     },
                     "label": "Lidl"
                   },
                   "Makro": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#00457a",150,"#ffe811"]
+                      "style": [
+                        400,
+                        "#00457a",
+                        150,
+                        "#ffe811"
+                      ]
                     },
                     "label": "Makro"
                   },
                   "Marks & Spencer": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0a0d10",200,"#def036",100,"#0a0d10"]
+                      "style": [
+                        400,
+                        "#0a0d10",
+                        200,
+                        "#def036",
+                        100,
+                        "#0a0d10"
+                      ]
                     },
                     "label": "Marks & Spencer"
                   },
                   "Morrisons": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ffe133",200,"#00614e"]
+                      "style": [
+                        400,
+                        "#ffe133",
+                        200,
+                        "#00614e"
+                      ]
                     },
                     "label": "Morrisons"
                   },
                   "Sainsburys": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#ee8a00",250,"#ffffff",150,"#ee8a00"]
+                      "style": [
+                        400,
+                        "#ee8a00",
+                        250,
+                        "#ffffff",
+                        150,
+                        "#ee8a00"
+                      ]
                     },
                     "label": "Sainsbury's"
                   },
                   "Tesco": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#0055a8",300,"#ffffff",150,"#f02f26"]
+                      "style": [
+                        400,
+                        "#0055a8",
+                        300,
+                        "#ffffff",
+                        150,
+                        "#f02f26"
+                      ]
                     },
                     "label": "Tesco"
                   },
                   "Waitrose": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#81ae37",150,"#ffffff"]
+                      "style": [
+                        400,
+                        "#81ae37",
+                        150,
+                        "#ffffff"
+                      ]
                     },
                     "label": "Waitrose"
                   },
                   "Whole Foods": {
                     "marker": {
                       "type": "target",
-                      "style": [400,"#00674b",350,"#ffffff",200,"#00674b"]
+                      "style": [
+                        400,
+                        "#00674b",
+                        350,
+                        "#ffffff",
+                        200,
+                        "#00674b"
+                      ]
                     },
                     "label": "Whole Foods"
                   }

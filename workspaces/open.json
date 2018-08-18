@@ -269,6 +269,35 @@
               }
             ]
           }
+        },
+        "foss4g": {
+          "editable": "geometry",
+          "name": "FOSS4G Dar",
+          "pane": [
+            "foss4g_dar",
+            540
+          ],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "foss4g_dar",
+          "infoj": [
+            {
+              "field": "email",
+              "label": "Mail",
+              "type": "text"
+            },
+            {
+              "field": "msg",
+              "label": "Message",
+              "type": "text"
+            },
+            {
+              "field": "images",
+              "label": "Images",
+              "type": "text[]",
+              "images": true
+            }
+          ]
         }
       }
     },
@@ -277,12 +306,7 @@
       "gazetteer": {
         "provider": "MAPBOX",
         "placeholder": "e.g. Brussels",
-        "bounds": [
-          -45,
-          25,
-          60,
-          75
-        ]
+        "bounds": "'-45,25,60,75'"
       },
       "bounds": [
         [
@@ -653,15 +677,28 @@
             }
           ],
           "style": {
-            "marker": "svg_symbols.target([400,'#9D383A',300,'#fff',250,'#9D383A'])",
-            "markerMulti": [
-              400,
-              "#9D383A",
-              300,
-              "#fff",
-              250,
-              "#9D383A"
-            ]
+            "marker": {
+              "type": "target",
+              "style": [
+                400,
+                "#9D383A",
+                300,
+                "#fff",
+                250,
+                "#9D383A"
+              ]
+            },
+            "markerMulti": {
+              "type": "target",
+              "style": [
+                400,
+                "#9D383A",
+                300,
+                "#fff",
+                250,
+                "#9D383A"
+              ]
+            }
           }
         },
         "retail_points": {
@@ -737,11 +774,22 @@
             }
           ],
           "style": {
-            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
-            "markerMulti": [
-              400,
-              "#333"
-            ],
+            "marker": {
+              "type": "target",
+              "style": [
+                400,
+                "#999",
+                350,
+                "#fff"
+              ]
+            },
+            "markerMulti": {
+              "type": "target",
+              "style": [
+                400,
+                "#333"
+              ]
+            },
             "themes": [
               {
                 "label": "Retailer",
@@ -768,76 +816,262 @@
                 },
                 "other": true,
                 "cat": {
-                  "aldi": {
-                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                  "Aldi": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffbf45",
+                        350,
+                        "#fa6f08",
+                        300,
+                        "#ef3c11",
+                        250,
+                        "#001f79",
+                        200,
+                        "#02bee3",
+                        100,
+                        "#ffffff"
+                      ]
+                    },
                     "label": "Aldi"
                   },
-                  "asda": {
-                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                  "Asda": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#83b923",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#fdb839"
+                      ]
+                    },
                     "label": "Asda"
                   },
-                  "booths": {
-                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                  "Booths": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#a12629",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#a12629"
+                      ]
+                    },
                     "label": "Booths"
                   },
-                  "budgens": {
-                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                  "Budgens": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#EEEEE0",
+                        200,
+                        "#679a00",
+                        150,
+                        "#cccb01"
+                      ]
+                    },
                     "label": "Budgens"
                   },
-                  "co_op": {
-                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                  "The Co-operative": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#0b1e60",
+                        250,
+                        "#ffffff",
+                        200,
+                        "#a3d227"
+                      ]
+                    },
                     "label": "The Co-Operative"
                   },
-                  "costco": {
-                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                  "Costco": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#005daa",
+                        350,
+                        "#ffffff",
+                        250,
+                        "#e31837"
+                      ]
+                    },
                     "label": "Costco"
                   },
-                  "farmfoods": {
-                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                  "Farmfoods": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#77a632",
+                        300,
+                        "#f7f900",
+                        200,
+                        "#ff0000"
+                      ]
+                    },
                     "label": "Farm Foods"
                   },
-                  "fultons_food": {
-                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                  "Fultons Food": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#004a95",
+                        300,
+                        "#ffffff",
+                        200,
+                        "#004a95",
+                        100,
+                        "#fff11f"
+                      ]
+                    },
                     "label": "Fultons Food"
                   },
-                  "heron_foods": {
-                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                  "Heron Foods": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffffff",
+                        300,
+                        "#313590",
+                        100,
+                        "#ffcf00"
+                      ]
+                    },
                     "label": "Heron Foods"
                   },
-                  "iceland": {
-                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                  "Iceland": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ed1b2d",
+                        300,
+                        "#f2552b",
+                        200,
+                        "#f89128",
+                        100,
+                        "#ffffff"
+                      ]
+                    },
                     "label": "Iceland"
                   },
-                  "lidl": {
-                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                  "Lidl": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#d61408",
+                        350,
+                        "#ffe502",
+                        200,
+                        "#002d7a",
+                        100,
+                        "#d61408"
+                      ]
+                    },
                     "label": "Lidl"
                   },
-                  "makro": {
-                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                  "Makro": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#00457a",
+                        150,
+                        "#ffe811"
+                      ]
+                    },
                     "label": "Makro"
                   },
-                  "marks_spencer": {
-                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                  "Marks & Spencer": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#0a0d10",
+                        200,
+                        "#def036",
+                        100,
+                        "#0a0d10"
+                      ]
+                    },
                     "label": "Marks & Spencer"
                   },
-                  "morrisons": {
-                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                  "Morrisons": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffe133",
+                        200,
+                        "#00614e"
+                      ]
+                    },
                     "label": "Morrisons"
                   },
-                  "sainsburys": {
-                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                  "Sainsburys": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ee8a00",
+                        250,
+                        "#ffffff",
+                        150,
+                        "#ee8a00"
+                      ]
+                    },
                     "label": "Sainsbury's"
                   },
-                  "tesco": {
-                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                  "Tesco": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#0055a8",
+                        300,
+                        "#ffffff",
+                        150,
+                        "#f02f26"
+                      ]
+                    },
                     "label": "Tesco"
                   },
-                  "waitrose": {
-                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                  "Waitrose": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#81ae37",
+                        150,
+                        "#ffffff"
+                      ]
+                    },
                     "label": "Waitrose"
                   },
-                  "whole_foods": {
-                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                  "Whole Foods": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#00674b",
+                        350,
+                        "#ffffff",
+                        200,
+                        "#00674b"
+                      ]
+                    },
                     "label": "Whole Foods"
                   }
                 }
@@ -963,11 +1197,22 @@
             }
           ],
           "style": {
-            "marker": "svg_symbols.target([400,'#999',350,'#fff'])",
-            "markerMulti": [
-              400,
-              "#333"
-            ],
+            "marker": {
+              "type": "target",
+              "style": [
+                400,
+                "#999",
+                350,
+                "#fff"
+              ]
+            },
+            "markerMulti": {
+              "type": "target",
+              "style": [
+                400,
+                "#333"
+              ]
+            },
             "themes": [
               {
                 "label": "Retailer",
@@ -977,75 +1222,261 @@
                 "applied": true,
                 "cat": {
                   "Aldi": {
-                    "marker": "svg_symbols.target([400,'#ffbf45',350,'#fa6f08',300,'#ef3c11',250,'#001f79',200,'#02bee3',100,'#ffffff'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffbf45",
+                        350,
+                        "#fa6f08",
+                        300,
+                        "#ef3c11",
+                        250,
+                        "#001f79",
+                        200,
+                        "#02bee3",
+                        100,
+                        "#ffffff"
+                      ]
+                    },
                     "label": "Aldi"
                   },
                   "Asda": {
-                    "marker": "svg_symbols.target([400,'#83b923',200,'#ffffff',150,'#fdb839'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#83b923",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#fdb839"
+                      ]
+                    },
                     "label": "Asda"
                   },
                   "Booths": {
-                    "marker": "svg_symbols.target([400,'#a12629',200,'#ffffff',150,'#a12629'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#a12629",
+                        200,
+                        "#ffffff",
+                        150,
+                        "#a12629"
+                      ]
+                    },
                     "label": "Booths"
                   },
                   "Budgens": {
-                    "marker": "svg_symbols.target([400,'#EEEEE0',200,'#679a00',150,'#cccb01'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#EEEEE0",
+                        200,
+                        "#679a00",
+                        150,
+                        "#cccb01"
+                      ]
+                    },
                     "label": "Budgens"
                   },
                   "The Co-operative": {
-                    "marker": "svg_symbols.target([400,'#0b1e60',250,'#ffffff',200,'#a3d227'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#0b1e60",
+                        250,
+                        "#ffffff",
+                        200,
+                        "#a3d227"
+                      ]
+                    },
                     "label": "The Co-Operative"
                   },
                   "Costco": {
-                    "marker": "svg_symbols.target([400,'#005daa',350,'#ffffff',250,'#e31837'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#005daa",
+                        350,
+                        "#ffffff",
+                        250,
+                        "#e31837"
+                      ]
+                    },
                     "label": "Costco"
                   },
                   "Farmfoods": {
-                    "marker": "svg_symbols.target([400,'#77a632',300,'#f7f900',200,'#ff0000'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#77a632",
+                        300,
+                        "#f7f900",
+                        200,
+                        "#ff0000"
+                      ]
+                    },
                     "label": "Farm Foods"
                   },
                   "Fultons Food": {
-                    "marker": "svg_symbols.target([400,'#004a95',300,'#ffffff',200,'#004a95',100,'#fff11f'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#004a95",
+                        300,
+                        "#ffffff",
+                        200,
+                        "#004a95",
+                        100,
+                        "#fff11f"
+                      ]
+                    },
                     "label": "Fultons Food"
                   },
                   "Heron Foods": {
-                    "marker": "svg_symbols.target([400,'#ffffff',300,'#313590',100,'#ffcf00'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffffff",
+                        300,
+                        "#313590",
+                        100,
+                        "#ffcf00"
+                      ]
+                    },
                     "label": "Heron Foods"
                   },
                   "Iceland": {
-                    "marker": "svg_symbols.target([400,'#ed1b2d',300,'#f2552b',200,'#f89128',100,'#ffffff'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ed1b2d",
+                        300,
+                        "#f2552b",
+                        200,
+                        "#f89128",
+                        100,
+                        "#ffffff"
+                      ]
+                    },
                     "label": "Iceland"
                   },
                   "Lidl": {
-                    "marker": "svg_symbols.target([400,'#d61408',350,'#ffe502',200,'#002d7a',100,'#d61408'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#d61408",
+                        350,
+                        "#ffe502",
+                        200,
+                        "#002d7a",
+                        100,
+                        "#d61408"
+                      ]
+                    },
                     "label": "Lidl"
                   },
                   "Makro": {
-                    "marker": "svg_symbols.target([400,'#00457a',150,'#ffe811'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#00457a",
+                        150,
+                        "#ffe811"
+                      ]
+                    },
                     "label": "Makro"
                   },
                   "Marks & Spencer": {
-                    "marker": "svg_symbols.target([400,'#0a0d10',200,'#def036',100,'#0a0d10'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#0a0d10",
+                        200,
+                        "#def036",
+                        100,
+                        "#0a0d10"
+                      ]
+                    },
                     "label": "Marks & Spencer"
                   },
                   "Morrisons": {
-                    "marker": "svg_symbols.target([400,'#ffe133',200,'#00614e'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffe133",
+                        200,
+                        "#00614e"
+                      ]
+                    },
                     "label": "Morrisons"
                   },
                   "Sainsburys": {
-                    "marker": "svg_symbols.target([400,'#ee8a00',250,'#ffffff',150,'#ee8a00'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ee8a00",
+                        250,
+                        "#ffffff",
+                        150,
+                        "#ee8a00"
+                      ]
+                    },
                     "label": "Sainsbury's"
                   },
                   "Tesco": {
-                    "marker": "svg_symbols.target([400,'#0055a8',300,'#ffffff',150,'#f02f26'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#0055a8",
+                        300,
+                        "#ffffff",
+                        150,
+                        "#f02f26"
+                      ]
+                    },
                     "label": "Tesco"
                   },
                   "Waitrose": {
-                    "marker": "svg_symbols.target([400,'#81ae37',150,'#ffffff'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#81ae37",
+                        150,
+                        "#ffffff"
+                      ]
+                    },
                     "label": "Waitrose"
                   },
                   "Whole Foods": {
-                    "marker": "svg_symbols.target([400,'#00674b',350,'#ffffff',200,'#00674b'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#00674b",
+                        350,
+                        "#ffffff",
+                        200,
+                        "#00674b"
+                      ]
+                    },
                     "label": "Whole Foods"
                   }
                 }
@@ -1197,37 +1628,79 @@
                 "cat": [
                   {
                     "val": 1,
-                    "marker": "svg_symbols.target([400,'#fde725'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#fde725"
+                      ]
+                    },
                     "label": "1"
                   },
                   {
                     "val": 10,
-                    "marker": "svg_symbols.target([400,'#8fd744'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#8fd744"
+                      ]
+                    },
                     "label": "10"
                   },
                   {
                     "val": 25,
-                    "marker": "svg_symbols.target([400,'#35b779'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#35b779"
+                      ]
+                    },
                     "label": "25"
                   },
                   {
                     "val": 50,
-                    "marker": "svg_symbols.target([400,'#20908d'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#20908d"
+                      ]
+                    },
                     "label": "50"
                   },
                   {
                     "val": 75,
-                    "marker": "svg_symbols.target([400,'#31688e'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#31688e"
+                      ]
+                    },
                     "label": "75"
                   },
                   {
                     "val": 100,
-                    "marker": "svg_symbols.target([400,'#443a83'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#443a83"
+                      ]
+                    },
                     "label": "100"
                   },
                   {
                     "val": 150,
-                    "marker": "svg_symbols.target([400,'#440154'])",
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#440154"
+                      ]
+                    },
                     "label": "150"
                   }
                 ]
@@ -1392,9 +1865,7 @@
               "fillOpacity": 0.3
             },
             "highlight": {
-              "color": "#e91e63",
-              "fill": true,
-              "fillOpacity": 0
+              "color": "#e91e63"
             },
             "themes": [
               {

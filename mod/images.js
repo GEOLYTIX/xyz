@@ -21,12 +21,12 @@ function save(req, res, fastify) {
 
             if (err) return console.error(err);
 
-            let table = req.query.table,
-                qID = req.query.qID == 'undefined' ? 'id' : req.query.qID,
-                id = req.query.id;
-
             const token = req.query.token ?
-                fastify.jwt.decode(req.query.token) : { access: 'public' };
+                fastify.jwt.decode(req.query.token) : { access: 'public' };            
+
+            let table = req.query.table,
+                qID = req.query.qID ? req.query.qID : 'id',
+                id = req.query.id;
 
             // Check whether string params are found in the settings to prevent SQL injections.
             if ([table, qID]
