@@ -81,7 +81,7 @@ function bar_chart(layer, chart){
             .duration(200)
             .style("opacity", .9);
         
-           tltp.html(d.y)
+           tltp.html(d.y.toLocaleString('en-GB'))
            .style("left", (d3.event.pageX - 18) + "px")
            .style("top", (d3.event.pageY - 20) + "px");
         }).on("mouseout", function(d){
