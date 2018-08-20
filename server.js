@@ -17,7 +17,10 @@ fastify
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
+                baseURI: ["'self'"],
+                objectSrc: ["'self'"],
                 frameSrc: ["'self'", 'www.google.com', 'www.gstatic.com'],
+                formAction: ["'self'"],
                 styleSrc: ["'self'", 'fonts.googleapis.com',
                     "'sha256-7GlB3boII82C2gMBDI/XeqbVLWT19Bt+blStRCESvqU='",
                     "'sha256-ZdHxw9eWtnxUb3mk6tBS+gIiVUPE3pGM470keHPDFlE='",
