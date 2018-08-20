@@ -100,13 +100,28 @@ function clipboard(record){
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                let data = [], row;
-                Object.keys(record.location.infoj).map(function(key){
-                    let lbl = record.location.infoj[key].label || '',
-                        val = record.location.infoj[key].value || '';
+                
+                let data = [];
+                
+                function processInfoj(entry, data) {
+                    let lbl = entry.label || '',
+                        val = entry.value || '',
+                        row = '';
+                    
                     row = lbl + '\t' + val;
                     data.push(row);
+                }
+                
+                Object.values(record.location.infoj).forEach(entry => {
+                    if(entry.type === "group"){
+                        Object.values(entry.items).forEach(item => {
+                            processInfoj(item, data);
+                        });
+                    } else {
+                        processInfoj(entry, data);
+                    }
                 });
+                
                 utils.copy_to_clipboard(data.join('\n'));
             }
         }
