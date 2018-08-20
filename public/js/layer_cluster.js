@@ -208,17 +208,19 @@ function clusterMouseClick(e, layer) {
         token: global._xyz.token
     }));
 
-    xhr.onload = e => {
+    xhr.onload = () => {
 
-        if (e.target.status === 401) {
+        if (xhr.status === 401) {
             document.getElementById('timeout_mask').style.display = 'block';
-            console.log(e.target.response);
+            //console.log(e.target.response);
             return loadLayer_complete(layer);
         }
 
-        if (e.target.status === 200) {
+        if (xhr.status === 200) {
+            
+            //console.log(e);
 
-            let cluster = JSON.parse(e.target.responseText);
+            let cluster = JSON.parse(xhr.responseText);
 
             if (cluster.length === 1) {
                 global._xyz.select.selectLayerFromEndpoint({
