@@ -1,15 +1,6 @@
 {
   "title": "GEOLYTIX | DEV",
   "locales": {
-    "Global": {
-      "layers": {
-        "base": {
-          "display": true,
-          "format": "tiles",
-          "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        }
-      }
-    },
     "UK": {
       "name": "United Kingdom",
       "gazetteer": {
