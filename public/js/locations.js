@@ -177,8 +177,15 @@ module.exports = () => {
         setChartData(layer, location);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', global._xyz.host + '/api/location/select?token=' + global._xyz.token);
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.open('GET', global._xyz.host + '/api/location/select?' + utils.paramString({
+            locale: _xyz.locale,
+            layer: layer.layer,
+            table: location.table,
+            id: location.id,
+            token: global._xyz.token
+        }));
+
+        //xhr.setRequestHeader('Content-Type', 'application/json');
         
         xhr.onload = e => {
 
@@ -201,16 +208,11 @@ module.exports = () => {
             }
         }
 
-        let body = {
-            locale: _xyz.locale,
-            layer: layer.layer,
-            table: location.table,
-            id: location.id
-        };
+        xhr.send();
 
-        if (layer.sql_filter) body.sql_filter = layer.sql_filter;
-
-        xhr.send(JSON.stringify(body));
+        // let body = {};
+        // if (layer.sql_filter) body.sql_filter = layer.sql_filter;
+        // xhr.send(JSON.stringify(body));
     }
     
     function setChartData(layer, location){

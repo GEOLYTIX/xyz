@@ -135,7 +135,7 @@ module.exports = fastify => {
         });
 
         fastify.route({
-            method: 'POST',
+            method: 'GET',
             url: '/api/location/select',
             beforeHandler: fastify.auth([fastify.authAPI]),
             handler: (req, res) => {

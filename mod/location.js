@@ -12,15 +12,15 @@ async function select(req, res, fastify) {
         fastify.jwt.decode(req.query.token) : { access: 'public' };
 
     let
-        layer = global.workspace[token.access].config.locales[req.body.locale].layers[req.body.layer],
-        table = req.body.table,
+        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+        table = req.query.table,
         qID = layer.qID ? layer.qID : 'id',
-        id = req.body.id,
+        id = req.query.id,
         geom = layer.geom ? layer.geom : 'geom',
         geomj = layer.geomj ? layer.geomj : `ST_asGeoJson(${geom})`,
         geomq = layer.geomq ? layer.geomq : geom,
         geomdisplay = layer.geomdisplay ? layer.geomdisplay : '',
-        sql_filter = req.body.sql_filter ? req.body.sql_filter : '',
+        // sql_filter = req.body && req.body.sql_filter ? req.body.sql_filter : '',
         infoj = JSON.parse(JSON.stringify(layer.infoj));
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -31,13 +31,13 @@ async function select(req, res, fastify) {
 
     if (geomdisplay) geomdisplay = `, ST_AsGeoJSON(${layer.geomdisplay}) AS geomdisplay`;
 
-    if (sql_filter) {
-        var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
-        var db_connection = await fastify.pg[layer.dbs].connect();
-        var result = await db_connection.query(q, [id]);
-        db_connection.release();
-        sql_filter = result.rows[0].sql_filter;
-    }
+    // if (sql_filter) {
+    //     var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
+    //     var db_connection = await fastify.pg[layer.dbs].connect();
+    //     var result = await db_connection.query(q, [id]);
+    //     db_connection.release();
+    //     sql_filter = result.rows[0].sql_filter;
+    // }
 
     let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
         layer.access_filter[token.email] : null;
@@ -47,7 +47,7 @@ async function select(req, res, fastify) {
     function processInfoj(entry){
         
         if (entry.layer) {
-            let entry_layer = global.workspace[token.access].config.locales[req.body.locale].layers[entry.layer];
+            let entry_layer = global.workspace[token.access].config.locales[req.query.locale].layers[entry.layer];
 
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
