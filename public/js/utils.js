@@ -333,28 +333,48 @@ function checkbox(onchange, options) {
 
 function slider(options) {
 
-    let title = createElement('span', {
-        textContent: options.title
-    }, options.appendTo);
-
-    let span = createElement('span', {
-        textContent: options.default,
-        className: "bold"
-    }, options.appendTo);
-
-    let range_div = createElement('div', {
-        className: "range"
+    _createElement({
+        tag: 'span', 
+        options: {
+            textContent: options.title
+        }, 
+        appendTo: options.appendTo
     });
 
-    let slider = createElement('input', {
-        type: 'range',
-        min: options.min,
-        value: options.value,
-        max: options.max,
-        oninput: options.oninput
-    }, range_div);
+    _createElement({
+        tag: 'span', 
+        options: {
+            textContent: options.default,
+            className: "bold"
+        }, 
+        appendTo: options.appendTo
+    });
 
-    options.appendTo.appendChild(range_div);
+    let range_div = _createElement({
+        tag: 'div', 
+        options: {
+            className: "range"
+        },
+        appendTo: options.appendTo
+    });
+
+    _createElement({
+        tag: 'input', 
+        options: {
+            type: 'range',
+            min: options.min,
+            value: options.value,
+            max: options.max
+        //oninput: options.oninput
+        },
+        eventListener: {
+            event: "input",
+            funct: e => options.oninput
+        },
+        appendTo: range_div
+    });
+
+    //options.appendTo.appendChild(range_div);
 }
 
 function rgbToHex(color) {

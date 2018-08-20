@@ -259,9 +259,9 @@ module.exports = (layer, panel) => {
             value: (!isNaN(layer.style.default.opacity) ? 100 * layer.style.default.opacity : 100),
             max: 100,
             appendTo: style_section,
-            oninput: function (e) {
-                let opacity = this.value;
-                this.parentNode.previousSibling.textContent = parseInt(opacity) + "%";
+            oninput: e => {
+                let opacity = e.target.value;
+                e.target.parentNode.previousSibling.textContent = parseInt(opacity) + "%";
                 set_stroke_opacity(layer, opacity);
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
@@ -293,9 +293,9 @@ module.exports = (layer, panel) => {
             value: (!isNaN(layer.style.default.fillOpacity) ? 100 * layer.style.default.fillOpacity : 100),
             max: 100,
             appendTo: style_section,
-            oninput: function (e) {
-                let fill_opacity = this.value;
-                this.parentNode.previousSibling.textContent = parseInt(fill_opacity) + "%";
+            oninput: e => {
+                let fill_opacity = e.target.value;
+                e.target.parentNode.previousSibling.textContent = parseInt(fill_opacity) + "%";
                 set_fill_opacity(layer, fill_opacity);
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {

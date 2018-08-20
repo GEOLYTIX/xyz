@@ -116,8 +116,8 @@ async function updateRecord(req, res, fastify) {
             table = req.body.table,
             qID = layer.qID ? layer.qID : 'id',
             id = req.body.id,
-            geom = layer.geom ? layer.geom : 'geom';
-        geometry = JSON.stringify(req.body.geometry),
+            geom = layer.geom ? layer.geom : 'geom',
+            geometry = JSON.stringify(req.body.geometry),
             log_table = layer.log_table ? layer.log_table : null;
 
         // Check whether string params are found in the settings to prevent SQL injections.
@@ -125,9 +125,8 @@ async function updateRecord(req, res, fastify) {
             .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
             return res.code(406).send('Parameter not acceptable.');
         }
-
-        let fields = '';
-        Object.values(req.body.infoj).forEach(entry => {
+        
+        function processInfoj(entry){
             if (entry.images) return
             if (entry.field && entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/\'/g, "''")}',`;
             if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
@@ -135,6 +134,24 @@ async function updateRecord(req, res, fastify) {
             if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
             if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`
             if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`
+        }
+
+        let fields = '';
+        Object.values(req.body.infoj).forEach(entry => {
+            if(entry.type === "group"){
+                Object.values(entry.items).forEach(item => {
+                    processInfoj(item);
+                });
+            } else {
+                processInfoj(entry);
+            }
+            /*if (entry.images) return
+            if (entry.field && entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/\'/g, "''")}',`;
+            if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
+            if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`
+            if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
+            if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`
+            if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`*/
         });
 
         var q = `
