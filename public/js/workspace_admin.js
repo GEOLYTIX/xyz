@@ -1,6 +1,8 @@
 let token = window.location.search.replace('?token=','');
 
-history.pushState({ token: true }, 'token', document.head.dataset.dir + '/admin/workspace');
+if (document.body.dataset.mode === 'tree') history.pushState({ token: true }, 'token', document.head.dataset.dir + '/admin/workspace');
+
+if (document.body.dataset.mode === 'code') history.pushState({ token: true }, 'token', document.head.dataset.dir + '/admin/workspacejson');
 
 const _xhr = new XMLHttpRequest();
 _xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + token);
@@ -78,7 +80,11 @@ function init(json) {
         fileSelector.addEventListener('change', function () {
             let reader = new FileReader();
             reader.onload = function () {
-                editor.set(JSON.parse(this.result));
+                try {
+                    editor.set(JSON.parse(this.result));
+                } catch {
+                    alert('Failed to parse JSON');
+                }
             };
             reader.readAsText(this.files[0])
         });
@@ -94,7 +100,7 @@ function init(json) {
     if (mode === 'tree') {
         let btnCode = document.createElement('button');
         btnCode.style.background = 'none';
-        btnCode.innerHTML = '<i class="material-icons" title="Upload settings file.">code</i>';
+        btnCode.innerHTML = '<i class="material-icons" title="JSON code view.">code</i>';
         editormenu.insertBefore(btnCode, search);
     
         btnCode.addEventListener('click', function () {
@@ -105,7 +111,7 @@ function init(json) {
     if (mode === 'code') {
         let btnTree = document.createElement('button');
         btnTree.style.background = 'none';
-        btnTree.innerHTML = '<i class="material-icons" title="Upload settings file.">list</i>';
+        btnTree.innerHTML = '<i class="material-icons" title="Tree view">list</i>';
         editormenu.insertBefore(btnTree, search);
     
         btnTree.addEventListener('click', function () {
