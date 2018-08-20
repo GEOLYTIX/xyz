@@ -20,9 +20,23 @@ module.exports = next => {
 const renewToken = () => {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + global._xyz.token);
+    xhr.onerror = () => document.getElementById('timeout_mask').style.display = 'block';
     xhr.onload = e => {
+
+        // Set timeout mask if token renewal fails
+        if (e.target.status !== 200) return document.getElementById('timeout_mask').style.display = 'block';
+
         global._xyz.token = e.target.response;
         setTimeout(renewToken, 60000);
+
+        // iterate through layers
+        Object.values(global._xyz.locales[global._xyz.locale].layers).forEach(layer => {
+
+            // set URL to acknowledge new token.
+            if (layer.base) layer.base.setUrl = layer.provider ?
+                global._xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + global._xyz.token :
+                layer.URI;
+        });
     }
     xhr.send();
 }

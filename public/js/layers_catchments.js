@@ -266,9 +266,8 @@ module.exports = (layer, panel) => {
                                 return alert(e.target.response);
                             }
                     
-                            if (e.target.status === 401) {
-                                document.getElementById('timeout_mask').style.display = 'block';
-                                console.log(e.target.response);
+                            if (e.target.status !== 200) {
+                                console.log(e.target);
                                 return;
                             }
                     

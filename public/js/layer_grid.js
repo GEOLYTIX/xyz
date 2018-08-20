@@ -41,12 +41,6 @@ module.exports = function() {
         // Draw layer on load event.
         layer.xhr.onload = e => {
 
-            if (e.target.status === 401) {
-                document.getElementById('timeout_mask').style.display = 'block';
-                console.log(e.target.response);
-                return loadLayer_complete(layer);
-            }
-
             if (e.target.status === 200 && layer.display && layer.locale === global._xyz.locale) {
 
                 // Check for existing layer and remove from map.

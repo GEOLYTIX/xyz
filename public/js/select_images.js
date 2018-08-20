@@ -159,12 +159,6 @@ function upload_image(record, img, blob) {
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = e => {
 
-        if (e.target.status === 401) {
-            document.getElementById('timeout_mask').style.display = 'block';
-            console.log(e.target.response);
-            return;
-        }
-
         if (e.target.status === 200) {
             
             let json = JSON.parse(e.target.responseText);
@@ -210,18 +204,11 @@ function remove_image(record, img) {
         image_src: encodeURIComponent(img.src),
         token: global._xyz.token
     }));
-    xhr.onload = e => {
-
-        if (e.target.status === 401) {
-            document.getElementById('timeout_mask').style.display = 'block';
-            console.log(e.target.response);
-            return;
-        }
-
-        if (e.target.status === 200) {
-            //console.log(this.responseText);
-        }
-    }
+    // xhr.onload = e => {
+    //     if (e.target.status === 200) {
+    //         //console.log(this.responseText);
+    //     }
+    // }
     xhr.send();
 }
 

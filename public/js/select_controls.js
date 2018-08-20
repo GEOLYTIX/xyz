@@ -183,16 +183,7 @@ function update(record) {
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
-                    if (e.target.status === 500) {
-                        console.log(e.target.response);
-                        return;
-                    }
-
-                    if (e.target.status === 401) {
-                        document.getElementById('timeout_mask').style.display = 'block';
-                        console.log(e.target.response);
-                        return;
-                    }
+                    if (e.target.status !== 200) return;
 
                     // Hide upload symbol.
                     record.upload.style.display = 'none';
@@ -255,11 +246,7 @@ function trash(record) {
 
                 xhr.onload = e => {
 
-                    if (e.target.status === 401) {
-                        document.getElementById('timeout_mask').style.display = 'block';
-                        console.log(e.target.response);
-                        return;
-                    }
+                    if (e.target.status !== 200) return;
 
                     global._xyz.map.removeLayer(layer.L);
                     layer.getLayer();

@@ -56,12 +56,6 @@ function loadLayer(layer) {
     // Process XHR onload.
     layer.xhr.onload = e => {
 
-        if (e.target.status === 401) {
-            document.getElementById('timeout_mask').style.display = 'block';
-            console.log(e.target.response);
-            return loadLayer_complete(layer);
-        }
-
         // Status 204. No features returned.
         if (e.target.status === 204) {
             if (layer.L) global._xyz.map.removeLayer(layer.L);

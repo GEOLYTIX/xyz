@@ -2,20 +2,17 @@ module.exports = function() {
     
     let layer = this;
 
-    if (layer.display && global._xyz.token !== layer.token) {
-
-        layer.token = global._xyz.token;
+    if (layer.display) {
 
         layer.loader.style.display = 'block';
 
         let uri = layer.provider ?
-        global._xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + layer.token :
+        global._xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + global._xyz.token :
             layer.URI;
 
-        if (layer.base) global._xyz.map.removeLayer(layer.base);
-
         layer.base = L.tileLayer(uri, {
-            pane: layer.pane[0]
+            pane: layer.pane[0],
+            updateWhenIdle: true
         })
             .addTo(global._xyz.map)
             .on('loading', e => {

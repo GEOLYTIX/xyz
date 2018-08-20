@@ -50,26 +50,13 @@ module.exports = (layer, panel) => {
             textContent: "Run Output",
             onclick: () => {
                 
-                //console.log(layer.filter);
-
                 layer.xhr.open('GET', global._xyz.host + '/api/location/aggregate?' + utils.paramString({
                     locale: _xyz.locale,
                     layer: layer.layer,
                     filter: JSON.stringify(layer.filter)
-                    // dbs: layer.dbs,
-                    // table_source: layer.table,
-                    // table_target: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
-                    // geom_target:  global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].geomq || undefined,
-                    // geom_source: layer.geom || undefined
                 }));
 
                 layer.xhr.onload = e => {
-                    if (e.target.status === 401) {
-                        document.getElementById('timeout_mask').style.display = 'block';
-                        console.log(e.target.response);
-                        return loadLayer_complete(layer);
-                    }
-
                     let json = JSON.parse(e.target.response);
                     if (e.target.status === 200) {
                         global._xyz.select.selectLayerFromEndpoint({

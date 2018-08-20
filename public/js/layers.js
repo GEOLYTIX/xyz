@@ -281,12 +281,6 @@ module.exports = () => {
                                 xhr.open('POST', global._xyz.host + '/api/location/new?token=' + global._xyz.token);
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = e => {
-                                    if (e.target.status === 401) {
-                                        document.getElementById('timeout_mask').style.display = 'block';
-                                        console.log(e.target.response);
-                                        return
-                                    }
-
                                     if (e.target.status === 200) {
                                         layer.getLayer();
                                         global._xyz.select.selectLayerFromEndpoint({

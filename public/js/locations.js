@@ -188,12 +188,6 @@ module.exports = () => {
                 el.classList.remove("wait-cursor-enabled");
             }
             
-            if (e.target.status === 401) {
-                document.getElementById('timeout_mask').style.display = 'block';
-                console.log(e.target.response);
-                return;
-            }
-            
             if (e.target.status === 200) {
                 let json = JSON.parse(e.target.responseText);
                 location.geometry = JSON.parse(json.geomj);
