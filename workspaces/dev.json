@@ -1,5 +1,6 @@
 {
   "title": "GEOLYTIX | DEV",
+  "locate": true,
   "locales": {
     "UK": {
       "name": "United Kingdom",
@@ -46,7 +47,7 @@
         },
         "retail_points_public": {
           "display": true,
-          "name": "Retail Points (public)",
+          "name": "RP (public)",
           "pane": [
             "retail_points",
             540
@@ -54,7 +55,6 @@
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
-          "log_table": "gb_retailpoint_editable_logs",
           "cluster_label": "store",
           "cluster_cat": "brand",
           "infoj": [
@@ -454,7 +454,7 @@
         "retail_points_private": {
           "access": "private",
           "editable": "geometry",
-          "name": "Retail Points - editable (private)",
+          "name": "RP - editable (private)",
           "pane": [
             "retail_points",
             540
@@ -462,7 +462,9 @@
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
-          "log_table": "gb_retailpoint_editable_logs",
+          "log": {
+            "table": "gb_retailpoint_editable_logs"
+          },
           "cluster_label": "store",
           "cluster_cat": "brand",
           "infoj": [
@@ -859,21 +861,25 @@
             ]
           }
         },
-        "retail_points_admin": {
+        "retail_points_logs": {
           "access": "admin",
-          "editable": "geometry",
-          "name": "Retail Points - logs (admin)",
+          "name": "RP (logs)",
           "pane": [
             "retail_points",
             540
           ],
           "format": "cluster",
           "dbs": "XYZ",
-          "table": "gb_retailpoint_editable",
-          "log_table": "gb_retailpoint_editable_logs",
+          "table": "gb_retailpoint_editable_logs",
+          "log_table": true,
           "cluster_label": "store",
           "cluster_cat": "brand",
           "infoj": [
+            {
+              "field": "log",
+              "label": "Log",
+              "type": "text"
+            },
             {
               "field": "store",
               "label": "Store",
@@ -978,294 +984,7 @@
               "type": "text[]",
               "images": true
             }
-          ],
-          "style": {
-            "marker": {
-              "type": "target",
-              "style": [
-                400,
-                "#999",
-                350,
-                "#fff"
-              ]
-            },
-            "markerMulti": {
-              "type": "target",
-              "style": [
-                400,
-                "#333"
-              ]
-            },
-            "themes": [
-              {
-                "label": "Retailer",
-                "type": "categorized",
-                "field": "brand",
-                "applied": true,
-                "other": true,
-                "cat": {
-                  "Aldi": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffbf45",
-                        350,
-                        "#fa6f08",
-                        300,
-                        "#ef3c11",
-                        250,
-                        "#001f79",
-                        200,
-                        "#02bee3",
-                        100,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Aldi"
-                  },
-                  "Asda": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#83b923",
-                        200,
-                        "#ffffff",
-                        150,
-                        "#fdb839"
-                      ]
-                    },
-                    "label": "Asda"
-                  },
-                  "Booths": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#a12629",
-                        200,
-                        "#ffffff",
-                        150,
-                        "#a12629"
-                      ]
-                    },
-                    "label": "Booths"
-                  },
-                  "Budgens": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#EEEEE0",
-                        200,
-                        "#679a00",
-                        150,
-                        "#cccb01"
-                      ]
-                    },
-                    "label": "Budgens"
-                  },
-                  "The Co-operative": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0b1e60",
-                        250,
-                        "#ffffff",
-                        200,
-                        "#a3d227"
-                      ]
-                    },
-                    "label": "The Co-Operative"
-                  },
-                  "Costco": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#005daa",
-                        350,
-                        "#ffffff",
-                        250,
-                        "#e31837"
-                      ]
-                    },
-                    "label": "Costco"
-                  },
-                  "Farmfoods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#77a632",
-                        300,
-                        "#f7f900",
-                        200,
-                        "#ff0000"
-                      ]
-                    },
-                    "label": "Farm Foods"
-                  },
-                  "Fultons Food": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#004a95",
-                        300,
-                        "#ffffff",
-                        200,
-                        "#004a95",
-                        100,
-                        "#fff11f"
-                      ]
-                    },
-                    "label": "Fultons Food"
-                  },
-                  "Heron Foods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffffff",
-                        300,
-                        "#313590",
-                        100,
-                        "#ffcf00"
-                      ]
-                    },
-                    "label": "Heron Foods"
-                  },
-                  "Iceland": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ed1b2d",
-                        300,
-                        "#f2552b",
-                        200,
-                        "#f89128",
-                        100,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Iceland"
-                  },
-                  "Lidl": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#d61408",
-                        350,
-                        "#ffe502",
-                        200,
-                        "#002d7a",
-                        100,
-                        "#d61408"
-                      ]
-                    },
-                    "label": "Lidl"
-                  },
-                  "Makro": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#00457a",
-                        150,
-                        "#ffe811"
-                      ]
-                    },
-                    "label": "Makro"
-                  },
-                  "Marks & Spencer": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0a0d10",
-                        200,
-                        "#def036",
-                        100,
-                        "#0a0d10"
-                      ]
-                    },
-                    "label": "Marks & Spencer"
-                  },
-                  "Morrisons": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffe133",
-                        200,
-                        "#00614e"
-                      ]
-                    },
-                    "label": "Morrisons"
-                  },
-                  "Sainsburys": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ee8a00",
-                        250,
-                        "#ffffff",
-                        150,
-                        "#ee8a00"
-                      ]
-                    },
-                    "label": "Sainsbury's"
-                  },
-                  "Tesco": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0055a8",
-                        300,
-                        "#ffffff",
-                        150,
-                        "#f02f26"
-                      ]
-                    },
-                    "label": "Tesco"
-                  },
-                  "Waitrose": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#81ae37",
-                        150,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Waitrose"
-                  },
-                  "Whole Foods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#00674b",
-                        350,
-                        "#ffffff",
-                        200,
-                        "#00674b"
-                      ]
-                    },
-                    "label": "Whole Foods"
-                  }
-                }
-              }
-            ]
-          }
+          ]
         }
       }
     }

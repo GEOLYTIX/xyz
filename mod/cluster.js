@@ -33,6 +33,16 @@ async function get(req, res, fastify) {
 
   let filter_sql = filter ? require('./filters').sql_filter(filter) : '';
 
+  let qLog = layer.log_table ?
+    `( SELECT
+        *,
+        ROW_NUMBER()
+        OVER (
+          PARTITION BY ${layer.qID || 'id'}
+          ORDER BY ((${layer.log_table.field || 'log'} -> 'time') :: VARCHAR) :: TIMESTAMP DESC ) AS rank
+      FROM gb_retailpoint_editable_logs
+    ) AS logfilter` : null;
+
   // Query the feature count from lat/lng bounding box.
   var q = `
   SELECT
@@ -51,14 +61,15 @@ async function get(req, res, fastify) {
       ST_Point(${west}, ${south}),
       ST_Point(${east}, ${north})
     ) AS xEnvelope
-  FROM ${table}
+  FROM ${layer.log_table ? qLog : table}
   WHERE
+    ${layer.log_table ? 'rank = 1 AND ' : ''}
     ST_DWithin(
       ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom},
         0.00001)
     ${filter_sql}
-    ${access_filter ? 'and ' + access_filter : ''};`;
+    ${access_filter ? 'AND ' + access_filter : ''};`;
 
   var db_connection = await fastify.pg[layer.dbs].connect();
   var result = await db_connection.query(q);
@@ -91,8 +102,9 @@ async function get(req, res, fastify) {
       SELECT
         ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid,
         ${geom}
-      FROM ${table}
+      FROM ${layer.log_table ? qLog : table}
       WHERE
+        ${layer.log_table ? 'rank = 1 AND ' : ''}
         ST_DWithin(
           ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom}, 0.00001)

@@ -10,23 +10,27 @@ async function newRecord(req, res, fastify) {
         table = req.body.table,
         geom = layer.geom ? layer.geom : 'geom',
         geometry = JSON.stringify(req.body.geometry),
-        qID = layer.qID ? layer.qID : 'id',
-        log_table = layer.log_table ? layer.log_table : null;
+        qID = layer.qID ? layer.qID : 'id';
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if ([table, qID, geom, log_table]
+    if ([table, qID, geom]
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
 
+    const d = new Date();
+
     var q = `
-    INSERT INTO ${table} (${geom})
-        SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326) AS ${geom}
+    INSERT INTO ${table} (${geom} ${layer.log ? `, ${layer.log.field || 'log'}` : ''})
+        SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
+        ${layer.log && layer.log.table ? `,'{ "user": "${token.email}", "op": "new", "time": "${d.toUTCString()}"}'`: ''}
         RETURNING ${qID} AS id;`;
 
     var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q);
     db_connection.release();
+
+    if (layer.log && layer.log.table) await writeLog(fastify, layer, result.rows[0].id)
 
     res.code(200).send(result.rows[0].id.toString());
 }
@@ -117,11 +121,10 @@ async function updateRecord(req, res, fastify) {
             qID = layer.qID ? layer.qID : 'id',
             id = req.body.id,
             geom = layer.geom ? layer.geom : 'geom',
-            geometry = JSON.stringify(req.body.geometry),
-            log_table = layer.log_table ? layer.log_table : null;
+            geometry = JSON.stringify(req.body.geometry);
 
         // Check whether string params are found in the settings to prevent SQL injections.
-        if ([table, geom, qID, log_table]
+        if ([table, geom, qID]
             .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
             return res.code(406).send('Parameter not acceptable.');
         }
@@ -154,10 +157,14 @@ async function updateRecord(req, res, fastify) {
             if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`*/
         });
 
+        const d = new Date();
+
         var q = `
             UPDATE ${table} SET
                 ${fields}
                 ${geom} = ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)
+                ${layer.log && layer.log.table ?
+                `, ${layer.log.field || 'log'} = '{ "user": "${token.email}", "op": "update", "time": "${d.toUTCString()}"}'` : ''}
             WHERE ${qID} = $1;`;
 
         var db_connection = await fastify.pg[layer.dbs].connect();
@@ -165,7 +172,7 @@ async function updateRecord(req, res, fastify) {
         db_connection.release();
 
         // Write into logtable if logging is enabled.
-        if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
+        if (layer.log && layer.log.table) await writeLog(fastify, layer, id);
 
         res.code(200).send();
 
@@ -184,17 +191,32 @@ async function deleteRecord(req, res, fastify) {
         layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
         table = req.query.table,
         qID = layer.qID ? layer.qID : 'id',
-        id = req.query.id,
-        log_table = layer.log_table ? layer.log_table : null;
+        id = req.query.id;
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if ([table, qID, log_table]
+    if ([table, qID]
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
+    
+    const d = new Date();
 
-    // Write into logtable if logging is enabled.
-    if (log_table) await writeLog(req, log_table, table, qID, id, fastify);
+    // Set the log stamp and create duplicate in log table prior to delete.
+    if (layer.log && layer.log.table) {
+
+        var q = `
+        UPDATE ${table}
+        SET ${layer.log.field || 'log'} = 
+            '{ "user": "${token.email}", "op": "delete", "time": "${d.toUTCString()}"}'
+        RETURNING ${qID} AS id;`;
+    
+        var db_connection = await fastify.pg[layer.dbs].connect();
+        var result = await db_connection.query(q);
+        db_connection.release();
+    
+        await writeLog(fastify, layer, result.rows[0].id)
+
+    }
 
     var q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
 
@@ -205,14 +227,16 @@ async function deleteRecord(req, res, fastify) {
     res.code(200).send();
 }
 
-async function writeLog(req, log_table, table, qID, id, fastify) {
+async function writeLog(fastify, layer, id) {
 
+    // Create duplicate of item in log table.
     var q = `
-    INSERT INTO ${log_table} 
+    INSERT INTO ${layer.log.table} 
     SELECT *
-    FROM ${table} WHERE ${qID} = $1;`;
+    FROM ${layer.table} WHERE ${layer.qID || 'id'} = $1;`;
 
     var db_connection = await fastify.pg[layer.dbs].connect();
     await db_connection.query(q, [id]);
-    db_connection.release();
+
+    return db_connection.release();
 }

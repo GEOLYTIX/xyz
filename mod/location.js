@@ -24,7 +24,7 @@ async function select(req, res, fastify) {
         infoj = JSON.parse(JSON.stringify(layer.infoj));
 
     // Check whether string params are found in the settings to prevent SQL injections.
-    if ([table, qID, geomj, geomq, geomdisplay, sql_filter]
+    if ([table, qID, geomj, geomq, geomdisplay]
         .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Parameter not acceptable.');
     }
@@ -73,16 +73,27 @@ async function select(req, res, fastify) {
         }
     });
 
+    let qLog = layer.log_table ?
+    `( SELECT
+        *,
+        ROW_NUMBER()
+        OVER (
+          PARTITION BY ${layer.qID || 'id'}
+          ORDER BY ((${layer.log_table.field || 'log'} -> 'time') :: VARCHAR) :: TIMESTAMP DESC ) AS rank
+      FROM gb_retailpoint_editable_logs
+    ) AS logfilter` : null;
+
     var q = `
     SELECT
         ${fields}
         ${geomj} AS geomj
         ${geomdisplay}
-    FROM ${table}
-    WHERE ${qID} = $1;`;
+    FROM ${layer.log_table ? qLog : table}
+    WHERE 
+    ${layer.log_table ? 'rank = 1 AND ' : ''}
+    ${qID} = $1;`;
 
     //console.log(q);
-
 
     var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q, [id]);

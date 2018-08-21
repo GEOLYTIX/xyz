@@ -160,6 +160,9 @@ module.exports = () => {
 
         let layer = global._xyz.locales[global._xyz.locale].layers[location.layer];
 
+        // Prevent crash for select from hook when layer is no accessible to user.
+        if (!layer) return
+
         // infoj fields with a layer definition are queried from the reference layer.
         layer.infoj.forEach(entry => {
 
