@@ -251,6 +251,27 @@ function populateTable(record, entry, tr, table){
         });
         return
     }
+    
+    // Create input text area for editable fields
+    if (entry.text) {
+        utils._createElement({
+            tag: 'textarea',
+            options: {
+                value: entry.value || '',
+                rows: 5
+            },
+            appendTo: val,
+            eventListener: {
+                event: 'keyup',
+                funct: e => {
+                    utils.addClass(e.target, 'changed');
+                    record.upload.style.display = 'block';
+                    entry.value = e.target.value;
+                }
+            }
+        });
+        return
+    }
 
     // Create select input for options.
     if (entry.options) {
