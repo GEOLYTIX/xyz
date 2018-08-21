@@ -26,6 +26,9 @@ module.exports = (function(){
 
 
     function dot(style){
+        
+        if(!style) return;
+        
         let svg = d3
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 866)
@@ -51,6 +54,9 @@ module.exports = (function(){
     }
 
     function circle(style){
+        
+        if(!style) return;
+        
         let svg = d3
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
@@ -72,6 +78,9 @@ module.exports = (function(){
     }
 
     function target(style){
+        
+        if(!style) return;
+        
         let svg = d3
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
@@ -99,6 +108,9 @@ module.exports = (function(){
     }
 
     function markerLetter(style) {//colorMarker, letter
+        
+        if(!style) return;
+        
         let svg = d3
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
@@ -161,6 +173,9 @@ module.exports = (function(){
     }
 
     function markerColor(style) {//colorMarker, colorDot
+        
+        if(!style) return;
+        
         let svg = d3
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
