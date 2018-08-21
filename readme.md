@@ -47,7 +47,9 @@ In Visual Studio Code we recommend to store the environment settings in the env:
 
 During startup, server.js will check for [dotenv](https://www.npmjs.com/package/dotenv). If found the dotenv settings will be loaded as environment settings.
 
-We use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
+For deployments on a Ubuntu server we use the [PM2](https://github.com/Unitech/pm2) process manager in our production environment to run multiple instances of the framework on different ports on the same server. With PM2 we store the settings in a json document which is used to start the application using the command: `pm2 start myapplication.json`
+
+For serverless deployments we use Zeit Now and provide environment variables with -e flag.
 
 Following environment keys are recognised:
 
@@ -58,6 +60,10 @@ The port on which the application is run. Defaults to 3000.
 `"DIR": "/xyz"`
 
 The path for the application root.
+
+`"ALIAS": "geolytix.xyz"`
+
+The domain alias to be used in email notifications.
 
 `"WORKSPACE": "file:demo.json"`
 
@@ -82,10 +88,6 @@ The maxmimum number of failed attempts before a user account is locked. Defaults
 `"SECRET": "ChinaCatSunflower"`
 
 A secret which is required to encrypt tokens which are used to store user credentials and session information. Should be longer than 32 characters!
-
-`"TIMEOUT": "30"`
-
-The maximum token age in seconds. Defaults to 30.
 
 `"DBS_XYZ": "postgres://username:password@123.123.123.123:5432/database"`
 
