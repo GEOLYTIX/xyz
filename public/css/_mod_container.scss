@@ -92,6 +92,9 @@
                     .expander-group::before {
                         content: "expand_more"
                     }
+                    .drawer.expandable {
+                        margin-left: 14px;
+                    }
                 }
                 &.expanded-group {
                     max-height: 2500px;

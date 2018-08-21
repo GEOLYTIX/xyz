@@ -455,6 +455,8 @@ input[type=range]::-moz-range-thumb {
         transition: max-height 0.3s ease-out; }
         .mod_container .module .drawer.drawer-group.expandable-group .expander-group::before {
           content: "expand_more"; }
+        .mod_container .module .drawer.drawer-group.expandable-group .drawer.expandable {
+          margin-left: 14px; }
       .mod_container .module .drawer.drawer-group.expanded-group {
         max-height: 2500px; }
         .mod_container .module .drawer.drawer-group.expanded-group .expander-group::before {

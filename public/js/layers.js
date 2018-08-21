@@ -28,6 +28,12 @@ module.exports = () => {
 
     // init is called upon initialisation and when the locale is changed (change_locale === true).
     if (!global._xyz.layers) global._xyz.layers = {};
+    
+    // Get the layers from the current locale.
+    let layers = global._xyz.locales[global._xyz.locale].layers;
+    let groups = global._xyz.locales[global._xyz.locale].groups || {};
+    
+    
     global._xyz.layers.init = function (change_locale) {
 
         global._xyz.attribution = ['leaflet', 'xyz'];
@@ -35,13 +41,8 @@ module.exports = () => {
         // Remove the layers hook on change_locale event.
         if (change_locale) {
             global._xyz.removeHook('layers');
-            global._xyz.map.eachLayer(layer => global._xyz.map.removeLayer(layer))
+            global._xyz.map.eachLayer(layer => global._xyz.map.removeLayer(layer));
         };
-
-        // Get the layers from the current locale.
-
-        let layers = global._xyz.locales[global._xyz.locale].layers;
-        let groups = global._xyz.locales[global._xyz.locale].groups || {};
 
         // Set the layer display from hooks if present; Overwrites the default setting.
         if (global._xyz.hooks.layers) Object.keys(layers).map(function (layer) {
@@ -53,7 +54,7 @@ module.exports = () => {
 
         // Empty the layers table.
         dom.layers.innerHTML = '';
-        
+
         // Add layer groups
         Object.keys(groups).forEach(group => {
             groups[group].container = utils._createElement({
@@ -63,7 +64,7 @@ module.exports = () => {
                 },
                 appendTo: dom.layers
             });
-            
+
             groups[group].header = utils._createElement({
                 tag: 'div',
                 options: {
@@ -84,7 +85,34 @@ module.exports = () => {
                     }
                 }
             });
-            
+
+            groups[group].hideAll = utils._createElement({
+                tag: "i",
+                options: {
+                    className: 'material-icons cursor noselect btn_header hide-group',
+                    title: "Hide layers from group",
+                    //textContent: (toggleGroupHidden(group) ? "layers" : "layers_clear")
+                    textContent: (toggleGroupHidden(group) ? "visibility" : "visibility_off")
+                },
+                appendTo: groups[group].header,
+                style: {
+                    display: (toggleGroupHidden(group) ? "block" : "none")
+                },
+                eventListener: {
+                    event: "click",
+                    funct: e => {
+                        e.stopPropagation();
+                        e.target.style.display = "none";
+                        
+                        Object.values(layers).forEach(layer => {
+                            // set URL to acknowledge new token.
+                            if (layer.group === group && layer.display) removeLayer(e, layer);   
+                        });
+                        global._xyz.layersCheck();
+                    }
+                }
+            });
+
             utils._createElement({ // add group expander
                 tag: 'i',
                 options: {
@@ -123,7 +151,7 @@ module.exports = () => {
                 "fillOpacity": 0.1
             };
             if (!layer.filter) layer.filter = {};
-            
+
 
             // Create layer drawer.
             layer.drawer = utils._createElement({
@@ -155,11 +183,10 @@ module.exports = () => {
             global._xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
 
             // Assign getLayer function from format.
-            //layer.getLayer = formats[layer.format].getLayer;
             layer.getLayer = formats[layer.format];
 
             // Create control to toggle layer visibility.
-            utils._createElement({
+            layer.clear_icon = utils._createElement({
                 tag: 'i',
                 options: {
                     textContent: layer.display ? 'layers' : 'layers_clear',
@@ -171,39 +198,12 @@ module.exports = () => {
                     event: 'click',
                     funct: e => {
                         e.stopPropagation();
-                        if (e.target.textContent === 'layers_clear') {
-                            layer.display = true;
-                            utils.removeClass(layer.drawer, 'report-off');
-                            e.target.textContent = 'layers';
-                            global._xyz.pushHook('layers', layer.layer);
-                            global._xyz.attribution = global._xyz.attribution.concat(layer.attribution || []);
-                            attributionCheck();
-                            layer.getLayer();
-                        } else {
-                            layer.loader.style.display = 'none';
-                            layer.display = false;
-                            utils.addClass(layer.drawer, 'report-off');
-                            e.target.textContent = 'layers_clear';
-                            global._xyz.filterHook('layers', layer.layer);
-
-                            if (layer.attribution) layer.attribution.forEach(a => {
-                                let foo = global._xyz.attribution.indexOf(a);
-                                global._xyz.attribution.splice(foo,1);
-                            });
-                            attributionCheck();
-
-                            if (layer.L) global._xyz.map.removeLayer(layer.L);
-                            if (layer.base) {
-                                global._xyz.map.removeLayer(layer.base);
-                                layer.base = null;
-                            }
-                            global._xyz.layersCheck();
-                        }
+                        toggleLayer(e, layer);
                     }
                 }
             });
-    
-            
+
+
             // Create zoom to layer control
             if(layer.cntr || layer.bounds){
                 utils._createElement({
@@ -281,6 +281,12 @@ module.exports = () => {
                                 xhr.open('POST', global._xyz.host + '/api/location/new?token=' + global._xyz.token);
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = e => {
+                                    if (e.target.status === 401) {
+                                        document.getElementById('timeout_mask').style.display = 'block';
+                                        console.log(e.target.response);
+                                        return
+                                    }
+
                                     if (e.target.status === 200) {
                                         layer.getLayer();
                                         global._xyz.select.selectLayerFromEndpoint({
@@ -292,7 +298,7 @@ module.exports = () => {
                                         });
                                     }
                                 }
-                                
+
                                 xhr.send(JSON.stringify({
                                     locale: _xyz.locale,
                                     layer: layer.layer,
@@ -319,7 +325,7 @@ module.exports = () => {
             }
 
             if (!layer.display) utils.addClass(layer.drawer, 'report-off');
-            
+
             if(layer.format === 'cluster' && layer.style.marker) {
                 utils._createElement({
                     tag: "img",
@@ -339,8 +345,54 @@ module.exports = () => {
             layer.getLayer();
         });
     };
-
     
+    function toggleGroupHidden(group){ // check if any layer visible
+        return Object.values(layers).some(entry => {
+            return (entry.group === group && entry.display) ? true : false;
+        });
+    }
+    
+    function toggleLayer(e, layer){
+        
+        if (e.target.textContent === 'layers_clear') {
+
+            if(layer.group) {
+                groups[layer.group].hideAll.textContent = "visibility";//"layers"; //(toggleGroupHidden(group) ? "block" : "none")
+                groups[layer.group].hideAll.style.display = "block";
+
+            }
+            layer.display = true;
+            utils.removeClass(layer.drawer, 'report-off');
+            e.target.textContent = 'layers';
+            global._xyz.pushHook('layers', layer.layer);
+            global._xyz.attribution = global._xyz.attribution.concat(layer.attribution || []);
+            attributionCheck();
+            layer.getLayer();
+        } else {
+            removeLayer(e, layer);
+            global._xyz.layersCheck();
+        }
+    }
+
+    function removeLayer(e, layer){
+        layer.loader.style.display = 'none';
+        layer.clear_icon.textContent = "layers_clear";
+        layer.display = false;
+        utils.addClass(layer.drawer, 'report-off');
+        global._xyz.filterHook('layers', layer.layer);
+
+        if (layer.attribution) layer.attribution.forEach(a => {
+            let foo = global._xyz.attribution.indexOf(a);
+            global._xyz.attribution.splice(foo,1);
+        });
+        attributionCheck();
+
+        if (layer.L) global._xyz.map.removeLayer(layer.L);
+        if (layer.base) {
+            global._xyz.map.removeLayer(layer.base);
+            layer.base = null;
+        }
+    }
     global._xyz.layers.init();
 }
 
