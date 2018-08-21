@@ -17,7 +17,8 @@ async function select(req, res, fastify) {
         qID = layer.qID ? layer.qID : 'id',
         id = req.query.id,
         geom = layer.geom ? layer.geom : 'geom',
-        geomj = layer.geomj ? layer.geomj : `ST_asGeoJson(${geom})`,
+        //geomj = layer.geomj ? layer.geomj : `ST_asGeoJson(${geom})`,
+        geomj = layer.geomj ? `ST_asGeoJson(${layer.geomj})` : `ST_asGeoJson(${geom})`,
         geomq = layer.geomq ? layer.geomq : geom,
         geomdisplay = layer.geomdisplay ? layer.geomdisplay : '',
         // sql_filter = req.body && req.body.sql_filter ? req.body.sql_filter : '',
@@ -49,10 +50,17 @@ async function select(req, res, fastify) {
         if (entry.layer) {
             let entry_layer = global.workspace[token.access].config.locales[req.query.locale].layers[entry.layer];
 
-            fields += `
+            /*fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
             FROM ${entry_layer.table}
             WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
+            ${access_filter ? 'AND ' + access_filter : ''}
+            ) AS "${entry.field}",`;
+            return*/
+            fields += `
+            (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
+            FROM ${entry_layer.table}
+            WHERE true ${'' || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
             ${access_filter ? 'AND ' + access_filter : ''}
             ) AS "${entry.field}",`;
             return
