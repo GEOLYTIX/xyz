@@ -22,7 +22,7 @@ tl;dr Here is a hosted version of the XYZ without login:
 [API](#api)
 * [Keys](#api-keys)
 * [Routes](#api-routes)
-  * [/documentation](#api-documentation)
+  * [/documentation][1]
   * [/proxy/image](#api-proxy-image)
   * [/api/mvt/get/:z/:x/:y](#api-mvt-get)
   * [/api/grid/get](#api-grid-get)
@@ -42,6 +42,8 @@ tl;dr Here is a hosted version of the XYZ without login:
   * [/api/catchments](#api-catchments)
   * [/api/images/new](#api-images-new)
   * [/api/images/delete](#api-images-delete)
+  
+[1]: #api-proxy-image
 
 [Security](#security)
 * [Email transport](#email-transport)
