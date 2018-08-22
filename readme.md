@@ -1,9 +1,9 @@
-# XYZ
-
 A Node.js framework to develop applications and APIs for spatial data.
 
 tl;dr Here is a hosted version of the XYZ without login:
 [https://geolytix.xyz/open](https://geolytix.xyz/open)
+
+[Strategy](#strategy)
 
 ## Introduction
 
@@ -1094,7 +1094,7 @@ The **user cookie** stores the email address as well as user access privileges (
 
 The **session cookie** holds a redirect address which allows the application to return to a specific parameterized address from the login view. This allows the auth module to respond with a redirect instead of passing the original request to the login function.
 
-### Strategy
+### [Strategy](#strategy)
 
 *fastify-auth* does not provide an authentication strategy. The strategy which is applied by the authToken() function will be detailed in this section.
 
@@ -1137,11 +1137,3 @@ The individual steps in the authentication strategy sequence are as follows.
 9. **issue new token**
 
    Success. Authorization has completed and the user token's issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.
-
-### Timeout
-
-The default timeout value is 30 (seconds). A different value can be provided in the TIMEOUT environment setting.
-
-### Logout
-
-The user and session token will be emptied by following the /logout route.
