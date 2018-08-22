@@ -23,6 +23,25 @@ tl;dr Here is a hosted version of the XYZ without login:
 * [Keys](#api-keys)
 * [Routes](#api-routes)
   * [/documentation](#api-documentation)
+  * [/proxy/image](#api-proxy-image)
+  * [/api/mvt/get/:z/:x/:y](#api-mvt-get)
+  * [/api/grid/get](#api-grid-get)
+  * [/api/geojson/get](#api-geojson-get)
+  * [/api/cluster/get](#api-cluster-get)
+  * [/api/cluster/select](#api-cluster-select)
+  * [/api/location/select](#api-location-select)
+  * [/api/location/select_ll](#api-location-select-ll)
+  * [/api/location/select_ll_nnearest](#api-location-select-nnearest)
+  * [/api/location/select_ll_intersect](#api-location-select-intersect)
+  * [/api/location/new](#api-location-new)
+  * [/api/location/update](#api-location-update)
+  * [/api/location/delete](#api-location-delete)
+  * [/api/location/aggregate](#api-location-aggregate)
+  * [/api/gazetteer/autocomplete](#api-gazetteer-autocomplete)
+  * [/api/gazetteer/googleplaces](#api-gazetteer-googleplaces)
+  * [/api/catchments](#api-catchments)
+  * [/api/images/new](#api-images-new)
+  * [/api/images/delete](#api-images-delete)
 
 [Security](#security)
 * [Email transport](#email-transport)
@@ -744,6 +763,7 @@ Thematic MVT style configuration:
 Styles defined in `"themes"` array can also be used as default MVT style.
 
 ### grid
+
 ### geojson
 
 ### tiles
@@ -863,11 +883,11 @@ We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/
 
 Serves the [documentation for the client application](https://github.com/GEOLYTIX/xyz/blob/master/public/documentation.md) as github flavoured markdown.
 
-### /proxy/image
+### [/proxy/image](#api-proxy-image)
 
 Proxy requests for image resources such as Mapbox tiles or Google StreetView images. The provider parameter is replaced with a key value from the environment settings.
 
-### /api/mvt/get/:z/:x/:y
+### [/api/mvt/get/:z/:x/:y](#api-mvt-get)
 
 Request vector tiles from a PostGIS data source.
 
@@ -881,7 +901,7 @@ Query parameter:
 * tilecache: The name of a table used to cache vector tiles. Defaults to false.
 * token: The user token which is required to authenticate the route.
 
-### /api/grid/get
+### [/api/grid/get](#api-grid-get)
 
 Request hex grid as json.
 
@@ -897,7 +917,7 @@ Query parameter:
 * east: The eastern bounds for the request (float).
 * north: The northern bounds for the request (float).
 
-### /api/geojson/get
+### [/api/geojson/get](#api-geojson-get)
 
 Request geojson from PostGIS table within bounding box.
 
@@ -912,7 +932,7 @@ Query parameter:
 * east: The eastern bounds for the request (float).
 * north: The northern bounds for the request (float).
 
-### /api/cluster/get
+### [/api/cluster/get](#api-cluster-get)
 
 Request cluster as json from PostGIS table within bounding box.
 
@@ -929,7 +949,7 @@ Query parameter:
 * east: The eastern bounds for the request (float).
 * north: The northern bounds for the request (float).
 
-### /api/cluster/select
+### [/api/cluster/select](#api-cluster-select)
 
 Request array of location from a cluster.
 
@@ -943,7 +963,7 @@ Query parameter:
 * count: The number of items to be listed in the array.
 * lnglat: Array of longitude and latitude from where to query the nearest count cluster features.
 
-### /api/location/select
+### [/api/location/select](#api-location-select)
 
 Request location data from a PostgreSQL table by ID.
 
@@ -959,11 +979,15 @@ Post request body:
 * sql_filter: Field name for stored SQL lookup filter.
 * infoj: The infoj object describes the structured property data to be queried and returned for the location.
 
-### /api/location/select_ll
+### [/api/location/select_ll](#api-location-select-ll)
 
 Request location data from a PostgreSQL table by Latitude and Longitude.
 
-### /api/location/new
+### [/api/location/select_ll_nnearest](#api-location-select-nnearest)
+
+### [/api/location/select_ll_intersect](#api-location-select-intersect)
+
+### [/api/location/new](#api-location-new)
 
 Creates a new location record in database.
 
@@ -976,7 +1000,7 @@ Post request body:
 * geometry: The geometry of the new location provided as stringified geojson.
 * log_table: The name of a table to store changes.
 
-### /api/location/update
+### [/api/location/update](#api-location-update)
 
 Updates a location in the database.
 
@@ -989,7 +1013,7 @@ Post request body:
 * geometry: The geometry of the updated location provided as stringified geojson.
 * log_table: The name of a table to store changes.
 
-### /api/location/delete
+### [/api/location/delete](#api-location-delete)
 
 Delete a location record in the database.
 
@@ -1000,7 +1024,7 @@ Post request body:
 * id: The ID of the location.
 * log_table: The name of a table to store changes.
 
-### /api/location/aggregate
+### [/api/location/aggregate](#api-location-aggregate)
 
 Creates an aggregate location in the database.
 
@@ -1013,15 +1037,15 @@ Post request body:
 * geom_target: The geometry field of the target table.
 * filter: A json object which generates the filter to be applied for the aggregation.
 
-### /api/gazetteer/autocomplete
+### [/api/gazetteer/autocomplete](#api-gazetteer-autocomplete)
 
 
 
-### /api/gazetteer/googleplaces
+### [/api/gazetteer/googleplaces](#api-gazetteer-googleplaces)
 
 
 
-### /api/catchments
+### [/api/catchments](#api-catchments)
 
 Request array of location from a cluster.
 
@@ -1038,7 +1062,7 @@ Query parameter:
 * mode: The travel mode for the catchment calculation.
 * provider: The provider to use for the catchment calculation.
 
-### /api/images/new
+### [/api/images/new](#api-images-new)
 
 Uploads an image to cloudinary and attaches the image reference to a location.
 
@@ -1049,7 +1073,7 @@ Post request body:
 * id: The id of the location.
 * The image data itself is send as an octet stream in the payload.
 
-### /api/images/delete
+### [/api/images/delete](#api-images-delete)
 
 Removes the reference of an image from a location.
 
