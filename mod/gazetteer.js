@@ -26,7 +26,7 @@ async function placesAutoComplete(req, res, locale, fastify) {
             ST_X(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lng,
             ST_Y(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lat
             FROM ${dataset.table}
-            WHERE ${dataset.label} ILIKE '${decodeURIComponent(req.query.q)}%'
+            WHERE ${dataset.label} ILIKE '${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(req.query.q)}%'
             ORDER BY length(${dataset.label})
             LIMIT 10`;
 

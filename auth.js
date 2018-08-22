@@ -50,6 +50,9 @@ function init(fastify) {
             url: '/login',
             handler: async (req, res) => {
 
+                if (!req.body.email) return
+                if (!req.body.password) return
+
                 // Get user from ACL.
                 var user_db = await fastify.pg.users.connect();
                 var result = await user_db.query(
