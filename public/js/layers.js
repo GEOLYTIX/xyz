@@ -340,7 +340,6 @@ module.exports = () => {
                     appendTo: layer.header
                 });
             }
-
             // get layer data.
             layer.getLayer();
         });
@@ -393,6 +392,7 @@ module.exports = () => {
             layer.base = null;
         }
     }
+
     global._xyz.layers.init();
 }
 

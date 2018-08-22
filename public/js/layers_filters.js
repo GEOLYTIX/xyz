@@ -179,8 +179,17 @@ module.exports = (layer, panel) => {
                             label: entry.label,
                             appendTo: block
                         }
+                        //console.log(layer);
 
-                        filter_numeric(layer, options);
+                        let _options = {
+                            field: entry.field,
+                            max: layer.idx[entry.field].max,
+                            min: layer.idx[entry.field].min,
+                            appendTo: block
+                        };
+
+                        //filter_numeric(layer, options);
+                        filter_range(layer, _options);
                         filters.insertBefore(block, filters.lastChild);
                     };
                     if(entry.filter === "like" || entry.filter === "match") {
@@ -399,6 +408,23 @@ function filter_numeric(layer, options) { // to rewrite
 }
 
 function filter_range(layer, options){ // in progress
+    console.log(layer.idx);
+
+    function oninput(e){
+        console.log('apply filter and reload layer ' + layer);
+    }
+
+    let opts = {
+        title: options.label,
+        default: options.min,
+        min: options.min,
+        max: options.max,
+        value: options.min,
+        appendTo: options.appendTo,
+        oninput: oninput
+    }
+    
+    utils.slider(opts);
     /*utils.slider({
         title: options.label, //?
         default: "set to min value",
