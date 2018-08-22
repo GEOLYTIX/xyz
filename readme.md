@@ -3,9 +3,26 @@ A Node.js framework to develop applications and APIs for spatial data.
 tl;dr Here is a hosted version of the XYZ without login:
 [https://geolytix.xyz/open](https://geolytix.xyz/open)
 
-[Strategy](#strategy)
+[Introduction](#introduction)
+[Licence](#licence)
+[Testing](#testing)
+[Dependencies](#dependencies)
+[Environment Settings](#environment)
+[Workspaces](#workspaces)
 
-## Introduction
+[Server](#server)
+[Client Application](#client-application)
+[API](#api)
+[Security](#security)
+* [Email transport](#email_transport)
+* [Registration](#registration)
+* [Password reset](#password_reset)
+* [Failed login attempts](#failed_login)
+* [JWT token](#jwt_token)
+* [Strategy](#strategy)
+* [SQL Injections](#sql_injections)
+
+# [Introduction](#introduction)
 
 The XYZ framework is designed to serve spatial data from PostGIS datasources without the need of additional services. The framework is modular with dependencies on third party open source modules such as the open GIS engine [Turf](https://github.com/Turfjs/turf), the [Leaflet](https://github.com/Leaflet/Leaflet) javascript engine for interactive maps and [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) to create server-side PDF reports.
 
@@ -13,17 +30,17 @@ XYZ is build with a [PfaJn stack](https://medium.com/@goldrydigital/a-fine-pfajn
 
 The code repository should work out of the box (zero-configuration) as [serverless deployments with Zeit Now](https://medium.com/@goldrydigital/the-zeit-is-now-for-serverless-web-mapping-77edebfaf17e).
 
-## Licence
+# [Licence](#licence)
 
 Free use of the code in this repository is allowed through a [MIT licence](https://github.com/GEOLYTIX/xyz/blob/master/LICENSE).
 
-## Testing
+# [Testing](#testing)
 
 We use BrowserStack to test browser compliance of the client shell and map control. This has been especially useful by allowing us to test older versions of chrome as well as Microsoft Edge since we do not have Microsoft Windows machines available to the core development team.
 
 [![alt text](https://user-images.githubusercontent.com/22201617/43830268-ce4cf53a-9af8-11e8-9bde-9e2526333eb3.png)](http://browserstack.com)
 
-## Dependencies
+# [Dependencies](#dependencies)
 
 We are currently using Node.js version 8.5 in production.
 
@@ -33,11 +50,11 @@ The application is compiled with Webpack (v4) and Babel. We target ES2015 with B
 
 The [xyz entry code](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js) can be compiled with the `npm run build` command from the root.
 
-### Puppeteer
+## Puppeteer
 
 [Google Puppeteer](https://github.com/GoogleChrome/puppeteer) is used to generate PDF reports server-side. In it's current state the project install of Pupetteer takes 300mb out of a total 400mb worth of dependencies. It is recommended to install Puppeteer either global `sudo npm install puppeteer --global --unsafe-perm` and then set a link to the global install in the project folder `npm link puppeteer`. Otherwise Puppeteer can be installed local with `npm install puppeteer`.
 
-## Environment Settings
+# [Environment Settings](#environment)
 
 The process environment contains sensitive information such as connection strings for data sources, security information and API keys. These should never be made public and are not contained in this repository.
 
@@ -111,7 +128,7 @@ A HERE API key which is required if HERE base maps are used.
 
 We use [cloudinary](https://cloudinary.com) to store images uploaded from the browser application interface.
 
-## Workspaces
+# [Workspaces](#workspaces)
 
 A workspace is the configuration of services, styles, layers and locations to be used in a deployment. File based configuration are stored in the [/workspaces](https://github.com/GEOLYTIX/xyz/tree/master/workspaces) directory. It is recommended to store the configuration object in a database in order manage the configurastion through admin views.
 
@@ -141,7 +158,7 @@ Whether a documentation button should be enabled. If set to 'documentation' the 
 
 The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
 
-### Locales
+## Locales
 
 `"locales": {}`
 
@@ -165,62 +182,7 @@ An array of \[lat,lon\] coordinate pairs which define the bounds of a locale. It
 
 The min and max zoom for the leaflet map object. The defaults range is zoom 0 to 20 if not set.
 
-### Gazetteer
-
-```
-"gazetteer": {
-  "provider": "MAPBOX",
-  "placeholder": "e.g. London",
-  "datasets": [
-    {
-      "layer": "sprawls",
-      "table": "glx_cities_of_the_world",
-      "label": "nameascii",
-      "leading_wildcard": true
-    }
-  ]
-},
-```
-
-The gazetteer to be used for a locale. The gazeetteer inputs will be hidden on the view if no gazetteer is set for the locale. The gazetteer configuration object is structured into several configuration keys.
-
-`"provider": "MAPBOX"`
-
-The geolocation service to use (MAPBOX or GOOGLE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service.
-
-`"placeholder": "e.g. London"`
-
-The placeholder to be shown in the gazetteer input.
-
-`"code": "GB"`
-
-The country code to limit the search on 3rd party geolocation services.
-
-`"bounds": "'&location=51.75,-1.25&radius=40'"`
-
-A bounding box or radii to spatially limit the search on 3rd party geolocation services.
-
-`"datasets": []"`
-
-An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.
-
-`"layer": "sprawls"`
-
-The layer key in the datasets array object must correspond to a layer defined in the locale's layers.
-
-`"table": "glx_cities_of_the_world"`
-
-The table to be used for the layer. This is required as layers may aggregate data from multiple table.
-
-`"label": "nameascii"`
-
-The field which is searched for the autocomplete match. The label is also displayed in the results list.
-
-`"leading_wildcard": true`
-
-The ILIKE query will pre-fix the search term with a wild card. e.g. 'Man' will find 'Central Manchester' as well as 'Manchester Airport'.
-
-### Layers
+## Layers
 
 `"layers": {}`
 
@@ -284,9 +246,202 @@ Each layer object needs `"table"` or `"arrayZoom"` property defined in order to 
 }
 ```
 
+### Gazetteer
+
+```
+"gazetteer": {
+  "provider": "MAPBOX",
+  "placeholder": "e.g. London",
+  "datasets": [
+    {
+      "layer": "sprawls",
+      "table": "glx_cities_of_the_world",
+      "label": "nameascii",
+      "leading_wildcard": true
+    }
+  ]
+},
+```
+
+The gazetteer to be used for a locale. The gazeetteer inputs will be hidden on the view if no gazetteer is set for the locale. The gazetteer configuration object is structured into several configuration keys.
+
+`"provider": "MAPBOX"`
+
+The geolocation service to use (MAPBOX or GOOGLE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service.
+
+`"placeholder": "e.g. London"`
+
+The placeholder to be shown in the gazetteer input.
+
+`"code": "GB"`
+
+The country code to limit the search on 3rd party geolocation services.
+
+`"bounds": "'&location=51.75,-1.25&radius=40'"`
+
+A bounding box or radii to spatially limit the search on 3rd party geolocation services.
+
+`"datasets": []"`
+
+An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.
+
+`"layer": "sprawls"`
+
+The layer key in the datasets array object must correspond to a layer defined in the locale's layers.
+
+`"table": "glx_cities_of_the_world"`
+
+The table to be used for the layer. This is required as layers may aggregate data from multiple table.
+
+`"label": "nameascii"`
+
+The field which is searched for the autocomplete match. The label is also displayed in the results list.
+
+`"leading_wildcard": true`
+
+The ILIKE query will pre-fix the search term with a wild card. e.g. 'Man' will find 'Central Manchester' as well as 'Manchester Airport'.
+
+### Editing
+
+Layers can be made editable by setting a flag in the root of the layer definition.
+
+`"editable": true`
+
+Seting the editable flag to `true` allows editing of location attributes. Setting the editable flag to `'geometry'` allows to create locations and modify a locations geometry. *!!! Geometry edits are currently only supported on cluster layer.*
+
+The primary key of a table which allows geometry edits must be a serial key. New features must get a unique ID when they are created in the database.
+
+Edits can be logged in a seperate table. The log table must be identical to the editable table but the id must not be a serial key. Allowing a feature to be stored several times under its original ID. Both tables need to have a JSON field for the log information. The default name for this field is *log*.
+
+`"log": {"table": "<tablename>", "field": "<log field>"}`
+
+The log table can be added as a seperate layer. Adding the log_table flag to this layer will make sure that only the last version of a logged edit will be loaded from the database.
+
+`"log_table": <true or "field name">}`
+
+If set to true, then *log* will be used as the default fieldname for the edit log.
+
+The log field stores the username, a timestamp and the operation which is either 'new', 'update' or 'delete'.
+
+### infoj
+
+`"infoj"` is a container for data associated with each feature displayed on selection and interaction that requires reading feature properties. This is an array of objects with the following structure:
+
+```javascript
+"infoj": [
+  {
+    "field": <field name>,
+    "label": <label for the field>, // optional
+    "type": <currently supported: "text", "numeric", "integer", "date">,
+    "level": <small integer, defines row indent, defaults to 0>,
+    "filter": <filter type>,
+    "options": <array of drop down values for editable properties>,
+    "inline": <boolean, displays table row in one line, defaults to false>
+  },
+  {
+    "label": <set label only when needed a section title>
+  },
+  {
+    "chart": <chart name> // in order to add chart
+  },
+  {...}
+]
+```
+`"options"` parameter can also support hierarchy of selections:
+
+```javascript
+"options": [
+  "parent value 1;child value 1 for value 1;child value 2 for value 1",
+  "parent value 2;child value 1 for value 2;child value 1 for value 2",
+  (...)
+]
+```
+
+`infoj` supports groups of items organized in collapsible sections.
+To define a group type `group` is used:
+
+```javascript
+{
+  "label": "Group name",
+  "type": "group",
+  "items": [] // items takes array of infoj objects described above.
+}
+```
+
+First value before semicolon will determine subsequent choice.
+
+__Filtering__
+
+In order to enable filtering data `"filter"` property in an `"infoj"` item must be defined. The following filter types are supported by cluster and geojson layers:
+
+`"like"` - search for text pattern
+
+`"match"` - search for exact text match
+
+`"date"` - date filtering, later and earlier than
+
+`"numeric"` - number filtering, greater and less than
+
+Filtering by checkbox:
+```javascript
+"filter": {
+      "in": [<array of values>]
+  }
+  ```
+Filtering by checkbox adds checkboxes for each value added to "in" array within filter object. Applied filters are logically conjunctive.
+
+__Aggregate filtering__
+
+Filtered features can be spatially aggregated if `"aggregate_layer"` property is defined. Aggregate functions support count of features with spatial unit on aggregate layer, sum of numeric attributes and average value.
+Aggregate layer is a layer object defined within `"layers"` container with the following parameters:
+
+```javascript
+"layers": {
+  "<filtered layer>": {
+    ...
+    "aggregate_layer": "scratch",
+    ...
+  },
+  "scratch": {
+    "hidden": true,
+    "name": "<layer name for reference>",
+    "pane": ["<pane settings>"],
+    "format": "geojson",
+    "sql_filter": "<field name to store applied filter>",
+    "table": "<source table name>",
+    "geomq": "<name for layer geometry field, expected SRID 4326>",
+    "qID": "<id field name>",
+    "infoj": [
+      {
+        "field": "count.<field name to count>", // count function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      {
+        "field": "sum.<field name to sum>", // sum function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      ,
+      {
+        "field": "avg.<field name to get average>", // average function
+        "label": "<label for field>",
+        "type": "integer",
+        "layer": "<filtered layer>"
+      },
+      {...}
+    ]
+  }
+}
+```
+
+
+
 Types of layers currently supported:
 
-* ### cluster
+### cluster
 
 A `cluster` layer is a GeoJSON point layer which automatically clusters features based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
 
@@ -465,7 +620,7 @@ Cluster layer supports theme object with the following parameters:
 }
 ```
 
-#### mvt
+### mvt
 
 `mvt` layer is a Mapbox Vector Tile layer served directly with PostgreSQL. This layer type is recommended for polygon and multipolygon geometries. MVT may contain feature properties stored within protobuffer string initially defined in "`properties `" layer parameter.
 
@@ -577,124 +732,10 @@ Thematic MVT style configuration:
 
 Styles defined in `"themes"` array can also be used as default MVT style.
 
-#### grid
-#### geojson
+### grid
+### geojson
 
-* ### infoj
-
-`"infoj"` is a container for data associated with each feature displayed on selection and interaction that requires reading feature properties. This is an array of objects with the following structure:
-
-```javascript
-"infoj": [
-  {
-    "field": <field name>,
-    "label": <label for the field>, // optional
-    "type": <currently supported: "text", "numeric", "integer", "date">,
-    "level": <small integer, defines row indent, defaults to 0>,
-    "filter": <filter type>,
-    "options": <array of drop down values for editable properties>,
-    "inline": <boolean, displays table row in one line, defaults to false>
-  },
-  {
-    "label": <set label only when needed a section title>
-  },
-  {
-    "chart": <chart name> // in order to add chart
-  },
-  {...}
-]
-```
-`"options"` parameter can also support hierarchy of selections:
-
-```javascript
-"options": [
-  "parent value 1;child value 1 for value 1;child value 2 for value 1",
-  "parent value 2;child value 1 for value 2;child value 1 for value 2",
-  (...)
-]
-```
-
-`infoj` supports groups of items organized in collapsible sections.
-To define a group type `group` is used:
-
-```javascript
-{
-  "label": "Group name",
-  "type": "group",
-  "items": [] // items takes array of infoj objects described above.
-}
-```
-
-First value before semicolon will determine subsequent choice.
-
-__Filtering__
-
-In order to enable filtering data `"filter"` property in an `"infoj"` item must be defined. The following filter types are supported by cluster and geojson layers:
-
-`"like"` - search for text pattern
-
-`"match"` - search for exact text match
-
-`"date"` - date filtering, later and earlier than
-
-`"numeric"` - number filtering, greater and less than
-
-Filtering by checkbox:
-```javascript
-"filter": {
-      "in": [<array of values>]
-  }
-  ```
-Filtering by checkbox adds checkboxes for each value added to "in" array within filter object. Applied filters are logically conjunctive.
-
-__Aggregate filtering__
-
-Filtered features can be spatially aggregated if `"aggregate_layer"` property is defined. Aggregate functions support count of features with spatial unit on aggregate layer, sum of numeric attributes and average value.
-Aggregate layer is a layer object defined within `"layers"` container with the following parameters:
-
-```javascript
-"layers": {
-  "<filtered layer>": {
-    ...
-    "aggregate_layer": "scratch",
-    ...
-  },
-  "scratch": {
-    "hidden": true,
-    "name": "<layer name for reference>",
-    "pane": ["<pane settings>"],
-    "format": "geojson",
-    "sql_filter": "<field name to store applied filter>",
-    "table": "<source table name>",
-    "geomq": "<name for layer geometry field, expected SRID 4326>",
-    "qID": "<id field name>",
-    "infoj": [
-      {
-        "field": "count.<field name to count>", // count function
-        "label": "<label for field>",
-        "type": "integer",
-        "layer": "<filtered layer>"
-      },
-      {
-        "field": "sum.<field name to sum>", // sum function
-        "label": "<label for field>",
-        "type": "integer",
-        "layer": "<filtered layer>"
-      },
-      ,
-      {
-        "field": "avg.<field name to get average>", // average function
-        "label": "<label for field>",
-        "type": "integer",
-        "layer": "<filtered layer>"
-      },
-      {...}
-    ]
-  }
-}
-```
-
-#### tiles
+### tiles
 
 `tiles` layer is a base map layer used both for map tiles and label tiles. It usually requires tile provider attribution. `URI` is base url for request from tile provider. Below default xyz configuration for base map provided by <a href="https://www.mapbox.com/" target="_blank">Mapbox</a>:
 
@@ -715,29 +756,9 @@ Aggregate layer is a layer object defined within `"layers"` container with the f
 
 Another base map provider available out of the box is <a href="https://www.here.com/en" target="_blank">Here</a>. This configuration also applies to labels displayed as tiles layer along with base map tiles.
 
-### Editing
 
-Layers can be made editable by setting a flag in the root of the layer definition.
 
-`"editable": true`
-
-Seting the editable flag to `true` allows editing of location attributes. Setting the editable flag to `'geometry'` allows to create locations and modify a locations geometry. *!!! Geometry edits are currently only supported on cluster layer.*
-
-The primary key of a table which allows geometry edits must be a serial key. New features must get a unique ID when they are created in the database.
-
-Edits can be logged in a seperate table. The log table must be identical to the editable table but the id must not be a serial key. Allowing a feature to be stored several times under its original ID. Both tables need to have a JSON field for the log information. The default name for this field is *log*.
-
-`"log": {"table": "<tablename>", "field": "<log field>"}`
-
-The log table can be added as a seperate layer. Adding the log_table flag to this layer will make sure that only the last version of a logged edit will be loaded from the database.
-
-`"log_table": <true or "field name">}`
-
-If set to true, then *log* will be used as the default fieldname for the edit log.
-
-The log field stores the username, a timestamp and the operation which is either 'new', 'update' or 'delete'.
-
-## Server
+# [Server](#server)
 
 [server.js](https://github.com/GEOLYTIX/xyz/blob/master/server.js) starts an [Fastify](https://www.fastify.io) web server on the specified port.
 
@@ -777,7 +798,7 @@ The startup procedure is as follows.
 
 17. Listen to incoming requests.
 
-## [Client Application](#client-application)
+# [Client Application](#client-application)
 
 The root route will check whether the incoming requests come from a mobile platform using the [mobile-detect](https://github.com/hgoebl/mobile-detect.js) node module. The user and session token are decoded for the access key to the workspace configuration. Based on the user, session and configuration [JSRender assembles](http://www.jsviews.com/#jsr-node-quickstart) the website template ([desktop](https://github.com/GEOLYTIX/xyz/blob/master/views/desktop.html) or [mobile](https://github.com/GEOLYTIX/xyz/blob/master/views/mobile.html)) with the script bundle and workspace configuration.
 
@@ -820,6 +841,10 @@ The client application initialization flow is as follows:
 14. Initialize [report](https://github.com/GEOLYTIX/xyz/blob/master/public/js/report.js) module.
 
 We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.svg).
+
+# [API](#api)
+
+## Keys
 
 ## Routes
 
@@ -1027,13 +1052,7 @@ Query parameter:
 * qID: The id field of the location. Defaults to 'id'.
 * id: The id of the location.
 
-## SQL Injections
-
-All queries to the PostgreSQL database are parsed through the node-postgres module. [Queries](https://node-postgres.com/features/queries) use a battle-tested parameter substitution code.
-
-Additionally all field and table names are checked against a lookup table which includes values from the current application settings only. A query to a table or a query with a fieldname which is not defined in the application settings is not acceptable ([http code 406](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406)).
-
-## [Security](#security)
+# [Security](#security)
 
 We are using the [fastify-auth](https://github.com/fastify/fastify-auth) module for authentication in XYZ. All authentication is handled in XYZ's [auth.js](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) module.
 
@@ -1062,7 +1081,11 @@ create table if not exists acl
 We are using a javascript implementation of the OpenBDS [Blowfish (cipher)](https://en.wikipedia.org/wiki/Blowfish_(cipher)) to encrypt passwords at rest in the ACL.
 The [login](https://github.com/GEOLYTIX/xyz/blob/master/views/login.html) and [register](https://github.com/GEOLYTIX/xyz/blob/master/views/register.html) views use [input form validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#Validation) for the email (max 50 character) and password (min 8 character). These are also validated on the backend.
 
-### Registration
+## [Email transport](#email_transport)
+
+We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to send emails through the [node-mailer](https://nodemailer.com) module. For this to work an SMTPS protocol string must be defined in the TRANSPORT key in the environment settings.
+
+## [Registration](#registration)
 
 New accounts consist of an email address and password.
 
@@ -1074,19 +1097,15 @@ Once the account is **verified** an email is sent to all site administrators. Th
 
 An email will be sent to inform whether an account has been deleted or approved.
 
-### Email transport
-
-We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to send emails through the [node-mailer](https://nodemailer.com) module. For this to work an SMTPS protocol string must be defined in the TRANSPORT key in the environment settings.
-
-### Password reset
+## [Password reset](#password_reset)
 
 Password reset works the same way as the registration. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. *Administrator do **not** need to approve the account again.* Changing the password resets failed login attempts to 0.
 
-### Failed login attempts
+## [Failed login attempts](#failed_login)
 
 Failed login attempts are stored with the record in the ACL. The verification will be removed once a maximum number of failed attempts has been recorded. The maximum number for failed login attempts can be set in the FAILED_ATTEMPTS environment setting. The default is 3 attempts. Having the verification removed, an account holder is forced to re-register. Setting a new (or old) password in the registration form for an existing account will reset the failed attempts and generate a new verification token to be sent via email. After verifying the account the user is able to login once again.
 
-### JWT token
+## [JWT token](#jwt_token)
 
 [JSON Web Token (JWT)](https://jwt.io) are used to store session and user data. Token themselves will be held in a cookie on the browser. The backend will *not* store these cookies in order to horizontally scale the application in a serverless environment.
 
@@ -1094,7 +1113,7 @@ The **user cookie** stores the email address as well as user access privileges (
 
 The **session cookie** holds a redirect address which allows the application to return to a specific parameterized address from the login view. This allows the auth module to respond with a redirect instead of passing the original request to the login function.
 
-### [Strategy](#strategy)
+## [Strategy](#strategy)
 
 *fastify-auth* does not provide an authentication strategy. The strategy which is applied by the authToken() function will be detailed in this section.
 
@@ -1137,3 +1156,10 @@ The individual steps in the authentication strategy sequence are as follows.
 9. **issue new token**
 
    Success. Authorization has completed and the user token's issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.
+
+
+## [SQL Injections](#sql_injections)
+
+All queries to the PostgreSQL database are parsed through the node-postgres module. [Queries](https://node-postgres.com/features/queries) use a battle-tested parameter substitution code.
+
+Additionally all field and table names are checked against a lookup table which includes values from the current application settings only. A query to a table or a query with a fieldname which is not defined in the application settings is not acceptable ([http code 406](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406)).
