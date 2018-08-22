@@ -118,9 +118,31 @@ async function select(req, res, fastify) {
         setValues(result, entry);
         
     });
+
+    function formatDate(str){
+        let d = new Date(str),
+            options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' },
+            loc = "en-GB";
+        return d ? d.toLocaleDateString('en-GB', options) : false;
+    }
+
+    function formatDateTime(str){
+        let d = new Date(str),
+            options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' },
+            loc = "en-GB";
+        return d ? d.toLocaleDateString('en-GB', options) + ', ' + d.toLocaleTimeString('en-GB') : false;
+    }
     
     function setValues(result, entry){
         if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
+            if(entry.datetime){
+                entry.value = formatDateTime(result.rows[0][entry.field]); 
+                return;
+            }
+            if(entry.date){
+                entry.value = formatDate(result.rows[0][entry.field]);
+                return;
+            }
             entry.value = result.rows[0][entry.field];
         }
         if (result.rows[0][entry.subfield]) {
@@ -197,7 +219,7 @@ async function select_ll(req, res, fastify) {
             entry.subvalue = result.rows[0][entry.subfield];
         }
     });
-
+    
     // Send the infoj object with values back to the client.
     res.code(200).send({
         geomj: result.rows[0].geomj,
