@@ -14,7 +14,7 @@ tl;dr Here is a hosted version of the XYZ without login:
 # [API](#api)
 ## [Keys](#api-keys)
 ## [Routes](#api-routes)
-### [/documentation](#api-documentation)
+### [/documentation](#apidocumentation)
 ### [/proxy/image](#api-proxy-image)
 ### [/api/mvt/get/:z/:x/:y](#api-mvt-get)
 ### [/api/grid/get](#api-grid-get)
