@@ -20,15 +20,18 @@ tl;dr Here is a hosted version of the XYZ without login:
 [Client Application](#client-application)
 
 [API](#api)
+* [Keys](#api-keys)
+* [Routes](#api-routes)
+*  [/documentation](#api-documentation)
 
 [Security](#security)
-* [Email transport](#email_transport)
+* [Email transport](#email-transport)
 * [Registration](#registration)
-* [Password reset](#password_reset)
-* [Failed login attempts](#failed_login)
-* [JWT token](#jwt_token)
-* [Strategy](#strategy)
-* [SQL Injections](#sql_injections)
+* [Password reset](#password-reset)
+* [Failed login attempts](#failed-login)
+* [JWT token](#jwt-token)
+* [Strategy](#security-strategy)
+* [SQL Injections](#sql-injections)
 
 # [Introduction](#introduction)
 
@@ -852,15 +855,11 @@ We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/
 
 # [API](#api)
 
-## Keys
+## [Keys](#api-keys)
 
-## Routes
+## [Routes](#api-routes)
 
-### /
-
-The main route which serves a client application.
-
-### /documentation
+### [/documentation](#api-documentation)
 
 Serves the [documentation for the client application](https://github.com/GEOLYTIX/xyz/blob/master/public/documentation.md) as github flavoured markdown.
 
@@ -1089,7 +1088,7 @@ create table if not exists acl
 We are using a javascript implementation of the OpenBDS [Blowfish (cipher)](https://en.wikipedia.org/wiki/Blowfish_(cipher)) to encrypt passwords at rest in the ACL.
 The [login](https://github.com/GEOLYTIX/xyz/blob/master/views/login.html) and [register](https://github.com/GEOLYTIX/xyz/blob/master/views/register.html) views use [input form validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#Validation) for the email (max 50 character) and password (min 8 character). These are also validated on the backend.
 
-## [Email transport](#email_transport)
+## [Email transport](#email-transport)
 
 We use [SMTPS](https://en.wikipedia.org/wiki/SMTPS) to enable the application to send emails through the [node-mailer](https://nodemailer.com) module. For this to work an SMTPS protocol string must be defined in the TRANSPORT key in the environment settings.
 
@@ -1105,15 +1104,15 @@ Once the account is **verified** an email is sent to all site administrators. Th
 
 An email will be sent to inform whether an account has been deleted or approved.
 
-## [Password reset](#password_reset)
+## [Password reset](#password-reset)
 
 Password reset works the same way as the registration. The hashed password is overwritten in the ACL and account verification is removed. A new verification token is sent to the user. The account will be verified again with the new password once the account holder ascertains access to the email account by following the link containing the verification token. *Administrator do **not** need to approve the account again.* Changing the password resets failed login attempts to 0.
 
-## [Failed login attempts](#failed_login)
+## [Failed login attempts](#failed-login)
 
 Failed login attempts are stored with the record in the ACL. The verification will be removed once a maximum number of failed attempts has been recorded. The maximum number for failed login attempts can be set in the FAILED_ATTEMPTS environment setting. The default is 3 attempts. Having the verification removed, an account holder is forced to re-register. Setting a new (or old) password in the registration form for an existing account will reset the failed attempts and generate a new verification token to be sent via email. After verifying the account the user is able to login once again.
 
-## [JWT token](#jwt_token)
+## [JWT token](#jwt-token)
 
 [JSON Web Token (JWT)](https://jwt.io) are used to store session and user data. Token themselves will be held in a cookie on the browser. The backend will *not* store these cookies in order to horizontally scale the application in a serverless environment.
 
@@ -1121,7 +1120,7 @@ The **user cookie** stores the email address as well as user access privileges (
 
 The **session cookie** holds a redirect address which allows the application to return to a specific parameterized address from the login view. This allows the auth module to respond with a redirect instead of passing the original request to the login function.
 
-## [Strategy](#strategy)
+## [Strategy](#security-strategy)
 
 *fastify-auth* does not provide an authentication strategy. The strategy which is applied by the authToken() function will be detailed in this section.
 
@@ -1166,7 +1165,7 @@ The individual steps in the authentication strategy sequence are as follows.
    Success. Authorization has completed and the user token's issue at value (iat) is updated with the current time, signed to the response, and finally passed on to the *done()* callback.
 
 
-## [SQL Injections](#sql_injections)
+## [SQL Injections](#sql-injections)
 
 All queries to the PostgreSQL database are parsed through the node-postgres module. [Queries](https://node-postgres.com/features/queries) use a battle-tested parameter substitution code.
 
