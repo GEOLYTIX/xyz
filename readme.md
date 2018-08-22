@@ -4,15 +4,23 @@ tl;dr Here is a hosted version of the XYZ without login:
 [https://geolytix.xyz/open](https://geolytix.xyz/open)
 
 [Introduction](#introduction)
+
 [Licence](#licence)
+
 [Testing](#testing)
+
 [Dependencies](#dependencies)
+
 [Environment Settings](#environment)
+
 [Workspaces](#workspaces)
 
 [Server](#server)
+
 [Client Application](#client-application)
+
 [API](#api)
+
 [Security](#security)
 * [Email transport](#email_transport)
 * [Registration](#registration)
