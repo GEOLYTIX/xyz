@@ -129,7 +129,7 @@ Below is a list of config keys which are currently supported. Default minimum vi
 
 The application title which will be inserted into the title meta tag in the HTML template.
 
-`"locate": true`
+`"locate": {}`
 
 Whether the geolocator should be enabled.
 
@@ -141,9 +141,9 @@ Whether a documentation button should be enabled. If set to 'documentation' the 
 
 The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
 
-`"locales": {}`
-
 ### Locales
+
+`"locales": {}`
 
 Locales are regional sub settings. Each locale is defined by it's name, bounds and a set of layers. A locale can be selected from the dropdown next to the input field in the gazetteer module. The dropdown will only be active if more than one locale object is defined in the *appsettings*. The locale 'Global' will be represented as a globe icon.
 
@@ -175,7 +175,8 @@ The min and max zoom for the leaflet map object. The defaults range is zoom 0 to
     {
       "layer": "sprawls",
       "table": "glx_cities_of_the_world",
-      "label": "nameascii"
+      "label": "nameascii",
+      "leading_wildcard": true
     }
   ]
 },
@@ -215,9 +216,13 @@ The table to be used for the layer. This is required as layers may aggregate dat
 
 The field which is searched for the autocomplete match. The label is also displayed in the results list.
 
-`"layers": {}`
+`"leading_wildcard": true`
+
+The ILIKE query will pre-fix the search term with a wild card. e.g. 'Man' will find 'Central Manchester' as well as 'Manchester Airport'.
 
 ### Layers
+
+`"layers": {}`
 
 Layers are a sub setting of a locale. Each layer object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window. `access` is a layer-specific privilege given to user role. Defaults to `"public"` which does not require login. Access set to `"private"` requires login in order to view content. Value `"admin"` allows all administrative operations and app configuration.
 
@@ -286,17 +291,6 @@ Types of layers currently supported:
 A `cluster` layer is a GeoJSON point layer which automatically clusters features based on defined value. The layer can be set as editable. Thematic classification can be applied in categorized or graduated styling.
 
 `cluster` layer further takes the following parameters:
-
-__Editing parameters__
-```javascript
-"editable": <true, "geometry", defaults to false>,
-"log_table": <log table name defaults to undefined>
-```
-`"editable": true` allows editing feature attributes.
-
-`"editable": "geometry"` allows editing geometries.
-
-`"log_table"` is a reference to a table that stores edit logs. This table has the same structure as layer source table and stores each change made to a feature along with last update timestamp and username who made the change.
 
 __Clustering parameters__
 
@@ -404,7 +398,7 @@ Radius size starts at maximum 400. Each ring is made of size and colour.
 }
 ```
 
-__Theme__
+__Themes__
 
 In order to display classified clusters `themes` parameters within layer style must be defined. `themes` is an array of theme objects. Currently there are 2 supported classification types: categorized and graduated.
 Cluster layer supports theme object with the following parameters:
@@ -721,7 +715,27 @@ Aggregate layer is a layer object defined within `"layers"` container with the f
 
 Another base map provider available out of the box is <a href="https://www.here.com/en" target="_blank">Here</a>. This configuration also applies to labels displayed as tiles layer along with base map tiles.
 
+### Editing
 
+Layers can be made editable by setting a flag in the root of the layer definition.
+
+`"editable": true`
+
+Seting the editable flag to `true` allows editing of location attributes. Setting the editable flag to `'geometry'` allows to create locations and modify a locations geometry. *!!! Geometry edits are currently only supported on cluster layer.*
+
+The primary key of a table which allows geometry edits must be a serial key. New features must get a unique ID when they are created in the database.
+
+Edits can be logged in a seperate table. The log table must be identical to the editable table but the id must not be a serial key. Allowing a feature to be stored several times under its original ID. Both tables need to have a JSON field for the log information. The default name for this field is *log*.
+
+`"log": {"table": "<tablename>", "field": "<log field>"}`
+
+The log table can be added as a seperate layer. Adding the log_table flag to this layer will make sure that only the last version of a logged edit will be loaded from the database.
+
+`"log_table": <true or "field name">}`
+
+If set to true, then *log* will be used as the default fieldname for the edit log.
+
+The log field stores the username, a timestamp and the operation which is either 'new', 'update' or 'delete'.
 
 ## Server
 
