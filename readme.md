@@ -14,7 +14,7 @@ tl;dr Here is a hosted version of the XYZ without login:
 # [API](#api)
 ## [Keys](#api-keys)
 ## [Routes](#api-routes)
-### [/documentation](#apidocumentation)
+### [documentation](#apidocumentation)
 ### [/proxy/image](#api-proxy-image)
 ### [/api/mvt/get/:z/:x/:y](#api-mvt-get)
 ### [/api/grid/get](#api-grid-get)
@@ -870,7 +870,7 @@ We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/
 
 ## [Routes](#api-routes)
 
-### [/documentation](#apidocumentation)
+### [documentation](#apidocumentation)
 
 Serves the [documentation for the client application](https://github.com/GEOLYTIX/xyz/blob/master/public/documentation.md) as github flavoured markdown.
 
