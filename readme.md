@@ -870,7 +870,7 @@ We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/
 
 ## [Routes](#api-routes)
 
-### [/documentation](#api-documentation)
+### [/documentation](#apidocumentation)
 
 Serves the [documentation for the client application](https://github.com/GEOLYTIX/xyz/blob/master/public/documentation.md) as github flavoured markdown.
 
