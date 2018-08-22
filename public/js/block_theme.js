@@ -94,7 +94,7 @@ module.exports = (layer, panel) => {
         //     },
         //     appendTo: select
         // });
-
+        block.classList += ' expanded';
     } else {
 
         // Single theme title.
