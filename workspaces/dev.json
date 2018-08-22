@@ -1,6 +1,6 @@
 {
   "title": "GEOLYTIX | DEV",
-  "locate": true,
+  "locate": {},
   "locales": {
     "UK": {
       "name": "United Kingdom",

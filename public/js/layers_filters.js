@@ -51,14 +51,16 @@ module.exports = (layer, panel) => {
             onclick: () => {
                 
                 layer.xhr.open('GET', global._xyz.host + '/api/location/aggregate?' + utils.paramString({
-                    locale: _xyz.locale,
+                    locale: global._xyz.locale,
                     layer: layer.layer,
+                    token: global._xyz.token,
                     filter: JSON.stringify(layer.filter)
                 }));
 
                 layer.xhr.onload = e => {
-                    let json = JSON.parse(e.target.response);
                     if (e.target.status === 200) {
+                        let json = JSON.parse(e.target.response);
+                    
                         global._xyz.select.selectLayerFromEndpoint({
                             layer: layer.aggregate_layer,
                             table: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
