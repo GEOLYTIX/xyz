@@ -20,6 +20,7 @@ tl;dr Here is a hosted version of the XYZ without login:
 [Client Application](#client-application)
 
 [API](#api)
+
   [Keys](#api-keys)
   [Routes](#api-routes)
     [/documentation](#api-proxy-image)
