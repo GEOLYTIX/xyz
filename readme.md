@@ -3,45 +3,65 @@ A Node.js framework to develop applications and APIs for spatial data.
 tl;dr Here is a hosted version of the XYZ without login:
 [https://geolytix.xyz/open](https://geolytix.xyz/open)
 
-# [Introduction](#introduction)
-# [Licence](#licence)
-# [Testing](#testing)
-# [Dependencies](#dependencies)
-# [Environment Settings](#environment)
-# [Workspaces](#workspaces)
-# [Server](#server)
-# [Client Application](#client-application)
-# [API](#api)
-## [Keys](#api-keys)
-## [Routes](#api-routes)
-### [documentation](#apidocumentation)
-### [/proxy/image](#api-proxy-image)
-### [/api/mvt/get/:z/:x/:y](#api-mvt-get)
-### [/api/grid/get](#api-grid-get)
-### [/api/geojson/get](#api-geojson-get)
-### [/api/cluster/get](#api-cluster-get)
-### [/api/cluster/select](#api-cluster-select)
-### [/api/location/select](#api-location-select)
-### [/api/location/select_ll](#api-location-select-ll)
-### [/api/location/select_ll_nnearest](#api-location-select-nnearest)
-### [/api/location/select_ll_intersect](#api-location-select-intersect)
-### [/api/location/new](#api-location-new)
-### [/api/location/update](#api-location-update)
-### [/api/location/delete](#api-location-delete)
-### [/api/location/aggregate](#api-location-aggregate)
-### [/api/gazetteer/autocomplete](#api-gazetteer-autocomplete)
-### [/api/gazetteer/googleplaces](#api-gazetteer-googleplaces)
-### [/api/catchments](#api-catchments)
-### [/api/images/new](#api-images-new)
-### [/api/images/delete](#api-images-delete)
-# [Security](#security)
-## [Email transport](#email-transport)
-## [Registration](#registration)
-## [Password reset](#password-reset)
-## [Failed login attempts](#failed-login)
-## [JWT token](#jwt-token)
-## [Strategy](#security-strategy)
-## [SQL Injections](#sql-injections)
+[Introduction](#introduction)
+
+[Licence](#licence)
+
+[Testing](#testing)
+
+[Dependencies](#dependencies)
+
+[Environment Settings](#environment)
+
+[Workspaces](#workspaces)
+* [Locales]()
+* [Layers]()
+  * [Gazetteer]()
+  * [Editing]()
+  * [Styling]()
+  * [InfoJ]()
+* [Cluster Layer]()
+* [GeoJson Layer]()
+* [MVT Layer]()
+* [Hex Grid Layer]()
+* [Base Layer]()
+
+[Server](#server)
+
+[Client Application](#client-application)
+
+[API](#api)
+* [Keys](#api-keys)
+* [Routes](#api-routes)
+  * [documentation](#api-documentation)
+  * [/proxy/image](#api-proxy-image)
+  * [/api/mvt/get/:z/:x/:y](#api-mvt-get)
+  * [/api/grid/get](#api-grid-get)
+  * [/api/geojson/get](#api-geojson-get)
+  * [/api/cluster/get](#api-cluster-get)
+  * [/api/cluster/select](#api-cluster-select)
+  * [/api/location/select](#api-location-select)
+  * [/api/location/select_ll](#api-location-select-ll)
+  * [/api/location/select_ll_nnearest](#api-location-select-nnearest)
+  * [/api/location/select_ll_intersect](#api-location-select-intersect)
+  * [/api/location/new](#api-location-new)
+  * [/api/location/update](#api-location-update)
+  * [/api/location/delete](#api-location-delete)
+  * [/api/location/aggregate](#api-location-aggregate)
+  * [/api/gazetteer/autocomplete](#api-gazetteer-autocomplete)
+  * [/api/gazetteer/googleplaces](#api-gazetteer-googleplaces)
+  * [/api/catchments](#api-catchments)
+  * [/api/images/new](#api-images-new)
+  * [/api/images/delete](#api-images-delete)
+  
+[Security](#security)
+* [Email transport](#email-transport)
+* [Registration](#registration)
+* [Password reset](#password-reset)
+* [Failed login attempts](#failed-login)
+* [JWT token](#jwt-token)
+* [Strategy](#security-strategy)
+* [SQL Injections](#sql-injections)
 
 # [Introduction](#introduction)
 
@@ -778,8 +798,6 @@ Styles defined in `"themes"` array can also be used as default MVT style.
 
 Another base map provider available out of the box is <a href="https://www.here.com/en" target="_blank">Here</a>. This configuration also applies to labels displayed as tiles layer along with base map tiles.
 
-
-
 # [Server](#server)
 
 [server.js](https://github.com/GEOLYTIX/xyz/blob/master/server.js) starts an [Fastify](https://www.fastify.io) web server on the specified port.
@@ -870,7 +888,7 @@ We use (flowmaker) to generate a diagram of the [entry flow](https://github.com/
 
 ## [Routes](#api-routes)
 
-### [documentation](#apidocumentation)
+### [documentation](#api-documentation)
 
 Serves the [documentation for the client application](https://github.com/GEOLYTIX/xyz/blob/master/public/documentation.md) as github flavoured markdown.
 
