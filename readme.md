@@ -22,7 +22,7 @@ tl;dr Here is a hosted version of the XYZ without login:
 [API](#api)
 * [Keys](#api-keys)
 * [Routes](#api-routes)
-*  [/documentation](#api-documentation)
+  * [/documentation](#api-documentation)
 
 [Security](#security)
 * [Email transport](#email-transport)
