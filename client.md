@@ -27,5 +27,3 @@ The client application initialization flow is as follows:
 13. Initialize [locate](https://github.com/GEOLYTIX/xyz/blob/master/public/js/locate.js) module.
 14. Initialize [report](https://github.com/GEOLYTIX/xyz/blob/master/public/js/report.js) module.
 
-We use \(flowmaker\) to generate a diagram of the [entry flow](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.svg).
-
