@@ -182,11 +182,12 @@ module.exports = (layer, panel) => {
                         //console.log(layer);
 
                         let _options = {
-                            field: entry.field,
-                            max: layer.idx[entry.field].max,
-                            min: layer.idx[entry.field].min,
-                            appendTo: block
-                        };
+                                field: entry.field,
+                                max: layer.idx[entry.field].max,
+                                min: layer.idx[entry.field].min,
+                                value: [layer.idx[entry.field].min, layer.idx[entry.field].max],
+                                appendTo: block
+                            };
 
                         //filter_numeric(layer, options);
                         filter_range(layer, _options);
@@ -408,32 +409,75 @@ function filter_numeric(layer, options) { // to rewrite
 }
 
 function filter_range(layer, options){ // in progress
-    console.log(layer.idx);
+    //appendTo: options.appendTo,
 
-    function oninput(e){
-        console.log('apply filter and reload layer ' + layer);
-    }
+    /*let tl = utils._createElement({
+        tag: "div",
+        options: {
+            classList: "range-tooltip",
+            textContent: "Min " + options.min
+        },
+        style: {
+            //textAlign: "center"
+        },
+        appendTo: options.appendTo
+    });
 
-    let opts = {
-        title: options.label,
-        default: options.min,
-        min: options.min,
-        max: options.max,
-        value: options.min,
-        appendTo: options.appendTo,
-        oninput: oninput
-    }
-    
-    utils.slider(opts);
-    /*utils.slider({
-        title: options.label, //?
-        default: "set to min value",
-        min: "min value from layer field, like fieldx=min(), =max()...",
-        value: "",
-        max: "max value from layer field - put in properties?",
-        appendTo: options.appendTo,
-        oninput: e => {}
+
+    let range_div = utils._createElement({
+        tag: 'div', 
+        options: {
+            className: "range"
+        },
+        appendTo: options.appendTo
+    });
+
+    let range = utils._createElement({
+        tag: "input",
+        options: {
+            type: 'range',
+            min: options.min,
+            value: options.min,//options.value[0],
+            max: options.max,
+            oninput: e => {
+                tl.textContent = "Min " + e.target.value;
+            }
+        },
+        appendTo: range_div
     });*/
+
+    let tl2 = utils._createElement({
+        tag: "div",
+        options: {
+            classList: "range-tooltip",
+            textContent: "Max " + options.max
+        },
+        appendTo: options.appendTo
+    });
+
+
+    let range_div2 = utils._createElement({
+        tag: 'div', 
+        options: {
+            className: "range"
+        },
+        appendTo: options.appendTo
+    });
+
+    let range2 = utils._createElement({
+        tag: "input",
+        options: {
+            type: 'range',
+            min: options.min,
+            value: 50000,
+            max: options.max,
+            oninput: e => {
+                tl2.textContent = "Max " + e.target.value;
+            }
+        },
+        appendTo: range_div2
+    });
+
 }
 
 // create date filter

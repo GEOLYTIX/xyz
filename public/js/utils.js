@@ -364,17 +364,11 @@ function slider(options) {
             type: 'range',
             min: options.min,
             value: options.value,
-            max: options.max
-        //oninput: options.oninput
-        },
-        eventListener: {
-            event: "input",
-            funct: e => options.oninput
+            max: options.max,
+            oninput: options.oninput,
         },
         appendTo: range_div
     });
-
-    //options.appendTo.appendChild(range_div);
 }
 
 function rgbToHex(color) {
