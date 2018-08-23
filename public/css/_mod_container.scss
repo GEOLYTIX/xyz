@@ -143,7 +143,12 @@
                         font-size: 14px;
                         float: right;
                     }
-
+                    .range-tooltip {
+                        &._max {
+                            float: right;
+                            margin-bottom: 6px;
+                        }
+                    }
                 }
                 
                 

@@ -189,6 +189,7 @@ module.exports = (layer, panel) => {
                                 appendTo: block
                             };
 
+                            console.log(_options);
                         //filter_numeric(layer, options);
                         filter_range(layer, _options);
                         filters.insertBefore(block, filters.lastChild);
@@ -409,16 +410,12 @@ function filter_numeric(layer, options) { // to rewrite
 }
 
 function filter_range(layer, options){ // in progress
-    //appendTo: options.appendTo,
 
-    /*let tl = utils._createElement({
+    let tl = utils._createElement({
         tag: "div",
         options: {
-            classList: "range-tooltip",
+            classList: "range-tooltip _min",
             textContent: "Min " + options.min
-        },
-        style: {
-            //textAlign: "center"
         },
         appendTo: options.appendTo
     });
@@ -437,21 +434,25 @@ function filter_range(layer, options){ // in progress
         options: {
             type: 'range',
             min: options.min,
-            value: options.min,//options.value[0],
             max: options.max,
+            value: options.min,
             oninput: e => {
                 tl.textContent = "Min " + e.target.value;
             }
         },
         appendTo: range_div
-    });*/
+    });
 
     let tl2 = utils._createElement({
         tag: "div",
         options: {
-            classList: "range-tooltip",
+            classList: "range-tooltip _max",
             textContent: "Max " + options.max
         },
+        /*style: {
+            float: "right",
+            margin-bottom: "5px"
+        },*/
         appendTo: options.appendTo
     });
 
@@ -469,10 +470,11 @@ function filter_range(layer, options){ // in progress
         options: {
             type: 'range',
             min: options.min,
-            value: 50000,
             max: options.max,
+            value: options.max,
             oninput: e => {
                 tl2.textContent = "Max " + e.target.value;
+                console.log(e.target.value);
             }
         },
         appendTo: range_div2
