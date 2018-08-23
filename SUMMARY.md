@@ -44,6 +44,7 @@
     * [/api/catchments](api/routes/api-catchments.md)
     * [/api/images/new](api/routes/api-images-new.md)
     * [/api/images/delete](api/routes/api-images-delete.md)
+    * [/api/key](api/routes/api-key.md)
 * [Security](security/README.md)
   * [Email transport](security/email-transport.md)
   * [Registration](security/registration.md)
