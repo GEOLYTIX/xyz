@@ -87,13 +87,22 @@ module.exports = (layer, panel) => {
     // creates colour picker to layer
     function color_picker(layer, options) {
 
-        let block = utils.createElement('div', {
-            classList: "block"
+        let block = utils._createElement({
+            tag: "div",
+            options: {
+                classList: "block"
+            },
+            appendTo: options.appendTo
         });
-
-        let title = utils.createElement('span', {
-            textContent: options.label + ": "
-        }, block);
+        
+        // title
+        utils._createElement({
+            tag: "span",
+            options: {
+                textContent: options.label + ": "
+            },
+            appendTo: block
+        });
 
         function get_colour(hex) {
             let index;
@@ -103,75 +112,96 @@ module.exports = (layer, panel) => {
                 colours[index].hex + ")" : colours[index].hex;
         }
 
-        let span = utils.createElement('span', {
-            classList: "bold",
-            textContent: get_colour() || 'default',
-        }, block);
+        utils._createElement({
+            tag: "span",
+            options: {
+                classList: "bold",
+                textContent: get_colour() || 'default',
+            },
+            appendTo: block
+        });
 
+        // add colour palette
         function palette(_options) {
 
-            let _col_onclick = function () {
-
-                let _colour = this.style.background, _hex = utils.rgbToHex(_colour);
-
-                _options.appendTo.style.display = "none";
-                _options.appendTo.previousSibling.style.background = _colour;
-                _options.appendTo.previousSibling.previousSibling.textContent = get_colour(_hex) || _hex;
-
-                layer.style[_options.style][_options.property] = _hex;
-
-                layer.getLayer();
-            }
-
             for (let i = 0; i < colours.length; i++) {
-                let _col = utils.createElement('div', {
-                    textContent: '&nbsp;',
-                    onclick: _col_onclick
+               
+                utils._createElement({
+                    tag: "div",
+                    options: {
+                        textContent: '&nbsp;',
+                        title: colours[i].name ? colours[i].name + " (" + colours[i].hex + ")" : colours[i].hex
+                    },
+                    style: {
+                        background: colours[i].hex,
+                        color: "transparent",
+                        marginTop: '2px',
+                        cursor: 'pointer',
+                        borderRadius: '2px'
+                    },
+                    eventListener: {
+                        event: "click",
+                        funct: e => {
+
+                            let _colour = e.target.style.background, _hex = utils.rgbToHex(_colour);
+            
+                            _options.appendTo.style.display = "none";
+                            _options.appendTo.previousSibling.style.background = _colour;
+                            _options.appendTo.previousSibling.previousSibling.textContent = get_colour(_hex) || _hex;
+            
+                            layer.style[_options.style][_options.property] = _hex;
+            
+                            layer.getLayer();
+                        }
+                    },
+                    appendTo: _options.appendTo
                 });
-                _col.style.background = colours[i].hex;
-                _col.style.color = "transparent";
-                _col.style.marginTop = '2px';
-                _col.style.cursor = 'pointer';
-                _col.style.borderRadius = '2px';
-
-                colours[i].name ? _col.title = colours[i].name + " (" + colours[i].hex + ")" : colours[i].hex;
-
-                _options.appendTo.appendChild(_col);
             }
         }
 
-        let range = utils.createElement('div', {
-            textContent: '&nbsp;',
-            onclick: function () {
-                this.nextSibling.style.display == 'none' ? this.nextSibling.style.display = "block" : this.nextSibling.style.display = 'none';
+        // add range
+        utils._createElement({
+            tag: "div",
+            options: {
+                textContent: '&nbsp;',
+                onclick: e => {
+                    e.target.nextSibling.style.display == 'none' ? e.target.nextSibling.style.display = "block" : e.target.nextSibling.style.display = 'none';
+                },
+                onmouseleave: e => {
+                    e.stopPropagation();
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        timeout = null;
+                        e.target.nextSibling.style.display = "none";
+                    }, 1.5 * 1000);
+                }
             },
-            onmouseleave: function (e) {
-                e.stopPropagation();
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    timeout = null;
-                    e.target.nextSibling.style.display = "none";
-                }, 1.5 * 1000);
-            }
+            style: {
+                color: 'transparent',
+                background: layer.style[options.style][options.property],
+                cursor: 'pointer',
+                borderRadius: '2px',
+                boxShadow: "1px 1px 1px 1px rgba(0,0,0,0.3)"
+            },
+            appendTo: block
         });
 
-        range.style.color = 'transparent';
-        range.style.background = layer.style[options.style][options.property];
-        range.style.cursor = 'pointer';
-        range.style.borderRadius = '2px';
-        range.style.boxShadow = "1px 1px 1px 1px rgba(0,0,0,0.3)";
-
-        block.appendChild(range);
-
-        let color_pick = utils.createElement('div', {
-            onmouseleave: function (e) {
-                e.stopPropagation();
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    timeout = null;
-                    e.target.style.display = "none";
-                }, 1.5 * 1000);
-            }
+        let color_pick = utils._createElement({
+            tag: "div",
+            options: {
+                onmouseleave: e => {
+                    e.stopPropagation();
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        timeout = null;
+                        e.target.style.display = "none";
+                    }, 1.5 * 1000);
+                }
+            },
+            style: {
+                display: "none"
+            },
+            appendTo: block
         });
 
         palette({
@@ -179,12 +209,6 @@ module.exports = (layer, panel) => {
             style: options.style,
             property: options.property
         });
-
-        color_pick.style.display = "none";
-        block.appendChild(color_pick);
-
-        options.appendTo.appendChild(block);
-
     }
 
     // begin add colour picker
@@ -241,12 +265,10 @@ module.exports = (layer, panel) => {
 
         function set_stroke_opacity(layer, opacity) {
             if (layer.style.theme) {
-                Object.keys(layer.style.theme.cat).map(function (key) {
-                    if (layer.style.theme.cat[key].style.stroke || layer.style.theme.cat[key].style.color) layer.style.theme.cat[key].style.opacity = (opacity / 100).toFixed(2);
+                Object.values(layer.style.theme.cat).map(entry => {
+                    if(entry.style.stroke || entry.style.color) entry.style.opacity = (opacity / 100).toFixed(2);
                 });
-
                 if (layer.style.theme.other) layer.style.default.opacity = (opacity / 100).toFixed(2);
-
             } else {
                 layer.style.default.opacity = (opacity / 100).toFixed(2);
             }
@@ -256,8 +278,8 @@ module.exports = (layer, panel) => {
             title: "Stroke opacity: ",
             default: (!isNaN(layer.style.default.opacity) ? 100 * layer.style.default.opacity : 100) + "%",
             min: 0,
-            value: (!isNaN(layer.style.default.opacity) ? 100 * layer.style.default.opacity : 100),
             max: 100,
+            value: (!isNaN(layer.style.default.opacity) ? 100 * layer.style.default.opacity : 100),
             appendTo: style_section,
             oninput: e => {
                 let opacity = e.target.value;
@@ -276,8 +298,9 @@ module.exports = (layer, panel) => {
 
         function set_fill_opacity(layer, opacity) {
             if (layer.style.theme) {
-                Object.keys(layer.style.theme.cat).map(function (key) {
-                    if (layer.style.theme.cat[key].style.fill) layer.style.theme.cat[key].style.fillOpacity = (opacity / 100).toFixed(2);
+
+                Object.values(layer.style.theme.cat).map(entry => {
+                    if(entry.style.fill) entry.style.fillOpacity = (opacity / 100).toFixed(2);
                 });
 
                 if (layer.style.theme.other) layer.style.default.fillOpacity = (opacity / 100).toFixed(2);
