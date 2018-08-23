@@ -26,12 +26,12 @@ async function placesAutoComplete(req, res, locale, fastify) {
             ST_X(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lng,
             ST_Y(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lat
             FROM ${dataset.table}
-            WHERE ${dataset.label} ILIKE $1
+            WHERE ${dataset.qterm || dataset.label} ILIKE $1
             ORDER BY length(${dataset.label})
             LIMIT 10`;
 
         var db_connection = await fastify.pg[locale.layers[dataset.layer].dbs].connect();
-        var result = await db_connection.query(q,[`${dataset.leading_wildcard ? '%': ''}${req.query.q}%`]);
+        var result = await db_connection.query(q,[`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(req.query.q)}%`]);
         db_connection.release();
 
         if (result.rows.length > 0) {
