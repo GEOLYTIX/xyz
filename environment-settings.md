@@ -42,7 +42,7 @@ e.g. `"postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
 `"PUBLIC": "postgres://username:password@123.123.123.123:5432/database|schema.table"`
 
-[Client and API access](security/access.md) are defined with the `"public"` or `"private"` environment variable. Public access without the possibility of administrative access are the default if no access environment variable is provided. Public access with a [pg-connection-string](https://github.com/iceddev/pg-connection-string) which references a PostgreSQL access control list \(ACL\) allows for private and administrator accounts to be used alongside public access. Setting a private environment variable for access disables public access and requires user to login in order to receive a token for private or administrative access.
+[Client and API access](security/access/) are defined with the `"public"` or `"private"` environment variable. Public access without the possibility of administrative access are the default if no access environment variable is provided. Public access with a [pg-connection-string](https://github.com/iceddev/pg-connection-string) which references a PostgreSQL access control list \(ACL\) allows for private and administrator accounts to be used alongside public access. Setting a private environment variable for access disables public access and requires user to login in order to receive a token for private or administrative access.
 
 `"TRANSPORT": "smtps://xyz%40geolytix.co.uk:password@smtp.gmail.com"`
 
@@ -50,7 +50,7 @@ An SMTP connection string which is required by the [nodemailer](https://nodemail
 
 `"FAILED_ATTEMPTS": "3"`
 
-The maxmimum number of [failed attempts](security/failed-login-attempts.md) before a user account is locked. Defaults to 3.
+The maxmimum number of [failed attempts](security/access/failed-login-attempts.md) before a user account is locked. Defaults to 3.
 
 `"SECRET": "ChinaCatSunflower"`
 
