@@ -1,41 +1,26 @@
 # Workspaces
 
-  
 A workspace is the configuration of services, locales, layers and locations.
 
-A service is a plugin which is accessible from the application root. For example the ability to locate a device position on the map or exporting the current view as a report are services.
+A [service]() is a plugin which is accessible from the application root. e.g. The ability to [locate](locate.md) a device position on the map or exporting the current view of layers and locations as a [report](report.md).
 
-Layers are grouped into locales. A locale is defined by their extent \(bounds and zoom level\). A locale may have services itself. For example the gazetteer service which is defined for a locale. Only one locale can be active in the application view. All API calls must specify a locale \(as well as a layer\). Layers can be grouped.
+[Layers](locales/layers.md) are defined within [locales](locales/). A locale is defined by its extent \(bounds and zoom level\). A locale may have services itself. e.g. The [gazetteer](locales/gazetteer.md) geolocation service.
 
-Vector layer are comprised of locations \(point or polygon\). A location is defined by an InfoJ object which list the locations properties and defines services specific to a location \(e.g. Google Streetview\). Properties can be grouped within the InfoJ object.
+Locations are defined by an [InfoJ](locales/infoj/) schema on the layer through which a location can be accessed.
 
-A workspace can be stored in the repository or in a PostgreSQL table.
+The location of a workspace is defined in the [environment settings](../environment-settings.md). Only one workspace can be served by a XYZ instance.
 
-locale File based configuration are stored in the [/workspaces](https://github.com/GEOLYTIX/xyz/tree/master/workspaces) directory. It is recommended to store the configuration object in a database in order manage the configurastion through admin views.
+\*\*\*\*[**/admin/workspace**](../api/routes/admin-workspace.md)\*\*\*\*
 
-/admin/workspace
+A [jsoneditor](https://github.com/josdejong/jsoneditor) tree view which allows administrator to modify workspaces which are stored in a PostgreSQL table.
 
-A [jsoneditor](https://github.com/josdejong/jsoneditor) tree view which allows modification of config keys, uploading configuration files into the view and saving the workspace configuragtion to a PostgreSQL table.
+![jsoneditor tree view](../.gitbook/assets/image%20%282%29.png)
 
-/admin/workspacejson
+\*\*\*\*[**/admin/workspacejson**](../api/routes/admin-workspacejson.md)\*\*\*\*
 
-A code view \(json\) of the configuration object.
+A [jsoneditor](https://github.com/josdejong/jsoneditor) code view which allows administrator to modify workspaces which are stored in a PostgreSQL table.
 
-Below is a list of config keys which are currently supported. Default minimum viable settings will be set if no _workspace_ has been defined in the deployment environment.
+![json editor code view](../.gitbook/assets/image%20%283%29.png)
 
-`"title": "XYZ Demo"`
 
-The application title which will be inserted into the title meta tag in the HTML template.
-
-`"locate": {}`
-
-Whether the geolocator should be enabled.
-
-`"documentation": "documentation"`
-
-Whether a documentation button should be enabled. If set to 'documentation' the [documentation.md](https://github.com/GEOLYTIX/xyz/tree/dev/public/documentation.md) markhub will be displayed in a github flavoured view. Any suitable link can be set instead of 'documentation'.
-
-`"locale": "UK"`
-
-The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
 

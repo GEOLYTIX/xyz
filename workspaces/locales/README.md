@@ -1,8 +1,12 @@
 # Locales
 
-`"locales": {}`
-
 Locales are regional sub settings. Each locale is defined by it's name, bounds and a set of layers. A locale can be selected from the dropdown next to the input field in the gazetteer module. The dropdown will only be active if more than one locale object is defined in the _appsettings_. The locale 'Global' will be represented as a globe icon.
+
+`"locale": "UK"`
+
+The default locale which is opened and set to the url hook parameter when an application is accessed. Defaults to the first locale in the locales object.
+
+`"locales": {}`
 
 The current local is defined as url\_hook. For example [https://geolytix.xyz/open/?locale=Global](https://geolytix.xyz/open/?locale=Global) will open the Global locale from the settings for the /open instance.
 

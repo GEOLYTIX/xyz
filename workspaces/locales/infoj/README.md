@@ -1,4 +1,4 @@
-# infoj
+# InfoJ
 
 `"infoj"` is a container for data associated with each feature displayed on selection and interaction that requires reading feature properties. This is an array of objects with the following structure:
 

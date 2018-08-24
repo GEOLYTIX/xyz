@@ -1,6 +1,12 @@
 # Testing
 
-We use BrowserStack to test browser compliance of the client shell and map control. This has been especially useful by allowing us to test older versions of chrome as well as Microsoft Edge since we do not have Microsoft Windows machines available to the core development team.
+We use [BrowserStack](https://www.browserstack.com) to test browser compliance of the client application. BrowserStack allows us to test older versions of Chrome as well as Microsoft Edge locally on non Windows development machines.
 
 ![](.gitbook/assets/image%20%281%29.png)
+
+{% hint style="warning" %}
+We do not currently use a JavaScript test suit but plan to integrate unit tests prior to a first point release.
+{% endhint %}
+
+
 
