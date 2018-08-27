@@ -108,6 +108,7 @@ async function get(req, res, fastify) {
         ST_DWithin(
           ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
         ${geom}, 0.00001)
+        ${filter_sql}
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
 
@@ -173,6 +174,8 @@ async function get(req, res, fastify) {
       ${access_filter ? 'and ' + access_filter : ''}
     ) kmeans
   ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
+
+  //console.log(q);
 
   var db_connection = await fastify.pg[layer.dbs].connect();
   var result = await db_connection.query(q);
