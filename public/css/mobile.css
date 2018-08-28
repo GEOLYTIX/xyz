@@ -296,7 +296,8 @@ input[type=range]::-moz-range-thumb {
   .infojTable .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px; }
+    font-size: 12px;
+    padding-right: 10px; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
@@ -314,7 +315,8 @@ input[type=range]::-moz-range-thumb {
     .infojTable .table-section .t-expander {
       vertical-align: bottom;
       float: right;
-      font-size: 15px; }
+      font-size: 15px;
+      padding-right: 5px; }
     .infojTable .table-section.expandable {
       max-height: 35px;
       overflow: hidden;
@@ -455,8 +457,6 @@ input[type=range]::-moz-range-thumb {
         transition: max-height 0.3s ease-out; }
         .mod_container .module .drawer.drawer-group.expandable-group .expander-group::before {
           content: "expand_more"; }
-        .mod_container .module .drawer.drawer-group.expandable-group .drawer.expandable {
-          margin-left: 14px; }
       .mod_container .module .drawer.drawer-group.expanded-group {
         max-height: 2500px; }
         .mod_container .module .drawer.drawer-group.expanded-group .expander-group::before {
@@ -485,7 +485,7 @@ input[type=range]::-moz-range-thumb {
             .mod_container .module .drawer .panel .section.expandable .expander::before {
               content: "expand_more"; }
           .mod_container .module .drawer .panel .section.expanded {
-            max-height: 2500px; }
+            max-height: 2500px !important; }
             .mod_container .module .drawer .panel .section.expanded .expander::before {
               content: "expand_less"; }
         .mod_container .module .drawer .panel .block {
