@@ -155,8 +155,6 @@ function populateTable(record, entry, tr, table){
         if(chart) table.appendChild(chart);
     }
 
-    if(entry.title) console.log(entry.title); 
-
     // Create new table cell for label and append to table.
     if (entry.label){
         let label = utils._createElement({
