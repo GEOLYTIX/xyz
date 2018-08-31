@@ -113,7 +113,10 @@ module.exports = (layer, panel) => {
 
             // hide run button when last filter block is removed
             if (!_select.nextSibling.nextSibling.classList.contains('block')) {
-                if (!filters.lastChild.classList.contains("block")) filters.lastChild.style.display = "none";
+                if (!filters.lastChild.classList.contains("block")) {
+                    filters.lastChild.style.display = "none";
+                    clear_all.style.display = "none";
+                }
             };
         }
         
@@ -129,14 +132,23 @@ module.exports = (layer, panel) => {
                         }
                     });
                     
-                    utils._createElement({
+                    let title_div = utils._createElement({
                         tag: "div",
                         options: {
-                            innerHTML: entry.label + '<i class="material-icons">clear</i>',
+                            //innerHTML: entry.label + '<i class="material-icons">clear</i>',
                             classList: "title",
                             onclick: remove_filter_onclick
                         }, 
                         appendTo: block
+                    });
+
+                    utils._createElement({
+                        tag: "i",
+                        options: {
+                            classList: "material-icons",
+                            textContent: "clear"
+                        },
+                        appendTo: title_div
                     });
                     
                     Object.values(entry.filter).forEach(_value => {
@@ -189,7 +201,7 @@ module.exports = (layer, panel) => {
                                 appendTo: block
                             };
 
-                            console.log(_options);
+                            //console.log(_options);
                         //filter_numeric(layer, options);
                         filter_range(layer, _options);
                         filters.insertBefore(block, filters.lastChild);
@@ -371,7 +383,7 @@ function filter_text(layer, _options) {
 }
 
 // create numeric filter 
-function filter_numeric(layer, options) { // to rewrite
+function filter_numeric(layer, options) {
 
     function onkeyup(e) {
         let val = parseFloat(this.value);
@@ -409,13 +421,32 @@ function filter_numeric(layer, options) { // to rewrite
     }, options.appendTo);
 }
 
-function filter_range(layer, options){ // in progress
+ // create range filter
+function filter_range(layer, options){
+
+    function oninput(e) {
+        let val = parseFloat(e.target.value);
+        if (!layer.filter[options.field]) layer.filter[options.field] = {};
+        if (typeof(val) == "number") {
+            layer.filter[options.field][e.target.name] = val;
+        } else {
+            layer.filter[options.field][e.target.name] = null;
+        }
+        //console.log(layer.filter);
+        //layer.getLayer();
+    }
+
+    function onchange(e){
+        //console.log(layer.filter);
+        layer.getLayer();
+    }
 
     let tl = utils._createElement({
         tag: "div",
         options: {
             classList: "range-tooltip _min",
-            textContent: "Min " + options.min
+            textContent: "Min " + options.min,
+            name: "gt"
         },
         appendTo: options.appendTo
     });
@@ -436,9 +467,12 @@ function filter_range(layer, options){ // in progress
             min: options.min,
             max: options.max,
             value: options.min,
+            name: "gt",
             oninput: e => {
                 tl.textContent = "Min " + e.target.value;
-            }
+                oninput(e);
+            },
+            onchange: e => onchange(e)
         },
         appendTo: range_div
     });
@@ -472,10 +506,12 @@ function filter_range(layer, options){ // in progress
             min: options.min,
             max: options.max,
             value: options.max,
+            name: "lt",
             oninput: e => {
                 tl2.textContent = "Max " + e.target.value;
-                console.log(e.target.value);
-            }
+                oninput(e);
+            },
+            onchange: e => onchange(e)
         },
         appendTo: range_div2
     });

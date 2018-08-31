@@ -45,7 +45,7 @@ function setIndices(layer){
 
     layer._xhr.onload = function(){
         if(this.status === 200){
-            console.log('set indices done');
+            //console.log('set indices done');
             //console.log(JSON.parse(this.responseText));
             layer.idx = JSON.parse(this.responseText);
         }
