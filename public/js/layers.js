@@ -30,11 +30,15 @@ module.exports = () => {
     if (!global._xyz.layers) global._xyz.layers = {};
     
     // Get the layers from the current locale.
-    let layers = global._xyz.locales[global._xyz.locale].layers;
-    let groups = global._xyz.locales[global._xyz.locale].groups || {};
+    //let layers = global._xyz.locales[global._xyz.locale].layers;
+    //let groups = global._xyz.locales[global._xyz.locale].groups || {};
     
     
     global._xyz.layers.init = function (change_locale) {
+
+        // Get the layers from the current locale.
+        let layers = global._xyz.locales[global._xyz.locale].layers;
+        let groups = global._xyz.locales[global._xyz.locale].groups || {};
 
         global._xyz.attribution = ['leaflet', 'xyz'];
 
@@ -346,6 +350,9 @@ module.exports = () => {
     };
     
     function toggleGroupHidden(group){ // check if any layer visible
+        // Get the layers from the current locale.
+        let layers = global._xyz.locales[global._xyz.locale].layers || {};
+        
         return Object.values(layers).some(entry => {
             return (entry.group === group && entry.display) ? true : false;
         });
@@ -356,8 +363,8 @@ module.exports = () => {
         if (e.target.textContent === 'layers_clear') {
 
             if(layer.group) {
-                groups[layer.group].hideAll.textContent = "visibility";//"layers"; //(toggleGroupHidden(group) ? "block" : "none")
-                groups[layer.group].hideAll.style.display = "block";
+                global._xyz.locales[global._xyz.locale].groups[layer.group].hideAll.textContent = "visibility";//"layers"; //(toggleGroupHidden(group) ? "block" : "none")
+                global._xyz.locales[global._xyz.locale].groups[layer.group].hideAll.style.display = "block";
 
             }
             layer.display = true;

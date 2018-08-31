@@ -50,8 +50,12 @@ function init(fastify) {
             url: '/login',
             handler: async (req, res) => {
 
+                if (!req.body.email) return
+                if (!req.body.password) return
+
                 // Get user from ACL.
                 var user_db = await fastify.pg.users.connect();
+
                 var result = await user_db.query(
                     `SELECT * FROM ${user_table} WHERE lower(email) = lower($1);`,
                     [req.body.email]
@@ -182,7 +186,7 @@ function init(fastify) {
                 }
 
                 var user_db = await fastify.pg.users.connect();
-                result = await user_db.query(
+                var result = await user_db.query(
                     `SELECT * FROM ${user_table} WHERE lower(email) = lower($1);`,
                     [email]
                 );
@@ -216,13 +220,40 @@ function init(fastify) {
 
                 // Create new user account
                 var user_db = await fastify.pg.users.connect();
-                await user_db.query(`
+
+                try {
+
+                    await user_db.query(`
                     INSERT INTO ${user_table} (email, password, verificationtoken)
                     SELECT
                         '${email}' AS email,
                         '${password}' AS password,
                         '${verificationtoken}' AS verificationtoken;`);
-                user_db.release();
+
+                    user_db.release();
+
+                    require('./mailer')({
+                        to: email,
+                        subject: `Please verify your account on ${global.alias || req.headers.host}${global.dir}`,
+                        text: `A new account for this email address has been registered with ${global.alias || req.headers.host}${global.dir} \n \n`
+                            + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
+                            + `A site administrator must approve the account before you are able to login. \n \n`
+                            + `You will be notified via email once an adimistrator has approved your account. \n \n`
+                            + `The account was registered from this remote address ${req.req.connection.remoteAddress} \n \n`
+                            + `This wasn't you? Do NOT verify the account and let your manager know. \n \n`
+    
+                    });
+    
+                    return res.redirect(global.dir + '/login?msg=validation');
+
+                } catch(err){
+                    console.log("Create new user failed: ");
+                    console.log(JSON.stringify({
+                        email: email
+                    }));
+                    console.log(err);
+                }
+                /*user_db.release();
 
                 require('./mailer')({
                     to: email,
@@ -236,7 +267,7 @@ function init(fastify) {
 
                 });
 
-                return res.redirect(global.dir + '/login?msg=validation');
+                return res.redirect(global.dir + '/login?msg=validation');*/
             }
         });
 
@@ -517,6 +548,10 @@ function authToken(req, res, fastify, access, done) {
     // Verify token (checks token expiry)
     fastify.jwt.verify(req.query.token, async (err, token) => {
         if (err) {
+            console.log(JSON.stringify({
+                email: token.email,
+                api: token.access
+            }));
             fastify.log.error(err);
             return res.code(401).send();
         }

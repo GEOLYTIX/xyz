@@ -165,6 +165,9 @@ function populateTable(record, entry, tr, table){
             },
             appendTo: tr
         });   
+        // add tooltip text
+        if(entry.title) label.title = entry.title;
+
         // return from object.map function if field(label) has no type.
         if (!entry.type) return
     }

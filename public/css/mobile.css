@@ -296,7 +296,8 @@ input[type=range]::-moz-range-thumb {
   .infojTable .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px; }
+    font-size: 12px;
+    padding-right: 10px; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
@@ -314,7 +315,8 @@ input[type=range]::-moz-range-thumb {
     .infojTable .table-section .t-expander {
       vertical-align: bottom;
       float: right;
-      font-size: 15px; }
+      font-size: 15px;
+      padding-right: 5px; }
     .infojTable .table-section.expandable {
       max-height: 35px;
       overflow: hidden;
