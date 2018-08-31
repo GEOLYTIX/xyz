@@ -73,7 +73,7 @@ function init() {
 
     // Cancel xhr and remove layer data from map object on view change start.
     function viewChangeStart() {
-        let layers = global._xyz.locales[global._xyz.locale].layers
+        let layers = global._xyz.locales[global._xyz.locale].layers;
         Object.keys(layers).forEach(layer => {
             if (layers[layer].xhr) layers[layer].xhr.abort();
             if (layers[layer].L) global._xyz.map.removeLayer(layers[layer].L);
@@ -100,8 +100,9 @@ function init() {
             // Reset the load inidicator and trigger get layer on all layers.
             Object.values(global._xyz.locales[global._xyz.locale].layers).forEach(layer => {
                 if (layer.loader) layer.loader.style.display = 'none';
-                layer.getLayer(global._xyz);
+                if(layer.getLayer) layer.getLayer(global._xyz);  
             });
+
         }, 100);
     }
 
@@ -117,11 +118,11 @@ function init() {
         });
     }
 
-    // Initialize layers module.
-    require('./layers')();
+            // Initialize layers module.
+            require('./layers')();
 
-    // Initialize locations module.
-    require('./locations')();
+            // Initialize locations module.
+            require('./locations')();
 
     // Initialize gazetteer module.
     if (global._xyz.view_mode != 'report') require('./gazetteer')();

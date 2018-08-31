@@ -104,16 +104,23 @@ function clipboard(record){
                 let data = [];
                 
                 function processInfoj(entry, data) {
+
+                    //console.log(entry);
+
                     let lbl = entry.label || '',
                         val = entry.value || '',
                         row = '';
                     
                     row = lbl + '\t' + val;
+
+                    //console.log(row);
+
                     data.push(row);
                 }
                 
                 Object.values(record.location.infoj).forEach(entry => {
                     if(entry.type === "group"){
+                        data.push(entry.label);
                         Object.values(entry.items).forEach(item => {
                             processInfoj(item, data);
                         });
