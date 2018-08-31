@@ -137,13 +137,19 @@
                 }
                 .block {
                     padding: 5px 0;
+                    margin-right: 10px;
                     
                     i {
                         color: $glxgreen;
                         font-size: 14px;
                         float: right;
                     }
-
+                    .range-tooltip {
+                        &._max {
+                            float: right;
+                            margin-bottom: 6px;
+                        }
+                    }
                 }
                 
                 

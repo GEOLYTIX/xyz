@@ -1,4 +1,4 @@
-module.exports = { newRecord, newAggregate, updateRecord, deleteRecord };
+module.exports = { newRecord, newAggregate, updateRecord, deleteRecord, setIndices };
 
 async function newRecord(req, res, fastify) {
 
@@ -239,4 +239,56 @@ async function writeLog(fastify, layer, id) {
     await db_connection.query(q, [id]);
 
     return db_connection.release();
+}
+
+async function setIndices(req, res, fastify){
+
+    const del = "__"; // column alias delimiter
+
+    const token = req.query.token ?
+        fastify.jwt.decode(req.query.token) : { access: 'public' };
+
+    let params = req.body,
+        idx = params.idx;
+
+    let layer = global.workspace[token.access].config.locales[params.locale].layers[params.layer];
+
+    let fields = [];
+    Object.keys(idx).map(key => {
+        let row = `MAX(${key}) as ${key}${del}max, MIN(${key}) as ${key}${del}min, AVG(${key}) as ${key}${del}avg`;
+        fields.push(row);
+    });
+
+    let q = `SELECT ${fields.join(",")} FROM ${params.table}`;
+    
+    //console.log(q);
+
+    var db_connection = await fastify.pg[layer.dbs].connect();
+    var result = await db_connection.query(q);
+    db_connection.release();
+
+    //console.log(result.rows[0]);
+
+    Object.keys(result.rows[0]).forEach(key => {
+        let _k = key.split(del);
+        
+        if(!_k.length || _k.length < 2) return;
+        
+        if(_k.length === 2){
+            idx[_k[0]][_k[1]] = result.rows[0][key];
+        } else {
+            let _fn = _k[_k.length-1];
+            let _f = _k.slice(0, _k.length-1);
+            _f = _f.join(del);
+
+            idx[_f][_fn] = result.rows[0][key];
+        }
+    });
+
+    //console.log(idx);
+
+    res.code(200).send(idx);
+
+    //console.log(req.body);
+    res.code(200).send();
 }

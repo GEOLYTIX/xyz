@@ -19,8 +19,45 @@ module.exports = function() {
         // Make drawer opaque if no table present.
         this.drawer.style.opacity = !this.table ? 0.4 : 1;
 
+        setIndices(this); // aga test
+
         if(this.table) return loadLayer(this);
     }
+}
+
+function setIndices(layer){
+    layer._xhr = new XMLHttpRequest();
+
+    let idx = {};
+
+    Object.values(layer.infoj).forEach(l => {
+        if(l.type === "group"){
+            Object.values(l.items).forEach(item => {
+                if(item.filter === "numeric") idx[item.field] = {};
+            });
+        } else {
+            if(l.filter === "numeric") idx[l.field] = {};
+        }
+    });
+
+    layer._xhr.open("POST", global._xyz.host + "/api/idx?token=" + global._xyz.token);
+    layer._xhr.setRequestHeader('Content-Type', 'application/json');
+
+    layer._xhr.onload = function(){
+        if(this.status === 200){
+            //console.log('set indices done');
+            //console.log(JSON.parse(this.responseText));
+            layer.idx = JSON.parse(this.responseText);
+        }
+    }
+
+    layer._xhr.send(JSON.stringify({
+        locale: _xyz.locale,
+        layer: layer.layer,
+        table: layer.table,
+        idx: idx,
+        token: global._xyz.token}));
+
 }
 
 function loadLayer(layer) {

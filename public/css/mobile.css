@@ -489,11 +489,15 @@ input[type=range]::-moz-range-thumb {
             .mod_container .module .drawer .panel .section.expanded .expander::before {
               content: "expand_less"; }
         .mod_container .module .drawer .panel .block {
-          padding: 5px 0; }
+          padding: 5px 0;
+          margin-right: 10px; }
           .mod_container .module .drawer .panel .block i {
             color: #079e00;
             font-size: 14px;
             float: right; }
+          .mod_container .module .drawer .panel .block .range-tooltip._max {
+            float: right;
+            margin-bottom: 6px; }
         .mod_container .module .drawer .panel .half {
           width: 48%;
           display: inline-block; }

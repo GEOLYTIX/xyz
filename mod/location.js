@@ -107,16 +107,18 @@ async function select(req, res, fastify) {
     var result = await db_connection.query(q, [id]);
     db_connection.release();
 
+    //console.log(result);
+
     // Iterate through the infoj object's entries and assign the values returned from the database query.
-    Object.values(infoj).forEach(entry => {
+    Object.values(infoj).map(entry => {
     
         if(entry.type == 'group'){
-            Object.values(entry.items).forEach(item => {
+            Object.values(entry.items).map(item => {
                 setValues(result, item);
             });
+            return;
         }
         setValues(result, entry);
-        
     });
 
     function formatDate(str){
@@ -134,6 +136,7 @@ async function select(req, res, fastify) {
     }
     
     function setValues(result, entry){
+        
         if (result.rows[0][entry.field] || result.rows[0][entry.field] == 0) {
             if(entry.datetime){
                 entry.value = formatDateTime(result.rows[0][entry.field]); 

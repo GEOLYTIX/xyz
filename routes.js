@@ -266,6 +266,15 @@ module.exports = fastify => {
             }
         });
 
+        fastify.route({
+            method: 'POST',
+            url: '/api/idx',
+            beforeHandler: fastify.auth([fastify.authAPI]),
+            handler: (req, res) => {
+                require('./mod/edit').setIndices(req, res, fastify);
+            }
+        });
+
         next();
 
     }, { prefix: global.dir });
