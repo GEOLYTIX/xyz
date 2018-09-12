@@ -8,7 +8,7 @@ module.exports = next => {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + search[1]);
         xhr.onload = e => {
-            setTimeout(renewToken, 60000);
+            setTimeout(renewToken, 5*60*1000);
             require('./workspace')(next, e.target.response);
         }
         xhr.send();
@@ -27,7 +27,7 @@ const renewToken = () => {
         if (e.target.status !== 200) return document.getElementById('timeout_mask').style.display = 'block';
 
         global._xyz.token = e.target.response;
-        setTimeout(renewToken, 60000);
+        setTimeout(renewToken, 5*60*1000);
 
         // iterate through layers
         Object.values(global._xyz.locales[global._xyz.locale].layers).forEach(layer => {
