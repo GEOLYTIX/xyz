@@ -49,12 +49,14 @@ module.exports = (layer, panel) => {
             classList: "btn_wide cursor noselect",
             textContent: "Run Output",
             onclick: () => {
+
+
                 
                 layer.xhr.open('GET', global._xyz.host + '/api/location/aggregate?' + utils.paramString({
                     locale: global._xyz.locale,
                     layer: layer.layer,
                     token: global._xyz.token,
-                    filter: JSON.stringify(layer.filter)
+                    filter: JSON.stringify(layer.filter) || ''
                 }));
 
                 layer.xhr.onload = e => {
@@ -66,7 +68,7 @@ module.exports = (layer, panel) => {
                             table: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
                             id: json.id,
                             marker: [json.lng, json.lat],
-                            filter: JSON.stringify(layer.filter)
+                            filter: JSON.stringify(layer.filter) || ''
                         });
                     }
                 };

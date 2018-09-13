@@ -117,6 +117,12 @@ module.exports = () => {
           "letter": "O",
           "color": "#d32f2f"
         }];
+
+    /*let filters = {};
+    if(global._xyz.hooks.filter) global._xyz.hooks.select.split(',').forEeach(hook => {
+        let f = hook.split('!');
+        filters[f[0]] = decodeURIComponent(f[1]);
+    });*/
     
     // Set the layer display from hooks if present; Overwrites the default setting.
     if (global._xyz.hooks.select) global._xyz.hooks.select.split(',').forEach(hook => {
@@ -185,7 +191,8 @@ module.exports = () => {
             layer: layer.layer,
             table: location.table,
             id: location.id,
-            token: global._xyz.token
+            token: global._xyz.token,
+            filter: location.filter || ''
         }));
 
         //xhr.setRequestHeader('Content-Type', 'application/json');
@@ -273,7 +280,8 @@ module.exports = () => {
                     freeRecords[0].location.table + '!' +
                     freeRecords[0].location.id + '!' +
                     freeRecords[0].location.marker[0] + ';' +
-                    freeRecords[0].location.marker[1]);
+                    freeRecords[0].location.marker[1] //+ (freeRecords[0].location.sql_filter ? '!' + freeRecords[0].location.sql_filter : '')
+                );
             }
 
             addRecordToMap(freeRecords[0])

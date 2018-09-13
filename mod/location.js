@@ -21,7 +21,8 @@ async function select(req, res, fastify) {
         //geomj = layer.geomj ? `ST_asGeoJson(${layer.geomj})` : `ST_asGeoJson(${geom})`,
         geomq = layer.geomq ? layer.geomq : geom,
         geomdisplay = layer.geomdisplay ? layer.geomdisplay : '',
-        // sql_filter = req.body && req.body.sql_filter ? req.body.sql_filter : '',
+        filter = req.query.filter ? JSON.parse(req.query.filter) : {},
+        sql_filter = '',
         infoj = JSON.parse(JSON.stringify(layer.infoj));
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -40,8 +41,11 @@ async function select(req, res, fastify) {
     //     sql_filter = result.rows[0].sql_filter;
     // }
 
+
     let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
         layer.access_filter[token.email] : null;
+
+    sql_filter = filter ? require('./filters').sql_filter(filter) : '';
 
     let fields = '';
     
@@ -50,17 +54,10 @@ async function select(req, res, fastify) {
         if (entry.layer) {
             let entry_layer = global.workspace[token.access].config.locales[req.query.locale].layers[entry.layer];
 
-            /*fields += `
-            (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
-            FROM ${entry_layer.table}
-            WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
-            ${access_filter ? 'AND ' + access_filter : ''}
-            ) AS "${entry.field}",`;
-            return*/
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
             FROM ${entry_layer.table}
-            WHERE true ${'' || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
+            WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
             ${access_filter ? 'AND ' + access_filter : ''}
             ) AS "${entry.field}",`;
             return
@@ -102,12 +99,11 @@ async function select(req, res, fastify) {
     ${qID} = $1;`;
 
     //console.log(q);
+    //console.log(id);
 
     var db_connection = await fastify.pg[layer.dbs].connect();
     var result = await db_connection.query(q, [id]);
     db_connection.release();
-
-    //console.log(result);
 
     // Iterate through the infoj object's entries and assign the values returned from the database query.
     Object.values(infoj).map(entry => {
@@ -152,8 +148,6 @@ async function select(req, res, fastify) {
             entry.subvalue = result.rows[0][entry.subfield];
         }
     }
-
-    //console.log(JSON.stringify(infoj));
     
     // Send the infoj object with values back to the client.
     res.code(200).send({

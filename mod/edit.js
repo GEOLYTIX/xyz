@@ -47,7 +47,7 @@ async function newAggregate(req, res, fastify) {
         table_target = target_layer.table,
         geom_source = layer.geom ? layer.geom : 'geom',
         geom_target = target_layer.geomq ? target_layer.geomq : 'geom',
-        filter = JSON.parse(req.query.filter),
+        filter = JSON.parse(req.query.filter) || {},
         filter_sql = '';
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -94,7 +94,7 @@ async function newAggregate(req, res, fastify) {
         FROM ${table_source}
         WHERE true ${filter_sql} ${access_filter ? 'and ' + access_filter : ''}
     
-    RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat;`;
+    RETURNING id, ST_X(ST_Centroid(geom)) as lng, ST_Y(ST_Centroid(geom)) as lat, sql_filter;`;
 
     //console.log(q);
 
@@ -105,7 +105,8 @@ async function newAggregate(req, res, fastify) {
     res.code(200).send({
         id: result.rows[0].id.toString(),
         lat: parseFloat(result.rows[0].lat),
-        lng: parseFloat(result.rows[0].lng)
+        lng: parseFloat(result.rows[0].lng),
+        filter: filter
     });
 }
 
