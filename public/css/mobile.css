@@ -376,7 +376,8 @@ input[type=range]::-moz-range-thumb {
   padding: 5px 0 5px 25px;
   position: relative;
   cursor: pointer;
-  display: block; }
+  display: block;
+  width: 90%; }
   .checkbox input[type=checkbox] {
     position: absolute;
     opacity: 0;
