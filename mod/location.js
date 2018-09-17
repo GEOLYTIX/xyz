@@ -21,8 +21,8 @@ async function select(req, res, fastify) {
         //geomj = layer.geomj ? `ST_asGeoJson(${layer.geomj})` : `ST_asGeoJson(${geom})`,
         geomq = layer.geomq ? layer.geomq : geom,
         geomdisplay = layer.geomdisplay ? layer.geomdisplay : '',
-        filter = req.query.filter ? JSON.parse(req.query.filter) : {},
-        sql_filter = '',
+        //filter = req.query.filter ? JSON.parse(req.query.filter) : {},
+        sql_filter = layer.sql_filter ? layer.sql_filter : '',
         infoj = JSON.parse(JSON.stringify(layer.infoj));
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -33,19 +33,18 @@ async function select(req, res, fastify) {
 
     if (geomdisplay) geomdisplay = `, ST_AsGeoJSON(${layer.geomdisplay}) AS geomdisplay`;
 
-    // if (sql_filter) {
-    //     var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
-    //     var db_connection = await fastify.pg[layer.dbs].connect();
-    //     var result = await db_connection.query(q, [id]);
-    //     db_connection.release();
-    //     sql_filter = result.rows[0].sql_filter;
-    // }
-
+    if (sql_filter) {
+        var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
+        var db_connection = await fastify.pg[layer.dbs].connect();
+        var result = await db_connection.query(q, [id]);
+        db_connection.release();
+        sql_filter = result.rows[0].sql_filter;
+    }
 
     let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
         layer.access_filter[token.email] : null;
 
-    sql_filter = filter ? require('./filters').sql_filter(filter) : '';
+    //sql_filter = filter ? require('./filters').sql_filter(filter) : '';
 
     let fields = '';
     

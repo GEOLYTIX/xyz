@@ -191,8 +191,8 @@ module.exports = () => {
             layer: layer.layer,
             table: location.table,
             id: location.id,
-            token: global._xyz.token,
-            filter: location.filter || ''
+            token: global._xyz.token
+            //filter: location.filter || ''
         }));
 
         //xhr.setRequestHeader('Content-Type', 'application/json');
