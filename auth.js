@@ -548,10 +548,7 @@ function authToken(req, res, fastify, access, done) {
     // Verify token (checks token expiry)
     fastify.jwt.verify(req.query.token, async (err, token) => {
         if (err) {
-            console.log(JSON.stringify({
-                email: token.email,
-                api: token.access
-            }));
+            console.log(JSON.stringify(token));
             fastify.log.error(err);
             return res.code(401).send();
         }
