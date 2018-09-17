@@ -472,7 +472,7 @@ function init(fastify) {
                     }
                     delete token.iat;
                     delete token.exp;
-                    res.send(fastify.jwt.sign(token, { expiresIn: 90 }));
+                    res.send(fastify.jwt.sign(token, { expiresIn:  360 }));
                 });
             }
         });
