@@ -53,10 +53,16 @@ async function select(req, res, fastify) {
         if (entry.layer) {
             let entry_layer = global.workspace[token.access].config.locales[req.query.locale].layers[entry.layer];
 
+            // For grids we want to use the highest resolution grid for the lookup.
+            let tableArray = entry_layer.arrayZoom ? Array.from(Object.values(entry_layer.arrayZoom)) : null;
+
+            // Get the last tableArray table name.
+            let entry_table = tableArray ? tableArray[tableArray.length - 1] : null;
+
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
-            FROM ${entry_layer.table}
-            WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
+            FROM ${entry_table || entry_layer.table}
+            WHERE true ${sql_filter || `AND ST_Intersects(${entry_table || entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
             ${access_filter ? 'AND ' + access_filter : ''}
             ) AS "${entry.field}",`;
             return
