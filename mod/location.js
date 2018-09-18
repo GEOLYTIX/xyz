@@ -21,8 +21,8 @@ async function select(req, res, fastify) {
         //geomj = layer.geomj ? `ST_asGeoJson(${layer.geomj})` : `ST_asGeoJson(${geom})`,
         geomq = layer.geomq ? layer.geomq : geom,
         geomdisplay = layer.geomdisplay ? layer.geomdisplay : '',
-        filter = req.query.filter ? JSON.parse(req.query.filter) : {},
-        sql_filter = '',
+        //filter = req.query.filter ? JSON.parse(req.query.filter) : {},
+        sql_filter = layer.sql_filter ? layer.sql_filter : '',
         infoj = JSON.parse(JSON.stringify(layer.infoj));
 
     // Check whether string params are found in the settings to prevent SQL injections.
@@ -33,19 +33,18 @@ async function select(req, res, fastify) {
 
     if (geomdisplay) geomdisplay = `, ST_AsGeoJSON(${layer.geomdisplay}) AS geomdisplay`;
 
-    // if (sql_filter) {
-    //     var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
-    //     var db_connection = await fastify.pg[layer.dbs].connect();
-    //     var result = await db_connection.query(q, [id]);
-    //     db_connection.release();
-    //     sql_filter = result.rows[0].sql_filter;
-    // }
-
+    if (sql_filter) {
+        var q = `select ${sql_filter} from ${table} where ${qID} = $1;`;
+        var db_connection = await fastify.pg[layer.dbs].connect();
+        var result = await db_connection.query(q, [id]);
+        db_connection.release();
+        sql_filter = result.rows[0].sql_filter;
+    }
 
     let access_filter = layer.access_filter && token.email && layer.access_filter[token.email.toLowerCase()] ?
         layer.access_filter[token.email] : null;
 
-    sql_filter = filter ? require('./filters').sql_filter(filter) : '';
+    //sql_filter = filter ? require('./filters').sql_filter(filter) : '';
 
     let fields = '';
     
@@ -54,10 +53,16 @@ async function select(req, res, fastify) {
         if (entry.layer) {
             let entry_layer = global.workspace[token.access].config.locales[req.query.locale].layers[entry.layer];
 
+            // For grids we want to use the highest resolution grid for the lookup.
+            let tableArray = entry_layer.arrayZoom ? Array.from(Object.values(entry_layer.arrayZoom)) : null;
+
+            // Get the last tableArray table name.
+            let entry_table = tableArray ? tableArray[tableArray.length - 1] : null;
+
             fields += `
             (SELECT ${entry.field.split('.')[0]}(${entry.field.split('.')[1]})
-            FROM ${entry_layer.table}
-            WHERE true ${sql_filter || `AND ST_Intersects(${entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
+            FROM ${entry_table || entry_layer.table}
+            WHERE true ${sql_filter || `AND ST_Intersects(${entry_table || entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
             ${access_filter ? 'AND ' + access_filter : ''}
             ) AS "${entry.field}",`;
             return

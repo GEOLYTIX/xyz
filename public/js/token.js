@@ -5,10 +5,11 @@ module.exports = next => {
     history.pushState({ token: true }, 'token', document.head.dataset.dir + search[0]);
 
     if (search[1]){
+
         const xhr = new XMLHttpRequest();
         xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + search[1]);
         xhr.onload = e => {
-            setTimeout(renewToken, 5*60*1000);
+            setTimeout(renewToken, 1*60*1000);
             require('./workspace')(next, e.target.response);
         }
         xhr.send();
@@ -18,8 +19,16 @@ module.exports = next => {
 }
 
 const renewToken = () => {
+
+    let timenow = Date.now();
+    
+    console.log({
+        nanoid: _xyz.nanoid,
+        timenow: timenow
+    });
+    
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + global._xyz.token);
+    xhr.open('GET', document.head.dataset.dir + '/token/renew?token=' + global._xyz.token + '&nanoid=' + _xyz.nanoid + '&timenow=' + timenow);
     xhr.onerror = () => document.getElementById('timeout_mask').style.display = 'block';
     xhr.onload = e => {
 
@@ -27,7 +36,7 @@ const renewToken = () => {
         if (e.target.status !== 200) return document.getElementById('timeout_mask').style.display = 'block';
 
         global._xyz.token = e.target.response;
-        setTimeout(renewToken, 5*60*1000);
+        setTimeout(renewToken, 1*60*1000);
 
         // iterate through layers
         Object.values(global._xyz.locales[global._xyz.locale].layers).forEach(layer => {

@@ -3,6 +3,8 @@
 
 // import * as _utils from './_utils';
 
+const nanoid = require('nanoid');
+
 module.exports = (next, token) => {
 
     let xhr = new XMLHttpRequest();
@@ -12,6 +14,7 @@ module.exports = (next, token) => {
     xhr.onload = e => {
         
         const _xyz = JSON.parse(e.target.response);
+        _xyz.nanoid = nanoid(6);
         _xyz.token = token;
         _xyz.view_mode = document.body.dataset.viewmode;
         _xyz.host = document.head.dataset.dir;

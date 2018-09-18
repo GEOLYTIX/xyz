@@ -465,6 +465,14 @@ function init(fastify) {
             method: 'GET',
             url: '/token/renew',
             handler: (req, res) => {
+                //fastify.log.info(req.query.timenow);
+
+                if (req.query.nanoid) console.log({
+                    nanoid: req.query.nanoid,
+                    timenow: req.query.timenow,
+                    token: req.query.token
+                });
+
                 fastify.jwt.verify(req.query.token, (err, token) => {
                     if (err) {
                         fastify.log.error(err);
@@ -472,7 +480,7 @@ function init(fastify) {
                     }
                     delete token.iat;
                     delete token.exp;
-                    res.send(fastify.jwt.sign(token, { expiresIn:  360 }));
+                    res.send(fastify.jwt.sign(token, { expiresIn:  120 }));
                 });
             }
         });
