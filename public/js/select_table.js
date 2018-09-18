@@ -3,8 +3,6 @@ const images = require('./select_images');
 const charts = require('./charts');
 
 function addInfojToList(record){
-    
-    //console.log(record.location.infoj);
 
     // Create infojTable table to be returned from this function.
     let table = utils._createElement({
@@ -150,6 +148,11 @@ function addInfojToList(record){
 
 function populateTable(record, entry, tr, table){
 
+    if(entry.streetview){
+        table.appendChild(insertStreetViewImage(record, tr));
+        return;
+    }
+
     if(entry.chart) {
         let chart = charts.bar_chart(record.location.layer, entry.chart);
         if(chart) table.appendChild(chart);
@@ -241,9 +244,9 @@ function populateTable(record, entry, tr, table){
             eventListener: {
                 event: "input",
                 funct: e => {
-                    console.log(e.target.max);
-                    console.log(e.target.min);
-                    console.log(e.target);
+                    //console.log(e.target.max);
+                    //console.log(e.target.min);
+                    //console.log(e.target);
                     utils.addClass(val, 'changed');
                     val.textContent = e.target.value;
                     record.upload.style.display = 'block';
@@ -536,30 +539,46 @@ function toggleSelectVisible(sel, inp, entry, prop){
 }
 
 // insert streetview gadget
-function insertStreetViewImage(record, table) {
-    let tr = utils.createElement('tr', {
-        className: 'tr_streetview'
-    }, table);
+function insertStreetViewImage(record, tr) {
 
-    let td = utils.createElement('td', {
-        className: 'td_streetview',
-        colSpan: '2'
-    }, tr);
+    tr.classList += " tr_streetview";
 
-    let div = utils.createElement('div', {
-        className: 'div_streetview'
-    }, td);
+    let td = utils._createElement({
+        tag: "td",
+        options: {
+            className: 'td_streetview',
+            colSpan: "2"
+        },
+        appendTo: tr
+    });
 
-    let a = utils.createElement('a', {
-        className: 'a_streetview',
-        href: 'https://www.google.com/maps?cbll=' + record.location.marker[1] + ',' + record.location.marker[0] + '&layer=c',
-        target: '_blank'
-    }, td);
+    let div = utils._createElement({
+        tag: "div",
+        options: {
+            className: 'div_streetview'
+        },
+        appendTo: td
+    });
 
-    let img = utils.createElement('img', {
-        className: 'img_streetview',
-        src: global._xyz.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE&token=' + global._xyz.token
-    }, a);
+    let a = utils._createElement({
+        tag: "a",
+        options: {
+            href: 'https://www.google.com/maps?cbll=' + record.location.marker[1] + ',' + record.location.marker[0] + '&layer=c',
+            target: '_blank'
+        },
+        appendTo: td
+    });
+
+    let img = utils._createElement({
+        tag: "img",
+        options: {
+            className: 'img_streetview',
+            src: global._xyz.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE&token=' + global._xyz.token
+        },
+        appendTo: a
+    });
+
+    return tr;
 }
 
 module.exports = {
