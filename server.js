@@ -1,4 +1,6 @@
-process.on('unhandledRejection', err => console.error(err));
+process.on('unhandledRejection', err => {
+    console.error(err)
+});
 
 const req_res = m => { try { return require.resolve(m) } catch (e) { console.log('Cannot resolve ' + m); return false } }
 
@@ -8,7 +10,13 @@ if (dotenv) dotenv.load();
 
 const fastify = require('fastify')({
     logger: {
-        level: 'error'
+        level: process.env.LOG_LEVEL || 'error',
+        prettifier: require('pino-pretty'),
+        prettyPrint: {
+            errorProps: ['hint', 'detail'],
+            levelFirst: true,
+            crlf: true
+        }
     }
 });
 

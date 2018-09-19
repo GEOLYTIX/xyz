@@ -64,13 +64,13 @@ async function select(req, res, fastify) {
             FROM ${entry_table || entry_layer.table}
             WHERE true ${sql_filter || `AND ST_Intersects(${entry_table || entry_layer.table}.${entry_layer.geom || 'geom'}, ${table}.${geomq})`}
             ${access_filter ? 'AND ' + access_filter : ''}
-            ) AS "${entry.field}",`;
+            ) AS "${entry.field}", `;
             return
         }
         
-        if (entry.type && entry.type !== 'group') fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field},`;
+        if (entry.type && entry.type !== 'group') fields += `${entry.fieldfx || entry.field}::${entry.type} AS ${entry.field}, `;
         
-        if (entry.subfield) fields += `${entry.subfield}::${entry.type} AS ${entry.subfield},`
+        if (entry.subfield) fields += `${entry.subfield}::${entry.type} AS ${entry.subfield}, `
     }
 
     infoj.forEach(entry => {
@@ -103,12 +103,26 @@ async function select(req, res, fastify) {
     ${layer.log_table ? 'rank = 1 AND ' : ''}
     ${qID} = $1;`;
 
-    //console.log(q);
-    //console.log(id);
+    try {
+        var db_connection = await fastify.pg[layer.dbs].connect();
+        var result = await db_connection.query(q, [id]);
+        db_connection.release();
+    } catch(err) {
+        err.detail = {
+            token: token,
+            locale: req.query.locale,
+            layer: req.query.layer,
+            q: q.replace(/\n/g,'').replace(/\s\s+/g, ' ').replace(/\$1/, id)
+        };
 
-    var db_connection = await fastify.pg[layer.dbs].connect();
-    var result = await db_connection.query(q, [id]);
-    db_connection.release();
+        fastify.log.error(err);
+
+        return res.code(401).send();
+    }
+
+    if (result.rowCount === 0) {
+        return res.code(401).send();
+    }
 
     // Iterate through the infoj object's entries and assign the values returned from the database query.
     Object.values(infoj).map(entry => {
