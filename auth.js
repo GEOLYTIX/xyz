@@ -536,7 +536,6 @@ function init(fastify) {
 }
 
 function authToken(req, res, fastify, access, done) {
-    fastify.log.info(req.req.url);
 
     // Public access
     if (access.lv === 'public') {
