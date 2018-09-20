@@ -17,9 +17,6 @@ function addInfojToList(record){
         }
     });
 
-    // Add streetview
-    if (global._xyz.locales[global._xyz.locale].layers[record.location.layer].streetview) insertStreetViewImage(record, table);
-
     // Adds info about layer and group to infoj
     record.location.infoj.unshift({
         "label": "Layer",
@@ -552,7 +549,7 @@ function insertStreetViewImage(record, tr) {
         appendTo: tr
     });
 
-    let div = utils._createElement({
+    utils._createElement({
         tag: "div",
         options: {
             className: 'div_streetview'
@@ -569,7 +566,7 @@ function insertStreetViewImage(record, tr) {
         appendTo: td
     });
 
-    let img = utils._createElement({
+    utils._createElement({
         tag: "img",
         options: {
             className: 'img_streetview',
