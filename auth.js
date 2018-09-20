@@ -411,7 +411,7 @@ function init(fastify) {
 
                     // Sent an email to all admin account emails with a request to approve the new user account.
                     require('./mailer')({
-                        to: adminmail,
+                        bcc: adminmail,
                         subject: `A new account has been verified on ${global.alias || req.headers.host}${global.dir}`,
                         text: `Please log into the admin panel ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/admin/user to approve ${user.email} \n \n`
                             + `You can also approve the account by following this link: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/admin/user/approve/${approvaltoken}`
