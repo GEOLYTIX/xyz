@@ -1,4 +1,0 @@
-# Keys
-
-API keys can be generated from the [/api/key](routes/api-key.md) endpoint. Requesting the endpoint in the browser requires user to provide their login credentials. Once authenticated the key will be presented to the user. API keys must be enabled for a user by setting the api\_key text field in the ACL to not null. The generated API key will be stored in this field, overwriting any existing key. Only one current API can be issued per user account. Setting the api\_key field to null will invalidate the current key and prevent the user from generating a new key. API keys have special access rights which are translated to a token with private access privileges in the [authToken](https://github.com/GEOLYTIX/xyz/blob/master/auth.js) process. The new token which will be assigned to the query as token parameter has an expiry of 10 seconds. The API key token itself will not expire.
-

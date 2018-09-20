@@ -36,6 +36,7 @@ const renewToken = () => {
         if (e.target.status !== 200) return document.getElementById('timeout_mask').style.display = 'block';
 
         global._xyz.token = e.target.response;
+
         setTimeout(renewToken, 1*60*1000);
 
         // iterate through layers

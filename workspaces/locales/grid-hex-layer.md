@@ -1,4 +1,0 @@
-# Grid \(Hex\) Layer
-
-
-

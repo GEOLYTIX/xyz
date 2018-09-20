@@ -475,6 +475,10 @@ function init(fastify) {
 
                 fastify.jwt.verify(req.query.token, (err, token) => {
                     if (err) {
+                        err.details = {
+                            timenow: Date.now(),
+                            token: req.query.token
+                        };
                         fastify.log.error(err);
                         return res.code(401).send();
                     }
