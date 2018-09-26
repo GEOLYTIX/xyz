@@ -1,7 +1,10 @@
-const utils = require('./utils');
-const svg_symbols = require('./svg_symbols.js');
+import _xyz from './_xyz.mjs';
 
-module.exports = (layer, panel) => {
+import * as utils from './utils.mjs';
+
+import * as svg_symbols from './svg_symbols.mjs';
+
+export default (layer, panel) => {
 
     let ctrl = utils._createElement({
         tag: 'div',
@@ -210,9 +213,9 @@ module.exports = (layer, panel) => {
                 if (!utils.hasClass(btnCatchment, 'disabled')) {
                     utils.addClass(btnCatchment, 'disabled')
                     document.getElementById('Map').style.cursor = 'crosshair';
-                    global._xyz.map.on('click', e => {
+                    _xyz.ws.map.on('click', e => {
                         layer.loader.style.display = 'block';
-                        global._xyz.map.off('click');
+                        _xyz.ws.map.off('click');
                         document.getElementById('Map').style.cursor = '';
                     
                         // Set layerMark on origin
@@ -240,12 +243,12 @@ module.exports = (layer, panel) => {
                                         })
                                     });
                                 }
-                            }).addTo(global._xyz.map);
+                            }).addTo(_xyz.ws.map);
                     
                         let xhr = new XMLHttpRequest();
                     
-                        xhr.open('GET', global._xyz.host + '/api/catchments?' + utils.paramString({
-                            locale: _xyz.locale,
+                        xhr.open('GET', _xyz.ws.host + '/api/catchments?' + utils.paramString({
+                            locale: _xyz.ws.locale,
                             layer: layer.layer,
                             lng: e.latlng.lng,
                             lat: e.latlng.lat,
@@ -254,7 +257,7 @@ module.exports = (layer, panel) => {
                             reach: sliReach.value,
                             mode: selMode.options[selMode.selectedIndex].value,
                             provider: selProvider.options[selProvider.selectedIndex].value,
-                            token: global._xyz.token
+                            token: _xyz.ws.token
                         }));
                     
                         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -287,7 +290,7 @@ module.exports = (layer, panel) => {
                                         weight: 1,
                                         fill: false
                                     }
-                                }).addTo(global._xyz.map);
+                                }).addTo(_xyz.ws.map);
                     
                                 let layerPoints = L.geoJson(json.circlePoints, {
                                     pointToLayer: function (feature, latlng) {
@@ -300,7 +303,7 @@ module.exports = (layer, panel) => {
                                             pane: 'tmp'
                                         });
                                     }
-                                }).addTo(global._xyz.map);
+                                }).addTo(_xyz.ws.map);
                     
                                 let layerSample = L.geoJson(json.samplePoints, {
                                     pointToLayer: function (feature, latlng) {
@@ -314,7 +317,7 @@ module.exports = (layer, panel) => {
                                             pane: 'tmp'
                                         });
                                     }
-                                }).addTo(global._xyz.map);
+                                }).addTo(_xyz.ws.map);
                             }
                         };
                         xhr.send();

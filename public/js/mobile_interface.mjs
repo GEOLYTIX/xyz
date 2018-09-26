@@ -1,6 +1,8 @@
-const utils = require('./utils');
+import _xyz from './_xyz.mjs';
 
-module.exports = () => {
+import * as utils from './utils.mjs';
+
+export default () => {
     
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -26,8 +28,8 @@ module.exports = () => {
         utils.removeClass(tabBar, 'pane_shadow');
     }
 
-    global._xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
-    global._xyz.activateLocationsTab = () => {
+    _xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
+    _xyz.activateLocationsTab = () => {
         utils.removeClass(tabLocations, 'hidden');
         activateTab(tabLocations, modLocations)
     };

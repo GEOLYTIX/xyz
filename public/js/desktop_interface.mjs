@@ -1,6 +1,6 @@
-const utils = require('./utils');
+import * as utils from './utils.mjs';
 
-module.exports = () => {
+export default () => {
 
     // remove polyfill for IE11
     if (!('remove' in Element.prototype)) {

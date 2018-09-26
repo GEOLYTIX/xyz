@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./utils.mjs');
 
 function addImages(record, images) {
 
@@ -149,12 +149,12 @@ function addImages(record, images) {
 function upload_image(record, img, blob) {
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', global._xyz.host + '/api/images/new?' + utils.paramString({
+    xhr.open('POST', _xyz.ws.host + '/api/images/new?' + utils.paramString({
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,
         id: record.location.id,
-        token: global._xyz.token
+        token: _xyz.ws.token
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = e => {
@@ -195,14 +195,14 @@ function remove_image(record, img) {
     document.getElementById(img.id).remove();
     
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', global._xyz.host + '/api/images/delete?' + utils.paramString({
+    xhr.open('GET', _xyz.ws.host + '/api/images/delete?' + utils.paramString({
         locale: _xyz.locale,
         layer: record.location.layer,
         table: record.location.table,
         id: record.location.id,
         image_id: img.id,
         image_src: encodeURIComponent(img.src),
-        token: global._xyz.token
+        token: _xyz.ws.token
     }));
     // xhr.onload = e => {
     //     if (e.target.status === 200) {

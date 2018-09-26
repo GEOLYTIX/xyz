@@ -1,6 +1,6 @@
-const utils = require('./utils');
+import * as utils from './utils.mjs';
 
-module.exports = (layer, panel) => {
+export default (layer, panel) => {
 
     // Create panel block.
     let block = utils._createElement({

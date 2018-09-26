@@ -1,90 +1,101 @@
-//require('./workspace')(init);
-require('./token')(init);
+import _xyz from './_xyz.mjs';
+
+import * as utils from './utils.mjs';
+
+import token from './token.mjs';
+
+import hooks from './hooks.mjs';
+
+import mobile_interface from './mobile_interface.mjs';
+
+import desktop_interface from './desktop_interface.mjs';
+
+import locales from './locales.mjs';
+
+import L from 'leaflet';
+
+import layers from './layers.mjs';
+
+token(init);
 
 function init() {
-
-    // Initialise utils.
-    const utils = require('./utils');
-
+ 
     // Set platform specific interface functions.
-    if (global._xyz.view_mode === 'mobile') require('./mobile_interface')();
-    if (global._xyz.view_mode === 'desktop') require('./desktop_interface')();
+    if (_xyz.ws.view_mode === 'mobile') mobile_interface();
+    if (_xyz.ws.view_mode === 'desktop') desktop_interface();
 
     // Initiate hooks module.
-    require('./hooks')();
+    hooks();
 
     // Initiate locales module.
-    require('./locales')();
-
-    // Initiate leaflet.
-    const L = require('leaflet');
+    locales();
 
     // Initiate map object.
-    global._xyz.map = L
+    _xyz.ws.map = L
         .map('Map', {
             renderer: L.svg(),
             scrollWheelZoom: true,
             zoomControl: false,
             attributionControl: false,
-            minZoom: global._xyz.locales[global._xyz.locale].minZoom,
-            maxZoom: global._xyz.locales[global._xyz.locale].maxZoom
+            minZoom: _xyz.ws.locales[_xyz.ws.locale].minZoom,
+            maxZoom: _xyz.ws.locales[_xyz.ws.locale].maxZoom
         })
-        .setView([parseFloat(global._xyz.hooks.lat || 0), parseFloat(global._xyz.hooks.lng || 0)], parseInt(global._xyz.hooks.z || 15));
+        .setView([parseFloat(_xyz.ws.hooks.lat || 0), parseFloat(_xyz.ws.hooks.lng || 0)], parseInt(_xyz.ws.hooks.z || 15));
 
     // Set view and bounds; Zoom to extent of bounds if no hooks.z is present.
-    global._xyz.setView = fit => {
-        global._xyz.map.setMaxBounds(global._xyz.locales[global._xyz.locale].bounds || [[-90, -180], [90, 180]]);
-        global._xyz.map.setMinZoom(global._xyz.locales[global._xyz.locale].minZoom);
-        global._xyz.map.setMaxZoom(global._xyz.locales[global._xyz.locale].maxZoom);
-        if (fit) global._xyz.map.fitBounds(global._xyz.locales[global._xyz.locale].bounds || [[-90, -180], [90, 180]]);
+    _xyz.ws.setView = fit => {
+        _xyz.ws.map.setMaxBounds(_xyz.ws.locales[_xyz.ws.locale].bounds || [[-90, -180], [90, 180]]);
+        _xyz.ws.map.setMinZoom(_xyz.ws.locales[_xyz.ws.locale].minZoom);
+        _xyz.ws.map.setMaxZoom(_xyz.ws.locales[_xyz.ws.locale].maxZoom);
+        if (fit) _xyz.ws.map.fitBounds(_xyz.ws.locales[_xyz.ws.locale].bounds || [[-90, -180], [90, 180]]);
     }
-    global._xyz.setView(!global._xyz.hooks.z);
+    _xyz.ws.setView(!_xyz.ws.hooks.z);
 
     // Zoom functions
     const btnZoomIn = document.getElementById('btnZoomIn');
     const btnZoomOut = document.getElementById('btnZoomOut');
 
-    chkZoomBtn(global._xyz.map.getZoom());
+    chkZoomBtn(_xyz.ws.map.getZoom());
     function chkZoomBtn(z) {
-        btnZoomIn.disabled = z < global._xyz.locales[global._xyz.locale].maxZoom ? false : true;
-        btnZoomOut.disabled = z > global._xyz.locales[global._xyz.locale].minZoom ? false : true;
+        btnZoomIn.disabled = z < _xyz.ws.locales[_xyz.ws.locale].maxZoom ? false : true;
+        btnZoomOut.disabled = z > _xyz.ws.locales[_xyz.ws.locale].minZoom ? false : true;
     }
 
     btnZoomIn.addEventListener('click', () => {
-        let z = global._xyz.map.getZoom() + 1;
-        global._xyz.map.setZoom(z);
+        let z = _xyz.ws.map.getZoom() + 1;
+        _xyz.ws.map.setZoom(z);
         chkZoomBtn(z);
     });
 
     btnZoomOut.addEventListener('click', () => {
-        let z = global._xyz.map.getZoom() - 1;
-        global._xyz.map.setZoom(z);
+        let z = _xyz.ws.map.getZoom() - 1;
+        _xyz.ws.map.setZoom(z);
         chkZoomBtn(z);
     });
 
     // Map view state functions
-    global._xyz.map.on('movestart', () => {
+    _xyz.ws.map.on('movestart', () => {
         viewChangeStart();
     });
 
-    global._xyz.map.on('resize', () => {
+    _xyz.ws.map.on('resize', () => {
         utils.debounce(viewChangeStart, 100);
     });
 
     // Cancel xhr and remove layer data from map object on view change start.
     function viewChangeStart() {
-        let layers = global._xyz.locales[global._xyz.locale].layers;
+        let layers = _xyz.ws.locales[_xyz.ws.locale].layers;
         Object.keys(layers).forEach(layer => {
             if (layers[layer].xhr) layers[layer].xhr.abort();
-            if (layers[layer].L) global._xyz.map.removeLayer(layers[layer].L);
+            if (layers[layer].L) _xyz.ws.map.removeLayer(layers[layer].L);
         });
     }
 
     // Fire viewChangeEnd after map move and zoomend
-    global._xyz.map.on('moveend', () => {
+    _xyz.ws.map.on('moveend', () => {
         viewChangeEnd();
     });
-    global._xyz.map.on('zoomend', () => {
+    _xyz.ws.map.on('zoomend', () => {
         viewChangeEnd();
     });
 
@@ -93,47 +104,48 @@ function init() {
     function viewChangeEnd() {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            chkZoomBtn(global._xyz.map.getZoom());
+            chkZoomBtn(_xyz.ws.map.getZoom());
 
-            global._xyz.setViewHook(global._xyz.map.getCenter());
+            _xyz.ws.setViewHook(_xyz.ws.map.getCenter());
 
             // Reset the load inidicator and trigger get layer on all layers.
-            Object.values(global._xyz.locales[global._xyz.locale].layers).forEach(layer => {
+            Object.values(_xyz.ws.locales[_xyz.ws.locale].layers).forEach(layer => {
                 if (layer.loader) layer.loader.style.display = 'none';
-                if(layer.getLayer) layer.getLayer(global._xyz);  
+                if(layer.getLayer) layer.getLayer(_xyz.ws);  
             });
 
         }, 100);
     }
 
     // Function to check whether all display layers are drawn.
-    global._xyz.layersCheck = () => {
+    _xyz.ws.layersCheck = () => {
         let layersArray = [],
             chkScore = 0;
 
-        Object.values(global._xyz.locales[global._xyz.locale].layers).forEach(layer => {
+        Object.values(_xyz.ws.locales[_xyz.ws.locale].layers).forEach(layer => {
             chkScore = layer.display ? chkScore++ : chkScore;
             chkScore = layer.display && layer.loaded ? chkScore-- : chkScore;
             layersArray.push([layer.name, layer.display, layer.loaded]);
         });
     }
 
-            // Initialize layers module.
-            require('./layers')();
+    // Initialize layers module.
+    layers();
 
-            // Initialize locations module.
-            require('./locations')();
+    // // Initialize locations module.
+    // require('./locations')();
 
-    // Initialize gazetteer module.
-    if (global._xyz.view_mode != 'report') require('./gazetteer')();
+    // // Initialize gazetteer module.
+    // if (_xyz.ws.view_mode != 'report') require('./gazetteer')();
 
-    // Initialize locate module.
-    if (global._xyz.locate && global._xyz.view_mode != 'report') require('./locate')();
+    // // Initialize locate module.
+    // if (_xyz.ws.locate && _xyz.ws.view_mode != 'report') require('./locate')();
 
-    // Initialize report module.
-    if (global._xyz.report) require('./report')();
+    // // Initialize report module.
+    // if (_xyz.ws.report) require('./report')();
 
-    document.getElementById('btnLogin').addEventListener('click', () => {
-        window.location = document.head.dataset.dir + '/login?redirect=' + (document.head.dataset.dir || '/') + window.location.search;
-    });
+    // document.getElementById('btnLogin').addEventListener('click', () => {
+    //     window.location = document.head.dataset.dir + '/login?redirect=' + (document.head.dataset.dir || '/') + window.location.search;
+    // });
+
 }

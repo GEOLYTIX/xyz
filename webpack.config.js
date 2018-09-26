@@ -1,9 +1,8 @@
 const path = require('path');
-//const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    xyz: ['babel-polyfill', './public/js/xyz_entry.js']
+    xyz: ['./public/js/xyz_entry.js']
   },
   output: {
     path: path.resolve(__dirname, 'public/js/build'),
@@ -11,22 +10,16 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['es2015']
-          }
-        }
-      }
-    ]
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/
+    }]
+  },
+  optimization: {
+    concatenateModules: true
+  },
+  stats: {
+    maxModules: Infinity,
+    optimizationBailout: true
   }
-  // plugins: [
-  //   new webpack.ProvidePlugin({
-  //     utils: 'utils.js'
-  //   })
-  // ]
 };

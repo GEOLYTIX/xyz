@@ -1,6 +1,8 @@
-const utils = require('./utils');
+import _xyz from './_xyz.mjs';
 
-module.exports = (layer, panel) => {
+import * as utils from './utils.mjs';
+
+export default (layer, panel) => {
 
     // Add filter block to layer panel.
     let filters = utils._createElement({
@@ -52,10 +54,10 @@ module.exports = (layer, panel) => {
 
 
                 
-                layer.xhr.open('GET', global._xyz.host + '/api/location/aggregate?' + utils.paramString({
-                    locale: global._xyz.locale,
+                layer.xhr.open('GET', _xyz.ws.host + '/api/location/aggregate?' + utils.paramString({
+                    locale: _xyz.ws.locale,
                     layer: layer.layer,
-                    token: global._xyz.token,
+                    token: _xyz.ws.token,
                     filter: JSON.stringify(layer.filter) || ''
                 }));
 
@@ -63,9 +65,9 @@ module.exports = (layer, panel) => {
                     if (e.target.status === 200) {
                         let json = JSON.parse(e.target.response);
                     
-                        global._xyz.select.selectLayerFromEndpoint({
+                        _xyz.ws.select.selectLayerFromEndpoint({
                             layer: layer.aggregate_layer,
-                            table: global._xyz.locales[global._xyz.locale].layers[layer.aggregate_layer].table,
+                            table: _xyz.ws.locales[_xyz.ws.locale].layers[layer.aggregate_layer].table,
                             id: json.id,
                             marker: [json.lng, json.lat],
                             filter: JSON.stringify(layer.filter) || ''

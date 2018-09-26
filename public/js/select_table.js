@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./utils.mjs');
 const images = require('./select_images');
 const charts = require('./charts');
 
@@ -570,7 +570,7 @@ function insertStreetViewImage(record, tr) {
         tag: "img",
         options: {
             className: 'img_streetview',
-            src: global._xyz.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE&token=' + global._xyz.token
+            src: _xyz.ws.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE&token=' + _xyz.ws.token
         },
         appendTo: a
     });

@@ -1,5 +1,5 @@
-const utils = require('./utils');
-const svg_symbols = require('./svg_symbols');
+const utils = require('./utils.mjs');
+const svg_symbols = require('./svg_symbols.mjs');
 const select_controls = require('./select_controls');
 
 module.exports = () => {
@@ -45,18 +45,18 @@ module.exports = () => {
     });
 
     // Create select pane. This pane has a shadow filter associated in the css.
-    global._xyz.map.createPane('select_display');
-    global._xyz.map.getPane('select_display').style.zIndex = 501;
-    global._xyz.map.createPane('select');
-    global._xyz.map.getPane('select').style.zIndex = 600;
-    global._xyz.map.createPane('select_marker');
-    global._xyz.map.getPane('select_marker').style.zIndex = 601;
-    global._xyz.map.createPane('select_circle');
-    global._xyz.map.getPane('select_circle').style.zIndex = 602;
+    _xyz.map.createPane('select_display');
+    _xyz.map.getPane('select_display').style.zIndex = 501;
+    _xyz.map.createPane('select');
+    _xyz.map.getPane('select').style.zIndex = 600;
+    _xyz.map.createPane('select_marker');
+    _xyz.map.getPane('select_marker').style.zIndex = 601;
+    _xyz.map.createPane('select_circle');
+    _xyz.map.getPane('select_circle').style.zIndex = 602;
 
     // Create recordset if it doesn't exist yet.
-    if (!global._xyz.select) global._xyz.select = {};
-    if (!global._xyz.select.records) global._xyz.select.records = [
+    if (!_xyz.select) _xyz.select = {};
+    if (!_xyz.select.records) _xyz.select.records = [
         {
           "letter": "A",
           "color": "#9c27b0"
@@ -119,13 +119,13 @@ module.exports = () => {
         }];
 
     /*let filters = {};
-    if(global._xyz.hooks.filter) global._xyz.hooks.select.split(',').forEeach(hook => {
+    if(_xyz.ws.hooks.filter) _xyz.ws.hooks.select.split(',').forEeach(hook => {
         let f = hook.split('!');
         filters[f[0]] = decodeURIComponent(f[1]);
     });*/
     
     // Set the layer display from hooks if present; Overwrites the default setting.
-    if (global._xyz.hooks.select) global._xyz.hooks.select.split(',').forEach(hook => {
+    if (_xyz.ws.hooks.select) _xyz.ws.hooks.select.split(',').forEach(hook => {
         let params = hook.split('!');
         selectLayerFromEndpoint({
             layer: params[1],
@@ -134,37 +134,37 @@ module.exports = () => {
             marker: [params[4].split(';')[0], params[4].split(';')[1]]
         });
     });
-    global._xyz.removeHook('select');
+    _xyz.removeHook('select');
 
     // Reset function for the module container.
-    global._xyz.select.resetModule = resetModule;
+    _xyz.select.resetModule = resetModule;
     function resetModule() {
         LocationsHeader.style.display = 'none';
         locations.innerHTML = '';
-        global._xyz.removeHook('select');
-        global._xyz.select.records.map(function (record) {
-            if (record.location && record.location.L) global._xyz.map.removeLayer(record.location.L);
-            if (record.location && record.location.M) global._xyz.map.removeLayer(record.location.M);
-            if (record.location && record.location.D) global._xyz.map.removeLayer(record.location.D);
+        _xyz.removeHook('select');
+        _xyz.select.records.map(function (record) {
+            if (record.location && record.location.L) _xyz.map.removeLayer(record.location.L);
+            if (record.location && record.location.M) _xyz.map.removeLayer(record.location.M);
+            if (record.location && record.location.D) _xyz.map.removeLayer(record.location.D);
             record.location = null;
         });
         
         // Make select tab active on mobile device.
-        if (global._xyz.activateLayersTab) global._xyz.activateLayersTab();
+        if (_xyz.activateLayersTab) _xyz.activateLayersTab();
     }
 
     // Get location from data source
-    global._xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
+    _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
     function selectLayerFromEndpoint(location) {
     
-        let freeRecords = global._xyz.select.records.filter(record => !record.location);
+        let freeRecords = _xyz.select.records.filter(record => !record.location);
 
         if (freeRecords.length === 0) return;
 
         // Make select tab active on mobile device.
-        if (global._xyz.activateSelectTab) global._xyz.activateSelectTab();
+        if (_xyz.activateSelectTab) _xyz.activateSelectTab();
 
-        let layer = global._xyz.locales[global._xyz.locale].layers[location.layer];
+        let layer = _xyz.locales[_xyz.locale].layers[location.layer];
 
         // Prevent crash for select from hook when layer is no accessible to user.
         if (!layer) return
@@ -175,9 +175,9 @@ module.exports = () => {
             // Create a layer reference for the layer defined in the infoj field.
             if (typeof entry.layer === 'string') {
                 entry.layer = {
-                    table: global._xyz.locales[global._xyz.locale].layers[entry.layer].table,
-                    geom: global._xyz.locales[global._xyz.locale].layers[entry.layer].geom || 'geom',
-                    filter: global._xyz.locales[global._xyz.locale].layers[entry.layer].filter || {}
+                    table: _xyz.locales[_xyz.locale].layers[entry.layer].table,
+                    geom: _xyz.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
+                    filter: _xyz.locales[_xyz.locale].layers[entry.layer].filter || {}
                 }
             }
         })
@@ -186,12 +186,12 @@ module.exports = () => {
         setChartData(layer, location);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', global._xyz.host + '/api/location/select?' + utils.paramString({
+        xhr.open('GET', _xyz.ws.host + '/api/location/select?' + utils.paramString({
             locale: _xyz.locale,
             layer: layer.layer,
             table: location.table,
             id: location.id,
-            token: global._xyz.token
+            token: _xyz.ws.token
             //filter: location.filter || ''
         }));
 
@@ -200,7 +200,7 @@ module.exports = () => {
         xhr.onload = e => {
 
             // remove wait cursor class if found
-            let els = global._xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
+            let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
             for (let el of els) {
                 el.classList.remove("wait-cursor-enabled");
             }
@@ -234,7 +234,7 @@ module.exports = () => {
                         _arr.push(layer.charts[chart][item].field);
                     });
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST', global._xyz.host + '/api/location/chart?token=' + global._xyz.token);
+                    xhr.open('POST', _xyz.ws.host + '/api/location/chart?token=' + _xyz.ws.token);
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onload = function(){
                         if (this.status === 200){
@@ -262,7 +262,7 @@ module.exports = () => {
 
     function addLayerToRecord(location) {
 
-        let freeRecords = global._xyz.select.records.filter(function (record) {
+        let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.location) return record
         });
 
@@ -274,7 +274,7 @@ module.exports = () => {
         if (freeRecords.length > 0) {
             freeRecords[0].location = location;
             if (location.layer) {
-                global._xyz.pushHook('select',
+                _xyz.pushHook('select',
                     freeRecords[0].letter + '!' +
                     freeRecords[0].location.layer + '!' +
                     freeRecords[0].location.table + '!' +
@@ -287,7 +287,7 @@ module.exports = () => {
             addRecordToMap(freeRecords[0])
         }
     }
-    global._xyz.select.addLayerToRecord = addLayerToRecord;
+    _xyz.select.addLayerToRecord = addLayerToRecord;
 
     function addRecordToMap(record) {
         if (record.location.geomdisplay) {
@@ -305,7 +305,7 @@ module.exports = () => {
                         fill: true,
                         fillOpacity: 0.3
                     }
-                }).addTo(global._xyz.map);
+                }).addTo(_xyz.map);
         }
 
         if (record.location.marker) {
@@ -334,7 +334,7 @@ module.exports = () => {
                             pane: 'select_marker'
                         });
                     }
-                }).addTo(global._xyz.map);
+                }).addTo(_xyz.map);
         }
 
         record.location.L = L.geoJson(
@@ -364,11 +364,11 @@ module.exports = () => {
                                 })
                             }),
                             pane: 'select_circle',
-                            interactive: global._xyz.select ? true : false,
+                            interactive: _xyz.select ? true : false,
                             draggable: record.location.editable
                         });
                 }
-            }).addTo(global._xyz.map);
+            }).addTo(_xyz.map);
        
         record.location.L.getLayers()[0].on('dragend', function (e) {
             record.upload.style.display = 'block';
@@ -437,18 +437,18 @@ module.exports = () => {
         record.drawer.appendChild(require('./select_table').addInfojToList(record));
 
         // Find free space and insert record.
-        let freeRecords = global._xyz.select.records.filter(function (record) {
+        let freeRecords = _xyz.select.records.filter(function (record) {
             if (!record.location) return record
         });
-        let idx = global._xyz.select.records.indexOf(record);
+        let idx = _xyz.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
 
-        if (global._xyz.view_mode === 'desktop') setTimeout(() => {
+        if (_xyz.ws.view_mode === 'desktop') setTimeout(() => {
             let el = document.querySelector('.mod_container > .scrolly');
             el.scrollTop = el.clientHeight;
         }, 500);
 
         // Make select tab active on mobile device.
-        if (global._xyz.activateLocationsTab) global._xyz.activateLocationsTab();
+        if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
     }
 }

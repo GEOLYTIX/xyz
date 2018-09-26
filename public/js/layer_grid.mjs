@@ -1,11 +1,16 @@
-const utils = require('./utils');
-const svg_symbols = require('./svg_symbols');
+import _xyz from './_xyz.mjs';
 
-module.exports = function() {
+import * as utils from './utils.mjs';
+
+import * as svg_symbols from './svg_symbols.mjs';
+
+import L from 'leaflet';
+
+export default function() {
 
     // Assign the table based on the zoom array.
     let layer = this,
-        zoom = global._xyz.map.getZoom(),
+        zoom = _xyz.ws.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
@@ -17,16 +22,16 @@ module.exports = function() {
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
     // Request layer data when table and display are true.
-    if(layer.table && layer.display && layer.locale === global._xyz.locale){
+    if(layer.table && layer.display && layer.locale === _xyz.ws.locale){
         layer.loaded = false;
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
         
         // Open & send vector.xhr;
-        let bounds = global._xyz.map.getBounds();
+        let bounds = _xyz.ws.map.getBounds();
 
-        layer.xhr.open('GET', global._xyz.host + '/api/grid/get?' + utils.paramString({
-            locale: _xyz.locale,
+        layer.xhr.open('GET', _xyz.ws.host + '/api/grid/get?' + utils.paramString({
+            locale: _xyz.ws.locale,
             layer: layer.layer,
             table: layer.table,
             size: layer.grid_size,
@@ -35,16 +40,16 @@ module.exports = function() {
             south: bounds.getSouth(),
             east: bounds.getEast(),
             north: bounds.getNorth(),
-            token: global._xyz.token
+            token: _xyz.ws.token
         }));
 
         // Draw layer on load event.
         layer.xhr.onload = e => {
 
-            if (e.target.status === 200 && layer.display && layer.locale === global._xyz.locale) {
+            if (e.target.status === 200 && layer.display && layer.locale === _xyz.ws.locale) {
 
                 // Check for existing layer and remove from map.
-                if (layer.L) global._xyz.map.removeLayer(layer.L);
+                if (layer.L) _xyz.ws.map.removeLayer(layer.L);
 
                 // Add geoJSON feature collection to the map.
                 layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
@@ -74,16 +79,16 @@ module.exports = function() {
                                 interactive: false
                             });
                     }
-                }).addTo(global._xyz.map);
+                }).addTo(_xyz.ws.map);
 
                 layer.loader.style.display = 'none';
                 layer.loaded = true;
-                global._xyz.layersCheck();
+                _xyz.ws.layersCheck();
 
             }
         };
         layer.xhr.send();
-        //global._xyz.layersCheck();
+        //_xyz.ws.layersCheck();
         
     }
 

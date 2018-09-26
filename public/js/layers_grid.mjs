@@ -1,7 +1,11 @@
-const utils = require('./utils');
-const d3 = require('d3');
+import _xyz from './_xyz.mjs';
 
-module.exports = (layer, panel) => {
+import * as utils from './utils.mjs';
+
+import d3 from 'd3';
+// import d3 from './d3.mjs';
+
+export default (layer, panel) => {
 
     let width = layer.drawer.clientWidth,
         legend = utils._createElement({
@@ -40,9 +44,9 @@ module.exports = (layer, panel) => {
         layer.chkGridRatio = e.target.checked;
         layer.grid_ratio = layer.chkGridRatio;
         if (layer.grid_ratio) {
-            global._xyz.setHook('grid_ratio', true);
+            _xyz.ws.setHook('grid_ratio', true);
         } else {
-            global._xyz.removeHook('grid_ratio');
+            _xyz.ws.removeHook('grid_ratio');
         }
         layer.getLayer();
 
@@ -50,14 +54,14 @@ module.exports = (layer, panel) => {
             label: 'Display colour values as a ratio to the size value.',
             id: 'chkGridRatio',
             className: 'ctrl',
-            checked: layer.grid_ratio || global._xyz.hooks.grid_ratio
+            checked: layer.grid_ratio || _xyz.ws.hooks.grid_ratio
         });
 
     // Set checked from either hook.grid_ratio or layer.grid_ratio.
-    layer.chkGridRatio = layer.grid_ratio || global._xyz.hooks.grid_ratio;
+    layer.chkGridRatio = layer.grid_ratio || _xyz.ws.hooks.grid_ratio;
     layer.grid_ratio = layer.chkGridRatio;
 
-    if (layer.chkGridRatio) global._xyz.setHook('grid_ratio', true);
+    if (layer.chkGridRatio) _xyz.ws.setHook('grid_ratio', true);
 
     legend.appendChild(gridRatio);
 
@@ -75,13 +79,13 @@ module.exports = (layer, panel) => {
         });
 
         // Set the select from either hook[query] or layer[query].
-        select.selectedIndex = global._xyz.hooks[query] || layer[query] ? utils.getSelectOptionsIndex(select.options, global._xyz.hooks[query] || layer[query]) : 0;
+        select.selectedIndex = _xyz.ws.hooks[query] || layer[query] ? utils.getSelectOptionsIndex(select.options, _xyz.ws.hooks[query] || layer[query]) : 0;
         layer[query] = select.value;
-        global._xyz.setHook(query, select.value);
+        _xyz.ws.setHook(query, select.value);
 
         // onchange event to set the hook and title.
         select.onchange = function () {
-            global._xyz.setHook(query, event.target.value);
+            _xyz.ws.setHook(query, event.target.value);
             layer[query] = event.target.value;
             layer.getLayer();
         };

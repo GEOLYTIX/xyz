@@ -1,30 +1,7 @@
-module.exports = {
-    scrollElement,
-    addClass,
-    removeClass,
-    toggleClass,
-    hasClass,
-    indexInParent,
-    paramString,
-    debounce,
-    createElement,
-    _createElement,
-    getSelectOptionsIndex,
-    getMath,
-    createStatsTable,
-    dataURLToBlob,
-    checkbox,
-    toggleExpanderParent,
-    rgbToHex,
-    clone,
-    get_index_by_value,
-    scrolly,
-    slider,
-    copy_to_clipboard,
-    wrap
-}
+import d3 from 'd3';
+// import d3 from './d3.mjs';
 
-function scrollElement(element, to, duration) {
+export function scrollElement(element, to, duration) {
     if (duration <= 0) return;
 
     let difference = to - element.scrollTop,
@@ -37,7 +14,7 @@ function scrollElement(element, to, duration) {
     }, 10);
 }
 
-function addClass(elements, myClass) {
+export function addClass(elements, myClass) {
     if (!elements) return;
 
     // if we have a selector, get the chosen elements
@@ -53,7 +30,7 @@ function addClass(elements, myClass) {
     }
 }
 
-function removeClass(elements, myClass) {
+export function removeClass(elements, myClass) {
     if (!elements) return;
 
     // if we have a selector, get the chosen elements
@@ -72,7 +49,7 @@ function removeClass(elements, myClass) {
     }
 }
 
-function toggleClass(elements, myClass) {
+export function toggleClass(elements, myClass) {
     if (!elements) return;
 
     // if we have a selector, get the chosen elements
@@ -94,7 +71,7 @@ function toggleClass(elements, myClass) {
     }
 }
 
-function hasClass(elements, myClass) {
+export function hasClass(elements, myClass) {
     if (!elements) return;
 
     // if we have a selector, get the chosen elements
@@ -113,7 +90,7 @@ function hasClass(elements, myClass) {
     return n === elements.length;
 }
 
-function indexInParent(node) {
+export function indexInParent(node) {
     if (node) {
         let children = node.parentNode.childNodes,
             num = 0;
@@ -125,7 +102,7 @@ function indexInParent(node) {
     return -1;
 }
 
-function debounce(func, wait) {
+export function debounce(func, wait) {
     let timeout;
     return function () {
         clearTimeout(timeout);
@@ -136,7 +113,7 @@ function debounce(func, wait) {
     };
 }
 
-function paramString(param) {
+export function paramString(param) {
     let encodedString = '';
     Object.keys(param).forEach(key => {
         if (param[key] && encodedString.length > 0) encodedString += '&';
@@ -145,7 +122,7 @@ function paramString(param) {
     return encodedString;
 }
 
-function createElement(tag, options, appendTo) {
+export function createElement(tag, options, appendTo) {
     let el = document.createElement(tag);
 
     if (options && typeof options === 'object')
@@ -157,7 +134,7 @@ function createElement(tag, options, appendTo) {
     return el;
 }
 
-function _createElement(_el) {
+export function _createElement(_el) {
     let el = document.createElement(_el.tag);
 
     if (_el.options)
@@ -177,14 +154,14 @@ function _createElement(_el) {
     return el;
 }
 
-function getSelectOptionsIndex(options, value) {
+export function getSelectOptionsIndex(options, value) {
     for (let i = 0; i < options.length; i++) {
         if (options[i].value == value) return i;
     }
     return -1;
 }
 
-function getMath(arr, key, type) {
+export function getMath(arr, key, type) {
     let numbers = arr.filter(function (n) {
         if (isFinite(n[key])) return n[key]
     });
@@ -194,7 +171,7 @@ function getMath(arr, key, type) {
     }))
 }
 
-function createStatsTable(infoj) {
+export function createStatsTable(infoj) {
     let table = '';
     Object.keys(infoj).map(function (key) {
         //typeof (infoj[key]) === 'object' ?
@@ -204,7 +181,7 @@ function createStatsTable(infoj) {
     return table;
 }
 
-function dataURLToBlob(dataURL) {
+export function dataURLToBlob(dataURL) {
     let BASE64_MARKER = ';base64,';
 
     if (dataURL.indexOf(BASE64_MARKER) == -1) {
@@ -227,7 +204,7 @@ function dataURLToBlob(dataURL) {
     return new Blob([uInt8Array], { type: contentType });
 }
 
-function toggleExpanderParent(params) {
+export function toggleExpanderParent(params) {
     
     if(!params.expandedTag) params.expandedTag = 'expanded';
     if(!params.expandableTag) params.expandableTag = 'expandable';
@@ -258,7 +235,7 @@ function toggleExpanderParent(params) {
     };
 }
 
-function scrolly(el) {
+export function scrolly(el) {
 
     //let content = scrolly.querySelector('.scrolly'),
     let track = el.querySelector('.scrolly_track'),
@@ -297,7 +274,7 @@ function scrolly(el) {
     });
 }
 
-function checkbox(onchange, options) {
+export function checkbox(onchange, options) {
 
     let checkbox = _createElement({
         tag: 'label',
@@ -331,7 +308,7 @@ function checkbox(onchange, options) {
     return checkbox;
 }
 
-function slider(options) {
+export function slider(options) {
 
     _createElement({
         tag: 'span', 
@@ -371,7 +348,7 @@ function slider(options) {
     });
 }
 
-function rgbToHex(color) {
+export function rgbToHex(color) {
 
     let hexDigits = new Array
         ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
@@ -388,7 +365,7 @@ function rgbToHex(color) {
     }
 }
 
-function clone(_obj) {
+export function clone(_obj) {
     let _clone;
     _obj instanceof Array ? _clone = [] : _clone = {};
     Object.keys(_obj).map(function (key) {
@@ -397,13 +374,13 @@ function clone(_obj) {
     return _clone;
 }
 
-function get_index_by_value(json_arr, key, val) {
+export function get_index_by_value(json_arr, key, val) {
     return json_arr.findIndex((item) => {
         return item.hasOwnProperty(key) && item[key] === val;
     });
 }
 
-function copy_to_clipboard(str) {
+export function copy_to_clipboard(str) {
     let textArea = document.createElement("textarea");
     textArea.style.visibility = 'none';
     textArea.value = str;
@@ -413,7 +390,7 @@ function copy_to_clipboard(str) {
     textArea.remove();
 }
 
-function wrap(text, width) { // wraps svg text
+export function wrap(text, width) { // wraps svg text
     text.each(function () {
         let
             text = d3.select(this),

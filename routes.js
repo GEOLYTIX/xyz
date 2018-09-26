@@ -1,23 +1,13 @@
 module.exports = fastify => {
 
-    // Set highlight and and markdown-it to turn markdown into flavoured html.
-    const hljs = require('highlight.js');
-    const markdown = require('markdown-it')({
-        highlight: (str, lang) => {
-            if (lang && hljs.getLanguage(lang)) {
-                try {
-                    return hljs.highlight(lang, str).value;
-                } catch (__) { }
-            }
-            return ''; // use external default escaping
-        }
-    });
-
     // Create constructor for mobile detect module.
     const Md = require('mobile-detect');
 
     // Set jsrender module for server-side templates.
     const jsr = require('jsrender');
+
+    // 
+    const nanoid = require('nanoid');
 
     // Add content type parser for octet stream.
     fastify.addContentTypeParser('*', (req, done) => done());
@@ -49,6 +39,7 @@ module.exports = fastify => {
                 res.type('text/html').send(tmpl.render({
                     dir: global.dir,
                     title: config.title || 'GEOLYTIX | XYZ',
+                    nanoid: nanoid(6),
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
                     hrefDocumentation: config.documentation ? global.dir + '/' + config.documentation : '',
@@ -59,23 +50,6 @@ module.exports = fastify => {
                     btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"',
                     btnLocate: config.locate ? '' : 'style="display: none;"'
                 }));
-            }
-        });
-
-        fastify.route({
-            method: 'GET',
-            url: '/documentation',
-            beforeHandler: fastify.auth([fastify.authAccess]),
-            handler: (req, res) => {
-                require('fs').readFile('./public/documentation.md', (err, md) => {
-                    if (err) throw err;
-                    res
-                        .type('text/html')
-                        .send(
-                            jsr.templates('./views/github.html').render({
-                                md: markdown.render(md.toString())
-                            }));
-                })
             }
         });
 

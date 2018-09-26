@@ -1,8 +1,11 @@
-const utils = require('./utils');
-const d3 = require('d3');
-const svg_symbols = require('./svg_symbols');
+import * as utils from './utils.mjs';
 
-module.exports = (layer, panel) => {
+import d3 from 'd3';
+// import d3 from './d3.mjs';
+
+import * as svg_symbols from './svg_symbols.mjs';
+
+export default (layer, panel) => {
 
     // Create panel block.
     let block = utils._createElement({

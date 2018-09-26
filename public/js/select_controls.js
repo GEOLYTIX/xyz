@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./utils.mjs');
 
 function clear(record) {
     utils._createElement({
@@ -20,17 +20,17 @@ function clear(record) {
                 e.stopPropagation();
                 record.drawer.remove();
 
-                global._xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
-                if (record.location.L) global._xyz.map.removeLayer(record.location.L);
-                if (record.location.M) global._xyz.map.removeLayer(record.location.M);
-                if (record.location.D) global._xyz.map.removeLayer(record.location.D);
+                _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                if (record.location.L) _xyz.map.removeLayer(record.location.L);
+                if (record.location.M) _xyz.map.removeLayer(record.location.M);
+                if (record.location.D) _xyz.map.removeLayer(record.location.D);
                 record.location = null;
 
-                let freeRecords = global._xyz.select.records.filter(function (record) {
+                let freeRecords = _xyz.select.records.filter(function (record) {
                     if (!record.location) return record
                 });
 
-                if (freeRecords.length === global._xyz.select.records.length) global._xyz.select.resetModule();
+                if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
             }
         }
     });
@@ -53,7 +53,7 @@ function zoom(record) {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                global._xyz.map.flyToBounds(record.location.L.getBounds());
+                _xyz.map.flyToBounds(record.location.L.getBounds());
             }
         }
     });
@@ -152,11 +152,11 @@ function marker(record) {
             funct: e => {
                 e.stopPropagation();
                 if (e.target.textContent === 'location_off') {
-                    global._xyz.map.removeLayer(record.location.M);
+                    _xyz.map.removeLayer(record.location.M);
                     e.target.textContent = 'location_on';
                     e.target.title = 'Show marker';
                 } else {
-                    global._xyz.map.addLayer(record.location.M);
+                    _xyz.map.addLayer(record.location.M);
                     e.target.textContent = 'location_off';
                     e.target.title = 'Hide marker';
                 }
@@ -183,10 +183,10 @@ function update(record) {
             funct: e => {
                 e.stopPropagation();
 
-                let layer = global._xyz.locales[global._xyz.locale].layers[record.location.layer],
+                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', global._xyz.host + '/api/location/update?token=' + global._xyz.token);
+                xhr.open('POST', _xyz.ws.host + '/api/location/update?token=' + _xyz.ws.token);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -240,36 +240,36 @@ function trash(record) {
             funct: e => {
                 e.stopPropagation();
 
-                let layer = global._xyz.locales[global._xyz.locale].layers[record.location.layer],
+                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('GET', global._xyz.host + '/api/location/delete?' + utils.paramString({
+                xhr.open('GET', _xyz.ws.host + '/api/location/delete?' + utils.paramString({
                     locale: _xyz.locale,
                     layer: layer.layer,
                     table: record.location.table,
                     id: record.location.id,
-                    token: global._xyz.token
+                    token: _xyz.ws.token
                 }));
 
                 xhr.onload = e => {
 
                     if (e.target.status !== 200) return;
 
-                    global._xyz.map.removeLayer(layer.L);
+                    _xyz.map.removeLayer(layer.L);
                     layer.getLayer();
                     record.drawer.remove();
     
-                    global._xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
-                    if (record.location.L) global._xyz.map.removeLayer(record.location.L);
-                    if (record.location.M) global._xyz.map.removeLayer(record.location.M);
-                    if (record.location.D) global._xyz.map.removeLayer(record.location.D);
+                    _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                    if (record.location.L) _xyz.map.removeLayer(record.location.L);
+                    if (record.location.M) _xyz.map.removeLayer(record.location.M);
+                    if (record.location.D) _xyz.map.removeLayer(record.location.D);
                     record.location = null;
     
-                    let freeRecords = global._xyz.select.records.filter(record => {
+                    let freeRecords = _xyz.select.records.filter(record => {
                         if (!record.location) return record
                     });
     
-                    if (freeRecords.length === global._xyz.select.records.length) global._xyz.select.resetModule();
+                    if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
                 }
                 xhr.send();
             }
