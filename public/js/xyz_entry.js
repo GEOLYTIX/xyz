@@ -1,15 +1,10 @@
 import _xyz from './_xyz.mjs';
 
-_xyz.log = document.body.dataset.log ? true : null;
-_xyz.nanoid = document.body.dataset.nanoid;
-_xyz.view_mode = document.body.dataset.viewmode;
-_xyz.host = document.head.dataset.dir;
-
 import token from './token.mjs';
 
-import mobile_interface from './mobile_interface.mjs';
+import mobile from './views/mobile.mjs';
 
-import desktop_interface from './desktop_interface.mjs';
+import desktop from './views/desktop.mjs';
 
 import hooks from './hooks.mjs';
 
@@ -19,19 +14,24 @@ import L from 'leaflet';
 
 import layers from './layer/_layers.mjs';
 
-import locations from './locations.mjs';
+import locations from './location/_locations.mjs';
 
 import locate from './locate.mjs';
 
 import gazetteer from './gazetteer.mjs';
+
+_xyz.log = document.body.dataset.log ? true : null;
+_xyz.nanoid = document.body.dataset.nanoid;
+_xyz.view_mode = document.body.dataset.viewmode;
+_xyz.host = document.head.dataset.dir;
 
 token(init);
 
 function init() {
  
     // Set platform specific interface functions.
-    if (_xyz.view_mode === 'mobile') mobile_interface();
-    if (_xyz.view_mode === 'desktop') desktop_interface();
+    if (_xyz.view_mode === 'mobile') mobile();
+    if (_xyz.view_mode === 'desktop') desktop();
 
     // Initiate hooks module.
     hooks();

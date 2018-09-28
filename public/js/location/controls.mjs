@@ -1,6 +1,4 @@
-import _xyz from './_xyz.mjs';
-
-
+import _xyz from '../_xyz.mjs';
 
 export function clear(record) {
     _xyz.utils._createElement({

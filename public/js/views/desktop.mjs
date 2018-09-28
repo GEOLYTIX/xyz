@@ -1,4 +1,4 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
 export default () => {
 
@@ -16,5 +16,4 @@ export default () => {
 
     // reset scrollbar on control container after window resize.
     window.addEventListener('resize', () => _xyz.utils.scrolly(document.querySelector('.mod_container > .scrolly')));
-
 };

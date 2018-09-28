@@ -1,8 +1,6 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
-
-
-export function addImages(record, images) {
+export default (record, images) => {
 
     // create image container
     let img_container = _xyz.utils.createElement('div', {

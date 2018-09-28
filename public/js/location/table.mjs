@@ -1,12 +1,10 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
-
-
-import {addImages} from './select_images.mjs';
+import addImages from './images.mjs';
 
 import {bar_chart} from './charts.mjs';
 
-export function addInfojToList(record){
+export default record => {
 
     // Create infojTable table to be returned from this function.
     let table = _xyz.utils._createElement({

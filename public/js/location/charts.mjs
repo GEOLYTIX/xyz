@@ -1,13 +1,10 @@
-import _xyz from './_xyz.mjs';
-
+import _xyz from '../_xyz.mjs';
 
 import d3_selection from "d3-selection";
 import d3_scale from "d3-scale";
 import d3_format from "d3-format";
 import d3_array from "d3-array";
 import d3_axis from "d3-axis";
-
-
 
 export function bar_chart(layer, chart){
     
@@ -22,6 +19,7 @@ export function bar_chart(layer, chart){
     let td = _xyz.utils.createElement('td', {
         colSpan: "2"
     });
+    
     let tr = _xyz.utils.createElement('tr');
     
     // Define the div for the tooltip

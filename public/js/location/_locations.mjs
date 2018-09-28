@@ -1,8 +1,8 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
-import {addInfojToList} from './select_table.mjs';
+import addInfojToList from './table.mjs';
 
-import * as select_controls from './select_controls.mjs';
+import * as controls from './controls.mjs';
 
 export default () => {
 
@@ -58,6 +58,7 @@ export default () => {
 
     // Create recordset if it doesn't exist yet.
     if (!_xyz.ws.select) _xyz.ws.select = {};
+    
     if (!_xyz.ws.select.records) _xyz.ws.select.records = [
         {
           "letter": "A",
@@ -437,25 +438,25 @@ export default () => {
         });
 
         // Create the clear control element to control the removal of a feature from the select.layers.
-        select_controls.clear(record);
+        controls.clear(record);
         
         // Create copy to clipboard element
-        select_controls.clipboard(record);
+        controls.clipboard(record);
 
         // Create the zoom control element which zoom the map to the bounds of the feature.
-        select_controls.zoom(record);
+        controls.zoom(record);
 
         // Create control to toggle marker.
-        select_controls.marker(record);
+        controls.marker(record);
         
         // Create the expand control element which controls whether the data table is displayed for the feature.
-        select_controls.expander(record);
+        controls.expander(record);
 
         // Create control to update editable items.
-        if (record.location.editable) select_controls.update(record);
+        if (record.location.editable) controls.update(record);
 
         // Create control to trash editable items.
-        if (record.location.editable) select_controls.trash(record);
+        if (record.location.editable) controls.trash(record);
 
         // Add header element to the drawer.
         record.drawer.appendChild(record.header);

@@ -1,4 +1,4 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
 export default () => {
     

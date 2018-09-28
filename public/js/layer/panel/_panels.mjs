@@ -1,16 +1,16 @@
 import _xyz from '../../_xyz.mjs';
 
-import panel_cluster from './cluster.mjs';
+import cluster from './cluster.mjs';
 
-import layers_filters from './filters.mjs';
+import filters from './filters.mjs';
 
-import layers_style from './style.mjs';
+import style from './style.mjs';
 
-import block_theme from './themes.mjs';
+import themes from './themes.mjs';
 
-import layers_grid from './grid.mjs';
+import grid from './grid.mjs';
 
-import layers_catchments from './catchments.mjs';
+import catchments from './catchments.mjs';
 
 export default layer => {
 
@@ -33,22 +33,22 @@ export default layer => {
     });
 
     // add cluster control block.
-    if (layer.format === 'cluster') panel_cluster(layer, panel);
+    if (layer.format === 'cluster') cluster(layer, panel);
 
     // add filters block.
-    if (layer.infoj && layer.infoj.some( entry => entry.filter )) layers_filters(layer, panel);
+    if (layer.infoj && layer.infoj.some( entry => entry.filter )) filters(layer, panel);
 
     // add mvt style block.
-    if (layer.format === 'mvt') layers_style(layer, panel);
+    if (layer.format === 'mvt') style(layer, panel);
 
     // applay themes control.
-    if (layer.style.theme || layer.style.themes) block_theme(layer, panel);
+    if (layer.style.theme || layer.style.themes) themes(layer, panel);
 
     // add grid control block to panel.
-    if (layer.format === 'grid') layers_grid(layer, panel);
+    if (layer.format === 'grid') grid(layer, panel);
 
     // add catchment block to panel.
-    if (layer.catchments) layers_catchments(layer, panel);
+    if (layer.catchments) catchments(layer, panel);
 
     // Add panel control when panel contains children.
     if (panel.children.length > 0) {
