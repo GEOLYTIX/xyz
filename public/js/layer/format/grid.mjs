@@ -1,16 +1,11 @@
-import _xyz from './_xyz.mjs';
-
-import * as utils from './utils.mjs';
-
-import * as svg_symbols from './svg_symbols.mjs';
+import _xyz from '../../_xyz.mjs';
 
 import L from 'leaflet';
 
-export default function() {
+export default layer => {
 
     // Assign the table based on the zoom array.
-    let layer = this,
-        zoom = _xyz.ws.map.getZoom(),
+    let zoom = _xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
@@ -22,16 +17,16 @@ export default function() {
     layer.drawer.style.opacity = !layer.table? 0.4: 1;
 
     // Request layer data when table and display are true.
-    if(layer.table && layer.display && layer.locale === _xyz.ws.locale){
+    if(layer.table && layer.display && layer.locale === _xyz.locale){
         layer.loaded = false;
         layer.loader.style.display = 'block';
         layer.xhr = new XMLHttpRequest(); 
         
         // Open & send vector.xhr;
-        let bounds = _xyz.ws.map.getBounds();
+        let bounds = _xyz.map.getBounds();
 
-        layer.xhr.open('GET', _xyz.ws.host + '/api/grid/get?' + utils.paramString({
-            locale: _xyz.ws.locale,
+        layer.xhr.open('GET', _xyz.host + '/api/grid/get?' + _xyz.utils.paramString({
+            locale: _xyz.locale,
             layer: layer.layer,
             table: layer.table,
             size: layer.grid_size,
@@ -40,16 +35,16 @@ export default function() {
             south: bounds.getSouth(),
             east: bounds.getEast(),
             north: bounds.getNorth(),
-            token: _xyz.ws.token
+            token: _xyz.token
         }));
 
         // Draw layer on load event.
         layer.xhr.onload = e => {
 
-            if (e.target.status === 200 && layer.display && layer.locale === _xyz.ws.locale) {
+            if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) {
 
                 // Check for existing layer and remove from map.
-                if (layer.L) _xyz.ws.map.removeLayer(layer.L);
+                if (layer.L) _xyz.map.removeLayer(layer.L);
 
                 // Add geoJSON feature collection to the map.
                 layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
@@ -73,22 +68,22 @@ export default function() {
                             {
                                 icon: L.icon({
                                     iconSize: size,
-                                    iconUrl: svg_symbols.create({type: "dot", style: {color: layer.style.range[parseInt(color)] || '#C0C0C0'}})
+                                    iconUrl: _xyz.utils.svg_symbols({type: "dot", style: {color: layer.style.range[parseInt(color)] || '#C0C0C0'}})
                                 }),
                                 pane: layer.pane[0],
                                 interactive: false
                             });
                     }
-                }).addTo(_xyz.ws.map);
+                }).addTo(_xyz.map);
 
                 layer.loader.style.display = 'none';
                 layer.loaded = true;
-                _xyz.ws.layersCheck();
+                _xyz.layersCheck();
 
             }
         };
         layer.xhr.send();
-        //_xyz.ws.layersCheck();
+        //_xyz.layersCheck();
         
     }
 
@@ -129,13 +124,13 @@ export default function() {
             }
         });
 
-        layer.sizeMin = utils.getMath(data, 2, 'min');
+        layer.sizeMin = _xyz.utils.getMath(data, 2, 'min');
         layer.sizeAvg /= dots.features.length;
-        layer.sizeMax = utils.getMath(data, 2, 'max');
+        layer.sizeMax = _xyz.utils.getMath(data, 2, 'max');
 
-        layer.colorMin = utils.getMath(data, 3, 'min');
+        layer.colorMin = _xyz.utils.getMath(data, 3, 'min');
         layer.colorAvg /= dots.features.length;
-        layer.colorMax = utils.getMath(data, 3, 'max');
+        layer.colorMax = _xyz.utils.getMath(data, 3, 'max');
 
         let digits = layer.grid_ratio ? 2 : 0;
         document.getElementById('grid_legend_size__min').textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});

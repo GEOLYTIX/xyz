@@ -1,4 +1,4 @@
-import * as utils from './utils.mjs';
+import _xyz from './_xyz.mjs';
 
 export default () => {
 
@@ -12,9 +12,9 @@ export default () => {
     }
 
     // add scrollbar on the left to control container.
-    utils.scrolly(document.querySelector('.mod_container > .scrolly'));
+    _xyz.utils.scrolly(document.querySelector('.mod_container > .scrolly'));
 
     // reset scrollbar on control container after window resize.
-    window.addEventListener('resize', () => utils.scrolly(document.querySelector('.mod_container > .scrolly')));
+    window.addEventListener('resize', () => _xyz.utils.scrolly(document.querySelector('.mod_container > .scrolly')));
 
 };

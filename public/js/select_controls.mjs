@@ -1,7 +1,9 @@
-const utils = require('./utils.mjs');
+import _xyz from './_xyz.mjs';
 
-function clear(record) {
-    utils._createElement({
+
+
+export function clear(record) {
+    _xyz.utils._createElement({
         tag: 'i',
         options: {
             textContent: 'clear',
@@ -20,24 +22,24 @@ function clear(record) {
                 e.stopPropagation();
                 record.drawer.remove();
 
-                _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                _xyz.utils.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
                 if (record.location.L) _xyz.map.removeLayer(record.location.L);
                 if (record.location.M) _xyz.map.removeLayer(record.location.M);
                 if (record.location.D) _xyz.map.removeLayer(record.location.D);
                 record.location = null;
 
-                let freeRecords = _xyz.select.records.filter(function (record) {
+                let freeRecords = _xyz.ws.select.records.filter(function (record) {
                     if (!record.location) return record
                 });
 
-                if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+                if (freeRecords.length === _xyz.ws.select.records.length) _xyz.ws.select.resetModule();
             }
         }
     });
 }
 
-function zoom(record) {
-    utils._createElement({
+export function zoom(record) {
+    _xyz.utils._createElement({
         tag: 'i',
         options: {
             textContent: 'search',
@@ -59,8 +61,8 @@ function zoom(record) {
     });
 }
 
-function expander(record) {
-    utils._createElement({
+export function expander(record) {
+    _xyz.utils._createElement({
         tag: 'i',
         options: {
             className: 'material-icons cursor noselect btn_header expander',
@@ -75,7 +77,7 @@ function expander(record) {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent({
+                _xyz.utils.toggleExpanderParent({
                     expandable: record.drawer,
                     scrolly: document.querySelector('.mod_container > .scrolly')
                 });
@@ -84,8 +86,8 @@ function expander(record) {
     });
 }
 
-function clipboard(record){
-    utils._createElement({
+export function clipboard(record){
+    _xyz.utils._createElement({
         tag: 'i',
         options: {
             textContent: 'file_copy',
@@ -129,14 +131,14 @@ function clipboard(record){
                     }
                 });
                 
-                utils.copy_to_clipboard(data.join('\n'));
+                _xyz.utils.copy_to_clipboard(data.join('\n'));
             }
         }
     });
 }
 
-function marker(record) {
-    utils._createElement({
+export function marker(record) {
+    _xyz.utils._createElement({
         tag: 'i',
         options: {
             textContent: 'location_off',
@@ -165,8 +167,8 @@ function marker(record) {
     });
 }
 
-function update(record) {
-    record.upload = utils._createElement({
+export function update(record) {
+    record.upload = _xyz.utils._createElement({
         tag: 'i',
         options: {
             textContent: 'cloud_upload',
@@ -183,10 +185,10 @@ function update(record) {
             funct: e => {
                 e.stopPropagation();
 
-                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
+                let layer = _xyz.ws.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('POST', _xyz.ws.host + '/api/location/update?token=' + _xyz.ws.token);
+                xhr.open('POST', _xyz.host + '/api/location/update?token=' + _xyz.token);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = e => {
 
@@ -196,9 +198,9 @@ function update(record) {
                     record.upload.style.display = 'none';
 
                     // Remove changed class from all changed entries.
-                    utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
+                    _xyz.utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
 
-                    layer.getLayer();
+                    layer.getLayer(layer);
                     try {
                         record.location.M
                             .getLayers()[0]
@@ -223,8 +225,8 @@ function update(record) {
     });
 }
 
-function trash(record) {
-    utils._createElement({
+export function trash(record) {
+    _xyz.utils._createElement({
         tag: 'i',
         options: {
             textContent: 'delete',
@@ -240,15 +242,15 @@ function trash(record) {
             funct: e => {
                 e.stopPropagation();
 
-                let layer = _xyz.locales[_xyz.locale].layers[record.location.layer],
+                let layer = _xyz.ws.locales[_xyz.locale].layers[record.location.layer],
                     xhr = new XMLHttpRequest();
 
-                xhr.open('GET', _xyz.ws.host + '/api/location/delete?' + utils.paramString({
+                xhr.open('GET', _xyz.host + '/api/location/delete?' + _xyz.utils.paramString({
                     locale: _xyz.locale,
                     layer: layer.layer,
                     table: record.location.table,
                     id: record.location.id,
-                    token: _xyz.ws.token
+                    token: _xyz.token
                 }));
 
                 xhr.onload = e => {
@@ -256,33 +258,23 @@ function trash(record) {
                     if (e.target.status !== 200) return;
 
                     _xyz.map.removeLayer(layer.L);
-                    layer.getLayer();
+                    layer.getLayer(layer);
                     record.drawer.remove();
     
-                    _xyz.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+                    _xyz.utils.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
                     if (record.location.L) _xyz.map.removeLayer(record.location.L);
                     if (record.location.M) _xyz.map.removeLayer(record.location.M);
                     if (record.location.D) _xyz.map.removeLayer(record.location.D);
                     record.location = null;
     
-                    let freeRecords = _xyz.select.records.filter(record => {
+                    let freeRecords = _xyz.ws.select.records.filter(record => {
                         if (!record.location) return record
                     });
     
-                    if (freeRecords.length === _xyz.select.records.length) _xyz.select.resetModule();
+                    if (freeRecords.length === _xyz.ws.select.records.length) _xyz.ws.select.resetModule();
                 }
                 xhr.send();
             }
         }
     });
-}
-
-module.exports = {
-    clear: clear,
-    zoom: zoom,
-    expander: expander,
-    marker: marker,
-    clipboard: clipboard,
-    update: update,
-    trash: trash
 }

@@ -1,11 +1,15 @@
-const utils = require('./utils.mjs');
-const images = require('./select_images');
-const charts = require('./charts');
+import _xyz from './_xyz.mjs';
 
-function addInfojToList(record){
+
+
+import {addImages} from './select_images.mjs';
+
+import {bar_chart} from './charts.mjs';
+
+export function addInfojToList(record){
 
     // Create infojTable table to be returned from this function.
-    let table = utils._createElement({
+    let table = _xyz.utils._createElement({
         tag: "table",
         options: {
             className: "infojTable"
@@ -20,15 +24,15 @@ function addInfojToList(record){
     // Adds info about layer and group to infoj
     record.location.infoj.unshift({
         "label": "Layer",
-        "value": _xyz.locales[_xyz.locale].layers[record.location.layer].name,
+        "value": _xyz.ws.locales[_xyz.locale].layers[record.location.layer].name,
         "type": "text",
         "inline": true,
         "locked": true
     });
 
-    if(_xyz.locales[_xyz.locale].layers[record.location.layer].group) record.location.infoj.unshift({
+    if(_xyz.ws.locales[_xyz.locale].layers[record.location.layer].group) record.location.infoj.unshift({
         "label": "Group",
-        "value": _xyz.locales[_xyz.locale].groups[_xyz.locales[_xyz.locale].layers[record.location.layer].group].label,
+        "value": _xyz.ws.locales[_xyz.locale].groups[_xyz.ws.locales[_xyz.locale].layers[record.location.layer].group].label,
         "type": "text",
         "inline": true,
         "locked": true
@@ -37,7 +41,7 @@ function addInfojToList(record){
     // populate table with entries
     Object.values(record.location.infoj).forEach(entry => {
         //create tr
-        let tr = utils._createElement({
+        let tr = _xyz.utils._createElement({
             tag: "tr",
             options: {
                 className: 'lv-' + (entry.level || 0)
@@ -46,14 +50,14 @@ function addInfojToList(record){
         });
 
         if(entry.type === "group"){
-            let group_td = utils._createElement({
+            let group_td = _xyz.utils._createElement({
                 tag: "td",
                 options: {
                     colSpan: "2"
                 },
                 appendTo: tr
             }),
-                group_div = utils._createElement({
+                group_div = _xyz.utils._createElement({
                     tag: "div",
                     options: {
                         classList: "table-section expandable"
@@ -61,7 +65,7 @@ function addInfojToList(record){
                     appendTo: group_td
                 });
             
-            let group_header = utils._createElement({
+            let group_header = _xyz.utils._createElement({
                 tag: "div",
                 options: {
                     className: 'btn_subtext cursor noselect'//,
@@ -76,7 +80,7 @@ function addInfojToList(record){
                     event: 'click',
                     funct: e => {
                         e.stopPropagation();
-                            utils.toggleExpanderParent({
+                            _xyz.utils.toggleExpanderParent({
                                 expandable: group_div,
                                 accordeon: true,
                                 scrolly: document.querySelector('.mod_container > .scrolly')
@@ -85,7 +89,7 @@ function addInfojToList(record){
                     }
                 });
             
-            utils._createElement({
+            _xyz.utils._createElement({
                 tag: "span",
                 options: {
                     textContent: entry.label
@@ -94,7 +98,7 @@ function addInfojToList(record){
             });
             
             // Add icon which allows to expand / collaps panel.
-            utils._createElement({
+            _xyz.utils._createElement({
                 tag: 'i',
                 options: {
                     className: 'material-icons cursor noselect btn_header t-expander',
@@ -105,7 +109,7 @@ function addInfojToList(record){
                     event: 'click',
                     funct: e => {
                         e.stopPropagation();
-                        utils.toggleExpanderParent({
+                        _xyz.utils.toggleExpanderParent({
                             expandable: group_div,
                             scrolly: document.querySelector('.mod_container > .scrolly')
                         });
@@ -113,7 +117,7 @@ function addInfojToList(record){
                 }
             });
                 
-               let group_table = utils._createElement({
+               let group_table = _xyz.utils._createElement({
                     tag: "table",
                     style: {
                         cellPadding: '0',
@@ -124,7 +128,7 @@ function addInfojToList(record){
                 });
         
             Object.values(entry.items).forEach(item => {
-                let group_tr = utils._createElement({
+                let group_tr = _xyz.utils._createElement({
                     tag: "tr",
                     options: {
                         className: 'lv-' + (entry.level || 0)
@@ -151,13 +155,13 @@ function populateTable(record, entry, tr, table){
     }
 
     if(entry.chart) {
-        let chart = charts.bar_chart(record.location.layer, entry.chart);
+        let chart = bar_chart(record.location.layer, entry.chart);
         if(chart) table.appendChild(chart);
     }
 
     // Create new table cell for label and append to table.
     if (entry.label){
-        let label = utils._createElement({
+        let label = _xyz.utils._createElement({
             tag: 'td',
             options: {
                 className: 'label lv-' + (entry.level || 0),
@@ -181,10 +185,10 @@ function populateTable(record, entry, tr, table){
     // Create new row for text cells and append to table.
     let val;
     if (entry.type && !entry.inline && !(entry.type === 'integer' || entry.type === 'numeric' || entry.type === 'date')) {
-        tr = utils._createElement({tag: "tr", appendTo: table});
-        val = utils._createElement({tag: "td", options: {className: "val", colSpan: "2"}, appendTo: tr});
+        tr = _xyz.utils._createElement({tag: "tr", appendTo: table});
+        val = _xyz.utils._createElement({tag: "td", options: {className: "val", colSpan: "2"}, appendTo: tr});
     } else {
-        val = utils._createElement({
+        val = _xyz.utils._createElement({
             tag: "td",
             options: {
                 className: "val num"
@@ -197,7 +201,7 @@ function populateTable(record, entry, tr, table){
     if (entry.images) {
         val.style.position = 'relative';
         val.style.height = '180px';
-        val.appendChild(images.addImages(record, entry.value.reverse() || []));
+        val.appendChild(addImages(record, entry.value.reverse() || []));
         return
     }
 
@@ -216,9 +220,9 @@ function populateTable(record, entry, tr, table){
     // Create range input for range fields.
     if (entry.range) {
         val.textContent = entry.value || entry.value == 0 ? parseInt(entry.value): entry.range[0];
-        tr = utils._createElement({tag: "tr", appendTo: table});
+        tr = _xyz.utils._createElement({tag: "tr", appendTo: table});
 
-        let range = utils._createElement({
+        let range = _xyz.utils._createElement({
             tag: "td",
             options: {
                 className: "range",
@@ -227,7 +231,7 @@ function populateTable(record, entry, tr, table){
             appendTo: tr
         });
 
-        let rangeInput = utils._createElement({
+        let rangeInput = _xyz.utils._createElement({
             tag: "input",
             options: {
                 value: entry.value || entry.value == 0 ? parseInt(entry.value): entry.range[0],
@@ -244,7 +248,7 @@ function populateTable(record, entry, tr, table){
                     //console.log(e.target.max);
                     //console.log(e.target.min);
                     //console.log(e.target);
-                    utils.addClass(val, 'changed');
+                    _xyz.utils.addClass(val, 'changed');
                     val.textContent = e.target.value;
                     record.upload.style.display = 'block';
                     entry.value = e.target.value;
@@ -257,7 +261,7 @@ function populateTable(record, entry, tr, table){
     
     // Create input text area for editable fields
     if (entry.text) {
-        utils._createElement({
+        _xyz.utils._createElement({
             tag: 'textarea',
             options: {
                 value: entry.value || '',
@@ -267,7 +271,7 @@ function populateTable(record, entry, tr, table){
             eventListener: {
                 event: 'keyup',
                 funct: e => {
-                    utils.addClass(e.target, 'changed');
+                    _xyz.utils.addClass(e.target, 'changed');
                     record.upload.style.display = 'block';
                     entry.value = e.target.value;
                 }
@@ -279,13 +283,13 @@ function populateTable(record, entry, tr, table){
     // Create select input for options.
     if (entry.options) {
         // Create select prime element.
-        let select = utils._createElement({
+        let select = _xyz.utils._createElement({
             tag: 'select',
             appendTo: val,
             eventListener: {
                 event: 'change',
                 funct: e => {
-                    utils.addClass(e.target, 'changed');
+                    _xyz.utils.addClass(e.target, 'changed');
                     record.upload.style.display = 'block';
                     entry.value = e.target.options[e.target.value].textContent;
                     entry.value = e.target[e.target.value].label;
@@ -300,7 +304,7 @@ function populateTable(record, entry, tr, table){
         // Create options with dataset list of sub options and append to select prime.
         Object.keys(entry.options).map(function (i) {
 
-            let opt = utils._createElement({
+            let opt = _xyz.utils._createElement({
                 tag: "option",
                 options: {
                     textContent: String(entry.options[i]).split(';')[0],
@@ -317,7 +321,7 @@ function populateTable(record, entry, tr, table){
         });
 
         // Create select_input which holds the value of the select prime option.
-        let select_input = utils._createElement({
+        let select_input = _xyz.utils._createElement({
             tag: "input",
             options: {
                 value: entry.value,
@@ -329,7 +333,7 @@ function populateTable(record, entry, tr, table){
             eventListener: {
                 event: "keyup",
                 funct: e => {
-                    utils.addClass(e.target, 'changed');
+                    _xyz.utils.addClass(e.target, 'changed');
                     record.upload.style.display = 'block';
                     entry.value = e.target.value;
                 }
@@ -345,10 +349,10 @@ function populateTable(record, entry, tr, table){
         
         if (entry.subfield) {
             // Create a new table row for select sub label
-            tr = utils._createElement({tag: "tr", appendTo: table});
+            tr = _xyz.utils._createElement({tag: "tr", appendTo: table});
 
             // Add select sub label to new tabel row.
-            let label = utils._createElement({
+            let label = _xyz.utils._createElement({
                 tag: "td",
                 options: {
                     className: 'label lv-' + (entry.level || 0),
@@ -358,10 +362,10 @@ function populateTable(record, entry, tr, table){
             });
 
             // Create a new table row for select sub element.
-            tr = utils._createElement({tag: "tr", appendTo: table});
+            tr = _xyz.utils._createElement({tag: "tr", appendTo: table});
 
             // Create new td with subselect element and add to current table row.
-            let td = utils._createElement({
+            let td = _xyz.utils._createElement({
                 tag: "td",
                 options: {
                     className: "val",
@@ -370,14 +374,14 @@ function populateTable(record, entry, tr, table){
                 appendTo: tr
             });
             
-            subselect = utils._createElement({
+            subselect = _xyz.utils._createElement({
                 tag: "select",
                 eventListener: {
                     event: "change",
                     funct: e => {
                         // Show select input only for last select option (other).
                         toggleSelectVisible(e.target, subselect_input, entry, "subvalue");
-                        utils.addClass(this, 'changed');
+                        _xyz.utils.addClass(this, 'changed');
                         record.upload.style.display = 'block';
                         entry.subvalue = subselect_input.value;
                     }
@@ -395,7 +399,7 @@ function populateTable(record, entry, tr, table){
             suboptions.push('other');
 
             Object.keys(suboptions).map(function (i) {
-                utils.createElement('option', {
+                _xyz.utils.createElement('option', {
                     textContent: suboptions[i],
                     value: i,
                     selected: (suboptions[i] == entry.subvalue)
@@ -403,7 +407,7 @@ function populateTable(record, entry, tr, table){
             });
 
             // Create select_input which holds the value of the select prime option.
-            subselect_input = utils._createElement({
+            subselect_input = _xyz.utils._createElement({
                 tag: "input",
                 options: {
                     value: entry.subvalue,
@@ -415,7 +419,7 @@ function populateTable(record, entry, tr, table){
                 eventListener: {
                     event: "keyup",
                     funct: e => {
-                        utils.addClass(e.target, 'changed');
+                        _xyz.utils.addClass(e.target, 'changed');
                         record.upload.style.display = 'block';
                         entry.subvalue = e.target.value;
                     }
@@ -423,7 +427,7 @@ function populateTable(record, entry, tr, table){
                 eventListener: {
                     event: "change",
                     funct: e => {
-                        utils.addClass(e.target, 'changed');
+                        _xyz.utils.addClass(e.target, 'changed');
                         record.upload.style.display = 'block';
                         entry.subvalue = e.target.options[e.target.value].textContent;
                         subselect_input.value = e.target.options[e.target.value].textContent;
@@ -452,7 +456,7 @@ function populateTable(record, entry, tr, table){
                 subselect.innerHTML = '';
                 
                 Object.keys(suboptions).map(function (i) {
-                    subselect.appendChild(utils.createElement('option', {
+                    subselect.appendChild(_xyz.utils.createElement('option', {
                         textContent: suboptions[i],
                         value: i,
                         selected: (suboptions[i] == entry.subvalue)
@@ -464,7 +468,7 @@ function populateTable(record, entry, tr, table){
             }
             
             // Add changed class and make cloud save visible.
-            utils.addClass(this, 'changed');
+            _xyz.utils.addClass(this, 'changed');
             record.upload.style.display = 'block';
             entry.value = e.target[e.target.value].label;
         });
@@ -474,7 +478,7 @@ function populateTable(record, entry, tr, table){
 
     // Creat input for editable fields
     if(record.location.editable && !entry.locked && !entry.layer){
-        utils._createElement({
+        _xyz.utils._createElement({
             tag: 'input',
             options: {
                 value: entry.value || '',
@@ -484,7 +488,7 @@ function populateTable(record, entry, tr, table){
             eventListener: {
                 event: 'keyup',
                 funct: e => {
-                    utils.addClass(e.target, 'changed');
+                    _xyz.utils.addClass(e.target, 'changed');
                     record.upload.style.display = 'block';
                     entry.value = e.target.value;
                 }
@@ -540,7 +544,7 @@ function insertStreetViewImage(record, tr) {
 
     tr.classList += " tr_streetview";
 
-    let td = utils._createElement({
+    let td = _xyz.utils._createElement({
         tag: "td",
         options: {
             className: 'td_streetview',
@@ -549,7 +553,7 @@ function insertStreetViewImage(record, tr) {
         appendTo: tr
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: "div",
         options: {
             className: 'div_streetview'
@@ -557,7 +561,7 @@ function insertStreetViewImage(record, tr) {
         appendTo: td
     });
 
-    let a = utils._createElement({
+    let a = _xyz.utils._createElement({
         tag: "a",
         options: {
             href: 'https://www.google.com/maps?cbll=' + record.location.marker[1] + ',' + record.location.marker[0] + '&layer=c',
@@ -566,18 +570,14 @@ function insertStreetViewImage(record, tr) {
         appendTo: td
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: "img",
         options: {
             className: 'img_streetview',
-            src: _xyz.ws.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE&token=' + _xyz.ws.token
+            src: _xyz.host + '/proxy/image?uri=https://maps.googleapis.com/maps/api/streetview?location=' + record.location.marker[1] + ',' + record.location.marker[0] + '&size=290x230&provider=GOOGLE&token=' + _xyz.token
         },
         appendTo: a
     });
 
     return tr;
-}
-
-module.exports = {
-    addInfojToList: addInfojToList
 }

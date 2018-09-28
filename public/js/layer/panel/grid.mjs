@@ -1,14 +1,11 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
 
-import * as utils from './utils.mjs';
-
-import d3 from 'd3';
-// import d3 from './d3.mjs';
+import d3_selection from "d3-selection";
 
 export default (layer, panel) => {
 
     let width = layer.drawer.clientWidth,
-        legend = utils._createElement({
+        legend = _xyz.utils._createElement({
             tag: 'div',
             options: {
                 className: 'section report-block'
@@ -17,51 +14,56 @@ export default (layer, panel) => {
         });
 
     // Select dropdown for size.
-    let selSize = utils.createElement('select', {
+    let selSize = _xyz.utils.createElement('select', {
         classList: 'selSize ctrl',
         name: 'selSize'
     });
+
     setDropDown(selSize, 'grid_size');
+
     legend.appendChild(selSize);
 
     // Create a D3 svg for the legend and nest between size and color drop down.
-    let svg = d3
-        .select(legend)
-        .append('svg')
-        .attr('width', width);
+    let svg = d3_selection.select(legend).append('svg').attr('width', width);
 
     // Select dropdown for color.
-    let selColor = utils.createElement('select', {
+    let selColor = _xyz.utils.createElement('select', {
         classList: 'selColor ctrl',
         name: 'selColor'
     });
+
     setDropDown(selColor, 'grid_color');
+
     legend.appendChild(selColor);
 
     // Grid ration checkbox element.
-    let gridRatio = utils.checkbox(function (e) {
+    let gridRatio = _xyz.utils.checkbox(function (e) {
+
         // Checkbox event to toggle grid_ratio.
         layer.chkGridRatio = e.target.checked;
         layer.grid_ratio = layer.chkGridRatio;
+
         if (layer.grid_ratio) {
-            _xyz.ws.setHook('grid_ratio', true);
+            _xyz.utils.setHook('grid_ratio', true);
+
         } else {
-            _xyz.ws.removeHook('grid_ratio');
+            _xyz.utils.removeHook('grid_ratio');
         }
-        layer.getLayer();
+
+        layer.getLayer(layer);
 
     }, {
             label: 'Display colour values as a ratio to the size value.',
             id: 'chkGridRatio',
             className: 'ctrl',
-            checked: layer.grid_ratio || _xyz.ws.hooks.grid_ratio
+            checked: layer.grid_ratio || _xyz.hooks.grid_ratio
         });
 
     // Set checked from either hook.grid_ratio or layer.grid_ratio.
-    layer.chkGridRatio = layer.grid_ratio || _xyz.ws.hooks.grid_ratio;
+    layer.chkGridRatio = layer.grid_ratio || _xyz.hooks.grid_ratio;
     layer.grid_ratio = layer.chkGridRatio;
 
-    if (layer.chkGridRatio) _xyz.ws.setHook('grid_ratio', true);
+    if (layer.chkGridRatio) _xyz.utils.setHook('grid_ratio', true);
 
     legend.appendChild(gridRatio);
 
@@ -71,7 +73,7 @@ export default (layer, panel) => {
         // Populate select options
         layer.queryFields.map(function (queryField) {
             select.appendChild(
-                utils.createElement('option', {
+                _xyz.utils.createElement('option', {
                     value: queryField[0],
                     textContent: queryField[1]
                 })
@@ -79,20 +81,21 @@ export default (layer, panel) => {
         });
 
         // Set the select from either hook[query] or layer[query].
-        select.selectedIndex = _xyz.ws.hooks[query] || layer[query] ? utils.getSelectOptionsIndex(select.options, _xyz.ws.hooks[query] || layer[query]) : 0;
+        select.selectedIndex = _xyz.hooks[query] || layer[query] ? _xyz.utils.getSelectOptionsIndex(select.options, _xyz.hooks[query] || layer[query]) : 0;
         layer[query] = select.value;
-        _xyz.ws.setHook(query, select.value);
+        _xyz.utils.setHook(query, select.value);
 
         // onchange event to set the hook and title.
         select.onchange = function () {
-            _xyz.ws.setHook(query, event.target.value);
+            _xyz.utils.setHook(query, event.target.value);
             layer[query] = event.target.value;
-            layer.getLayer();
+            layer.getLayer(layer);
         };
     }
 
     // Add default style.range if none exists.
     if (!layer.style) layer.style = {};
+
     if (!layer.style.range) layer.style.range = [
         "#15773f",
         "#66bd63",
@@ -104,28 +107,24 @@ export default (layer, panel) => {
     ];
 
     // Create SVG grid legend
-    let
-        yTrack = 35,
+    let yTrack = 35,
         padding = 0,
         _width = width - (2 * padding),
         n = layer.style.range.length;
 
     for (let i = 0; i < n; i++) {
 
-        let
-            r = (i + 2) * 10 / n,
+        let r = (i + 2) * 10 / n,
             w = _width / n,
             x = padding + (i * w);
 
-        svg
-            .append('circle')
+        svg.append('circle')
             .attr('cx', x + w / 2 + 1)
             .attr('cy', yTrack + 1)
             .attr('r', r)
             .style('fill', '#333');
 
-        svg
-            .append('circle')
+        svg.append('circle')
             .attr('cx', x + w / 2)
             .attr('cy', yTrack)
             .attr('r', r)
@@ -164,12 +163,10 @@ export default (layer, panel) => {
 
     for (let i = 0; i < n; i++) {
 
-        let
-            w = _width / n,
+        let w = _width / n,
             x = padding + i * w;
 
-        svg
-            .append('rect')
+        svg.append('rect')
             .attr('x', x)
             .attr('y', yTrack)
             .attr('width', w)

@@ -1,14 +1,11 @@
-import * as utils from './utils.mjs';
+import _xyz from '../../_xyz.mjs';
 
-import d3 from 'd3';
-// import d3 from './d3.mjs';
-
-import * as svg_symbols from './svg_symbols.mjs';
+import d3_selection from "d3-selection";
 
 export default (layer, panel) => {
 
     // Create panel block.
-    let block = utils._createElement({
+    let block = _xyz.utils._createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -17,7 +14,7 @@ export default (layer, panel) => {
     });
 
     // Create block title expander.
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -28,7 +25,7 @@ export default (layer, panel) => {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent({
+                _xyz.utils.toggleExpanderParent({
                     expandable: block,
                     accordeon: true,
                     scrolly: document.querySelector('.mod_container > .scrolly')
@@ -38,7 +35,7 @@ export default (layer, panel) => {
     });
 
     // Create panel block.
-    layer.legend = utils._createElement({
+    layer.legend = _xyz.utils._createElement({
         tag: 'div',
         options: {
             classList: 'legend'
@@ -51,7 +48,7 @@ export default (layer, panel) => {
     if (layer.style.themes) {
 
         // Theme drop down
-        utils._createElement({
+        _xyz.utils._createElement({
             tag: 'span',
             options: {
                 textContent: 'Select thematic style…'
@@ -59,7 +56,7 @@ export default (layer, panel) => {
             appendTo: block
         });
 
-        let select = utils._createElement({
+        let select = _xyz.utils._createElement({
             tag: 'select',
             options: {
                 onchange: e => {
@@ -70,7 +67,7 @@ export default (layer, panel) => {
 
                     layer.style.theme = layer.style.themes[e.target.selectedIndex];
                     applyTheme(layer);
-                    layer.getLayer();
+                    layer.getLayer(layer);
                 }
             },
             appendTo: block
@@ -78,7 +75,7 @@ export default (layer, panel) => {
 
         // add themes to dropdown
         Object.keys(layer.style.themes).forEach(key => {
-            utils._createElement({
+            _xyz.utils._createElement({
                 tag: 'option',
                 options: {
                     value: key,
@@ -90,7 +87,7 @@ export default (layer, panel) => {
 
         if (layer.style.themes.length === 1) select.disabled = true;
 
-        // utils._createElement({
+        // _xyz.utils._createElement({
         //     tag: 'option',
         //     options: {
         //         textContent: 'Create new theme…'
@@ -101,7 +98,7 @@ export default (layer, panel) => {
     } else {
 
         // Single theme title.
-        if (layer.style.theme.label) utils._createElement({
+        if (layer.style.theme.label) _xyz.utils._createElement({
             tag: 'span',
             options: {
                 classList: 'title',
@@ -140,18 +137,16 @@ function polyGraduated(layer) {
 
     let width = layer.drawer.clientWidth;
 
-    let svg = d3
-        .select(layer.legend)
-        .append('svg')
-        .attr('width', width),
+    let svg = d3_selection.select(layer.legend).append('svg').attr('width', width),
         y = 10;
 
     layer.style.theme.cat.forEach(cat => {
-        // // two columns
-        // for (let i = 0; i < keys.length; i++) {
-        //     y = i % 2 ? y : y += 25;
-        //     x = i % 2 ? w / 2 + 15 : 15;
-        // }
+
+        // two columns
+        /*for (let i = 0; i < keys.length; i++) {
+            y = i % 2 ? y : y += 25;
+            x = i % 2 ? w / 2 + 15 : 15;
+        }*/
 
         // Attach box for the style category.
         svg.append('rect')
@@ -183,13 +178,14 @@ function polyCategorized(layer) {
 
     let width = layer.drawer.clientWidth;
 
-    let svg = d3
+    let svg = d3_selection
         .select(layer.legend)
         .append('svg')
         .attr('width', width),
         y = 10;
 
     Object.keys(layer.style.theme.cat).forEach(item => {
+
         // Attach box for the style category.
         svg.append('rect')
             .attr('x', 4)
@@ -220,7 +216,7 @@ function polyCategorized(layer) {
                     layer.style.theme.cat[item].style.stroke = false;
                     layer.style.theme.cat[item].style.fill = false;
                 }
-                layer.getLayer();
+                layer.getLayer(layer);
             });
 
         y += 20;
@@ -255,7 +251,7 @@ function polyCategorized(layer) {
                     layer.style.default.fill = false;
                 }
 
-                layer.getLayer();
+                layer.getLayer(layer);
             });
 
         y += 20
@@ -269,7 +265,7 @@ function clusterCategorized(layer) {
 
     let width = layer.drawer.clientWidth;
 
-    let svg = d3
+    let svg = d3_selection
         .select(layer.legend)
         .append('svg')
         .attr('width', width),
@@ -285,11 +281,11 @@ function clusterCategorized(layer) {
 
     Object.keys(layer.style.theme.cat).forEach(item => {
 
-        // // two columns
-        // for (let i = 0; i < keys.length; i++) {
-        //     y = i % 2 ? y : y += 25;
-        //     x = i % 2 ? w / 2 + 15 : 15;
-        // }
+        // two columns
+        /*for (let i = 0; i < keys.length; i++) {
+            y = i % 2 ? y : y += 25;
+            x = i % 2 ? w / 2 + 15 : 15;
+        }*/
 
         // Attach box for the style category.
         svg.append('image')
@@ -297,7 +293,7 @@ function clusterCategorized(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', svg_symbols.create(layer.style.theme.cat[item].marker));
+            .attr('xlink:href', _xyz.utils.svg_symbols(layer.style.theme.cat[item].marker));
 
         // Attach label with filter on click for the style category.
         svg.append('text')
@@ -318,7 +314,7 @@ function clusterCategorized(layer) {
                     layer.filter[_field].ni.push(item);
                 }
 
-                layer.getLayer();
+                layer.getLayer(layer);
             });
 
         y += 20;
@@ -331,7 +327,7 @@ function clusterCategorized(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', svg_symbols.create(layer.style.marker));
+            .attr('xlink:href', _xyz.utils.svg_symbols(layer.style.marker));
 
         // Attach text with filter on click for the other/default category.
         svg.append('text')
@@ -351,7 +347,7 @@ function clusterCategorized(layer) {
                     layer.filter[_field].in = Object.keys(layer.style.theme.cat);
                 }
 
-                layer.getLayer();
+                layer.getLayer(layer);
             });
 
         y += 20;
@@ -428,7 +424,7 @@ function clusterGraduated(layer) {
 
     let width = layer.drawer.clientWidth;
 
-    let svg = d3
+    let svg = d3_selection
         .select(layer.legend)
         .append('svg')
         .attr('width', width),
@@ -436,11 +432,11 @@ function clusterGraduated(layer) {
 
     layer.style.theme.cat.forEach(cat => {
 
-        // // two columns
-        // for (let i = 0; i < keys.length; i++) {
-        //     y = i % 2 ? y : y += 25;
-        //     x = i % 2 ? w / 2 + 15 : 15;
-        // }
+        // two columns
+        /*for (let i = 0; i < keys.length; i++) {
+            y = i % 2 ? y : y += 25;
+            x = i % 2 ? w / 2 + 15 : 15;
+        }*/
 
         // Attach box for the style category.
         svg.append('image')
@@ -448,7 +444,7 @@ function clusterGraduated(layer) {
             .attr('y', y)
             .attr('width', 20)
             .attr('height', 20)
-            .attr('xlink:href', svg_symbols.create(cat.marker) || '');
+            .attr('xlink:href', _xyz.utils.svg_symbols(cat.marker) || '');
         
         // Attach label with filter on click for the style category.
         svg.append('text')

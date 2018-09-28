@@ -1,9 +1,11 @@
-const utils = require('./utils.mjs');
+import _xyz from './_xyz.mjs';
 
-function addImages(record, images) {
+
+
+export function addImages(record, images) {
 
     // create image container
-    let img_container = utils.createElement('div', {
+    let img_container = _xyz.utils.createElement('div', {
         className: 'img-container'
     })
 
@@ -12,23 +14,23 @@ function addImages(record, images) {
     img_container.appendChild(img_tr);
 
     // add image picker
-    let img_td = utils.createElement('td', {
+    let img_td = _xyz.utils.createElement('td', {
         className: 'addImageCell',
     });
     img_tr.appendChild(img_td);
 
-    let add_img_label = utils.createElement('label', {
+    let add_img_label = _xyz.utils.createElement('label', {
         htmlFor: 'addImage_' + record.letter,
     });
     img_td.appendChild(add_img_label);
 
-    let add_img_icon = utils.createElement('i', {
+    let add_img_icon = _xyz.utils.createElement('i', {
         className: 'material-icons cursor noselect',
         textContent: 'add_a_photo'
     });
     add_img_label.appendChild(add_img_icon);
 
-    let add_img = utils.createElement('input', {
+    let add_img = _xyz.utils.createElement('input', {
         id: 'addImage_' + record.letter,
         type: 'file',
         accept: 'image/*;capture=camera'
@@ -40,14 +42,14 @@ function addImages(record, images) {
     for (let image of images) {
         img_td = document.createElement('td');
         img_tr.appendChild(img_td);
-        let _img = utils.createElement('img', {
+        let _img = _xyz.utils.createElement('img', {
             id: image.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
             src: image
         });
         _img.style.border = '3px solid #EEE';
 
         // add delete button / control
-        let btn_del = utils.createElement('button', {
+        let btn_del = _xyz.utils.createElement('button', {
             title: 'Delete image',
             className: 'btn_del',
             innerHTML: '<i class="material-icons">delete_forever</i>'
@@ -101,13 +103,13 @@ function addImages(record, images) {
                 canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
                 let dataURL = canvas.toDataURL('image/jpeg', 0.5);
-                let _img = utils.createElement('img', {
+                let _img = _xyz.utils.createElement('img', {
                     src: dataURL
                 });
                 _img.style.border = '3px solid #090';
 
                 // add delete button / control
-                let btn_del = utils.createElement('button', {
+                let btn_del = _xyz.utils.createElement('button', {
                     title: 'Delete image',
                     className: 'btn_del',
                     innerHTML: '<i class="material-icons">delete_forever</i>'
@@ -118,7 +120,7 @@ function addImages(record, images) {
                 newImage.appendChild(btn_del);
                     
                 // add save button / control
-                let btn_save = utils.createElement('button', {
+                let btn_save = _xyz.utils.createElement('button', {
                     title: 'Save image',
                     className: 'btn_save',
                     innerHTML: '<i class="material-icons">cloud_upload</i>'
@@ -126,7 +128,7 @@ function addImages(record, images) {
                 btn_save.addEventListener('click', function () {
                     btn_del.remove();
                     btn_save.remove();
-                    upload_image(record, _img, utils.dataURLToBlob(dataURL));
+                    upload_image(record, _img, _xyz.utils.dataURLToBlob(dataURL));
                 });
                 newImage.appendChild(btn_save);
 
@@ -149,12 +151,12 @@ function addImages(record, images) {
 function upload_image(record, img, blob) {
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', _xyz.ws.host + '/api/images/new?' + utils.paramString({
+    xhr.open('POST', _xyz.host + '/api/images/new?' + _xyz.utils.paramString({
         dbs: record.location.dbs,
         table: record.location.table,
         qID: record.location.qID,
         id: record.location.id,
-        token: _xyz.ws.token
+        token: _xyz.ws.ws.token
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = e => {
@@ -169,7 +171,7 @@ function upload_image(record, img, blob) {
             img.src = json.image_url;
 
             // add delete button / control
-            let btn_del = utils.createElement('button', {
+            let btn_del = _xyz.utils.createElement('button', {
                 title: 'Delete image',
                 className: 'btn_del',
                 innerHTML: '<i class="material-icons">delete_forever</i>'
@@ -195,14 +197,14 @@ function remove_image(record, img) {
     document.getElementById(img.id).remove();
     
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', _xyz.ws.host + '/api/images/delete?' + utils.paramString({
+    xhr.open('GET', _xyz.ws.ws.host + '/api/images/delete?' + _xyz.utils.paramString({
         locale: _xyz.locale,
         layer: record.location.layer,
         table: record.location.table,
         id: record.location.id,
         image_id: img.id,
         image_src: encodeURIComponent(img.src),
-        token: _xyz.ws.token
+        token: _xyz.ws.ws.token
     }));
     // xhr.onload = e => {
     //     if (e.target.status === 200) {
@@ -210,8 +212,4 @@ function remove_image(record, img) {
     //     }
     // }
     xhr.send();
-}
-
-module.exports = {
-    addImages: addImages
 }

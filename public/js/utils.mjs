@@ -1,5 +1,4 @@
-import d3 from 'd3';
-// import d3 from './d3.mjs';
+export {default as svg_symbols} from './svg_symbols.mjs';
 
 export function scrollElement(element, to, duration) {
     if (duration <= 0) return;
@@ -36,6 +35,7 @@ export function removeClass(elements, myClass) {
     // if we have a selector, get the chosen elements
     if (typeof (elements) === 'string') {
         elements = document.querySelectorAll(elements);
+
     } else if (elements.tagName) {
         elements = [elements];
     }
@@ -55,6 +55,7 @@ export function toggleClass(elements, myClass) {
     // if we have a selector, get the chosen elements
     if (typeof (elements) === 'string') {
         elements = document.querySelectorAll(elements);
+
     } else if (elements.tagName) {
         elements = [elements];
     }
@@ -94,16 +95,19 @@ export function indexInParent(node) {
     if (node) {
         let children = node.parentNode.childNodes,
             num = 0;
+
         for (let i = 0; i < children.length; i++) {
             if (children[i] === node) return num;
             if (children[i].nodeType === 1) num++;
         }
     }
+
     return -1;
 }
 
 export function debounce(func, wait) {
     let timeout;
+
     return function () {
         clearTimeout(timeout);
         timeout = setTimeout(function () {
@@ -115,19 +119,19 @@ export function debounce(func, wait) {
 
 export function paramString(param) {
     let encodedString = '';
+
     Object.keys(param).forEach(key => {
         if (param[key] && encodedString.length > 0) encodedString += '&';
         if (param[key]) encodedString += encodeURI(key + '=' + param[key]);
     });
+
     return encodedString;
 }
 
 export function createElement(tag, options, appendTo) {
     let el = document.createElement(tag);
 
-    if (options && typeof options === 'object')
-        Object.keys(options)
-            .map(key => el[key] = options[key]);
+    if (options && typeof options === 'object') Object.keys(options).map(key => el[key] = options[key]);
 
     if (appendTo) appendTo.appendChild(el);
 
@@ -137,19 +141,13 @@ export function createElement(tag, options, appendTo) {
 export function _createElement(_el) {
     let el = document.createElement(_el.tag);
 
-    if (_el.options)
-        Object.keys(_el.options)
-            .map(key => el[key] = _el.options[key]);
+    if (_el.options) Object.keys(_el.options).map(key => el[key] = _el.options[key]);
 
-    if (_el.style)
-        Object.keys(_el.style)
-            .map(key => el.style[key] = _el.style[key]);
+    if (_el.style) Object.keys(_el.style).map(key => el.style[key] = _el.style[key]);
 
-    if (_el.appendTo)
-        _el.appendTo.appendChild(el);
+    if (_el.appendTo) _el.appendTo.appendChild(el);
 
-    if (_el.eventListener)
-        el.addEventListener(_el.eventListener.event, _el.eventListener.funct);
+    if (_el.eventListener) el.addEventListener(_el.eventListener.event, _el.eventListener.funct);
 
     return el;
 }
@@ -158,6 +156,7 @@ export function getSelectOptionsIndex(options, value) {
     for (let i = 0; i < options.length; i++) {
         if (options[i].value == value) return i;
     }
+
     return -1;
 }
 
@@ -174,10 +173,9 @@ export function getMath(arr, key, type) {
 export function createStatsTable(infoj) {
     let table = '';
     Object.keys(infoj).map(function (key) {
-        //typeof (infoj[key]) === 'object' ?
-        //statsTableGroup(infoj, key, 'title') :
         table += '<tr><td class="lv-0">' + key + '</td><td class="val">' + infoj[key].toLocaleString('en-GB') + '</td></tr>';
     });
+
     return table;
 }
 
@@ -188,6 +186,7 @@ export function dataURLToBlob(dataURL) {
         let parts = dataURL.split(','),
             contentType = parts[0].split(':')[1],
             raw = parts[1];
+
         return new Blob([raw], { type: contentType });
     }
 
@@ -205,9 +204,9 @@ export function dataURLToBlob(dataURL) {
 }
 
 export function toggleExpanderParent(params) {
-    
-    if(!params.expandedTag) params.expandedTag = 'expanded';
-    if(!params.expandableTag) params.expandableTag = 'expandable';
+
+    if (!params.expandedTag) params.expandedTag = 'expanded';
+    if (!params.expandableTag) params.expandableTag = 'expandable';
 
     // Check whether parent is expanded.
     if (hasClass(params.expandable, params.expandedTag)) {
@@ -217,6 +216,7 @@ export function toggleExpanderParent(params) {
 
         // Actualize scrollbar of scrolly element.
         if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
+
         return
     }
 
@@ -302,8 +302,7 @@ export function checkbox(onchange, options) {
 
     if (options.checked) input.checked = true;
 
-    if (typeof (onchange) === 'function')
-        input.addEventListener('change', onchange);
+    if (typeof (onchange) === 'function') input.addEventListener('change', onchange);
 
     return checkbox;
 }
@@ -311,24 +310,24 @@ export function checkbox(onchange, options) {
 export function slider(options) {
 
     _createElement({
-        tag: 'span', 
+        tag: 'span',
         options: {
             textContent: options.title
-        }, 
+        },
         appendTo: options.appendTo
     });
 
     _createElement({
-        tag: 'span', 
+        tag: 'span',
         options: {
             textContent: options.default,
             className: "bold"
-        }, 
+        },
         appendTo: options.appendTo
     });
 
     let range_div = _createElement({
-        tag: 'div', 
+        tag: 'div',
         options: {
             className: "range"
         },
@@ -336,7 +335,7 @@ export function slider(options) {
     });
 
     _createElement({
-        tag: 'input', 
+        tag: 'input',
         options: {
             type: 'range',
             min: options.min,
@@ -349,29 +348,26 @@ export function slider(options) {
 }
 
 export function rgbToHex(color) {
-
     let hexDigits = new Array
         ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
+
+    if (color.substr(0, 1) === '#') return color;
+
+    color = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    return "#" + hex(color[1]) + hex(color[2]) + hex(color[3]);
 
     function hex(x) {
         return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
     }
-
-    if (color.substr(0, 1) === '#') {
-        return color;
-    } else {
-        color = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-        return "#" + hex(color[1]) + hex(color[2]) + hex(color[3]);
-    }
 }
 
-export function clone(_obj) {
-    let _clone;
-    _obj instanceof Array ? _clone = [] : _clone = {};
-    Object.keys(_obj).map(function (key) {
-        _clone[key] = _obj[key];
+export function clone(obj) {
+    let clone;
+    obj instanceof Array ? clone = [] : clone = {};
+    Object.keys(obj).map(function (key) {
+        clone[key] = obj[key];
     });
-    return _clone;
+    return clone;
 }
 
 export function get_index_by_value(json_arr, key, val) {
@@ -390,29 +386,28 @@ export function copy_to_clipboard(str) {
     textArea.remove();
 }
 
-export function wrap(text, width) { // wraps svg text
-    text.each(function () {
-        let
-            text = d3.select(this),
-            words = text.text().split(/\s+/).reverse(),
-            word,
-            line = [],
-            lineNumber = 0,
-            lineHeight = 1.1, // ems
-            x = text.attr("x"),
-            y = text.attr("y"),
-            dy = 1.1,
-            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+// export function wrap(text, width) { // wraps svg text
+//     text.each(function () {
+//         let text = d3_selection.select(this),
+//             words = text.text().split(/\s+/).reverse(),
+//             word,
+//             line = [],
+//             lineNumber = 0,
+//             lineHeight = 1.1, // ems
+//             x = text.attr("x"),
+//             y = text.attr("y"),
+//             dy = 1.1,
+//             tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
 
-        while (word = words.pop()) {
-            line.push(word);
-            tspan.text(line.join(" "));
-            if (tspan.node().getComputedTextLength() > width) {
-                line.pop();
-                tspan.text(line.join(" "));
-                line = [word];
-                tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-            }
-        }
-    });
-}
+//         while (word = words.pop()) {
+//             line.push(word);
+//             tspan.text(line.join(" "));
+//             if (tspan.node().getComputedTextLength() > width) {
+//                 line.pop();
+//                 tspan.text(line.join(" "));
+//                 line = [word];
+//                 tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+//             }
+//         }
+//     });
+// }

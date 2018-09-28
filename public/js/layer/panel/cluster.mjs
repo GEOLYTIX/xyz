@@ -1,9 +1,9 @@
-import * as utils from './utils.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default (layer, panel) => {
 
     // Create panel block.
-    let block = utils._createElement({
+    let block = _xyz.utils._createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -12,7 +12,7 @@ export default (layer, panel) => {
     });
 
     // Create block title expander.
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -23,7 +23,7 @@ export default (layer, panel) => {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent({
+                _xyz.utils.toggleExpanderParent({
                     expandable: block,
                     accordeon: true,
                     scrolly: document.querySelector('.mod_container > .scrolly')
@@ -40,7 +40,7 @@ export default (layer, panel) => {
 
 
     // KMeans
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Minimum number of cluster (KMeans): '
@@ -48,7 +48,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblKMeans = utils._createElement({
+    let lblKMeans = _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: layer.cluster_kmeans,
@@ -57,7 +57,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rKMeans = utils._createElement({
+    let rKMeans = _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -67,7 +67,7 @@ export default (layer, panel) => {
 
     let timeout;
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -85,7 +85,7 @@ export default (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer();
+                    layer.getLayer(layer);
                 }, 500); 
             }
         }
@@ -93,7 +93,7 @@ export default (layer, panel) => {
 
 
     // DBScan
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Maximum distance between locations in cluster (DBScan): '
@@ -101,7 +101,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblDBScan = utils._createElement({
+    let lblDBScan = _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: layer.cluster_dbscan,
@@ -110,7 +110,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rDBScan = utils._createElement({
+    let rDBScan = _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -118,7 +118,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -136,7 +136,7 @@ export default (layer, panel) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     timeout = null;
-                    layer.getLayer();
+                    layer.getLayer(layer);
                 }, 500);
             }
         }
@@ -144,7 +144,7 @@ export default (layer, panel) => {
 
 
     // markerMin
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Marker Min: '
@@ -152,7 +152,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblMarkerMin = utils._createElement({
+    let lblMarkerMin = _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: layer.style.markerMin,
@@ -161,7 +161,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rMarkerMin = utils._createElement({
+    let rMarkerMin = _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -169,7 +169,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -183,14 +183,14 @@ export default (layer, panel) => {
             funct: e => {
                 lblMarkerMin.innerHTML = e.target.value;
                 layer.style.markerMin = parseInt(e.target.value);
-                layer.getLayer();
+                layer.getLayer(layer);
             }
         }
     });
 
 
     // markerMax
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Marker Max: '
@@ -198,7 +198,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblMarkerMax = utils._createElement({
+    let lblMarkerMax = _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: layer.style.markerMax,
@@ -207,7 +207,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rMarkerMax = utils._createElement({
+    let rMarkerMax = _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -215,7 +215,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -229,17 +229,17 @@ export default (layer, panel) => {
             funct: e => {
                 lblMarkerMax.innerHTML = e.target.value;
                 layer.style.markerMax = parseInt(e.target.value);
-                layer.getLayer();
+                layer.getLayer(layer);
             }
         }
     });
 
 
     // Log scale cluster.
-    let logScale = utils.checkbox(function (e) {
+    let logScale = _xyz.utils.checkbox(function (e) {
         layer.markerLog = e.target.checked;
         layer.style.markerLog = layer.markerLog;
-        layer.getLayer();
+        layer.getLayer(layer);
     }, { label: 'Log scale cluster', id: layer.layer + '_logscale' });
 
     block.appendChild(logScale);

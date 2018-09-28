@@ -1,25 +1,31 @@
-const d3 = require('d3');
-const utils = require('./utils.mjs');
+import _xyz from './_xyz.mjs';
 
-module.exports = { bar_chart };
 
-function bar_chart(layer, chart){
+import d3_selection from "d3-selection";
+import d3_scale from "d3-scale";
+import d3_format from "d3-format";
+import d3_array from "d3-array";
+import d3_axis from "d3-axis";
+
+
+
+export function bar_chart(layer, chart){
     
     let week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     
-    let data = _xyz.locales[_xyz.locale].layers[layer].charts[chart];
+    let data = _xyz.ws.locales[_xyz.locale].layers[layer].charts[chart];
     
     if(!data[0] || !data[0].y) return;
     
-    let div = utils.createElement('div');
+    let div = _xyz.utils.createElement('div');
     
-    let td = utils.createElement('td', {
+    let td = _xyz.utils.createElement('td', {
         colSpan: "2"
     });
-    let tr = utils.createElement('tr');
+    let tr = _xyz.utils.createElement('tr');
     
     // Define the div for the tooltip
-    let tltp = d3.select(div).append("div")	
+    let tltp = d3_selection.select(div).append("div")	
     .attr("class", "chart-tooltip")				
     .style("opacity", 0)
     .style("width", "auto");
@@ -30,15 +36,15 @@ function bar_chart(layer, chart){
         height = 200 - margin.top - margin.bottom;
     
     // set the ranges
-    let x = d3.scaleBand().range([0, width]).round(0.05);
-    let y = d3.scaleLinear().range([height, 0]);
+    let x = d3_scale.scaleBand().range([0, width]).round(0.05);
+    let y = d3_scale.scaleLinear().range([height, 0]);
     
     // define the axis
-    let xAxis = d3.axisBottom(x);
-    let yAxis = d3.axisLeft().scale(y);
+    let xAxis = d3_axis.axisBottom(x);
+    let yAxis = d3_axis.axisLeft().scale(y);
     
     // add the SVG element
-    let svg = d3.select(div).append('svg')
+    let svg = d3_selection.select(div).append('svg')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -56,7 +62,7 @@ function bar_chart(layer, chart){
     x.domain(data.map(function(d){
         return d.x;
     }));
-    y.domain([0, d3.max(data, function(d){
+    y.domain([0, d3_array.max(data, function(d){
         return d.y ? d.y : 0; 
     })]);
     
@@ -73,29 +79,30 @@ function bar_chart(layer, chart){
         .attr("y", function(d){
             return y(d.y);
         })
-        .attr("height", function(d){ 
+        .attr("height", function (d) {
             return height - y(d.y);
         })
-        .on("mouseover", function(d){
+        // .on("mouseover", function (d) {
+        //     tltp.transition()
+        //         .duration(200)
+        //         .style("opacity", .9);
+
+        //     tltp.html(d.y.toLocaleString('en-GB'))
+        //         .style("left", (d3.event.pageX - 18) + "px")
+        //         .style("top", (d3.event.pageY - 20) + "px");
+        // })
+        .on("mouseout", function (d) {
             tltp.transition()
-            .duration(200)
-            .style("opacity", .9);
-        
-           tltp.html(d.y.toLocaleString('en-GB'))
-           .style("left", (d3.event.pageX - 18) + "px")
-           .style("top", (d3.event.pageY - 20) + "px");
-        }).on("mouseout", function(d){
-           tltp.transition()
-               .duration(500)
-               .style("opacity", 0);
+                .duration(500)
+                .style("opacity", 0);
     });
 
-    let formatValue = d3.format(".2s");
+    let formatValue = d3_format.format(".2s");
     
     // add the x Axis
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(function(d, i){
+      .call(d3_axis.axisBottom(x).tickFormat(function(d, i){
         return data.length == week.length ? week[d] : d;
     }));
     
@@ -106,7 +113,7 @@ function bar_chart(layer, chart){
       .style("text-anchor", "middle");
     
       // add the y Axis
-    svg.append("g").call(d3.axisLeft(y).tickFormat(function(d, i){
+    svg.append("g").call(d3_axis.axisLeft(y).tickFormat(function(d, i){
         if(d > 999) d = formatValue(d);
         if(d < 1000) d = (d == Math.floor(d)) ? d : "";
         return d;

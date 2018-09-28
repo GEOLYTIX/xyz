@@ -40,6 +40,7 @@ module.exports = fastify => {
                     dir: global.dir,
                     title: config.title || 'GEOLYTIX | XYZ',
                     nanoid: nanoid(6),
+                    log: process.env.LOG_LEVEL ? 'data-log = true' : '',
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
                     hrefDocumentation: config.documentation ? global.dir + '/' + config.documentation : '',

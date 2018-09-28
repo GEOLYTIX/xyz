@@ -1,7 +1,5 @@
 import _xyz from './_xyz.mjs';
 
-import * as utils from './utils.mjs';
-
 export default () => {
     
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -11,7 +9,7 @@ export default () => {
         () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
 
     let modules = document.querySelectorAll('.mod_container > .module'),
-        tabBar = document.querySelector('.tab_bar'),
+        tabs = document.querySelector('.tab_bar'),
         tabLayers = document.getElementById('tabLayers'),
         modLayers = document.getElementById('Layers'),
         tabLocations = document.getElementById('tabLocations'),
@@ -22,15 +20,15 @@ export default () => {
 
     function checkOverlap (mod) {
         if (mod.scrollTop > 0) {
-            utils.addClass(tabBar, 'pane_shadow');
+            _xyz.utils.addClass(tabs, 'pane_shadow');
             return
         }
-        utils.removeClass(tabBar, 'pane_shadow');
+        _xyz.utils.removeClass(tabs, 'pane_shadow');
     }
 
     _xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
     _xyz.activateLocationsTab = () => {
-        utils.removeClass(tabLocations, 'hidden');
+        _xyz.utils.removeClass(tabLocations, 'hidden');
         activateTab(tabLocations, modLocations)
     };
 
@@ -41,16 +39,16 @@ export default () => {
         () => activateTab(tabLocations, modLocations));
 
     function activateTab(target, mod) {
-        utils.removeClass(target.parentNode.children, 'active');
-        utils.addClass(target, 'active');
-        utils.addClass(modules, 'hidden');
-        utils.removeClass(mod, 'hidden');
+        _xyz.utils.removeClass(target.parentNode.children, 'active');
+        _xyz.utils.addClass(target, 'active');
+        _xyz.utils.addClass(modules, 'hidden');
+        _xyz.utils.removeClass(mod, 'hidden');
         checkOverlap (mod);
 
         let locations = document.querySelector('#Locations > .content');
 
         setTimeout(() => {
-            if (locations.children.length === 0) utils.addClass(tabLocations, 'hidden')
+            if (locations.children.length === 0) _xyz.utils.addClass(tabLocations, 'hidden')
         }, 300);
     }
 };

@@ -1,21 +1,21 @@
 import _xyz from './_xyz.mjs';
 
-import * as utils from './utils.mjs';
-
 export default () => {
 
-    // Set locale default.
-    if (!_xyz.ws.locale) _xyz.ws.locale = Object.keys(_xyz.ws.locales)[0];
-    _xyz.ws.locale = _xyz.ws.hooks.locale || _xyz.ws.locale;
+    // Set locale from hook or set first locale from locales array.
+    _xyz.locale = _xyz.hooks.locale || Object.keys(_xyz.ws.locales)[0];
 
-    // Set locale to hook, or set hook for locale.
-    if (!_xyz.ws.hooks.locale) _xyz.ws.setHook('locale', _xyz.ws.locale);
+    // Set hook for locale if it doesn't exist.
+    if (!_xyz.hooks.locale) _xyz.utils.setHook('locale', _xyz.locale);
 
     setLocaleDefaults();
 
+    // Return if length of locales array is 1.
     if (Object.keys(_xyz.ws.locales).length === 1) return
 
-    let locale = utils._createElement({
+
+    // Create locales dropdown from locales array.
+    let locale = _xyz.utils._createElement({
         tag: 'div',
         options: {
             classList: 'report-off',
@@ -24,24 +24,26 @@ export default () => {
         appendTo: document.getElementById('Layers')
     });
     
-    let selLocale = utils._createElement({
+    let selLocale = _xyz.utils._createElement({
         tag: 'select',
         appendTo: locale
     });
 
+    // Onchange event for locales dropdown.
     selLocale.onchange = e => {
-        _xyz.ws.locale = e.target.value;
-        _xyz.ws.removeHooks();
-        _xyz.ws.setHook('locale', _xyz.ws.locale);
+        _xyz.locale = e.target.value;
+        _xyz.utils.removeHooks();
+        _xyz.utils.setHook('locale', _xyz.locale);
         setLocaleDefaults();
-        _xyz.ws.setView(true);
+        _xyz.setView(true);
         _xyz.ws.gazetteer.init(true);
         _xyz.ws.layers.init(true);
         _xyz.ws.select.resetModule();
     };
 
+    // Populate locales dropdown.
     Object.keys(_xyz.ws.locales).forEach(loc => {
-        utils._createElement({
+        _xyz.utils._createElement({
             tag: 'option',
             options: {
                 textContent: _xyz.ws.locales[loc].name || loc,
@@ -51,13 +53,13 @@ export default () => {
         })
     })
 
-    // Set the select from either hook[query] or layer[query].
-    selLocale.selectedIndex = utils.getSelectOptionsIndex(selLocale, _xyz.ws.locale);
+    // Set locales dropdown to locale.
+    selLocale.selectedIndex = _xyz.utils.getSelectOptionsIndex(selLocale, _xyz.locale);
 }
 
 function setLocaleDefaults(){
 
     // Set min/max zoom defaults.
-    _xyz.ws.locales[_xyz.ws.locale].minZoom = _xyz.ws.locales[_xyz.ws.locale].minZoom || 0;
-    _xyz.ws.locales[_xyz.ws.locale].maxZoom = _xyz.ws.locales[_xyz.ws.locale].maxZoom || 20;
+    _xyz.ws.locales[_xyz.locale].minZoom = _xyz.ws.locales[_xyz.locale].minZoom || 0;
+    _xyz.ws.locales[_xyz.locale].maxZoom = _xyz.ws.locales[_xyz.locale].maxZoom || 20;
 };

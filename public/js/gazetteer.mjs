@@ -1,7 +1,6 @@
-const utils = require('./utils.mjs');
-const svg_symbols = require('./svg_symbols.mjs');
+import _xyz from './_xyz.mjs';
 
-module.exports = () => {
+export default () => {
 
     // Declare DOM elements
     const dom = {
@@ -14,10 +13,10 @@ module.exports = () => {
     };
 
     // Set gazetteer defaults if missing from appSettings.
-    if (!_xyz.gazetteer) _xyz.gazetteer = {};
-    if (!_xyz.gazetteer.icon) _xyz.gazetteer.icon = svg_symbols.create({type: "markerColor", style: {colorMarker: '#64dd17', colorDot: '#33691e'}});
-    if (!_xyz.gazetteer.pane) _xyz.gazetteer.pane = 550;
-    if (!_xyz.gazetteer.style) _xyz.gazetteer.style = {
+    if (!_xyz.ws.gazetteer) _xyz.ws.gazetteer = {};
+    if (!_xyz.ws.gazetteer.icon) _xyz.ws.gazetteer.icon = _xyz.utils.svg_symbols({type: "markerColor", style: {colorMarker: '#64dd17', colorDot: '#33691e'}});
+    if (!_xyz.ws.gazetteer.pane) _xyz.ws.gazetteer.pane = 550;
+    if (!_xyz.ws.gazetteer.style) _xyz.ws.gazetteer.style = {
         stroke: true,
         color: '#090',
         weight: 2,
@@ -28,14 +27,14 @@ module.exports = () => {
 
     // Create the gazetteer pane.
     _xyz.map.createPane('gazetteer');
-    _xyz.map.getPane('gazetteer').style.zIndex = _xyz.gazetteer.pane;
+    _xyz.map.getPane('gazetteer').style.zIndex = _xyz.ws.gazetteer.pane;
 
     // Gazetteer init which is called on change of locale.
-    _xyz.gazetteer.init = () => {
+    _xyz.ws.gazetteer.init = () => {
 
         // Hide gazetteer button if no gazetteer is set for the locale.
-        if (!_xyz.locales[_xyz.locale].gazetteer) {
-            utils.removeClass(dom.btnSearch, 'active');
+        if (!_xyz.ws.locales[_xyz.locale].gazetteer) {
+            _xyz.utils.removeClass(dom.btnSearch, 'active');
             dom.btnSearch.style.display = 'none';
             dom.group.style.display = 'none';
             return;
@@ -46,17 +45,17 @@ module.exports = () => {
 
         // Empty input value, results and set placeholder.
         dom.input.value = '';
-        dom.input.placeholder = _xyz.locales[_xyz.locale].gazetteer.placeholder || '';
+        dom.input.placeholder = _xyz.ws.locales[_xyz.locale].gazetteer.placeholder || '';
         dom.result.innerHTML = '';
 
         // Remove existing layer if exists
-        if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
+        if (_xyz.ws.gazetteer.layer) _xyz.map.removeLayer(_xyz.ws.gazetteer.layer);
     }
-    _xyz.gazetteer.init();
+    _xyz.ws.gazetteer.init();
 
     // Toggle visibility of the gazetteer group
     dom.btnSearch.addEventListener('click', e => {
-        utils.toggleClass(e.target, 'active');
+        _xyz.utils.toggleClass(e.target, 'active');
         dom.group.style.display =
             dom.group.style.display === 'block' ? 'none' : 'block';
 
@@ -75,7 +74,7 @@ module.exports = () => {
 
             //initiate search if either split value is not a number
             let NaN_check = e.target.value.split(',').map(isNaN);
-            if (_xyz.gazetteer.xhrSearch) _xyz.gazetteer.xhrSearch.abort();
+            if (_xyz.ws.gazetteer.xhrSearch) _xyz.ws.gazetteer.xhrSearch.abort();
             if (NaN_check[0] || NaN_check[1]) initiateSearch(val, dom);
         }
     });
@@ -87,21 +86,21 @@ module.exports = () => {
 
         // Move up through results with up key
         if (key === 38) {
-            let i = utils.indexInParent(dom.result.querySelector('.active'));
-            if (i > 0) utils.toggleClass([results[i], results[i - 1]], 'active');
+            let i = _xyz.utils.indexInParent(dom.result.querySelector('.active'));
+            if (i > 0) _xyz.utils.toggleClass([results[i], results[i - 1]], 'active');
         }
 
         // Move down through results with down key
         if (key === 40) {
-            let i = utils.indexInParent(dom.result.querySelector('.active'));
-            if (i < results.length - 1) utils.toggleClass([results[i], results[i + 1]], 'active');
+            let i = _xyz.utils.indexInParent(dom.result.querySelector('.active'));
+            if (i < results.length - 1) _xyz.utils.toggleClass([results[i], results[i + 1]], 'active');
         }
 
         // Cancel search and set results to empty on backspace or delete keydown
         if (key === 46 || key === 8) {
-            if (_xyz.gazetteer.xhrSearch) _xyz.gazetteer.xhrSearch.abort();
+            if (_xyz.ws.gazetteer.xhrSearch) _xyz.ws.gazetteer.xhrSearch.abort();
             dom.result.innerHTML = '';
-            if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
+            if (_xyz.ws.gazetteer.layer) _xyz.map.removeLayer(_xyz.ws.gazetteer.layer);
         }
 
         // Select first result on enter keypress
@@ -118,7 +117,7 @@ module.exports = () => {
             }
 
             // Select active results record
-            let activeRecord = results[utils.indexInParent(dom.result.querySelector('.active'))];
+            let activeRecord = results[_xyz.utils.indexInParent(dom.result.querySelector('.active'))];
 
             if (!activeRecord && results.length > 0) activeRecord = results[0];
 
@@ -134,7 +133,7 @@ module.exports = () => {
 
     // Cancel search and empty results on input focusout
     dom.input.addEventListener('focusout', () => {
-        if (_xyz.gazetteer.xhrSearch) _xyz.gazetteer.xhrSearch.abort();
+        if (_xyz.ws.gazetteer.xhrSearch) _xyz.ws.gazetteer.xhrSearch.abort();
         setTimeout(() => dom.result.innerHTML = '', 400);
     });
 }
@@ -146,14 +145,14 @@ function initiateSearch(searchValue, dom) {
     dom.loader.style.display = 'block';
     dom.result.innerHTML = '';
 
-    _xyz.gazetteer.xhrSearch = new XMLHttpRequest();
-    _xyz.gazetteer.xhrSearch.open('GET', _xyz.ws.host + '/api/gazetteer/autocomplete?' + utils.paramString({
+    _xyz.ws.gazetteer.xhrSearch = new XMLHttpRequest();
+    _xyz.ws.gazetteer.xhrSearch.open('GET', _xyz.host + '/api/gazetteer/autocomplete?' + _xyz.utils.paramString({
         locale: _xyz.locale,
         q: encodeURIComponent(searchValue),
-        token: _xyz.ws.token
+        token: _xyz.token
     }));
 
-    _xyz.gazetteer.xhrSearch.onload = e => {
+    _xyz.ws.gazetteer.xhrSearch.onload = e => {
 
         dom.loader.style.display = 'none';
 
@@ -164,7 +163,7 @@ function initiateSearch(searchValue, dom) {
             let json = JSON.parse(e.target.responseText);
 
             if (json.length === 0) {
-                utils._createElement({
+                _xyz.utils._createElement({
                     tag: 'li',
                     options: { textContent: 'No results for this search.' },
                     style: { padding: '5px 0' },
@@ -174,7 +173,7 @@ function initiateSearch(searchValue, dom) {
             }
 
             for (let key in json) {
-                utils._createElement({
+                _xyz.utils._createElement({
                     tag: 'li',
                     options: {
                         textContent: json[key].label,
@@ -189,7 +188,7 @@ function initiateSearch(searchValue, dom) {
             }
         }
     };
-    _xyz.gazetteer.xhrSearch.send();
+    _xyz.ws.gazetteer.xhrSearch.send();
 }
 
 function selectResult(record, dom) {
@@ -197,7 +196,7 @@ function selectResult(record, dom) {
     dom.input.value = record.innerText;
 
     if (record['data-source'] === 'glx') {
-        _xyz.select.selectLayerFromEndpoint({
+        _xyz.ws.select.selectLayerFromEndpoint({
             layer: record['data-layer'],
             table: record['data-table'],
             id: record['data-id'],
@@ -219,7 +218,7 @@ function selectResult(record, dom) {
         // Get the geometry from the gazetteer database.
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', _xyz.ws.host + '/api/gazetteer/googleplaces?id=' + record['data-id'] + '&token=' + _xyz.ws.token);
+        xhr.open('GET', _xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id'] + '&token=' + _xyz.token);
 
         xhr.onload = e => {
 
@@ -238,8 +237,8 @@ function createFeature(geom) {
     geom = typeof (geom) === 'string' ? JSON.parse(geom) : geom;
 
     // Add geometry to the gazetteer layer
-    if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
-    _xyz.gazetteer.layer = L.geoJson(geom, {
+    if (_xyz.ws.gazetteer.layer) _xyz.map.removeLayer(_xyz.ws.gazetteer.layer);
+    _xyz.ws.gazetteer.layer = L.geoJson(geom, {
         interactive: false,
         pane: 'gazetteer',
         pointToLayer: function (feature, latlng) {
@@ -247,15 +246,15 @@ function createFeature(geom) {
                 interactive: false,
                 pane: 'gazetteer',
                 icon: L.icon({
-                    iconUrl: _xyz.gazetteer.icon,
+                    iconUrl: _xyz.ws.gazetteer.icon,
                     iconSize: [40, 40],
                     iconAnchor: [20, 40]
                 })
             });
         },
-        style: _xyz.gazetteer.style
+        style: _xyz.ws.gazetteer.style
     }).addTo(_xyz.map);
 
     // Zoom to the extent of the gazetteer layer
-    _xyz.map.fitBounds(_xyz.gazetteer.layer.getBounds());
+    _xyz.map.fitBounds(_xyz.ws.gazetteer.layer.getBounds());
 }

@@ -1,21 +1,21 @@
-import * as utils from './utils.mjs';
+import _xyz from '../../_xyz.mjs';
 
-import panel_cluster from './panel_cluster.mjs';
+import panel_cluster from './cluster.mjs';
 
-import layers_filters from './layers_filters.mjs';
+import layers_filters from './filters.mjs';
 
-import layers_style from './layers_style.mjs';
+import layers_style from './style.mjs';
 
-import block_theme from './block_theme.mjs';
+import block_theme from './themes.mjs';
 
-import layers_grid from './layers_grid.mjs';
+import layers_grid from './grid.mjs';
 
-import layers_catchments from './layers_catchments.mjs';
+import layers_catchments from './catchments.mjs';
 
 export default layer => {
 
     // create panel element.
-    let panel = utils._createElement({
+    let panel = _xyz.utils._createElement({
             tag: 'div',
             options: {
                 className: 'panel'
@@ -23,7 +23,7 @@ export default layer => {
         });
 
     // add meta info to panel.
-    if (layer.meta) utils._createElement({
+    if (layer.meta) _xyz.utils._createElement({
         tag: 'p',
         options: {
             className: 'meta',
@@ -56,12 +56,12 @@ export default layer => {
         // set panel on layer object.
         layer.panel = panel;
 
-        utils.addClass(layer.header, 'pane_shadow');
-        utils.addClass(layer.drawer, 'expandable');
+        _xyz.utils.addClass(layer.header, 'pane_shadow');
+        _xyz.utils.addClass(layer.drawer, 'expandable');
 
         // expander control layer header
         layer.header.addEventListener('click', () => {
-            utils.toggleExpanderParent({
+            _xyz.utils.toggleExpanderParent({
                 expandable: layer.drawer,
                 accordeon: true,
                 scrolly: document.querySelector('.mod_container > .scrolly')
@@ -71,7 +71,7 @@ export default layer => {
         layer.drawer.appendChild(layer.panel);
 
         // Add icon which allows to expand / collaps panel.
-        utils._createElement({
+        _xyz.utils._createElement({
             tag: 'i',
             options: {
                 className: 'material-icons cursor noselect btn_header expander',
@@ -82,7 +82,7 @@ export default layer => {
                 event: 'click',
                 funct: e => {
                     e.stopPropagation();
-                    utils.toggleExpanderParent({
+                    _xyz.utils.toggleExpanderParent({
                         expandable: layer.drawer,
                         scrolly: document.querySelector('.mod_container > .scrolly')
                     });

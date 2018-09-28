@@ -1,24 +1,22 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
 
 import L from 'leaflet';
 
-export default function() {
-    
-    let layer = this;
+export default layer => {
 
     if (layer.display) {
 
         layer.loader.style.display = 'block';
 
         let uri = layer.provider ?
-        _xyz.ws.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + _xyz.ws.token :
+        _xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + _xyz.token :
             layer.URI;
 
         layer.base = L.tileLayer(uri, {
             pane: layer.pane[0],
             updateWhenIdle: true
         })
-            .addTo(_xyz.ws.map)
+            .addTo(_xyz.map)
             .on('loading', e => {
                 layer.loader.style.display = 'block';
             })

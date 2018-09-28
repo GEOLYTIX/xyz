@@ -1,12 +1,8 @@
-import _xyz from './_xyz.mjs';
-
-import * as utils from './utils.mjs';
-
-import * as svg_symbols from './svg_symbols.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default (layer, panel) => {
 
-    let ctrl = utils._createElement({
+    let ctrl = _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'section'
@@ -15,7 +11,7 @@ export default (layer, panel) => {
     });
 
     // Mode
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             textContent: 'Transit mode:'
@@ -24,7 +20,7 @@ export default (layer, panel) => {
     });
 
     let mode,
-        selMode = utils._createElement({
+        selMode = _xyz.utils._createElement({
             tag: 'select',
             appendTo: ctrl,
             eventListener: {
@@ -45,19 +41,19 @@ export default (layer, panel) => {
 
 
     // spacer
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'br',
         appendTo: ctrl
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'br',
         appendTo: ctrl
     });
 
 
     // Distance
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Maximum travel time: '
@@ -65,7 +61,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let lblMinutes = utils._createElement({
+    let lblMinutes = _xyz.utils._createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -74,7 +70,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -83,7 +79,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let sliMinutes = utils._createElement({
+    let sliMinutes = _xyz.utils._createElement({
         tag: 'input',
         options: {
             classList: 'range_new',
@@ -98,7 +94,7 @@ export default (layer, panel) => {
 
 
     // Detail
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Detail: '
@@ -106,7 +102,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let lblDetail = utils._createElement({
+    let lblDetail = _xyz.utils._createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -115,7 +111,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let sliDetail = utils._createElement({
+    let sliDetail = _xyz.utils._createElement({
         tag: 'input',
         options: {
             classList: 'range_new',
@@ -132,7 +128,7 @@ export default (layer, panel) => {
 
 
     // Reach
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'span',
         options: {
             textContent: 'Reach: '
@@ -140,7 +136,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let lblReach = utils._createElement({
+    let lblReach = _xyz.utils._createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -149,7 +145,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let sliReach = utils._createElement({
+    let sliReach = _xyz.utils._createElement({
         tag: 'input',
         options: {
             classList: 'range_new',
@@ -165,7 +161,7 @@ export default (layer, panel) => {
 
     // Provider
     let provider;
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             textContent: 'Provider:'
@@ -173,7 +169,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let selProvider = utils._createElement({
+    let selProvider = _xyz.utils._createElement({
         tag: 'select',
         appendTo: ctrl,
         eventListener: {
@@ -190,7 +186,7 @@ export default (layer, panel) => {
 
 
     //TIN construction
-    let chkCatchmentsConstruction = utils.checkbox(
+    let chkCatchmentsConstruction = _xyz.utils.checkbox(
         e => { },
         {
             label: 'Display catchment sample points and TIN.',
@@ -200,7 +196,7 @@ export default (layer, panel) => {
 
     ctrl.appendChild(chkCatchmentsConstruction);
 
-    let btnCatchment = utils._createElement({
+    let btnCatchment = _xyz.utils._createElement({
         tag: 'div',
         options: {
             classList: 'btn_wide cursor noselect',
@@ -210,12 +206,12 @@ export default (layer, panel) => {
         eventListener: {
             event: 'click',
             funct: () => {
-                if (!utils.hasClass(btnCatchment, 'disabled')) {
-                    utils.addClass(btnCatchment, 'disabled')
+                if (!_xyz.utils.hasClass(btnCatchment, 'disabled')) {
+                    _xyz.utils.addClass(btnCatchment, 'disabled')
                     document.getElementById('Map').style.cursor = 'crosshair';
-                    _xyz.ws.map.on('click', e => {
+                    _xyz.map.on('click', e => {
                         layer.loader.style.display = 'block';
-                        _xyz.ws.map.off('click');
+                        _xyz.map.off('click');
                         document.getElementById('Map').style.cursor = '';
                     
                         // Set layerMark on origin
@@ -231,7 +227,7 @@ export default (layer, panel) => {
                                 pointToLayer: function (feature, latlng) {
                                     return new L.Marker(latlng, {
                                         icon: L.icon({
-                                            iconUrl: svg_symbols.create({
+                                            iconUrl: _xyz.utils.svg_symbols({
                                                 type: "markerColor",
                                                 style: {
                                                     colorMarker: "#444",
@@ -243,12 +239,12 @@ export default (layer, panel) => {
                                         })
                                     });
                                 }
-                            }).addTo(_xyz.ws.map);
+                            }).addTo(_xyz.map);
                     
                         let xhr = new XMLHttpRequest();
                     
-                        xhr.open('GET', _xyz.ws.host + '/api/catchments?' + utils.paramString({
-                            locale: _xyz.ws.locale,
+                        xhr.open('GET', _xyz.host + '/api/catchments?' + _xyz.utils.paramString({
+                            locale: _xyz.locale,
                             layer: layer.layer,
                             lng: e.latlng.lng,
                             lat: e.latlng.lat,
@@ -257,15 +253,15 @@ export default (layer, panel) => {
                             reach: sliReach.value,
                             mode: selMode.options[selMode.selectedIndex].value,
                             provider: selProvider.options[selProvider.selectedIndex].value,
-                            token: _xyz.ws.token
+                            token: _xyz.token
                         }));
                     
                         xhr.setRequestHeader('Content-Type', 'application/json');
                         xhr.onload = e => {
 
                             if (e.target.status === 502) {
-                                utils.removeClass(btnCatchment, 'disabled');
-                                layer.getLayer();
+                                _xyz.utils.removeClass(btnCatchment, 'disabled');
+                                layer.getLayer(layer);
                                 return alert(e.target.response);
                             }
                     
@@ -274,9 +270,9 @@ export default (layer, panel) => {
                                 return;
                             }
                     
-                            utils.removeClass(btnCatchment, 'disabled');
+                            _xyz.utils.removeClass(btnCatchment, 'disabled');
                     
-                            layer.getLayer();
+                            layer.getLayer(layer);
                     
                             let json = JSON.parse(e.target.responseText);
                     
@@ -290,7 +286,7 @@ export default (layer, panel) => {
                                         weight: 1,
                                         fill: false
                                     }
-                                }).addTo(_xyz.ws.map);
+                                }).addTo(_xyz.map);
                     
                                 let layerPoints = L.geoJson(json.circlePoints, {
                                     pointToLayer: function (feature, latlng) {
@@ -303,7 +299,7 @@ export default (layer, panel) => {
                                             pane: 'tmp'
                                         });
                                     }
-                                }).addTo(_xyz.ws.map);
+                                }).addTo(_xyz.map);
                     
                                 let layerSample = L.geoJson(json.samplePoints, {
                                     pointToLayer: function (feature, latlng) {
@@ -317,7 +313,7 @@ export default (layer, panel) => {
                                             pane: 'tmp'
                                         });
                                     }
-                                }).addTo(_xyz.ws.map);
+                                }).addTo(_xyz.map);
                             }
                         };
                         xhr.send();

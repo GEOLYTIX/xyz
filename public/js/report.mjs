@@ -1,4 +1,6 @@
-module.exports = () => {
+import _xyz from './_xyz.mjs';
+
+export default () => {
     
     let btn = document.getElementById('btnReport');
       

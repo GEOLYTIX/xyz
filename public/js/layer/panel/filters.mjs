@@ -1,11 +1,9 @@
-import _xyz from './_xyz.mjs';
-
-import * as utils from './utils.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default (layer, panel) => {
 
     // Add filter block to layer panel.
-    let filters = utils._createElement({
+    let filters = _xyz.utils._createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -14,7 +12,7 @@ export default (layer, panel) => {
     });
 
     // Filter control expander.
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -25,7 +23,7 @@ export default (layer, panel) => {
             event: 'click',
             funct: e => {
                 e.stopPropagation();
-                utils.toggleExpanderParent({
+                _xyz.utils.toggleExpanderParent({
                     expandable: filters,
                     accordeon: true,
                     scrolly: document.querySelector('.mod_container > .scrolly')
@@ -39,7 +37,9 @@ export default (layer, panel) => {
     // disable the list if everything is selected
     function toggle_select(select, title) {
         let _array = Array.from(select.options);
+
         if (!title) _array.shift();
+
         _array = _array.map((item) => item.disabled);
         select.disabled = _array.reduce((acc, curr) => acc + curr) == _array.length ? true : false;
     }
@@ -47,17 +47,15 @@ export default (layer, panel) => {
     // add aggregate layer button
     function add_run_button() {
 
-        let run = utils.createElement('div', {
-            classList: "btn_wide cursor noselect",
-            textContent: "Run Output",
+        let run = _xyz.utils.createElement('div', {
+            classList: 'btn_wide cursor noselect',
+            textContent: 'Run Output',
             onclick: () => {
 
-
-                
-                layer.xhr.open('GET', _xyz.ws.host + '/api/location/aggregate?' + utils.paramString({
-                    locale: _xyz.ws.locale,
+                layer.xhr.open('GET', _xyz.host + '/api/location/aggregate?' + _xyz.utils.paramString({
+                    locale: _xyz.locale,
                     layer: layer.layer,
-                    token: _xyz.ws.token,
+                    token: _xyz.token,
                     filter: JSON.stringify(layer.filter) || ''
                 }));
 
@@ -67,17 +65,18 @@ export default (layer, panel) => {
                     
                         _xyz.ws.select.selectLayerFromEndpoint({
                             layer: layer.aggregate_layer,
-                            table: _xyz.ws.locales[_xyz.ws.locale].layers[layer.aggregate_layer].table,
+                            table: _xyz.ws.locales[_xyz.locale].layers[layer.aggregate_layer].table,
                             id: json.id,
                             marker: [json.lng, json.lat],
                             filter: JSON.stringify(layer.filter) || ''
                         });
                     }
                 };
+
                 layer.xhr.send();
             }
         });
-        run.style.display = "none";
+        run.style.display = 'none';
         filters.appendChild(run);
     }
 
@@ -90,10 +89,10 @@ export default (layer, panel) => {
         _select.options[_select.selectedIndex].disabled = true;
 
         // show run button only if aggregate layer enabled
-        if (layer.aggregate_layer) filters.lastChild.style.display = "block";
+        if (layer.aggregate_layer) filters.lastChild.style.display = 'block';
 
         // show clear all button
-        _select.nextSibling.style.display = "block";
+        _select.nextSibling.style.display = 'block';
 
         // enable option back
         function enable_option(select, val) {
@@ -109,17 +108,17 @@ export default (layer, panel) => {
         // remove unwanted filter
         function remove_filter_onclick(e) {
 
-            if (e.target.parentNode.parentNode.classList.contains("block")) e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
+            if (e.target.parentNode.parentNode.classList.contains('block')) e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
 
             delete layer.filter[_val];
             enable_option(_select, _val);
-            layer.getLayer();
+            layer.getLayer(layer);
 
             // hide run button when last filter block is removed
             if (!_select.nextSibling.nextSibling.classList.contains('block')) {
-                if (!filters.lastChild.classList.contains("block")) {
-                    filters.lastChild.style.display = "none";
-                    clear_all.style.display = "none";
+                if (!filters.lastChild.classList.contains('block')) {
+                    filters.lastChild.style.display = 'none';
+                    clear_all.style.display = 'none';
                 }
             };
         }
@@ -127,30 +126,30 @@ export default (layer, panel) => {
         function processInfoj(val, entry){
             if(entry.filter && entry.field === val){
                 
-                if(typeof(entry.filter) == "object"){
+                if(typeof(entry.filter) == 'object'){
                     
-                    block = utils._createElement({
-                        tag: "div",
+                    block = _xyz.utils._createElement({
+                        tag: 'div',
                         options: {
-                            classList: "block"
+                            classList: 'block'
                         }
                     });
                     
-                    let title_div = utils._createElement({
-                        tag: "div",
+                    let title_div = _xyz.utils._createElement({
+                        tag: 'div',
                         options: {
-                            //innerHTML: entry.label + '<i class="material-icons">clear</i>',
-                            classList: "title",
+                            //innerHTML: entry.label + '<i class='material-icons'>clear</i>',
+                            classList: 'title',
                             onclick: remove_filter_onclick
                         }, 
                         appendTo: block
                     });
 
-                    utils._createElement({
-                        tag: "i",
+                    _xyz.utils._createElement({
+                        tag: 'i',
                         options: {
-                            classList: "material-icons",
-                            textContent: "clear"
+                            classList: 'material-icons',
+                            textContent: 'clear'
                         },
                         appendTo: title_div
                     });
@@ -171,20 +170,20 @@ export default (layer, panel) => {
                     filters.insertBefore(block, filters.lastChild);
                     
                 } else {
-                    if(entry.filter === "numeric") {
+                    if(entry.filter === 'numeric') {
                         
-                        block = utils._createElement({
-                            tag: "div",
+                        block = _xyz.utils._createElement({
+                            tag: 'div',
                             options: {
-                                classList: "block"
+                                classList: 'block'
                             }
                         });
                         
-                        utils._createElement({
-                            tag: "div",
+                        _xyz.utils._createElement({
+                            tag: 'div',
                             options: {
                                 innerHTML: entry.label + '<i class="material-icons">clear</i>',
-                                classList: "title",
+                                classList: 'title',
                                 onclick: remove_filter_onclick
                             },
                             appendTo: block
@@ -210,20 +209,20 @@ export default (layer, panel) => {
                         filter_range(layer, _options);
                         filters.insertBefore(block, filters.lastChild);
                     };
-                    if(entry.filter === "like" || entry.filter === "match") {
+                    if(entry.filter === 'like' || entry.filter === 'match') {
                         
-                        block = utils._createElement({
-                            tag: "div", 
+                        block = _xyz.utils._createElement({
+                            tag: 'div', 
                             options: {
-                                classList: "block"
+                                classList: 'block'
                             }
                         });
 
-                        utils._createElement({
-                            tag: "div", 
+                        _xyz.utils._createElement({
+                            tag: 'div', 
                             options: {
                                 innerHTML: entry.label + '<i class="material-icons">clear</i>',
-                                classList: "title",
+                                classList: 'title',
                                 onclick: remove_filter_onclick
                             }, 
                             appendTo: block
@@ -240,19 +239,19 @@ export default (layer, panel) => {
                         filter_text(layer, options);
                         filters.insertBefore(block, filters.lastChild);
                     };
-                    if(entry.filter === "date") {
+                    if(entry.filter === 'date') {
                         
-                        block = utils._createElement({
-                            tag: "div",
+                        block = _xyz.utils._createElement({
+                            tag: 'div',
                             options: {
-                                classList: "block"
+                                classList: 'block'
                             }
                         });
 
-                        title = utils._createElement({
-                            tag: "div",
+                        title = _xyz.utils._createElement({
+                            tag: 'div',
                             options: {
-                                classList: "title",
+                                classList: 'title',
                                 innerHTML: entry.label + '<i class="material-icons">clear</i>',
                                 onclick: remove_filter_onclick
                             },
@@ -275,7 +274,7 @@ export default (layer, panel) => {
         
         // process filters from infoj
         Object.values(layer.infoj).map(item => {
-            if(item.type === "group"){
+            if(item.type === 'group'){
                 Object.values(item.items).map(_item => {
                     processInfoj(_val, _item);
                 });
@@ -287,17 +286,17 @@ export default (layer, panel) => {
         this.selectedIndex = 0;
     }
 
-    let select = utils._createElement({
+    let select = _xyz.utils._createElement({
         tag: 'select', 
         options: {
             onchange: select_onchange,
-            innerHTML: "<option selected>Select filter from list.</option>"
+            innerHTML: '<option selected>Select filter from list.</option>'
         }
     });
     
     function createOptions(select, entry){
         if (entry.filter) {
-            utils.createElement("option", {
+            _xyz.utils.createElement('option', {
                 value: entry.field,
                 textContent: entry.label
             }, select);
@@ -306,7 +305,7 @@ export default (layer, panel) => {
     
     // add options to select
     Object.values(layer.infoj).forEach(entry => {
-        if(entry.type === "group"){
+        if(entry.type === 'group'){
             Object.values(entry.items).map(item => {
                 createOptions(select, item)
             });
@@ -316,11 +315,11 @@ export default (layer, panel) => {
     });
 
 
-    let clear_all = utils._createElement({
-        tag: "div", 
+    let clear_all = _xyz.utils._createElement({
+        tag: 'div', 
         options: {
-            classList: "btn_small cursor noselect",
-            textContent: "Clear",
+            classList: 'btn_small cursor noselect',
+            textContent: 'Clear',
             onclick: function (e) {
                 let siblings = this.parentNode.children;
                 
@@ -344,11 +343,11 @@ export default (layer, panel) => {
                 });
                 
                 // hide filtering buttons, reload layer.
-                this.style.display = "none";
+                this.style.display = 'none';
                 
                 // hide aggregate button if enabled 
-                if (layer.aggregate_layer) this.parentNode.lastChild.style.display = "none";
-                layer.getLayer();
+                if (layer.aggregate_layer) this.parentNode.lastChild.style.display = 'none';
+                layer.getLayer(layer);
             }
         }
     });
@@ -366,17 +365,17 @@ function filter_text(layer, _options) {
         let val = this.value;
         if (!layer.filter[_options.field]) layer.filter[_options.field] = {};
         layer.filter[_options.field][this.name] = val;
-        layer.getLayer();
+        layer.getLayer(layer);
     }
 
-    /*let input = utils.createElement('input', {
+    /*let input = _xyz.utils.createElement('input', {
         placeholder: 'Search.',
         onkeyup: onkeyup,
         name: _options.operator
     }, _options.appendTo);*/
     
-    utils._createElement({
-        tag: "input",
+    _xyz.utils._createElement({
+        tag: 'input',
         options: {
             placeholder: 'Search.',
             onkeyup: onkeyup,
@@ -392,36 +391,36 @@ function filter_numeric(layer, options) {
     function onkeyup(e) {
         let val = parseFloat(this.value);
         if (!layer.filter[options.field]) layer.filter[options.field] = {};
-        if (typeof (val) == "number") {
+        if (typeof (val) == 'number') {
             layer.filter[options.field][this.name] = val;
         } else {
             layer.filter[options.field][this.name] = null;
         }
-        layer.getLayer();
+        layer.getLayer(layer);
     }
 
-    let gt_label = utils.createElement('div', {
-        classList: "label half",
-        textContent: "> greater than"
+    let gt_label = _xyz.utils.createElement('div', {
+        classList: 'label half',
+        textContent: '> greater than'
     }, options.appendTo);
 
-    let lt_label = utils.createElement('div', {
-        classList: "label half right",
-        textContent: "< less than"
+    let lt_label = _xyz.utils.createElement('div', {
+        classList: 'label half right',
+        textContent: '< less than'
     }, options.appendTo);
 
-    let gt_input = utils.createElement('input', {
-        classList: "label half",
+    let gt_input = _xyz.utils.createElement('input', {
+        classList: 'label half',
         placeholder: 'Set value.',
-        name: "gt",
+        name: 'gt',
         onkeyup: onkeyup
     }, options.appendTo);
 
-    let lt_input = utils.createElement('input', {
-        classList: "label half right",
+    let lt_input = _xyz.utils.createElement('input', {
+        classList: 'label half right',
         placeholder: 'Set value.',
         onkeyup: onkeyup,
-        name: "lt"
+        name: 'lt'
     }, options.appendTo);
 }
 
@@ -431,49 +430,49 @@ function filter_range(layer, options){
     function oninput(e) {
         let val = parseFloat(e.target.value);
         if (!layer.filter[options.field]) layer.filter[options.field] = {};
-        if (typeof(val) == "number") {
+        if (typeof(val) == 'number') {
             layer.filter[options.field][e.target.name] = val;
         } else {
             layer.filter[options.field][e.target.name] = null;
         }
         //console.log(layer.filter);
-        //layer.getLayer();
+        //layer.getLayer(layer);
     }
 
     function onchange(e){
         //console.log(layer.filter);
-        layer.getLayer();
+        layer.getLayer(layer);
     }
 
-    let tl = utils._createElement({
-        tag: "div",
+    let tl = _xyz.utils._createElement({
+        tag: 'div',
         options: {
-            classList: "range-tooltip _min",
-            textContent: "Min " + options.min,
-            name: "gt"
+            classList: 'range-tooltip _min',
+            textContent: 'Min ' + options.min,
+            name: 'gt'
         },
         appendTo: options.appendTo
     });
 
 
-    let range_div = utils._createElement({
+    let range_div = _xyz.utils._createElement({
         tag: 'div', 
         options: {
-            className: "range"
+            className: 'range'
         },
         appendTo: options.appendTo
     });
 
-    let range = utils._createElement({
-        tag: "input",
+    let range = _xyz.utils._createElement({
+        tag: 'input',
         options: {
             type: 'range',
             min: options.min,
             max: options.max,
             value: options.min,
-            name: "gt",
+            name: 'gt',
             oninput: e => {
-                tl.textContent = "Min " + e.target.value;
+                tl.textContent = 'Min ' + e.target.value;
                 oninput(e);
             },
             onchange: e => onchange(e)
@@ -481,38 +480,38 @@ function filter_range(layer, options){
         appendTo: range_div
     });
 
-    let tl2 = utils._createElement({
-        tag: "div",
+    let tl2 = _xyz.utils._createElement({
+        tag: 'div',
         options: {
-            classList: "range-tooltip _max",
-            textContent: "Max " + options.max
+            classList: 'range-tooltip _max',
+            textContent: 'Max ' + options.max
         },
         /*style: {
-            float: "right",
-            margin-bottom: "5px"
+            float: 'right',
+            margin-bottom: '5px'
         },*/
         appendTo: options.appendTo
     });
 
 
-    let range_div2 = utils._createElement({
+    let range_div2 = _xyz.utils._createElement({
         tag: 'div', 
         options: {
-            className: "range"
+            className: 'range'
         },
         appendTo: options.appendTo
     });
 
-    let range2 = utils._createElement({
-        tag: "input",
+    let range2 = _xyz.utils._createElement({
+        tag: 'input',
         options: {
             type: 'range',
             min: options.min,
             max: options.max,
             value: options.max,
-            name: "lt",
+            name: 'lt',
             oninput: e => {
-                tl2.textContent = "Max " + e.target.value;
+                tl2.textContent = 'Max ' + e.target.value;
                 oninput(e);
             },
             onchange: e => onchange(e)
@@ -527,8 +526,8 @@ function filter_date(layer, options) {
 
     // default date strings
     let def = {
-        dd: "01",
-        mm: "01",
+        dd: '01',
+        mm: '01',
         df: []
     }
     
@@ -536,7 +535,7 @@ function filter_date(layer, options) {
     def.df[2] = def.dd;
 
     function date_to_string(arr) {
-        return "'" + arr.join("-") + "'";
+        return "'" + arr.join('-') + "'";
     }
 
     function show_reset() {
@@ -555,7 +554,7 @@ function filter_date(layer, options) {
         if (e.target.value) show_reset();
         
         switch(format){
-            case "dd": 
+            case 'dd': 
                 if (val && val > 0 && val < 32) {
                 if (val < 10) val = '0' + String(val);
                 def.df[2] = val;
@@ -564,7 +563,7 @@ function filter_date(layer, options) {
                 def.df[2] = def[format];
             }; break;
             
-            case "mm": 
+            case 'mm': 
                 if (val && val > 0 && val < 13) {
                     if (val < 10) val = '0' + String(val);
                     def.df[1] = val;
@@ -573,7 +572,7 @@ function filter_date(layer, options) {
                     def.df[1] = def[format];
                 }; break;
             
-            case "yyyy": 
+            case 'yyyy': 
                 if (!layer.filter[options.field]) layer.filter[options.field] = {};
                 if (val && val > 99) {
                     def.df[0] = val;
@@ -583,132 +582,132 @@ function filter_date(layer, options) {
                     layer.filter[options.field] = {};
                 }; break;
         }
-        layer.getLayer();
+        layer.getLayer(layer);
     }
 
     // labels
     // later than label
-    utils._createElement({
-        tag: "div", 
+    _xyz.utils._createElement({
+        tag: 'div', 
         options: {
-            classList: "label half",
-            textContent: "later than"
+            classList: 'label half',
+            textContent: 'later than'
         }, 
         appendTo: options.appendTo
     });
 
     // earlier than label
-    utils._createElement({
-        tag: "div", 
+    _xyz.utils._createElement({
+        tag: 'div', 
         options: {
-            classList: "label half right",
-            textContent: "earlier than"
+            classList: 'label half right',
+            textContent: 'earlier than'
         }, 
         appendTo: options.appendTo
     });
 
     // later than year input
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input', 
         options: {
-            classList: "label third",
+            classList: 'label third',
             placeholder: 'yyyy',
-            name: "gte"
+            name: 'gte'
         }, 
         eventListener: {
-            event: "keyup",
-            funct: e => onkeyup(e, "yyyy")
+            event: 'keyup',
+            funct: e => onkeyup(e, 'yyyy')
         },
         appendTo: options.appendTo
     });
 
     // later than month input
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input',
         options: {
-            classList: "label third",
+            classList: 'label third',
             placeholder: 'mm'
         }, 
         eventListener: {
-            event: "keyup",
-            funct: e => onkeyup(e, "mm")
+            event: 'keyup',
+            funct: e => onkeyup(e, 'mm')
         },
         appendTo: options.appendTo
     });
     
     // later than day input
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input', 
         options: {
-            classList: "label third",
+            classList: 'label third',
             placeholder: 'dd'
         }, 
         eventListener: {
-            event: "keyup",
-            funct: e => onkeyup(e, "dd")
+            event: 'keyup',
+            funct: e => onkeyup(e, 'dd')
         },
         appendTo: options.appendTo
     });
 
     // earlier than day input
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input', 
         options: {
-            classList: "label third right",
+            classList: 'label third right',
             placeholder: 'dd'
         }, 
         eventListener: {
-            event: "keyup",
-            funct: e => onkeyup(e, "dd")
+            event: 'keyup',
+            funct: e => onkeyup(e, 'dd')
         },
         appendTo: options.appendTo
     });
     
     // earlier than month input
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input', 
         options: {
-            classList: "label third right",
+            classList: 'label third right',
             placeholder: 'mm'
         }, 
         eventListener: {
-            event: "keyup",
-            funct: e => onkeyup(e, "mm")
+            event: 'keyup',
+            funct: e => onkeyup(e, 'mm')
         },
         appendTo: options.appendTo
     });
 
     // earlier than year input
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'input',
         options: {
-            classList: "label third right",
+            classList: 'label third right',
             placeholder: 'yyyy',
-            name: "lte"
+            name: 'lte'
         }, 
         eventListener: {
-            event: "keyup",
-            funct: e => onkeyup(e, "yyyy")
+            event: 'keyup',
+            funct: e => onkeyup(e, 'yyyy')
         },
         appendTo: options.appendTo
     });
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div', 
         options: {
-            classList: "btn_small cursor noselect",
-            textContent: "Reset"
+            classList: 'btn_small cursor noselect',
+            textContent: 'Reset'
         }, 
         eventListener: {
-            event: "click",
+            event: 'click',
             funct: e => {
                 let siblings = options.appendTo.children;
                 for (let sibling of siblings) {
                     if (sibling.tagName === 'INPUT') sibling.value = '';
                 }
-                e.target.style.display = "none";
+                e.target.style.display = 'none';
                 layer.filter[options.field] = {};
-                layer.getLayer();
+                layer.getLayer(layer);
             }
         },
         appendTo: options.appendTo
@@ -728,15 +727,15 @@ function filter_checkbox(options, layer) {
         if (this.checked) {
             if (!layer.filter[options.field][options.operator]) layer.filter[options.field][options.operator] = [];
             layer.filter[options.field][options.operator].push(options.value);
-            layer.getLayer();
+            layer.getLayer(layer);
 
         } else {
             layer.filter[options.field][options.operator].splice(layer.filter[options.field][options.operator].indexOf(options.value), 1);
-            layer.getLayer();
+            layer.getLayer(layer);
         }
     }
 
-    let checkbox = utils.checkbox(filter_checkbox_onchange, { label: options.value });
+    let checkbox = _xyz.utils.checkbox(filter_checkbox_onchange, { label: options.value });
 
     return checkbox;
 }

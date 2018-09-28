@@ -1,11 +1,8 @@
-import d3 from 'd3';
-// import d3 from './d3.mjs';
-
-const xmlSerializer = new XMLSerializer();
-
-export function create(marker) {
+export default marker => {
 
     if (typeof (marker) == 'string') return marker;
+
+    if (!marker.type) return false;
 
     const markers = {
         dot: dot(marker.style),
@@ -16,14 +13,20 @@ export function create(marker) {
         geo: geolocation()
     }
 
-    return marker.type ? markers[marker.type] : false;
+    return markers[marker.type];
 }
+
+import d3_selection from "d3-selection";
+import d3_color from "d3-color";
+import d3_path from "d3-path";
+
+const xmlSerializer = new XMLSerializer();
 
 function dot(style) {
 
     if (!style) return;
 
-    let svg = d3
+    let svg = d3_selection
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 866)
         .attr('height', 1000)
@@ -35,14 +38,14 @@ function dot(style) {
         .attr('cx', 466)
         .attr('cy', 532)
         .attr('r', 395)
-        .style('fill', d3.rgb(style.color).darker(0.5));
+        .style('fill', d3_color.rgb(style.color).darker(0.5));
 
     svg
         .append('circle')
         .attr('cx', 400)
         .attr('cy', 468)
         .attr('r', 395)
-        .style('fill', d3.rgb(style.color));
+        .style('fill', d3_color.rgb(style.color));
 
     return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
 }
@@ -51,7 +54,7 @@ function circle(style) {
 
     if (!style) return;
 
-    let svg = d3
+    let svg = d3_selection
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
         .attr('height', 1000)
@@ -75,7 +78,7 @@ function target(style) {
 
     if (!style) return;
 
-    let svg = d3
+    let svg = d3_selection
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
         .attr('height', 1000)
@@ -105,14 +108,14 @@ function markerLetter(style) {//colorMarker, letter
 
     if (!style) return;
 
-    let svg = d3
+    let svg = d3_selection
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
         .attr('height', 1000)
         .attr('viewBox', '0 0 1000 1000')
         .attr('xmlns', 'http://www.w3.org/2000/svg');
 
-    let p = d3.path();
+    let p = d3_path.path();
     p.moveTo(570, 20);
     p.bezierCurveTo(370, 20, 210, 180, 210, 380);
     p.bezierCurveTo(210, 460, 230, 520, 280, 610);
@@ -128,7 +131,7 @@ function markerLetter(style) {//colorMarker, letter
         .style('opacity', 0.5)
         .attr('d', p.toString());
 
-    p = d3.path();
+    p = d3_path.path();
     p.moveTo(500, 20);
     p.bezierCurveTo(300, 20, 140, 180, 140, 380);
     p.bezierCurveTo(140, 440, 160, 520, 210, 610);
@@ -170,14 +173,14 @@ function markerColor(style) {//colorMarker, colorDot
 
     if (!style) return;
 
-    let svg = d3
+    let svg = d3_selection
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
         .attr('height', 1000)
         .attr('viewBox', '0 0 1000 1000')
         .attr('xmlns', 'http://www.w3.org/2000/svg');
 
-    let p = d3.path();
+    let p = d3_path.path();
     p.moveTo(570, 20);
     p.bezierCurveTo(370, 20, 210, 180, 210, 380);
     p.bezierCurveTo(210, 460, 230, 520, 280, 610);
@@ -193,7 +196,7 @@ function markerColor(style) {//colorMarker, colorDot
         .style('opacity', 0.5)
         .attr('d', p.toString());
 
-    p = d3.path();
+    p = d3_path.path();
     p.moveTo(500, 20);
     p.bezierCurveTo(300, 20, 140, 180, 140, 380);
     p.bezierCurveTo(140, 440, 160, 520, 210, 610);
@@ -227,7 +230,7 @@ function markerColor(style) {//colorMarker, colorDot
 }
 
 function geolocation() {
-    let svg = d3
+    let svg = d3_selection
         .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr('width', 1000)
         .attr('height', 1000)
@@ -252,7 +255,7 @@ function geolocation() {
         .style('fill', '#090')
         .style('opacity', 0.8);
 
-    let p = d3.path();
+    let p = d3_path.path();
 
     p.moveTo(500, 150);
     p.lineTo(500, 0);

@@ -1,16 +1,13 @@
-import _xyz from './_xyz.mjs';
-
-import * as utils from './utils.mjs';
+import _xyz from '../../_xyz.mjs';
 
 import L from 'leaflet';
 
 import 'leaflet.vectorgrid';
 
-export default function() {
+export default layer => {
 
     // Assign the table based on the zoom array.
-    let layer = this,
-        zoom = _xyz.ws.map.getZoom(),
+    let zoom = _xyz.map.getZoom(),
         zoomKeys = Object.keys(layer.arrayZoom),
         maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
@@ -21,18 +18,18 @@ export default function() {
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 
-    if (layer.table && layer.display && layer.locale === _xyz.ws.locale) {
+    if (layer.table && layer.display && layer.locale === _xyz.locale) {
 
         // Create new vector.xhr
         layer.loaded = false;
         layer.loader.style.display = 'block';
 
-        let url = _xyz.ws.host + '/api/mvt/get/{z}/{x}/{y}?' + utils.paramString({
-            locale: _xyz.ws.locale,
+        let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + _xyz.utils.paramString({
+            locale: _xyz.locale,
             layer: layer.layer,
             table: layer.table,
             properties: layer.properties,
-            token: _xyz.ws.token
+            token: _xyz.token
         }),
             options = {
                 rendererFactory: L.svg.tile,
@@ -70,7 +67,7 @@ export default function() {
         }
 
 
-        if (layer.L) _xyz.ws.map.removeLayer(layer.L);
+        if (layer.L) _xyz.map.removeLayer(layer.L);
 
         layer.L = L.vectorGrid.protobuf(url, options)
             .on('error', err => console.error(err))
@@ -78,7 +75,7 @@ export default function() {
                 //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
                 layer.loaded = true;
                 layer.loader.style.display = 'none';
-                _xyz.ws.layersCheck();
+                _xyz.layersCheck();
             })
             .on('click', e => {
                 if (e.layer.properties.selected) return;
@@ -87,8 +84,8 @@ export default function() {
 
                 function checkCurrentSelection(e) {
                     let check = false;
-                    if (_xyz.ws.hooks.select) {
-                        _xyz.ws.hooks.select.map(item => {
+                    if (_xyz.hooks.select) {
+                        _xyz.hooks.select.map(item => {
                             item = item.split('!');
                             if (item[1] === layer.layer && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
                                 check = true;
@@ -100,7 +97,7 @@ export default function() {
 
                 if (!checkCurrentSelection(e)) {
                     // set cursor to wait
-                    let els = _xyz.ws.map.getContainer().querySelectorAll('.leaflet-interactive');
+                    let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
 
                     for (let el of els) {
                         el.classList += ' wait-cursor-enabled';
@@ -125,6 +122,6 @@ export default function() {
             .on('mouseout', e => {
                 e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
             })
-            .addTo(_xyz.ws.map);
+            .addTo(_xyz.map);
     }
 }

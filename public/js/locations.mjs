@@ -1,10 +1,12 @@
-const utils = require('./utils.mjs');
-const svg_symbols = require('./svg_symbols.mjs');
-const select_controls = require('./select_controls');
+import _xyz from './_xyz.mjs';
 
-module.exports = () => {
+import {addInfojToList} from './select_table.mjs';
 
-    let LocationsHeader = utils._createElement({
+import * as select_controls from './select_controls.mjs';
+
+export default () => {
+
+    let LocationsHeader = _xyz.utils._createElement({
         tag: 'div',
         style: {
             display: 'none'
@@ -12,7 +14,7 @@ module.exports = () => {
         appendTo: document.getElementById('Locations')
     })
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             textContent: 'Locations',
@@ -21,7 +23,7 @@ module.exports = () => {
         appendTo: LocationsHeader
     })
 
-    utils._createElement({
+    _xyz.utils._createElement({
         tag: 'div',
         options: {
             textContent: 'Clear all locations.',
@@ -36,7 +38,7 @@ module.exports = () => {
         }
     })
 
-    let locations = utils._createElement({
+    let locations = _xyz.utils._createElement({
         tag: 'div',
         options: {
             className: 'content'
@@ -55,8 +57,8 @@ module.exports = () => {
     _xyz.map.getPane('select_circle').style.zIndex = 602;
 
     // Create recordset if it doesn't exist yet.
-    if (!_xyz.select) _xyz.select = {};
-    if (!_xyz.select.records) _xyz.select.records = [
+    if (!_xyz.ws.select) _xyz.ws.select = {};
+    if (!_xyz.ws.select.records) _xyz.ws.select.records = [
         {
           "letter": "A",
           "color": "#9c27b0"
@@ -119,13 +121,13 @@ module.exports = () => {
         }];
 
     /*let filters = {};
-    if(_xyz.ws.hooks.filter) _xyz.ws.hooks.select.split(',').forEeach(hook => {
+    if(_xyz.hooks.filter) _xyz.hooks.select.split(',').forEeach(hook => {
         let f = hook.split('!');
         filters[f[0]] = decodeURIComponent(f[1]);
     });*/
     
     // Set the layer display from hooks if present; Overwrites the default setting.
-    if (_xyz.ws.hooks.select) _xyz.ws.hooks.select.split(',').forEach(hook => {
+    if (_xyz.hooks.select) _xyz.hooks.select.split(',').forEach(hook => {
         let params = hook.split('!');
         selectLayerFromEndpoint({
             layer: params[1],
@@ -134,15 +136,15 @@ module.exports = () => {
             marker: [params[4].split(';')[0], params[4].split(';')[1]]
         });
     });
-    _xyz.removeHook('select');
+    _xyz.utils.removeHook('select');
 
     // Reset function for the module container.
-    _xyz.select.resetModule = resetModule;
+    _xyz.ws.select.resetModule = resetModule;
     function resetModule() {
         LocationsHeader.style.display = 'none';
         locations.innerHTML = '';
-        _xyz.removeHook('select');
-        _xyz.select.records.map(function (record) {
+        _xyz.utils.removeHook('select');
+        _xyz.ws.select.records.map(function (record) {
             if (record.location && record.location.L) _xyz.map.removeLayer(record.location.L);
             if (record.location && record.location.M) _xyz.map.removeLayer(record.location.M);
             if (record.location && record.location.D) _xyz.map.removeLayer(record.location.D);
@@ -150,21 +152,21 @@ module.exports = () => {
         });
         
         // Make select tab active on mobile device.
-        if (_xyz.activateLayersTab) _xyz.activateLayersTab();
+        if (_xyz.ws.activateLayersTab) _xyz.ws.activateLayersTab();
     }
 
     // Get location from data source
-    _xyz.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
+    _xyz.ws.select.selectLayerFromEndpoint = selectLayerFromEndpoint;
     function selectLayerFromEndpoint(location) {
     
-        let freeRecords = _xyz.select.records.filter(record => !record.location);
+        let freeRecords = _xyz.ws.select.records.filter(record => !record.location);
 
         if (freeRecords.length === 0) return;
 
         // Make select tab active on mobile device.
-        if (_xyz.activateSelectTab) _xyz.activateSelectTab();
+        if (_xyz.ws.activateSelectTab) _xyz.ws.activateSelectTab();
 
-        let layer = _xyz.locales[_xyz.locale].layers[location.layer];
+        let layer = _xyz.ws.locales[_xyz.locale].layers[location.layer];
 
         // Prevent crash for select from hook when layer is no accessible to user.
         if (!layer) return
@@ -175,9 +177,9 @@ module.exports = () => {
             // Create a layer reference for the layer defined in the infoj field.
             if (typeof entry.layer === 'string') {
                 entry.layer = {
-                    table: _xyz.locales[_xyz.locale].layers[entry.layer].table,
-                    geom: _xyz.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
-                    filter: _xyz.locales[_xyz.locale].layers[entry.layer].filter || {}
+                    table: _xyz.ws.locales[_xyz.locale].layers[entry.layer].table,
+                    geom: _xyz.ws.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
+                    filter: _xyz.ws.locales[_xyz.locale].layers[entry.layer].filter || {}
                 }
             }
         })
@@ -185,17 +187,42 @@ module.exports = () => {
         // charts
         setChartData(layer, location);
 
+        // fetch(_xyz.host + '/api/location/select?' + _xyz.utils.paramString({
+        //     locale: _xyz.locale,
+        //     layer: layer.layer,
+        //     table: location.table,
+        //     id: location.id,
+        //     token: _xyz.token
+        //     //filter: location.filter || ''
+        // }))
+        //     .then(res => {
+        //         return res.json();
+        //     })
+        //     .then(loc => {
+        //         let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
+        //         for (let el of els) {
+        //             el.classList.remove("wait-cursor-enabled");
+        //         }
+        //         location.geometry = JSON.parse(loc.geomj);
+        //         location.infoj = loc.infoj;
+        //         location.editable = layer.editable;
+        //         location.geomdisplay = layer.geomdisplay ? JSON.parse(loc.geomdisplay) : null;
+        //         location.dbs = layer.dbs;
+        //         location.qID = layer.qID;
+        //         location.geom = layer.geom;
+        //         addLayerToRecord(location);
+        //     })
+        //     .catch(err => console.error(err));
+
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', _xyz.ws.host + '/api/location/select?' + utils.paramString({
+        xhr.open('GET', _xyz.host + '/api/location/select?' + _xyz.utils.paramString({
             locale: _xyz.locale,
             layer: layer.layer,
             table: location.table,
             id: location.id,
-            token: _xyz.ws.token
+            token: _xyz.token
             //filter: location.filter || ''
         }));
-
-        //xhr.setRequestHeader('Content-Type', 'application/json');
         
         xhr.onload = e => {
 
@@ -234,7 +261,7 @@ module.exports = () => {
                         _arr.push(layer.charts[chart][item].field);
                     });
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST', _xyz.ws.host + '/api/location/chart?token=' + _xyz.ws.token);
+                    xhr.open('POST', _xyz.host + '/api/location/chart?token=' + _xyz.token);
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onload = function(){
                         if (this.status === 200){
@@ -262,7 +289,7 @@ module.exports = () => {
 
     function addLayerToRecord(location) {
 
-        let freeRecords = _xyz.select.records.filter(function (record) {
+        let freeRecords = _xyz.ws.select.records.filter(function (record) {
             if (!record.location) return record
         });
 
@@ -274,7 +301,7 @@ module.exports = () => {
         if (freeRecords.length > 0) {
             freeRecords[0].location = location;
             if (location.layer) {
-                _xyz.pushHook('select',
+                _xyz.utils.pushHook('select',
                     freeRecords[0].letter + '!' +
                     freeRecords[0].location.layer + '!' +
                     freeRecords[0].location.table + '!' +
@@ -287,7 +314,7 @@ module.exports = () => {
             addRecordToMap(freeRecords[0])
         }
     }
-    _xyz.select.addLayerToRecord = addLayerToRecord;
+    _xyz.ws.select.addLayerToRecord = addLayerToRecord;
 
     function addRecordToMap(record) {
         if (record.location.geomdisplay) {
@@ -320,7 +347,7 @@ module.exports = () => {
                     pointToLayer: function (feature, latlng) {
                         return new L.Marker(latlng, {
                             icon: L.icon({
-                                iconUrl: svg_symbols.create({
+                                iconUrl: _xyz.utils.svg_symbols({
                                     type: "markerLetter",
                                     style: {
                                         color: record.color,
@@ -356,7 +383,7 @@ module.exports = () => {
                         {
                             icon: L.icon({
                                 iconSize: 35,
-                                iconUrl: svg_symbols.create({
+                                iconUrl: _xyz.utils.svg_symbols({
                                     type: "circle",
                                     style: {
                                         color: record.color
@@ -364,7 +391,7 @@ module.exports = () => {
                                 })
                             }),
                             pane: 'select_circle',
-                            interactive: _xyz.select ? true : false,
+                            interactive: _xyz.ws.select ? true : false,
                             draggable: record.location.editable
                         });
                 }
@@ -379,15 +406,15 @@ module.exports = () => {
 
     function addRecordToList(record) {
 
-        Object.values(locations.children).forEach(loc => utils.removeClass(loc, 'expanded'));
+        Object.values(locations.children).forEach(loc => _xyz.utils.removeClass(loc, 'expanded'));
 
         // Create drawer element to contain the header with controls and the infoj table with inputs.
-        record.drawer = utils.createElement('div', {
+        record.drawer = _xyz.utils.createElement('div', {
             className: 'drawer expandable expanded'
         });
 
         // Create the header element to contain the control elements
-        record.header = utils._createElement({
+        record.header = _xyz.utils._createElement({
             tag: 'div',
             options: {
                 textContent: record.letter,
@@ -400,7 +427,7 @@ module.exports = () => {
             eventListener: {
                 event: 'click',
                 funct: () => {
-                    utils.toggleExpanderParent({
+                    _xyz.utils.toggleExpanderParent({
                         expandable: record.drawer,
                         accordeon: true,
                         scrolly: document.querySelector('.mod_container > .scrolly')
@@ -434,21 +461,21 @@ module.exports = () => {
         record.drawer.appendChild(record.header);
 
         // Add create and append infoj table to drawer.
-        record.drawer.appendChild(require('./select_table').addInfojToList(record));
+        record.drawer.appendChild(addInfojToList(record));
 
         // Find free space and insert record.
-        let freeRecords = _xyz.select.records.filter(function (record) {
+        let freeRecords = _xyz.ws.select.records.filter(function (record) {
             if (!record.location) return record
         });
-        let idx = _xyz.select.records.indexOf(record);
+        let idx = _xyz.ws.select.records.indexOf(record);
         locations.insertBefore(record.drawer, locations.children[idx]);
 
-        if (_xyz.ws.view_mode === 'desktop') setTimeout(() => {
+        if (_xyz.view_mode === 'desktop') setTimeout(() => {
             let el = document.querySelector('.mod_container > .scrolly');
             el.scrollTop = el.clientHeight;
         }, 500);
 
         // Make select tab active on mobile device.
-        if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
+        if (_xyz.ws.activateLocationsTab) _xyz.ws.activateLocationsTab();
     }
 }
