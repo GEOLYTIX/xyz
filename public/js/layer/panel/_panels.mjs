@@ -15,7 +15,7 @@ import catchments from './catchments.mjs';
 export default layer => {
 
     // create panel element.
-    let panel = _xyz.utils._createElement({
+    let panel = _xyz.utils.createElement({
             tag: 'div',
             options: {
                 className: 'panel'
@@ -23,7 +23,7 @@ export default layer => {
         });
 
     // add meta info to panel.
-    if (layer.meta) _xyz.utils._createElement({
+    if (layer.meta) _xyz.utils.createElement({
         tag: 'p',
         options: {
             className: 'meta',
@@ -56,8 +56,8 @@ export default layer => {
         // set panel on layer object.
         layer.panel = panel;
 
-        _xyz.utils.addClass(layer.header, 'pane_shadow');
-        _xyz.utils.addClass(layer.drawer, 'expandable');
+        layer.header.classList.add('pane_shadow');
+        layer.drawer.classList.add('expandable');
 
         // expander control layer header
         layer.header.addEventListener('click', () => {
@@ -71,7 +71,7 @@ export default layer => {
         layer.drawer.appendChild(layer.panel);
 
         // Add icon which allows to expand / collaps panel.
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'i',
             options: {
                 className: 'material-icons cursor noselect btn_header expander',

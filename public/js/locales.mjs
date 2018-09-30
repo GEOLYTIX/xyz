@@ -15,7 +15,7 @@ export default () => {
 
 
     // Create locales dropdown from locales array.
-    let locale = _xyz.utils._createElement({
+    let locale = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'report-off',
@@ -24,7 +24,7 @@ export default () => {
         appendTo: document.getElementById('Layers')
     });
     
-    let selLocale = _xyz.utils._createElement({
+    let selLocale = _xyz.utils.createElement({
         tag: 'select',
         appendTo: locale
     });
@@ -43,7 +43,7 @@ export default () => {
 
     // Populate locales dropdown.
     Object.keys(_xyz.ws.locales).forEach(loc => {
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'option',
             options: {
                 textContent: _xyz.ws.locales[loc].name || loc,

@@ -22,7 +22,7 @@ export default (layer, panel) => {
     };
 
     // create style section
-    let style_section = _xyz.utils._createElement({
+    let style_section = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -30,7 +30,7 @@ export default (layer, panel) => {
         appendTo: panel
     });
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -83,7 +83,7 @@ export default (layer, panel) => {
     // creates colour picker to layer
     function color_picker(layer, options) {
 
-        let block = _xyz.utils._createElement({
+        let block = _xyz.utils.createElement({
             tag: 'div',
             options: {
                 classList: 'block'
@@ -92,7 +92,7 @@ export default (layer, panel) => {
         });
 
         // title
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'span',
             options: {
                 textContent: options.label + ': '
@@ -108,7 +108,7 @@ export default (layer, panel) => {
                 colours[index].hex + ')' : colours[index].hex;
         }
 
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'span',
             options: {
                 classList: 'bold',
@@ -122,7 +122,7 @@ export default (layer, panel) => {
 
             for (let i = 0; i < colours.length; i++) {
 
-                _xyz.utils._createElement({
+                _xyz.utils.createElement({
                     tag: 'div',
                     options: {
                         textContent: '&nbsp;',
@@ -157,7 +157,7 @@ export default (layer, panel) => {
         }
 
         // add range
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'div',
             options: {
                 textContent: '&nbsp;',
@@ -185,7 +185,7 @@ export default (layer, panel) => {
             appendTo: block
         });
 
-        let color_pick = _xyz.utils._createElement({
+        let color_pick = _xyz.utils.createElement({
             tag: 'div',
             options: {
                 onmouseleave: e => {
@@ -212,7 +212,7 @@ export default (layer, panel) => {
 
     // Colour picker
     if (colours) {
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'div',
             options: {
                 className: 'bold btn_subtext',
@@ -246,7 +246,7 @@ export default (layer, panel) => {
     // Begin opacity tools
     // Group title
     if (layer.style.default.stroke || layer.style.default.color || layer.style.default.fill) {
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'div',
             options: {
                 className: 'bold btn_subtext',

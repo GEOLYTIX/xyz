@@ -6,7 +6,7 @@ import * as controls from './controls.mjs';
 
 export default () => {
 
-    let LocationsHeader = _xyz.utils._createElement({
+    let LocationsHeader = _xyz.utils.createElement({
         tag: 'div',
         style: {
             display: 'none'
@@ -14,7 +14,7 @@ export default () => {
         appendTo: document.getElementById('Locations')
     })
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             textContent: 'Locations',
@@ -23,7 +23,7 @@ export default () => {
         appendTo: LocationsHeader
     })
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             textContent: 'Clear all locations.',
@@ -38,7 +38,7 @@ export default () => {
         }
     })
 
-    let locations = _xyz.utils._createElement({
+    let locations = _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'content'
@@ -61,64 +61,64 @@ export default () => {
     
     if (!_xyz.ws.select.records) _xyz.ws.select.records = [
         {
-          "letter": "A",
-          "color": "#9c27b0"
+          letter: 'A',
+          color: '#9c27b0'
         },
         {
-          "letter": "B",
-          "color": "#2196f3"
+          letter: 'B',
+          color: '#2196f3'
         },
         {
-          "letter": "C",
-          "color": "#009688"
+          letter: 'C',
+          color: '#009688'
         },
         {
-          "letter": "D",
-          "color": "#cddc39"
+          letter: 'D',
+          color: '#cddc39'
         },
         {
-          "letter": "E",
-          "color": "#ff9800"
+          letter: 'E',
+          color: '#ff9800'
         },
         {
-          "letter": "F",
-          "color": "#673ab7"
+          letter: 'F',
+          color: '#673ab7'
         },
         {
-          "letter": "G",
-          "color": "#03a9f4"
+          letter: 'G',
+          color: '#03a9f4'
         },
         {
-          "letter": "H",
-          "color": "#4caf50"
+          letter: 'H',
+          color: '#4caf50'
         },
         {
-          "letter": "I",
-          "color": "#ffeb3b"
+          letter: 'I',
+          color: '#ffeb3b'
         },
         {
-          "letter": "J",
-          "color": "#ff5722"
+          letter: 'J',
+          color: '#ff5722'
         },
         {
-          "letter": "K",
-          "color": "#0d47a1"
+          letter: 'K',
+          color: '#0d47a1'
         },
         {
-          "letter": "L",
-          "color": "#00bcd4"
+          letter: 'L',
+          color: '#00bcd4'
         },
         {
-          "letter": "M",
-          "color": "#8bc34a"
+          letter: 'M',
+          color: '#8bc34a'
         },
         {
-          "letter": "N",
-          "color": "#ffc107"
+          letter: 'N',
+          color: '#ffc107'
         },
         {
-          "letter": "O",
-          "color": "#d32f2f"
+          letter: 'O',
+          color: '#d32f2f'
         }];
 
     /*let filters = {};
@@ -202,7 +202,7 @@ export default () => {
         //     .then(loc => {
         //         let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
         //         for (let el of els) {
-        //             el.classList.remove("wait-cursor-enabled");
+        //             el.classList.remove('wait-cursor-enabled');
         //         }
         //         location.geometry = JSON.parse(loc.geomj);
         //         location.infoj = loc.infoj;
@@ -230,7 +230,7 @@ export default () => {
             // remove wait cursor class if found
             let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
             for (let el of els) {
-                el.classList.remove("wait-cursor-enabled");
+                el.classList.remove('wait-cursor-enabled');
             }
             
             if (e.target.status === 200) {
@@ -281,7 +281,7 @@ export default () => {
                         table: location.table,
                         qID: layer.qID || 'id',
                         id: location.id,
-                        series: _arr.join(",")
+                        series: _arr.join(',')
                     }));
                 });
             }
@@ -349,7 +349,7 @@ export default () => {
                         return new L.Marker(latlng, {
                             icon: L.icon({
                                 iconUrl: _xyz.utils.svg_symbols({
-                                    type: "markerLetter",
+                                    type: 'markerLetter',
                                     style: {
                                         color: record.color,
                                         letter: record.letter
@@ -385,7 +385,7 @@ export default () => {
                             icon: L.icon({
                                 iconSize: 35,
                                 iconUrl: _xyz.utils.svg_symbols({
-                                    type: "circle",
+                                    type: 'circle',
                                     style: {
                                         color: record.color
                                     }
@@ -407,15 +407,18 @@ export default () => {
 
     function addRecordToList(record) {
 
-        Object.values(locations.children).forEach(loc => _xyz.utils.removeClass(loc, 'expanded'));
+        Object.values(locations.children).forEach(loc => loc.classList.remove('expanded'));
 
         // Create drawer element to contain the header with controls and the infoj table with inputs.
-        record.drawer = _xyz.utils.createElement('div', {
-            className: 'drawer expandable expanded'
+        record.drawer = _xyz.utils.createElement({
+            tag: 'div',
+            options: {
+                className: 'drawer expandable expanded'
+            }
         });
 
         // Create the header element to contain the control elements
-        record.header = _xyz.utils._createElement({
+        record.header = _xyz.utils.createElement({
             tag: 'div',
             options: {
                 textContent: record.letter,

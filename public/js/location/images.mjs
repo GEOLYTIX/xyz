@@ -3,63 +3,92 @@ import _xyz from '../_xyz.mjs';
 export default (record, images) => {
 
     // create image container
-    let img_container = _xyz.utils.createElement('div', {
-        className: 'img-container'
-    })
+    let img_container = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+            className: 'img-container'
+        }
+    });
 
     // image table row which holds the image array
-    let img_tr = document.createElement('tr');
-    img_container.appendChild(img_tr);
+    let img_tr = _xyz.utils.createElement({
+        tag: 'tr',
+        appendTo: img_container
+    });
 
     // add image picker
-    let img_td = _xyz.utils.createElement('td', {
-        className: 'addImageCell',
+    let img_td = _xyz.utils.createElement({
+        tag: 'td',
+        options: {
+            className: 'addImageCell'
+        },
+        appendTo: img_tr
     });
-    img_tr.appendChild(img_td);
 
-    let add_img_label = _xyz.utils.createElement('label', {
-        htmlFor: 'addImage_' + record.letter,
+    let add_img_label = _xyz.utils.createElement({
+        tag: 'label',
+        options: {
+            htmlFor: 'addImage_' + record.letter
+        },
+        appendTo: img_td
     });
-    img_td.appendChild(add_img_label);
 
-    let add_img_icon = _xyz.utils.createElement('i', {
-        className: 'material-icons cursor noselect',
-        textContent: 'add_a_photo'
+    let add_img_icon = _xyz.utils.createElement({
+        tag: 'i',
+        options: {
+            className: 'material-icons cursor noselect',
+            textContent: 'add_a_photo'
+        },
+        appendTo: add_img_label
     });
-    add_img_label.appendChild(add_img_icon);
 
-    let add_img = _xyz.utils.createElement('input', {
-        id: 'addImage_' + record.letter,
-        type: 'file',
-        accept: 'image/*;capture=camera'
+    let add_img = _xyz.utils.createElement({
+        tag: 'input',
+        options: {
+            id: 'addImage_' + record.letter,
+            type: 'file',
+            accept: 'image/*;capture=camera'
+        },
+        appendTo: img_td
     });
-    
-    img_td.appendChild(add_img);
 
     // add images if there are any
     for (let image of images) {
-        img_td = document.createElement('td');
-        img_tr.appendChild(img_td);
-        let _img = _xyz.utils.createElement('img', {
-            id: image.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
-            src: image
+        
+        img_td = _xyz.utils.createElement({
+            tag: 'td',
+            appendTo: img_tr
         });
-        _img.style.border = '3px solid #EEE';
+
+        let _img = _xyz.utils.createElement({
+            tag: 'img',
+            options: {
+                id: image.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
+                src: image
+            },
+            style: {
+                border: '3px solid #EEE'
+            },
+            appendTo: img_td
+        });
 
         // add delete button / control
-        let btn_del = _xyz.utils.createElement('button', {
-            title: 'Delete image',
-            className: 'btn_del',
-            innerHTML: '<i class="material-icons">delete_forever</i>'
+        _xyz.utils.createElement({
+            tag: 'button',
+            options: {
+                title: 'Delete image',
+                className: 'btn_del',
+                innerHTML: '<i class="material-icons">delete_forever</i>'
+            },
+            appendTo: img_td,
+            eventListener: {
+                event: 'click',
+                funct: e => {
+                    e.target.remove();
+                    remove_image(record, _img);
+                }
+            }
         });
-        btn_del.addEventListener('click', function () {
-            this.remove();
-            remove_image(record, _img);
-        });
-        img_td.appendChild(btn_del);
-
-        // append image to table cell
-        img_td.appendChild(_img);
     }
     
     // empty the file input value
@@ -101,37 +130,54 @@ export default (record, images) => {
                 canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
                 let dataURL = canvas.toDataURL('image/jpeg', 0.5);
-                let _img = _xyz.utils.createElement('img', {
-                    src: dataURL
+
+                let _img = _xyz.utils.createElement({
+                    tag: 'img',
+                    options: {
+                        src: dataURL
+                    },
+                    style: {
+                        border: '3px solid #090'
+                    }
                 });
-                _img.style.border = '3px solid #090';
 
                 // add delete button / control
-                let btn_del = _xyz.utils.createElement('button', {
-                    title: 'Delete image',
-                    className: 'btn_del',
-                    innerHTML: '<i class="material-icons">delete_forever</i>'
+                let btn_del = _xyz.utils.createElement({
+                    tag: 'button',
+                    options: {
+                        title: 'Delete image',
+                        className: 'btn_del',
+                        innerHTML: '<i class="material-icons">delete_forever</i>'
+                    },
+                    appendTo: newImage,
+                    eventListener: {
+                        event: 'click',
+                        funct: () => {
+                            newImage.remove();
+                        }
+                    }
                 });
-                btn_del.addEventListener('click', function () {
-                    newImage.remove();
-                });
-                newImage.appendChild(btn_del);
                     
                 // add save button / control
-                let btn_save = _xyz.utils.createElement('button', {
-                    title: 'Save image',
-                    className: 'btn_save',
-                    innerHTML: '<i class="material-icons">cloud_upload</i>'
+                let btn_save = _xyz.utils.createElement({
+                    tag: 'button',
+                    options: {
+                        title: 'Save image',
+                        className: 'btn_save',
+                        innerHTML: '<i class="material-icons">cloud_upload</i>'
+                    },
+                    appendTo: newImage,
+                    eventListener: {
+                        event: 'click',
+                        funct: () => {
+                            btn_del.remove();
+                            btn_save.remove();
+                            upload_image(record, _img, _xyz.utils.dataURLToBlob(dataURL));
+                        }
+                    }
                 });
-                btn_save.addEventListener('click', function () {
-                    btn_del.remove();
-                    btn_save.remove();
-                    upload_image(record, _img, _xyz.utils.dataURLToBlob(dataURL));
-                });
-                newImage.appendChild(btn_save);
 
                 newImage.appendChild(_img);
-
             }
 
             img.src = readerOnload.target.result;
@@ -154,11 +200,10 @@ function upload_image(record, img, blob) {
         table: record.location.table,
         qID: record.location.qID,
         id: record.location.id,
-        token: _xyz.ws.ws.token
+        token: _xyz.token
     }));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.onload = e => {
-
         if (e.target.status === 200) {
             
             let json = JSON.parse(e.target.responseText);
@@ -169,16 +214,22 @@ function upload_image(record, img, blob) {
             img.src = json.image_url;
 
             // add delete button / control
-            let btn_del = _xyz.utils.createElement('button', {
-                title: 'Delete image',
-                className: 'btn_del',
-                innerHTML: '<i class="material-icons">delete_forever</i>'
+            let btn_del = _xyz.utils.createElement({
+                tag: 'button',
+                options: {
+                    title: 'Delete image',
+                    className: 'btn_del',
+                    innerHTML: '<i class="material-icons">delete_forever</i>'
+                },
+                appendTo: img.parentElement,
+                eventListener: {
+                    event: 'click',
+                    funct: e => {
+                        e.target.remove();
+                        remove_image(record, img);
+                    }
+                }
             });
-            btn_del.addEventListener('click', function () {
-                this.remove();
-                remove_image(record, img);
-            });
-            img.parentElement.appendChild(btn_del);
         }
     }
     img.style.opacity = '0'
@@ -195,19 +246,19 @@ function remove_image(record, img) {
     document.getElementById(img.id).remove();
     
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', _xyz.ws.ws.host + '/api/images/delete?' + _xyz.utils.paramString({
+    xhr.open('GET', _xyz.host + '/api/images/delete?' + _xyz.utils.paramString({
         locale: _xyz.locale,
         layer: record.location.layer,
         table: record.location.table,
         id: record.location.id,
         image_id: img.id,
         image_src: encodeURIComponent(img.src),
-        token: _xyz.ws.ws.token
+        token: _xyz.token
     }));
-    // xhr.onload = e => {
-    //     if (e.target.status === 200) {
-    //         //console.log(this.responseText);
-    //     }
-    // }
+    /*xhr.onload = e => {
+        if (e.target.status === 200) {
+            //console.log(this.responseText);
+        }
+    }*/
     xhr.send();
 }

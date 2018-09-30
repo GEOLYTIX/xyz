@@ -1,110 +1,19 @@
 export {default as svg_symbols} from './svg_symbols.mjs';
 
-export function scrollElement(element, to, duration) {
-    if (duration <= 0) return;
-
-    let difference = to - element.scrollTop,
-        perTick = difference / duration * 10;
-
-    setTimeout(function () {
-        element.scrollTop = element.scrollTop + perTick;
-        if (element.scrollTop === to) return;
-        scrollElement(element, to, duration - 10);
-    }, 10);
-}
-
-export function addClass(elements, myClass) {
-    if (!elements) return;
-
-    // if we have a selector, get the chosen elements
-    if (typeof (elements) === 'string') {
-        elements = document.querySelectorAll(elements);
-    } else if (elements.tagName) {
-        elements = [elements];
-    }
-
-    // add class to all chosen elements
-    for (let i = 0; i < elements.length; i++) {
-        if ((' ' + elements[i].className + ' ').indexOf(' ' + myClass + ' ') < 0) elements[i].className += ' ' + myClass;
-    }
-}
-
-export function removeClass(elements, myClass) {
-    if (!elements) return;
-
-    // if we have a selector, get the chosen elements
-    if (typeof (elements) === 'string') {
-        elements = document.querySelectorAll(elements);
-
-    } else if (elements.tagName) {
-        elements = [elements];
-    }
-
-    // create pattern to find class name
-    let reg = new RegExp('(^| )' + myClass + '($| )', 'g');
-
-    // remove class from all chosen elements
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].className = elements[i].className.replace(reg, ' ');
-    }
-}
-
-export function toggleClass(elements, myClass) {
-    if (!elements) return;
-
-    // if we have a selector, get the chosen elements
-    if (typeof (elements) === 'string') {
-        elements = document.querySelectorAll(elements);
-
-    } else if (elements.tagName) {
-        elements = [elements];
-    }
-
-    // create pattern to find class name
-    let reg = new RegExp('(^| )' + myClass + '($| )', 'g');
-
-    for (let i = 0; i < elements.length; i++) {
-        if (elements[i] && (' ' + elements[i].className + ' ').indexOf(' ' + myClass + ' ') > 0) {
-            elements[i].className = elements[i].className.replace(reg, ' ');
-        } else if (elements[i]) {
-            elements[i].className += ' ' + myClass;
-        }
-    }
-}
-
-export function hasClass(elements, myClass) {
-    if (!elements) return;
-
-    // if we have a selector, get the chosen elements
-    if (typeof (elements) === 'string') {
-        elements = document.querySelectorAll(elements);
-    } else if (elements.tagName) {
-        elements = [elements];
-    }
-
-    // add class to all chosen elements
-    let n = 0;
-    for (let i = 0; i < elements.length; i++) {
-        if ((' ' + elements[i].className + ' ').indexOf(' ' + myClass + ' ') > 0) n++;
-    }
-
-    return n === elements.length;
-}
-
+// Find the index of node in childNodes of parentNode.
 export function indexInParent(node) {
-    if (node) {
-        let children = node.parentNode.childNodes,
-            num = 0;
+    if (!node) return -1;
 
-        for (let i = 0; i < children.length; i++) {
-            if (children[i] === node) return num;
-            if (children[i].nodeType === 1) num++;
-        }
+    let children = node.parentNode.childNodes,
+        num = 0;
+
+    for (let i = 0; i < children.length; i++) {
+        if (children[i] === node) return num;
+        if (children[i].nodeType === 1) num++;
     }
-
-    return -1;
 }
 
+// Debounce function.
 export function debounce(func, wait) {
     let timeout;
 
@@ -117,6 +26,7 @@ export function debounce(func, wait) {
     };
 }
 
+// Create param string for XHR request.
 export function paramString(param) {
     let encodedString = '';
 
@@ -128,17 +38,7 @@ export function paramString(param) {
     return encodedString;
 }
 
-export function createElement(tag, options, appendTo) {
-    let el = document.createElement(tag);
-
-    if (options && typeof options === 'object') Object.keys(options).map(key => el[key] = options[key]);
-
-    if (appendTo) appendTo.appendChild(el);
-
-    return el;
-}
-
-export function _createElement(_el) {
+export function createElement(_el) {
     let el = document.createElement(_el.tag);
 
     if (_el.options) Object.keys(_el.options).map(key => el[key] = _el.options[key]);
@@ -209,10 +109,10 @@ export function toggleExpanderParent(params) {
     if (!params.expandableTag) params.expandableTag = 'expandable';
 
     // Check whether parent is expanded.
-    if (hasClass(params.expandable, params.expandedTag)) {
+    if (params.expandable.classList.contains(params.expandedTag)) {
 
         // Remove expanded class.
-        removeClass(params.expandable, params.expandedTag);
+        params.expandable.classList.remove(params.expandedTag);
 
         // Actualize scrollbar of scrolly element.
         if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
@@ -223,14 +123,14 @@ export function toggleExpanderParent(params) {
     // Accordion: Collapse the parents siblings which are expanded.
     if (params.accordeon) {
         [...params.expandable.parentElement.children].forEach(expandable_sibling => {
-            removeClass(expandable_sibling, params.expandedTag);
+            expandable_sibling.classList.remove(params.expandedTag);
             if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
         });
     }
 
     // Add expanded class to expandable element.
-    if (hasClass(params.expandable, params.expandableTag)) {
-        addClass(params.expandable, params.expandedTag);
+    if (params.expandable.classList.contains(params.expandableTag)) {
+        params.expandable.classList.add(params.expandedTag);
         if (params.scrolly) setTimeout(() => scrolly(params.scrolly), 400);
     };
 }
@@ -276,7 +176,7 @@ export function scrolly(el) {
 
 export function checkbox(onchange, options) {
 
-    let checkbox = _createElement({
+    let checkbox = createElement({
         tag: 'label',
         options: {
             textContent: options.label,
@@ -284,7 +184,7 @@ export function checkbox(onchange, options) {
         }
     });
 
-    let input = _createElement({
+    let input = createElement({
         tag: 'input',
         options: {
             type: 'checkbox'
@@ -292,7 +192,7 @@ export function checkbox(onchange, options) {
         appendTo: checkbox
     });
 
-    _createElement({
+    createElement({
         tag: 'div',
         options: {
             className: 'checkbox_i'
@@ -309,7 +209,7 @@ export function checkbox(onchange, options) {
 
 export function slider(options) {
 
-    _createElement({
+    createElement({
         tag: 'span',
         options: {
             textContent: options.title
@@ -317,7 +217,7 @@ export function slider(options) {
         appendTo: options.appendTo
     });
 
-    _createElement({
+    createElement({
         tag: 'span',
         options: {
             textContent: options.default,
@@ -326,7 +226,7 @@ export function slider(options) {
         appendTo: options.appendTo
     });
 
-    let range_div = _createElement({
+    let range_div = createElement({
         tag: 'div',
         options: {
             className: "range"
@@ -334,7 +234,7 @@ export function slider(options) {
         appendTo: options.appendTo
     });
 
-    _createElement({
+    createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -385,29 +285,3 @@ export function copy_to_clipboard(str) {
     document.execCommand('copy');
     textArea.remove();
 }
-
-// export function wrap(text, width) { // wraps svg text
-//     text.each(function () {
-//         let text = d3_selection.select(this),
-//             words = text.text().split(/\s+/).reverse(),
-//             word,
-//             line = [],
-//             lineNumber = 0,
-//             lineHeight = 1.1, // ems
-//             x = text.attr("x"),
-//             y = text.attr("y"),
-//             dy = 1.1,
-//             tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-//         while (word = words.pop()) {
-//             line.push(word);
-//             tspan.text(line.join(" "));
-//             if (tspan.node().getComputedTextLength() > width) {
-//                 line.pop();
-//                 tspan.text(line.join(" "));
-//                 line = [word];
-//                 tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-//             }
-//         }
-//     });
-// }

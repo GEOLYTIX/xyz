@@ -3,7 +3,7 @@ import _xyz from '../../_xyz.mjs';
 export default (layer, panel) => {
 
     // Create panel block.
-    let block = _xyz.utils._createElement({
+    let block = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -12,7 +12,7 @@ export default (layer, panel) => {
     });
 
     // Create block title expander.
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -40,7 +40,7 @@ export default (layer, panel) => {
 
 
     // KMeans
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Minimum number of cluster (KMeans): '
@@ -48,7 +48,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblKMeans = _xyz.utils._createElement({
+    let lblKMeans = _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: layer.cluster_kmeans,
@@ -57,7 +57,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rKMeans = _xyz.utils._createElement({
+    let rKMeans = _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -67,7 +67,7 @@ export default (layer, panel) => {
 
     let timeout;
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -93,7 +93,7 @@ export default (layer, panel) => {
 
 
     // DBScan
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Maximum distance between locations in cluster (DBScan): '
@@ -101,7 +101,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblDBScan = _xyz.utils._createElement({
+    let lblDBScan = _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: layer.cluster_dbscan,
@@ -110,7 +110,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rDBScan = _xyz.utils._createElement({
+    let rDBScan = _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -118,7 +118,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -144,7 +144,7 @@ export default (layer, panel) => {
 
 
     // markerMin
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Marker Min: '
@@ -152,7 +152,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblMarkerMin = _xyz.utils._createElement({
+    let lblMarkerMin = _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: layer.style.markerMin,
@@ -161,7 +161,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rMarkerMin = _xyz.utils._createElement({
+    let rMarkerMin = _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -169,7 +169,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -190,7 +190,7 @@ export default (layer, panel) => {
 
 
     // markerMax
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Marker Max: '
@@ -198,7 +198,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let lblMarkerMax = _xyz.utils._createElement({
+    let lblMarkerMax = _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: layer.style.markerMax,
@@ -207,7 +207,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    let rMarkerMax = _xyz.utils._createElement({
+    let rMarkerMax = _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'range'
@@ -215,7 +215,7 @@ export default (layer, panel) => {
         appendTo: block
     });
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             type: 'range',

@@ -9,7 +9,7 @@ export default () => {
     // Assign dom objects.
     let dom = {
         map: document.getElementById('Map'),
-        layers: _xyz.utils._createElement({
+        layers: _xyz.utils.createElement({
             tag: 'div',
             options: {
                 className: 'content'
@@ -52,7 +52,7 @@ export default () => {
 
         // Add layer groups
         Object.keys(groups).forEach(group => {
-            groups[group].container = _xyz.utils._createElement({
+            groups[group].container = _xyz.utils.createElement({
                 tag: 'div',
                 options: {
                     className: 'drawer drawer-group expandable-group'
@@ -60,7 +60,7 @@ export default () => {
                 appendTo: dom.layers
             });
 
-            groups[group].header = _xyz.utils._createElement({
+            groups[group].header = _xyz.utils.createElement({
                 tag: 'div',
                 options: {
                     textContent: groups[group].label,
@@ -81,7 +81,7 @@ export default () => {
                 }
             });
 
-            groups[group].hideAll = _xyz.utils._createElement({
+            groups[group].hideAll = _xyz.utils.createElement({
                 tag: "i",
                 options: {
                     className: 'material-icons cursor noselect btn_header hide-group',
@@ -110,7 +110,7 @@ export default () => {
             });
 
             // add group expander
-            _xyz.utils._createElement({
+            _xyz.utils.createElement({
                 tag: 'i',
                 options: {
                     className: 'material-icons cursor noselect btn_header expander-group',
@@ -164,7 +164,7 @@ export default () => {
             if (!layer.filter) layer.filter = {};
 
             // Create layer drawer.
-            layer.drawer = _xyz.utils._createElement({
+            layer.drawer = _xyz.utils.createElement({
                 tag: 'div',
                 options: {
                     className: 'drawer'
@@ -175,7 +175,7 @@ export default () => {
             if (layer.hidden) layer.drawer.style.display = 'none';
 
             // Create layer header.
-            layer.header = _xyz.utils._createElement({
+            layer.header = _xyz.utils.createElement({
                 tag: 'div',
                 options: {
                     textContent: layer.name,
@@ -196,7 +196,7 @@ export default () => {
             layer.getLayer = layer_formats[layer.format];
 
             // Create control to toggle layer visibility.
-            layer.clear_icon = _xyz.utils._createElement({
+            layer.clear_icon = _xyz.utils.createElement({
                 tag: 'i',
                 options: {
                     textContent: layer.display ? 'layers' : 'layers_clear',
@@ -215,7 +215,7 @@ export default () => {
 
             // Create zoom to layer control
             if (layer.cntr || layer.bounds) {
-                _xyz.utils._createElement({
+                _xyz.utils.createElement({
                     tag: 'i',
                     options: {
                         textContent: "search",
@@ -240,7 +240,7 @@ export default () => {
             }
 
             // Create loader element.
-            layer.loader = _xyz.utils._createElement({
+            layer.loader = _xyz.utils.createElement({
                 tag: 'div',
                 options: {
                     className: 'loader'
@@ -251,7 +251,7 @@ export default () => {
             // Add edit control to layer header.
             if (layer.editable && layer.editable === 'geometry') {
 
-                _xyz.utils._createElement({
+                _xyz.utils.createElement({
                     tag: 'i',
                     options: {
                         textContent: 'add_location',
@@ -264,9 +264,9 @@ export default () => {
                         funct: e => {
                             e.stopPropagation();
                             let btn = e.target;
-                            _xyz.utils.toggleClass(btn, 'active');
+                            btn.classList.toggle('active');
 
-                            if (!_xyz.utils.hasClass(btn, 'active')) {
+                            if (!btn.classList.contains('active')) {
                                 _xyz.map.off('click');
                                 dom.map.style.cursor = '';
                                 return
@@ -279,7 +279,7 @@ export default () => {
 
                                 let marker = [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)];
 
-                                _xyz.utils.removeClass(btn, 'active');
+                                btn.classList.remove('active');
                                 _xyz.map.off('click');
                                 dom.map.style.cursor = '';
 
@@ -335,10 +335,10 @@ export default () => {
                 attributionCheck();
             }
 
-            if (!layer.display) _xyz.utils.addClass(layer.drawer, 'report-off');
+            if (!layer.display) layer.drawer.classList.add('report-off');
 
             if (layer.format === 'cluster' && layer.style.marker) {
-                _xyz.utils._createElement({
+                _xyz.utils.createElement({
                     tag: "img",
                     options: {
                         src: _xyz.utils.svg_symbols(layer.style.marker),
@@ -379,7 +379,7 @@ export default () => {
             }
 
             layer.display = true;
-            _xyz.utils.removeClass(layer.drawer, 'report-off');
+            layer.drawer.classList.remove('report-off');
             e.target.textContent = 'layers';
             _xyz.utils.pushHook('layers', layer.layer);
             _xyz.ws.attribution = _xyz.ws.attribution.concat(layer.attribution || []);
@@ -396,7 +396,7 @@ export default () => {
         layer.loader.style.display = 'none';
         layer.clear_icon.textContent = "layers_clear";
         layer.display = false;
-        _xyz.utils.addClass(layer.drawer, 'report-off');
+        layer.drawer.classList.add('report-off');
         _xyz.utils.filterHook('layers', layer.layer);
 
         if (layer.attribution) layer.attribution.forEach(a => {

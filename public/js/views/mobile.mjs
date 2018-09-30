@@ -20,35 +20,34 @@ export default () => {
 
     function checkOverlap (mod) {
         if (mod.scrollTop > 0) {
-            _xyz.utils.addClass(tabs, 'pane_shadow');
+            tabs.classList.add('pane_shadow');
             return
         }
-        _xyz.utils.removeClass(tabs, 'pane_shadow');
+        tabs.classList.remove('pane_shadow');
     }
 
     _xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
     _xyz.activateLocationsTab = () => {
-        _xyz.utils.removeClass(tabLocations, 'hidden');
+        tabLocations.classList.remove('hidden');
         activateTab(tabLocations, modLocations)
     };
 
-    tabLayers.addEventListener('click',
-        () => activateTab(tabLayers, modLayers));
+    tabLayers.addEventListener('click', () => activateTab(tabLayers, modLayers));
 
-    tabLocations.addEventListener('click',
-        () => activateTab(tabLocations, modLocations));
+    tabLocations.addEventListener('click', () => activateTab(tabLocations, modLocations));
 
     function activateTab(target, mod) {
-        _xyz.utils.removeClass(target.parentNode.children, 'active');
-        _xyz.utils.addClass(target, 'active');
-        _xyz.utils.addClass(modules, 'hidden');
-        _xyz.utils.removeClass(mod, 'hidden');
+
+        target.parentNode.children.forEach(el => el.classList.remove('active'));
+        target.classList.add('active');
+        modules.forEach(m => m.classList.add('hidden'));
+        mod.classList.remove('hidden');
         checkOverlap (mod);
 
         let locations = document.querySelector('#Locations > .content');
 
         setTimeout(() => {
-            if (locations.children.length === 0) _xyz.utils.addClass(tabLocations, 'hidden')
+            if (locations.children.length === 0) tabLocations.classList.add('hidden');
         }, 300);
     }
 };

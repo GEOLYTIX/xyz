@@ -34,7 +34,7 @@ export default () => {
 
         // Hide gazetteer button if no gazetteer is set for the locale.
         if (!_xyz.ws.locales[_xyz.locale].gazetteer) {
-            _xyz.utils.removeClass(dom.btnSearch, 'active');
+            dom.btnSearch.classList.remove('active');
             dom.btnSearch.style.display = 'none';
             dom.group.style.display = 'none';
             return;
@@ -55,7 +55,7 @@ export default () => {
 
     // Toggle visibility of the gazetteer group
     dom.btnSearch.addEventListener('click', e => {
-        _xyz.utils.toggleClass(e.target, 'active');
+        e.target.classList.toggle('active');
         dom.group.style.display =
             dom.group.style.display === 'block' ? 'none' : 'block';
 
@@ -87,13 +87,13 @@ export default () => {
         // Move up through results with up key
         if (key === 38) {
             let i = _xyz.utils.indexInParent(dom.result.querySelector('.active'));
-            if (i > 0) _xyz.utils.toggleClass([results[i], results[i - 1]], 'active');
+            if (i > 0) [results[i], results[i - 1]].forEach(el => el.classList.toggle('active'));
         }
 
         // Move down through results with down key
         if (key === 40) {
             let i = _xyz.utils.indexInParent(dom.result.querySelector('.active'));
-            if (i < results.length - 1) _xyz.utils.toggleClass([results[i], results[i + 1]], 'active');
+            if (i < results.length - 1) [results[i], results[i + 1]].forEach(el => el.classList.toggle('active'));
         }
 
         // Cancel search and set results to empty on backspace or delete keydown
@@ -163,7 +163,7 @@ function initiateSearch(searchValue, dom) {
             let json = JSON.parse(e.target.responseText);
 
             if (json.length === 0) {
-                _xyz.utils._createElement({
+                _xyz.utils.createElement({
                     tag: 'li',
                     options: { textContent: 'No results for this search.' },
                     style: { padding: '5px 0' },
@@ -173,7 +173,7 @@ function initiateSearch(searchValue, dom) {
             }
 
             for (let key in json) {
-                _xyz.utils._createElement({
+                _xyz.utils.createElement({
                     tag: 'li',
                     options: {
                         textContent: json[key].label,

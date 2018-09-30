@@ -5,7 +5,7 @@ import d3_selection from "d3-selection";
 export default (layer, panel) => {
 
     // Create panel block.
-    let block = _xyz.utils._createElement({
+    let block = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -14,7 +14,7 @@ export default (layer, panel) => {
     });
 
     // Create block title expander.
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -35,7 +35,7 @@ export default (layer, panel) => {
     });
 
     // Create panel block.
-    layer.legend = _xyz.utils._createElement({
+    layer.legend = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'legend'
@@ -48,7 +48,7 @@ export default (layer, panel) => {
     if (layer.style.themes) {
 
         // Theme drop down
-        _xyz.utils._createElement({
+        _xyz.utils.createElement({
             tag: 'span',
             options: {
                 textContent: 'Select thematic style…'
@@ -56,7 +56,7 @@ export default (layer, panel) => {
             appendTo: block
         });
 
-        let select = _xyz.utils._createElement({
+        let select = _xyz.utils.createElement({
             tag: 'select',
             options: {
                 onchange: e => {
@@ -75,7 +75,7 @@ export default (layer, panel) => {
 
         // add themes to dropdown
         Object.keys(layer.style.themes).forEach(key => {
-            _xyz.utils._createElement({
+            _xyz.utils.createElement({
                 tag: 'option',
                 options: {
                     value: key,
@@ -87,7 +87,7 @@ export default (layer, panel) => {
 
         if (layer.style.themes.length === 1) select.disabled = true;
 
-        // _xyz.utils._createElement({
+        // _xyz.utils.createElement({
         //     tag: 'option',
         //     options: {
         //         textContent: 'Create new theme…'
@@ -98,7 +98,7 @@ export default (layer, panel) => {
     } else {
 
         // Single theme title.
-        if (layer.style.theme.label) _xyz.utils._createElement({
+        if (layer.style.theme.label) _xyz.utils.createElement({
             tag: 'span',
             options: {
                 classList: 'title',

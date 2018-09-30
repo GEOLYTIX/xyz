@@ -3,7 +3,7 @@ import _xyz from '../../_xyz.mjs';
 export default (layer, panel) => {
 
     // Add filter block to layer panel.
-    let filters = _xyz.utils._createElement({
+    let filters = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'section expandable'
@@ -12,7 +12,7 @@ export default (layer, panel) => {
     });
 
     // Filter control expander.
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -42,42 +42,6 @@ export default (layer, panel) => {
 
         _array = _array.map((item) => item.disabled);
         select.disabled = _array.reduce((acc, curr) => acc + curr) == _array.length ? true : false;
-    }
-
-    // add aggregate layer button
-    function add_run_button() {
-
-        let run = _xyz.utils.createElement('div', {
-            classList: 'btn_wide cursor noselect',
-            textContent: 'Run Output',
-            onclick: () => {
-
-                layer.xhr.open('GET', _xyz.host + '/api/location/aggregate?' + _xyz.utils.paramString({
-                    locale: _xyz.locale,
-                    layer: layer.layer,
-                    token: _xyz.token,
-                    filter: JSON.stringify(layer.filter) || ''
-                }));
-
-                layer.xhr.onload = e => {
-                    if (e.target.status === 200) {
-                        let json = JSON.parse(e.target.response);
-                    
-                        _xyz.ws.select.selectLayerFromEndpoint({
-                            layer: layer.aggregate_layer,
-                            table: _xyz.ws.locales[_xyz.locale].layers[layer.aggregate_layer].table,
-                            id: json.id,
-                            marker: [json.lng, json.lat],
-                            filter: JSON.stringify(layer.filter) || ''
-                        });
-                    }
-                };
-
-                layer.xhr.send();
-            }
-        });
-        run.style.display = 'none';
-        filters.appendChild(run);
     }
 
     function select_onchange(e) {
@@ -122,30 +86,30 @@ export default (layer, panel) => {
                 }
             };
         }
-        
-        function processInfoj(val, entry){
-            if(entry.filter && entry.field === val){
-                
-                if(typeof(entry.filter) == 'object'){
-                    
-                    block = _xyz.utils._createElement({
+
+        function processInfoj(val, entry) {
+            if (entry.filter && entry.field === val) {
+
+                if (typeof (entry.filter) == 'object') {
+
+                    block = _xyz.utils.createElement({
                         tag: 'div',
                         options: {
                             classList: 'block'
                         }
                     });
-                    
-                    let title_div = _xyz.utils._createElement({
+
+                    let title_div = _xyz.utils.createElement({
                         tag: 'div',
                         options: {
                             //innerHTML: entry.label + '<i class='material-icons'>clear</i>',
                             classList: 'title',
                             onclick: remove_filter_onclick
-                        }, 
+                        },
                         appendTo: block
                     });
 
-                    _xyz.utils._createElement({
+                    _xyz.utils.createElement({
                         tag: 'i',
                         options: {
                             classList: 'material-icons',
@@ -153,9 +117,9 @@ export default (layer, panel) => {
                         },
                         appendTo: title_div
                     });
-                    
+
                     Object.values(entry.filter).forEach(_value => {
-                        for(let __value of _value){
+                        for (let __value of _value) {
                             let index = _value.indexOf(__value);
                             let options = {
                                 field: val,
@@ -166,20 +130,20 @@ export default (layer, panel) => {
                             block.appendChild(content);
                         }
                     });
-                    
+
                     filters.insertBefore(block, filters.lastChild);
-                    
+
                 } else {
-                    if(entry.filter === 'numeric') {
-                        
-                        block = _xyz.utils._createElement({
+                    if (entry.filter === 'numeric') {
+
+                        block = _xyz.utils.createElement({
                             tag: 'div',
                             options: {
                                 classList: 'block'
                             }
                         });
-                        
-                        _xyz.utils._createElement({
+
+                        _xyz.utils.createElement({
                             tag: 'div',
                             options: {
                                 innerHTML: entry.label + '<i class="material-icons">clear</i>',
@@ -197,34 +161,34 @@ export default (layer, panel) => {
                         //console.log(layer);
 
                         let _options = {
-                                field: entry.field,
-                                max: layer.idx[entry.field].max,
-                                min: layer.idx[entry.field].min,
-                                value: [layer.idx[entry.field].min, layer.idx[entry.field].max],
-                                appendTo: block
-                            };
+                            field: entry.field,
+                            max: layer.idx[entry.field].max,
+                            min: layer.idx[entry.field].min,
+                            value: [layer.idx[entry.field].min, layer.idx[entry.field].max],
+                            appendTo: block
+                        };
 
-                            //console.log(_options);
+                        //console.log(_options);
                         //filter_numeric(layer, options);
                         filter_range(layer, _options);
                         filters.insertBefore(block, filters.lastChild);
                     };
-                    if(entry.filter === 'like' || entry.filter === 'match') {
-                        
-                        block = _xyz.utils._createElement({
-                            tag: 'div', 
+                    if (entry.filter === 'like' || entry.filter === 'match') {
+
+                        block = _xyz.utils.createElement({
+                            tag: 'div',
                             options: {
                                 classList: 'block'
                             }
                         });
 
-                        _xyz.utils._createElement({
-                            tag: 'div', 
+                        _xyz.utils.createElement({
+                            tag: 'div',
                             options: {
                                 innerHTML: entry.label + '<i class="material-icons">clear</i>',
                                 classList: 'title',
                                 onclick: remove_filter_onclick
-                            }, 
+                            },
                             appendTo: block
                         });
 
@@ -239,16 +203,16 @@ export default (layer, panel) => {
                         filter_text(layer, options);
                         filters.insertBefore(block, filters.lastChild);
                     };
-                    if(entry.filter === 'date') {
-                        
-                        block = _xyz.utils._createElement({
+                    if (entry.filter === 'date') {
+
+                        block = _xyz.utils.createElement({
                             tag: 'div',
                             options: {
                                 classList: 'block'
                             }
                         });
 
-                        title = _xyz.utils._createElement({
+                        title = _xyz.utils.createElement({
                             tag: 'div',
                             options: {
                                 classList: 'title',
@@ -271,10 +235,10 @@ export default (layer, panel) => {
                 }
             }
         }
-        
+
         // process filters from infoj
         Object.values(layer.infoj).map(item => {
-            if(item.type === 'group'){
+            if (item.type === 'group') {
                 Object.values(item.items).map(_item => {
                     processInfoj(_val, _item);
                 });
@@ -286,26 +250,28 @@ export default (layer, panel) => {
         this.selectedIndex = 0;
     }
 
-    let select = _xyz.utils._createElement({
-        tag: 'select', 
+    let select = _xyz.utils.createElement({
+        tag: 'select',
         options: {
             onchange: select_onchange,
             innerHTML: '<option selected>Select filter from list.</option>'
         }
     });
-    
-    function createOptions(select, entry){
-        if (entry.filter) {
-            _xyz.utils.createElement('option', {
+
+    function createOptions(select, entry) {
+        if (entry.filter) _xyz.utils.createElement({
+            tag: 'option',
+            options: {
                 value: entry.field,
                 textContent: entry.label
-            }, select);
-        }
+            },
+            appendTo: select
+        });
     }
-    
+
     // add options to select
     Object.values(layer.infoj).forEach(entry => {
-        if(entry.type === 'group'){
+        if (entry.type === 'group') {
             Object.values(entry.items).map(item => {
                 createOptions(select, item)
             });
@@ -315,14 +281,14 @@ export default (layer, panel) => {
     });
 
 
-    let clear_all = _xyz.utils._createElement({
-        tag: 'div', 
+    let clear_all = _xyz.utils.createElement({
+        tag: 'div',
         options: {
             classList: 'btn_small cursor noselect',
             textContent: 'Clear',
             onclick: function (e) {
                 let siblings = this.parentNode.children;
-                
+
                 // enable select options
                 for (let sibling of siblings) {
                     if (sibling.tagName == 'SELECT') {
@@ -332,19 +298,19 @@ export default (layer, panel) => {
                         toggle_select(sibling);
                     }
                 }
-                
+
                 while (this.nextSibling !== this.parentNode.lastChild) {
                     this.parentNode.removeChild(this.nextSibling);
                 }
-                
+
                 // remove applied filters
                 Object.keys(layer.filter).map(key => {
                     delete layer.filter[key];
                 });
-                
+
                 // hide filtering buttons, reload layer.
                 this.style.display = 'none';
-                
+
                 // hide aggregate button if enabled 
                 if (layer.aggregate_layer) this.parentNode.lastChild.style.display = 'none';
                 layer.getLayer(layer);
@@ -355,7 +321,44 @@ export default (layer, panel) => {
     filters.appendChild(select);
     filters.appendChild(clear_all);
 
-    add_run_button();
+    _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+            className: 'btn_wide cursor noselect',
+            textContent: 'Run Output',
+        },
+        style: {
+            display: 'none'
+        },
+        appendTo: filters,
+        eventListener: {
+            event: 'click',
+            funct: () => {
+                layer.xhr.open('GET', _xyz.host + '/api/location/aggregate?' + _xyz.utils.paramString({
+                    locale: _xyz.locale,
+                    layer: layer.layer,
+                    token: _xyz.token,
+                    filter: JSON.stringify(layer.filter) || ''
+                }));
+
+                layer.xhr.onload = e => {
+                    if (e.target.status === 200) {
+                        let json = JSON.parse(e.target.response);
+
+                        _xyz.ws.select.selectLayerFromEndpoint({
+                            layer: layer.aggregate_layer,
+                            table: _xyz.ws.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+                            id: json.id,
+                            marker: [json.lng, json.lat],
+                            filter: JSON.stringify(layer.filter) || ''
+                        });
+                    }
+                };
+
+                layer.xhr.send();
+            }
+        }
+    });
 }
 
 // create text filter
@@ -368,13 +371,7 @@ function filter_text(layer, _options) {
         layer.getLayer(layer);
     }
 
-    /*let input = _xyz.utils.createElement('input', {
-        placeholder: 'Search.',
-        onkeyup: onkeyup,
-        name: _options.operator
-    }, _options.appendTo);*/
-    
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             placeholder: 'Search.',
@@ -388,49 +385,68 @@ function filter_text(layer, _options) {
 // create numeric filter 
 function filter_numeric(layer, options) {
 
-    function onkeyup(e) {
+    function onkeyup() {
         let val = parseFloat(this.value);
+
         if (!layer.filter[options.field]) layer.filter[options.field] = {};
+
         if (typeof (val) == 'number') {
             layer.filter[options.field][this.name] = val;
         } else {
             layer.filter[options.field][this.name] = null;
         }
+
         layer.getLayer(layer);
     }
+    
+    _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+            className: 'label half',
+            textContent: '> greater than'
+        },
+        appendTo: options.appendTo
+    });
 
-    let gt_label = _xyz.utils.createElement('div', {
-        classList: 'label half',
-        textContent: '> greater than'
-    }, options.appendTo);
+    _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+            className: 'label half right',
+            textContent: '< less than'
+        },
+        appendTo: options.appendTo
+    });
 
-    let lt_label = _xyz.utils.createElement('div', {
-        classList: 'label half right',
-        textContent: '< less than'
-    }, options.appendTo);
+    _xyz.utils.createElement({
+        tag: 'input',
+        options: {
+            className: 'label half',
+            placeholder: 'Set value.',
+            name: 'gt',
+            onkeyup: onkeyup
+        },
+        appendTo: options.appendTo
+    });
 
-    let gt_input = _xyz.utils.createElement('input', {
-        classList: 'label half',
-        placeholder: 'Set value.',
-        name: 'gt',
-        onkeyup: onkeyup
-    }, options.appendTo);
-
-    let lt_input = _xyz.utils.createElement('input', {
-        classList: 'label half right',
-        placeholder: 'Set value.',
-        onkeyup: onkeyup,
-        name: 'lt'
-    }, options.appendTo);
+    _xyz.utils.createElement({
+        tag: 'input',
+        options: {
+            className: 'label half right',
+            placeholder: 'Set value.',
+            onkeyup: onkeyup,
+            name: 'lt'
+        },
+        appendTo: options.appendTo
+    });
 }
 
- // create range filter
-function filter_range(layer, options){
+// create range filter
+function filter_range(layer, options) {
 
     function oninput(e) {
         let val = parseFloat(e.target.value);
         if (!layer.filter[options.field]) layer.filter[options.field] = {};
-        if (typeof(val) == 'number') {
+        if (typeof (val) == 'number') {
             layer.filter[options.field][e.target.name] = val;
         } else {
             layer.filter[options.field][e.target.name] = null;
@@ -439,12 +455,12 @@ function filter_range(layer, options){
         //layer.getLayer(layer);
     }
 
-    function onchange(e){
+    function onchange(e) {
         //console.log(layer.filter);
         layer.getLayer(layer);
     }
 
-    let tl = _xyz.utils._createElement({
+    let tl = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'range-tooltip _min',
@@ -454,16 +470,15 @@ function filter_range(layer, options){
         appendTo: options.appendTo
     });
 
-
-    let range_div = _xyz.utils._createElement({
-        tag: 'div', 
+    let range_div = _xyz.utils.createElement({
+        tag: 'div',
         options: {
             className: 'range'
         },
         appendTo: options.appendTo
     });
 
-    let range = _xyz.utils._createElement({
+    let range = _xyz.utils.createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -480,7 +495,7 @@ function filter_range(layer, options){
         appendTo: range_div
     });
 
-    let tl2 = _xyz.utils._createElement({
+    let tl2 = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'range-tooltip _max',
@@ -493,16 +508,15 @@ function filter_range(layer, options){
         appendTo: options.appendTo
     });
 
-
-    let range_div2 = _xyz.utils._createElement({
-        tag: 'div', 
+    let range_div2 = _xyz.utils.createElement({
+        tag: 'div',
         options: {
             className: 'range'
         },
         appendTo: options.appendTo
     });
 
-    let range2 = _xyz.utils._createElement({
+    let range2 = _xyz.utils.createElement({
         tag: 'input',
         options: {
             type: 'range',
@@ -518,7 +532,6 @@ function filter_range(layer, options){
         },
         appendTo: range_div2
     });
-
 }
 
 // create date filter
@@ -530,7 +543,7 @@ function filter_date(layer, options) {
         mm: '01',
         df: []
     }
-    
+
     def.df[1] = def.mm;
     def.df[2] = def.dd;
 
@@ -548,22 +561,22 @@ function filter_date(layer, options) {
     }
 
     // sql and keyups
-    
-    function onkeyup(e, format){
+
+    function onkeyup(e, format) {
         let val = parseInt(e.target.value);
         if (e.target.value) show_reset();
-        
-        switch(format){
-            case 'dd': 
+
+        switch (format) {
+            case 'dd':
                 if (val && val > 0 && val < 32) {
-                if (val < 10) val = '0' + String(val);
-                def.df[2] = val;
-                if (def.df[0]) layer.filter[options.field][e.target.name] = date_to_string(def.df);
-            } else {
-                def.df[2] = def[format];
-            }; break;
-            
-            case 'mm': 
+                    if (val < 10) val = '0' + String(val);
+                    def.df[2] = val;
+                    if (def.df[0]) layer.filter[options.field][e.target.name] = date_to_string(def.df);
+                } else {
+                    def.df[2] = def[format];
+                }; break;
+
+            case 'mm':
                 if (val && val > 0 && val < 13) {
                     if (val < 10) val = '0' + String(val);
                     def.df[1] = val;
@@ -571,8 +584,8 @@ function filter_date(layer, options) {
                 } else {
                     def.df[1] = def[format];
                 }; break;
-            
-            case 'yyyy': 
+
+            case 'yyyy':
                 if (!layer.filter[options.field]) layer.filter[options.field] = {};
                 if (val && val > 99) {
                     def.df[0] = val;
@@ -587,33 +600,33 @@ function filter_date(layer, options) {
 
     // labels
     // later than label
-    _xyz.utils._createElement({
-        tag: 'div', 
+    _xyz.utils.createElement({
+        tag: 'div',
         options: {
             classList: 'label half',
             textContent: 'later than'
-        }, 
+        },
         appendTo: options.appendTo
     });
 
     // earlier than label
-    _xyz.utils._createElement({
-        tag: 'div', 
+    _xyz.utils.createElement({
+        tag: 'div',
         options: {
             classList: 'label half right',
             textContent: 'earlier than'
-        }, 
+        },
         appendTo: options.appendTo
     });
 
     // later than year input
-    _xyz.utils._createElement({
-        tag: 'input', 
+    _xyz.utils.createElement({
+        tag: 'input',
         options: {
             classList: 'label third',
             placeholder: 'yyyy',
             name: 'gte'
-        }, 
+        },
         eventListener: {
             event: 'keyup',
             funct: e => onkeyup(e, 'yyyy')
@@ -622,26 +635,26 @@ function filter_date(layer, options) {
     });
 
     // later than month input
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             classList: 'label third',
             placeholder: 'mm'
-        }, 
+        },
         eventListener: {
             event: 'keyup',
             funct: e => onkeyup(e, 'mm')
         },
         appendTo: options.appendTo
     });
-    
+
     // later than day input
-    _xyz.utils._createElement({
-        tag: 'input', 
+    _xyz.utils.createElement({
+        tag: 'input',
         options: {
             classList: 'label third',
             placeholder: 'dd'
-        }, 
+        },
         eventListener: {
             event: 'keyup',
             funct: e => onkeyup(e, 'dd')
@@ -650,26 +663,26 @@ function filter_date(layer, options) {
     });
 
     // earlier than day input
-    _xyz.utils._createElement({
-        tag: 'input', 
+    _xyz.utils.createElement({
+        tag: 'input',
         options: {
             classList: 'label third right',
             placeholder: 'dd'
-        }, 
+        },
         eventListener: {
             event: 'keyup',
             funct: e => onkeyup(e, 'dd')
         },
         appendTo: options.appendTo
     });
-    
+
     // earlier than month input
-    _xyz.utils._createElement({
-        tag: 'input', 
+    _xyz.utils.createElement({
+        tag: 'input',
         options: {
             classList: 'label third right',
             placeholder: 'mm'
-        }, 
+        },
         eventListener: {
             event: 'keyup',
             funct: e => onkeyup(e, 'mm')
@@ -678,13 +691,13 @@ function filter_date(layer, options) {
     });
 
     // earlier than year input
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'input',
         options: {
             classList: 'label third right',
             placeholder: 'yyyy',
             name: 'lte'
-        }, 
+        },
         eventListener: {
             event: 'keyup',
             funct: e => onkeyup(e, 'yyyy')
@@ -692,12 +705,12 @@ function filter_date(layer, options) {
         appendTo: options.appendTo
     });
 
-    _xyz.utils._createElement({
-        tag: 'div', 
+    _xyz.utils.createElement({
+        tag: 'div',
         options: {
             classList: 'btn_small cursor noselect',
             textContent: 'Reset'
-        }, 
+        },
         eventListener: {
             event: 'click',
             funct: e => {

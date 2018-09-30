@@ -2,7 +2,7 @@ import _xyz from '../../_xyz.mjs';
 
 export default (layer, panel) => {
 
-    let ctrl = _xyz.utils._createElement({
+    let ctrl = _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'section'
@@ -11,7 +11,7 @@ export default (layer, panel) => {
     });
 
     // Mode
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             textContent: 'Transit mode:'
@@ -20,7 +20,7 @@ export default (layer, panel) => {
     });
 
     let mode,
-        selMode = _xyz.utils._createElement({
+        selMode = _xyz.utils.createElement({
             tag: 'select',
             appendTo: ctrl,
             eventListener: {
@@ -41,19 +41,19 @@ export default (layer, panel) => {
 
 
     // spacer
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'br',
         appendTo: ctrl
     });
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'br',
         appendTo: ctrl
     });
 
 
     // Distance
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Maximum travel time: '
@@ -61,7 +61,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let lblMinutes = _xyz.utils._createElement({
+    let lblMinutes = _xyz.utils.createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -70,7 +70,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -79,7 +79,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let sliMinutes = _xyz.utils._createElement({
+    let sliMinutes = _xyz.utils.createElement({
         tag: 'input',
         options: {
             classList: 'range_new',
@@ -94,7 +94,7 @@ export default (layer, panel) => {
 
 
     // Detail
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Detail: '
@@ -102,7 +102,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let lblDetail = _xyz.utils._createElement({
+    let lblDetail = _xyz.utils.createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -111,7 +111,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let sliDetail = _xyz.utils._createElement({
+    let sliDetail = _xyz.utils.createElement({
         tag: 'input',
         options: {
             classList: 'range_new',
@@ -128,7 +128,7 @@ export default (layer, panel) => {
 
 
     // Reach
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'span',
         options: {
             textContent: 'Reach: '
@@ -136,7 +136,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let lblReach = _xyz.utils._createElement({
+    let lblReach = _xyz.utils.createElement({
         tag: 'span',
         options: {
             classList: 'range_label',
@@ -145,7 +145,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let sliReach = _xyz.utils._createElement({
+    let sliReach = _xyz.utils.createElement({
         tag: 'input',
         options: {
             classList: 'range_new',
@@ -161,7 +161,7 @@ export default (layer, panel) => {
 
     // Provider
     let provider;
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'div',
         options: {
             textContent: 'Provider:'
@@ -169,7 +169,7 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-    let selProvider = _xyz.utils._createElement({
+    let selProvider = _xyz.utils.createElement({
         tag: 'select',
         appendTo: ctrl,
         eventListener: {
@@ -196,7 +196,7 @@ export default (layer, panel) => {
 
     ctrl.appendChild(chkCatchmentsConstruction);
 
-    let btnCatchment = _xyz.utils._createElement({
+    let btnCatchment = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'btn_wide cursor noselect',
@@ -206,8 +206,8 @@ export default (layer, panel) => {
         eventListener: {
             event: 'click',
             funct: () => {
-                if (!_xyz.utils.hasClass(btnCatchment, 'disabled')) {
-                    _xyz.utils.addClass(btnCatchment, 'disabled')
+                if (!btnCatchment.classList.contains('disabled')) {
+                    btnCatchment.classList.add('disabled');
                     document.getElementById('Map').style.cursor = 'crosshair';
                     _xyz.map.on('click', e => {
                         layer.loader.style.display = 'block';
@@ -260,7 +260,7 @@ export default (layer, panel) => {
                         xhr.onload = e => {
 
                             if (e.target.status === 502) {
-                                _xyz.utils.removeClass(btnCatchment, 'disabled');
+                                btnCatchment.classList.remove('disabled');
                                 layer.getLayer(layer);
                                 return alert(e.target.response);
                             }
@@ -270,7 +270,7 @@ export default (layer, panel) => {
                                 return;
                             }
                     
-                            _xyz.utils.removeClass(btnCatchment, 'disabled');
+                            btnCatchment.classList.remove('disabled');
                     
                             layer.getLayer(layer);
                     

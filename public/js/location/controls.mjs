@@ -1,7 +1,7 @@
 import _xyz from '../_xyz.mjs';
 
 export function clear(record) {
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'i',
         options: {
             textContent: 'clear',
@@ -37,7 +37,7 @@ export function clear(record) {
 }
 
 export function zoom(record) {
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'i',
         options: {
             textContent: 'search',
@@ -60,7 +60,7 @@ export function zoom(record) {
 }
 
 export function expander(record) {
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'i',
         options: {
             className: 'material-icons cursor noselect btn_header expander',
@@ -85,7 +85,7 @@ export function expander(record) {
 }
 
 export function clipboard(record){
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'i',
         options: {
             textContent: 'file_copy',
@@ -136,7 +136,7 @@ export function clipboard(record){
 }
 
 export function marker(record) {
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'i',
         options: {
             textContent: 'location_off',
@@ -166,7 +166,7 @@ export function marker(record) {
 }
 
 export function update(record) {
-    record.upload = _xyz.utils._createElement({
+    record.upload = _xyz.utils.createElement({
         tag: 'i',
         options: {
             textContent: 'cloud_upload',
@@ -196,7 +196,8 @@ export function update(record) {
                     record.upload.style.display = 'none';
 
                     // Remove changed class from all changed entries.
-                    _xyz.utils.removeClass(record.drawer.querySelectorAll('.changed'), 'changed');
+                    let changedElements = record.drawer.querySelectorAll('.changed');
+                    changedElements.forEach(el => el.classList.remove('changed'));
 
                     layer.getLayer(layer);
                     try {
@@ -224,7 +225,7 @@ export function update(record) {
 }
 
 export function trash(record) {
-    _xyz.utils._createElement({
+    _xyz.utils.createElement({
         tag: 'i',
         options: {
             textContent: 'delete',

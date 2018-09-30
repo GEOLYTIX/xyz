@@ -5,7 +5,7 @@ import d3_selection from "d3-selection";
 export default (layer, panel) => {
 
     let width = layer.drawer.clientWidth,
-        legend = _xyz.utils._createElement({
+        legend = _xyz.utils.createElement({
             tag: 'div',
             options: {
                 className: 'section report-block'
@@ -14,9 +14,12 @@ export default (layer, panel) => {
         });
 
     // Select dropdown for size.
-    let selSize = _xyz.utils.createElement('select', {
-        classList: 'selSize ctrl',
-        name: 'selSize'
+    let selSize = _xyz.utils.createElement({
+        tag: 'select',
+        options: {
+            className: 'selSize ctrl',
+            name: 'selSize'
+        }
     });
 
     setDropDown(selSize, 'grid_size');
@@ -27,9 +30,12 @@ export default (layer, panel) => {
     let svg = d3_selection.select(legend).append('svg').attr('width', width);
 
     // Select dropdown for color.
-    let selColor = _xyz.utils.createElement('select', {
-        classList: 'selColor ctrl',
-        name: 'selColor'
+    let selColor = _xyz.utils.createElement({
+        tag: 'select',
+        options: {
+            className: 'selColor ctrl',
+            name: 'selColor'
+        }
     });
 
     setDropDown(selColor, 'grid_color');
@@ -72,12 +78,14 @@ export default (layer, panel) => {
 
         // Populate select options
         layer.queryFields.map(function (queryField) {
-            select.appendChild(
-                _xyz.utils.createElement('option', {
+            _xyz.utils.createElement({
+                tag: 'option',
+                options: {
                     value: queryField[0],
                     textContent: queryField[1]
-                })
-            );
+                },
+                appendTo: select
+            });
         });
 
         // Set the select from either hook[query] or layer[query].

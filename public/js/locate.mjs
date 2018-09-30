@@ -7,7 +7,7 @@ export default () => {
     let btnLocate = document.getElementById('btnLocate');
 
     btnLocate.addEventListener('click', e => {
-        _xyz.utils.toggleClass(btnLocate, 'active');
+        btnLocate.classList.toggle('active');
 
         let flyTo = true;
 
@@ -23,13 +23,13 @@ export default () => {
         }
 
         // Remove the geolocation marker if btnLocate is not active.
-        if (!_xyz.utils.hasClass(btnLocate, 'active')) {
+        if (!btnLocate.classList.contains('active')) {
             _xyz.map.removeLayer(_xyz.ws.locate.L);
             return
         }
         
         // Add the geolocation marker if btnLocate is active and the latitude is not 0.
-        if (_xyz.utils.hasClass(btnLocate, 'active') && _xyz.ws.locate.L.getLatLng().lat !== 0) {
+        if (btnLocate.classList.contains('active') && _xyz.ws.locate.L.getLatLng().lat !== 0) {
             _xyz.ws.locate.L.addTo(_xyz.map);
 
             // Fly to marker location and set flyto to false to prevent map tracking.
@@ -50,7 +50,7 @@ export default () => {
                     btnLocate.children[0].textContent = 'gps_fixed';
 
                     // Reposition marker if btnLocate is active
-                    if (_xyz.utils.hasClass(btnLocate, 'active')) {
+                    if (btnLocate.classList.contains('active')) {
                         let pos_ll = [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)];
                         _xyz.map.removeLayer(_xyz.ws.locate.L);
                         _xyz.ws.locate.L.setLatLng(pos_ll);
