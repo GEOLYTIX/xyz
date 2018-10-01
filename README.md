@@ -87,3 +87,10 @@ e.g.
 import * as _def from './_def.mjs';
 if (!_xyz.ws.select.records) _xyz.ws.select.records = _def.records;
 ```
+
+
+Ternary operator should return value not assign value in switch.
+
+DO `let clone = obj instanceof Array ? [] : {};`
+
+DONT `let clone; obj instanceof Array ? clone = [] : clone = {};`
