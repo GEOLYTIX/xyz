@@ -73,3 +73,12 @@ Prevent large conditional blocks if possible.
 DO `if (e.target.status !== 200) return`
 
 DONT `if (e.target.status === 200) { ... }`
+
+
+Defaults should be in individual modules \_def in the same folder as the dependent script.
+
+e.g.
+```
+import * as _def from './_def.mjs';
+if (!_xyz.ws.select.records) _xyz.ws.select.records = _def.records;
+```
