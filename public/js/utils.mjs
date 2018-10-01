@@ -38,6 +38,7 @@ export function paramString(param) {
     return encodedString;
 }
 
+// Create dom element.
 export function createElement(_el) {
     let el = document.createElement(_el.tag);
 
@@ -70,19 +71,9 @@ export function getMath(arr, key, type) {
     }))
 }
 
-export function createStatsTable(infoj) {
-    let table = '';
-    Object.keys(infoj).map(function (key) {
-        table += '<tr><td class="lv-0">' + key + '</td><td class="val">' + infoj[key].toLocaleString('en-GB') + '</td></tr>';
-    });
-
-    return table;
-}
-
 export function dataURLToBlob(dataURL) {
-    let BASE64_MARKER = ';base64,';
 
-    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+    if (dataURL.indexOf(';base64,') == -1) {
         let parts = dataURL.split(','),
             contentType = parts[0].split(':')[1],
             raw = parts[1];
@@ -90,7 +81,7 @@ export function dataURLToBlob(dataURL) {
         return new Blob([raw], { type: contentType });
     }
 
-    let parts = dataURL.split(BASE64_MARKER),
+    let parts = dataURL.split(';base64,'),
         contentType = parts[0].split(':')[1],
         raw = window.atob(parts[1]),
         rawLength = raw.length,
