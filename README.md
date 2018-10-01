@@ -44,6 +44,11 @@ Fonts are now in a seperate public folder. Only css should be in public\/css. On
 
 ## Notes:
 
+mjs scripts should not be much longer than 250 lines. If this is the case it is probably worth investigating whether methods can be put into sub-modules.
+
+Function in the same script should be called more than once otherwise they should either go in a submodule or not be a function in the first place.
+
+
 When moving js modules into folder the first file should be prefixed with \_
 
 e.g. `import locations from './location/_locations.mjs';`
@@ -73,3 +78,12 @@ Prevent large conditional blocks if possible.
 DO `if (e.target.status !== 200) return`
 
 DONT `if (e.target.status === 200) { ... }`
+
+
+Defaults should be in individual modules \_def in the same folder as the dependent script.
+
+e.g.
+```
+import * as _def from './_def.mjs';
+if (!_xyz.ws.select.records) _xyz.ws.select.records = _def.records;
+```
