@@ -43,6 +43,7 @@ Fonts are now in a seperate public folder. Only css should be in public\/css. On
 Notes:
 
 When moving js modules into folder the first file should be prefixed with \_
+
 e.g. `import locations from './location/_locations.mjs';`
 
 Object keys should not be quoted.
