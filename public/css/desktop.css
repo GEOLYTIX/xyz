@@ -2,13 +2,13 @@
 @import url("https://fonts.googleapis.com/css?family=PT+Mono");
 @font-face {
   font-family: ffmark_black;
-  src: url(fonts/MarkWeb-Black.woff) format("woff"); }
+  src: url(../fonts/MarkWeb-Black.woff) format("woff"); }
 @font-face {
   font-family: ffmark;
-  src: url(fonts/MarkWebPro.woff) format("woff"); }
+  src: url(../fonts/MarkWebPro.woff) format("woff"); }
 @font-face {
   font-family: ffmark_bold;
-  src: url(fonts/MarkWebPro-Bold.woff) format("woff"); }
+  src: url(../fonts/MarkWebPro-Bold.woff) format("woff"); }
 .input_group {
   width: 100%; }
   .input_group input {

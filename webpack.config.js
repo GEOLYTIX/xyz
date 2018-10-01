@@ -1,5 +1,4 @@
 const path = require('path');
-// const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -16,11 +15,6 @@ module.exports = {
       exclude: /node_modules/
     }]
   },
-  // plugins: [
-  //   new webpack.ProvidePlugin({
-  //     d3: 'd3'
-  //   })
-  // ],
   optimization: {
     concatenateModules: true
   },
