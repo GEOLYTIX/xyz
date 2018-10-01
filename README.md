@@ -21,7 +21,8 @@ xyz_entry is bundled with webpack4 to facilitate module concatenation and minifi
 Leaflet, Leaflet.VectorGrid and some D3 modules are included in the bundle.
 
 
-Notable Changes:
+
+## Notable Changes:
 
 Restructure of the \_xyz object.
 
@@ -40,7 +41,8 @@ utils.createElement has been replaced with the utils.\_createElement
 Fonts are now in a seperate public folder. Only css should be in public\/css. Only js should be in public\/js
 
 
-Notes:
+
+## Notes:
 
 When moving js modules into folder the first file should be prefixed with \_
 
