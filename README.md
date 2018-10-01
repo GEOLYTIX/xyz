@@ -44,6 +44,11 @@ Fonts are now in a seperate public folder. Only css should be in public\/css. On
 
 ## Notes:
 
+mjs scripts should not be much longer than 250 lines. If this is the case it is probably worth investigating whether methods can be put into sub-modules.
+
+Function in the same script should be called more than once otherwise they should either go in a submodule or not be a function in the first place.
+
+
 When moving js modules into folder the first file should be prefixed with \_
 
 e.g. `import locations from './location/_locations.mjs';`
