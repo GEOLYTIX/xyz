@@ -124,13 +124,13 @@ export default layer => {
             }
         });
 
-        layer.sizeMin = _xyz.utils.getMath(data, 2, 'min');
+        layer.sizeMin = getMath(data, 2, 'min');
         layer.sizeAvg /= dots.features.length;
-        layer.sizeMax = _xyz.utils.getMath(data, 2, 'max');
+        layer.sizeMax = getMath(data, 2, 'max');
 
-        layer.colorMin = _xyz.utils.getMath(data, 3, 'min');
+        layer.colorMin = getMath(data, 3, 'min');
         layer.colorAvg /= dots.features.length;
-        layer.colorMax = _xyz.utils.getMath(data, 3, 'max');
+        layer.colorMax = getMath(data, 3, 'max');
 
         let digits = layer.grid_ratio ? 2 : 0;
         document.getElementById('grid_legend_size__min').textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
@@ -141,5 +141,15 @@ export default layer => {
         document.getElementById('grid_legend_color__max').textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: digits});
 
         return dots
+    }
+
+    // Apply maths function to a column in a two dimensional array of numbers.
+    function getMath(arr, idx, type) {
+    
+        // Filter numbers from array column idx.
+        let numbers = arr.filter(n => isFinite(n[idx]));
+    
+        // Apply math function to the filtered numbers array.
+        return Math[type].apply(null, numbers.map(val => val[idx]));
     }
 }

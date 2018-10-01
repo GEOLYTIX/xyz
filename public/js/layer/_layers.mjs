@@ -7,7 +7,7 @@ import layer_panels from './panel/_panels.mjs';
 export default () => {
 
     // Assign dom objects.
-    let dom = {
+    const dom = {
         map: document.getElementById('Map'),
         layers: _xyz.utils.createElement({
             tag: 'div',
@@ -18,20 +18,19 @@ export default () => {
         })
     };
 
+    // Create tmp pane.
     _xyz.map.createPane('tmp');
     _xyz.map.getPane('tmp').style.zIndex = 549;
 
-    // should probably return from here?
-    if (!_xyz.ws.layers) _xyz.ws.layers = {};
-
     // init is called upon initialisation and when the locale is changed (change_locale === true).
-    _xyz.ws.layers.init = function (change_locale) {
+    _xyz.initLayers = change_locale => {
 
         // Get the layers from the current locale.
-        let layers = _xyz.ws.locales[_xyz.locale].layers;
-        let groups = _xyz.ws.locales[_xyz.locale].groups || {};
+        const layers = _xyz.ws.locales[_xyz.locale].layers;
+        const groups = _xyz.ws.locales[_xyz.locale].groups || {};
 
-        _xyz.ws.attribution = ['leaflet', 'xyz'];
+        // Set default attribution.
+        _xyz.attribution = ['leaflet', 'xyz'];
 
         // Remove the layers hook on change_locale event.
         if (change_locale) {
@@ -40,8 +39,8 @@ export default () => {
         };
 
         // Set the layer display from hooks if present; Overwrites the default setting.
-        if (_xyz.hooks.layers) Object.keys(layers).map(function (layer) {
-            layers[layer].display = _xyz.hooks.layers.indexOf(layer) > -1 ? true : false;
+        if (_xyz.hooks.layers) Object.keys(layers).map(layer => {
+            layers[layer].display = (_xyz.hooks.layers.indexOf(layer) > -1);
         });
 
         // Remove the layers hook.
@@ -68,12 +67,12 @@ export default () => {
                 },
                 appendTo: groups[group].container,
                 eventListener: {
-                    event: "click",
+                    event: 'click',
                     funct: e => {
                         _xyz.utils.toggleExpanderParent({
                             expandable: e.target.parentNode,
-                            expandedTag: "expanded-group",
-                            expandableTag: "expandable-group",
+                            expandedTag: 'expanded-group',
+                            expandableTag: 'expandable-group',
                             accordeon: true,
                             scrolly: document.querySelector('.mod_container > .scrolly')
                         });
@@ -81,29 +80,33 @@ export default () => {
                 }
             });
 
+            // Check if any layer visible.
+            groups[group].chkVisibleLayer = group => {
+                let layers = _xyz.ws.locales[_xyz.locale].layers || {};
+                return Object.values(layers).some(entry => (entry.group === group && entry.display));
+            }
+
             groups[group].hideAll = _xyz.utils.createElement({
-                tag: "i",
+                tag: 'i',
                 options: {
                     className: 'material-icons cursor noselect btn_header hide-group',
-                    title: "Hide layers from group",
-                    //textContent: (toggleGroupHidden(group) ? "layers" : "layers_clear")
-                    textContent: (toggleGroupHidden(group) ? "visibility" : "visibility_off")
+                    title: 'Hide layers from group',
+                    textContent: 'visibility'
                 },
                 appendTo: groups[group].header,
                 style: {
-                    display: (toggleGroupHidden(group) ? "block" : "none")
+                    display: (groups[group].chkVisibleLayer(group) ? 'block' : 'none')
                 },
                 eventListener: {
-                    event: "click",
+                    event: 'click',
                     funct: e => {
                         e.stopPropagation();
-                        e.target.style.display = "none";
+                        e.target.style.display = 'none';
 
                         Object.values(layers).forEach(layer => {
-
-                            // set URL to acknowledge new token.
-                            if (layer.group === group && layer.display) removeLayer(e, layer);
+                            if (layer.group === group && layer.display) removeLayer(layer);
                         });
+
                         _xyz.layersCheck();
                     }
                 }
@@ -123,13 +126,14 @@ export default () => {
                         e.stopPropagation();
                         _xyz.utils.toggleExpanderParent({
                             expandable: groups[group].container,
-                            expandedTag: "expanded-group",
-                            expandableTag: "expandable-group",
+                            expandedTag: 'expanded-group',
+                            expandableTag: 'expandable-group',
                             scrolly: document.querySelector('.mod_container > .scrolly')
                         });
                     }
                 }
             });
+
         });
 
         // Loop through the locale layers and build layer control elements.
@@ -154,11 +158,11 @@ export default () => {
             if (!layer.style) layer.style = {};
 
             if (!layer.style.default) layer.style.default = {
-                "weight": 1,
-                "color": "#333",
-                "fill": true,
-                "fillColor": "#333",
-                "fillOpacity": 0.1
+                weight: 1,
+                color: '#333',
+                fill: true,
+                fillColor: '#333',
+                fillOpacity: 0.1
             };
 
             if (!layer.filter) layer.filter = {};
@@ -208,7 +212,32 @@ export default () => {
                     event: 'click',
                     funct: e => {
                         e.stopPropagation();
-                        toggleLayer(e, layer);
+
+                        if (e.target.textContent === 'layers_clear') {
+
+                            if (layer.group) _xyz.ws.locales[_xyz.locale].groups[layer.group].hideAll.style.display = 'block';
+
+                            layer.display = true;
+                            layer.drawer.classList.remove('report-off');
+                            e.target.textContent = 'layers';
+                            _xyz.utils.pushHook('layers', layer.layer);
+                            _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
+
+                            attributionCheck();
+
+                            layer.getLayer(layer);
+
+                        } else {
+
+                            removeLayer(layer);
+
+                            if (layer.group) {
+                                _xyz.ws.locales[_xyz.locale].groups[layer.group].hideAll.style.display =
+                                    _xyz.ws.locales[_xyz.locale].groups[layer.group].chkVisibleLayer(layer.group) ?
+                                        'block' : 'none';
+                            }
+                            _xyz.layersCheck();
+                        }
                     }
                 }
             });
@@ -218,7 +247,7 @@ export default () => {
                 _xyz.utils.createElement({
                     tag: 'i',
                     options: {
-                        textContent: "search",
+                        textContent: 'search',
                         className: 'material-icons cursor noselect btn_header',
                         title: 'Pan to layer'
                     },
@@ -227,10 +256,16 @@ export default () => {
                         event: 'click',
                         funct: e => {
                             e.stopPropagation();
+
                             if (layer.display) {
-                                layer.bounds ? _xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) : _xyz.map.panTo(L.latLng(layer.cntr));
+                                layer.bounds ?
+                                    _xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) :
+                                    _xyz.map.panTo(L.latLng(layer.cntr));
+
                                 attributionCheck();
+
                                 _xyz.layersCheck();
+
                             } else {
                                 return false;
                             }
@@ -330,7 +365,7 @@ export default () => {
             // Push hook for display:true layer (default).
             if (layer.display) {
                 _xyz.utils.pushHook('layers', layer.layer);
-                _xyz.ws.attribution = _xyz.ws.attribution.concat(layer.attribution || []);
+                _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
 
                 attributionCheck();
             }
@@ -339,14 +374,14 @@ export default () => {
 
             if (layer.format === 'cluster' && layer.style.marker) {
                 _xyz.utils.createElement({
-                    tag: "img",
+                    tag: 'img',
                     options: {
                         src: _xyz.utils.svg_symbols(layer.style.marker),
                         width: 20,
                         height: 20
                     },
                     style: {
-                        float: "right"
+                        float: 'right'
                     },
                     appendTo: layer.header
                 });
@@ -357,51 +392,16 @@ export default () => {
         });
     };
 
-    // Check if any layer visible.
-    function toggleGroupHidden(group) {
-
-        // Get the layers from the current locale.
-        let layers = _xyz.ws.locales[_xyz.locale].layers || {};
-
-        return Object.values(layers).some(entry => {
-            return (entry.group === group && entry.display) ? true : false;
-        });
-    }
-
-    function toggleLayer(e, layer) {
-
-        if (e.target.textContent === 'layers_clear') {
-
-            if (layer.group) {
-                _xyz.ws.locales[_xyz.locale].groups[layer.group].hideAll.textContent = "visibility";//"layers"; //(toggleGroupHidden(group) ? "block" : "none")
-                _xyz.ws.locales[_xyz.locale].groups[layer.group].hideAll.style.display = "block";
-
-            }
-
-            layer.display = true;
-            layer.drawer.classList.remove('report-off');
-            e.target.textContent = 'layers';
-            _xyz.utils.pushHook('layers', layer.layer);
-            _xyz.ws.attribution = _xyz.ws.attribution.concat(layer.attribution || []);
-            attributionCheck();
-            layer.getLayer(layer);
-
-        } else {
-            removeLayer(e, layer);
-            _xyz.layersCheck();
-        }
-    }
-
-    function removeLayer(e, layer) {
+    function removeLayer(layer) {
         layer.loader.style.display = 'none';
-        layer.clear_icon.textContent = "layers_clear";
+        layer.clear_icon.textContent = 'layers_clear';
         layer.display = false;
         layer.drawer.classList.add('report-off');
         _xyz.utils.filterHook('layers', layer.layer);
 
         if (layer.attribution) layer.attribution.forEach(a => {
-            let foo = _xyz.ws.attribution.indexOf(a);
-            _xyz.ws.attribution.splice(foo, 1);
+            let foo = _xyz.attribution.indexOf(a);
+            _xyz.attribution.splice(foo, 1);
         });
 
         attributionCheck();
@@ -414,7 +414,7 @@ export default () => {
         }
     }
 
-    _xyz.ws.layers.init();
+    _xyz.initLayers();
 }
 
 function attributionCheck() {
@@ -423,14 +423,6 @@ function attributionCheck() {
     let links = document.querySelectorAll('.attribution > .links > a');
 
     for (let i = 0; i < links.length; ++i) {
-        let me = links[i].className;
-        let me_i = _xyz.ws.attribution.indexOf(me);
-
-        if (_xyz.ws.attribution.indexOf(links[i].className) >= 0) {
-            links[i].style.display = 'inline-block';
-
-        } else {
-            links[i].style.display = 'none';
-        }
+        links[i].style.display = _xyz.attribution.indexOf(links[i].className) >= 0 ? 'inline-block' : 'none';
     }
 }

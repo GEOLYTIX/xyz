@@ -129,7 +129,7 @@ export function clipboard(record){
                     }
                 });
                 
-                _xyz.utils.copy_to_clipboard(data.join('\n'));
+                _xyz.utils.copyToClipboard(data.join('\n'));
             }
         }
     });

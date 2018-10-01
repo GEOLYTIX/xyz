@@ -38,62 +38,7 @@ export function paramString(param) {
     return encodedString;
 }
 
-// Create dom element.
-export function createElement(_el) {
-    let el = document.createElement(_el.tag);
-
-    if (_el.options) Object.keys(_el.options).map(key => el[key] = _el.options[key]);
-
-    if (_el.style) Object.keys(_el.style).map(key => el.style[key] = _el.style[key]);
-
-    if (_el.appendTo) _el.appendTo.appendChild(el);
-
-    if (_el.eventListener) el.addEventListener(_el.eventListener.event, _el.eventListener.funct);
-
-    return el;
-}
-
-export function getSelectOptionsIndex(options, value) {
-    for (let i = 0; i < options.length; i++) {
-        if (options[i].value == value) return i;
-    }
-
-    return -1;
-}
-
-export function getMath(arr, key, type) {
-    let numbers = arr.filter(function (n) {
-        if (isFinite(n[key])) return n[key]
-    });
-
-    return Math[type].apply(null, numbers.map(function (val) {
-        return val[key]
-    }))
-}
-
-export function dataURLToBlob(dataURL) {
-
-    if (dataURL.indexOf(';base64,') == -1) {
-        let parts = dataURL.split(','),
-            contentType = parts[0].split(':')[1],
-            raw = parts[1];
-
-        return new Blob([raw], { type: contentType });
-    }
-
-    let parts = dataURL.split(';base64,'),
-        contentType = parts[0].split(':')[1],
-        raw = window.atob(parts[1]),
-        rawLength = raw.length,
-        uInt8Array = new Uint8Array(rawLength);
-
-    for (let i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i);
-    }
-
-    return new Blob([uInt8Array], { type: contentType });
-}
-
+// Function which expands the parent container of an expander element.
 export function toggleExpanderParent(params) {
 
     if (!params.expandedTag) params.expandedTag = 'expanded';
@@ -126,12 +71,11 @@ export function toggleExpanderParent(params) {
     };
 }
 
+// Method to apply a left hand scroll bar to a container element.
 export function scrolly(el) {
 
-    //let content = scrolly.querySelector('.scrolly'),
     let track = el.querySelector('.scrolly_track'),
-        bar = el.querySelector('.scrolly_bar'),
-        scrollEvent = new Event('scroll');
+        bar = el.querySelector('.scrolly_bar');
 
     bar.style.height = track.clientHeight * el.clientHeight / el.scrollHeight + 'px';
     bar.style.top = track.clientHeight * el.scrollTop / el.scrollHeight + 'px';
@@ -165,6 +109,22 @@ export function scrolly(el) {
     });
 }
 
+// Dom element factory.
+export function createElement(param) {
+    let el = document.createElement(param.tag);
+
+    if (param.options) Object.keys(param.options).map(key => el[key] = param.options[key]);
+
+    if (param.style) Object.keys(param.style).map(key => el.style[key] = param.style[key]);
+
+    if (param.appendTo) param.appendTo.appendChild(el);
+
+    if (param.eventListener) el.addEventListener(param.eventListener.event, param.eventListener.funct);
+
+    return el;
+}
+
+// Checkbox factory.
 export function checkbox(onchange, options) {
 
     let checkbox = createElement({
@@ -198,6 +158,7 @@ export function checkbox(onchange, options) {
     return checkbox;
 }
 
+// Slider factory.
 export function slider(options) {
 
     createElement({
@@ -212,7 +173,7 @@ export function slider(options) {
         tag: 'span',
         options: {
             textContent: options.default,
-            className: "bold"
+            className: 'bold'
         },
         appendTo: options.appendTo
     });
@@ -220,7 +181,7 @@ export function slider(options) {
     let range_div = createElement({
         tag: 'div',
         options: {
-            className: "range"
+            className: 'range'
         },
         appendTo: options.appendTo
     });
@@ -238,41 +199,24 @@ export function slider(options) {
     });
 }
 
-export function rgbToHex(color) {
-    let hexDigits = new Array
-        ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f");
-
-    if (color.substr(0, 1) === '#') return color;
-
-    color = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    return "#" + hex(color[1]) + hex(color[2]) + hex(color[3]);
-
-    function hex(x) {
-        return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
-    }
-}
-
-export function clone(obj) {
-    let clone;
-    obj instanceof Array ? clone = [] : clone = {};
-    Object.keys(obj).map(function (key) {
-        clone[key] = obj[key];
-    });
-    return clone;
-}
-
-export function get_index_by_value(json_arr, key, val) {
-    return json_arr.findIndex((item) => {
-        return item.hasOwnProperty(key) && item[key] === val;
-    });
-}
-
-export function copy_to_clipboard(str) {
-    let textArea = document.createElement("textarea");
+// Create temporary textarea to copy string to clipboard.
+export function copyToClipboard(str) {
+    let textArea = document.createElement('textarea');
     textArea.style.visibility = 'none';
     textArea.value = str;
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand('copy');
     textArea.remove();
+}
+
+
+
+// needs to go into dropdown factory
+export function getSelectOptionsIndex(options, value) {
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value == value) return i;
+    }
+
+    return -1;
 }

@@ -37,7 +37,7 @@ export default () => {
         setLocaleDefaults();
         _xyz.setView(true);
         _xyz.ws.gazetteer.init(true);
-        _xyz.ws.layers.init(true);
+        _xyz.initLayers(true);
         _xyz.ws.select.resetModule();
     };
 

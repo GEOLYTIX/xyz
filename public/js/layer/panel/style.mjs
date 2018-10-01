@@ -101,11 +101,21 @@ export default (layer, panel) => {
         });
 
         function get_colour(hex) {
-            let index;
-            hex ? index = _xyz.utils.get_index_by_value(colours, hex, hex) : index = _xyz.utils.get_index_by_value(colours, hex, layer.style[options.style][options.property]);
 
-            return index == -1 ? layer.style[options.style][options.property] : colours[index].name ? colours[index].name + ' (' +
-                colours[index].hex + ')' : colours[index].hex;
+            let index = hex ?
+                get_index_by_value(colours, hex, hex) :
+                get_index_by_value(colours, hex, layer.style[options.style][options.property]);
+
+            if (index === -1) return layer.style[options.style][options.property];
+
+            return colours[index].name ?
+                colours[index].name + ' (' + colours[index].hex + ')' :
+                colours[index].hex;
+
+            // return index of item which has key property and the key property equals val.
+            function get_index_by_value(arr, key, val) {
+                return arr.findIndex(item => item.hasOwnProperty(key) && item[key] === val);
+            }
         }
 
         _xyz.utils.createElement({
@@ -140,7 +150,7 @@ export default (layer, panel) => {
                         funct: e => {
 
                             let _colour = e.target.style.background,
-                                _hex = _xyz.utils.rgbToHex(_colour);
+                                _hex = rgbToHex(_colour);
 
                             _options.appendTo.style.display = 'none';
                             _options.appendTo.previousSibling.style.background = _colour;
@@ -208,6 +218,20 @@ export default (layer, panel) => {
             style: options.style,
             property: options.property
         });
+    }
+
+    function rgbToHex(color) {
+        let hexDigits = new Array
+            ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+    
+        if (color.substr(0, 1) === '#') return color;
+    
+        color = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        return '#' + hex(color[1]) + hex(color[2]) + hex(color[3]);
+    
+        function hex(x) {
+            return isNaN(x) ? '00' : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+        }
     }
 
     // Colour picker

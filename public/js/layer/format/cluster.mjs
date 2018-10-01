@@ -141,7 +141,9 @@ function addClusterToLayer(cluster, layer) {
             if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
 
                 // Define a default dotArr.
-                let dotArr = layer.style.markerMulti.style instanceof Array ? _xyz.utils.clone(layer.style.markerMulti.style) : [400, "#333"];
+                let dotArr = layer.style.markerMulti.style instanceof Array ?
+                    JSON.parse(JSON.stringify(layer.style.markerMulti.style)) :
+                    [400, "#333"];
 
                 if (layer.style.theme.competitors) {
                     let c = 0;

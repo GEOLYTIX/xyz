@@ -172,7 +172,7 @@ export default (record, images) => {
                         funct: () => {
                             btn_del.remove();
                             btn_save.remove();
-                            upload_image(record, _img, _xyz.utils.dataURLToBlob(dataURL));
+                            upload_image(record, _img, dataURLToBlob(dataURL));
                         }
                     }
                 });
@@ -261,4 +261,27 @@ function remove_image(record, img) {
         }
     }*/
     xhr.send();
+}
+
+function dataURLToBlob(dataURL) {
+
+    if (dataURL.indexOf(';base64,') == -1) {
+        let parts = dataURL.split(','),
+            contentType = parts[0].split(':')[1],
+            raw = parts[1];
+
+        return new Blob([raw], { type: contentType });
+    }
+
+    let parts = dataURL.split(';base64,'),
+        contentType = parts[0].split(':')[1],
+        raw = window.atob(parts[1]),
+        rawLength = raw.length,
+        uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], { type: contentType });
 }
