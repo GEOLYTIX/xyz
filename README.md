@@ -109,3 +109,7 @@ Ternary operator should return value not assign value in switch.
 DO `let clone = obj instanceof Array ? [] : {};`
 
 DONT `let clone; obj instanceof Array ? clone = [] : clone = {};`
+
+
+
+Array.map() should only be used when an array is to be mapped. For iterating without return of a mapped array the Array.forEach() method should be used.
