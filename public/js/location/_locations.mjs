@@ -14,7 +14,7 @@ export default () => {
             display: 'none'
         },
         appendTo: document.getElementById('Locations')
-    })
+    });
 
     _xyz.utils.createElement({
         tag: 'div',
@@ -23,7 +23,7 @@ export default () => {
             className: 'title'
         },
         appendTo: LocationsHeader
-    })
+    });
 
     _xyz.utils.createElement({
         tag: 'div',
@@ -38,7 +38,7 @@ export default () => {
                 resetModule();
             }
         }
-    })
+    });
 
     let locations = _xyz.utils.createElement({
         tag: 'div',

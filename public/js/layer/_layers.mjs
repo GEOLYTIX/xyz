@@ -104,7 +104,7 @@ export default () => {
                         e.target.style.display = 'none';
 
                         Object.values(layers).forEach(layer => {
-                            if (layer.group === group && layer.display) removeLayer(layer);
+                            if (layer.group === group && layer.display) layer.removeLayer();
                         });
 
                         _xyz.layersCheck();
@@ -199,6 +199,29 @@ export default () => {
             // Assign getLayer function from format.
             layer.getLayer = layer_formats[layer.format];
 
+            // Method for layer to become invisible.
+            layer.removeLayer = function() {
+                this.loader.style.display = 'none';
+                this.clear_icon.textContent = 'layers_clear';
+                this.display = false;
+                this.drawer.classList.add('report-off');
+                _xyz.utils.filterHook('layers', this.layer);
+        
+                if (this.attribution) this.attribution.forEach(a => {
+                    let foo = _xyz.attribution.indexOf(a);
+                    _xyz.attribution.splice(foo, 1);
+                });
+        
+                attributionCheck();
+        
+                if (this.L) _xyz.map.removeLayer(this.L);
+        
+                if (this.base) {
+                    _xyz.map.removeLayer(this.base);
+                    this.base = null;
+                }
+            }
+
             // Create control to toggle layer visibility.
             layer.clear_icon = _xyz.utils.createElement({
                 tag: 'i',
@@ -229,7 +252,7 @@ export default () => {
 
                         } else {
 
-                            removeLayer(layer);
+                            layer.removeLayer();
 
                             if (layer.group) {
                                 _xyz.ws.locales[_xyz.locale].groups[layer.group].hideAll.style.display =
@@ -391,28 +414,6 @@ export default () => {
             layer.getLayer(layer);
         });
     };
-
-    function removeLayer(layer) {
-        layer.loader.style.display = 'none';
-        layer.clear_icon.textContent = 'layers_clear';
-        layer.display = false;
-        layer.drawer.classList.add('report-off');
-        _xyz.utils.filterHook('layers', layer.layer);
-
-        if (layer.attribution) layer.attribution.forEach(a => {
-            let foo = _xyz.attribution.indexOf(a);
-            _xyz.attribution.splice(foo, 1);
-        });
-
-        attributionCheck();
-
-        if (layer.L) _xyz.map.removeLayer(layer.L);
-
-        if (layer.base) {
-            _xyz.map.removeLayer(layer.base);
-            layer.base = null;
-        }
-    }
 
     _xyz.initLayers();
 }

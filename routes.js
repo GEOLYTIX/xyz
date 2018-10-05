@@ -43,7 +43,7 @@ module.exports = fastify => {
                     log: process.env.LOG_LEVEL ? 'data-log = true' : '',
                     bundle_js: 'build/xyz_bundle.js',
                     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
-                    hrefDocumentation: config.documentation ? global.dir + '/' + config.documentation : '',
+                    hrefDocumentation: config.documentation ? config.documentation : '',
                     btnReport: config.report ? '' : 'style="display: none;"',
                     btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
                     btnLogin_style: token.email ? 'face' : 'lock_open',
