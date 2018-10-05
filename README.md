@@ -42,7 +42,20 @@ Fonts are now in a seperate public folder. Only css should be in public\/css. On
 
 Documentation is now served from gitbooks. The documentation property in the workspace must be a URL.
 
+utils.dropdrop factory to create dropdowns from entries array.
 
+Restructure grid fields array. 
+
+```
+"queryFields": [
+ {
+  "pop__01": "Population 2001"
+ },
+ {
+  "pop__11": "Population 2011"
+ }
+]
+```
 
 ## Notes:
 
