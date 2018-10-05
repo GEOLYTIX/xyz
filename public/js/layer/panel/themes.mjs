@@ -43,58 +43,30 @@ export default (layer, panel) => {
     });
 
     // set theme to first theme from array
-    if (!layer.style.theme) layer.style.theme = layer.style.themes[0] || undefined;
+    if (!layer.style.theme) layer.style.theme = layer.style.themes[0] || null;
 
     if (layer.style.themes) {
 
-        // Theme drop down
-        _xyz.utils.createElement({
-            tag: 'span',
-            options: {
-                textContent: 'Select thematic style…'
-            },
-            appendTo: block
+        // Create theme drop down
+        _xyz.utils.dropdown({
+            title: 'Select thematic style…',
+            appendTo: block,
+            entries: layer.style.themes,
+            label: 'label',
+            onchange: e => {
+                layer.legend.innerHTML = '';
+
+                // clear any applied 'ni' filters when theme changes
+                if (layer.style.theme && layer.filter[layer.style.theme.field] && layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
+
+                layer.style.theme = layer.style.themes[e.target.selectedIndex];
+                applyTheme(layer);
+                layer.getLayer(layer);
+            }
         });
 
-        let select = _xyz.utils.createElement({
-            tag: 'select',
-            options: {
-                onchange: e => {
-                    layer.legend.innerHTML = '';
-
-                    // clear any applied 'ni' filters when theme changes
-                    if (layer.style.theme && layer.filter[layer.style.theme.field] && layer.filter[layer.style.theme.field].ni) layer.filter[layer.style.theme.field].ni = [];
-
-                    layer.style.theme = layer.style.themes[e.target.selectedIndex];
-                    applyTheme(layer);
-                    layer.getLayer(layer);
-                }
-            },
-            appendTo: block
-        });
-
-        // add themes to dropdown
-        Object.keys(layer.style.themes).forEach(key => {
-            _xyz.utils.createElement({
-                tag: 'option',
-                options: {
-                    value: key,
-                    textContent: layer.style.themes[key].label || key
-                },
-                appendTo: select
-            });
-        });
-
-        if (layer.style.themes.length === 1) select.disabled = true;
-
-        // _xyz.utils.createElement({
-        //     tag: 'option',
-        //     options: {
-        //         textContent: 'Create new theme…'
-        //     },
-        //     appendTo: select
-        // });
         block.classList += ' expanded';
+
     } else {
 
         // Single theme title.

@@ -109,6 +109,17 @@ export function scrolly(el) {
     });
 }
 
+// Create temporary textarea to copy string to clipboard.
+export function copyToClipboard(str) {
+    let textArea = document.createElement('textarea');
+    textArea.style.visibility = 'none';
+    textArea.value = str;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    textArea.remove();
+}
+
 // Dom element factory.
 export function createElement(param) {
     let el = document.createElement(param.tag);
@@ -199,24 +210,66 @@ export function slider(options) {
     });
 }
 
-// Create temporary textarea to copy string to clipboard.
-export function copyToClipboard(str) {
-    let textArea = document.createElement('textarea');
-    textArea.style.visibility = 'none';
-    textArea.value = str;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    textArea.remove();
-}
+export function dropdown(options) {
 
+    if (options.title) createElement({
+        tag: 'div',
+        options: {
+            textContent: options.title
+        },
+        appendTo: options.appendTo
+    });
 
+    let select = createElement({
+        tag: 'select',
+        appendTo: options.appendTo
+    });
 
-// needs to go into dropdown factory
-export function getSelectOptionsIndex(options, value) {
-    for (let i = 0; i < options.length; i++) {
-        if (options[i].value == value) return i;
+    if (options.entries.length) {
+
+        // Create select options from entries Array.
+        options.entries.forEach(entry => {
+            createElement({
+                tag: 'option',
+                options: {
+                    // Assign first value as text if entry is object.
+                    textContent: typeof (entry) == 'object' ? Object.values(entry)[0] : entry,
+                    // Assign first key as value if entry is object.
+                    value: typeof (entry) == 'object' ? Object.keys(entry)[0] : entry
+                },
+                appendTo: select
+            })
+        });
+
+    } else {
+
+        // Create select options from Object if length is undefined.
+        Object.keys(options.entries).forEach(entry => {
+            createElement({
+                tag: 'option',
+                options: {
+                    textContent: options.entries[entry][options.label] || entry,
+                    value: options.entries[entry][options.val] || entry
+                },
+                appendTo: select
+            })
+        });
     }
 
-    return -1;
+    select.disabled = (select.childElementCount === 1);
+
+    select.onchange = options.onchange;
+
+    select.selectedIndex = getSelectOptionsIndex(select, options.selected);
+
+    // Get the index of the selected option from the select element.
+    function getSelectOptionsIndex(select, value) {
+        if (!value) return 0;
+        
+        for (let i = 0; i < select.length; i++) {
+            if (select[i].value == value) return i;
+        }
+    
+        return -1;
+    }
 }

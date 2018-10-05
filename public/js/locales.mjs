@@ -13,8 +13,7 @@ export default () => {
     // Return if length of locales array is 1.
     if (Object.keys(_xyz.ws.locales).length === 1) return
 
-
-    // Create locales dropdown from locales array.
+    // Create control to change locale for multiple locales in workspace.
     let locale = _xyz.utils.createElement({
         tag: 'div',
         options: {
@@ -23,43 +22,31 @@ export default () => {
         },
         appendTo: document.getElementById('Layers')
     });
-    
-    let selLocale = _xyz.utils.createElement({
-        tag: 'select',
-        appendTo: locale
+
+    // Create locales dropdown.
+    _xyz.utils.dropdown({
+        appendTo: locale,
+        entries: _xyz.ws.locales,
+        label: 'name',
+        val: 'loc',
+        selected: _xyz.locale,
+        onchange: e => {
+            _xyz.locale = e.target.value;
+            _xyz.utils.removeHooks();
+            _xyz.utils.setHook('locale', _xyz.locale);
+            setLocaleDefaults();
+            _xyz.setView(true);
+            _xyz.ws.gazetteer.init(true);
+            _xyz.initLayers(true);
+            _xyz.ws.select.resetModule();
+        }
     });
 
-    // Onchange event for locales dropdown.
-    selLocale.onchange = e => {
-        _xyz.locale = e.target.value;
-        _xyz.utils.removeHooks();
-        _xyz.utils.setHook('locale', _xyz.locale);
-        setLocaleDefaults();
-        _xyz.setView(true);
-        _xyz.ws.gazetteer.init(true);
-        _xyz.initLayers(true);
-        _xyz.ws.select.resetModule();
+    // Set locale defaults.
+    function setLocaleDefaults() {
+
+        // Set min/max zoom defaults.
+        _xyz.ws.locales[_xyz.locale].minZoom = _xyz.ws.locales[_xyz.locale].minZoom || 0;
+        _xyz.ws.locales[_xyz.locale].maxZoom = _xyz.ws.locales[_xyz.locale].maxZoom || 20;
     };
-
-    // Populate locales dropdown.
-    Object.keys(_xyz.ws.locales).forEach(loc => {
-        _xyz.utils.createElement({
-            tag: 'option',
-            options: {
-                textContent: _xyz.ws.locales[loc].name || loc,
-                value: loc
-            },
-            appendTo: selLocale
-        })
-    })
-
-    // Set locales dropdown to locale.
-    selLocale.selectedIndex = _xyz.utils.getSelectOptionsIndex(selLocale, _xyz.locale);
 }
-
-function setLocaleDefaults(){
-
-    // Set min/max zoom defaults.
-    _xyz.ws.locales[_xyz.locale].minZoom = _xyz.ws.locales[_xyz.locale].minZoom || 0;
-    _xyz.ws.locales[_xyz.locale].maxZoom = _xyz.ws.locales[_xyz.locale].maxZoom || 20;
-};

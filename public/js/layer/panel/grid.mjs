@@ -1,6 +1,6 @@
 import _xyz from '../../_xyz.mjs';
 
-import d3_selection from "d3-selection";
+import d3_selection from 'd3-selection';
 
 export default (layer, panel) => {
 
@@ -13,37 +13,37 @@ export default (layer, panel) => {
             appendTo: panel
         });
 
-    // Select dropdown for size.
-    let selSize = _xyz.utils.createElement({
-        tag: 'select',
-        options: {
-            className: 'selSize ctrl',
-            name: 'selSize'
+    // Create grid_seize dropdown.
+    layer.grid_size = _xyz.hooks['grid_size'] || layer.grid_size || Object.keys(layer.queryFields[0])[0];
+    _xyz.utils.dropdown({
+        appendTo: legend,
+        entries: layer.queryFields,
+        selected: layer.grid_size,
+        onchange: e => {
+            layer.grid_size = e.target.value;
+            _xyz.utils.setHook('grid_size', layer.grid_size);
+            layer.getLayer(layer);
         }
     });
-
-    setDropDown(selSize, 'grid_size');
-
-    legend.appendChild(selSize);
 
     // Create a D3 svg for the legend and nest between size and color drop down.
     let svg = d3_selection.select(legend).append('svg').attr('width', width);
 
-    // Select dropdown for color.
-    let selColor = _xyz.utils.createElement({
-        tag: 'select',
-        options: {
-            className: 'selColor ctrl',
-            name: 'selColor'
+    // Create grid_color dropdown.
+    layer.grid_color = _xyz.hooks['grid_color'] || layer.grid_color || Object.keys(layer.queryFields[1])[0];
+    _xyz.utils.dropdown({
+        appendTo: legend,
+        entries: layer.queryFields,
+        selected: layer.grid_color,
+        onchange: e => {
+            layer.grid_color = e.target.value;
+            _xyz.utils.setHook('grid_color', layer.grid_color);
+            layer.getLayer(layer);
         }
     });
 
-    setDropDown(selColor, 'grid_color');
-
-    legend.appendChild(selColor);
-
     // Grid ration checkbox element.
-    let gridRatio = _xyz.utils.checkbox(function (e) {
+    let gridRatio = _xyz.utils.checkbox(e => {
 
         // Checkbox event to toggle grid_ratio.
         layer.chkGridRatio = e.target.checked;
@@ -73,45 +73,17 @@ export default (layer, panel) => {
 
     legend.appendChild(gridRatio);
 
-    // Set dropdown values and events.
-    function setDropDown(select, query) {
-
-        // Populate select options
-        layer.queryFields.map(function (queryField) {
-            _xyz.utils.createElement({
-                tag: 'option',
-                options: {
-                    value: queryField[0],
-                    textContent: queryField[1]
-                },
-                appendTo: select
-            });
-        });
-
-        // Set the select from either hook[query] or layer[query].
-        select.selectedIndex = _xyz.hooks[query] || layer[query] ? _xyz.utils.getSelectOptionsIndex(select.options, _xyz.hooks[query] || layer[query]) : 0;
-        layer[query] = select.value;
-        _xyz.utils.setHook(query, select.value);
-
-        // onchange event to set the hook and title.
-        select.onchange = function () {
-            _xyz.utils.setHook(query, event.target.value);
-            layer[query] = event.target.value;
-            layer.getLayer(layer);
-        };
-    }
-
     // Add default style.range if none exists.
     if (!layer.style) layer.style = {};
 
     if (!layer.style.range) layer.style.range = [
-        "#15773f",
-        "#66bd63",
-        "#a6d96a",
-        "#d9ef8b",
-        "#fdae61",
-        "#f46d43",
-        "#d73027"
+        '#15773f',
+        '#66bd63',
+        '#a6d96a',
+        '#d9ef8b',
+        '#fdae61',
+        '#f46d43',
+        '#d73027'
     ];
 
     // Create SVG grid legend
@@ -189,9 +161,6 @@ export default (layer, panel) => {
             .style('font-family', '"PT Mono", monospace')
             .attr('id', 'grid_legend_color__min')
             .text('min');
-        // .text(arrayColor[i].toLocaleString('en-GB', {
-        //     maximumFractionDigits: 0
-        // }));
 
         if (i === (n / 2 % 1 != 0 && Math.round(n / 2) - 1)) svg.append('text')
             .attr('x', x + w / 2)

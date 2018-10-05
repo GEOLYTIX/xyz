@@ -131,149 +131,147 @@
               "fill": true,
               "fillOpacity": 0
             },
-            "themes": [
-              {
-                "label": "Population Density",
-                "type": "graduated",
-                "field": "pop_density",
-                "applied": true,
-                "other": true,
-                "cat": [
-                  {
-                    "val": 5000,
-                    "label": "up to 5,000 per km2 square",
-                    "style": {
-                      "weight": 1,
-                      "color": "#bcdf27",
-                      "opacity": 1,
-                      "fillColor": "#fde725",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 10000,
-                    "label": "10,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#7ad251",
-                      "opacity": 1,
-                      "fillColor": "#bcdf27",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 15000,
-                    "label": "15,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#43bf70",
-                      "opacity": 1,
-                      "fillColor": "#7ad251",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 20000,
-                    "label": "20,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#22a884",
-                      "opacity": 1,
-                      "fillColor": "#43bf70",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 25000,
-                    "label": "25,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#20908d",
-                      "opacity": 1,
-                      "fillColor": "#22a884",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 30000,
-                    "label": "30,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#29788e",
-                      "opacity": 1,
-                      "fillColor": "#20908d",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 35000,
-                    "label": "35,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#345f8d",
-                      "opacity": 1,
-                      "fillColor": "#29788e",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 40000,
-                    "label": "40,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#404387",
-                      "opacity": 1,
-                      "fillColor": "#345f8d",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 45000,
-                    "label": "45,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#482475",
-                      "opacity": 1,
-                      "fillColor": "#404387",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 50000,
-                    "label": "50,000",
-                    "style": {
-                      "weight": 1,
-                      "color": "#440154",
-                      "opacity": 1,
-                      "fillColor": "#482475",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  {
-                    "val": 1000000,
-                    "label": "50,000 or more",
-                    "style": {
-                      "weight": 1,
-                      "color": "#000",
-                      "opacity": 1,
-                      "fillColor": "#440154",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
+            "theme": {
+              "label": "Population Density",
+              "type": "graduated",
+              "field": "pop_density",
+              "applied": true,
+              "other": true,
+              "cat": [
+                {
+                  "val": 5000,
+                  "label": "up to 5,000 per km2 square",
+                  "style": {
+                    "weight": 1,
+                    "color": "#bcdf27",
+                    "opacity": 1,
+                    "fillColor": "#fde725",
+                    "fill": true,
+                    "fillOpacity": 0.3
                   }
-                ]
-              }
-            ]
+                },
+                {
+                  "val": 10000,
+                  "label": "10,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#7ad251",
+                    "opacity": 1,
+                    "fillColor": "#bcdf27",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 15000,
+                  "label": "15,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#43bf70",
+                    "opacity": 1,
+                    "fillColor": "#7ad251",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 20000,
+                  "label": "20,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#22a884",
+                    "opacity": 1,
+                    "fillColor": "#43bf70",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 25000,
+                  "label": "25,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#20908d",
+                    "opacity": 1,
+                    "fillColor": "#22a884",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 30000,
+                  "label": "30,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#29788e",
+                    "opacity": 1,
+                    "fillColor": "#20908d",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 35000,
+                  "label": "35,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#345f8d",
+                    "opacity": 1,
+                    "fillColor": "#29788e",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 40000,
+                  "label": "40,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#404387",
+                    "opacity": 1,
+                    "fillColor": "#345f8d",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 45000,
+                  "label": "45,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#482475",
+                    "opacity": 1,
+                    "fillColor": "#404387",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 50000,
+                  "label": "50,000",
+                  "style": {
+                    "weight": 1,
+                    "color": "#440154",
+                    "opacity": 1,
+                    "fillColor": "#482475",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                {
+                  "val": 1000000,
+                  "label": "50,000 or more",
+                  "style": {
+                    "weight": 1,
+                    "color": "#000",
+                    "opacity": 1,
+                    "fillColor": "#440154",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                }
+              ]
+            }
           }
         },
         "catchments": {
@@ -410,84 +408,82 @@
                 "#e0e0e0"
               ]
             },
-            "themes": [
-              {
-                "label": "Retailer",
-                "type": "categorized",
-                "field": "brand2",
-                "applied": true,
-                "cat": {
-                  "dr_martens": {
-                    "label": "Dr Martens",
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#000",
-                        300,
-                        "#fff176",
-                        150,
-                        "#000"
-                      ]
-                    }
-                  },
-                  "watsons": {
-                    "label": "Watsons",
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0A94A6",
-                        300,
-                        "#FFF",
-                        150,
-                        "#D72F33"
-                      ]
-                    }
-                  },
-                  "park_n_shop": {
-                    "label": "Park'N'Shop",
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#382596",
-                        250,
-                        "#F02C24",
-                        150,
-                        "#FDD03E"
-                      ]
-                    }
-                  },
-                  "holland_and_barrett": {
-                    "label": "Holland & Barrett",
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#056243",
-                        200,
-                        "#FFF"
-                      ]
-                    }
+            "theme": {
+              "label": "Retailer",
+              "type": "categorized",
+              "field": "brand2",
+              "applied": true,
+              "cat": {
+                "dr_martens": {
+                  "label": "Dr Martens",
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#000",
+                      300,
+                      "#fff176",
+                      150,
+                      "#000"
+                    ]
                   }
                 },
-                "competitors": {
-                  "watsons": {
-                    "label": "Watsons",
-                    "colour": "#0A94A6"
-                  },
-                  "park_n_shop": {
-                    "label": "Park'N'Shop",
-                    "colour": "#FCE28D"
-                  },
-                  "other": {
-                    "label": "other",
-                    "colour": "#e0e0e0"
+                "watsons": {
+                  "label": "Watsons",
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0A94A6",
+                      300,
+                      "#FFF",
+                      150,
+                      "#D72F33"
+                    ]
+                  }
+                },
+                "park_n_shop": {
+                  "label": "Park'N'Shop",
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#382596",
+                      250,
+                      "#F02C24",
+                      150,
+                      "#FDD03E"
+                    ]
+                  }
+                },
+                "holland_and_barrett": {
+                  "label": "Holland & Barrett",
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#056243",
+                      200,
+                      "#FFF"
+                    ]
                   }
                 }
+              },
+              "competitors": {
+                "watsons": {
+                  "label": "Watsons",
+                  "colour": "#0A94A6"
+                },
+                "park_n_shop": {
+                  "label": "Park'N'Shop",
+                  "colour": "#FCE28D"
+                },
+                "other": {
+                  "label": "other",
+                  "colour": "#e0e0e0"
+                }
               }
-            ]
+            }
           }
         },
         "cn_sh_retail_venues": {
@@ -910,838 +906,630 @@
             "12": "gb_hx_1k"
           },
           "queryFields": [
-            [
-              "pop__01",
-              "Population 2001"
-            ],
-            [
-              "pop__11",
-              "Population 2011"
-            ],
-            [
-              "gen_female__11",
-              "Female population"
-            ],
-            [
-              "gen_male__11",
-              "Male population"
-            ],
-            [
-              "age_05to07__11",
-              "Age 5 to 7"
-            ],
-            [
-              "age_08to09__11",
-              "Age 8 to 9"
-            ],
-            [
-              "age_10to14__11",
-              "Age 10 to 14"
-            ],
-            [
-              "age_15__11",
-              "Age 15"
-            ],
-            [
-              "age_16pl__11",
-              "Age 16 and above"
-            ],
-            [
-              "age_16to17__11",
-              "Age 16 to 17"
-            ],
-            [
-              "age_16to74__11",
-              "Age 16 to 74"
-            ],
-            [
-              "age_18to19__11",
-              "Age 18 to 19"
-            ],
-            [
-              "age_20to24__11",
-              "Age 20 to 24"
-            ],
-            [
-              "age_25to29__11",
-              "Age 25 to 29"
-            ],
-            [
-              "age_30to44__11",
-              "Age 30 to 44"
-            ],
-            [
-              "age_45to59__11",
-              "Age 45 to 59"
-            ],
-            [
-              "age_60to64__11",
-              "Age 60 to 64"
-            ],
-            [
-              "age_65to74__11",
-              "Age 65 to 74"
-            ],
-            [
-              "age_75to84__11",
-              "Age 75 to 84"
-            ],
-            [
-              "age_85to89__11",
-              "Age 85 to 89"
-            ],
-            [
-              "age_90pl__11",
-              "Age 90 and above"
-            ],
-            [
-              "edu_na__11",
-              "Highest level of education not stated or not applicable"
-            ],
-            [
-              "edu_primary_i1__11",
-              "Primary education (IESCD 1)"
-            ],
-            [
-              "edu_secondary_i2__11",
-              "Secondary education (IESCD 2)"
-            ],
-            [
-              "edu_secondary_i2_l__11",
-              "Secondary education lower level (IESCD 2)"
-            ],
-            [
-              "edu_secondary_i3__11",
-              "Secondary education upper level (IESCD 3)"
-            ],
-            [
-              "edu_secondary_i3v__11",
-              "Secondary education vocational apprenticeship (IESCD 3)"
-            ],
-            [
-              "edu_tertiary_i6__11",
-              "Tertiary education with a Bachelor degree or equivalent (IESCD 6)"
-            ],
-            [
-              "ski_ab__11",
-              "AB Higher and intermediate managerial/administrative or professional"
-            ],
-            [
-              "ski_c1__11",
-              "C1 Supervisory or clerical or junior managerial or administrative or professional"
-            ],
-            [
-              "ski_c2__11",
-              "C2 Skilled manual workers"
-            ],
-            [
-              "ski_de__11",
-              "DE Semi skilled and unskilled manual workers  or on state benefit unemployed"
-            ],
-            [
-              "ski_hrp_base__11",
-              "Household Spaces with an Household Reference Person aged 16 to 64"
-            ],
-            [
-              "ski_nssec_1_1__11",
-              "Skill NSSEC 1_1 Large employers and higher managerial and administrative occupations"
-            ],
-            [
-              "ski_nssec_1_2__11",
-              "Skill NSSEC 1_2 Higher professional occupations"
-            ],
-            [
-              "ski_nssec_2__11",
-              "Skill NSSEC 2 Lower managerial administrative and professional occupations"
-            ],
-            [
-              "ski_nssec_3__11",
-              "Skill NSSEC 3 Intermediate occupations"
-            ],
-            [
-              "ski_nssec_4__11",
-              "Skill NSSEC 4 Small employers and own account workers"
-            ],
-            [
-              "ski_nssec_5__11",
-              "Skill NSSEC 5 Lower supervisory and technical occupations"
-            ],
-            [
-              "ski_nssec_6__11",
-              "Skill NSSEC 6 Semi-routine occupations"
-            ],
-            [
-              "ski_nssec_7__11",
-              "Skill NSSEC 7 Routine occupations"
-            ],
-            [
-              "ski_nssec_l14_1__11",
-              "Skill NSSEC L14_1 Never worked"
-            ],
-            [
-              "ski_nssec_l14_2__11",
-              "Skill NSSEC L14_2 Long-term unemployed"
-            ],
-            [
-              "ski_nssec_na__11",
-              "Skill NSSEC Not classified"
-            ],
-            [
-              "eac_employed__11",
-              "Economically active: Employed"
-            ],
-            [
-              "eac_employed_b__11",
-              "Economically active: Employed base"
-            ],
-            [
-              "eac_employed_self__11",
-              "Economically active: Self employed"
-            ],
-            [
-              "eac_full_time__11",
-              "Economically active: Working full time"
-            ],
-            [
-              "eac_in_accom_food__11",
-              "Economically active: Accommodation and food service (SOC I)"
-            ],
-            [
-              "eac_in_admin_serv__11",
-              "Economically active: Administrative and support service activities (SOC N)"
-            ],
-            [
-              "eac_in_aggriculture__11",
-              "Economically active: Agriculture forestry or fishing industries (SOC A)"
-            ],
-            [
-              "eac_in_construction__11",
-              "Economically active: Construction industry (SOC F)"
-            ],
-            [
-              "eac_in_education__11",
-              "Economically active: Eduction (SOC P)"
-            ],
-            [
-              "eac_in_extractive__11",
-              "Economically active: Extractive industries including mining and quarrying (SOC B)"
-            ],
-            [
-              "eac_in_finance__11",
-              "Economically active: Financial and insurance industries (SOC K)"
-            ],
-            [
-              "eac_in_health__11",
-              "Economically active: Human health and social work activities (SOC Q)"
-            ],
-            [
-              "eac_in_ict__11",
-              "Economically active: Information and communication technologies industry (SOC J)"
-            ],
-            [
-              "eac_in_manufacturing_2__11",
-              "Economically active: Manufacturing (SOC C)"
-            ],
-            [
-              "eac_in_other__11",
-              "Economically active: Other services and industries (SOC R|S|T|U)"
-            ],
-            [
-              "eac_in_power__11",
-              "Economically active: Electricity gas steam and air conditioning supply (SOC D)"
-            ],
-            [
-              "eac_in_prof_tech__11",
-              "Economically active: Professional scientific and technical activitiess (SOC M)"
-            ],
-            [
-              "eac_in_property__11",
-              "Economically active: Property and real estate industries (SOC L)"
-            ],
-            [
-              "eac_in_public_admin__11",
-              "Economically active: Public administration and defence compulsory social security (SOC O)"
-            ],
-            [
-              "eac_in_retail__11",
-              "Economically active: Wholesale and retail trade repair of motor vehicles (SOC G)"
-            ],
-            [
-              "eac_in_transport__11",
-              "Economically active: Transport and Storage (SOC H)"
-            ],
-            [
-              "eac_in_waste__11",
-              "Economically active: Water supply sewerage waste management and remediation activities (SOC E)"
-            ],
-            [
-              "eac_part_time__11",
-              "Economically active: Working part time"
-            ],
-            [
-              "eac_student__11",
-              "Economically active: Full-time student"
-            ],
-            [
-              "eac_student_18to74_empl__11",
-              "Economically active: Full-time student (employed)"
-            ],
-            [
-              "eac_student_18to74_unempl__11",
-              "Economically active: Full-time student (unemployed)"
-            ],
-            [
-              "eac_tr_bike__11",
-              "Economically active: Travel to work by bike"
-            ],
-            [
-              "eac_tr_bus__11",
-              "Economically active: Travel to work by bus"
-            ],
-            [
-              "eac_tr_car__11",
-              "Economically active: Travel to work by car"
-            ],
-            [
-              "eac_tr_carpass__11",
-              "Economically active: Travel to work by car (including car pool)"
-            ],
-            [
-              "eac_tr_foot__11",
-              "Economically active: Travel to work by foot"
-            ],
-            [
-              "eac_tr_mbike__11",
-              "Economically active: Travel to work by motorcycle"
-            ],
-            [
-              "eac_tr_none__11",
-              "Economically active: No travel to work"
-            ],
-            [
-              "eac_tr_other__11",
-              "Economically active: Travel to work by other mode"
-            ],
-            [
-              "eac_tr_taxi__11",
-              "Economically active: Travel to work by taxi"
-            ],
-            [
-              "eac_tr_train__11",
-              "Economically active: Travel to work by train"
-            ],
-            [
-              "eac_tr_tube__11",
-              "Economically active: Travel to work by metro system"
-            ],
-            [
-              "eac_unemployed__11",
-              "Economically active: Unemployed"
-            ],
-            [
-              "ein_homemaker__11",
-              "Economically inactive: Homemaker"
-            ],
-            [
-              "ein_other__11",
-              "Economically inactive: Other"
-            ],
-            [
-              "ein_pensioner__11",
-              "Economically inactive: Pensioner"
-            ],
-            [
-              "ein_sick_disabled__11",
-              "Economically inactive: Long-term sick or disabled"
-            ],
-            [
-              "ein_student__11",
-              "Economically inactive: Student"
-            ],
-            [
-              "ein_student_16to17__11",
-              "Economically inactive: Schoolchildren and full time students Aged 16 to 17"
-            ],
-            [
-              "ein_student_18pl__11",
-              "Economically inactive: Schoolchildren and full time students Aged 18 and over"
-            ],
-            [
-              "ein_student_18to74__11",
-              "Economically inactive: Full-time students Age 18 to 74"
-            ],
-            [
-              "hhi_communal__11",
-              "Person living in a communal establishment"
-            ],
-            [
-              "hhi_divorced__11",
-              "Divorced from a marriage"
-            ],
-            [
-              "hhi_health_bad__11",
-              "Person with bad health"
-            ],
-            [
-              "hhi_health_fair__11",
-              "Person with fair health"
-            ],
-            [
-              "hhi_health_good__11",
-              "Person with good health"
-            ],
-            [
-              "hhi_health_verybad__11",
-              "Person with very bad health"
-            ],
-            [
-              "hhi_health_verygood__11",
-              "Person with very good health"
-            ],
-            [
-              "hhi_married__11",
-              "Person who is married"
-            ],
-            [
-              "hhi_partner__11",
-              "Person who is in a registered partnership"
-            ],
-            [
-              "hhi_private__11",
-              "Person living in a private household"
-            ],
-            [
-              "hhi_seperated__11",
-              "Person who is seperated but still legally married or still legally in a same sex civil partnership"
-            ],
-            [
-              "hhi_single__11",
-              "Person who has never married"
-            ],
-            [
-              "hhi_widowed__11",
-              "Person who is widowed"
-            ],
-            [
-              "hhu__total__11",
-              "Household: Total"
-            ],
-            [
-              "hhu__total_occ__11",
-              "Household: Occupied"
-            ],
-            [
-              "hhu_2person__11",
-              "Household: 2 persons"
-            ],
-            [
-              "hhu_3person__11",
-              "Household: 3 persons"
-            ],
-            [
-              "hhu_4person__11",
-              "Household: 4 persons"
-            ],
-            [
-              "hhu_5person__11",
-              "Household: 5 persons"
-            ],
-            [
-              "hhu_6person__11",
-              "Household: 6 persons"
-            ],
-            [
-              "hhu_7person__11",
-              "Household: 7 persons"
-            ],
-            [
-              "hhu_8person_pl__11",
-              "Household: 8 or more persons"
-            ],
-            [
-              "hhu_all65pl__11",
-              "Other household type All aged 65 and over"
-            ],
-            [
-              "hhu_allstudents__11",
-              "Other household type all full time students"
-            ],
-            [
-              "hhu_c_0__11",
-              "Household: No car access"
-            ],
-            [
-              "hhu_c_1__11",
-              "Household: Access to a car"
-            ],
-            [
-              "hhu_c_2__11",
-              "Household: Access to 2 cars"
-            ],
-            [
-              "hhu_c_3__11",
-              "Household: Access to 3 cars"
-            ],
-            [
-              "hhu_c_4pl__11",
-              "Household: Access to 4 or more cars"
-            ],
-            [
-              "hhu_fm_1_65pl__11",
-              "Household: 1 family (aged 65 and over)"
-            ],
-            [
-              "hhu_fm_1_cohab_depchildren__11",
-              "Household: 1 family Cohabiting couple Dependent children"
-            ],
-            [
-              "hhu_fm_1_cohab_nochildren__11",
-              "Household unit made up of 1 family Cohabiting couple No children"
-            ],
-            [
-              "hhu_fm_1_cohab_nodepchildren__11",
-              "Household unit made up of 1 family Cohabiting couple All children non-dependent"
-            ],
-            [
-              "hhu_fm_1_married_depchildren__11",
-              "Household unit made up of 1 family Married or same-sex civil partnership couple Dependent children"
-            ],
-            [
-              "hhu_fm_1_married_nochildren__11",
-              "Household unit made up of 1 family Married or same-sex civil partnership couple No children"
-            ],
-            [
-              "hhu_fm_1_married_nodepchildren__11",
-              "Household unit made up of 1 family Married or same-sex civil partnership couple All children non-dependent"
-            ],
-            [
-              "hhu_lone_parent_depchildren__11",
-              "Household unit made up of 1 family Lone parent Dependent children"
-            ],
-            [
-              "hhu_lone_parent_nodepchildren__11",
-              "Household unit made up of 1 family Lone parent All chidren non-dependent"
-            ],
-            [
-              "hhu_other__11",
-              "Other household type Other"
-            ],
-            [
-              "hhu_other_depchildren__11",
-              "Other household type With dependent children"
-            ],
-            [
-              "hhu_p_1__11",
-              "Household unit with 1 person"
-            ],
-            [
-              "hhu_p_1_65pl__11",
-              "Household unit with 1 person aged 65 and over"
-            ],
-            [
-              "hhu_p_1_other__11",
-              "Household unit with 1 person other"
-            ],
-            [
-              "hhu_tenure_rent_free__11",
-              "Household rent free"
-            ],
-            [
-              "hhu_tenure_rent_other__11",
-              "Household rented privately from other type of landlord"
-            ],
-            [
-              "hhu_tenure_rent_social_council__11",
-              "Household social rent from council"
-            ],
-            [
-              "hhu_tenure_rent_social_other__11",
-              "Household social rent from other landlord"
-            ],
-            [
-              "hhu_tenure_rented__11",
-              "Households in rental housing"
-            ],
-            [
-              "hhu_tenure_shared__11",
-              "Household unit under shared ownership"
-            ],
-            [
-              "dwu__total__11",
-              "Dwelling unit (total)"
-            ],
-            [
-              "dwu_empty__11",
-              "Dwelling unit: Empty"
-            ],
-            [
-              "dwu_fta__11",
-              "Dwelling unit: Flat, terraced or apartment"
-            ],
-            [
-              "dwu_hh_2pl__11",
-              "Shared dwelling two household spaces or more"
-            ],
-            [
-              "dwu_s_detached__11",
-              "Dwelling unit style: Detached"
-            ],
-            [
-              "dwu_s_semi__11",
-              "Dwelling unit style: Semi detached"
-            ],
-            [
-              "dwu_t_fma_com__11",
-              "Dwelling unit type: Flat maisonette or apartment Commercial building"
-            ],
-            [
-              "dwu_t_fma_con__11",
-              "Dwelling unit type: Flat maisonette or apartment Part of a converted or shared house"
-            ],
-            [
-              "dwu_t_fma_pur__11",
-              "Dwelling unit type: Flat maisonette or apartment Purpose-built block of flats or tenement"
-            ],
-            [
-              "dwu_t_mobile__11",
-              "Dwelling unit type: Caravan or other mobile or temporary structure"
-            ],
-            [
-              "dwu_t_unshared__11",
-              "Unshared dwelling"
-            ],
-            [
-              "dwu_tenure_own_mortgage__11",
-              "Dwelling unit owned mortgage outstanding"
-            ],
-            [
-              "dwu_tenure_own_outright__11",
-              "Dwelling unit owned totally paid"
-            ],
-            [
-              "ror_england__11",
-              "Origin in England"
-            ],
-            [
-              "ror_eu_new__11",
-              "Origin in EU member state joined 2001 to 2011"
-            ],
-            [
-              "ror_eu_old__11",
-              "Origin in 2001 EU member state"
-            ],
-            [
-              "ror_ireland__11",
-              "Origin in Ireland"
-            ],
-            [
-              "ror_ni__11",
-              "Origin in Northern Ireland"
-            ],
-            [
-              "ror_other__11",
-              "Origin is not indicated or otherwise classifiable"
-            ],
-            [
-              "ror_scotland__11",
-              "Origin in Scotland"
-            ],
-            [
-              "ror_wales__11",
-              "Origin in Wales"
-            ],
-            [
-              "ret_african_brit__11",
-              "British African"
-            ],
-            [
-              "ret_bandladeshi_brit__11",
-              "British Bangladeshi"
-            ],
-            [
-              "ret_caribbean_brit__11",
-              "British Caribbean"
-            ],
-            [
-              "ret_chinese_brit__11",
-              "British Chinese"
-            ],
-            [
-              "ret_indian_brit__11",
-              "British Indian"
-            ],
-            [
-              "ret_mixed__11",
-              "Ethnic Mixed or Multiple ethnic group"
-            ],
-            [
-              "ret_other__11",
-              "Other ethnic group "
-            ],
-            [
-              "ret_otherasian_brit__11",
-              "Ethnic Asian/Asian British Other Asian"
-            ],
-            [
-              "ret_otherblack_brit__11",
-              "British Other Black"
-            ],
-            [
-              "ret_pakistani_brit__11",
-              "British Pakistani"
-            ],
-            [
-              "ret_white_brit__11",
-              "Ethnic White including nationalities Irish and gypsy travellers"
-            ],
-            [
-              "ret_white_other__11",
-              "Ethnic all White ethnicities"
-            ],
-            [
-              "ret_white_tot__11",
-              "Ethnic White including White British White Irish and traveller"
-            ],
-            [
-              "rcz_africa__11",
-              "Citizen of African country"
-            ],
-            [
-              "rcz_asia__11",
-              "Citizen of Asian country"
-            ],
-            [
-              "rcz_central_america__11",
-              "Citizen of Central American country"
-            ],
-            [
-              "rcz_eu__11",
-              "Citizen of an EU member state"
-            ],
-            [
-              "rcz_europe__11",
-              "Citizen of an European country"
-            ],
-            [
-              "rcz_north_america__11",
-              "Citizen of North American country"
-            ],
-            [
-              "rcz_oceania__11",
-              "Citizen of country belonging to Oceania"
-            ],
-            [
-              "rcz_roi__11",
-              "Citizen of the Republic of Ireland"
-            ],
-            [
-              "rcz_south_america__11",
-              "Citizen of South American country"
-            ],
-            [
-              "rcz_stateless__11",
-              "Stateless unsettled or unknown citizenship"
-            ],
-            [
-              "rcz_uk__11",
-              "Citizen of the UK"
-            ],
-            [
-              "rel_buddhist__11",
-              "Religion Buddhist"
-            ],
-            [
-              "rel_catholic__11",
-              "Religion Catholic"
-            ],
-            [
-              "rel_christian__11",
-              "Religion All Christan"
-            ],
-            [
-              "rel_hindu__11",
-              "Religion Hindu"
-            ],
-            [
-              "rel_jewish__11",
-              "Religion Jewish"
-            ],
-            [
-              "rel_muslim__11",
-              "Religion Muslim"
-            ],
-            [
-              "rel_na__11",
-              "Religion not specified"
-            ],
-            [
-              "rel_none__11",
-              "Religion none"
-            ],
-            [
-              "rel_none_christian__11",
-              "Religion Non-Christian"
-            ],
-            [
-              "rel_other__11",
-              "Religion other"
-            ],
-            [
-              "rel_other_christian__11",
-              "Religion Other Christan denomination"
-            ],
-            [
-              "rel_sikh__11",
-              "Religion Sikh"
-            ],
-            [
-              "ue__05",
-              "Unemployed in 2005"
-            ],
-            [
-              "ue__06",
-              "Unemployed in 2006"
-            ],
-            [
-              "ue__07",
-              "Unemployed in 2007"
-            ],
-            [
-              "ue__08",
-              "Unemployed in 2008"
-            ],
-            [
-              "ue__09",
-              "Unemployed in 2009"
-            ],
-            [
-              "ue__10",
-              "Unemployed in 2010"
-            ],
-            [
-              "ue__11",
-              "Unemployed in 2011"
-            ],
-            [
-              "ue__12",
-              "Unemployed in 2012"
-            ],
-            [
-              "ue__13",
-              "Unemployed in 2013"
-            ],
-            [
-              "ue__14",
-              "Unemployed in 2014"
-            ],
-            [
-              "ue__15",
-              "Unemployed in 2015"
-            ],
-            [
-              "ue__16",
-              "Unemployed in 2016"
-            ]
+            {
+              "pop__01": "Population 2001"
+            },
+            {
+              "pop__11": "Population 2011"
+            },
+            {
+              "gen_female__11": "Female population"
+            },
+            {
+              "gen_male__11": "Male population"
+            },
+            {
+              "age_05to07__11": "Age 5 to 7"
+            },
+            {
+              "age_08to09__11": "Age 8 to 9"
+            },
+            {
+              "age_10to14__11": "Age 10 to 14"
+            },
+            {
+              "age_15__11": "Age 15"
+            },
+            {
+              "age_16pl__11": "Age 16 and above"
+            },
+            {
+              "age_16to17__11": "Age 16 to 17"
+            },
+            {
+              "age_16to74__11": "Age 16 to 74"
+            },
+            {
+              "age_18to19__11": "Age 18 to 19"
+            },
+            {
+              "age_20to24__11": "Age 20 to 24"
+            },
+            {
+              "age_25to29__11": "Age 25 to 29"
+            },
+            {
+              "age_30to44__11": "Age 30 to 44"
+            },
+            {
+              "age_45to59__11": "Age 45 to 59"
+            },
+            {
+              "age_60to64__11": "Age 60 to 64"
+            },
+            {
+              "age_65to74__11": "Age 65 to 74"
+            },
+            {
+              "age_75to84__11": "Age 75 to 84"
+            },
+            {
+              "age_85to89__11": "Age 85 to 89"
+            },
+            {
+              "age_90pl__11": "Age 90 and above"
+            },
+            {
+              "edu_na__11": "Highest level of education not stated or not applicable"
+            },
+            {
+              "edu_primary_i1__11": "Primary education (IESCD 1)"
+            },
+            {
+              "edu_secondary_i2__11": "Secondary education (IESCD 2)"
+            },
+            {
+              "edu_secondary_i2_l__11": "Secondary education lower level (IESCD 2)"
+            },
+            {
+              "edu_secondary_i3__11": "Secondary education upper level (IESCD 3)"
+            },
+            {
+              "edu_secondary_i3v__11": "Secondary education vocational apprenticeship (IESCD 3)"
+            },
+            {
+              "edu_tertiary_i6__11": "Tertiary education with a Bachelor degree or equivalent (IESCD 6)"
+            },
+            {
+              "ski_ab__11": "AB Higher and intermediate managerial/administrative or professional"
+            },
+            {
+              "ski_c1__11": "C1 Supervisory or clerical or junior managerial or administrative or professional"
+            },
+            {
+              "ski_c2__11": "C2 Skilled manual workers"
+            },
+            {
+              "ski_de__11": "DE Semi skilled and unskilled manual workers  or on state benefit unemployed"
+            },
+            {
+              "ski_hrp_base__11": "Household Spaces with an Household Reference Person aged 16 to 64"
+            },
+            {
+              "ski_nssec_1_1__11": "Skill NSSEC 1_1 Large employers and higher managerial and administrative occupations"
+            },
+            {
+              "ski_nssec_1_2__11": "Skill NSSEC 1_2 Higher professional occupations"
+            },
+            {
+              "ski_nssec_2__11": "Skill NSSEC 2 Lower managerial administrative and professional occupations"
+            },
+            {
+              "ski_nssec_3__11": "Skill NSSEC 3 Intermediate occupations"
+            },
+            {
+              "ski_nssec_4__11": "Skill NSSEC 4 Small employers and own account workers"
+            },
+            {
+              "ski_nssec_5__11": "Skill NSSEC 5 Lower supervisory and technical occupations"
+            },
+            {
+              "ski_nssec_6__11": "Skill NSSEC 6 Semi-routine occupations"
+            },
+            {
+              "ski_nssec_7__11": "Skill NSSEC 7 Routine occupations"
+            },
+            {
+              "ski_nssec_l14_1__11": "Skill NSSEC L14_1 Never worked"
+            },
+            {
+              "ski_nssec_l14_2__11": "Skill NSSEC L14_2 Long-term unemployed"
+            },
+            {
+              "ski_nssec_na__11": "Skill NSSEC Not classified"
+            },
+            {
+              "eac_employed__11": "Economically active: Employed"
+            },
+            {
+              "eac_employed_b__11": "Economically active: Employed base"
+            },
+            {
+              "eac_employed_self__11": "Economically active: Self employed"
+            },
+            {
+              "eac_full_time__11": "Economically active: Working full time"
+            },
+            {
+              "eac_in_accom_food__11": "Economically active: Accommodation and food service (SOC I)"
+            },
+            {
+              "eac_in_admin_serv__11": "Economically active: Administrative and support service activities (SOC N)"
+            },
+            {
+              "eac_in_aggriculture__11": "Economically active: Agriculture forestry or fishing industries (SOC A)"
+            },
+            {
+              "eac_in_construction__11": "Economically active: Construction industry (SOC F)"
+            },
+            {
+              "eac_in_education__11": "Economically active: Eduction (SOC P)"
+            },
+            {
+              "eac_in_extractive__11": "Economically active: Extractive industries including mining and quarrying (SOC B)"
+            },
+            {
+              "eac_in_finance__11": "Economically active: Financial and insurance industries (SOC K)"
+            },
+            {
+              "eac_in_health__11": "Economically active: Human health and social work activities (SOC Q)"
+            },
+            {
+              "eac_in_ict__11": "Economically active: Information and communication technologies industry (SOC J)"
+            },
+            {
+              "eac_in_manufacturing_2__11": "Economically active: Manufacturing (SOC C)"
+            },
+            {
+              "eac_in_other__11": "Economically active: Other services and industries (SOC R|S|T|U)"
+            },
+            {
+              "eac_in_power__11": "Economically active: Electricity gas steam and air conditioning supply (SOC D)"
+            },
+            {
+              "eac_in_prof_tech__11": "Economically active: Professional scientific and technical activitiess (SOC M)"
+            },
+            {
+              "eac_in_property__11": "Economically active: Property and real estate industries (SOC L)"
+            },
+            {
+              "eac_in_public_admin__11": "Economically active: Public administration and defence compulsory social security (SOC O)"
+            },
+            {
+              "eac_in_retail__11": "Economically active: Wholesale and retail trade repair of motor vehicles (SOC G)"
+            },
+            {
+              "eac_in_transport__11": "Economically active: Transport and Storage (SOC H)"
+            },
+            {
+              "eac_in_waste__11": "Economically active: Water supply sewerage waste management and remediation activities (SOC E)"
+            },
+            {
+              "eac_part_time__11": "Economically active: Working part time"
+            },
+            {
+              "eac_student__11": "Economically active: Full-time student"
+            },
+            {
+              "eac_student_18to74_empl__11": "Economically active: Full-time student (employed)"
+            },
+            {
+              "eac_student_18to74_unempl__11": "Economically active: Full-time student (unemployed)"
+            },
+            {
+              "eac_tr_bike__11": "Economically active: Travel to work by bike"
+            },
+            {
+              "eac_tr_bus__11": "Economically active: Travel to work by bus"
+            },
+            {
+              "eac_tr_car__11": "Economically active: Travel to work by car"
+            },
+            {
+              "eac_tr_carpass__11": "Economically active: Travel to work by car (including car pool)"
+            },
+            {
+              "eac_tr_foot__11": "Economically active: Travel to work by foot"
+            },
+            {
+              "eac_tr_mbike__11": "Economically active: Travel to work by motorcycle"
+            },
+            {
+              "eac_tr_none__11": "Economically active: No travel to work"
+            },
+            {
+              "eac_tr_other__11": "Economically active: Travel to work by other mode"
+            },
+            {
+              "eac_tr_taxi__11": "Economically active: Travel to work by taxi"
+            },
+            {
+              "eac_tr_train__11": "Economically active: Travel to work by train"
+            },
+            {
+              "eac_tr_tube__11": "Economically active: Travel to work by metro system"
+            },
+            {
+              "eac_unemployed__11": "Economically active: Unemployed"
+            },
+            {
+              "ein_homemaker__11": "Economically inactive: Homemaker"
+            },
+            {
+              "ein_other__11": "Economically inactive: Other"
+            },
+            {
+              "ein_pensioner__11": "Economically inactive: Pensioner"
+            },
+            {
+              "ein_sick_disabled__11": "Economically inactive: Long-term sick or disabled"
+            },
+            {
+              "ein_student__11": "Economically inactive: Student"
+            },
+            {
+              "ein_student_16to17__11": "Economically inactive: Schoolchildren and full time students Aged 16 to 17"
+            },
+            {
+              "ein_student_18pl__11": "Economically inactive: Schoolchildren and full time students Aged 18 and over"
+            },
+            {
+              "ein_student_18to74__11": "Economically inactive: Full-time students Age 18 to 74"
+            },
+            {
+              "hhi_communal__11": "Person living in a communal establishment"
+            },
+            {
+              "hhi_divorced__11": "Divorced from a marriage"
+            },
+            {
+              "hhi_health_bad__11": "Person with bad health"
+            },
+            {
+              "hhi_health_fair__11": "Person with fair health"
+            },
+            {
+              "hhi_health_good__11": "Person with good health"
+            },
+            {
+              "hhi_health_verybad__11": "Person with very bad health"
+            },
+            {
+              "hhi_health_verygood__11": "Person with very good health"
+            },
+            {
+              "hhi_married__11": "Person who is married"
+            },
+            {
+              "hhi_partner__11": "Person who is in a registered partnership"
+            },
+            {
+              "hhi_private__11": "Person living in a private household"
+            },
+            {
+              "hhi_seperated__11": "Person who is seperated but still legally married or still legally in a same sex civil partnership"
+            },
+            {
+              "hhi_single__11": "Person who has never married"
+            },
+            {
+              "hhi_widowed__11": "Person who is widowed"
+            },
+            {
+              "hhu__total__11": "Household: Total"
+            },
+            {
+              "hhu__total_occ__11": "Household: Occupied"
+            },
+            {
+              "hhu_2person__11": "Household: 2 persons"
+            },
+            {
+              "hhu_3person__11": "Household: 3 persons"
+            },
+            {
+              "hhu_4person__11": "Household: 4 persons"
+            },
+            {
+              "hhu_5person__11": "Household: 5 persons"
+            },
+            {
+              "hhu_6person__11": "Household: 6 persons"
+            },
+            {
+              "hhu_7person__11": "Household: 7 persons"
+            },
+            {
+              "hhu_8person_pl__11": "Household: 8 or more persons"
+            },
+            {
+              "hhu_all65pl__11": "Other household type All aged 65 and over"
+            },
+            {
+              "hhu_allstudents__11": "Other household type all full time students"
+            },
+            {
+              "hhu_c_0__11": "Household: No car access"
+            },
+            {
+              "hhu_c_1__11": "Household: Access to a car"
+            },
+            {
+              "hhu_c_2__11": "Household: Access to 2 cars"
+            },
+            {
+              "hhu_c_3__11": "Household: Access to 3 cars"
+            },
+            {
+              "hhu_c_4pl__11": "Household: Access to 4 or more cars"
+            },
+            {
+              "hhu_fm_1_65pl__11": "Household: 1 family (aged 65 and over)"
+            },
+            {
+              "hhu_fm_1_cohab_depchildren__11": "Household: 1 family Cohabiting couple Dependent children"
+            },
+            {
+              "hhu_fm_1_cohab_nochildren__11": "Household unit made up of 1 family Cohabiting couple No children"
+            },
+            {
+              "hhu_fm_1_cohab_nodepchildren__11": "Household unit made up of 1 family Cohabiting couple All children non-dependent"
+            },
+            {
+              "hhu_fm_1_married_depchildren__11": "Household unit made up of 1 family Married or same-sex civil partnership couple Dependent children"
+            },
+            {
+              "hhu_fm_1_married_nochildren__11": "Household unit made up of 1 family Married or same-sex civil partnership couple No children"
+            },
+            {
+              "hhu_fm_1_married_nodepchildren__11": "Household unit made up of 1 family Married or same-sex civil partnership couple All children non-dependent"
+            },
+            {
+              "hhu_lone_parent_depchildren__11": "Household unit made up of 1 family Lone parent Dependent children"
+            },
+            {
+              "hhu_lone_parent_nodepchildren__11": "Household unit made up of 1 family Lone parent All chidren non-dependent"
+            },
+            {
+              "hhu_other__11": "Other household type Other"
+            },
+            {
+              "hhu_other_depchildren__11": "Other household type With dependent children"
+            },
+            {
+              "hhu_p_1__11": "Household unit with 1 person"
+            },
+            {
+              "hhu_p_1_65pl__11": "Household unit with 1 person aged 65 and over"
+            },
+            {
+              "hhu_p_1_other__11": "Household unit with 1 person other"
+            },
+            {
+              "hhu_tenure_rent_free__11": "Household rent free"
+            },
+            {
+              "hhu_tenure_rent_other__11": "Household rented privately from other type of landlord"
+            },
+            {
+              "hhu_tenure_rent_social_council__11": "Household social rent from council"
+            },
+            {
+              "hhu_tenure_rent_social_other__11": "Household social rent from other landlord"
+            },
+            {
+              "hhu_tenure_rented__11": "Households in rental housing"
+            },
+            {
+              "hhu_tenure_shared__11": "Household unit under shared ownership"
+            },
+            {
+              "dwu__total__11": "Dwelling unit (total)"
+            },
+            {
+              "dwu_empty__11": "Dwelling unit: Empty"
+            },
+            {
+              "dwu_fta__11": "Dwelling unit: Flat: terraced or apartment"
+            },
+            {
+              "dwu_hh_2pl__11": "Shared dwelling two household spaces or more"
+            },
+            {
+              "dwu_s_detached__11": "Dwelling unit style: Detached"
+            },
+            {
+              "dwu_s_semi__11": "Dwelling unit style: Semi detached"
+            },
+            {
+              "dwu_t_fma_com__11": "Dwelling unit type: Flat maisonette or apartment Commercial building"
+            },
+            {
+              "dwu_t_fma_con__11": "Dwelling unit type: Flat maisonette or apartment Part of a converted or shared house"
+            },
+            {
+              "dwu_t_fma_pur__11": "Dwelling unit type: Flat maisonette or apartment Purpose-built block of flats or tenement"
+            },
+            {
+              "dwu_t_mobile__11": "Dwelling unit type: Caravan or other mobile or temporary structure"
+            },
+            {
+              "dwu_t_unshared__11": "Unshared dwelling"
+            },
+            {
+              "dwu_tenure_own_mortgage__11": "Dwelling unit owned mortgage outstanding"
+            },
+            {
+              "dwu_tenure_own_outright__11": "Dwelling unit owned totally paid"
+            },
+            {
+              "ror_england__11": "Origin in England"
+            },
+            {
+              "ror_eu_new__11": "Origin in EU member state joined 2001 to 2011"
+            },
+            {
+              "ror_eu_old__11": "Origin in 2001 EU member state"
+            },
+            {
+              "ror_ireland__11": "Origin in Ireland"
+            },
+            {
+              "ror_ni__11": "Origin in Northern Ireland"
+            },
+            {
+              "ror_other__11": "Origin is not indicated or otherwise classifiable"
+            },
+            {
+              "ror_scotland__11": "Origin in Scotland"
+            },
+            {
+              "ror_wales__11": "Origin in Wales"
+            },
+            {
+              "ret_african_brit__11": "British African"
+            },
+            {
+              "ret_bandladeshi_brit__11": "British Bangladeshi"
+            },
+            {
+              "ret_caribbean_brit__11": "British Caribbean"
+            },
+            {
+              "ret_chinese_brit__11": "British Chinese"
+            },
+            {
+              "ret_indian_brit__11": "British Indian"
+            },
+            {
+              "ret_mixed__11": "Ethnic Mixed or Multiple ethnic group"
+            },
+            {
+              "ret_other__11": "Other ethnic group "
+            },
+            {
+              "ret_otherasian_brit__11": "Ethnic Asian/Asian British Other Asian"
+            },
+            {
+              "ret_otherblack_brit__11": "British Other Black"
+            },
+            {
+              "ret_pakistani_brit__11": "British Pakistani"
+            },
+            {
+              "ret_white_brit__11": "Ethnic White including nationalities Irish and gypsy travellers"
+            },
+            {
+              "ret_white_other__11": "Ethnic all White ethnicities"
+            },
+            {
+              "ret_white_tot__11": "Ethnic White including White British White Irish and traveller"
+            },
+            {
+              "rcz_africa__11": "Citizen of African country"
+            },
+            {
+              "rcz_asia__11": "Citizen of Asian country"
+            },
+            {
+              "rcz_central_america__11": "Citizen of Central American country"
+            },
+            {
+              "rcz_eu__11": "Citizen of an EU member state"
+            },
+            {
+              "rcz_europe__11": "Citizen of an European country"
+            },
+            {
+              "rcz_north_america__11": "Citizen of North American country"
+            },
+            {
+              "rcz_oceania__11": "Citizen of country belonging to Oceania"
+            },
+            {
+              "rcz_roi__11": "Citizen of the Republic of Ireland"
+            },
+            {
+              "rcz_south_america__11": "Citizen of South American country"
+            },
+            {
+              "rcz_stateless__11": "Stateless unsettled or unknown citizenship"
+            },
+            {
+              "rcz_uk__11": "Citizen of the UK"
+            },
+            {
+              "rel_buddhist__11": "Religion Buddhist"
+            },
+            {
+              "rel_catholic__11": "Religion Catholic"
+            },
+            {
+              "rel_christian__11": "Religion All Christan"
+            },
+            {
+              "rel_hindu__11": "Religion Hindu"
+            },
+            {
+              "rel_jewish__11": "Religion Jewish"
+            },
+            {
+              "rel_muslim__11": "Religion Muslim"
+            },
+            {
+              "rel_na__11": "Religion not specified"
+            },
+            {
+              "rel_none__11": "Religion none"
+            },
+            {
+              "rel_none_christian__11": "Religion Non-Christian"
+            },
+            {
+              "rel_other__11": "Religion other"
+            },
+            {
+              "rel_other_christian__11": "Religion Other Christan denomination"
+            },
+            {
+              "rel_sikh__11": "Religion Sikh"
+            },
+            {
+              "ue__05": "Unemployed in 2005"
+            },
+            {
+              "ue__06": "Unemployed in 2006"
+            },
+            {
+              "ue__07": "Unemployed in 2007"
+            },
+            {
+              "ue__08": "Unemployed in 2008"
+            },
+            {
+              "ue__09": "Unemployed in 2009"
+            },
+            {
+              "ue__10": "Unemployed in 2010"
+            },
+            {
+              "ue__11": "Unemployed in 2011"
+            },
+            {
+              "ue__12": "Unemployed in 2012"
+            },
+            {
+              "ue__13": "Unemployed in 2013"
+            },
+            {
+              "ue__14": "Unemployed in 2014"
+            },
+            {
+              "ue__15": "Unemployed in 2015"
+            },
+            {
+              "ue__16": "Unemployed in 2016"
+            }
           ]
         },
         "postal_areas": {
@@ -1887,47 +1675,45 @@
               "opacity": 0.3,
               "fillOpacity": 0.1
             },
-            "themes": [
-              {
-                "label": "Rank",
-                "type": "categorized",
-                "field": "rank",
-                "applied": true,
-                "other": true,
-                "cat": {
-                  "Primary": {
-                    "style": {
-                      "fill": true,
-                      "color": "#A51C30",
-                      "opacity": 0.2,
-                      "weight": 1,
-                      "fillColor": "#A51C30",
-                      "fillOpacity": 0.4
-                    }
-                  },
-                  "Secondary": {
-                    "style": {
-                      "color": "#F58A07",
-                      "opacity": 0.2,
-                      "weight": 1,
-                      "fill": true,
-                      "fillColor": "#F58A07",
-                      "fillOpacity": 0.4
-                    }
-                  },
-                  "Tertiary": {
-                    "style": {
-                      "color": "#F9CB40",
-                      "opacity": 0.2,
-                      "weight": 1,
-                      "fill": true,
-                      "fillColor": "#F9CB40",
-                      "fillOpacity": 0.4
-                    }
+            "theme": {
+              "label": "Rank",
+              "type": "categorized",
+              "field": "rank",
+              "applied": true,
+              "other": true,
+              "cat": {
+                "Primary": {
+                  "style": {
+                    "fill": true,
+                    "color": "#A51C30",
+                    "opacity": 0.2,
+                    "weight": 1,
+                    "fillColor": "#A51C30",
+                    "fillOpacity": 0.4
+                  }
+                },
+                "Secondary": {
+                  "style": {
+                    "color": "#F58A07",
+                    "opacity": 0.2,
+                    "weight": 1,
+                    "fill": true,
+                    "fillColor": "#F58A07",
+                    "fillOpacity": 0.4
+                  }
+                },
+                "Tertiary": {
+                  "style": {
+                    "color": "#F9CB40",
+                    "opacity": 0.2,
+                    "weight": 1,
+                    "fill": true,
+                    "fillColor": "#F9CB40",
+                    "fillOpacity": 0.4
                   }
                 }
               }
-            ]
+            }
           }
         },
         "retail_places_mvt": {
@@ -2026,188 +1812,186 @@
               "fill": true,
               "fillOpacity": 0.3
             },
-            "themes": [
-              {
-                "label": "Retail Place type",
-                "type": "categorized",
-                "field": "rp_type",
-                "applied": true,
-                "other": true,
-                "cat": {
-                  "Major City Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#EF271B",
-                      "opacity": 1,
-                      "fillColor": "#EF271B",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
+            "theme": {
+              "label": "Retail Place type",
+              "type": "categorized",
+              "field": "rp_type",
+              "applied": true,
+              "other": true,
+              "cat": {
+                "Major City Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#EF271B",
+                    "opacity": 1,
+                    "fillColor": "#EF271B",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "City Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#BA2D0B",
+                    "opacity": 1,
+                    "fillColor": "#BA2D0B",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Large Town Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#FE4E00",
+                    "opacity": 1,
+                    "fillColor": "#FE4E00",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Major Urban Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#E2711D",
+                    "opacity": 1,
+                    "fillColor": "#E2711D",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Town Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#F3A712",
+                    "opacity": 1,
+                    "fillColor": "#F3A712",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Urban Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#FADF63",
+                    "opacity": 1,
+                    "fillColor": "#FADF63",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Small Town Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#FFE74C",
+                    "opacity": 1,
+                    "fillColor": "#FFE74C",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Village Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#DBFE87",
+                    "opacity": 1,
+                    "fillColor": "#DBFE87",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Regional SC": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#8ED081",
+                    "opacity": 1,
+                    "fillColor": "#8ED081",
+                    "fill": true,
+                    "fillOpacity": 0.3
                   },
-                  "City Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#BA2D0B",
-                      "opacity": 1,
-                      "fillColor": "#BA2D0B",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Large Town Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#FE4E00",
-                      "opacity": 1,
-                      "fillColor": "#FE4E00",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Major Urban Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#E2711D",
-                      "opacity": 1,
-                      "fillColor": "#E2711D",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Town Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#F3A712",
-                      "opacity": 1,
-                      "fillColor": "#F3A712",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Urban Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#FADF63",
-                      "opacity": 1,
-                      "fillColor": "#FADF63",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Small Town Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#FFE74C",
-                      "opacity": 1,
-                      "fillColor": "#FFE74C",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Village Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#DBFE87",
-                      "opacity": 1,
-                      "fillColor": "#DBFE87",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Regional SC": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#8ED081",
-                      "opacity": 1,
-                      "fillColor": "#8ED081",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    },
-                    "label": "Regional Shopping Centre"
-                  },
-                  "Outlet Centre": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#7DDF64",
-                      "opacity": 1,
-                      "fillColor": "#7DDF64",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Shopping Park": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#074F57",
-                      "opacity": 1,
-                      "fillColor": "#074F57",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Retail Park": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#32746D",
-                      "opacity": 1,
-                      "fillColor": "#32746D",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Leisure Park": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#41D3BD",
-                      "opacity": 1,
-                      "fillColor": "#41D3BD",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Local Hub": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#08B2E3",
-                      "opacity": 1,
-                      "fillColor": "#08B2E3",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Large Parade": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#1F487E",
-                      "opacity": 1,
-                      "fillColor": "#1F487E",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Parade": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#541388",
-                      "opacity": 1,
-                      "fillColor": "#541388",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "Weak Parade": {
-                    "style": {
-                      "weight": 2,
-                      "color": "#D90368",
-                      "opacity": 1,
-                      "fillColor": "#D90368",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
+                  "label": "Regional Shopping Centre"
+                },
+                "Outlet Centre": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#7DDF64",
+                    "opacity": 1,
+                    "fillColor": "#7DDF64",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Shopping Park": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#074F57",
+                    "opacity": 1,
+                    "fillColor": "#074F57",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Retail Park": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#32746D",
+                    "opacity": 1,
+                    "fillColor": "#32746D",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Leisure Park": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#41D3BD",
+                    "opacity": 1,
+                    "fillColor": "#41D3BD",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Local Hub": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#08B2E3",
+                    "opacity": 1,
+                    "fillColor": "#08B2E3",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Large Parade": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#1F487E",
+                    "opacity": 1,
+                    "fillColor": "#1F487E",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Parade": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#541388",
+                    "opacity": 1,
+                    "fillColor": "#541388",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "Weak Parade": {
+                  "style": {
+                    "weight": 2,
+                    "color": "#D90368",
+                    "opacity": 1,
+                    "fillColor": "#D90368",
+                    "fill": true,
+                    "fillOpacity": 0.3
                   }
                 }
               }
-            ]
+            }
           }
         },
         "retail_points": {
@@ -2222,7 +2006,6 @@
           "table": "gb_retailpoint",
           "cluster_label": "store",
           "cluster_cat": "brand",
-          "streetview": true,
           "infoj": [
             {
               "field": "store",
@@ -2299,293 +2082,291 @@
                 "#333"
               ]
             },
-            "themes": [
-              {
-                "label": "Retailer",
-                "type": "categorized",
-                "field": "brand",
-                "applied": true,
-                "competitors": {
-                  "tesco": {
-                    "colour": "#0055a8",
-                    "label": "Tesco"
-                  },
-                  "sainsburys": {
-                    "colour": "#ee8a00",
-                    "label": "Sainsbury's"
-                  },
-                  "asda": {
-                    "colour": "#83b923",
-                    "label": "Asda"
-                  },
-                  "morrisons": {
-                    "colour": "#ffe133",
-                    "label": "Morrisons"
-                  }
+            "theme": {
+              "label": "Retailer",
+              "type": "categorized",
+              "field": "brand",
+              "applied": true,
+              "competitors": {
+                "tesco": {
+                  "colour": "#0055a8",
+                  "label": "Tesco"
                 },
-                "other": true,
-                "cat": {
-                  "aldi": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffbf45",
-                        350,
-                        "#fa6f08",
-                        300,
-                        "#ef3c11",
-                        250,
-                        "#001f79",
-                        200,
-                        "#02bee3",
-                        100,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Aldi"
+                "sainsburys": {
+                  "colour": "#ee8a00",
+                  "label": "Sainsbury's"
+                },
+                "asda": {
+                  "colour": "#83b923",
+                  "label": "Asda"
+                },
+                "morrisons": {
+                  "colour": "#ffe133",
+                  "label": "Morrisons"
+                }
+              },
+              "other": true,
+              "cat": {
+                "aldi": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffbf45",
+                      350,
+                      "#fa6f08",
+                      300,
+                      "#ef3c11",
+                      250,
+                      "#001f79",
+                      200,
+                      "#02bee3",
+                      100,
+                      "#ffffff"
+                    ]
                   },
-                  "asda": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#83b923",
-                        200,
-                        "#ffffff",
-                        150,
-                        "#fdb839"
-                      ]
-                    },
-                    "label": "Asda"
+                  "label": "Aldi"
+                },
+                "asda": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#83b923",
+                      200,
+                      "#ffffff",
+                      150,
+                      "#fdb839"
+                    ]
                   },
-                  "booths": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#a12629",
-                        200,
-                        "#ffffff",
-                        150,
-                        "#a12629"
-                      ]
-                    },
-                    "label": "Booths"
+                  "label": "Asda"
+                },
+                "booths": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#a12629",
+                      200,
+                      "#ffffff",
+                      150,
+                      "#a12629"
+                    ]
                   },
-                  "budgens": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#EEEEE0",
-                        200,
-                        "#679a00",
-                        150,
-                        "#cccb01"
-                      ]
-                    },
-                    "label": "Budgens"
+                  "label": "Booths"
+                },
+                "budgens": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#EEEEE0",
+                      200,
+                      "#679a00",
+                      150,
+                      "#cccb01"
+                    ]
                   },
-                  "co-op": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0b1e60",
-                        250,
-                        "#ffffff",
-                        200,
-                        "#a3d227"
-                      ]
-                    },
-                    "label": "The Co-Operative"
+                  "label": "Budgens"
+                },
+                "co-op": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0b1e60",
+                      250,
+                      "#ffffff",
+                      200,
+                      "#a3d227"
+                    ]
                   },
-                  "costco": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#005daa",
-                        350,
-                        "#ffffff",
-                        250,
-                        "#e31837"
-                      ]
-                    },
-                    "label": "Costco"
+                  "label": "The Co-Operative"
+                },
+                "costco": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#005daa",
+                      350,
+                      "#ffffff",
+                      250,
+                      "#e31837"
+                    ]
                   },
-                  "farmfoods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#77a632",
-                        300,
-                        "#f7f900",
-                        200,
-                        "#ff0000"
-                      ]
-                    },
-                    "label": "Farm Foods"
+                  "label": "Costco"
+                },
+                "farmfoods": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#77a632",
+                      300,
+                      "#f7f900",
+                      200,
+                      "#ff0000"
+                    ]
                   },
-                  "fultons_food": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#004a95",
-                        300,
-                        "#ffffff",
-                        200,
-                        "#004a95",
-                        100,
-                        "#fff11f"
-                      ]
-                    },
-                    "label": "Fultons Food"
+                  "label": "Farm Foods"
+                },
+                "fultons_food": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#004a95",
+                      300,
+                      "#ffffff",
+                      200,
+                      "#004a95",
+                      100,
+                      "#fff11f"
+                    ]
                   },
-                  "heron_foods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffffff",
-                        300,
-                        "#313590",
-                        100,
-                        "#ffcf00"
-                      ]
-                    },
-                    "label": "Heron Foods"
+                  "label": "Fultons Food"
+                },
+                "heron_foods": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffffff",
+                      300,
+                      "#313590",
+                      100,
+                      "#ffcf00"
+                    ]
                   },
-                  "iceland": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ed1b2d",
-                        300,
-                        "#f2552b",
-                        200,
-                        "#f89128",
-                        100,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Iceland"
+                  "label": "Heron Foods"
+                },
+                "iceland": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ed1b2d",
+                      300,
+                      "#f2552b",
+                      200,
+                      "#f89128",
+                      100,
+                      "#ffffff"
+                    ]
                   },
-                  "lidl": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#d61408",
-                        350,
-                        "#ffe502",
-                        200,
-                        "#002d7a",
-                        100,
-                        "#d61408"
-                      ]
-                    },
-                    "label": "Lidl"
+                  "label": "Iceland"
+                },
+                "lidl": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#d61408",
+                      350,
+                      "#ffe502",
+                      200,
+                      "#002d7a",
+                      100,
+                      "#d61408"
+                    ]
                   },
-                  "makro": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#00457a",
-                        150,
-                        "#ffe811"
-                      ]
-                    },
-                    "label": "Makro"
+                  "label": "Lidl"
+                },
+                "makro": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#00457a",
+                      150,
+                      "#ffe811"
+                    ]
                   },
-                  "marks_spencer": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0a0d10",
-                        200,
-                        "#def036",
-                        100,
-                        "#0a0d10"
-                      ]
-                    },
-                    "label": "Marks & Spencer"
+                  "label": "Makro"
+                },
+                "marks_spencer": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0a0d10",
+                      200,
+                      "#def036",
+                      100,
+                      "#0a0d10"
+                    ]
                   },
-                  "morrisons": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffe133",
-                        200,
-                        "#00614e"
-                      ]
-                    },
-                    "label": "Morrisons"
+                  "label": "Marks & Spencer"
+                },
+                "morrisons": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffe133",
+                      200,
+                      "#00614e"
+                    ]
                   },
-                  "sainsburys": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ee8a00",
-                        250,
-                        "#ffffff",
-                        150,
-                        "#ee8a00"
-                      ]
-                    },
-                    "label": "Sainsbury's"
+                  "label": "Morrisons"
+                },
+                "sainsburys": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ee8a00",
+                      250,
+                      "#ffffff",
+                      150,
+                      "#ee8a00"
+                    ]
                   },
-                  "tesco": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0055a8",
-                        300,
-                        "#ffffff",
-                        150,
-                        "#f02f26"
-                      ]
-                    },
-                    "label": "Tesco"
+                  "label": "Sainsbury's"
+                },
+                "tesco": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0055a8",
+                      300,
+                      "#ffffff",
+                      150,
+                      "#f02f26"
+                    ]
                   },
-                  "waitrose": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#81ae37",
-                        150,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Waitrose"
+                  "label": "Tesco"
+                },
+                "waitrose": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#81ae37",
+                      150,
+                      "#ffffff"
+                    ]
                   },
-                  "whole_foods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#00674b",
-                        350,
-                        "#ffffff",
-                        200,
-                        "#00674b"
-                      ]
-                    },
-                    "label": "Whole Foods"
-                  }
+                  "label": "Waitrose"
+                },
+                "whole_foods": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#00674b",
+                      350,
+                      "#ffffff",
+                      200,
+                      "#00674b"
+                    ]
+                  },
+                  "label": "Whole Foods"
                 }
               }
-            ]
+            }
           }
         },
         "retail_pitch": {
@@ -2613,96 +2394,94 @@
               "fillColor": "#000",
               "fillOpacity": 0.3
             },
-            "themes": [
-              {
-                "type": "categorized",
-                "field": "pitch_dec",
-                "label": "Retail pitch rank in decimal scale",
-                "applied": true,
-                "cat": {
-                  "1": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#ca0020",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "2": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#dd494b",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "3": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#f09377",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "4": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#f5c1a9",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "5": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#f7e5dd",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "6": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#e1ecf2",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "7": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#b4d6e7",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "8": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#82bcd9",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "9": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#4396c5",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
-                  },
-                  "10": {
-                    "style": {
-                      "stroke": false,
-                      "fillColor": "#0571b0",
-                      "fill": true,
-                      "fillOpacity": 0.3
-                    }
+            "theme": {
+              "type": "categorized",
+              "field": "pitch_dec",
+              "label": "Retail pitch rank in decimal scale",
+              "applied": true,
+              "cat": {
+                "1": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#ca0020",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "2": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#dd494b",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "3": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f09377",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "4": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f5c1a9",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "5": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#f7e5dd",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "6": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#e1ecf2",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "7": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#b4d6e7",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "8": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#82bcd9",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "9": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#4396c5",
+                    "fill": true,
+                    "fillOpacity": 0.3
+                  }
+                },
+                "10": {
+                  "style": {
+                    "stroke": false,
+                    "fillColor": "#0571b0",
+                    "fill": true,
+                    "fillOpacity": 0.3
                   }
                 }
               }
-            ]
+            }
           }
         },
         "retail_points_editable": {
@@ -2842,275 +2621,273 @@
                 "#333"
               ]
             },
-            "themes": [
-              {
-                "label": "Retailer",
-                "type": "categorized",
-                "field": "brand",
-                "applied": true,
-                "other": true,
-                "cat": {
-                  "Aldi": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffbf45",
-                        350,
-                        "#fa6f08",
-                        300,
-                        "#ef3c11",
-                        250,
-                        "#001f79",
-                        200,
-                        "#02bee3",
-                        100,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Aldi"
+            "theme": {
+              "label": "Retailer",
+              "type": "categorized",
+              "field": "brand",
+              "applied": true,
+              "other": true,
+              "cat": {
+                "Aldi": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffbf45",
+                      350,
+                      "#fa6f08",
+                      300,
+                      "#ef3c11",
+                      250,
+                      "#001f79",
+                      200,
+                      "#02bee3",
+                      100,
+                      "#ffffff"
+                    ]
                   },
-                  "Asda": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#83b923",
-                        200,
-                        "#ffffff",
-                        150,
-                        "#fdb839"
-                      ]
-                    },
-                    "label": "Asda"
+                  "label": "Aldi"
+                },
+                "Asda": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#83b923",
+                      200,
+                      "#ffffff",
+                      150,
+                      "#fdb839"
+                    ]
                   },
-                  "Booths": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#a12629",
-                        200,
-                        "#ffffff",
-                        150,
-                        "#a12629"
-                      ]
-                    },
-                    "label": "Booths"
+                  "label": "Asda"
+                },
+                "Booths": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#a12629",
+                      200,
+                      "#ffffff",
+                      150,
+                      "#a12629"
+                    ]
                   },
-                  "Budgens": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#EEEEE0",
-                        200,
-                        "#679a00",
-                        150,
-                        "#cccb01"
-                      ]
-                    },
-                    "label": "Budgens"
+                  "label": "Booths"
+                },
+                "Budgens": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#EEEEE0",
+                      200,
+                      "#679a00",
+                      150,
+                      "#cccb01"
+                    ]
                   },
-                  "The Co-operative": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0b1e60",
-                        250,
-                        "#ffffff",
-                        200,
-                        "#a3d227"
-                      ]
-                    },
-                    "label": "The Co-Operative"
+                  "label": "Budgens"
+                },
+                "The Co-operative": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0b1e60",
+                      250,
+                      "#ffffff",
+                      200,
+                      "#a3d227"
+                    ]
                   },
-                  "Costco": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#005daa",
-                        350,
-                        "#ffffff",
-                        250,
-                        "#e31837"
-                      ]
-                    },
-                    "label": "Costco"
+                  "label": "The Co-Operative"
+                },
+                "Costco": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#005daa",
+                      350,
+                      "#ffffff",
+                      250,
+                      "#e31837"
+                    ]
                   },
-                  "Farmfoods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#77a632",
-                        300,
-                        "#f7f900",
-                        200,
-                        "#ff0000"
-                      ]
-                    },
-                    "label": "Farm Foods"
+                  "label": "Costco"
+                },
+                "Farmfoods": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#77a632",
+                      300,
+                      "#f7f900",
+                      200,
+                      "#ff0000"
+                    ]
                   },
-                  "Fultons Food": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#004a95",
-                        300,
-                        "#ffffff",
-                        200,
-                        "#004a95",
-                        100,
-                        "#fff11f"
-                      ]
-                    },
-                    "label": "Fultons Food"
+                  "label": "Farm Foods"
+                },
+                "Fultons Food": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#004a95",
+                      300,
+                      "#ffffff",
+                      200,
+                      "#004a95",
+                      100,
+                      "#fff11f"
+                    ]
                   },
-                  "Heron Foods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffffff",
-                        300,
-                        "#313590",
-                        100,
-                        "#ffcf00"
-                      ]
-                    },
-                    "label": "Heron Foods"
+                  "label": "Fultons Food"
+                },
+                "Heron Foods": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffffff",
+                      300,
+                      "#313590",
+                      100,
+                      "#ffcf00"
+                    ]
                   },
-                  "Iceland": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ed1b2d",
-                        300,
-                        "#f2552b",
-                        200,
-                        "#f89128",
-                        100,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Iceland"
+                  "label": "Heron Foods"
+                },
+                "Iceland": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ed1b2d",
+                      300,
+                      "#f2552b",
+                      200,
+                      "#f89128",
+                      100,
+                      "#ffffff"
+                    ]
                   },
-                  "Lidl": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#d61408",
-                        350,
-                        "#ffe502",
-                        200,
-                        "#002d7a",
-                        100,
-                        "#d61408"
-                      ]
-                    },
-                    "label": "Lidl"
+                  "label": "Iceland"
+                },
+                "Lidl": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#d61408",
+                      350,
+                      "#ffe502",
+                      200,
+                      "#002d7a",
+                      100,
+                      "#d61408"
+                    ]
                   },
-                  "Makro": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#00457a",
-                        150,
-                        "#ffe811"
-                      ]
-                    },
-                    "label": "Makro"
+                  "label": "Lidl"
+                },
+                "Makro": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#00457a",
+                      150,
+                      "#ffe811"
+                    ]
                   },
-                  "Marks & Spencer": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0a0d10",
-                        200,
-                        "#def036",
-                        100,
-                        "#0a0d10"
-                      ]
-                    },
-                    "label": "Marks & Spencer"
+                  "label": "Makro"
+                },
+                "Marks & Spencer": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0a0d10",
+                      200,
+                      "#def036",
+                      100,
+                      "#0a0d10"
+                    ]
                   },
-                  "Morrisons": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffe133",
-                        200,
-                        "#00614e"
-                      ]
-                    },
-                    "label": "Morrisons"
+                  "label": "Marks & Spencer"
+                },
+                "Morrisons": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffe133",
+                      200,
+                      "#00614e"
+                    ]
                   },
-                  "Sainsburys": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ee8a00",
-                        250,
-                        "#ffffff",
-                        150,
-                        "#ee8a00"
-                      ]
-                    },
-                    "label": "Sainsbury's"
+                  "label": "Morrisons"
+                },
+                "Sainsburys": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ee8a00",
+                      250,
+                      "#ffffff",
+                      150,
+                      "#ee8a00"
+                    ]
                   },
-                  "Tesco": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#0055a8",
-                        300,
-                        "#ffffff",
-                        150,
-                        "#f02f26"
-                      ]
-                    },
-                    "label": "Tesco"
+                  "label": "Sainsbury's"
+                },
+                "Tesco": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#0055a8",
+                      300,
+                      "#ffffff",
+                      150,
+                      "#f02f26"
+                    ]
                   },
-                  "Waitrose": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#81ae37",
-                        150,
-                        "#ffffff"
-                      ]
-                    },
-                    "label": "Waitrose"
+                  "label": "Tesco"
+                },
+                "Waitrose": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#81ae37",
+                      150,
+                      "#ffffff"
+                    ]
                   },
-                  "Whole Foods": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#00674b",
-                        350,
-                        "#ffffff",
-                        200,
-                        "#00674b"
-                      ]
-                    },
-                    "label": "Whole Foods"
-                  }
+                  "label": "Waitrose"
+                },
+                "Whole Foods": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#00674b",
+                      350,
+                      "#ffffff",
+                      200,
+                      "#00674b"
+                    ]
+                  },
+                  "label": "Whole Foods"
                 }
               }
-            ]
+            }
           }
         },
         "catchments": {
@@ -3347,154 +3124,117 @@
             ]
           },
           "queryFields": [
-            [
-              "pop__11",
-              "Population"
-            ],
-            [
-              "gen_male__11",
-              "Male population"
-            ],
-            [
-              "gen_female__11",
-              "Female population"
-            ],
-            [
-              "age_14mi_gen_male__11",
-              "Age 14 and below (male)"
-            ],
-            [
-              "age_14mi_gen_female__11",
-              "Age 14 and below (female)"
-            ],
-            [
-              "age_15to24_gen_male__11",
-              "Age 15 to 24 (male)"
-            ],
-            [
-              "age_15to24_gen_female__11",
-              "Age 15 to 24 (female)"
-            ],
-            [
-              "age_25to34_gen_male__11",
-              "Age 25 to 34 (male)"
-            ],
-            [
-              "age_25to34_gen_female__11",
-              "Age 25 to 34 (female)"
-            ],
-            [
-              "age_35to44_gen_male__11",
-              "Age 35 to 44 (male)"
-            ],
-            [
-              "age_35to44_gen_female__11",
-              "Age 35 to 44 (female)"
-            ],
-            [
-              "age_45to54_gen_male__11",
-              "Age 45 to 54 (male)"
-            ],
-            [
-              "age_45to54_gen_female__11",
-              "Age 45 to 54 (female)"
-            ],
-            [
-              "age_55to64_gen_male__11",
-              "Age 55 to 64 (male)"
-            ],
-            [
-              "age_55to64_gen_female__11",
-              "Age 55 to 64 (female)"
-            ],
-            [
-              "age_65pl_gen_male__11",
-              "Age 65 and above (male)"
-            ],
-            [
-              "age_65pl_gen_female__11",
-              "Age 65 and above (female)"
-            ],
-            [
-              "edu_tertiary_gen_m__11",
-              "Tertiary education (IESCD level not specified) Male only"
-            ],
-            [
-              "edu_tertiary_gen_f__11",
-              "Tertiary education (IESCD level not specified) Female only"
-            ],
-            [
-              "edu_tertiary_university_gen_m__11",
-              "Tertiary education at university Male only"
-            ],
-            [
-              "edu_tertiary_university_gen_f__11",
-              "Tertiary eductation at university Female only"
-            ],
-            [
-              "edu_tertiary_i7_gen_m__11",
-              "Tertiary education with a Masters degree or equivalent (IESCD 7) Male only"
-            ],
-            [
-              "edu_tertiary_i7_gen_f__11",
-              "Tertiary education with a Masters degree or equivalent (IESCD 7) Female only"
-            ],
-            [
-              "edu_secondary_gen_m__11",
-              "Secondary education (IESCD level not specified) Male only"
-            ],
-            [
-              "edu_secondary_gen_f__11",
-              "Secondary education (IESCD level not specified) Female only"
-            ],
-            [
-              "edu_secondary_i3_gen_m__11",
-              "Secondary education upper level (IESCD 3) Male only"
-            ],
-            [
-              "edu_secondary_i3_gen_f__11",
-              "Secondary education upper level (IESCD 3) Female only"
-            ],
-            [
-              "edu_secondary_i3v_gen_m__11",
-              "Secondary education vocational apprenticeship (IESCD 3) Male only"
-            ],
-            [
-              "edu_secondary_i3v_gen_f__11",
-              "Secondary education vocational apprenticeship (IESCD 3) Female only"
-            ],
-            [
-              "edu_secondary_i2_l_gen_m__11",
-              "Secondary education lower level (IESCD 2) Male only"
-            ],
-            [
-              "edu_secondary_i2_l_gen_f__11",
-              "Secondary education lower level (IESCD 2) Female only"
-            ],
-            [
-              "edu_primary_i1_gen_m__11",
-              "Primary education (IESCD 1) Male only"
-            ],
-            [
-              "edu_primary_i1_gen_f__11",
-              "Primary education (IESCD 1) Female only"
-            ],
-            [
-              "edu_none_gen_m__11",
-              "No formal education Memale only"
-            ],
-            [
-              "edu_none_gen_f__11",
-              "No formal education Female only"
-            ],
-            [
-              "edu_illiterate_gen_m__11",
-              "Illiterate (male)"
-            ],
-            [
-              "edu_illiterate_gen_f__11",
-              "Illiterate (female)"
-            ]
+            {
+              "pop__11": "Population"
+            },
+            {
+              "gen_male__11": "Male population"
+            },
+            {
+              "gen_female__11": "Female population"
+            },
+            {
+              "age_14mi_gen_male__11": "Age 14 and below (male)"
+            },
+            {
+              "age_14mi_gen_female__11": "Age 14 and below (female)"
+            },
+            {
+              "age_15to24_gen_male__11": "Age 15 to 24 (male)"
+            },
+            {
+              "age_15to24_gen_female__11": "Age 15 to 24 (female)"
+            },
+            {
+              "age_25to34_gen_male__11": "Age 25 to 34 (male)"
+            },
+            {
+              "age_25to34_gen_female__11": "Age 25 to 34 (female)"
+            },
+            {
+              "age_35to44_gen_male__11": "Age 35 to 44 (male)"
+            },
+            {
+              "age_35to44_gen_female__11": "Age 35 to 44 (female)"
+            },
+            {
+              "age_45to54_gen_male__11": "Age 45 to 54 (male)"
+            },
+            {
+              "age_45to54_gen_female__11": "Age 45 to 54 (female)"
+            },
+            {
+              "age_55to64_gen_male__11": "Age 55 to 64 (male)"
+            },
+            {
+              "age_55to64_gen_female__11": "Age 55 to 64 (female)"
+            },
+            {
+              "age_65pl_gen_male__11": "Age 65 and above (male)"
+            },
+            {
+              "age_65pl_gen_female__11": "Age 65 and above (female)"
+            },
+            {
+              "edu_tertiary_gen_m__11": "Tertiary education (IESCD level not specified) Male only"
+            },
+            {
+              "edu_tertiary_gen_f__11": "Tertiary education (IESCD level not specified) Female only"
+            },
+            {
+              "edu_tertiary_university_gen_m__11": "Tertiary education at university Male only"
+            },
+            {
+              "edu_tertiary_university_gen_f__11": "Tertiary eductation at university Female only"
+            },
+            {
+              "edu_tertiary_i7_gen_m__11": "Tertiary education with a Masters degree or equivalent (IESCD 7) Male only"
+            },
+            {
+              "edu_tertiary_i7_gen_f__11": "Tertiary education with a Masters degree or equivalent (IESCD 7) Female only"
+            },
+            {
+              "edu_secondary_gen_m__11": "Secondary education (IESCD level not specified) Male only"
+            },
+            {
+              "edu_secondary_gen_f__11": "Secondary education (IESCD level not specified) Female only"
+            },
+            {
+              "edu_secondary_i3_gen_m__11": "Secondary education upper level (IESCD 3) Male only"
+            },
+            {
+              "edu_secondary_i3_gen_f__11": "Secondary education upper level (IESCD 3) Female only"
+            },
+            {
+              "edu_secondary_i3v_gen_m__11": "Secondary education vocational apprenticeship (IESCD 3) Male only"
+            },
+            {
+              "edu_secondary_i3v_gen_f__11": "Secondary education vocational apprenticeship (IESCD 3) Female only"
+            },
+            {
+              "edu_secondary_i2_l_gen_m__11": "Secondary education lower level (IESCD 2) Male only"
+            },
+            {
+              "edu_secondary_i2_l_gen_f__11": "Secondary education lower level (IESCD 2) Female only"
+            },
+            {
+              "edu_primary_i1_gen_m__11": "Primary education (IESCD 1) Male only"
+            },
+            {
+              "edu_primary_i1_gen_f__11": "Primary education (IESCD 1) Female only"
+            },
+            {
+              "edu_none_gen_m__11": "No formal education Memale only"
+            },
+            {
+              "edu_none_gen_f__11": "No formal education Female only"
+            },
+            {
+              "edu_illiterate_gen_m__11": "Illiterate (male)"
+            },
+            {
+              "edu_illiterate_gen_f__11": "Illiterate (female)"
+            }
           ]
         },
         "communes": {
@@ -3682,102 +3422,100 @@
                 "#333"
               ]
             },
-            "themes": [
-              {
-                "label": "Retailer",
-                "field": "fascia",
-                "type": "categorized",
-                "applied": true,
-                "competitors": {
-                  "SINSAY": {
-                    "colour": "#8d6e63",
-                    "label": "Sinsay"
-                  },
-                  "MOHITO": {
-                    "colour": "#ffeb3b",
-                    "label": "Mohito"
-                  },
-                  "RESERVED": {
-                    "colour": "#dce775",
-                    "label": "Reserved"
-                  },
-                  "CROPP": {
-                    "colour": "#64b5f6",
-                    "label": "Cropp"
-                  },
-                  "HOUSE": {
-                    "colour": "#ab47bc",
-                    "label": "House"
-                  },
-                  "H&M": {
-                    "colour": "#f44336",
-                    "label": "H&M"
-                  }
+            "theme": {
+              "label": "Retailer",
+              "field": "fascia",
+              "type": "categorized",
+              "applied": true,
+              "competitors": {
+                "SINSAY": {
+                  "colour": "#8d6e63",
+                  "label": "Sinsay"
                 },
-                "cat": {
-                  "SINSAY": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#8d6e63"
-                      ]
-                    },
-                    "label": "Sinsay"
+                "MOHITO": {
+                  "colour": "#ffeb3b",
+                  "label": "Mohito"
+                },
+                "RESERVED": {
+                  "colour": "#dce775",
+                  "label": "Reserved"
+                },
+                "CROPP": {
+                  "colour": "#64b5f6",
+                  "label": "Cropp"
+                },
+                "HOUSE": {
+                  "colour": "#ab47bc",
+                  "label": "House"
+                },
+                "H&M": {
+                  "colour": "#f44336",
+                  "label": "H&M"
+                }
+              },
+              "cat": {
+                "SINSAY": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#8d6e63"
+                    ]
                   },
-                  "MOHITO": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ffeb3b"
-                      ]
-                    },
-                    "label": "Mohito"
+                  "label": "Sinsay"
+                },
+                "MOHITO": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ffeb3b"
+                    ]
                   },
-                  "RESERVED": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#dce775"
-                      ]
-                    },
-                    "label": "Reserved"
+                  "label": "Mohito"
+                },
+                "RESERVED": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#dce775"
+                    ]
                   },
-                  "CROPP": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#64b5f6"
-                      ]
-                    },
-                    "label": "Cropp"
+                  "label": "Reserved"
+                },
+                "CROPP": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#64b5f6"
+                    ]
                   },
-                  "HOUSE": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#ab47bc"
-                      ]
-                    },
-                    "label": "House"
+                  "label": "Cropp"
+                },
+                "HOUSE": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#ab47bc"
+                    ]
                   },
-                  "H&M": {
-                    "marker": {
-                      "type": "target",
-                      "style": [
-                        400,
-                        "#f44336"
-                      ]
-                    },
-                    "label": "H&M"
-                  }
+                  "label": "House"
+                },
+                "H&M": {
+                  "marker": {
+                    "type": "target",
+                    "style": [
+                      400,
+                      "#f44336"
+                    ]
+                  },
+                  "label": "H&M"
                 }
               }
-            ]
+            }
           }
         }
       }

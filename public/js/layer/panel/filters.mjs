@@ -134,6 +134,7 @@ export default (layer, panel) => {
                     filters.insertBefore(block, filters.lastChild);
 
                 } else {
+
                     if (entry.filter === 'numeric') {
 
                         block = _xyz.utils.createElement({
@@ -173,6 +174,7 @@ export default (layer, panel) => {
                         filter_range(layer, _options);
                         filters.insertBefore(block, filters.lastChild);
                     };
+
                     if (entry.filter === 'like' || entry.filter === 'match') {
 
                         block = _xyz.utils.createElement({
@@ -279,7 +281,6 @@ export default (layer, panel) => {
             createOptions(select, entry);
         }
     });
-
 
     let clear_all = _xyz.utils.createElement({
         tag: 'div',

@@ -10,35 +10,18 @@ export default (layer, panel) => {
         appendTo: panel
     });
 
-    // Mode
-    _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-            textContent: 'Transit mode:'
-        },
-        appendTo: ctrl
+    // Create transit mode dropdown.
+    let mode = Object.keys(layer.catchments.modes)[0];
+    _xyz.utils.dropdown({
+        title: 'Transit mode:',
+        appendTo: ctrl,
+        entries: layer.catchments.modes,
+        selected: mode,
+        onchange: e => {
+            mode = e.target.value;
+            setParams();
+        }
     });
-
-    let mode,
-        selMode = _xyz.utils.createElement({
-            tag: 'select',
-            appendTo: ctrl,
-            eventListener: {
-                event: 'change',
-                funct: e => {
-                    mode = e.target.value;
-                    setParams();
-                }
-            }
-        });
-
-    Object.keys(layer.catchments.modes).forEach(function (key) {
-        selMode.insertAdjacentHTML('beforeend', '<option value="' + key + '">' + key.charAt(0).toUpperCase() + key.slice(1) + '</option>');
-    });
-
-    selMode.disabled = selMode.childElementCount === 1 ? true : false;
-    mode = selMode.options[selMode.selectedIndex].value;
-
 
     // spacer
     _xyz.utils.createElement({
@@ -158,32 +141,17 @@ export default (layer, panel) => {
         appendTo: ctrl
     });
 
-
-    // Provider
-    let provider;
-    _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-            textContent: 'Provider:'
-        },
-        appendTo: ctrl
-    });
-
-    let selProvider = _xyz.utils.createElement({
-        tag: 'select',
+    // Create api provider dropdown.
+    let provider = layer.catchments.provider[0];
+    _xyz.utils.dropdown({
+        title: 'Provider:',
         appendTo: ctrl,
-        eventListener: {
-            event: 'change',
-            funct: e => provider = e.target.value
+        entries: layer.catchments.provider,
+        selected: provider,
+        onchange: e => {
+            provider = e.target.value;
         }
     });
-
-    layer.catchments.provider.forEach(function (key) {
-        selProvider.insertAdjacentHTML('beforeend', '<option value="' + key + '">' + key.charAt(0).toUpperCase() + key.slice(1) + '</option>');
-    });
-
-    selProvider.disabled = selProvider.childElementCount === 1 ? true : false;
-
 
     //TIN construction
     let chkCatchmentsConstruction = _xyz.utils.checkbox(
@@ -251,8 +219,8 @@ export default (layer, panel) => {
                             distance: sliMinutes.value * 60,
                             detail: sliDetail.value,
                             reach: sliReach.value,
-                            mode: selMode.options[selMode.selectedIndex].value,
-                            provider: selProvider.options[selProvider.selectedIndex].value,
+                            mode: mode,
+                            provider: provider,
                             token: _xyz.token
                         }));
                     
