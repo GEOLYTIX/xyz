@@ -40,6 +40,8 @@ utils.createElement has been replaced with the utils.\_createElement
 
 Fonts are now in a seperate public folder. Only css should be in public\/css. Only js should be in public\/js
 
+Documentation is now served from gitbooks. The documentation property in the workspace must be a URL.
+
 
 
 ## Notes:
