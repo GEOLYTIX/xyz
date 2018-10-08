@@ -86,7 +86,7 @@ export default (layer, panel) => {
                 timeout = setTimeout(() => {
                     timeout = null;
                     layer.getLayer(layer);
-                }, 500); 
+                }, 500);
             }
         }
     });
@@ -234,13 +234,16 @@ export default (layer, panel) => {
         }
     });
 
+    //Create cluster_logscale checkbox.
+    layer.cluster_logscale = layer.cluster_logscale || false;
+    _xyz.utils.checkbox({
+        label: 'Log scale cluster size.',
+        appendTo: block,
+        onChange: e => {
 
-    // Log scale cluster.
-    let logScale = _xyz.utils.checkbox(function (e) {
-        layer.markerLog = e.target.checked;
-        layer.style.markerLog = layer.markerLog;
-        layer.getLayer(layer);
-    }, { label: 'Log scale cluster', id: layer.layer + '_logscale' });
-
-    block.appendChild(logScale);
+            // Set the tin construction flag to the checked status.
+            layer.cluster_logscale = e.target.checked;
+            layer.getLayer(layer);
+        }
+    });
 }

@@ -179,7 +179,7 @@ function addClusterToLayer(cluster, layer) {
             }
 
             // Define iconSize from number of locations in cluster.
-            let iconSize = layer.markerLog ?
+            let iconSize = layer.cluster_logscale ?
                 layer.style.markerMin + layer.style.markerMax / Math.log(c_max) * Math.log(point.properties.count) :
                 point.properties.count === 1 ?
                     layer.style.markerMin :
@@ -188,7 +188,7 @@ function addClusterToLayer(cluster, layer) {
             if (csize_max) {
                 
             // Define iconSize from number of locations in cluster.
-            iconSize = layer.markerLog ?
+            iconSize = layer.cluster_logscale ?
                 layer.style.markerMin + layer.style.markerMax / Math.log(csize_max) * Math.log(point.properties.size) :
                 point.properties.size === 1 ?
                     layer.style.markerMin :

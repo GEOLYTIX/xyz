@@ -120,14 +120,26 @@ export default (layer, panel) => {
 
                     Object.values(entry.filter).forEach(_value => {
                         for (let __value of _value) {
-                            let index = _value.indexOf(__value);
-                            let options = {
-                                field: val,
-                                operator: 'in',
-                                value: __value
-                            }
-                            content = filter_checkbox(options, layer);
-                            block.appendChild(content);
+
+                            _xyz.utils.checkbox({
+                                label: __value,
+                                appendTo: block,
+                                onChange: e => {
+                        
+                                    if (!layer.filter[val]) layer.filter[val] = { ['in']: [] };
+                        
+                                    if (e.target.checked) {
+                                        if (!layer.filter[val]['in']) layer.filter[val]['in'] = [];
+                                        layer.filter[val]['in'].push(__value);
+                                        layer.getLayer(layer);
+                        
+                                    } else {
+                                        layer.filter[val]['in'].splice(layer.filter[val]['in'].indexOf(__value), 1);
+                                        layer.getLayer(layer);
+                                    }
+                                }
+                            });
+
                         }
                     });
 
@@ -399,7 +411,7 @@ function filter_numeric(layer, options) {
 
         layer.getLayer(layer);
     }
-    
+
     _xyz.utils.createElement({
         tag: 'div',
         options: {
@@ -726,30 +738,4 @@ function filter_date(layer, options) {
         },
         appendTo: options.appendTo
     });
-}
-
-// create checkbox filter
-function filter_checkbox(options, layer) {
-
-    function filter_checkbox_onchange(e) {
-
-        if (!layer.filter[options.field])
-            layer.filter[options.field] = {
-                [options.operator]: []
-            };
-
-        if (this.checked) {
-            if (!layer.filter[options.field][options.operator]) layer.filter[options.field][options.operator] = [];
-            layer.filter[options.field][options.operator].push(options.value);
-            layer.getLayer(layer);
-
-        } else {
-            layer.filter[options.field][options.operator].splice(layer.filter[options.field][options.operator].indexOf(options.value), 1);
-            layer.getLayer(layer);
-        }
-    }
-
-    let checkbox = _xyz.utils.checkbox(filter_checkbox_onchange, { label: options.value });
-
-    return checkbox;
 }

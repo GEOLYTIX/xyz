@@ -136,14 +136,15 @@ export function createElement(param) {
 }
 
 // Checkbox factory.
-export function checkbox(onchecked, param) {
+export function checkbox(param) {
 
     let checkbox = createElement({
         tag: 'label',
         options: {
             textContent: param.label,
             className: 'checkbox'
-        }
+        },
+        appendTo: param.appendTo
     });
 
     let input = createElement({
@@ -164,40 +165,7 @@ export function checkbox(onchecked, param) {
 
     if (param.checked) input.checked = true;
 
-    if (typeof (onchecked) === 'function') input.addEventListener('change', onchange);
-
-    return checkbox;
-}
-
-export function _checkbox(param) {
-
-    let checkbox = createElement({
-        tag: 'label',
-        options: {
-            textContent: param.label,
-            className: 'checkbox'
-        }
-    });
-
-    let input = createElement({
-        tag: 'input',
-        options: {
-            type: 'checkbox'
-        },
-        appendTo: checkbox
-    });
-
-    createElement({
-        tag: 'div',
-        options: {
-            className: 'checkbox_i'
-        },
-        appendTo: checkbox
-    });
-
-    if (param.checked) input.checked = true;
-
-    if (typeof (onchecked) === 'function') input.addEventListener('change', onchange);
+    if (typeof (param.onChange) === 'function') input.addEventListener('change', param.onChange);
 }
 
 // Slider factory.

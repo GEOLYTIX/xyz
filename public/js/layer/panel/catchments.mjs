@@ -153,16 +153,17 @@ export default (layer, panel) => {
         }
     });
 
-    //TIN construction
-    let chkCatchmentsConstruction = _xyz.utils.checkbox(
-        e => { },
-        {
-            label: 'Display catchment sample points and TIN.',
-            id: layer.layer + '_tin_construction'
-        }
-    );
+    //Create TIN construction checkbox
+    layer.tin_construction = layer.tin_construction || false;
+    _xyz.utils.checkbox({
+        label: 'Display catchment sample points and TIN.',
+        appendTo: ctrl,
+        onChange: e => {
 
-    ctrl.appendChild(chkCatchmentsConstruction);
+            // Set the tin construction flag to the checked status.
+            layer.tin_construction = e.target.checked;
+        }
+    });
 
     let btnCatchment = _xyz.utils.createElement({
         tag: 'div',
@@ -244,7 +245,7 @@ export default (layer, panel) => {
                     
                             let json = JSON.parse(e.target.responseText);
                     
-                            if (chkCatchmentsConstruction.control.checked) {
+                            if (layer.tin_construction) {
                                 let layerTIN = L.geoJson(json.tin, {
                                     interactive: false,
                                     pane: 'tmp',
