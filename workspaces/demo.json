@@ -777,16 +777,12 @@
           }
         ]
       },
-      "bounds": [
-        [
-          48,
-          -13
-        ],
-        [
-          62,
-          5
-        ]
-      ],
+      "bounds": {
+        "north": 62,
+        "east": 5,
+        "south": 48,
+        "west": -13
+      },
       "minZoom": 6,
       "maxZoom": 17,
       "groups": {
@@ -3007,16 +3003,12 @@
         "code": "RO",
         "placeholder": "e.g. Constanța"
       },
-      "bounds": [
-        [
-          43,
-          20
-        ],
-        [
-          49,
-          30
-        ]
-      ],
+      "bounds": {
+        "north": 49,
+        "east": 30,
+        "south": 43,
+        "west": 20
+      },
       "minZoom": 6,
       "maxZoom": 17,
       "layers": {

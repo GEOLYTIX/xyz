@@ -36,7 +36,7 @@ export default () => {
       _xyz.utils.setHook('locale', _xyz.locale);
 
       setLocaleDefaults();
-            
+
       _xyz.setView(true);
       _xyz.ws.gazetteer.init(true);
       _xyz.initLayers(true);
@@ -48,7 +48,23 @@ export default () => {
   function setLocaleDefaults() {
 
     // Set min/max zoom defaults.
-    _xyz.ws.locales[_xyz.locale].minZoom = _xyz.ws.locales[_xyz.locale].minZoom || 0;
-    _xyz.ws.locales[_xyz.locale].maxZoom = _xyz.ws.locales[_xyz.locale].maxZoom || 20;
+    _xyz.ws.locales[_xyz.locale].minZoom = parseInt(_xyz.ws.locales[_xyz.locale].minZoom) || 0;
+    _xyz.ws.locales[_xyz.locale].maxZoom = parseInt(_xyz.ws.locales[_xyz.locale].maxZoom) || 20;
+
+    // Set default bounds.
+    _xyz.ws.locales[_xyz.locale].bounds = _xyz.ws.locales[_xyz.locale].bounds || {};
+    _xyz.ws.locales[_xyz.locale].bounds.south = parseFloat(_xyz.ws.locales[_xyz.locale].bounds.south) || -90;
+    _xyz.ws.locales[_xyz.locale].bounds.west = parseFloat(_xyz.ws.locales[_xyz.locale].bounds.west) || -180;
+    _xyz.ws.locales[_xyz.locale].bounds.north = parseFloat(_xyz.ws.locales[_xyz.locale].bounds.north) || 90;
+    _xyz.ws.locales[_xyz.locale].bounds.east = parseFloat(_xyz.ws.locales[_xyz.locale].bounds.east) || 180;
+
+    // Formated bounds for leaflet.
+    _xyz.ws.locales[_xyz.locale].bounds.leaflet = [[
+      _xyz.ws.locales[_xyz.locale].bounds.south,
+      _xyz.ws.locales[_xyz.locale].bounds.west
+    ], [
+      _xyz.ws.locales[_xyz.locale].bounds.north,
+      _xyz.ws.locales[_xyz.locale].bounds.east
+    ]];
   }
 };

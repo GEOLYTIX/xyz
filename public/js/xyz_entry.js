@@ -53,12 +53,13 @@ function init() {
 
   // Set view and bounds;
   _xyz.setView = fit => {
-    _xyz.map.setMaxBounds(_xyz.ws.locales[_xyz.locale].bounds || [[-90, -180], [90, 180]]);
+
+    _xyz.map.setMaxBounds(_xyz.ws.locales[_xyz.locale].bounds.leaflet);
     _xyz.map.setMinZoom(_xyz.ws.locales[_xyz.locale].minZoom);
     _xyz.map.setMaxZoom(_xyz.ws.locales[_xyz.locale].maxZoom);
 
     // Fit view to bounds of locale if fit is true.
-    if (fit) _xyz.map.fitBounds(_xyz.ws.locales[_xyz.locale].bounds || [[-90, -180], [90, 180]]);
+    if (fit) _xyz.map.fitBounds(_xyz.ws.locales[_xyz.locale].bounds.leaflet);
   };
 
   // Set the map view; fit is true for !hooks.z
