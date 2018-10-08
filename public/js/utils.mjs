@@ -124,9 +124,9 @@ export function copyToClipboard(str) {
 export function createElement(param) {
     let el = document.createElement(param.tag);
 
-    if (param.options) Object.keys(param.options).map(key => el[key] = param.options[key]);
+    if (param.options) Object.keys(param.options).forEach(key => el[key] = param.options[key]);
 
-    if (param.style) Object.keys(param.style).map(key => el.style[key] = param.style[key]);
+    if (param.style) Object.keys(param.style).forEach(key => el.style[key] = param.style[key]);
 
     if (param.appendTo) param.appendTo.appendChild(el);
 
