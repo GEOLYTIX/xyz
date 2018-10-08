@@ -9,9 +9,9 @@ import grid from './grid.mjs';
 import tiles from './tiles.mjs';
 
 export default {
-    cluster: cluster,
-    mvt: mvt,
-    geojson: geojson,
-    grid: grid,
-    tiles: tiles
+  cluster: cluster,
+  mvt: mvt,
+  geojson: geojson,
+  grid: grid,
+  tiles: tiles
 };
