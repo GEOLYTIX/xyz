@@ -43,35 +43,56 @@ export default (layer, panel) => {
     });
 
     // Grid ration checkbox element.
-    let gridRatio = _xyz.utils.checkbox(e => {
+    // let gridRatio = _xyz.utils.checkbox(e => {
 
-        // Checkbox event to toggle grid_ratio.
-        layer.chkGridRatio = e.target.checked;
-        layer.grid_ratio = layer.chkGridRatio;
+    //     // Checkbox event to toggle grid_ratio.
+    //     layer.chkGridRatio = e.target.checked;
+    //     layer.grid_ratio = layer.chkGridRatio;
 
-        if (layer.grid_ratio) {
-            _xyz.utils.setHook('grid_ratio', true);
+    //     if (layer.grid_ratio) {
+    //         _xyz.utils.setHook('grid_ratio', true);
 
-        } else {
-            _xyz.utils.removeHook('grid_ratio');
+    //     } else {
+    //         _xyz.utils.removeHook('grid_ratio');
+    //     }
+
+    //     layer.getLayer(layer);
+
+    // }, {
+    //         label: 'Display colour values as a ratio to the size value.',
+    //         id: 'chkGridRatio',
+    //         className: 'ctrl',
+    //         checked: layer.grid_ratio || _xyz.hooks.grid_ratio
+    //     });
+
+    layer.grid_ratio = layer.grid_ratio || _xyz.hooks.grid_ratio || false;
+    _xyz.utils._checkbox({
+        label: 'Display colour values as a ratio to the size value.',
+        id: 'chkGridRatio',
+        className: 'ctrl',
+        checked: layer.grid_ratio || _xyz.hooks.grid_ratio,
+        appendto: legend,
+        onchange: e => {
+
+            // Set the layer grid ratio to the state of the checkbox.
+            layer.grid_ratio = e.target.checked;
+
+            // Set grid_ratio hook if true.
+            if (layer.grid_ratio) {
+                _xyz.utils.setHook('grid_ratio', true);
+
+            } else {
+
+                // Remove grid_ratio hook if false.
+                _xyz.utils.removeHook('grid_ratio');
+            }
+
+            layer.getLayer(layer);
         }
+    });
 
-        layer.getLayer(layer);
 
-    }, {
-            label: 'Display colour values as a ratio to the size value.',
-            id: 'chkGridRatio',
-            className: 'ctrl',
-            checked: layer.grid_ratio || _xyz.hooks.grid_ratio
-        });
-
-    // Set checked from either hook.grid_ratio or layer.grid_ratio.
-    layer.chkGridRatio = layer.grid_ratio || _xyz.hooks.grid_ratio;
-    layer.grid_ratio = layer.chkGridRatio;
-
-    if (layer.chkGridRatio) _xyz.utils.setHook('grid_ratio', true);
-
-    legend.appendChild(gridRatio);
+    //if (layer.chkGridRatio) _xyz.utils.setHook('grid_ratio', true);
 
     // Add default style.range if none exists.
     if (!layer.style) layer.style = {};

@@ -34,7 +34,9 @@ export default () => {
             _xyz.locale = e.target.value;
             _xyz.utils.removeHooks();
             _xyz.utils.setHook('locale', _xyz.locale);
+
             setLocaleDefaults();
+            
             _xyz.setView(true);
             _xyz.ws.gazetteer.init(true);
             _xyz.initLayers(true);

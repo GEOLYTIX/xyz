@@ -4,13 +4,8 @@
 .DS_Store
 .sass-cache/
 node_modules/
-reports/1*.pdf
 public/css/.sass-cache/
 public/js/build/
-public/js/build/xyz_bundle.js
 stats.json
 now
-workspaces/
-
 env
-workspaces/geodata.json

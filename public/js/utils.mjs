@@ -136,12 +136,12 @@ export function createElement(param) {
 }
 
 // Checkbox factory.
-export function checkbox(onchange, options) {
+export function checkbox(onchecked, param) {
 
     let checkbox = createElement({
         tag: 'label',
         options: {
-            textContent: options.label,
+            textContent: param.label,
             className: 'checkbox'
         }
     });
@@ -162,31 +162,62 @@ export function checkbox(onchange, options) {
         appendTo: checkbox
     });
 
-    if (options.checked) input.checked = true;
+    if (param.checked) input.checked = true;
 
-    if (typeof (onchange) === 'function') input.addEventListener('change', onchange);
+    if (typeof (onchecked) === 'function') input.addEventListener('change', onchange);
 
     return checkbox;
 }
 
+export function _checkbox(param) {
+
+    let checkbox = createElement({
+        tag: 'label',
+        options: {
+            textContent: param.label,
+            className: 'checkbox'
+        }
+    });
+
+    let input = createElement({
+        tag: 'input',
+        options: {
+            type: 'checkbox'
+        },
+        appendTo: checkbox
+    });
+
+    createElement({
+        tag: 'div',
+        options: {
+            className: 'checkbox_i'
+        },
+        appendTo: checkbox
+    });
+
+    if (param.checked) input.checked = true;
+
+    if (typeof (onchecked) === 'function') input.addEventListener('change', onchange);
+}
+
 // Slider factory.
-export function slider(options) {
+export function slider(param) {
 
     createElement({
         tag: 'span',
         options: {
-            textContent: options.title
+            textContent: param.title
         },
-        appendTo: options.appendTo
+        appendTo: param.appendTo
     });
 
     createElement({
         tag: 'span',
         options: {
-            textContent: options.default,
+            textContent: param.default,
             className: 'bold'
         },
-        appendTo: options.appendTo
+        appendTo: param.appendTo
     });
 
     let range_div = createElement({
@@ -194,41 +225,41 @@ export function slider(options) {
         options: {
             className: 'range'
         },
-        appendTo: options.appendTo
+        appendTo: param.appendTo
     });
 
     createElement({
         tag: 'input',
         options: {
             type: 'range',
-            min: options.min,
-            value: options.value,
-            max: options.max,
-            oninput: options.oninput,
+            min: param.min,
+            value: param.value,
+            max: param.max,
+            oninput: param.oninput,
         },
         appendTo: range_div
     });
 }
 
-export function dropdown(options) {
+export function dropdown(param) {
 
-    if (options.title) createElement({
+    if (param.title) createElement({
         tag: 'div',
         options: {
-            textContent: options.title
+            textContent: param.title
         },
-        appendTo: options.appendTo
+        appendTo: param.appendTo
     });
 
     let select = createElement({
         tag: 'select',
-        appendTo: options.appendTo
+        appendTo: param.appendTo
     });
 
-    if (options.entries.length) {
+    if (param.entries.length) {
 
         // Create select options from entries Array.
-        options.entries.forEach(entry => {
+        param.entries.forEach(entry => {
             createElement({
                 tag: 'option',
                 options: {
@@ -244,12 +275,12 @@ export function dropdown(options) {
     } else {
 
         // Create select options from Object if length is undefined.
-        Object.keys(options.entries).forEach(entry => {
+        Object.keys(param.entries).forEach(entry => {
             createElement({
                 tag: 'option',
                 options: {
-                    textContent: options.entries[entry][options.label] || entry,
-                    value: options.entries[entry][options.val] || entry
+                    textContent: param.entries[entry][param.label] || entry,
+                    value: param.entries[entry][param.val] || entry
                 },
                 appendTo: select
             })
@@ -258,9 +289,9 @@ export function dropdown(options) {
 
     select.disabled = (select.childElementCount === 1);
 
-    select.onchange = options.onchange;
+    select.onchange = param.onchange;
 
-    select.selectedIndex = getSelectOptionsIndex(select, options.selected);
+    select.selectedIndex = getSelectOptionsIndex(select, param.selected);
 
     // Get the index of the selected option from the select element.
     function getSelectOptionsIndex(select, value) {
