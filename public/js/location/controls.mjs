@@ -183,7 +183,7 @@ export function update(record) {
       funct: e => {
         e.stopPropagation();
 
-        let layer = _xyz.ws.locales[_xyz.locale].layers[record.location.layer],
+        let layer = _xyz.layers[record.location.layer],
           xhr = new XMLHttpRequest();
 
         xhr.open('POST', _xyz.host + '/api/location/update?token=' + _xyz.token);
@@ -241,7 +241,7 @@ export function trash(record) {
       funct: e => {
         e.stopPropagation();
 
-        let layer = _xyz.ws.locales[_xyz.locale].layers[record.location.layer],
+        let layer = _xyz.layers[record.location.layer],
           xhr = new XMLHttpRequest();
 
         xhr.open('GET', _xyz.host + '/api/location/delete?' + _xyz.utils.paramString({

@@ -11,9 +11,9 @@ export default () => {
   let modules = document.querySelectorAll('.mod_container > .module'),
     tabs = document.querySelector('.tab_bar'),
     tabLayers = document.getElementById('tabLayers'),
-    modLayers = document.getElementById('Layers'),
+    modLayers = document.getElementById('modLayers'),
     tabLocations = document.getElementById('tabLocations'),
-    modLocations = document.getElementById('Locations');
+    modLocations = document.getElementById('modLocations');
 
   modLayers.addEventListener('scroll', e => checkOverlap (e.target));
   modLocations.addEventListener('scroll', e => checkOverlap (e.target));

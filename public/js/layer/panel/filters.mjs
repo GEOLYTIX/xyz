@@ -360,7 +360,7 @@ export default (layer, panel) => {
 
             _xyz.ws.select.selectLayerFromEndpoint({
               layer: layer.aggregate_layer,
-              table: _xyz.ws.locales[_xyz.locale].layers[layer.aggregate_layer].table,
+              table: _xyz.layers[layer.aggregate_layer].table,
               id: json.id,
               marker: [json.lng, json.lat],
               filter: JSON.stringify(layer.filter) || ''

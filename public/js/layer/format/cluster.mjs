@@ -60,6 +60,9 @@ function setIndices(layer){
 
 function loadLayer(layer) {
 
+  // Set locale to check whether locale is still current when data is returned from backend.
+  const locale = _xyz.locale;
+
   // Display loader animation.
   layer.loaded = false;
   layer.loader.style.display = 'block';
@@ -98,7 +101,7 @@ function loadLayer(layer) {
     }
 
     // Data is returned and the layer is still current.
-    if (e.target.status === 200 && layer.display && layer.locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
+    if (e.target.status === 200 && layer.display && locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
   };
   // Send XHR to middleware.
   layer.xhr.send();

@@ -60,7 +60,7 @@ const renewToken = () => {
     setTimeout(renewToken, 1*60*1000);
 
     // Iterate through layers
-    Object.values(_xyz.ws.locales[_xyz.locale].layers).forEach(layer => {
+    Object.values(_xyz.layers).forEach(layer => {
 
       // Set URL on base layer to acknowledge new token.
       if (layer.base) layer.base.setUrl = layer.provider ?

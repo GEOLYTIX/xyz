@@ -2,6 +2,10 @@ import _xyz from '../../_xyz.mjs';
 
 export default (layer, panel) => {
 
+  // Create tmp pane.
+  _xyz.map.createPane('tmp');
+  _xyz.map.getPane('tmp').style.zIndex = 549;
+
   let ctrl = _xyz.utils.createElement({
     tag: 'div',
     options: {

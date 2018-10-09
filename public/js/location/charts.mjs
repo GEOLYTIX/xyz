@@ -10,7 +10,7 @@ export function bar_chart(layer, chart) {
 
   let week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  let data = _xyz.ws.locales[_xyz.locale].layers[layer].charts[chart];
+  let data = _xyz.layers[layer].charts[chart];
 
   if (!data[0] || !data[0].y) return;
 

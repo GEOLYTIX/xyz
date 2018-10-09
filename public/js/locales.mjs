@@ -14,17 +14,11 @@ export default () => {
   if (Object.keys(_xyz.ws.locales).length === 1) return;
 
   // Create control to change locale for multiple locales in workspace.
-  let locale = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'report-off',
-      textContent: 'Show layers for the following locale:'
-    },
-    appendTo: document.getElementById('Layers')
-  });
+  let locale = document.getElementById('locale');
 
   // Create locales dropdown.
   _xyz.utils.dropdown({
+    title: 'Show layers for the following locale:',
     appendTo: locale,
     entries: _xyz.ws.locales,
     label: 'name',
@@ -39,7 +33,10 @@ export default () => {
 
       _xyz.setView(true);
       _xyz.ws.gazetteer.init(true);
-      _xyz.initLayers(true);
+
+      _xyz.utils.removeHook('layers');
+      _xyz.initLayers();
+      
       _xyz.ws.select.resetModule();
     }
   });

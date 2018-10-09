@@ -13,6 +13,7 @@ import locales from './locales.mjs';
 import L from 'leaflet';
 
 import layers from './layer/_layers.mjs';
+_xyz.initLayers = layers;
 
 import locations from './location/_locations.mjs';
 
@@ -102,7 +103,7 @@ function init() {
   function viewChangeStart() {
 
     // Iterate through layers; Abort xhr and remove layer from map.
-    Object.values(_xyz.ws.locales[_xyz.locale].layers).forEach(layer => {
+    Object.values(_xyz.layers).forEach(layer => {
       if (layer.xhr) layer.xhr.abort();
       if (layer.L) _xyz.map.removeLayer(layer.L);
     });
@@ -125,7 +126,7 @@ function init() {
       _xyz.utils.setViewHook(_xyz.map.getCenter());
 
       // Iterate through layers; Hide layer load indicator and attempt layer reload.
-      Object.values(_xyz.ws.locales[_xyz.locale].layers).forEach(layer => {
+      Object.values(_xyz.layers).forEach(layer => {
         if (layer.loader) layer.loader.style.display = 'none';
         if (layer.getLayer) layer.getLayer(layer);  
       });
@@ -137,15 +138,15 @@ function init() {
     let layersArray = [],
       chkScore = 0;
 
-    Object.values(_xyz.ws.locales[_xyz.locale].layers).forEach(layer => {
+    Object.values(_xyz.layers).forEach(layer => {
       chkScore = layer.display ? chkScore++ : chkScore;
       chkScore = layer.display && layer.loaded ? chkScore-- : chkScore;
       layersArray.push([layer.name, layer.display, layer.loaded]);
     });
   };
 
-  // Initialize layers module.
-  layers();
+  // Initialize layers.
+  _xyz.initLayers();
 
   // Initialize locations module.
   locations();

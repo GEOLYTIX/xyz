@@ -13,7 +13,7 @@ export default () => {
     style: {
       display: 'none'
     },
-    appendTo: document.getElementById('Locations')
+    appendTo: document.getElementById('modLocations')
   });
 
   _xyz.utils.createElement({
@@ -45,7 +45,7 @@ export default () => {
     options: {
       className: 'content'
     },
-    appendTo: document.getElementById('Locations')
+    appendTo: document.getElementById('modLocations')
   });
 
   // Create select pane. This pane has a shadow filter associated in the css.
@@ -109,7 +109,7 @@ export default () => {
     // Make select tab active on mobile device.
     if (_xyz.ws.activateSelectTab) _xyz.ws.activateSelectTab();
 
-    let layer = _xyz.ws.locales[_xyz.locale].layers[location.layer];
+    let layer = _xyz.layers[location.layer];
 
     // Prevent crash for select from hook when layer is no accessible to user.
     if (!layer) return;
@@ -120,9 +120,9 @@ export default () => {
       // Create a layer reference for the layer defined in the infoj field.
       if (typeof entry.layer === 'string') {
         entry.layer = {
-          table: _xyz.ws.locales[_xyz.locale].layers[entry.layer].table,
-          geom: _xyz.ws.locales[_xyz.locale].layers[entry.layer].geom || 'geom',
-          filter: _xyz.ws.locales[_xyz.locale].layers[entry.layer].filter || {}
+          table: _xyz.layers[entry.layer].table,
+          geom: _xyz.layers[entry.layer].geom || 'geom',
+          filter: _xyz.layers[entry.layer].filter || {}
         };
       }
     });

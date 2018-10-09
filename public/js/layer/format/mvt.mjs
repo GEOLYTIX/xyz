@@ -6,6 +6,9 @@ import 'leaflet.vectorgrid';
 
 export default layer => {
 
+  // Set locale to check whether locale is still current when data is returned from backend.
+  //const locale = _xyz.locale;
+
   // Assign the table based on the zoom array.
   let zoom = _xyz.map.getZoom(),
     zoomKeys = Object.keys(layer.arrayZoom),
@@ -18,7 +21,7 @@ export default layer => {
   // Make drawer opaque if no table present.
   layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 
-  if (layer.table && layer.display && layer.locale === _xyz.locale) {
+  if (layer.table && layer.display) {
 
     // Create new vector.xhr
     layer.loaded = false;
@@ -41,31 +44,6 @@ export default layer => {
 
     // set style for each layer
     options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
-
-    function applyLayerStyle(properties, zoom) {
-
-      if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]]) {
-
-        return layer.style.theme.cat[properties[layer.style.theme.field]].style;
-
-      }
-
-      if (layer.style && layer.style.theme && layer.style.theme.type === 'graduated') {
-
-        let style = layer.style.theme.cat[0].style;
-
-        for (let i = 0; i < layer.style.theme.cat.length; i++) {
-          if (properties[layer.style.theme.field] < layer.style.theme.cat[i].val) break;
-          style = layer.style.theme.cat[i].style;
-        }
-
-        return style;
-
-      }
-
-      return layer.style.default;
-    }
-
 
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
@@ -123,5 +101,29 @@ export default layer => {
         e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
       })
       .addTo(_xyz.map);
+  }
+
+  function applyLayerStyle(properties, zoom) {
+
+    if (layer.style && layer.style.theme && layer.style.theme.type === 'categorized' && layer.style.theme.cat[properties[layer.style.theme.field]]) {
+
+      return layer.style.theme.cat[properties[layer.style.theme.field]].style;
+
+    }
+
+    if (layer.style && layer.style.theme && layer.style.theme.type === 'graduated') {
+
+      let style = layer.style.theme.cat[0].style;
+
+      for (let i = 0; i < layer.style.theme.cat.length; i++) {
+        if (properties[layer.style.theme.field] < layer.style.theme.cat[i].val) break;
+        style = layer.style.theme.cat[i].style;
+      }
+
+      return style;
+
+    }
+
+    return layer.style.default;
   }
 };
