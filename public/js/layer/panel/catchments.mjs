@@ -188,7 +188,7 @@ export default (layer, panel) => {
             document.getElementById('Map').style.cursor = '';
 
             // Set layerMark on origin
-            let layerMark = L.geoJson({
+            L.geoJson({
               type: 'Feature',
               geometry: {
                 type: 'Point',
@@ -218,7 +218,7 @@ export default (layer, panel) => {
 
             xhr.open('GET', _xyz.host + '/api/catchments?' + _xyz.utils.paramString({
               locale: _xyz.locale,
-              layer: layer.layer,
+              layer: layer.key,
               lng: e.latlng.lng,
               lat: e.latlng.lat,
               distance: sliMinutes.value * 60,
@@ -234,7 +234,7 @@ export default (layer, panel) => {
 
               if (e.target.status === 502) {
                 btnCatchment.classList.remove('disabled');
-                layer.getLayer(layer);
+                layer.get();
                 return alert(e.target.response);
               }
 
@@ -245,12 +245,12 @@ export default (layer, panel) => {
 
               btnCatchment.classList.remove('disabled');
 
-              layer.getLayer(layer);
+              layer.get();
 
               let json = JSON.parse(e.target.responseText);
 
               if (layer.tin_construction) {
-                let layerTIN = L.geoJson(json.tin, {
+                L.geoJson(json.tin, {
                   interactive: false,
                   pane: 'tmp',
                   style: {
@@ -261,7 +261,7 @@ export default (layer, panel) => {
                   }
                 }).addTo(_xyz.map);
 
-                let layerPoints = L.geoJson(json.circlePoints, {
+                L.geoJson(json.circlePoints, {
                   pointToLayer: function (feature, latlng) {
                     return new L.CircleMarker(latlng, {
                       radius: 5,
@@ -274,7 +274,7 @@ export default (layer, panel) => {
                   }
                 }).addTo(_xyz.map);
 
-                let layerSample = L.geoJson(json.samplePoints, {
+                L.geoJson(json.samplePoints, {
                   pointToLayer: function (feature, latlng) {
                     return new L.CircleMarker(latlng, {
                       radius: 2,

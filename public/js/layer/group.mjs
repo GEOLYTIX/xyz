@@ -1,14 +1,15 @@
 import _xyz from '../_xyz.mjs';
 
-export default group => {
+export default groupKey => {
+
+  // Create group object.
+  const group = {};
 
   // Create new layer group.
-  _xyz.layer_groups[group] = {
-    group: group
-  };
+  _xyz.layer_groups[groupKey] = group;
 
   // Create layer group container.
-  _xyz.layer_groups[group].container = _xyz.utils.createElement({
+  group.container = _xyz.utils.createElement({
     tag: 'div',
     options: {
       className: 'drawer drawer-group expandable-group'
@@ -17,13 +18,13 @@ export default group => {
   });
   
   // Create layer group header.
-  _xyz.layer_groups[group].header = _xyz.utils.createElement({
+  group.header = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      textContent: group,
+      textContent: groupKey,
       className: 'header-group'
     },
-    appendTo: _xyz.layer_groups[group].container,
+    appendTo: group.container,
     eventListener: {
       event: 'click',
       funct: e => {
@@ -38,35 +39,37 @@ export default group => {
     }
   });
 
-  // Function to check whether layers in group are visible.
-  _xyz.layer_groups[group].chkVisibleLayer = group => {
-    return Object.values(_xyz.layers).some(layer => (layer.group === group && layer.display));
+  // Check whether some layers group are visible and toggle visible button display accordingly.
+  group.chkVisibleLayer = () => {
+    let someVisible = Object.values(_xyz.layers)
+      .some(layer => (layer.group === groupKey && layer.display));
+    
+    group.visible.style.display = someVisible ? 'block' : 'none';
   };
 
   // Create hide all group layers button.
-  _xyz.layer_groups[group].hideAll = _xyz.utils.createElement({
+  group.visible = _xyz.utils.createElement({
     tag: 'i',
     options: {
       className: 'material-icons cursor noselect btn_header hide-group',
       title: 'Hide layers from group',
       textContent: 'visibility'
     },
-    appendTo: _xyz.layer_groups[group].header,
+    appendTo: group.header,
     style: {
-      display: (_xyz.layer_groups[group].chkVisibleLayer(group) ? 'block' : 'none')
+      display: 'none'
     },
     eventListener: {
       event: 'click',
       funct: e => {
         e.stopPropagation();
-        e.target.style.display = 'none';
+        //e.target.style.display = 'none';
     
         // Iterate through all layers and remove layer if layer is in group.
-        Object.values(layers).forEach(layer => {
-          if (layer.group === group && layer.display) layer.removeLayer(layer);
+        Object.values(_xyz.layers).forEach(layer => {
+          if (layer.group === groupKey && layer.display) layer.remove();
         });
-    
-        _xyz.layersCheck();
+
       }
     }
   });
@@ -78,13 +81,13 @@ export default group => {
       className: 'material-icons cursor noselect btn_header expander-group',
       title: 'Toggle group panel'
     },
-    appendTo: _xyz.layer_groups[group].header,
+    appendTo: group.header,
     eventListener: {
       event: 'click',
       funct: e => {
         e.stopPropagation();
         _xyz.utils.toggleExpanderParent({
-          expandable: _xyz.layer_groups[group].container,
+          expandable: group.container,
           expandedTag: 'expanded-group',
           expandableTag: 'expandable-group',
           scrolly: document.querySelector('.mod_container > .scrolly')

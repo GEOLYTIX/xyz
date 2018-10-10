@@ -22,7 +22,7 @@ export default (layer, panel) => {
     onchange: e => {
       layer.grid_size = e.target.value;
       _xyz.utils.setHook('grid_size', layer.grid_size);
-      layer.getLayer(layer);
+      layer.get();
     }
   });
 
@@ -38,7 +38,7 @@ export default (layer, panel) => {
     onchange: e => {
       layer.grid_color = e.target.value;
       _xyz.utils.setHook('grid_color', layer.grid_color);
-      layer.getLayer(layer);
+      layer.get();
     }
   });
 
@@ -58,7 +58,7 @@ export default (layer, panel) => {
         _xyz.utils.setHook('grid_ratio', true) :
         _xyz.utils.removeHook('grid_ratio');
 
-      layer.getLayer(layer);
+      layer.get();
     }
   });
 

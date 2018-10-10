@@ -4,7 +4,9 @@ import L from 'leaflet';
 
 import 'leaflet.vectorgrid';
 
-export default layer => {
+export default function(){
+
+  const layer = this;
 
   // Set locale to check whether locale is still current when data is returned from backend.
   //const locale = _xyz.locale;
@@ -29,7 +31,7 @@ export default layer => {
 
     let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + _xyz.utils.paramString({
         locale: _xyz.locale,
-        layer: layer.layer,
+        layer: layer.key,
         table: layer.table,
         properties: layer.properties,
         token: _xyz.token
@@ -37,13 +39,13 @@ export default layer => {
       options = {
         rendererFactory: L.svg.tile,
         interactive: (layer.infoj && layer.qID) || false,
-        pane: layer.pane[0],
+        pane: layer.key,
         getFeatureId: (f) => f.properties.id,
         vectorTileLayerStyles: {}
       };
 
     // set style for each layer
-    options.vectorTileLayerStyles[layer.layer] = applyLayerStyle;
+    options.vectorTileLayerStyles[layer.key] = applyLayerStyle;
 
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
@@ -65,7 +67,7 @@ export default layer => {
           if (_xyz.hooks.select) {
             _xyz.hooks.select.map(item => {
               item = item.split('!');
-              if (item[1] === layer.layer && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
+              if (item[1] === layer.key && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
                 check = true;
               }
             });
@@ -82,7 +84,7 @@ export default layer => {
           }
           // get selection
           _xyz.ws.select.selectLayerFromEndpoint({
-            layer: layer.layer,
+            layer: layer.key,
             table: layer.table,
             id: e.layer.properties.id,
             marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]

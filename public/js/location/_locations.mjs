@@ -34,9 +34,7 @@ export default () => {
     appendTo: LocationsHeader,
     eventListener: {
       event: 'click',
-      funct: e => {
-        resetModule();
-      }
+      funct: () => resetModule()
     }
   });
 
@@ -132,7 +130,7 @@ export default () => {
 
     // fetch(_xyz.host + '/api/location/select?' + _xyz.utils.paramString({
     //     locale: _xyz.locale,
-    //     layer: layer.layer,
+    //     layer: layer.key,
     //     table: location.table,
     //     id: location.id,
     //     token: _xyz.token
@@ -160,7 +158,7 @@ export default () => {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', _xyz.host + '/api/location/select?' + _xyz.utils.paramString({
       locale: _xyz.locale,
-      layer: layer.layer,
+      layer: layer.key,
       table: location.table,
       id: location.id,
       token: _xyz.token
@@ -340,7 +338,7 @@ export default () => {
         }
       }).addTo(_xyz.map);
        
-    record.location.L.getLayers()[0].on('dragend', function (e) {
+    record.location.L.getLayers()[0].on('dragend', function () {
       record.upload.style.display = 'block';
     });
 
@@ -410,7 +408,7 @@ export default () => {
     record.drawer.appendChild(addInfojToList(record));
 
     // Find free space and insert record.
-    let freeRecords = _xyz.ws.select.records.filter(function (record) {
+    _xyz.ws.select.records.filter(function (record) {
       if (!record.location) return record;
     });
     let idx = _xyz.ws.select.records.indexOf(record);

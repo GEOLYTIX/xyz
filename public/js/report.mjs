@@ -1,4 +1,4 @@
-import _xyz from './_xyz.mjs';
+// import _xyz from './_xyz.mjs';
 
 export default () => {
     
@@ -26,7 +26,7 @@ export default () => {
   //     };
         
   //     if (_this.drivetime && _this.drivetime.layer){
-  //         let layers = _this.drivetime.layer.getLayers(),
+  //         let layers = _this.drivetime.layer.gets(),
   //             drivetime = layers[0].feature;
   //         payload["drivetime"] = drivetime;   
   //     } 

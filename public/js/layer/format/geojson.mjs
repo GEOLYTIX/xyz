@@ -2,10 +2,12 @@ import _xyz from '../../_xyz.mjs';
 
 import L from 'leaflet';
 
-export default layer => {
+export default function(){
 
-    // Set locale to check whether locale is still current when data is returned from backend.
-    const locale = _xyz.locale;
+  const layer = this;
+
+  // Set locale to check whether locale is still current when data is returned from backend.
+  const locale = _xyz.locale;
 
   if (layer.arrayZoom) {
     let zoom = _xyz.map.getZoom(),
@@ -30,7 +32,7 @@ export default layer => {
     let bounds = _xyz.map.getBounds();      
     layer.xhr.open('GET', _xyz.host + '/api/geojson/get?' + _xyz.utils.paramString({
       locale: _xyz.locale,
-      layer: layer.layer,
+      layer: layer.key,
       table: layer.table,
       west: bounds.getWest(),
       south: bounds.getSouth(),
@@ -53,18 +55,18 @@ export default layer => {
         // Add geoJSON feature collection to the map.
         layer.L = L.geoJSON(features, {
           style: applyLayerStyle,
-          pane: layer.pane[0],
+          pane: layer.key,
           interactive: layer.infoj? true: false,
           pointToLayer: function(point, latlng){
             return L.circleMarker(latlng, {
               radius: 9,
-              pane: layer.pane[0]
+              pane: layer.key
             });
           }
         })
           .on('click', function(e){
             _xyz.ws.select.selectLayerFromEndpoint({
-              layer: layer.layer,
+              layer: layer.key,
               table: layer.table,
               id: e.layer.feature.properties.id,
               marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],

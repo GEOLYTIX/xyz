@@ -2,7 +2,9 @@ import _xyz from '../../_xyz.mjs';
 
 import L from 'leaflet';
 
-export default layer => {
+export default function(){
+
+  const layer = this;
 
   // Set locale to check whether locale is still current when data is returned from backend.
   const locale = _xyz.locale;
@@ -30,7 +32,7 @@ export default layer => {
 
     layer.xhr.open('GET', _xyz.host + '/api/grid/get?' + _xyz.utils.paramString({
       locale: _xyz.locale,
-      layer: layer.layer,
+      layer: layer.key,
       table: layer.table,
       size: layer.grid_size,
       color: layer.grid_color,
@@ -73,7 +75,7 @@ export default layer => {
                   iconSize: size,
                   iconUrl: _xyz.utils.svg_symbols({type: 'dot', style: {color: layer.style.range[parseInt(color)] || '#C0C0C0'}})
                 }),
-                pane: layer.pane[0],
+                pane: layer.key,
                 interactive: false
               });
           }

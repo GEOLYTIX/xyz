@@ -128,21 +128,42 @@ function init() {
       // Iterate through layers; Hide layer load indicator and attempt layer reload.
       Object.values(_xyz.layers).forEach(layer => {
         if (layer.loader) layer.loader.style.display = 'none';
-        if (layer.getLayer) layer.getLayer(layer);  
+        if (layer.get) layer.get();  
       });
     }, 100);
   }
 
+  // Function to check the map attribution.
+  function attributionCheck() {
+
+    // Get attribution links and check whether the className is in the attribution list.
+    let links = document.querySelectorAll('.attribution > .links > a');
+
+    for (let i = 0; i < links.length; ++i) {
+      links[i].style.display = _xyz.attribution.indexOf(links[i].className) >= 0 ? 'inline-block' : 'none';
+    }
+  }
+
   // Function to check whether all display layers are drawn.
   _xyz.layersCheck = () => {
+
+    // Set default attribution.
+    _xyz.attribution = ['leaflet', 'xyz'];
+
     let layersArray = [],
       chkScore = 0;
 
     Object.values(_xyz.layers).forEach(layer => {
+
+      // Add attribution to array if layer is visible.
+      if (layer.attribution && layer.display) _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
+  
       chkScore = layer.display ? chkScore++ : chkScore;
       chkScore = layer.display && layer.loaded ? chkScore-- : chkScore;
-      layersArray.push([layer.name, layer.display, layer.loaded]);
+      layersArray.push([layer.key, layer.display, layer.loaded]);
     });
+
+    attributionCheck();
   };
 
   // Initialize layers.

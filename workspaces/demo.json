@@ -2,7 +2,6 @@
   "title": "GEOLYTIX | XYZ Demo",
   "documentation": "https://geolytix.gitbook.io/xyz-user-guide",
   "locate": {},
-  "report": {},
   "locales": {
     "Global": {
       "gazetteer": {
@@ -18,11 +17,6 @@
       },
       "minZoom": 3,
       "maxZoom": 15,
-      "groups": {
-        "basemaps": {
-          "label": "Base maps"
-        }
-      },
       "layers": {
         "base": {
           "group": "Base maps",
@@ -32,27 +26,8 @@
             "mapbox",
             "osm"
           ],
-          "pane": [
-            "base",
-            500
-          ],
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
-        },
-        "label": {
-          "group": "Base maps",
-          "name": "Mapbox Labels",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
-          "pane": [
-            "base_labels",
-            550
-          ],
-          "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
@@ -62,10 +37,6 @@
             "here"
           ],
           "meta": "Satellite Imagery layer provided by HERE.",
-          "pane": [
-            "base",
-            500
-          ],
           "format": "tiles",
           "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
@@ -73,10 +44,6 @@
         "sprawls": {
           "name": "World Cities",
           "meta": "Urban agglomerations with a population greater than 100,000.",
-          "pane": [
-            "bounds",
-            510
-          ],
           "format": "mvt",
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
@@ -277,10 +244,6 @@
         "catchments": {
           "name": "Catchments",
           "meta": "Calculate catchments from a distance matrix.",
-          "pane": [
-            "scratch",
-            520
-          ],
           "editable": true,
           "format": "geojson",
           "dbs": "XYZ",
@@ -329,14 +292,6 @@
           "display": true,
           "name": "Retail Shops",
           "group": "Retail",
-          "pane": [
-            "cn_retailpoints",
-            539
-          ],
-          "cntr": [
-            34.83001,
-            116.10712
-          ],
           "format": "cluster",
           "dbs": "XYZ",
           "qID": "id",
@@ -491,15 +446,7 @@
           "name": "Shanghai Retail Places",
           "group": "Retail",
           "format": "mvt",
-          "cntr": [
-            34.07093,
-            114.80507
-          ],
           "geom_3857": "geom_3857",
-          "pane": [
-            "cn_sh_retail_venues",
-            530
-          ],
           "dbs": "XYZ",
           "properties": "venue_name, name_cn, venue_type, address, mass_count, massplus_count, luxury_count, mass, premium, luxury, main_market, secondary",
           "qID": "id",
@@ -757,6 +704,17 @@
               }
             ]
           }
+        },
+        "label": {
+          "group": "Base maps",
+          "name": "Mapbox Labels",
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
         }
       }
     },
@@ -787,80 +745,43 @@
       },
       "minZoom": 6,
       "maxZoom": 17,
-      "groups": {
-        "basemaps": {
-          "label": "Base maps"
-        }
-      },
       "layers": {
         "base": {
-          "group": "basemaps",
+          "group": "Base maps",
           "display": true,
           "name": "Mapbox Baselayer",
           "attribution": [
             "mapbox",
             "osm"
           ],
-          "pane": [
-            "base",
-            500
-          ],
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
-        "label": {
-          "group": "basemaps",
-          "display": true,
-          "name": "Mapbox Labels",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
-          "pane": [
-            "base_labels",
-            550
-          ],
-          "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
-        },
         "mapbox_custom": {
-          "group": "basemaps",
+          "group": "Base maps",
           "name": "Mapbox Color",
           "attribution": [
             "mapbox",
             "osm"
-          ],
-          "pane": [
-            "base",
-            500
           ],
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
         },
         "here": {
-          "group": "basemaps",
+          "group": "Base maps",
           "name": "HERE Imagery",
           "attribution": [
             "here"
           ],
           "meta": "Satellite Imagery layer provided by HERE.",
-          "pane": [
-            "base",
-            500
-          ],
           "format": "tiles",
           "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
           "provider": "HERE"
         },
         "border": {
           "name": "Country Border",
-          "pane": [
-            "bounds",
-            510
-          ],
           "format": "mvt",
           "geom_3857": "geom_3857",
           "dbs": "XYZ",
@@ -887,10 +808,6 @@
         "grid": {
           "name": "Census Grid",
           "format": "grid",
-          "pane": [
-            "grid",
-            515
-          ],
           "dbs": "XYZ",
           "geom": "geomcntr",
           "grid_color": "pop__11",
@@ -1535,10 +1452,6 @@
           "format": "mvt",
           "geom_3857": "geom_3857",
           "geomj": "geomj",
-          "pane": [
-            "postal",
-            520
-          ],
           "dbs": "XYZ",
           "properties": "rank",
           "qID": "qid",
@@ -1718,10 +1631,6 @@
           "name": "Retail Places",
           "format": "mvt",
           "geom_3857": "geom_3857",
-          "pane": [
-            "bounds",
-            510
-          ],
           "dbs": "XYZ",
           "properties": "rp_type",
           "qID": "id",
@@ -1995,10 +1904,6 @@
         "retail_points": {
           "display": true,
           "name": "Retail Points",
-          "pane": [
-            "retail_points",
-            540
-          ],
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint",
@@ -2373,10 +2278,6 @@
           "meta": "Comparitive strength within Retail Place area.",
           "properties": "rp_id, pitch_raw, pitch_pct, pitch_dec",
           "format": "mvt",
-          "pane": [
-            "pitch",
-            540
-          ],
           "dbs": "XYZ",
           "qID": "id",
           "geom": "geom",
@@ -2486,10 +2387,6 @@
           "editable": "geometry",
           "restriction": "admin",
           "name": "Retail Points (editable)",
-          "pane": [
-            "retail_points",
-            540
-          ],
           "format": "cluster",
           "dbs": "XYZ",
           "table": "gb_retailpoint_editable",
@@ -2892,10 +2789,6 @@
           "editable": true,
           "name": "Catchments",
           "meta": "Calculate catchments from a distance matrix.",
-          "pane": [
-            "scratch",
-            520
-          ],
           "format": "geojson",
           "dbs": "XYZ",
           "table": "uk_catchments",
@@ -2995,6 +2888,18 @@
               "layer": "grid"
             }
           ]
+        },
+        "label": {
+          "group": "Base maps",
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": [
+            "mapbox",
+            "osm"
+          ],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
         }
       }
     }

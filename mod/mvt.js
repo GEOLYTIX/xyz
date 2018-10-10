@@ -2,51 +2,51 @@ module.exports = { get };
 
 async function get(req, res, fastify) {
 
-    const token = req.query.token ?
-        fastify.jwt.decode(req.query.token) : { access: 'public' };
+  const token = req.query.token ?
+    fastify.jwt.decode(req.query.token) : { access: 'public' };
 
-    let
-        layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
-        table = req.query.table,
-        geom_3857 = layer.geom_3857 ? layer.geom_3857 : 'geom_3857',
-        properties = layer.properties ? layer.properties : '',
-        tilecache = layer.tilecache ? layer.tilecache : null,
-        id = layer.qID ? layer.qID : null,
-        x = parseInt(req.params.x),
-        y = parseInt(req.params.y),
-        z = parseInt(req.params.z),
-        m = 20037508.34,
-        r = (m * 2) / (Math.pow(2, z));
+  let
+    layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
+    table = req.query.table,
+    geom_3857 = layer.geom_3857 ? layer.geom_3857 : 'geom_3857',
+    properties = layer.properties ? layer.properties : '',
+    tilecache = layer.tilecache ? layer.tilecache : null,
+    id = layer.qID ? layer.qID : null,
+    x = parseInt(req.params.x),
+    y = parseInt(req.params.y),
+    z = parseInt(req.params.z),
+    m = 20037508.34,
+    r = (m * 2) / (Math.pow(2, z));
 
-    // Check whether string params are found in the settings to prevent SQL injections.
-    if ([id, table, tilecache, layer, geom_3857, properties]
-        .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Parameter not acceptable.');
+  // Check whether string params are found in the settings to prevent SQL injections.
+  if ([id, table, tilecache, layer, geom_3857, properties]
+    .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
+    return res.code(406).send('Parameter not acceptable.');
+  }
+
+  if (properties) properties = `${properties},`;
+
+  if (tilecache) {
+    try {
+      var db_connection = await fastify.pg[layer.dbs].connect();
+      var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
+      db_connection.release();
+    } catch (err) {
+      console.error(err);
+      res.code(500).send('soz. it\'s not you. it\'s me.');
     }
+  }
 
-    if (properties) properties = `${properties},`;
+  if (result && result.rowCount === 1) {
+    res
+      .type('application/x-protobuf')
+      .code(200)
+      .send(result.rows[0].mvt);
+    return;
+  }
 
-    if (tilecache) {
-        try {
-            var db_connection = await fastify.pg[layer.dbs].connect();
-            var result = await db_connection.query(`SELECT mvt FROM ${tilecache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
-            db_connection.release();
-        } catch (err) {
-            console.error(err);
-            res.code(500).send("soz. it's not you. it's me.");
-        }
-    }
-
-    if (result && result.rowCount === 1) {
-        res
-            .type('application/x-protobuf')
-            .code(200)
-            .send(result.rows[0].mvt);
-        return
-    }
-
-    // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
-    var q = `
+  // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
+  var q = `
         ${tilecache ? `INSERT INTO ${tilecache} (z, x, y, mvt, tile)` : ''}
         SELECT
             ${z},
@@ -88,12 +88,12 @@ async function get(req, res, fastify) {
         ${tilecache ? 'RETURNING mvt;' : ';'}
         `;
 
-    var db_connection = await fastify.pg[layer.dbs].connect();
-    var result = await db_connection.query(q);
-    db_connection.release();
+  db_connection = await fastify.pg[layer.dbs].connect();
+  result = await db_connection.query(q);
+  db_connection.release();
 
-    res
-        .type('application/x-protobuf')
-        .code(200)
-        .send(result.rows[0].mvt);
+  res
+    .type('application/x-protobuf')
+    .code(200)
+    .send(result.rows[0].mvt);
 }

@@ -76,7 +76,7 @@ export default (layer, panel) => {
 
       delete layer.filter[_val];
       enable_option(_select, _val);
-      layer.getLayer(layer);
+      layer.get();
 
       // hide run button when last filter block is removed
       if (!_select.nextSibling.nextSibling.classList.contains('block')) {
@@ -131,11 +131,11 @@ export default (layer, panel) => {
                   if (e.target.checked) {
                     if (!layer.filter[val]['in']) layer.filter[val]['in'] = [];
                     layer.filter[val]['in'].push(__value);
-                    layer.getLayer(layer);
+                    layer.get();
                         
                   } else {
                     layer.filter[val]['in'].splice(layer.filter[val]['in'].indexOf(__value), 1);
-                    layer.getLayer(layer);
+                    layer.get();
                   }
                 }
               });
@@ -326,7 +326,7 @@ export default (layer, panel) => {
 
         // hide aggregate button if enabled 
         if (layer.aggregate_layer) this.parentNode.lastChild.style.display = 'none';
-        layer.getLayer(layer);
+        layer.get();
       }
     }
   });
@@ -349,7 +349,7 @@ export default (layer, panel) => {
       funct: () => {
         layer.xhr.open('GET', _xyz.host + '/api/location/aggregate?' + _xyz.utils.paramString({
           locale: _xyz.locale,
-          layer: layer.layer,
+          layer: layer.key,
           token: _xyz.token,
           filter: JSON.stringify(layer.filter) || ''
         }));
@@ -381,7 +381,7 @@ function filter_text(layer, _options) {
     let val = this.value;
     if (!layer.filter[_options.field]) layer.filter[_options.field] = {};
     layer.filter[_options.field][this.name] = val;
-    layer.getLayer(layer);
+    layer.get();
   }
 
   _xyz.utils.createElement({
@@ -409,7 +409,7 @@ function filter_numeric(layer, options) {
       layer.filter[options.field][this.name] = null;
     }
 
-    layer.getLayer(layer);
+    layer.get();
   }
 
   _xyz.utils.createElement({
@@ -465,12 +465,12 @@ function filter_range(layer, options) {
       layer.filter[options.field][e.target.name] = null;
     }
     //console.log(layer.filter);
-    //layer.getLayer(layer);
+    //layer.get();
   }
 
   function onchange(e) {
     //console.log(layer.filter);
-    layer.getLayer(layer);
+    layer.get();
   }
 
   let tl = _xyz.utils.createElement({
@@ -608,7 +608,7 @@ function filter_date(layer, options) {
         layer.filter[options.field] = {};
       } break;
     }
-    layer.getLayer(layer);
+    layer.get();
   }
 
   // labels
@@ -733,7 +733,7 @@ function filter_date(layer, options) {
         }
         e.target.style.display = 'none';
         layer.filter[options.field] = {};
-        layer.getLayer(layer);
+        layer.get();
       }
     },
     appendTo: options.appendTo

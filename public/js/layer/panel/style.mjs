@@ -158,7 +158,7 @@ export default (layer, panel) => {
 
               layer.style[_options.style][_options.property] = _hex;
 
-              layer.getLayer(layer);
+              layer.get();
             }
           },
           appendTo: _options.appendTo
@@ -280,22 +280,22 @@ export default (layer, panel) => {
     });
   }
 
+  function set_stroke_opacity(layer, opacity) {
+
+    if (layer.style.theme) {
+      Object.values(layer.style.theme.cat).map(entry => {
+        if (entry.style.stroke || entry.style.color) entry.style.opacity = (opacity / 100).toFixed(2);
+      });
+
+      if (layer.style.theme.other) layer.style.default.opacity = (opacity / 100).toFixed(2);
+
+    } else {
+      layer.style.default.opacity = (opacity / 100).toFixed(2);
+    }
+  }
+
   // Stroke opacity slider.
   if (layer.style.default.stroke || layer.style.default.color) {
-
-    function set_stroke_opacity(layer, opacity) {
-
-      if (layer.style.theme) {
-        Object.values(layer.style.theme.cat).map(entry => {
-          if (entry.style.stroke || entry.style.color) entry.style.opacity = (opacity / 100).toFixed(2);
-        });
-
-        if (layer.style.theme.other) layer.style.default.opacity = (opacity / 100).toFixed(2);
-
-      } else {
-        layer.style.default.opacity = (opacity / 100).toFixed(2);
-      }
-    }
 
     _xyz.utils.slider({
       title: 'Stroke opacity: ',
@@ -313,28 +313,28 @@ export default (layer, panel) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
           timeout = null;
-          layer.getLayer(layer);
+          layer.get();
         }, 500);
       }
     });
   }
 
+  function set_fill_opacity(layer, opacity) {
+    if (layer.style.theme) {
+
+      Object.values(layer.style.theme.cat).map(entry => {
+        if (entry.style.fill) entry.style.fillOpacity = (opacity / 100).toFixed(2);
+      });
+
+      if (layer.style.theme.other) layer.style.default.fillOpacity = (opacity / 100).toFixed(2);
+
+    } else {
+      layer.style.default.fillOpacity = (opacity / 100).toFixed(2);
+    }
+  }
+
   // Fill opacity slider.
   if (layer.style.default.fill || layer.style.fill) {
-
-    function set_fill_opacity(layer, opacity) {
-      if (layer.style.theme) {
-
-        Object.values(layer.style.theme.cat).map(entry => {
-          if (entry.style.fill) entry.style.fillOpacity = (opacity / 100).toFixed(2);
-        });
-
-        if (layer.style.theme.other) layer.style.default.fillOpacity = (opacity / 100).toFixed(2);
-
-      } else {
-        layer.style.default.fillOpacity = (opacity / 100).toFixed(2);
-      }
-    }
 
     _xyz.utils.slider({
       title: 'Fill opacity: ',
@@ -352,7 +352,7 @@ export default (layer, panel) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
           timeout = null;
-          layer.getLayer(layer);
+          layer.get();
         }, 500);
       }
     });

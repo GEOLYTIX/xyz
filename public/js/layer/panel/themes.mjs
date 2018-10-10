@@ -61,7 +61,7 @@ export default (layer, panel) => {
 
         layer.style.theme = layer.style.themes[e.target.selectedIndex];
         applyTheme(layer);
-        layer.getLayer(layer);
+        layer.get();
       }
     });
 
@@ -188,7 +188,7 @@ function polyCategorized(layer) {
           layer.style.theme.cat[item].style.stroke = false;
           layer.style.theme.cat[item].style.fill = false;
         }
-        layer.getLayer(layer);
+        layer.get();
       });
 
     y += 20;
@@ -223,7 +223,7 @@ function polyCategorized(layer) {
           layer.style.default.fill = false;
         }
 
-        layer.getLayer(layer);
+        layer.get();
       });
 
     y += 20;
@@ -286,7 +286,7 @@ function clusterCategorized(layer) {
           layer.filter[_field].ni.push(item);
         }
 
-        layer.getLayer(layer);
+        layer.get();
       });
 
     y += 20;
@@ -319,7 +319,7 @@ function clusterCategorized(layer) {
           layer.filter[_field].in = Object.keys(layer.style.theme.cat);
         }
 
-        layer.getLayer(layer);
+        layer.get();
       });
 
     y += 20;

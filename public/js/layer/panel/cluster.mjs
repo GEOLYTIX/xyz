@@ -85,7 +85,7 @@ export default (layer, panel) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
           timeout = null;
-          layer.getLayer(layer);
+          layer.get();
         }, 500);
       }
     }
@@ -136,7 +136,7 @@ export default (layer, panel) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
           timeout = null;
-          layer.getLayer(layer);
+          layer.get();
         }, 500);
       }
     }
@@ -183,7 +183,7 @@ export default (layer, panel) => {
       funct: e => {
         lblMarkerMin.innerHTML = e.target.value;
         layer.style.markerMin = parseInt(e.target.value);
-        layer.getLayer(layer);
+        layer.get();
       }
     }
   });
@@ -229,7 +229,7 @@ export default (layer, panel) => {
       funct: e => {
         lblMarkerMax.innerHTML = e.target.value;
         layer.style.markerMax = parseInt(e.target.value);
-        layer.getLayer(layer);
+        layer.get();
       }
     }
   });
@@ -243,24 +243,7 @@ export default (layer, panel) => {
 
       // Set the tin construction flag to the checked status.
       layer.cluster_logscale = e.target.checked;
-      layer.getLayer(layer);
+      layer.get();
     }
   });
-
-  // Add symbol to layer header.
-  if (layer.style.marker) {
-    _xyz.utils.createElement({
-      tag: 'img',
-      options: {
-        src: _xyz.utils.svg_symbols(layer.style.marker),
-        width: 20,
-        height: 20
-      },
-      style: {
-        float: 'right'
-      },
-      appendTo: layer.header
-    });
-  }
-
 };

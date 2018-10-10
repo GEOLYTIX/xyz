@@ -110,7 +110,7 @@ async function get(req, res, fastify) {
         ${geom}, 0.00001)
         ${filter_sql}
     ) kmeans
-  ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
+  ) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
 
   if (theme === 'categorized') q = `
   SELECT
@@ -144,7 +144,7 @@ async function get(req, res, fastify) {
         ${access_filter ? 'and ' + access_filter : ''}
       ) kmeans
     ) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
-  ) cluster GROUP BY kmeans_cid, dbscan_cid;`
+  ) cluster GROUP BY kmeans_cid, dbscan_cid;`;
 
   if (theme === 'graduated') q = `
   SELECT
@@ -173,12 +173,12 @@ async function get(req, res, fastify) {
       ${filter_sql}
       ${access_filter ? 'and ' + access_filter : ''}
     ) kmeans
-  ) dbscan GROUP BY kmeans_cid, dbscan_cid;`
+  ) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
 
   //console.log(q);
 
-  var db_connection = await fastify.pg[layer.dbs].connect();
-  var result = await db_connection.query(q);
+  db_connection = await fastify.pg[layer.dbs].connect();
+  result = await db_connection.query(q);
   db_connection.release();
 
   if (!theme) res.code(200).send(Object.keys(result.rows).map(record => {
@@ -188,7 +188,7 @@ async function get(req, res, fastify) {
       properties: {
         count: parseInt(result.rows[record].count)
       }
-    }
+    };
   }));
 
   if (theme === 'categorized') res.code(200).send(Object.keys(result.rows).map(record => {
@@ -199,7 +199,7 @@ async function get(req, res, fastify) {
         count: parseInt(result.rows[record].count),
         cat: Object.assign({}, ...result.rows[record].cat)
       }
-    }
+    };
   }));
 
   if (theme === 'graduated') res.code(200).send(Object.keys(result.rows).map(record => {
@@ -211,7 +211,7 @@ async function get(req, res, fastify) {
         size: parseInt(result.rows[record].size),
         sum: result.rows[record].sum
       }
-    }
+    };
   }));
 }
 
@@ -226,9 +226,9 @@ async function select(req, res, fastify) {
     table = req.query.table,
     id = layer.qID ? layer.qID : 'id';
   filter = req.query.filter ? JSON.parse(req.query.filter) : null,
-    label = layer.cluster_label ? layer.cluster_label : id,
-    count = parseInt(req.query.count),
-    lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
+  label = layer.cluster_label ? layer.cluster_label : id,
+  count = parseInt(req.query.count),
+  lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, id, label]
@@ -258,6 +258,6 @@ async function select(req, res, fastify) {
       id: result.rows[record].id,
       label: result.rows[record].label,
       lnglat: result.rows[record].lnglat
-    }
+    };
   }));
 }

@@ -2,7 +2,9 @@ import _xyz from '../../_xyz.mjs';
 
 import L from 'leaflet';
 
-export default layer => {
+export default function(){
+
+  const layer = this;
 
   // Load layer if display is true.
   if(layer.display){
@@ -51,7 +53,7 @@ function setIndices(layer){
 
   xhr.send(JSON.stringify({
     locale: _xyz.locale,
-    layer: layer.layer,
+    layer: layer.key,
     table: layer.table,
     idx: idx,
     token: _xyz.token}));
@@ -76,7 +78,7 @@ function loadLayer(layer) {
   // Build XHR request.
   layer.xhr.open('GET', _xyz.host + '/api/cluster/get?' + _xyz.utils.paramString({
     locale: _xyz.locale,
-    layer: layer.layer,
+    layer: layer.key,
     table: layer.table,
     kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
     dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
@@ -200,7 +202,7 @@ function addClusterToLayer(cluster, layer) {
 
       // Create marker from icon and iconSize.
       let marker = L.marker(latlng, {
-        pane: layer.pane[0],
+        pane: layer.key,
         zIndexOffset: parseInt(1000 - 1000 / c_max * point.properties.count),
         icon: L.icon({
           iconUrl: icon,
@@ -235,7 +237,7 @@ function clusterMouseClick(e, layer) {
 
   xhr.open('GET', _xyz.host + '/api/cluster/select?' + _xyz.utils.paramString({
     locale: _xyz.locale,
-    layer: layer.layer,
+    layer: layer.key,
     table: layer.table,
     filter: JSON.stringify(layer.filter),
     count: count > 99 ? 99 : count,
@@ -259,7 +261,7 @@ function clusterMouseClick(e, layer) {
 
       if (cluster.length === 1) {
         _xyz.ws.select.selectLayerFromEndpoint({
-          layer: layer.layer,
+          layer: layer.key,
           table: layer.table,
           id: cluster[0].id,
           marker: cluster[0].lnglat
@@ -295,7 +297,7 @@ function clusterMouseClick(e, layer) {
         if (_xyz.view_mode === 'mobile') {
 
           // Remove the line marker which connects the cell with the drop down list;
-          if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
+          if (layer.keySelectionLine) _xyz.map.removeLayer(layer.keySelectionLine);
 
           let dom = {
             map: document.getElementById('Map'),
@@ -317,7 +319,7 @@ function clusterMouseClick(e, layer) {
           _xyz.map.panBy([0, -shiftY]);
 
           // Draw line marker which connects hex cell with drop down.
-          layer.layerSelectionLine = L.marker(lnglat.reverse(), {
+          layer.keySelectionLine = L.marker(lnglat.reverse(), {
             icon: L.icon({
               iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
               iconSize: [3, 1000],
@@ -327,7 +329,7 @@ function clusterMouseClick(e, layer) {
 
           // Button event to close the .location_drop.
           dom.location_drop__close.addEventListener('click', function () {
-            if (layer.layerSelectionLine) _xyz.map.removeLayer(layer.layerSelectionLine);
+            if (layer.keySelectionLine) _xyz.map.removeLayer(layer.keySelectionLine);
 
             _xyz.map.panBy([0, parseInt(dom.location_drop.clientHeight) / 2]);
 
@@ -342,7 +344,7 @@ function clusterMouseClick(e, layer) {
         for (let i = 0; i < location_table_rows.length; i++) {
           location_table_rows[i].addEventListener('click', e => {
             _xyz.ws.select.selectLayerFromEndpoint({
-              layer: layer.layer,
+              layer: layer.key,
               table: layer.table,
               id: e.target.parentNode.dataset.id,
               marker: e.target.parentNode.dataset.marker.split(',')

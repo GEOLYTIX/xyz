@@ -8,6 +8,14 @@ import layer_group from './group.mjs';
 
 import layer_toggle from './toggle.mjs';
 
+import layer_focus from './focus.mjs';
+
+import layer_show from './show.mjs';
+
+import layer_remove from './remove.mjs';
+
+import layer_icon from './icon.mjs';
+
 export default () => {
 
   // Empty the layers table.
@@ -16,14 +24,11 @@ export default () => {
   // Remove all existing layers from map.
   _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
 
+  _xyz.pane = 500;
+
   // Get the layers from the current locale.
   _xyz.layers = _xyz.ws.locales[_xyz.locale].layers;
   _xyz.layer_groups = {};
-
-  
-  // Set default attribution.
-  _xyz.attribution = ['leaflet', 'xyz'];
-
 
   // Set the layer display from hooks then remove layer hooks.
   if (_xyz.hooks.layers) Object.keys(_xyz.layers).forEach(layer => {
@@ -32,27 +37,17 @@ export default () => {
   _xyz.utils.removeHook('layers');
 
 
-  // Loop through the locale layers and build layer control elements.
+  // Loop through the layers and add to layers list.
   Object.keys(_xyz.layers).forEach(layer => {
 
-    // Assign layer key as layer property to layer.
-    _xyz.layers[layer].layer = layer;
+    // Assign layer key from object key.
+    _xyz.layers[layer].key = layer;
 
-    // Re-assign layer to be the layer object.
+    // Assign layer to be the layer object from array.
     layer = _xyz.layers[layer];
 
-    // Create layer style object if none exists.
+    // Set empty layer defaults if not defined in workspace.
     if (!layer.style) layer.style = {};
-
-    // if (!layer.style.default) layer.style.default = {
-    //   weight: 1,
-    //   color: '#333',
-    //   fill: true,
-    //   fillColor: '#333',
-    //   fillOpacity: 0.1
-    // };
-
-    // Set layer filter if it does not exist.
     if (!layer.filter) layer.filter = {};
 
     // Create new layer group if group does not exist yet.
@@ -70,12 +65,11 @@ export default () => {
       appendTo: layer.group ? _xyz.layer_groups[layer.group].container : document.getElementById('layers')
     });
 
-    // Assign layer name if not set and create layer header.
-    layer.name = layer.name || layer.layer;
+    // Create layer header.
     layer.header = _xyz.utils.createElement({
       tag: 'div',
       options: {
-        textContent: layer.name,
+        textContent: layer.name || layer.key,
         className: 'header'
       },
       style: {
@@ -93,97 +87,34 @@ export default () => {
       appendTo: layer.drawer
     });
 
+    // Increase pane counter and add layer pane to map.
+    _xyz.pane++;
+    _xyz.map.createPane(layer.key);
+    _xyz.map.getPane(layer.key).style.zIndex = _xyz.pane;
 
-    // Create the pane and set layers function.
-    layer.pane = layer.pane || ['default', 501];
-    _xyz.map.createPane(layer.pane[0]);
-    _xyz.map.getPane(layer.pane[0]).style.zIndex = layer.pane[1];
+    // Method to get data and redraw layer on map.
+    layer.get = layer_formats[layer.format];
 
-
-    // Assign getLayer function from format.
-    layer.getLayer = layer_formats[layer.format];
+    // Method to show layer on map.
+    layer.show = layer_show;
 
     // Method to remove layer from map.
-    layer.removeLayer = layer => {
-      layer.loader.style.display = 'none';
-      layer.clear_icon.textContent = 'layers_clear';
-      layer.display = false;
-      _xyz.utils.filterHook('layers', layer.layer);
-        
-      if (layer.attribution) layer.attribution.forEach(a => {
-        let foo = _xyz.attribution.indexOf(a);
-        _xyz.attribution.splice(foo, 1);
-      });
-        
-      attributionCheck();
-        
-      if (layer.L) _xyz.map.removeLayer(layer.L);
-        
-      if (layer.base) {
-        _xyz.map.removeLayer(layer.base);
-        layer.base = null;
-      }
-
-    };
+    layer.remove = layer_remove;
 
     // Create control to toggle layer visibility.
-    layer.clear_icon = layer_toggle(layer);
+    layer.toggle = layer_toggle(layer);
     
     // Create zoom to layer control
-    if (layer.cntr || layer.bounds) {
-      _xyz.utils.createElement({
-        tag: 'i',
-        options: {
-          textContent: 'search',
-          className: 'material-icons cursor noselect btn_header',
-          title: 'Pan to layer'
-        },
-        appendTo: layer.header,
-        eventListener: {
-          event: 'click',
-          funct: e => {
-            e.stopPropagation();
-
-            if (layer.display) {
-              layer.bounds ?
-                _xyz.map.flyToBounds(L.latLngBounds(layer.bounds)) :
-                _xyz.map.panTo(L.latLng(layer.cntr));
-
-              attributionCheck();
-
-              _xyz.layersCheck();
-
-            } else {
-              return false;
-            }
-          }
-        }
-      });
-    }
+    layer_focus(layer);
 
     //Add panel to layer control.
     layer_panels(layer);
 
-    // Push hook for display:true layer (default).
-    if (layer.display) {
-      _xyz.utils.pushHook('layers', layer.layer);
-      _xyz.attribution = _xyz.attribution.concat(layer.attribution || []);
+    //Add icon to layer header.
+    layer_icon(layer);
 
-      attributionCheck();
-    }
-
-    // get layer data.
-    layer.getLayer(layer);
+    // Show layer if layer display is true.
+    if (layer.display) layer.show();
+    
   });
-
 };
-
-function attributionCheck() {
-
-  // get attribution links and check whether the className is in the attribution list.
-  let links = document.querySelectorAll('.attribution > .links > a');
-
-  for (let i = 0; i < links.length; ++i) {
-    links[i].style.display = _xyz.attribution.indexOf(links[i].className) >= 0 ? 'inline-block' : 'none';
-  }
-}

@@ -199,7 +199,7 @@ export function update(record) {
           let changedElements = record.drawer.querySelectorAll('.changed');
           changedElements.forEach(el => el.classList.remove('changed'));
 
-          layer.getLayer(layer);
+          layer.get();
           try {
             record.location.M
               .getLayers()[0]
@@ -208,12 +208,12 @@ export function update(record) {
                   .getLayers()[0]
                   .getLatLng()
               );
-          } catch (err) { }
+          } catch (err) { console.error(err); }
         };
 
         xhr.send(JSON.stringify({
           locale: _xyz.locale,
-          layer: layer.layer,
+          layer: layer.key,
           table: record.location.table,
           id: record.location.id,
           infoj: record.location.infoj,
@@ -246,7 +246,7 @@ export function trash(record) {
 
         xhr.open('GET', _xyz.host + '/api/location/delete?' + _xyz.utils.paramString({
           locale: _xyz.locale,
-          layer: layer.layer,
+          layer: layer.key,
           table: record.location.table,
           id: record.location.id,
           token: _xyz.token
@@ -257,7 +257,7 @@ export function trash(record) {
           if (e.target.status !== 200) return;
 
           _xyz.map.removeLayer(layer.L);
-          layer.getLayer(layer);
+          layer.get();
           record.drawer.remove();
     
           _xyz.utils.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
