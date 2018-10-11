@@ -7,9 +7,10 @@ import 'leaflet.vectorgrid';
 export default function(){
 
   const layer = this;
+  layer.loaded = false;
 
   // Set locale to check whether locale is still current when data is returned from backend.
-  //const locale = _xyz.locale;
+  const locale = _xyz.locale;
 
   // Assign the table based on the zoom array.
   let zoom = _xyz.map.getZoom(),
@@ -23,87 +24,80 @@ export default function(){
   // Make drawer opaque if no table present.
   layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 
-  if (layer.table && layer.display) {
+  if (!layer.table || !layer.display) return _xyz.layersCheck(layer);
 
-    // Create new vector.xhr
-    layer.loaded = false;
-    layer.loader.style.display = 'block';
+  let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + _xyz.utils.paramString({
+      locale: _xyz.locale,
+      layer: layer.key,
+      table: layer.table,
+      properties: layer.properties,
+      token: _xyz.token
+    }),
+    options = {
+      rendererFactory: L.svg.tile,
+      interactive: (layer.infoj && layer.qID) || false,
+      pane: layer.key,
+      getFeatureId: (f) => f.properties.id,
+      vectorTileLayerStyles: {}
+    };
 
-    let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + _xyz.utils.paramString({
-        locale: _xyz.locale,
-        layer: layer.key,
-        table: layer.table,
-        properties: layer.properties,
-        token: _xyz.token
-      }),
-      options = {
-        rendererFactory: L.svg.tile,
-        interactive: (layer.infoj && layer.qID) || false,
-        pane: layer.key,
-        getFeatureId: (f) => f.properties.id,
-        vectorTileLayerStyles: {}
-      };
+  // set style for each layer
+  options.vectorTileLayerStyles[layer.key] = applyLayerStyle;
 
-    // set style for each layer
-    options.vectorTileLayerStyles[layer.key] = applyLayerStyle;
+  if (layer.L) _xyz.map.removeLayer(layer.L);
 
-    if (layer.L) _xyz.map.removeLayer(layer.L);
+  layer.L = L.vectorGrid.protobuf(url, options)
+    .on('error', err => console.error(err))
+    .on('load', () => {
+      //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
+      if (locale === _xyz.locale) _xyz.layersCheck(layer);
+    })
+    .on('click', e => {
+      if (e.layer.properties.selected) return;
 
-    layer.L = L.vectorGrid.protobuf(url, options)
-      .on('error', err => console.error(err))
-      .on('load', e => {
-        //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
-        layer.loaded = true;
-        layer.loader.style.display = 'none';
-        _xyz.layersCheck();
-      })
-      .on('click', e => {
-        if (e.layer.properties.selected) return;
+      e.layer.properties.selected = true;
 
-        e.layer.properties.selected = true;
-
-        function checkCurrentSelection(e) {
-          let check = false;
-          if (_xyz.hooks.select) {
-            _xyz.hooks.select.map(item => {
-              item = item.split('!');
-              if (item[1] === layer.key && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
-                check = true;
-              }
-            });
-          }
-          return check;
-        }
-
-        if (!checkCurrentSelection(e)) {
-          // set cursor to wait
-          let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
-
-          for (let el of els) {
-            el.classList += ' wait-cursor-enabled';
-          }
-          // get selection
-          _xyz.ws.select.selectLayerFromEndpoint({
-            layer: layer.key,
-            table: layer.table,
-            id: e.layer.properties.id,
-            marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+      function checkCurrentSelection(e) {
+        let check = false;
+        if (_xyz.hooks.select) {
+          _xyz.hooks.select.map(item => {
+            item = item.split('!');
+            if (item[1] === layer.key && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
+              check = true;
+            }
           });
-          e.layer.properties.selected = false;
-        } else {
-          //console.log('feature ' + e.layer.properties.id + ' already selected');
         }
+        return check;
+      }
+
+      if (!checkCurrentSelection(e)) {
+        // set cursor to wait
+        let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
+
+        for (let el of els) {
+          el.classList += ' wait-cursor-enabled';
+        }
+        // get selection
+        _xyz.ws.select.selectLayerFromEndpoint({
+          layer: layer.key,
+          table: layer.table,
+          id: e.layer.properties.id,
+          marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+        });
+        e.layer.properties.selected = false;
+      } else {
+        //console.log('feature ' + e.layer.properties.id + ' already selected');
+      }
 
 
-      })
-      .on('mouseover', e => {
-        e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || { 'color': '#090' });
-      })
-      .on('mouseout', e => {
-        e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
-      })
-      .addTo(_xyz.map);
-  }
+    })
+    .on('mouseover', e => {
+      e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight || { 'color': '#090' });
+    })
+    .on('mouseout', e => {
+      e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
+    })
+    .addTo(_xyz.map);
 
   function applyLayerStyle(properties, zoom) {
 
@@ -128,4 +122,4 @@ export default function(){
 
     return layer.style.default;
   }
-};
+}

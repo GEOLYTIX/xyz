@@ -668,20 +668,19 @@ input[type=range]::-moz-range-thumb {
   padding: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   width: 100%; }
-  .attribution .links {
+  .attribution #attribution_links {
     float: right;
     clear: right;
     font-family: ffmark_bold, sans-serif;
     font-size: 18px;
     font-size: 15px;
     text-shadow: 2px 2px #cf9; }
-    .attribution .links i {
+    .attribution #attribution_links i {
       font-size: 14px;
       font-size: 10px; }
-    .attribution .links a {
+    .attribution #attribution_links a {
       border-bottom: 2px solid black;
-      margin-left: 5px;
-      display: none; }
+      margin-left: 5px; }
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
     text-shadow: 2px 2px #cf9;

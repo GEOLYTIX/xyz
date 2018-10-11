@@ -63,7 +63,6 @@ export default groupKey => {
       event: 'click',
       funct: e => {
         e.stopPropagation();
-        //e.target.style.display = 'none';
     
         // Iterate through all layers and remove layer if layer is in group.
         Object.values(_xyz.layers).forEach(layer => {

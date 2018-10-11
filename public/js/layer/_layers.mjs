@@ -88,7 +88,7 @@ export default () => {
     });
 
     // Increase pane counter and add layer pane to map.
-    _xyz.pane++;
+    _xyz.pane += 2;
     _xyz.map.createPane(layer.key);
     _xyz.map.getPane(layer.key).style.zIndex = _xyz.pane;
 
@@ -115,6 +115,8 @@ export default () => {
 
     // Show layer if layer display is true.
     if (layer.display) layer.show();
+
+    if (_xyz.log) console.log(layer);
     
   });
 };

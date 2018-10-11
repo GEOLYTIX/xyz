@@ -909,18 +909,17 @@ input[type=range]::-moz-range-thumb {
   right: 5px;
   position: absolute;
   z-index: 999; }
-  .attribution .links {
+  .attribution #attribution_links {
     float: right;
     clear: right;
     font-family: ffmark_bold, sans-serif;
     font-size: 18px;
     text-shadow: 2px 2px #ccff90; }
-    .attribution .links i {
+    .attribution #attribution_links i {
       font-size: 14px; }
-    .attribution .links a {
+    .attribution #attribution_links a {
       border-bottom: 2px solid black;
-      margin-left: 5px;
-      display: none; }
+      margin-left: 5px; }
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
     text-shadow: 2px 2px #ccff90;

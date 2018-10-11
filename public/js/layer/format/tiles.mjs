@@ -5,26 +5,26 @@ import L from 'leaflet';
 export default function(){
 
   const layer = this;
+  layer.loaded = false;
+
+  // Set locale to check whether locale is still current when data is returned from backend.
+  const locale = _xyz.locale;
 
   if (layer.display) {
 
-    layer.loader.style.display = 'block';
-
+    // Augment request with token if provider is set in workspace.
+    // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.
     let uri = layer.provider ?
       _xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + _xyz.token :
       layer.URI;
 
-    layer.base = L.tileLayer(uri, {
-      pane: layer.key,
-      updateWhenIdle: true
-    })
-      .addTo(_xyz.map)
-      .on('loading', () => {
-        layer.loader.style.display = 'block';
-      })
-      .on('load', () => {
-        layer.loader.style.display = 'none';
-        //layersCheck();
-      });
+    // Assign the tile layer to the layer L object and add to map.
+    layer.L = L.tileLayer(uri, {
+      //updateWhenIdle: true,
+      pane: layer.key
+    }).addTo(_xyz.map).on('load', () => {
+      if (locale === _xyz.locale) _xyz.layersCheck(layer);
+    });
   }
+
 }

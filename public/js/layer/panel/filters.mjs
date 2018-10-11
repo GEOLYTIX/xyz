@@ -347,14 +347,17 @@ export default (layer, panel) => {
     eventListener: {
       event: 'click',
       funct: () => {
-        layer.xhr.open('GET', _xyz.host + '/api/location/aggregate?' + _xyz.utils.paramString({
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('GET', _xyz.host + '/api/location/aggregate?' + _xyz.utils.paramString({
           locale: _xyz.locale,
           layer: layer.key,
           token: _xyz.token,
           filter: JSON.stringify(layer.filter) || ''
         }));
 
-        layer.xhr.onload = e => {
+        xhr.onload = e => {
           if (e.target.status === 200) {
             let json = JSON.parse(e.target.response);
 
@@ -368,7 +371,7 @@ export default (layer, panel) => {
           }
         };
 
-        layer.xhr.send();
+        xhr.send();
       }
     }
   });

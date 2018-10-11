@@ -15,12 +15,6 @@ export default function() {
   // Remove layer.
   if (layer.L) _xyz.map.removeLayer(layer.L);
 
-  // Set the base key of tile layer to null after removing the layer.
-  if (layer.base) {
-    _xyz.map.removeLayer(layer.base);
-    layer.base = null;
-  }
-
   // Check whether other group layers are visible.
   if (layer.group) _xyz.layer_groups[layer.group].chkVisibleLayer();
 

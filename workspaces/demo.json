@@ -22,10 +22,10 @@
           "group": "Base maps",
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
+          "attribution": {
+            "© Mapbox" : "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
@@ -33,9 +33,9 @@
         "here": {
           "group": "Base maps",
           "name": "HERE Imagery",
-          "attribution": [
-            "here"
-          ],
+          "attribution": {
+            "© HERE" : "https://legal.here.com/us-en/terms/serviceterms"
+          },
           "meta": "Satellite Imagery layer provided by HERE.",
           "format": "tiles",
           "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
@@ -708,10 +708,10 @@
         "label": {
           "group": "Base maps",
           "name": "Mapbox Labels",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
+          "attribution": {
+            "© Mapbox" : "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
@@ -750,10 +750,10 @@
           "group": "Base maps",
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
+          "attribution": {
+            "© Mapbox" : "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
@@ -761,10 +761,10 @@
         "mapbox_custom": {
           "group": "Base maps",
           "name": "Mapbox Color",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
+          "attribution": {
+            "© Mapbox" : "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"
@@ -772,9 +772,9 @@
         "here": {
           "group": "Base maps",
           "name": "HERE Imagery",
-          "attribution": [
-            "here"
-          ],
+          "attribution": {
+            "© HERE" : "https://legal.here.com/us-en/terms/serviceterms"
+          },
           "meta": "Satellite Imagery layer provided by HERE.",
           "format": "tiles",
           "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
@@ -2893,10 +2893,10 @@
           "group": "Base maps",
           "display": true,
           "name": "Mapbox Labels",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
+          "attribution": {
+            "© Mapbox" : "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
           "provider": "MAPBOX"

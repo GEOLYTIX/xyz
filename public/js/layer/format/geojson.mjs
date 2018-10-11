@@ -5,10 +5,11 @@ import L from 'leaflet';
 export default function(){
 
   const layer = this;
+  layer.loaded = false;
 
   // Set locale to check whether locale is still current when data is returned from backend.
   const locale = _xyz.locale;
-
+  
   if (layer.arrayZoom) {
     let zoom = _xyz.map.getZoom(),
       zoomKeys = Object.keys(layer.arrayZoom),
@@ -24,13 +25,13 @@ export default function(){
 
   // Request layer data when table and display are true.
   if(layer.table && layer.display){
-    layer.loaded = false;
-    layer.loader.style.display = 'block';
-    layer.xhr = new XMLHttpRequest(); 
+    
+    const xhr = new XMLHttpRequest(); 
 
     // Build xhr request.
     let bounds = _xyz.map.getBounds();      
-    layer.xhr.open('GET', _xyz.host + '/api/geojson/get?' + _xyz.utils.paramString({
+    
+    xhr.open('GET', _xyz.host + '/api/geojson/get?' + _xyz.utils.paramString({
       locale: _xyz.locale,
       layer: layer.key,
       table: layer.table,
@@ -42,54 +43,53 @@ export default function(){
     }));
 
     // Draw layer on load event.
-    layer.xhr.onload = e => {
+    xhr.onload = e => {
 
-      if (e.target.status === 200 && layer.display && locale === _xyz.locale){
+      if (e.target.status !== 200 || !layer.display || locale !== _xyz.locale) return;
+      
+      // Create feature collection for vector features.
+      let features = JSON.parse(e.target.responseText);
 
-        // Create feature collection for vector features.
-        let features = JSON.parse(e.target.responseText);
+      // Check for existing layer and remove from map.
+      if (layer.L) _xyz.map.removeLayer(layer.L);
 
-        // Check for existing layer and remove from map.
-        if (layer.L) _xyz.map.removeLayer(layer.L);
-
-        // Add geoJSON feature collection to the map.
-        layer.L = L.geoJSON(features, {
-          style: applyLayerStyle,
-          pane: layer.key,
-          interactive: layer.infoj? true: false,
-          pointToLayer: function(point, latlng){
-            return L.circleMarker(latlng, {
-              radius: 9,
-              pane: layer.key
-            });
-          }
+      // Add geoJSON feature collection to the map.
+      layer.L = L.geoJSON(features, {
+        style: applyLayerStyle,
+        pane: layer.key,
+        interactive: layer.infoj? true: false,
+        pointToLayer: function(point, latlng){
+          return L.circleMarker(latlng, {
+            radius: 9,
+            pane: layer.key
+          });
+        }
+      })
+        .on('click', function(e){
+          _xyz.ws.select.selectLayerFromEndpoint({
+            layer: layer.key,
+            table: layer.table,
+            id: e.layer.feature.properties.id,
+            marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
+            editable: layer.editable
+          });
         })
-          .on('click', function(e){
-            _xyz.ws.select.selectLayerFromEndpoint({
-              layer: layer.key,
-              table: layer.table,
-              id: e.layer.feature.properties.id,
-              marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
-              editable: layer.editable
-            });
-          })
-          .on('mouseover', function(e){
-            e.layer.setStyle(layer.style.highlight);
-          })
-          .on('mouseout', function(e){
-            e.layer.setStyle(layer.style.default);
-          })
-          .addTo(_xyz.map);
+        .on('mouseover', function(e){
+          e.layer.setStyle(layer.style.highlight);
+        })
+        .on('mouseout', function(e){
+          e.layer.setStyle(layer.style.default);
+        })
+        .addTo(_xyz.map);
 
-        layer.loader.style.display = 'none';
-        layer.loaded = true;
-        _xyz.layersCheck();
+      _xyz.layersCheck(layer);
 
-        // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
-        if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
-      }
+      // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
+      if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
+  
     };
-    layer.xhr.send();
+    
+    xhr.send();
   }
 
   function applyLayerStyle(geojsonFeature){
@@ -115,4 +115,4 @@ export default function(){
     }
     return layer.style.default;
   }
-};
+}

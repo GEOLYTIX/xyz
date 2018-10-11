@@ -5,8 +5,7 @@ import workspace from './workspace.mjs';
 // Next will be the the application init function from the entry script.
 export default init => {
 
-  // Split url on token definition.
-  // Token must be the last parameter.
+  // Split url on token definition. Token must be the last parameter!
   const search = window.location.search.split('token=');
 
   // Immediately retrieve public workspace if no token was found in the URL.
@@ -58,15 +57,6 @@ const renewToken = () => {
 
     // Set timeout to renew token again.
     setTimeout(renewToken, 1*60*1000);
-
-    // Iterate through layers
-    Object.values(_xyz.layers).forEach(layer => {
-
-      // Set URL on base layer to acknowledge new token.
-      if (layer.base) layer.base.setUrl = layer.provider ?
-        _xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + _xyz.token :
-        layer.URI;
-    });
   };
   xhr.send();
 };

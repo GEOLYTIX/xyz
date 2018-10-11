@@ -5,6 +5,10 @@ import L from 'leaflet';
 export default function(){
 
   const layer = this;
+  layer.loaded = false;
+
+  // Set locale to check whether locale is still current when data is returned from backend.
+  const locale = _xyz.locale;
 
   // Load layer if display is true.
   if(layer.display){
@@ -22,100 +26,50 @@ export default function(){
     // Make drawer opaque if no table present.
     layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 
-    setIndices(layer); // aga test
-
-    if(layer.table) return loadLayer(layer);
-  }
-};
-
-// aga
-function setIndices(layer){
-  let xhr = new XMLHttpRequest();
-
-  let idx = {};
-
-  Object.values(layer.infoj).forEach(l => {
-    if(l.type === 'group'){
-      Object.values(l.items).forEach(item => {
-        if(item.filter === 'numeric') idx[item.field] = {};
-      });
-    } else {
-      if(l.filter === 'numeric') idx[l.field] = {};
-    }
-  });
-
-  xhr.open('POST', _xyz.host + '/api/idx?token=' + _xyz.token);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
-  xhr.onload = e => {
-    if (e.target.status === 200) layer.idx = JSON.parse(e.target.responseText);
-  };
-
-  xhr.send(JSON.stringify({
-    locale: _xyz.locale,
-    layer: layer.key,
-    table: layer.table,
-    idx: idx,
-    token: _xyz.token}));
-
-}
-
-function loadLayer(layer) {
-
-  // Set locale to check whether locale is still current when data is returned from backend.
-  const locale = _xyz.locale;
-
-  // Display loader animation.
-  layer.loaded = false;
-  layer.loader.style.display = 'block';
-
-  // Create XHR for fetching data from middleware.
-  layer.xhr = new XMLHttpRequest();
-
-  // Get bounds for request.
-  let bounds = _xyz.map.getBounds();
+    if(layer.table) {
     
-  // Build XHR request.
-  layer.xhr.open('GET', _xyz.host + '/api/cluster/get?' + _xyz.utils.paramString({
-    locale: _xyz.locale,
-    layer: layer.key,
-    table: layer.table,
-    kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
-    dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
-    theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : null,
-    cat: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : null,
-    size: layer.style.theme && layer.style.theme.size ? layer.style.theme.size : null,
-    filter: JSON.stringify(layer.filter),
-    west: bounds.getWest(),
-    south: bounds.getSouth(),
-    east: bounds.getEast(),
-    north: bounds.getNorth(),
-    token: _xyz.token
-  }));
-
-  // Process XHR onload.
-  layer.xhr.onload = e => {
-
-    // Status 204. No features returned.
-    if (e.target.status === 204) {
-      if (layer.L) _xyz.map.removeLayer(layer.L);
-      return loadLayer_complete(layer);
+      // Create XHR for fetching data from middleware.
+      const xhr = new XMLHttpRequest();
+    
+      // Get bounds for request.
+      let bounds = _xyz.map.getBounds();
+        
+      // Build XHR request.
+      xhr.open('GET', _xyz.host + '/api/cluster/get?' + _xyz.utils.paramString({
+        locale: _xyz.locale,
+        layer: layer.key,
+        table: layer.table,
+        kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
+        dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
+        theme: layer.style.theme && layer.style.theme.type ? layer.style.theme.type : null,
+        cat: layer.style.theme && layer.style.theme.field ? layer.style.theme.field : null,
+        size: layer.style.theme && layer.style.theme.size ? layer.style.theme.size : null,
+        filter: JSON.stringify(layer.filter),
+        west: bounds.getWest(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        north: bounds.getNorth(),
+        token: _xyz.token
+      }));
+    
+      // Process XHR onload.
+      xhr.onload = e => {
+    
+        if (locale !== _xyz.locale) return;
+    
+        // Status 204. No features returned.
+        if (e.target.status === 204) {
+          if (layer.L) _xyz.map.removeLayer(layer.L);
+          return xyz.layersCheck(layer);
+        }
+    
+        // Data is returned and the layer is still current.
+        if (e.target.status === 200 && layer.display && locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
+      };
+    
+      xhr.send();
     }
-
-    // Data is returned and the layer is still current.
-    if (e.target.status === 200 && layer.display && locale === _xyz.locale) return addClusterToLayer(JSON.parse(e.target.responseText), layer);
-  };
-  // Send XHR to middleware.
-  layer.xhr.send();
-
-}
-
-function loadLayer_complete(layer) {
-
-  // Hide loader animation and run layers check.
-  layer.loader.style.display = 'none';
-  layer.loaded = true;
-  return _xyz.layersCheck();
+  }
 }
 
 function addClusterToLayer(cluster, layer) {
@@ -225,7 +179,7 @@ function addClusterToLayer(cluster, layer) {
     .on('click', e => clusterMouseClick(e, layer))
     .addTo(_xyz.map);
 
-  return loadLayer_complete(layer);
+  return xyz.layersCheck(layer);
 
 }
 
@@ -249,13 +203,10 @@ function clusterMouseClick(e, layer) {
 
     if (xhr.status === 401) {
       document.getElementById('timeout_mask').style.display = 'block';
-      //console.log(e.target.response);
-      return loadLayer_complete(layer);
+      return xyz.layersCheck(layer);
     }
 
     if (xhr.status === 200) {
-            
-      //console.log(e);
 
       let cluster = JSON.parse(xhr.responseText);
 

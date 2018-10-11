@@ -5,6 +5,7 @@ import L from 'leaflet';
 export default function(){
 
   const layer = this;
+  layer.loaded = false;
 
   // Set locale to check whether locale is still current when data is returned from backend.
   const locale = _xyz.locale;
@@ -23,14 +24,13 @@ export default function(){
 
   // Request layer data when table and display are true.
   if(layer.table && layer.display){
-    layer.loaded = false;
-    layer.loader.style.display = 'block';
-    layer.xhr = new XMLHttpRequest(); 
+
+    const xhr = new XMLHttpRequest(); 
         
     // Open & send vector.xhr;
     let bounds = _xyz.map.getBounds();
 
-    layer.xhr.open('GET', _xyz.host + '/api/grid/get?' + _xyz.utils.paramString({
+    xhr.open('GET', _xyz.host + '/api/grid/get?' + _xyz.utils.paramString({
       locale: _xyz.locale,
       layer: layer.key,
       table: layer.table,
@@ -44,7 +44,7 @@ export default function(){
     }));
 
     // Draw layer on load event.
-    layer.xhr.onload = e => {
+    xhr.onload = e => {
 
       if (e.target.status === 200 && layer.display && locale === _xyz.locale) {
 
@@ -81,15 +81,12 @@ export default function(){
           }
         }).addTo(_xyz.map);
 
-        layer.loader.style.display = 'none';
-        layer.loaded = true;
-        _xyz.layersCheck();
+        _xyz.layersCheck(layer);
 
       }
     };
-    layer.xhr.send();
-    //_xyz.layersCheck();
-        
+    
+    xhr.send();       
   }
 
   function processGrid(data){

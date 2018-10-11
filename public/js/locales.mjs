@@ -32,9 +32,9 @@ export default () => {
       setLocaleDefaults();
 
       _xyz.setView(true);
+      
       _xyz.ws.gazetteer.init(true);
 
-      _xyz.utils.removeHook('layers');
       _xyz.initLayers();
       
       _xyz.ws.select.resetModule();
