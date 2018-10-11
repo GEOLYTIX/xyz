@@ -196,7 +196,7 @@ function selectResult(record, dom) {
   dom.input.value = record.innerText;
 
   if (record['data-source'] === 'glx') {
-    _xyz.ws.select.selectLayerFromEndpoint({
+    _xyz.selectLocation({
       layer: record['data-layer'],
       table: record['data-table'],
       id: record['data-id'],

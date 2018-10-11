@@ -78,7 +78,7 @@ export default function(){
           el.classList += ' wait-cursor-enabled';
         }
         // get selection
-        _xyz.ws.select.selectLayerFromEndpoint({
+        _xyz.selectLocation({
           layer: layer.key,
           table: layer.table,
           id: e.layer.properties.id,

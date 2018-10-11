@@ -47,7 +47,8 @@ function init() {
   _xyz.initLayers();
 
   // Initialize locations module.
-  _locations();
+  _xyz.initLocations = _locations;
+  _xyz.initLocations();
 
   // Initialize gazetteer module.
   if (_xyz.view_mode !== 'report') gazetteer();

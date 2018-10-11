@@ -66,7 +66,7 @@ export default function(){
         }
       })
         .on('click', function(e){
-          _xyz.ws.select.selectLayerFromEndpoint({
+          _xyz.selectLocation({
             layer: layer.key,
             table: layer.table,
             id: e.layer.feature.properties.id,

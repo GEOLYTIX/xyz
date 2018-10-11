@@ -211,7 +211,7 @@ function clusterMouseClick(e, layer) {
       let cluster = JSON.parse(xhr.responseText);
 
       if (cluster.length === 1) {
-        _xyz.ws.select.selectLayerFromEndpoint({
+        _xyz.selectLocation({
           layer: layer.key,
           table: layer.table,
           id: cluster[0].id,
@@ -294,7 +294,7 @@ function clusterMouseClick(e, layer) {
 
         for (let i = 0; i < location_table_rows.length; i++) {
           location_table_rows[i].addEventListener('click', e => {
-            _xyz.ws.select.selectLayerFromEndpoint({
+            _xyz.selectLocation({
               layer: layer.key,
               table: layer.table,
               id: e.target.parentNode.dataset.id,

@@ -18,7 +18,7 @@ import layer_icon from './icon.mjs';
 
 export default () => {
 
-  // Empty the layers table.
+  // Empty the layers list.
   document.getElementById('layers').innerHTML = '';
 
   // Remove all existing layers from map.

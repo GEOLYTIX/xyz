@@ -361,7 +361,7 @@ export default (layer, panel) => {
           if (e.target.status === 200) {
             let json = JSON.parse(e.target.response);
 
-            _xyz.ws.select.selectLayerFromEndpoint({
+            _xyz.selectLocation({
               layer: layer.aggregate_layer,
               table: _xyz.layers[layer.aggregate_layer].table,
               id: json.id,

@@ -25,19 +25,26 @@ export default () => {
     val: 'loc',
     selected: _xyz.locale,
     onchange: e => {
+
+      // Set the locale and remove hooks.
       _xyz.locale = e.target.value;
       _xyz.utils.removeHooks();
       _xyz.utils.setHook('locale', _xyz.locale);
 
+      // Set locale defaults.
       setLocaleDefaults();
 
+      // Set locale view.
       _xyz.setView(true);
       
+      // Init gazetteer
       _xyz.ws.gazetteer.init(true);
 
+      // Init layers
       _xyz.initLayers();
       
-      _xyz.ws.select.resetModule();
+      // Init locations.
+      _xyz.initLocations();
     }
   });
 

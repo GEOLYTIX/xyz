@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head data-dir = "{{:dir}}">
+<head data-dir="{{:dir}}">
     <title>{{:title}}</title>
     <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
 </head>
 
-<body data-viewmode = "desktop" data-nanoid = {{:nanoid}} {{:log}}>
+<body data-viewmode="desktop" data-nanoid={{:nanoid}} {{:log}}>
 
     <div class="mod_container">
 
@@ -32,9 +32,10 @@
                 <div id="layers" class="content"></div>
             </div>
 
-            <div id="Locations" class="module">
-
-
+            <div class="module">
+                <div class="title">Locations</div>
+                <div class="btn_text cursor">Clear all locations.</div>
+                <div id="locations" class="content"></div>
             </div>
 
             <div class="scrolly_spacer"></div>
@@ -106,7 +107,7 @@
                         <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
                         <feOffset dx='1' dy='1' result='offsetblur' />
                         <feMerge>
-                            <feMergeNode/>
+                            <feMergeNode />
                             <feMergeNode in='SourceGraphic' />
                         </feMerge>
                     </filter>
