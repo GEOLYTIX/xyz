@@ -6,9 +6,9 @@ import * as controls from './controls.mjs';
 
 export default record => {
 
-  _xyz.locations.parentElement.style.display = 'block';
+  _xyz.locations.dom.parentElement.style.display = 'block';
 
-  Object.values(_xyz.locations.children).forEach(el => el.classList.remove('expanded'));
+  Object.values(_xyz.locations.dom.children).forEach(el => el.classList.remove('expanded'));
 
   // Create drawer element to contain the header with controls and the infoj table with inputs.
   record.drawer = _xyz.utils.createElement({
@@ -69,15 +69,15 @@ export default record => {
   record.drawer.appendChild(addInfojToList(record));
 
   // Find free space and insert record.
-  let idx = _xyz.records.indexOf(record);
-  _xyz.locations.insertBefore(record.drawer, _xyz.locations.children[idx]);
+  let idx = _xyz.locations.list.indexOf(record);
+  _xyz.locations.dom.insertBefore(record.drawer, _xyz.locations.dom.children[idx]);
 
-  if (_xyz.view_mode === 'desktop') setTimeout(() => {
+  if (_xyz.view.mode === 'desktop') setTimeout(() => {
     let el = document.querySelector('.mod_container > .scrolly');
     el.scrollTop = el.clientHeight;
   }, 500);
 
   // Make select tab active on mobile device.
-  if (_xyz.activateLocationsTab) _xyz.activateLocationsTab();
+  if (_xyz.view.mobile) _xyz.view.mobile.activateLocationsTab();
 
 };

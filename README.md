@@ -28,7 +28,7 @@ Restructure of the \_xyz object.
 
 Workspace is now \_xyz.ws
 
-host, token, view_mode, log, nanoid on root \_xyz.*
+host, token, view.mode, log, nanoid on root \_xyz.*
 
 Utils are now in \_xyz.utils
 
@@ -100,7 +100,7 @@ Defaults should be in individual modules \_def in the same folder as the depende
 e.g.
 ```
 import * as _def from './_def.mjs';
-if (!_xyz.ws.select.records) _xyz.ws.select.records = _def.records;
+if (!_xyz.ws.select.layers.records) _xyz.ws.select.layers.records = _def.layers.records;
 ```
 
 

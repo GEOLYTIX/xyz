@@ -23,7 +23,7 @@ export default function(){
       //updateWhenIdle: true,
       pane: layer.key
     }).addTo(_xyz.map).on('load', () => {
-      if (locale === _xyz.locale) _xyz.layersCheck(layer);
+      if (locale === _xyz.locale) _xyz.layers.check(layer);
     });
   }
 

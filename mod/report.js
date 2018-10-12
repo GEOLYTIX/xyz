@@ -22,31 +22,7 @@ async function request(req, res) {
     title: global.appSettings.title || 'GEOLYTIX | XYZ',
     module_layers: './public/tmpl/layers.html',
     module_select: global.appSettings.select ? './public/tmpl/select.html' : null,
-    module_catchments: global.appSettings.catchments ? './public/tmpl/catchments.html' : null,
-    //btnDocumentation: global.appSettings.documentation ? '' : 'style="display: none;"',
-    //hrefDocumentation: global.appSettings.documentation ? appSettings.documentation : '',
-    btnReport: global.appSettings.report ? '' : 'style="display: none;"',
-    btnAdmin: (req.user && req.user.admin) ? '' : 'style="display: none;"',
-    btnSearch: global.appSettings.gazetteer ? '' : 'style="display: none;"',
-    btnLocate: global.appSettings.locate ? '' : 'style="display: none;"',
-    settings: `
-        <script>
-            const node_env = '${process.env.NODE_ENV}';
-            const host = '';
-            const hooks = ${req.session && req.session.hooks ? JSON.stringify(req.session.hooks) : false};
-            const _xyz = ${JSON.stringify(global.appSettings)};
-        </script>`
-    /*view_mode: 'desktop',
-        module_location: './public/tmpl/location.html',
-        module_hxgrid: './public/tmpl/hxgrid.html',
-        module_drivetime: './public/tmpl/drivetime.html',
-        module_statistics: './public/tmpl/statistics.html',
-        report_container: './public/tmpl/report.html',
-        localhost: process.env.LOCALHOST || '//localhost:3000',
-        hooks: JSON.stringify(req.body.hooks),
-        drivetime: drivetime_flag,
-        mapbox_token: process.env.MAPBOX,
-        settings: JSON.stringify(global.appSettings)*/
+    module_catchments: global.appSettings.catchments ? './public/tmpl/catchments.html' : null
   }), { waitUntil: 'domcontentloaded' });
 
   await page.addStyleTag({ path: './public/css/report.css' });

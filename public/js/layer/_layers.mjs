@@ -25,31 +25,30 @@ export default () => {
   _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
 
   // Get the layers from the current locale.
-  _xyz.layers = _xyz.ws.locales[_xyz.locale].layers;
-  _xyz.layer_groups = {};
+  _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
 
   // Set the layer display from hooks then remove layer hooks.
-  if (_xyz.hooks.layers) Object.keys(_xyz.layers).forEach(layer => {
-    _xyz.layers[layer].display = (_xyz.hooks.layers.indexOf(layer) > -1);
+  if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {
+    _xyz.layers.list[layer].display = (_xyz.hooks.current.layers.indexOf(layer) > -1);
   });
-  _xyz.utils.removeHook('layers');
+  _xyz.hooks.remove('layers');
 
 
   // Loop through the layers and add to layers list.
-  Object.keys(_xyz.layers).forEach(layer => {
+  Object.keys(_xyz.layers.list).forEach(layer => {
 
     // Assign layer key from object key.
-    _xyz.layers[layer].key = layer;
+    _xyz.layers.list[layer].key = layer;
 
     // Assign layer to be the layer object from array.
-    layer = _xyz.layers[layer];
+    layer = _xyz.layers.list[layer];
 
     // Set empty layer defaults if not defined in workspace.
     if (!layer.style) layer.style = {};
     if (!layer.filter) layer.filter = {};
 
     // Create new layer group if group does not exist yet.
-    if (layer.group && !_xyz.layer_groups[layer.group]) layer_group(layer.group);
+    if (layer.group && !_xyz.layers.groups[layer.group]) layer_group(layer.group);
 
     // Create layer drawer.
     layer.drawer = _xyz.utils.createElement({
@@ -60,7 +59,7 @@ export default () => {
       style: {
         display: layer.hidden ? 'none' : 'block'
       },
-      appendTo: layer.group ? _xyz.layer_groups[layer.group].container : document.getElementById('layers')
+      appendTo: layer.group ? _xyz.layers.groups[layer.group].container : document.getElementById('layers')
     });
 
     // Create layer header.
@@ -86,8 +85,8 @@ export default () => {
     });
 
     // Increase pane counter and add layer pane to map.
-    _xyz.pane += 2;
-    _xyz.panes.push(_xyz.map.createPane(layer.key));
+    _xyz.panes.next += 2;
+    _xyz.panes.list.push(_xyz.map.createPane(layer.key));
     _xyz.map.getPane(layer.key).style.zIndex = _xyz.pane;
 
     // Method to get data and redraw layer on map.

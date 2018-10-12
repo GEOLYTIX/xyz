@@ -1,48 +1,44 @@
 import _xyz from '../_xyz.mjs';
 
-import _records from './records.mjs';
-
 import select from './select.mjs';
-_xyz.selectLocation = select;
+_xyz.locations.select = select;
 
 import draw from './draw.mjs';
-_xyz.drawRecord = draw;
+_xyz.locations.draw = draw;
 
-import list from './list.mjs';
-_xyz.listRecord = list;
+import add from './add.mjs';
+_xyz.locations.add = add;
 
 export default () => {
 
   // Make select tab active on mobile device.
-  if (_xyz.activateLayersTab) _xyz.activateLayersTab();
+  if (_xyz.view.mobile) _xyz.view.mobile.activateLayersTab();
 
-  _xyz.locations = document.getElementById('locations');
+  _xyz.locations.dom = document.getElementById('locations');
 
   document.getElementById('clear_locations').addEventListener('click', () => {
-    _xyz.utils.removeHook('select');
-    _xyz.initLocations();
+    _xyz.hooks.remove('select');
+    _xyz.locations.init();
   });
 
   // Hide the Locations Module.
-  _xyz.locations.parentElement.style.display = 'none';
+  _xyz.locations.dom.parentElement.style.display = 'none';
 
   // Empty the locations list.
-  _xyz.locations.innerHTML = '';
+  _xyz.locations.dom.innerHTML = '';
   
-  if (_xyz.records) _xyz.records.forEach(record => {
+  _xyz.locations.list.forEach(record => {
     if (record.location && record.location.L) _xyz.map.removeLayer(record.location.L);
     if (record.location && record.location.M) _xyz.map.removeLayer(record.location.M);
     if (record.location && record.location.D) _xyz.map.removeLayer(record.location.D);
     record.location = null;
   });
-
-  _xyz.records = _records;
     
   // Set the layer display from hooks if present; Overwrites the default setting.
   // layer!table!id!lng!lat
-  if (_xyz.hooks.select) _xyz.hooks.select.split(',').forEach(hook => {
+  if (_xyz.hooks.current.select) _xyz.hooks.current.select.split(',').forEach(hook => {
     let params = hook.split('!');
-    _xyz.selectLocation({
+    _xyz.locations.select({
       layer: params[0],
       table: params[1],
       id: params[2],
@@ -50,6 +46,6 @@ export default () => {
     });
   });
 
-  _xyz.utils.removeHook('select');
+  _xyz.hooks.remove('select');
 
 };

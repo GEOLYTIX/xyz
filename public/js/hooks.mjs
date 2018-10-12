@@ -2,66 +2,64 @@ import _xyz from './_xyz.mjs';
 
 export default () => {
 
-  _xyz.hooks = {};
-
   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
-    _xyz.hooks[key] = value;
+    _xyz.hooks.current[key] = value;
   });
 
   // Set view hook containing lat, lng and zoom.
-  _xyz.utils.setViewHook = cntr => {
-    _xyz.hooks.lat = cntr.lat;
-    _xyz.hooks.lng = cntr.lng;
-    _xyz.hooks.z = _xyz.map.getZoom();
+  _xyz.hooks.setView = cntr => {
+    _xyz.hooks.current.lat = cntr.lat;
+    _xyz.hooks.current.lng = cntr.lng;
+    _xyz.hooks.current.z = _xyz.map.getZoom();
     try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks));
-    } catch (me) { }
+      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+    } catch (me) { console.log(me); }
   };
 
-  // Add kvp hook to _xyz.hooks and URI.
-  _xyz.utils.setHook = (key, val) => {
-    _xyz.hooks[key] = val;
+  // Add kvp hook to _xyz.hooks.current and URI.
+  _xyz.hooks.set = (key, val) => {
+    _xyz.hooks.current[key] = val;
     try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks));
-    } catch (me) { }
+      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+    } catch (me) { console.log(me); }
   };
 
-  // Remove hook from _xyz.hooks and URI.
-  _xyz.utils.removeHook = key => {
-    delete _xyz.hooks[key];
+  // Remove hook from _xyz.hooks.current and URI.
+  _xyz.hooks.remove = key => {
+    delete _xyz.hooks.current[key];
     try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks));
-    } catch (me) { }
+      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+    } catch (me) { console.log(me); }
   };
 
   // Remove all hooks.
-  _xyz.utils.removeHooks = () => {
-    Object.keys(_xyz.hooks).map(key => delete _xyz.hooks[key]);
+  _xyz.hooks.removeAll = () => {
+    Object.keys(_xyz.hooks.current).map(key => delete _xyz.hooks.current[key]);
     try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks));
-    } catch (me) { }
+      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+    } catch (me) { console.log(me); }
   };
 
   // Push key into an array hook.
-  _xyz.utils.pushHook = (key, val) => {
-    if (_xyz.hooks[key]) {
-      _xyz.hooks[key].push(val);
+  _xyz.hooks.push = (key, val) => {
+    if (_xyz.hooks.current[key]) {
+      _xyz.hooks.current[key].push(val);
     } else {
-      _xyz.hooks[key] = [val];
+      _xyz.hooks.current[key] = [val];
     }
     try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks));
-    } catch (me) { }
+      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+    } catch (me) { console.log(me); }
   };
 
   // Filter key from an array hook.
-  _xyz.utils.filterHook = (key, val) => {
-    if (_xyz.hooks[key]) {
-      _xyz.hooks[key] = _xyz.hooks[key].filter(el => el !== val);
-      if (_xyz.hooks[key].length === 0) delete _xyz.hooks[key];
+  _xyz.hooks.filter = (key, val) => {
+    if (_xyz.hooks.current[key]) {
+      _xyz.hooks.current[key] = _xyz.hooks.current[key].filter(el => el !== val);
+      if (_xyz.hooks.current[key].length === 0) delete _xyz.hooks.current[key];
       try {
-        history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks));
-      } catch (me) { }
+        history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+      } catch (me) { console.log(me); }
     }
   };
 

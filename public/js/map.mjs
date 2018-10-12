@@ -5,7 +5,7 @@ import L from 'leaflet';
 import * as attribution from './attribution.mjs';
 
 import _panes from './panes.mjs';
-_xyz.initPanes = _panes;
+_xyz.panes = {init: _panes};
 
 export default () => {
 
@@ -18,12 +18,12 @@ export default () => {
     minZoom: _xyz.ws.locales[_xyz.locale].minZoom,
     maxZoom: _xyz.ws.locales[_xyz.locale].maxZoom
   })
-    .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
+    .setView([parseFloat(_xyz.hooks.current.lat || 0), parseFloat(_xyz.hooks.current.lng || 0)], parseInt(_xyz.hooks.current.z || 15));
 
-  _xyz.initPanes();
+  _xyz.panes.init();
 
   // Set view and bounds;
-  _xyz.setView = (fit) => {
+  _xyz.view.set = (fit) => {
     _xyz.map.setMaxBounds(_xyz.ws.locales[_xyz.locale].bounds.leaflet);
     _xyz.map.setMinZoom(_xyz.ws.locales[_xyz.locale].minZoom);
     _xyz.map.setMaxZoom(_xyz.ws.locales[_xyz.locale].maxZoom);
@@ -33,7 +33,7 @@ export default () => {
   };
 
   // Set the map view; fit is true for !hooks.z
-  _xyz.setView(!_xyz.hooks.z);
+  _xyz.view.set(!_xyz.hooks.current.z);
 
   // Zoom functions
   const btnZoomIn = document.getElementById('btnZoomIn');
@@ -73,7 +73,7 @@ export default () => {
     _xyz.frame = L.rectangle(_xyz.map.getBounds(), {color: '#cf9', fill: false, pane: 'rectangle'}).addTo(_xyz.map);
 
     // Remove layers from map.
-    Object.values(_xyz.layers).forEach(layer => {
+    Object.values(_xyz.layers.list).forEach(layer => {
       if (layer.L) _xyz.map.removeLayer(layer.L);
     });
   }
@@ -98,10 +98,10 @@ export default () => {
     chkZoomBtn(_xyz.map.getZoom());
 
     // Set the hook for the map view.
-    _xyz.utils.setViewHook(_xyz.map.getCenter());
+    _xyz.hooks.setView(_xyz.map.getCenter());
 
     // Load layer which have display set to true.
-    Object.values(_xyz.layers).forEach(layer => {
+    Object.values(_xyz.layers.list).forEach(layer => {
       if (layer.display) {
         layer.loader.style.display = 'block';
         layer.get();
@@ -110,7 +110,7 @@ export default () => {
   }
 
   // Function to check whether all display layers are drawn.
-  _xyz.layersCheck = layer => {
+  _xyz.layers.check = layer => {
 
     // Set layer to loaded and hide the loader.
     if (layer) {
@@ -127,7 +127,7 @@ export default () => {
     
     // Determine whether all layers with display true are loaded.
     let chkScore = 0;
-    Object.values(_xyz.layers).forEach(layer => {
+    Object.values(_xyz.layers.list).forEach(layer => {
       chkScore += layer.display ? 1 : 0;
       chkScore -= layer.display && layer.loaded ? 1 : 0;
     });

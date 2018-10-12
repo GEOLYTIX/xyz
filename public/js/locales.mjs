@@ -3,10 +3,10 @@ import _xyz from './_xyz.mjs';
 export default () => {
 
   // Set locale from hook or set first locale from locales array.
-  _xyz.locale = _xyz.hooks.locale || Object.keys(_xyz.ws.locales)[0];
+  _xyz.locale = _xyz.hooks.current.locale || Object.keys(_xyz.ws.locales)[0];
 
   // Set hook for locale if it doesn't exist.
-  if (!_xyz.hooks.locale) _xyz.utils.setHook('locale', _xyz.locale);
+  if (!_xyz.hooks.current.locale) _xyz.hooks.set('locale', _xyz.locale);
 
   setLocaleDefaults();
 
@@ -28,26 +28,26 @@ export default () => {
 
       // Set the locale and remove hooks.
       _xyz.locale = e.target.value;
-      _xyz.utils.removeHooks();
-      _xyz.utils.setHook('locale', _xyz.locale);
+      _xyz.hooks.removeAll();
+      _xyz.hooks.set('locale', _xyz.locale);
 
       // Set locale defaults.
       setLocaleDefaults();
 
       // Set drawing panes.
-      _xyz.initPanes();
+      _xyz.panes.init();
 
       // Set locale view.
-      _xyz.setView(true);
+      _xyz.view.set(true);
       
       // Init gazetteer.
-      _xyz.initGazetteer();
+      _xyz.gazetteer.init();
 
       // Init layers.
-      _xyz.initLayers();
+      _xyz.layers.init();
       
       // Init locations.
-      _xyz.initLocations();
+      _xyz.locations.init();
     }
   });
 

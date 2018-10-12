@@ -10,10 +10,10 @@ export default function () {
   layer.toggle.textContent = 'layers';
 
   // Push the layer into the layers hook array.
-  _xyz.utils.pushHook('layers', layer.key);
+  _xyz.hooks.push('layers', layer.key);
 
   // Check whether other group layers are visible.
-  if (layer.group) _xyz.layer_groups[layer.group].chkVisibleLayer();
+  if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
 
   // Add the layer to map.
   layer.get();

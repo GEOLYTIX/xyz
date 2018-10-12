@@ -20,17 +20,17 @@ export function clear(record) {
         e.stopPropagation();
         record.drawer.remove();
 
-        _xyz.utils.filterHook('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+        _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
         if (record.location.L) _xyz.map.removeLayer(record.location.L);
         if (record.location.M) _xyz.map.removeLayer(record.location.M);
         if (record.location.D) _xyz.map.removeLayer(record.location.D);
         record.location = null;
 
         // Find free records in locations array.
-        let freeRecords = _xyz.records.filter(record => record.location);
+        let freeRecords = _xyz.locations.list.filter(record => record.location);
 
         // Return from selection if no free record is available.
-        if (freeRecords.length === 0) _xyz.initLocations();
+        if (freeRecords.length === 0) _xyz.locations.init();
 
       }
     }
@@ -184,7 +184,8 @@ export function update(record) {
       funct: e => {
         e.stopPropagation();
 
-        let layer = _xyz.layers[record.location.layer],
+        let
+          layer = _xyz.layers.list[record.location.layer],
           xhr = new XMLHttpRequest();
 
         xhr.open('POST', _xyz.host + '/api/location/update?token=' + _xyz.token);
@@ -242,7 +243,7 @@ export function trash(record) {
       funct: e => {
         e.stopPropagation();
 
-        let layer = _xyz.layers[record.location.layer],
+        let layer = _xyz.layers.list[record.location.layer],
           xhr = new XMLHttpRequest();
 
         xhr.open('GET', _xyz.host + '/api/location/delete?' + _xyz.utils.paramString({
@@ -261,17 +262,17 @@ export function trash(record) {
           layer.get();
           record.drawer.remove();
     
-          _xyz.utils.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+          _xyz.hooks.filter('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
           if (record.location.L) _xyz.map.removeLayer(record.location.L);
           if (record.location.M) _xyz.map.removeLayer(record.location.M);
           if (record.location.D) _xyz.map.removeLayer(record.location.D);
           record.location = null;
     
-          let freeRecords = _xyz.ws.select.records.filter(record => {
+          let freeRecords = _xyz.ws.select.layers.records.filter(record => {
             if (!record.location) return record;
           });
     
-          if (freeRecords.length === _xyz.ws.select.records.length) _xyz.ws.select.resetModule();
+          if (freeRecords.length === _xyz.ws.select.layers.records.length) _xyz.ws.select.resetModule();
         };
         xhr.send();
       }

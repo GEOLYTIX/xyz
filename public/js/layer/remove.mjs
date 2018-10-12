@@ -10,15 +10,15 @@ export default function() {
   layer.toggle.textContent = 'layers_clear';
 
   // Filter the layer from the layers hook array.
-  _xyz.utils.filterHook('layers', layer.key);
+  _xyz.hooks.filter('layers', layer.key);
   
   // Remove layer.
   if (layer.L) _xyz.map.removeLayer(layer.L);
 
   // Check whether other group layers are visible.
-  if (layer.group) _xyz.layer_groups[layer.group].chkVisibleLayer();
+  if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
 
   // Run layers check to update attribution and send signal that map render has completed.
-  _xyz.layersCheck();
+  _xyz.layers.check();
 
 }

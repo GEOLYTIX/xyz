@@ -81,7 +81,7 @@ export default function(){
           }
         }).addTo(_xyz.map);
 
-        _xyz.layersCheck(layer);
+        _xyz.layers.check(layer);
 
       }
     };
@@ -154,4 +154,4 @@ export default function(){
     // Apply math function to the filtered numbers array.
     return Math[type].apply(null, numbers.map(val => val[idx]));
   }
-};
+}

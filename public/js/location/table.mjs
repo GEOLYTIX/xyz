@@ -22,15 +22,15 @@ export default record => {
   // Adds info about layer and group to infoj
   record.location.infoj.unshift({
     'label': 'Layer',
-    'value': _xyz.layers[record.location.layer].name,
+    'value': _xyz.layers.list[record.location.layer].name,
     'type': 'text',
     'inline': true,
     'locked': true
   });
 
-  if (_xyz.layers[record.location.layer].group) record.location.infoj.unshift({
+  if (_xyz.layers.list[record.location.layer].group) record.location.infoj.unshift({
     'label': 'Group',
-    'value': _xyz.layers[record.location.layer].group,
+    'value': _xyz.layers.list[record.location.layer].group,
     'type': 'text',
     'inline': true,
     'locked': true

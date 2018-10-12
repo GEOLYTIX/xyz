@@ -66,7 +66,7 @@ export default function(){
         }
       })
         .on('click', function(e){
-          _xyz.selectLocation({
+          _xyz.locations.select({
             layer: layer.key,
             table: layer.table,
             id: e.layer.feature.properties.id,
@@ -82,7 +82,7 @@ export default function(){
         })
         .addTo(_xyz.map);
 
-      _xyz.layersCheck(layer);
+      _xyz.layers.check(layer);
 
       // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
       if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);

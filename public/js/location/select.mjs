@@ -3,7 +3,7 @@ import _xyz from '../_xyz.mjs';
 export default location => {
 
   // Find free records in locations array.
-  let freeRecords = _xyz.records.filter(record => !record.location);
+  let freeRecords = _xyz.locations.list.filter(record => !record.location);
 
   // Return from selection if no free record is available.
   if (freeRecords.length === 0) return;
@@ -13,7 +13,7 @@ export default location => {
   record.location = {};
 
   // Get layer from where the location should be selected.
-  let layer = _xyz.layers[location.layer];
+  let layer = _xyz.layers.list[location.layer];
 
   // Prevent crash for select from hook when layer is no accessible to user.
   if (!layer) return;
@@ -22,9 +22,9 @@ export default location => {
   layer.infoj.forEach(entry => {
     if (typeof entry.layer === 'string') {
       entry.layer = {
-        table: _xyz.layers[entry.layer].table,
-        geom: _xyz.layers[entry.layer].geom || 'geom',
-        filter: _xyz.layers[entry.layer].filter || {}
+        table: _xyz.layers.list[entry.layer].table,
+        geom: _xyz.layers.list[entry.layer].geom || 'geom',
+        filter: _xyz.layers.list[entry.layer].filter || {}
       };
     }
   });
@@ -84,7 +84,7 @@ export default location => {
     record.location = location;
 
     // Push the hook for the location.
-    _xyz.utils.pushHook('select',
+    _xyz.hooks.push('select',
       record.location.layer + '!' +
       record.location.table + '!' +
       record.location.id + '!' +
@@ -93,10 +93,10 @@ export default location => {
     );
   
     // Draw the record to the map.
-    _xyz.drawRecord(record);
+    _xyz.locations.draw(record);
 
     // List the record
-    _xyz.listRecord(record);
+    _xyz.locations.add(record);
 
   };
 

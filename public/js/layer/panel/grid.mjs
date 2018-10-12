@@ -14,14 +14,14 @@ export default (layer, panel) => {
     });
 
   // Create grid_seize dropdown.
-  layer.grid_size = _xyz.hooks['grid_size'] || layer.grid_size || Object.keys(layer.queryFields[0])[0];
+  layer.grid_size = _xyz.hooks.current['grid_size'] || layer.grid_size || Object.keys(layer.queryFields[0])[0];
   _xyz.utils.dropdown({
     appendTo: legend,
     entries: layer.queryFields,
     selected: layer.grid_size,
     onchange: e => {
       layer.grid_size = e.target.value;
-      _xyz.utils.setHook('grid_size', layer.grid_size);
+      _xyz.hooks.set('grid_size', layer.grid_size);
       layer.get();
     }
   });
@@ -30,23 +30,23 @@ export default (layer, panel) => {
   let svg = d3_selection.select(legend).append('svg').attr('width', width);
 
   // Create grid_color dropdown.
-  layer.grid_color = _xyz.hooks['grid_color'] || layer.grid_color || Object.keys(layer.queryFields[1])[0];
+  layer.grid_color = _xyz.hooks.current['grid_color'] || layer.grid_color || Object.keys(layer.queryFields[1])[0];
   _xyz.utils.dropdown({
     appendTo: legend,
     entries: layer.queryFields,
     selected: layer.grid_color,
     onchange: e => {
       layer.grid_color = e.target.value;
-      _xyz.utils.setHook('grid_color', layer.grid_color);
+      _xyz.hooks.set('grid_color', layer.grid_color);
       layer.get();
     }
   });
 
   // Create grid_ratio checkbox.
-  layer.grid_ratio = layer.grid_ratio || _xyz.hooks.grid_ratio || false;
+  layer.grid_ratio = layer.grid_ratio || _xyz.hooks.current.grid_ratio || false;
   _xyz.utils.checkbox({
     label: 'Display colour values as a ratio to the size value.',
-    checked: layer.grid_ratio || _xyz.hooks.grid_ratio,
+    checked: layer.grid_ratio || _xyz.hooks.current.grid_ratio,
     appendTo: legend,
     onChange: e => {
 
@@ -55,15 +55,15 @@ export default (layer, panel) => {
 
       // Set grid_ratio hook if true.
       layer.grid_ratio ?
-        _xyz.utils.setHook('grid_ratio', true) :
-        _xyz.utils.removeHook('grid_ratio');
+        _xyz.hooks.set('grid_ratio', true) :
+        _xyz.hooks.remove('grid_ratio');
 
       layer.get();
     }
   });
 
 
-  //if (layer.chkGridRatio) _xyz.utils.setHook('grid_ratio', true);
+  //if (layer.chkGridRatio) _xyz.hooks.set('grid_ratio', true);
 
   // Add default style.range if none exists.
   if (!layer.style) layer.style = {};

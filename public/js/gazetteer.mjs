@@ -13,26 +13,26 @@ export default () => {
       fillOpacity: 0.2,
       fill: true
     },
-    btnSearch: document.getElementById('btnGazetteer'),
+    toggle: document.getElementById('btnGazetteer'),
     group: document.getElementById('Gazetteer'),
     input: document.querySelector('#Gazetteer > input'),
     clear: document.querySelector('#Gazetteer .clear'),
     loader: document.querySelector('#Gazetteer > .loader'),
-    result: document.querySelector('#Gazetteer > ul')
+    result: document.querySelector('#Gazetteer > ul'),
   };
 
   // Gazetteer init which is called on change of locale.
-  _xyz.initGazetteer = () => {
+  _xyz.gazetteer.init = () => {
 
     // Hide gazetteer button if no gazetteer is set for the locale.
     if (!_xyz.ws.locales[_xyz.locale].gazetteer) {
-      _xyz.gazetteer.btnSearch.classList.remove('active');
-      _xyz.gazetteer.btnSearch.style.display = 'none';
+      _xyz.gazetteer.toggle.classList.remove('active');
+      _xyz.gazetteer.toggle.style.display = 'none';
       _xyz.gazetteer.group.style.display = 'none';
       return;
 
     } else {
-      _xyz.gazetteer.btnSearch.style.display = 'block';
+      _xyz.gazetteer.toggle.style.display = 'block';
     }
 
     // Empty input value, results and set placeholder.
@@ -44,11 +44,11 @@ export default () => {
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
   };
-  _xyz.initGazetteer();
+  _xyz.gazetteer.init();
 
 
   // Toggle visibility of the gazetteer group
-  _xyz.gazetteer.btnSearch.addEventListener('click', e => {
+  _xyz.gazetteer.toggle.addEventListener('click', e => {
     e.target.classList.toggle('active');
     _xyz.gazetteer.group.style.display =
             _xyz.gazetteer.group.style.display === 'block' ? 'none' : 'block';
@@ -198,7 +198,7 @@ export default () => {
     _xyz.gazetteer.input.value = record.innerText;
   
     if (record['data-source'] === 'glx') {
-      _xyz.selectLocation({
+      _xyz.locations.select({
         layer: record['data-layer'],
         table: record['data-table'],
         id: record['data-id'],

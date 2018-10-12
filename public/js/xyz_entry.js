@@ -20,18 +20,13 @@ import gazetteer from './gazetteer.mjs';
 
 import locate from './locate.mjs';
 
-_xyz.log = typeof document.body.dataset.log !== 'undefined';
-_xyz.nanoid = document.body.dataset.nanoid;
-_xyz.view_mode = document.body.dataset.viewmode;
-_xyz.host = document.head.dataset.dir;
-
 token(init);
 
 function init() {
  
   // Set platform specific interface functions.
-  if (_xyz.view_mode === 'mobile') mobile();
-  if (_xyz.view_mode === 'desktop') desktop();
+  if (_xyz.view.mode === 'mobile') mobile();
+  if (_xyz.view.mode === 'desktop') desktop();
 
   // Initiate hooks module.
   hooks();
@@ -43,18 +38,18 @@ function init() {
   map();
 
   // Initialize layers.
-  _xyz.initLayers = _layers;
-  _xyz.initLayers();
+  _xyz.layers.init = _layers;
+  _xyz.layers.init();
 
   // Initialize locations module.
-  _xyz.initLocations = _locations;
-  _xyz.initLocations();
+  _xyz.locations.init = _locations;
+  _xyz.locations.init();
 
   // Initialize gazetteer module.
-  if (_xyz.view_mode !== 'report') gazetteer();
+  if (_xyz.view.mode !== 'report') gazetteer();
 
   // Initialize locate module.
-  if (_xyz.ws.locate && _xyz.view_mode !== 'report') locate();
+  if (_xyz.ws.locate && _xyz.view.mode !== 'report') locate();
 
   // Initialize report module.
   // if (_xyz.ws.report) report();
@@ -64,6 +59,6 @@ function init() {
     window.location = document.head.dataset.dir + '/login?redirect=' + (document.head.dataset.dir || '/') + window.location.search;
   });
 
-  console.log(_xyz);
+  if (_xyz.log) console.log(_xyz);
 
 }

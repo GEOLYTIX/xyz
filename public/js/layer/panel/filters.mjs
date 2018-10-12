@@ -361,9 +361,9 @@ export default (layer, panel) => {
           if (e.target.status === 200) {
             let json = JSON.parse(e.target.response);
 
-            _xyz.selectLocation({
+            _xyz.locations.select({
               layer: layer.aggregate_layer,
-              table: _xyz.layers[layer.aggregate_layer].table,
+              table: _xyz.layers.list[layer.aggregate_layer].table,
               id: json.id,
               marker: [json.lng, json.lat],
               filter: JSON.stringify(layer.filter) || ''

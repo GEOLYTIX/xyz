@@ -24,7 +24,7 @@ export default function(){
   // Make drawer opaque if no table present.
   layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 
-  if (!layer.table || !layer.display) return _xyz.layersCheck(layer);
+  if (!layer.table || !layer.display) return _xyz.layers.check(layer);
 
   let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + _xyz.utils.paramString({
       locale: _xyz.locale,
@@ -50,7 +50,7 @@ export default function(){
     .on('error', err => console.error(err))
     .on('load', () => {
       //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
-      if (locale === _xyz.locale) _xyz.layersCheck(layer);
+      if (locale === _xyz.locale) _xyz.layers.check(layer);
     })
     .on('click', e => {
       if (e.layer.properties.selected) return;
@@ -59,8 +59,8 @@ export default function(){
 
       function checkCurrentSelection(e) {
         let check = false;
-        if (_xyz.hooks.select) {
-          _xyz.hooks.select.map(item => {
+        if (_xyz.hooks.current.select) {
+          _xyz.hooks.current.select.map(item => {
             item = item.split('!');
             if (item[1] === layer.key && item[2] === layer.table && item[3] === String(e.layer.properties.id)) {
               check = true;
@@ -78,7 +78,7 @@ export default function(){
           el.classList += ' wait-cursor-enabled';
         }
         // get selection
-        _xyz.selectLocation({
+        _xyz.locations.select({
           layer: layer.key,
           table: layer.table,
           id: e.layer.properties.id,

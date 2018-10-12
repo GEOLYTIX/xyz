@@ -1,6 +1,8 @@
 import _xyz from '../_xyz.mjs';
 
 export default () => {
+
+  _xyz.view.mobile = {};
     
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -8,7 +10,8 @@ export default () => {
   document.addEventListener('scroll',
     () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
 
-  let modules = document.querySelectorAll('.mod_container > .module'),
+  let
+    modules = document.querySelectorAll('.mod_container > .module'),
     tabs = document.querySelector('.tab_bar'),
     tabLayers = document.getElementById('tabLayers'),
     modLayers = document.getElementById('modLayers'),
@@ -26,8 +29,8 @@ export default () => {
     tabs.classList.remove('pane_shadow');
   }
 
-  _xyz.activateLayersTab = () => activateTab(tabLayers, modLayers);
-  _xyz.activateLocationsTab = () => {
+  _xyz.view.mobile.activateLayersTab = () => activateTab(tabLayers, modLayers);
+  _xyz.view.mobile.activateLocationsTab = () => {
     tabLocations.classList.remove('hidden');
     activateTab(tabLocations, modLocations);
   };

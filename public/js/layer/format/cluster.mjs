@@ -58,7 +58,7 @@ export default function(){
   xhr.onload = e => {
            
     // Data is returned and the layer is still current.
-    if (e.target.status !== 200 || !layer.display || locale !== _xyz.locale) return _xyz.layersCheck(layer);
+    if (e.target.status !== 200 || !layer.display || locale !== _xyz.locale) return _xyz.layers.check(layer);
     
     let cluster = JSON.parse(e.target.responseText);
 
@@ -79,7 +79,7 @@ export default function(){
         let icon = _xyz.utils.svg_symbols(marker_style);
 
         // Set tooltip for desktop if corresponding layer has hover property.
-        let tooltip = (layer.theme && layer.theme.hover && _xyz.view_mode === 'desktop') || false;
+        let tooltip = (layer.theme && layer.theme.hover && _xyz.view.mode === 'desktop') || false;
 
         // Check whether layer has categorized theme and more than a single location in cluster.
         if (layer.style.theme && layer.style.theme.type === 'categorized' && Object.keys(point.properties.cat).length > 1) {
@@ -164,7 +164,7 @@ export default function(){
       .on('click', e => clusterMouseClick(e, layer))
       .addTo(_xyz.map);
 
-    return _xyz.layersCheck(layer);
+    return _xyz.layers.check(layer);
 
   };
     
@@ -196,7 +196,7 @@ function clusterMouseClick(e, layer) {
     let cluster = JSON.parse(xhr.responseText);
 
     if (cluster.length === 1) {
-      _xyz.selectLocation({
+      _xyz.locations.select({
         layer: layer.key,
         table: layer.table,
         id: cluster[0].id,
@@ -215,7 +215,7 @@ function clusterMouseClick(e, layer) {
 
       if (cluster.length == 99) table += '<caption><small>Cluster selection is limited to 99 feature.</small></caption>';
 
-      if (_xyz.view_mode === 'desktop') {
+      if (_xyz.view.mode === 'desktop') {
 
         // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
         layer.popup = L.popup()
@@ -226,7 +226,7 @@ function clusterMouseClick(e, layer) {
         setTimeout(() => _xyz.utils.scrolly(document.querySelector('.leaflet-popup-content > .scrolly')), 300);
       }
 
-      if (_xyz.view_mode === 'mobile') {
+      if (_xyz.view.mode === 'mobile') {
 
         // Remove the line marker which connects the cell with the drop down list;
         if (layer.keySelectionLine) _xyz.map.removeLayer(layer.keySelectionLine);
@@ -275,7 +275,7 @@ function clusterMouseClick(e, layer) {
 
       for (let i = 0; i < location_table_rows.length; i++) {
         location_table_rows[i].addEventListener('click', e => {
-          _xyz.selectLocation({
+          _xyz.locations.select({
             layer: layer.key,
             table: layer.table,
             id: e.target.parentNode.dataset.id,
