@@ -164,7 +164,7 @@ export default function(){
       .on('click', e => clusterMouseClick(e, layer))
       .addTo(_xyz.map);
 
-    return xyz.layersCheck(layer);
+    return _xyz.layersCheck(layer);
 
   };
     

@@ -28,16 +28,6 @@ export default () => {
 
   // Empty the locations list.
   _xyz.locations.innerHTML = '';
-
-  // Create select pane. This pane has a shadow filter associated in the css.
-  _xyz.map.createPane('select_display');
-  _xyz.map.getPane('select_display').style.zIndex = 501;
-  _xyz.map.createPane('select');
-  _xyz.map.getPane('select').style.zIndex = 600;
-  _xyz.map.createPane('select_marker');
-  _xyz.map.getPane('select_marker').style.zIndex = 601;
-  _xyz.map.createPane('select_circle');
-  _xyz.map.getPane('select_circle').style.zIndex = 602;
   
   if (_xyz.records) _xyz.records.forEach(record => {
     if (record.location && record.location.L) _xyz.map.removeLayer(record.location.L);

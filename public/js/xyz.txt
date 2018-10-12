@@ -1,0 +1,48 @@
+attribution: {© Mapbox: a, © OpenStreetMap: a}
+locations:
+    init
+    dom
+    draw
+    add
+    select
+    list
+
+layers:
+    init
+    dom
+    list
+    groups
+    check
+
+panes:
+    list
+    last
+
+
+//drawRecord: record => {…}
+gazetteer: {icon: "data:image/svg+xml,%3Csvg%20width%3D%221000%22%20h…0rgb(51%2C%20105%2C%2030)%3B%22%2F%3E%3C%2Fsvg%3E", style: {…}, btnSearch: button#btnGazetteer, group: div#Gazetteer.input_group, input: input.pane_shadow, …}
+hooks: {locale: "Global", lng: "0.087890625", z: "3", layers: Array(2)}
+host: "/demo"
+//initGazetteer: () => {…}
+//initLayers: () => {…}
+//initLocations: () => {…}
+//initPanes: () => {…}
+//layer_groups: {Base maps: {…}, Retail: {…}}
+//layers: {base: {…}, here: {…}, sprawls: {…}, catchments: {…}, cn_retailpoints: {…}, …}
+//layersCheck: layer => {…}
+//listRecord: record => {…}
+locale: "Global"
+locate: {}
+//locations: div#locations.content
+log: true
+map: NewClass {options: {…}, _container: div#Map.map.leaflet-container.leaflet-touch.leaflet-fade-anim.leaflet-grab.leaflet-touch-drag.leafle…, _leaflet_id: 3, _containerId: 4, _fadeAnimated: true, …}
+nanoid: "IkFvk_"
+//pane: 514
+//panes: (14) [div.leaflet-pane.leaflet-tmp-pane, div.leaflet-pane.leaflet-gazetteer-pane, div.leaflet-pane.leaflet-select_display-pane, div.leaflet-pane.leaflet-select-pane, div.leaflet-pane.leaflet-select_marker-pane, div.leaflet-pane.leaflet-select_circle-pane, div.leaflet-pane.leaflet-rectangle-pane, div.leaflet-pane.leaflet-base-pane, div.leaflet-pane.leaflet-here-pane, div.leaflet-pane.leaflet-sprawls-pane, div.leaflet-pane.leaflet-catchments-pane, div.leaflet-pane.leaflet-cn_retailpoints-pane, div.leaflet-pane.leaflet-cn_sh_retail_venues-pane, div.leaflet-pane.leaflet-label-pane]
+//records: (15) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+//selectLocation: location => {…}
+setView: (fit) => {…}
+token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm5pcy5iYXVzenVzQGdlb2x5dGl4LmNvLnVrIiwiYWNjZXNzIjoiYWRtaW4iLCJpYXQiOjE1MzkzNTExMDksImV4cCI6MTUzOTM1MTIyOX0.Pp8RSuXCRb7tR3cc_isfeZjFURxvL_SkOTHhCRKmH2o"
+utils: Module {…}
+view_mode: "desktop"
+ws: {title: "GEOLYTIX | XYZ Demo", documentation: "https://geolytix.gitbook.io/xyz-user-guide", locate: {…}, locales: {…}}

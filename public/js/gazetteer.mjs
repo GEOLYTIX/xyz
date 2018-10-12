@@ -5,7 +5,6 @@ export default () => {
   // Create gazetteer object.
   _xyz.gazetteer = {
     icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}}),
-    pane: 550,
     style: {
       stroke: true,
       color: '#090',
@@ -21,10 +20,6 @@ export default () => {
     loader: document.querySelector('#Gazetteer > .loader'),
     result: document.querySelector('#Gazetteer > ul')
   };
-
-  // Create the gazetteer pane.
-  _xyz.map.createPane('gazetteer');
-  _xyz.map.getPane('gazetteer').style.zIndex = _xyz.gazetteer.pane;
 
   // Gazetteer init which is called on change of locale.
   _xyz.initGazetteer = () => {

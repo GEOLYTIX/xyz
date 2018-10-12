@@ -4,6 +4,9 @@ import L from 'leaflet';
 
 import * as attribution from './attribution.mjs';
 
+import _panes from './panes.mjs';
+_xyz.initPanes = _panes;
+
 export default () => {
 
   // Initiate map object.
@@ -16,6 +19,8 @@ export default () => {
     maxZoom: _xyz.ws.locales[_xyz.locale].maxZoom
   })
     .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
+
+  _xyz.initPanes();
 
   // Set view and bounds;
   _xyz.setView = (fit) => {
@@ -58,10 +63,6 @@ export default () => {
   // Map view state functions
   _xyz.map.on('movestart', () => viewChangeStart());
   _xyz.map.on('resize', () => _xyz.utils.debounce(viewChangeStart, 100));
-
-  // Create pane for rectangle.
-  _xyz.map.createPane('rectangle');
-  _xyz.map.getPane('rectangle').style.zIndex = 600;
 
   function viewChangeStart() {
 

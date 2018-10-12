@@ -34,13 +34,16 @@ export default () => {
       // Set locale defaults.
       setLocaleDefaults();
 
+      // Set drawing panes.
+      _xyz.initPanes();
+
       // Set locale view.
       _xyz.setView(true);
       
-      // Init gazetteer
+      // Init gazetteer.
       _xyz.initGazetteer();
 
-      // Init layers
+      // Init layers.
       _xyz.initLayers();
       
       // Init locations.

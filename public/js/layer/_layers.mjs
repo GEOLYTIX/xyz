@@ -24,8 +24,6 @@ export default () => {
   // Remove all existing layers from map.
   _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
 
-  _xyz.pane = 500;
-
   // Get the layers from the current locale.
   _xyz.layers = _xyz.ws.locales[_xyz.locale].layers;
   _xyz.layer_groups = {};
@@ -89,7 +87,7 @@ export default () => {
 
     // Increase pane counter and add layer pane to map.
     _xyz.pane += 2;
-    _xyz.map.createPane(layer.key);
+    _xyz.panes.push(_xyz.map.createPane(layer.key));
     _xyz.map.getPane(layer.key).style.zIndex = _xyz.pane;
 
     // Method to get data and redraw layer on map.

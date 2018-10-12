@@ -1,6 +1,5 @@
 import _xyz from './_xyz.mjs';
 
-_xyz.attribution_links = document.getElementById('attribution_links');
 _xyz.attribution = {};
 
 export function set(attribution) {
@@ -9,7 +8,7 @@ export function set(attribution) {
     // Create new attribution for layer if the same attribution does not exist yet.
     if (!_xyz.attribution[entry[0]]) _xyz.attribution[entry[0]] = _xyz.utils.createElement({
       tag: 'a',
-      appendTo : _xyz.attribution_links,
+      appendTo : document.getElementById('attribution_links'),
       options: {
         textContent: entry[0],
         href: entry[1],
