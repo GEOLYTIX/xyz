@@ -64,4 +64,6 @@ function init() {
     window.location = document.head.dataset.dir + '/login?redirect=' + (document.head.dataset.dir || '/') + window.location.search;
   });
 
+  console.log(_xyz);
+
 }

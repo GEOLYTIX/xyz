@@ -7,19 +7,18 @@ import * as attribution from './attribution.mjs';
 export default () => {
 
   // Initiate map object.
-  _xyz.map = L
-    .map('Map', {
-      renderer: L.svg(),
-      scrollWheelZoom: true,
-      zoomControl: false,
-      attributionControl: false,
-      minZoom: _xyz.ws.locales[_xyz.locale].minZoom,
-      maxZoom: _xyz.ws.locales[_xyz.locale].maxZoom
-    })
+  _xyz.map = L.map('Map', {
+    renderer: L.svg(),
+    scrollWheelZoom: true,
+    zoomControl: false,
+    attributionControl: false,
+    minZoom: _xyz.ws.locales[_xyz.locale].minZoom,
+    maxZoom: _xyz.ws.locales[_xyz.locale].maxZoom
+  })
     .setView([parseFloat(_xyz.hooks.lat || 0), parseFloat(_xyz.hooks.lng || 0)], parseInt(_xyz.hooks.z || 15));
 
   // Set view and bounds;
-  _xyz.setView = fit => {
+  _xyz.setView = (fit) => {
     _xyz.map.setMaxBounds(_xyz.ws.locales[_xyz.locale].bounds.leaflet);
     _xyz.map.setMinZoom(_xyz.ws.locales[_xyz.locale].minZoom);
     _xyz.map.setMaxZoom(_xyz.ws.locales[_xyz.locale].maxZoom);

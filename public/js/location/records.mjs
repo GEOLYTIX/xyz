@@ -1,4 +1,4 @@
-export const records = [
+export default [
   {
     letter: 'A',
     color: '#9c27b0'

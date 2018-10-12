@@ -1,6 +1,6 @@
 import _xyz from '../_xyz.mjs';
 
-import * as _def from './_def.mjs';
+import _records from './records.mjs';
 
 import select from './select.mjs';
 _xyz.selectLocation = select;
@@ -17,6 +17,11 @@ export default () => {
   if (_xyz.activateLayersTab) _xyz.activateLayersTab();
 
   _xyz.locations = document.getElementById('locations');
+
+  document.getElementById('clear_locations').addEventListener('click', () => {
+    _xyz.utils.removeHook('select');
+    _xyz.initLocations();
+  });
 
   // Hide the Locations Module.
   _xyz.locations.parentElement.style.display = 'none';
@@ -38,18 +43,20 @@ export default () => {
     if (record.location && record.location.L) _xyz.map.removeLayer(record.location.L);
     if (record.location && record.location.M) _xyz.map.removeLayer(record.location.M);
     if (record.location && record.location.D) _xyz.map.removeLayer(record.location.D);
+    record.location = null;
   });
 
-  _xyz.records = _def.records;
+  _xyz.records = _records;
     
   // Set the layer display from hooks if present; Overwrites the default setting.
+  // layer!table!id!lng!lat
   if (_xyz.hooks.select) _xyz.hooks.select.split(',').forEach(hook => {
     let params = hook.split('!');
     _xyz.selectLocation({
-      layer: params[1],
-      table: params[2],
-      id: params[3],
-      marker: [params[4].split(';')[0], params[4].split(';')[1]]
+      layer: params[0],
+      table: params[1],
+      id: params[2],
+      marker: [params[3].split(';')[0], params[3].split(';')[1]]
     });
   });
 

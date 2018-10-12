@@ -20,17 +20,18 @@ export function clear(record) {
         e.stopPropagation();
         record.drawer.remove();
 
-        _xyz.utils.filterHook('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+        _xyz.utils.filterHook('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
         if (record.location.L) _xyz.map.removeLayer(record.location.L);
         if (record.location.M) _xyz.map.removeLayer(record.location.M);
         if (record.location.D) _xyz.map.removeLayer(record.location.D);
         record.location = null;
 
-        let freeRecords = _xyz.ws.select.records.filter(function (record) {
-          if (!record.location) return record;
-        });
+        // Find free records in locations array.
+        let freeRecords = _xyz.records.filter(record => record.location);
 
-        if (freeRecords.length === _xyz.ws.select.records.length) _xyz.ws.select.resetModule();
+        // Return from selection if no free record is available.
+        if (freeRecords.length === 0) _xyz.initLocations();
+
       }
     }
   });

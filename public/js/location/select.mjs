@@ -8,6 +8,10 @@ export default location => {
   // Return from selection if no free record is available.
   if (freeRecords.length === 0) return;
 
+  // Assign location to the first free record.
+  const record = freeRecords[0];
+  record.location = {};
+
   // Get layer from where the location should be selected.
   let layer = _xyz.layers[location.layer];
 
@@ -77,23 +81,22 @@ export default location => {
     if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
 
     // Add the location to the first free record.
-    freeRecords[0].location = location;
+    record.location = location;
 
     // Push the hook for the location.
     _xyz.utils.pushHook('select',
-      freeRecords[0].letter + '!' +
-        freeRecords[0].location.layer + '!' +
-        freeRecords[0].location.table + '!' +
-        freeRecords[0].location.id + '!' +
-        freeRecords[0].location.marker[0] + ';' +
-        freeRecords[0].location.marker[1]
+      record.location.layer + '!' +
+      record.location.table + '!' +
+      record.location.id + '!' +
+      record.location.marker[0] + ';' +
+      record.location.marker[1]
     );
   
     // Draw the record to the map.
-    _xyz.drawRecord(freeRecords[0]);
+    _xyz.drawRecord(record);
 
     // List the record
-    _xyz.listRecord(freeRecords[0]);
+    _xyz.listRecord(record);
 
   };
 

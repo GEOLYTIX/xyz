@@ -38,7 +38,7 @@ export default () => {
       _xyz.setView(true);
       
       // Init gazetteer
-      _xyz.ws.gazetteer.init(true);
+      _xyz.initGazetteer();
 
       // Init layers
       _xyz.initLayers();
