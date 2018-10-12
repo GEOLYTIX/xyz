@@ -2,11 +2,11 @@ import _xyz from '../../_xyz.mjs';
 
 import cluster from './cluster.mjs';
 
-import filters from './filters.mjs';
+import filters from './filters/_filters.mjs';
 
 import style from './style.mjs';
 
-import themes from './themes.mjs';
+import themes from './themes/_themes.mjs';
 
 import grid from './grid.mjs';
 
