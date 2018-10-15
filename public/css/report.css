@@ -769,27 +769,27 @@ i,
     height: 6mm; }
     .mod_container .module .drawer .header:hover {
       cursor: pointer; }
-  .mod_container .module .drawer .panel {
+  .mod_container .module .drawer .dashboard {
     border-bottom: 1px solid #333;
     font-size: 13px; }
-    .mod_container .module .drawer .panel .title {
+    .mod_container .module .drawer .dashboard .title {
       font-family: ffmark_bold, sans-serif;
       line-height: 1.5; }
-    .mod_container .module .drawer .panel .section {
+    .mod_container .module .drawer .dashboard .panel {
       padding: 10px 0;
       border-bottom: 1px solid #555; }
-    .mod_container .module .drawer .panel .block {
+    .mod_container .module .drawer .dashboard .block {
       padding: 5px 0; }
-    .mod_container .module .drawer .panel .half {
+    .mod_container .module .drawer .dashboard .half {
       width: 48%;
       display: inline-block; }
-      .mod_container .module .drawer .panel .half.right {
+      .mod_container .module .drawer .dashboard .half.right {
         float: right; }
-    .mod_container .module .drawer .panel .third {
+    .mod_container .module .drawer .dashboard .third {
       width: 15%;
       display: inline-block;
       margin: 1px; }
-      .mod_container .module .drawer .panel .third.right {
+      .mod_container .module .drawer .dashboard .third.right {
         float: right; }
 .mod_container .loader {
   height: 2px;

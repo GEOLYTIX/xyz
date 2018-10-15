@@ -8,15 +8,15 @@ import filter_range from './filter_range.mjs';
 
 import filter_date from './filter_date.mjs';
 
-export default (layer, panel) => {
+export default layer => {
 
   // Add filter block to layer panel.
   let filters = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      classList: 'section expandable'
+      classList: 'panel expandable'
     },
-    appendTo: panel
+    appendTo: layer.dashboard
   });
 
   // Filter control expander.

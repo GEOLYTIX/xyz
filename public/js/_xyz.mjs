@@ -85,6 +85,7 @@ export default {
     list: {},
     next: 500
   },
+  state: 'select',
   token: null,
   utils: utils,
   view: { 

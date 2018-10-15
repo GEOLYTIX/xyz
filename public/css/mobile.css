@@ -132,6 +132,11 @@
   .btn_wide.disabled {
     opacity: 0.3; }
 
+.btn_state {
+  color: black; }
+  .btn_state.active {
+    color: #090; }
+
 .range {
   width: 100%;
   width: calc(100% - 5px);
@@ -468,47 +473,47 @@ input[type=range]::-moz-range-thumb {
         font-family: ffmark, sans-serif; }
         .mod_container .module .drawer .header:hover {
           cursor: pointer; }
-      .mod_container .module .drawer .panel {
+      .mod_container .module .drawer .dashboard {
         border-bottom: 1px solid #333;
         font-size: 13px; }
-        .mod_container .module .drawer .panel .title {
+        .mod_container .module .drawer .dashboard .title {
           font-family: ffmark_bold, sans-serif;
           line-height: 1.5;
           font-size: 13px;
           margin-bottom: 0; }
-        .mod_container .module .drawer .panel .section {
+        .mod_container .module .drawer .dashboard .panel {
           padding: 10px 0;
           border-bottom: 1px solid #555; }
-          .mod_container .module .drawer .panel .section.expandable {
+          .mod_container .module .drawer .dashboard .panel.expandable {
             max-height: 30px;
             overflow: hidden;
             transition: max-height 0.3s ease-out; }
-            .mod_container .module .drawer .panel .section.expandable .expander::before {
+            .mod_container .module .drawer .dashboard .panel.expandable .expander::before {
               content: "expand_more"; }
-          .mod_container .module .drawer .panel .section.expanded {
+          .mod_container .module .drawer .dashboard .panel.expanded {
             max-height: 2500px !important; }
-            .mod_container .module .drawer .panel .section.expanded .expander::before {
+            .mod_container .module .drawer .dashboard .panel.expanded .expander::before {
               content: "expand_less"; }
-        .mod_container .module .drawer .panel .block {
+        .mod_container .module .drawer .dashboard .block {
           padding: 5px 0;
           margin-right: 10px; }
-          .mod_container .module .drawer .panel .block i {
+          .mod_container .module .drawer .dashboard .block i {
             color: #079e00;
             font-size: 14px;
             float: right; }
-          .mod_container .module .drawer .panel .block .range-tooltip._max {
+          .mod_container .module .drawer .dashboard .block .range-tooltip._max {
             float: right;
             margin-bottom: 6px; }
-        .mod_container .module .drawer .panel .half {
+        .mod_container .module .drawer .dashboard .half {
           width: 48%;
           display: inline-block; }
-          .mod_container .module .drawer .panel .half.right {
+          .mod_container .module .drawer .dashboard .half.right {
             float: right; }
-        .mod_container .module .drawer .panel .third {
+        .mod_container .module .drawer .dashboard .third {
           width: 15%;
           display: inline-block;
           margin: 1px; }
-          .mod_container .module .drawer .panel .third.right {
+          .mod_container .module .drawer .dashboard .third.right {
             float: right; }
       .mod_container .module .drawer .bar {
         fill: #5AB664 !important;

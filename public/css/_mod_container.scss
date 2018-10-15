@@ -108,7 +108,7 @@
                     cursor: pointer;
                 }
             }
-            .panel {
+            .dashboard {
                 border-bottom: 1px solid #333;
                 font-size: 13px;
                 .title {
@@ -117,7 +117,7 @@
                     font-size: 13px;
                     margin-bottom: 0;
                 }
-                .section {
+                .panel {
                     padding: 10px 0;
                     border-bottom: 1px solid #555;
                     &.expandable {

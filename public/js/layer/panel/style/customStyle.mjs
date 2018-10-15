@@ -1,6 +1,6 @@
-import _xyz from '../../_xyz.mjs';
+import _xyz from '../../../_xyz.mjs';
 
-export default (layer, panel) => {
+export default layer => {
 
   if (!layer.style) layer.style = {};
 
@@ -21,34 +21,6 @@ export default (layer, panel) => {
     fill: true
   };
 
-  // create style section
-  let style_section = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'section expandable'
-    },
-    appendTo: panel
-  });
-
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'btn_text cursor noselect',
-      textContent: 'Style settings'
-    },
-    appendTo: style_section,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        e.stopPropagation();
-        _xyz.utils.toggleExpanderParent({
-          expandable: style_section,
-          accordeon: true,
-          scrolly: document.querySelector('.mod_container > .scrolly')
-        });
-      }
-    }
-  });
 
   let timeout;
 
@@ -242,28 +214,28 @@ export default (layer, panel) => {
         className: 'bold btn_subtext',
         textContent: 'Default colours'
       },
-      appendTo: style_section
+      appendTo: layer.style.panel
     });
 
     color_picker(layer, {
       property: 'fillColor',
       label: 'Fill',
       style: 'default',
-      appendTo: style_section
+      appendTo: layer.style.panel
     });
 
     color_picker(layer, {
       property: 'color',
       label: 'Stroke',
       style: 'default',
-      appendTo: style_section
+      appendTo: layer.style.panel
     });
 
     color_picker(layer, {
       property: 'color',
       label: 'Highlight',
       style: 'highlight',
-      appendTo: style_section
+      appendTo: layer.style.panel
     });
   }
 
@@ -276,7 +248,7 @@ export default (layer, panel) => {
         className: 'bold btn_subtext',
         textContent: 'Layer opacity'
       },
-      appendTo: style_section
+      appendTo: layer.style.panel
     });
   }
 
@@ -303,7 +275,7 @@ export default (layer, panel) => {
       min: 0,
       max: 100,
       value: (!isNaN(layer.style.default.opacity) ? 100 * layer.style.default.opacity : 100),
-      appendTo: style_section,
+      appendTo: layer.style.panel,
       oninput: e => {
         let opacity = e.target.value;
         e.target.parentNode.previousSibling.textContent = parseInt(opacity) + '%';
@@ -342,7 +314,7 @@ export default (layer, panel) => {
       min: 0,
       value: (!isNaN(layer.style.default.fillOpacity) ? 100 * layer.style.default.fillOpacity : 100),
       max: 100,
-      appendTo: style_section,
+      appendTo: layer.style.panel,
       oninput: e => {
         let fill_opacity = e.target.value;
         e.target.parentNode.previousSibling.textContent = parseInt(fill_opacity) + '%';

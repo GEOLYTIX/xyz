@@ -1,13 +1,13 @@
 import _xyz from '../../_xyz.mjs';
 
-export default (layer, panel) => {
+export default layer => {
 
   let ctrl = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      className: 'section'
+      className: 'panel'
     },
-    appendTo: panel
+    appendTo: layer.dashboard
   });
 
   // Create transit mode dropdown.

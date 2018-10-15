@@ -103,3 +103,11 @@
         opacity: 0.3;
     }
 }
+
+.btn_state {
+    color: black;
+
+    &.active {
+        color: #090;
+    }
+}

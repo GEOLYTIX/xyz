@@ -1,65 +1,65 @@
 import _xyz from '../../_xyz.mjs';
 
-import cluster from './cluster.mjs';
+import panel_cluster from './cluster.mjs';
 
-import filters from './filters/_filters.mjs';
+import panel_filters from './filters/_filters.mjs';
 
-import style from './style.mjs';
+import panel_style from './style/_styles.mjs';
 
-import themes from './themes/_themes.mjs';
+import panel_grid from './grid.mjs';
 
-import grid from './grid.mjs';
+import panel_catchments from './catchments.mjs';
 
-import catchments from './catchments.mjs';
+import panel_editing from './editing.mjs';
 
 export default layer => {
 
-  // create panel element.
-  let panel = _xyz.utils.createElement({
+  // Create layer dashboard.
+  layer.dashboard = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      className: 'panel'
+      className: 'dashboard'
     }
   });
 
-  // add meta info to panel.
+  // Add meta info to dashboard.
   if (layer.meta) _xyz.utils.createElement({
     tag: 'p',
     options: {
       className: 'meta',
       textContent: layer.meta
     },
-    appendTo: panel
+    appendTo: layer.dashboard
   });
 
-  // add cluster control block.
-  if (layer.format === 'cluster') cluster(layer, panel);
+  panel_editing(layer);
 
-  // add filters block.
-  if (layer.infoj && layer.infoj.some( entry => entry.filter )) filters(layer, panel);
+  // Add cluster panel to dashboard.
+  if (layer.format === 'cluster') panel_cluster(layer);
 
-  // add mvt style block.
-  if (layer.format === 'mvt') style(layer, panel);
+  // Add grid panel to dashboard.
+  if (layer.format === 'grid') panel_grid(layer);
 
-  // applay themes control.
-  if (layer.style.theme || layer.style.themes) themes(layer, panel);
 
-  // add grid control block to panel.
-  if (layer.format === 'grid') grid(layer, panel);
+  // Add filters panel.
+  if (layer.infoj && layer.infoj.some(entry => entry.filter)) panel_filters(layer);
 
-  // add catchment block to panel.
-  if (layer.catchments) catchments(layer, panel);
 
-  // Add panel control when panel contains children.
-  if (panel.children.length > 0) {
+  // Add styles panel.
+  panel_style(layer);
 
-    // set panel on layer object.
-    layer.panel = panel;
+
+  // Add catchments panel.
+  if (layer.catchments) panel_catchments(layer);
+
+
+  // Add dashboard if it contains panel.
+  if (layer.dashboard.children.length > 0) {
 
     layer.header.classList.add('pane_shadow');
     layer.drawer.classList.add('expandable');
 
-    // expander control layer header
+    // Expander control for layer drawer.
     layer.header.addEventListener('click', () => {
       _xyz.utils.toggleExpanderParent({
         expandable: layer.drawer,
@@ -68,14 +68,15 @@ export default layer => {
       });
     });
 
-    layer.drawer.appendChild(layer.panel);
+    // Append dashboard to layer drawer.
+    layer.drawer.appendChild(layer.dashboard);
 
-    // Add icon which allows to expand / collaps panel.
+    // Add icon which allows to expand / collapse dashboard.
     _xyz.utils.createElement({
       tag: 'i',
       options: {
         className: 'material-icons cursor noselect btn_header expander',
-        title: 'Toggle layer panel'
+        title: 'Toggle layer dashboard'
       },
       appendTo: layer.header,
       eventListener: {

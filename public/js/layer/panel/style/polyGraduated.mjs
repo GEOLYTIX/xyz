@@ -6,7 +6,11 @@ export default layer => {
 
   let width = layer.drawer.clientWidth;
   
-  let svg = d3_selection.select(layer.legend).append('svg').attr('width', width),
+  let
+    svg = d3_selection
+      .select(layer.style.panel)
+      .append('svg')
+      .attr('width', width),
     y = 10;
   
   layer.style.theme.cat.forEach(cat => {

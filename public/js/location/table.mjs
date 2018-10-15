@@ -147,7 +147,20 @@ export default record => {
 
   });
     
-  hide_empty_sections(table);
+  // hide empty sections.
+  let prev, next, len = table.children.length;
+  for (let i = 1; i < len; i++) {
+    next = table.children[i];
+    prev = table.children[i - 1];
+
+    if (next && next.children && next.children.length == 1) {
+      if (next.children[0].classList.contains('label') && prev.children[prev.children.length - 1].classList.contains('label')) {
+        prev.children[prev.children.length - 1].style.display = 'none';
+        if (i == len - 1) next.children[0].style.display = 'none';
+      }
+    }
+  }
+
   return table;
 };
 
@@ -515,23 +528,6 @@ function populateTable(record, entry, tr, table) {
       }
     });
   }
-}
-
-// hides label rows which don't have data available
-function hide_empty_sections(element) {
-  let prev, next, len = element.children.length;
-  for (let i = 1; i < len; i++) {
-    next = element.children[i];
-    prev = element.children[i - 1];
-
-    if (next && next.children && next.children.length == 1) {
-      if (next.children[0].classList.contains('label') && prev.children[prev.children.length - 1].classList.contains('label')) {
-        prev.children[prev.children.length - 1].style.display = 'none';
-        if (i == len - 1) next.children[0].style.display = 'none';
-      }
-    }
-  }
-  return element;
 }
 
 // Check whether value exists but not found in list.

@@ -1,30 +1,30 @@
 import _xyz from '../../_xyz.mjs';
 
-export default (layer, panel) => {
+export default layer => {
 
-  // Create panel block.
-  let block = _xyz.utils.createElement({
+  // Create cluster panel and add to layer dashboard.
+  const panel = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      classList: 'section expandable'
+      classList: 'panel expandable'
     },
-    appendTo: panel
+    appendTo: layer.dashboard
   });
 
-  // Create block title expander.
+  // Panel title / expander.
   _xyz.utils.createElement({
     tag: 'div',
     options: {
       className: 'btn_text cursor noselect',
       textContent: 'Cluster'
     },
-    appendTo: block,
+    appendTo: panel,
     eventListener: {
       event: 'click',
       funct: e => {
         e.stopPropagation();
         _xyz.utils.toggleExpanderParent({
-          expandable: block,
+          expandable: panel,
           accordeon: true,
           scrolly: document.querySelector('.mod_container > .scrolly')
         });
@@ -32,12 +32,14 @@ export default (layer, panel) => {
     }
   });
 
-  // Set cluster defaults
+  // __defaults
   if (!layer.cluster_kmeans) layer.cluster_kmeans = 0.05;
   if (!layer.cluster_dbscan) layer.cluster_dbscan = 0.01;
   if (!layer.style.markerMin) layer.style.markerMin = 20;
   if (!layer.style.markerMax) layer.style.markerMax = 40;
 
+  // Set timeout to debounce layer get on range input event.
+  let timeout;
 
   // KMeans
   _xyz.utils.createElement({
@@ -45,7 +47,7 @@ export default (layer, panel) => {
     options: {
       textContent: 'Minimum number of cluster (KMeans): '
     },
-    appendTo: block
+    appendTo: panel
   });
 
   let lblKMeans = _xyz.utils.createElement({
@@ -54,40 +56,22 @@ export default (layer, panel) => {
       textContent: layer.cluster_kmeans,
       className: 'bold'
     },
-    appendTo: block
+    appendTo: panel
   });
 
-  let rKMeans = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'range'
-    },
-    appendTo: block
-  });
-
-  let timeout;
-
-  _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      type: 'range',
-      min: 1,
-      value: parseInt(layer.cluster_kmeans * 100),
-      max: 50,
-      step: 1
-    },
-    appendTo: rKMeans,
-    eventListener: {
-      event: 'input',
-      funct: e => {
-        lblKMeans.innerHTML = e.target.value / 100;
-        layer.cluster_kmeans = e.target.value / 100;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          timeout = null;
-          layer.get();
-        }, 500);
-      }
+  _xyz.utils.slider({
+    min: 1,
+    max: 50,
+    value: parseInt(layer.cluster_kmeans * 100),
+    appendTo: panel,
+    oninput: e => {
+      lblKMeans.innerHTML = e.target.value / 100;
+      layer.cluster_kmeans = e.target.value / 100;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        timeout = null;
+        layer.get();
+      }, 500);
     }
   });
 
@@ -98,7 +82,7 @@ export default (layer, panel) => {
     options: {
       textContent: 'Maximum distance between locations in cluster (DBScan): '
     },
-    appendTo: block
+    appendTo: panel
   });
 
   let lblDBScan = _xyz.utils.createElement({
@@ -107,38 +91,22 @@ export default (layer, panel) => {
       textContent: layer.cluster_dbscan,
       className: 'bold'
     },
-    appendTo: block
+    appendTo: panel
   });
 
-  let rDBScan = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'range'
-    },
-    appendTo: block
-  });
-
-  _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      type: 'range',
-      min: 1,
-      value: parseInt(layer.cluster_dbscan * 100),
-      max: 50,
-      step: 1
-    },
-    appendTo: rDBScan,
-    eventListener: {
-      event: 'input',
-      funct: e => {
-        lblDBScan.innerHTML = e.target.value / 100;
-        layer.cluster_dbscan = e.target.value / 100;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          timeout = null;
-          layer.get();
-        }, 500);
-      }
+  _xyz.utils.slider({
+    min: 1,
+    max: 50,
+    value: parseInt(layer.cluster_dbscan * 100),
+    appendTo: panel,
+    oninput: e => {
+      lblDBScan.innerHTML = e.target.value / 100;
+      layer.cluster_dbscan = e.target.value / 100;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        timeout = null;
+        layer.get();
+      }, 500);
     }
   });
 
@@ -149,7 +117,7 @@ export default (layer, panel) => {
     options: {
       textContent: 'Marker Min: '
     },
-    appendTo: block
+    appendTo: panel
   });
 
   let lblMarkerMin = _xyz.utils.createElement({
@@ -158,33 +126,18 @@ export default (layer, panel) => {
       textContent: layer.style.markerMin,
       className: 'bold'
     },
-    appendTo: block
+    appendTo: panel
   });
 
-  let rMarkerMin = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'range'
-    },
-    appendTo: block
-  });
-
-  _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      type: 'range',
-      min: parseInt(layer.style.markerMin * 0.3),
-      value: parseInt(layer.style.markerMin),
-      max: parseInt(layer.style.markerMin * 3)
-    },
-    appendTo: rMarkerMin,
-    eventListener: {
-      event: 'input',
-      funct: e => {
-        lblMarkerMin.innerHTML = e.target.value;
-        layer.style.markerMin = parseInt(e.target.value);
-        layer.get();
-      }
+  _xyz.utils.slider({
+    min: parseInt(layer.style.markerMin * 0.3),
+    max: parseInt(layer.style.markerMin * 3),
+    value: parseInt(layer.style.markerMin),
+    appendTo: panel,
+    oninput: e => {
+      lblMarkerMin.innerHTML = e.target.value;
+      layer.style.markerMin = parseInt(e.target.value);
+      layer.get();
     }
   });
 
@@ -195,7 +148,7 @@ export default (layer, panel) => {
     options: {
       textContent: 'Marker Max: '
     },
-    appendTo: block
+    appendTo: panel
   });
 
   let lblMarkerMax = _xyz.utils.createElement({
@@ -204,41 +157,27 @@ export default (layer, panel) => {
       textContent: layer.style.markerMax,
       className: 'bold'
     },
-    appendTo: block
+    appendTo: panel
   });
 
-  let rMarkerMax = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'range'
-    },
-    appendTo: block
-  });
-
-  _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      type: 'range',
-      min: parseInt(layer.style.markerMax * 0.3),
-      value: parseInt(layer.style.markerMax),
-      max: parseInt(layer.style.markerMax * 3)
-    },
-    appendTo: rMarkerMax,
-    eventListener: {
-      event: 'input',
-      funct: e => {
-        lblMarkerMax.innerHTML = e.target.value;
-        layer.style.markerMax = parseInt(e.target.value);
-        layer.get();
-      }
+  _xyz.utils.slider({
+    min: parseInt(layer.style.markerMax * 0.3),
+    max: parseInt(layer.style.markerMax * 3),
+    value: parseInt(layer.style.markerMax),
+    appendTo: panel,
+    oninput: e => {
+      lblMarkerMax.innerHTML = e.target.value;
+      layer.style.markerMax = parseInt(e.target.value);
+      layer.get();
     }
   });
+
 
   //Create cluster_logscale checkbox.
   layer.cluster_logscale = layer.cluster_logscale || false;
   _xyz.utils.checkbox({
     label: 'Log scale cluster size.',
-    appendTo: block,
+    appendTo: panel,
     onChange: e => {
 
       // Set the tin construction flag to the checked status.

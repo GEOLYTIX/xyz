@@ -185,7 +185,6 @@
                 "label": "Retailer",
                 "type": "categorized",
                 "field": "brand",
-                "applied": true,
                 "other": true,
                 "cat": {
                   "Aldi": {
@@ -595,7 +594,6 @@
                 "label": "Retailer",
                 "type": "categorized",
                 "field": "brand",
-                "applied": true,
                 "other": true,
                 "cat": {
                   "Aldi": {

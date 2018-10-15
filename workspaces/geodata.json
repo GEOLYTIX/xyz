@@ -1583,7 +1583,6 @@
                   "label": "Retail Place type",
                   "type": "categorized",
                   "field": "rp_type",
-                  "applied": true,
                   "other": true,
                   "cat": {
                     "Major City Centre": {

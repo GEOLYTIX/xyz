@@ -1,3 +1,5 @@
+import _xyz from './_xyz.mjs';
+
 export {default as svg_symbols} from './svg_symbols.mjs';
 
 // Find the index of node in childNodes of parentNode.
@@ -168,6 +170,37 @@ export function checkbox(param) {
   if (typeof (param.onChange) === 'function') input.addEventListener('change', param.onChange);
 }
 
+export function createStateButton(param){
+
+  const btn = createElement({
+    tag: 'div',
+    options: {
+      className: 'btn_state cursor',
+      textContent: param.text
+    },
+    appendTo: param.appendTo
+  });
+
+  btn.addEventListener('click', () => {
+
+    if (_xyz.state == btn) {
+      btn.classList.remove('active');
+      return _xyz.state = 'select';
+    }
+
+    if (_xyz.state !== 'select') _xyz.state.classList.remove('active');
+
+    _xyz.state = btn;
+
+    _xyz.state.classList.add('active');
+
+    param.fx(param.text);
+
+
+  });
+
+}
+
 // Slider factory.
 export function slider(param) {
 
@@ -203,6 +236,7 @@ export function slider(param) {
       min: param.min,
       value: param.value,
       max: param.max,
+      step: param.step || 1,
       oninput: param.oninput,
     },
     appendTo: range_div

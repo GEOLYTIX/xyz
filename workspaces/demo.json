@@ -102,7 +102,6 @@
               "label": "Population Density",
               "type": "graduated",
               "field": "pop_density",
-              "applied": true,
               "other": true,
               "cat": [
                 {
@@ -368,7 +367,6 @@
               "label": "Retailer",
               "type": "categorized",
               "field": "brand2",
-              "applied": true,
               "cat": {
                 "dr_martens": {
                   "label": "Dr Martens",
@@ -648,7 +646,6 @@
                 "label": "Main Market",
                 "type": "categorized",
                 "field": "main_market",
-                "applied": true,
                 "cat": {
                   "Mass": {
                     "style": {
@@ -1590,7 +1587,6 @@
               "label": "Rank",
               "type": "categorized",
               "field": "rank",
-              "applied": true,
               "other": true,
               "cat": {
                 "Primary": {
@@ -1723,7 +1719,6 @@
               "label": "Retail Place type",
               "type": "categorized",
               "field": "rp_type",
-              "applied": true,
               "other": true,
               "cat": {
                 "Major City Centre": {
@@ -1989,7 +1984,6 @@
               "label": "Retailer",
               "type": "categorized",
               "field": "brand",
-              "applied": true,
               "competitors": {
                 "tesco": {
                   "colour": "#0055a8",
@@ -2297,7 +2291,6 @@
               "type": "categorized",
               "field": "pitch_dec",
               "label": "Retail pitch rank in decimal scale",
-              "applied": true,
               "cat": {
                 "1": {
                   "style": {
@@ -2520,7 +2513,6 @@
               "label": "Retailer",
               "type": "categorized",
               "field": "brand",
-              "applied": true,
               "other": true,
               "cat": {
                 "Aldi": {

@@ -130,7 +130,6 @@
                 "label": "Population Density",
                 "type": "graduated",
                 "field": "pop_density",
-                "applied": true,
                 "other": true,
                 "cat": [
                   {
@@ -795,7 +794,6 @@
                 "label": "Retailer",
                 "type": "categorized",
                 "field": "brand",
-                "applied": true,
                 "competitors": {
                   "tesco": {
                     "colour": "#0055a8",
@@ -1219,7 +1217,6 @@
                 "type": "categorized",
                 "field": "brand",
                 "other": true,
-                "applied": true,
                 "cat": {
                   "Aldi": {
                     "marker": {
@@ -1623,7 +1620,6 @@
               {
                 "label": "Motor vehicles 2016 (000's)",
                 "type": "graduated",
-                "applied": true,
                 "field": "all_mv_000__16",
                 "cat": [
                   {
@@ -1872,7 +1868,6 @@
                 "label": "Retail Place type",
                 "type": "categorized",
                 "field": "rp_type",
-                "applied": true,
                 "other": true,
                 "cat": {
                   "Major City Centre": {

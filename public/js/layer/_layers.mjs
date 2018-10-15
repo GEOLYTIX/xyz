@@ -43,7 +43,7 @@ export default () => {
     // Assign layer to be the layer object from array.
     layer = _xyz.layers.list[layer];
 
-    // Set empty layer defaults if not defined in workspace.
+    // __defaults
     if (!layer.style) layer.style = {};
     if (!layer.filter) layer.filter = {};
 
