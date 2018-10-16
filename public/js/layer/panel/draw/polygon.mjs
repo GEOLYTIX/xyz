@@ -16,10 +16,6 @@ export default (e, layer) => {
         layer.get();
     }
 
-    layer.drawnItems = L.featureGroup().addTo(_xyz.map);
-    layer.trail = L.featureGroup().addTo(_xyz.map);
-    layer.path = L.featureGroup().addTo(_xyz.map);
-
     let coords = [];
 
     if(!layer.edited){
@@ -29,16 +25,26 @@ export default (e, layer) => {
 
         _xyz.dom.map.style.cursor = 'crosshair';
 
+        layer.drawnItems = L.featureGroup().addTo(_xyz.map);
+        layer.trail = L.featureGroup().addTo(_xyz.map);
+        layer.path = L.featureGroup().addTo(_xyz.map);
+
         _xyz.map.on('click', e => {
             let start_pnt = [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng];
             layer.drawnItems.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
             
             let len = layer.drawnItems.getLayers().length,
                 segment = [];
+
+            //console.log(len);
             
             if(len === 2) {
                 let g = layer.drawnItems.toGeoJSON();
-                segment = [g.features[len-2].geometry.coordinates.reverse(), g.features[len-1].geometry.coordinates.reverse()];
+                segment = [
+                    [layer.drawnItems.getLayers()[len-2].getLatLng().lat, layer.drawnItems.getLayers()[len-2].getLatLng().lng],
+                    [layer.drawnItems.getLayers()[len-1].getLatLng().lat, layer.drawnItems.getLayers()[len-1].getLatLng().lng]
+                ];
+                //segment = [g.features[len-2].geometry.coordinates.reverse(), g.features[len-1].geometry.coordinates.reverse()];
                 layer.path.addLayer(L.polyline([segment], style(layer).path));
             }
             
@@ -46,12 +52,14 @@ export default (e, layer) => {
                 layer.path.clearLayers();
                 coords = [];
                 segment = [];
-                let g = layer.drawnItems.toGeoJSON();
-                
-                g.features.map(item => {
-                    coords.push(item.geometry.coodinates);
-                    segment.push(item.geometry.coordinates.reverse());
+
+                layer.drawnItems.eachLayer(layer => {
+                    let latlng = [layer.getLatLng().lng, layer.getLatLng().lat];
+                    coords.push(latlng);
+                    segment.push(latlng.reverse());
                 });
+                
+                //console.log(coords);
                 layer.path.addLayer(L.polygon(coords, style(layer).path));
             }
             
@@ -88,10 +96,10 @@ export default (e, layer) => {
                     "properties": {}
                 };
 
-                console.log(poly);
+                //console.log(poly);
                 
                 // Make select tab active on mobile device.
-                if (_xyz.view.mobile.activateLocationsTab) _xyz.view.mobile.activateLocationsTab();
+                //if (_xyz.view.mobile.activateLocationsTab) _xyz.view.mobile.activateLocationsTab(); // resolve this name
                 
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', _xyz.host + '/api/location/new?token=' + _xyz.token);
@@ -114,7 +122,7 @@ export default (e, layer) => {
                         layer.get();
                         
                         _xyz.locations.select({
-                            layer: layer.layer,
+                            layer: layer.key,
                             table: layer.table,
                             id: e.target.response,
                             marker: marker,
@@ -123,16 +131,16 @@ export default (e, layer) => {
                     }
                 }
                 
-                /*xhr.send(JSON.stringify({
+                xhr.send(JSON.stringify({
                     locale: _xyz.locale,
-                    layer: layer.layer,
+                    layer: layer.key,
                     table: layer.table,
                     geometry: poly
-                }));*/
+                }));
                 
                 console.log(JSON.stringify({
                     locale: _xyz.locale,
-                    layer: layer.layer,
+                    layer: layer.key,
                     table: layer.table,
                     geometry: poly
                 }));
