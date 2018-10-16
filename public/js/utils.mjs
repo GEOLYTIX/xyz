@@ -181,7 +181,7 @@ export function createStateButton(param){
     appendTo: param.appendTo
   });
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', e => {
 
     if (_xyz.state == btn) {
       btn.classList.remove('active');
@@ -194,7 +194,7 @@ export function createStateButton(param){
 
     _xyz.state.classList.add('active');
 
-    param.fx(param.text);
+    param.fx(e, param.layer);
 
 
   });

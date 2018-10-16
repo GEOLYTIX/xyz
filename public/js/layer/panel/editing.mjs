@@ -1,5 +1,7 @@
 import _xyz from '../../_xyz.mjs';
 
+import { polygon } from './draw/_draw.mjs';
+
 export default layer => {
 
   // Create cluster panel and add to layer dashboard.
@@ -34,30 +36,34 @@ export default layer => {
 
   function someFunction(word){
     console.log(word);
+    //let _style = draw(layer);
+    //console.log(_style);
   }
 
 
   _xyz.utils.createStateButton({
-    text: 'polygon',
+    text: 'Polygon',
+    appendTo: panel,
+    layer: layer,
+    //fx: someFunction
+    fx: polygon
+  });
+
+  _xyz.utils.createStateButton({
+    text: 'Rectangle',
+    appendTo: panel,
+    fx: someFunction
+  });
+
+
+  _xyz.utils.createStateButton({
+    text: 'Circle',
     appendTo: panel,
     fx: someFunction
   });
 
   _xyz.utils.createStateButton({
-    text: 'rectangle',
-    appendTo: panel,
-    fx: someFunction
-  });
-
-
-  _xyz.utils.createStateButton({
-    text: 'circle',
-    appendTo: panel,
-    fx: someFunction
-  });
-
-  _xyz.utils.createStateButton({
-    text: 'catchment',
+    text: 'Catchment',
     appendTo: panel,
     fx: someFunction
   });
