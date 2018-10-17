@@ -78,7 +78,7 @@ module.exports = async fastify => {
 
         }
 
-        await loadWorkspace(fastify);
+        await loadWorkspace(fastify, workspace);
 
         res.code(200).send(workspace);
 
@@ -114,7 +114,7 @@ module.exports = async fastify => {
       if (config.rows.length === 0) return {};
 
       // Return settings from first row as workspace.
-      return config.rows[0].settings;
+      return chkWorkspace(config.rows[0].settings);
     };
   }
 
@@ -133,7 +133,7 @@ module.exports = async fastify => {
     global.workspace.load = () => {
 
       // Return empty object as workspace if file does not exist.
-      if (!fs.existsSync('./workspaces/' + process.env.WORKSPACE.split(':').pop())) return chkWorkspace({});
+      if (!fs.existsSync('./workspaces/' + process.env.WORKSPACE.split(':').pop())) return chkWorkspace(global.workspace.admin.config || {});
 
       // Return workspace parsed as JSON from file stream.
       try {
@@ -141,7 +141,7 @@ module.exports = async fastify => {
         return chkWorkspace(JSON.parse(fs.readFileSync('./workspaces/' + process.env.WORKSPACE.split(':').pop()), 'utf8'));
       } catch (err) {
         console.error(err);
-        return chkWorkspace({});
+        return chkWorkspace(global.workspace.admin.config || {});
       }
 
     };
@@ -150,17 +150,17 @@ module.exports = async fastify => {
   // Create zero config workspace if the WORKSPACE is not defined in environment.
   if (!process.env.WORKSPACE) {
     global.workspace.name = 'zero config';
-    global.workspace.load = () => chkWorkspace({});
+    global.workspace.load = () => chkWorkspace(global.workspace.admin.config || {});
   }
 
   loadWorkspace(fastify);
 
 };
 
-async function loadWorkspace(fastify) {
+async function loadWorkspace(fastify, workspace) {
 
   // Get admin workspace.
-  global.workspace.admin.config = await global.workspace.load(fastify);
+  global.workspace.admin.config = workspace || await global.workspace.load(fastify);
 
   await createLookup(global.workspace.admin);
 

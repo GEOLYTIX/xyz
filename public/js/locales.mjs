@@ -16,6 +16,17 @@ export default () => {
       return obj;
     }, {});
 
+  // Set Leaflet bounds;
+  Object.values(_xyz.ws.locales).forEach(locale => {
+    locale.bounds.leaflet = [[
+      locale.bounds.south,
+      locale.bounds.west
+    ], [
+      locale.bounds.north,
+      locale.bounds.east
+    ]];
+  });
+
   // Return if length of locales array is 1.
   if (Object.keys(_xyz.ws.locales).length === 1) return;
 
