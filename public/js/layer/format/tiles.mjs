@@ -12,12 +12,12 @@ export default function(){
 
   if (layer.display) {
 
-    // Augment request with token if provider is set in workspace.
-    // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.
-    let uri = layer.provider ?
-      _xyz.host + '/proxy/image?uri=' + layer.URI + '&provider=' + layer.provider + '&token=' + _xyz.token :
+    // Augment request with token if proxied through backend.
+    // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
+    let uri = layer.URI.indexOf('provider') > 0 ?
+      _xyz.host + '/proxy/image?uri=' + layer.URI + '&token=' + _xyz.token :
       layer.URI;
-
+ 
     // Assign the tile layer to the layer L object and add to map.
     layer.L = L.tileLayer(uri, {
       //updateWhenIdle: true,

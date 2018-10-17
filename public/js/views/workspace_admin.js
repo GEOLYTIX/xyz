@@ -56,8 +56,10 @@ function init(json) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     
     xhr.onload = function () {
-      if (this.status === 406) alert('Cannot save file based settings.');
-      if (this.status === 200) alert('Settings saved.');
+      if (this.status !== 200) alert('I am not here. This is not happening.');
+
+      // Set cleaned json to editor;
+      editor.set(JSON.parse(this.response));
     };
     
     xhr.send(JSON.stringify({

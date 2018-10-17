@@ -1,0 +1,63 @@
+{
+    "ws": {
+        "title": "GEOLYTIX | XYZ",
+        "documentation": "optional",
+        "locate": "optional",
+        "locales": {
+            "zero": {
+                "layers": {
+                    "OSM": {
+                        "display": true,
+                        "format": "tiles",
+                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    }
+                }
+            }
+        }
+    },
+    "locale": {
+        "minZoom": 0,
+        "maxZoom": 20,
+        "bounds": {
+            "north": 90,
+            "east": 180,
+            "south": -90,
+            "west": -180
+        },
+        "gazetteer": "optional",
+        "layers": {}
+    },
+    "layers": {
+        "default": {
+            "key": "optional",
+            "name": "optional",
+            "group": "optional",
+            "format": "optional",
+            "display": "optional",
+            "attribution": "optional"
+        },
+        "tiles": {
+            "URI": "optional"
+        },
+        "geojson": {},
+        "mvt": {},
+        "cluster": {
+            "dbs": "optional",
+            "table": "optional",
+            "arrayZoom": "optional",
+            "cluster_label": "optional",
+            "cluster_cat": "optional",
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01,
+            "style": {
+                "markerMin": 20,
+                "markerMax": 40,
+                "marker": {
+                    "type": "target",
+                    "style": [400, "#aaa"]
+                }
+            }
+        },
+        "grid": {}
+    }
+}

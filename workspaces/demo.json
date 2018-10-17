@@ -2386,6 +2386,15 @@
           "log_table": "gb_retailpoint_editable_logs",
           "cluster_label": "store",
           "cluster_cat": "brand",
+          "editing": {
+            "properties": true,
+            "delete": true,
+            "circle": true,
+            "rectangle": true,
+            "catchments": {"default": "something"},
+            "polygon": true,
+            "point": true
+          },
           "infoj": [
             {
               "field": "store",

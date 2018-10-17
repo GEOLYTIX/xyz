@@ -74,7 +74,7 @@ export default function(){
       pointToLayer: (point, latlng) => {
         
         // Set icon to default marker. 
-        let marker_style = layer.style.marker ? layer.style.marker : {type: 'target', style: [400, '#aaa']};
+        let marker_style = layer.style.marker;
 
         let icon = _xyz.utils.svg_symbols(marker_style);
 

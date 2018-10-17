@@ -25,7 +25,18 @@ export default () => {
   _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
 
   // Get the layers from the current locale.
-  _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
+  _xyz.layers.list = JSON.parse(JSON.stringify(_xyz.ws.locales[_xyz.locale].layers));
+
+  // Filter invalid layers
+  _xyz.layers.list = Object.keys(_xyz.layers.list)
+    .filter(key => key.indexOf('__') === -1)
+    .reduce((obj, key) => {
+      obj[key] = _xyz.layers.list[key];
+      return obj;
+    }, {});
+
+  // Reset groups.
+  _xyz.layers.groups = {};
 
   // Set the layer display from hooks then remove layer hooks.
   if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {

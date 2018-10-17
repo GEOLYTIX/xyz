@@ -196,9 +196,7 @@ export function createStateButton(param){
 
     param.fx(param.text);
 
-
   });
-
 }
 
 // Slider factory.
