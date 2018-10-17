@@ -175,7 +175,7 @@ export function createStateButton(param){
   const btn = createElement({
     tag: 'div',
     options: {
-      className: 'btn_state cursor',
+      className: 'btn_state btn_wide cursor noselect',
       textContent: param.text
     },
     appendTo: param.appendTo

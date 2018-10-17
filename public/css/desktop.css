@@ -133,9 +133,11 @@
     opacity: 0.3; }
 
 .btn_state {
-  color: black; }
+  /*color: black;*/
+  color: #090; }
   .btn_state.active {
-    color: #090; }
+    /*color: #090;*/
+    color: black; }
 
 .range {
   width: 100%;

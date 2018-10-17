@@ -134,18 +134,11 @@ async function updateRecord(req, res, fastify) {
     Object.values(req.body.infoj).forEach(entry => {
       if(entry.type === 'group'){
         Object.values(entry.items).forEach(item => {
-          processInfoj(item);
+          fields = processInfoj(fields, item);
         });
       } else {
-        processInfoj(entry);
+        fields = processInfoj(fields, entry);
       }
-      /*if (entry.images) return
-            if (entry.field && entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/\'/g, "''")}',`;
-            if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`
-            if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`
-            if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`
-            if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`
-            if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`*/
     });
 
     const d = new Date();
@@ -173,7 +166,7 @@ async function updateRecord(req, res, fastify) {
   }
 }
 
-function processInfoj(entry){
+function processInfoj(fields, entry){
   if (entry.images) return;
   if (entry.field && entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/'/g, '\'\'')}',`;
   if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`;
@@ -181,6 +174,7 @@ function processInfoj(entry){
   if (entry.subfield && entry.subvalue) fields += `${entry.subfield} = '${entry.subvalue}',`;
   if (entry.type === 'date' && entry.value) fields += `${entry.field} = '${entry.value}',`;
   if (entry.type === 'date' && !entry.value) fields += `${entry.field} = null,`;
+  return fields;
 }
 
 async function deleteRecord(req, res, fastify) {
@@ -243,7 +237,7 @@ async function writeLog(fastify, layer, id) {
 }
 
 async function setIndices(req, res, fastify){
-
+  
   const del = '__'; // column alias delimiter
 
   const token = req.query.token ?
@@ -287,7 +281,6 @@ async function setIndices(req, res, fastify){
   });
 
   //console.log(idx);
-
   res.code(200).send(idx);
 
   //console.log(req.body);

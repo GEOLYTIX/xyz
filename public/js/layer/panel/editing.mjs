@@ -1,6 +1,7 @@
 import _xyz from '../../_xyz.mjs';
-
 import { polygon } from './draw/_draw.mjs';
+import { rect } from './draw/_draw.mjs';
+import { circle } from './draw/_draw.mjs';
 
 export default layer => {
 
@@ -52,14 +53,18 @@ export default layer => {
   _xyz.utils.createStateButton({
     text: 'Rectangle',
     appendTo: panel,
-    fx: someFunction
+    layer: layer,
+    //fx: someFunction
+    fx: rect
   });
 
 
   _xyz.utils.createStateButton({
     text: 'Circle',
     appendTo: panel,
-    fx: someFunction
+    layer: layer,
+    fx: circle
+    //fx: someFunction
   });
 
   _xyz.utils.createStateButton({

@@ -1,18 +1,20 @@
 import _xyz from '../../../_xyz.mjs';
-
 import style from './style.mjs';
+import { switchState } from './_draw.mjs';
 
 export default (e, layer) => {
     e.stopPropagation();
 
     layer.edited = layer.edited ? false : true;
 
-    console.log(layer);
+    let btn = e.target;
+
+    //console.log(layer);
 
     if(layer.edited && !layer.display){
         layer.display = true;
-        layer.clear_icon.textContent = layer.display ? 'layers' : 'layers_clear';
-        _xyz.pushHook('layers', layer.layer);
+        layer.toggle.textContent = layer.display ? 'layers' : 'layers_clear';
+        _xyz.hooks.push('layers', layer.key);
         layer.get();
     }
 
@@ -25,26 +27,24 @@ export default (e, layer) => {
 
         _xyz.dom.map.style.cursor = 'crosshair';
 
-        layer.drawnItems = L.featureGroup().addTo(_xyz.map);
+        layer.vertices = L.featureGroup().addTo(_xyz.map);
         layer.trail = L.featureGroup().addTo(_xyz.map);
         layer.path = L.featureGroup().addTo(_xyz.map);
 
         _xyz.map.on('click', e => {
             let start_pnt = [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng];
-            layer.drawnItems.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
+            layer.vertices.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
             
-            let len = layer.drawnItems.getLayers().length,
+            let len = layer.vertices.getLayers().length,
                 segment = [];
 
             //console.log(len);
             
             if(len === 2) {
-                let g = layer.drawnItems.toGeoJSON();
                 segment = [
-                    [layer.drawnItems.getLayers()[len-2].getLatLng().lat, layer.drawnItems.getLayers()[len-2].getLatLng().lng],
-                    [layer.drawnItems.getLayers()[len-1].getLatLng().lat, layer.drawnItems.getLayers()[len-1].getLatLng().lng]
+                    [layer.vertices.getLayers()[len-2].getLatLng().lat, layer.vertices.getLayers()[len-2].getLatLng().lng],
+                    [layer.vertices.getLayers()[len-1].getLatLng().lat, layer.vertices.getLayers()[len-1].getLatLng().lng]
                 ];
-                //segment = [g.features[len-2].geometry.coordinates.reverse(), g.features[len-1].geometry.coordinates.reverse()];
                 layer.path.addLayer(L.polyline([segment], style(layer).path));
             }
             
@@ -53,13 +53,12 @@ export default (e, layer) => {
                 coords = [];
                 segment = [];
 
-                layer.drawnItems.eachLayer(layer => {
+                layer.vertices.eachLayer(layer => {
                     let latlng = [layer.getLatLng().lng, layer.getLatLng().lat];
                     coords.push(latlng);
                     segment.push(latlng.reverse());
                 });
-                
-                //console.log(coords);
+
                 layer.path.addLayer(L.polygon(coords, style(layer).path));
             }
             
@@ -67,9 +66,9 @@ export default (e, layer) => {
                 layer.trail.clearLayers();
                 
                 layer.trail.addLayer(L.polyline([
-                    [layer.drawnItems.getLayers()[0].getLatLng().lat, layer.drawnItems.getLayers()[0].getLatLng().lng],
+                    [layer.vertices.getLayers()[0].getLatLng().lat, layer.vertices.getLayers()[0].getLatLng().lng],
                     [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng], 
-                    [layer.drawnItems.getLayers()[len-1].getLatLng().lat, layer.drawnItems.getLayers()[len-1].getLatLng().lng]
+                    [layer.vertices.getLayers()[len-1].getLatLng().lat, layer.vertices.getLayers()[len-1].getLatLng().lng]
                 ], style(layer).trail));
             });
             
@@ -85,7 +84,7 @@ export default (e, layer) => {
                 layer.edited = false;
                 
                 coords = [];
-                layer.drawnItems.eachLayer(layer => {
+                layer.vertices.eachLayer(layer => {
                     coords.push([layer.getLatLng().lng, layer.getLatLng().lat]);
                 });
                 coords.push(coords[0]);
@@ -105,7 +104,7 @@ export default (e, layer) => {
                 xhr.open('POST', _xyz.host + '/api/location/new?token=' + _xyz.token);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 
-                let _marker = layer.drawnItems.getBounds().getCenter(),
+                let _marker = layer.vertices.getBounds().getCenter(),
                     marker = [_marker.lng.toFixed(5), _marker.lat.toFixed(5)];
                     
                 xhr.onload = e => {
@@ -116,10 +115,12 @@ export default (e, layer) => {
                     }
                     
                     if (e.target.status === 200) {
-                        layer.drawnItems.clearLayers();
+                        layer.vertices.clearLayers();
                         layer.path.clearLayers();
                         
                         layer.get();
+
+                        switchState(btn); // jumps back to select state;
                         
                         _xyz.locations.select({
                             layer: layer.key,
@@ -138,12 +139,12 @@ export default (e, layer) => {
                     geometry: poly
                 }));
                 
-                console.log(JSON.stringify({
+                /*console.log(JSON.stringify({
                     locale: _xyz.locale,
                     layer: layer.key,
                     table: layer.table,
                     geometry: poly
-                }));
+                }));*/
             });
         });
     }

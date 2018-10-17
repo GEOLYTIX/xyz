@@ -105,9 +105,11 @@
 }
 
 .btn_state {
-    color: black;
-
+    /*color: black;*/
+    color: $glxgreen;
+    
     &.active {
-        color: #090;
+        /*color: #090;*/
+        color: black;
     }
 }

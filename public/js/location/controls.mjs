@@ -202,13 +202,15 @@ export function update(record) {
           changedElements.forEach(el => el.classList.remove('changed'));
 
           layer.get();
+
           try {
             record.location.M
               .getLayers()[0]
               .setLatLng(
                 record.location.L
                   .getLayers()[0]
-                  .getLatLng()
+                  .getBounds()
+                  .getCenter()
               );
           } catch (err) { console.error(err); }
         };
@@ -262,17 +264,26 @@ export function trash(record) {
           layer.get();
           record.drawer.remove();
     
-          _xyz.hooks.filter('select', record.letter + '!' + record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+          _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
           if (record.location.L) _xyz.map.removeLayer(record.location.L);
           if (record.location.M) _xyz.map.removeLayer(record.location.M);
           if (record.location.D) _xyz.map.removeLayer(record.location.D);
           record.location = null;
+
+          console.log(_xyz);
+
+          // Find free records in locations array.
+          let freeRecords = _xyz.locations.list.filter(record => record.location);
+
+          // Return from selection if no free record is available.
+          if (freeRecords.length === 0) _xyz.locations.init();
     
-          let freeRecords = _xyz.ws.select.layers.records.filter(record => {
-            if (!record.location) return record;
-          });
+          //let freeRecords = _xyz.ws.select.layers.records.filter(record => {
+         // let freeRecords = _xyz.locations.list.filter(record => {
+          //  if (!record.location) return record;
+          //});
     
-          if (freeRecords.length === _xyz.ws.select.layers.records.length) _xyz.ws.select.resetModule();
+          //if (freeRecords.length === _xyz.ws.select.layers.records.length) _xyz.ws.select.resetModule();
         };
         xhr.send();
       }
