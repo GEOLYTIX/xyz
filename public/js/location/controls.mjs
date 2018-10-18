@@ -1,4 +1,6 @@
 import _xyz from '../_xyz.mjs';
+import pointOnFeature from '@turf/point-on-feature';
+import { switchState } from '../layer/panel/draw/_draw';
 
 export function clear(record) {
   _xyz.utils.createElement({
@@ -19,7 +21,9 @@ export function clear(record) {
 
         e.stopPropagation();
         record.drawer.remove();
-
+        
+        switchState(_xyz.state);
+      
         _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
         if (record.location.L) _xyz.map.removeLayer(record.location.L);
         if (record.location.M) _xyz.map.removeLayer(record.location.M);
@@ -204,14 +208,12 @@ export function update(record) {
           layer.get();
 
           try {
+            
+            let pof = pointOnFeature(record.location.L.toGeoJSON());
+            
             record.location.M
-              .getLayers()[0]
-              .setLatLng(
-                record.location.L
-                  .getLayers()[0]
-                  .getBounds()
-                  .getCenter()
-              );
+              .getLayers()[0].setLatLng(L.latLng(pof.geometry.coordinates.reverse()));
+
           } catch (err) { console.error(err); }
         };
 
@@ -245,6 +247,8 @@ export function trash(record) {
       funct: e => {
         e.stopPropagation();
 
+        switchState(_xyz.state);
+
         let layer = _xyz.layers.list[record.location.layer],
           xhr = new XMLHttpRequest();
 
@@ -270,7 +274,7 @@ export function trash(record) {
           if (record.location.D) _xyz.map.removeLayer(record.location.D);
           record.location = null;
 
-          console.log(_xyz);
+          //console.log(_xyz);
 
           // Find free records in locations array.
           let freeRecords = _xyz.locations.list.filter(record => record.location);
