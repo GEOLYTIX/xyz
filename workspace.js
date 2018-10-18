@@ -268,6 +268,9 @@ function chkOptionals(chk, opt) {
 
   // Check whether optionals exist.
   Object.keys(chk).forEach(key => {
+
+    if (chk[key] === 'optional') return delete chk[key];
+
     if (!(key in opt)) {
 
       // Prefix key with double underscore if opt key does not exist.

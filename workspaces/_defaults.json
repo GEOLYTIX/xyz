@@ -129,7 +129,13 @@
                         "#aaa"
                     ]
                 },
-                "markerMulti": "optional",
+                "markerMulti": {
+                    "type": "target",
+                    "style": [
+                        400,
+                        "#333"
+                    ]
+                },
                 "theme": "optional",
                 "themes": "optional"
             }
@@ -143,15 +149,13 @@
             "geom": "optional",
             "style": {
                 "range": [
-                    "#3366FF",
-                    "#4D59F2",
-                    "#664DE6",
-                    "#8040D9",
-                    "#9933CC",
-                    "#B326BF",
-                    "#CC1AB3",
-                    "#E60DA6",
-                    "#FF0099"
+                    "#15773f",
+                    "#66bd63",
+                    "#a6d96a",
+                    "#d9ef8b",
+                    "#fdae61",
+                    "#f46d43",
+                    "#d73027"
                 ]
             }
         }

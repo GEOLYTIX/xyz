@@ -43,16 +43,9 @@ export default () => {
 
 
   // Loop through the layers and add to layers list.
-  Object.keys(_xyz.layers.list).forEach(layer => {
-
-    // Assign layer key from object key.
-    _xyz.layers.list[layer].key = layer;
-
-    // Assign layer to be the layer object from array.
-    layer = _xyz.layers.list[layer];
+  Object.values(_xyz.layers.list).forEach(layer => {
 
     // __defaults
-    if (!layer.style) layer.style = {};
     if (!layer.filter) layer.filter = {};
 
     // Create new layer group if group does not exist yet.

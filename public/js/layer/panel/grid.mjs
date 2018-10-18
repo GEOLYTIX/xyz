@@ -63,19 +63,6 @@ export default layer => {
     }
   });
 
-  // __defaults
-  if (!layer.style) layer.style = {};
-
-  if (!layer.style.range) layer.style.range = [
-    '#15773f',
-    '#66bd63',
-    '#a6d96a',
-    '#d9ef8b',
-    '#fdae61',
-    '#f46d43',
-    '#d73027'
-  ];
-
   // Create SVG grid legend
   let
     yTrack = 35,
