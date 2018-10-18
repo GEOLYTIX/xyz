@@ -232,6 +232,9 @@ function chkWorkspace(workspace) {
 
     chkOptionals(locale, _locale);
 
+    // Check bounds
+    chkOptionals(locale.bounds, _locale.bounds);
+
     // Check layers.
     Object.keys(locale.layers).forEach(key => {
 
