@@ -141,7 +141,19 @@
             "grid_color": "optional",
             "queryFields": "optional",
             "geom": "optional",
-            "style": "optional"
+            "style": {
+                "range": [
+                    "#3366FF",
+                    "#4D59F2",
+                    "#664DE6",
+                    "#8040D9",
+                    "#9933CC",
+                    "#B326BF",
+                    "#CC1AB3",
+                    "#E60DA6",
+                    "#FF0099"
+                ]
+            }
         }
     }
 }
