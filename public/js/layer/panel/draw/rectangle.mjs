@@ -27,18 +27,15 @@ export default (e, layer) => {
         layer.path = L.featureGroup().addTo(_xyz.map);
 
         _xyz.map.on('click', e => {
-            let start_pnt = [
-                _xyz.map.mouseEventToLatLng(e.originalEvent).lat, 
-                _xyz.map.mouseEventToLatLng(e.originalEvent).lng
-            ];
-            layer.vertices.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
+            let start_pnt = [e.latlng.lat, e.latlng.lng];
+            layer.vertices.addLayer(L.circleMarker(e.latlng, style(layer).vertex));
 
             let len = layer.vertices.getLayers().length;
 
             if(len === 1){
                 _xyz.map.on('mousemove', e => {
                     layer.trail.clearLayers();
-                    layer.trail.addLayer(L.rectangle([start_pnt, [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng]], style(layer).trail));
+                    layer.trail.addLayer(L.rectangle([start_pnt, [e.latlng.lat, e.latlng.lng]], style(layer).trail));
                 });
             }
 

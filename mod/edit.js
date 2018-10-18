@@ -167,7 +167,7 @@ async function updateRecord(req, res, fastify) {
 }
 
 function processInfoj(fields, entry){
-  if (entry.images) return;
+  //if (entry.images) return;
   if (entry.field && entry.type === 'text' && entry.value) fields += `${entry.field} = '${entry.value.replace(/'/g, '\'\'')}',`;
   if (entry.type === 'integer' && entry.value) fields += `${entry.field} = ${entry.value},`;
   if (entry.type === 'integer' && !entry.value) fields += `${entry.field} = null,`;

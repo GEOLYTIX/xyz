@@ -41,7 +41,7 @@ export default layer => {
     console.log(word);
   }
 
-  if(layer.editing && layer.editing.point){
+  if(layer.edit && layer.edit.point){
     _xyz.utils.createStateButton({
       text: 'Point',
       appendTo: panel,
@@ -50,7 +50,7 @@ export default layer => {
     });
   }
   
-  if(layer.editing && layer.editing.polygon){
+  if(layer.edit && layer.edit.polygon){
     _xyz.utils.createStateButton({
       text: 'Polygon',
       appendTo: panel,
@@ -59,7 +59,7 @@ export default layer => {
     });
   }
   
-  if(layer.editing && layer.editing.rectangle){
+  if(layer.edit && layer.edit.rectangle){
     _xyz.utils.createStateButton({
       text: 'Rectangle',
       appendTo: panel,
@@ -68,7 +68,7 @@ export default layer => {
     });
   }
   
-  if(layer.editing && layer.editing.circle){
+  if(layer.edit && layer.edit.circle){
     _xyz.utils.createStateButton({
       text: 'Circle',
       appendTo: panel,
@@ -77,7 +77,7 @@ export default layer => {
     });
   }
 
-  if(layer.editing && layer.editing.line){
+  if(layer.edit && layer.edit.line){
     _xyz.utils.createStateButton({
       text: 'Line',
       appendTo: panel,
@@ -86,7 +86,7 @@ export default layer => {
     });
   }
   
-  if(layer.editing && layer.editing.catchment){
+  if(layer.edit && layer.edit.catchment){
     _xyz.utils.createStateButton({
       text: 'Catchment',
       appendTo: panel,

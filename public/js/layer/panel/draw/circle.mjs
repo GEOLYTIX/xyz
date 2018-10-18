@@ -32,7 +32,7 @@ export default (e, layer) => {
 
         _xyz.map.on('click', e => {
 
-            layer.vertices.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
+            layer.vertices.addLayer(L.circleMarker(e.latlng, style(layer).vertex));
 
             let len = layer.vertices.getLayers().length, 
                 o, c, s, r, // origin, cursor, segment, radius
@@ -43,7 +43,7 @@ export default (e, layer) => {
             if(len === 1){
                 _xyz.map.on('mousemove', e => {
                     layer.trail.clearLayers();
-                    c = helpers.point([_xyz.map.mouseEventToLatLng(e.originalEvent).lng, _xyz.map.mouseEventToLatLng(e.originalEvent).lat]);
+                    c = helpers.point([e.latlng.lng, e.latlng.lat]);
                     r = distance(o, c, options).toFixed(2);
                     
                     layer.trail.addLayer(L.circle([layer.vertices.getLayers()[0].getLatLng().lat, layer.vertices.getLayers()[0].getLatLng().lng], Object.assign(style(layer).path, {radius: parseFloat(r)})));

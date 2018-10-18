@@ -30,11 +30,8 @@ export default (e, layer) => {
         layer.path = L.featureGroup().addTo(_xyz.map);
 
         _xyz.map.on('click', e => {
-            let start_pnt = [
-                _xyz.map.mouseEventToLatLng(e.originalEvent).lat, 
-                _xyz.map.mouseEventToLatLng(e.originalEvent).lng
-            ];
-            layer.vertices.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
+            let start_pnt = [e.latlng.lat, e.latlng.lng];
+            layer.vertices.addLayer(L.circleMarker(e.latlng, style(layer).vertex));
             
             let len = layer.vertices.getLayers().length,
                 segment = [];
@@ -66,7 +63,7 @@ export default (e, layer) => {
                 
                 layer.trail.addLayer(L.polyline([
                     [layer.vertices.getLayers()[0].getLatLng().lat, layer.vertices.getLayers()[0].getLatLng().lng],
-                    [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng], 
+                    [e.latlng.lat,e.latlng.lng], 
                     [layer.vertices.getLayers()[len-1].getLatLng().lat, layer.vertices.getLayers()[len-1].getLatLng().lng]
                 ], style(layer).path));
             });

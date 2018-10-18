@@ -29,9 +29,9 @@ export default (e, layer) => {
         let coords = [];
 
         _xyz.map.on('click', e => {
-            let start_pnt = [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng];
+            let start_pnt = [e.latlng.lat, e.latlng.lng];
 
-            layer.vertices.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
+            layer.vertices.addLayer(L.circleMarker(e.latlng, style(layer).vertex));
 
             let len = layer.vertices.getLayers().length, part = [];
 
@@ -47,9 +47,8 @@ export default (e, layer) => {
                 layer.trail.clearLayers();
                 layer.trail.addLayer(L.polyline(
                     [start_pnt, 
-                        [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, 
-                         _xyz.map.mouseEventToLatLng(e.originalEvent).lng]
-                        ], 
+                        [e.latlng.lat, e.latlng.lng]
+                    ], 
                     style(layer).trail));
                 });
 
