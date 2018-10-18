@@ -21,11 +21,14 @@ export default () => {
   // Empty the layers list.
   document.getElementById('layers').innerHTML = '';
 
+  //Object.values(_xyz.layers.list).forEach(layer => layer.remove());
+
   // Remove all existing layers from map.
-  _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
+  // _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
 
   // Get the layers from the current locale.
-  _xyz.layers.list = JSON.parse(JSON.stringify(_xyz.ws.locales[_xyz.locale].layers));
+  //_xyz.layers.list = JSON.parse(JSON.stringify(_xyz.ws.locales[_xyz.locale].layers));
+  _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
 
   // Filter invalid layers
   _xyz.layers.list = Object.keys(_xyz.layers.list)
@@ -98,7 +101,7 @@ export default () => {
     // Increase pane counter and add layer pane to map.
     _xyz.panes.next += 2;
     _xyz.panes.list.push(_xyz.map.createPane(layer.key));
-    _xyz.map.getPane(layer.key).style.zIndex = _xyz.pane;
+    _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next;
 
     // Method to get data and redraw layer on map.
     layer.get = layer_formats[layer.format];

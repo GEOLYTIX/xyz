@@ -20,11 +20,11 @@ export default function(){
  
     // Assign the tile layer to the layer L object and add to map.
     layer.L = L.tileLayer(uri, {
-      //updateWhenIdle: true,
+      updateWhenIdle: true,
       pane: layer.key
-    }).addTo(_xyz.map).on('load', () => {
-      if (locale === _xyz.locale) _xyz.layers.check(layer);
-    });
+    }).addTo(_xyz.map).on('load', () => { _xyz.layers.check(layer); });
+    //   if (locale === _xyz.locale) _xyz.layers.check(layer);
+    // });
   }
 
 }

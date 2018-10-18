@@ -4,18 +4,11 @@
         "documentation": "optional",
         "locate": "optional",
         "locales": {
-            "zero": {
-                "layers": {
-                    "OSM": {
-                        "display": true,
-                        "format": "tiles",
-                        "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    }
-                }
-            }
+            "zero": {}
         }
     },
     "locale": {
+        "name": "optional",
         "minZoom": 0,
         "maxZoom": 20,
         "bounds": {
@@ -25,7 +18,13 @@
             "west": -180
         },
         "gazetteer": "optional",
-        "layers": {}
+        "layers": {
+            "OSM": {
+                "display": true,
+                "format": "tiles",
+                "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            }
+        }
     },
     "layers": {
         "default": {
@@ -34,13 +33,57 @@
             "group": "optional",
             "format": "optional",
             "display": "optional",
-            "attribution": "optional"
+            "attribution": "optional",
+            "infoj": "optional"
         },
         "tiles": {
             "URI": "optional"
         },
-        "geojson": {},
-        "mvt": {},
+        "geojson": {
+            "DBS": "optional",
+            "table": "optional",
+            "arrayZoom": "optional",
+            "style": {
+                "default": {
+                    "weight": 1,
+                    "color": "#333",
+                    "fill": true,
+                    "fillColor": "#333",
+                    "fillOpacity": 0.1
+                },
+                "highlight": {
+                    "stroke": true,
+                    "color": "#090",
+                    "weight": 2,
+                    "fillColor": "#cf9",
+                    "fillOpacity": 0.2,
+                    "fill": true
+                }
+            }
+        },
+        "mvt": {
+            "DBS": "optional",
+            "table": "optional",
+            "arrayZoom": "optional",
+            "geom_3857": "optional",
+            "style": {
+                "default": {
+                    "weight": 1,
+                    "color": "#333",
+                    "fill": true,
+                    "fillColor": "#333",
+                    "fillOpacity": 0.1
+                },
+                "highlight": {
+                    "stroke": true,
+                    "color": "#090",
+                    "weight": 2,
+                    "fillColor": "#cf9",
+                    "fillOpacity": 0.2,
+                    "fill": true
+                }
+            }
+        },
         "cluster": {
             "dbs": "optional",
             "table": "optional",
@@ -54,10 +97,23 @@
                 "markerMax": 40,
                 "marker": {
                     "type": "target",
-                    "style": [400, "#aaa"]
-                }
+                    "style": [
+                        400,
+                        "#aaa"
+                    ]
+                },
+                "markerMulti": "optional",
+                "theme": "optional",
+                "themes": "optional"
             }
         },
-        "grid": {}
+        "grid": {
+            "DBS": "optional",
+            "table": "optional",
+            "arrayZoom": "optional",
+            "grid_color": "optional",
+            "queryFields": "optional",
+            "style": "optional"
+        }
     }
 }

@@ -27,8 +27,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "here": {
           "group": "Base maps",
@@ -710,8 +709,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         }
       }
     },
@@ -752,8 +750,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "mapbox_custom": {
           "group": "Base maps",
@@ -763,8 +760,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "here": {
           "group": "Base maps",
@@ -2899,8 +2895,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         }
       }
     }

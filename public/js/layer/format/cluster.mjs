@@ -70,6 +70,7 @@ export default function(){
       cluster.reduce((csize_max, f) => Math.max(c_max, f.properties.size), 0) : null;
 
     // Add cluster as point layer to Leaflet.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
     layer.L = L.geoJson(cluster, {
       pointToLayer: (point, latlng) => {
         

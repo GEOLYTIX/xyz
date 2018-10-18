@@ -235,7 +235,7 @@ function chkWorkspace(workspace) {
     // Check layers.
     Object.keys(locale.layers).forEach(key => {
 
-      let layer = locale.layers[key];
+      const layer = locale.layers[key];
 
       if (typeof layer !== 'object'
         || !layer.format
@@ -245,7 +245,7 @@ function chkWorkspace(workspace) {
         return;
       }
 
-      let _layer = Object.assign(
+      const _layer = Object.assign({},
         global.workspace._defaults.layers.default,
         global.workspace._defaults.layers[layer.format]
       );
@@ -254,6 +254,8 @@ function chkWorkspace(workspace) {
       layer.name = layer.name || key;
 
       chkOptionals(layer, _layer);
+
+      if (layer.style) chkOptionals(layer.style, _layer.style);
     });
 
   });
@@ -266,7 +268,7 @@ function chkOptionals(chk, opt) {
 
   // Check whether optionals exist.
   Object.keys(chk).forEach(key => {
-    if (!opt[key]) {
+    if (!(key in opt)) {
 
       // Prefix key with double underscore if opt key does not exist.
       chk['__' + key] = chk[key];
@@ -276,6 +278,6 @@ function chkOptionals(chk, opt) {
 
   // Set default for non optional key values.
   Object.keys(opt).forEach(key => {
-    if (!chk[key] && opt[key] !== 'optional') chk[key] = opt[key];
+    if (!(key in chk) && opt[key] !== 'optional') chk[key] = opt[key];
   });
 }

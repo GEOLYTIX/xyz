@@ -11,7 +11,7 @@ export default function() {
 
   // Filter the layer from the layers hook array.
   _xyz.hooks.filter('layers', layer.key);
-  
+
   // Remove layer.
   if (layer.L) _xyz.map.removeLayer(layer.L);
 

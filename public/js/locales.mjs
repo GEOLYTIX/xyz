@@ -44,6 +44,19 @@ export default () => {
     selected: _xyz.locale,
     onchange: e => {
 
+      _xyz.map.remove();
+
+      _xyz.map = L.map('Map', {
+        renderer: L.svg(),
+        scrollWheelZoom: true,
+        zoomControl: false,
+        attributionControl: false,
+        minZoom: _xyz.ws.locales[_xyz.locale].minZoom,
+        maxZoom: _xyz.ws.locales[_xyz.locale].maxZoom
+      });
+
+
+
       // Set the locale and remove hooks.
       _xyz.locale = e.target.value;
       _xyz.hooks.removeAll();
