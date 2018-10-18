@@ -70,11 +70,12 @@ export default function(){
       cluster.reduce((csize_max, f) => Math.max(c_max, f.properties.size), 0) : null;
 
     // Add cluster as point layer to Leaflet.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
     layer.L = L.geoJson(cluster, {
       pointToLayer: (point, latlng) => {
         
         // Set icon to default marker. 
-        let marker_style = layer.style.marker ? layer.style.marker : {type: 'target', style: [400, '#aaa']};
+        let marker_style = layer.style.marker;
 
         let icon = _xyz.utils.svg_symbols(marker_style);
 

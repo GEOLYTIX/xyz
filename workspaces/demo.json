@@ -27,8 +27,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "here": {
           "group": "Base maps",
@@ -38,8 +37,7 @@
           },
           "meta": "Satellite Imagery layer provided by HERE.",
           "format": "tiles",
-          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE"
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
         },
         "sprawls": {
           "name": "World Cities",
@@ -710,8 +708,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         }
       }
     },
@@ -752,8 +749,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "mapbox_custom": {
           "group": "Base maps",
@@ -763,8 +759,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "here": {
           "group": "Base maps",
@@ -774,8 +769,7 @@
           },
           "meta": "Satellite Imagery layer provided by HERE.",
           "format": "tiles",
-          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE"
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
         },
         "border": {
           "name": "Country Border",
@@ -2386,6 +2380,15 @@
           "log_table": "gb_retailpoint_editable_logs",
           "cluster_label": "store",
           "cluster_cat": "brand",
+          "editing": {
+            "properties": true,
+            "delete": true,
+            "circle": true,
+            "rectangle": true,
+            "catchments": {"default": "something"},
+            "polygon": true,
+            "point": true
+          },
           "infoj": [
             {
               "field": "store",
@@ -2890,8 +2893,7 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           },
           "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
-          "provider": "MAPBOX"
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         }
       }
     }

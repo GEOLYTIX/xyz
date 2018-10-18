@@ -10,15 +10,21 @@ _xyz.panes = {init: _panes};
 export default () => {
 
   // Initiate map object.
-  _xyz.map = L.map('Map', {
+  _xyz.initMap = () => L.map('Map', {
     renderer: L.svg(),
     scrollWheelZoom: true,
     zoomControl: false,
     attributionControl: false,
     minZoom: _xyz.ws.locales[_xyz.locale].minZoom,
     maxZoom: _xyz.ws.locales[_xyz.locale].maxZoom
-  })
-    .setView([parseFloat(_xyz.hooks.current.lat || 0), parseFloat(_xyz.hooks.current.lng || 0)], parseInt(_xyz.hooks.current.z || 15));
+  });
+
+  _xyz.map = _xyz.initMap();
+    
+  _xyz.map.setView(
+    [parseFloat(_xyz.hooks.current.lat || 0),
+      parseFloat(_xyz.hooks.current.lng || 0)],
+    parseInt(_xyz.hooks.current.z || 15));
 
   _xyz.panes.init();
 

@@ -21,11 +21,19 @@ export default () => {
   // Empty the layers list.
   document.getElementById('layers').innerHTML = '';
 
-  // Remove all existing layers from map.
-  _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
-
   // Get the layers from the current locale.
   _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
+
+  // Filter invalid layers
+  _xyz.layers.list = Object.keys(_xyz.layers.list)
+    .filter(key => key.indexOf('__') === -1)
+    .reduce((obj, key) => {
+      obj[key] = _xyz.layers.list[key];
+      return obj;
+    }, {});
+
+  // Reset groups.
+  _xyz.layers.groups = {};
 
   // Set the layer display from hooks then remove layer hooks.
   if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {
@@ -35,16 +43,9 @@ export default () => {
 
 
   // Loop through the layers and add to layers list.
-  Object.keys(_xyz.layers.list).forEach(layer => {
-
-    // Assign layer key from object key.
-    _xyz.layers.list[layer].key = layer;
-
-    // Assign layer to be the layer object from array.
-    layer = _xyz.layers.list[layer];
+  Object.values(_xyz.layers.list).forEach(layer => {
 
     // __defaults
-    if (!layer.style) layer.style = {};
     if (!layer.filter) layer.filter = {};
 
     // Create new layer group if group does not exist yet.
@@ -88,7 +89,7 @@ export default () => {
     // Increase pane counter and add layer pane to map.
     _xyz.panes.next += 2;
     _xyz.panes.list.push(_xyz.map.createPane(layer.key));
-    _xyz.map.getPane(layer.key).style.zIndex = _xyz.pane;
+    _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next;
 
     // Method to get data and redraw layer on map.
     layer.get = layer_formats[layer.format];

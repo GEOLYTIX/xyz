@@ -32,12 +32,6 @@ export default layer => {
     }
   });
 
-  // __defaults
-  if (!layer.cluster_kmeans) layer.cluster_kmeans = 0.05;
-  if (!layer.cluster_dbscan) layer.cluster_dbscan = 0.01;
-  if (!layer.style.markerMin) layer.style.markerMin = 20;
-  if (!layer.style.markerMax) layer.style.markerMax = 40;
-
   // Set timeout to debounce layer get on range input event.
   let timeout;
 

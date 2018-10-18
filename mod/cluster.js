@@ -224,11 +224,11 @@ async function select(req, res, fastify) {
     layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
     geom = layer.geom ? layer.geom : 'geom',
     table = req.query.table,
-    id = layer.qID ? layer.qID : 'id';
-  filter = req.query.filter ? JSON.parse(req.query.filter) : null,
-  label = layer.cluster_label ? layer.cluster_label : id,
-  count = parseInt(req.query.count),
-  lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
+    id = layer.qID ? layer.qID : 'id',
+    filter = req.query.filter ? JSON.parse(req.query.filter) : null,
+    label = layer.cluster_label ? layer.cluster_label : id,
+    count = parseInt(req.query.count),
+    lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([table, geom, id, label]
