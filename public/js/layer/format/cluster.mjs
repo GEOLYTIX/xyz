@@ -24,7 +24,6 @@ export default function(){
         null : layer.arrayZoom[zoom];
   }
 
-
   // Make drawer opaque if no table present.
   layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 

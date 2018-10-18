@@ -1,7 +1,32 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import url("https://fonts.googleapis.com/css?family=PT+Mono");
 
+@font-face {
+    font-family: ffmark_black;
+    src: url(../../fonts/MarkWeb-Black.woff) format("woff");
+}
+
 button {
     background-color: transparent;
     border: none;
+}
+
+body {
+    margin: 0;
+}
+
+#workspace_mask {
+    z-index: 999;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    opacity: 0.5;
+    font-size: 50px;
+    text-align: center;
+    color: #090;
+    font-family: ffmark_black;
+    padding-top: 30%;
+    text-shadow: 2px 2px #cf9;
 }

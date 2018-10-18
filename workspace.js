@@ -61,7 +61,7 @@ module.exports = async fastify => {
       beforeHandler: fastify.auth([fastify.authAdminAPI]),
       handler: async (req, res) => {
 
-        let workspace = chkWorkspace(req.body.settings);
+        let workspace = await chkWorkspace(req.body.settings);
 
         if (process.env.WORKSPACE && process.env.WORKSPACE.split(':')[0] === 'postgres') {
 
@@ -69,17 +69,17 @@ module.exports = async fastify => {
           let
             db = await fastify.pg.workspace.connect(),
             q = `INSERT INTO ${process.env.WORKSPACE.split('|').pop()} (settings)
-               SELECT $1 AS settings;`;
-
+                 SELECT $1 AS settings;`;
+  
           // INSERT query to update the workspace in Postgres table.
           await db.query(q, [JSON.stringify(workspace)]);
-
+  
           db.release();
-
+  
         }
-
-        await loadWorkspace(fastify, workspace);
-
+  
+        await loadWorkspace(workspace);
+  
         res.code(200).send(workspace);
 
       }
@@ -153,97 +153,110 @@ module.exports = async fastify => {
     global.workspace.load = () => chkWorkspace(global.workspace.admin.config || {});
   }
 
-  loadWorkspace(fastify);
+  loadWorkspace();
 
-};
+  async function loadWorkspace(workspace) {
 
-async function loadWorkspace(fastify, workspace) {
+    // Get admin workspace.
+    global.workspace.admin.config = workspace || await global.workspace.load(fastify);
 
-  // Get admin workspace.
-  global.workspace.admin.config = workspace || await global.workspace.load(fastify);
+    await createLookup(global.workspace.admin);
 
-  await createLookup(global.workspace.admin);
+    global.workspace.private.config = await removeAccess('admin');
+    await createLookup(global.workspace.private);
 
-  global.workspace.private.config = await removeAccess('admin');
-  await createLookup(global.workspace.private);
+    global.workspace.public.config = await removeAccess('private');
+    await createLookup(global.workspace.public);
+  }
 
-  global.workspace.public.config = await removeAccess('private');
-  await createLookup(global.workspace.public);
-}
+  function removeAccess(access) {
 
-function removeAccess(access) {
+    // deep clone the access level workspace.
+    let config = JSON.parse(JSON.stringify(global.workspace[access].config));
 
-  // deep clone the access level workspace.
-  let config = JSON.parse(JSON.stringify(global.workspace[access].config));
+    (function objectEval(o, parent, key) {
 
-  (function objectEval(o, parent, key) {
+      // check whether the object has an access key matching the current level.
+      if (Object.entries(o).some(e => e[0] === 'access' && e[1] === access)) {
 
-    // check whether the object has an access key matching the current level.
-    if (Object.entries(o).some(e => e[0] === 'access' && e[1] === access)) {
+        // if the parent is an array splice the key index.
+        if (parent.length > 0) return parent.splice(parseInt(key), 1);
 
-      // if the parent is an array splice the key index.
-      if (parent.length > 0) return parent.splice(parseInt(key), 1);
+        // if the parent is an object delete the key from the parent.
+        return delete parent[key];
+      }
 
-      // if the parent is an object delete the key from the parent.
-      return delete parent[key];
+      // iterate through the object tree.
+      Object.keys(o).forEach((key) => {
+        if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key);
+      });
+
+    })(config);
+
+    return config;
+  }
+
+  function createLookup(workspace) {
+
+    // store all workspace string values in lookup arrays.
+    workspace.values = ['', 'geom', 'geom_3857', 'id', 'ST_asGeoJson(geom)', 'ST_asGeoJson(geom_4326)'];
+    (function objectEval(o) {
+      Object.keys(o).forEach((key) => {
+        if (typeof key === 'string') workspace.values.push(key);
+        if (typeof o[key] === 'string') workspace.values.push(o[key]);
+        if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
+      });
+    })(workspace.config);
+  }
+
+  async function chkWorkspace(workspace) {
+
+    const _workspace = global.workspace._defaults.ws;
+
+    await chkOptionals(workspace, _workspace);
+
+    await chkLocales(workspace.locales);
+
+    return workspace;
+
+  }
+
+  async function chkLocales(locales) {   
+
+    for (const key of Object.keys(locales)) {
+    //await Object.keys(locales).forEach(async key => {
+
+      const
+        locale = locales[key],
+        _locale = global.workspace._defaults.locale;
+
+      if (typeof locale !== 'object') {
+        locales['__' + key] = locale;
+        delete locales[key];
+        return;
+      }
+
+      await chkOptionals(locale, _locale);
+
+      // Check bounds
+      await chkOptionals(locale.bounds, _locale.bounds);
+
+      await chkLayers(locale.layers);
+
     }
+  }
 
-    // iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key);
-    });
+  async function chkLayers(layers) {
 
-  })(config);
+    for (const key of Object.keys(layers)) {
+    //await Object.keys(layers).forEach(async key => {
 
-  return config;
-}
-
-function createLookup(workspace) {
-
-  // store all workspace string values in lookup arrays.
-  workspace.values = ['', 'geom', 'geom_3857', 'id', 'ST_asGeoJson(geom)', 'ST_asGeoJson(geom_4326)'];
-  (function objectEval(o) {
-    Object.keys(o).forEach((key) => {
-      if (typeof key === 'string') workspace.values.push(key);
-      if (typeof o[key] === 'string') workspace.values.push(o[key]);
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
-    });
-  })(workspace.config);
-}
-
-function chkWorkspace(workspace) {
-
-  let _workspace = global.workspace._defaults.ws;
-
-  chkOptionals(workspace, _workspace);
-
-  // Check locales.
-  Object.keys(workspace.locales).forEach(key => {
-
-    let
-      locale = workspace.locales[key],
-      _locale = global.workspace._defaults.locale;
-
-    if (typeof locale !== 'object') {
-      workspace.locales['__' + key] = locale;
-      delete workspace.locales[key];
-      return;
-    }
-
-    chkOptionals(locale, _locale);
-
-    // Check bounds
-    chkOptionals(locale.bounds, _locale.bounds);
-
-    // Check layers.
-    Object.keys(locale.layers).forEach(key => {
-
-      const layer = locale.layers[key];
+      const layer = layers[key];
 
       if (typeof layer !== 'object'
         || !layer.format
         || !global.workspace._defaults.layers[layer.format]) {
-        locale.layers['__' + key] = layer;
+        layers['__' + key] = layer;
         delete locale.layers[key];
         return;
       }
@@ -256,34 +269,135 @@ function chkWorkspace(workspace) {
       layer.key = key;
       layer.name = layer.name || key;
 
-      chkOptionals(layer, _layer);
+      await chkOptionals(layer, _layer);
 
-      if (layer.style) chkOptionals(layer.style, _layer.style);
+      if (layer.style) await chkOptionals(layer.style, _layer.style);
+
+      await chkLayerConnect(layer, layers);
+
+    }
+  }
+
+  async function chkLayerConnect(layer, layers) {
+
+    if (layer.format === 'cluster') {
+
+      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
+
+      for (const table of tables){
+
+        if (!table) return;
+
+        try {
+          var db_connection = await fastify.pg[layer.dbs].connect();
+          var result = await db_connection.query(`SELECT count(${layer.geom}) FROM ${table}`);
+          db_connection.release();
+        } catch(err) {
+          console.error(err);
+        }
+
+        console.log(`CLUSTER | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
+
+      }
+
+      return;
+
+    }
+
+    if (layer.format === 'geojson') {
+
+      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
+
+      for (const table of tables){
+
+        if (!table) return;
+
+        try {
+          db_connection = await fastify.pg[layer.dbs].connect();
+          result = await db_connection.query(`SELECT count(${layer.geom}) FROM ${table}`);
+          db_connection.release();
+        } catch(err) {
+          console.error(err);
+        }
+
+        console.log(`GEOJSON | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
+
+      }
+
+      return;
+
+    }
+
+    if (layer.format === 'grid') {
+
+      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
+
+      for (const table of tables){
+
+        if (!table) return;
+
+        try {
+          db_connection = await fastify.pg[layer.dbs].connect();
+          result = await db_connection.query(`SELECT count(${layer.geom}) FROM ${table}`);
+          db_connection.release();
+        } catch(err) {
+          console.error(err);
+        }
+
+        console.log(`GRID | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
+
+      }
+
+      return;
+
+    }
+
+    if (layer.format === 'mvt') {
+
+      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
+
+      for (const table of tables){
+
+        if (!table) return;
+
+        try {
+          db_connection = await fastify.pg[layer.dbs].connect();
+          result = await db_connection.query(`SELECT count(${layer.geom_3857}) FROM ${table}`);
+          db_connection.release();
+        } catch(err) {
+          console.error(err);
+          layers['__'+layer.key] = layer;
+          delete layers[layer.key];
+          return;
+        }
+
+        if (result) console.log(`MVT | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
+
+      }
+
+    }
+
+  }
+
+  function chkOptionals(chk, opt) {
+
+    // Check whether optionals exist.
+    Object.keys(chk).forEach(key => {
+
+      if (chk[key] === 'optional') return delete chk[key];
+
+      if (!(key in opt)) {
+
+        // Prefix key with double underscore if opt key does not exist.
+        chk['__' + key] = chk[key];
+        delete chk[key];
+      }
     });
 
-  });
+    // Set default for non optional key values.
+    Object.keys(opt).forEach(key => {
+      if (!(key in chk) && opt[key] !== 'optional') chk[key] = opt[key];
+    });
+  }
 
-  return workspace;
-
-}
-
-function chkOptionals(chk, opt) {
-
-  // Check whether optionals exist.
-  Object.keys(chk).forEach(key => {
-
-    if (chk[key] === 'optional') return delete chk[key];
-
-    if (!(key in opt)) {
-
-      // Prefix key with double underscore if opt key does not exist.
-      chk['__' + key] = chk[key];
-      delete chk[key];
-    }
-  });
-
-  // Set default for non optional key values.
-  Object.keys(opt).forEach(key => {
-    if (!(key in chk) && opt[key] !== 'optional') chk[key] = opt[key];
-  });
-}
+};

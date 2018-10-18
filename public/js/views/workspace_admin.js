@@ -60,7 +60,11 @@ function init(json) {
 
       // Set cleaned json to editor;
       editor.set(JSON.parse(this.response));
+
+      document.getElementById('workspace_mask').style.display = 'none';
     };
+
+    document.getElementById('workspace_mask').style.display = 'block';
     
     xhr.send(JSON.stringify({
       settings: editor.get()
