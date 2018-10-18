@@ -18,6 +18,7 @@
             "west": -180
         },
         "gazetteer": "optional",
+        "restriction": "optional",
         "layers": {
             "OSM": {
                 "display": true,
@@ -31,18 +32,27 @@
             "key": "optional",
             "name": "optional",
             "group": "optional",
+            "meta": "optional",
             "format": "optional",
             "display": "optional",
             "attribution": "optional",
-            "infoj": "optional"
+            "infoj": "optional",
+            "restriction": "optional",
+            "access_filter": "optional"
         },
         "tiles": {
             "URI": "optional"
         },
         "geojson": {
-            "DBS": "optional",
+            "dbs": "optional",
             "table": "optional",
             "arrayZoom": "optional",
+            "qID": "optional",
+            "geom": "optional",
+            "catchments": "optional",
+            "editable": "optional",
+            "editing": "optional",
+            "log_table": "optional",
             "style": {
                 "default": {
                     "weight": 1,
@@ -58,14 +68,24 @@
                     "fillColor": "#cf9",
                     "fillOpacity": 0.2,
                     "fill": true
-                }
+                },
+                "theme": "optional",
+                "themes": "optional"
             }
         },
         "mvt": {
-            "DBS": "optional",
+            "dbs": "optional",
             "table": "optional",
             "arrayZoom": "optional",
             "geom_3857": "optional",
+            "geomj": "optional",
+            "geom": "optional",
+            "qID": "optional",
+            "properties": "optional",
+            "editable": "optional",
+            "editing": "optional",
+            "log_table": "optional",
+            "tilecache": "optional",
             "style": {
                 "default": {
                     "weight": 1,
@@ -81,13 +101,20 @@
                     "fillColor": "#cf9",
                     "fillOpacity": 0.2,
                     "fill": true
-                }
+                },
+                "theme": "optional",
+                "themes": "optional"
             }
         },
         "cluster": {
             "dbs": "optional",
             "table": "optional",
             "arrayZoom": "optional",
+            "qID": "optional",
+            "geom": "optional",
+            "editable": "optional",
+            "editing": "optional",
+            "log_table": "optional",
             "cluster_label": "optional",
             "cluster_cat": "optional",
             "cluster_kmeans": 0.05,
@@ -108,11 +135,12 @@
             }
         },
         "grid": {
-            "DBS": "optional",
+            "dbs": "optional",
             "table": "optional",
             "arrayZoom": "optional",
             "grid_color": "optional",
             "queryFields": "optional",
+            "geom": "optional",
             "style": "optional"
         }
     }
