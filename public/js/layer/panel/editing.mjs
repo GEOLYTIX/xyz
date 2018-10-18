@@ -2,6 +2,8 @@ import _xyz from '../../_xyz.mjs';
 import { polygon } from './draw/_draw.mjs';
 import { rect } from './draw/_draw.mjs';
 import { circle } from './draw/_draw.mjs';
+import { line } from './draw/_draw.mjs';
+import { point } from './draw/_draw.mjs';
 
 export default layer => {
 
@@ -37,40 +39,59 @@ export default layer => {
 
   function someFunction(word){
     console.log(word);
-    //let _style = draw(layer);
-    //console.log(_style);
   }
 
+  if(layer.editing && layer.editing.point){
+    _xyz.utils.createStateButton({
+      text: 'Point',
+      appendTo: panel,
+      layer: layer,
+      fx: point
+    });
+  }
+  
+  if(layer.editing && layer.editing.polygon){
+    _xyz.utils.createStateButton({
+      text: 'Polygon',
+      appendTo: panel,
+      layer: layer,
+      fx: polygon
+    });
+  }
+  
+  if(layer.editing && layer.editing.rectangle){
+    _xyz.utils.createStateButton({
+      text: 'Rectangle',
+      appendTo: panel,
+      layer: layer,
+      fx: rect
+    });
+  }
+  
+  if(layer.editing && layer.editing.circle){
+    _xyz.utils.createStateButton({
+      text: 'Circle',
+      appendTo: panel,
+      layer: layer,
+      fx: circle
+    });
+  }
 
-  _xyz.utils.createStateButton({
-    text: 'Polygon',
-    appendTo: panel,
-    layer: layer,
-    //fx: someFunction
-    fx: polygon
-  });
-
-  _xyz.utils.createStateButton({
-    text: 'Rectangle',
-    appendTo: panel,
-    layer: layer,
-    //fx: someFunction
-    fx: rect
-  });
-
-
-  _xyz.utils.createStateButton({
-    text: 'Circle',
-    appendTo: panel,
-    layer: layer,
-    fx: circle
-    //fx: someFunction
-  });
-
-  _xyz.utils.createStateButton({
-    text: 'Catchment',
-    appendTo: panel,
-    fx: someFunction
-  });
+  if(layer.editing && layer.editing.line){
+    _xyz.utils.createStateButton({
+      text: 'Line',
+      appendTo: panel,
+      layer: layer,
+      fx: line
+    });
+  }
+  
+  if(layer.editing && layer.editing.catchment){
+    _xyz.utils.createStateButton({
+      text: 'Catchment',
+      appendTo: panel,
+      fx: someFunction
+    });
+  }
 
 };

@@ -9,8 +9,6 @@ export default (e, layer) => {
 
     let btn = e.target;
 
-    //console.log(layer);
-
     if(layer.edited && !layer.display){
         layer.display = true;
         layer.toggle.textContent = layer.display ? 'layers' : 'layers_clear';
@@ -32,13 +30,14 @@ export default (e, layer) => {
         layer.path = L.featureGroup().addTo(_xyz.map);
 
         _xyz.map.on('click', e => {
-            let start_pnt = [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng];
+            let start_pnt = [
+                _xyz.map.mouseEventToLatLng(e.originalEvent).lat, 
+                _xyz.map.mouseEventToLatLng(e.originalEvent).lng
+            ];
             layer.vertices.addLayer(L.circleMarker(_xyz.map.mouseEventToLatLng(e.originalEvent), style(layer).vertex));
             
             let len = layer.vertices.getLayers().length,
                 segment = [];
-
-            //console.log(len);
             
             if(len === 2) {
                 segment = [
@@ -69,7 +68,7 @@ export default (e, layer) => {
                     [layer.vertices.getLayers()[0].getLatLng().lat, layer.vertices.getLayers()[0].getLatLng().lng],
                     [_xyz.map.mouseEventToLatLng(e.originalEvent).lat, _xyz.map.mouseEventToLatLng(e.originalEvent).lng], 
                     [layer.vertices.getLayers()[len-1].getLatLng().lat, layer.vertices.getLayers()[len-1].getLatLng().lng]
-                ], style(layer).trail));
+                ], style(layer).path));
             });
             
             _xyz.map.on('contextmenu', e => {
@@ -94,8 +93,6 @@ export default (e, layer) => {
                     "coordinates": [coords],
                     "properties": {}
                 };
-
-                //console.log(poly);
                 
                 // Make select tab active on mobile device.
                 //if (_xyz.view.mobile.activateLocationsTab) _xyz.view.mobile.activateLocationsTab(); // resolve this name
@@ -138,13 +135,6 @@ export default (e, layer) => {
                     table: layer.table,
                     geometry: poly
                 }));
-                
-                /*console.log(JSON.stringify({
-                    locale: _xyz.locale,
-                    layer: layer.key,
-                    table: layer.table,
-                    geometry: poly
-                }));*/
             });
         });
     }

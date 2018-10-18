@@ -1,10 +1,13 @@
-/*import style from './style.mjs';
-
-export default (layer) => { return style(layer) };*/ // this works
 import _xyz from '../../../_xyz.mjs';
 import _polygon from './polygon.mjs';
 import _rect from './rectangle.mjs';
 import _circle from './circle.mjs';
+import _line from './line.mjs';
+import _point from './point.mjs';
+
+export function point(e, layer){
+    _point(e, layer);
+}
 
 export function polygon(e, layer){
     _polygon(e, layer);
@@ -16,6 +19,10 @@ export function rect(e, layer){
 
 export function circle(e, layer){
     _circle(e, layer);
+}
+
+export function line(e, layer){
+    _line(e, layer);
 }
 
 export function switchState(btn){

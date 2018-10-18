@@ -32,7 +32,7 @@ export default layer => {
     appendTo: layer.dashboard
   });
 
-  panel_editing(layer);
+  if(layer.editing) panel_editing(layer);
 
   // Add cluster panel to dashboard.
   if (layer.format === 'cluster') panel_cluster(layer);
