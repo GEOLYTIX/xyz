@@ -4,6 +4,9 @@ export default {
   attribution: { 
     layer: {} 
   },
+  dom: {
+    map: document.getElementById('Map')
+  },
   gazetteer: {},
   hooks: {
     current: {}

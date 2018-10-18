@@ -67,7 +67,8 @@ export default () => {
     layer.header = _xyz.utils.createElement({
       tag: 'div',
       options: {
-        textContent: layer.name || layer.key,
+        //textContent: (layer.group ? '' : (layer.name || layer.key)),
+        innerHTML: (layer.group ? ('&#10149; ' + layer.name) : (layer.name || layer.key)),
         className: 'header'
       },
       style: {

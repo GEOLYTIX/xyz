@@ -133,9 +133,11 @@
     opacity: 0.3; }
 
 .btn_state {
-  color: black; }
+  /*color: black;*/
+  color: #090; }
   .btn_state.active {
-    color: #090; }
+    /*color: #090;*/
+    color: black; }
 
 .range {
   width: 100%;
@@ -473,6 +475,8 @@ input[type=range]::-moz-range-thumb {
         font-family: ffmark, sans-serif; }
         .mod_container .module .drawer .header:hover {
           cursor: pointer; }
+        .mod_container .module .drawer .header.edited {
+          background-image: linear-gradient(white, #fff176); }
       .mod_container .module .drawer .dashboard {
         border-bottom: 1px solid #333;
         font-size: 13px; }

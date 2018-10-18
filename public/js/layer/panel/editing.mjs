@@ -1,4 +1,9 @@
 import _xyz from '../../_xyz.mjs';
+import { polygon } from './draw/_draw.mjs';
+import { rect } from './draw/_draw.mjs';
+import { circle } from './draw/_draw.mjs';
+import { line } from './draw/_draw.mjs';
+import { point } from './draw/_draw.mjs';
 
 export default layer => {
 
@@ -36,30 +41,57 @@ export default layer => {
     console.log(word);
   }
 
+  if(layer.edit && layer.edit.point){
+    _xyz.utils.createStateButton({
+      text: 'Point',
+      appendTo: panel,
+      layer: layer,
+      fx: point
+    });
+  }
+  
+  if(layer.edit && layer.edit.polygon){
+    _xyz.utils.createStateButton({
+      text: 'Polygon',
+      appendTo: panel,
+      layer: layer,
+      fx: polygon
+    });
+  }
+  
+  if(layer.edit && layer.edit.rectangle){
+    _xyz.utils.createStateButton({
+      text: 'Rectangle',
+      appendTo: panel,
+      layer: layer,
+      fx: rect
+    });
+  }
+  
+  if(layer.edit && layer.edit.circle){
+    _xyz.utils.createStateButton({
+      text: 'Circle',
+      appendTo: panel,
+      layer: layer,
+      fx: circle
+    });
+  }
 
-  _xyz.utils.createStateButton({
-    text: 'polygon',
-    appendTo: panel,
-    fx: someFunction
-  });
-
-  _xyz.utils.createStateButton({
-    text: 'rectangle',
-    appendTo: panel,
-    fx: someFunction
-  });
-
-
-  _xyz.utils.createStateButton({
-    text: 'circle',
-    appendTo: panel,
-    fx: someFunction
-  });
-
-  _xyz.utils.createStateButton({
-    text: 'catchment',
-    appendTo: panel,
-    fx: someFunction
-  });
+  if(layer.edit && layer.edit.line){
+    _xyz.utils.createStateButton({
+      text: 'Line',
+      appendTo: panel,
+      layer: layer,
+      fx: line
+    });
+  }
+  
+  if(layer.edit && layer.edit.catchment){
+    _xyz.utils.createStateButton({
+      text: 'Catchment',
+      appendTo: panel,
+      fx: someFunction
+    });
+  }
 
 };

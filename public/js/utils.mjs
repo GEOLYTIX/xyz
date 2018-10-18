@@ -175,13 +175,13 @@ export function createStateButton(param){
   const btn = createElement({
     tag: 'div',
     options: {
-      className: 'btn_state cursor',
+      className: 'btn_state btn_wide cursor noselect',
       textContent: param.text
     },
     appendTo: param.appendTo
   });
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', e => {
 
     if (_xyz.state == btn) {
       btn.classList.remove('active');
@@ -194,7 +194,7 @@ export function createStateButton(param){
 
     _xyz.state.classList.add('active');
 
-    param.fx(param.text);
+    param.fx(e, param.layer);
 
   });
 }
