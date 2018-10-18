@@ -4,8 +4,6 @@ export default () => {
 
   _xyz.panes.next = 500;
 
-  // if (_xyz.panes.list) _xyz.panes.list.forEach(pane => L.DomUtil.remove(pane));
-
   _xyz.panes.list = [];
 
   _xyz.panes.list.push(_xyz.map.createPane('tmp'));

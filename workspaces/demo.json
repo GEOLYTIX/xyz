@@ -37,8 +37,7 @@
           },
           "meta": "Satellite Imagery layer provided by HERE.",
           "format": "tiles",
-          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE"
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
         },
         "sprawls": {
           "name": "World Cities",
@@ -770,8 +769,7 @@
           },
           "meta": "Satellite Imagery layer provided by HERE.",
           "format": "tiles",
-          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
-          "provider": "HERE"
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
         },
         "border": {
           "name": "Country Border",

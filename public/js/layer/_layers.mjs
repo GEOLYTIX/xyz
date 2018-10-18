@@ -21,13 +21,7 @@ export default () => {
   // Empty the layers list.
   document.getElementById('layers').innerHTML = '';
 
-  //Object.values(_xyz.layers.list).forEach(layer => layer.remove());
-
-  // Remove all existing layers from map.
-  // _xyz.map.eachLayer(layer => _xyz.map.removeLayer(layer));
-
   // Get the layers from the current locale.
-  //_xyz.layers.list = JSON.parse(JSON.stringify(_xyz.ws.locales[_xyz.locale].layers));
   _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
 
   // Filter invalid layers
