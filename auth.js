@@ -14,6 +14,7 @@ function init(fastify) {
     });
   }
 
+  // Register auth routes.
   fastify.register(async (fastify, opts, next) => {
 
     // Get login view
@@ -252,21 +253,6 @@ function init(fastify) {
           }));
           console.log(err);
         }
-        /*user_db.release();
-
-                require('./mailer')({
-                    to: email,
-                    subject: `Please verify your account on ${global.alias || req.headers.host}${global.dir}`,
-                    text: `A new account for this email address has been registered with ${global.alias || req.headers.host}${global.dir} \n \n`
-                        + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/admin/user/verify/${verificationtoken} \n \n`
-                        + `A site administrator must approve the account before you are able to login. \n \n`
-                        + `You will be notified via email once an adimistrator has approved your account. \n \n`
-                        + `The account was registered from this remote address ${req.req.connection.remoteAddress} \n \n`
-                        + `This wasn't you? Do NOT verify the account and let your manager know. \n \n`
-
-                });
-
-                return res.redirect(global.dir + '/login?msg=validation');*/
       }
     });
 
@@ -464,7 +450,6 @@ function init(fastify) {
       method: 'GET',
       url: '/token/renew',
       handler: (req, res) => {
-        //fastify.log.info(req.query.timenow);
 
         if (req.query.nanoid) console.log({
           nanoid: req.query.nanoid,
@@ -580,20 +565,15 @@ function authToken(req, res, fastify, access, done) {
 
       const user = result.rows[0];
 
-      if (user.api && (user.api === req.query.token)) {
+      if (!user.api || (user.api !== req.query.token)) return res.code(401).send();
     
-        // Create a private token with 10second expiry.
-        req.query.token = fastify.jwt.sign({
-          email: user.email,
-          access: 'private'
-        }, { expiresIn: 10 });
+      // Create a private token with 10second expiry.
+      req.query.token = fastify.jwt.sign({
+        email: user.email,
+        access: 'private'
+      }, { expiresIn: 10 });
 
-        return done();
-
-      } else {
-
-        return res.code(401).send();
-      }
+      return done();
     }
 
     // Check admin privileges.

@@ -1,5 +1,19 @@
-module.exports = async fastify => {
+module.exports = async (fastify, startListen) => {
 
+  // Create an array of promises for each DBS PostgreSQL connection.
+  const DBS_promises = [];
+  Object.keys(process.env).forEach(key => {
+    if (key.split('_')[0] === 'DBS') DBS_promises.push(
+      new Promise(resolve => {
+        fastify.register(require('fastify-postgres'), {
+          connectionString: process.env[key],
+          name: key.split('_')[1]
+        }).after(() => resolve());
+      })
+    );
+  });
+
+  // Set global workspace.
   global.workspace = {
     _defaults: {},
     public: {},
@@ -7,6 +21,7 @@ module.exports = async fastify => {
     admin: {}
   };
 
+  // Register workspace routes.
   fastify.register((fastify, opts, next) => {
 
     // Get the stored workspace config for the token access level.
@@ -92,8 +107,6 @@ module.exports = async fastify => {
   // Create workspace loader from Postgres database.
   if (process.env.WORKSPACE && process.env.WORKSPACE.split(':')[0] === 'postgres') {
 
-    global.workspace.name = process.env.WORKSPACE.split('|').pop();
-
     // Register Postgres connection string to fastify.
     await fastify.register(require('fastify-postgres'), {
       connectionString: process.env.WORKSPACE.split('|')[0],
@@ -127,8 +140,6 @@ module.exports = async fastify => {
   // Create workspace loader for file in workspaces directory.
   if (process.env.WORKSPACE && process.env.WORKSPACE.split(':')[0] === 'file') {
 
-    global.workspace.name = process.env.WORKSPACE;
-
     // Assign load method to global workspace object.
     global.workspace.load = () => {
 
@@ -149,11 +160,21 @@ module.exports = async fastify => {
 
   // Create zero config workspace if the WORKSPACE is not defined in environment.
   if (!process.env.WORKSPACE) {
-    global.workspace.name = 'zero config';
     global.workspace.load = () => chkWorkspace(global.workspace.admin.config || {});
   }
 
-  loadWorkspace();
+  // Call initWorkspace() once all DBS_promises are resolved.
+  Promise.all(DBS_promises).then(() => initWorkspace());
+
+  // Wait for fastify to complete plugin registration.
+  await fastify.ready();
+
+  async function initWorkspace(){
+
+    // Wait for workspaces to load and check then start listen for requests.
+    await loadWorkspace();
+    startListen();
+  }
 
   async function loadWorkspace(workspace) {
 
@@ -211,36 +232,45 @@ module.exports = async fastify => {
 
   async function chkWorkspace(workspace) {
 
+    // Get default workspace
     const _workspace = global.workspace._defaults.ws;
 
+    // Check whether workspace keys are valid or missing.
     await chkOptionals(workspace, _workspace);
 
+    // Check locales.
     await chkLocales(workspace.locales);
 
     return workspace;
-
   }
 
   async function chkLocales(locales) {   
 
+    // Iterate through locales.
     for (const key of Object.keys(locales)) {
-    //await Object.keys(locales).forEach(async key => {
 
+      // Set default locale.
       const
         locale = locales[key],
         _locale = global.workspace._defaults.locale;
 
+      // Invalidate locale if it is not an object.
       if (typeof locale !== 'object') {
         locales['__' + key] = locale;
         delete locales[key];
         return;
       }
 
+      // Check whether locale keys are valid or missing.
       await chkOptionals(locale, _locale);
 
-      // Check bounds
+      // Check bounds.
       await chkOptionals(locale.bounds, _locale.bounds);
 
+      // Check gazetteer.
+      //
+
+      // Check layers in locale.
       await chkLayers(locale.layers);
 
     }
@@ -248,11 +278,12 @@ module.exports = async fastify => {
 
   async function chkLayers(layers) {
 
+    // Iterate through loayers.
     for (const key of Object.keys(layers)) {
-    //await Object.keys(layers).forEach(async key => {
 
       const layer = layers[key];
 
+      // Invalidate layer if it is not an object or does not have a valid layer format.
       if (typeof layer !== 'object'
         || !layer.format
         || !global.workspace._defaults.layers[layer.format]) {
@@ -261,18 +292,23 @@ module.exports = async fastify => {
         return;
       }
 
+      // Assign layer default from layer and format defaults.
       const _layer = Object.assign({},
         global.workspace._defaults.layers.default,
         global.workspace._defaults.layers[layer.format]
       );
 
+      // Set layer key and name.
       layer.key = key;
       layer.name = layer.name || key;
 
+      // Check whether layer keys are valid or missing.
       await chkOptionals(layer, _layer);
 
+      // Check whether layer.style keys are valid or missing.
       if (layer.style) await chkOptionals(layer.style, _layer.style);
 
+      // Check whether the layer connects.
       await chkLayerConnect(layer, layers);
 
     }
@@ -280,99 +316,35 @@ module.exports = async fastify => {
 
   async function chkLayerConnect(layer, layers) {
 
-    if (layer.format === 'cluster') {
+    if (layer.format === 'tiles') return;
 
-      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
+    if (layer.format === 'cluster') await chkLayerGeom(layer, layers);
 
-      for (const table of tables){
+    if (layer.format === 'geojson') await chkLayerGeom(layer, layers);
 
-        if (!table) return;
+    if (layer.format === 'grid') await chkLayerGeom(layer, layers);
 
-        try {
-          var db_connection = await fastify.pg[layer.dbs].connect();
-          var result = await db_connection.query(`SELECT count(${layer.geom}) FROM ${table}`);
-          db_connection.release();
-        } catch(err) {
-          console.error(err);
-        }
+    if (layer.format === 'mvt') await chkLayerGeom(layer, layers);
 
-        console.log(`CLUSTER | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
+  }
 
-      }
+  async function chkLayerGeom(layer, layers) {
 
-      return;
+    let tables = layer.tables ? Object.values(layer.tables) : [layer.table];
 
-    }
+    for (const table of tables){
 
-    if (layer.format === 'geojson') {
+      if (!table) return;
 
-      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
-
-      for (const table of tables){
-
-        if (!table) return;
-
-        try {
-          db_connection = await fastify.pg[layer.dbs].connect();
-          result = await db_connection.query(`SELECT count(${layer.geom}) FROM ${table}`);
-          db_connection.release();
-        } catch(err) {
-          console.error(err);
-        }
-
-        console.log(`GEOJSON | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
-
-      }
-
-      return;
-
-    }
-
-    if (layer.format === 'grid') {
-
-      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
-
-      for (const table of tables){
-
-        if (!table) return;
-
-        try {
-          db_connection = await fastify.pg[layer.dbs].connect();
-          result = await db_connection.query(`SELECT count(${layer.geom}) FROM ${table}`);
-          db_connection.release();
-        } catch(err) {
-          console.error(err);
-        }
-
-        console.log(`GRID | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
-
-      }
-
-      return;
-
-    }
-
-    if (layer.format === 'mvt') {
-
-      let tables = layer.arrayZoom ? Object.values(layer.arrayZoom) : [layer.table];
-
-      for (const table of tables){
-
-        if (!table) return;
-
-        try {
-          db_connection = await fastify.pg[layer.dbs].connect();
-          result = await db_connection.query(`SELECT count(${layer.geom_3857}) FROM ${table}`);
-          db_connection.release();
-        } catch(err) {
-          console.error(err);
-          layers['__'+layer.key] = layer;
-          delete layers[layer.key];
-          return;
-        }
-
-        if (result) console.log(`MVT | DBS: ${layer.dbs}, TABLE: ${table}, COUNT: ${result.rows[0].count}`);
-
+      try {
+        db_connection = await fastify.pg[layer.dbs].connect();
+        result = await db_connection.query(`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`);
+        db_connection.release();
+      } catch(err) {
+        console.log(`${layer.format} | ${layer.dbs} | ${table} | ${err.message}`);
+        layers['__'+layer.key] = layer;
+        delete layers[layer.key];
+        return;
       }
 
     }

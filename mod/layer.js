@@ -8,7 +8,7 @@ async function get_extent(req, res, fastify) {
   let
     layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
     geom = layer.geom ? layer.geom : 'geom',
-    table = layer.table || Object.values(layer.arrayZoom)[0];
+    table = layer.table || Object.values(layer.tables)[0];
 
   // Check whether string params are found in the settings to prevent SQL injections.
   if ([geom]

@@ -75,7 +75,7 @@
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
           "qID": "id",
-          "arrayZoom": {
+          "tables": {
             "3": "glx_cities_of_the_world"
           },
           "tilecache": "glx_cities_of_the_world__tc",
@@ -479,7 +479,7 @@
               "type": "numeric"
             }
           ],
-          "arrayZoom": {
+          "tables": {
             "5": "eu_nuts_data"
           },
           "tilecache": "eu_nuts_data__tc",
@@ -507,7 +507,7 @@
           ],
           "dbs": "XYZ",
           "geom": "geomcntr",
-          "arrayZoom": {
+          "tables": {
             "5": "eu_hx_128k",
             "6": "eu_hx_64k",
             "7": "eu_hx_32k",
@@ -1517,7 +1517,7 @@
               "layer": "traffic_count"
             }
           ],
-          "arrayZoom": {
+          "tables": {
             "6": "gb_region"
           },
           "tilecache": "gb_region__tc",
@@ -1783,7 +1783,7 @@
           ],
           "dbs": "XYZ",
           "qID": "id",
-          "arrayZoom": {
+          "tables": {
             "10": "ox_retailplace"
           },
           "infoj": [

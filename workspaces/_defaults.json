@@ -44,9 +44,9 @@
             "URI": "optional"
         },
         "geojson": {
-            "dbs": "optional",
+            "dbs": "required",
             "table": "optional",
-            "arrayZoom": "optional",
+            "tables": "optional",
             "qID": "optional",
             "geom": "geom",
             "catchments": "optional",
@@ -76,7 +76,7 @@
         "mvt": {
             "dbs": "optional",
             "table": "optional",
-            "arrayZoom": "optional",
+            "tables": "optional",
             "geom_3857": "geom_3857",
             "geomj": "optional",
             "geom": "optional",
@@ -109,7 +109,7 @@
         "cluster": {
             "dbs": "optional",
             "table": "optional",
-            "arrayZoom": "optional",
+            "tables": "optional",
             "qID": "optional",
             "geom": "geom",
             "editable": "optional",
@@ -143,7 +143,7 @@
         "grid": {
             "dbs": "optional",
             "table": "optional",
-            "arrayZoom": "optional",
+            "tables": "optional",
             "grid_color": "optional",
             "queryFields": "optional",
             "geom": "geom",

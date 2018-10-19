@@ -12,12 +12,12 @@ export default function(){
 
   // Assign the table based on the zoom array.
   let zoom = _xyz.map.getZoom(),
-    zoomKeys = Object.keys(layer.arrayZoom),
+    zoomKeys = Object.keys(layer.tables),
     maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
   layer.table = zoom > maxZoomKey ?
-    layer.arrayZoom[maxZoomKey] : zoom < zoomKeys[0] ?
-      null : layer.arrayZoom[zoom];
+    layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
+      null : layer.tables[zoom];
     
   // Make drawer opaque if no table present.
   layer.drawer.style.opacity = !layer.table? 0.4: 1;

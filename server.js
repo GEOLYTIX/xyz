@@ -1,13 +1,23 @@
-process.on('unhandledRejection', err => {
-  console.error(err);
-});
+// Catch unhandled errors on the process.
+process.on('unhandledRejection', err => console.error(err));
 
-const req_res = m => { try { return require.resolve(m); } catch (e) { console.log('Cannot resolve ' + m); return false; } };
+// Function to check whether a required module is available.
+const req_res = m => {
+  try {
+    return require.resolve(m);
+  } catch (e) {
+    console.log('Cannot resolve ' + m);
+    return false;
+  }
+};
 
+// Set dotenv if the module is available
 const dotenv = req_res('dotenv') ? require('dotenv') : null;
 
+// Load environment from dotenv if available.
 if (dotenv) dotenv.load();
 
+// Set fastify
 const fastify = require('fastify')({
   logger: {
     level: process.env.LOG_LEVEL || 'error',
@@ -20,6 +30,7 @@ const fastify = require('fastify')({
   }
 });
 
+// Register fastify modules.
 fastify
   .register(require('fastify-helmet'), {
     contentSecurityPolicy: {
@@ -54,19 +65,35 @@ fastify
   .decorate('authAdmin', (req, res, done) => require('./auth').authToken(req, res, fastify, {lv: 'admin', API: false}, done))
   .decorate('authAdminAPI', (req, res, done) => require('./auth').authToken(req, res, fastify, {lv: 'admin', API: true}, done));
 
-require('./globals')(fastify);
+global.dir = process.env.DIR || '';
 
-require('./workspace')(fastify);
+global.alias = process.env.ALIAS ? process.env.ALIAS : null;
 
+global.access = process.env.PRIVATE ? 'private' : 'public';
+
+global.failed_attempts = parseInt(process.env.FAILED_ATTEMPTS) || 3;
+
+global.KEYS = {};
+Object.keys(process.env).forEach(key => {
+  if (key.split('_')[0] === 'KEY') {
+    global.KEYS[key.split('_')[1]] = process.env[key];
+  }
+});
+  
 require('./auth').init(fastify);
-
+  
 require('./routes')(fastify);
 
-fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
+require('./workspace')(fastify, startListen);
 
-  console.log(`Serving ${global.workspace.name} workspace.`);
-});
+// Start to listen for requests (after workspaces are loaded).
+function startListen(){
+  fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }  
+  
+    console.log(`Serving ${global.workspace.admin.config.title} workspace.`);
+  });
+}

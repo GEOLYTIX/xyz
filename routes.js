@@ -6,7 +6,7 @@ module.exports = fastify => {
   // Set jsrender module for server-side templates.
   const jsr = require('jsrender');
 
-  // 
+  // Nanoid is used to pass a unique id on the client view.
   const nanoid = require('nanoid');
 
   // Add content type parser for octet stream.
@@ -54,6 +54,7 @@ module.exports = fastify => {
       }
     });
 
+    //proxy/image
     fastify.route({
       method: 'GET',
       url: '/proxy/image',
@@ -64,6 +65,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/layer/get_extent
     fastify.route({
       method: 'GET',
       url: '/api/layer/get_extent',
@@ -73,6 +75,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/mvt/get/:z/:x/:y
     fastify.route({
       method: 'GET',
       url: '/api/mvt/get/:z/:x/:y',
@@ -82,6 +85,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/grid/get
     fastify.route({
       method: 'GET',
       url: '/api/grid/get',
@@ -91,6 +95,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/geojson/get
     fastify.route({
       method: 'GET',
       url: '/api/geojson/get',
@@ -100,6 +105,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/cluster/get
     fastify.route({
       method: 'GET',
       url: '/api/cluster/get',
@@ -109,6 +115,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/cluster/select
     fastify.route({
       method: 'GET',
       url: '/api/cluster/select',
@@ -118,6 +125,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/select
     fastify.route({
       method: 'GET',
       url: '/api/location/select',
@@ -127,6 +135,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/select_ll
     fastify.route({
       method: 'GET',
       url: '/api/location/select_ll',
@@ -136,6 +145,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/select_ll_nnearest
     fastify.route({
       method: 'GET',
       url: '/api/location/select_ll_nnearest',
@@ -145,6 +155,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/select_ll_intersect
     fastify.route({
       method: 'GET',
       url: '/api/location/select_ll_intersect',
@@ -155,15 +166,16 @@ module.exports = fastify => {
     });
 
     // !!!should be taken from /select infoj
-    fastify.route({
-      method: 'POST',
-      url: '/api/location/chart',
-      beforeHandler: fastify.auth([fastify.authAPI]),
-      handler: (req, res) => {
-        require('./mod/location').chart_data(req, res, fastify);
-      }
-    });
+    // fastify.route({
+    //   method: 'POST',
+    //   url: '/api/location/chart',
+    //   beforeHandler: fastify.auth([fastify.authAPI]),
+    //   handler: (req, res) => {
+    //     require('./mod/location').chart_data(req, res, fastify);
+    //   }
+    // });
 
+    //api/location/new
     fastify.route({
       method: 'POST',
       url: '/api/location/new',
@@ -173,6 +185,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/update
     fastify.route({
       method: 'POST',
       url: '/api/location/update',
@@ -182,6 +195,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/delete
     fastify.route({
       method: 'GET',
       url: '/api/location/delete',
@@ -191,6 +205,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/location/aggregate
     fastify.route({
       method: 'GET',
       url: '/api/location/aggregate',
@@ -200,6 +215,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/gazetteer/autocomplete
     fastify.route({
       method: 'GET',
       url: '/api/gazetteer/autocomplete',
@@ -209,6 +225,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/gazetteer/googleplaces
     fastify.route({
       method: 'GET',
       url: '/api/gazetteer/googleplaces',
@@ -218,6 +235,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/catchments
     fastify.route({
       method: 'GET',
       url: '/api/catchments',
@@ -227,6 +245,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/images/new
     fastify.route({
       method: 'POST',
       url: '/api/images/new',
@@ -241,6 +260,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/images/delete
     fastify.route({
       method: 'GET',
       url: '/api/images/delete',
@@ -250,6 +270,7 @@ module.exports = fastify => {
       }
     });
 
+    //api/idx
     fastify.route({
       method: 'POST',
       url: '/api/idx',

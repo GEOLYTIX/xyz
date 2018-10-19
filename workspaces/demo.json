@@ -46,7 +46,7 @@
           "dbs": "XYZ",
           "geom_3857": "geom_3857",
           "qID": "id",
-          "arrayZoom": {
+          "tables": {
             "3": "glx_cities_of_the_world"
           },
           "properties": "pop_density",
@@ -245,7 +245,7 @@
           "format": "geojson",
           "dbs": "XYZ",
           "table": "demo.global_catchments",
-          "arrayZoom": {
+          "tables": {
             "3": "demo.global_catchments"
           },
           "catchments": {
@@ -446,7 +446,7 @@
           "dbs": "XYZ",
           "properties": "venue_name, name_cn, venue_type, address, mass_count, massplus_count, luxury_count, mass, premium, luxury, main_market, secondary",
           "qID": "id",
-          "arrayZoom": {
+          "tables": {
             "12": "cn_sh_retail_venues"
           },
           "infoj": [
@@ -776,7 +776,7 @@
           "format": "mvt",
           "geom_3857": "geom_3857",
           "dbs": "XYZ",
-          "arrayZoom": {
+          "tables": {
             "6": "eu_nuts_lv0",
             "7": "eu_nuts_lv0",
             "8": "eu_nuts_lv0",
@@ -802,7 +802,7 @@
           "dbs": "XYZ",
           "geom": "geomcntr",
           "grid_color": "pop__11",
-          "arrayZoom": {
+          "tables": {
             "6": "gb_hx_64k",
             "7": "gb_hx_32k",
             "8": "gb_hx_16k",
@@ -1446,7 +1446,7 @@
           "dbs": "XYZ",
           "properties": "rank",
           "qID": "qid",
-          "arrayZoom": {
+          "tables": {
             "7": "gb_postaldistrict_census__11",
             "8": "gb_postalsector_census__11",
             "9": "gb_postalsector_census__11",
@@ -1624,7 +1624,7 @@
           "dbs": "XYZ",
           "properties": "rp_type",
           "qID": "id",
-          "arrayZoom": {
+          "tables": {
             "12": "gb_retailplace"
           },
           "infoj": [
@@ -2270,7 +2270,7 @@
           "qID": "id",
           "geom": "geom",
           "geom_3857": "geom_3857",
-          "arrayZoom": {
+          "tables": {
             "16": "gb_retail_place_pitch"
           },
           "style": {
@@ -2788,7 +2788,7 @@
           "dbs": "XYZ",
           "table": "uk_catchments",
           "qID": "id",
-          "arrayZoom": {
+          "tables": {
             "3": "uk_catchments"
           },
           "catchments": {

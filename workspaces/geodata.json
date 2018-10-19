@@ -143,7 +143,7 @@
               501
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "6": "admin_kingdom"
             },
             "qID": "id",
@@ -198,7 +198,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geomj": "ST_asGeoJson(geom_4326)",
-            "arrayZoom": {
+            "tables": {
               "15": "admin_census_pcode"
             },
             "infoj": [
@@ -242,7 +242,7 @@
               502
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "10": "admin_county"
             },
             "qID": "id",
@@ -279,7 +279,7 @@
               503
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "12": "admin_lad"
             },
             "qID": "id",
@@ -352,7 +352,7 @@
               504
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "12": "admin_lad_higher"
             },
             "qID": "id",
@@ -407,7 +407,7 @@
               506
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "12": "admin_lsoa"
             },
             "qID": "id",
@@ -462,7 +462,7 @@
               507
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "14": "admin_msoa"
             },
             "qID": "id",
@@ -505,7 +505,7 @@
               508
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "15": "admin_output_area"
             },
             "qID": "id",
@@ -560,7 +560,7 @@
               509
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "15": "admin_outputarea_fulllook"
             },
             "qID": "id",
@@ -747,7 +747,7 @@
               510
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "6": "admin_region"
             },
             "qID": "id",
@@ -796,7 +796,7 @@
               511
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "10": "admin_ttwa"
             },
             "qID": "id",
@@ -881,7 +881,7 @@
               512
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "16": "admin_hybrid_zone"
             },
             "qID": "id",
@@ -934,7 +934,7 @@
               513
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "14": "demand_grocery_oa"
             },
             "qID": "id",
@@ -1351,7 +1351,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "14": "education_uni_building"
             },
             "infoj": [
@@ -1493,7 +1493,7 @@
             "dbs": "GEODATA",
             "properties": "rp_type",
             "qID": "id",
-            "arrayZoom": {
+            "tables": {
               "12": "retail_place_outline"
             },
             "infoj": [
@@ -1776,7 +1776,7 @@
             ],
             "dbs": "GEODATA",
             "qID": "id",
-            "arrayZoom": {
+            "tables": {
               "13": "retail_place_shopcent"
             },
             "infoj": [
@@ -2231,7 +2231,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "16": "retail_place_pitch"
             },
             "style": {
@@ -2346,7 +2346,7 @@
             ],
             "dbs": "GEODATA",
             "qID": "id",
-            "arrayZoom": {
+            "tables": {
               "13": "retail_place_building"
             },
             "infoj": [
@@ -2644,7 +2644,7 @@
               519
             ],
             "dbs": "GEODATA",
-            "arrayZoom": {
+            "tables": {
               "12": "work_place_hybrid_zone"
             },
             "qID": "id",
@@ -4281,7 +4281,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "postal_postal_area"
             },
             "infoj": [
@@ -4353,7 +4353,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "12": "postal_postal_district"
             },
             "infoj": [
@@ -4425,7 +4425,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "14": "postal_postal_sector"
             },
             "infoj": [
@@ -4616,7 +4616,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "6": "media_barb"
             },
             "infoj": [
@@ -4724,7 +4724,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "6": "media_radio_coverage"
             },
             "infoj": [
@@ -4872,7 +4872,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "physical_coast_line"
             },
             "infoj": [
@@ -4920,7 +4920,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "physical_contour_major"
             },
             "infoj": [
@@ -4968,7 +4968,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "physical_contour_minor"
             },
             "infoj": [
@@ -5016,7 +5016,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "physical_foreshore"
             },
             "infoj": [
@@ -5058,7 +5058,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "physical_land"
             },
             "infoj": [
@@ -5100,7 +5100,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "physical_national_park"
             },
             "infoj": [
@@ -5160,7 +5160,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "9": "physical_open_water"
             },
             "infoj": [
@@ -5208,7 +5208,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "9": "physical_river_line"
             },
             "infoj": [
@@ -5250,7 +5250,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "5": "physical_sea"
             },
             "infoj": [
@@ -5363,7 +5363,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "physical_woodland"
             },
             "infoj": [
@@ -7225,7 +7225,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "public_trans_lrt_line"
             },
             "infoj": [
@@ -7337,7 +7337,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "public_trans_oyster_zone"
             },
             "infoj": [
@@ -7385,7 +7385,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "8": "public_trans_rail_line"
             },
             "infoj": [
@@ -7491,7 +7491,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "public_trans_rail_planned"
             },
             "infoj": [
@@ -7706,7 +7706,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "public_trans_uground_line"
             },
             "infoj": [
@@ -7857,7 +7857,7 @@
               "Residential. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "11": "residential_disposableincome_lsoa"
             },
             "pane": [
@@ -7953,7 +7953,7 @@
               "Residential. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "14": "residential_disposableincome_oa"
             },
             "pane": [
@@ -8055,7 +8055,7 @@
               "Residential. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "11": "residential_pop_hhd_lsoa"
             },
             "pane": [
@@ -8233,7 +8233,7 @@
               "Residential. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "14": "residential_pop_hhd_oa"
             },
             "pane": [
@@ -8612,7 +8612,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "9": "road_detail_aroad"
             },
             "pane": [
@@ -8666,7 +8666,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "10": "road_detail_broad"
             },
             "pane": [
@@ -8720,7 +8720,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "11": "road_detail_localstreet"
             },
             "pane": [
@@ -8768,7 +8768,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "12": "road_detail_minorroad"
             },
             "pane": [
@@ -8822,7 +8822,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "7": "road_detail_motorway"
             },
             "pane": [
@@ -8876,7 +8876,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "14": "road_detail_pedestroad"
             },
             "pane": [
@@ -8924,7 +8924,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "10": "road_detail_primaryroad"
             },
             "pane": [
@@ -8978,7 +8978,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "14": "road_detail_privateaccess"
             },
             "pane": [
@@ -9032,7 +9032,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "14": "road_detail_roadtunnel"
             },
             "pane": [
@@ -9247,7 +9247,7 @@
               "Road & Network. Geolytix License."
             ],
             "format": "mvt",
-            "arrayZoom": {
+            "tables": {
               "10": "road_routable_link"
             },
             "pane": [
@@ -9593,7 +9593,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "9": "seamless_combined"
             },
             "infoj": [
@@ -9677,7 +9677,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "9": "seamless_locality"
             },
             "infoj": [
@@ -9761,7 +9761,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "seamless_shoppertown"
             },
             "infoj": [
@@ -9821,7 +9821,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "11": "seamless_town"
             },
             "infoj": [
@@ -9893,7 +9893,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "11": "townsuburb_combined"
             },
             "infoj": [
@@ -10007,7 +10007,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "11": "townsuburb_suburb"
             },
             "infoj": [
@@ -10079,7 +10079,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "11": "townsuburb_town"
             },
             "infoj": [
@@ -10157,7 +10157,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "14": "urbanity_output_area"
             },
             "infoj": [
@@ -10391,7 +10391,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "10": "glx_open_data.uk_postal_area_open2012"
             },
             "infoj": [
@@ -10469,7 +10469,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "12": "glx_open_data.uk_postal_district_open2012"
             },
             "infoj": [
@@ -10541,7 +10541,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "14": "glx_open_data.uk_postal_sector_open2012"
             },
             "infoj": [
@@ -10705,7 +10705,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "14": "glx_open_data.uk_retail_place_outline_open2012"
             },
             "infoj": [
@@ -10820,7 +10820,7 @@
             "qID": "id",
             "geom": "geom_4326",
             "geom_3857": "geom_3857",
-            "arrayZoom": {
+            "tables": {
               "14": "glx_open_data.uk_retail_place_building_open2012"
             },
             "infoj": [
