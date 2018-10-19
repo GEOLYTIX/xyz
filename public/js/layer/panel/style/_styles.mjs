@@ -61,9 +61,7 @@ export default layer => {
   if (!layer.style.themes) layer.style.themes = [layer.style.theme];
 
   // Push no theme entry into themes array.
-  layer.style.themes.push({
-    label: 'No theme.'
-  });
+  layer.style.themes.push({ label: 'No theme.' });
 
   // Create theme drop down
   _xyz.utils.dropdown({

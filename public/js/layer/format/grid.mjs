@@ -10,72 +10,71 @@ export default function(){
   // Set locale to check whether locale is still current when data is returned from backend.
   const locale = _xyz.locale;
 
-  // Request layer data when table and display are true.
-  if(layer.table && layer.display){
+  if(!layer.table || !layer.display)  return _xyz.layers.check(layer);
 
-    const xhr = new XMLHttpRequest(); 
+  const xhr = new XMLHttpRequest(); 
         
-    // Open & send vector.xhr;
-    let bounds = _xyz.map.getBounds();
+  // Open & send vector.xhr;
+  let bounds = _xyz.map.getBounds();
 
-    xhr.open('GET', _xyz.host + '/api/grid/get?' + _xyz.utils.paramString({
-      locale: _xyz.locale,
-      layer: layer.key,
-      table: layer.table,
-      size: layer.grid_size,
-      color: layer.grid_color,
-      west: bounds.getWest(),
-      south: bounds.getSouth(),
-      east: bounds.getEast(),
-      north: bounds.getNorth(),
-      token: _xyz.token
-    }));
+  xhr.open('GET', _xyz.host + '/api/grid/get?' + _xyz.utils.paramString({
+    locale: _xyz.locale,
+    layer: layer.key,
+    table: layer.table,
+    size: layer.grid_size,
+    color: layer.grid_color,
+    west: bounds.getWest(),
+    south: bounds.getSouth(),
+    east: bounds.getEast(),
+    north: bounds.getNorth(),
+    token: _xyz.token
+  }));
 
-    // Draw layer on load event.
-    xhr.onload = e => {
+  // Draw layer on load event.
+  xhr.onload = e => {
 
-      if (e.target.status === 200 && layer.display && locale === _xyz.locale) {
+    if (e.target.status === 200 && layer.display && locale === _xyz.locale) {
 
-        // Check for existing layer and remove from map.
-        if (layer.L) _xyz.map.removeLayer(layer.L);
+      // Check for existing layer and remove from map.
+      if (layer.L) _xyz.map.removeLayer(layer.L);
 
-        // Add geoJSON feature collection to the map.
-        layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
-          pointToLayer: function (feature, latlng) {
+      // Add geoJSON feature collection to the map.
+      layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
+        pointToLayer: function (feature, latlng) {
 
-            // Distribute size between min, avg and max.
-            let size = feature.properties.size <= layer.sizeAvg ?
-              7 + 7 / layer.sizeAvg * feature.properties.size :
-              14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.size - layer.sizeAvg);
+          // Distribute size between min, avg and max.
+          let size = feature.properties.size <= layer.sizeAvg ?
+            7 + 7 / layer.sizeAvg * feature.properties.size :
+            14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.size - layer.sizeAvg);
 
-            // Distribute color index between min, avg and max. Reduce index by 1 if index exceeds style.range.
-            let n = layer.style.range.length,
-              color = feature.properties.color <= layer.colorAvg ?
-                n / 2 / layer.colorAvg * feature.properties.color :
-                n / 2 + n / 2 / (layer.colorMax - layer.colorAvg) * (feature.properties.color - layer.colorAvg);
-            if (parseInt(color) === n) color -= 1;
+          // Distribute color index between min, avg and max. Reduce index by 1 if index exceeds style.range.
+          let n = layer.style.range.length,
+            color = feature.properties.color <= layer.colorAvg ?
+              n / 2 / layer.colorAvg * feature.properties.color :
+              n / 2 + n / 2 / (layer.colorMax - layer.colorAvg) * (feature.properties.color - layer.colorAvg);
+          if (parseInt(color) === n) color -= 1;
 
-            // Return L.Marker with icon as style to pointToLayer.
-            return L.marker(
-              latlng,
-              {
-                icon: L.icon({
-                  iconSize: size,
-                  iconUrl: _xyz.utils.svg_symbols({type: 'dot', style: {color: layer.style.range[parseInt(color)] || '#C0C0C0'}})
-                }),
-                pane: layer.key,
-                interactive: false
-              });
-          }
-        }).addTo(_xyz.map);
+          // Return L.Marker with icon as style to pointToLayer.
+          return L.marker(
+            latlng,
+            {
+              icon: L.icon({
+                iconSize: size,
+                iconUrl: _xyz.utils.svg_symbols({type: 'dot', style: {color: layer.style.range[parseInt(color)] || '#C0C0C0'}})
+              }),
+              pane: layer.key,
+              interactive: false
+            });
+        }
+      }).addTo(_xyz.map);
 
-        _xyz.layers.check(layer);
+      _xyz.layers.check(layer);
 
-      }
-    };
+    }
+  };
     
-    xhr.send();       
-  }
+  xhr.send();
+
 
   function processGrid(data){
     let dots = {

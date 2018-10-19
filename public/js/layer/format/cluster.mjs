@@ -10,10 +10,7 @@ export default function(){
   // Set locale to check whether locale is still current when data is returned from backend.
   const locale = _xyz.locale;
 
-  // Load layer if display is true.
-  if(!layer.display) return;
-  
-  if(!layer.table) return _xyz.layers.check(layer);
+  if(!layer.table || !layer.display)  return _xyz.layers.check(layer);
   
   // Create XHR for fetching data from middleware.
   const xhr = new XMLHttpRequest();

@@ -2,55 +2,11 @@ import _xyz from '../../../_xyz.mjs';
 
 export default layer => {
 
-  if (!layer.style) layer.style = {};
-
-  if (!layer.style.default) layer.style.default = {
-    weight: 1,
-    color: '#333',
-    fill: true,
-    fillColor: '#333',
-    fillOpacity: 0.1
-  };
-
-  if (!layer.style.highlight) layer.style.highlight = {
-    stroke: true,
-    color: '#090',
-    weight: 2,
-    fillColor: '#cf9',
-    fillOpacity: 0.2,
-    fill: true
-  };
-
-
+  // Timeout to debounce layer.get on sliders.
   let timeout;
 
-  // default colours for mvt styles
-  let default_colours = [
-    { hex: '#c62828', name: 'Fire Engine Red' },
-    { hex: '#f50057', name: 'Folly' },
-    { hex: '#9c27b0', name: 'Dark Orchid' },
-    { hex: '#673ab7', name: 'Plump Purple' },
-    { hex: '#3f51b5', name: 'Violet Blue' },
-    { hex: '#2196f3', name: 'Dodger Blue' },
-    { hex: '#03a9f4', name: 'Vivid Cerulean' },
-    { hex: '#00bcd4', name: 'Turquoise Surf' },
-    { hex: '#009688', name: 'Dark Cyan' },
-    { hex: '#4caf50', name: 'Middle Green' },
-    { hex: '#8bc34a', name: 'Dollar Bill' },
-    { hex: '#cddc39', name: 'Pear' },
-    { hex: '#ffeb3b', name: 'Banana Yellow' },
-    { hex: '#ffb300', name: 'UCLA Gold' },
-    { hex: '#fb8c00', name: 'Dark Orange' },
-    { hex: '#f4511e', name: 'Orioles Orange' },
-    { hex: '#8d6e63', name: 'Dark Chestnut' },
-    { hex: '#777', name: 'Sonic Silver' },
-    { hex: '#bdbdbd', name: 'X11 Gray' },
-    { hex: '#aaa', name: 'Dark Medium Gray' },
-    { hex: '#78909c', name: 'Light Slate Gray' }
-  ];
-
   // if palette is an object then apply it. Else just take the default.
-  let colours = (layer.style.palette && layer.style.palette instanceof Object) ? layer.style.palette : default_colours;
+  let colours = (layer.style.palette && layer.style.palette instanceof Object) ? layer.style.palette : _xyz.style.defaults.colours;
 
   // creates colour picker to layer
   function color_picker(layer, options) {
@@ -154,7 +110,7 @@ export default layer => {
           timeout = setTimeout(() => {
             timeout = null;
             e.target.nextSibling.style.display = 'none';
-          }, 1.5 * 1000);
+          }, 1500);
         }
       },
       style: {
@@ -176,7 +132,7 @@ export default layer => {
           timeout = setTimeout(() => {
             timeout = null;
             e.target.style.display = 'none';
-          }, 1.5 * 1000);
+          }, 1500);
         }
       },
       style: {

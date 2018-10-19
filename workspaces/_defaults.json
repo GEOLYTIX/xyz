@@ -36,9 +36,7 @@
             "format": "optional",
             "display": "optional",
             "attribution": "optional",
-            "infoj": "optional",
-            "restriction": "optional",
-            "access_filter": "optional"
+            "restriction": "optional"
         },
         "tiles": {
             "URI": "optional"
@@ -47,7 +45,9 @@
             "dbs": "required",
             "table": "optional",
             "tables": "optional",
+            "access_filter": "optional",
             "qID": "optional",
+            "infoj": "optional",
             "geom": "geom",
             "catchments": "optional",
             "editable": "optional",
@@ -77,10 +77,12 @@
             "dbs": "optional",
             "table": "optional",
             "tables": "optional",
+            "access_filter": "optional",
             "geom_3857": "geom_3857",
             "geomj": "optional",
             "geom": "optional",
             "qID": "optional",
+            "infoj": "optional",
             "properties": "optional",
             "editable": "optional",
             "editing": "optional",
@@ -110,7 +112,9 @@
             "dbs": "optional",
             "table": "optional",
             "tables": "optional",
+            "access_filter": "optional",
             "qID": "optional",
+            "infoj": "optional",
             "geom": "geom",
             "editable": "optional",
             "editing": "optional",

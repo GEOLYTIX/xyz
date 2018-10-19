@@ -127,6 +127,8 @@ export default () => {
     //Add icon to layer header.
     layer_icon(layer);
 
+    if (layer.tables) _xyz.layers.getTable(layer);
+
     // Show layer if layer display is true.
     if (layer.display) layer.show();
 
