@@ -16,6 +16,21 @@ import layer_remove from './remove.mjs';
 
 import layer_icon from './icon.mjs';
 
+_xyz.layers.getTable = layer => {
+
+  let
+    zoom = _xyz.map.getZoom(),
+    zoomKeys = Object.keys(layer.tables),
+    maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+            
+  layer.table = zoom > maxZoomKey ?
+    layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
+      null : layer.tables[zoom];
+
+  // Make drawer opaque if no table present.
+  layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
+};
+
 export default () => {
 
   // Empty the layers list.

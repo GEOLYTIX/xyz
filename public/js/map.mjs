@@ -108,6 +108,10 @@ export default () => {
 
     // Load layer which have display set to true.
     Object.values(_xyz.layers.list).forEach(layer => {
+
+      // Set the layer table and check whether the drawer should be faded.
+      if (layer.tables) _xyz.layers.getTable(layer);
+
       if (layer.display) {
         layer.loader.style.display = 'block';
         layer.get();

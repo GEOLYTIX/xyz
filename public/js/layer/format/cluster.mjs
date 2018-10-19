@@ -13,21 +13,7 @@ export default function(){
   // Load layer if display is true.
   if(!layer.display) return;
   
-  if(layer.tables){
-    let
-      zoom = _xyz.map.getZoom(),
-      zoomKeys = Object.keys(layer.tables),
-      maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-            
-    layer.table = zoom > maxZoomKey ?
-      layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
-        null : layer.tables[zoom];
-  }
-
-  // Make drawer opaque if no table present.
-  layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
-
-  if(!layer.table) return xyz.layersCheck(layer);
+  if(!layer.table) return _xyz.layers.check(layer);
   
   // Create XHR for fetching data from middleware.
   const xhr = new XMLHttpRequest();

@@ -12,18 +12,6 @@ export default function(){
   // Set locale to check whether locale is still current when data is returned from backend.
   const locale = _xyz.locale;
 
-  // Assign the table based on the zoom array.
-  let zoom = _xyz.map.getZoom(),
-    zoomKeys = Object.keys(layer.tables),
-    maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
-
-  layer.table = zoom > maxZoomKey ?
-    layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
-      null : layer.tables[zoom];
-
-  // Make drawer opaque if no table present.
-  layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
-
   if (!layer.table || !layer.display) return _xyz.layers.check(layer);
 
   let url = _xyz.host + '/api/mvt/get/{z}/{x}/{y}?' + _xyz.utils.paramString({
