@@ -8,6 +8,16 @@ export default layer => {
   // if palette is an object then apply it. Else just take the default.
   let colours = (layer.style.palette && layer.style.palette instanceof Object) ? layer.style.palette : _xyz.style.defaults.colours;
 
+  console.log(colours);
+
+  if (!layer.style) layer.style = {};
+
+  if (!layer.style.default) layer.style.default =  _xyz.style.defaults.default;
+
+  if(!layer.style.highlight) layer.style.highlight = _xyz.style.defaults.highlight;
+  
+  //if(!layer.style.highlight.fillColor) layer.style.highlight.fillColor = layer.style.default.fillColor || "#777";
+
   // creates colour picker to layer
   function color_picker(layer, options) {
 
