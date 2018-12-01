@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir = "{{:dir}}">
+    <title>{{:title}}</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
+</head>
+
+<body data-viewmode = "mobile" data-nanoid = {{:nanoid}}  {{:log}}>
+
+    <div class="location_drop">
+        <div class="location_table"></div>
+        <i class="material-icons location_drop__close">vertical_align_top</i>
+    </div>
+
+    <div id="Map" class="map" style="margin-top: 0;">
+        <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+            <defs>
+                <filter id='dropshadow'>
+                    <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                    <feOffset dx='1' dy='1' result='offsetblur' />
+                    <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in='SourceGraphic' />
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+        <div class="attribution">
+            <a class="logo" class="noselect tooltip-top" data-tooltip="Please visit our website and find out how we can assist you."
+                href="https://geolytix.co.uk">GEOLYTIX</a>
+            <div id="attribution_links">
+                <a class="leaflet" href="https://leafletjs.com" target="_blank">
+                    <i class="material-icons">favorite</i> Leaflet</a>
+                <a class="xyz" href="https://github.com/geolytix/xyz" target="_blank"> XYZ</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="Gazetteer" class="input_group" style="display: none">
+        <input type="text" required>
+        <div class="clear-mask">|</div>
+        <i class="material-icons cursor clear">cancel</i>
+        <span class="bar"></span>
+        <div class="loader"></div>
+        <ul></ul>
+    </div>
+
+    <div class="btn_column noselect">
+        <button id="btnGazetteer" {{:btnSearch}}>
+            <i class="material-icons">search</i>
+        </button>
+
+        <button id="btnLocate" title="Current location" {{:btnLocate}}>
+            <i class="material-icons">gps_not_fixed</i>
+        </button>
+
+        <button id="btnZoomIn">
+            <i class="material-icons">add</i>
+        </button>
+
+        <button id="btnZoomOut">
+            <i class="material-icons">remove</i>
+        </button>
+
+        <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+            <a href="{{:hrefDocumentation}}">
+                <i class="material-icons">school</i>
+            </a>
+        </div>
+
+        <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
+            <a href="{{:dir}}/login">
+                <i class="material-icons">{{:btnLogin_style}}</i>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="spacer_mobile"></div>
+
+    <div class="mod_container">
+
+        <table class="tab_bar" cellpadding="0" cellspacing="0">
+            <td id="tabLayers" class="tab_btn active">
+                <i class="material-icons tab_icon">layers</i>
+                <i class="material-icons swipe_icon">touch_app</i>
+            </td>
+            <td id="tabLocations" class="tab_btn hidden">
+                <i class="material-icons tab_icon">location_on</i>
+                <i class="material-icons swipe_icon">touch_app</i>
+            </td>
+        </table>
+
+        <div id="modLayers" class="module">
+                <div class="title">Layers</div>
+                <div id="locale"></div>
+                <div id="layers" class="content"></div>
+        </div>
+
+        <div id="modLocations" class="module hidden">
+            <div class="title">Locations</div>
+            <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
+            <div id="locations" class="content"></div>
+        </div>
+
+    </div>
+
+    <div id="timeout_mask">Session expired.</div>
+
+</body>
+
+<script src="{{:dir}}/js/{{:bundle_js}}"></script>
+
+</html>

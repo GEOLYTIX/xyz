@@ -1,0 +1,297 @@
+@import 'chkbox';
+.mod_container {
+    @if $desktop {
+        position: fixed;
+        height: 100%;
+        padding: 0 20px;
+        width: 330px;
+
+        > .scrolly {
+            width: calc(100% + 50px);
+        }
+    }
+    @if $mobile {
+        position: absolute;
+        background-color: white;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 0 10px slategrey;
+        z-index: 1000;
+    }
+    .tab_bar {
+        width: 100%;
+        color: $glxgreen;
+        border-bottom: 1px solid $glxgreen;
+        text-align: center;
+        table-layout: fixed;
+        height: 50px; // box-shadow: 0 3px 3px -3px #000;
+        .swipe_icon {
+            display: none;
+        }
+        .active {
+            color: white;
+            background-color: $glxgreen;
+            .tab_icon {
+                display: none;
+            }
+            .swipe_icon {
+                display: inline-block;
+            }
+        }
+    }
+    .hidden {
+        display: none;
+    }
+    .module {
+        @if $desktop {
+            padding: 10px 0;
+        }
+        @if $mobile {
+            padding: 20px;
+            overflow-y: scroll;
+            height: calc(100% - 50px);
+        }
+        .title {
+            font-family: ffmark_bold, sans-serif;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+        }
+        .drawer {
+            margin-top: 10px;
+            &.expandable {
+                max-height: 35px;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                .expander::before {
+                    content: "expand_more"
+                }
+            }
+            &.expanded {
+                max-height: 2500px;
+                .expander::before {
+                    content: "expand_less"
+                }
+            }
+            &.drawer-group {
+                .header-group {
+                    font-family: ffmark_bold, sans-serif!important;
+                    font-size: 15px!important;
+                    line-height: 2;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+                &.expandable-group {
+                    max-height: 30px;
+                    overflow: hidden;
+                    transition: max-height 0.3s ease-out;
+                    .expander-group::before {
+                        content: "expand_more"
+                    }
+                }
+                &.expanded-group {
+                    max-height: 2500px;
+                    .expander-group::before {
+                        content: "expand_less"
+                    }
+                }
+            }
+            .header {
+                font-size: 14px;
+                line-height: 2;
+                font-family: ffmark, sans-serif;
+                &:hover {
+                    cursor: pointer;
+                }
+                &.edited {
+                    background-image: linear-gradient(white, #cf9);
+                }
+            }
+            .dashboard {
+                border-bottom: 1px solid #333;
+                font-size: 14px;
+                .title {
+                    font-family: ffmark_bold, sans-serif;
+                    font-size: 14px;
+                    margin-bottom: 7px;
+                }
+                .panel {
+                    padding: 10px 0;
+                    border-bottom: 1px solid #555;
+                    &.expandable {
+                        max-height: 30px;
+                        overflow: hidden;
+                        transition: max-height 0.3s ease-out;
+                        .expander::before {
+                            content: "expand_more"
+                        }
+                    }
+                    &.expanded {
+                        max-height: 2500px !important;
+                        .expander::before {
+                            content: "expand_less"
+                        }
+                    }
+                }
+                .block-title {
+                    width: 100%;
+                    border-bottom: 1px solid #ccc;
+                    line-height: 1.5;
+                    padding-top: 5px;
+                    margin-bottom: 6px;
+                }
+                .block {
+                    padding: 5px 0;
+                    position: relative;
+                    
+                    .cancel-btn {
+                        color: $glxgreen;
+                        font-size: 20px;
+                        top: 2px;
+                        right: -4px;
+                        position: absolute;
+                    }
+
+                    .range-label {
+                        display: inline;
+                        line-height: 1.7;
+                    }
+
+                    .range-input {
+                        float: right;
+                        width: 60%;
+                    }
+
+                    .sample-poly {
+                        width: 30%;
+                        height: 32px;
+                        border-radius: 5px;
+                        box-shadow: 2px 2px 2px #999;
+                        position: absolute;
+                        right: 2px;
+                        top: 5px;
+                    }
+
+                    .sample-circle {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        box-shadow: 2px 2px 2px #999;
+                        position: absolute;
+                        right: 2px;
+                        top: 0;
+                    }
+
+                    .colour-label {
+                        color: #090;
+                    }
+
+                    .colour-swatch {
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    .colour-td {
+                        height: 20px;
+                    }
+                }
+                                
+                .half {
+                    width: 48%;
+                    display: inline-block;
+                    &.right {
+                        float: right;
+                    }
+                }
+
+                .third {
+                    width: 15%;
+                    display: inline-block;
+                    margin: 1px;
+                    &.right {
+                        float: right;
+                    }
+                }
+            }
+            
+            .bar {
+                fill: #5AB664!important;
+                width: 10px;
+            }
+           
+            div.chart-tooltip {	
+                position: absolute;			
+                text-align: center;			
+                width: 40px;						
+                padding: 2px;				
+                font: 12px sans-serif;
+                background: #EFC9A5;	
+                border: 0px;		
+                border-radius: 2px;			
+                pointer-events: none;	
+                vertical-align: baseline;
+            }
+                     
+            .bar:hover{
+                fill: #D8BC8E!important;
+            }
+                    
+            .axis {
+                font: 10px sans-serif;
+                color: #333;
+            }
+                    
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: #333;
+                shape-rendering: crispEdges;
+            }
+        }
+    }
+    .pane_shadow {
+        box-shadow: 0 3px 3px -3px #000;
+    }
+    .loader {
+        height: 2px;
+        margin-top: -2px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        display: none;
+    }
+    .loader:before {
+        display: block;
+        position: absolute;
+        content: "";
+        left: -200px;
+        width: 200px;
+        height: 2px;
+        background-color: #fff;
+        animation: loading 2s linear infinite;
+    }
+    @keyframes loading {
+        from {
+            left: -200px;
+            width: 30%;
+        }
+        50% {
+            width: 30%;
+        }
+        70% {
+            width: 70%;
+        }
+        80% {
+            left: 50%;
+        }
+        95% {
+            left: 120%;
+        }
+        to {
+            left: 100%;
+        }
+    }
+}

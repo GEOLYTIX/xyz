@@ -1,0 +1,104 @@
+$desktop: true;
+$mobile: false;
+$glxgreen: #090;
+$glxlightgreen: #cf9;
+$onyx: #383836;
+
+@font-face {
+    font-family: ffmark_black;
+    src: url(../fonts/MarkWeb-Black.woff) format("woff");
+}
+
+@font-face {
+    font-family: ffmark;
+    src: url(../fonts/MarkWebPro.woff) format("woff");
+}
+
+@font-face {
+    font-family: ffmark_bold;
+    src: url(../fonts/MarkWebPro-Bold.woff) format("woff");
+}
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+@import 'input';
+@import 'button';
+@import 'range';
+@import 'dropdown';
+@import 'images';
+@import 'scrolly';
+@import 'infoj';
+@import 'gazetteer';
+@import 'mod_container';
+@import 'map_container';
+@import 'leaflet';
+@import 'location';
+@import 'attribution';
+*,
+*::after,
+*::before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: ffmark, sans-serif;
+    color: $onyx;
+}
+
+a {
+    color: $onyx;
+    text-decoration: none;
+}
+
+select {
+    width: 100%;
+    margin: 5px 0;
+    font-family: 'PT Mono', monospace;
+    background: #fff;
+}
+
+i,
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.cursor:hover {
+    cursor: pointer;
+}
+
+#Gazetteer {
+    background-color: #fff;
+    padding-top: 5px;
+}
+
+#timeout_mask {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    font-size: 50px;
+    text-align: center;
+    color: #090;
+    font-family: ffmark_black;
+    padding-top: 30%;
+    text-shadow: 2px 2px #cf9;
+}

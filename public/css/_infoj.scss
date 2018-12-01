@@ -1,0 +1,85 @@
+@import 'datepicker';
+.infojTable {
+    width: 100%;
+    font-size: 12px;
+    padding-top: 5px;
+    .changed {
+        color: #090;
+    }
+    .label {
+        padding-top: 5px;
+    }
+    textarea {
+        resize: none;
+        width: 100%;
+    }
+    input {
+        width: 100%;
+        font-family: 'PT Mono', monospace;
+        margin: 5px 0 7px 0;
+        box-sizing: border-box;
+        padding-left: 3px;
+    }
+    .range {
+        padding: 10px 0 10px 10px;
+    }
+    .lv-0 {
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .lv-1 {
+        font-size: 13px;
+    }
+    .lv-2 {
+        font-size: 12px;
+        padding-left: 10px;
+    }
+    .val {
+        font-family: 'PT Mono', monospace; // padding-left: 10px;
+        font-weight: 400;
+        font-size: 12px;
+        padding-right: 10px;
+    }
+    .num {
+        text-align: right;
+    }
+    .addImageCell {
+        vertical-align: middle;
+        height: 170px;
+        i {
+            color: #090;
+            font-size: 70px;
+            padding: 20px;
+            text-shadow: 2px 2px 1px #777;
+        }
+        input {
+            display: none;
+        }
+    }
+    
+    .table-section {
+        margin-top: 10px;
+        
+        .t-expander {
+            vertical-align: bottom;
+            float: right;
+            font-size: 15px;
+            padding-right: 5px;
+        }
+        
+        &.expandable {
+            max-height: 35px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            .t-expander::before {
+                content: "expand_more"
+            }
+        }
+        &.expanded {
+            max-height: 2500px;
+            .t-expander::before {
+               content: "expand_less"
+            }
+        }
+    }
+}

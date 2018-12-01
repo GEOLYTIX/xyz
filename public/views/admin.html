@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head data-dir = "{{:dir}}">
+    <title>GEOLYTIX | admin</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        body>div {
+            padding: 40px;
+        }
+
+        .material-icons {
+            font-size: 40px !important;
+            -moz-user-select: -moz-none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        table {
+            text-align: left;
+        }
+
+        th .material-icons:hover {
+            cursor: help;
+        }
+
+        .email_field {
+            padding: 11px 10px 0 0;
+        }
+
+        .failedattempts {
+            padding: 11px 0 0 0;
+            text-align: center;
+            color: red;
+            font-weight: 800;
+        }
+
+        .delete_account {
+            cursor: pointer;
+            padding: 10px 0px 0px 0px;
+        }
+
+        .checkbox {
+            padding: 5px 0 5px 25px;
+            position: relative;
+            cursor: pointer;
+            display: block;
+        }
+
+        .checkbox input[type=checkbox] {
+            position: absolute;
+            opacity: 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .checkbox .checkbox_i {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 0;
+            width: 0;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .checkbox .checkbox_i:after {
+            font-family: "Material Icons";
+            content: '\E836';
+            padding-left: 8px;
+        }
+
+        .checkbox input[type=checkbox]:checked+.checkbox_i:after {
+            font-family: "Material Icons";
+            content: '\E837';
+            padding-left: 8px;
+        }
+
+        .checkbox input[type=checkbox]:disabled+.checkbox_i:after {
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Account admin</h1>
+        <table>
+            <th>
+                <i class="material-icons" title="Account email">face</i>
+            </th>
+            <th>
+                <i class="material-icons" title="The account email has been verified through a token sent to the email address.">done</i>
+            </th>
+            <th>
+                <i class="material-icons" title="The account has been approved by a site administrator and is permitted to access the application.">done_all</i>
+            </th>
+            <th>
+                <i class="material-icons" title="The account is an admin account which can access this page and change other account credentials.">font_download</i>
+            </th>
+            <th>
+                <i class="material-icons" title="Failed login attempts.">warning</i>
+            </th>
+            <th></th>
+            {{for users}}
+            <tr>
+                <td class="email_field text">{{:email}}</td>
+                <td>
+                    <label class="checkbox">
+                        <input name="verified" type="checkbox" {{if verified}}checked{{/if}}>
+                        <div class="checkbox_i"></div>
+                    </label>
+                </td>
+                <td>
+                    <label class="checkbox">
+                        <input name="approved" type="checkbox" {{if approved}}checked{{/if}}>
+                        <div class="checkbox_i"></div>
+                    </label>
+                </td>
+                <td>
+                    <label class="checkbox">
+                        <input name="admin" type="checkbox" {{if admin}}checked{{/if}}>
+                        <div class="checkbox_i"></div>
+                    </label>
+                </td>
+            <td class="failedattempts text">{{:failedattempts}}
+            </td>
+                <td>
+                    <i class="material-icons delete_account" title="The account will be deleted.">delete</i>
+                </td>
+            </tr>
+            {{/for}}
+        </table>
+
+    </div>
+</body>
+
+<script src="{{:dir}}/js/views/admin.js"></script>
+
+</html>

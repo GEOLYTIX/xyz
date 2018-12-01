@@ -1,0 +1,923 @@
+{
+    "title": "XYZ dev",
+    "locales": {
+        "NE": {
+            "minZoom": 3,
+            "maxZoom": 10,
+            "layers": {
+                "OSM": {
+                    "format": "tiles",
+                    "attribution": {
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                "COUNTRIES": {
+                    "display": true,
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "attribution": {
+                        "Made with Natural Earth.": "https://www.naturalearthdata.com/"
+                    },
+                    "table": "dev.natural_earth_countries",
+                    "mvt_cache": true,
+                    "mvt_fields": [
+                        "pop_est",
+                        "gdp_md_est",
+                        "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000 as gdp_pp",
+                        "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
+                    ],
+                    "qID": "id",
+                    "infoj": [
+                        {
+                            "label": "Name",
+                            "field": "name",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Population Est",
+                            "field": "pop_est",
+                            "type": "integer"
+                        },
+                        {
+                            "label": "Population Est edit",
+                            "field": "pop_est_edit",
+                            "type": "integer",
+                            "edit": true
+                        },
+                        {
+                            "label": "GDP",
+                            "field": "gdp_md_est",
+                            "type": "integer"
+                        },
+                        {
+                            "label": "GDP edit",
+                            "field": "gdp_md_est_edit",
+                            "type": "integer",
+                            "edit": true
+                        },
+                        {
+                            "label": "Area SRID:3857",
+                            "field": "area_",
+                            "fieldfx": "ST_Area(geom_3857)",
+                            "type": "integer"
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#333333",
+                            "fill": true,
+                            "fillColor": "#ffffff",
+                            "fillOpacity": 1
+                        },
+                        "highlight": {
+                            "weight": 2,
+                            "color": "#f50057",
+                            "fill": true,
+                            "fillColor": "#fce4ec",
+                            "fillOpacity": 1
+                        },
+                        "themes": {
+                            "Population": {
+                                "type": "graduated",
+                                "field": "pop_est",
+                                "cat": {
+                                    "0": {
+                                        "label": "0 to 10000",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "1000000": {
+                                        "label": "1+ million",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "10000000": {
+                                        "label": "10+ million",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "25000000": {
+                                        "label": "25+ million",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "50000000": {
+                                        "label": "50+ million",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "100000000": {
+                                        "label": "100+ million",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "1000000000": {
+                                        "label": "1+ billion",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            },
+                            "GDP": {
+                                "type": "graduated",
+                                "field": "gdp_md_est",
+                                "cat": {
+                                    "0": {
+                                        "label": "0",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "5000": {
+                                        "label": "5000",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "25000": {
+                                        "label": "25000",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "75000": {
+                                        "label": "75000",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "250000": {
+                                        "label": "250000",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "500000": {
+                                        "label": "500000",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "1000000": {
+                                        "label": "1000000",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            },
+                            "GDP / Population": {
+                                "type": "graduated",
+                                "field": "gdp_pp",
+                                "cat": {
+                                    "1": {
+                                        "label": "1",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "2.5": {
+                                        "label": "2.5",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "5": {
+                                        "label": "5",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "10": {
+                                        "label": "10",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "25": {
+                                        "label": "25",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "50": {
+                                        "label": "50",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "100": {
+                                        "label": "100",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            },
+                            "Population Density": {
+                                "type": "graduated",
+                                "field": "pop_dens",
+                                "cat": {
+                                    "0": {
+                                        "label": "0",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "0.01": {
+                                        "label": "0.01",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "0.025": {
+                                        "label": "0.025",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "0.05": {
+                                        "label": "0.05",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "0.1": {
+                                        "label": "0.1",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "0.5": {
+                                        "label": "0.5",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "1": {
+                                        "label": "1",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "TILES": {
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "geom_3857": "tile",
+                    "table": "dev.natural_earth_countries__mvts",
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#333333",
+                            "fill": true,
+                            "fillColor": "#ffffff",
+                            "fillOpacity": 0.1
+                        },
+                        "highlight": {
+                            "weight": 2,
+                            "color": "#f50057",
+                            "fill": true,
+                            "fillColor": "#fce4ec",
+                            "fillOpacity": 1
+                        }
+                    }
+                }
+            }
+        },
+        "GB": {
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "code": "GB",
+                "placeholder": "e.g. London",
+                "datasets": [
+                    {
+                        "layer": "cluster",
+                        "table": "dev.cluster",
+                        "label": "postcode"
+                    }
+                ]
+            },
+            "bounds": {
+                "north": 62,
+                "east": 5,
+                "south": 48,
+                "west": -13
+            },
+            "minZoom": 6,
+            "maxZoom": 17,
+            "layers": {
+                "OSM": {
+                    "format": "tiles",
+                    "attribution": {
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                "Mapbox Base": {
+                    "name": "Mapbox Baselayer",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "edit_layer": {
+                    "format": "mvt",
+                    "mvt_cache": true,
+                    "dbs": "XYZ",
+                    "table": "dev.scratch",
+                    "qID": "id",
+                    "edit": {
+                        "polygon": true,
+                        "circle": true,
+                        "rectangle": true,
+                        "line": true,
+                        "point": true,
+                        "catchment": true,
+                        "delete": true
+                    }
+                },
+                "oa": {
+                    "name": "Output areas",
+                    "display": true,
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "tables": {
+                        "12": "dev.oa"
+                    },
+                    "qID": "id",
+                    "mvt_cache": true,
+                    "mvt_fields": [
+                        "pop_11"
+                    ],
+                    "style": {
+                        "themes": {
+                            "Population '11": {
+                                "type": "graduated",
+                                "field": "pop_11",
+                                "cat": {
+                                    "0": {
+                                        "label": "0 to 10000",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "100": {
+                                        "label": "10000 to 25000",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "200": {
+                                        "label": "25000 to 50000",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "300": {
+                                        "label": "50000 to 100000",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "400": {
+                                        "label": "100000 to 250000",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "500": {
+                                        "label": "250000 to 500000",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "600": {
+                                        "label": "500000 or more",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "infoj": [
+                        {
+                            "label": "OA Code",
+                            "field": "oacode",
+                            "type": "text",
+                            "inline": true,
+                            "filter": "like"
+                        },
+                        {
+                            "label": "Population '11",
+                            "field": "pop_11",
+                            "type": "integer",
+                            "filter": "numeric",
+                            "edit": true
+                        },
+                        {
+                            "label": "GRID pop__01",
+                            "field": "pop__01",
+                            "type": "integer",
+                            "lookup": {
+                                "layer": "grid",
+                                "function": "AVG"
+                            }
+                        }
+                    ]
+                },
+                "retail_places": {
+                    "group": "RP",
+                    "name": "Retail Places",
+                    "display": true,
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "tables": {
+                        "9": "dev.retailplaces"
+                    },
+                    "qID": "tid",
+                    "mvt_fields": [
+                        "rp_type",
+                        "pop__11"
+                    ],
+                    "filter": {
+                        "infoj": [
+                            {
+                                "label": "ID count",
+                                "field": "id_count",
+                                "type": "integer",
+                                "inline": true,
+                                "fieldfx": "count(id)"
+                            }
+                        ]
+                    },
+                    "style": {
+                        "themes": {
+                            "Retail Place type": {
+                                "type": "categorized",
+                                "field": "rp_type",
+                                "other": true,
+                                "cat": {
+                                    "Major City Centre": {
+                                        "label": "Major City Centre",
+                                        "color": "#EF271B",
+                                        "fillColor": "#EF271B"
+                                    },
+                                    "City Centre": {
+                                        "label": "City Centre",
+                                        "color": "#BA2D0B",
+                                        "fillColor": "#BA2D0B"
+                                    },
+                                    "Large Town Centre": {
+                                        "label": "Large Town Centre",
+                                        "color": "#FE4E00",
+                                        "fillColor": "#FE4E00"
+                                    },
+                                    "Major Urban Centre": {
+                                        "label": "Major Urban Centre",
+                                        "color": "#E2711D",
+                                        "fillColor": "#E2711D"
+                                    },
+                                    "Town Centre": {
+                                        "label": "Town Centre",
+                                        "color": "#F3A712",
+                                        "fillColor": "#F3A712"
+                                    },
+                                    "Urban Centre": {
+                                        "label": "Urban Centre",
+                                        "color": "#FADF63",
+                                        "fillColor": "#FADF63"
+                                    },
+                                    "Small Town Centre": {
+                                        "label": "Small Town Centre",
+                                        "color": "#FFE74C",
+                                        "fillColor": "#FFE74C"
+                                    },
+                                    "Village Centre": {
+                                        "label": "Village Centre",
+                                        "color": "#DBFE87",
+                                        "fillColor": "#DBFE87"
+                                    },
+                                    "Regional SC": {
+                                        "label": "Regional SC",
+                                        "color": "#8ED081",
+                                        "fillColor": "#8ED081"
+                                    },
+                                    "Outlet Centre": {
+                                        "label": "Outlet Centre",
+                                        "color": "#7DDF64",
+                                        "fillColor": "#7DDF64"
+                                    },
+                                    "Shopping Park": {
+                                        "label": "Shopping Park",
+                                        "color": "#074F57",
+                                        "fillColor": "#074F57"
+                                    },
+                                    "Retail Park": {
+                                        "label": "Retail Park",
+                                        "color": "#32746D",
+                                        "fillColor": "#32746D"
+                                    },
+                                    "Leisure Park": {
+                                        "label": "Leisure Park",
+                                        "color": "#41D3BD",
+                                        "fillColor": "#41D3BD"
+                                    },
+                                    "Local Hub": {
+                                        "label": "Local Hub",
+                                        "color": "#08B2E3",
+                                        "fillColor": "#08B2E3"
+                                    },
+                                    "Large Parade": {
+                                        "label": "Large Parade",
+                                        "color": "#1F487E",
+                                        "fillColor": "#1F487E"
+                                    },
+                                    "Parade": {
+                                        "label": "Parade",
+                                        "color": "#541388",
+                                        "fillColor": "#541388"
+                                    },
+                                    "Weak Parade": {
+                                        "label": "Weak Parade",
+                                        "color": "#D90368",
+                                        "fillColor": "#D90368"
+                                    }
+                                }
+                            },
+                            "Population '11": {
+                                "type": "graduated",
+                                "field": "pop__11",
+                                "cat": {
+                                    "0": {
+                                        "label": "0 to 10000",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "10000": {
+                                        "label": "10000 to 25000",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "25000": {
+                                        "label": "25000 to 50000",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "50000": {
+                                        "label": "50000 to 100000",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "100000": {
+                                        "label": "100000 to 250000",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "250000": {
+                                        "label": "250000 to 500000",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "500000": {
+                                        "label": "500000 or more",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "infoj": [
+                        {
+                            "label": "ID",
+                            "field": "id",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Date edit",
+                            "field": "dev_date",
+                            "type": "date",
+                            "edit": "true",
+                            "filter": "date"
+                        },
+                        {
+                            "label": "Date",
+                            "field": "dev_date_",
+                            "fieldfx": "dev_date",
+                            "type": "date"
+                        },
+                        {
+                            "label": "RP Type",
+                            "field": "rp_type",
+                            "type": "text",
+                            "filter": {
+                                "in": [
+                                    "Major City Centre",
+                                    "Large Town Centre",
+                                    "Village Centre",
+                                    "Weak Parade"
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Name",
+                            "field": "uniq_name",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Competition Str.",
+                            "field": "comp_strgh",
+                            "type": "integer"
+                        },
+                        {
+                            "label": "OA pop_11",
+                            "field": "pop_11",
+                            "type": "integer",
+                            "lookup": {
+                                "table": "dev_oa",
+                                "geom": "geom",
+                                "condition": "ST_INTERSECTS",
+                                "function": "AVG"
+                            }
+                        },
+                        {
+                            "label": "Population",
+                            "type": "group",
+                            "chart": {
+                                "x": "label x",
+                                "y": "label y"
+                            }
+                        },
+                        {
+                            "group": "Population",
+                            "label": "Population '11",
+                            "field": "pop__11",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Population",
+                            "label": "Population '12",
+                            "field": "pop__12",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Population",
+                            "label": "Population '13",
+                            "field": "pop__13",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Population",
+                            "label": "Population '14",
+                            "field": "pop__14",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Population",
+                            "label": "Population '15",
+                            "field": "pop__15",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Population",
+                            "label": "Population '16",
+                            "field": "pop__16",
+                            "type": "integer"
+                        },
+                        {
+                            "label": "Population 16 - 11",
+                            "field": "pop_diff",
+                            "fieldfx": "(pop__16 - pop__11)",
+                            "type": "integer"
+                        }
+                    ]
+                },
+                "retail_points": {
+                    "group": "RP",
+                    "name": "Retail Points",
+                    "display": true,
+                    "format": "cluster",
+                    "cluster_label": "store",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "dev.retailpoints",
+                    "filter": {
+                        "roles": {
+                            "n1": "some_filter"
+                        },
+                        "infoj": [
+                            {
+                                "label": "ID count",
+                                "field": "id_count",
+                                "type": "integer",
+                                "inline": true,
+                                "fieldfx": "count(retailpoint_id)"
+                            }
+                        ]
+                    },
+                    "style": {
+                        "themes": {
+                            "Retailer": {
+                                "type": "categorized",
+                                "field": "retailer",
+                                "other": true,
+                                "cat": {
+                                    "Tesco": {
+                                        "label": "Tesco",
+                                        "fillColor": "#0055a8",
+                                        "layers": {
+                                            "0.75": "#ffffff",
+                                            "0.35": "#f02f26"
+                                        }
+                                    },
+                                    "Sainsburys": {
+                                        "label": "Sainsbury's",
+                                        "fillColor": "#ee8a00",
+                                        "layers": {
+                                            "0.5": "#ffffff",
+                                            "0.35": "#ee8a00"
+                                        }
+                                    },
+                                    "Marks and Spencer": {
+                                        "label": "Marks & Spencer",
+                                        "fillColor": "#0a0d10",
+                                        "layers": {
+                                            "0.5": "#def036",
+                                            "0.25": "#0a0d10"
+                                        }
+                                    }
+                                }
+                            },
+                            "Households": {
+                                "type": "graduated",
+                                "field": "hhdooc_11",
+                                "cat": {
+                                    "0": {
+                                        "label": "0 to 100",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "100": {
+                                        "label": "100 to 200",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "200": {
+                                        "label": "200 to 400",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "400": {
+                                        "label": "400 to 600",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "600": {
+                                        "label": "600 to 800",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "800": {
+                                        "label": "800 to 1000",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "1000": {
+                                        "label": "1000 or more",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            },
+                            "Households Sized": {
+                                "type": "graduated",
+                                "field": "hhdooc_11",
+                                "size": "hhdooc_11",
+                                "cat": {
+                                    "0": {
+                                        "label": "0 to 100",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "100": {
+                                        "label": "100 to 200",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "200": {
+                                        "label": "200 to 400",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "400": {
+                                        "label": "400 to 600",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "600": {
+                                        "label": "600 to 800",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "800": {
+                                        "label": "800 to 1000",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "1000": {
+                                        "label": "1000 or more",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            },
+                            "Tesco/Sainsbury's": {
+                                "type": "competition",
+                                "field": "retailer",
+                                "other": true,
+                                "cat": {
+                                    "Tesco": {
+                                        "label": "Tesco",
+                                        "fillColor": "#0055a8"
+                                    },
+                                    "Sainsburys": {
+                                        "label": "Sainsbury's",
+                                        "fillColor": "#ee8a00"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "infoj": [
+                        {
+                            "type": "streetview"
+                        },
+                        {
+                            "label": "ID",
+                            "field": "retailpoint_id",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Store",
+                            "field": "store",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Retailer",
+                            "field": "retailer",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Fascia",
+                            "field": "fascia",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Address"
+                        },
+                        {
+                            "field": "address_1",
+                            "type": "text",
+                            "level": 1
+                        },
+                        {
+                            "field": "address_2",
+                            "type": "text",
+                            "level": 1
+                        },
+                        {
+                            "field": "locality",
+                            "type": "text",
+                            "level": 1
+                        },
+                        {
+                            "field": "town",
+                            "type": "text",
+                            "level": 1
+                        },
+                        {
+                            "label": "Postcode",
+                            "field": "postcode",
+                            "type": "text",
+                            "level": 1,
+                            "filter": "like"
+                        },
+                        {
+                            "label": "RP competition",
+                            "field": "comp_strgh",
+                            "type": "integer",
+                            "lookup": {
+                                "table_a": "dev_retailpoints",
+                                "geom_a": "ST_Transform(ST_Setsrid(a.geom, 4326), 3857)",
+                                "table_b": "dev_retailplaces",
+                                "geom_b": "b.geom_3857",
+                                "condition": "ST_INTERSECTS",
+                                "aggregate": "AVG"
+                            }
+                        },
+                        {
+                            "label": "Households",
+                            "field": "hhdooc_11",
+                            "type": "integer"
+                        },
+                        {
+                            "label": "Catchment 10min",
+                            "field": "geom_catchment",
+                            "fieldfx": "ST_asGeoJson(geom_catchment)",
+                            "type": "geometry",
+                            "edit": {
+                                "catchment": {
+                                    "minutes": 10
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#cf0",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.5
+                            }
+                        },
+                        {
+                            "label": "Catchment Population",
+                            "field": "catchment_pop",
+                            "fieldfx": "pop__11",
+                            "type": "integer",
+                            "lookup": {
+                                "table_a": "dev_retailpoints",
+                                "geom_a": "a.geom_catchment",
+                                "table_b": "gb_hx_1k",
+                                "geom_b": "b.geomcntr",
+                                "aggregate": "AVG"
+                            }
+                        }
+                    ]
+                },
+                "grid": {
+                    "name": "Grid",
+                    "format": "grid",
+                    "dbs": "XYZ",
+                    "geom": "geomcntr",
+                    "grid_color": "pop__11",
+                    "tables": {
+                        "6": "gb_hx_64k",
+                        "7": "gb_hx_32k",
+                        "8": "gb_hx_16k",
+                        "9": "gb_hx_8k",
+                        "10": "gb_hx_4k",
+                        "11": "gb_hx_2k",
+                        "12": "gb_hx_1k",
+                        "13": "gb_hx_1k",
+                        "14": null
+                    },
+                    "grid_fields": {
+                        "Population 2001": "pop__01",
+                        "Population 2011": "pop__11",
+                        "Female population": "gen_female__11",
+                        "Male population": "gen_male__11"
+                    },
+                    "style": {
+                        "range": [
+                            "#15773f",
+                            "#66bd63",
+                            "#a6d96a",
+                            "#fdae61",
+                            "#f46d43",
+                            "#d73027"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

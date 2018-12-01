@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head data-dir = "{{:dir}}">
+    <title>GEOLYTIX | register</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{:dir}}/css/views/login.css" />
+</head>
+<body>
+<div>
+    <form method="post">
+
+        <div class="input_group">
+            <input id="auth_user_email" name="email" type="email" autocomplete="username" value="" maxlength="50">
+            <span class="bar"></span>
+            <label for="auth_user_email">E-mail</label>
+        </div>
+
+        <br>
+
+        <div class="input_group">
+            <input id="auth_user_password" name="password" type="password" autocomplete="new-password" value="" minlength="8">
+            <span class="bar"></span>
+            <label for="auth_user_password">New Password (min. length 8 character)</label>
+        </div>
+
+        <br>
+
+        <div class="input_group">
+            <input id="auth_user_password_retype" name="password_retype" type="password" autocomplete="new-password" value="">
+            <span class="bar"></span>
+            <label for="auth_user_password_retype">Re-type password</label>
+        </div>
+
+        <br>
+
+        <button id="btnRegister" type="submit" formaction="register" disabled>
+            Register or Re-set Password
+        </button>
+
+        <p>A verification link will be sent to your email address. Follow the link to verify that you are the account holder.</p>
+        <p>Password re-sets will be completed once the verification link has been followed</p>
+        <p>A site administrator must approve new accounts once the email address has been verified by following the link.</p>
+        <a class="switch" href="{{:dir}}/login">Already registered? Login.</p>
+    </form>
+</div>
+</body>
+
+<script src="{{:dir}}/js/views/register.js"></script>
+
+</html>

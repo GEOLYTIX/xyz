@@ -1,0 +1,49 @@
+.img-container {
+    overflow-x: scroll;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    td {
+        position: relative;
+        padding: 5px;
+        img {
+            height: 160px;
+            box-shadow: 2px 2px 1px #777;
+            border-radius: 10px;
+            -webkit-transition: opacity 0.2s linear;
+            -moz-transition: opacity 0.2s linear;
+            -o-transition: opacity 0.2s linear;
+            transition: opacity 0.2s linear;
+        }
+        button {
+            display: block;
+            background: none;
+            position: absolute;
+            border: none;
+            &.btn_del {
+                right: 6px;
+                top: 10px;
+            }
+            &.btn_save {
+                left: 5px;
+                bottom: 14px;
+            }
+            :hover {
+                cursor: pointer;
+            }
+            i {
+                padding: 1px;
+                width: 30px;
+                height: 30px;
+                font-size: 28px;
+                color: #090;
+                align-content: center;
+                border-radius: 5px;
+                background-color: #fff;
+                opacity: 0.9;
+                border: 1px solid #cf7;
+                box-shadow: 2px 2px 1px #cf7;
+            }
+        }
+    }
+}

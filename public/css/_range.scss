@@ -1,0 +1,42 @@
+.range {
+    width: 100%;
+    width: calc(100% - 5px);
+    padding: 10px 0;
+}
+
+input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    border-radius: 5px;
+    background: #cf9;
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #090;
+    cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border: 0;
+    border-radius: 50%;
+    background: #090;
+    cursor: pointer;
+}
+
+.range_new {
+    margin: 15px 0 20px 0;
+}
+
+.range_label {
+    font-family: ffmark_bold;
+}
