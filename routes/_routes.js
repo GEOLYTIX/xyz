@@ -4,4 +4,5 @@ module.exports = fastify => {
   require('./api/_api')(fastify);
   require('./auth/_auth')(fastify);
   require('./workspace/_workspace')(fastify);
+  require('./map_control')(fastify);
 };
