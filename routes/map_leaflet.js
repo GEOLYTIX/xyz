@@ -10,7 +10,7 @@ const nanoid = require('nanoid');
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
-    url: '/ctrl',
+    url: '/map/leaflet',
     beforeHandler: fastify.auth([fastify.authAccess]),
     handler: async (req, res) => {
 
