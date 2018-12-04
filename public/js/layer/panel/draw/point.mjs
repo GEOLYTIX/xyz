@@ -1,6 +1,6 @@
 import _xyz from '../../../_xyz.mjs';
 
-// import stage from './stage.mjs';
+import stage from './stage.mjs';
 
 export default layer => {
     
@@ -17,53 +17,13 @@ export default layer => {
 
     layer.edit.vertices.clearLayers();
 
-    // Add vertice from click.
     layer.edit.vertices.addLayer(
       L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
-    );
-    // .bindTooltip(stage(layer, marker), {
-    //   permanent: true, direction: 'right'
-    // })
-    // .openTooltip();
-        
-
-    // Use right click context menu to upload polygon.
-    _xyz.map.on('contextmenu', () => {
-                         
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', _xyz.host + '/api/location/edit/draw?token=' + _xyz.token);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-        
-      xhr.onload = e => {
-    
-        if (e.target.status !== 200) return;
-                  
-        layer.get();
-                  
-        // Select polygon when post request returned 200.
-        _xyz.locations.select({
-          layer: layer.key,
-          table: layer.table,
-          id: e.target.response,
-          marker: marker
-        });
-    
-      };
-          
-      // Send path geometry to endpoint.
-      xhr.send(JSON.stringify({
-        locale: _xyz.locale,
-        layer: layer.key,
-        table: layer.table,
-        geometry: {
-          type: 'Point',
-          coordinates: marker
-        }
-      }));
-    
-      _xyz.state.finish();
-    
-    }); 
+    )
+      .bindPopup(stage(layer, marker), {
+        closeButton: false
+      })
+      .openPopup();
 
   });
   
