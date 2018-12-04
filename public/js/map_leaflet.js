@@ -82,6 +82,58 @@ map.addLayer({
 });
 
 map.addLayer({
+  format: 'cluster',
+  key: 'retail_points',
+  locale: 'GB',
+  table: 'dev.retailpoints',
+  cluster_kmeans: 0.05,
+  cluster_dbscan: 0.01,
+  style: {
+    markerMin: 20,
+    markerMax: 40,
+    marker: {
+      type: 'target',
+      fillColor: '#999999'
+    },
+    markerMulti: {
+      type: 'target',
+      fillColor: '#333333'
+    },
+    theme: {
+      'type': 'categorized',
+      'field': 'retailer',
+      'other': true,
+      'cat': {
+        'Tesco': {
+          'label': 'Tesco',
+          'fillColor': '#0055a8',
+          'layers': {
+            '0.75': '#ffffff',
+            '0.35': '#f02f26'
+          }
+        },
+        'Sainsburys': {
+          'label': 'Sainsburys',
+          'fillColor': '#ee8a00',
+          'layers': {
+            '0.5': '#ffffff',
+            '0.35': '#ee8a00'
+          }
+        },
+        'Marks and Spencer': {
+          'label': 'Marks & Spencer',
+          'fillColor': '#0a0d10',
+          'layers': {
+            '0.5': '#def036',
+            '0.25': '#0a0d10'
+          }
+        }
+      }
+    }
+  }
+});
+
+map.addLayer({
   format: 'tiles',
   key: 'base_label',
   URI: 'https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX'
