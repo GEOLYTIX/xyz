@@ -2,7 +2,17 @@ import map from './xyz_leaflet/index.mjs';
 
 map.init({
   map_id: 'xyz_map',
-  host: document.head.dataset.dir
+  host: document.head.dataset.dir,
+  view_latlon: [52, 0],
+  view_zoom: 7,
+  bounds: {
+    north: 62,
+    east: 5,
+    south: 48,
+    west: -13
+  },
+  minZoom: 6,
+  maxZoom: 17
 });
 
 map.addLayer({
@@ -69,4 +79,10 @@ map.addLayer({
       fillOpacity: 0.2
     }
   }
+});
+
+map.addLayer({
+  format: 'tiles',
+  key: 'base_label',
+  URI: 'https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX'
 });

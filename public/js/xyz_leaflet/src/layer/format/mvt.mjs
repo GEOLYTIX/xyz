@@ -56,7 +56,7 @@ export default function() {
     options = {
       rendererFactory: _xyz.L.svg.tile,
       interactive: (layer.qID) || false,
-      //   pane: layer.key,
+      pane: layer.key,
       getFeatureId: f => f.properties.id,
       vectorTileLayerStyles: {}
     };

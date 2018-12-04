@@ -9,8 +9,24 @@ export default params => {
     scrollWheelZoom: true,
     zoomControl: false,
     attributionControl: false
-  })
-    .setView([52, 0], 7);
+  });
+
+  // _xyz.map.setMaxBounds(_xyz.ws.locales[_xyz.locale].bounds.leaflet);
+  if (params.minZoom) _xyz.map.setMinZoom(params.minZoom);
+  if (params.maxZoom) _xyz.map.setMaxZoom(params.maxZoom);
+
+  // Set Leaflet bounds;
+  if (params.bounds) {
+    _xyz.map.setMaxBounds([[
+      params.bounds.south,
+      params.bounds.west
+    ], [
+      params.bounds.north,
+      params.bounds.east
+    ]]);
+  }
+
+  _xyz.map.setView(params.view_latlon || [0,0], params.view_zoom || 5);
 
   // Fire viewChangeEnd after map move and zoomend
   _xyz.map.on('moveend', () => viewChangeEndTimer());
@@ -27,7 +43,7 @@ export default params => {
 
     // Load layer which have display set to true.
     Object.values(_xyz.layers).forEach(layer => layer.get());
-    
+
   }
 
   // // Function to check whether all display layers are drawn.

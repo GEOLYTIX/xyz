@@ -17,7 +17,7 @@ export default function () {
     // Assign the tile layer to the layer L object and add to map.
   layer.L = L.tileLayer(uri, {
     updateWhenIdle: true,
-    //pane: layer.key
+    pane: layer.key
   }).addTo(_xyz.map);
 
 }
