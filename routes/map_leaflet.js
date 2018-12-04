@@ -27,7 +27,8 @@ module.exports = fastify => {
       res.type('text/html').send(tmpl.render({
         dir: global.dir,
         title: config.title || 'GEOLYTIX | XYZ',
-        nanoid: nanoid(6)
+        nanoid: nanoid(6),
+        bundle_js: 'build/map_leaflet_bundle.js'
       }));
     }
   });

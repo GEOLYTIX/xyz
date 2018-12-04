@@ -86,9 +86,6 @@ export default () => {
     // Draw a frame of the current map bounding box.
     if (_xyz.frame) _xyz.map.removeLayer(_xyz.frame);
 
-    console.log(_xyz.map.getBounds());
-
-
     _xyz.frame = L.rectangle(_xyz.map.getBounds(), {color: '#cf9', fill: false, pane: 'rectangle'}).addTo(_xyz.map);
 
     // Remove layers from map.
