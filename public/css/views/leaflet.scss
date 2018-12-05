@@ -1,30 +1,60 @@
-*{
-    margin: 0;
-    padding: 0;
+$glxgreen: #090;
+$glxlightgreen: #cf9;
+$onyx: #383836;
+
+@font-face {
+    font-family: ffmark_black;
+    src: url(../../fonts/MarkWeb-Black.woff) format("woff");
 }
 
-html, body {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    height: 100%;
-    padding-top: 5px;
-} 
+@font-face {
+    font-family: ffmark;
+    src: url(../../fonts/MarkWebPro.woff) format("woff");
+}
 
-#xyz_map {
-    width: calc(100% - 200px);
-    height: 80%;
-    border: 3px solid #090;
-    margin: auto;
-    margin-top: 80px;
+@font-face {
+    font-family: ffmark_bold;
+    src: url(../../fonts/MarkWebPro-Bold.woff) format("woff");
+}
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+
+a {
+    color: $onyx;
+    text-decoration: none;
+}
+
+.attribution {
+    bottom: 5px;
+    right: 5px;
+    position: absolute;
+    z-index: 999;
+    #attribution_links {
+        float: right;
+        clear: right;
+        font-family: ffmark_bold, sans-serif;
+        font-size: 18px;
+        text-shadow: 2px 2px $glxlightgreen;
+        i {
+            font-size: 14px;
+        }
+        a {
+            margin-left: 5px;
+        }
+    }
+    .logo {
+        font-family: ffmark_black, sans-serif;
+        text-shadow: 2px 2px $glxlightgreen;
+        float: right;
+        font-size: 40px;
+    }
 }
 
 .leaflet-control-attribution {
     display: none;
 }
-
-
-/* required styles */
 
 .leaflet-pane,
 .leaflet-tile,

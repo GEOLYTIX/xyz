@@ -28,7 +28,8 @@ module.exports = fastify => {
         dir: global.dir,
         title: config.title || 'GEOLYTIX | XYZ',
         nanoid: nanoid(6),
-        bundle_js: 'build/map_leaflet_bundle.js'
+        bundle_js: 'build/lib_leaflet_bundle.js',
+        script_js: 'views/map_leaflet.js'
       }));
     }
   });

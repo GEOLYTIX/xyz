@@ -70,6 +70,9 @@ function startFastify(){
       },
       noCache: true
     })
+    .register(require('fastify-cors'), { 
+      origin: true
+    })
     .register(require('fastify-formbody'))
     .register(require('fastify-static'), {
       root: global.appRoot + '/public',

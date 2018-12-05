@@ -13,7 +13,7 @@ export default layer => {
   if (!layer.key) return;
 
   _xyz.map.createPane(layer.key);
-  _xyz.map.getPane(layer.key).style.zIndex = 500 + Object.keys(_xyz.layers).length;
+  _xyz.map.getPane(layer.key).style.zIndex = 500 + Object.keys(_xyz.layers.list).length;
     
   if (layer.format === 'mvt') layer.get = format_mvt;
 
@@ -23,6 +23,6 @@ export default layer => {
 
   layer.get();
 
-  _xyz.layers[layer.key] = layer;
+  _xyz.layers.list[layer.key] = layer;
 
 };

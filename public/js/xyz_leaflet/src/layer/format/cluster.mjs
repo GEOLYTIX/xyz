@@ -51,12 +51,16 @@ export default function(){
     north: bounds.getNorth(),
     token: _xyz.token
   }));
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
     
   // Process XHR onload.
   xhr.onload = e => {
            
     // Data is returned and the layer is still current.
     if (e.target.status !== 200) return;
+
+    if (layer.attribution) _xyz.attribution.set(layer.attribution);
     
     const cluster = JSON.parse(e.target.response);
 

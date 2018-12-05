@@ -272,6 +272,7 @@
                     "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 },
                 "Mapbox Base": {
+                    "display": true,
                     "name": "Mapbox Baselayer",
                     "attribution": {
                         "© Mapbox": "https://www.mapbox.com/about/maps",
@@ -376,7 +377,6 @@
                 "retail_places": {
                     "group": "RP",
                     "name": "Retail Places",
-                    "display": true,
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {

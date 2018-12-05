@@ -40,7 +40,7 @@ export default function() {
   if (layer.table === table) return;
 
   // Set layer table to be table from tables array.
-  layer.table = table;
+  if (table) layer.table = table;
 
   // Create filter from legend and current filter.
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
@@ -68,6 +68,8 @@ export default function() {
   if (layer.style.theme && layer.style.theme.type === 'graduated') {
     layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
   }
+
+  if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
   layer.L = L.vectorGrid.protobuf(url, options)
     .on('error', err => console.error(err))
