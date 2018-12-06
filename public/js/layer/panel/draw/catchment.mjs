@@ -5,7 +5,7 @@ export default layer => {
   if(!layer.display) layer.show();
     
   layer.header.classList.add('edited');
-  _xyz.dom.map.style.cursor = 'crosshair';
+  _xyz.map_dom.style.cursor = 'crosshair';
 
   layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
 
@@ -32,7 +32,7 @@ export default layer => {
 
     xhr.onload = e => {
 
-      _xyz.dom.map.style.cursor = '';
+      _xyz.map_dom.style.cursor = '';
 
       layer.get();
 
@@ -51,7 +51,7 @@ export default layer => {
 
     _xyz.state.finish();
     
-    _xyz.dom.map.style.cursor = 'busy';
+    _xyz.map_dom.style.cursor = 'busy';
 
   });
 };

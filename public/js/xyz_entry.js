@@ -10,7 +10,8 @@ import hooks from './hooks.mjs';
 
 import locales from './locales.mjs';
 
-import map from './map.mjs';
+// import map from './map.mjs';
+import './xyz_leaflet/index.mjs';
 
 import _layers from './layer/_layers.mjs';
 
@@ -19,6 +20,8 @@ import _locations from './location/_locations.mjs';
 import gazetteer from './gazetteer.mjs';
 
 import locate from './locate.mjs';
+
+
 
 token(init);
 
@@ -35,7 +38,13 @@ function init() {
   locales();
 
   // Initiate map control.
-  map();
+  _xyz.init({
+    host: document.head.dataset.dir,
+    map_id: 'Map',
+    locale: _xyz.locale,
+    // view_latlon: [52, 0],
+    // view_zoom: 7
+  });
 
   // Initialize layers.
   _xyz.layers.init = _layers;

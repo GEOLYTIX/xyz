@@ -1,6 +1,8 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default next => {
+
+  return next();
 
   // XHR to retrieve workspace from backend.
   const xhr = new XMLHttpRequest();

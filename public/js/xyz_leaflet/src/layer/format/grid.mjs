@@ -1,8 +1,11 @@
-import _xyz from '../../_xyz.mjs';
+import _xyz from '../../../../_xyz.mjs';
 
 export default function(){
 
   const layer = this;
+
+  if (!layer.display) return;
+  
   layer.loaded = false;
 
   // Set locale to check whether locale is still current when data is returned from backend.
@@ -37,7 +40,7 @@ export default function(){
       if (layer.L) _xyz.map.removeLayer(layer.L);
 
       // Add geoJSON feature collection to the map.
-      layer.L = _xyz.L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
+      layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
         pointToLayer: function (feature, latlng) {
 
           // Distribute size between min, avg and max.
@@ -65,11 +68,11 @@ export default function(){
 
           }
 
-          // Return Marker with icon as style to pointToLayer.
-          return _xyz.L.marker(
+          // Return L.Marker with icon as style to pointToLayer.
+          return L.marker(
             latlng,
             {
-              icon: _xyz.L.icon({
+              icon: L.icon({
                 iconSize: size,
                 iconUrl: _xyz.utils.svg_symbols({
                   type: 'dot',

@@ -1,11 +1,17 @@
-import _xyz from '../../_xyz.mjs';
+import _xyz from '../../../../_xyz.mjs';
+
+import cluster_select from './cluster_select.mjs';
 
 export default function(){
 
   const layer = this;
 
+  if (!layer.display) return;
+
   // Remove existing layer.
   if (layer.L) _xyz.map.removeLayer(layer.L);
+
+  let table = null;
 
   // Get table from tables array.
   if (layer.tables) {
@@ -20,10 +26,26 @@ export default function(){
       layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
         null : layer.tables[zoom];
 
+    // Remove the layer if table is null.
+    if (!table) {
+
+      // Set layer table to null to ensure that layer will be added again when table is not null.
+      layer.table = null;
+
+      // Remove layer from map if currently drawn.
+      if (layer.L) _xyz.map.removeLayer(layer.L);
+
+      return;
+
+    }        
+
   }
 
-  // Return from layer.get() if no layer table.
-  if (!layer.table) return;
+  // Return from layer.get() if table is the same as layer table.
+  if (layer.table === table) return;
+
+  // Set layer table to be table from tables array.
+  if (table) layer.table = table;
 
   // Create filter from legend and current filter.
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
@@ -53,6 +75,7 @@ export default function(){
   }));
 
   xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.responseType = 'json';
     
   // Process XHR onload.
   xhr.onload = e => {
@@ -62,7 +85,7 @@ export default function(){
 
     if (layer.attribution) _xyz.attribution.set(layer.attribution);
     
-    const cluster = JSON.parse(e.target.response);
+    const cluster = e.target.response;
 
     const param = {
       max_size: cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0)
@@ -163,7 +186,7 @@ export default function(){
             
       }
     })
-      //.on('click', e => cluster_select(e, layer))
+      .on('click', e => cluster_select(e, layer))
       .addTo(_xyz.map);
 
     function marker(latlng, layer, point, param){

@@ -1,7 +1,5 @@
 import _xyz from './_xyz.mjs';
 
-import L from 'leaflet';
-
 export default () => {
 
   _xyz.locate.toggle = document.getElementById('btnLocate');
@@ -14,9 +12,9 @@ export default () => {
 
     // Create the geolocation marker if it doesn't exist yet.
     if (!_xyz.locate.L) {
-      _xyz.locate.L = L.marker([0, 0], {
+      _xyz.locate.L = _xyz.L.marker([0, 0], {
         interactive: false,
-        icon: L.icon({
+        icon: _xyz.L.icon({
           iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
           iconSize: 30
         })

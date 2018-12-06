@@ -1,10 +1,14 @@
-import _xyz from '../../_xyz.mjs';
+// import _xyz from '../../_xyz.mjs';
+
+import _xyz from '../../../../_xyz.mjs';
 
 import 'leaflet.vectorgrid';
 
 export default function() {
 
   const layer = this;
+
+  if (!layer.display) return;
 
   let table = null;
 
@@ -94,6 +98,9 @@ export default function() {
         id: e.layer.properties.id,
         token: _xyz.token
       }));
+
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
     
       xhr.onload = e => {
     
@@ -105,7 +112,7 @@ export default function() {
     
         if (e.target.status !== 200) return;
     
-        alert(e.target.responseText);
+        alert(JSON.stringify(e.target.response));
           
       };
     

@@ -1,7 +1,5 @@
 import _xyz from '../../_xyz.mjs';
 
-import L from 'leaflet';
-
 export default (e, layer) => {
 
   const xhr = new XMLHttpRequest();
@@ -49,7 +47,7 @@ export default (e, layer) => {
       if (_xyz.view.mode === 'desktop') {
   
         // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
-        layer.popup = L.popup()
+        layer.popup = _xyz.L.popup()
           .setLatLng(lnglat.reverse())
           .setContent('<div class="content scrolly location_table"><div class="scrolly_track"><div class="scrolly_bar"></div></div>' + table + '</div>')
           .openOn(_xyz.map);
@@ -63,7 +61,6 @@ export default (e, layer) => {
         if (layer.keySelectionLine) _xyz.map.removeLayer(layer.keySelectionLine);
   
         let dom = {
-          map: document.getElementById('Map'),
           location_drop: document.querySelector('.location_drop'),
           location_drop__close: document.querySelector('.location_drop__close'),
           location_table: document.querySelector('.location_table'),
@@ -74,16 +71,16 @@ export default (e, layer) => {
         dom.location_drop.style['display'] = 'block';
   
         // Pan map according to the location of the cluster cell;
-        let map_dom__height = dom.map.clientHeight,
-          map_dom__margin = parseInt(dom.map.style.marginTop),
+        let map_dom__height = _xyz.map_dom.clientHeight,
+          map_dom__margin = parseInt(_xyz.map_dom.style.marginTop),
           shiftY = parseInt((map_dom__height + map_dom__margin * 2) / 2) + parseInt(dom.location_drop.clientHeight) / 2 - (e.containerPoint.y + map_dom__margin);
   
           // _xyz.map.setZoomAround(e.latlng, _xyz.map.getZoom() + 1, { animate: false });
         _xyz.map.panBy([0, -shiftY]);
   
         // Draw line marker which connects hex cell with drop down.
-        layer.keySelectionLine = L.marker(lnglat.reverse(), {
-          icon: L.icon({
+        layer.keySelectionLine = _xyz.L.marker(lnglat.reverse(), {
+          icon: _xyz.L.icon({
             iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
             iconSize: [3, 1000],
             iconAnchor: [2, 1000]

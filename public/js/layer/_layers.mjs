@@ -1,6 +1,6 @@
 import _xyz from '../_xyz.mjs';
 
-import layer_formats from './format/_formats.mjs';
+// import layer_formats from './format/_formats.mjs';
 
 import layer_panels from './panel/_panels.mjs';
 
@@ -16,6 +16,7 @@ import layer_remove from './remove.mjs';
 
 import layer_icon from './icon.mjs';
 
+/*
 _xyz.layers.getTable = layer => {
 
   let
@@ -30,31 +31,32 @@ _xyz.layers.getTable = layer => {
   // Make drawer opaque if no table present.
   layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
 };
+*/
 
 export default () => {
 
   // Empty the layers list.
   document.getElementById('layers').innerHTML = '';
 
-  // Get the layers from the current locale.
-  _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
+  // // Get the layers from the current locale.
+  // _xyz.layers.list = _xyz.ws.locales[_xyz.locale].layers;
 
-  // Filter invalid layers
-  _xyz.layers.list = Object.keys(_xyz.layers.list)
-    .filter(key => key.indexOf('__') === -1)
-    .reduce((obj, key) => {
-      obj[key] = _xyz.layers.list[key];
-      return obj;
-    }, {});
+  // // Filter invalid layers
+  // _xyz.layers.list = Object.keys(_xyz.layers.list)
+  //   .filter(key => key.indexOf('__') === -1)
+  //   .reduce((obj, key) => {
+  //     obj[key] = _xyz.layers.list[key];
+  //     return obj;
+  //   }, {});
 
   // Reset groups.
   _xyz.layers.groups = {};
 
-  // Set the layer display from hooks then remove layer hooks.
-  if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {
-    _xyz.layers.list[layer].display = (_xyz.hooks.current.layers.indexOf(layer) > -1);
-  });
-  _xyz.hooks.remove('layers');
+  // // Set the layer display from hooks then remove layer hooks.
+  // if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {
+  //   _xyz.layers.list[layer].display = (_xyz.hooks.current.layers.indexOf(layer) > -1);
+  // });
+  // _xyz.hooks.remove('layers');
 
 
   // Loop through the layers and add to layers list.
@@ -98,13 +100,13 @@ export default () => {
       appendTo: layer.drawer
     });
 
-    // Increase pane counter and add layer pane to map.
-    _xyz.panes.next += 2;
-    _xyz.panes.list.push(_xyz.map.createPane(layer.key));
-    _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next;
+    // // Increase pane counter and add layer pane to map.
+    // _xyz.panes.next += 2;
+    // _xyz.panes.list.push(_xyz.map.createPane(layer.key));
+    // _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next;
 
-    // Method to get data and redraw layer on map.
-    layer.get = layer_formats[layer.format];
+    // // Method to get data and redraw layer on map.
+    // layer.get = layer_formats[layer.format];
 
     // Method to show layer on map.
     layer.show = layer_show;
@@ -124,10 +126,10 @@ export default () => {
     //Add icon to layer header.
     layer_icon(layer);
 
-    if (layer.tables) _xyz.layers.getTable(layer);
+    //if (layer.tables) _xyz.layers.getTable(layer);
 
     // Show layer if layer display is true.
-    if (layer.display) layer.show();
+    //if (layer.display) layer.show();
 
     if (_xyz.log) console.log(layer);
     

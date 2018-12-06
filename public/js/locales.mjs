@@ -16,16 +16,16 @@ export default () => {
       return obj;
     }, {});
 
-  // Set Leaflet bounds;
-  Object.values(_xyz.ws.locales).forEach(locale => {
-    locale.bounds.leaflet = [[
-      locale.bounds.south,
-      locale.bounds.west
-    ], [
-      locale.bounds.north,
-      locale.bounds.east
-    ]];
-  });
+  // // Set Leaflet bounds;
+  // Object.values(_xyz.ws.locales).forEach(locale => {
+  //   locale.bounds.leaflet = [[
+  //     locale.bounds.south,
+  //     locale.bounds.west
+  //   ], [
+  //     locale.bounds.north,
+  //     locale.bounds.east
+  //   ]];
+  // });
 
   // Return if length of locales array is 1.
   if (Object.keys(_xyz.ws.locales).length === 1) return;
@@ -44,23 +44,33 @@ export default () => {
     selected: _xyz.locale,
     onchange: e => {
 
-      _xyz.map.remove();
+      
 
-      _xyz.map = _xyz.initMap();
+      // _xyz.map = _xyz.initMap();
 
       // Set the locale and remove hooks.
       _xyz.locale = e.target.value;
+
+      // Initiate map control.
+      _xyz.init({
+        host: document.head.dataset.dir,
+        map_id: 'Map',
+        locale: _xyz.locale,
+        // view_latlon: [52, 0],
+        // view_zoom: 7
+      });
+
       _xyz.hooks.removeAll();
       _xyz.hooks.set('locale', _xyz.locale);
 
       // Set drawing panes.
-      _xyz.panes.init();
+      // _xyz.panes.init();
 
       // Set locale view.
-      _xyz.view.set(true);
+      // _xyz.view.set(true);
 
       // Map events must be set after view change.
-      _xyz.initMapEvents();
+      // _xyz.initMapEvents();
       
       // Init gazetteer.
       _xyz.gazetteer.init();

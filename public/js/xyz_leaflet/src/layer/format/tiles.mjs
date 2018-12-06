@@ -1,8 +1,10 @@
-import _xyz from '../../_xyz.mjs';
+import _xyz from '../../../../_xyz.mjs';
 
 export default function () {
 
   const layer = this;
+
+  if (!layer.display) return;
 
   // Return from layer get once added to map.
   if (layer.onMap) return;

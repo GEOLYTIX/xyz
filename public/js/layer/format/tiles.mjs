@@ -1,7 +1,5 @@
 import _xyz from '../../_xyz.mjs';
 
-import L from 'leaflet';
-
 export default function () {
 
   const layer = this;
@@ -22,7 +20,7 @@ export default function () {
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
     // Assign the tile layer to the layer L object and add to map.
-    layer.L = L.tileLayer(uri, {
+    layer.L = _xyz.L.tileLayer(uri, {
       updateWhenIdle: true,
       pane: layer.key
     }).addTo(_xyz.map).on('load', () => {

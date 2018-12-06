@@ -1,12 +1,21 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
+
+import './attribution.mjs';
+
+import './loadLocale.mjs';
 
 export default params => {
 
   if (!params.map_id) return console.log('map_id missing in params.');
 
   _xyz.host = params.host;
+  if (!params.host) return console.log('host missing in params.');
 
   _xyz.map_dom = document.getElementById(params.map_id);
+
+  _xyz.attribution.create();
+
+  if (_xyz.map) _xyz.map.remove();
 
   _xyz.map = _xyz.L.map(params.map_id, {
     renderer: _xyz.L.svg(),
@@ -15,15 +24,13 @@ export default params => {
     attributionControl: false
   });
 
-  _xyz.attribution.create();
-
-  if (!params.host) return console.log('host missing in params.');
-
   _xyz.getWorkspace(init);
 
   function init() {
 
     if (!params.locale) return console.log('locale missing in params.');
+
+    _xyz.locale = params.locale;
 
     const locale = Object.assign({}, _xyz.ws.locales[params.locale], params);
   

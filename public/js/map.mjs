@@ -1,7 +1,5 @@
 import _xyz from './_xyz.mjs';
 
-import L from 'leaflet';
-
 import * as attribution from './attribution.mjs';
 
 import _panes from './panes.mjs';
@@ -10,8 +8,8 @@ _xyz.panes = {init: _panes};
 export default () => {
 
   // Initiate map object.
-  _xyz.initMap = () => L.map('Map', {
-    renderer: L.svg(),
+  _xyz.initMap = () => _xyz.L.map('Map', {
+    renderer: _xyz.L.svg(),
     scrollWheelZoom: true,
     zoomControl: false,
     attributionControl: false,
@@ -86,7 +84,7 @@ export default () => {
     // Draw a frame of the current map bounding box.
     if (_xyz.frame) _xyz.map.removeLayer(_xyz.frame);
 
-    _xyz.frame = L.rectangle(_xyz.map.getBounds(), {color: '#cf9', fill: false, pane: 'rectangle'}).addTo(_xyz.map);
+    _xyz.frame = _xyz.L.rectangle(_xyz.map.getBounds(), {color: '#cf9', fill: false, pane: 'rectangle'}).addTo(_xyz.map);
 
     // Remove layers from map.
     Object.values(_xyz.layers.list).forEach(layer => {

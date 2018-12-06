@@ -1,12 +1,26 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
 
-export default locale => {
+export default (function(){
 
-  Object.values(locale.layers).forEach(layer => {
+  _xyz.loadLocale = locale => {
 
-    if (layer.style && layer.style.themes) layer.style.theme = Object.values(layer.style.themes)[0];
+    // // Filter invalid layers
+    // _xyz.layers.list = Object.keys(_xyz.layers.list)
+    //   .filter(key => key.indexOf('__') === -1)
+    //   .reduce((obj, key) => {
+    //     obj[key] = _xyz.layers.list[key];
+    //     return obj;
+    //   }, {});
+
+    _xyz.layers.list = {};
+
+    Object.values(locale.layers).forEach(layer => {
+
+      if (layer.style && layer.style.themes) layer.style.theme = Object.values(layer.style.themes)[0];
     
-    if (layer.display) _xyz.addLayer(layer);
-  });
+      _xyz.layers.add(layer);
+    });
 
-};
+  };
+
+})();

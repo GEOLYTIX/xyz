@@ -4,9 +4,6 @@ export default {
   attribution: { 
     layer: {} 
   },
-  dom: {
-    map: document.getElementById('Map')
-  },
   gazetteer: {},
   hooks: {
     current: {}
@@ -81,7 +78,7 @@ export default {
       }]
   },
   log: typeof document.body.dataset.log !== 'undefined',
-  map: {},
+  //map: {},
   nanoid: document.body.dataset.nanoid,
   panes: {
     init: {},
@@ -91,32 +88,37 @@ export default {
   state: 'select',
   style: {
     defaults: {
-      vertex: { // drawn feature vertex
+      // drawn feature vertex
+      vertex: { 
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',
         weight: 1,
         radius: 5
       },
-      trail: { // trail left behind cursor
+      // trail left behind cursor
+      trail: { 
         stroke: true,
         color: '#666',
         dashArray: '5 5',
         weight: 1
       },
-      path: { // actual drawn feature
+      // actual drawn feature
+      path: { 
         stroke: true,
         color: '#666',
         fill: true,
         fillColor: '#cf9',
         weight: 2
       },
-      path_line: { // actual drawn feature
+      // actual drawn feature
+      path_line: { 
         stroke: true,
         color: '#666',
         weight: 2
       },
-      point: { // new staged point
+      // new staged point
+      point: { 
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',

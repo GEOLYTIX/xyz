@@ -1,4 +1,4 @@
-import _xyz from './src/_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
 import L from 'leaflet';
 
@@ -8,13 +8,9 @@ import getWorkspace from './src/getWorkspace.mjs';
 
 _xyz.getWorkspace = getWorkspace;
 
-import addLayer from './src/layer/addLayer.mjs';
+import add from './src/layer/add.mjs';
 
-_xyz.addLayer = addLayer;
-
-import loadLocale from './src/loadLocale.mjs';
-
-_xyz.loadLocale = loadLocale;
+_xyz.layers.add = add;
 
 import init from './src/init.mjs';
 

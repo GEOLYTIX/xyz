@@ -1,7 +1,5 @@
 import _xyz from '../../_xyz.mjs';
 
-import L from 'leaflet';
-
 import 'leaflet.vectorgrid';
 
 export default function(){
@@ -26,7 +24,7 @@ export default function(){
       token: _xyz.token
     }),
     options = {
-      rendererFactory: L.svg.tile,
+      rendererFactory: _xyz.L.svg.tile,
       interactive: (layer.infoj && layer.qID) || false,
       pane: layer.key,
       getFeatureId: (f) => f.properties.id,
@@ -43,7 +41,7 @@ export default function(){
     layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
   }
 
-  layer.L = L.vectorGrid.protobuf(url, options)
+  layer.L = _xyz.L.vectorGrid.protobuf(url, options)
     .on('error', err => console.error(err))
     .on('load', () => {
       //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
