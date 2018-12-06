@@ -1275,7 +1275,7 @@ input[type=range]::-moz-range-thumb {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6)); }
 
 .attribution {
-  bottom: 5px;
+  bottom: 32px;
   right: 5px;
   position: absolute;
   z-index: 999; }
@@ -1295,6 +1295,25 @@ input[type=range]::-moz-range-thumb {
     text-shadow: 2px 2px #cf9;
     float: right;
     font-size: 40px; }
+
+.tableview {
+  position: absolute;
+  overflow: hidden;
+  /*bottom: calc(-100% + 25px);*/
+  top: calc(100% - 25px);
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1001;
+  background: cadetblue; }
+  .tableview .expander {
+    float: right;
+    cursor: pointer; }
+  .tableview.expanded {
+    transition: 1s;
+    top: 0; }
+  .tableview.folded {
+    transition: 1s; }
 
 *,
 *::after,

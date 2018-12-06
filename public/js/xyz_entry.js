@@ -20,6 +20,8 @@ import gazetteer from './gazetteer.mjs';
 
 import locate from './locate.mjs';
 
+import tableview from './tableview.mjs';
+
 token(init);
 
 function init() {
@@ -50,6 +52,8 @@ function init() {
 
   // Initialize locate module.
   if (_xyz.ws.locate) locate();
+
+  if(_xyz.view.mode === 'desktop') tableview();
 
   // Add redirect to login button click event.
   document.getElementById('btnLogin').addEventListener('click', () => {

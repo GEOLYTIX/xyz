@@ -1,0 +1,25 @@
+.tableview {
+    position: absolute;
+    overflow: hidden;
+    /*bottom: calc(-100% + 25px);*/
+    top: calc(100% - 25px);
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1001;
+    background: cadetblue;
+
+    .expander {
+        float: right;
+        cursor: pointer;
+    }
+
+    &.expanded {
+        transition: 1s;
+        top: 0;
+    }
+
+    &.folded {
+        transition: 1s;
+    }
+}
