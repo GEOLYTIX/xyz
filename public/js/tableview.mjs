@@ -14,22 +14,24 @@ export default () => {
     console.log('transision complete');
   });
 
-  _xyz.utils.createElement({
+  let expander = _xyz.utils.createElement({
     tag: 'i',
     options: {
       classList: 'material-icons expander',
-      textContent: 'unfold_more'
+      //textContent: 'unfold_more'
+      textContent: 'unfold_less'
     },
     eventListener: {
       event: 'click',
       funct: e => {
-        if(e.target.textContent === 'unfold_more'){
+        transition('less');
+        /*if(e.target.textContent === 'unfold_more'){
           e.target.textContent = 'unfold_less';
           transition('more');
         } else {
           e.target.textContent = 'unfold_more';
           transition('less');
-        }
+        }*/
       } 
     },
     appendTo: tableview
@@ -41,6 +43,8 @@ export default () => {
     tableview.style.top = top;
     tableview.addEventListener('transitionend', e => {
       e.target.style.transition = '';
+      expander.style.opacity = 0;
+      expander.style.display = 'none';
     });
   }
 
@@ -60,6 +64,8 @@ export default () => {
 
   function finish(){ 
     el = null; 
+    expander.style.opacity = 1;
+    expander.style.display = 'block';
   }
 
   tableview.addEventListener('mousedown', () => {

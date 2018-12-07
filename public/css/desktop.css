@@ -1307,7 +1307,10 @@ input[type=range]::-moz-range-thumb {
   background: cadetblue; }
   .tableview .expander {
     float: right;
-    cursor: pointer; }
+    cursor: pointer;
+    opacity: 0;
+    display: none;
+    transition: opacity 2s ease-in-out; }
 
 *,
 *::after,
