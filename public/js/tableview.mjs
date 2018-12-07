@@ -10,14 +10,9 @@ export default () => {
     y_el = 0,
     min_height;
 
-  //tableview.addEventListener('mouseover', e => {
-  // e.target.style.cursor = 'ns-resize';
-  //});
-
-    /*let header = _xyz.utils.createElement({
-        tag: 'div',
-        appendTo: tableview
-    });*/
+  tableview.addEventListener('transisionend', e => {
+    console.log('transision complete');
+  });
 
   _xyz.utils.createElement({
     tag: 'i',
@@ -28,25 +23,25 @@ export default () => {
     eventListener: {
       event: 'click',
       funct: e => {
-        tableview.classList.toggle('expanded'); 
-        //tableview.classList.add('folded');
-        e.target.textContent === 'unfold_more' ? e.target.textContent = 'unfold_less' : e.target.textContent = 'unfold_more';
-        //tableview.classList.remove('folded');
-        /*if(e.target.textContent === 'unfold_more'){
-                   e.target.textContent = 'unfold_less'
-               } else {
-                   e.target.textContent = 'unfold_more';
-               }*/
-        /*e.target.textContent === 'unfold_more' ? 
-               (e.target.textContent = 'unfold_less', tableview.classList.add('expanded')) : 
-               (e.target.textContent = 'unfold_more', tableview.style.transition = '1s', tableview.style.top = min_height);*/
+        if(e.target.textContent === 'unfold_more'){
+          e.target.textContent = 'unfold_less';
+          transition('more');
+        } else {
+          e.target.textContent = 'unfold_more';
+          transition('less');
+        }
       } 
     },
     appendTo: tableview
   });
 
-  function foldTable(){ // write function that folds the table
-    //tableview.style.
+  function transition(top){
+    top = top === 'less' ?  'calc(100% - 25px)' : 0;
+    tableview.style.transition = '1s';
+    tableview.style.top = top;
+    tableview.addEventListener('transitionend', e => {
+      e.target.style.transition = '';
+    });
   }
 
   function start_drag(_el){

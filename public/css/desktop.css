@@ -1299,7 +1299,6 @@ input[type=range]::-moz-range-thumb {
 .tableview {
   position: absolute;
   overflow: hidden;
-  /*bottom: calc(-100% + 25px);*/
   top: calc(100% - 25px);
   right: 0;
   width: 100%;
@@ -1309,11 +1308,6 @@ input[type=range]::-moz-range-thumb {
   .tableview .expander {
     float: right;
     cursor: pointer; }
-  .tableview.expanded {
-    transition: 1s;
-    top: 0; }
-  .tableview.folded {
-    transition: 1s; }
 
 *,
 *::after,
