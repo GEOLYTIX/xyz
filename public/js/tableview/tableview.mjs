@@ -2,15 +2,25 @@ import _xyz from '../_xyz.mjs';
 
 export default () => {
 
-  //_xyz.view.desktop.tableview = {}; // ?
-  _xyz.view.desktop = {};
-
-  _xyz.view.desktop.tableview = document.querySelector('.tableview');
+  let tableview = document.querySelector('.tableview');
 
   let el = null,
     y_position = 0, 
     y_el = 0,
     min_height;
+
+  let corner = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: '25px',
+      height: '25px',
+      border: '1px solid blue'
+    },
+    appendTo: tableview
+  });
 
   let expander = _xyz.utils.createElement({
     tag: 'i',
@@ -24,14 +34,14 @@ export default () => {
         transition();
       } 
     },
-    appendTo: _xyz.view.desktop.tableview
+    appendTo: corner
   });
 
   function transition(){
     let top = 'calc(100% - 25px)';
-    _xyz.view.desktop.tableview.style.transition = '1s';
-    _xyz.view.desktop.tableview.style.top = top;
-    _xyz.view.desktop.tableview.addEventListener('transitionend', e => {
+    tableview.style.transition = '1s';
+    tableview.style.top = top;
+    tableview.addEventListener('transitionend', e => {
       expander.style.opacity = 0;
       expander.style.display = 'none';
       e.target.style.transition = '';
@@ -60,10 +70,12 @@ export default () => {
     return false;
   }
 
-  _xyz.view.desktop.tableview.addEventListener('mousedown', () => {
-    start_drag(_xyz.view.desktop.tableview);
+  tableview.addEventListener('mousedown', () => {
+    start_drag(tableview);
   });
 
   document.onmousemove = move;
+
+  return tableview;
 
 };
