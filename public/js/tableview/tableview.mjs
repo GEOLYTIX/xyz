@@ -1,11 +1,13 @@
-import _xyz from './_xyz.mjs';
+import _xyz from '../_xyz.mjs';
 
 export default () => {
 
   //_xyz.view.desktop.tableview = {}; // ?
+  _xyz.view.desktop = {};
 
-  let tableview = document.querySelector('.tableview'),
-    el = null,
+  _xyz.view.desktop.tableview = document.querySelector('.tableview');
+
+  let el = null,
     y_position = 0, 
     y_el = 0,
     min_height;
@@ -22,14 +24,14 @@ export default () => {
         transition();
       } 
     },
-    appendTo: tableview
+    appendTo: _xyz.view.desktop.tableview
   });
 
   function transition(){
     let top = 'calc(100% - 25px)';
-    tableview.style.transition = '1s';
-    tableview.style.top = top;
-    tableview.addEventListener('transitionend', e => {
+    _xyz.view.desktop.tableview.style.transition = '1s';
+    _xyz.view.desktop.tableview.style.top = top;
+    _xyz.view.desktop.tableview.addEventListener('transitionend', e => {
       expander.style.opacity = 0;
       expander.style.display = 'none';
       e.target.style.transition = '';
@@ -58,8 +60,8 @@ export default () => {
     return false;
   }
 
-  tableview.addEventListener('mousedown', () => {
-    start_drag(tableview);
+  _xyz.view.desktop.tableview.addEventListener('mousedown', () => {
+    start_drag(_xyz.view.desktop.tableview);
   });
 
   document.onmousemove = move;

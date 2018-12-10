@@ -20,7 +20,7 @@ import gazetteer from './gazetteer.mjs';
 
 import locate from './locate.mjs';
 
-import tableview from './tableview.mjs';
+import tableview from './tableview/_tableview.mjs';
 
 token(init);
 
