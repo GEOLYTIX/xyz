@@ -1275,7 +1275,7 @@ input[type=range]::-moz-range-thumb {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6)); }
 
 .attribution {
-  bottom: 32px;
+  bottom: 5px;
   right: 5px;
   position: absolute;
   z-index: 999; }
@@ -1299,18 +1299,107 @@ input[type=range]::-moz-range-thumb {
 .tableview {
   position: absolute;
   overflow: hidden;
-  top: calc(100% - 25px);
+  top: calc(100% - 16px);
   right: 0;
   width: 100%;
   height: 100vh;
-  z-index: 1001;
-  background: cadetblue; }
-  .tableview .expander {
-    float: right;
-    cursor: pointer;
-    opacity: 0;
-    display: none;
-    transition: opacity 2s ease-in-out; }
+  z-index: 1001; }
+  .tableview .tablepad {
+    width: 200px;
+    height: 12px;
+    background-color: #090;
+    border-radius: 8px;
+    margin: auto;
+    cursor: grab;
+    margin-bottom: 6px;
+    box-shadow: 1px 1px 2px #333; }
+    .tableview .tablepad:hover {
+      cursor: grab; }
+  .tableview .tabs {
+    position: relative;
+    /*top: '';*/
+    overflow: hidden;
+    width: 100%;
+    cursor: default;
+    background: white; }
+    .tableview .tabs nav {
+      text-align: center; }
+      .tableview .tabs nav ul {
+        position: relative;
+        display: flex;
+        list-style: none;
+        flex-flow: row wrap;
+        justify-content: center; }
+        .tableview .tabs nav ul li {
+          position: relative;
+          z-index: 1;
+          display: block;
+          margin: 0;
+          padding: 5px;
+          text-align: center;
+          -webkit-flex: 1;
+          -moz-flex: 1;
+          -ms-flex: 1;
+          flex: 1; }
+          .tableview .tabs nav ul li.tab-current a {
+            color: #090;
+            -webkit-transform: translate3d(0, 2px, 0);
+            transform: translate3d(0, 2px, 0);
+            line-height: 1.2; }
+          .tableview .tabs nav ul li a {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #74777b;
+            line-height: 1;
+            -webkit-transition: color 0.3s, -webkit-transform 0.3s;
+            transition: color 0.3s, transform 0.3s; }
+            .tableview .tabs nav ul li a:focus {
+              outline: none; }
+            .tableview .tabs nav ul li a span {
+              vertical-align: middle;
+              font-weight: 700; }
+        .tableview .tabs nav ul li:last-child::before {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: #090;
+          content: '';
+          -webkit-transition: -webkit-transform 0.3s;
+          transition: transform 0.3s; }
+        .tableview .tabs nav ul li:first-child.tab-current ~ li:last-child::before {
+          -webkit-transform: translate3d(-400%, 0, 0);
+          transform: translate3d(-400%, 0, 0); }
+        .tableview .tabs nav ul li:nth-child(2).tab-current ~ li:last-child::before {
+          -webkit-transform: translate3d(-300%, 0, 0);
+          transform: translate3d(-300%, 0, 0); }
+        .tableview .tabs nav ul li:nth-child(3).tab-current ~ li:last-child::before {
+          -webkit-transform: translate3d(-200%, 0, 0);
+          transform: translate3d(-200%, 0, 0); }
+        .tableview .tabs nav ul li:nth-child(4).tab-current ~ li:last-child::before {
+          -webkit-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0); }
+    .tableview .tabs .content-wrap {
+      position: relative; }
+      .tableview .tabs .content-wrap section {
+        display: none;
+        margin: 0 auto;
+        padding: 1em;
+        max-width: 1200px;
+        text-align: center; }
+        .tableview .tabs .content-wrap section.content-current {
+          display: block; }
+        .tableview .tabs .content-wrap section p {
+          margin: 0;
+          padding: 0.75em 0;
+          color: rgba(40, 44, 42, 0.05);
+          font-weight: 900;
+          font-size: 4em;
+          line-height: 1; }
 
 *,
 *::after,

@@ -1,18 +1,143 @@
 .tableview {
     position: absolute;
     overflow: hidden;
-    top: calc(100% - 25px);
+    top: calc(100% - 16px);
     right: 0;
     width: 100%;
     height: 100vh;
     z-index: 1001;
-    background: cadetblue;
 
-    .expander {
-        float: right;
-        cursor: pointer;
-        opacity: 0;
-        display: none;
-        transition: opacity 2s ease-in-out;
+    .tablepad {
+        width: 200px;
+        height: 12px;
+        background-color: $glxgreen;
+        border-radius: 8px;
+        margin: auto;
+        cursor: grab;
+        margin-bottom: 6px;
+        box-shadow: 1px 1px 2px #333;
+
+        &:hover {
+            cursor: grab;
+        }
+    }
+
+    .tabs {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        cursor: default;
+        background: white;
+
+        nav {
+            text-align: center;
+
+            ul {
+                position: relative;
+                display: flex;
+                list-style: none;
+                flex-flow: row wrap;
+                justify-content: center;
+
+                li {
+                    position: relative;
+                    z-index: 1;
+                    display: block;
+                    margin: 0;
+                    padding: 5px;
+                    text-align: center;
+                    -webkit-flex: 1;
+                    -moz-flex: 1;
+                    -ms-flex: 1;
+                    flex: 1;
+
+                    &.tab-current a {
+                        color: $glxgreen;
+                        -webkit-transform: translate3d(0, 2px, 0);
+                        transform: translate3d(0, 2px, 0);
+                        line-height: 1.2;
+                    }
+
+                    a  {
+                        position: relative;
+                        display: block;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        color: #74777b;
+                        line-height: 1;
+                        -webkit-transition: color 0.3s, -webkit-transform 0.3s;
+                        transition: color 0.3s, transform 0.3s;
+                        
+
+                        &:focus {
+                            outline: none;
+                        }
+        
+                        span {
+                            vertical-align: middle;
+                            font-weight: 700;
+                        }
+                    }
+                }
+
+                li:last-child::before {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 2px;
+                    background: $glxgreen;
+                    content: '';
+                    -webkit-transition: -webkit-transform 0.3s;
+                    transition: transform 0.3s;
+                }
+
+                li:first-child.tab-current ~ li:last-child::before {
+                    -webkit-transform: translate3d(-400%,0,0);
+                    transform: translate3d(-400%,0,0);
+                }
+                
+                li:nth-child(2).tab-current ~ li:last-child::before {
+                    -webkit-transform: translate3d(-300%,0,0);
+                    transform: translate3d(-300%,0,0);
+                }
+                
+                li:nth-child(3).tab-current ~ li:last-child::before {
+                    -webkit-transform: translate3d(-200%,0,0);
+                    transform: translate3d(-200%,0,0);
+                }
+                
+                li:nth-child(4).tab-current ~ li:last-child::before {
+                    -webkit-transform: translate3d(-100%,0,0);
+                    transform: translate3d(-100%,0,0);
+                }
+            }
+        }
+
+        .content-wrap {
+            position: relative;
+
+            section {
+                display: none;
+                margin: 0 auto;
+                padding: 1em;
+                max-width: 1200px;
+                text-align: center;
+
+                &.content-current {
+                    display: block;
+                }
+
+                p {
+                    margin: 0;
+                    padding: 0.75em 0;
+                    color: rgba(40,44,42,0.05);
+                    font-weight: 900;
+                    font-size: 4em;
+                    line-height: 1;
+                }
+            }
+        }
     }
 }

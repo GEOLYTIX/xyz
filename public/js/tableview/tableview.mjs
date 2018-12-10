@@ -9,53 +9,38 @@ export default () => {
     y_el = 0,
     min_height;
 
-  let corner = _xyz.utils.createElement({
+  let pad = _xyz.utils.createElement({
     tag: 'div',
-    style: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      width: '25px',
-      height: '25px',
-      border: '1px solid blue'
+    options: {
+      title: 'Drag to unfold table view. Double click to fold.',
+      className: 'tablepad'
+    },
+    eventListener: {
+      event: 'dblclick',
+      funct: e => {
+        transition();
+      }
     },
     appendTo: tableview
   });
 
-  let expander = _xyz.utils.createElement({
-    tag: 'i',
-    options: {
-      classList: 'material-icons expander',
-      textContent: 'unfold_less'
-    },
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        transition();
-      } 
-    },
-    appendTo: corner
-  });
-
   function transition(){
-    let top = 'calc(100% - 25px)';
+    let top = 'calc(100% - 16px)';
     tableview.style.transition = '1s';
     tableview.style.top = top;
     tableview.addEventListener('transitionend', e => {
-      expander.style.opacity = 0;
-      expander.style.display = 'none';
       e.target.style.transition = '';
     });
   }
 
-  function start_drag(_el){
+  function initialize(_el){
     el = _el;
-    min_height = el.parentNode.clientHeight - 25;
+    min_height = el.parentNode.clientHeight - 16;
     y_el = y_position - el.offsetTop;
-    el.style.cursor = 'ns-resize';
   }
 
   function move(e){
+    e.preventDefault();
     y_position = el ? window.event.clientY : e.pageY;
     if(!!el && (y_position - y_el) > -1 && (y_position - y_el) < min_height){
       el.style.top = (y_position - y_el) + 'px';
@@ -63,15 +48,19 @@ export default () => {
     document.onmouseup = finish; 
   }
 
-  function finish(){
-    expander.style.opacity = 1;
-    expander.style.display = 'block';
-    el = null; 
-    return false;
+  function finish(e){
+    if(e.which === 1) {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', finish);
+      el = null; 
+    }
   }
 
-  tableview.addEventListener('mousedown', () => {
-    start_drag(tableview);
+  pad.addEventListener('mousedown', (e) => {
+    if(e.which === 1) {
+      e.target.style.cursor = 'grabbing';
+      initialize(tableview);
+    }
   });
 
   document.onmousemove = move;

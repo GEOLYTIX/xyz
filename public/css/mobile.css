@@ -1213,7 +1213,7 @@ input[type=range]::-moz-range-thumb {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6)); }
 
 .attribution {
-  bottom: 32px;
+  bottom: 5px;
   right: 5px;
   position: absolute;
   z-index: 999; }

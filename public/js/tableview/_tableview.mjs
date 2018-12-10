@@ -1,6 +1,7 @@
 import _xyz from '../_xyz.mjs';
 import tableview from './tableview.mjs';
 import layout from './layout.mjs';
+import nav from './nav.mjs';
 
 export default () => {
 
@@ -8,6 +9,10 @@ export default () => {
     
   _xyz.view.desktop.tableview = tableview();
 
-  layout(_xyz.view.desktop.tableview);
+  _xyz.view.desktop.tableview.appendChild(layout());
+
+  nav();
+
+  //layout(_xyz.view.desktop.tableview);
 
 };
