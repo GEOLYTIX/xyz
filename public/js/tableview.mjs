@@ -10,41 +10,29 @@ export default () => {
     y_el = 0,
     min_height;
 
-  tableview.addEventListener('transisionend', e => {
-    console.log('transision complete');
-  });
-
   let expander = _xyz.utils.createElement({
     tag: 'i',
     options: {
       classList: 'material-icons expander',
-      //textContent: 'unfold_more'
       textContent: 'unfold_less'
     },
     eventListener: {
       event: 'click',
       funct: e => {
-        transition('less');
-        /*if(e.target.textContent === 'unfold_more'){
-          e.target.textContent = 'unfold_less';
-          transition('more');
-        } else {
-          e.target.textContent = 'unfold_more';
-          transition('less');
-        }*/
+        transition();
       } 
     },
     appendTo: tableview
   });
 
-  function transition(top){
-    top = top === 'less' ?  'calc(100% - 25px)' : 0;
+  function transition(){
+    let top = 'calc(100% - 25px)';
     tableview.style.transition = '1s';
     tableview.style.top = top;
     tableview.addEventListener('transitionend', e => {
-      e.target.style.transition = '';
       expander.style.opacity = 0;
       expander.style.display = 'none';
+      e.target.style.transition = '';
     });
   }
 
@@ -55,24 +43,25 @@ export default () => {
     el.style.cursor = 'ns-resize';
   }
 
-  function move(e){ 
+  function move(e){
     y_position = el ? window.event.clientY : e.pageY;
     if(!!el && (y_position - y_el) > -1 && (y_position - y_el) < min_height){
-      el.style.top = (y_position - y_el) + 'px'; 
+      el.style.top = (y_position - y_el) + 'px';
     }
+    document.onmouseup = finish; 
   }
 
-  function finish(){ 
-    el = null; 
+  function finish(){
     expander.style.opacity = 1;
     expander.style.display = 'block';
+    el = null; 
+    return false;
   }
 
   tableview.addEventListener('mousedown', () => {
     start_drag(tableview);
-    return false;
   });
 
   document.onmousemove = move;
-  document.onmouseup = finish;
+
 };
