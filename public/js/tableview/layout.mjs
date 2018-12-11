@@ -1,4 +1,5 @@
 import _xyz from '../_xyz.mjs';
+import tab_content from './content.mjs';
 
 export default () => {
 
@@ -45,7 +46,9 @@ export default () => {
         appendTo: li
       });
 
-      _xyz.utils.createElement({
+      tab_content(layer);
+
+      _xyz.utils.createElement({ // this is where data should be loaded
         tag: 'section',
         options: {
           textContent: 'This is section for layer ' + layer.name + '.'
