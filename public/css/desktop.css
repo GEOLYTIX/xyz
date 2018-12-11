@@ -1317,11 +1317,27 @@ input[type=range]::-moz-range-thumb {
       cursor: grab; }
   .tableview .tabs {
     position: relative;
-    /*top: '';*/
     overflow: hidden;
     width: 100%;
     cursor: default;
     background: white; }
+    .tableview .tabs .content-wrap {
+      position: relative; }
+      .tableview .tabs .content-wrap section {
+        display: none;
+        margin: 0 auto;
+        padding: 1em;
+        max-width: 1200px;
+        text-align: center; }
+        .tableview .tabs .content-wrap section.content-current {
+          display: block; }
+        .tableview .tabs .content-wrap section p {
+          margin: 0;
+          padding: 0.75em 0;
+          color: rgba(40, 44, 42, 0.05);
+          font-weight: 900;
+          font-size: 4em;
+          line-height: 1; }
     .tableview .tabs nav {
       text-align: center; }
       .tableview .tabs nav ul {
@@ -1361,7 +1377,7 @@ input[type=range]::-moz-range-thumb {
             .tableview .tabs nav ul li a span {
               vertical-align: middle;
               font-weight: 700; }
-        .tableview .tabs nav ul li:last-child::before {
+        .tableview .tabs nav ul li:last-child div {
           position: absolute;
           bottom: 0;
           left: 0;
@@ -1371,35 +1387,6 @@ input[type=range]::-moz-range-thumb {
           content: '';
           -webkit-transition: -webkit-transform 0.3s;
           transition: transform 0.3s; }
-        .tableview .tabs nav ul li:first-child.tab-current ~ li:last-child::before {
-          -webkit-transform: translate3d(-400%, 0, 0);
-          transform: translate3d(-400%, 0, 0); }
-        .tableview .tabs nav ul li:nth-child(2).tab-current ~ li:last-child::before {
-          -webkit-transform: translate3d(-300%, 0, 0);
-          transform: translate3d(-300%, 0, 0); }
-        .tableview .tabs nav ul li:nth-child(3).tab-current ~ li:last-child::before {
-          -webkit-transform: translate3d(-200%, 0, 0);
-          transform: translate3d(-200%, 0, 0); }
-        .tableview .tabs nav ul li:nth-child(4).tab-current ~ li:last-child::before {
-          -webkit-transform: translate3d(-100%, 0, 0);
-          transform: translate3d(-100%, 0, 0); }
-    .tableview .tabs .content-wrap {
-      position: relative; }
-      .tableview .tabs .content-wrap section {
-        display: none;
-        margin: 0 auto;
-        padding: 1em;
-        max-width: 1200px;
-        text-align: center; }
-        .tableview .tabs .content-wrap section.content-current {
-          display: block; }
-        .tableview .tabs .content-wrap section p {
-          margin: 0;
-          padding: 0.75em 0;
-          color: rgba(40, 44, 42, 0.05);
-          font-weight: 900;
-          font-size: 4em;
-          line-height: 1; }
 
 *,
 *::after,

@@ -40,6 +40,7 @@ export default () => {
   }
 
   function move(e){
+    e.preventDefault();
     y_position = el ? window.event.clientY : e.pageY;
     if(!!el && (y_position - y_el) > -1 && (y_position - y_el) < min_height){
       el.style.top = (y_position - y_el) + 'px';

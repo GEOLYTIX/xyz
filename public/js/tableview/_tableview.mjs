@@ -4,15 +4,12 @@ import layout from './layout.mjs';
 import nav from './nav.mjs';
 
 export default () => {
-
-  _xyz.view.desktop = {};
     
+  if(!Object.values(_xyz.layers.list).some(layer => { return layer.tab === true; })) return;
+    
+  _xyz.view.desktop = {};
   _xyz.view.desktop.tableview = tableview();
-
   _xyz.view.desktop.tableview.appendChild(layout());
-
   nav();
-
-  //layout(_xyz.view.desktop.tableview);
 
 };

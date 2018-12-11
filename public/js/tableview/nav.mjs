@@ -1,5 +1,3 @@
-import _xyz from '../_xyz.mjs';
-
 export default () => {
     
   let options = {
@@ -20,13 +18,18 @@ export default () => {
   }
 
   function show(idx) {
+
     if(current >= 0){
       tabs[current].className = items[current].className = '';
     }
+
     // change current
     current = idx != undefined ? idx : options.start >= 0 && options.start < items.length ? options.start : 0;
     tabs[current].className = 'tab-current';
     items[current].className = 'content-current';
+
+    document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
+
   }
 
   function initEvents(){
@@ -50,7 +53,6 @@ function extend(a, b) {
     
   return a;
 } 
-
 
 
 

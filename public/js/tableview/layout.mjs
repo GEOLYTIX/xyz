@@ -1,7 +1,6 @@
 import _xyz from '../_xyz.mjs';
 
 export default () => {
-  console.log('I am creating layout');
 
   let container = _xyz.utils.createElement({
     tag: 'div',
@@ -31,28 +30,32 @@ export default () => {
     appendTo: container
   });
 
-  for(let i = 1; i < 6; i++){
-    let li = _xyz.utils.createElement({
-      tag: 'li',
-      appendTo: ul
-    });
+  Object.values(_xyz.layers.list).map(layer => {
+    if(layer.tab){
+      let li = _xyz.utils.createElement({
+        tag: 'li',
+        appendTo: ul
+      });
+          
+      _xyz.utils.createElement({
+        tag: 'a',
+        options: {
+          textContent: layer.name
+        },
+        appendTo: li
+      });
 
-    _xyz.utils.createElement({
-      tag: 'a',
-      options: {
-        textContent: 'Tab ' + i
-      },
-      appendTo: li
-    });
+      _xyz.utils.createElement({
+        tag: 'section',
+        options: {
+          textContent: 'This is section for layer ' + layer.name + '.'
+        },
+        appendTo: content
+      });
+    }
+  });
 
-    _xyz.utils.createElement({
-      tag: 'section',
-      options: {
-        textContent: 'Content ' + i
-      },
-      appendTo: content
-    });
-  }
+  ul.lastChild.appendChild(_xyz.utils.createElement({tag: 'div'}));
 
   return container;
 

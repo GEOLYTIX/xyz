@@ -29,6 +29,31 @@
         cursor: default;
         background: white;
 
+        .content-wrap {
+            position: relative;
+
+            section {
+                display: none;
+                margin: 0 auto;
+                padding: 1em;
+                max-width: 1200px;
+                text-align: center;
+
+                &.content-current {
+                    display: block;
+                }
+
+                p {
+                    margin: 0;
+                    padding: 0.75em 0;
+                    color: rgba(40,44,42,0.05);
+                    font-weight: 900;
+                    font-size: 4em;
+                    line-height: 1;
+                }
+            }
+        }
+
         nav {
             text-align: center;
 
@@ -81,7 +106,7 @@
                     }
                 }
 
-                li:last-child::before {
+                li:last-child div {
                     position: absolute;
                     bottom: 0;
                     left: 0;
@@ -91,51 +116,6 @@
                     content: '';
                     -webkit-transition: -webkit-transform 0.3s;
                     transition: transform 0.3s;
-                }
-
-                li:first-child.tab-current ~ li:last-child::before {
-                    -webkit-transform: translate3d(-400%,0,0);
-                    transform: translate3d(-400%,0,0);
-                }
-                
-                li:nth-child(2).tab-current ~ li:last-child::before {
-                    -webkit-transform: translate3d(-300%,0,0);
-                    transform: translate3d(-300%,0,0);
-                }
-                
-                li:nth-child(3).tab-current ~ li:last-child::before {
-                    -webkit-transform: translate3d(-200%,0,0);
-                    transform: translate3d(-200%,0,0);
-                }
-                
-                li:nth-child(4).tab-current ~ li:last-child::before {
-                    -webkit-transform: translate3d(-100%,0,0);
-                    transform: translate3d(-100%,0,0);
-                }
-            }
-        }
-
-        .content-wrap {
-            position: relative;
-
-            section {
-                display: none;
-                margin: 0 auto;
-                padding: 1em;
-                max-width: 1200px;
-                text-align: center;
-
-                &.content-current {
-                    display: block;
-                }
-
-                p {
-                    margin: 0;
-                    padding: 0.75em 0;
-                    color: rgba(40,44,42,0.05);
-                    font-weight: 900;
-                    font-size: 4em;
-                    line-height: 1;
                 }
             }
         }
