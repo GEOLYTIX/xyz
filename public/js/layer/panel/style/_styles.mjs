@@ -79,7 +79,7 @@ export default layer => {
   });
 
   // Apply the current theme.
-  applyTheme(layer);
+  //applyTheme(layer);
 
 };
 

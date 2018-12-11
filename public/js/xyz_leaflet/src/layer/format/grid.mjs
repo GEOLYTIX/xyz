@@ -4,22 +4,55 @@ export default function(){
 
   const layer = this;
 
+  // Create grid_seize dropdown.
+  layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
+
   if (!layer.display) return;
-  
-  layer.loaded = false;
 
-  // Set locale to check whether locale is still current when data is returned from backend.
-  const locale = _xyz.locale;
+  let table = null;
 
-  if(!layer.table || !layer.display)  return _xyz.layers.check(layer);
+  // Get table from tables array.
+  if (layer.tables) {
 
-  const xhr = new XMLHttpRequest(); 
-        
-  // Open & send vector.xhr;
-  let bounds = _xyz.map.getBounds();
+    let
+      zoom = _xyz.map.getZoom(),
+      zoomKeys = Object.keys(layer.tables),
+      maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+
+    // Set table based on current zoom.
+    table = zoom > maxZoomKey ?
+      layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
+        null : layer.tables[zoom];
+
+    // Remove the layer if table is null.
+    if (!table) {
+
+      // Set layer table to null to ensure that layer will be added again when table is not null.
+      layer.table = null;
+
+      // Remove layer from map if currently drawn.
+      if (layer.L) _xyz.map.removeLayer(layer.L);
+
+      return;
+
+    }        
+
+  }
+
+  // Return from layer.get() if table is the same as layer table.
+  // if (!table || layer.table === table) return;
+
+  // Set layer table to be table from tables array.
+  if (table) layer.table = table;
+
+  // Create XHR for fetching data from middleware.
+  const xhr = new XMLHttpRequest();
+    
+  // Get bounds for request.
+  const bounds = _xyz.map.getBounds();
 
   xhr.open('GET', _xyz.host + '/api/layer/grid?' + _xyz.utils.paramString({
-    locale: _xyz.locale,
+    locale: layer.locale,
     layer: layer.key,
     table: layer.table,
     size: layer.grid_size,
@@ -31,16 +64,19 @@ export default function(){
     token: _xyz.token
   }));
 
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.responseType = 'json';
+
   // Draw layer on load event.
   xhr.onload = e => {
 
-    if (e.target.status === 200 && layer.display && locale === _xyz.locale) {
+    if (e.target.status === 200 && layer.display) {
 
       // Check for existing layer and remove from map.
       if (layer.L) _xyz.map.removeLayer(layer.L);
 
       // Add geoJSON feature collection to the map.
-      layer.L = new L.geoJson(processGrid(JSON.parse(e.target.responseText)), {
+      layer.L = new L.geoJson(processGrid(e.target.response), {
         pointToLayer: function (feature, latlng) {
 
           // Distribute size between min, avg and max.
@@ -87,7 +123,7 @@ export default function(){
         }
       }).addTo(_xyz.map);
 
-      _xyz.layers.check(layer);
+      // _xyz.layers.check(layer);
 
     }
   };
@@ -162,12 +198,12 @@ export default function(){
 
 
     let digits = layer.grid_ratio ? 2 : 0;
-    document.getElementById('grid_legend_size__min').textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
+    if (document.getElementById('grid_legend_size__min')) document.getElementById('grid_legend_size__min').textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
     if (document.getElementById('grid_legend_size__avg')) document.getElementById('grid_legend_size__avg').textContent = layer.sizeAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});
-    document.getElementById('grid_legend_size__max').textContent = layer.sizeMax.toLocaleString('en-GB', {maximumFractionDigits: 0});
-    document.getElementById('grid_legend_color__min').textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: digits});
+    if (document.getElementById('grid_legend_size__max')) document.getElementById('grid_legend_size__max').textContent = layer.sizeMax.toLocaleString('en-GB', {maximumFractionDigits: 0});
+    if (document.getElementById('grid_legend_color__min')) document.getElementById('grid_legend_color__min').textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: digits});
     if (document.getElementById('grid_legend_color__avg')) document.getElementById('grid_legend_color__avg').textContent = layer.colorAvg.toLocaleString('en-GB', {maximumFractionDigits: digits});
-    document.getElementById('grid_legend_color__max').textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: digits});
+    if (document.getElementById('grid_legend_color__max')) document.getElementById('grid_legend_color__max').textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: digits});
 
     return dots;
   }

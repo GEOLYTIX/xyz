@@ -1,5 +1,3 @@
-// import _xyz from '../../_xyz.mjs';
-
 import _xyz from '../../../../_xyz.mjs';
 
 import 'leaflet.vectorgrid';
@@ -10,7 +8,7 @@ export default function() {
 
   if (!layer.display) return;
 
-  let table = null;
+  let table = layer.table;
 
   // Get table from tables array.
   if (layer.tables) {
@@ -41,7 +39,7 @@ export default function() {
   }
 
   // Return from layer.get() if table is the same as layer table.
-  if (layer.table === table) return;
+  if (layer.table === table && layer.loaded) return;
 
   // Set layer table to be table from tables array.
   if (table) layer.table = table;
@@ -75,11 +73,17 @@ export default function() {
 
   if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
+  // Remove layer.
+  if (layer.L) _xyz.map.removeLayer(layer.L);
+
   layer.L = L.vectorGrid.protobuf(url, options)
     .on('error', err => console.error(err))
-    // .on('load', () => {
-    //   e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
-    // })
+    .on('load', () => {
+      
+      layer.loaded = true;
+
+      //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
+    })
     .on('click', e => {
 
       // // set cursor to wait

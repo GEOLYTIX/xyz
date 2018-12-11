@@ -12,8 +12,8 @@ export default layer => {
     appendTo: layer.dashboard
   });
 
-  // Create grid_seize dropdown.
-  layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
+  // // Create grid_seize dropdown.
+  // layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
 
 
   _xyz.utils.dropdown({

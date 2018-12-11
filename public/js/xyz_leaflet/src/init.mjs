@@ -1,43 +1,60 @@
 import _xyz from '../../_xyz.mjs';
 
+import './getWorkspace.mjs';
+
 import './attribution.mjs';
 
 import './loadLocale.mjs';
 
-export default params => {
+import './interface.mjs';
 
-  if (!params.map_id) return console.log('map_id missing in params.');
+_xyz.init = params => {
 
+  // Set XYZ Host.
   _xyz.host = params.host;
-  if (!params.host) return console.log('host missing in params.');
 
-  _xyz.map_dom = document.getElementById(params.map_id);
+  if (!_xyz.host) return console.error('XYZ host not defined!');
 
-  _xyz.attribution.create();
+  if (params.token) _xyz.token = params.token;
 
-  if (_xyz.map) _xyz.map.remove();
-
-  _xyz.map = _xyz.L.map(params.map_id, {
-    renderer: _xyz.L.svg(),
-    scrollWheelZoom: true,
-    zoomControl: false,
-    attributionControl: false
-  });
-
+  // Get workspace from XYZ host.
+  // Proceed with init from callback.
   _xyz.getWorkspace(init);
 
   function init() {
 
-    if (!params.locale) return console.log('locale missing in params.');
+    // Set XYZ map DOM.
+    _xyz.map_dom = document.getElementById(params.map_id);
 
-    _xyz.locale = params.locale;
+    if (!_xyz.map_dom) return console.error('XYZ map not defined!');
 
-    const locale = Object.assign({}, _xyz.ws.locales[params.locale], params);
+    // Create attribution in map DOM.
+    _xyz.attribution.create();
+
+    // Remove existing Leaflet map object.
+    if (_xyz.map) _xyz.map.remove();
+
+    // Create Leaflet map object.
+    _xyz.map = _xyz.L.map(_xyz.map_dom, {
+      renderer: _xyz.L.svg(),
+      scrollWheelZoom: true,
+      zoomControl: false,
+      attributionControl: false
+    });
+
+    // Set locale from params or to first in workspace.
+    _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
+
+    // Set locale hook.
+    if (_xyz.hooks.set) _xyz.hooks.set('locale', _xyz.locale);
+
+    // Assign params to locale.
+    // This makes it possible to override client side workspace entries.
+    const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
   
+    // Set min, max zoom and bounds.
     _xyz.map.setMinZoom(locale.minZoom);
     _xyz.map.setMaxZoom(locale.maxZoom);
-  
-    // Set Leaflet bounds;
     _xyz.map.setMaxBounds([[
       locale.bounds.south,
       locale.bounds.west
@@ -46,7 +63,19 @@ export default params => {
       locale.bounds.east
     ]]);
   
-    _xyz.map.setView(locale.view_latlon || [0,0], locale.view_zoom || 5);
+    // Set view if defined in workspace.
+    _xyz.map.setView(
+      [
+        _xyz.hooks.current.lat
+        || locale.view_lat
+        || 0,
+        _xyz.hooks.current.lng
+        || locale.view_lng
+        || 0
+      ],
+      _xyz.hooks.current.z
+      || locale.view_zoom
+      || 5);
   
     // Fire viewChangeEnd after map move and zoomend
     _xyz.map.on('moveend', () => viewChangeEndTimer());
@@ -60,16 +89,54 @@ export default params => {
     }
   
     function viewChangeEnd() {
+
+      // Check whether zoom buttons should be disabled for initial view.
+      if (_xyz.view.chkZoomBtn) _xyz.view.chkZoomBtn(_xyz.map.getZoom());
+
+      // Set view hooks when method is available.
+      if (_xyz.hooks.setView) _xyz.hooks.setView(_xyz.map.getCenter(), _xyz.map.getZoom());
   
-      // Load layer which have display set to true.
+      // Reload layers.
+      // layer.get() will return if reload is not required.
       Object.values(_xyz.layers.list).forEach(layer => layer.get());
   
     }
 
+    // Load locale.
     _xyz.loadLocale(locale);
 
+    // Continue with callback if provided.
     if (params.next) params.next();
 
   }
 
 };
+
+
+// // Function to check whether all display layers are drawn.
+// _xyz.layers.check = layer => {
+
+//   // Set layer to loaded and hide the loader.
+//   if (layer) {
+//     layer.loaded = true;
+//     if (layer.loader) layer.loader.style.display = 'none';
+//     if (_xyz.log) console.log(layer.key + ' loaded.');
+
+//     // Attribution
+//     if (layer.attribution && layer.display) attribution.set(layer.attribution);
+
+//   } else {
+//     attribution.check();
+//   }
+    
+//   // Determine whether all layers with display true are loaded.
+//   let chkScore = 0;
+//   Object.values(_xyz.layers.list).forEach(layer => {
+//     chkScore += layer.display ? 1 : 0;
+//     chkScore -= layer.display && layer.loaded ? 1 : 0;
+//   });
+
+//   // Send info signal that all layers are loaded.
+//   if (_xyz.log && chkScore === 0) console.log('All layers loaded.');
+
+// };

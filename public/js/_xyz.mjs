@@ -8,7 +8,7 @@ export default {
   hooks: {
     current: {}
   },
-  host: document.head.dataset.dir,
+  host: null,
   layers: {
     groups: {},
     list: {}

@@ -1,57 +1,45 @@
 import _xyz from './_xyz.mjs';
 
-import token from './token.mjs';
-
+// Set platform specific interface functions.
 import mobile from './views/mobile.mjs';
+if (_xyz.view.mode === 'mobile') mobile();
 
 import desktop from './views/desktop.mjs';
+if (_xyz.view.mode === 'desktop') desktop();
 
-import hooks from './hooks.mjs';
+import './hooks.mjs';
 
-import locales from './locales.mjs';
+import './locales.mjs';
 
-// import map from './map.mjs';
+// use leaflet map control
 import './xyz_leaflet/index.mjs';
 
-import _layers from './layer/_layers.mjs';
+import './layer/_layers.mjs';
 
-import _locations from './location/_locations.mjs';
+import './location/_locations.mjs';
 
 import gazetteer from './gazetteer.mjs';
 
 import locate from './locate.mjs';
 
 
-
-token(init);
+// Initiate map control.
+_xyz.init({
+  host: document.head.dataset.dir,
+  token: document.body.dataset.token,
+  map_id: 'Map',
+  next: init
+});
 
 function init() {
- 
-  // Set platform specific interface functions.
-  if (_xyz.view.mode === 'mobile') mobile();
-  if (_xyz.view.mode === 'desktop') desktop();
 
-  // Initiate hooks module.
-  hooks();
-
-  // Initiate locales module.
-  locales();
-
-  // Initiate map control.
-  _xyz.init({
-    host: document.head.dataset.dir,
-    map_id: 'Map',
-    locale: _xyz.locale,
-    // view_latlon: [52, 0],
-    // view_zoom: 7
-  });
+  // Create locales dropdown (if more than one locale in workspace).
+  _xyz.locales(_xyz.ws.locales);
 
   // Initialize layers.
-  _xyz.layers.init = _layers;
   _xyz.layers.init();
 
   // Initialize locations module.
-  _xyz.locations.init = _locations;
   _xyz.locations.init();
 
   // Initialize gazetteer module.

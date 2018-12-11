@@ -1,3 +1,5 @@
+module.exports = {route, view};
+
 // Create constructor for mobile detect module.
 // const Md = require('mobile-detect');
 
@@ -7,30 +9,40 @@ const jsr = require('jsrender');
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
   
-module.exports = fastify => {
+function route(fastify) {
+
   fastify.route({
     method: 'GET',
     url: '/map/leaflet',
     beforeHandler: fastify.auth([fastify.authAccess]),
-    handler: async (req, res) => {
-
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      let config = global.workspace[token.access].config;
-
-      // Check whether request comes from a mobile platform and set template.
-      // let md = new Md(req.headers['user-agent']);
-
-      let tmpl = jsr.templates('./public/views/map.html');
-
-      // Build the template with jsrender and send to client.
-      res.type('text/html').send(tmpl.render({
-        dir: global.dir,
-        title: config.title || 'GEOLYTIX | XYZ',
-        nanoid: nanoid(6),
-        bundle_js: 'build/lib_leaflet_bundle.js',
-        script_js: 'views/map_leaflet.js'
-      }));
-    }
+    handler: view
   });
+
+  fastify.route({
+    method: 'POST',
+    url: '/map/leaflet',
+    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+  });
+
 };
+
+async function view(req, res, token = { access: 'public' }) {
+
+  const config = global.workspace[token.access].config;
+
+  // Check whether request comes from a mobile platform and set template.
+  // const md = new Md(req.headers['user-agent']);
+
+  const tmpl = jsr.templates('./public/views/map.html');
+
+  // Build the template with jsrender and send to client.
+  res.type('text/html').send(tmpl.render({
+    dir: global.dir,
+    title: config.title || 'GEOLYTIX | XYZ',
+    nanoid: nanoid(6),
+    token: token.signed,
+    bundle_js: 'build/lib_leaflet_bundle.js',
+    script_js: 'views/map_leaflet.js'
+  }));
+
+}

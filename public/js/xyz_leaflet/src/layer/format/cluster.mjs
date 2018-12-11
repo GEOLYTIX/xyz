@@ -8,9 +8,6 @@ export default function(){
 
   if (!layer.display) return;
 
-  // Remove existing layer.
-  if (layer.L) _xyz.map.removeLayer(layer.L);
-
   let table = null;
 
   // Get table from tables array.
@@ -22,7 +19,7 @@ export default function(){
       maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
 
     // Set table based on current zoom.
-    layer.table = zoom > maxZoomKey ?
+    table = zoom > maxZoomKey ?
       layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
         null : layer.tables[zoom];
 
@@ -42,7 +39,7 @@ export default function(){
   }
 
   // Return from layer.get() if table is the same as layer table.
-  if (layer.table === table) return;
+  // if (layer.table === table) return;
 
   // Set layer table to be table from tables array.
   if (table) layer.table = table;
