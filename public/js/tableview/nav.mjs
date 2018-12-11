@@ -22,8 +22,7 @@ export default () => {
     if(current >= 0){
       tabs[current].className = items[current].className = '';
     }
-
-    // change current
+    
     current = idx != undefined ? idx : options.start >= 0 && options.start < items.length ? options.start : 0;
     tabs[current].className = 'tab-current';
     items[current].className = 'content-current';

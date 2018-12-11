@@ -1322,7 +1322,8 @@ input[type=range]::-moz-range-thumb {
     cursor: default;
     background: white; }
     .tableview .tabs .content-wrap {
-      position: relative; }
+      position: relative;
+      cursor: default; }
       .tableview .tabs .content-wrap section {
         display: none;
         margin: 0 auto;

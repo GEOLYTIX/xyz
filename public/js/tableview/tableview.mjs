@@ -49,7 +49,7 @@ export default () => {
   }
 
   function finish(e){
-    e.target.style.cursor = 'grab';
+    e.target.style.cursor = '';
     if(e.which === 1) {
       document.removeEventListener('mousemove', move);
       document.removeEventListener('mouseup', finish);
