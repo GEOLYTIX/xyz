@@ -5,7 +5,7 @@ export default record => {
   record.location.geometries = [];
 
   if (record.location.marker) {
-    record.location.Marker = L.geoJson(
+    record.location.Marker = _xyz.L.geoJson(
       {
         type: 'Feature',
         geometry: {
@@ -16,7 +16,7 @@ export default record => {
       {
         pointToLayer: function (feature, latlng) {
           return new L.Marker(latlng, {
-            icon: L.icon({
+            icon: _xyz.L.icon({
               iconUrl: _xyz.utils.svg_symbols({
                 type: 'markerLetter',
                 style: {
@@ -36,7 +36,7 @@ export default record => {
     record.location.geometries.push(record.location.Marker);
   }
 
-  record.location.Layer = L.geoJson(
+  record.location.Layer = _xyz.L.geoJson(
     {
       type: 'Feature',
       geometry: record.location.geometry
@@ -54,7 +54,7 @@ export default record => {
         return L.marker(
           latlng,
           {
-            icon: L.icon({
+            icon: _xyz.L.icon({
               iconSize: 35,
               iconUrl: _xyz.utils.svg_symbols({
                 type: 'circle',

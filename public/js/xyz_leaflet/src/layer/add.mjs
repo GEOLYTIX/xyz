@@ -33,8 +33,8 @@ _xyz.layers.getTable = layer => {
 
   if (!layer.key) return;
 
-  _xyz.map.createPane(layer.key);
-  _xyz.map.getPane(layer.key).style.zIndex = 500 + Object.keys(_xyz.layers.list).length;
+  _xyz.panes.list.push(_xyz.map.createPane(layer.key));
+  _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
     
   if (layer.format === 'mvt') layer.get = format_mvt;
 

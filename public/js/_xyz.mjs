@@ -81,9 +81,7 @@ export default {
   //map: {},
   nanoid: document.body.dataset.nanoid,
   panes: {
-    init: {},
-    list: {},
-    next: 500
+    list: {}
   },
   state: 'select',
   style: {

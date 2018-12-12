@@ -242,14 +242,14 @@ export default () => {
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
     // Add layer to map.
-    _xyz.gazetteer.layer = L.geoJson(geom, {
+    _xyz.gazetteer.layer = _xyz.L.geoJson(geom, {
       interactive: false,
       pane: 'gazetteer',
       pointToLayer: function (feature, latlng) {
         return new L.Marker(latlng, {
           interactive: false,
           pane: 'gazetteer',
-          icon: L.icon({
+          icon: _xyz.L.icon({
             iconUrl: _xyz.gazetteer.icon,
             iconSize: [40, 40],
             iconAnchor: [20, 40]

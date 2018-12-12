@@ -76,7 +76,7 @@ export default function(){
       if (layer.L) _xyz.map.removeLayer(layer.L);
 
       // Add geoJSON feature collection to the map.
-      layer.L = new L.geoJson(processGrid(e.target.response), {
+      layer.L = _xyz.L.geoJson(processGrid(e.target.response), {
         pointToLayer: function (feature, latlng) {
 
           // Distribute size between min, avg and max.
@@ -108,7 +108,7 @@ export default function(){
           return L.marker(
             latlng,
             {
-              icon: L.icon({
+              icon: _xyz.L.icon({
                 iconSize: size,
                 iconUrl: _xyz.utils.svg_symbols({
                   type: 'dot',

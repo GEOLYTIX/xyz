@@ -18,7 +18,4 @@ export default function() {
   // Check whether other group layers are visible.
   if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
 
-  // Run layers check to update attribution and send signal that map render has completed.
-  //_xyz.layers.check();
-
 }

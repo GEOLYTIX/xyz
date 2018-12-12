@@ -82,7 +82,6 @@ export default function() {
       
       layer.loaded = true;
 
-      //e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
     })
     .on('click', e => {
 
@@ -92,6 +91,13 @@ export default function() {
       // for (let el of els) {
       //   el.classList += ' wait-cursor-enabled';
       // }
+      
+      if (_xyz.locations.select) return _xyz.locations.select({
+        layer: layer.key,
+        table: layer.table,
+        id: e.layer.properties.id,
+        marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+      });
 
       const xhr = new XMLHttpRequest();
 

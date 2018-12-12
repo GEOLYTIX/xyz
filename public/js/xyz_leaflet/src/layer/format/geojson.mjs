@@ -49,12 +49,12 @@ export default function(){
     if (layer.style.theme) layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat);
 
     // Add geoJSON feature collection to the map.
-    layer.L = L.geoJSON(features, {
+    layer.L = _xyz.L.geoJSON(features, {
       style: applyLayerStyle,
       pane: layer.key,
       interactive: layer.infoj? true: false,
       pointToLayer: function(point, latlng){
-        return L.circleMarker(latlng, {
+        return _xyz.L.circleMarker(latlng, {
           radius: 9,
           pane: layer.key
         });

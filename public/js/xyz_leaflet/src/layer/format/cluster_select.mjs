@@ -86,7 +86,7 @@ export default (e, layer) => {
   
     //     // Draw line marker which connects hex cell with drop down.
     //     layer.keySelectionLine = L.marker(lnglat.reverse(), {
-    //       icon: L.icon({
+    //       icon: _xyz.L.icon({
     //         iconUrl: 'data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%223%22%20height%3D%221000%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%3Cline%20x1%3D%222%22%20y1%3D%220%22%20x2%3D%222%22%20y2%3D%221000%22%0A%20%20%20%20%20%20stroke-width%3D%221%22%20stroke%3D%22%23079e00%22/%3E%0A%3C/svg%3E',
     //         iconSize: [3, 1000],
     //         iconAnchor: [2, 1000]

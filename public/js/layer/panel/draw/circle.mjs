@@ -11,9 +11,9 @@ export default layer => {
   layer.header.classList.add('edited');
   _xyz.map_dom.style.cursor = 'crosshair';
     
-  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = L.featureGroup().addTo(_xyz.map);
-  layer.edit.path = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
 
   // Options for circle construction.
   const options = {units: 'metres', steps: 128};
@@ -32,7 +32,7 @@ export default layer => {
       origin_lnglat = [e.latlng.lng, e.latlng.lat];
 
       // Add circle marker to vertices layer.
-      layer.edit.vertices.addLayer(L.circleMarker(e.latlng, _xyz.style.defaults.vertex));
+      layer.edit.vertices.addLayer(_xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex));
 
       // Set mousemove event to show trail.
       _xyz.map.on('mousemove', e => {
@@ -49,7 +49,7 @@ export default layer => {
         
         // Create new trail layer from origin and radius.
         layer.edit.trail.addLayer(
-          L.circle(
+          _xyz.L.circle(
             [origin_lnglat[1],origin_lnglat[0]],
             Object.assign(
               _xyz.style.defaults.trail,

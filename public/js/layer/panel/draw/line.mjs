@@ -7,14 +7,14 @@ export default layer => {
   layer.header.classList.add('edited');
   _xyz.map_dom.style.cursor = 'crosshair';
 
-  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = L.featureGroup().addTo(_xyz.map);
-  layer.edit.path = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
 
   _xyz.map.on('click', e => {
 
     // Add vertice from click.
-    layer.edit.vertices.addLayer(L.circleMarker(e.latlng, _xyz.style.defaults.vertex));
+    layer.edit.vertices.addLayer(_xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex));
       
     // Return trail on mousemove with first vertice.
     if (layer.edit.vertices.getLayers().length === 1) return _xyz.map.on('mousemove', e => {
@@ -30,7 +30,7 @@ export default layer => {
       coords.push([e.latlng.lat, e.latlng.lng]);
       
       layer.edit.trail.addLayer(
-        L.polyline(coords, _xyz.style.defaults.trail)
+        _xyz.L.polyline(coords, _xyz.style.defaults.trail)
       );
       
     });
@@ -48,7 +48,7 @@ export default layer => {
     });
 
     layer.edit.path.addLayer(
-      L.polyline(coords, _xyz.style.defaults.path_line)
+      _xyz.L.polyline(coords, _xyz.style.defaults.path_line)
     );
 
     // Use right click context menu to upload polygon.

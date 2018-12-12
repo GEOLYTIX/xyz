@@ -16,8 +16,7 @@ export default (record, entry) => {
     fillOpacity: 0.3
   };
 
-  //const geometry = L.geoJson(
-  entry.edit.catchment.geometry = L.geoJson(
+  entry.edit.catchment.geometry = _xyz.L.geoJson(
     {
       type: 'Feature',
       geometry: JSON.parse(entry.value)

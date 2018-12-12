@@ -7,7 +7,7 @@ export default layer => {
   layer.header.classList.add('edited');
   _xyz.map_dom.style.cursor = 'crosshair';
 
-  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
 
   _xyz.map.once('click', e => {
 
@@ -15,7 +15,7 @@ export default layer => {
         
     // Add vertice from click.
     layer.edit.vertices.addLayer(
-      L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+      _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
     );
         
     const xhr = new XMLHttpRequest();
