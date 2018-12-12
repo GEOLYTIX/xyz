@@ -17,7 +17,10 @@ module.exports = fastify => {
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
-      const table = req.query.table || layer.table || Object.values(layer.tables).pop();
+      const table = req.query.table
+        || layer.table
+        || Object.values(layer.tables)[Object.values(layer.tables).length - 1]
+        || Object.values(layer.tables)[Object.values(layer.tables).length - 2];
     
       // Clone the infoj from the memory workspace layer.
       const infoj = JSON.parse(JSON.stringify(layer.infoj));

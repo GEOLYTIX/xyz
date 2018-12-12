@@ -303,7 +303,10 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {
-                        "12": "dev.oa"
+                        "11": null,
+                        "12": "dev.oa",
+                        "13": "dev.oa",
+                        "14": null
                     },
                     "qID": "id",
                     "mvt_cache": true,

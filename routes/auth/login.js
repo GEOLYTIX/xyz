@@ -1,4 +1,20 @@
-module.exports = {view, post};
+module.exports = {route, view, post};
+
+function route(fastify) {
+
+  fastify.route({
+    method: 'GET',
+    url: '/login',
+    handler: view
+  });
+
+  fastify.route({
+    method: 'POST',
+    url: '/login',
+    handler: (req, res) => post(req, res, fastify)
+  });
+
+}
 
 async function post(req, res, fastify) {
 
@@ -48,6 +64,18 @@ async function post(req, res, fastify) {
 
     // Return leaflet map control view.
     if(/\/map\/leaflet/.test(req.headers.referer)) return require(global.appRoot + '/routes/map_leaflet').view(req, res, token);
+
+    // Return user admin view.
+    if(/\/auth\/user\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/admin').view(req, res, token);
+
+    // Return user admin view.
+    if(/\/auth\/user\/approve/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/approve').view(req, res);
+
+    // Return workspace admin json view.
+    if(/\/workspace\/admin\/json/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin_json').view(req, res, token);
+
+    // Return workspace admin view.
+    if(/\/workspace\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin').view(req, res, token);
 
     // Return root view.
     require(global.appRoot + '/routes/root').view(req, res, token);
@@ -132,7 +160,6 @@ async function view(req, res) {
       .render({
         dir: global.dir,
         action: req.req.url,
-        //target: req.req.url,
         msg: req.query.msg ? msgs[req.query.msg] : null
       }));  
 

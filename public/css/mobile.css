@@ -1096,7 +1096,7 @@ input[type=range]::-moz-range-thumb {
 
 /* visual tweaks */
 .leaflet-container {
-  background: #ddd;
+  background: #fbfbfb;
   outline: 0; }
 
 /* popup */

@@ -8,33 +8,16 @@ export default function() {
 
   if (!layer.display) return;
 
-  let table = layer.table;
+  const table = layer.tableCurrent();
 
-  // Get table from tables array.
-  if (layer.tables) {
+  if (!table) {
 
-    let
-      zoom = _xyz.map.getZoom(),
-      zoomKeys = Object.keys(layer.tables),
-      maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+    // Remove layer from map if currently drawn.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
 
-    // Set table based on current zoom.
-    table = zoom > maxZoomKey ?
-      layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
-        null : layer.tables[zoom];
+    layer.loaded = false;
 
-    // Remove the layer if table is null.
-    if (!table) {
-
-      // Set layer table to null to ensure that layer will be added again when table is not null.
-      layer.table = null;
-
-      // Remove layer from map if currently drawn.
-      if (layer.L) _xyz.map.removeLayer(layer.L);
-
-      return;
-
-    }
+    return;
 
   }
 
@@ -42,7 +25,7 @@ export default function() {
   if (layer.table === table && layer.loaded) return;
 
   // Set layer table to be table from tables array.
-  if (table) layer.table = table;
+  layer.table = table;
 
   // Create filter from legend and current filter.
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
@@ -91,7 +74,7 @@ export default function() {
       // for (let el of els) {
       //   el.classList += ' wait-cursor-enabled';
       // }
-      
+
       if (_xyz.locations.select) return _xyz.locations.select({
         layer: layer.key,
         table: layer.table,

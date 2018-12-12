@@ -5,13 +5,25 @@ export default function(){
   const layer = this;
 
   if (!layer.display) return;
-  
-  layer.loaded = false;
 
-  // Set locale to check whether locale is still current when data is returned from backend.
-  const locale = _xyz.locale;
-  
-  if(!layer.table || !layer.display)  return _xyz.layers.check(layer);
+  const table = layer.tableCurrent();
+
+  if (!table) {
+
+    // Remove layer from map if currently drawn.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
+
+    layer.loaded = false;
+
+    return;
+
+  }
+
+  // Return from layer.get() if table is the same as layer table.
+  if (layer.table === table && layer.loaded) return;
+
+  // Set layer table to be table from tables array.
+  layer.table = table;
     
   const xhr = new XMLHttpRequest(); 
 

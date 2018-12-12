@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
 </head>
 
-<body data-viewmode = "mobile" data-nanoid = {{:nanoid}}  {{:log}}>
+<body data-viewmode = "mobile" data-nanoid = {{:nanoid}} data-token={{:token}} {{:log}}>
 
     <div class="location_drop">
         <div class="location_table"></div>
@@ -64,7 +64,7 @@
         </div>
 
         <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-            <a href="{{:dir}}/login">
+            <a href="{{:dir}}{{:btnLogin_path}}">
                 <i class="material-icons">{{:btnLogin_style}}</i>
             </a>
         </div>

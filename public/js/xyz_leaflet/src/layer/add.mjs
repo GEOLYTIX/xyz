@@ -12,22 +12,52 @@ import format_grid from './format/grid.mjs';
 
 _xyz.layers.add = layer => {
 
-  /*
-_xyz.layers.getTable = layer => {
+  layer.tableCurrent = function(){
 
-  let
-    zoom = _xyz.map.getZoom(),
-    zoomKeys = Object.keys(layer.tables),
-    maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+    const layer = this;
+
+    if (!layer.tables) return layer.table;
+
+    let
+      table,
+      zoom = _xyz.map.getZoom(),
+      zoomKeys = Object.keys(layer.tables),
+      minZoomKey = parseInt(zoomKeys[0]),
+      maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
             
-  layer.table = zoom > maxZoomKey ?
-    layer.tables[maxZoomKey] : zoom < zoomKeys[0] ?
-      null : layer.tables[zoom];
+    table = layer.tables[zoom];
 
-  // Make drawer opaque if no table present.
-  layer.drawer.style.opacity = !layer.table ? 0.4 : 1;
-};
-*/
+    table = zoom < minZoomKey ? layer.tables[minZoomKey] : table;
+
+    table = zoom > maxZoomKey ? layer.tables[maxZoomKey] : table;
+
+    return table;
+
+  };
+
+  layer.tableMin = function(){
+
+    const layer = this;
+
+    if (!layer.tables) return layer.table;
+
+    let zoomKeys = Object.keys(layer.tables);
+
+    return layer.tables[zoomKeys[0]] || layer.tables[zoomKeys[1]];
+
+  };
+
+  layer.tableMax = function(){
+
+    const layer = this;
+
+    if (!layer.tables) return layer.table;
+
+    let zoomKeys = Object.keys(layer.tables);
+
+    return layer.tables[zoomKeys[zoomKeys.length-1]] || layer.tables[zoomKeys[zoomKeys.length-2]];
+
+  };
 
   if (!layer.format) return;
 

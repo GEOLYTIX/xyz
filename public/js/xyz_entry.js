@@ -48,11 +48,6 @@ function init() {
   // Initialize locate module.
   if (_xyz.ws.locate) locate();
 
-  // Add redirect to login button click event.
-  document.getElementById('btnLogin').addEventListener('click', () => {
-    window.location = document.head.dataset.dir + '/login?redirect=' + (document.head.dataset.dir || '/') + window.location.search;
-  });
-
   if (_xyz.log) console.log(_xyz);
 
 }
