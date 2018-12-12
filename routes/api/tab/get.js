@@ -5,7 +5,7 @@ module.exports = fastify => {
     beforeHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
-      console.log(req.body);
+      //console.log(req.body);
 
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
       const locale = global.workspace[token.access].config.locales[req.body.locale];
@@ -44,9 +44,16 @@ module.exports = fastify => {
 
       let q = `SELECT ${fields} FROM ${table} ${filter_sql ? `WHERE ${filter_sql}` : ''} LIMIT ${count};`;
 
-      console.log(q);
+      //console.log(q);
 
-      res.code(200).send('dummy');
+      var rows = await global.pg.dbs[layer.dbs](q);
+
+      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+
+      // return 202 if no locations found within the envelope.
+      if (parseInt(rows[0].count) === 0) return res.code(200).send([]);
+
+      res.code(200).send(rows);
     }
   });
 };

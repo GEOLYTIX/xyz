@@ -11,6 +11,7 @@
         width: 200px;
         height: 12px;
         background-color: $glxgreen;
+        opacity: 0.7;
         border-radius: 8px;
         margin: auto;
         cursor: grab;
@@ -31,14 +32,18 @@
 
         .content-wrap {
             position: relative;
+            /*min-height: 100vh;
+            max-height: 12000px;*/
             cursor: default;
 
             section {
                 display: none;
                 margin: 0 auto;
                 padding: 1em;
-                max-width: 1200px;
+                /*max-width: 1200px;*/
                 text-align: center;
+                min-height: 100vh;
+                max-height: 12000px;
 
                 &.content-current {
                     display: block;

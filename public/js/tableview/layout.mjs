@@ -46,15 +46,16 @@ export default () => {
         appendTo: li
       });
 
-      tab_content(layer);
-
-      _xyz.utils.createElement({ // this is where data should be loaded
+      let section = _xyz.utils.createElement({ // this is where data should be loaded
         tag: 'section',
         options: {
           textContent: 'This is section for layer ' + layer.name + '.'
         },
         appendTo: content
       });
+
+      //section.appendChild(tab_content(layer));
+      tab_content(layer, section);
     }
   });
 
