@@ -7,10 +7,10 @@ export default () => {
     tag: 'div',
     options: {
       className: 'tabs'
-    },
+    }/*,
     style: {
       border: '1px dashed orange'
-    }
+    }*/
   });
 
   let nav = _xyz.utils.createElement({
@@ -46,7 +46,7 @@ export default () => {
         appendTo: li
       });
 
-      let section = _xyz.utils.createElement({ // this is where data should be loaded
+      layer.tab_section = _xyz.utils.createElement({
         tag: 'section',
         options: {
           textContent: 'This is section for layer ' + layer.name + '.'
@@ -54,8 +54,6 @@ export default () => {
         appendTo: content
       });
 
-      //section.appendChild(tab_content(layer));
-      tab_content(layer, section);
     }
   });
 

@@ -1,3 +1,6 @@
+import _xyz from '../_xyz.mjs';
+import tab_content from './content.mjs';
+
 export default () => {
     
   let options = {
@@ -8,6 +11,12 @@ export default () => {
   let tabs  = document.querySelectorAll('.tableview .tabs nav ul li'),
     items = document.querySelectorAll('.tableview .tabs .content-wrap section'),
     current = -1;
+
+  let tab_layers = [];
+
+  Object.values(_xyz.layers.list).map(layer => {
+    if(layer.tab) tab_layers.push(layer);
+  });
         
   function nav_tabs(_el, _options){
     el = _el;
@@ -26,6 +35,8 @@ export default () => {
     current = idx != undefined ? idx : options.start >= 0 && options.start < items.length ? options.start : 0;
     tabs[current].className = 'tab-current';
     items[current].className = 'content-current';
+
+    tab_layers[current].tab_section = tab_content(tab_layers[current]);
 
     document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
 

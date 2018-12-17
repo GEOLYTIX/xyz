@@ -1,13 +1,14 @@
 import _xyz from '../_xyz.mjs';
 import Tabulator from 'tabulator-tables';
 
-export default (layer, el) => {
+export default layer => {
   console.log('Hello I am sending layer content');
 
 
   let table_container = _xyz.utils.createElement({
     tag: 'div',
-    appendTo: el
+    appendTo: layer.tab_section
+    //appendTo: el
   });
 
   //if(!layer.table) layer.table = getTable(layer); // zoom problem
@@ -74,6 +75,7 @@ export default (layer, el) => {
 
   //return table_container;
   //return el;
+  return layer.tab_section;
 };
 
 
