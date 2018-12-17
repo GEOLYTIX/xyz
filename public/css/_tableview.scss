@@ -29,6 +29,7 @@
         width: 100%;
         cursor: default;
         background: white;
+        height: inherit;
 
         .content-wrap {
             position: relative;
@@ -39,7 +40,7 @@
             section {
                 display: none;
                 margin: 0 auto;
-                padding: 1em;
+                padding: 5px;
                 /*max-width: 1200px;*/
                 text-align: center;
                 /*min-height: 100vh;

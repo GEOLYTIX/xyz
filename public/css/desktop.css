@@ -1321,7 +1321,8 @@ input[type=range]::-moz-range-thumb {
     overflow: hidden;
     width: 100%;
     cursor: default;
-    background: white; }
+    background: white;
+    height: inherit; }
     .tableview .tabs .content-wrap {
       position: relative;
       /*min-height: 100vh;
@@ -1330,7 +1331,7 @@ input[type=range]::-moz-range-thumb {
       .tableview .tabs .content-wrap section {
         display: none;
         margin: 0 auto;
-        padding: 1em;
+        padding: 5px;
         /*max-width: 1200px;*/
         text-align: center;
         /*min-height: 100vh;
