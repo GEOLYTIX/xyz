@@ -18,8 +18,8 @@ export default () => {
     if(layer.tab) tab_layers.push(layer);
   });
         
-  function nav_tabs(_el, _options){
-    el = _el;
+  function nav_tabs(_options){
+    //el = _el;
     options = extend({}, options);
     extend(options, _options);
     show();
@@ -36,7 +36,7 @@ export default () => {
     tabs[current].className = 'tab-current';
     items[current].className = 'content-current';
 
-    tab_layers[current].tab_section = tab_content(tab_layers[current]);
+    if(!tab_layers[current].tab_section.childNodes.length) tab_layers[current].tab_section = tab_content(tab_layers[current]);
 
     document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
 
