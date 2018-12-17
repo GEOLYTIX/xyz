@@ -51,20 +51,28 @@ export default layer => {
     if (e.target.status !== 200) return;
     let data = JSON.parse(e.target.response);
 
-    let table = new Tabulator(table_container, { columns: columns});
+    let tableHeight = (window.innerHeight - 70) + 'px';
+
+    let table = new Tabulator(table_container, {
+      height: tableHeight,
+      columns: columns,
+      dataLoaded: function(){ //freeze first row on data load
+        let firstRow = this.getRows()[0];
+        if(firstRow) firstRow.freeze();
+      }
+    });
+    
     table.setData(data);
 
     console.log('data set for '  + layer.key);
 
-    //console.log(data);
-    //console.log(e.target.response);
   };
     
   xhr.send(JSON.stringify({
     locale: _xyz.locale,
     layer: layer.key,
     table: layer.table,
-    count: 50,
+    count: 99,
     //filter: JSON.stringify(layer.filter),
     west: bounds.getWest(),
     south: bounds.getSouth(),

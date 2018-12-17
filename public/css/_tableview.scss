@@ -4,7 +4,7 @@
     top: calc(100% - 16px);
     right: 0;
     width: 100%;
-    height: 100vh;
+    height: 98vh;
     z-index: 1001;
 
     .tablepad {
@@ -42,8 +42,9 @@
                 padding: 1em;
                 /*max-width: 1200px;*/
                 text-align: center;
-                min-height: 100vh;
-                max-height: 12000px;
+                /*min-height: 100vh;
+                max-height: 12000px;*/
+                max-height: calc(100vh - 70px);
 
                 &.content-current {
                     display: block;
