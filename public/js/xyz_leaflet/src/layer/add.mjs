@@ -31,6 +31,10 @@ _xyz.layers.add = layer => {
 
     table = zoom > maxZoomKey ? layer.tables[maxZoomKey] : table;
 
+    if (layer.drawer) layer.drawer.style.opacity = !table ? 0.4 : 1;
+
+    if (layer.loader) layer.loader.style.display = !table ? 'none' : 'block';
+
     return table;
 
   };

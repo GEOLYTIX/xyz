@@ -90,6 +90,9 @@ _xyz.init = params => {
   
     function viewChangeEnd() {
 
+      // Remove attribution from map.
+      _xyz.attribution.removeAll();
+
       // Check whether zoom buttons should be disabled for initial view.
       if (_xyz.view.chkZoomBtn) _xyz.view.chkZoomBtn(_xyz.map.getZoom());
 

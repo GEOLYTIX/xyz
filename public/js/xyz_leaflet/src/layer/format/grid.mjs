@@ -6,9 +6,11 @@ export default function(){
 
   // Create grid_seize dropdown.
   layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
-
+  
+  // Return if layer should not be displayed.
   if (!layer.display) return;
 
+  // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
   if (!table) {
@@ -16,25 +18,27 @@ export default function(){
     // Remove layer from map if currently drawn.
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
-    layer.loaded = false;
-
-    return;
-
+    return layer.loaded = false;
   }
 
-  // Return from layer.get() if table is the same as layer table.
+  // Return from layer.get() if table is the same as layer table
+  // AND the layer is already loaded.
   if (layer.table === table && layer.loaded) return;
 
-  // Set layer table to be table from tables array.
+  // Set table to layer.table.
   layer.table = table;
 
-  // Create XHR for fetching data from middleware.
-  const xhr = new XMLHttpRequest();
-    
   // Get bounds for request.
   const bounds = _xyz.map.getBounds();
 
-  xhr.open('GET', _xyz.host + '/api/layer/grid?' + _xyz.utils.paramString({
+  if (layer.xhr) layer.xhr.abort();
+
+  // Create XHR for fetching data from middleware.
+  layer.xhr = new XMLHttpRequest();
+
+  if (layer.loader) layer.loader.style.display = 'block';
+    
+  layer.xhr.open('GET', _xyz.host + '/api/layer/grid?' + _xyz.utils.paramString({
     locale: layer.locale,
     layer: layer.key,
     table: layer.table,
@@ -47,71 +51,74 @@ export default function(){
     token: _xyz.token
   }));
 
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.responseType = 'json';
+  layer.xhr.setRequestHeader('Content-Type', 'application/json');
+  layer.xhr.responseType = 'json';
 
   // Draw layer on load event.
-  xhr.onload = e => {
+  layer.xhr.onload = e => {
 
-    if (e.target.status === 200 && layer.display) {
+    if (layer.loader) layer.loader.style.display = 'none';
 
-      // Check for existing layer and remove from map.
-      if (layer.L) _xyz.map.removeLayer(layer.L);
+    if (e.target.status !== 200 || !layer.display) return;
 
-      // Add geoJSON feature collection to the map.
-      layer.L = _xyz.L.geoJson(processGrid(e.target.response), {
-        pointToLayer: function (feature, latlng) {
+    if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
-          // Distribute size between min, avg and max.
-          let size = feature.properties.size <= layer.sizeAvg ?
-            7 + 7 / layer.sizeAvg * feature.properties.size :
-            14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.size - layer.sizeAvg);
+    // Check for existing layer and remove from map.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
+
+    // Add geoJSON feature collection to the map.
+    layer.L = _xyz.L.geoJson(processGrid(e.target.response), {
+      pointToLayer: function (feature, latlng) {
+
+        // Distribute size between min, avg and max.
+        let size = feature.properties.size <= layer.sizeAvg ?
+          7 + 7 / layer.sizeAvg * feature.properties.size :
+          14 + 7 / (layer.sizeMax - layer.sizeAvg) * (feature.properties.size - layer.sizeAvg);
 
           // set to no value colour.
-          feature.properties.hxcolor = '#C0C0C0';
+        feature.properties.hxcolor = '#C0C0C0';
 
-          if (parseFloat(feature.properties.color)) {
+        if (parseFloat(feature.properties.color)) {
 
-            // set to min colour.
-            feature.properties.hxcolor = layer.style.range[0];
+          // set to min colour.
+          feature.properties.hxcolor = layer.style.range[0];
 
-            for (let i = 0; i < layer.colorBins.length; i++) {
+          for (let i = 0; i < layer.colorBins.length; i++) {
 
-              // Break iteration is cat value is below current cat array value.
-              if (feature.properties.color < layer.colorBins[i]) break;
+            // Break iteration is cat value is below current cat array value.
+            if (feature.properties.color < layer.colorBins[i]) break;
     
-              // Set cat_style to current cat style after value check.
-              feature.properties.hxcolor = layer.style.range[i + 1];
+            // Set cat_style to current cat style after value check.
+            feature.properties.hxcolor = layer.style.range[i + 1];
              
-            }
-
           }
 
-          // Return L.Marker with icon as style to pointToLayer.
-          return L.marker(
-            latlng,
-            {
-              icon: _xyz.L.icon({
-                iconSize: size,
-                iconUrl: _xyz.utils.svg_symbols({
-                  type: 'dot',
-                  style: {
-                    color: feature.properties.hxcolor
-                  }
-                })
-              }),
-              pane: layer.key,
-              interactive: false
-            });
         }
-      }).addTo(_xyz.map);
 
-      // _xyz.layers.check(layer);
+        // Return L.Marker with icon as style to pointToLayer.
+        return L.marker(
+          latlng,
+          {
+            icon: _xyz.L.icon({
+              iconSize: size,
+              iconUrl: _xyz.utils.svg_symbols({
+                type: 'dot',
+                style: {
+                  color: feature.properties.hxcolor
+                }
+              })
+            }),
+            pane: layer.key,
+            interactive: false
+          });
+      }
+    }).addTo(_xyz.map);
 
-    }
+    // _xyz.layers.check(layer);
+
   };
     
-  xhr.send();
+  layer.xhr.send();
 
 
   function processGrid(data){

@@ -6,25 +6,25 @@ export default function() {
 
   const layer = this;
 
+  // Return if layer should not be displayed.
   if (!layer.display) return;
 
+  // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
   if (!table) {
 
-    // Remove layer from map if currently drawn.
-    if (layer.L) _xyz.map.removeLayer(layer.L);
+    // Remove existing layer from map.
+    if (layer.L) _xyz.map.removeLayer(layer.L);  
 
-    layer.loaded = false;
-
-    return;
-
+    return layer.loaded = false;
   }
 
-  // Return from layer.get() if table is the same as layer table.
+  // Return from layer.get() if table is the same as layer table
+  // AND the layer is already loaded.
   if (layer.table === table && layer.loaded) return;
 
-  // Set layer table to be table from tables array.
+  // Set table to layer.table.
   layer.table = table;
 
   // Create filter from legend and current filter.
@@ -54,26 +54,26 @@ export default function() {
     layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
   }
 
-  if (layer.attribution) _xyz.attribution.set(layer.attribution);
-
   // Remove layer.
   if (layer.L) _xyz.map.removeLayer(layer.L);
 
   layer.L = L.vectorGrid.protobuf(url, options)
     .on('error', err => console.error(err))
+    .on('loading', () => {
+      
+      if (layer.loader) layer.loader.style.display = 'block';
+
+    })
     .on('load', () => {
       
+      if (layer.loader)  layer.loader.style.display = 'none';
+
+      if (layer.attribution) _xyz.attribution.set(layer.attribution);
+
       layer.loaded = true;
 
     })
     .on('click', e => {
-
-      // // set cursor to wait
-      // let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive');
-
-      // for (let el of els) {
-      //   el.classList += ' wait-cursor-enabled';
-      // }
 
       if (_xyz.locations.select) return _xyz.locations.select({
         layer: layer.key,
@@ -96,13 +96,7 @@ export default function() {
       xhr.responseType = 'json';
     
       xhr.onload = e => {
-    
-        // // remove wait cursor class if found
-        // let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
-        // for (let el of els) {
-        //   el.classList.remove('wait-cursor-enabled');
-        // }
-    
+        
         if (e.target.status !== 200) return;
     
         alert(JSON.stringify(e.target.response));

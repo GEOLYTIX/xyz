@@ -15,6 +15,10 @@ export default function() {
   // Remove layer.
   if (layer.L) _xyz.map.removeLayer(layer.L);
 
+  layer.loaded = false;
+
+  if (layer.attribution) _xyz.attribution.remove(layer.attribution);
+
   // Check whether other group layers are visible.
   if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
 

@@ -299,6 +299,9 @@
                 },
                 "oa": {
                     "name": "Output areas",
+                    "attribution": {
+                        "© ONS": "https://www.ons.gov.uk"
+                    },                    
                     "display": true,
                     "format": "mvt",
                     "dbs": "XYZ",
@@ -888,13 +891,15 @@
                 },
                 "grid": {
                     "name": "Grid",
+                    "attribution": {
+                        "© ONS": "https://www.ons.gov.uk"
+                    },
                     "format": "grid",
                     "dbs": "XYZ",
                     "geom": "geomcntr",
                     "grid_color": "pop__11",
                     "tables": {
-                        "6": "gb_hx_64k",
-                        "7": "gb_hx_32k",
+                        "7": null,
                         "8": "gb_hx_16k",
                         "9": "gb_hx_8k",
                         "10": "gb_hx_4k",

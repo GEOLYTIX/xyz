@@ -83,6 +83,9 @@ _xyz.layers.init = () => {
   
     //Add icon to layer header.
     layer_icon(layer);
+
+    //Run tableCurrent function to disable layer drawer if necessary.
+    layer.tableCurrent();
    
     if (_xyz.log) console.log(layer);
       

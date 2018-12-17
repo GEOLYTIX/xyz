@@ -73,22 +73,24 @@ _xyz.attribution.set = attribution => {
 
 };
 
+_xyz.attribution.removeAll = () => {
 
-/*
-export function check() {
-      
-  remove();
-
-  Object.values(_xyz.layers.list).forEach(layer => {
-    if (layer.display && layer.attribution) set(layer.attribution);
-  });
-}
-
-export function remove() {
   Object.values(_xyz.attribution.layer).forEach(entry => entry.remove());
+
   _xyz.attribution.layer = {};
-}
 
-export let layer = {};
+};
 
-*/
+_xyz.attribution.remove = attribution => {
+
+  Object.entries(attribution).forEach(entry => {
+
+    // Create new attribution for layer if the same attribution does not exist yet.
+    if (_xyz.attribution.layer[entry[0]]) {
+      _xyz.attribution.layer[entry[0]].remove();
+      delete _xyz.attribution.layer[entry[0]];
+    }
+
+  });
+
+};
