@@ -1,5 +1,4 @@
 import _xyz from '../_xyz.mjs';
-import tab_content from './content.mjs';
 
 export default () => {
 
@@ -7,10 +6,7 @@ export default () => {
     tag: 'div',
     options: {
       className: 'tabs'
-    }/*,
-    style: {
-      border: '1px dashed orange'
-    }*/
+    }
   });
 
   let nav = _xyz.utils.createElement({

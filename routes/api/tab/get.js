@@ -42,9 +42,13 @@ module.exports = fastify => {
 
       let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], layer.infoj, layer.qID);
 
-      let q = `SELECT ${fields} FROM ${table} ${filter_sql ? `WHERE ${filter_sql}` : ''} LIMIT ${count};`;
+      let q = `SELECT ${fields} FROM ${table} WHERE
+        ST_DWithin(
+            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), ${layer.geom}, 0.00001) 
+            ${filter_sql ? `AND ${filter_sql}` : ''} 
+            LIMIT ${count};`;
 
-      //console.log(q);
+      console.log(q);
 
       var rows = await global.pg.dbs[layer.dbs](q);
 

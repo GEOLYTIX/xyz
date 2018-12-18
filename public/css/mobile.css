@@ -140,6 +140,24 @@
     /*color: #090;*/
     color: black; }
 
+.btn_inline {
+  display: inline-block;
+  width: 130px;
+  font-size: 12px;
+  border-radius: 2px;
+  line-height: 2;
+  text-align: center;
+  font-weight: 600;
+  color: #079e00;
+  box-shadow: 1px 1px 3px #666;
+  margin: 0 3px 12px 3px;
+  cursor: pointer; }
+  .btn_inline.disabled {
+    opacity: 0.3; }
+  .btn_inline i {
+    font-size: 14px;
+    vertical-align: text-bottom; }
+
 .range {
   width: 100%;
   width: calc(100% - 5px);

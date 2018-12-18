@@ -1,26 +1,100 @@
 import _xyz from '../_xyz.mjs';
-import Tabulator from 'tabulator-tables';
+import setData from './setData.mjs';
+//import Tabulator from 'tabulator-tables';
 
 export default layer => {
   console.log('Hello I am sending layer content');
+
+  _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      className: 'btn_inline',
+      textContent: 'Download CSV'
+    },
+    eventListener: {
+      event: 'click',
+      funct: () => {
+        layer.tableview.download('csv', layer.name + '.csv');
+      }
+    },
+    appendTo: layer.tab_section
+  });
+
+  _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      className: 'btn_inline',
+      textContent: 'Download JSON'
+    },
+    eventListener: {
+      event: 'click',
+      funct: () => {
+        layer.tableview.download('json', layer.name + '.json');
+      }
+    },
+    appendTo: layer.tab_section
+  });
+
+  let btn_refresh = _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      classList: 'btn_inline',
+      //title: 'Refresh'
+      textContent: 'Refresh'
+    },
+    eventListener: {
+      event: 'click',
+      funct: (e) => {
+        console.log('Refresh data for ' + layer.name);
+        e.target.classList.add('disabled');
+        setData(layer, table_container, e);
+      }
+    },
+    appendTo: layer.tab_section
+  });
+
+  /*_xyz.utils.createElement({
+    tag: 'i',
+    options: {
+      classList: 'material-icons noselect',
+      textContent: 'autorenew'
+    },
+    style: {
+      fontSize: '14px'
+    },
+    appendTo: btn_refresh
+  });
+
+  _xyz.utils.createElement({
+    tag: 'span',
+    options: {
+      className: 'noselect',
+      textContent: 'Refresh'
+    },
+    appendTo: btn_refresh
+  });*/
 
 
   let table_container = _xyz.utils.createElement({
     tag: 'div',
     appendTo: layer.tab_section
-    //appendTo: el
+  });
+
+  _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      fontSize: '12px',
+      padding: '2px',
+      marginTop: '5px'
+    },
+    appendTo: layer.tab_section
   });
 
   //if(!layer.table) layer.table = getTable(layer); // zoom problem
 
-  let xhr = new XMLHttpRequest();
+  //let columns = [];
 
-  // Get bounds for request.
-  const bounds = _xyz.map.getBounds();
-
-  let columns = [];
-
-  Object.values(layer.infoj).map(entry => {
+  /*Object.values(layer.infoj).map(entry => {
       
     if(!entry.type || entry.type === 'numeric' || entry.type === 'integer' || entry.type === 'textarea'){
       entry.title = entry.label;
@@ -38,11 +112,13 @@ export default layer => {
       entry.formatter = _xyz.utils.formatDateTime;
       columns.push(entry);
     }
-  });
+  });*/
 
-  //let table = new Tabulator(table_container, { columns: columns});
+  setData(layer, table_container);
+  /*let xhr = new XMLHttpRequest();
 
-  //let table = new Tabulator(el, { columns: columns});
+  // Get bounds for request.
+  const bounds = _xyz.map.getBounds();
 
   xhr.open('POST', _xyz.host + '/api/tab/get?token=' + _xyz.token);
   xhr.setRequestHeader('Content-Type', 'application/json');
@@ -51,21 +127,38 @@ export default layer => {
     if (e.target.status !== 200) return;
     let data = JSON.parse(e.target.response);
 
-    let tableHeight = (window.innerHeight - 70) + 'px';
+    let tableHeight = (window.innerHeight - 150) + 'px';
 
     let table = new Tabulator(table_container, {
       height: tableHeight,
       columns: columns,
-      dataLoaded: function(){ //freeze first row on data load
-        let firstRow = this.getRows()[0];
-        if(firstRow) firstRow.freeze();
+      dataLoaded: function(){ 
+        //freeze first row on data load
+        //let firstRow = this.getRows()[0];
+        //if(firstRow) firstRow.freeze();
       }
     });
     
     table.setData(data);
 
-    console.log('data set for '  + layer.key);
-
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        textContent: data.length ? 'Showing first ' + data.length + ' results.' : 'No results.'
+      },
+      style: {
+        fontSize: '12px',
+        padding: '2px',
+        marginTop: '5px'
+      },
+      eventListener: {
+        event: 'click',
+        funct: () => {
+          table.download('json', layer.name + '.json');
+        }
+      },
+      appendTo: layer.tab_section
+    });
   };
     
   xhr.send(JSON.stringify({
@@ -73,16 +166,13 @@ export default layer => {
     layer: layer.key,
     table: layer.table,
     count: 99,
-    //filter: JSON.stringify(layer.filter),
     west: bounds.getWest(),
     south: bounds.getSouth(),
     east: bounds.getEast(),
     north: bounds.getNorth(),
     token: _xyz.token
-  })); 
+  })); */
 
-  //return table_container;
-  //return el;
   return layer.tab_section;
 };
 

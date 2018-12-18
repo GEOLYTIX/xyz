@@ -114,3 +114,25 @@
         color: black;
     }
 }
+
+.btn_inline {
+    display: inline-block;
+    width: 130px;
+    font-size: 12px;
+    border-radius: 2px;
+    line-height: 2;
+    text-align: center;
+    font-weight: 600;
+    color: $glxgreen;
+    box-shadow: 1px 1px 3px #666;
+    margin: 0 3px 12px 3px;
+    cursor: pointer;
+    &.disabled {
+        opacity: 0.3;
+    }
+
+    i {
+        font-size: 14px;
+        vertical-align: text-bottom;
+    }
+}
