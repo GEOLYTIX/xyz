@@ -6,11 +6,11 @@ export default function() {
 
   const layer = this;
 
-  // Return if layer should not be displayed.
-  if (!layer.display) return;
-
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
+
+  // Return if layer should not be displayed.
+  if (!layer.display) return;
 
   if (!table) {
 
@@ -77,11 +77,14 @@ export default function() {
     .on('click', e => {
 
       _xyz.locations.select({
+        dbs: layer.dbs,
         locale: layer.locale,
         layer: layer.key,
         table: layer.table,
+        qID: layer.qID,
         id: e.layer.properties.id,
-        marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
+        marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
+        edit: layer.edit
       });
 
     })

@@ -1,5 +1,11 @@
 import _xyz from './_xyz.mjs';
 
+_xyz.log = typeof document.body.dataset.log !== 'undefined';
+
+_xyz.nanoid = document.body.dataset.nanoid;
+
+_xyz.view.mode = document.body.dataset.viewmode;
+
 // Set platform specific interface functions.
 import mobile from './views/mobile.mjs';
 if (_xyz.view.mode === 'mobile') mobile();

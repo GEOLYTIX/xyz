@@ -35,6 +35,8 @@ _xyz.layers.add = layer => {
 
     if (layer.loader) layer.loader.style.display = (!table || !layer.display) ? 'none' : 'block';
 
+    if (!table && layer.attribution) _xyz.attribution.remove(layer.attribution);
+
     return table;
 
   };

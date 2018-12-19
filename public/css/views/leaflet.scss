@@ -21,6 +21,12 @@ $onyx: #383836;
 
 @import url('https://fonts.googleapis.com/css?family=PT+Mono');
 
+@import '../infoj';
+
+td {
+    font-family: ffmark, sans-serif;
+}
+
 a {
     color: $onyx;
     text-decoration: none;
@@ -362,7 +368,7 @@ a {
 .leaflet-popup-content,
 .leaflet-popup-content-wrapper {
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 .leaflet-popup-tip-container {

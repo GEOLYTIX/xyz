@@ -533,6 +533,7 @@ input[type=range]::-moz-range-thumb {
   background: #079e00; }
 
 .infojTable {
+  text-align: left;
   width: 100%;
   font-size: 12px;
   padding-top: 5px; }

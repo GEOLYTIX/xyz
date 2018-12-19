@@ -10,11 +10,11 @@ export default function(){
   // Create grid_seize dropdown.
   layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
   
-  // Return if layer should not be displayed.
-  if (!layer.display) return;
-
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
+
+  // Return if layer should not be displayed.
+  if (!layer.display) return;
 
   if (!table) return layer.loaded = false;
 

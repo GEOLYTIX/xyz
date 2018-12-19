@@ -77,9 +77,9 @@ export default {
         color: '#d32f2f'
       }]
   },
-  log: typeof document.body.dataset.log !== 'undefined',
+  //log: typeof document.body.dataset.log !== 'undefined',
   //map: {},
-  nanoid: document.body.dataset.nanoid,
+  //nanoid: document.body.dataset.nanoid,
   panes: {
     list: {}
   },
@@ -151,7 +151,7 @@ export default {
   token: null,
   utils: utils,
   view: { 
-    mode: document.body.dataset.viewmode,
+    //mode: document.body.dataset.viewmode,
     set: {}
   }
 };

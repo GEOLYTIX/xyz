@@ -6,9 +6,11 @@ export default function(){
 
   const layer = this;
 
-  if (!layer.display) return;
-
+  // Get table for the current zoom level.
   const table = layer.tableCurrent();
+
+  // Return if layer should not be displayed.
+  if (!layer.display) return;
 
   if (!table) {
 
