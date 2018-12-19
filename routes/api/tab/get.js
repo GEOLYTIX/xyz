@@ -24,12 +24,11 @@ module.exports = fastify => {
       if (!table) return res.code(406).send('Missing table.');
 
       let 
-        //filter = req.body.filter && JSON.parse(req.body.filter),
         west = parseFloat(req.body.west),
         south = parseFloat(req.body.south),
         east = parseFloat(req.body.east),
         north = parseFloat(req.body.north),
-        count = parseInt(req.body.count);
+        offset = parseInt(req.body.offset);
               
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table]
@@ -45,8 +44,9 @@ module.exports = fastify => {
       let q = `SELECT ${fields} FROM ${table} WHERE
         ST_DWithin(
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), ${layer.geom}, 0.00001) 
-            ${filter_sql ? `AND ${filter_sql}` : ''} 
-            LIMIT ${count};`;
+            ${filter_sql ? `AND ${filter_sql}` : ''} ORDER BY ${layer.qID || 'id'}
+            OFFSET ${99*offset} ROWS
+            FETCH FIRST 99 ROW ONLY;`;
 
       console.log(q);
 
@@ -55,7 +55,7 @@ module.exports = fastify => {
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
       // return 202 if no locations found within the envelope.
-      if (parseInt(rows[0].count) === 0) return res.code(200).send([]);
+      if (!rows[0] || parseInt(rows[0].count) === 0) return res.code(200).send([]);
 
       res.code(200).send(rows);
     }

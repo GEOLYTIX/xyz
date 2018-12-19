@@ -1,7 +1,8 @@
 import _xyz from '../_xyz.mjs';
 import Tabulator from 'tabulator-tables';
+import Refresh from './refresh.mjs';
 
-export default (layer, el, ev) => {
+export default layer => {
 
   let xhr = new XMLHttpRequest(), columns = [];
 
@@ -36,31 +37,49 @@ export default (layer, el, ev) => {
 
     let tableHeight = (window.innerHeight - 150) + 'px';
 
-    if(ev && ev.target.classList) ev.target.classList.remove('disabled');
-
-    el.innerHTML = '';
+    layer.tableview.container.innerHTML = '';
         
+    if(data.length){
 
-    layer.tableview = new Tabulator(el, {
-      height: tableHeight,
-      columns: columns,
-      dataLoaded: function(){ 
-        //freeze first row on data load
-        /*let firstRow = this.getRows()[0];
-              if(firstRow) firstRow.freeze();*/
-      }
-    });
+      layer.tableview.table = new Tabulator(layer.tableview.container, {
+        height: tableHeight,
+        columns: columns,
+        dataLoaded: function(){ 
+          //freeze first row on data load
+          /*let firstRow = this.getRows()[0];
+                    if(firstRow) firstRow.freeze();*/
+        }
+      });
 
-    layer.tableview.setData(data);
+      layer.tableview.table.setData(data);
+      layer.tableview.container.previousSibling.textContent = 'Showing ' + data.length + ' results.';
+    } else {
+        
+      layer.tableview.section.innerHTML = '';
+        
+      Refresh(layer);
 
-    el.nextSibling.textContent = data.length ? 'Showing first ' + data.length + ' results.' : 'No results.';
+      _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          textContent: 'No results.'
+        },
+        style: {
+          fontSize: '12px',
+          padding: '2px',
+          marginTop: '5px'
+        },
+        appendTo: layer.tableview.section
+      });
+    }
+
   };
 
   xhr.send(JSON.stringify({
     locale: _xyz.locale,
     layer: layer.key,
     table: layer.table,
-    count: 99,
+    offset: (layer.tableview.offset ? layer.tableview.offset : 0), // this will be click counter from load more button
     west: bounds.getWest(),
     south: bounds.getSouth(),
     east: bounds.getEast(),

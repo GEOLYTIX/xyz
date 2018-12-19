@@ -17,7 +17,7 @@ export default () => {
     },
     eventListener: {
       event: 'dblclick',
-      funct: e => {
+      funct: () => {
         transition();
       }
     },
