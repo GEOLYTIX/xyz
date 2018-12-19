@@ -12,7 +12,7 @@ export default () => {
   let pad = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      title: 'Drag to unfold table view. Double click to fold.',
+      title: 'Drag to unfold table view. Else double click.',
       className: 'tablepad'
     },
     eventListener: {
@@ -25,7 +25,7 @@ export default () => {
   });
 
   function transition(){
-    let top = 'calc(100% - 16px)';
+    let top = parseInt(tableview.style.top) >= 0 ? 'calc(100% - 16px)' : 0;
     tableview.style.transition = '1s';
     tableview.style.top = top;
     tableview.addEventListener('transitionend', e => {

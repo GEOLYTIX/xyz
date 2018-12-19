@@ -53,6 +53,22 @@ export default layer => {
 
       layer.tableview.table.setData(data);
       layer.tableview.container.previousSibling.textContent = 'Showing ' + data.length + ' results.';
+      
+      _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          classList: 'btn_small',
+          textContent: 'Load more.'
+        },
+        eventListener: {
+          event: 'click',
+          funct: e => {
+            console.log('load more data and hide button if no more.');
+          }
+        },
+        appendTo: layer.tableview.container.parentNode
+      });
+    
     } else {
         
       layer.tableview.section.innerHTML = '';
