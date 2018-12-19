@@ -670,6 +670,9 @@ input[type=range]::-moz-range-thumb {
   cursor: pointer;
   display: block;
   width: 90%; }
+  .checkbox.small {
+    padding: 5px 0 5px 15px;
+    font-size: 13px; }
   .checkbox input[type=checkbox] {
     position: absolute;
     opacity: 0;

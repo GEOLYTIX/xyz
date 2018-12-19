@@ -23,12 +23,21 @@ module.exports = fastify => {
       // Return 406 if table is not defined as request parameter.
       if (!table) return res.code(406).send('Missing table.');
 
-      let 
-        west = parseFloat(req.body.west),
-        south = parseFloat(req.body.south),
-        east = parseFloat(req.body.east),
-        north = parseFloat(req.body.north),
-        offset = parseInt(req.body.offset);
+      var viewport = '';
+
+      if(req.body.viewport) {
+        let 
+          west = parseFloat(req.body.west),
+          south = parseFloat(req.body.south),
+          east = parseFloat(req.body.east),
+          north = parseFloat(req.body.north);
+
+        viewport = `WHERE
+        ST_DWithin(
+            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), ${layer.geom}, 0.00001) `;
+      }
+
+      let offset = parseInt(req.body.offset);
               
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table]
@@ -40,13 +49,12 @@ module.exports = fastify => {
       const filter_sql = layer.filter && await require(global.appRoot + '/mod/pg/sql_filter')(layer.filter) || '';
 
       let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], layer.infoj, layer.qID);
-
-      let q = `SELECT ${fields} FROM ${table} WHERE
-        ST_DWithin(
-            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), ${layer.geom}, 0.00001) 
-            ${filter_sql ? `AND ${filter_sql}` : ''} ORDER BY ${layer.qID || 'id'}
-            OFFSET ${99*offset} ROWS
-            FETCH FIRST 99 ROW ONLY;`;
+      
+      let q = `SELECT ${fields} FROM ${table} ${viewport}
+                ${filter_sql ? (viewport ? ` AND ${filter_sql}` : ` WHERE ${filter_sql}`) : ''} 
+                ORDER BY ${layer.qID || 'id'}
+                OFFSET ${99*offset} ROWS
+                FETCH FIRST 99 ROW ONLY;`;
 
       console.log(q);
 

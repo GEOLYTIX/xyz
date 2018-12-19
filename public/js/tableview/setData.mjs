@@ -5,8 +5,6 @@ import Refresh from './refresh.mjs';
 export default layer => {
 
   let xhr = new XMLHttpRequest(), columns = [];
-
-  const bounds = _xyz.map.getBounds(); // Get bounds for request.
     
   Object.values(layer.infoj).map(entry => {
     if(!entry.type || entry.type === 'numeric' || entry.type === 'integer' || entry.type === 'textarea'){
@@ -91,15 +89,37 @@ export default layer => {
 
   };
 
-  xhr.send(JSON.stringify({
+  let params = {
     locale: _xyz.locale,
     layer: layer.key,
     table: layer.table,
+    offset: (layer.tableview.offset ? layer.tableview.offset : 0), // this will be click counter from load more button
+    token: _xyz.token
+  };
+  
+  if(layer.tableview.viewport) {
+    const bounds = _xyz.map.getBounds(); // Get bounds for request.
+
+    Object.assign(params, {
+      viewport: layer.tableview.viewport,
+      west: bounds.getWest(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      north: bounds.getNorth()
+    });
+  }
+
+  /*xhr.send(JSON.stringify({
+    locale: _xyz.locale,
+    layer: layer.key,
+    table: layer.table,
+    viewport: layer.tableview.viewport || false,
     offset: (layer.tableview.offset ? layer.tableview.offset : 0), // this will be click counter from load more button
     west: bounds.getWest(),
     south: bounds.getSouth(),
     east: bounds.getEast(),
     north: bounds.getNorth(),
     token: _xyz.token
-  })); 
+  })); */
+  xhr.send(JSON.stringify(params));
 };
