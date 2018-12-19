@@ -24,7 +24,7 @@ import './layer/_layers.mjs';
 
 import './location/_locations.mjs';
 
-import gazetteer from './gazetteer.mjs';
+import './gazetteer.mjs';
 
 // Initiate map control.
 _xyz.init({
@@ -45,9 +45,10 @@ function init() {
   // Initialize locations module.
   _xyz.locations.init();
 
-  // Initialize gazetteer module.
-  gazetteer();
+  // Init gazetteer.
+  _xyz.gazetteer.init();
 
+  // Assign locate toggle to locate button.
   _xyz.locate.btn = document.getElementById('btnLocate');
   _xyz.locate.btn.onclick = _xyz.locate.toggle;
 

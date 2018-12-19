@@ -12,4 +12,4 @@ _xyz.init({
   view_zoom: 7
 });
 
-_xyz.locate.toggle();
+// _xyz.locate.toggle();

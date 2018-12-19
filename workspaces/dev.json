@@ -250,9 +250,9 @@
                 "placeholder": "e.g. London",
                 "datasets": [
                     {
-                        "layer": "cluster",
-                        "table": "dev.cluster",
-                        "label": "postcode"
+                        "layer": "retail_points",
+                        "table": "dev.retailpoints",
+                        "label": "store"
                     }
                 ]
             },
