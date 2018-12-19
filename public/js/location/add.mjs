@@ -16,7 +16,7 @@ import expander from './controls/expander.mjs';
 
 import info from './info/_info.mjs';
 
-export default record => {
+_xyz.locations.add = record => {
 
   _xyz.locations.dom.parentElement.style.display = 'block';
 

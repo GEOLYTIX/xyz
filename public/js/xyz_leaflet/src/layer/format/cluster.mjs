@@ -30,14 +30,19 @@ export default function(){
   // Create filter from legend and current filter.
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
   
-  // Create XHR for fetching data from middleware.
-  const xhr = new XMLHttpRequest();
-    
   // Get bounds for request.
   const bounds = _xyz.map.getBounds();
-        
+
+  if (layer.xhr) {
+    layer.xhr.abort();
+    layer.xhr.onload = null;
+  }
+
+  // Create XHR for fetching data from middleware.
+  layer.xhr = new XMLHttpRequest();
+      
   // Build XHR request.
-  xhr.open('GET', _xyz.host + '/api/layer/cluster?' + _xyz.utils.paramString({
+  layer.xhr.open('GET', _xyz.host + '/api/layer/cluster?' + _xyz.utils.paramString({
     locale: layer.locale,
     layer: layer.key,
     table: layer.table,
@@ -54,14 +59,19 @@ export default function(){
     token: _xyz.token
   }));
 
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.responseType = 'json';
+  layer.xhr.setRequestHeader('Content-Type', 'application/json');
+  layer.xhr.responseType = 'json';
     
   // Process XHR onload.
-  xhr.onload = e => {
+  layer.xhr.onload = e => {
+
+    if (layer.loader) layer.loader.style.display = 'none';
+
+    // Check for existing layer and remove from map.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
            
     // Data is returned and the layer is still current.
-    if (e.target.status !== 200) return;
+    if (e.target.status !== 200 || !layer.display) return;
 
     if (layer.attribution) _xyz.attribution.set(layer.attribution);
     
@@ -70,9 +80,6 @@ export default function(){
     const param = {
       max_size: cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0)
     };
-
-    // Remove existing layer.
-    if (layer.L) _xyz.map.removeLayer(layer.L);
 
     // Create cat array for graduated theme.
     if (layer.style.theme && layer.style.theme.type === 'graduated') {
@@ -194,6 +201,6 @@ export default function(){
 
   };
     
-  xhr.send();
+  layer.xhr.send();
 
 }

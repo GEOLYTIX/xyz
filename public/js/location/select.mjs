@@ -1,12 +1,12 @@
 import _xyz from '../_xyz.mjs';
 
-export default location => {
+_xyz.locations.select = location => {
 
   const record = _xyz.locations.getFreeRecord();
 
   if (!record) return;
 
-  record.location = {};
+  record.location = location;
 
   // Get layer from where the location should be selected.
   let layer = _xyz.layers.list[location.layer];
@@ -26,12 +26,6 @@ export default location => {
 
   xhr.onload = e => {
 
-    // remove wait cursor class if found
-    let els = _xyz.map.getContainer().querySelectorAll('.leaflet-interactive.wait-cursor-enabled');
-    for (let el of els) {
-      el.classList.remove('wait-cursor-enabled');
-    }
-
     if (e.target.status !== 200) return;
 
     let json = JSON.parse(e.target.responseText);
@@ -48,9 +42,6 @@ export default location => {
  
     // Set marker coordinates from point geometry.
     if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
-
-    // Add the location to the first free record.
-    record.location = location;
 
     // Push the hook for the location.
     _xyz.hooks.push('select',

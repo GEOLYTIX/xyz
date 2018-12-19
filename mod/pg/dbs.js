@@ -13,7 +13,8 @@ module.exports = async () => {
     
       // Create connection pool.
       const pool = new require('pg').Pool({
-        connectionString: process.env[key]
+        connectionString: process.env[key],
+        statement_timeout: 10000
       });
     
       // Request which accepts q and arr and will return rows or rows.err.

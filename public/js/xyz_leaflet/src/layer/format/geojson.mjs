@@ -13,9 +13,7 @@ export default function(){
     // Remove layer from map if currently drawn.
     if (layer.L) _xyz.map.removeLayer(layer.L);
 
-    layer.loaded = false;
-
-    return;
+    return layer.loaded = false;
 
   }
 
@@ -24,16 +22,21 @@ export default function(){
 
   // Set layer table to be table from tables array.
   layer.table = table;
-    
-  const xhr = new XMLHttpRequest(); 
 
-  // Build xhr request.
-  const bounds = _xyz.map.getBounds();     
+  // Get bounds for request.
+  const bounds = _xyz.map.getBounds();
+
+  if (layer.xhr) {
+    layer.xhr.abort();
+    layer.xhr.onload = null;
+  }  
+    
+  layer.xhr = new XMLHttpRequest();   
   
   // Create filter from legend and current filter.
   const filter = Object.assign({},layer.filter.legend, layer.filter.current);
     
-  xhr.open('GET', _xyz.host + '/api/layer/geojson?' + _xyz.utils.paramString({
+  layer.xhr.open('GET', _xyz.host + '/api/layer/geojson?' + _xyz.utils.paramString({
     locale: _xyz.locale,
     layer: layer.key,
     table: layer.table,
@@ -47,9 +50,9 @@ export default function(){
   }));
 
   // Draw layer on load event.
-  xhr.onload = e => {
+  layer.xhr.onload = e => {
 
-    if (e.target.status !== 200 || !layer.display || locale !== _xyz.locale) return;
+    if (e.target.status !== 200 || !layer.display) return;
       
     // Create feature collection for vector features.
     const features = JSON.parse(e.target.responseText);
@@ -89,14 +92,12 @@ export default function(){
       })
       .addTo(_xyz.map);
 
-    _xyz.layers.check(layer);
-
     // Check whether vector.table or vector.display have been set to false during the drawing process and remove layer from map if necessary.
     if (!layer.table || !layer.display) _xyz.map.removeLayer(layer.L);
   
   };
     
-  xhr.send();
+  layer.xhr.send();
 
     
   function applyLayerStyle(feature){

@@ -1,20 +1,17 @@
 import _xyz from '../_xyz.mjs';
 
-import select from './select.mjs';
-_xyz.locations.select = select;
+import './select.mjs';
 
-import draw from './draw.mjs';
-_xyz.locations.draw = draw;
+import './draw.mjs';
 
-import add from './add.mjs';
-_xyz.locations.add = add;
+import './add.mjs';
 
 _xyz.locations.dom = document.getElementById('locations');
 
 _xyz.locations.getFreeRecord = () => {
 
   // Find free records in locations array.
-  const freeRecords = _xyz.locations.list.filter(record => record.location.geometries.length === 0);
+  const freeRecords = _xyz.locations.list.filter(record => !record.location);
 
   // Return from selection if no free record is available.
   if (freeRecords.length === 0) return null;
@@ -24,10 +21,7 @@ _xyz.locations.getFreeRecord = () => {
 };
 
 _xyz.locations.init = () => {
-
-  // // Make select tab active on mobile device.
-  // if (_xyz.view.mobile) _xyz.view.mobile.activateLayersTab();
-  
+ 
   document.getElementById('clear_locations').addEventListener('click', () => {
     _xyz.hooks.remove('select');
     _xyz.locations.init();
@@ -42,18 +36,11 @@ _xyz.locations.init = () => {
   _xyz.locations.list.forEach(record => {
   
     // Return if location doesn't exist. ie. on init.
-    //if (!record.location) return;
+    if (!record.location) return;
+
+    record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
   
-    if (record.location) {
-      record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-    }
-  
-    //record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-  
-    record.location = {
-      geometries: []
-    };
-  
+    delete record.location;  
   });
   
   // Make select tab active on mobile device.

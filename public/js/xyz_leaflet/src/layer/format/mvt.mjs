@@ -31,20 +31,21 @@ export default function() {
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
   let url = _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
-      locale: layer.locale,
-      layer: layer.key,
-      table: layer.table,
-      properties: layer.properties,
-      filter: JSON.stringify(filter),
-      token: _xyz.token
-    }),
-    options = {
-      rendererFactory: _xyz.L.svg.tile,
-      interactive: (layer.qID) || false,
-      pane: layer.key,
-      getFeatureId: f => f.properties.id,
-      vectorTileLayerStyles: {}
-    };
+    locale: layer.locale,
+    layer: layer.key,
+    table: layer.table,
+    properties: layer.properties,
+    filter: JSON.stringify(filter),
+    token: _xyz.token
+  });
+
+  let options = {
+    rendererFactory: _xyz.L.svg.tile,
+    interactive: (layer.qID) || false,
+    pane: layer.key,
+    getFeatureId: f => f.properties.id,
+    vectorTileLayerStyles: {}
+  };
 
   // set style for each layer
   options.vectorTileLayerStyles[layer.key] = applyLayerStyle;
@@ -75,35 +76,13 @@ export default function() {
     })
     .on('click', e => {
 
-      if (_xyz.locations.select) return _xyz.locations.select({
+      _xyz.locations.select({
+        locale: layer.locale,
         layer: layer.key,
         table: layer.table,
         id: e.layer.properties.id,
         marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)]
       });
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.open('GET', _xyz.host + '/api/location/select/id?' + _xyz.utils.paramString({
-        locale: layer.locale,
-        layer: layer.key,
-        table: layer.table,
-        id: e.layer.properties.id,
-        token: _xyz.token
-      }));
-
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.responseType = 'json';
-    
-      xhr.onload = e => {
-        
-        if (e.target.status !== 200) return;
-    
-        alert(JSON.stringify(e.target.response));
-          
-      };
-    
-      xhr.send();
 
     })
     .on('mouseover', e => {

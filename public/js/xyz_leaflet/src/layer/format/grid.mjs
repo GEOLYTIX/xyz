@@ -4,6 +4,9 @@ export default function(){
 
   const layer = this;
 
+  // Remove layer from map if currently drawn.
+  if (layer.L) _xyz.map.removeLayer(layer.L);
+
   // Create grid_seize dropdown.
   layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
   
@@ -13,13 +16,7 @@ export default function(){
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
-  if (!table) {
-
-    // Remove layer from map if currently drawn.
-    if (layer.L) _xyz.map.removeLayer(layer.L);
-
-    return layer.loaded = false;
-  }
+  if (!table) return layer.loaded = false;
 
   // Return from layer.get() if table is the same as layer table
   // AND the layer is already loaded.
@@ -31,7 +28,10 @@ export default function(){
   // Get bounds for request.
   const bounds = _xyz.map.getBounds();
 
-  if (layer.xhr) layer.xhr.abort();
+  if (layer.xhr) {
+    layer.xhr.abort();
+    layer.xhr.onload = null;
+  }
 
   // Create XHR for fetching data from middleware.
   layer.xhr = new XMLHttpRequest();
@@ -59,12 +59,12 @@ export default function(){
 
     if (layer.loader) layer.loader.style.display = 'none';
 
+    // Check for existing layer and remove from map.
+    if (layer.L) _xyz.map.removeLayer(layer.L);
+
     if (e.target.status !== 200 || !layer.display) return;
 
     if (layer.attribution) _xyz.attribution.set(layer.attribution);
-
-    // Check for existing layer and remove from map.
-    if (layer.L) _xyz.map.removeLayer(layer.L);
 
     // Add geoJSON feature collection to the map.
     layer.L = _xyz.L.geoJson(processGrid(e.target.response), {
@@ -113,8 +113,6 @@ export default function(){
           });
       }
     }).addTo(_xyz.map);
-
-    // _xyz.layers.check(layer);
 
   };
     

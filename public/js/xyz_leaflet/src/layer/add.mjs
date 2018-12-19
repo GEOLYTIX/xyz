@@ -33,7 +33,7 @@ _xyz.layers.add = layer => {
 
     if (layer.drawer) layer.drawer.style.opacity = !table ? 0.4 : 1;
 
-    if (layer.loader) layer.loader.style.display = !table ? 'none' : 'block';
+    if (layer.loader) layer.loader.style.display = (!table || !layer.display) ? 'none' : 'block';
 
     return table;
 

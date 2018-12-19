@@ -1,6 +1,6 @@
 import _xyz from '../_xyz.mjs';
 
-export default record => {
+_xyz.locations.draw = record => {
 
   record.location.geometries = [];
 
