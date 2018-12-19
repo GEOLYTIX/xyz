@@ -26,9 +26,6 @@ import './location/_locations.mjs';
 
 import gazetteer from './gazetteer.mjs';
 
-import locate from './locate.mjs';
-
-
 // Initiate map control.
 _xyz.init({
   host: document.head.dataset.dir,
@@ -51,8 +48,8 @@ function init() {
   // Initialize gazetteer module.
   gazetteer();
 
-  // Initialize locate module.
-  if (_xyz.ws.locate) locate();
+  _xyz.locate.btn = document.getElementById('btnLocate');
+  _xyz.locate.btn.onclick = _xyz.locate.toggle;
 
   if (_xyz.log) console.log(_xyz);
 

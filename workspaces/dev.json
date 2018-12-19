@@ -1,5 +1,6 @@
 {
     "title": "XYZ dev",
+    "locate": {},
     "locales": {
         "NE": {
             "minZoom": 3,

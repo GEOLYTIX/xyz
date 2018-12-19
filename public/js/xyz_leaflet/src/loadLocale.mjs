@@ -4,6 +4,8 @@ import './layer/add.mjs';
 
 import './location/select.mjs';
 
+import './locate.mjs';
+
 _xyz.loadLocale = locale => {
 
   // Filter invalid layers
