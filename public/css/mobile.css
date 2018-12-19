@@ -151,11 +151,8 @@
   font-weight: 600;
   color: #079e00;
   box-shadow: 1px 1px 3px #666;
-  margin: 0 3px 12px 3px;
-  cursor: pointer;
-  /*&.disabled {
-      opacity: 0.3;
-  }*/ }
+  margin: 6px 3px 12px 3px;
+  cursor: pointer; }
   .btn_inline:active {
     box-shadow: 2px 2px 3px #090; }
   .btn_inline span {

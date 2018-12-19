@@ -126,11 +126,8 @@
     font-weight: 600;
     color: $glxgreen;
     box-shadow: 1px 1px 3px #666;
-    margin: 0 3px 12px 3px;
+    margin: 6px 3px 12px 3px;
     cursor: pointer;
-    /*&.disabled {
-        opacity: 0.3;
-    }*/
 
     &:active {
         box-shadow: 2px 2px 3px #090;
