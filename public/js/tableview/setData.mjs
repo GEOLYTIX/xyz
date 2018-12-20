@@ -3,17 +3,15 @@ import Tabulator from 'tabulator-tables';
 import Refresh from './refresh.mjs';
 import RequestData from './requestData.mjs';
 import AddData from './addData.mjs';
+import Download from './download.mjs';
 
 export default layer => {
 
-  console.log('set data fired');
   RequestData(layer, setData);
 };
 
 
 function setData(layer, data, columns){
-
-  console.log(layer.tableview);
 
   let tableHeight = (window.innerHeight - 185) + 'px';
 
@@ -22,6 +20,8 @@ function setData(layer, data, columns){
   layer.tableview.offset = 0;
         
   if(data.length){
+
+    if(!layer.tableview.download) Download(layer);
 
     layer.tableview.table = new Tabulator(layer.tableview.container, {
       height: tableHeight,
@@ -54,6 +54,8 @@ function setData(layer, data, columns){
     
     
   } else {
+
+    layer.tableview.download = false;
         
     layer.tableview.section.innerHTML = '';
         
