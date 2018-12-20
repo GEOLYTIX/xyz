@@ -669,9 +669,6 @@ input[type=range]::-moz-range-thumb {
   cursor: pointer;
   display: block;
   width: 90%; }
-  .checkbox.small {
-    padding: 5px 0 5px 15px;
-    font-size: 13px; }
   .checkbox input[type=checkbox] {
     position: absolute;
     opacity: 0;
@@ -1370,6 +1367,13 @@ input[type=range]::-moz-range-thumb {
           font-weight: 900;
           font-size: 4em;
           line-height: 1; }
+        .tableview .tabs .content-wrap section .checkbox {
+          padding: 5px 5px 10px 0 !important;
+          font-size: 13px;
+          width: 150px;
+          display: inline-block !important;
+          padding-left: 15px;
+          margin-left: 10px; }
     .tableview .tabs nav {
       text-align: center; }
       .tableview .tabs nav ul {

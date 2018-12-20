@@ -1,9 +1,10 @@
 import _xyz from '../_xyz.mjs';
 import setData from './setData.mjs';
+import tab_content from './content.mjs';
 
 export default layer => {
     
-  let btn_refresh = _xyz.utils.createElement({
+  layer.tableview.refresh = _xyz.utils.createElement({
     tag: 'div',
     options: {
       classList: 'btn_inline',
@@ -30,7 +31,7 @@ export default layer => {
     style: {
       fontSize: '14px'
     },
-    appendTo: btn_refresh
+    appendTo: layer.tableview.refresh
   });
     
   _xyz.utils.createElement({
@@ -38,11 +39,37 @@ export default layer => {
     options: {
       textContent: 'Refresh'
     },
-    appendTo: btn_refresh
+    appendTo: layer.tableview.refresh
   });
     
   _xyz.utils.createElement({
     tag: 'span',
-    appendTo: btn_refresh
+    appendTo: layer.tableview.refresh
   });
+
+  _xyz.utils.checkbox({
+    label: 'Viewport only',
+    appendTo: layer.tableview.section,
+    checked: layer.tableview.viewport || false,
+    onChange: e => {
+      layer.tableview.viewport = e.target.checked;
+      setData(layer);
+    }
+  });
+
+  layer.tableview.note = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      fontSize: '12px',
+      padding: '2px',
+      marginTop: '5px'
+    },
+    appendTo: layer.tableview.section
+  });
+
+  layer.tableview.container = _xyz.utils.createElement({
+    tag: 'div',
+    appendTo: layer.tableview.section
+  });
+
 };

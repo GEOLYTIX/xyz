@@ -1,6 +1,7 @@
 import _xyz from '../_xyz.mjs';
 
 export default (layer, callback) => {
+    
   let xhr = new XMLHttpRequest(), columns = [];
 
   Object.values(layer.infoj).map(entry => {
@@ -28,7 +29,8 @@ export default (layer, callback) => {
   xhr.onload = e => {
     if (e.target.status !== 200) return;
     let data = JSON.parse(e.target.response);
-    callback(layer, columns, data);
+    console.log(data.length);
+    callback(layer, data, columns);
   };
 
   let params = {

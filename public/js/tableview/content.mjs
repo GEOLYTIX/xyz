@@ -36,41 +36,6 @@ export default layer => {
 
   Refresh(layer);
 
-  let checkbox_container = _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      width: '150px',
-      display: 'inline-block',
-      paddingLeft: '15px'
-    },
-    appendTo: layer.tableview.section
-  });
-
-  _xyz.utils.checkbox({
-    label: 'Viewport only',
-    class: 'small',
-    appendTo: checkbox_container,
-    onChange: e => {
-      layer.tableview.viewport = e.target.checked;
-      setData(layer);
-    }
-  });
-
-  _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      fontSize: '12px',
-      padding: '2px',
-      marginTop: '5px'
-    },
-    appendTo: layer.tableview.section
-  });
-
-  layer.tableview.container = _xyz.utils.createElement({
-    tag: 'div',
-    appendTo: layer.tableview.section
-  });
-
   //if(!layer.table) layer.table = getTable(layer); // zoom problem
 
   setData(layer);

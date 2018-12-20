@@ -6,11 +6,14 @@ import AddData from './addData.mjs';
 
 export default layer => {
 
+  console.log('set data fired');
   RequestData(layer, setData);
 };
 
 
-function setData(layer, columns, data){
+function setData(layer, data, columns){
+
+  console.log(layer.tableview);
 
   let tableHeight = (window.innerHeight - 185) + 'px';
 
@@ -31,7 +34,7 @@ function setData(layer, columns, data){
     });
 
     layer.tableview.table.setData(data);
-    layer.tableview.container.previousSibling.textContent = 'Showing ' + data.length + ' results.';
+    layer.tableview.note.textContent = 'Showing ' + data.length + ' results.';
   
     if(!layer.tableview.more) layer.tableview.more = _xyz.utils.createElement({
       tag: 'div',
@@ -43,11 +46,10 @@ function setData(layer, columns, data){
         event: 'click',
         funct: () => {
           console.log('load more data and hide button if no more.');
-          layer.tableview.offset = parseInt(layer.tableview.offset) + 1;
-          console.log(layer.tableview.offset); 
+          AddData(layer);
         }
       },
-      appendTo: layer.tableview.container.parentNode
+      appendTo: layer.tableview.section
     });
     
     
@@ -57,17 +59,7 @@ function setData(layer, columns, data){
         
     Refresh(layer);
 
-    _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        textContent: 'No results.'
-      },
-      style: {
-        fontSize: '12px',
-        padding: '2px',
-        marginTop: '5px'
-      },
-      appendTo: layer.tableview.section
-    });
+    layer.tableview.note.textContent = 'No results.';
+
   }
 }
