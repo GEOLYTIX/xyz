@@ -8,10 +8,10 @@ export default layer => {
 
 function addData(layer, data){
   if(data.length){
-    console.log(data);
-    console.log(data.length);
-    console.log(layer.tableview.offset);
+    layer.tableview.more.style.display = (data.length < 99 ? 'none' : 'inline-block');
     layer.tableview.table.addData(data, false);
-    layer.tableview.container.previousSibling.textContent = 'Showing ' + (99*layer.tableview.offset + data.length) + ' results.';
+    layer.tableview.note.textContent = 'Showing ' + (99*layer.tableview.offset + data.length) + ' results.';
+  } else {
+    layer.tableview.more.style.display = 'none';
   }
 }

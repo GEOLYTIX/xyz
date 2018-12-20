@@ -35,22 +35,31 @@ function setData(layer, data, columns){
 
     layer.tableview.table.setData(data);
     layer.tableview.note.textContent = 'Showing ' + data.length + ' results.';
-  
-    if(!layer.tableview.more) layer.tableview.more = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        className: 'btn_inline',
-        textContent: 'Load more'
-      },
-      eventListener: {
-        event: 'click',
-        funct: () => {
-          console.log('load more data and hide button if no more.');
-          AddData(layer);
-        }
-      },
-      appendTo: layer.tableview.section
-    });
+
+    if(layer.tableview.more){
+        
+      layer.tableview.more.style.display = (data.length < 99 ? 'none' : 'inline-block');
+    
+    } else {
+        
+      layer.tableview.more = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          className: 'btn_inline',
+          textContent: 'Load more'
+        },
+        style: {
+          display: (data.length < 99 ? 'none' : 'inline-block')
+        },
+        eventListener: {
+          event: 'click',
+          funct: () => {
+            AddData(layer);
+          }
+        },
+        appendTo: layer.tableview.section
+      });
+    }
     
     
   } else {

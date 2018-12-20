@@ -1,6 +1,5 @@
 import _xyz from '../_xyz.mjs';
-import setData from './setData.mjs';
-import tab_content from './content.mjs';
+import SetData from './setData.mjs';
 
 export default layer => {
     
@@ -13,10 +12,9 @@ export default layer => {
     eventListener: {
       event: 'click',
       funct: (e) => {
-        console.log('Refresh data for ' + layer.name);
         layer.tableview.offset = 0; // set offset back to zero
         e.stopPropagation();
-        setData(layer);
+        SetData(layer);
       }
     },
     appendTo: layer.tableview.section
@@ -53,7 +51,7 @@ export default layer => {
     checked: layer.tableview.viewport || false,
     onChange: e => {
       layer.tableview.viewport = e.target.checked;
-      setData(layer);
+      SetData(layer);
     }
   });
 

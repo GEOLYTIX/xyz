@@ -1,5 +1,5 @@
 
-import setData from './setData.mjs';
+import SetData from './setData.mjs';
 import Refresh from './refresh.mjs';
 import Download from './download.mjs';
 
@@ -11,7 +11,7 @@ export default layer => {
 
   //if(!layer.table) layer.table = getTable(layer); // zoom problem
 
-  setData(layer);
+  SetData(layer);
 
   return layer.tableview.section;
 };

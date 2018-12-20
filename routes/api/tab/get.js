@@ -56,7 +56,7 @@ module.exports = fastify => {
                 OFFSET ${99*offset} ROWS
                 FETCH FIRST 99 ROW ONLY;`;
 
-      console.log(q);
+      //console.log(q);
 
       var rows = await global.pg.dbs[layer.dbs](q);
 
