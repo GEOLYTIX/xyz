@@ -1,3 +1,7 @@
+.leaflet-control-attribution {
+    display: none;
+}
+
 /* required styles */
 
 .leaflet-pane,
@@ -301,12 +305,6 @@
     position: absolute;
     text-align: center;
     margin-bottom: 20px;
-}
-
-.leaflet-popup-content,
-.leaflet-popup-content-wrapper {
-    margin: 0;
-    padding: 0;
 }
 
 .leaflet-popup-tip-container {

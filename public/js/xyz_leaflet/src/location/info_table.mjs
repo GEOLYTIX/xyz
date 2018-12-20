@@ -1,6 +1,6 @@
 import _xyz from '../../../_xyz.mjs';
 
-export default location => {
+_xyz.locations.info_table = location => {
 
   // Add table element to record drawer.
   // info fields will be added to this table.
@@ -11,17 +11,30 @@ export default location => {
     },
     style: {
       cellPadding: '0',
-      cellSpacing: '0'
+      cellSpacing: '0',
+      padding: '10px'
     }
   });
 
-    // Assign location object to hold info groups.
+  // Assign location object to hold info groups.
   location.infogroups = {};
 
   // Iterate through info fields and add to info table.
   Object.values(location.infoj).forEach(entry => {
 
     if (entry.type === 'group') return;
+
+    // Create streetview control.
+    if (entry.type === 'streetview') return;
+
+    // If input is images create image control and return from object.map function.
+    if (entry.type === 'images') return;
+    
+    // Create log control.
+    if (entry.type === 'log') return;
+    
+    // Create geometry control.
+    if (entry.type === 'geometry') return;  
 
     // Create a new table row for the entry.
     entry.row = _xyz.utils.createElement({

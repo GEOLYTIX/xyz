@@ -129,7 +129,7 @@
   font-weight: 600;
   color: #090;
   box-shadow: 1px 1px 3px #666;
-  margin: 5px 2px 0 1px; }
+  margin: 5px 2px 5px 1px; }
   .btn_wide.disabled {
     opacity: 0.3; }
 
@@ -563,8 +563,7 @@ input[type=range]::-moz-range-thumb {
   .infojTable .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px;
-    padding-right: 10px; }
+    font-size: 12px; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
@@ -880,8 +879,6 @@ input[type=range]::-moz-range-thumb {
       filter: url(#dropshadow); }
   .map_container .leaflet-interactive.wait-cursor-enabled {
     cursor: wait !important; }
-  .map_container .leaflet-control-attribution {
-    display: none; }
   .map_container .leaflet-popup-content {
     width: 401px !important; }
   .map_container .leaflet-popup-content {
@@ -894,6 +891,9 @@ input[type=range]::-moz-range-thumb {
     padding: 5px 5px 3px 5px;
     border-radius: 3px;
     box-shadow: 1px 1px 3px #555; }
+
+.leaflet-control-attribution {
+  display: none; }
 
 /* required styles */
 .leaflet-pane,
@@ -1133,11 +1133,6 @@ input[type=range]::-moz-range-thumb {
   text-align: center;
   margin-bottom: 20px; }
 
-.leaflet-popup-content,
-.leaflet-popup-content-wrapper {
-  margin: 0;
-  padding: 0; }
-
 .leaflet-popup-tip-container {
   width: 40px;
   height: 20px;
@@ -1225,22 +1220,19 @@ input[type=range]::-moz-range-thumb {
   .leaflet-popup-content .content::-webkit-scrollbar {
     display: none; }
 
-.location_table {
+.location_list {
   min-height: 30px;
   max-height: 300px;
-  width: 450px; }
-  .location_table table {
-    width: 100%;
-    font-family: 'PT Mono', monospace; }
-    .location_table table td {
-      vertical-align: top !important;
-      text-align: left;
-      padding-right: 10px;
-      padding-left: 15px;
-      white-space: nowrap; }
-    .location_table table tr:hover {
-      background-color: #cf9;
-      cursor: pointer; }
+  width: 450px;
+  list-style-type: none;
+  text-align: left;
+  font-family: 'PT Mono', monospace; }
+  .location_list li {
+    padding-left: 15px; }
+  .location_list li:hover {
+    white-space: nowrap;
+    background-color: #cf9;
+    cursor: pointer; }
 
 .location_drop {
   display: none;
@@ -1304,14 +1296,15 @@ input[type=range]::-moz-range-thumb {
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-spacing: 0; }
 
 body {
   position: absolute;
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
   font-family: ffmark, sans-serif;
   color: #383836; }
 

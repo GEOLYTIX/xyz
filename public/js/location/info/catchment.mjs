@@ -18,9 +18,6 @@ export default (record, entry) => {
       className: 'btn_wide cursor noselect',
       textContent: entry.value ? 'Delete' : 'Create'
     },
-    style: {
-      margin: '3px 4px 3px -2px'
-    },
     appendTo: td,
     eventListener: {
       event: 'click',

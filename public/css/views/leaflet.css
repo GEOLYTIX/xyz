@@ -298,8 +298,7 @@
   .infojTable .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px;
-    padding-right: 10px; }
+    font-size: 12px; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
@@ -330,37 +329,96 @@
       .infojTable .table-section.expanded .t-expander::before {
         content: "expand_less"; }
 
-td {
-  font-family: ffmark, sans-serif; }
+.leaflet-popup-content {
+  overflow-x: hidden; }
+  .leaflet-popup-content .scrollbar_container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    width: 10px;
+    background-color: lightgrey; }
+    .leaflet-popup-content .scrollbar_container > .scrollbar {
+      position: absolute;
+      width: 10px;
+      background: rgba(0, 0, 0, 0.5); }
+    .leaflet-popup-content .scrollbar_container:hover {
+      cursor: ns-resize; }
+  .leaflet-popup-content .content::-webkit-scrollbar {
+    display: none; }
 
-a {
-  color: #383836;
-  text-decoration: none; }
+.location_list {
+  min-height: 30px;
+  max-height: 300px;
+  width: 450px;
+  list-style-type: none;
+  text-align: left;
+  font-family: 'PT Mono', monospace; }
+  .location_list li {
+    padding-left: 15px; }
+  .location_list li:hover {
+    white-space: nowrap;
+    background-color: #cf9;
+    cursor: pointer; }
 
-.attribution {
-  bottom: 5px;
-  right: 5px;
-  position: absolute;
-  z-index: 999; }
-  .attribution #attribution_links {
-    float: right;
-    clear: right;
-    font-family: ffmark_bold, sans-serif;
-    font-size: 18px;
-    text-shadow: 2px 2px #cf9; }
-    .attribution #attribution_links i {
-      font-size: 14px; }
-    .attribution #attribution_links a {
-      margin-left: 5px; }
-  .attribution .logo {
-    font-family: ffmark_black, sans-serif;
-    text-shadow: 2px 2px #cf9;
-    float: right;
-    font-size: 40px; }
+.location_drop {
+  display: none;
+  position: fixed;
+  max-height: 30%;
+  width: 100%;
+  z-index: 1;
+  background: white;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-bottom: 2px solid #079e00;
+  box-shadow: 0 0 10px slategrey; }
+  .location_drop .location_table {
+    padding-right: 10px; }
+  .location_drop td {
+    padding: 5px 0 5px 10px;
+    font-size: 20px;
+    color: #090; }
+  .location_drop td:first-child {
+    font-size: 14px; }
+  .location_drop .location_drop__close {
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: #090;
+    font-size: 50px; }
+
+.stage-tooltip {
+  width: 65px;
+  height: 30px;
+  padding: 2px;
+  border-radius: 4px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6)); }
+
+.scrolly {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  padding-right: 35px; }
+  .scrolly > .scrolly_track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 10px;
+    background-color: #aaa; }
+    .scrolly > .scrolly_track > .scrolly_bar {
+      position: absolute;
+      width: 10px;
+      background: #666; }
+    .scrolly > .scrolly_track:hover {
+      cursor: ns-resize; }
+  .scrolly .scrolly_spacer {
+    height: 30px; }
 
 .leaflet-control-attribution {
   display: none; }
 
+/* required styles */
 .leaflet-pane,
 .leaflet-tile,
 .leaflet-marker-icon,
@@ -589,7 +647,7 @@ a {
 
 /* visual tweaks */
 .leaflet-container {
-  background: #ddd;
+  background: #fbfbfb;
   outline: 0; }
 
 /* popup */
@@ -597,11 +655,6 @@ a {
   position: absolute;
   text-align: center;
   margin-bottom: 20px; }
-
-.leaflet-popup-content,
-.leaflet-popup-content-wrapper {
-  margin: 0;
-  padding: 20px; }
 
 .leaflet-popup-tip-container {
   width: 40px;
@@ -671,5 +724,45 @@ a {
 .leaflet-div-icon {
   background: #fff;
   border: 1px solid #666; }
+
+*,
+*::after,
+*::before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-spacing: 0; }
+
+body {
+  font-family: ffmark, sans-serif; }
+
+a {
+  color: #383836;
+  text-decoration: none; }
+
+.attribution {
+  bottom: 5px;
+  right: 5px;
+  position: absolute;
+  z-index: 999; }
+  .attribution #attribution_links {
+    float: right;
+    clear: right;
+    font-family: ffmark_bold, sans-serif;
+    font-size: 18px;
+    text-shadow: 2px 2px #cf9; }
+    .attribution #attribution_links i {
+      font-size: 14px; }
+    .attribution #attribution_links a {
+      margin-left: 5px; }
+  .attribution .logo {
+    font-family: ffmark_black, sans-serif;
+    text-shadow: 2px 2px #cf9;
+    float: right;
+    font-size: 40px; }
 
 /*# sourceMappingURL=leaflet.css.map */

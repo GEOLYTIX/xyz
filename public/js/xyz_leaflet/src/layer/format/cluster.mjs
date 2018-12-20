@@ -1,7 +1,5 @@
 import _xyz from '../../../../_xyz.mjs';
 
-import cluster_select from './cluster_select.mjs';
-
 export default function(){
 
   const layer = this;
@@ -175,7 +173,46 @@ export default function(){
             
       }
     })
-      .on('click', e => cluster_select(e, layer))
+      .on('click', e => {
+        let
+          count = e.layer.feature.properties.count,
+          lnglat = e.layer.feature.geometry.coordinates;
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
+          locale: _xyz.locale,
+          layer: layer.key,
+          table: layer.table,
+          filter: JSON.stringify(layer.filter.current),
+          count: count > 99 ? 99 : count,
+          lnglat: lnglat,
+          token: _xyz.token
+        }));
+    
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
+      
+        xhr.onload = e => {
+      
+          if (e.target.status !== 200) return;
+        
+          let cluster = e.target.response;
+    
+          if (cluster.length > 1) return _xyz.locations.select_list(cluster, lnglat, layer);
+      
+          if (cluster.length === 1) return _xyz.locations.select({
+            locale: layer.locale,
+            layer: layer.key,
+            table: layer.table,
+            id: cluster[0].id,
+            marker: cluster[0].lnglat
+          });
+      
+        };
+      
+        xhr.send();
+      })
       .addTo(_xyz.map);
 
     function marker(latlng, layer, point, param){

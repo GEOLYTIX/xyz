@@ -1,47 +1,63 @@
-@if $desktop {
-    .leaflet-popup-content {
-        overflow-x: hidden;
-        .scrollbar_container {
+.leaflet-popup-content {
+    overflow-x: hidden;
+    .scrollbar_container {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        width: 10px;
+        background-color: lightgrey;
+        >.scrollbar {
             position: absolute;
-            left: 0;
-            bottom: 0;
-            top: 0;
             width: 10px;
-            background-color: lightgrey;
-            >.scrollbar {
-                position: absolute;
-                width: 10px;
-                background: rgba(0, 0, 0, 0.5);
-            }
-            &:hover {
-                cursor: ns-resize;
-            }
+            background: rgba(0, 0, 0, 0.5);
         }
-        .content::-webkit-scrollbar {
-            display: none;
+        &:hover {
+            cursor: ns-resize;
         }
     }
-    .location_table {
-        min-height: 30px;
-        max-height: 300px;
-        width: 450px;
-        table {
-            width: 100%;
-            font-family: 'PT Mono', monospace;
-            td {
-                vertical-align: top !important;
-                text-align: left;
-                padding-right: 10px;
-                padding-left: 15px;
-                white-space: nowrap;
-            }
-            tr:hover {
-                background-color: $glxlightgreen;
-                cursor: pointer;
-            }
-        }
+    .content::-webkit-scrollbar {
+        display: none;
     }
 }
+
+.location_list {
+    min-height: 30px;
+    max-height: 300px;
+    width: 450px;
+    list-style-type: none;
+    text-align: left;
+    font-family: 'PT Mono', monospace;
+    li {
+        padding-left: 15px;
+    }
+    li:hover {
+        white-space: nowrap;
+        background-color: $glxlightgreen;
+        cursor: pointer;
+    }
+}
+
+// .location_table {
+//     min-height: 30px;
+//     max-height: 300px;
+//     width: 450px;
+//     table {
+//         width: 100%;
+//         font-family: 'PT Mono', monospace;
+//         td {
+//             vertical-align: top !important;
+//             text-align: left;
+//             padding-right: 10px;
+//             padding-left: 15px;
+//             white-space: nowrap;
+//         }
+//         tr:hover {
+//             background-color: $glxlightgreen;
+//             cursor: pointer;
+//         }
+//     }
+// }
 
 .location_drop {
     display: none;
@@ -79,5 +95,5 @@
     height: 30px;
     padding: 2px;
     border-radius: 4px;
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0) , rgba(255, 255, 255, 0.6));
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6));
 }
