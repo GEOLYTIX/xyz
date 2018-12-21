@@ -83,7 +83,7 @@ export default function(){
           table: layer.table,
           id: e.layer.feature.properties.id,
           marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
-          editable: layer.edit ? layer.edit.properties : false
+          edit: layer.edit
         });
       })
       .on('mouseover', function(e){

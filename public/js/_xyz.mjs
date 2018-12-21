@@ -87,7 +87,8 @@ export default {
   style: {
     defaults: {
       // drawn feature vertex
-      vertex: { 
+      vertex: {
+        pane: 'drawing',
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',
@@ -95,7 +96,8 @@ export default {
         radius: 5
       },
       // trail left behind cursor
-      trail: { 
+      trail: {
+        pane: 'drawing',
         stroke: true,
         color: '#666',
         dashArray: '5 5',
@@ -103,6 +105,7 @@ export default {
       },
       // actual drawn feature
       path: { 
+        pane: 'drawing',
         stroke: true,
         color: '#666',
         fill: true,
@@ -111,12 +114,14 @@ export default {
       },
       // actual drawn feature
       path_line: { 
+        pane: 'drawing',
         stroke: true,
         color: '#666',
         weight: 2
       },
       // new staged point
-      point: { 
+      point: {
+        pane: 'drawing',
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',

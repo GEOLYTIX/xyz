@@ -50,11 +50,14 @@ _xyz.locations.init = () => {
   // layer!table!id!lng!lat
   if (_xyz.hooks.current.select) _xyz.hooks.current.select.split(',').forEach(hook => {
     let params = hook.split('!');
+    let layer = _xyz.layers.list[params[0]];
     _xyz.locations.select({
-      layer: params[0],
+      locale: _xyz.locale,
+      layer: layer.key,
       table: params[1],
       id: params[2],
-      marker: [params[3].split(';')[0], params[3].split(';')[1]]
+      marker: [params[3].split(';')[0], params[3].split(';')[1]],
+      edit: layer.edit
     });
   });
   

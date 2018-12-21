@@ -82,6 +82,7 @@ _xyz.layers.add = layer => {
 
   if (layer.format === 'grid') layer.get = format_grid;
 
+  layer.loaded = false;
   layer.get();
 
 };

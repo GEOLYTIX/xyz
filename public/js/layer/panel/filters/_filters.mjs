@@ -107,6 +107,7 @@ export default layer => {
         layer.filter.current = {};
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
       }
     }

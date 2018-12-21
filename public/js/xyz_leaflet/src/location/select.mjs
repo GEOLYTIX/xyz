@@ -77,7 +77,8 @@ _xyz.locations.select_list = (list, lnglat, layer) => {
             layer: layer.key,
             table: layer.table,
             id: e.target['data-id'],
-            marker: e.target['data-marker']
+            marker: e.target['data-marker'],
+            edit: layer.edit
           });
 
         }

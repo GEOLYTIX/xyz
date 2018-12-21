@@ -206,7 +206,8 @@ export default function(){
             layer: layer.key,
             table: layer.table,
             id: cluster[0].id,
-            marker: cluster[0].lnglat
+            marker: cluster[0].lnglat,
+            edit: layer.edit
           });
       
         };

@@ -66,6 +66,7 @@ export default layer => {
     
         if (e.target.status !== 200) return;
                   
+        layer.loaded = false;
         layer.get();
                   
         // Select polygon when post request returned 200.
@@ -73,7 +74,8 @@ export default layer => {
           layer: layer.key,
           table: layer.table,
           id: e.target.response,
-          marker: marker
+          marker: marker,
+          edit: layer.edit
         });
     
       };

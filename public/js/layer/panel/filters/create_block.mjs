@@ -40,6 +40,7 @@ export default (layer, filter_entry) => {
         });
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
       }
     }

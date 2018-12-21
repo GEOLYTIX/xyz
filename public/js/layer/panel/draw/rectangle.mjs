@@ -54,6 +54,7 @@ export default layer => {
                 
     xhr.onload = e => {
 
+      layer.loaded = false;
       layer.get();
                 
       if (e.target.status !== 200) return;
@@ -62,7 +63,8 @@ export default layer => {
         layer: layer.key,
         table: layer.table,
         id: e.target.response,
-        marker: marker
+        marker: marker,
+        edit: layer.edit
       });
 
     };

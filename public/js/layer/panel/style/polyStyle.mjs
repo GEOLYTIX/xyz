@@ -130,6 +130,7 @@ export default (layer, style, title) => {
 
           block.colour_swatch.style.display = 'none';
 
+          layer.loaded = false;
           layer.get();
           
         }
@@ -167,6 +168,7 @@ export default (layer, style, title) => {
         timeout = null;
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
 
       }, 500);
@@ -202,6 +204,7 @@ export default (layer, style, title) => {
         timeout = null;
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
 
       }, 500);

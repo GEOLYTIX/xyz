@@ -45,27 +45,10 @@ export default layer => {
     checked: layer.grid_ratio,
     appendTo: panel,
     onChange: e => {
-
-      // Set the layer grid ratio to the state of the checkbox.
       layer.grid_ratio = e.target.checked;
-
       layer.get();
     }
   });
-
-  // // Create grid_stdev checkbox.
-  // _xyz.utils.checkbox({
-  //   label: 'Use standard deviation for the distribution of values.',
-  //   checked: layer.grid_stdev
-  //   appendTo: panel,
-  //   onChange: e => {
-
-  //     // Set the layer grid ratio to the state of the checkbox.
-  //     layer.grid_stdev = e.target.checked;
-
-  //     layer.get();
-  //   }
-  // });  
 
   // Create SVG grid legend
   let

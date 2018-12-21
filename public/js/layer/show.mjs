@@ -16,6 +16,7 @@ export default function () {
   if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
 
   // Add the layer to map.
+  layer.loaded = false;
   layer.get();
 
 }

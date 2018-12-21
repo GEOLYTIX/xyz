@@ -21,7 +21,9 @@ export default (layer, filter_entry) => {
         layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
+        
         if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
 
 

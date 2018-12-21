@@ -36,13 +36,15 @@ export default (layer, marker) => {
 
           if (e.target.status !== 200) return;
 
+          layer.loaded = false;
           layer.get();
 
           _xyz.locations.select({
             layer: layer.key,
             table: layer.table,
             id: e.target.response,
-            marker: marker
+            marker: marker,
+            edit: layer.edit
           });
         };
 

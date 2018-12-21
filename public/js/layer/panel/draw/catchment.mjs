@@ -34,6 +34,7 @@ export default layer => {
 
       _xyz.map_dom.style.cursor = '';
 
+      layer.loaded = false;
       layer.get();
 
       if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
@@ -42,7 +43,8 @@ export default layer => {
         layer: layer.key,
         table: layer.table,
         id: e.target.response,
-        marker: marker
+        marker: marker,
+        edit: layer.edit
       });
 
     };

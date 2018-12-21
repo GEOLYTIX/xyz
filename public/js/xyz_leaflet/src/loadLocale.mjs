@@ -26,15 +26,7 @@ _xyz.loadLocale = locale => {
   _xyz.panes.next = 500;
   _xyz.panes.list = [];
 
-  Object.values(_xyz.layers.list).forEach(layer => {
-
-    //if (layer.style && layer.style.themes) layer.style.theme = Object.values(layer.style.themes)[0];
-    
-    _xyz.layers.add(layer);
-  });
-
-  _xyz.panes.list.push(_xyz.map.createPane('tmp'));
-  _xyz.map.getPane('tmp').style.zIndex = _xyz.panes.next++;
+  Object.values(_xyz.layers.list).forEach(layer => _xyz.layers.add(layer));
 
   _xyz.panes.list.push(_xyz.map.createPane('gazetteer'));
   _xyz.map.getPane('gazetteer').style.zIndex = _xyz.panes.next++;
@@ -51,7 +43,7 @@ _xyz.loadLocale = locale => {
   _xyz.panes.list.push(_xyz.map.createPane('select_circle'));
   _xyz.map.getPane('select_circle').style.zIndex = _xyz.panes.next++;
 
-  _xyz.panes.list.push(_xyz.map.createPane('rectangle'));
-  _xyz.map.getPane('rectangle').style.zIndex = _xyz.panes.next++;
+  _xyz.panes.list.push(_xyz.map.createPane('drawing'));
+  _xyz.map.getPane('drawing').style.zIndex = _xyz.panes.next++;
 
 };

@@ -100,6 +100,7 @@ export default (layer, style, title) => {
 
           block.colour_swatch.style.display = 'none';
 
+          layer.loaded = false;
           layer.get();
           
         }

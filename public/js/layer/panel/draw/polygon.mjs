@@ -48,7 +48,7 @@ export default layer => {
     });
 
     layer.edit.path.addLayer(
-      _xyz.L.polygon(coords, _xyz.style.defaults.path)
+      _xyz.L.polygon(coords, _xyz.style.defaults.trail)
     );
 
     // Use right click context menu to upload polygon.
@@ -65,15 +65,18 @@ export default layer => {
       xhr.onload = e => {
 
         if (e.target.status !== 200) return;
-              
+
+        layer.loaded = false;
         layer.get();
               
         // Select polygon when post request returned 200.
         _xyz.locations.select({
+          locale: _xyz.locale,
           layer: layer.key,
           table: layer.table,
           id: e.target.response,
-          marker: marker
+          marker: marker,
+          edit: layer.edit
         });
 
       };
