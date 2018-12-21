@@ -7,8 +7,8 @@ export default function () {
   if (!layer.display) return;
 
   // Return from layer get once added to map.
-  if (layer.onMap) return;
-  layer.onMap = true;
+  if (layer.loaded) return;
+  layer.loaded = true;
 
   if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
@@ -22,6 +22,12 @@ export default function () {
   layer.L = L.tileLayer(uri, {
     updateWhenIdle: true,
     pane: layer.key
-  }).addTo(_xyz.map);
+  })
+    .on('load', () => {
+      
+      if (layer.loader)  layer.loader.style.display = 'none';
+
+    })
+    .addTo(_xyz.map);
 
 }

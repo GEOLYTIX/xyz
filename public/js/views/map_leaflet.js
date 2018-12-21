@@ -10,7 +10,22 @@ _xyz.init({
   locale: 'GB',
   view_lat: 52,
   view_lng: 0,
-  view_zoom: 7
+  view_zoom: 12,
+  next: init
 });
 
-// _xyz.locate.toggle();
+function init() {
+
+  // let layer = _xyz.layers.list['grid'];
+  // layer.display = true;
+  // layer.get();
+
+  // let layer = _xyz.layers.list['oa'];
+  // layer.style.theme = layer.style.themes['Population \'11'];
+  // layer.loaded = false;
+  // layer.get();
+
+  // _xyz.locate.toggle();
+
+}
+

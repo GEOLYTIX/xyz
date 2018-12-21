@@ -24,6 +24,7 @@
                     "mvt_cache": true,
                     "mvt_fields": [
                         "pop_est",
+                        "pop_est_edit",
                         "gdp_md_est",
                         "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000 as gdp_pp",
                         "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
@@ -82,7 +83,7 @@
                         "themes": {
                             "Population": {
                                 "type": "graduated",
-                                "field": "pop_est",
+                                "field": "pop_est_edit",
                                 "cat": {
                                     "0": {
                                         "label": "0 to 10000",
@@ -898,7 +899,6 @@
                     "format": "grid",
                     "dbs": "XYZ",
                     "geom": "geomcntr",
-                    "grid_color": "pop__11",
                     "tables": {
                         "7": null,
                         "8": "gb_hx_16k",

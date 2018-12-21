@@ -67,6 +67,8 @@ export default layer => {
       // Set layer theme from themes object.
       layer.style.theme = themes[e.target.value];
 
+      layer.loaded = false;
+
       applyTheme(layer);
       
     }
@@ -79,7 +81,7 @@ export default layer => {
   });
 
   // Apply the current theme.
-  //applyTheme(layer);
+  if(layer.style.theme) applyTheme(layer);
 
 };
 

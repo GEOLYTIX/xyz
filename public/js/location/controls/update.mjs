@@ -34,6 +34,7 @@ export default record => {
           record.upload.style.display = 'none';
 
           // Reload layer.
+          _xyz.layers.list[record.location.layer].loaded = false;
           _xyz.layers.list[record.location.layer].get();
 
           // Reset location infoj with response.

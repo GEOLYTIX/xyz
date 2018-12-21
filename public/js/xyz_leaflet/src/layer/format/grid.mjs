@@ -7,9 +7,13 @@ export default function(){
   // Remove layer from map if currently drawn.
   if (layer.L) _xyz.map.removeLayer(layer.L);
 
-  // Create grid_seize dropdown.
-  layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
+  // Set layer grid_size
+  layer.grid_size = layer.grid_size || Object.values(layer.grid_fields)[0];
   
+  layer.grid_color = layer.grid_color || Object.values(layer.grid_fields)[0];
+
+  layer.grid_ratio = layer.grid_ratio || false;
+
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
 

@@ -28,7 +28,7 @@ _xyz.loadLocale = locale => {
 
   Object.values(_xyz.layers.list).forEach(layer => {
 
-    if (layer.style && layer.style.themes) layer.style.theme = Object.values(layer.style.themes)[0];
+    //if (layer.style && layer.style.themes) layer.style.theme = Object.values(layer.style.themes)[0];
     
     _xyz.layers.add(layer);
   });
