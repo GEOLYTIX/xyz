@@ -6,7 +6,7 @@ module.exports = fastify => {
 
   // token
   
-  require('./token/api')(fastify);
+  require('./token/api').route(fastify);
 
   // user
 

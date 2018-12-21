@@ -65,10 +65,13 @@ async function post(req, res, fastify) {
     // Return leaflet map control view.
     if(/\/map\/leaflet/.test(req.headers.referer)) return require(global.appRoot + '/routes/map_leaflet').view(req, res, token);
 
+    // Return API key.
+    if(/\/auth\/token\/api/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/token/api').view(req, res, token, fastify);
+
     // Return user admin view.
     if(/\/auth\/user\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/admin').view(req, res, token);
 
-    // Return user admin view.
+    // Approve user.
     if(/\/auth\/user\/approve/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/approve').view(req, res);
 
     // Return workspace admin json view.

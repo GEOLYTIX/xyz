@@ -2,6 +2,7 @@
 //   window.history.replaceState( null, null, window.location.href );
 // }
 
+
 _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
