@@ -9,3 +9,4 @@ public/js/build/
 stats.json
 now
 env
+workspaces/
