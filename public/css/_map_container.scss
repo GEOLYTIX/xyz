@@ -14,18 +14,6 @@
         cursor: wait !important;
     }
     .leaflet-popup-content {
-        width: 401px !important;
-    }
-    .leaflet-popup-content {
-        width: 401px !important;
-    }
-    .tooltip {
-        font-family: 'PT Mono', monospace;
-        font-weight: 600;
-        font-size: 15px;
-        background-color: #fff;
-        padding: 5px 5px 3px 5px;
-        border-radius: 3px;
-        box-shadow: 1px 1px 3px #555;
+        max-width: 401px !important;
     }
 }

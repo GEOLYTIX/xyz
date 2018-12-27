@@ -21,10 +21,10 @@ export default layer => {
     layer.edit.vertices.addLayer(
       _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
     );
-    // .bindTooltip(stage(layer, marker), {
-    //   permanent: true, direction: 'right'
+    // .bindPopup(stage(layer, marker), {
+    //   closeButton: false
     // })
-    // .openTooltip();
+    // .openPopup();
         
 
     // Use right click context menu to upload polygon.
