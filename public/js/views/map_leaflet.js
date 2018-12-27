@@ -5,7 +5,7 @@
 
 _xyz.init({
   host: document.head.dataset.dir,
-  token: document.body.dataset.token,
+  //token: API token,
   map_id: 'xyz_map',
   locale: 'GB',
   view_lat: 52,
@@ -25,7 +25,7 @@ function init() {
   // layer.loaded = false;
   // layer.get();
 
-  // _xyz.locate.toggle();
+  //_xyz.locate.toggle();
 
 }
 

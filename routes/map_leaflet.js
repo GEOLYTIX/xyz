@@ -14,10 +14,12 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/map/leaflet',
-    beforeHandler: fastify.auth([fastify.authAccess]),
+
+    // No beforeHandler for map control pages.
     handler: view
   });
 
+  // Required for 3rd party developers to build their own security model with XYZ ACL.
   fastify.route({
     method: 'POST',
     url: '/map/leaflet',
