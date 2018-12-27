@@ -1,4 +1,4 @@
-import _xyz from '../_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default (layer, callback) => {
     
@@ -29,7 +29,6 @@ export default (layer, callback) => {
   xhr.onload = e => {
     if (e.target.status !== 200) return;
     let data = JSON.parse(e.target.response);
-    console.log(data.length);
     callback(layer, data, columns);
   };
 

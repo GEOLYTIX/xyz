@@ -1,9 +1,9 @@
-import RequestData from './requestData.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default layer => {
     
   layer.tableview.offset = parseInt(layer.tableview.offset) + 1;
-  RequestData(layer, addData);
+  _xyz.tableview.requestData(layer, addData);
 };
 
 function addData(layer, data){

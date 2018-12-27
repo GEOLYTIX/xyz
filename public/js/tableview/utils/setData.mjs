@@ -1,13 +1,9 @@
-import _xyz from '../_xyz.mjs';
+import _xyz from '../../_xyz.mjs';
 import Tabulator from 'tabulator-tables';
-import Refresh from './refresh.mjs';
-import RequestData from './requestData.mjs';
-import AddData from './addData.mjs';
-import Download from './download.mjs';
 
 export default layer => {
 
-  RequestData(layer, setData);
+  _xyz.tableview.requestData(layer, setData);
 };
 
 
@@ -21,7 +17,7 @@ function setData(layer, data, columns){
         
   if(data.length){
 
-    if(!layer.tableview.download) Download(layer);
+    if(!layer.tableview.download) _xyz.tableview.download(layer);
 
     layer.tableview.table = new Tabulator(layer.tableview.container, {
       height: tableHeight,
@@ -54,7 +50,7 @@ function setData(layer, data, columns){
         eventListener: {
           event: 'click',
           funct: () => {
-            AddData(layer);
+            _xyz.tableview.addData(layer);
           }
         },
         appendTo: layer.tableview.section
@@ -68,7 +64,7 @@ function setData(layer, data, columns){
         
     layer.tableview.section.innerHTML = '';
         
-    Refresh(layer);
+    _xyz.tableview.refresh(layer);
 
     layer.tableview.note.textContent = 'No results.';
 

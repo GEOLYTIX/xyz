@@ -1,5 +1,4 @@
-import _xyz from '../_xyz.mjs';
-import SetData from './setData.mjs';
+import _xyz from '../../_xyz.mjs';
 
 export default layer => {
     
@@ -14,7 +13,7 @@ export default layer => {
       funct: (e) => {
         layer.tableview.offset = 0; // set offset back to zero
         e.stopPropagation();
-        SetData(layer);
+        _xyz.tableview.setData(layer);
       }
     },
     appendTo: layer.tableview.section
@@ -51,7 +50,7 @@ export default layer => {
     checked: layer.tableview.viewport || false,
     onChange: e => {
       layer.tableview.viewport = e.target.checked;
-      SetData(layer);
+      _xyz.tableview.setData(layer);
     }
   });
 

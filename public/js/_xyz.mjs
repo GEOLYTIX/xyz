@@ -148,6 +148,7 @@ export default {
       ]
     }
   },
+  tableview: {},
   token: null,
   utils: utils,
   view: { 
