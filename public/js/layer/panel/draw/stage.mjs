@@ -2,24 +2,26 @@ import _xyz from '../../../_xyz.mjs';
 
 export default (layer, marker) => {
   
-  let tooltip = _xyz.utils.createElement({
+  const tooltip = _xyz.utils.createElement({
     tag: 'div',
     options: {
       classList: 'stage-tooltip'
     }
   });
 
+  const tr = _xyz.utils.createElement({
+    tag: 'tr',
+    appendTo: tooltip
+  });
+
   _xyz.utils.createElement({
     tag: 'i',
     options: {
       textContent: 'cloud_upload',
-      className: 'material-icons cursor noselect btn_header',
+      className: 'material-icons cursor noselect btn-tooltip',
       title: 'Save to cloud'
     },
-    style: {
-      display: 'inline-block'
-    },
-    appendTo: tooltip,
+    appendTo: tr,
     eventListener: {
       event: 'click',
       funct: e => {
@@ -27,25 +29,26 @@ export default (layer, marker) => {
         e.stopPropagation();
 
         const xhr = new XMLHttpRequest();
-
         xhr.open('POST', _xyz.host + '/api/location/edit/draw?token=' + _xyz.token);
-        
         xhr.setRequestHeader('Content-Type', 'application/json');
-
+          
         xhr.onload = e => {
-
+      
           if (e.target.status !== 200) return;
-
+                    
           layer.get();
-
+                    
+          // Select polygon when post request returned 200.
           _xyz.locations.select({
             layer: layer.key,
             table: layer.table,
             id: e.target.response,
             marker: marker
           });
+      
         };
-
+            
+        // Send path geometry to endpoint.
         xhr.send(JSON.stringify({
           locale: _xyz.locale,
           layer: layer.key,
@@ -55,7 +58,8 @@ export default (layer, marker) => {
             coordinates: marker
           }
         }));
-
+      
+        _xyz.map.closePopup();
         _xyz.state.finish();
 
       }
@@ -66,17 +70,16 @@ export default (layer, marker) => {
     tag: 'i',
     options: {
       textContent: 'clear',
-      className: 'material-icons cursor noselect btn_header',
+      className: 'material-icons cursor noselect btn-tooltip',
       title: 'Remove feature'
     },
-    style: {
-      display: 'inline-block'
-    },
-    appendTo: tooltip,
+    appendTo: tr,
     eventListener: {
       event: 'click',
       funct: e => {
         e.stopPropagation();
+        layer.edit.vertices.clearLayers();
+        _xyz.map.closePopup();
         _xyz.state.finish();
       }
     }
