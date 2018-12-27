@@ -51,8 +51,60 @@ export default () => {
     checkOverlap (mod);
 
     // Run locations init when all records are free.
-    let freeRecords = _xyz.locations.list.filter(record => record.location.geometries.length === 0);
+    const freeRecords = _xyz.locations.list.filter(record => !record.location);
     if (freeRecords.length === _xyz.locations.list.length) tabLocations.classList.add('hidden');
 
   }
+
+  _xyz.locations.select_list = (list, lnglat, layer) => {
+  
+    let dom = {
+      map: document.getElementById('Map'),
+      location_drop: document.querySelector('.location_drop'),
+      location_drop__close: document.querySelector('.location_drop__close'),
+      location_table: document.querySelector('.location_table'),
+      map_button: document.querySelector('.btn_column')
+    };
+
+    dom.location_table.innerHTML = '';
+    dom.map_button.style['display'] = 'none';
+    dom.location_drop.style['display'] = 'block';
+
+    for (let i = 0; i < list.length; i++) {
+
+      _xyz.utils.createElement({
+        tag: 'li',
+        options: {
+          textContent: list[i].label,
+          'data-id': list[i].id,
+          'data-marker': list[i].lnglat
+        },
+        appendTo: dom.location_table,
+        eventListener: {
+          event: 'click',
+          funct: e => {
+  
+            _xyz.locations.select({
+              locale: layer.locale,
+              layer: layer.key,
+              table: layer.table,
+              id: e.target['data-id'],
+              marker: e.target['data-marker'],
+              edit: layer.edit
+            });
+  
+          }
+        }
+      });
+  
+    }
+
+    // Button event to close the .location_drop.
+    dom.location_drop__close.addEventListener('click', () => {
+      dom.location_drop.style['display'] = 'none';
+      dom.map_button.style['display'] = 'block';
+    });
+
+  };
+
 };

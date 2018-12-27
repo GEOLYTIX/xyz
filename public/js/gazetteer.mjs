@@ -149,6 +149,9 @@ function search(term) {
     token: _xyz.token
   }));
 
+  _xyz.gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
+  _xyz.gazetteer.xhr.responseType = 'json';
+
   _xyz.gazetteer.xhr.onload = e => {
 
     // Hide loader.
@@ -158,7 +161,8 @@ function search(term) {
     if (e.target.status !== 200) return;
       
     // Parse the response as JSON and check for results length.
-    let json = JSON.parse(e.target.responseText);
+    let json = e.target.response;
+
     if (json.length === 0) {
       _xyz.utils.createElement({
         tag: 'li',

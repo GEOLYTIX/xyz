@@ -1212,16 +1212,29 @@ input[type=range]::-moz-range-thumb {
 .location_drop {
   display: none;
   position: fixed;
+  height: 100%;
   max-height: 30%;
   width: 100%;
-  z-index: 1;
-  background: white;
-  overflow-x: hidden;
-  overflow-y: auto;
+  z-index: 999;
   border-bottom: 2px solid #079e00;
   box-shadow: 0 0 10px slategrey; }
-  .location_drop .location_table {
-    padding-right: 10px; }
+  .location_drop > ul {
+    -webkit-padding-start: 0;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    list-style-type: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    padding-left: 70px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%; }
+    .location_drop > ul li {
+      font-size: 20px;
+      color: #079e00;
+      list-style: none;
+      line-height: 1.5em; }
   .location_drop td {
     padding: 5px 0 5px 10px;
     font-size: 20px;
@@ -1233,7 +1246,8 @@ input[type=range]::-moz-range-thumb {
     top: 0;
     right: 0;
     color: #079e00;
-    font-size: 50px; }
+    font-size: 50px;
+    z-index: 1000; }
 
 .stage-tooltip {
   width: 65px;
