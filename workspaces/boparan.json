@@ -1,0 +1,659 @@
+{
+    "title": "GEOLYTIX | Boparan",
+    "documentation": "documentation",
+    "locate": {},
+    "locales": {
+        "LDN": {
+            "name": "London",
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "bounds": "'&location=51.75,-1.25&radius=40'",
+                "placeholder": "e.g. Piccadilly Circus"
+            },
+            "bounds": [[51, -1], [52, 1]],
+            "groups": {
+                "basemaps": {
+                    "label": "Base maps"
+                }
+            },
+            "layers": {
+                "base": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": ["mapbox", "osm"],
+                    "pane": ["base", 500],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "label": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": ["mapbox", "osm"],
+                    "pane": ["base_labels", 550],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "here": {
+                    "group": "basemaps",
+                    "name": "HERE Imagery",
+                    "attribution": ["here"],
+                    "pane": ["base", 500],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "here_hybrid": {
+                    "group": "basemaps",
+                    "name": "HERE Hybrid",
+                    "attribution": ["here"],
+                    "pane": ["base", 500],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "grid": {
+                    "name": "Demographics",
+                    "format": "grid",
+                    "pane": ["grid", 515],
+                    "dbs": "XYZ",
+                    "geom": "geomcntr",
+                    "grid_color": "pop__11",
+                    "arrayZoom": {
+                        "6": "gb_hx_64k",
+                        "7": "gb_hx_32k",
+                        "8": "gb_hx_16k",
+                        "9": "gb_hx_8k",
+                        "10": "gb_hx_4k",
+                        "11": "gb_hx_2k",
+                        "12": "gb_hx_1k"
+                    },
+                    "queryFields": [
+                        ["pop__01", "Population 2001"],
+                        ["pop__11", "Population 2011"],
+                        ["gen_female__11", "Female population"],
+                        ["gen_male__11", "Male population"],
+                        ["age_05to07__11", "Age 5 to 7"],
+                        ["age_08to09__11", "Age 8 to 9"],
+                        ["age_10to14__11", "Age 10 to 14"],
+                        ["age_15__11", "Age 15"],
+                        ["age_16pl__11", "Age 16 and above"],
+                        ["age_16to17__11", "Age 16 to 17"],
+                        ["age_16to74__11", "Age 16 to 74"],
+                        ["age_18to19__11", "Age 18 to 19"],
+                        ["age_20to24__11", "Age 20 to 24"],
+                        ["age_25to29__11", "Age 25 to 29"],
+                        ["age_30to44__11", "Age 30 to 44"],
+                        ["age_45to59__11", "Age 45 to 59"],
+                        ["age_60to64__11", "Age 60 to 64"],
+                        ["age_65to74__11", "Age 65 to 74"],
+                        ["age_75to84__11", "Age 75 to 84"],
+                        ["age_85to89__11", "Age 85 to 89"],
+                        ["age_90pl__11", "Age 90 and above"],
+                        [
+                            "edu_na__11",
+                            "Highest level of education not stated or not applicable"
+                        ],
+                        ["edu_primary_i1__11", "Primary education (IESCD 1)"],
+                        ["edu_secondary_i2__11", "Secondary education (IESCD 2)"],
+                        [
+                            "edu_secondary_i2_l__11",
+                            "Secondary education lower level (IESCD 2)"
+                        ],
+                        [
+                            "edu_secondary_i3__11",
+                            "Secondary education upper level (IESCD 3)"
+                        ],
+                        [
+                            "edu_secondary_i3v__11",
+                            "Secondary education vocational apprenticeship (IESCD 3)"
+                        ],
+                        [
+                            "edu_tertiary_i6__11",
+                            "Tertiary education with a Bachelor degree or equivalent (IESCD 6)"
+                        ],
+                        [
+                            "ski_ab__11",
+                            "AB Higher and intermediate managerial/administrative or professional"
+                        ],
+                        [
+                            "ski_c1__11",
+                            "C1 Supervisory or clerical or junior managerial or administrative or professional"
+                        ],
+                        ["ski_c2__11", "C2 Skilled manual workers"],
+                        [
+                            "ski_de__11",
+                            "DE Semi skilled and unskilled manual workers  or on state benefit unemployed"
+                        ],
+                        [
+                            "ski_hrp_base__11",
+                            "Household Spaces with an Household Reference Person aged 16 to 64"
+                        ],
+                        [
+                            "ski_nssec_1_1__11",
+                            "Skill NSSEC 1_1 Large employers and higher managerial and administrative occupations"
+                        ],
+                        [
+                            "ski_nssec_1_2__11",
+                            "Skill NSSEC 1_2 Higher professional occupations"
+                        ],
+                        [
+                            "ski_nssec_2__11",
+                            "Skill NSSEC 2 Lower managerial administrative and professional occupations"
+                        ],
+                        ["ski_nssec_3__11", "Skill NSSEC 3 Intermediate occupations"],
+                        [
+                            "ski_nssec_4__11",
+                            "Skill NSSEC 4 Small employers and own account workers"
+                        ],
+                        [
+                            "ski_nssec_5__11",
+                            "Skill NSSEC 5 Lower supervisory and technical occupations"
+                        ],
+                        ["ski_nssec_6__11", "Skill NSSEC 6 Semi-routine occupations"],
+                        ["ski_nssec_7__11", "Skill NSSEC 7 Routine occupations"],
+                        ["ski_nssec_l14_1__11", "Skill NSSEC L14_1 Never worked"],
+                        ["ski_nssec_l14_2__11", "Skill NSSEC L14_2 Long-term unemployed"],
+                        ["ski_nssec_na__11", "Skill NSSEC Not classified"],
+                        ["eac_employed__11", "Economically active: Employed"],
+                        ["eac_employed_b__11", "Economically active: Employed base"],
+                        ["eac_employed_self__11", "Economically active: Self employed"],
+                        ["eac_full_time__11", "Economically active: Working full time"],
+                        [
+                            "eac_in_accom_food__11",
+                            "Economically active: Accommodation and food service (SOC I)"
+                        ],
+                        [
+                            "eac_in_admin_serv__11",
+                            "Economically active: Administrative and support service activities (SOC N)"
+                        ],
+                        [
+                            "eac_in_aggriculture__11",
+                            "Economically active: Agriculture forestry or fishing industries (SOC A)"
+                        ],
+                        [
+                            "eac_in_construction__11",
+                            "Economically active: Construction industry (SOC F)"
+                        ],
+                        ["eac_in_education__11", "Economically active: Eduction (SOC P)"],
+                        [
+                            "eac_in_extractive__11",
+                            "Economically active: Extractive industries including mining and quarrying (SOC B)"
+                        ],
+                        [
+                            "eac_in_finance__11",
+                            "Economically active: Financial and insurance industries (SOC K)"
+                        ],
+                        [
+                            "eac_in_health__11",
+                            "Economically active: Human health and social work activities (SOC Q)"
+                        ],
+                        [
+                            "eac_in_ict__11",
+                            "Economically active: Information and communication technologies industry (SOC J)"
+                        ],
+                        [
+                            "eac_in_manufacturing_2__11",
+                            "Economically active: Manufacturing (SOC C)"
+                        ],
+                        [
+                            "eac_in_other__11",
+                            "Economically active: Other services and industries (SOC R|S|T|U)"
+                        ],
+                        [
+                            "eac_in_power__11",
+                            "Economically active: Electricity gas steam and air conditioning supply (SOC D)"
+                        ],
+                        [
+                            "eac_in_prof_tech__11",
+                            "Economically active: Professional scientific and technical activitiess (SOC M)"
+                        ],
+                        [
+                            "eac_in_property__11",
+                            "Economically active: Property and real estate industries (SOC L)"
+                        ],
+                        [
+                            "eac_in_public_admin__11",
+                            "Economically active: Public administration and defence compulsory social security (SOC O)"
+                        ],
+                        [
+                            "eac_in_retail__11",
+                            "Economically active: Wholesale and retail trade repair of motor vehicles (SOC G)"
+                        ],
+                        [
+                            "eac_in_transport__11",
+                            "Economically active: Transport and Storage (SOC H)"
+                        ],
+                        [
+                            "eac_in_waste__11",
+                            "Economically active: Water supply sewerage waste management and remediation activities (SOC E)"
+                        ],
+                        ["eac_part_time__11", "Economically active: Working part time"],
+                        ["eac_student__11", "Economically active: Full-time student"],
+                        [
+                            "eac_student_18to74_empl__11",
+                            "Economically active: Full-time student (employed)"
+                        ],
+                        [
+                            "eac_student_18to74_unempl__11",
+                            "Economically active: Full-time student (unemployed)"
+                        ],
+                        ["eac_tr_bike__11", "Economically active: Travel to work by bike"],
+                        ["eac_tr_bus__11", "Economically active: Travel to work by bus"],
+                        ["eac_tr_car__11", "Economically active: Travel to work by car"],
+                        [
+                            "eac_tr_carpass__11",
+                            "Economically active: Travel to work by car (including car pool)"
+                        ],
+                        ["eac_tr_foot__11", "Economically active: Travel to work by foot"],
+                        [
+                            "eac_tr_mbike__11",
+                            "Economically active: Travel to work by motorcycle"
+                        ],
+                        ["eac_tr_none__11", "Economically active: No travel to work"],
+                        [
+                            "eac_tr_other__11",
+                            "Economically active: Travel to work by other mode"
+                        ],
+                        ["eac_tr_taxi__11", "Economically active: Travel to work by taxi"],
+                        [
+                            "eac_tr_train__11",
+                            "Economically active: Travel to work by train"
+                        ],
+                        [
+                            "eac_tr_tube__11",
+                            "Economically active: Travel to work by metro system"
+                        ],
+                        ["eac_unemployed__11", "Economically active: Unemployed"],
+                        ["ein_homemaker__11", "Economically inactive: Homemaker"],
+                        ["ein_other__11", "Economically inactive: Other"],
+                        ["ein_pensioner__11", "Economically inactive: Pensioner"],
+                        [
+                            "ein_sick_disabled__11",
+                            "Economically inactive: Long-term sick or disabled"
+                        ],
+                        ["ein_student__11", "Economically inactive: Student"],
+                        [
+                            "ein_student_16to17__11",
+                            "Economically inactive: Schoolchildren and full time students Aged 16 to 17"
+                        ],
+                        [
+                            "ein_student_18pl__11",
+                            "Economically inactive: Schoolchildren and full time students Aged 18 and over"
+                        ],
+                        [
+                            "ein_student_18to74__11",
+                            "Economically inactive: Full-time students Age 18 to 74"
+                        ],
+                        ["ue__05", "Unemployed in 2005"],
+                        ["ue__06", "Unemployed in 2006"],
+                        ["ue__07", "Unemployed in 2007"],
+                        ["ue__08", "Unemployed in 2008"],
+                        ["ue__09", "Unemployed in 2009"],
+                        ["ue__10", "Unemployed in 2010"],
+                        ["ue__11", "Unemployed in 2011"],
+                        ["ue__12", "Unemployed in 2012"],
+                        ["ue__13", "Unemployed in 2013"],
+                        ["ue__14", "Unemployed in 2014"],
+                        ["ue__15", "Unemployed in 2015"],
+                        ["ue__16", "Unemployed in 2016"]
+                    ]
+                },
+                "boparan_stores": {
+                    "display": true,
+                    "name": "Boparan Stores",
+                    "pane": ["boparan_stores", 540],
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "boparan.boparan_stores",
+                    "geom": "geom",
+                    "cluster_cat": "town",
+                    "cluster_label": "facial_name",
+                    "cluster_kmeans": 0.2,
+                    "cluster_dbscan": 0.012,
+                    "qID": "branchid",
+                    "infoj": [
+                        {
+                            "field": "rl_catagory",
+                            "label": "Catagory",
+                            "type": "text"
+                        },
+                        {
+                            "field": "parent_name",
+                            "label": "Parent Name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "facial_name",
+                            "label": "Name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "street_no",
+                            "label": "Street No",
+                            "type": "text"
+                        },
+                        {
+                            "field": "street",
+                            "label": "Street",
+                            "type": "text"
+                        },
+                        {
+                            "field": "town",
+                            "label": "Town",
+                            "type": "text"
+                        },
+                        {
+                            "field": "post_code",
+                            "label": "Post Code",
+                            "type": "text"
+                        },
+                        {
+                            "streetview": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400, "#777", 300, "#EEE", 200, "#777"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style": [400, "#777"]
+                        },
+                        "themes": [
+                            {
+                                "label": "Boparan Shop",
+                                "type": "categorized",
+                                "field": "esc_name",
+                                "other": true,
+                                "cat": {
+                                    "BURGERS AND COCKTAILS": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#EEE", 200, "#008C99"]
+                                        },
+                                        "label": "Burgers And Cocktails"
+                                    },
+                                    "GIRAFFE": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#000", 260, "#E5851F"]
+                                        },
+                                        "label": "Giraffe"
+                                    },
+                                    "SLIM CHICKENS": {
+                                        "marker":{
+                                            "type": "target",
+                                            "style":[400, "#e21f39", 300, "#EEE"]
+                                        },
+                                        "label": "Slim Chickens"
+                                    },
+                                    "EDS EASY DINER": {
+                                        "marker":{
+                                            "type": "target",
+                                            "style":[400, "#000", 300, "#dd1119", 200, "#ffffff"]
+                                        },
+                                        "label": "Ed's Easy Diner"
+                                    },
+                                    "FISH WORKS": {
+                                        "marker":{
+                                            "type": "target",
+                                            "style":[400, "#11135C", 200, "#ffffff", 100, "#11135C"]
+                                        },
+                                        "label": "Fish Works"
+                                    },
+                                    "CINNAMON COLLECTION": {
+                                        "marker":{
+                                            "type": "target",
+                                            "style":[400, "#6D6D6D", 300, "fff", 200, "#3AC1E7"]
+                                        },
+                                        "label": "Cinnamon Collection"
+                                    },
+                                    "HARRY RAMSDENS": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#202e66", 300, "#EEE", 200, "#ca1338"]
+                                        },
+                                        "label": "Harry Ramsden's"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "chicken_stores": {
+                    "display": true,
+                    "name": "Chicken Stores",
+                    "pane": ["chicken_stores", 540],
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "boparan.boparan_chicken_shops",
+                    "geom": "geom",
+                    "cluster_cat": "town",
+                    "properties": "esc_name",
+                    "cluster_label": "facial_name",
+                    "cluster_kmeans": 0.2,
+                    "cluster_dbscan": 0.012,
+                    "qID": "branchid",
+                    "infoj": [
+                        {
+                            "field": "rl_catagory",
+                            "label": "Catagory",
+                            "type": "text"
+                        },
+                        {
+                            "field": "shop_name",
+                            "label": "Shop Name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "facial_name",
+                            "label": "Name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "street_no",
+                            "label": "Street No",
+                            "type": "text"
+                        },
+                        {
+                            "field": "street",
+                            "label": "Street",
+                            "type": "text"
+                        },
+                        {
+                            "field": "town",
+                            "label": "Town",
+                            "type": "text"
+                        },
+                        {
+                            "field": "post_code",
+                            "label": "Post Code",
+                            "type": "text"
+                        },
+                        {
+                            "streetview": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400, "#FF8552", 300, "#111", 200, "#FF8552"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style": [400, "#FF8552"]
+                        },
+                        "themes": [
+                            {
+                                "label": "Chicken Shop type",
+                                "type": "categorized",
+                                "field": "esc_name",
+                                "other": true,
+                                "cat": {
+                                    "NANDOS": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#CE0A24", 200, "#FFF"]
+                                        },
+                                        "label": "Nando's"
+                                    },
+                                    "KFC": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#BA2D0B", 200, "#f5d4b7", 100, "#BA2D0B"]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "chicken_market_price": {
+                    "display": true,
+                    "name": "Chicken Market Price",
+                    "meta": "Average price for 6 pieces of chicken across takeaway shops",
+                    "pane": ["market_price", 515],
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "arrayZoom": {
+                        "8": "boparan.gb_postalsector"
+                    },
+                    "properties": "chicken_price",
+                    "qID": "qid",
+                    "infoj": [
+                        {
+                            "field": "p_sect_id",
+                            "label": "Postal sector",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "p_area_id",
+                            "label": "Postal area",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "pop__11",
+                            "label": "Population 2011",
+                            "type": "integer",
+                            "inline": true
+                        },
+                        {
+                            "field": "chicken_price",
+                            "label": "Chicken market price",
+                            "type": "numeric",
+                            "inline": true,
+                            "title": "Average price for 6 pieces of chicken across takeaway shops."
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "fill": true,
+                            "stroke": false,
+                            "fillColor": "#86A5D9",
+                            "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                            "fill": true,
+                            "stroke": false,
+                            "fillOpacity": 0.6
+                        },
+                        "themes": [
+                            {
+                                "label": "Chicken Market Price",
+                                "type": "graduated",
+                                "field": "chicken_price",
+                                "cat": [
+                                    {
+                                        "val": 8,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#c62828"
+                                        },
+                                        "label": "up to £8"
+                                    },
+                                    {
+                                        "val": 6,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#e57373"
+                                        },
+                                        "label": "up to £6"
+                                    },
+                                    {
+                                        "val": 5.5,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#ef9a9a"
+                                        },
+                                        "label": "up to £5.50"
+                                    },
+                                    {
+                                        "val": 5,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#ffcdd2"
+                                        },
+                                        "label": "up to £5"
+                                    },
+                                    {
+                                        "val": 4.5,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#64b5f6"
+                                        },
+                                        "label": "up to £4.5"
+                                    },
+                                    {
+                                        "val": 4,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#42a5f5"
+                                        },
+                                        "label": "up to £4"
+                                    },
+                                    {
+                                        "val": 3.5,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#1565c0"
+                                        },
+                                        "label": "up to £3.50"
+                                    },
+                                    {
+                                        "val": 3,
+                                        "style": {
+                                            "stroke": false,
+                                            "fill": true,
+                                            "fillOpacity": 0.4,
+                                            "fillColor": "#0d47a1"
+                                        },
+                                        "label": "less than £3"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

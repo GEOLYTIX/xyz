@@ -1,0 +1,2543 @@
+{
+	"title": "GEOLYTIX | XYZ Dixons",
+	"documentation": "documentation",
+	"locales": {
+		"UK": {
+			"name": "United Kingdom",
+			"gazetteer": {
+				"provider": "GOOGLE",
+				"bounds": "&components=country:GB|country:IE",
+				"placeholder": "e.g. London",
+				"code": "GB"
+			},
+			"bounds": {
+				"north": "48",
+				"east": "-13",
+				"south": "62",
+				"west": "5"
+			},
+			"minZoom": 6,
+			"maxZoom": 17,
+			"layers": {
+				"mapbox_custom": {
+					"display": true,
+					"group": "Base Maps",
+					"name": "Mapbox Color",
+					"attribution": [
+						"mapbox",
+						"osm"
+					],
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+				},
+				"label": {
+					"group": "Base Maps",
+					"name": "Mapbox Labels",
+					"attribution": [
+						"mapbox",
+						"osm"
+					],
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+				},
+				"postal_areas": {
+					"name": "Postal boundaries",
+					"meta": "Postal area, district and sector boundaries with population counts. Largest geographical postal unit used to form the initial one or two characters of the postcode. Postal districts are the next geographical level from postal sector. The districts are made up of postal area characters followed by one or two digits. The sector is the third or fourth digit after the postal district or can be identified as the digit after the space in a postcode written in Royal Mail format.",
+					"attribution": [
+						"Postal. Geolytix License."
+					],
+					"format": "mvt",
+					"mvt_fields": [
+						"boundary_type",
+						"postal_label",
+						"post_area",
+						"post_dist",
+						"gis_sect",
+						"pop_11"
+					],
+					"geom_3857": "geom_3857",
+					"geom": "geom_4326",
+					"dbs": "XYZ",
+					"qID": "id",
+					"tables": {
+						"10": "dixonscpw.postal_postal_area",
+						"11": "dixonscpw.postal_postal_area",
+						"12": "dixonscpw.postal_postal_district",
+						"13": "dixonscpw.postal_postal_district",
+						"14": "dixonscpw.postal_postal_sector"
+					},
+					"infoj": [
+						{
+							"field": "boundary_type",
+							"label": "Level",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "postal_label",
+							"label": "Name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "post_area",
+							"label": "Postal Area",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "post_dist",
+							"label": "Postal District",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "gis_sect",
+							"label": "Postal Sector",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "pop_11",
+							"label": "Total Population 2011",
+							"type": "integer"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#f06292",
+							"fill": true,
+							"opacity": 0.5,
+							"fillOpacity": 0,
+							"fillColor": "#f8bbd0"
+						},
+						"highlight": {
+							"color": "#f06292",
+							"fill": true,
+							"opacity": 0.7,
+							"fillOpacity": 0.3,
+							"weight": 2
+						}
+					}
+				},
+				"stores": {
+					"format": "cluster",
+					"display": true,
+					"meta": "Dixons Carphone Warehouse shops.",
+					"attribution": [
+						"Dixons Carphone Warehouse"
+					],
+					"name": "Dixons CPW",
+					"dbs": "XYZ",
+					"table": "dixonscpw.stores",
+					"qID": "id",
+					"cluster_label": "store_name",
+					"edit": {
+						"point": true,
+						"polygon": true,
+						"rectangle": true,
+						"circle": true,
+						"line": true,
+						"delete": true
+					  },
+					"infoj": [
+						{
+							"field": "brand",
+							"label": "Brand",
+							"type": "text"
+						},
+						{
+							"field": "store_name",
+							"label": "Store name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "store_address",
+							"name": "Address",
+							"type": "text"
+						},
+						{
+							"field": "category",
+							"label": "Category",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "geographical_catchment",
+							"label": "Catchment",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "town_city",
+							"label": "Town",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"label": "Details",
+							"type": "group" 
+						},
+						{
+							"field": "store_format",
+							"group": "Details",
+							"label": "Format",
+							"type": "text",
+							"inline": true,
+							"level": 1
+						},
+						{
+							"field": "location_type",
+							"group": "Details",
+							"label": "Location type",
+							"type": "text",
+							"inline": true,
+							"level": 1
+						},
+						{
+							"field": "build",
+							"group": "Details",
+							"label": "Build",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "refit_date",
+							"group": "Details",
+							"label": "Refit date",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "lease_expire",
+							"label": "Lease expire",
+							"group": "Details",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "break_date",
+							"group": "Details",
+							"label": "Break date",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "rent",
+							"group": "Details",
+							"label": "Rent",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "total_gross_area_sqft",
+							"group": "Details",
+							"label": "Total gross area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "total_sales_area_sqft",
+							"group": "Details",
+							"label": "Total sales area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "wkly_footfall",
+							"group": "Details",
+							"label": "Weekly footfall",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "swas_sales_area",
+							"group": "Details",
+							"label": "SWAS sales area",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "wkly_cgm",
+							"group": "Details",
+							"label": "Weekly CGM",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "swas_ebit",
+							"group": "Details",
+							"label": "SWAS EBIT",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "product_sales",
+							"group": "Details",
+							"label": "Product sales",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "branch_ebit",
+							"group": "Details",
+							"label": "Branch EBIT",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "branch_ebit_inc_pc_ois",
+							"group": "Details",
+							"label": "Branch EBIT inc. pc. ois.",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "gross_mezz_area_sqft",
+							"group": "Details",
+							"label": "Gross mezzanine area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "gf_sales_area_sqft",
+							"group": "Details",
+							"label": "GF sales area SqFT",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "mezz_sales_area_sqft",
+							"group": "Details",
+							"label": "Mezzanine sales area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "location",
+							"group": "Details",
+							"label": "Location",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "postpay_mix",
+							"group": "Details",
+							"label": "Postpay mix",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "wkly_tm",
+							"group": "Details",
+							"label": "Weekly TM",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"type": "streetview",
+							"locked": true
+						},
+						{
+							"field": "images",
+							"label": "Images",
+							"type" : "images",
+							"edit": true
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#33849D"
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#33849D"
+						},
+						"themes": {
+							"Brand": {
+								"field": "brand",
+								"type": "categorized",
+								"label": "Brand",
+								"cat": {
+									"Currys PC World": {
+										"label": "Currys PC World",
+										"fillColor": "#0D357B",
+										"layers": {
+											"0.75": "#FDE44D",
+											"0.50": "#73246E"
+										}
+									},
+									"Currys PC World & Carphone Warehouse": {
+										"label": "Currys PC World & Carphone Warehouse",
+										"fillColor": "#011D4A",
+										"layers": {
+											"0.75": "#EEE",
+											"0.50": "#33849D"
+										}
+									},
+									"Carphone Warehouse": {
+										"label": "Carphone Warehouse",
+										"fillColor": "#33849D",
+										"layers": {
+											"0.75": "#EEE",
+											"0.50": "#ED3833"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"catchment": {
+					"format": "cluster",
+					"meta": "Dixons Carphone Warehouse customer catchments.",
+					"attribution": [
+						"Dixons Carphone Warehouse"
+					],
+					"name": "Customer Catchments",
+					"dbs": "XYZ",
+					"table": "dixonscpw.stores",
+					"geomdisplay": "catchment_primary",
+					"qID": "id",
+					"cluster_label": "store_name",
+					"infoj": [
+						{
+							"field": "brand",
+							"label": "Brand",
+							"type": "text"
+						},
+						{
+							"field": "store_name",
+							"label": "Store name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "store_address",
+							"name": "Address",
+							"type": "text"
+						},
+						{
+							"field": "category",
+							"label": "Category",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "geographical_catchment",
+							"label": "Catchment",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "town_city",
+							"label": "Town",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"label": "Details",
+							"type": "group"
+						},
+						{
+							"field": "store_format",
+							"group": "Details",
+							"label": "Format",
+							"type": "text",
+							"inline": true,
+							"level": 1
+						},
+						{
+							"field": "location_type",
+							"group": "Details",
+							"label": "Location type",
+							"type": "text",
+							"inline": true,
+							"level": 1
+						},
+						{
+							"field": "build",
+							"group": "Details",
+							"label": "Build",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "refit_date",
+							"group": "Details",
+							"label": "Refit date",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "lease_expire",
+							"group": "Details",
+							"label": "Lease expire",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "break_date",
+							"group": "Details",
+							"label": "Break date",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "rent",
+							"group": "Details",
+							"label": "Rent",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "total_gross_area_sqft",
+							"group": "Details",
+							"label": "Total gross area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "total_sales_area_sqft",
+							"group": "Details",
+							"label": "Total sales area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "wkly_footfall",
+							"group": "Details",
+							"label": "Weekly footfall",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "swas_sales_area",
+							"group": "Details",
+							"label": "SWAS sales area",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "wkly_cgm",
+							"group": "Details",
+							"label": "Weekly CGM",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "swas_ebit",
+							"group": "Details",
+							"label": "SWAS EBIT",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "product_sales",
+							"group": "Details",
+							"label": "Product sales",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "branch_ebit",
+							"group": "Details",
+							"label": "Branch EBIT",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "branch_ebit_inc_pc_ois",
+							"group": "Details",
+							"label": "Branch EBIT inc. pc. ois.",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "gross_mezz_area_sqft",
+							"group": "Details",
+							"label": "Gross mezzanine area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "gf_sales_area_sqft",
+							"group": "Details",
+							"label": "GF sales area SqFT",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "mezz_sales_area_sqft",
+							"group": "Details",
+							"label": "Mezzanine sales area SqFt",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "location",
+							"group": "Details",
+							"label": "Location",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "postpay_mix",
+							"group": "Details",
+							"label": "Postpay mix",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "wkly_tm",
+							"group": "Details",
+							"label": "Weekly TM",
+							"inline": true,
+							"type": "text",
+							"level": 1
+						},
+						{
+							"label": "Catchment Primary",
+							"field": "catchment_primary",
+							"fieldfx": "ST_asGeoJson(catchment_primary)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#E01A4F",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						},
+						{
+							"label": "Catchment Secondary",
+							"field": "catchment_secondary",
+							"fieldfx": "ST_asGeoJson(catchment_secondary)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#F17105",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						},
+						{
+							"label": "Catchment tertiary",
+							"field": "catchment_tertiary",
+							"fieldfx": "ST_asGeoJson(catchment_tertiary)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#E6C229",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						},
+						{
+							"type": "streetview"
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#33849D"
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#33849D"
+						},
+						"themes": {
+							"Brand": {
+								"field": "brand",
+								"type": "categorized",
+								"label": "Brand",
+								"cat": {
+									"Currys PC World": {
+										"label": "Currys PC World",
+										"fillColor": "#0D357B",
+										"layers": {
+											"0.75": "#FDE44D",
+											"0.50": "#73246E"
+										}
+									},
+									"Currys PC World & Carphone Warehouse": {
+										"label": "Currys PC World & Carphone Warehouse",
+										"fillColor": "#011D4A",
+										"layers": {
+											"0.75": "#EEE",
+											"0.50": "#33849D"
+										}
+									},
+									"Carphone Warehouse": {
+										"label": "Carphone Warehouse",
+										"fillColor": "#33849D",
+										"layers": {
+											"0.75": "#EEE",
+											"0.50": "#ED3833"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"catchment_editable": {
+					"edit": {
+						"properties": true,
+						"catchment": true
+					},
+					"meta": "Isochrones generated on the fly around a point.",
+					"display": true,
+					"name": "Catchments",
+					"format": "geojson",
+					"dbs": "XYZ",
+					"qID": "id",
+					"table": "dixonscpw.catchments_editable",
+					"infoj": [
+						{
+							"field": "area_name",
+							"label": "Name"
+						},
+						{
+							"label": "Retail places within area reach",
+							"field": "a.id",
+							"fieldfx": "a.id",
+							"type": "integer",
+							"lookup": {
+								"table_a": "dixonscpw.catchments_editable",
+								"geom_a": "a.geom",
+								"table_b": "gb_retailplace",
+								"geom_b": "b.geom",
+								"condition": "ST_INTERSECTS",
+								"aggregate": "COUNT"
+							}
+						},
+						{
+							"field": "description",
+							"label": "Notes",
+							"type": "textarea",
+							"edit": true
+						},
+						{
+							"field": "edited",
+							"label": "Created on",
+							"type": "datetime"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#F34213",
+							"fill": true,
+							"fillColor": "#F34213",
+							"fillOpacity": 0.2
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"weight": 2,
+							"fillOpacity": 0.3
+						}
+					}
+				},
+				"competitors": {
+					"meta": "Dixons Carphone Warehouse significant competitor shops.",
+					"attribution": [
+						"Dixons Carphone Warehouse"
+					],
+					"format": "cluster",
+					"name": "Competitors",
+					"dbs": "XYZ",
+					"table": "dixonscpw.competitors",
+					"qID": "id",
+					"cluster_label": "fascia || ' ' || location",
+					"infoj": [
+						{
+							"field": "fascia",
+							"label": "Fascia",
+							"type": "text",
+							"inline": true
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#1e4D31"
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#1e4D31"
+						},
+						"themes": {
+							"Fascia": {
+								"field": "fascia",
+								"type": "categorized",
+								"other": true,
+								"label": "Fascia",
+								"cat": {
+									"Apple": {
+										"label": "Apple",
+										"fillColor": "#FFF",
+										"layers": {
+											"0.75": "#000",
+											"0.25": "#FFF"
+										}
+									},
+									"John Lewis": {
+										"label": "John Lewis",
+										"fillColor": "#1e4D31",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#1e4D31"
+										}
+									},
+									"John Lewis at Home": {
+										"label": "John Lewis at Home",
+										"fillColor": "#1e4D31",
+										"layers": {
+											"0.50": "#EEE"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"mobile_competitors": {
+					"meta": "Competitor mobile shops.",
+					"attribution": [
+						"Dixons Carphone Warehouse"
+					],
+					"format": "cluster",
+					"name": "Mobile Competitors",
+					"dbs": "XYZ",
+					"table": "dixonscpw.competitors_mobile",
+					"qID": "business_id",
+					"cluster_label": "business_name || ' ' || address_street",
+					"infoj": [
+						{
+							"field": "business_name",
+							"label": "Business name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"label": "Address"
+						},
+						{
+							"field": "address_building_unit",
+							"type": "text"
+						},
+						{
+							"field": "address_building",
+							"type": "text"
+						},
+						{
+							"field": "address_street_n",
+							"type": "text"
+						},
+						{
+							"field": "address_street",
+							"type": "text"
+						},
+						{
+							"field": "postcode",
+							"type": "text"
+						},
+						{
+							"field": "area",
+							"type": "text"
+						},
+						{
+							"field": "city",
+							"type": "text"
+						},
+						{
+							"field": "country",
+							"type": "text"
+						},
+						{
+							"field": "telephone",
+							"label": "Telephone",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "website",
+							"label": "Website",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "category_name1",
+							"label": "Category 1",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "category_name2",
+							"label": "Category 2",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "care_of",
+							"label": "Care of",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "voa",
+							"label": "VOA",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "business_rate",
+							"label": "Business rate",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"type": "streetview"
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#EABA6B"
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#EABA6B"
+						},
+						"themes": {
+							"Business name": {
+								"field": "business_name",
+								"label": "Business name",
+								"other": true,
+								"type": "categorized",
+								"cat": {
+									"3 Store": {
+										"label": "3 Store",
+										"fillColor": "#FFF",
+										"layers": {
+											"0.75": "#000",
+											"0.50": "#FFF",
+											"0.25": "000"
+										}
+									},
+									"EE": {
+										"label": "EE",
+										"fillColor": "#419C9D",
+										"layers": {
+											"0.75": "#FEE74E",
+											"0.50": "#419C9D"
+										}
+									},
+									"iSmash": {
+										"label": "iSmash",
+										"fillColor": "#000",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#EC428A"
+										}
+									},
+									"O2": {
+										"label": "O2",
+										"fillColor": "#010733",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#010733"
+										}
+									},
+									"Virgin Media": {
+										"label": "Virgin Media",
+										"fillColor": "#ED3833",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#ED3833"
+										}
+									},
+									"Vodafone": {
+										"label": "Vodafone",
+										"fillColor": "#C82E2B",
+										"layers": {
+											"0.75": "#FFF"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"poi": {
+					"name": "Points of Interest",
+					"meta": "A subset of collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, car parks, cinemas and service areas.",
+					"attribution": [
+						"Point of Interest. Geolytix License."
+					],
+					"format": "cluster",
+					"dbs": "XYZ",
+					"table": "dixonscpw.poi",
+					"qID": "id",
+					"geom": "geom_4326",
+					"cluster_label": "poi_name",
+					"infoj": [
+						{
+							"field": "poi_type",
+							"label": "Category",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "poi_name",
+							"label": "Name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "poi_fascia",
+							"label": "Brand",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "poi_flag",
+							"label": "Type",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "poi_address",
+							"label": "Address",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "postcode",
+							"label": "Postcode",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "town",
+							"label": "Town",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "locality",
+							"label": "locality",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"type": "streetview"
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#C2095A"
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#C2095A"
+						},
+						"themes": {
+							"POI Type": {
+								"field": "poi_type",
+								"label": "POI Type",
+								"type": "categorized",
+								"other": true,
+								"cat": {
+									"Airport": {
+										"label": "Airport",
+										"svg": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxwYXRoIGQ9Ik0yMSAxNnYtMmwtOC01VjMuNWMwLS44My0uNjctMS41LTEuNS0xLjVTMTAgMi42NyAxMCAzLjVWOWwtOCA1djJsOC0yLjVWMTlsLTIgMS41VjIybDMuNS0xIDMuNSAxdi0xLjVMMTMgMTl2LTUuNWw4IDIuNXoiLz4KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz4KPC9zdmc+Cg=="
+									},
+									"Cinema": {
+										"label": "Cinema",
+										"svg": "data:image/svg+xml;base64;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCiAgICA8cGF0aCBmaWxsPSIjQzIwOTVBIiBkPSJNMTggM3YyaC0yVjNIOHYySDZWM0g0djE4aDJ2LTJoMnYyaDh2LTJoMnYyaDJWM2gtMnpNOCAxN0g2di0yaDJ2MnptMC00SDZ2LTJoMnYyem0wLTRINlY3aDJ2MnptMTAgOGgtMnYtMmgydjJ6bTAtNGgtMnYtMmgydjJ6bTAtNGgtMlY3aDJ2MnoiLz4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+DQo8L3N2Zz4="
+									},
+									"Hospital": {
+										"label": "Hospital",
+										"svg": "data:image/svg+xml;base64;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCiAgICA8cGF0aCBkPSJNNCA0aDE2djE2SDR6IiBmaWxsPSIjZmZmIi8+DQogICAgPHBhdGggZmlsbD0iIzY4QTZBRCIgZD0iTTE5IDNINWMtMS4xIDAtMS45OS45LTEuOTkgMkwzIDE5YzAgMS4xLjkgMiAyIDJoMTRjMS4xIDAgMi0uOSAyLTJWNWMwLTEuMS0uOS0yLTItMnptLTEgMTFoLTR2NGgtNHYtNEg2di00aDRWNmg0djRoNHY0eiIvPg0KPC9zdmc+"
+									},
+									"Pharmacy": {
+										"label": "Pharmacy",
+										"svg": "data:image/svg+xml;base64;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+DQogICAgPHBhdGggZmlsbD0iIzRDOTk4OCIgZD0iTTIxIDVoLTIuNjRsMS4xNC0zLjE0TDE3LjE1IDFsLTEuNDYgNEgzdjJsMiA2LTIgNnYyaDE4di0ybC0yLTYgMi02VjV6bS01IDloLTN2M2gtMnYtM0g4di0yaDNWOWgydjNoM3YyeiIvPg0KPC9zdmc+"
+									},
+									"Sport and Leisure": {
+										"label": "Sport and Leisure",
+										"svg": "data:image/svg+xml;base64;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCiAgICA8cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDB6Ii8+DQogICAgPHBhdGggZmlsbD0iIzVFNjk3MyIgZD0iTTEzLjQ5IDUuNDhjMS4xIDAgMi0uOSAyLTJzLS45LTItMi0yLTIgLjktMiAyIC45IDIgMiAyem0tMy42IDEzLjlsMS00LjQgMi4xIDJ2Nmgydi03LjVsLTIuMS0yIC42LTNjMS4zIDEuNSAzLjMgMi41IDUuNSAyLjV2LTJjLTEuOSAwLTMuNS0xLTQuMy0yLjRsLTEtMS42Yy0uNC0uNi0xLTEtMS43LTEtLjMgMC0uNS4xLS44LjFsLTUuMiAyLjJ2NC43aDJ2LTMuNGwxLjgtLjctMS42IDguMS00LjktMS0uNCAyIDcgMS40eiIvPg0KPC9zdmc+"
+									},
+									"Stadium": {
+										"label": "Stadium",
+										"svg": "data:image/svg+xml;base64;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCiAgICA8cGF0aCBmaWxsPSIjQzIwOTVBIiBkPSJNMTggM3YyaC0yVjNIOHYySDZWM0g0djE4aDJ2LTJoMnYyaDh2LTJoMnYyaDJWM2gtMnpNOCAxN0g2di0yaDJ2MnptMC00SDZ2LTJoMnYyem0wLTRINlY3aDJ2MnptMTAgOGgtMnYtMmgydjJ6bTAtNGgtMnYtMmgydjJ6bTAtNGgtMlY3aDJ2MnoiLz4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+DQo8L3N2Zz4="
+									}
+								}
+							}
+						}
+					}
+				},
+				"retail_places_mvt": {
+					"display": true,
+					"group": "Retail Places",
+					"name": "Retail Places",
+					"meta": "Polygon representing a Retail Place.",
+					"attribution": [
+						"Retail place. Geolytix License."
+					],
+					"format": "mvt",
+					"geom_3857": "geom_3857",
+					"dbs": "XYZ",
+					"properties": "rp_type",
+					"qID": "id",
+					"geom": "geom_4326",
+					"mvt_fields": [
+						"rp_type",
+						"rp_name"
+					],
+					"tables": {
+						"12": "dixonscpw.retail_place_outline"
+					},
+					"infoj": [
+						{
+							"field": "rp_name",
+							"label": "Name",
+							"type": "text"
+						},
+						{
+							"field": "rp_type",
+							"label": "Type",
+							"type": "text"
+						},
+						{
+							"field": "ref_pc",
+							"label": "Reference Postcode",
+							"type": "text",
+							"level": 1
+						},
+						{
+							"field": "comp_strgh",
+							"label": "Competition Strength",
+							"type": "integer",
+							"level": 1
+						},
+						{
+							"field": "est_units",
+							"label": "Estimate Units",
+							"type": "integer",
+							"level": 1
+						},
+						{
+							"field": "est_brands",
+							"label": "Estimate Brands",
+							"type": "integer",
+							"level": 1
+						},
+						{
+							"field": "comparison",
+							"label": "Comparison",
+							"type": "numeric",
+							"level": 1
+						},
+						{
+							"field": "conv",
+							"label": "Convenience",
+							"type": "numeric",
+							"level": 1
+						},
+						{
+							"field": "fbl",
+							"label": "Food, Beverage, Leisure",
+							"type": "numeric",
+							"level": 1
+						},
+						{
+							"field": "services",
+							"label": "Services",
+							"type": "numeric",
+							"level": 1
+						},
+						{
+							"field": "classbrass",
+							"label": "Class|Brass",
+							"type": "numeric",
+							"level": 1
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#000",
+							"fill": true,
+							"fillColor": "#000",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						},
+						"themes": {
+							"Retail Place Type": {
+								"label": "Retail Place type",
+								"type": "categorized",
+								"field": "rp_type",
+								"applied": true,
+								"other": true,
+								"cat": {
+									"Major City Centre": {
+										"label": "Major City Centre",
+										"weight": 2,
+										"color": "#EF271B",
+										"opacity": 1,
+										"fillColor": "#EF271B",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"City Centre": {
+										"label": "City Centre",
+										"weight": 2,
+										"color": "#BA2D0B",
+										"opacity": 1,
+										"fillColor": "#BA2D0B",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Large Town Centre": {
+										"label": "Large Town Centre",
+										"weight": 2,
+										"color": "#FE4E00",
+										"opacity": 1,
+										"fillColor": "#FE4E00",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Major Urban Centre": {
+										"label": "Major Urban Centre",
+										"weight": 2,
+										"color": "#E2711D",
+										"opacity": 1,
+										"fillColor": "#E2711D",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Town Centre": {
+										"label": "Town Centre",
+										"weight": 2,
+										"color": "#F3A712",
+										"opacity": 1,
+										"fillColor": "#F3A712",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Urban Centre": {
+										"label": "Urban Centre",
+										"weight": 2,
+										"color": "#FADF63",
+										"opacity": 1,
+										"fillColor": "#FADF63",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Small Town Centre": {
+										"label": "Small Town Centre",
+										"weight": 2,
+										"color": "#FFE74C",
+										"opacity": 1,
+										"fillColor": "#FFE74C",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Village Centre": {
+										"label": "Village Centre",
+										"weight": 2,
+										"color": "#DBFE87",
+										"opacity": 1,
+										"fillColor": "#DBFE87",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Regional SC": {
+										"label": "Regional Shopping Centre",
+										"weight": 2,
+										"color": "#8ED081",
+										"opacity": 1,
+										"fillColor": "#8ED081",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Outlet Centre": {
+										"label": "Outlet Centre",
+										"weight": 2,
+										"color": "#7DDF64",
+										"opacity": 1,
+										"fillColor": "#7DDF64",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Shopping Park": {
+										"label": "Shopping Park",
+										"weight": 2,
+										"color": "#074F57",
+										"opacity": 1,
+										"fillColor": "#074F57",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Retail Park": {
+										"label": "Retail Park",
+										"weight": 2,
+										"color": "#32746D",
+										"opacity": 1,
+										"fillColor": "#32746D",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Leisure Park": {
+										"label": "Leisure Park",
+										"weight": 2,
+										"color": "#41D3BD",
+										"opacity": 1,
+										"fillColor": "#41D3BD",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Local Hub": {
+										"label": "Local Hub",
+										"weight": 2,
+										"color": "#08B2E3",
+										"opacity": 1,
+										"fillColor": "#08B2E3",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Large Parade": {
+										"label": "Large Parade",
+										"weight": 2,
+										"color": "#1F487E",
+										"opacity": 1,
+										"fillColor": "#1F487E",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Parade": {
+										"label": "Parade",
+										"weight": 2,
+										"color": "#541388",
+										"opacity": 1,
+										"fillColor": "#541388",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Weak Parade": {
+										"label": "Weak Parade",
+										"weight": 2,
+										"color": "#D90368",
+										"opacity": 1,
+										"fillColor": "#D90368",
+										"fill": true,
+										"fillOpacity": 0.3
+									}
+								}
+							}
+						}
+					}
+				},
+				"retail_place_shopcent": {
+					"group": "Retail Places",
+					"display": true,
+					"name": "Retail Place Shopping Centre",
+					"meta": "Polygons of all shopping centres within the UK.",
+					"attribution": [
+						"Retail place. Geolytix License."
+					],
+					"properties": "rp_id, sc_name, rp_name, rp_type, unit_count, sc_type, area_curt",
+					"format": "mvt",
+					"geom_3857": "geom_3857",
+					"geom": "geom_4326",
+					"dbs": "XYZ",
+					"qID": "id",
+					"mvt_fields": [
+						"rp_type"
+					],
+					"tables": {
+						"13": "dixonscpw.retail_place_shopcent"
+					},
+					"infoj": [
+						{
+							"field": "rp_id",
+							"label": "Retail place ID",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "sc_name",
+							"label": "Shopping centre name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "rp_name",
+							"label": "Retail place name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "rp_type",
+							"label": "Retail place type",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "unit_count",
+							"label": "Unit count",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "sc_type",
+							"label": "Shopping centre type",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "area_curt",
+							"label": "Area",
+							"type": "integer",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#444",
+							"fill": true,
+							"fillColor": "#444",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						},
+						"themes": {
+							"Retail Place Type": {
+								"label": "Retail Place type",
+								"type": "categorized",
+								"field": "rp_type",
+								"other": true,
+								"cat": {
+									"Major City Centre": {
+										"label": "Major City Centre",
+										"weight": 2,
+										"color": "#EF271B",
+										"opacity": 1,
+										"fillColor": "#EF271B",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"City Centre": {
+										"label": "City Centre",
+										"weight": 2,
+										"color": "#BA2D0B",
+										"opacity": 1,
+										"fillColor": "#BA2D0B",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Large Town Centre": {
+										"label": "Large Town Centre",
+										"weight": 2,
+										"color": "#FE4E00",
+										"opacity": 1,
+										"fillColor": "#FE4E00",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Major Urban Centre": {
+										"label": "Major Urban Centre",
+										"weight": 2,
+										"color": "#E2711D",
+										"opacity": 1,
+										"fillColor": "#E2711D",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Town Centre": {
+										"label": "Town Centre",
+										"weight": 2,
+										"color": "#F3A712",
+										"opacity": 1,
+										"fillColor": "#F3A712",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Urban Centre": {
+										"label": "Urban Centre",
+										"weight": 2,
+										"color": "#FADF63",
+										"opacity": 1,
+										"fillColor": "#FADF63",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Small Town Centre": {
+										"label": "Small Town Centre",
+										"weight": 2,
+										"color": "#FFE74C",
+										"opacity": 1,
+										"fillColor": "#FFE74C",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Village Centre": {
+										"label": "Village Centre",
+										"weight": 2,
+										"color": "#DBFE87",
+										"opacity": 1,
+										"fillColor": "#DBFE87",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Regional SC": {
+										"label": "Regional Shopping Centre",
+										"weight": 2,
+										"color": "#8ED081",
+										"opacity": 1,
+										"fillColor": "#8ED081",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Outlet Centre": {
+										"label": "Outlet Centre",
+										"weight": 2,
+										"color": "#7DDF64",
+										"opacity": 1,
+										"fillColor": "#7DDF64",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Shopping Park": {
+										"label": "Shopping Park",
+										"weight": 2,
+										"color": "#074F57",
+										"opacity": 1,
+										"fillColor": "#074F57",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Retail Park": {
+										"label": "Retail Park",
+										"weight": 2,
+										"color": "#32746D",
+										"opacity": 1,
+										"fillColor": "#32746D",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Leisure Park": {
+										"label": "Leisure Park",
+										"weight": 2,
+										"color": "#41D3BD",
+										"opacity": 1,
+										"fillColor": "#41D3BD",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Local Hub": {
+										"label": "Local Hub",
+										"weight": 2,
+										"color": "#08B2E3",
+										"opacity": 1,
+										"fillColor": "#08B2E3",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Large Parade": {
+										"label": "Large Parades",
+										"weight": 2,
+										"color": "#1F487E",
+										"opacity": 1,
+										"fillColor": "#1F487E",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Parade": {
+										"label": "Parade",
+										"weight": 2,
+										"color": "#541388",
+										"opacity": 1,
+										"fillColor": "#541388",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Weak Parade": {
+										"label": "Weak Parade",
+										"weight": 2,
+										"color": "#D90368",
+										"opacity": 1,
+										"fillColor": "#D90368",
+										"fill": true,
+										"fillOpacity": 0.3
+									}
+								}
+							},
+							"Shopping Centre Type": {
+								"label": "Shopping Centre type",
+								"field": "sc_type",
+								"type": "categorized",
+								"other": true,
+								"cat": {
+									"Arcades/Buildings": {
+										"label": "Arcades/Buildings",
+										"weight": 2,
+										"color": "#D90368",
+										"opacity": 1,
+										"fillColor": "#D90368",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Aspirational Brand": {
+										"label": "Aspirational Brand",
+										"weight": 2,
+										"color": "#541388",
+										"opacity": 1,
+										"fillColor": "#541388",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"City Centre Monsters": {
+										"label": "City Centre Monsters",
+										"weight": 2,
+										"color": "#1F487E",
+										"opacity": 1,
+										"fillColor": "#1F487E",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Large Classics": {
+										"label": "Large Classics",
+										"weight": 2,
+										"color": "#08B2E3",
+										"opacity": 1,
+										"fillColor": "#08B2E3",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"New Town Centres": {
+										"label": "New Town Centres",
+										"weight": 2,
+										"color": "#32746D",
+										"opacity": 1,
+										"fillColor": "#32746D",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Outlet Centres": {
+										"label": "Outlet Centres",
+										"weight": 2,
+										"color": "#074F57",
+										"opacity": 1,
+										"fillColor": "#074F57",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Planned Urban Centre": {
+										"label": "Planned Urban Centre",
+										"weight": 2,
+										"color": "#7DDF64",
+										"opacity": 1,
+										"fillColor": "#7DDF64",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Regional Mall": {
+										"label": "Regional Mall",
+										"weight": 2,
+										"color": "#8ED081",
+										"opacity": 1,
+										"fillColor": "#8ED081",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Small Classic": {
+										"label": "Small Classic",
+										"weight": 2,
+										"color": "#DBFE87",
+										"opacity": 1,
+										"fillColor": "#DBFE87",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Small Classics": {
+										"label": "Small Classics",
+										"weight": 2,
+										"color": "#FFE74C",
+										"opacity": 1,
+										"fillColor": "#FFE74C",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Standalone Shopping": {
+										"label": "Standalone Shopping",
+										"weight": 2,
+										"color": "#FADF63",
+										"opacity": 1,
+										"fillColor": "#FADF63",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"Urban Entertainment Centre": {
+										"label": "Urban Entertainment Centre",
+										"weight": 2,
+										"color": "#E2711D",
+										"opacity": 1,
+										"fillColor": "#E2711D",
+										"fill": true,
+										"fillOpacity": 0.3
+									}
+								}
+							}
+						}
+					}
+				},
+				"retail_pitch": {
+					"display": true,
+					"group": "Retail Places",
+					"name": "Retail Place Pitch",
+					"meta": "Comparitive strength within Retail Place area. Hex grid created using Retail Place to determine ranking of each cell within the centre.",
+					"attribution": [
+						"Retail place. Geolytix License."
+					],
+					"properties": "rp_id, pitch_raw, pitch_pct, pitch_dec",
+					"format": "mvt",
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom",
+					"geom_3857": "geom_3857",
+					"mvt_fields": [
+						"pitch_dec"
+					],
+					"tables": {
+						"16": "dixonscpw.retail_place_pitch"
+					},
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#000",
+							"fill": true,
+							"fillColor": "#000",
+							"fillOpacity": 0.3
+						},
+						"themes": {
+							"Retail pitch rank in decimal scale": {
+								"type": "categorized",
+								"field": "pitch_dec",
+								"label": "Retail pitch rank in decimal scale",
+								"applied": true,
+								"cat": {
+									"1": {
+										"stroke": false,
+										"fillColor": "#ca0020",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"2": {
+										"stroke": false,
+										"fillColor": "#dd494b",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"3": {
+										"stroke": false,
+										"fillColor": "#f09377",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"4": {
+										"stroke": false,
+										"fillColor": "#f5c1a9",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"5": {
+										"stroke": false,
+										"fillColor": "#f7e5dd",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"6": {
+										"stroke": false,
+										"fillColor": "#e1ecf2",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"7": {
+										"stroke": false,
+										"fillColor": "#b4d6e7",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"8": {
+										"stroke": false,
+										"fillColor": "#82bcd9",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"9": {
+										"stroke": false,
+										"fillColor": "#4396c5",
+										"fill": true,
+										"fillOpacity": 0.3
+									},
+									"10": {
+										"stroke": false,
+										"fillColor": "#0571b0",
+										"fill": true,
+										"fillOpacity": 0.3
+									}
+								}
+							}
+						}
+					}
+				},
+				"stations": {
+					"group": "Transport",
+					"meta": "The stations that service underground lines, are part of the National Rail network or the Northern Ireland rail stations and support thirteen light rail systems within the United Kingdom.",
+					"attribution": [
+						"Public Transport. Geolytix License."
+					],
+					"display": true,
+					"name": "Rail stations",
+					"format": "cluster",
+					"dbs": "XYZ",
+					"table": "dixonscpw.public_transport_stations",
+					"geom": "geom_4326",
+					"cluster_label": "station_name",
+					"infoj": [
+						{
+							"field": "atco_code",
+							"label": "ATCO Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "rail_type",
+							"label": "Type",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "station_name",
+							"label": "Station name",
+							"type": "text"
+						},
+						{
+							"field": "network",
+							"label": "Network",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "line",
+							"label": "Lines",
+							"type": "text"
+						},
+						{
+							"field": "glx_town",
+							"label": "Town",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "country",
+							"label": "Country",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"streetview": true
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#777",
+							"layers": {
+								"0.75": "#EEE",
+								"0.50": "#777"
+							}
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#777"
+						},
+						"themes": {
+							"Rail Type": {
+								"label": "Rail type",
+								"field": "rail_type",
+								"type": "categorized",
+								"other": true,
+								"cat": {
+									"Light Rail": {
+										"label": "Light Rail",
+										"fillColor": "#00afad",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#00afad"
+										}
+									},
+									"Rail": {
+										"label": "target",
+										"fillColor": "#0019a8",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#0019a8"
+										}
+									},
+									"Underground": {
+										"label": "target",
+										"fillColor": "#0019A8",
+										"layers": {
+											"0.75": "#FFF",
+											"0.50": "#DC241F"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"rail": {
+					"display": true,
+					"group": "Transport",
+					"name": "Railways",
+					"meta": "The rail and light rail systems within the United Kingdom.",
+					"attribution": [
+						"Public Transport. Geolytix License."
+					],
+					"format": "mvt",
+					"mvt_fields": [
+						"type_rail"
+					],
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_4326",
+					"geom_3857": "geom_3857",
+					"tables": {
+						"8": "dixonscpw.public_transport_lines"
+					},
+					"infoj": [
+						{
+							"field": "line_name",
+							"label": "Name",
+							"type": "text"
+						},
+						{
+							"field": "type_rail",
+							"label": "Type",
+							"inline": true,
+							"type": "text"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#3C7A89",
+							"fill": true,
+							"fillColor": "#3C7A89",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"weight": 1,
+							"color": "#3C7A89",
+							"fill": true
+						},
+						"themes": {
+							"Rail Type": {
+								"field": "type_rail",
+								"label": "Rail type",
+								"type": "categorized",
+								"other": true,
+								"cat": {
+									"Rail": {
+										"label": "Rail",
+											"color": "#129490",
+											"opacity": 1,
+											"fillColor": "#129490",
+											"fill": true,
+											"fillOpacity": 0.3,
+											"weight": 2
+									},
+									"Light Rail": {
+										"label": "Light Rail",
+											"color": "#C1B098",
+											"opacity": 1,
+											"fillColor": "#C1B098",
+											"fill": true,
+											"fillOpacity": 0.3,
+											"weight": 2
+									}
+								}
+							}
+						}
+					}
+				},
+				"roads": {
+					"name": "Road network",
+					"group": "Transport",
+					"meta": "The UK’s motorways including all junctions, slip roads, stubs and spurs. All non-primary UK roads (trunk roads or otherwise, A-road). B-roads designated as carrying significant local traffic. Minor roads that are generally local. Minor roads that provide the most satisfactory route for through traffic between places of traffic importance, they are often but not always trunk roads.",
+					"attribution": [
+						"Road & Network. Geolytix License."
+					],
+					"format": "mvt",
+					"mvt_fields": [
+						"road_type"
+					],
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_4326",
+					"properties": "tag",
+					"tables": {
+						"8": "dixonscpw.roads"
+					},
+					"infoj": [
+						{
+							"field": "road_name",
+							"label": "Name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "road_type",
+							"label": "Road Type",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "tag",
+							"label": "Road category",
+							"type": "text",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#780116",
+							"fill": true,
+							"fillColor": "#780116",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"weight": 1,
+							"color": "#780116",
+							"fill": true
+						},
+						"themes": {
+							"Road Category": {
+								"field": "tag",
+								"label": "Road category",
+								"other": true,
+								"type": "categorized",
+								"cat": {
+									"A-Road": {
+										"label": "A-Road",
+											"weight": 1,
+											"color": "#1e88e5",
+											"fill": true,
+											"fillColor": "#1e88e5",
+											"fillOpacity": 0.3
+									},
+									"B-Road": {
+										"label": "B-Road",
+											"weight": 1,
+											"color": "#66bb6a",
+											"fill": true,
+											"fillColor": "#66bb6a",
+											"fillOpacity": 0.3
+									},
+									"Minor": {
+										"label": "Minor",
+											"weight": 1,
+											"color": "#ffc107",
+											"fill": true,
+											"fillColor": "#ffc107",
+											"fillOpacity": 0.3
+									},
+									"Motorway": {
+										"label": "Motorway",
+											"weight": 2,
+											"color": "#ef5350",
+											"fill": true,
+											"fillColor": "#ef5350",
+											"fillOpacity": 0.3
+									},
+									"Primary": {
+										"label": "Primary",
+											"weight": 2,
+											"color": "#7b1fa2",
+											"fill": true,
+											"fillColor": "#7b1fa2",
+											"fillOpacity": 0.3
+									}
+								}
+							}
+						}
+					}
+				},
+				"seamless_town": {
+					"name": "Seamless towns and suburbs",
+					"group": "Towns",
+					"meta": "Seamless boundaries for towns and suburbs in the UK.",
+					"attribution": [
+						"Seamless Locale. Geolytix License."
+					],
+					"format": "mvt",
+					"mvt_fields": [
+						"census11pp"
+					],
+					"geom": "geom_4326",
+					"dbs": "XYZ",
+					"qID": "id",
+					"tables": {
+						"10": "dixonscpw.seamless_town",
+						"11": "dixonscpw.seamless_town",
+						"12": "dixonscpw.seamless_town",
+						"13": "dixonscpw.seamless_town",
+						"14": "dixonscpw.seamless_town_suburb"
+					},
+					"infoj": [
+						{
+							"field": "town_name",
+							"label": "Town name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "sub_name",
+							"label": "Suburb name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "shop_town",
+							"label": "Shop town",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "census11pp",
+							"label": "Population 2011",
+							"type": "numeric",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#4F7CAC",
+							"fill": true,
+							"fillColor": "#EEE",
+							"fillOpacity": 0
+						},
+						"highlight": {
+							"color": "#4F7CAC",
+							"fill": true,
+							"fillOpacity": 0,
+							"weight": 3
+						}
+					}
+				},
+				"shoppertown": {
+					"name": "Shopper town",
+					"group": "Towns",
+					"meta": "585 seamless shopper towns which are created by using true town centres.",
+					"attribution": [
+						"Seamless Locale. Geolytix License."
+					],
+					"format": "mvt",
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_4326",
+					"mvt_fields": [
+						"census11pp"
+					],
+					"tables": {
+						"10": "dixonscpw.seamless_shoppertown"
+					},
+					"infoj": [
+						{
+							"field": "dom_rpid",
+							"label": "RP ID",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "shoptown",
+							"label": "Shop town",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "census11pp",
+							"label": "Population 2011",
+							"type": "numeric",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 2,
+							"color": "#d84315",
+							"fill": true,
+							"fillColor": "#d84315",
+							"fillOpacity": 0
+						},
+						"highlight": {
+							"color": "#d84315",
+							"fill": true,
+							"fillOpacity": 0,
+							"weight": 4
+						}
+					}
+				},
+				"admin_region": {
+					"name": "Local Authority Districts",
+					"group": "Admin Boundaries",
+					"format": "mvt",
+					"mvt_fields": [
+						"regioncode"
+					],
+					"meta": "Regions, counties and local authority districts of the UK.",
+					"attribution": [
+						"Admin Geography. Geolytix License."
+					],
+					"dbs": "XYZ",
+					"tables": {
+						"6": "dixonscpw.admin_region",
+						"7": "dixonscpw.admin_region",
+						"8": "dixonscpw.admin_region",
+						"9": "dixonscpw.admin_county",
+						"10": "dixonscpw.admin_county",
+						"11": "dixonscpw.admin_lad",
+						"12": "dixonscpw.admin_lad"
+					},
+					"qID": "id",
+					"geom": "geom_4326",
+					"infoj": [
+						{
+							"field": "regioncode",
+							"label": "Region code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "regionname",
+							"label": "Region name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "countyname",
+							"label": "County name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "lad_code",
+							"label": "LAD Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "lad_name",
+							"label": "LAD Name",
+							"type": "text",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 2,
+							"color": "#558b2f",
+							"fill": true,
+							"fillColor": "#eee",
+							"fillOpacity": 0
+						},
+						"highlight": {
+							"weight": 3,
+							"fill": true,
+							"fillColor": "#558b2f",
+							"fillOpacity": 0,
+							"color": "#558b2f"
+						}
+					}
+				},
+				"oa_census": {
+					"group": "Admin Boundaries",
+					"name": "Output Areas",
+					"format": "mvt",
+					"meta": "Census 2017 at Output Area level.",
+					"attribution": [
+						"Census. Population 2017. Geolytix License."
+					],
+					"dbs": "XYZ",
+					"mvt_fields": [
+						"pop17"
+					],
+					"tables": {
+						"12": "dixonscpw.admin_output_area_census__17"
+					},
+					"qID": "id",
+					"geom": "geom_4326",
+					"geom_3857": "geom_3857",
+					"infoj": [
+						{
+							"field": "oacode",
+							"label": "Output Area Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "pop17",
+							"label": "Population 2017",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "age18_24",
+							"label": "Age 18-24",
+							"type": "integer",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"field": "age25_44",
+							"label": "Age 25-44",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"field": "age45_59",
+							"label": "Age 45-59",
+							"type": "integer",
+							"level": 2
+						},
+						{
+							"field": "age60plus",
+							"label": "Age 60+",
+							"type": "integer",
+							"level": 2
+						},
+						{
+							"field": "employed",
+							"label": "Employed",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "eaunemp",
+							"label": "Unemployed",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "econ_inactive",
+							"label": "Economically inactive",
+							"type": "integer",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#1976d2",
+							"fill": true,
+							"opacity": 0.5,
+							"fillOpacity": 0.3,
+							"fillColor": "#1976d2"
+						},
+						"highlight": {
+							"color": "#1976d2",
+							"fill": true,
+							"opacity": 0.7,
+							"fillOpacity": 0.7
+						}
+					}
+				},
+				"work_place_hybrid_zone": {
+					"group": "Admin Boundaries",
+					"name": "Work place at hybrid zone",
+					"meta": "2015 worker counts, densities and occupation splits on hybrid zone level.",
+					"attribution": [
+						"Work Place. Geolytix License."
+					],
+					"format": "mvt",
+					"dbs": "XYZ",
+					"mvt_fields": [
+						"workers_15"
+					],
+					"tables": {
+						"14": "dixonscpw.work_place_hybrid_zone"
+					},
+					"qID": "id",
+					"geom_3857": "geom_3857",
+					"geom": "geom_4326",
+					"geomj": "ST_asGeoJson(geom_4326)",
+					"infoj": [
+						{
+							"field": "oa_code",
+							"label": "OA Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "wz_code",
+							"label": "WZ Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "workers_15",
+							"label": "Workers",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "workerskm2",
+							"label": "Workers km2",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "managerial",
+							"label": "Managerial",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "profession",
+							"label": "Professional",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "technical",
+							"label": "Technical",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "administra",
+							"label": "Administration",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "trades",
+							"label": "Trades",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "services",
+							"label": "Services",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "sales",
+							"label": "Sales",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "operatives",
+							"label": "Operatives",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "elementary",
+							"label": "Elementary",
+							"type": "integer",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#5A9367",
+							"fill": true,
+							"fillColor": "#5A9367",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#5A9367",
+							"fill": true,
+							"fillOpacity": 0.6
+						}
+					}
+				}
+			}
+		}
+	}
+}

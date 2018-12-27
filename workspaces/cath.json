@@ -1,0 +1,238 @@
+{
+	"title": "GEOLYTIX | Cath Kidston",
+	"locate": {},
+	"documentation": "documentation",
+	"locales": {
+		"JP": {
+			"gazetteer": {
+				"provider": "GOOGLE",
+				"code": "JP",
+				"placeholder": "e.g. Yamanashi"
+			},
+            "bounds": [[25, 118], [47, 160]],
+            "minZoom": 6,
+            "maxZoom": 17,
+            "groups": {
+            	"basemaps": {
+            		"label": "Base maps"
+            	}
+            },
+            "layers": {
+            	"base": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "label": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base_labels",
+                        550
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "here": {
+                    "group": "basemaps",
+                    "name": "HERE Imagery",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "here_hybrid": {
+                    "group": "basemaps",
+                    "name": "HERE Hybrid",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "stores": {
+                	"display": true,
+                	"name": "Cath Kidston Shops",
+                	"meta": "As of September 2018",
+                	"format": "cluster",
+                	"pane": ["store", 540],
+                	"dbs": "XYZ",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                	"table": "cath_kidston.jp_stores",
+                	"cluster_label": "shop_name",
+                	"cluster_cat": "brand",
+                	"infoj": [
+                		{
+                			"field": "brand",
+                			"label": "Brand",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "shop_name",
+                			"label": "Shop name",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "address",
+                			"label": "Address",
+                			"type": "text"
+                		},
+                		{
+                			"field": "combined_a",
+                			"type": "text",
+                			"label": "Long address"
+                		},
+                		{
+                			"field": "geom_accur",
+                			"label": "Location type",
+                			"type": "text",
+                			"inline": true 
+                		},
+                		{
+                			"streetview": true
+                		}
+                	],
+                	"style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400, "#fff", 300, "#F1AEBF", 200, "#D60E44"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style" :[400, "#fff", 300, "#F1AEBF", 200, "#D60E44"]
+                        }
+                    }
+                },
+                "venue": {
+                    "display": true,
+                    "name": "Venues",
+                    "format": "cluster",
+                    "pane": ["venues", 539],
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                    "table": "cath_kidston.jp_venue",
+                    "cluster_label": "venuename",
+                    "cluster_cat": "town",
+                    "cluster_kmeans": 0.05,
+                    "infoj": [
+                        {
+                            "field": "id",
+                            "label": "ID",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "town",
+                            "label": "Town",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "venuename",
+                            "label": "Venue name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "size",
+                            "label": "Size",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "opendate",
+                            "label": "Date open",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "streetview": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400,"#CFCFEA", 300, "#A89B9D", 200, "#816C61"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style" :[400,"#CFCFEA", 300, "#A89B9D", 200, "#816C61"]
+                        }
+                    }
+                },
+                "trade_zones": {
+                	"display": true,
+                	"name": "Retail Places Japan",
+                	"meta": "Retail Places Japan 2018",
+                	"format": "mvt",
+                	"dbs": "XYZ",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                    "geom_3857": "geom_3857",
+                	"arrayZoom": {
+                		"9": "cath_kidston.jp_retail_place"
+                	},
+                	"infoj": [
+                		{
+                			"field": "rp_name",
+                			"label": "Name",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"streetview": true
+                		}
+                	],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "opacity": 1,
+                            "fillColor": "#56A3A6",
+                            "fill": true,
+                            "fillOpacity": 0.5
+                        },
+                        "highlight": {
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "fillColor": "#DBD56E",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        }
+                    }
+                }
+            }
+		}
+	}
+}

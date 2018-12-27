@@ -1,0 +1,349 @@
+{
+  "title": "GEOLYTIX | DOMINOS",
+  "documentation": "documentation",
+  "locate": {},
+  "locales": {
+    "UK": {
+      "name": "Great Britain",
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "code": "GB",
+        "placeholder": "e.g. Milton Keynes"
+      },
+      "bounds": [[40, -15],[65, 7]],
+      "minZoom": 6,
+      "maxZoom": 17,
+      "groups": {
+        "basemaps": {
+          "label": "Base maps"
+        }
+      },
+      "layers": {
+        "base": {
+          "group": "basemaps",
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "label": {
+          "group": "basemaps",
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
+          "pane": ["base_labels", 550],
+          "format": "tiles",
+          "URI" : "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+          "provider": "MAPBOX"
+        },
+        "here": {
+          "group": "basemaps",
+          "name": "HERE Imagery",
+          "attribution": ["here"],
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI" : "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "stores": {
+          "display": true,
+          "streetview": true,
+          "name": "Stores",
+          "format": "cluster",
+          "pane": ["stores", 520],
+          "dbs": "XYZ",
+          "table": "dominos.stores",
+          "qID": "store_id",
+          "cluster_label": "store_name",
+          "cluster_kmeans": 3,
+          "cluster_dbscan": 0.01,
+          "style": {
+            "markerMin": 25,
+            "markerMax": 50,
+            "marker": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22105%22%20height%3D%22105%22%3E%0A%3Cg%20transform%3D%22matrix%280.5%2C-0.5%2C0.5%2C0.5%2C-1%2C50%29%22%3E%0A%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%224%22%20style%3D%22fill%3A%23000%3Bopacity%3A0.5%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%224%22%20style%3D%22fill%3A%23fff%22%2F%3E%0A%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%2245%22%20height%3D%2245%22%20rx%3D%224%22%20style%3D%22fill%3A%23de2939%22%2F%3E%0A%3Crect%20x%3D%2252%22%20y%3D%223%22%20width%3D%2245%22%20height%3D%2245%22%20rx%3D%224%22%20style%3D%22fill%3A%23de2939%22%2F%3E%0A%3Crect%20x%3D%223%22%20y%3D%2252%22%20width%3D%2294%22%20height%3D%2245%22%20rx%3D%224%22%20style%3D%22fill%3A%23007bad%22%2F%3E%0A%3Ccircle%20cx%3D%2215%22%20cy%3D%2215%22%20r%3D%228%22%20style%3D%22fill%3A%23fff%22%2F%3E%0A%3Ccircle%20cx%3D%2233%22%20cy%3D%2233%22%20r%3D%228%22%20style%3D%22fill%3A%23fff%22%2F%3E%0A%3Ccircle%20cx%3D%2275%22%20cy%3D%2225%22%20r%3D%228%22%20style%3D%22fill%3A%23fff%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E"
+          },
+          "infoj": [
+              {
+                "field": "store_name",
+                "label": "Store",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "store_id",
+                "label": "Store ID",
+                "type": "text",
+                "level": 1,
+                "inline": true
+              },
+              {
+                "field": "franchisee",
+                "label": "Franchisee",
+                "type": "text",
+                "level": 1,
+                "inline": true
+              },
+              {
+                "field": "maturity",
+                "label": "Maturity",
+                "type": "text",
+                "level": 1,
+                "inline": true
+              },
+              {
+                "field": "avgprice",
+                "label": "Average Price £",
+                "type": "numeric",
+                "level": 1,
+                "inline": true
+              },
+              {
+                "label": "Address",
+                "level": 1
+              },
+              {
+                "field": "address_1",
+                "type": "text"
+              },
+              {
+                "field": "address_2",
+                "type": "text"
+              },
+              {
+                "field": "postcode",
+                "type": "text"
+              },
+              {
+                "field": "town",
+                "type": "text"
+              },
+              {
+                "field": "region",
+                "type": "text"
+              }
+          ]
+        },
+        "dominos_retailplace_select": {          
+          "name": "Retail Place Catchments",
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "geomdisplay": "displaygeom",
+          "pane": ["bounds", 515],
+          "dbs": "XYZ",
+          "qID": "id",
+          "arrayZoom": {
+            "10": "dominos.retailplace_select"
+          },
+          "style": {
+            "default": {
+              "stroke": true,
+              "color": "#de2939",
+              "weight": 2,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "stroke": true,
+              "color": "#de2939",
+              "weight": 2,
+              "fill": true,
+              "fillColor": "#de2939",
+              "fillOpacity": 0.2
+            }
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1,
+              "inline": true
+            },
+            {
+              "field": "sales",
+              "label": "Sales",
+              "type": "integer"
+            },
+            {
+              "field": "rank",
+              "label": "Rank",
+              "type": "integer"
+            },
+            {
+              "field": "address_total",
+              "label": "Addresses total",
+              "type": "integer"
+            },
+            {
+              "field": "address_domestic",
+              "label": "Add. Domestic",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "address_nondomestic",
+              "label": "Add. NonDomestic",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
+            }
+          ]
+        },
+        "dominos_retailplace": {          
+          "name": "Retail Places",
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "pane": ["bounds", 510],
+          "dbs": "XYZ",
+          "qID": "id",
+          "arrayZoom": {
+            "10": "dominos.retailplace"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
+            }
+          ],
+          "style": {
+            "default": {
+              "stroke": true,
+              "color": "#007bad",
+              "weight": 2,
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "stroke": true,
+              "color": "#007bad",
+              "weight": 2,
+              "fill": true,
+              "fillColor": "#007bad",
+              "fillOpacity": 0.2
+            }
+          }
+        }
+      }
+    }
+  }
+}

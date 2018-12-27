@@ -1,0 +1,630 @@
+{
+	"title": "GEOLYTIX | Tanaka",
+	"documentation": "documentation",
+	"locate": {},
+	"locales": {
+		"JP": {
+			"gazetteer": {
+				"provider": "GOOGLE",
+				"code": "JP",
+				"placeholder": "e.g. Yamanashi"
+			},
+			"bounds": [[25, 118], [47, 160]],
+			"minZoom": 6,
+			"maxZoom": 17,
+			"groups": {
+				"basemaps": {
+					"label": "Base maps"
+				}
+			},
+			"layers": {	
+                "base": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "label": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base_labels",
+                        550
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "here": {
+                    "group": "basemaps",
+                    "name": "HERE Imagery",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "here_hybrid": {
+                    "group": "basemaps",
+                    "name": "HERE Hybrid",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "store": {
+                    "display": true,
+                    "streetview": true,
+                    "name": "Tanaka Stores",
+                    "meta": "Tanaka Shops August 2018.",
+                    "format": "cluster",
+                    "pane": ["store", 540],
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "tanaka.store",
+                    "cluster_label": "store_name",
+                    "cluster_cat": "area",
+                    "cluster_kmeans": 0.01,
+                    "infoj": [
+                    	{
+                    		"field": "storeid",
+                    		"label": "Store ID",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "venueid",
+                    		"label": "Venue ID",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "chomokucod",
+                    		"label": "Chomokucod",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "area",
+                    		"label": "Area",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "area_name",
+                    		"label": "Area name",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "area_name_abrv",
+                    		"label": "Short area name",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "area_type",
+                    		"label": "Area type",
+                    		"text": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "store_code",
+                    		"label": "Store code",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "store_name",
+                    		"label": "Store name",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "store_name_abrv",
+                    		"label": "Short store name",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "store_name_en",
+                    		"label": "Store name (en)",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "store_type",
+                    		"label": "Store type",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "contract_type",
+                    		"label": "Contract type",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "location",
+                    		"label": "Location",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "rent_monthly",
+                    		"label": "Rent monthly",
+                    		"type": "numeric",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "common_services_fee_monthly",
+                    		"label": "Common services fee monthly",
+                    		"type": "numeric",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "sales_area",
+                    		"label": "Sales area",
+                    		"type": "numeric",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "meters",
+                    		"label": "Meters",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "f15",
+                    		"label": "F15",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "f16",
+                    		"label": "F16",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "ping_unit_price_common_service_charge_included",
+                    		"label": "Ping unit price; common service change included",
+                    		"type": "numeric",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "deposit",
+                    		"label": "Deposit",
+                    		"type": "numeric",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "p_rent",
+                    		"label": "P Rent",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "p_number",
+                    		"label": "P Number",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "total_monthly_rent",
+                    		"label": "Total monthly rent",
+                    		"type": "numeric",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "first_contract_date",
+                    		"label": "First contract date",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "immediate_contract_start_date",
+                    		"label": "Immediate contract start date",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "next_time_update_date",
+                    		"label": "Next time update date",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "renewal_fee",
+                    		"label": "Renewal fee",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "renter_name",
+                    		"label": "Renter name",
+                    		"type": "text",
+                    		"inline": true
+                    	},
+                    	{
+                    		"field": "management_company_name",
+                    		"label": "Management company name",
+                    		"type": "text",
+                    		"inline": true
+                    	}
+                    ],
+                	"style": {
+                		"markerMin": 15,
+                        "markerMax": 40,
+                        "marker": {
+                            "type": "target",
+                            "style": [400,"#fff", 300, "#ccc"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style" :[400,"#fff", 300, "#ccc"]
+                        }
+                    }
+                },
+                "competition": {
+                	"streetview": true,
+                	"name": "Competition",
+                	"meta": "",
+                	"format": "cluster",
+                	"pane": ["competition", 538],
+                	"dbs": "XYZ",
+                	"qID": "id",
+                	"table": "tanaka.competition",
+                	"cluster_label": "shop_name",
+                	"cluster_cat": "prefecture",
+                	"infoj": [
+                		{
+                			"field": "id", 
+                			"label": "ID",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "shop_status",
+                			"label": "Status",
+                			"type": "text",
+                			"inline": true,
+                			"filter": {
+                				"in": ["New", "Open"]
+                			}
+                		},
+                		{
+                			"field": "brand",
+                			"label": "Brand",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "shop_name",
+                			"label": "Shop name",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "prefecture",
+                			"label": "Prefecture",
+                			"type": "text",
+                			"inline": true,
+                			"level": 1
+                		},
+                		{
+                			"field": "address",
+                			"label": "Address",
+                			"type": "text",
+                			"inline": true,
+                			"level": 1
+                		},
+                		{
+                			"field": "phone",
+                			"label": "Phone",
+                			"type": "text",
+                			"inline": true,
+                			"level": 1
+                		},
+                		{
+                			"field": "contact_lense_specialty",
+                			"label": "Contact lens speciality",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "independents",
+                			"label": "Independents",
+                			"type": "integer",
+                			"inline": true
+                		}
+                	],
+                	"style": {
+                		"markerMin": 15,
+                        "markerMax": 40,
+                        "marker": {
+                            "type": "target",
+                            "style": [400,"#fff", 300, "#000"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style" :[400,"#fff", 300, "#000"]
+                        }
+                    }
+                },
+                "venue": {
+                	"streetview": true,
+                	"name": "Venues",
+                	"meta": "",
+                	"format": "cluster",
+                	"pane": ["venues", 539],
+                	"dbs": "XYZ",
+                	"qID": "id",
+                	"table": "tanaka.venue",
+                	"cluster_label": "venuename",
+                	"cluster_cat": "town",
+                	"cluster_kmeans": 0.01,
+                	"infoj": [
+                		{
+                			"field": "id",
+                			"label": "ID",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "town",
+                			"label": "Town",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "venuename",
+                			"label": "Venue name",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "size",
+                			"label": "Size",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "opendate",
+                			"label": "Date open",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "competition_all",
+                			"label": "All competition",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "independents",
+                			"label": "Independents",
+                			"type": "text",
+                			"inline": true
+                		}
+                	],
+                	"style": {
+                		"markerMin": 15,
+                        "markerMax": 40,
+                        "marker": {
+                            "type": "target",
+                            "style": [400,"#bbb", 300, "#000"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style" :[400,"#bbb", 300, "#000"]
+                        }
+                    }
+                },
+                "catchment": {
+					"display": true,
+                	"name": "Tanaka store catchment",
+                	"format": "mvt",
+                	"pane": ["catchment", 520],
+                	"dbs": "XYZ",
+                	"arrayZoom": {
+                		"11": "tanaka.catchment"
+                	},
+                	"infoj": [
+                		{
+                			"field": "storeid",
+                			"label": "Store ID",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "chomokucod",
+                			"label": "Chomokucod",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "distance_degrees",
+                			"label": "Distance (degrees)",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"field": "orders",
+                			"label": "Orders",
+                			"type": "integer",
+                			"inline": true
+                		},
+                		{
+                			"field": "catchment",
+                			"label": "Catchment",
+                			"type": "text",
+                			"inline": true
+                		}
+                	],
+                	"style": {
+                		"default": {
+                			"weight": 1,
+                			"color": "#56A3A6",
+                			"opacity": 1,
+                			"fillColor": "#56A3A6",
+                			"fill": true,
+                		    "fillOpacity": 0.5
+                	    },
+                		"highlight": {
+							"color": "#DBD56E",
+							"fillColor": "#DBD56E",
+                			"fill": true,
+                			"fillOpacity": 0.3
+                		},
+                		"themes": [
+                			{
+                				"type": "graduated",
+                				"field": "orders",
+                				"label": "Orders",
+                				"cat": [
+                                    {
+                						"val": 20000,
+                						"label": "over 5000 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#E70000",
+                							"opacity": 1,
+                							"fillColor": "#E70000",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    },
+                                    {
+                						"val": 5000,
+                						"label": "up to 5000 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#EC7D10",
+                							"opacity": 1,
+                							"fillColor": "#EC7D10",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    },
+                                    {
+                						"val": 3000,
+                						"label": "3000 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#FFBC0A",
+                							"opacity": 1,
+                							"fillColor": "#FFBC0A",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    },
+                                    {
+                						"val": 2500,
+                						"label": "2500 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#B7F0AD",
+                							"opacity": 1,
+                							"fillColor": "#B7F0AD",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    },
+                                    {
+                						"val": 2000,
+                						"label": "2000 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#56A3A6",
+                							"opacity": 1,
+                							"fillColor": "#56A3A6",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    },
+                                    {
+                						"val": 1500,
+                						"label": "1500 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#22AED1",
+                							"opacity": 1,
+                							"fillColor": "#22AED1",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    },
+                                    {
+                						"val": 1000,
+                						"label": "up to 1000 orders",
+                						"style": {
+                							"weight": 1,
+                							"color": "#016FB9",
+                							"opacity": 1,
+                							"fillColor": "#016FB9",
+                							"fill": true,
+                							"fillOpacity": 0.3
+                						}
+                                    }
+                				]
+                            },
+                            {
+                                "type": "categorized",
+                				"field": "catchment",
+                                "label": "Catchment",
+                				"cat": {
+                					"1": {
+                                        "style": {
+                                            "weight": 1,
+                                            "color": "#DE8F6E",
+                                            "opacity": 1,
+                                            "fillColor": "#DE8F6E",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    },
+                					"2": {
+                                        "style": {
+                                            "weight": 1,
+                                            "color": "#2D93AD",
+                                            "opacity": 1,
+                                            "fillColor": "#2D93AD",
+                                            "fill": true,
+                                            "fillOpacity": 0.3
+                                        }
+                                    }
+                                }
+                            }
+                		]
+                	}
+
+                }
+			}
+		}
+	}
+}

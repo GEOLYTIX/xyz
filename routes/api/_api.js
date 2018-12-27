@@ -34,6 +34,8 @@ module.exports = fastify => {
 
   require('./location/edit/draw_catchment')(fastify);
 
+  require('./location/edit/draw_isoline')(fastify);
+
   require('./location/edit/update')(fastify);
 
   // location/select

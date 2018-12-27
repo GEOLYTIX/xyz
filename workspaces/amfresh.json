@@ -1,0 +1,1104 @@
+{
+  "title": "GEOLYTIX | Amazon Fresh",
+  "documentation": "documentation",
+  "locate": {},
+  "locales": {
+    "LDN": {
+      "name": "London",
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "bounds": "'&location=51.75,-1.25&radius=40'",
+        "placeholder": "e.g. Piccadilly Circus"
+      },
+      "bounds": [[51, -1], [52, 1]],
+      "minZoom": 11,
+      "maxZoom": 18,
+      "groups": {
+        "basemaps": {
+          "label": "Base maps"
+        }
+      },
+      "layers": {
+        "base": {
+          "group": "basemaps",
+          "display": true,
+          "name": "Mapbox Baselayer",
+          "attribution": ["mapbox", "osm"],
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+        },
+        "label": {
+          "group": "basemaps",
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": ["mapbox", "osm"],
+          "pane": ["base_labels", 550],
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+        },
+        "here": {
+          "group": "basemaps",
+          "name": "HERE Imagery",
+          "attribution": ["here"],
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "here_hybrid": {
+          "group": "basemaps",
+          "name": "HERE Hybrid",
+          "attribution": ["here"],
+          "pane": ["base", 500],
+          "format": "tiles",
+          "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+          "provider": "HERE"
+        },
+        "grid": {
+          "name": "Demographics",
+          "format": "grid",
+          "pane": ["grid", 515],
+          "dbs": "XYZ",
+          "geom": "geomcntr",
+          "grid_color": "pop__11",
+          "arrayZoom": {
+            "6": "gb_hx_64k",
+            "7": "gb_hx_32k",
+            "8": "gb_hx_16k",
+            "9": "gb_hx_8k",
+            "10": "gb_hx_4k",
+            "11": "gb_hx_2k",
+            "12": "gb_hx_1k"
+          },
+          "queryFields": [
+            ["pop__01", "Population 2001"],
+            ["pop__11", "Population 2011"],
+            ["gen_female__11", "Female population"],
+            ["gen_male__11", "Male population"],
+            ["age_05to07__11", "Age 5 to 7"],
+            ["age_08to09__11", "Age 8 to 9"],
+            ["age_10to14__11", "Age 10 to 14"],
+            ["age_15__11", "Age 15"],
+            ["age_16pl__11", "Age 16 and above"],
+            ["age_16to17__11", "Age 16 to 17"],
+            ["age_16to74__11", "Age 16 to 74"],
+            ["age_18to19__11", "Age 18 to 19"],
+            ["age_20to24__11", "Age 20 to 24"],
+            ["age_25to29__11", "Age 25 to 29"],
+            ["age_30to44__11", "Age 30 to 44"],
+            ["age_45to59__11", "Age 45 to 59"],
+            ["age_60to64__11", "Age 60 to 64"],
+            ["age_65to74__11", "Age 65 to 74"],
+            ["age_75to84__11", "Age 75 to 84"],
+            ["age_85to89__11", "Age 85 to 89"],
+            ["age_90pl__11", "Age 90 and above"],
+            [
+              "edu_na__11",
+              "Highest level of education not stated or not applicable"
+            ],
+            ["edu_primary_i1__11", "Primary education (IESCD 1)"],
+            ["edu_secondary_i2__11", "Secondary education (IESCD 2)"],
+            [
+              "edu_secondary_i2_l__11",
+              "Secondary education lower level (IESCD 2)"
+            ],
+            [
+              "edu_secondary_i3__11",
+              "Secondary education upper level (IESCD 3)"
+            ],
+            [
+              "edu_secondary_i3v__11",
+              "Secondary education vocational apprenticeship (IESCD 3)"
+            ],
+            [
+              "edu_tertiary_i6__11",
+              "Tertiary education with a Bachelor degree or equivalent (IESCD 6)"
+            ],
+            [
+              "ski_ab__11",
+              "AB Higher and intermediate managerial/administrative or professional"
+            ],
+            [
+              "ski_c1__11",
+              "C1 Supervisory or clerical or junior managerial or administrative or professional"
+            ],
+            ["ski_c2__11", "C2 Skilled manual workers"],
+            [
+              "ski_de__11",
+              "DE Semi skilled and unskilled manual workers  or on state benefit unemployed"
+            ],
+            [
+              "ski_hrp_base__11",
+              "Household Spaces with an Household Reference Person aged 16 to 64"
+            ],
+            [
+              "ski_nssec_1_1__11",
+              "Skill NSSEC 1_1 Large employers and higher managerial and administrative occupations"
+            ],
+            [
+              "ski_nssec_1_2__11",
+              "Skill NSSEC 1_2 Higher professional occupations"
+            ],
+            [
+              "ski_nssec_2__11",
+              "Skill NSSEC 2 Lower managerial administrative and professional occupations"
+            ],
+            ["ski_nssec_3__11", "Skill NSSEC 3 Intermediate occupations"],
+            [
+              "ski_nssec_4__11",
+              "Skill NSSEC 4 Small employers and own account workers"
+            ],
+            [
+              "ski_nssec_5__11",
+              "Skill NSSEC 5 Lower supervisory and technical occupations"
+            ],
+            ["ski_nssec_6__11", "Skill NSSEC 6 Semi-routine occupations"],
+            ["ski_nssec_7__11", "Skill NSSEC 7 Routine occupations"],
+            ["ski_nssec_l14_1__11", "Skill NSSEC L14_1 Never worked"],
+            ["ski_nssec_l14_2__11", "Skill NSSEC L14_2 Long-term unemployed"],
+            ["ski_nssec_na__11", "Skill NSSEC Not classified"],
+            ["eac_employed__11", "Economically active: Employed"],
+            ["eac_employed_b__11", "Economically active: Employed base"],
+            ["eac_employed_self__11", "Economically active: Self employed"],
+            ["eac_full_time__11", "Economically active: Working full time"],
+            [
+              "eac_in_accom_food__11",
+              "Economically active: Accommodation and food service (SOC I)"
+            ],
+            [
+              "eac_in_admin_serv__11",
+              "Economically active: Administrative and support service activities (SOC N)"
+            ],
+            [
+              "eac_in_aggriculture__11",
+              "Economically active: Agriculture forestry or fishing industries (SOC A)"
+            ],
+            [
+              "eac_in_construction__11",
+              "Economically active: Construction industry (SOC F)"
+            ],
+            ["eac_in_education__11", "Economically active: Eduction (SOC P)"],
+            [
+              "eac_in_extractive__11",
+              "Economically active: Extractive industries including mining and quarrying (SOC B)"
+            ],
+            [
+              "eac_in_finance__11",
+              "Economically active: Financial and insurance industries (SOC K)"
+            ],
+            [
+              "eac_in_health__11",
+              "Economically active: Human health and social work activities (SOC Q)"
+            ],
+            [
+              "eac_in_ict__11",
+              "Economically active: Information and communication technologies industry (SOC J)"
+            ],
+            [
+              "eac_in_manufacturing_2__11",
+              "Economically active: Manufacturing (SOC C)"
+            ],
+            [
+              "eac_in_other__11",
+              "Economically active: Other services and industries (SOC R|S|T|U)"
+            ],
+            [
+              "eac_in_power__11",
+              "Economically active: Electricity gas steam and air conditioning supply (SOC D)"
+            ],
+            [
+              "eac_in_prof_tech__11",
+              "Economically active: Professional scientific and technical activitiess (SOC M)"
+            ],
+            [
+              "eac_in_property__11",
+              "Economically active: Property and real estate industries (SOC L)"
+            ],
+            [
+              "eac_in_public_admin__11",
+              "Economically active: Public administration and defence compulsory social security (SOC O)"
+            ],
+            [
+              "eac_in_retail__11",
+              "Economically active: Wholesale and retail trade repair of motor vehicles (SOC G)"
+            ],
+            [
+              "eac_in_transport__11",
+              "Economically active: Transport and Storage (SOC H)"
+            ],
+            [
+              "eac_in_waste__11",
+              "Economically active: Water supply sewerage waste management and remediation activities (SOC E)"
+            ],
+            ["eac_part_time__11", "Economically active: Working part time"],
+            ["eac_student__11", "Economically active: Full-time student"],
+            [
+              "eac_student_18to74_empl__11",
+              "Economically active: Full-time student (employed)"
+            ],
+            [
+              "eac_student_18to74_unempl__11",
+              "Economically active: Full-time student (unemployed)"
+            ],
+            ["eac_tr_bike__11", "Economically active: Travel to work by bike"],
+            ["eac_tr_bus__11", "Economically active: Travel to work by bus"],
+            ["eac_tr_car__11", "Economically active: Travel to work by car"],
+            [
+              "eac_tr_carpass__11",
+              "Economically active: Travel to work by car (including car pool)"
+            ],
+            ["eac_tr_foot__11", "Economically active: Travel to work by foot"],
+            [
+              "eac_tr_mbike__11",
+              "Economically active: Travel to work by motorcycle"
+            ],
+            ["eac_tr_none__11", "Economically active: No travel to work"],
+            [
+              "eac_tr_other__11",
+              "Economically active: Travel to work by other mode"
+            ],
+            ["eac_tr_taxi__11", "Economically active: Travel to work by taxi"],
+            [
+              "eac_tr_train__11",
+              "Economically active: Travel to work by train"
+            ],
+            [
+              "eac_tr_tube__11",
+              "Economically active: Travel to work by metro system"
+            ],
+            ["eac_unemployed__11", "Economically active: Unemployed"],
+            ["ein_homemaker__11", "Economically inactive: Homemaker"],
+            ["ein_other__11", "Economically inactive: Other"],
+            ["ein_pensioner__11", "Economically inactive: Pensioner"],
+            [
+              "ein_sick_disabled__11",
+              "Economically inactive: Long-term sick or disabled"
+            ],
+            ["ein_student__11", "Economically inactive: Student"],
+            [
+              "ein_student_16to17__11",
+              "Economically inactive: Schoolchildren and full time students Aged 16 to 17"
+            ],
+            [
+              "ein_student_18pl__11",
+              "Economically inactive: Schoolchildren and full time students Aged 18 and over"
+            ],
+            [
+              "ein_student_18to74__11",
+              "Economically inactive: Full-time students Age 18 to 74"
+            ],
+            ["ue__05", "Unemployed in 2005"],
+            ["ue__06", "Unemployed in 2006"],
+            ["ue__07", "Unemployed in 2007"],
+            ["ue__08", "Unemployed in 2008"],
+            ["ue__09", "Unemployed in 2009"],
+            ["ue__10", "Unemployed in 2010"],
+            ["ue__11", "Unemployed in 2011"],
+            ["ue__12", "Unemployed in 2012"],
+            ["ue__13", "Unemployed in 2013"],
+            ["ue__14", "Unemployed in 2014"],
+            ["ue__15", "Unemployed in 2015"],
+            ["ue__16", "Unemployed in 2016"]
+          ]
+        },
+        "admin_hybrid_zone": {
+          "name": "Hybrid Zone",
+          "format": "mvt",
+          "meta": "Hybrid Zones are designed to contain consistent numbers of workers, based on where people work.",
+          "attribution": ["Admin Geography. Geolytix License."],
+          "pane": ["admin_hybrid_zone", 512],
+          "dbs": "XYZ",
+          "arrayZoom": {
+            "16": "amazon_fresh.admin_hybrid_zone"
+          },
+          "qID": "id",
+          "geom_3857": "geom_3857",
+          "geom": "geom_4326",
+          "geomj": "ST_asGeoJson(geom_4326)",
+          "properties": "wz11code, oasplitper, oa11code, wzsplitper",
+          "infoj": [
+            {
+              "field": "wz11code",
+              "label": "WZ 11 Code",
+              "type": "text"
+            },
+            {
+              "field": "oa11code",
+              "label": "OA 11 Code",
+              "type": "text"
+            },
+            {
+              "field": "oasplitper",
+              "label": "OA Split per",
+              "type": "numeric"
+            },
+            {
+              "field": "wzsplitper",
+              "label": "WZ Split per",
+              "type": "numeric"
+            }
+          ],
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#444",
+              "fill": true,
+              "fillColor": "#444",
+              "fillOpacity": 0.3
+            }
+          }
+        },
+        "rp_points": {
+          "display": true,
+          "name": "Retail Points",
+          "pane": ["retail_points", 540],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "amazon_fresh.gb_retailpoint",
+          "geom": "geom",
+          "properties": "brand",
+          "cluster_label": "store",
+          "cluster_cat": "brand",
+          "cluster_kmeans": 0.2,
+          "cluster_dbscan": 0.012,
+          "infoj": [
+            {
+              "field": "store",
+              "label": "Store",
+              "type": "text"
+            },
+            {
+              "field": "retailer",
+              "label": "Retailer",
+              "type": "text",
+              "filter": "like"
+            },
+            {
+              "field": "fascia",
+              "label": "Fascia",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "size_band",
+              "restriction": "admin",
+              "label": "Size",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "label": "Address",
+              "level": 1
+            },
+            {
+              "field": "address_1",
+              "type": "text"
+            },
+            {
+              "field": "address_2",
+              "type": "text"
+            },
+            {
+              "field": "town",
+              "type": "text"
+            },
+            {
+              "field": "postcode",
+              "type": "text"
+            },
+            {
+              "field": "pqi",
+              "label": "Positional Quality",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "locality",
+              "label": "Locality",
+              "type": "text",
+              "level": 1,
+              "filter": "like"
+            },
+            {
+              "streetview": true
+            }
+          ],
+          "style": {
+            "marker": {
+              "type": "target",
+              "style": [400, "#999", 350, "#fff"]
+            },
+            "markerMulti": {
+              "type": "target",
+              "style": [400, "#333"]
+            },
+            "themes": [
+              {
+                "label": "Retailer",
+                "type": "categorized",
+                "field": "brand",
+                "competitors": {
+                  "tesco": {
+                    "colour": "#0055a8",
+                    "label": "Tesco"
+                  },
+                  "sainsburys": {
+                    "colour": "#ee8a00",
+                    "label": "Sainsbury's"
+                  },
+                  "asda": {
+                    "colour": "#83b923",
+                    "label": "Asda"
+                  },
+                  "morrisons": {
+                    "colour": "#ffe133",
+                    "label": "Morrisons"
+                  }
+                },
+                "other": true,
+                "cat": {
+                  "aldi": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ffbf45",
+                        350,
+                        "#fa6f08",
+                        300,
+                        "#ef3c11",
+                        250,
+                        "#001f79",
+                        200,
+                        "#02bee3",
+                        100,
+                        "#ffffff"
+                      ]
+                    },
+                    "label": "Aldi"
+                  },
+                  "asda": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#83b923", 200, "#ffffff", 150, "#fdb839"]
+                    },
+                    "label": "Asda"
+                  },
+                  "booths": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#a12629", 200, "#ffffff", 150, "#a12629"]
+                    },
+                    "label": "Booths"
+                  },
+                  "budgens": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#EEEEE0", 200, "#679a00", 150, "#cccb01"]
+                    },
+                    "label": "Budgens"
+                  },
+                  "co_op": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#0b1e60", 250, "#ffffff", 200, "#a3d227"]
+                    },
+                    "label": "The Co-Operative"
+                  },
+                  "costco": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#005daa", 350, "#ffffff", 250, "#e31837"]
+                    },
+                    "label": "Costco"
+                  },
+                  "farmfoods": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#77a632", 300, "#f7f900", 200, "#ff0000"]
+                    },
+                    "label": "Farm Foods"
+                  },
+                  "fultons_food": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#004a95",
+                        300,
+                        "#ffffff",
+                        200,
+                        "#004a95",
+                        100,
+                        "#fff11f"
+                      ]
+                    },
+                    "label": "Fultons Food"
+                  },
+                  "heron_foods": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#ffffff", 300, "#313590", 100, "#ffcf00"]
+                    },
+                    "label": "Heron Foods"
+                  },
+                  "iceland": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#ed1b2d",
+                        300,
+                        "#f2552b",
+                        200,
+                        "#f89128",
+                        100,
+                        "#ffffff"
+                      ]
+                    },
+                    "label": "Iceland"
+                  },
+                  "lidl": {
+                    "marker": {
+                      "type": "target",
+                      "style": [
+                        400,
+                        "#d61408",
+                        350,
+                        "#ffe502",
+                        200,
+                        "#002d7a",
+                        100,
+                        "#d61408"
+                      ]
+                    },
+                    "label": "Lidl"
+                  },
+                  "makro": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#00457a", 150, "#ffe811"]
+                    },
+                    "label": "Makro"
+                  },
+                  "marks_spencer": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#0a0d10", 200, "#def036", 100, "#0a0d10"]
+                    },
+                    "label": "Marks & Spencer"
+                  },
+                  "morrisons": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#ffe133", 200, "#00614e"]
+                    },
+                    "label": "Morrisons"
+                  },
+                  "sainsburys": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#ee8a00", 250, "#ffffff", 150, "#ee8a00"]
+                    },
+                    "label": "Sainsbury's"
+                  },
+                  "tesco": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#0055a8", 300, "#ffffff", 150, "#f02f26"]
+                    },
+                    "label": "Tesco"
+                  },
+                  "waitrose": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#81ae37", 150, "#ffffff"]
+                    },
+                    "label": "Waitrose"
+                  },
+                  "whole_foods": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#00674b", 350, "#ffffff", 200, "#00674b"]
+                    },
+                    "label": "Whole Foods"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "rp_place": {
+          "display": true,
+          "name": "Retail Places",
+          "meta": "Profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.",
+          "properties": "rp_type",
+          "format": "mvt",
+          "geom_3857": "geom_3857",
+          "pane": ["bounds", 510],
+          "dbs": "XYZ",
+          "qID": "id",
+          "arrayZoom": {
+            "10": "amazon_fresh.gb_retailplace"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "type": "text"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "type": "text",
+              "level": 1
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "comparison",
+              "label": "Comparison",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "conv",
+              "label": "Convenience",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "fbl",
+              "label": "Food, Beverage, Leisure",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "services",
+              "label": "Services",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "field": "classbrass",
+              "label": "Class|Brass",
+              "type": "numeric",
+              "level": 1
+            },
+            {
+              "streetview": true
+            }
+          ],
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#000",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0.3
+            },
+            "themes": [
+              {
+                "label": "Retail Place type",
+                "type": "categorized",
+                "field": "rp_type",
+                "other": true,
+                "cat": {
+                  "Major City Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#EF271B",
+                      "opacity": 1,
+                      "fillColor": "#EF271B",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "City Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#BA2D0B",
+                      "opacity": 1,
+                      "fillColor": "#BA2D0B",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Large Town Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#FE4E00",
+                      "opacity": 1,
+                      "fillColor": "#FE4E00",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Major Urban Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#E2711D",
+                      "opacity": 1,
+                      "fillColor": "#E2711D",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Town Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#F3A712",
+                      "opacity": 1,
+                      "fillColor": "#F3A712",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Urban Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#FADF63",
+                      "opacity": 1,
+                      "fillColor": "#FADF63",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Small Town Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#FFE74C",
+                      "opacity": 1,
+                      "fillColor": "#FFE74C",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Village Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#DBFE87",
+                      "opacity": 1,
+                      "fillColor": "#DBFE87",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Regional SC": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#8ED081",
+                      "opacity": 1,
+                      "fillColor": "#8ED081",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    },
+                    "label": "Regional Shopping Centre"
+                  },
+                  "Outlet Centre": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#7DDF64",
+                      "opacity": 1,
+                      "fillColor": "#7DDF64",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Shopping Park": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#074F57",
+                      "opacity": 1,
+                      "fillColor": "#074F57",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Retail Park": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#32746D",
+                      "opacity": 1,
+                      "fillColor": "#32746D",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Leisure Park": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#41D3BD",
+                      "opacity": 1,
+                      "fillColor": "#41D3BD",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Local Hub": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#08B2E3",
+                      "opacity": 1,
+                      "fillColor": "#08B2E3",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Large Parade": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#1F487E",
+                      "opacity": 1,
+                      "fillColor": "#1F487E",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Parade": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#541388",
+                      "opacity": 1,
+                      "fillColor": "#541388",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  },
+                  "Weak Parade": {
+                    "style": {
+                      "weight": 2,
+                      "color": "#D90368",
+                      "opacity": 1,
+                      "fillColor": "#D90368",
+                      "fill": true,
+                      "fillOpacity": 0.3
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "tfl": {
+          "display": true,
+          "name": "TfL and Rail",
+          "pane": ["tfl", 538],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "amazon_fresh.london_tube_rail",
+          "geom": "geom_4326",
+          "cluster_label": "station_name",
+          "cluster_cat": "network",
+          "infoj": [
+            {
+              "field": "atco_code",
+              "label": "ATCO Code",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "rail_type",
+              "label": "Type",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "station_name",
+              "label": "Station name",
+              "type": "text"
+            },
+            {
+              "field": "network",
+              "label": "Network",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "line",
+              "label": "Lines",
+              "type": "text"
+            },
+            {
+              "field": "glx_town",
+              "label": "Town",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "country",
+              "label": "Country",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "streetview": true
+            }
+          ],
+          "style": {
+            "marker": {
+              "type": "target",
+              "style": [400, "#777", 300, "#EEE", 200, "#777"]
+            },
+            "markerMulti": {
+              "type": "target",
+              "style": [400, "#777"]
+            },
+            "themes": [
+              {
+                "label": "Network",
+                "field": "network",
+                "type": "categorized",
+                "other": true,
+                "cat": {
+                  "DLR": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#00afad", 300, "#FFF", 200, "#00afad"]
+                    }
+                  },
+                  "Overground": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#111", 300, "#FFF", 200, "#ef7b10"]
+                    }
+                  },
+                  "Rail": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "##0019a8", 300, "#FFF", 200, "#0019a8"]
+                    }
+                  },
+                  "Tramlink": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#00bd19", 300, "#FFF", 200, "#00bd19"]
+                    }
+                  },
+                  "Tube": {
+                    "marker": {
+                      "type": "target",
+                      "style": [400, "#DC241F", 300, "#FFF", 200, "#0019A8"]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "demand_grocery_oa": {
+          "name": "Grocery Demand",
+          "format": "mvt",
+          "meta": "Grocery demand within output areas.",
+          "attribution": ["Demand. Geolytix License."],
+          "pane": ["demand_grocery_oa", 513],
+          "dbs": "XYZ",
+          "arrayZoom": {
+            "14": "amazon_fresh.demand_grocery_oa"
+          },
+          "qID": "id",
+          "geom_3857": "geom_3857",
+          "geom": "geom_4326",
+          "infoj": [
+            {
+              "field": "id",
+              "label": "ID",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "oa_code",
+              "label": "OA Code",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "lsoa_code",
+              "label": "LSOA Code",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "region",
+              "label": "Region",
+              "type": "text",
+              "inline": true
+            },
+            {
+              "field": "spend_2017",
+              "label": "Spend 2017",
+              "type": "numeric",
+              "inline": true
+            },
+            {
+              "field": "total_2017",
+              "label": "Total 2017",
+              "type": "numeric",
+              "inline": true
+            },
+            {
+              "field": "main_2017",
+              "label": "Main 2017",
+              "type": "numeric",
+              "inline": true
+            },
+            {
+              "field": "conv_2017",
+              "label": "Conversion 2017",
+              "type": "numeric",
+              "inline": true
+            },
+            {
+              "field": "online_2017",
+              "label": "Online 2017",
+              "type": "numeric",
+              "inline": true
+            },
+            {
+              "field": "kiosk_2017",
+              "label": "Kiosk 2017",
+              "type": "numeric",
+              "inline": true
+            }
+          ],
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#70B77E",
+              "fill": true,
+              "fillColor": "#70B77E",
+              "fillOpacity": 0.3
+            }
+          }
+        }
+      }
+    }
+  }
+}

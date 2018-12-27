@@ -1,0 +1,421 @@
+{
+    "title": "London Needs You Alive",
+    "locate": {},
+    "locales": {
+        "GLA": {
+            "name": "United Kingdom",
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "bounds": "'&location=51.75,-1.25&radius=40'",
+                "placeholder": "e.g. City Hall"
+            },
+            "bounds": [
+                [
+                    51,
+                    -1
+                ],
+                [
+                    52,
+                    1
+                ]
+            ],
+            "groups": {
+                "basemaps": {
+                    "label": "Basemaps"
+                }
+            },
+            "minZoom": 11,
+            "maxZoom": 18,
+            "layers": {
+                "base": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?",
+                    "provider": "MAPBOX"
+                },
+                "label": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base_labels",
+                        550
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?",
+                    "provider": "MAPBOX"
+                },
+                "here": {
+                    "group": "basemaps",
+                    "name": "HERE Imagery",
+                    "attribution": [
+                        "here"
+                    ],
+                    "meta": "Satellite Imagery layer provided by HERE.",
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "activities": {
+                    "display": true,
+                    "editable": "geometry",
+                    "restriction": "admin",
+                    "name": "Activities",
+                    "pane": [
+                        "retail_points",
+                        540
+                    ],
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "gla.activities",
+                    "qID": "_id",
+                    "cluster_label": "organisation",
+                    "cluster_cat": "activity",
+                    "infoj": [
+                        {
+                            "field": "activity",
+                            "label": "Activity",
+                            "type": "text",
+                            "options": [
+                                "Open Day",
+                                "Community",
+                                "Workshop",
+                                "Sports",
+                                "Events",
+                                "Fundraising",
+                                "Music",
+                                "Performing Arts",
+                                "Youth Activities"
+                            ],
+                            "filter": {
+                                "in": [
+                                    "Open Day",
+                                    "Community",
+                                    "Workshop",
+                                    "Sports",
+                                    "Events",
+                                    "Fundraising",
+                                    "Music",
+                                    "Performing Arts",
+                                    "Youth Activities"
+                                ]
+                            }
+                        },
+                        {
+                            "field": "organisation",
+                            "label": "Organisation",
+                            "type": "text"
+                        },
+                        {
+                            "field": "age_group",
+                            "label": "Age Group",
+                            "type": "text",
+                            "options": [
+                                "All Ages",
+                                "Primary School and Secondary School Ages",
+                                "Children (5 to 12)",
+                                "Young People (8 to 18)",
+                                "Young People (8 to 21)",
+                                "Young Girls (11 to 16)",
+                                "Young People (13 to 18)",
+                                "Young People (15 to 21)",
+                                "Young Adults (19 to 25)",
+                                "Adults (26 to 65)"
+                            ],
+                            "filter": {
+                                "in": [
+                                    "Primary School and Secondary School Ages",
+                                    "Children (5 to 12)",
+                                    "Young People (8 to 18)",
+                                    "Young People (8 to 21)",
+                                    "Young Girls (11 to 16)",
+                                    "Young People (13 to 18)",
+                                    "Young People (15 to 21)",
+                                    "Young Adults (19 to 25)",
+                                    "Adults (26 to 65)"
+                                ]
+                            }
+                        },
+                        {
+                            "field": "borough",
+                            "label": "Borough",
+                            "type": "text",
+                            "options": [
+                                "Barking",
+                                "Barnet",
+                                "Bexley",
+                                "Brent",
+                                "Bromley",
+                                "Camden",
+                                "Croydon",
+                                "Ealing",
+                                "Enfield",
+                                "Greenwich",
+                                "Hackney",
+                                "Hammersmith",
+                                "Haringey",
+                                "Harrow",
+                                "Havering",
+                                "Hillingdon",
+                                "Hounslow",
+                                "Islington",
+                                "Kensington and Chelsea",
+                                "Kingston upon Thames",
+                                "Lambeth",
+                                "Lewisham",
+                                "Merton",
+                                "Newham",
+                                "Redbridge",
+                                "Richmond upon Thames",
+                                "Southwark",
+                                "Sutton",
+                                "Tower Hamlets",
+                                "Waltham Forest",
+                                "Wandsworth",
+                                "Westminster"
+                            ]
+                        },
+                        {
+                            "field": "area",
+                            "label": "Area",
+                            "type": "text",
+                            "filter": "like"
+                        },
+                        {
+                            "field": "street",
+                            "label": "Street",
+                            "type": "text"
+                        },
+                        {
+                            "field": "postcode",
+                            "label": "Postcode",
+                            "type": "text",
+                            "filter": "like"
+                        },
+                        {
+                            "field": "phone",
+                            "label": "Phone",
+                            "type": "text"
+                        },
+                        {
+                            "field": "email",
+                            "label": "Mail",
+                            "type": "text"
+                        },
+                        {
+                            "field": "website",
+                            "label": "Website",
+                            "type": "text"
+                        },
+                        {
+                            "field": "owner",
+                            "label": "Owner",
+                            "type": "text",
+                            "options": [
+                                "MOPAC",
+                                "StreetGames"
+                            ],
+                            "filter": {
+                                "in": [
+                                    "MOPAC",
+                                    "StreetGames"
+                                ]
+                            }
+                        },
+                        {
+                            "field": "images",
+                            "label": "Images",
+                            "type": "text[]",
+                            "images": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400,"#999",350,"#ffd54f"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style": [400,"#333"]
+                        },
+                        "themes": [
+                            {
+                                "label": "Activities",
+                                "type": "categorized",
+                                "field": "activity",
+                                "applied": true,
+                                "other": true,
+                                "competitors": {
+                                    "Community": {
+                                        "colour": "#c62828",
+                                        "label": "Community"
+                                    },
+                                    "Sports": {
+                                        "colour": "#9c27b0",
+                                        "label": "Sports"
+                                    },
+                                    "Music": {
+                                        "colour": "#03a9f4",
+                                        "label": "Music"
+                                    }
+                                },
+                                "cat": {
+                                    "Community": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#c62828"]
+                                        }
+                                    },
+                                    "Workshop": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#f50057"]
+                                        }
+                                    },
+                                    "Sports": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#9c27b0"]
+                                        }
+                                    },
+                                    "Open Day": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#673ab7"]
+                                        }
+                                    },
+                                    "Events": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#3f51b5"]
+                                        }
+                                    },
+                                    "Fundraising": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#2196f3"]
+                                        }
+                                    },
+                                    "Music": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#03a9f4"]
+                                        }
+                                    },
+                                    "Performing Arts": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#00bcd4"]
+                                        }
+                                    },
+                                    "Youth Activities": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#009688"]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Age Groups",
+                                "type": "categorized",
+                                "field": "age_group",
+                                "other": true,
+                                "competitors": {
+                                    "All Ages": {
+                                        "colour": "#c62828",
+                                        "label": "All Ages"
+                                    },
+                                    "Adults (26 to 65)": {
+                                        "colour": "#03a9f4",
+                                        "label": "Adults (26 to 65)"
+                                    }
+                                },
+                                "cat": {
+                                    "All Ages": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#c62828"]
+                                        }
+                                    },
+                                    "Primary School and Secondary School Ages": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#f50057"]
+                                        }
+                                    },
+                                    "Children (5 to 12)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#9c27b0"]
+                                        }
+                                    },
+                                    "Young People (8 to 18)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#673ab7"]
+                                        }
+                                    },
+                                    "Young People (8 to 21)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#3f51b5"]
+                                        }
+                                    },
+                                    "Young Girls (11 to 16)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#2196f3"]
+                                        }
+                                    },
+                                    "Young People (13 to 18)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#03a9f4"]
+                                        }
+                                    },
+                                    "Young People (15 to 21)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#00bcd4"]
+                                        }
+                                    },
+                                    "Young Adults (19 to 25)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#009688"]
+                                        }
+                                    },
+                                    "Adults (26 to 65)": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#4caf50"]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

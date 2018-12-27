@@ -1,0 +1,544 @@
+{
+	"title": "GEOLYTIX | Under Armour",
+    "documentation": "documentation",
+    "locate": {},
+    "locales": {
+    	"JP": {
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "code": "JP",
+                "placeholder": "e.g. Yamanashi"
+            },
+            "bounds": [[25, 118], [47, 160]],
+            "minZoom": 6,
+            "maxZoom": 17,
+            "groups": {
+                "basemaps": {
+                    "label": "Base maps"
+                }
+            },
+            "layers": { 
+                "base": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "label": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base_labels",
+                        550
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "here": {
+                    "group": "basemaps",
+                    "name": "HERE Imagery",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "here_hybrid": {
+                    "group": "basemaps",
+                    "name": "HERE Hybrid",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "stores": {
+                    "display": true,
+                    "name": "Under Armour Stores",
+                    "meta": "September 2018",
+                    "format": "cluster",
+                    "pane": ["stores", 550],
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "under_armour.ua_stores",
+                    "cluster_label": "shop_name_",
+                    "cluster_cat": "prefect_e",
+                    "size": "sum.sales",
+                    "hover": true,
+                    "infoj": [
+                        {
+                            "field": "id",
+                            "label": "ID",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "shop_name_",
+                            "label": "Name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "name_jp",
+                            "type": "text"
+                        },
+                        {
+                            "field": "shop_type",
+                            "label": "Shop type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "address_en",
+                            "label": "Address",
+                            "type": "text"
+                        },
+                        {
+                            "field": "address_jp",
+                            "type": "text"
+                        },
+                        {
+                            "field": "postal_cod",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Prefecture",
+                            "level": 1
+                        },
+                        {
+                            "field": "prefect_e",
+                            "type": "text",
+                            "lavel": 1
+                        },
+                        {
+                            "field": "prefect_jp",
+                            "type": "text",
+                            "lavel": 1
+                        },
+                        {
+                            "field": "gross_floo",
+                            "label": "Gross floor space",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "n_floor_en",
+                            "label": "Net floor space",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "sales",
+                            "label": "Sales",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "modelled_s",
+                            "label": "Modelled sales",
+                            "type": "text",
+                            "inline": "true"
+                        },
+                        {
+                            "field": "venue_name",
+                            "label": "Venue name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "venue_type",
+                            "label": "Venue type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "rp_name",
+                            "label": "Retail place",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "streetview": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400, "#333"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style": [400, "#333"]
+                        }
+                    }
+                },
+                "competitors": {
+                    "display": true,
+                    "name": "Competitors",
+                    "meta": "September 2018",
+                    "format": "cluster",
+                    "pane": ["competitors", 545],
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "under_armour.jp_competitor_stores",
+                    "cluster_label": "fascia",
+                    "cluster_cat": "retailer",
+                    "infoj": [
+                        {
+                            "field": "retailer",
+                            "label": "Retailer",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "fascia",
+                            "label": "Fascia",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "shopname",
+                            "label": "Shop name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "address",
+                            "label": "Address",
+                            "type": "text"
+                        },
+                        {
+                            "field": "prefecture",
+                            "type": "text",
+                            "level": 1
+                        },
+                        {
+                            "field": "venue_name",
+                            "label": "Venue name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "venue_type",
+                            "label": "Venue type",
+                            "type": "text",
+                            "inline": true,
+                            "level": 1
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [400, "#8C8A93"]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style": [400, "#8C8A93"]
+                        },
+                        "themes": [
+                            {
+                                "type": "categorized",
+                                "field": "retailer",
+                                "label": "Retailer",
+                                "other": true,
+                                "cat": {
+                                    "ABC Mart": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#FFDA00", 300, "#EEE", 200, "#E21B13"]
+                                        }
+                                    },
+                                    "Adidas": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#000", 300, "#FFF", 200, "#000"]
+                                        }
+                                    },
+                                    "Alpen Sports Depot": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#225640", 300, "#EEE", 200, "#F4C301"]
+                                        }
+                                    },
+                                    "Asics": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#010066", 200, "#FFF"]
+                                        }
+                                    },
+                                    "Himaraya Sports": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400,"#134C92", 300, "#FFF", 200, "#134C92"]
+                                        }
+                                    },
+                                    "Murasaki Sports": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#512686", 200, "#F7EA4D"]
+                                        }
+                                    },
+                                    "Nike": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#000", 320, "#EEE", 200, "#BF4E30"]
+                                        }
+                                    },
+                                    "Puma": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#000", 250, "#FFF"]
+                                        }
+                                    },
+                                    "Sports Alpen": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#0058A7", 300, "#FFF", 200, "#0058A7"]
+                                        }
+                                    },
+                                    "Sports Authority": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#B32726", 200, "#EEE"]
+                                        }
+                                    },
+                                    "Super Sports Xebio": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [400, "#2754A0", 300, "#FFF", 200, "#E7303F"]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "trade_zones": {
+                	"display": true,
+                	"name": "Retail Places Japan",
+                	"meta": "Retail Places Japan 2018",
+                	"format": "mvt",
+                	"dbs": "XYZ",
+                    "qID": "id",
+                    "geom_3857": "geom_3857",
+                	"arrayZoom": {
+                		"10": "under_armour.jp_retail_place"
+                	},
+                	"infoj": [
+                		{
+                			"field": "rp_name",
+                			"label": "Name",
+                			"type": "text",
+                			"inline": true
+                		},
+                		{
+                			"streetview": true
+                		}
+                	],
+                    "style": {
+                        "default": {
+                            "weight": 2,
+                            "color": "#56A3A6",
+                            "stroke": true,
+                            "opacity": 1,
+                            "fillColor": "#EFE9F4",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                            "color": "#56A3A6",
+                            "stroke": true,
+                            "fillColor": "#B8C5D6",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        }
+                    }
+                },
+                "venues": { 
+                    "display": true,
+                    "name": "Venues",
+                    "format": "mvt",
+                    "pane": ["venues", 530],
+                    "properties": "venue_type",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "arrayZoom": {
+                        "12": "under_armour.jp_venues"
+                    },
+                    "infoj": [
+                        {
+                            "field": "id",
+                            "label": "ID",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "venue_name",
+                            "label": "Venue name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "venue_type",
+                            "label": "Venue type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "comment_gl",
+                            "label": "Comment",
+                            "type": "text"
+                        },
+                        {
+                            "streetview": true
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#EE6352",
+                            "fill": true,
+                            "fillColor": "#EE6352",
+                            "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                            "color": "#08B2E3",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        },
+                        "themes": [
+                            {
+                                "label": "Venue type",
+                                "field": "venue_type",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "Airport": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#EF271B",
+                                          "opacity": 1,
+                                          "fillColor": "#EF271B",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Commercial Building": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#BA2D0B",
+                                          "opacity": 1,
+                                          "fillColor": "#BA2D0B",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Department Store": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#FE4E00",
+                                          "opacity": 1,
+                                          "fillColor": "#FE4E00",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Duty Free": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#E2711D",
+                                          "opacity": 1,
+                                          "fillColor": "#E2711D",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Outlet": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#F3A712",
+                                          "opacity": 1,
+                                          "fillColor": "#F3A712",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Retail Street": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#FADF63",
+                                          "opacity": 1,
+                                          "fillColor": "#FADF63",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Shopping Mall": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#FFE74C",
+                                          "opacity": 1,
+                                          "fillColor": "#FFE74C",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Stadium": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#DBFE87",
+                                          "opacity": 1,
+                                          "fillColor": "#DBFE87",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Supermarket": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#8ED081",
+                                          "opacity": 1,
+                                          "fillColor": "#8ED081",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    },
+                                    "Train Station": {
+                                        "style": {
+                                          "weight": 2,
+                                          "color": "#7DDF64",
+                                          "opacity": 1,
+                                          "fillColor": "#7DDF64",
+                                          "fill": true,
+                                          "fillOpacity": 0.3
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

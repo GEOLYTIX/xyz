@@ -1,0 +1,471 @@
+{
+    "title": "GEOLYTIX | Costa",
+    "documentation": "documentation",
+    "locate": {},
+    "locales": {
+        "UK": {
+            "name": "United Kingdom",
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "code": "GB",
+                "placeholder": "e.g. Piccadilly Circus"
+            },
+            "minZoom": 6,
+            "maxZoom": 18,
+            "bounds": [
+                [
+                    48,
+                    -11.5
+                ],
+                [
+                    62,
+                    5
+                ]
+            ],
+            "groups": {
+                "basemaps": {
+                    "label": "Base maps"
+                }
+            },
+            "layers": {
+                "base": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "label": {
+                    "group": "basemaps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": [
+                        "mapbox",
+                        "osm"
+                    ],
+                    "pane": [
+                        "base_labels",
+                        550
+                    ],
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2pnbTFwNWh3MWwxdjJ4bno5M3pndDNubiJ9.fMKui_Ypb0qJz0r1QzYzGg"
+                },
+                "here": {
+                    "group": "basemaps",
+                    "name": "HERE Imagery",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "here_hybrid": {
+                    "group": "basemaps",
+                    "name": "HERE Hybrid",
+                    "attribution": [
+                        "here"
+                    ],
+                    "pane": [
+                        "base",
+                        500
+                    ],
+                    "format": "tiles",
+                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?",
+                    "provider": "HERE"
+                },
+                "hex": {
+                    "display": false,
+                    "name": "hex 200m",
+                    "format": "grid",
+                    "pane": [
+                        "hex",
+                        550
+                    ],
+                    "dbs": "XYZ",
+                    "arrayZoom": {
+                        "12": "costa.hex200m"
+                    },
+                    "queryFields": [
+                        [
+                            "hospitality_workers",
+                            "Hospitality Workers"
+                        ]
+                    ]
+                },
+                "grid": {
+                    "name": "Demographics",
+                    "format": "grid",
+                    "pane": [
+                        "grid",
+                        515
+                    ],
+                    "dbs": "XYZ",
+                    "geom": "geomcntr",
+                    "grid_color": "pop__11",
+                    "arrayZoom": {
+                        "6": "gb_hx_64k",
+                        "7": "gb_hx_32k",
+                        "8": "gb_hx_16k",
+                        "9": "gb_hx_8k",
+                        "10": "gb_hx_4k",
+                        "11": "gb_hx_2k",
+                        "12": "gb_hx_1k"
+                    },
+                    "queryFields": [
+                        [
+                            "pop__11",
+                            "Population 2011"
+                        ]
+                    ]
+                },
+                "costa_stores": {
+                    "display": true,
+                    "name": "Costa Stores",
+                    "pane": [
+                        "costa_stores",
+                        540
+                    ],
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "costa.stores_estate",
+                    "geom": "geom_4326",
+                    "cluster_cat": "hybrid_channel",
+                    "cluster_label": "name",
+                    "cluster_kmeans": 0.2,
+                    "cluster_dbscan": 0.012,
+                    "qID": "storeid",
+                    "infoj": [
+                        {
+                            "field": "name",
+                            "label": "Store Name",
+                            "type": "text"
+                        },
+                        {
+                            "field": "government",
+                            "label": "Government",
+                            "type": "text"
+                        },
+                        {
+                            "field": "london_zone",
+                            "label": "London Zone",
+                            "type": "text"
+                        },
+                        {
+                            "field": "caz_split",
+                            "label": "Split",
+                            "type": "text"
+                        },
+                        {
+                            "field": "status",
+                            "label": "status",
+                            "type": "text"
+                        },
+                        {
+                            "field": "equity_franchise",
+                            "label": "Equity/Franchise",
+                            "type": "text"
+                        },
+                        {
+                            "field": "status_2018_2019",
+                            "label": "Status 2018/2019",
+                            "type": "text"
+                        },
+                        {
+                            "field": "channel_split",
+                            "label": "Channel Split",
+                            "type": "text"
+                        },
+                        {
+                            "field": "detail_split",
+                            "label": "Detail Split",
+                            "type": "text"
+                        },
+                        {
+                            "field": "region",
+                            "label": "Region",
+                            "type": "text"
+                        },
+                        {
+                            "field": "rp_type",
+                            "label": "Retail Point Type",
+                            "type": "text"
+                        },
+                        {
+                            "field": "hybrid_channel",
+                            "label": "Hybrid Channel",
+                            "type": "text"
+                        },
+                        {
+                            "field": "sales_actual",
+                            "label": "Actual Sales",
+                            "type": "text"
+                        },
+                        {
+                            "field": "sales_model",
+                            "label": "Modelled Sales",
+                            "type": "text"
+                        },
+                        {
+                            "field": "sales_par",
+                            "label": "PAR",
+                            "type": "text"
+                        },
+                        {
+                            "field": "error_model",
+                            "label": "Relative Error of Modelled Sale",
+                            "type": "text"
+                        },
+                        {
+                            "field": "error_par",
+                            "label": "Relative Error of PAR",
+                            "type": "text"
+                        },
+                        {
+                            "streetview": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "style": [
+                                400,
+                                "#8f0a31",
+                                300,
+                                "#ffffff",
+                                200,
+                                "#4f1823"
+                            ]
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "style": [
+                                400,
+                                "#8f0a31"
+                            ]
+                        },
+                        "themes": [
+                            {
+                                "label": "Hybrid Channel",
+                                "type": "categorized",
+                                "field": "hybrid_channel",
+                                "other": true,
+                                "channels": {
+                                    "concession": {
+                                        "colour": "#4286f4",
+                                        "label": "Concession"
+                                    },
+                                    "secondary_centre": {
+                                        "colour": "#28B463",
+                                        "label": "Secondary Center"
+                                    },
+                                    "drive_thru": {
+                                        "colour": "#76D7C4",
+                                        "label": "Drive Thru"
+                                    },
+                                    "rail": {
+                                        "colour": "#DAF7A6",
+                                        "label": "Rail"
+                                    },
+                                    "airport": {
+                                        "colour": "#F4D03F",
+                                        "label": "Airport"
+                                    },
+                                    "caz_business": {
+                                        "colour": "#7D3C98",
+                                        "label": "caz_business"
+                                    },
+                                    "tertiary_centre": {
+                                        "colour": "#99A3A4",
+                                        "label": "Tertiary Center"
+                                    },
+                                    "primary_centre": {
+                                        "colour": "#EDBB99",
+                                        "label": "Primary Center"
+                                    },
+                                    "retail_park_main": {
+                                        "colour": "#2471A3",
+                                        "label": "Retail Park Main"
+                                    },
+                                    "controlled_access": {
+                                        "colour": "#1ABC9C",
+                                        "label": "Controlled Access"
+                                    },
+                                    "retail_park_local": {
+                                        "colour": "#F5B7B1",
+                                        "label": "Retail Park Local"
+                                    },
+                                    "outlet_centre": {
+                                        "colour": "#17202A",
+                                        "label": "Outlet Center"
+                                    },
+                                    "shopping_centre": {
+                                        "colour": "#F9E79F",
+                                        "label": "Shopping Center"
+                                    }
+                                },
+                                "cat": {
+                                    "concession": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#4286f4",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "secondary_centre": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#28B463",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "drive_thru": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#76D7C4",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "rail": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#DAF7A6",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "airport": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#F4D03F",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "caz_business": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#7D3C98",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "tertiary_centre": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#99A3A4",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "primary_centre": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#EDBB99",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "retail_park_main": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#2471A3",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "controlled_access": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#1ABC9C",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "retail_park_local": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#F5B7B1",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "outlet_centre": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#17202A",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    },
+                                    "shopping_centre": {
+                                        "marker": {
+                                            "type": "target",
+                                            "style": [
+                                                400,
+                                                "#F9E79F",
+                                                200,
+                                                "#FFF"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
