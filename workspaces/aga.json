@@ -298,7 +298,7 @@
 							"text": true
 						},
 						{
-							"label": "Catchment 10min",
+							"label": "Mapbox Catchment 10min",
 							"field": "geom_rplace",
 							"fieldfx": "ST_asGeoJson(geom_rplace)",
 							"type": "geometry",
@@ -310,6 +310,24 @@
 							"style": {
 								"stroke": true,
 								"color": "#ffca28",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						},
+						{
+							"label": "HERE Catchment 10min",
+							"field": "geom_rplace2",
+							"fieldfx": "ST_asGeoJson(geom_rplace2)",
+							"type": "geometry",
+							"edit": {
+								"isoline": {
+									"range": 10	
+								}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#6BE1FF",
 								"weight": 2,
 								"fill": true,
 								"fillOpacity": 0.2
@@ -351,8 +369,9 @@
 						"rectangle": true,
 						"circle": true,
 						"catchment": true,
-						"isolines": true,
-						"line": true
+						"isoline": true,
+						"line": true,
+						"delete": true
 					},
 					"display": true,
 					"name": "Vector test",
@@ -384,7 +403,7 @@
 							"filter": "date"
 						},
 						{
-							"label": "Catchment 10min",
+							"label": "Mapbox Catchment 10min",
 							"field": "geom_rplace",
 							"fieldfx": "ST_asGeoJson(geom_rplace)",
 							"type": "geometry",
@@ -393,7 +412,23 @@
 							},
 							"style": {
 								"stroke": true,
-								"color": "#cf0",
+								"color": "#FB8B24",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.5
+							}
+						},
+						{
+							"label": "HERE Catchment 10min",
+							"field": "geom_rplace2",
+							"fieldfx": "ST_asGeoJson(geom_rplace2)",
+							"type": "geometry",
+							"edit": {
+								"isoline": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#E36414",
 								"weight": 2,
 								"fill": true,
 								"fillOpacity": 0.5

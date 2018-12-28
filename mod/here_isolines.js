@@ -2,10 +2,10 @@ module.exports = async params => {
     
   let mode = params.mode || 'car',
     coordinates = params.coordinates, // required
-    rangetype = params.rangetype || layer.edit.isolines.rangetype,
-    range = params.range ? matchUnit(params.rangetype)*params.range : 10*matchUnit(params.rangetype), // 10 mins by default
+    rangetype = params.rangetype || 'time',
+    range = params.range ? matchUnit(rangetype)*parseInt(params.range) : 10*matchUnit(rangetype), // 10 mins by default
     type = params.type || 'fastest',
-    traffic = params.traffic ? 'traffic:default' : 'traffic:disabled';
+    traffic = 'traffic:disabled';//params.traffic ? 'traffic:default' : 'traffic:disabled';
 
   let _mode = [type, mode, traffic];
 

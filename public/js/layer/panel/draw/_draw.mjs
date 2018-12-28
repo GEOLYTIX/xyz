@@ -129,10 +129,10 @@ export default layer => {
     });
   }
 
-  if(layer.edit.isolines){
+  if(layer.edit.isoline){
 
     // set defaults
-    layer.edit.isolines = {
+    layer.edit.isoline = {
       type: 'fastest',
       rangetype: 'time'
     };
@@ -158,7 +158,7 @@ export default layer => {
         'Cycling': 'bicycle'
       },
       onchange: e => {
-        layer.edit.isolines.mode = e.target.value;
+        layer.edit.isoline.mode = e.target.value;
       },
       appendTo: block
     });
@@ -170,7 +170,7 @@ export default layer => {
         'Shortest': 'shortest'
       },
       onchange: e => {
-        layer.edit.isolines.type = e.target.value;
+        layer.edit.isoline.type = e.target.value;
       },
       appendTo: block
     });
@@ -183,7 +183,7 @@ export default layer => {
         'Consumption': 'consumption'
       },
       onchange: e => {
-        layer.edit.isolines.rangetype = e.target.value;
+        layer.edit.isoline.rangetype = e.target.value;
       },
       appendTo: block
     });
@@ -191,7 +191,7 @@ export default layer => {
     _xyz.utils.checkbox({
       label: 'Use live traffic data',
       onChange: e => {
-        layer.edit.isolines.traffic = e.target.checked;
+        layer.edit.isoline.traffic = e.target.checked;
         console.log('if this is checked select departure time');
       },
       appendTo: block
@@ -199,13 +199,14 @@ export default layer => {
 
     _xyz.utils.slider({
       title: 'Range of isoline: ',
-      min: 0, // 3 mins or 3 km
+      min: 1, // 3 mins or 3 km
       max: 60, // 60 mins or 60 km
+      default: 5,
       value: 10,
       appendTo: block,
       oninput: e => {
-        layer.edit.isolines.range = parseInt(e.target.value);
-        e.target.parentNode.previousSibling.textContent = layer.edit.isolines.range;
+        layer.edit.isoline.range = parseInt(e.target.value);
+        e.target.parentNode.previousSibling.textContent = layer.edit.isoline.range;
       }
     });
 

@@ -24,11 +24,11 @@ export default layer => {
       layer: layer.key,
       table: layer.table,
       coordinates: [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)].join(','),
-      mode: layer.edit.isolines.mode,
-      type: layer.edit.isolines.type,
-      rangetype: layer.edit.isolines.rangetype,
-      traffic: null,//layer.edit.isolines.traffic ? 'default' : 'disabled',
-      range: layer.edit.isolines.range,
+      mode: layer.edit.isoline.mode,
+      type: layer.edit.isoline.type,
+      rangetype: layer.edit.isoline.rangetype,
+      traffic: null,//layer.edit.isoline.traffic ? 'default' : 'disabled',
+      range: layer.edit.isoline.range,
       token: _xyz.token
     }));
 
