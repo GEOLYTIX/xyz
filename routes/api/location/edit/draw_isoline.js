@@ -25,10 +25,10 @@ module.exports = fastify => {
       const params = {
         coordinates: req.query.coordinates,
         mode: req.query.mode,
-        type: req.query.type || 'fastest',
+        type: req.query.type,
         rangetype: req.query.rangetype,
         range: req.query.range,
-        traffic: req.query.traffic ? 'traffic:default' : 'traffic:disabled' 
+        traffic: req.query.traffic 
       };
   
       if (!params.coordinates) return res.code(406).send('Invalid coordinates.');
@@ -45,30 +45,39 @@ module.exports = fastify => {
           
       const here_isolines = await require(global.appRoot + '/mod/here_isolines')(params);
   
-      if(!here_isolines.features) return res.code(202).send('No isoline found within this range.');
+      if(!here_isolines.response.isoline || !here_isolines.response.isoline[0].component) return res.code(202).send('No isoline found within this range.');
+  
+      let shape = here_isolines.response.isoline[0].component[0].shape;
 
-      console.log(here_isolines);
-  
-      /*let geojson = JSON.stringify(mapbox_isochrones.features[0].geometry);
-  
-        let _geom;
-  
-        if (geom) _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)`;
+      let geojson = {
+        'type': 'Polygon',
+        'coordinates': [[]]
+      };
+
+      shape.map(el => {
+        el = el.split(',');
+        geojson.coordinates[0].push(el.reverse());
+      });
+      
+      let _geom;
+      
+      if (geom) _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geojson)}'), 4326)`;
         
-        if (geom_3857) _geom = `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326), 3857)`;
+      if (geom_3857) _geom = `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geojson)}'), 4326), 3857)`;
   
-        var q = `
+      var q = `
         INSERT INTO ${table} (${geom || geom_3857})
         SELECT ${_geom}
         RETURNING ${layer.qID} AS id;`;
+
         
-        var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await global.pg.dbs[layer.dbs](q);
         
-        if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
         
-        if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, rows[0].id);
+      if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, rows[0].id);
         
-        res.code(200).send(rows[0].id.toString());   */
+      res.code(200).send(rows[0].id.toString());
         
     }
   });

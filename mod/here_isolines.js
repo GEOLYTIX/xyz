@@ -4,13 +4,14 @@ module.exports = async params => {
     coordinates = params.coordinates, // required
     rangetype = params.rangetype || layer.edit.isolines.rangetype,
     range = params.range ? matchUnit(params.rangetype)*params.range : 10*matchUnit(params.rangetype), // 10 mins by default
-    type = param.type || 'fastest',
-    traffic = param.traffic ? 'traffic:default' : 'traffic:disabled';
+    type = params.type || 'fastest',
+    traffic = params.traffic ? 'traffic:default' : 'traffic:disabled';
 
   let _mode = [type, mode, traffic];
 
+  const q = `https://isoline.route.api.here.com/routing/7.2/calculateisoline.json?${global.KEYS.HERE}&mode=${_mode.join(';')}&start=geo!${coordinates}&range=${range}&rangetype=${rangetype}`;
 
-  const q = `https://route.api.here.com/routing/7.2/calculateroute.json?${global.KEYS.HERE}&mode=${_mode.join(';')}&start=geo!${coordinates.join(',')}&range=${range}&rangetype=${rangetype}`;
+  console.log(q);
 
   // Fetch results from Google maps places API.
   const fetched = await require(global.appRoot + '/mod/fetch')(q);

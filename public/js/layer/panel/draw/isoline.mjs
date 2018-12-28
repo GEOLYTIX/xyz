@@ -23,29 +23,31 @@ export default layer => {
       locale: _xyz.locale,
       layer: layer.key,
       table: layer.table,
-      coordinates: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)].join(','),
+      coordinates: [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)].join(','),
       mode: layer.edit.isolines.mode,
       type: layer.edit.isolines.type,
       rangetype: layer.edit.isolines.rangetype,
-      traffic: layer.edit.isolines.traffic ? 'default' : 'disabled',
+      traffic: null,//layer.edit.isolines.traffic ? 'default' : 'disabled',
       range: layer.edit.isolines.range,
       token: _xyz.token
     }));
 
     xhr.onload = e => {
 
+      console.log(e.target.response);
+
       _xyz.dom.map.style.cursor = '';
   
-      //layer.get();
+      layer.get();
   
       if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
                                   
-      /*_xyz.locations.select({
-          layer: layer.key,
-          table: layer.table,
-          id: e.target.response,
-          marker: marker
-        });*/
+      _xyz.locations.select({
+        layer: layer.key,
+        table: layer.table,
+        id: e.target.response,
+        marker: marker
+      });
   
     };
 
