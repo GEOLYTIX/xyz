@@ -68,6 +68,8 @@ function startFastify(){
         },
         setAllHeaders: true
       },
+      // Must be set to false to allow iframe embeds.
+      frameguard: false,
       noCache: true
     })
     .register(require('fastify-cors'), { 
