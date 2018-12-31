@@ -408,7 +408,9 @@
 							"fieldfx": "ST_asGeoJson(geom_rplace)",
 							"type": "geometry",
 							"edit": {
-								"catchment": {}
+								"catchment": {
+									"minutes": 10
+								}
 							},
 							"style": {
 								"stroke": true,
@@ -424,7 +426,9 @@
 							"fieldfx": "ST_asGeoJson(geom_rplace2)",
 							"type": "geometry",
 							"edit": {
-								"isoline": {}
+								"isoline": {
+									"range": 600
+								}
 							},
 							"style": {
 								"stroke": true,

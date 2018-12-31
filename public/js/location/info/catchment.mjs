@@ -9,6 +9,9 @@ export default (record, entry) => {
     appendTo: tr,
     options: {
       colSpan: '2'
+    },
+    style: {
+      borderBottom: 'solid 1px ' + (entry.style ? entry.style.color : record.color)
     }
   });
 
