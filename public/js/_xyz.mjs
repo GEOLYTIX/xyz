@@ -79,6 +79,39 @@ export default {
   },
   //log: typeof document.body.dataset.log !== 'undefined',
   //map: {},
+  Map: function(params) {
+
+    this.map = _xyz.L.map(params.map_id, {
+      renderer: _xyz.L.svg(),
+      scrollWheelZoom: true,
+      zoomControl: false,
+      attributionControl: false
+    });
+  
+    _xyz.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
+  
+    this.map.setView([ params.view_lat, params.view_lng ], 10);
+
+    // return this.map;
+  
+  },
+  // Map: class {
+
+  //   constructor(params) {
+  //     this.map = _xyz.L.map(params.map_id, {
+  //       renderer: _xyz.L.svg(),
+  //       scrollWheelZoom: true,
+  //       zoomControl: false,
+  //       attributionControl: false
+  //     });
+  
+  //     _xyz.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
+  
+  //     this.map.setView([ params.view_lat, params.view_lng ], 10);
+  
+  //   }
+  
+  // },
   //nanoid: document.body.dataset.nanoid,
   panes: {
     list: {}

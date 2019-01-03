@@ -3,7 +3,19 @@
 // }
 
 
-let one = new __xyz({
+// _xyz.map = new _xyz.Map({
+//   host: document.head.dataset.dir,
+//   //token: API token,
+//   map_id: 'xyz_map1',
+//   locale: 'NE',
+//   view_lat: 40.74,
+//   view_lng: -73.98,
+//   view_zoom: 2,
+//   next: () => console.log(one)
+// });
+
+
+_this = new _xyz.Map({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
@@ -14,9 +26,11 @@ let one = new __xyz({
   next: () => console.log(one)
 });
 
-console.log(one);
+Object.assign(_xyz, _this);
 
-let two = new __xyz({
+console.log(_xyz);
+
+let two = new _xyz.Map({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
@@ -28,6 +42,8 @@ let two = new __xyz({
 });
 
 console.log(two);
+
+
 
 
 // function init() {
@@ -44,4 +60,3 @@ console.log(two);
 //   _xyz.locate.toggle();
 
 // }
-

@@ -17,19 +17,9 @@ _xyz.init = function (params) {
 
   if (params.token) _xyz.token = params.token;
 
-  
-
   // Get workspace from XYZ host.
   // Proceed with init from callback.
   _xyz.getWorkspace(init);
-
-  return _xyz;
-
-  // return new o(_xyz);
-
-  // function o(oo) {
-  //   this._xyz = oo;
-  // }
 
   function init() {
 
