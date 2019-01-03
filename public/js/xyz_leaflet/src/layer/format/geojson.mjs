@@ -70,11 +70,17 @@ export default function(){
       style: applyLayerStyle,
       pane: layer.key,
       interactive: layer.infoj? true: false,
-      pointToLayer: function(point, latlng){
-        return _xyz.L.circleMarker(latlng, {
-          radius: 9,
-          pane: layer.key
+      pointToLayer: (point, latlng) => {
+
+        return _xyz.L.marker(latlng, {
+          pane: layer.key,
+          icon: _xyz.L.icon({
+            iconUrl: _xyz.utils.svg_symbols(layer.style.default.marker),
+            iconSize: 40
+          }),
+          interactive: (layer.qID) ? true : false
         });
+
       }
     })
       .on('click', function(e){
@@ -87,10 +93,10 @@ export default function(){
         });
       })
       .on('mouseover', function(e){
-        e.layer.setStyle(layer.style.highlight);
+        e.layer.setStyle && e.layer.setStyle(layer.style.highlight);
       })
       .on('mouseout', function(e){
-        e.layer.setStyle(applyLayerStyle(e.layer.feature));
+        e.layer.setStyle && e.layer.setStyle(applyLayerStyle(e.layer.feature));
       })
       .addTo(_xyz.map);
 

@@ -227,7 +227,7 @@ export default function(){
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / param.max_size * point.properties.size;
 
-      return L.marker(latlng, {
+      return _xyz.L.marker(latlng, {
         pane: layer.key,
         // offset base on size draws bigger cluster first.
         zIndexOffset: parseInt(1000 - 1000 / param.max_size * point.properties.size),

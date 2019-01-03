@@ -11,7 +11,7 @@ html, body {
     padding-top: 5px;
 } 
 
-#xyz_map {
+.xyz_map {
     width: calc(100% - 200px);
     height: 80%;
     box-shadow: 2px 2px 4px #666;

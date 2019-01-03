@@ -63,7 +63,8 @@
                     "color": "#333333",
                     "fill": true,
                     "fillColor": "#333333",
-                    "fillOpacity": 0.1
+                    "fillOpacity": 0.1,
+                    "marker": {}
                 },
                 "highlight": {
                     "stroke": true,

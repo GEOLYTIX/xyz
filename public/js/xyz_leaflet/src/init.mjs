@@ -8,7 +8,7 @@ import './loadLocale.mjs';
 
 import './interface.mjs';
 
-_xyz.init = params => {
+_xyz.init = function (params) {
 
   // Set XYZ Host.
   _xyz.host = params.host;
@@ -17,9 +17,19 @@ _xyz.init = params => {
 
   if (params.token) _xyz.token = params.token;
 
+  
+
   // Get workspace from XYZ host.
   // Proceed with init from callback.
   _xyz.getWorkspace(init);
+
+  return _xyz;
+
+  // return new o(_xyz);
+
+  // function o(oo) {
+  //   this._xyz = oo;
+  // }
 
   function init() {
 

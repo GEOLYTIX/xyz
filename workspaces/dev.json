@@ -244,6 +244,70 @@
                 }
             }
         },
+        "Offices": {
+            "minZoom": 2,
+            "maxZoom": 18,
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "placeholder": "e.g. London"
+            },
+            "layers": {
+                "base": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "label": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "offices": {
+                    "display": true,
+                    "format": "geojson",
+                    "dbs": "XYZ",
+                    "table": "glx_offices",
+                    "qID": "id",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "style": {
+                        "default": {
+                            "marker": {
+                                "type": "markerColor",
+                                "style": {
+                                    "colorMarker": "#64dd17",
+                                    "colorDot": "#33691e"
+                                }
+                            }
+                        }
+                    },
+                    "infoj": [
+                        {
+                            "label": "City",
+                            "field": "city",
+                            "type": "text",
+                            "edit": true
+                        },   
+                        {
+                            "label": "Address",
+                            "field": "address",
+                            "type": "text",
+                            "edit": true
+                        }
+                    ]
+                }
+            }
+        },
         "GB": {
             "gazetteer": {
                 "provider": "GOOGLE",
