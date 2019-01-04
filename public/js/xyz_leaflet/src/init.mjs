@@ -21,7 +21,18 @@ _xyz.init = function (params) {
   // Proceed with init from callback.
   _xyz.getWorkspace(init);
 
+
   function init() {
+
+    // Set XYZ map DOM.
+    _xyz.map_dom = document.getElementById(params.map_id);
+
+    // Continue with callback if provided.
+    if (params.next) params.next(new _xyz.Map(params));
+    
+  }
+
+  function _init() {
 
     // Set XYZ map DOM.
     _xyz.map_dom = document.getElementById(params.map_id);

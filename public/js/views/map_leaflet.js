@@ -15,7 +15,22 @@
 // });
 
 
-_this = new _xyz.Map({
+// let _this = new _xyz.Map({
+//   host: document.head.dataset.dir,
+//   //token: API token,
+//   map_id: 'xyz_map1',
+//   locale: 'NE',
+//   view_lat: 40.74,
+//   view_lng: -73.98,
+//   view_zoom: 2,
+//   next: () => console.log(one)
+// });
+
+// Object.assign(_xyz, _this);
+
+// console.log(_xyz);
+
+_xyz.init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
@@ -23,14 +38,14 @@ _this = new _xyz.Map({
   view_lat: 40.74,
   view_lng: -73.98,
   view_zoom: 2,
-  next: () => console.log(one)
+  next: map => {
+    Object.assign(_xyz, map);
+    console.log(_xyz);
+  }
 });
 
-Object.assign(_xyz, _this);
 
-console.log(_xyz);
-
-let two = new _xyz.Map({
+_xyz.init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
@@ -38,10 +53,8 @@ let two = new _xyz.Map({
   view_lat: 51.52,
   view_lng: 0.24,
   view_zoom: 2,
-  next: () => console.log(two)
+  next: map => console.log(map)
 });
-
-console.log(two);
 
 
 
