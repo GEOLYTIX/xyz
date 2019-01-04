@@ -1,6 +1,6 @@
 import _xyz from '../../_xyz.mjs';
 
-_xyz.getWorkspace = next => {
+_xyz.getWorkspace = done => {
 
   // XHR to retrieve workspace from host backend.
   const xhr = new XMLHttpRequest();
@@ -22,7 +22,7 @@ _xyz.getWorkspace = next => {
         return obj;
       }, {});
 
-    next();
+    done();
 
   };
 

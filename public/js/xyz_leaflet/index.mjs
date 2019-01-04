@@ -4,6 +4,8 @@ import L from 'leaflet';
 
 _xyz.L = L;
 
-import './src/init.mjs';
+import init from './src/init.mjs';
+
+init(_xyz);
 
 export default _xyz;

@@ -3,18 +3,6 @@
 // }
 
 
-// _xyz.map = new _xyz.Map({
-//   host: document.head.dataset.dir,
-//   //token: API token,
-//   map_id: 'xyz_map1',
-//   locale: 'NE',
-//   view_lat: 40.74,
-//   view_lng: -73.98,
-//   view_zoom: 2,
-//   next: () => console.log(one)
-// });
-
-
 // let _this = new _xyz.Map({
 //   host: document.head.dataset.dir,
 //   //token: API token,
@@ -23,14 +11,14 @@
 //   view_lat: 40.74,
 //   view_lng: -73.98,
 //   view_zoom: 2,
-//   next: () => console.log(one)
+//   next: () => console.log(_this)
 // });
 
 // Object.assign(_xyz, _this);
 
 // console.log(_xyz);
 
-_xyz.init({
+let _xyz1 = _xyz.init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
@@ -38,14 +26,16 @@ _xyz.init({
   view_lat: 40.74,
   view_lng: -73.98,
   view_zoom: 2,
-  next: map => {
-    Object.assign(_xyz, map);
-    console.log(_xyz);
-  }
+  //next: next1(map)
 });
 
+function next1(map) {
+  let _xyz1 = Object.assign(_xyz, map);
+  console.log(_xyz1);
+}
 
-_xyz.init({
+
+let _xyz2 = _xyz.init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
@@ -53,8 +43,13 @@ _xyz.init({
   view_lat: 51.52,
   view_lng: 0.24,
   view_zoom: 2,
-  next: map => console.log(map)
+  //next: next2(map)
 });
+
+function next2(map) {
+  let _xyz2 = Object.assign(_xyz, map);
+  console.log(_xyz2);
+}
 
 
 
