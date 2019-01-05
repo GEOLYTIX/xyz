@@ -2,56 +2,31 @@
 //   window.history.replaceState( null, null, window.location.href );
 // }
 
+_xyz1 = _xyz();
 
-// let _this = new _xyz.Map({
-//   host: document.head.dataset.dir,
-//   //token: API token,
-//   map_id: 'xyz_map1',
-//   locale: 'NE',
-//   view_lat: 40.74,
-//   view_lng: -73.98,
-//   view_zoom: 2,
-//   next: () => console.log(_this)
-// });
-
-// Object.assign(_xyz, _this);
-
-// console.log(_xyz);
-
-let _xyz1 = _xyz.init({
+_xyz1.init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
   locale: 'NE',
   view_lat: 40.74,
   view_lng: -73.98,
-  view_zoom: 2,
-  //next: next1(map)
+  view_zoom: 10,
+  callback: () => console.log(_xyz1)
 });
 
-function next1(map) {
-  let _xyz1 = Object.assign(_xyz, map);
-  console.log(_xyz1);
-}
+_xyz2 = _xyz();
 
-
-let _xyz2 = _xyz.init({
+_xyz2.init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
   locale: 'Offices',
   view_lat: 51.52,
   view_lng: 0.24,
-  view_zoom: 2,
-  //next: next2(map)
+  view_zoom: 10,
+  callback: () => console.log(_xyz2)
 });
-
-function next2(map) {
-  let _xyz2 = Object.assign(_xyz, map);
-  console.log(_xyz2);
-}
-
-
 
 
 // function init() {

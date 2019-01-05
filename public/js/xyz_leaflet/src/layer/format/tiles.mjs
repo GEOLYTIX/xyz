@@ -1,33 +1,37 @@
-import _xyz from '../../../../_xyz.mjs';
+// import _xyz from '../../../../_xyz.mjs';
 
-export default function () {
+export default _xyz => {
 
-  const layer = this;
+  return function () {
 
-  if (!layer.display) return;
+    const layer = this;
 
-  // Return from layer get once added to map.
-  if (layer.loaded) return;
-  layer.loaded = true;
+    if (!layer.display) return;
 
-  if (layer.attribution) _xyz.attribution.set(layer.attribution);
+    // Return from layer get once added to map.
+    if (layer.loaded) return;
+    layer.loaded = true;
 
-  // Augment request with token if proxied through backend.
-  // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
-  let uri = layer.URI.indexOf('provider') > 0 ?
-    _xyz.host + '/proxy/request?uri=' + layer.URI + '&token=' + _xyz.token :
-    layer.URI;
+    //if (layer.attribution) _xyz.attribution.set(layer.attribution);
+
+    // Augment request with token if proxied through backend.
+    // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
+    let uri = layer.URI.indexOf('provider') > 0 ?
+      _xyz.host + '/proxy/request?uri=' + layer.URI + '&token=' + _xyz.token :
+      layer.URI;
 
     // Assign the tile layer to the layer L object and add to map.
-  layer.L = L.tileLayer(uri, {
-    updateWhenIdle: true,
-    pane: layer.key
-  })
-    .on('load', () => {
-      
-      if (layer.loader)  layer.loader.style.display = 'none';
-
+    layer.L = L.tileLayer(uri, {
+      updateWhenIdle: true,
+      pane: layer.key
     })
-    .addTo(_xyz.map);
+      .on('load', () => {
+      
+        if (layer.loader)  layer.loader.style.display = 'none';
 
-}
+      })
+      .addTo(_xyz.map);
+
+  };
+
+};

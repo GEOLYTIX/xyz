@@ -7,6 +7,7 @@
             "maxZoom": 10,
             "layers": {
                 "OSM": {
+                    "display": true,
                     "format": "tiles",
                     "attribution": {
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"

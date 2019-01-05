@@ -1,88 +1,102 @@
-import _xyz from '../../../_xyz.mjs';
+// import _xyz from '../../../_xyz.mjs';
 
-import format_mvt from './format/mvt.mjs';
+import MVT from './format/mvt.mjs';
 
-import format_geojson from './format/geojson.mjs';
+import Geojson from './format/geojson.mjs';
 
-import format_cluster from './format/cluster.mjs';
+import Cluster from './format/cluster.mjs';
 
-import format_tiles from './format/tiles.mjs';
+import Tiles from './format/tiles.mjs';
 
-import format_grid from './format/grid.mjs';
+import Grid from './format/grid.mjs';
 
-_xyz.layers.add = layer => {
+export default _xyz => {
 
-  layer.tableCurrent = function(){
+  const format_mvt = MVT(_xyz);
 
-    const layer = this;
+  const format_geojson = Geojson(_xyz);
 
-    if (!layer.tables) return layer.table;
+  const format_cluster = Cluster(_xyz);
 
-    let
-      table,
-      zoom = _xyz.map.getZoom(),
-      zoomKeys = Object.keys(layer.tables),
-      minZoomKey = parseInt(zoomKeys[0]),
-      maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
+  const format_tiles = Tiles(_xyz);
+
+  const format_grid = Grid(_xyz);
+
+  _xyz.layers.add = layer => {
+
+    layer.tableCurrent = function(){
+
+      const layer = this;
+
+      if (!layer.tables) return layer.table;
+
+      let
+        table,
+        zoom = _xyz.map.getZoom(),
+        zoomKeys = Object.keys(layer.tables),
+        minZoomKey = parseInt(zoomKeys[0]),
+        maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
             
-    table = layer.tables[zoom];
+      table = layer.tables[zoom];
 
-    table = zoom < minZoomKey ? layer.tables[minZoomKey] : table;
+      table = zoom < minZoomKey ? layer.tables[minZoomKey] : table;
 
-    table = zoom > maxZoomKey ? layer.tables[maxZoomKey] : table;
+      table = zoom > maxZoomKey ? layer.tables[maxZoomKey] : table;
 
-    if (layer.drawer) layer.drawer.style.opacity = !table ? 0.4 : 1;
+      if (layer.drawer) layer.drawer.style.opacity = !table ? 0.4 : 1;
 
-    if (layer.loader) layer.loader.style.display = (!table || !layer.display) ? 'none' : 'block';
+      if (layer.loader) layer.loader.style.display = (!table || !layer.display) ? 'none' : 'block';
 
-    if (!table && layer.attribution) _xyz.attribution.remove(layer.attribution);
+      if (!table && layer.attribution) _xyz.attribution.remove(layer.attribution);
 
-    return table;
+      return table;
 
-  };
+    };
 
-  layer.tableMin = function(){
+    layer.tableMin = function(){
 
-    const layer = this;
+      const layer = this;
 
-    if (!layer.tables) return layer.table;
+      if (!layer.tables) return layer.table;
 
-    let zoomKeys = Object.keys(layer.tables);
+      let zoomKeys = Object.keys(layer.tables);
 
-    return layer.tables[zoomKeys[0]] || layer.tables[zoomKeys[1]];
+      return layer.tables[zoomKeys[0]] || layer.tables[zoomKeys[1]];
 
-  };
+    };
 
-  layer.tableMax = function(){
+    layer.tableMax = function(){
 
-    const layer = this;
+      const layer = this;
 
-    if (!layer.tables) return layer.table;
+      if (!layer.tables) return layer.table;
 
-    let zoomKeys = Object.keys(layer.tables);
+      let zoomKeys = Object.keys(layer.tables);
 
-    return layer.tables[zoomKeys[zoomKeys.length-1]] || layer.tables[zoomKeys[zoomKeys.length-2]];
+      return layer.tables[zoomKeys[zoomKeys.length-1]] || layer.tables[zoomKeys[zoomKeys.length-2]];
 
-  };
+    };
 
-  if (!layer.format) return;
+    if (!layer.format) return;
 
-  if (!layer.key) return;
+    if (!layer.key) return;
 
-  _xyz.panes.list.push(_xyz.map.createPane(layer.key));
-  _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
+    _xyz.panes.list.push(_xyz.map.createPane(layer.key));
+    _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
     
-  if (layer.format === 'mvt') layer.get = format_mvt;
+    if (layer.format === 'mvt') layer.get = format_mvt;
 
-  if (layer.format === 'geojson') layer.get = format_geojson;
+    if (layer.format === 'geojson') layer.get = format_geojson;
 
-  if (layer.format === 'cluster') layer.get = format_cluster;
+    if (layer.format === 'cluster') layer.get = format_cluster;
 
-  if (layer.format === 'tiles') layer.get = format_tiles;
+    if (layer.format === 'tiles') layer.get = format_tiles;
 
-  if (layer.format === 'grid') layer.get = format_grid;
+    if (layer.format === 'grid') layer.get = format_grid;
 
-  layer.loaded = false;
-  layer.get();
+    layer.loaded = false;
+    layer.get();
+
+  };
 
 };

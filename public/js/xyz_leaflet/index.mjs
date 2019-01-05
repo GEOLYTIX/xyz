@@ -1,11 +1,21 @@
-import _xyz from '../_xyz.mjs';
+import _xyz_instance from '../_xyz.mjs';
 
 import L from 'leaflet';
 
-_xyz.L = L;
+import * as utils from '../utils/_utils.mjs';
 
 import init from './src/init.mjs';
 
-init(_xyz);
+export default () => {
+    
+  const _xyz = _xyz_instance();
 
-export default _xyz;
+  _xyz.L = L;
+
+  _xyz.utils = utils;
+
+  init(_xyz);
+
+  return _xyz;
+
+};
