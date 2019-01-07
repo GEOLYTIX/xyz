@@ -1,18 +1,22 @@
-// import _xyz from '../../_xyz.mjs';
-
 import getWorkspace from './getWorkspace.mjs';
 
-// import './attribution.mjs';
+import attribution from './attribution.mjs';
 
 import loadLocale from './loadLocale.mjs';
 
-// import './interface.mjs';
+import Locate from './locate.mjs';
+
+import Interface from './interface.mjs';
 
 export default _xyz => {
+
+  attribution(_xyz);
 
   getWorkspace(_xyz);
 
   loadLocale(_xyz);
+
+  Locate(_xyz);
 
   _xyz.init = params => {
 
@@ -22,6 +26,8 @@ export default _xyz => {
     if (!_xyz.host) return console.error('XYZ host not defined!');
 
     if (params.token) _xyz.token = params.token;
+
+    Interface(_xyz, params);
 
     // Get workspace from XYZ host.
     // Proceed with init from callback.
@@ -35,7 +41,7 @@ export default _xyz => {
       if (!_xyz.map_dom) return console.error('XYZ map not defined!');
 
       // Create attribution in map DOM.
-      //_xyz.attribution.create();
+      _xyz.attribution.create();
 
       // Remove existing Leaflet map object.
       if (_xyz.map) _xyz.map.remove();

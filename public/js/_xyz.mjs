@@ -154,7 +154,6 @@ export default () => ({
   token: null,
   utils: null,
   view: { 
-    mode: null,
-    set: {}
+    mode: null
   }
 });

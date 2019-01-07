@@ -1,8 +1,6 @@
-import _xyz from '../../../_xyz.mjs';
-
 import d3_selection from 'd3-selection';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   let width = layer.drawer.clientWidth;
       

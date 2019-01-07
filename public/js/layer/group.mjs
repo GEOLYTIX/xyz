@@ -1,6 +1,4 @@
-import _xyz from '../_xyz.mjs';
-
-export default groupKey => {
+export default (_xyz, groupKey) => {
 
   // Create group object.
   const group = {};

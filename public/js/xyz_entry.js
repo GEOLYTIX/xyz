@@ -1,9 +1,7 @@
-// import _xyz from './_xyz.mjs';
-
 // use leaflet map control
-import XYZ from './xyz_leaflet/index.mjs';
+import _XYZ from './xyz_leaflet/index.mjs';
 
-const _xyz = XYZ();
+const _xyz = _XYZ();
 
 _xyz.log = typeof document.body.dataset.log !== 'undefined';
 
@@ -12,28 +10,33 @@ _xyz.nanoid = document.body.dataset.nanoid;
 _xyz.view.mode = document.body.dataset.viewmode;
 
 // Set platform specific interface functions.
-// import mobile from './views/mobile.mjs';
-// if (_xyz.view.mode === 'mobile') mobile();
+import mobile from './views/mobile.mjs';
+if (_xyz.view.mode === 'mobile') mobile(_xyz);
 
-// import desktop from './views/desktop.mjs';
-// if (_xyz.view.mode === 'desktop') desktop();
+import desktop from './views/desktop.mjs';
+if (_xyz.view.mode === 'desktop') desktop(_xyz);
 
-// import './hooks.mjs';
+import hooks from './hooks.mjs';
+hooks(_xyz);
 
-// import './locales.mjs';
+import locales from './locales.mjs';
+locales(_xyz);
 
-// import './layer/_layers.mjs';
+import _layers from './layer/_layers.mjs';
+_layers(_xyz);
 
-// import './location/_locations.mjs';
+import _locations from './location/_locations.mjs';
+_locations(_xyz);
 
-// import './gazetteer.mjs';
+import gazetteer from './gazetteer.mjs';
+gazetteer(_xyz);
 
 // Initiate map control.
 _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
   map_id: 'Map',
-  //callback: init
+  callback: init
 });
 
 function init() {

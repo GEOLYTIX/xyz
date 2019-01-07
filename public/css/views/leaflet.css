@@ -740,6 +740,23 @@
   background: #fff;
   border: 1px solid #666; }
 
+.attribution {
+  bottom: 5px;
+  right: 5px;
+  position: absolute;
+  z-index: 999;
+  text-align: right;
+  font-family: ffmark_bold, sans-serif;
+  font-size: 18px;
+  text-shadow: 1px 1px 1px #cf9; }
+  .attribution #attribution_links i {
+    font-size: 14px; }
+  .attribution #attribution_links a {
+    margin-left: 5px; }
+  .attribution .logo {
+    font-family: ffmark_black, sans-serif;
+    font-size: 40px; }
+
 *,
 *::after,
 *::before {
@@ -758,26 +775,5 @@ body {
 a {
   color: #383836;
   text-decoration: none; }
-
-.attribution {
-  bottom: 5px;
-  right: 5px;
-  position: absolute;
-  z-index: 999; }
-  .attribution #attribution_links {
-    float: right;
-    clear: right;
-    font-family: ffmark_bold, sans-serif;
-    font-size: 18px;
-    text-shadow: 2px 2px #cf9; }
-    .attribution #attribution_links i {
-      font-size: 14px; }
-    .attribution #attribution_links a {
-      margin-left: 5px; }
-  .attribution .logo {
-    font-family: ffmark_black, sans-serif;
-    text-shadow: 2px 2px #cf9;
-    float: right;
-    font-size: 40px; }
 
 /*# sourceMappingURL=leaflet.css.map */

@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import circle from '@turf/circle';
 import distance from '@turf/distance';
 import helpers from '@turf/helpers';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   if(!layer.display) layer.show();
     

@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default layer => {
+export default (_xyz, layer) => {
 
   layer.header.classList.remove('edited');
 

@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (layer, style, title) => {
+export default (_xyz, layer, style, title) => {
 
   if (title) {
 

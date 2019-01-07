@@ -1,8 +1,6 @@
-import _xyz from '../../_xyz.mjs';
-
 // import pointOnFeature from '@turf/point-on-feature';
 
-export default record => {
+export default (_xyz, record) => {
 
   record.upload = _xyz.utils.createElement({
     tag: 'i',
@@ -79,4 +77,5 @@ export default record => {
       }
     }
   });
+  
 };

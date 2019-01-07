@@ -1,5 +1,3 @@
-import _xyz from '../_xyz.mjs';
-
 import layer_panels from './panel/_panels.mjs';
 
 import layer_group from './group.mjs';
@@ -14,80 +12,84 @@ import layer_remove from './remove.mjs';
 
 import layer_icon from './icon.mjs';
 
-_xyz.layers.init = () => {
+export default _xyz => {
+
+  _xyz.layers.init = () => {
 
   // Empty the layers list.
-  document.getElementById('layers').innerHTML = '';
+    document.getElementById('layers').innerHTML = '';
    
-  // Reset groups.
-  _xyz.layers.groups = {};
+    // Reset groups.
+    _xyz.layers.groups = {};
   
-  // Loop through the layers and add to layers list.
-  Object.values(_xyz.layers.list).forEach(layer => {
+    // Loop through the layers and add to layers list.
+    Object.values(_xyz.layers.list).forEach(layer => {
   
     // Create new layer group if group does not exist yet.
-    if (layer.group && !_xyz.layers.groups[layer.group]) layer_group(layer.group);
+      if (layer.group && !_xyz.layers.groups[layer.group]) layer_group(_xyz, layer.group);
   
-    // Create layer drawer.
-    layer.drawer = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        className: 'drawer'
-      },
-      style: {
-        display: layer.hidden ? 'none' : 'block'
-      },
-      appendTo: layer.group ? _xyz.layers.groups[layer.group].container : document.getElementById('layers')
-    });
+      // Create layer drawer.
+      layer.drawer = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          className: 'drawer'
+        },
+        style: {
+          display: layer.hidden ? 'none' : 'block'
+        },
+        appendTo: layer.group ? _xyz.layers.groups[layer.group].container : document.getElementById('layers')
+      });
   
-    // Create layer header.
-    layer.header = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
+      // Create layer header.
+      layer.header = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
         //textContent: (layer.group ? '' : (layer.name || layer.key)),
-        innerHTML: (layer.group ? ('&#10149; ' + layer.name) : (layer.name || layer.key)),
-        className: 'header'
-      },
-      style: {
-        borderBottom: '2px solid ' + (((layer.style || {}).default || {}).color ? layer.style.default.color : '#333')
-      },
-      appendTo: layer.drawer
-    });
+          innerHTML: (layer.group ? ('&#10149; ' + layer.name) : (layer.name || layer.key)),
+          className: 'header'
+        },
+        style: {
+          borderBottom: '2px solid ' + (((layer.style || {}).default || {}).color ? layer.style.default.color : '#333')
+        },
+        appendTo: layer.drawer
+      });
   
-    // Add loader bar to layer drawer.
-    layer.loader = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        className: 'loader'
-      },
-      appendTo: layer.drawer
-    });
+      // Add loader bar to layer drawer.
+      layer.loader = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          className: 'loader'
+        },
+        appendTo: layer.drawer
+      });
   
-    // Push the layer into the layers hook array.
-    if (layer.display) _xyz.hooks.push('layers', layer.key);
+      // Push the layer into the layers hook array.
+      if (layer.display) _xyz.hooks.push('layers', layer.key);
   
-    // Method to show layer on map.
-    layer.show = layer_show;
+      // Method to show layer on map.
+      layer_show(_xyz, layer);
   
-    // Method to remove layer from map.
-    layer.remove = layer_remove;
+      // Method to remove layer from map.
+      layer_remove(_xyz, layer);
   
-    // Create control to toggle layer visibility.
-    layer.toggle = layer_toggle(layer);
+      // Create control to toggle layer visibility.
+      layer_toggle(_xyz, layer);
       
-    // Create zoom to layer control
-    layer_focus(layer);
+      // Create zoom to layer control
+      layer_focus(_xyz, layer);
   
-    //Add panel to layer control.
-    layer_panels(layer);
+      //Add panel to layer control.
+      layer_panels(_xyz, layer);
   
-    //Add icon to layer header.
-    layer_icon(layer);
+      //Add icon to layer header.
+      layer_icon(_xyz, layer);
 
-    //Run tableCurrent function to disable layer drawer if necessary.
-    layer.tableCurrent();
+      //Run tableCurrent function to disable layer drawer if necessary.
+      layer.tableCurrent();
    
-    if (_xyz.log) console.log(layer);
+      if (_xyz.log) console.log(layer);
       
-  });
+    });
+  };
+
 };

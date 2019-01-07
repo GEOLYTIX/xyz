@@ -1,6 +1,4 @@
-import _xyz from '../../_xyz.mjs';
-
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   entry.row.classList.add('tr_streetview');
   

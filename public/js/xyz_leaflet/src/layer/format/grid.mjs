@@ -1,5 +1,3 @@
-// import _xyz from '../../../../_xyz.mjs';
-
 export default _xyz => {
 
   return function () {
@@ -70,7 +68,7 @@ export default _xyz => {
 
       if (e.target.status !== 200 || !layer.display) return;
 
-      // if (layer.attribution) _xyz.attribution.set(layer.attribution);
+      if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
       // Add geoJSON feature collection to the map.
       layer.L = _xyz.L.geoJson(processGrid(e.target.response), {

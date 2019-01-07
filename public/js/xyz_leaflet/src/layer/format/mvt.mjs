@@ -1,7 +1,3 @@
-// import _xyz from '../../../../_xyz.mjs';
-
-import 'leaflet.vectorgrid';
-
 export default _xyz => {
 
   return function () {
@@ -71,7 +67,7 @@ export default _xyz => {
       
         if (layer.loader)  layer.loader.style.display = 'none';
 
-        // if (layer.attribution) _xyz.attribution.set(layer.attribution);
+        if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
         layer.loaded = true;
 

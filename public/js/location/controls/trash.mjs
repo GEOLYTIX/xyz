@@ -1,6 +1,4 @@
-import _xyz from '../../_xyz.mjs';
-
-export default record => {
+export default (_xyz, record) => {
 
   if (!record.location.edit || !record.location.edit.delete) return;
 
@@ -60,4 +58,5 @@ export default record => {
       }
     }
   });
+  
 };

@@ -1,5 +1,3 @@
-import _xyz from '../../../_xyz.mjs';
-
 import polyGraduated from './polyGraduated.mjs';
 
 import polyCategorized from './polyCategorized.mjs';
@@ -12,7 +10,7 @@ import polyStyle from './polyStyle.mjs';
 
 import clusterStyle from './clusterStyle.mjs';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   // Meaningful styles can only be set for vector and cluster objects.
   if (layer.format === 'grid' || layer.format === 'tiles') return;
@@ -83,45 +81,45 @@ export default layer => {
   // Apply the current theme.
   if(layer.style.theme) applyTheme(layer);
 
-};
+  function applyTheme(layer) {
 
-function applyTheme(layer) {
-
-  // Empty legend.
-  layer.style.legend.innerHTML = '';
-
-  // Create / empty legend filter when theme is applied.
-  layer.filter.legend = {};
-
-  // Basic controls for cluster marker, default polygon and highlight.
-  if (!layer.style.theme) {
-
-    if (layer.style.marker) clusterStyle(layer, layer.style.marker, 'Marker');
-
-    if (layer.style.markerMulti) clusterStyle(layer, layer.style.markerMulti, 'Marker (multi)');
-
-    if (layer.style.default) polyStyle(layer, layer.style.default, 'Polygon');
-
-    if (layer.style.highlight) polyStyle(layer, layer.style.highlight, 'Highlight');
-
-    return layer.get();
+    // Empty legend.
+    layer.style.legend.innerHTML = '';
+  
+    // Create / empty legend filter when theme is applied.
+    layer.filter.legend = {};
+  
+    // Basic controls for cluster marker, default polygon and highlight.
+    if (!layer.style.theme) {
+  
+      if (layer.style.marker) clusterStyle(_xyz, layer, layer.style.marker, 'Marker');
+  
+      if (layer.style.markerMulti) clusterStyle(_xyz, layer, layer.style.markerMulti, 'Marker (multi)');
+  
+      if (layer.style.default) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
+  
+      if (layer.style.highlight) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
+  
+      return layer.get();
+    }
+  
+    if ((layer.format === 'mvt' || layer.format === 'geojson')
+      && layer.style.theme.type === 'categorized') polyCategorized(_xyz, layer);
+  
+    if ((layer.format === 'mvt' || layer.format === 'geojson')
+      && layer.style.theme.type === 'graduated') polyGraduated(_xyz, layer);
+  
+    if (layer.format === 'cluster'
+      && layer.style.theme.type === 'categorized') clusterCategorized(_xyz, layer);
+  
+    if (layer.format === 'cluster'
+      && layer.style.theme.type === 'competition') clusterCategorized(_xyz, layer);
+  
+    if (layer.format === 'cluster'
+      && layer.style.theme.type === 'graduated') clusterGraduated(_xyz, layer);    
+  
+    layer.get();
+  
   }
 
-  if ((layer.format === 'mvt' || layer.format === 'geojson')
-    && layer.style.theme.type === 'categorized') polyCategorized(layer);
-
-  if ((layer.format === 'mvt' || layer.format === 'geojson')
-    && layer.style.theme.type === 'graduated') polyGraduated(layer);
-
-  if (layer.format === 'cluster'
-    && layer.style.theme.type === 'categorized') clusterCategorized(layer);
-
-  if (layer.format === 'cluster'
-    && layer.style.theme.type === 'competition') clusterCategorized(layer);
-
-  if (layer.format === 'cluster'
-    && layer.style.theme.type === 'graduated') clusterGraduated(layer);    
-
-  layer.get();
-
-}
+};

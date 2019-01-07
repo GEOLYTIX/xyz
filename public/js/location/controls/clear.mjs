@@ -1,7 +1,5 @@
-import _xyz from '../../_xyz.mjs';
+export default (_xyz, record) => {
 
-export default record => {
-    
   _xyz.utils.createElement({
     tag: 'i',
     options: {
@@ -38,4 +36,5 @@ export default record => {
       }
     }
   });
+  
 };

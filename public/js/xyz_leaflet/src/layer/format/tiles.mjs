@@ -1,5 +1,3 @@
-// import _xyz from '../../../../_xyz.mjs';
-
 export default _xyz => {
 
   return function () {
@@ -12,7 +10,7 @@ export default _xyz => {
     if (layer.loaded) return;
     layer.loaded = true;
 
-    //if (layer.attribution) _xyz.attribution.set(layer.attribution);
+    if (layer.attribution) _xyz.attribution.set(layer.attribution);
 
     // Augment request with token if proxied through backend.
     // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  

@@ -1,10 +1,8 @@
-import _xyz from '../../_xyz.mjs';
-
 import catchment from './catchment.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
-  if (entry.edit.catchment) catchment(record, entry);
+  if (entry.edit.catchment) catchment(_xyz, record, entry);
 
   if (!entry.value) return;
 

@@ -1,5 +1,3 @@
-// import _xyz from '../../../_xyz.mjs';
-
 import MVT from './format/mvt.mjs';
 
 import Geojson from './format/geojson.mjs';

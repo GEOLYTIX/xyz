@@ -1,5 +1,3 @@
-// import _xyz from '../../../../_xyz.mjs';
-
 export default _xyz => {
 
   return function () {

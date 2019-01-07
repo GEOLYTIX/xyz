@@ -1,5 +1,3 @@
-// import _xyz from '../../../../_xyz.mjs';
-
 export default _xyz => {
 
   return function () {
@@ -75,7 +73,7 @@ export default _xyz => {
       // Data is returned and the layer is still current.
       if (e.target.status !== 200 || !layer.display) return;
 
-      // if (layer.attribution) _xyz.attribution.set(layer.attribution);
+      if (layer.attribution) _xyz.attribution.set(layer.attribution);
     
       const cluster = e.target.response;
 

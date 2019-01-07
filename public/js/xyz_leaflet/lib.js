@@ -1,3 +1,3 @@
-import _xyz from './index.mjs';
+import _XYZ from './index.mjs';
 
-window._xyz = _xyz;
+window._xyz = _XYZ;

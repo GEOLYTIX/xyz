@@ -1,14 +1,12 @@
-// import _xyz from '../../_xyz.mjs';
-
 import addLayer from './layer/add.mjs';
 
-// import './location/select.mjs';
-
-// import './locate.mjs';
+import Select from './location/select.mjs';
 
 export default _xyz => {
 
   addLayer(_xyz);
+
+  Select(_xyz);
 
   _xyz.loadLocale = locale => {
 

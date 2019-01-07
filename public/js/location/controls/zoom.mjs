@@ -1,6 +1,4 @@
-import _xyz from '../../_xyz.mjs';
-
-export default record => {
+export default (_xyz, record) => {
     
   _xyz.utils.createElement({
     tag: 'i',
@@ -24,4 +22,5 @@ export default record => {
       }
     }
   });
+  
 };

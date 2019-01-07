@@ -1,8 +1,6 @@
-import _xyz from '../../../_xyz.mjs';
-
 // import stage from './stage.mjs';
 
-export default layer => {
+export default (_xyz, layer) => {
     
   if(!layer.display) layer.show();
     
@@ -21,7 +19,7 @@ export default layer => {
     layer.edit.vertices.addLayer(
       _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
     );
-    // .bindPopup(stage(layer, marker), {
+    // .bindPopup(stage(_xyz, layer, marker), {
     //   closeButton: false
     // })
     // .openPopup();

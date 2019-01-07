@@ -12,7 +12,9 @@ _xyz1.init({
   view_lat: 40.74,
   view_lng: -73.98,
   view_zoom: 10,
-  callback: () => console.log(_xyz1)
+  btnZoomIn: document.getElementById('btnZoomIn1'),
+  btnZoomOut: document.getElementById('btnZoomOut1')
+  //callback: () => console.log(_xyz1)
 });
 
 _xyz2 = _xyz();
@@ -25,7 +27,27 @@ _xyz2.init({
   view_lat: 51.52,
   view_lng: 0.24,
   view_zoom: 10,
-  callback: () => console.log(_xyz2)
+  btnZoomIn: document.getElementById('btnZoomIn2'),
+  btnZoomOut: document.getElementById('btnZoomOut2'),
+  callback: () => {
+    _xyz2.locate.toggle();
+
+    _xyz2.locations.select_output = location => {
+
+      document.getElementById('location_info_container').innerHTML = location.infoj[1].value;
+
+    };
+
+    _xyz2.locations.select_popup = location => {
+
+      let container = document.getElementById('location_info_container');
+
+      container.innerHTML = '';
+
+      container.appendChild(location.info_table);
+
+    };
+  }
 });
 
 

@@ -58,6 +58,11 @@
 .btn_column {
   top: 0;
   z-index: 999;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: fixed;
   left: 10px; }
   .btn_column div:hover {
@@ -128,17 +133,15 @@
   text-align: center;
   font-weight: 600;
   color: #079e00;
-  box-shadow: 1px 1px 3px #666;
+  box-shadow: 1px 1px 3px #383836;
   margin: 5px 2px 5px 1px; }
   .btn_wide.disabled {
     opacity: 0.3; }
 
 .btn_state {
-  /*color: black;*/
   color: #079e00; }
   .btn_state.active {
-    /*color: #090;*/
-    color: black; }
+    color: #383836; }
 
 .range {
   width: 100%;
@@ -1261,25 +1264,18 @@ input[type=range]::-moz-range-thumb {
   bottom: 5px;
   right: 5px;
   position: absolute;
-  z-index: 999; }
-  .attribution #attribution_links {
-    float: right;
-    clear: right;
-    font-family: ffmark_bold, sans-serif;
-    font-size: 18px;
-    text-shadow: 2px 2px #ccff90; }
-    .attribution #attribution_links i {
-      font-size: 14px; }
-    .attribution #attribution_links a {
-      border-bottom: 2px solid black;
-      margin-left: 5px; }
+  z-index: 999;
+  text-align: right;
+  font-family: ffmark_bold, sans-serif;
+  font-size: 18px;
+  text-shadow: 1px 1px 1px #ccff90; }
+  .attribution #attribution_links i {
+    font-size: 14px; }
+  .attribution #attribution_links a {
+    margin-left: 5px; }
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
-    text-shadow: 2px 2px #ccff90;
-    position: fixed;
-    top: 5px;
-    right: 5px;
-    font-size: 35px; }
+    font-size: 40px; }
 
 *,
 *::after,

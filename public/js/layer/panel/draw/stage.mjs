@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (layer, marker) => {
+export default (_xyz, layer, marker) => {
   
   const tooltip = _xyz.utils.createElement({
     tag: 'div',

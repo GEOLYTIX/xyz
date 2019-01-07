@@ -29,6 +29,8 @@ $onyx: #383836;
 
 @import '../leaflet';
 
+@import '../attribution';
+
 *,
 *::after,
 *::before {
@@ -49,30 +51,4 @@ body {
 a {
     color: $onyx;
     text-decoration: none;
-}
-
-.attribution {
-    bottom: 5px;
-    right: 5px;
-    position: absolute;
-    z-index: 999;
-    #attribution_links {
-        float: right;
-        clear: right;
-        font-family: ffmark_bold, sans-serif;
-        font-size: 18px;
-        text-shadow: 2px 2px $glxlightgreen;
-        i {
-            font-size: 14px;
-        }
-        a {
-            margin-left: 5px;
-        }
-    }
-    .logo {
-        font-family: ffmark_black, sans-serif;
-        text-shadow: 2px 2px $glxlightgreen;
-        float: right;
-        font-size: 40px;
-    }
 }
