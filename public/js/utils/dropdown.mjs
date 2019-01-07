@@ -13,6 +13,7 @@ export function dropdown(param) {
 
   const _select = createElement({
     tag: 'select',
+    style: param.style ? param.style : null,
     appendTo: param.appendTo
   });
 

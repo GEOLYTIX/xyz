@@ -11,7 +11,7 @@ module.exports = async params => {
 
   const q = `https://isoline.route.api.here.com/routing/7.2/calculateisoline.json?${global.KEYS.HERE}&mode=${_mode.join(';')}&start=geo!${coordinates}&range=${range}&rangetype=${rangetype}`;
 
-  console.log(q);
+  //console.log(q);
 
   // Fetch results from Google maps places API.
   const fetched = await require(global.appRoot + '/mod/fetch')(q);

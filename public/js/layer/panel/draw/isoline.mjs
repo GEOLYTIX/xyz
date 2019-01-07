@@ -34,7 +34,7 @@ export default layer => {
 
     xhr.onload = e => {
 
-      console.log(e.target.response);
+      //console.log(e.target.response);
 
       _xyz.dom.map.style.cursor = '';
   

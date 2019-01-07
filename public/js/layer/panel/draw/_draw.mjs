@@ -146,56 +146,169 @@ export default layer => {
       appendTo: layer.edit.panel
     });
 
-    _xyz.utils.dropdown({
-      title: 'Transport mode',
-      entries: {
-        'Driving': 'car',
-        'Walking': 'pedestrian',
-        'Public transport': 'publicTransport',
-        'Public transport live': 'publicTransportTimetable',
-        'Cargo': 'truck',
-        'High occupancy vehicle lane': 'carHOV',
-        'Cycling': 'bicycle'
+    var row = _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'block'
       },
+      appendTo: block
+    });
+
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        textContent: 'Transport mode'
+      },
+      style: {
+        display: 'inline-block',
+        width: '48%'
+      },
+      appendTo: row
+    });
+
+    _xyz.utils.dropdown({
+      style: {
+        width: '50%',
+        display: 'inline-block'
+      },
+      label: 'label',
+      val: 'val',
+      entries: [
+        {
+          label: 'Driving',
+          val: 'car'
+        },
+        {
+          label: 'Walking',
+          val: 'pedestrian'
+        }/*,
+        {
+          label: 'Public transport',
+          val: 'publicTransport'
+        },
+        {
+          label: 'Public transport live',
+          val: 'publicTransportTimetable'
+        }*/,
+        {
+          label: 'Cargo',
+          val: 'truck'
+        },
+        {
+          label: 'HOV lane',
+          val: 'carHOV'
+        }/*,
+        {
+          label: "Cycling",
+          val: 'bicycle'
+        }*/
+      ],
       onchange: e => {
         layer.edit.isoline.mode = e.target.value;
       },
+      appendTo: row
+    });
+
+    row = _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'block'
+      },
       appendTo: block
+    });
+
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        textContent: 'Routing type'
+      },
+      style: {
+        display: 'inline-block',
+        width: '48%'
+      },
+      appendTo: row
     });
     
     _xyz.utils.dropdown({
-      title: 'Routing type',
-      entries: {
-        'Fastest': 'fastest',
-        'Shortest': 'shortest'
+      //title: 'Routing type',
+      style: {
+        width: '50%',
+        display: 'inline-block'
       },
+      label: 'label',
+      val: 'val',
+      entries: [
+        {
+          label: 'Fastest',
+          val: 'fastest'
+        },
+        {
+          label: 'Shortest',
+          val: 'shortest'
+        }
+      ],
       onchange: e => {
         layer.edit.isoline.type = e.target.value;
       },
+      appendTo: row
+    });
+
+    row = _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'block'
+      },
       appendTo: block
+    });
+
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        textContent: 'Range type'
+      },
+      style: {
+        display: 'inline-block',
+        width: '48%'
+      },
+      appendTo: row
     });
 
     _xyz.utils.dropdown({
-      title: 'Range type',
-      entries: {
-        'Time (min)': 'time',
-        'Distance (km)': 'distance',
-        'Consumption': 'consumption'
+      //title: 'Range type',
+      style: {
+        width: '50%',
+        display: 'inline-block'
       },
+      label: 'label',
+      val: 'val',
+      entries: [
+        {
+          label: 'Time (min)',
+          val: 'time'
+        },
+        {
+          label: 'Distance (km)',
+          val: 'distance'
+        }/*,
+        {
+          label: 'Consumption',
+          val: 'consumption'
+        }*/
+      ],
       onchange: e => {
         layer.edit.isoline.rangetype = e.target.value;
       },
-      appendTo: block
+      appendTo: row
     });
 
-    _xyz.utils.checkbox({
+    /*_xyz.utils.checkbox({
       label: 'Use live traffic data',
       onChange: e => {
         layer.edit.isoline.traffic = e.target.checked;
         console.log('if this is checked select departure time');
       },
       appendTo: block
-    });
+    });*/
 
     _xyz.utils.slider({
       title: 'Range of isoline: ',

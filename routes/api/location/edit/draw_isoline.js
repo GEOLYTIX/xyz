@@ -45,9 +45,9 @@ module.exports = fastify => {
           
       const here_isolines = await require(global.appRoot + '/mod/here_isolines')(params);
   
-      if(!here_isoline.response.isoline || !here_isoline.response.isoline[0].component) return res.code(202).send('No isoline found within this range.');
+      if(!here_isolines.response.isoline || !here_isolines.response.isoline[0].component) return res.code(202).send('No isoline found within this range.');
   
-      let shape = here_isoline.response.isoline[0].component[0].shape;
+      let shape = here_isolines.response.isoline[0].component[0].shape;
 
       let geojson = {
         'type': 'Polygon',
