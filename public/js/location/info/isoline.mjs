@@ -55,7 +55,7 @@ function createIsoline(record, entry){
     mode: entry.edit.isoline.mode,
     type: entry.edit.isoline.type,
     rangetype: entry.edit.isoline.rangetype,
-    traffic: null,
+    range: entry.edit.isoline.range,
     token: _xyz.token
   }));
 

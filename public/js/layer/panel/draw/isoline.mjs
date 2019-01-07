@@ -27,7 +27,7 @@ export default layer => {
       mode: layer.edit.isoline.mode,
       type: layer.edit.isoline.type,
       rangetype: layer.edit.isoline.rangetype,
-      traffic: null,//layer.edit.isoline.traffic ? 'default' : 'disabled',
+      traffic: null,
       range: layer.edit.isoline.range,
       token: _xyz.token
     }));
