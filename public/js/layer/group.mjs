@@ -54,9 +54,6 @@ export default (_xyz, groupKey) => {
       textContent: 'visibility'
     },
     appendTo: group.header,
-    style: {
-      display: 'none'
-    },
     eventListener: {
       event: 'click',
       funct: e => {

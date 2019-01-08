@@ -253,7 +253,7 @@ export default _xyz => {
           pane: 'gazetteer',
           icon: _xyz.L.icon({
             iconUrl: _xyz.gazetteer.icon,
-            iconSize: [40, 40],
+            iconSize: 40,
             iconAnchor: [20, 40]
           })
         });

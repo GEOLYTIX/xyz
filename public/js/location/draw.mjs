@@ -24,7 +24,7 @@ export default _xyz => {
                     letter: record.letter
                   }
                 }),
-                iconSize: [40, 40],
+                iconSize: 40,
                 iconAnchor: [20, 40]
               }),
               interactive: false,

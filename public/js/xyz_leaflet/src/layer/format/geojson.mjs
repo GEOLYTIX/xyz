@@ -76,7 +76,8 @@ export default _xyz => {
             pane: layer.key,
             icon: _xyz.L.icon({
               iconUrl: _xyz.utils.svg_symbols(layer.style.default.marker),
-              iconSize: 40
+              iconSize: layer.style.default.marker.iconSize || 40,
+              iconAnchor: layer.style.default.marker.iconAnchor || [20,20]
             }),
             interactive: (layer.qID) ? true : false
           });
