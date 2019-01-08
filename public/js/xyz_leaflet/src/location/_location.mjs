@@ -1,8 +1,8 @@
-import Info from './info_table.mjs';
+import infoTable from './infoTable.mjs';
 
 export default _xyz => {
 
-  Info(_xyz);
+  infoTable(_xyz);
 
   _xyz.locations.select = location => {
 
@@ -36,7 +36,7 @@ export default _xyz => {
 
   _xyz.locations.select_output = location => {
 
-    location.info_table = _xyz.locations.info_table(location);
+    location.info_table = _xyz.locations.infoTable(location);
 
     _xyz.locations.select_popup(location);
 

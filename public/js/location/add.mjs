@@ -18,9 +18,9 @@ export default _xyz => {
 
   _xyz.locations.add = record => {
 
-    _xyz.locations.dom.parentElement.style.display = 'block';
+    _xyz.locations.container.parentElement.style.display = 'block';
 
-    Object.values(_xyz.locations.dom.children).forEach(el => el.classList.remove('expanded'));
+    Object.values(_xyz.locations.container.children).forEach(el => el.classList.remove('expanded'));
 
     // Create drawer element to contain the header with controls and the infoj table with inputs.
     record.drawer = _xyz.utils.createElement({
@@ -81,7 +81,7 @@ export default _xyz => {
     // Find free space and insert record.
     let idx = _xyz.locations.list.indexOf(record);
   
-    _xyz.locations.dom.insertBefore(record.drawer, _xyz.locations.dom.children[idx]);
+    _xyz.locations.container.insertBefore(record.drawer, _xyz.locations.container.children[idx]);
 
     if (_xyz.view.mode === 'desktop') setTimeout(() => {
       let el = document.querySelector('.mod_container > .scrolly');

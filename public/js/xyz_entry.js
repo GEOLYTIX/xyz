@@ -36,6 +36,9 @@ _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
   map_id: 'Map',
+  btnZoomIn: document.getElementById('btnZoomIn'),
+  btnZoomOut: document.getElementById('btnZoomOut'),
+  btnLocate: document.getElementById('btnLocate'),
   callback: init
 });
 
@@ -52,10 +55,6 @@ function init() {
 
   // Init gazetteer.
   _xyz.gazetteer.init();
-
-  // Assign locate toggle to locate button.
-  _xyz.locate.btn = document.getElementById('btnLocate');
-  _xyz.locate.btn.onclick = _xyz.locate.toggle;
 
   if (_xyz.log) console.log(_xyz);
 

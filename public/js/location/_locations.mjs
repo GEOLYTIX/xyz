@@ -12,7 +12,12 @@ export default _xyz => {
 
   add(_xyz);
 
-  _xyz.locations.dom = document.getElementById('locations');
+  document.getElementById('clear_locations').addEventListener('click', () => {
+    _xyz.hooks.remove('select');
+    _xyz.locations.init();
+  });
+
+  _xyz.locations.container = document.getElementById('locations');
 
   _xyz.locations.getFreeRecord = () => {
 
@@ -27,17 +32,12 @@ export default _xyz => {
   };
 
   _xyz.locations.init = () => {
- 
-    document.getElementById('clear_locations').addEventListener('click', () => {
-      _xyz.hooks.remove('select');
-      _xyz.locations.init();
-    });
   
     // Hide the Locations Module.
-    _xyz.locations.dom.parentElement.style.display = 'none';
+    _xyz.locations.container.parentElement.style.display = 'none';
   
     // Empty the locations list.
-    _xyz.locations.dom.innerHTML = '';
+    _xyz.locations.container.innerHTML = '';
     
     _xyz.locations.list.forEach(record => {
   

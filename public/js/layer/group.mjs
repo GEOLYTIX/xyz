@@ -12,7 +12,7 @@ export default (_xyz, groupKey) => {
     options: {
       className: 'drawer drawer-group expandable-group'
     },
-    appendTo: document.getElementById('layers')
+    appendTo: _xyz.layers.container
   });
   
   // Create layer group header.

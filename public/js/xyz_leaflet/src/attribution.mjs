@@ -2,9 +2,9 @@ export default _xyz => {
 
   _xyz.attribution.create = () => {
 
-    if (_xyz.attribution.dom) _xyz.attribution.dom.remove();
+    if (_xyz.attribution.container) _xyz.attribution.container.remove();
 
-    _xyz.attribution.dom = _xyz.utils.createElement({
+    _xyz.attribution.container = _xyz.utils.createElement({
       tag: 'div',
       options: {
         classList: 'attribution'
@@ -20,7 +20,7 @@ export default _xyz => {
         href: 'https://geolytix.co.uk',
         target: '_blank'
       },
-      appendTo: _xyz.attribution.dom
+      appendTo: _xyz.attribution.container
     });
 
     const attribution_links = _xyz.utils.createElement({
@@ -28,7 +28,7 @@ export default _xyz => {
       options: {
         id: 'attribution_links'
       },
-      appendTo: _xyz.attribution.dom
+      appendTo: _xyz.attribution.container
     });
 
     _xyz.utils.createElement({

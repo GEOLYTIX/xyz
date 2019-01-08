@@ -1,22 +1,4 @@
-import getWorkspace from './getWorkspace.mjs';
-
-import attribution from './attribution.mjs';
-
-import loadLocale from './loadLocale.mjs';
-
-import Locate from './locate.mjs';
-
-import Interface from './interface.mjs';
-
 export default _xyz => {
-
-  attribution(_xyz);
-
-  getWorkspace(_xyz);
-
-  loadLocale(_xyz);
-
-  Locate(_xyz);
 
   _xyz.init = params => {
 
@@ -27,7 +9,7 @@ export default _xyz => {
 
     if (params.token) _xyz.token = params.token;
 
-    Interface(_xyz, params);
+    _xyz.assignBtn(params);
 
     // Get workspace from XYZ host.
     // Proceed with init from callback.

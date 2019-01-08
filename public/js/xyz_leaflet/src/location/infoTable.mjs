@@ -1,6 +1,6 @@
 export default _xyz => {
 
-  _xyz.locations.info_table = location => {
+  _xyz.locations.infoTable = location => {
 
   // Add table element to record drawer.
   // info fields will be added to this table.

@@ -4,7 +4,7 @@ export default _xyz => {
 
     _xyz.locate.active = !_xyz.locate.active;
 
-    if (_xyz.locate.btn) _xyz.locate.btn.classList.toggle('active');
+    if (_xyz.btnLocate) _xyz.btnLocate.classList.toggle('active');
 
     let flyTo = true;
 
@@ -43,7 +43,7 @@ export default _xyz => {
           if (_xyz.log) console.log('pos: ' + [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)]);
                     
           // Change icon to fixed location.
-          if (_xyz.locate.btn) _xyz.locate.btn.children[0].textContent = 'gps_fixed';
+          if (_xyz.btnLocate) _xyz.btnLocate.children[0].textContent = 'gps_fixed';
 
           // Reposition marker if _xyz.locate is active
           if (_xyz.locate.active) {

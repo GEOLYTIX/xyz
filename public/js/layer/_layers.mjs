@@ -14,10 +14,12 @@ import layer_icon from './icon.mjs';
 
 export default _xyz => {
 
+  _xyz.layers.container = document.getElementById('layers');
+
   _xyz.layers.init = () => {
 
-  // Empty the layers list.
-    document.getElementById('layers').innerHTML = '';
+    // Empty the layers list.
+    _xyz.layers.container.innerHTML = '';
    
     // Reset groups.
     _xyz.layers.groups = {};
@@ -37,7 +39,7 @@ export default _xyz => {
         style: {
           display: layer.hidden ? 'none' : 'block'
         },
-        appendTo: layer.group ? _xyz.layers.groups[layer.group].container : document.getElementById('layers')
+        appendTo: layer.group ? _xyz.layers.groups[layer.group].container : _xyz.layers.container
       });
   
       // Create layer header.
