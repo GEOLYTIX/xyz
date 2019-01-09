@@ -1,9 +1,6 @@
 export default (_xyz, layer) => {
 
-  layer.show = () => {
-
-    // Set layer display to true, hide the loader element and change the toggle icon.
-    layer.display = true;
+  layer.show = _xyz.utils.compose(layer.show, ()=>{
     layer.loader.style.display = 'block';
     layer.toggle.textContent = 'layers';
 
@@ -12,11 +9,6 @@ export default (_xyz, layer) => {
 
     // Check whether other group layers are visible.
     if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
-
-    // Add the layer to map.
-    layer.loaded = false;
-    layer.get();
-
-  };
+  });
 
 };

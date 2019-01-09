@@ -20,8 +20,8 @@ export default _xyz => {
 
     // Disable zoom button at max/min zoom for locale.
     _xyz.view.chkZoomBtn = z => {
-      if (_xyz.btnZoomIn) _xyz.btnZoomIn.disabled = z < _xyz.ws.locales[_xyz.locale].maxZoom ? false : true;
-      if (_xyz.btnZoomOut) _xyz.btnZoomOut.disabled = z > _xyz.ws.locales[_xyz.locale].minZoom ? false : true;
+      if (_xyz.btnZoomIn) _xyz.btnZoomIn.disabled = !(z < _xyz.ws.locales[_xyz.locale].maxZoom);
+      if (_xyz.btnZoomOut) _xyz.btnZoomOut.disabled = !(z > _xyz.ws.locales[_xyz.locale].minZoom);
     };
   
     _xyz.btnLocate = params.btnLocate;

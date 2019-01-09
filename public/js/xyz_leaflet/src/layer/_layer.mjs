@@ -75,6 +75,19 @@ export default _xyz => {
 
     };
 
+    layer.show = () => {
+      layer.display = true;
+      layer.loaded = false;
+      layer.get();
+    };
+
+    layer.remove = () => {
+      layer.display = false;
+      layer.loaded = false;
+      if (layer.L) _xyz.map.removeLayer(layer.L);
+      if (layer.attribution) _xyz.attribution.remove(layer.attribution);
+    };
+
     if (!layer.format) return;
 
     if (!layer.key) return;

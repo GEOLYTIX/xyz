@@ -31,7 +31,7 @@ export default _xyz => {
       // Create Leaflet map object.
       _xyz.map = _xyz.L.map(_xyz.map_dom, {
         renderer: _xyz.L.svg(),
-        scrollWheelZoom: true,
+        scrollWheelZoom: params.scrollWheelZoom || false,
         zoomControl: false,
         attributionControl: false
       });
