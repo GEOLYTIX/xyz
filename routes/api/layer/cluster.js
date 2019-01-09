@@ -129,7 +129,7 @@ module.exports = fastify => {
 
       if (!theme) var q = `
       SELECT
-        count(cat) count,
+        count(1) count,
         SUM(size) size,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
@@ -138,7 +138,7 @@ module.exports = fastify => {
 
       if (theme === 'categorized') var q = `
       SELECT
-        count(cat) count,
+        count(1) count,
         SUM(size) size,
         array_agg(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
@@ -148,7 +148,7 @@ module.exports = fastify => {
 
       if (theme === 'graduated') var q = `
       SELECT
-        count(cat) count,
+        count(1) count,
         SUM(size) size,
         SUM(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
@@ -158,7 +158,7 @@ module.exports = fastify => {
 
       if (theme === 'competition') var q = `
       SELECT
-        count(cat) count,
+        count(1) count,
         SUM(size) size,
         JSON_Agg(JSON_Build_Object(cat, size)) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj

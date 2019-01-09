@@ -905,17 +905,7 @@ input[type=range]::-moz-range-thumb {
   .map_container .leaflet-control-attribution {
     display: none; }
   .map_container .leaflet-popup-content {
-    width: 401px !important; }
-  .map_container .leaflet-popup-content {
-    width: 401px !important; }
-  .map_container .tooltip {
-    font-family: 'PT Mono', monospace;
-    font-weight: 600;
-    font-size: 15px;
-    background-color: #fff;
-    padding: 5px 5px 3px 5px;
-    border-radius: 3px;
-    box-shadow: 1px 1px 3px #555; }
+    max-width: 401px !important; }
 
 /* required styles */
 .leaflet-pane,
@@ -1291,11 +1281,12 @@ input[type=range]::-moz-range-thumb {
     font-size: 50px; }
 
 .stage-tooltip {
-  width: 65px;
-  height: 30px;
-  padding: 2px;
-  border-radius: 4px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6)); }
+  padding: 0 0 0 4px; }
+  .stage-tooltip .btn-tooltip {
+    display: table-cell;
+    font-size: 25px;
+    padding: 4px 2px 4px 2px;
+    color: #090; }
 
 .attribution {
   bottom: 5px;

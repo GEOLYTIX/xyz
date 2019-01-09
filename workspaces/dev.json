@@ -643,6 +643,10 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
                     "filter": {
                         "roles": {
                             "n1": "some_filter"
@@ -837,9 +841,9 @@
                             "field": "comp_strgh",
                             "type": "integer",
                             "lookup": {
-                                "table_a": "dev_retailpoints",
+                                "table_a": "dev.retailpoints",
                                 "geom_a": "ST_Transform(ST_Setsrid(a.geom, 4326), 3857)",
-                                "table_b": "dev_retailplaces",
+                                "table_b": "dev.retailplaces",
                                 "geom_b": "b.geom_3857",
                                 "condition": "ST_INTERSECTS",
                                 "aggregate": "AVG"
@@ -874,7 +878,7 @@
                             "fieldfx": "pop__11",
                             "type": "integer",
                             "lookup": {
-                                "table_a": "dev_retailpoints",
+                                "table_a": "dev.retailpoints",
                                 "geom_a": "a.geom_catchment",
                                 "table_b": "gb_hx_1k",
                                 "geom_b": "b.geomcntr",
