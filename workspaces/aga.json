@@ -61,7 +61,8 @@
 					"tab": true,
 					"cluster_label": "retailer",
 					"cluster_cat": "retailer",
-					"infoj": [{
+					"infoj": [
+						{
 							"field": "date_reviewed_2",
 							"label": "Date reviewed",
 							"type": "date",
@@ -88,6 +89,7 @@
 						{
 							"field": "retailer",
 							"label": "Retailer",
+							"inline": true,
 							"options": [
 								"& OTHER STORIES;& OTHER STORIES",
 								"7 FOR ALL MANKIND;7 FOR ALL MANKIND",
@@ -336,8 +338,8 @@
 						{
 							"field": "images",
 							"label": "Images",
-							"type": "text[]",
-							"images": true
+							"type": "images",
+							"edit": true
 						},
 						{
 							"field": "edited_2",
@@ -377,12 +379,12 @@
 					"name": "Vector test",
 					"format": "geojson",
 					"geom": "geom",
-					"pane": ["vector_test", 519],
 					"dbs": "XYZ",
 					"qID": "id",
 					"tab": true,
 					"table": "aga_vector_test",
-					"infoj": [{
+					"infoj": [
+						{
 							"field": "shop_town",
 							"label": "Shoptown",
 							"inline": true,
@@ -403,40 +405,33 @@
 							"filter": "date"
 						},
 						{
-							"label": "Mapbox Catchment 10min",
-							"field": "geom_rplace",
-							"fieldfx": "ST_asGeoJson(geom_rplace)",
-							"type": "geometry",
+							"field": "isoline_mode",
+							"label": "Mode",
+							"inline": true,
 							"edit": {
-								"catchment": {
-									"minutes": 10
-								}
-							},
-							"style": {
-								"stroke": true,
-								"color": "#FB8B24",
-								"weight": 2,
-								"fill": true,
-								"fillOpacity": 0.5
+								"options": ["Driving", "Walking", "Cargo", "HOV lane"]
 							}
 						},
 						{
-							"label": "HERE Catchment 10min",
-							"field": "geom_rplace2",
-							"fieldfx": "ST_asGeoJson(geom_rplace2)",
-							"type": "geometry",
+							"field": "isoline_range",
+							"label": "Range",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "isoline_unit",
+							"label": "Unit",
+							"inline": true,
 							"edit": {
-								"isoline": {
-									"range": 600
-								}
-							},
-							"style": {
-								"stroke": true,
-								"color": "#E36414",
-								"weight": 2,
-								"fill": true,
-								"fillOpacity": 0.5
+								"options": ["Time", "Distance"]
 							}
+							
+						},
+						{
+							"field": "notes",
+							"label": "Notes",
+							"type": "textarea",
+							"edit": true
 						}
 					]
 				},
@@ -446,7 +441,10 @@
 						"polygon": true,
 						"rectangle": true,
 						"circle": true,
-						"catchment": true
+						"catchment": true,
+						"isoline": true,
+						"line": true,
+						"delete": true
 					},
 					"display": true,
 					"name": "MVT test",
@@ -459,7 +457,8 @@
 						"5": "aga_mvt_test"
 					},
 					"table": "aga_mvt_test",
-					"infoj": [{
+					"infoj": [
+						{
 							"field": "shop_town",
 							"label": "Shoptown",
 							"type": "text",
@@ -471,6 +470,43 @@
 							"label": "Town name",
 							"type": "text",
 							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "date_reviewed_2",
+							"label": "Date reviewed",
+							"type": "date",
+							"inline": true,
+							"edit": true,
+							"filter": "date"
+						},
+						{
+							"field": "isoline_mode",
+							"label": "Mode",
+							"inline": true,
+							"edit": {
+								"options": ["Driving", "Walking", "Cargo", "HOV lane"]
+							}
+						},
+						{
+							"field": "isoline_range",
+							"label": "Range",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "isoline_unit",
+							"label": "Unit",
+							"inline": true,
+							"edit": {
+								"options": ["Time", "Distance"]
+							}
+							
+						},
+						{
+							"field": "notes",
+							"label": "Notes",
+							"type": "textarea",
 							"edit": true
 						}
 					],
