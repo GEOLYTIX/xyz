@@ -23,8 +23,7 @@ function PopTheme(){
   _xyz1.layers.list.OSM.remove();
 
   _xyz1.layers.list.COUNTRIES.style.theme = _xyz1.layers.list.COUNTRIES.style.themes['Population'];
-  _xyz1.layers.list.COUNTRIES.loaded = false;
-  _xyz1.layers.list.COUNTRIES.get();
+  _xyz1.layers.list.COUNTRIES.show();
 }
 
 _xyz2 = _xyz();
@@ -36,10 +35,10 @@ _xyz2.init({
   locale: 'GB',
   view_lat: 51.52,
   view_lng: 0.24,
-  view_zoom: 10,
+  view_zoom: 12,
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Grid
+  callback: Legends
 });
 
 function LocatePopup(){
@@ -60,8 +59,29 @@ function LocatePopup(){
 
 function Grid() {
 
+  _xyz2.layers.list.retail_points.style.theme = _xyz2.layers.list.retail_points.style.themes['Retailer'];
+  _xyz2.layers.list.retail_points.show();
+
+  _xyz2.layers.list.retail_points.getLegend(document.getElementById('location_info_container'), document.getElementById('location_info_container').clientWidth - 40);
+
+  _xyz2.layers.list.oa.remove();
+
   _xyz2.layers.list.grid.show();
 
+  _xyz2.layers.list.grid.getLegend(document.getElementById('location_info_container'), document.getElementById('location_info_container').clientWidth - 40);
+
+}
+
+function Legends() {
+
   _xyz2.layers.list.retail_points.remove();
+
+  _xyz2.layers.list.oa.style.theme = _xyz2.layers.list.oa.style.themes['Population \'11'];
+
+  _xyz2.layers.list.oa.show();
+
+  document.getElementById('location_info_container').appendChild(_xyz2.layers.list.oa.style.legend);
+
+  _xyz2.layers.list.oa.getLegend();
 
 }

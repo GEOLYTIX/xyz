@@ -11,6 +11,9 @@ export default (_xyz, layer) => {
   
   let y = 10;
 
+  // Create / empty legend filter when theme is applied.
+  layer.filter.legend = {};
+
   // Create array for NI (not in) value filter.
   layer.filter.legend[layer.style.theme.field] = {
     ni: []
@@ -35,7 +38,7 @@ export default (_xyz, layer) => {
       .style('font-size', '12px')
       .style('alignment-baseline', 'central')
       .style('cursor', 'pointer')
-      .text(cat[0].label || cat[0])
+      .text(cat[1].label || cat[0])
       .on('click', function () {
         if (this.style.opacity == 0.5) {
           this.style.opacity = 1;

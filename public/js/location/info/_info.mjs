@@ -66,7 +66,7 @@ export default (_xyz, record) => {
       if (entry.type === 'group') return group(_xyz, record, entry);
 
       // Create entry.row inside previously created group.
-      if (entry.group) entry.row = _xyz.utils.createElement({
+      if (entry.group && record.location.infogroups[entry.group]) entry.row = _xyz.utils.createElement({
         tag: 'tr',
         options: {
           className: 'lv-' + (entry.level || 0)

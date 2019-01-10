@@ -134,7 +134,8 @@ body {
   height: 100%;
   background-color: white;
   z-index: 999;
-  position: absolute; }
+  position: absolute;
+  padding: 20px; }
 
 #xyz_map2 {
   position: absolute;

@@ -28,7 +28,7 @@ export default (_xyz, layer) => {
       .attr('y', y + 11)
       .style('font-size', '12px')
       .style('alignment-baseline', 'central')
-      .text(cat[1].label || '');
+      .text(cat[1].label || cat[0]);
       
     y += 20;
   });

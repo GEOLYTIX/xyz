@@ -36,7 +36,7 @@ export default _xyz => {
     layer.xhr = new XMLHttpRequest();   
   
     // Create filter from legend and current filter.
-    const filter = Object.assign({},layer.filter.legend, layer.filter.current);
+    const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
     
     layer.xhr.open('GET', _xyz.host + '/api/layer/geojson?' + _xyz.utils.paramString({
       locale: _xyz.locale,

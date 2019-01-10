@@ -36,6 +36,7 @@ _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
   map_id: 'Map',
+  scrollWheelZoom: true,
   btnZoomIn: document.getElementById('btnZoomIn'),
   btnZoomOut: document.getElementById('btnZoomOut'),
   btnLocate: document.getElementById('btnLocate'),

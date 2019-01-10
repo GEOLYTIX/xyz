@@ -746,6 +746,8 @@ input[type=range]::-moz-range-thumb {
           font-family: ffmark_bold, sans-serif;
           font-size: 14px;
           margin-bottom: 7px; }
+        .mod_container .module .drawer .dashboard .meta {
+          margin-top: 5px; }
         .mod_container .module .drawer .dashboard .panel {
           padding: 10px 0;
           border-bottom: 1px solid #555; }

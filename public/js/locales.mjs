@@ -29,6 +29,7 @@ export default _xyz => {
         _xyz.init({
           host: document.head.dataset.dir,
           token: document.body.dataset.token,
+          scrollWheelZoom: true,
           map_id: 'Map',
           locale: _xyz.locale,
           callback: init

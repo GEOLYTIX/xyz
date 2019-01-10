@@ -180,7 +180,7 @@ async function chkLayerGeom(layer, layers) {
   for (const table of tables){
 
     // Don't invalidate layer with null in tables array.
-    if (!table && tables.length > 1) return;
+    if (!table && tables.length > 1) continue;
 
     // Invalidate layer without table.
     if (!table) return invalidateLayer();

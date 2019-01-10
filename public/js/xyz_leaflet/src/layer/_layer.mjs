@@ -2,11 +2,17 @@ import MVT from './format/mvt.mjs';
 
 import Geojson from './format/geojson.mjs';
 
+import PolyGraduatedLegend from './legend/polyGraduated.mjs';
+
 import Cluster from './format/cluster.mjs';
+
+import ClusterCategorizedLegend from './legend/clusterCategorized.mjs';
 
 import Tiles from './format/tiles.mjs';
 
 import Grid from './format/grid.mjs';
+
+import GridLegend from './legend/grid.mjs';
 
 export default _xyz => {
 
@@ -14,17 +20,21 @@ export default _xyz => {
 
   const format_geojson = Geojson(_xyz);
 
+  const legend_polyGraduated = PolyGraduatedLegend(_xyz);
+
   const format_cluster = Cluster(_xyz);
+
+  const legend_clusterCategorized = ClusterCategorizedLegend(_xyz);
 
   const format_tiles = Tiles(_xyz);
 
   const format_grid = Grid(_xyz);
 
+  const legend_grid = GridLegend(_xyz);
+
   _xyz.layers.add = layer => {
 
-    layer.tableCurrent = function(){
-
-      const layer = this;
+    layer.tableCurrent = () => {
 
       if (!layer.tables) return layer.table;
 
@@ -51,9 +61,7 @@ export default _xyz => {
 
     };
 
-    layer.tableMin = function(){
-
-      const layer = this;
+    layer.tableMin = () => {
 
       if (!layer.tables) return layer.table;
 
@@ -63,9 +71,7 @@ export default _xyz => {
 
     };
 
-    layer.tableMax = function(){
-
-      const layer = this;
+    layer.tableMax = () => {
 
       if (!layer.tables) return layer.table;
 
@@ -92,18 +98,35 @@ export default _xyz => {
 
     if (!layer.key) return;
 
+    // Create empty legend container.
+    if (layer.style) layer.style.legend = _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'legend'
+      }
+    });
+
     _xyz.panes.list.push(_xyz.map.createPane(layer.key));
     _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
     
-    if (layer.format === 'mvt') layer.get = format_mvt;
+    if (layer.format === 'mvt') {
+      layer.get = format_mvt;
+      layer.getLegend = legend_polyGraduated;
+    }
 
     if (layer.format === 'geojson') layer.get = format_geojson;
 
-    if (layer.format === 'cluster') layer.get = format_cluster;
+    if (layer.format === 'cluster') {
+      layer.get = format_cluster;
+      layer.getLegend = legend_clusterCategorized;
+    }
 
     if (layer.format === 'tiles') layer.get = format_tiles;
 
-    if (layer.format === 'grid') layer.get = format_grid;
+    if (layer.format === 'grid') {
+      layer.get = format_grid;
+      layer.getLegend = legend_grid;
+    }
 
     layer.loaded = false;
     layer.get();
