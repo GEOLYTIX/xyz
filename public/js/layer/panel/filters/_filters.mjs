@@ -1,5 +1,3 @@
-import _xyz from '../../../_xyz.mjs';
-
 import filter_text from './filter_text.mjs';
 
 import filter_numeric from './filter_numeric.mjs';
@@ -10,7 +8,7 @@ import filter_date from './filter_date.mjs';
 
 import output from './output.mjs';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   // Create current filter object.
   layer.filter.current = {};
@@ -70,13 +68,13 @@ export default layer => {
       // Display clear all button.
       layer.filter.clear_all.style.display = 'block';
 
-      if (entry.filter == 'date') return filter_date(layer, entry);
+      if (entry.filter == 'date') return filter_date(_xyz, ayer, entry);
 
-      if (entry.filter === 'numeric') return filter_numeric(layer, entry);
+      if (entry.filter === 'numeric') return filter_numeric(_xyz, layer, entry);
 
-      if (entry.filter === 'like' || entry.filter === 'match') return filter_text(layer, entry);
+      if (entry.filter === 'like' || entry.filter === 'match') return filter_text(_xyz, layer, entry);
 
-      if (entry.filter.in) return filter_in(layer, entry);
+      if (entry.filter.in) return filter_in(_xyz, layer, entry);
 
     }
   });
@@ -107,6 +105,7 @@ export default layer => {
         layer.filter.current = {};
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
       }
     }
@@ -117,6 +116,6 @@ export default layer => {
     appendTo: panel,
   });
 
-  layer.filter.run_output = output(panel, layer);
+  layer.filter.run_output = output(_xyz, panel, layer);
 
 };

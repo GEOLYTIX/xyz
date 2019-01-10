@@ -1,17 +1,12 @@
-import * as utils from './utils/_utils.mjs';
-
-export default {
+export default () => ({
   attribution: { 
     layer: {} 
-  },
-  dom: {
-    map: document.getElementById('Map')
   },
   gazetteer: {},
   hooks: {
     current: {}
   },
-  host: document.head.dataset.dir,
+  host: null,
   layers: {
     groups: {},
     list: {}
@@ -80,43 +75,51 @@ export default {
         color: '#d32f2f'
       }]
   },
-  log: typeof document.body.dataset.log !== 'undefined',
-  map: {},
-  nanoid: document.body.dataset.nanoid,
+  log: null,
+  map: null,
+  nanoid: null,
   panes: {
-    init: {},
-    list: {},
-    next: 500
+    list: {}
   },
   state: 'select',
   style: {
     defaults: {
-      vertex: { // drawn feature vertex
+      // drawn feature vertex
+      vertex: {
+        pane: 'drawing',
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',
         weight: 1,
         radius: 5
       },
-      trail: { // trail left behind cursor
+      // trail left behind cursor
+      trail: {
+        pane: 'drawing',
         stroke: true,
         color: '#666',
         dashArray: '5 5',
         weight: 1
       },
-      path: { // actual drawn feature
+      // actual drawn feature
+      path: { 
+        pane: 'drawing',
         stroke: true,
         color: '#666',
         fill: true,
         fillColor: '#cf9',
         weight: 2
       },
-      path_line: { // actual drawn feature
+      // actual drawn feature
+      path_line: { 
+        pane: 'drawing',
         stroke: true,
         color: '#666',
         weight: 2
       },
-      point: { // new staged point
+      // new staged point
+      point: {
+        pane: 'drawing',
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',
@@ -149,9 +152,8 @@ export default {
     }
   },
   token: null,
-  utils: utils,
+  utils: null,
   view: { 
-    mode: document.body.dataset.viewmode,
-    set: {}
+    mode: null
   }
-};
+});

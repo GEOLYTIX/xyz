@@ -1,13 +1,11 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default layer => {
+export default (_xyz, layer) => {
 
   if(!layer.display) layer.show();
     
   layer.header.classList.add('edited');
-  _xyz.dom.map.style.cursor = 'crosshair';
+  _xyz.map_dom.style.cursor = 'crosshair';
 
-  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
 
   _xyz.map.once('click', e => {
 
@@ -15,7 +13,7 @@ export default layer => {
         
     // Add vertice from click.
     layer.edit.vertices.addLayer(
-      L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+      _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
     );
         
     const xhr = new XMLHttpRequest();
@@ -32,8 +30,9 @@ export default layer => {
 
     xhr.onload = e => {
 
-      _xyz.dom.map.style.cursor = '';
+      _xyz.map_dom.style.cursor = '';
 
+      layer.loaded = false;
       layer.get();
 
       if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
@@ -42,7 +41,8 @@ export default layer => {
         layer: layer.key,
         table: layer.table,
         id: e.target.response,
-        marker: marker
+        marker: marker,
+        edit: layer.edit
       });
 
     };
@@ -51,7 +51,8 @@ export default layer => {
 
     _xyz.state.finish();
     
-    _xyz.dom.map.style.cursor = 'busy';
+    _xyz.map_dom.style.cursor = 'busy';
 
   });
+  
 };

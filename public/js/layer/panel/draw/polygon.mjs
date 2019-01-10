@@ -1,21 +1,19 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default layer => {
+export default (_xyz, layer) => {
 
   if(!layer.display) layer.show();
 
   layer.header.classList.add('edited');
-  _xyz.dom.map.style.cursor = 'crosshair';
+  _xyz.map_dom.style.cursor = 'crosshair';
 
-  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = L.featureGroup().addTo(_xyz.map);
-  layer.edit.path = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
 
   _xyz.map.on('click', e => {
 
     // Add vertice from click.
     layer.edit.vertices.addLayer(
-      L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+      _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
     );
 
     // Return trail on mousemove with first vertice.
@@ -30,7 +28,7 @@ export default layer => {
       });
   
       layer.edit.trail.addLayer(
-        L.polygon(coords, _xyz.style.defaults.trail)
+        _xyz.L.polygon(coords, _xyz.style.defaults.trail)
       );
   
     });
@@ -48,7 +46,7 @@ export default layer => {
     });
 
     layer.edit.path.addLayer(
-      L.polygon(coords, _xyz.style.defaults.path)
+      _xyz.L.polygon(coords, _xyz.style.defaults.trail)
     );
 
     // Use right click context menu to upload polygon.
@@ -65,15 +63,18 @@ export default layer => {
       xhr.onload = e => {
 
         if (e.target.status !== 200) return;
-              
+
+        layer.loaded = false;
         layer.get();
               
         // Select polygon when post request returned 200.
         _xyz.locations.select({
+          locale: _xyz.locale,
           layer: layer.key,
           table: layer.table,
           id: e.target.response,
-          marker: marker
+          marker: marker,
+          edit: layer.edit
         });
 
       };

@@ -1,8 +1,6 @@
-import _xyz from '../../../_xyz.mjs';
-
 import valChange from './valChange.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   _xyz.utils.createElement({
     tag: 'span',

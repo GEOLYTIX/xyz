@@ -1,30 +1,6 @@
-let token = window.location.search.replace('?token=','');
+const xhr = new XMLHttpRequest();
 
-if (document.body.dataset.mode === 'tree') history.pushState({ token: true }, 'token', document.head.dataset.dir + '/workspace/admin');
-
-if (document.body.dataset.mode === 'code') history.pushState({ token: true }, 'token', document.head.dataset.dir + '/workspace/admin/json');
-
-const _xhr = new XMLHttpRequest();
-_xhr.open('GET', document.head.dataset.dir + '/auth/token/renew?token=' + token);
-_xhr.onload = e => {
-  token = e.target.response;
-  setTimeout(renewToken, 6000);
-};
-_xhr.send();
-
-const renewToken = () => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', document.head.dataset.dir + '/auth/token/renew?token=' + token);
-  xhr.onload = e => {
-    token = e.target.response;
-    setTimeout(renewToken, 6000);
-  };
-  xhr.send();
-};
-
-let xhr = new XMLHttpRequest();
-
-xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + token);
+xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + document.body.dataset.token);
 
 xhr.onload = e => init(JSON.parse(e.target.response));
 
@@ -51,8 +27,8 @@ function init(json) {
   editormenu.insertBefore(btnSave, search);
     
   btnSave.addEventListener('click', function () {
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', document.head.dataset.dir + '/workspace/load?token=' + token);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', document.head.dataset.dir + '/workspace/load?token=' + document.body.dataset.token);
     xhr.setRequestHeader('Content-Type', 'application/json');
     
     xhr.onload = function () {

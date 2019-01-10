@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import create_block from './create_block.mjs';
 
-export default (layer, filter_entry) => {
+export default (_xyz, layer, filter_entry) => {
 
-  const block = create_block(layer, filter_entry);
+  const block = create_block(_xyz, layer, filter_entry);
 
   filter_entry.filter.in.forEach(val => {
 

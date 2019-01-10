@@ -89,7 +89,7 @@ module.exports = fastify => {
     
       // Send the infoj object with values back to the client.
       res.code(200).send({
-        geomj: rows[0].geomj,
+        geomj: JSON.parse(rows[0].geomj),
         infoj: infoj
       });
 

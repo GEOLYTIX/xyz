@@ -1,5 +1,3 @@
-import _xyz from '../../_xyz.mjs';
-
 import group from './group.mjs';
 
 import streetview from './streetview.mjs';
@@ -12,7 +10,7 @@ import log from './log.mjs';
 
 import edit from './edit/_edit.mjs';
 
-export default record => {
+export default (_xyz, record) => {
 
   // Add table element to record drawer.
   // info fields will be added to this table.
@@ -65,7 +63,7 @@ export default record => {
       });
 
       // Create a new info group.
-      if (entry.type === 'group') return group(record, entry);
+      if (entry.type === 'group') return group(_xyz, record, entry);
 
       // Create entry.row inside previously created group.
       if (entry.group) entry.row = _xyz.utils.createElement({
@@ -91,16 +89,16 @@ export default record => {
       if(entry.type === 'label') return;
 
       // Create streetview control.
-      if (entry.type === 'streetview') return streetview(record, entry);
+      if (entry.type === 'streetview') return streetview(_xyz, record, entry);
 
       // If input is images create image control and return from object.map function.
-      if (entry.type === 'images') return images(record, entry);
+      if (entry.type === 'images') return images(_xyz, record, entry);
 
       // Create log control.
-      if (entry.type === 'log') return log(record, entry);
+      if (entry.type === 'log') return log(_xyz, record, entry);
 
       // Create geometry control.
-      if (entry.type === 'geometry') return geometry(record, entry);    
+      if (entry.type === 'geometry') return geometry(_xyz, record, entry);    
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();
@@ -139,7 +137,7 @@ export default record => {
       }
 
       // Create controls for editable fields.
-      if (entry.edit && !entry.fieldfx) return edit(record, entry);
+      if (entry.edit && !entry.fieldfx) return edit(_xyz, record, entry);
 
       // Set field value.
       entry.val.textContent =

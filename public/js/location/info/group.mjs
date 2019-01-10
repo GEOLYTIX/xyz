@@ -1,8 +1,6 @@
-import _xyz from '../../_xyz.mjs';
-
 import chart from './charts.mjs';
 
-export default (record, group) => {
+export default (_xyz, record, group) => {
 
   record.location.infogroups[group.label] = group;
 
@@ -92,7 +90,7 @@ export default (record, group) => {
         e.stopPropagation();
         if(e.target.textContent === chartIcon(group)) {
           group.fields = record.location.infoj.filter(entry => entry.group === group.label);
-          group.div.appendChild(chart(group));
+          group.div.appendChild(chart(_xyz, group));
           group.table.style.display = 'none';
           e.target.textContent = 'view_list';
           e.target.title = 'Show table';

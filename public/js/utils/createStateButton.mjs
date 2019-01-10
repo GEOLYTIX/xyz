@@ -1,7 +1,5 @@
-import _xyz from '../_xyz.mjs';
-
 // StateButton factory
-export function createStateButton(param){
+export function createStateButton(_xyz, param){
 
   const btn = _xyz.utils.createElement({
     tag: 'div',
@@ -17,7 +15,7 @@ export function createStateButton(param){
     if (_xyz.state.finish) _xyz.state.finish();
     _xyz.state = btn;
     btn.classList.add('active');
-    param.activate(param.layer);
+    param.activate(_xyz, param.layer);
   
   };
   
@@ -25,7 +23,7 @@ export function createStateButton(param){
   
     _xyz.state = 'select';
     btn.classList.remove('active');
-    param.finish(param.layer);
+    param.finish(_xyz, param.layer);
       
   };
   

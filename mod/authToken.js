@@ -13,7 +13,7 @@ module.exports = function(req, res, fastify, access, done) {
     if (access.API) return res.code(401).send('Invalid token');
 
     // Redirect to login with request URL as redirect parameter
-    return res.redirect(global.dir + '/login?redirect=' + req.req.url);
+    return require(global.appRoot + '/routes/auth/login').view(req, res);
   }
 
   // Verify token (checks token expiry)
@@ -36,7 +36,7 @@ module.exports = function(req, res, fastify, access, done) {
       SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`,
       [token.email]);
 
-      if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+      if (rows.err) return require(global.appRoot + '/routes/auth/login').view(req, res);
 
       const user = rows[0];
 
@@ -58,7 +58,8 @@ module.exports = function(req, res, fastify, access, done) {
       if (access.API) return res.code(401).send('Invalid token');
 
       // Redirect to login.
-      return res.redirect(global.dir + '/login?msg=fail');
+      return require(global.appRoot + '/routes/auth/login').view(req, res);
+
     }
 
     done();

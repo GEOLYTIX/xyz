@@ -1,5 +1,3 @@
-import _xyz from '../../../_xyz.mjs';
-
 import rectangle from './rectangle.mjs';
 
 import circle from './circle.mjs';
@@ -14,7 +12,7 @@ import polygon from './polygon.mjs';
 
 import finish from './finish.mjs';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   // Create cluster panel and add to layer dashboard.
   layer.edit.panel = _xyz.utils.createElement({
@@ -47,7 +45,7 @@ export default layer => {
   });
 
 
-  if(layer.edit.point) _xyz.utils.createStateButton({
+  if(layer.edit.point) _xyz.utils.createStateButton(_xyz, {
     text: 'Point',
     appendTo: layer.edit.panel,
     layer: layer,
@@ -56,7 +54,7 @@ export default layer => {
   });
 
   
-  if(layer.edit.polygon) _xyz.utils.createStateButton({
+  if(layer.edit.polygon) _xyz.utils.createStateButton(_xyz, {
     text: 'Polygon',
     appendTo: layer.edit.panel,
     layer: layer,
@@ -65,7 +63,7 @@ export default layer => {
   });
 
   
-  if(layer.edit.rectangle) _xyz.utils.createStateButton({
+  if(layer.edit.rectangle) _xyz.utils.createStateButton(_xyz, {
     text: 'Rectangle',
     appendTo: layer.edit.panel,
     layer: layer,
@@ -74,7 +72,7 @@ export default layer => {
   });
 
 
-  if(layer.edit.circle) _xyz.utils.createStateButton({
+  if(layer.edit.circle) _xyz.utils.createStateButton(_xyz, {
     text: 'Circle',
     appendTo: layer.edit.panel,
     layer: layer,
@@ -83,7 +81,7 @@ export default layer => {
   });
 
 
-  // if(layer.edit.line) _xyz.utils.createStateButton({
+  // if(layer.edit.line) _xyz.utils.createStateButton(_xyz, {
   //   text: 'Linestring',
   //   appendTo: layer.edit.panel,
   //   layer: layer,
@@ -118,7 +116,7 @@ export default layer => {
       }
     });
 
-    _xyz.utils.createStateButton({
+    _xyz.utils.createStateButton(_xyz, {
       text: 'Catchment',
       appendTo: layer.edit.panel,
       layer: layer,

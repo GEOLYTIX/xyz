@@ -1,15 +1,13 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default layer => {
+export default (_xyz, layer) => {
     
   if(!layer.display) layer.show();
     
   layer.header.classList.add('edited');
-  _xyz.dom.map.style.cursor = 'crosshair';
+  _xyz.map_dom.style.cursor = 'crosshair';
     
-  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = L.featureGroup().addTo(_xyz.map);
-  layer.edit.path = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
 
   // Define origin outside click event.
   let origin_lnglat;
@@ -24,7 +22,7 @@ export default layer => {
 
       // Add circle marker to vertices layer.       
       layer.edit.vertices.addLayer(
-        L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+        _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
       );
 
       // Set mousemove event to show trail.
@@ -34,7 +32,7 @@ export default layer => {
         layer.edit.trail.clearLayers();
 
         layer.edit.trail.addLayer(
-          L.rectangle(
+          _xyz.L.rectangle(
             [[origin_lnglat[1], origin_lnglat[0]], [e.latlng.lat, e.latlng.lng]],
             _xyz.style.defaults.trail
           )
@@ -54,6 +52,7 @@ export default layer => {
                 
     xhr.onload = e => {
 
+      layer.loaded = false;
       layer.get();
                 
       if (e.target.status !== 200) return;
@@ -62,7 +61,8 @@ export default layer => {
         layer: layer.key,
         table: layer.table,
         id: e.target.response,
-        marker: marker
+        marker: marker,
+        edit: layer.edit
       });
 
     };
@@ -78,4 +78,5 @@ export default layer => {
     _xyz.state.finish();
 
   });
+  
 };

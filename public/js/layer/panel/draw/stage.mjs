@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (layer, marker) => {
+export default (_xyz, layer, marker) => {
   
   const tooltip = _xyz.utils.createElement({
     tag: 'div',
@@ -35,7 +33,8 @@ export default (layer, marker) => {
         xhr.onload = e => {
       
           if (e.target.status !== 200) return;
-                    
+
+          layer.loaded = false;
           layer.get();
                     
           // Select polygon when post request returned 200.
@@ -43,7 +42,8 @@ export default (layer, marker) => {
             layer: layer.key,
             table: layer.table,
             id: e.target.response,
-            marker: marker
+            marker: marker,
+            edit: layer.edit
           });
       
         };
@@ -58,7 +58,7 @@ export default (layer, marker) => {
             coordinates: marker
           }
         }));
-      
+
         _xyz.map.closePopup();
         _xyz.state.finish();
 

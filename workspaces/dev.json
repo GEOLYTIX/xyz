@@ -1,11 +1,13 @@
 {
     "title": "XYZ dev",
+    "locate": {},
     "locales": {
         "NE": {
             "minZoom": 3,
             "maxZoom": 10,
             "layers": {
                 "OSM": {
+                    "display": true,
                     "format": "tiles",
                     "attribution": {
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -23,6 +25,7 @@
                     "mvt_cache": true,
                     "mvt_fields": [
                         "pop_est",
+                        "pop_est_edit",
                         "gdp_md_est",
                         "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000 as gdp_pp",
                         "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
@@ -81,7 +84,7 @@
                         "themes": {
                             "Population": {
                                 "type": "graduated",
-                                "field": "pop_est",
+                                "field": "pop_est_edit",
                                 "cat": {
                                     "0": {
                                         "label": "0 to 10000",
@@ -242,6 +245,71 @@
                 }
             }
         },
+        "Offices": {
+            "minZoom": 2,
+            "maxZoom": 18,
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "placeholder": "e.g. London"
+            },
+            "layers": {
+                "base": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "label": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "offices": {
+                    "display": true,
+                    "format": "geojson",
+                    "dbs": "XYZ",
+                    "table": "glx_offices",
+                    "qID": "id",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "style": {
+                        "default": {
+                            "marker": {
+                                "type": "markerColor",
+                                "style": {
+                                    "colorMarker": "#64dd17",
+                                    "colorDot": "#33691e"
+                                },
+                                "iconAnchor": [20,40]
+                            }
+                        }
+                    },
+                    "infoj": [
+                        {
+                            "label": "City",
+                            "field": "city",
+                            "type": "text",
+                            "edit": true
+                        },   
+                        {
+                            "label": "Address",
+                            "field": "address",
+                            "type": "text",
+                            "edit": true
+                        }
+                    ]
+                }
+            }
+        },
         "GB": {
             "gazetteer": {
                 "provider": "GOOGLE",
@@ -249,9 +317,9 @@
                 "placeholder": "e.g. London",
                 "datasets": [
                     {
-                        "layer": "cluster",
-                        "table": "dev.cluster",
-                        "label": "postcode"
+                        "layer": "retail_points",
+                        "table": "dev.retailpoints",
+                        "label": "store"
                     }
                 ]
             },
@@ -272,6 +340,7 @@
                     "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 },
                 "Mapbox Base": {
+                    "display": true,
                     "name": "Mapbox Baselayer",
                     "attribution": {
                         "© Mapbox": "https://www.mapbox.com/about/maps",
@@ -298,11 +367,17 @@
                 },
                 "oa": {
                     "name": "Output areas",
+                    "attribution": {
+                        "© ONS": "https://www.ons.gov.uk"
+                    },                    
                     "display": true,
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {
-                        "12": "dev.oa"
+                        "11": null,
+                        "12": "dev.oa",
+                        "13": "dev.oa",
+                        "14": null
                     },
                     "qID": "id",
                     "mvt_cache": true,
@@ -376,7 +451,6 @@
                 "retail_places": {
                     "group": "RP",
                     "name": "Retail Places",
-                    "display": true,
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {
@@ -889,13 +963,14 @@
                 },
                 "grid": {
                     "name": "Grid",
+                    "attribution": {
+                        "© ONS": "https://www.ons.gov.uk"
+                    },
                     "format": "grid",
                     "dbs": "XYZ",
                     "geom": "geomcntr",
-                    "grid_color": "pop__11",
                     "tables": {
-                        "6": "gb_hx_64k",
-                        "7": "gb_hx_32k",
+                        "7": null,
                         "8": "gb_hx_16k",
                         "9": "gb_hx_8k",
                         "10": "gb_hx_4k",

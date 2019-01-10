@@ -1,10 +1,8 @@
-import _xyz from '../../_xyz.mjs';
-
 import catchment from './catchment.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
-  if (entry.edit.catchment) catchment(record, entry);
+  if (entry.edit.catchment) catchment(_xyz, record, entry);
 
   if (!entry.value) return;
 
@@ -16,8 +14,7 @@ export default (record, entry) => {
     fillOpacity: 0.3
   };
 
-  //const geometry = L.geoJson(
-  entry.edit.catchment.geometry = L.geoJson(
+  entry.edit.catchment.geometry = _xyz.L.geoJson(
     {
       type: 'Feature',
       geometry: JSON.parse(entry.value)

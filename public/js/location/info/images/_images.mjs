@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import add_image from './add_image.mjs';
 
 import delete_image from './delete_image.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   const images = entry.value.reverse() || [];
 
@@ -51,7 +49,7 @@ export default (record, entry) => {
     appendTo: imageControl.container
   });
 
-  if (entry.edit) add_image(imageControl, entry);
+  if (entry.edit) add_image(_xyz, imageControl, entry);
 
   // add images if there are any
   for (let image of images) {
@@ -86,7 +84,7 @@ export default (record, entry) => {
         event: 'click',
         funct: e => {
           e.target.remove();
-          delete_image(record, entry, img);
+          delete_image(_xyz, record, entry, img);
         }
       }
     });

@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (entry, record) => {
+export default (_xyz, entry, record) => {
 
   if (!typeof entry.edit.options[entry.select.selectedIndex] === 'object') return;
 

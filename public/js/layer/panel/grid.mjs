@@ -1,8 +1,6 @@
-import _xyz from '../../_xyz.mjs';
-
 import d3_selection from 'd3-selection';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   const panel = _xyz.utils.createElement({
     tag: 'div',
@@ -12,17 +10,13 @@ export default layer => {
     appendTo: layer.dashboard
   });
 
-  // Create grid_seize dropdown.
-  layer.grid_size = _xyz.hooks.current['grid_size'] ||layer.grid_size || Object.values(layer.grid_fields)[0];
-
-
+  // Create grid_size dropdown.
   _xyz.utils.dropdown({
     appendTo: panel,
     entries: layer.grid_fields,
     selected: Object.keys(layer.grid_fields).find(key => layer.grid_fields[key] === layer.grid_size),
     onchange: e => {
       layer.grid_size = layer.grid_fields[e.target.value];
-      _xyz.hooks.set('grid_size', layer.grid_size);
       layer.get();
     }
   });
@@ -33,58 +27,26 @@ export default layer => {
     legend = d3_selection.select(panel).append('svg').attr('width', width);
 
   // Create grid_color dropdown.
-  layer.grid_color = _xyz.hooks.current['grid_color'] || layer.grid_color || Object.values(layer.grid_fields)[0];
-
   _xyz.utils.dropdown({
     appendTo: panel,
     entries: layer.grid_fields,
     selected:  Object.keys(layer.grid_fields).find(key => layer.grid_fields[key] === layer.grid_color),
     onchange: e => {
       layer.grid_color = layer.grid_fields[e.target.value];
-      _xyz.hooks.set('grid_color', layer.grid_color);
       layer.get();
     }
   });
 
   // Create grid_ratio checkbox.
-  layer.grid_ratio = layer.grid_ratio || _xyz.hooks.current.grid_ratio || false;
   _xyz.utils.checkbox({
     label: 'Display colour values as a ratio to the size value.',
-    checked: layer.grid_ratio || _xyz.hooks.current.grid_ratio,
+    checked: layer.grid_ratio,
     appendTo: panel,
     onChange: e => {
-
-      // Set the layer grid ratio to the state of the checkbox.
       layer.grid_ratio = e.target.checked;
-
-      // Set grid_ratio hook if true.
-      layer.grid_ratio ?
-        _xyz.hooks.set('grid_ratio', true) :
-        _xyz.hooks.remove('grid_ratio');
-
       layer.get();
     }
   });
-
-  // // Create grid_stdev checkbox.
-  // layer.grid_stdev = layer.grid_stdev || _xyz.hooks.current.grid_stdev || false;
-  // _xyz.utils.checkbox({
-  //   label: 'Use standard deviation for the distribution of values.',
-  //   checked: layer.grid_stdev || _xyz.hooks.current.grid_stdev,
-  //   appendTo: panel,
-  //   onChange: e => {
-
-  //     // Set the layer grid ratio to the state of the checkbox.
-  //     layer.grid_stdev = e.target.checked;
-
-  //     // Set grid_ratio hook if true.
-  //     layer.grid_stdev ?
-  //       _xyz.hooks.set('grid_stdev', true) :
-  //       _xyz.hooks.remove('grid_stdev');
-
-  //     layer.get();
-  //   }
-  // });  
 
   // Create SVG grid legend
   let
