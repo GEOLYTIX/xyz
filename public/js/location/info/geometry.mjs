@@ -2,7 +2,7 @@ import catchment from './catchment.mjs';
 
 export default (_xyz, record, entry) => {
 
-  //if (entry.edit.catchment) catchment(_xyz, record, entry);
+  if (entry.edit && entry.edit.catchment) catchment(_xyz, record, entry);
 
   if (!entry.value) return;
 
@@ -14,27 +14,18 @@ export default (_xyz, record, entry) => {
     fillOpacity: 0.3
   };
 
-  // entry.edit.catchment.geometry = _xyz.L.geoJson(
-  //   {
-  //     type: 'Feature',
-  //     geometry: JSON.parse(entry.value)
-  //   }, {
-  //     interactive: false,
-  //     pane: 'select_display',
-  //     style: style
-  //   }).addTo(_xyz.map);
-
-  // record.location.geometries.push(entry.edit.catchment.geometry);
-
-  let geom = _xyz.L.geoJson(
+  const geom = _xyz.L.geoJson(
     {
       type: 'Feature',
       geometry: JSON.parse(entry.value)
-    }, {
+    },
+    {
       interactive: false,
       pane: 'select_display',
       style: style
     }).addTo(_xyz.map);
+
+  if (entry.edit && entry.edit.catchment) entry.edit.catchment.geometry = geom;
 
   record.location.geometries.push(geom);
 

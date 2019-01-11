@@ -26,7 +26,7 @@ _xyz().init({
   view_zoom: 12,
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Grid2
+  callback: Legends
 });
 
 function LocatePopup(_xyz){
@@ -49,11 +49,13 @@ function Grid(_xyz) {
 
   _xyz.layers.list.oa.remove();
 
-  //_xyz.layers.list.retail_points.remove();
+  _xyz.layers.list.retail_points.remove();
 
-  _xyz.layers.list.retail_points.style.setTheme('Retailer');
-
-  _xyz.layers.list.retail_points.style.setLegend(document.getElementById('location_info_container1'));
+  _xyz.layers.list.grid.grid_size = 'gen_female__11';
+  
+  _xyz.layers.list.grid.grid_color = 'gen_male__11';
+  
+  _xyz.layers.list.grid.grid_ratio = true;
 
   _xyz.layers.list.grid.show();
 
@@ -61,25 +63,11 @@ function Grid(_xyz) {
 
 }
 
-function Grid2(_xyz) {
-
-  _xyz.layers.list.oa.remove();
-
-  //_xyz.layers.list.retail_points.remove();
+function Legends(_xyz) {
 
   _xyz.layers.list.retail_points.style.setTheme('Retailer');
 
   _xyz.layers.list.retail_points.style.setLegend(document.getElementById('location_info_container2'));
-
-  _xyz.layers.list.grid.show();
-
-  _xyz.layers.list.grid.style.setLegend(document.getElementById('location_info_container2'));
-
-}
-
-function Legends(_xyz) {
-
-  _xyz.layers.list.retail_points.remove();
 
   _xyz.layers.list.oa.style.setTheme('Population \'11');
 

@@ -242,6 +242,35 @@
                             "fillOpacity": 1
                         }
                     }
+                },
+                "store": {
+                    "display": true,
+                    "name": "Tanaka Stores",
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "tanaka.store",
+                    "cluster_label": "store_name",
+                    "infoj": [
+                        {
+                            "field": "store_code",
+                            "label": "Store code",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "catchments",
+                            "fieldfx": "ST_asGeoJson(catchments)",
+                            "type": "geometry",
+                            "style": {
+                              "stroke": true,
+                              "color": "#cf0",
+                              "weight": 2,
+                              "fill": true,
+                              "fillOpacity": 0.5
+                            }
+                        }
+                   ]
                 }
             }
         },
@@ -348,6 +377,34 @@
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "cluster_catchments": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "dev.cluster_catchments",
+                    "qID": "id",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "infoj": [
+                        {
+							"label": "Catchment Primary",
+							"field": "catchment",
+							"fieldfx": "ST_asGeoJson(catchment)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#E01A4F",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						}
+                   ]
                 },
                 "edit_layer": {
                     "format": "mvt",
