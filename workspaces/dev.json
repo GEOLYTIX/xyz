@@ -980,16 +980,6 @@
                         "Population 2011": "pop__11",
                         "Female population": "gen_female__11",
                         "Male population": "gen_male__11"
-                    },
-                    "style": {
-                        "range": [
-                            "#15773f",
-                            "#66bd63",
-                            "#a6d96a",
-                            "#fdae61",
-                            "#f46d43",
-                            "#d73027"
-                        ]
                     }
                 }
             }

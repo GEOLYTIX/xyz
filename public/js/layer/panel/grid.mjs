@@ -20,7 +20,7 @@ export default (_xyz, layer) => {
   });
 
   // Create a D3 svg for the legend and nest between size and color drop down.
-  layer.getLegend(panel, layer.drawer.clientWidth);
+  layer.style.setLegend(panel);
 
   // Create grid_color dropdown.
   _xyz.utils.dropdown({

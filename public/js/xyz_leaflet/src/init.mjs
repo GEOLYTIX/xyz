@@ -100,7 +100,7 @@ export default _xyz => {
       _xyz.loadLocale(locale);
 
       // Continue with callback if provided.
-      if (params.callback) params.callback();
+      if (params.callback) params.callback(_xyz);
 
     };
 

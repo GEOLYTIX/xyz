@@ -1,36 +1,24 @@
-import MVT from './format/mvt.mjs';
+import format_mvt from './format/mvt.mjs';
 
-import Geojson from './format/geojson.mjs';
+import format_geojson from './format/geojson.mjs';
 
-import PolyGraduatedLegend from './legend/polyGraduated.mjs';
+import legend_polyCategorized from './legend/polyCategorized.mjs';
 
-import Cluster from './format/cluster.mjs';
+import legend_polyGraduated from './legend/polyGraduated.mjs';
 
-import ClusterCategorizedLegend from './legend/clusterCategorized.mjs';
+import format_cluster from './format/cluster.mjs';
 
-import Tiles from './format/tiles.mjs';
+import legend_clusterCategorized from './legend/clusterCategorized.mjs';
 
-import Grid from './format/grid.mjs';
+import legend_clusterGraduated from './legend/clusterGraduated.mjs';
 
-import GridLegend from './legend/grid.mjs';
+import format_tiles from './format/tiles.mjs';
+
+import format_grid from './format/grid.mjs';
+
+import legend_grid from './legend/grid.mjs';
 
 export default _xyz => {
-
-  const format_mvt = MVT(_xyz);
-
-  const format_geojson = Geojson(_xyz);
-
-  const legend_polyGraduated = PolyGraduatedLegend(_xyz);
-
-  const format_cluster = Cluster(_xyz);
-
-  const legend_clusterCategorized = ClusterCategorizedLegend(_xyz);
-
-  const format_tiles = Tiles(_xyz);
-
-  const format_grid = Grid(_xyz);
-
-  const legend_grid = GridLegend(_xyz);
 
   _xyz.layers.add = layer => {
 
@@ -99,34 +87,54 @@ export default _xyz => {
     if (!layer.key) return;
 
     // Create empty legend container.
-    if (layer.style) layer.style.legend = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        classList: 'legend'
-      }
-    });
+    if (layer.style) {
+      layer.style.legend = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          classList: 'legend'
+        }
+      });
+
+      layer.style.setLegend = dom => {
+        layer.style.getLegend();
+        dom.appendChild(layer.style.legend);
+      };
+
+      layer.style.getLegend = () => {
+
+        if (layer.format === 'mvt' && layer.style.theme.type === 'categorized') legend_polyCategorized(_xyz, layer);
+
+        if (layer.format === 'mvt' && layer.style.theme.type === 'graduated') legend_polyGraduated(_xyz, layer);
+
+        if (layer.format === 'cluster' && layer.style.theme.type === 'categorized') legend_clusterCategorized(_xyz, layer);
+
+        if (layer.format === 'cluster' && layer.style.theme.type === 'competition') legend_clusterCategorized(_xyz, layer);
+
+        if (layer.format === 'cluster' && layer.style.theme.type === 'graduated') legend_clusterGraduated(_xyz, layer);
+
+        if (layer.format === 'grid') legend_grid(_xyz, layer);
+
+      };
+
+      if (layer.style.themes) layer.style.setTheme = theme => {
+        layer.style.theme = layer.style.themes[theme];
+        layer.show();
+      };
+
+    }
 
     _xyz.panes.list.push(_xyz.map.createPane(layer.key));
     _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
     
-    if (layer.format === 'mvt') {
-      layer.get = format_mvt;
-      layer.getLegend = legend_polyGraduated;
-    }
+    if (layer.format === 'mvt') layer.get = format_mvt(_xyz, layer);
 
-    if (layer.format === 'geojson') layer.get = format_geojson;
+    if (layer.format === 'geojson') layer.get = format_geojson(_xyz, layer);
 
-    if (layer.format === 'cluster') {
-      layer.get = format_cluster;
-      layer.getLegend = legend_clusterCategorized;
-    }
+    if (layer.format === 'cluster') layer.get = format_cluster(_xyz, layer);
 
-    if (layer.format === 'tiles') layer.get = format_tiles;
+    if (layer.format === 'tiles') layer.get = format_tiles(_xyz, layer);
 
-    if (layer.format === 'grid') {
-      layer.get = format_grid;
-      layer.getLegend = legend_grid;
-    }
+    if (layer.format === 'grid') layer.get = format_grid(_xyz, layer);
 
     layer.loaded = false;
     layer.get();
