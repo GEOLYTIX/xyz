@@ -120,6 +120,10 @@
                 }
                 .meta {
                     margin-top: 5px;
+                    a {
+                        color: $glxgreen;
+                        font-weight: 600;
+                    }
                 }
                 .legend > svg{
                     width: 100%;

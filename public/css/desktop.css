@@ -748,6 +748,9 @@ input[type=range]::-moz-range-thumb {
           margin-bottom: 7px; }
         .mod_container .module .drawer .dashboard .meta {
           margin-top: 5px; }
+          .mod_container .module .drawer .dashboard .meta a {
+            color: #090;
+            font-weight: 600; }
         .mod_container .module .drawer .dashboard .legend > svg {
           width: 100%; }
         .mod_container .module .drawer .dashboard .panel {

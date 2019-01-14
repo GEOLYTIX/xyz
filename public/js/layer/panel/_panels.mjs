@@ -23,7 +23,7 @@ export default (_xyz, layer) => {
     tag: 'p',
     options: {
       className: 'meta',
-      textContent: layer.meta
+      innerHTML: layer.meta
     },
     appendTo: layer.dashboard
   });

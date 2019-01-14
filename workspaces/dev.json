@@ -380,6 +380,7 @@
                 },
                 "cluster_catchments": {
                     "format": "cluster",
+                    "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/file/d/0B1GCK8cPXzg-TGdzNzA4VUY4TGs\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
                     "dbs": "XYZ",
                     "table": "dev.cluster_catchments",
                     "qID": "id",
