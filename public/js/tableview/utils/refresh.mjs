@@ -54,19 +54,44 @@ export default layer => {
     }
   });
 
-  layer.tableview.note = _xyz.utils.createElement({
+  layer.tableview.note_container = _xyz.utils.createElement({
     tag: 'div',
-    style: {
-      fontSize: '12px',
-      padding: '2px',
-      marginTop: '5px'
+    options: {
+      classList: 'note'
     },
     appendTo: layer.tableview.section
   });
 
+  layer.tableview.note = _xyz.utils.createElement({
+    tag: 'div',
+    appendTo: layer.tableview.note_container
+  });
+
+  layer.tableview.preholder = _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      classList: 'table-preholder'
+    },
+    appendTo: layer.tableview.section
+  });
+
+  layer.tableview.holder = _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      classList: 'table-holder'
+    },
+    style: {
+      height: _xyz.tableview.height || '30vh'
+    },
+    appendTo: layer.tableview.preholder
+  });
+
   layer.tableview.container = _xyz.utils.createElement({
     tag: 'div',
-    appendTo: layer.tableview.section
+    style: {
+      //height: '30vh'
+    },
+    appendTo: layer.tableview.holder
   });
 
 };

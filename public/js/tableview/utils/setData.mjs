@@ -9,7 +9,8 @@ export default layer => {
 
 function setData(layer, data, columns){
 
-  let tableHeight = (window.innerHeight - 185) + 'px';
+  //let tableHeight = (window.innerHeight - 185) + 'px';
+  let tableHeight = layer.tableview.holder.clientHeight + 'px';
 
   layer.tableview.container.innerHTML = '';
 
@@ -20,8 +21,11 @@ function setData(layer, data, columns){
     if(!layer.tableview.download) _xyz.tableview.download(layer);
 
     layer.tableview.table = new Tabulator(layer.tableview.container, {
-      height: tableHeight,
+      height: _xyz.tableview.height || '30vh',
+      //height: (layer.tableview.section.clientHeight - 185) + 'px',
       columns: columns,
+      autoResize: true,
+      resizableRows: true,
       dataLoaded: function(){ 
         //freeze first row on data load
         /*let firstRow = this.getRows()[0];
@@ -34,11 +38,11 @@ function setData(layer, data, columns){
 
     if(layer.tableview.more){
         
-      layer.tableview.more.style.display = (data.length < 99 ? 'none' : 'inline-block');
+      layer.tableview.more.style.display = (data.length < 99 ? 'none' : 'inline');
     
     } else {
         
-      layer.tableview.more = _xyz.utils.createElement({
+      /*layer.tableview.more = _xyz.utils.createElement({
         tag: 'div',
         options: {
           className: 'btn_inline',
@@ -54,7 +58,29 @@ function setData(layer, data, columns){
           }
         },
         appendTo: layer.tableview.section
+      });*/
+
+      layer.tableview.more = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          textContent: 'Load more',
+          classList: 'load_more'
+        },
+        style: {
+          display: (data.length < 99 ? 'none' : 'inline')/*,
+          marginLeft: '3px',
+          color: '#090',
+          cursor: 'pointer'*/
+        },
+        eventListener: {
+          event: 'click',
+          funct: () => {
+            _xyz.tableview.addData(layer);
+          }
+        },
+        appendTo: layer.tableview.note_container
       });
+
     }
     
     
@@ -69,4 +95,5 @@ function setData(layer, data, columns){
     layer.tableview.note.textContent = 'No results.';
 
   }
+
 }
