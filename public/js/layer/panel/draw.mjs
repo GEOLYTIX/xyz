@@ -1,17 +1,3 @@
-import rectangle from './rectangle.mjs';
-
-import circle from './circle.mjs';
-
-// import line from './line.mjs';
-
-import point from './point.mjs';
-
-import catchment from './catchment.mjs';
-
-import polygon from './polygon.mjs';
-
-import finish from './finish.mjs';
-
 export default (_xyz, layer) => {
 
   // Create cluster panel and add to layer dashboard.
@@ -49,8 +35,8 @@ export default (_xyz, layer) => {
     text: 'Point',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: point,
-    finish: finish
+    activate: _xyz.draw.point,
+    finish: _xyz.draw.finish
   });
 
   
@@ -58,8 +44,8 @@ export default (_xyz, layer) => {
     text: 'Polygon',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: polygon,
-    finish: finish
+    activate: _xyz.draw.polygon,
+    finish: _xyz.draw.finish
   });
 
   
@@ -67,8 +53,8 @@ export default (_xyz, layer) => {
     text: 'Rectangle',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: rectangle,
-    finish: finish
+    activate: _xyz.draw.rectangle,
+    finish: _xyz.draw.finish
   });
 
 
@@ -76,18 +62,18 @@ export default (_xyz, layer) => {
     text: 'Circle',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: circle,
-    finish: finish
+    activate: _xyz.draw.circle,
+    finish: _xyz.draw.finish
   });
 
 
-  // if(layer.edit.line) _xyz.utils.createStateButton(_xyz, {
-  //   text: 'Linestring',
-  //   appendTo: layer.edit.panel,
-  //   layer: layer,
-  //   activate: line,
-  //   finish: finish
-  // });
+  if(layer.edit.line) _xyz.utils.createStateButton(_xyz, {
+    text: 'Linestring',
+    appendTo: layer.edit.panel,
+    layer: layer,
+    activate: _xyz.draw.line,
+    finish: _xyz.draw.finish
+  });
 
   
   if(layer.edit.catchment){
@@ -120,8 +106,8 @@ export default (_xyz, layer) => {
       text: 'Catchment',
       appendTo: layer.edit.panel,
       layer: layer,
-      activate: catchment,
-      finish: finish
+      activate: _xyz.draw.catchment,
+      finish: _xyz.draw.finish
     });
   }
 

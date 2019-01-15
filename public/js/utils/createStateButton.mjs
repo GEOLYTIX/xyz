@@ -15,7 +15,7 @@ export function createStateButton(_xyz, param){
     if (_xyz.state.finish) _xyz.state.finish();
     _xyz.state = btn;
     btn.classList.add('active');
-    param.activate(_xyz, param.layer);
+    param.activate(param.layer);
   
   };
   
@@ -23,7 +23,7 @@ export function createStateButton(_xyz, param){
   
     _xyz.state = 'select';
     btn.classList.remove('active');
-    param.finish(_xyz, param.layer);
+    param.finish(param.layer);
       
   };
   

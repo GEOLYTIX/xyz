@@ -14,6 +14,176 @@
                     },
                     "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 },
+                "geodem": {
+                    "name": "Demography",
+                    "format": "mvt",
+                    "mvt_cache": false,
+					"mvt_fields": ["totalpop", "average_age"],
+                    "dbs": "XYZ",
+                    "qID": "ogc_fid",
+                    "tables": {
+                        "10": null,
+                        "11": "tanaka.geodem"
+                    },
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "opacity": 1,
+                            "fillColor": "#56A3A6",
+                            "fill": true,
+                            "fillOpacity": 0.5
+                        },
+                        "highlight": {
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "fillColor": "#DBD56E",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        },
+						"themes": {
+						"average age": {
+							"type": "graduated",
+							"field": "average_age",
+							"cat": {
+								"18": { 
+									"label": "18 to 40",
+									"fillColor": "#2b83ba"
+									},
+								"40": { 
+									"label": "40 to 47",
+									"fillColor": "#abdda4"
+									},
+								"47": { 
+									"label": "47 to 53",
+									"fillColor": "#ffffbf"
+									},
+								"53": { 
+									"label": "53 to 62",
+									"fillColor": "#fdae61"
+									},
+								"62": { 
+									"label": "62 and above",
+									"fillColor": "#d7191c"
+									}
+								}
+							}
+						}
+                    },
+                    "infoj": [
+                        {
+                            "field": "chomokucode",
+                            "label": "Chomoku code",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "totalpop",
+                            "label": "Total population",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "field": "malepop",
+                            "label": "Male population",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "field": "femalepop",
+                            "label": "Female population",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "field": "average_age",
+                            "label": "Average age",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "label": "Age breakdown"
+                        },
+                        {
+                            "field": "to0_9",
+                            "label": "0 to 9",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to10_19",
+                            "label": "10 to 19",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to20_29",
+                            "label": "20 to 29",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to30_39",
+                            "label": "30 to 39",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to40_49",
+                            "label": "40 to 49",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to50_59",
+                            "label": "50 to 59",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to60_69",
+                            "label": "60 to 69",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to70_79",
+                            "label": "70 to 79",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to80_89",
+                            "label": "80 to 89",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to90_99",
+                            "label": "90 to 99",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        },
+                        {
+                            "field": "to100_plus",
+                            "label": "100 and over",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 1
+                        }
+                    ]
+                },
                 "COUNTRIES": {
                     "display": true,
                     "format": "mvt",

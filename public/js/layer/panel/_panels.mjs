@@ -2,7 +2,7 @@ import panel_filters from './filters/_filters.mjs';
 
 import panel_style from './style/_styles.mjs';
 
-import panel_draw from './draw/_draw.mjs';
+import panel_draw from './draw.mjs';
 
 import panel_grid from './grid.mjs';
 

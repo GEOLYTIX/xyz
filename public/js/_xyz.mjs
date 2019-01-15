@@ -6,6 +6,7 @@ export default () => ({
   hooks: {
     current: {}
   },
+  draw: {},
   host: null,
   layers: {
     groups: {},

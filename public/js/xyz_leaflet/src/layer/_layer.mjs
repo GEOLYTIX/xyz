@@ -116,6 +116,8 @@ export default _xyz => {
 
       };
 
+      if (layer.style.themes) layer.style.theme = layer.style.themes[Object.keys(layer.style.themes)[0]];
+
       if (layer.style.themes) layer.style.setTheme = theme => {
         layer.style.theme = layer.style.themes[theme];
         layer.show();
@@ -138,6 +140,30 @@ export default _xyz => {
 
     layer.loaded = false;
     layer.get();
+
+  };
+
+  _xyz.layers.geoJSON = params => {
+
+    if (!params.json) return;
+
+    // Add layer to map.
+    return _xyz.L.geoJson(params.json, {
+      interactive: params.interactive || false,
+      pane: params.pane || 'default',
+      pointToLayer: (feature, latlng) => {
+        return new _xyz.L.Marker(latlng, {
+          interactive: params.interactive || false,
+          pane: params.pane || 'default',
+          icon: _xyz.L.icon({
+            iconUrl: params.icon.url,
+            iconSize: params.icon.size || 40,
+            iconAnchor: params.icon.anchor || [20, 40]
+          })
+        });
+      },
+      style: params.style || {}
+    }).addTo(_xyz.map);
 
   };
 
