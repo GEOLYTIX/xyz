@@ -8,9 +8,11 @@ _xyz().init({
   map_id: 'xyz_map1',
   locale: 'GB',
   scrollWheelZoom: true,
-  view_lat: 51.52,
-  view_lng: 0.24,
-  view_zoom: 12,
+  view: {
+    lat: 51.52,
+    lng: 0.24,
+    zoom: 12,
+  },
   btnZoomIn: document.getElementById('btnZoomIn1'),
   btnZoomOut: document.getElementById('btnZoomOut1'),
   callback: Grid
@@ -21,9 +23,11 @@ _xyz().init({
   //token: API token,
   map_id: 'xyz_map2',
   locale: 'GB',
-  view_lat: 51.52,
-  view_lng: 0.24,
-  view_zoom: 12,
+  view: {
+    lat: 51.52,
+    lng: 0.24,
+    zoom: 12,
+  },
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
   callback: Legends

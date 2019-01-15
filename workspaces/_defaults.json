@@ -17,6 +17,7 @@
             "south": -90,
             "west": -180
         },
+        "view": {},
         "gazetteer": {
             "optional": true,
             "provider": "optional",

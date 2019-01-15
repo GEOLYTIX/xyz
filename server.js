@@ -89,7 +89,10 @@ function startFastify(){
     .decorate('authAPI', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: global.access, API: true }, done))
     .decorate('authAdmin', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: 'admin', API: false }, done))
     .decorate('authAdminAPI', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: 'admin', API: true }, done))
-    .register((fastify, opts, next) => { require('./routes/_routes')(fastify); next(); }, { prefix: global.dir });
+    .register((fastify, opts, next) => {
+      require('./routes/_routes')(fastify);
+      next(); 
+    }, { prefix: global.dir });
 
   fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
     if (err) {

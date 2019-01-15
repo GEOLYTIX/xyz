@@ -4,7 +4,7 @@
     "locales": {
         "NE": {
             "minZoom": 3,
-            "maxZoom": 10,
+            "maxZoom": 11,
             "layers": {
                 "OSM": {
                     "display": true,
@@ -243,6 +243,34 @@
                         }
                     }
                 },
+                "catchment": {
+                    "name": "Tanaka store catchment",
+                    "format": "mvt",
+                    "mvt_cache": true,
+                    "dbs": "XYZ",
+                    "tables": {
+                        "10": null,
+                        "11": "tanaka.customer_coverage"
+                    },
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "opacity": 1,
+                            "fillColor": "#56A3A6",
+                            "fill": true,
+                            "fillOpacity": 0.5
+                        },
+                        "highlight": {
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "fillColor": "#DBD56E",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        }
+                    }
+                },
                 "store": {
                     "display": true,
                     "name": "Tanaka Stores",
@@ -269,6 +297,9 @@
                               "fill": true,
                               "fillOpacity": 0.5
                             }
+                        },
+                        {
+                            "type": "streetview"
                         }
                    ]
                 }
@@ -388,7 +419,7 @@
                         "point": true,
                         "delete": true
                     },
-                    "infoj": [
+                    "_infoj": [
                         {
 							"label": "Catchment Primary",
 							"field": "catchment",
