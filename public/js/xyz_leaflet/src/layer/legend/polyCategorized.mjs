@@ -2,14 +2,12 @@ import d3_selection from 'd3-selection';
 
 export default (_xyz, layer) => {
 
-  let width = layer.drawer.clientWidth;
-      
-  const svg = d3_selection
-    .select(layer.style.legend)
-    .append('svg')
-    .attr('width', width);
+  const legend = d3_selection.select(layer.style.legend).append('svg');
   
   let y = 10;
+
+  // Create / empty legend filter when theme is applied.
+  layer.filter.legend = {};
 
   // Create array for NI (not in) value filter.
   layer.filter.legend[layer.style.theme.field] = {
@@ -17,21 +15,25 @@ export default (_xyz, layer) => {
   };
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
-           
-    svg.append('image')
-      .attr('x', 0)
-      .attr('y', y)
-      .attr('width', 20)
-      .attr('height', 20)
-      .attr('xlink:href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1])));
+
+    let cat_style = Object.assign({}, layer.style.default, cat[1]);
+
+    legend.append('rect')
+      .attr('x', 4)
+      .attr('y', y + 3)
+      .attr('width', 14)
+      .attr('height', 14)
+      .style('fill', cat_style.fillColor)
+      .style('fill-opacity', cat_style.fillOpacity)
+      .style('stroke', cat_style.color);      
       
-    svg.append('text')
+    legend.append('text')
       .attr('x', 25)
       .attr('y', y + 11)
       .style('font-size', '12px')
       .style('alignment-baseline', 'central')
       .style('cursor', 'pointer')
-      .text(cat[1].label || '')
+      .text(cat[1].label || cat[0])
       .on('click', function () {
         if (this.style.opacity == 0.5) {
           this.style.opacity = 1;
@@ -55,15 +57,18 @@ export default (_xyz, layer) => {
       
   // Attach box for other/default categories.
   if (layer.style.theme.other) {
-    svg.append('image')
-      .attr('x', 0)
-      .attr('y', y)
-      .attr('width', 20)
-      .attr('height', 20)
-      .attr('xlink:href', _xyz.utils.svg_symbols(layer.style.marker));
+
+    legend.append('rect')
+      .attr('x', 4)
+      .attr('y', y + 3)
+      .attr('width', 14)
+      .attr('height', 14)
+      .style('fill', layer.style.default.fillColor)
+      .style('fill-opacity', layer.style.default.fillOpacity)
+      .style('stroke', layer.style.default.color);       
       
     // Attach text with filter on click for the other/default category.
-    svg.append('text')
+    legend.append('text')
       .attr('x', 25)
       .attr('y', y + 11)
       .style('font-size', '12px')
@@ -90,24 +95,8 @@ export default (_xyz, layer) => {
       
     y += 20;
   }
-          
-  // Add multi marker.
-  svg.append('image')
-    .attr('x', 0)
-    .attr('y', y + 5)
-    .attr('width', 40)
-    .attr('height', 40)
-    .attr('xlink:href', _xyz.utils.svg_symbols(layer.style.markerMulti));    
-      
-  svg.append('text')
-    .attr('x', 44)
-    .attr('y', y + 27)
-    .style('font-size', '12px')
-    .style('alignment-baseline', 'central')
-    .style('cursor', 'pointer')
-    .text('Multiple Locations');
 
   // Set height of the svg element.
-  svg.attr('height', y + 50);    
+  legend.attr('height', y);
       
 };

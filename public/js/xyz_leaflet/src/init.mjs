@@ -61,14 +61,14 @@ export default _xyz => {
       _xyz.map.setView(
         [
           _xyz.hooks.current.lat
-        || locale.view_lat
+        || locale.view.lat
         || 0,
           _xyz.hooks.current.lng
-        || locale.view_lng
+        || locale.view.lng
         || 0
         ],
         _xyz.hooks.current.z
-      || locale.view_zoom
+      || locale.view.zoom
       || 5);
   
       // Fire viewChangeEnd after map move and zoomend
@@ -100,7 +100,7 @@ export default _xyz => {
       _xyz.loadLocale(locale);
 
       // Continue with callback if provided.
-      if (params.callback) params.callback();
+      if (params.callback) params.callback(_xyz);
 
     };
 

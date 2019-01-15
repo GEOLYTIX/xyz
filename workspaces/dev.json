@@ -4,7 +4,7 @@
     "locales": {
         "NE": {
             "minZoom": 3,
-            "maxZoom": 10,
+            "maxZoom": 11,
             "layers": {
                 "OSM": {
                     "display": true,
@@ -242,6 +242,66 @@
                             "fillOpacity": 1
                         }
                     }
+                },
+                "catchment": {
+                    "name": "Tanaka store catchment",
+                    "format": "mvt",
+                    "mvt_cache": true,
+                    "dbs": "XYZ",
+                    "tables": {
+                        "10": null,
+                        "11": "tanaka.customer_coverage"
+                    },
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "opacity": 1,
+                            "fillColor": "#56A3A6",
+                            "fill": true,
+                            "fillOpacity": 0.5
+                        },
+                        "highlight": {
+                            "color": "#56A3A6",
+                            "stroke": false,
+                            "fillColor": "#DBD56E",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        }
+                    }
+                },
+                "store": {
+                    "display": true,
+                    "name": "Tanaka Stores",
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "tanaka.store",
+                    "cluster_label": "store_name",
+                    "infoj": [
+                        {
+                            "field": "store_code",
+                            "label": "Store code",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "catchments",
+                            "fieldfx": "ST_asGeoJson(catchments)",
+                            "type": "geometry",
+                            "style": {
+                              "stroke": true,
+                              "color": "#cf0",
+                              "weight": 2,
+                              "fill": true,
+                              "fillOpacity": 0.5
+                            }
+                        },
+                        {
+                            "type": "streetview"
+                        }
+                   ]
                 }
             }
         },
@@ -348,6 +408,35 @@
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "cluster_catchments": {
+                    "format": "cluster",
+                    "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/file/d/0B1GCK8cPXzg-TGdzNzA4VUY4TGs\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
+                    "dbs": "XYZ",
+                    "table": "dev.cluster_catchments",
+                    "qID": "id",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "_infoj": [
+                        {
+							"label": "Catchment Primary",
+							"field": "catchment",
+							"fieldfx": "ST_asGeoJson(catchment)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#E01A4F",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						}
+                   ]
                 },
                 "edit_layer": {
                     "format": "mvt",
@@ -984,16 +1073,6 @@
                         "Population 2011": "pop__11",
                         "Female population": "gen_female__11",
                         "Male population": "gen_male__11"
-                    },
-                    "style": {
-                        "range": [
-                            "#15773f",
-                            "#66bd63",
-                            "#a6d96a",
-                            "#fdae61",
-                            "#f46d43",
-                            "#d73027"
-                        ]
                     }
                 }
             }

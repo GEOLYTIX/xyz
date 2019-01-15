@@ -15,6 +15,7 @@ export default _xyz => {
         },
         {
           pointToLayer: function (feature, latlng) {
+
             return new L.Marker(latlng, {
               icon: _xyz.L.icon({
                 iconUrl: _xyz.utils.svg_symbols({
@@ -30,6 +31,7 @@ export default _xyz => {
               interactive: false,
               pane: 'select_marker'
             });
+            
           }
         }).addTo(_xyz.map);
 

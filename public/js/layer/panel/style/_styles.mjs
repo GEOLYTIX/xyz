@@ -1,11 +1,3 @@
-import polyGraduated from './polyGraduated.mjs';
-
-import polyCategorized from './polyCategorized.mjs';
-
-import clusterCategorized from './clusterCategorized.mjs';
-
-import clusterGraduated from './clusterGraduated.mjs';
-
 import polyStyle from './polyStyle.mjs';
 
 import clusterStyle from './clusterStyle.mjs';
@@ -72,14 +64,10 @@ export default (_xyz, layer) => {
     }
   });
 
-  // Create empty legend container.
-  layer.style.legend = _xyz.utils.createElement({
-    tag: 'div',
-    appendTo: panel,
-  });
+  panel.appendChild(layer.style.legend);
 
   // Apply the current theme.
-  if(layer.style.theme) applyTheme(layer);
+  applyTheme(layer);
 
   function applyTheme(layer) {
 
@@ -102,22 +90,10 @@ export default (_xyz, layer) => {
   
       return layer.get();
     }
-  
-    if ((layer.format === 'mvt' || layer.format === 'geojson')
-      && layer.style.theme.type === 'categorized') polyCategorized(_xyz, layer);
-  
-    if ((layer.format === 'mvt' || layer.format === 'geojson')
-      && layer.style.theme.type === 'graduated') polyGraduated(_xyz, layer);
-  
-    if (layer.format === 'cluster'
-      && layer.style.theme.type === 'categorized') clusterCategorized(_xyz, layer);
-  
-    if (layer.format === 'cluster'
-      && layer.style.theme.type === 'competition') clusterCategorized(_xyz, layer);
-  
-    if (layer.format === 'cluster'
-      && layer.style.theme.type === 'graduated') clusterGraduated(_xyz, layer);    
-  
+
+    layer.style.setLegend(panel);
+    
+    
     layer.get();
   
   }

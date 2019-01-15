@@ -2,51 +2,42 @@
 //   window.history.replaceState( null, null, window.location.href );
 // }
 
-_xyz1 = _xyz();
-
-_xyz1.init({
+_xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
-  locale: 'NE',
+  locale: 'GB',
   scrollWheelZoom: true,
-  view_lat: 40.74,
-  view_lng: -73.98,
-  view_zoom: 10,
+  view: {
+    lat: 51.52,
+    lng: 0.24,
+    zoom: 12,
+  },
   btnZoomIn: document.getElementById('btnZoomIn1'),
   btnZoomOut: document.getElementById('btnZoomOut1'),
-  callback: PopTheme
+  callback: Grid
 });
 
-function PopTheme(){
-
-  _xyz1.layers.list.OSM.remove();
-
-  _xyz1.layers.list.COUNTRIES.style.theme = _xyz1.layers.list.COUNTRIES.style.themes['Population'];
-  _xyz1.layers.list.COUNTRIES.loaded = false;
-  _xyz1.layers.list.COUNTRIES.get();
-}
-
-_xyz2 = _xyz();
-
-_xyz2.init({
+_xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
   locale: 'GB',
-  view_lat: 51.52,
-  view_lng: 0.24,
-  view_zoom: 10,
+  view: {
+    lat: 51.52,
+    lng: 0.24,
+    zoom: 12,
+  },
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Grid
+  callback: Legends
 });
 
-function LocatePopup(){
+function LocatePopup(_xyz){
 
-  _xyz2.locate.toggle();
+  _xyz.locate.toggle();
 
-  _xyz2.locations.select_output = location => {
+  _xyz.locations.select_output = location => {
     document.getElementById('location_info_container').innerHTML = location.infoj[1].value;
   };
 
@@ -58,10 +49,40 @@ function LocatePopup(){
 }
 
 
-function Grid() {
+function Grid(_xyz) {
 
-  _xyz2.layers.list.grid.show();
+  _xyz.layers.list.oa.remove();
 
-  _xyz2.layers.list.retail_points.remove();
+  _xyz.layers.list.retail_points.remove();
+
+  _xyz.layers.list.grid.grid_size = 'gen_female__11';
+  
+  _xyz.layers.list.grid.grid_color = 'gen_male__11';
+  
+  _xyz.layers.list.grid.grid_ratio = true;
+
+  _xyz.layers.list.grid.show();
+
+  _xyz.layers.list.grid.style.setLegend(document.getElementById('location_info_container1'));
+
+}
+
+function Legends(_xyz) {
+
+  _xyz.layers.list.retail_points.style.setTheme('Retailer');
+
+  _xyz.layers.list.retail_points.style.setLegend(document.getElementById('location_info_container2'));
+
+  _xyz.layers.list.oa.style.setTheme('Population \'11');
+
+  _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
+
+}
+
+function PopTheme(_xyz){
+
+  _xyz.layers.list.OSM.remove();
+
+  _xyz.layers.list.COUNTRIES.style.setTheme('Population');
 
 }

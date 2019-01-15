@@ -35,7 +35,7 @@ body {
     padding-top: 5px;
 }
 
-.xyz_map {
+.xyz_frame {
     width: calc(100% - 200px);
     height: 400px;
     box-shadow: 2px 2px 4px #666;
@@ -44,17 +44,22 @@ body {
     position: relative;
 }
 
-#location_info_container {
+.location_info_container {
     width: 300px;
     height: 100%;
     background-color: white;
     z-index: 999;
     position: absolute;
+    padding: 20px;
 }
 
-#xyz_map2 {
+.xyz_map {
     position: absolute;
     width: calc(100% - 300px);
     height: 100%;
     left: 300px;
+}
+
+.legend > svg{
+    width: 100%;
 }
