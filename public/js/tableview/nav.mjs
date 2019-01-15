@@ -1,7 +1,7 @@
 import _xyz from '../_xyz.mjs';
 
 export default () => {
-    
+
   let options = {
     start : 0
   };
@@ -33,10 +33,11 @@ export default () => {
     tabs[current].className = 'tab-current';
     items[current].className = 'content-current';
 
-    if(!tab_layers[current].tableview.section.childNodes.length) tab_layers[current].tableview.section = _xyz.tableview.content(tab_layers[current]);
+    if(!tab_layers[current].tableview.container.childNodes.length) tab_layers[current].tableview.container = _xyz.tableview.content(tab_layers[current]);
 
     document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
 
+    _xyz.tableview.observe();
   }
 
   function initEvents(){
@@ -44,6 +45,7 @@ export default () => {
       tab.addEventListener('click', function(e){
         e.preventDefault();
         show(idx);
+        _xyz.tableview.observe();
       });
     });
   }

@@ -89,7 +89,8 @@ export default layer => {
   layer.tableview.container = _xyz.utils.createElement({
     tag: 'div',
     style: {
-      //height: '30vh'
+      padding: '8px',
+      height: _xyz.tableview.height || '30vh'
     },
     appendTo: layer.tableview.holder
   });

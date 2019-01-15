@@ -2,46 +2,43 @@ import _xyz from '../_xyz.mjs';
 
 export default () => {
     
+  if(_xyz.tableview.observer) _xyz.tableview.observer.disconnect();
+    
   let thresholdSet = [];
-
+    
   for (let i=0; i<=1.0; i+= 0.01) {
     thresholdSet.push(i);
   }
-
-  let holder = document.querySelector('.tableview .tabs .content-wrap .table-preholder');// .content-wrap .content-current'); //.content-wrap');
-
+    
+  let preholder = document.querySelector('.tableview .tabs .content-wrap .content-current .table-preholder');
+    
   let observerOptions = {
     root: null,
     rootMargin: '0px',
     threshold: thresholdSet
   };
-
-  let observer = new IntersectionObserver(intersectionCallback, observerOptions);
-
-  observer.observe(holder);
-  //observer.observe(wrapper.querySelector('.content-wrap .content-current'));
-  //observer.observe(wrapper.querySelector('.tabulator'));
-  //observer.observe(layer.tableview.container);
     
+  _xyz.tableview.observer = new IntersectionObserver(intersectionCallback, observerOptions);
+  _xyz.tableview.observer.observe(preholder);
 };
 
 function intersectionCallback(entries){
-  let preholder = document.querySelector('.tableview .tabs .content-wrap .table-preholder'),
-    holder = document.querySelector('.tableview .tabs .content-wrap .table-holder');// .content-wrap .content-current'); //.content-wrap');
-
+  let preholder = document.querySelector('.tableview .tabs .content-wrap .content-current .table-preholder');
 
   entries.forEach(entry => {
-    let visiblePct = (Math.floor(entry.intersectionRatio * 100)) + '%';
-    let pct = entry.intersectionRatio;//Math.floor(entry.intersectionRatio*100);
+    let pct = parseFloat(entry.intersectionRatio);
+    
+    _xyz.tableview.height = pct ? Math.floor(preholder.clientHeight*pct) + 'px' : '30vh';
 
-    console.log(pct);
-    console.log(_xyz.tableview.height);
+    console.log({ /* test */
+      pct: pct,
+      height: _xyz.tableview.height
+    });
+
 
     if(pct === 0){
       Object.values(_xyz.layers.list).map(layer => {
         if(layer.tableview && layer.tableview.holder && layer.tableview.table) {
-          //layer.tableview.holder.style.height = '30vh';
-          _xyz.tableview.height = '30vh';
           layer.tableview.holder.style.height = _xyz.tableview.height;
           layer.tableview.container.style.height = _xyz.tableview.height;
         }
@@ -50,16 +47,10 @@ function intersectionCallback(entries){
     if(pct > 0.3){
       Object.values(_xyz.layers.list).map(layer => {
         if(layer.tableview && layer.tableview.holder && layer.tableview.table) {
-          //layer.tableview.holder.style.height = Math.floor(preholder.clientHeight*pct) + 'px';
-          //layer.tableview.table.redraw();
-          _xyz.tableview.height = Math.floor(preholder.clientHeight*pct) + 'px';
           layer.tableview.holder.style.height = _xyz.tableview.height;
           layer.tableview.container.style.height = _xyz.tableview.height;
-          //_xyz.tableview.refresh(layer);
-          console.log(layer.tableview.holder.style.height);
         }
       });
     }
-        
   });
 }

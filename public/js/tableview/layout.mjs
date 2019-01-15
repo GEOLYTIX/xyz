@@ -49,6 +49,11 @@ export default () => {
         tag: 'section',
         appendTo: content
       });
+
+      _xyz.tableview.download(layer);
+
+      _xyz.tableview.refresh(layer);
+
     }
   });
 
