@@ -541,6 +541,7 @@
             }
         },
         "GB": {
+            "maskBounds": true,
             "gazetteer": {
                 "provider": "GOOGLE",
                 "code": "GB",
@@ -559,7 +560,7 @@
                 "south": 48,
                 "west": -13
             },
-            "minZoom": 6,
+            "minZoom": 5,
             "maxZoom": 17,
             "layers": {
                 "OSM": {

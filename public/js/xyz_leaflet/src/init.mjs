@@ -46,7 +46,7 @@ export default _xyz => {
       // This makes it possible to override client side workspace entries.
       const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
 
-      if(params.maskBounds) {
+      if(locale.maskBounds) {
         // Grey out area outside bbox
         const world = [[90,180], [90,-180], [-90,-180], [-90,180]];
         const bbox = [[locale.bounds.north,locale.bounds.east], [locale.bounds.north,locale.bounds.west], [locale.bounds.south,locale.bounds.west], [locale.bounds.south,locale.bounds.east]];
