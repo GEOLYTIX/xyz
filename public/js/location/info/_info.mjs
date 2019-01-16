@@ -139,6 +139,8 @@ export default (_xyz, record) => {
       // Create controls for editable fields.
       if (entry.edit && !entry.fieldfx) return edit(_xyz, record, entry);
 
+      if (entry.type === 'html') return entry.val.innerHTML = entry.value;
+
       // Set field value.
       entry.val.textContent =
       entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :

@@ -5,6 +5,7 @@ export default _xyz => {
     record.location.geometries = [];
 
     if (record.location.marker) {
+      
       record.location.Marker = _xyz.L.geoJson(
         {
           type: 'Feature',
