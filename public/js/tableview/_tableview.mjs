@@ -10,8 +10,8 @@ import observe from './observer.mjs';
 
 export default () => {
     
-  if(!Object.values(_xyz.layers.list).some(layer => { return layer.tab === true; })) return;
-
+  //if(!Object.values(_xyz.layers.list).some(layer => { return layer.tab === true; })) return;
+  if(!Object.values(_xyz.layers.list).some(layer => !!layer.tab)) return;
   _xyz.tableview = utils;
   _xyz.tableview.observe = observe;
     
