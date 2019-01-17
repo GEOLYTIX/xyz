@@ -4,6 +4,7 @@ export default _xyz => {
   return layer => {
 
     _xyz.tableview.setData(layer);
+
     _xyz.tableview.observe();
     
     return layer.tableview.container;
@@ -11,5 +12,3 @@ export default _xyz => {
   };
 
 };
-
-

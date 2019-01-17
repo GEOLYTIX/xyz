@@ -29,12 +29,10 @@ import _locations from './location/_locations.mjs';
 _locations(_xyz);
 
 import gazetteer from './gazetteer.mjs';
-
 gazetteer(_xyz);
 
-import tableview from './tableview/_tableview.mjs';
-
-tableview(_xyz);
+import _tableview from './tableview/_tableview.mjs';
+_tableview(_xyz);
 
 // Initiate map control.
 _xyz.init({
@@ -63,7 +61,6 @@ function init() {
   _xyz.gazetteer.init();
 
   // Init tableview
-
   if(_xyz.view.mode === 'desktop') _xyz.tableview.init();
   //console.log(_xyz.layers.list);
 

@@ -35,4 +35,5 @@ export default _xyz => {
     layer.tableview.section.insertBefore(json_download, layer.tableview.section.firstChild);
     layer.tableview.section.insertBefore(csv_download, layer.tableview.section.firstChild);
   };
+  
 };

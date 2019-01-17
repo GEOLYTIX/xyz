@@ -785,6 +785,7 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
+                    "tab": true,
                     "edit": {
                         "point": true,
                         "delete": true

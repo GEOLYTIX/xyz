@@ -10,8 +10,6 @@ import refresh from './refresh.mjs';
 
 import content from './content.mjs';
 
-//export const compose = (...fns) => () => fns.forEach(f=>f());
-
 export default _xyz => {
 
   _xyz.tableview.requestData = requestData(_xyz);
