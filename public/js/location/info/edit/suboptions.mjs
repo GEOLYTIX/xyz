@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import valChange from './valChange.mjs';
 
 import optionsTextInput from './optionsTextInput.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   // Get the associated entry for the prime select.
   const _entry = Object.values(record.location.infoj).find(_entry => _entry.field === entry.edit.options_field);
@@ -32,7 +30,7 @@ export default (record, entry) => {
     if (_entry.select_other) _entry.select_other.remove();
 
     // Create a custom text input
-    optionsTextInput(_entry, record);
+    optionsTextInput(_xyz, _entry, record);
 
     // Remove options from suboptions select.
     entry.select.innerHTML = '';

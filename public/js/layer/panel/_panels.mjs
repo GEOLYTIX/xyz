@@ -1,16 +1,14 @@
-import _xyz from '../../_xyz.mjs';
-
 import panel_filters from './filters/_filters.mjs';
 
 import panel_style from './style/_styles.mjs';
 
-import panel_draw from './draw/_draw.mjs';
+import panel_draw from './draw.mjs';
 
 import panel_grid from './grid.mjs';
 
 import panel_cluster from './cluster.mjs';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   // Create layer dashboard.
   layer.dashboard = _xyz.utils.createElement({
@@ -25,26 +23,26 @@ export default layer => {
     tag: 'p',
     options: {
       className: 'meta',
-      textContent: layer.meta
+      innerHTML: layer.meta
     },
     appendTo: layer.dashboard
   });
 
   // Add draw panel to dashboard.
-  if (layer.edit) panel_draw(layer);
+  if (layer.edit) panel_draw(_xyz, layer);
 
   // Add cluster panel to dashboard.
-  if (layer.format === 'cluster') panel_cluster(layer);
+  if (layer.format === 'cluster') panel_cluster(_xyz, layer);
 
   // Add grid panel to dashboard.
-  if (layer.format === 'grid') panel_grid(layer);
+  if (layer.format === 'grid') panel_grid(_xyz, layer);
 
   // Add filters panel.
-  if (layer.infoj && layer.infoj.some(entry => entry.filter)) panel_filters(layer);
+  if (layer.infoj && layer.infoj.some(entry => entry.filter)) panel_filters(_xyz, layer);
 
 
   // Add styles panel.
-  panel_style(layer);
+  panel_style(_xyz, layer);
 
 
   // Add dashboard if it contains panel.

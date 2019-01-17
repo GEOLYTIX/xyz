@@ -1,18 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
-import polyGraduated from './polyGraduated.mjs';
-
-import polyCategorized from './polyCategorized.mjs';
-
-import clusterCategorized from './clusterCategorized.mjs';
-
-import clusterGraduated from './clusterGraduated.mjs';
-
 import polyStyle from './polyStyle.mjs';
 
 import clusterStyle from './clusterStyle.mjs';
 
-export default layer => {
+export default (_xyz, layer) => {
 
   // Meaningful styles can only be set for vector and cluster objects.
   if (layer.format === 'grid' || layer.format === 'tiles') return;
@@ -67,59 +57,45 @@ export default layer => {
       // Set layer theme from themes object.
       layer.style.theme = themes[e.target.value];
 
+      layer.loaded = false;
+
       applyTheme(layer);
       
     }
   });
 
-  // Create empty legend container.
-  layer.style.legend = _xyz.utils.createElement({
-    tag: 'div',
-    appendTo: panel,
-  });
+  panel.appendChild(layer.style.legend);
 
   // Apply the current theme.
   applyTheme(layer);
 
-};
+  function applyTheme(layer) {
 
-function applyTheme(layer) {
+    // Empty legend.
+    layer.style.legend.innerHTML = '';
+  
+    // Create / empty legend filter when theme is applied.
+    layer.filter.legend = {};
+  
+    // Basic controls for cluster marker, default polygon and highlight.
+    if (!layer.style.theme) {
+  
+      if (layer.style.marker) clusterStyle(_xyz, layer, layer.style.marker, 'Marker');
+  
+      if (layer.style.markerMulti) clusterStyle(_xyz, layer, layer.style.markerMulti, 'Marker (multi)');
+  
+      if (layer.style.default) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
+  
+      if (layer.style.highlight) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
+  
+      return layer.get();
+    }
 
-  // Empty legend.
-  layer.style.legend.innerHTML = '';
-
-  // Create / empty legend filter when theme is applied.
-  layer.filter.legend = {};
-
-  // Basic controls for cluster marker, default polygon and highlight.
-  if (!layer.style.theme) {
-
-    if (layer.style.marker) clusterStyle(layer, layer.style.marker, 'Marker');
-
-    if (layer.style.markerMulti) clusterStyle(layer, layer.style.markerMulti, 'Marker (multi)');
-
-    if (layer.style.default) polyStyle(layer, layer.style.default, 'Polygon');
-
-    if (layer.style.highlight) polyStyle(layer, layer.style.highlight, 'Highlight');
-
-    return layer.get();
+    layer.style.setLegend(panel);
+    
+    
+    layer.get();
+  
   }
 
-  if ((layer.format === 'mvt' || layer.format === 'geojson')
-    && layer.style.theme.type === 'categorized') polyCategorized(layer);
-
-  if ((layer.format === 'mvt' || layer.format === 'geojson')
-    && layer.style.theme.type === 'graduated') polyGraduated(layer);
-
-  if (layer.format === 'cluster'
-    && layer.style.theme.type === 'categorized') clusterCategorized(layer);
-
-  if (layer.format === 'cluster'
-    && layer.style.theme.type === 'competition') clusterCategorized(layer);
-
-  if (layer.format === 'cluster'
-    && layer.style.theme.type === 'graduated') clusterGraduated(layer);    
-
-  layer.get();
-
-}
+};

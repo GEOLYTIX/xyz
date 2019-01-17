@@ -1,6 +1,4 @@
-import _xyz from '../../_xyz.mjs';
-
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   entry.row.classList.add('tr_streetview');
   
@@ -22,9 +20,7 @@ export default (record, entry) => {
     appendTo: streetview_td
   });
 
-  console.log(document.getElementById('locations').clientWidth);
-
-  const width = document.getElementById('locations').clientWidth;
+  const width = _xyz.locations.container.clientWidth;
  
   // Create StreetView image and append into link element.
   _xyz.utils.createElement({

@@ -1,8 +1,6 @@
-import _xyz from '../../../_xyz.mjs';
-
 import pointOnFeature from '@turf/point-on-feature';
 
-export default (panel, layer) => _xyz.utils.createElement({
+export default (_xyz, panel, layer) => _xyz.utils.createElement({
   tag: 'div',
   options: {
     className: 'btn_wide cursor noselect',

@@ -1,8 +1,6 @@
-import _xyz from './_xyz.mjs';
+export default _xyz => {
 
-export default () => {
-
-  // Create gazetteer object.
+// Create gazetteer object.
   _xyz.gazetteer = {
     icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}}),
     style: {
@@ -24,7 +22,7 @@ export default () => {
   // Gazetteer init which is called on change of locale.
   _xyz.gazetteer.init = () => {
 
-    // Hide gazetteer button if no gazetteer is set for the locale.
+  // Hide gazetteer button if no gazetteer is set for the locale.
     if (!_xyz.ws.locales[_xyz.locale].gazetteer) {
       _xyz.gazetteer.toggle.classList.remove('active');
       _xyz.gazetteer.toggle.style.display = 'none';
@@ -44,8 +42,6 @@ export default () => {
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
   };
-  _xyz.gazetteer.init();
-
 
   // Toggle visibility of the gazetteer group
   _xyz.gazetteer.toggle.addEventListener('click', e => {
@@ -66,7 +62,7 @@ export default () => {
 
     if (key !== 37 && key !== 38 && key !== 39 && key !== 40 && key !== 13 && term.length > 0 && isNaN(term.value)) {
 
-      //initiate search if either split value is not a number
+    //initiate search if either split value is not a number
       let NaN_check = e.target.value.split(',').map(isNaN);
       if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
       if (NaN_check[0] || NaN_check[1]) search(term);
@@ -103,7 +99,7 @@ export default () => {
     // Select first result on enter keypress
     if (key === 13) {
 
-      // Get possible coordinates from input and draw location if valid
+    // Get possible coordinates from input and draw location if valid
       let latlng = e.target.value.split(',').map(parseFloat);
       if ((latlng[1] > -90 && latlng[1] < 90) && (latlng[0] > -180 && latlng[0] < 180)) {
         _xyz.gazetteer.result.innerHTML = '';
@@ -136,10 +132,10 @@ export default () => {
     setTimeout(() => _xyz.gazetteer.result.innerHTML = '', 400);
   });
 
-  // Initiate search request
+  // Initiate search request.
   function search(term) {
 
-    // Show loader while waiting for results from XHR.
+  // Show loader while waiting for results from XHR.
     _xyz.gazetteer.loader.style.display = 'block';
     _xyz.gazetteer.result.innerHTML = '';
 
@@ -153,16 +149,20 @@ export default () => {
       token: _xyz.token
     }));
 
+    _xyz.gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
+    _xyz.gazetteer.xhr.responseType = 'json';
+
     _xyz.gazetteer.xhr.onload = e => {
 
-      // Hide loader.
+    // Hide loader.
       _xyz.gazetteer.loader.style.display = 'none';
 
       // List results or show that no results were found
       if (e.target.status !== 200) return;
       
       // Parse the response as JSON and check for results length.
-      let json = JSON.parse(e.target.responseText);
+      let json = e.target.response;
+
       if (json.length === 0) {
         _xyz.utils.createElement({
           tag: 'li',
@@ -193,12 +193,14 @@ export default () => {
     _xyz.gazetteer.xhr.send();
   }
 
+  // Select location from search results.
   function select(record) {
     _xyz.gazetteer.result.innerHTML = '';
     _xyz.gazetteer.input.value = record.innerText;
   
     if (record['data-source'] === 'glx') {
       _xyz.locations.select({
+        locale: _xyz.locale,
         layer: record['data-layer'],
         table: record['data-table'],
         id: record['data-id'],
@@ -217,14 +219,14 @@ export default () => {
   
     if (record['data-source'] === 'google') {
   
-      // Get the geometry from the gazetteer database.
+    // Get the geometry from the gazetteer database.
       let xhr = new XMLHttpRequest();
   
       xhr.open('GET', _xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id'] + '&token=' + _xyz.token);
   
       xhr.onload = e => {
   
-        // Send results to createFeature
+      // Send results to createFeature
         if (e.target.status === 200) createFeature(JSON.parse(e.target.responseText));
   
       };
@@ -232,32 +234,24 @@ export default () => {
     }
   }
 
-  // Create a feature from geojson
+  // Create a feature from geojson.
   function createFeature(geom) {
 
-    // Parse json if geom is string
+  // Parse json if geom is string
     geom = typeof (geom) === 'string' ? JSON.parse(geom) : geom;
 
     // Remove existing layer.
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
-    // Add layer to map.
-    _xyz.gazetteer.layer = L.geoJson(geom, {
-      interactive: false,
+    _xyz.gazetteer.layer = _xyz.layers.geoJSON({
+      json: geom,
       pane: 'gazetteer',
-      pointToLayer: function (feature, latlng) {
-        return new L.Marker(latlng, {
-          interactive: false,
-          pane: 'gazetteer',
-          icon: L.icon({
-            iconUrl: _xyz.gazetteer.icon,
-            iconSize: [40, 40],
-            iconAnchor: [20, 40]
-          })
-        });
-      },
-      style: _xyz.gazetteer.style
-    }).addTo(_xyz.map);
+      icon: {
+        url: _xyz.gazetteer.icon,
+        size: 40,
+        anchor: [20, 40]
+      }
+    });
 
     // Zoom to the extent of the gazetteer layer
     _xyz.map.fitBounds(_xyz.gazetteer.layer.getBounds());

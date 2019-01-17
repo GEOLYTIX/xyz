@@ -58,6 +58,11 @@
 .btn_column {
   top: 0;
   z-index: 999;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: fixed;
   left: 10px; }
   .btn_column div:hover {
@@ -128,17 +133,15 @@
   text-align: center;
   font-weight: 600;
   color: #079e00;
-  box-shadow: 1px 1px 3px #666;
-  margin: 5px 2px 0 1px; }
+  box-shadow: 1px 1px 3px #383836;
+  margin: 5px 2px 5px 1px; }
   .btn_wide.disabled {
     opacity: 0.3; }
 
 .btn_state {
-  /*color: black;*/
   color: #079e00; }
   .btn_state.active {
-    /*color: #090;*/
-    color: black; }
+    color: #383836; }
 
 .btn_inline {
   display: inline-block;
@@ -556,6 +559,7 @@ input[type=range]::-moz-range-thumb {
   background: #079e00; }
 
 .infojTable {
+  text-align: left;
   width: 100%;
   font-size: 12px;
   padding-top: 5px; }
@@ -585,8 +589,7 @@ input[type=range]::-moz-range-thumb {
   .infojTable .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px;
-    padding-right: 10px; }
+    font-size: 12px; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
@@ -766,6 +769,13 @@ input[type=range]::-moz-range-thumb {
           font-family: ffmark_bold, sans-serif;
           font-size: 14px;
           margin-bottom: 7px; }
+        .mod_container .module .drawer .dashboard .meta {
+          margin-top: 5px; }
+          .mod_container .module .drawer .dashboard .meta a {
+            color: #079e00;
+            font-weight: 600; }
+        .mod_container .module .drawer .dashboard .legend > svg {
+          width: 100%; }
         .mod_container .module .drawer .dashboard .panel {
           padding: 10px 0;
           border-bottom: 1px solid #555; }
@@ -890,6 +900,9 @@ input[type=range]::-moz-range-thumb {
     left: 120%; }
   to {
     left: 100%; } }
+.leaflet-control-attribution {
+  display: none; }
+
 /* required styles */
 .leaflet-pane,
 .leaflet-tile,
@@ -1119,7 +1132,7 @@ input[type=range]::-moz-range-thumb {
 
 /* visual tweaks */
 .leaflet-container {
-  background: #ddd;
+  background: #fbfbfb;
   outline: 0; }
 
 /* popup */
@@ -1127,11 +1140,6 @@ input[type=range]::-moz-range-thumb {
   position: absolute;
   text-align: center;
   margin-bottom: 20px; }
-
-.leaflet-popup-content,
-.leaflet-popup-content-wrapper {
-  margin: 0;
-  padding: 0; }
 
 .leaflet-popup-tip-container {
   width: 40px;
@@ -1202,19 +1210,64 @@ input[type=range]::-moz-range-thumb {
   background: #fff;
   border: 1px solid #666; }
 
+.leaflet-popup-content {
+  overflow-x: hidden; }
+  .leaflet-popup-content .scrollbar_container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    width: 10px;
+    background-color: lightgrey; }
+    .leaflet-popup-content .scrollbar_container > .scrollbar {
+      position: absolute;
+      width: 10px;
+      background: rgba(0, 0, 0, 0.5); }
+    .leaflet-popup-content .scrollbar_container:hover {
+      cursor: ns-resize; }
+  .leaflet-popup-content .content::-webkit-scrollbar {
+    display: none; }
+
+.location_list {
+  min-height: 30px;
+  max-height: 300px;
+  width: 450px;
+  list-style-type: none;
+  text-align: left;
+  font-family: 'PT Mono', monospace; }
+  .location_list li {
+    padding-left: 15px; }
+  .location_list li:hover {
+    white-space: nowrap;
+    background-color: #ccff90;
+    cursor: pointer; }
+
 .location_drop {
   display: none;
   position: fixed;
+  height: 100%;
   max-height: 30%;
   width: 100%;
-  z-index: 1;
-  background: white;
-  overflow-x: hidden;
-  overflow-y: auto;
+  z-index: 999;
   border-bottom: 2px solid #079e00;
   box-shadow: 0 0 10px slategrey; }
-  .location_drop .location_table {
-    padding-right: 10px; }
+  .location_drop > ul {
+    -webkit-padding-start: 0;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    list-style-type: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    padding-left: 70px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%; }
+    .location_drop > ul li {
+      font-size: 20px;
+      color: #079e00;
+      list-style: none;
+      line-height: 1.5em; }
   .location_drop td {
     padding: 5px 0 5px 10px;
     font-size: 20px;
@@ -1226,7 +1279,8 @@ input[type=range]::-moz-range-thumb {
     top: 0;
     right: 0;
     color: #079e00;
-    font-size: 50px; }
+    font-size: 50px;
+    z-index: 1000; }
 
 .stage-tooltip {
   padding: 0 0 0 4px; }
@@ -1240,25 +1294,18 @@ input[type=range]::-moz-range-thumb {
   bottom: 5px;
   right: 5px;
   position: absolute;
-  z-index: 999; }
-  .attribution #attribution_links {
-    float: right;
-    clear: right;
-    font-family: ffmark_bold, sans-serif;
-    font-size: 18px;
-    text-shadow: 2px 2px #ccff90; }
-    .attribution #attribution_links i {
-      font-size: 14px; }
-    .attribution #attribution_links a {
-      border-bottom: 2px solid black;
-      margin-left: 5px; }
+  z-index: 999;
+  text-align: right;
+  font-family: ffmark_bold, sans-serif;
+  font-size: 18px;
+  text-shadow: 1px 1px 1px #ccff90; }
+  .attribution #attribution_links i {
+    font-size: 14px; }
+  .attribution #attribution_links a {
+    margin-left: 5px; }
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
-    text-shadow: 2px 2px #ccff90;
-    position: fixed;
-    top: 5px;
-    right: 5px;
-    font-size: 35px; }
+    font-size: 40px; }
 
 *,
 *::after,
@@ -1267,7 +1314,10 @@ input[type=range]::-moz-range-thumb {
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-spacing: 0; }
 
 body {
   position: absolute;
@@ -1275,8 +1325,6 @@ body {
   overflow-x: hidden;
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
   font-family: ffmark, sans-serif;
   color: #383836; }
 
@@ -1319,8 +1367,6 @@ button {
   position: fixed;
   width: 100%;
   height: calc(100% - 50px); }
-  .map .leaflet-control-attribution {
-    display: none; }
   .map div.leaflet-select-pane svg > g path {
     filter: url(#dropshadow); }
 

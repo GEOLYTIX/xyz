@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import valChange from './valChange.mjs';
 
 import optionsTextInput from './optionsTextInput.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   // Map first level options and keys to the options object.
   const options = entry.edit.options.map(option => {
@@ -34,11 +32,11 @@ export default (record, entry) => {
       // Remove the custom text input.
       if (entry.select_other) entry.select_other.remove();
 
-      optionsTextInput(entry, record);
+      optionsTextInput(_xyz, entry, record);
 
     }
   });
 
-  optionsTextInput(entry, record);
+  optionsTextInput(_xyz, entry, record);
 
 };

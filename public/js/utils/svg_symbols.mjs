@@ -4,8 +4,6 @@ export default marker => {
 
   if (marker.svg) return marker.svg;
 
-  if (!marker.type) return false;
-
   const markers = {
     dot: dot(marker.style),
     circle: circle(marker.style),
@@ -14,6 +12,8 @@ export default marker => {
     markerColor: markerColor(marker.style),
     geo: geolocation()
   };
+
+  if (!marker.type) return dot({color: '#666'});
 
   return markers[marker.type];
 };

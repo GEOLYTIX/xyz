@@ -1,8 +1,6 @@
-import _xyz from '../../_xyz.mjs';
-
 // import pointOnFeature from '@turf/point-on-feature';
 
-export default record => {
+export default (_xyz, record) => {
 
   record.upload = _xyz.utils.createElement({
     tag: 'i',
@@ -34,6 +32,7 @@ export default record => {
           record.upload.style.display = 'none';
 
           // Reload layer.
+          _xyz.layers.list[record.location.layer].loaded = false;
           _xyz.layers.list[record.location.layer].get();
 
           // Reset location infoj with response.
@@ -78,4 +77,5 @@ export default record => {
       }
     }
   });
+  
 };

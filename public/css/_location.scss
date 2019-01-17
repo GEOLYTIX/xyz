@@ -1,61 +1,70 @@
-@if $desktop {
-    .leaflet-popup-content {
-        overflow-x: hidden;
-        .scrollbar_container {
+.leaflet-popup-content {
+    overflow-x: hidden;
+    .scrollbar_container {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        width: 10px;
+        background-color: lightgrey;
+        >.scrollbar {
             position: absolute;
-            left: 0;
-            bottom: 0;
-            top: 0;
             width: 10px;
-            background-color: lightgrey;
-            >.scrollbar {
-                position: absolute;
-                width: 10px;
-                background: rgba(0, 0, 0, 0.5);
-            }
-            &:hover {
-                cursor: ns-resize;
-            }
+            background: rgba(0, 0, 0, 0.5);
         }
-        .content::-webkit-scrollbar {
-            display: none;
+        &:hover {
+            cursor: ns-resize;
         }
     }
-    .location_table {
-        min-height: 30px;
-        max-height: 300px;
-        width: 450px;
-        table {
-            width: 100%;
-            font-family: 'PT Mono', monospace;
-            td {
-                vertical-align: top !important;
-                text-align: left;
-                padding-right: 10px;
-                padding-left: 15px;
-                white-space: nowrap;
-            }
-            tr:hover {
-                background-color: $glxlightgreen;
-                cursor: pointer;
-            }
-        }
+    .content::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.location_list {
+    min-height: 30px;
+    max-height: 300px;
+    width: 450px;
+    list-style-type: none;
+    text-align: left;
+    font-family: 'PT Mono', monospace;
+    li {
+        padding-left: 15px;
+    }
+    li:hover {
+        white-space: nowrap;
+        background-color: $glxlightgreen;
+        cursor: pointer;
     }
 }
 
 .location_drop {
     display: none;
     position: fixed;
+    height: 100%;
     max-height: 30%;
     width: 100%;
-    z-index: 1;
-    background: white;
-    overflow-x: hidden;
-    overflow-y: auto;
+    z-index: 999;
     border-bottom: 2px solid #079e00;
     box-shadow: 0 0 10px slategrey;
-    .location_table {
-        padding-right: 10px;
+    >ul {
+        -webkit-padding-start: 0;
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+        list-style-type: none;
+        position: absolute;
+        background-color: white;
+        width: 100%;
+        padding-left: 70px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+        li {
+            font-size: 20px;
+            color: $glxgreen;
+            list-style: none;
+            line-height: 1.5em;
+        }
     }
     td {
         padding: 5px 0 5px 10px;
@@ -71,12 +80,12 @@
         right: 0;
         color: $glxgreen;
         font-size: 50px;
+        z-index: 1000;
     }
 }
 
 .stage-tooltip {
     padding: 0 0 0 4px;
-
     .btn-tooltip {
         display: table-cell;
         font-size: 25px;

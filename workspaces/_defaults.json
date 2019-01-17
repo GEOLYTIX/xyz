@@ -17,6 +17,8 @@
             "south": -90,
             "west": -180
         },
+        "maskBounds": "optional",
+        "view": {},
         "gazetteer": {
             "optional": true,
             "provider": "optional",
@@ -64,7 +66,8 @@
                     "color": "#333333",
                     "fill": true,
                     "fillColor": "#333333",
-                    "fillOpacity": 0.1
+                    "fillOpacity": 0.1,
+                    "marker": {}
                 },
                 "highlight": {
                     "stroke": true,

@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (layer, filter_entry) => {
+export default (_xyz, layer, filter_entry) => {
     
   const block = _xyz.utils.createElement({
     tag: 'div',
@@ -40,6 +38,7 @@ export default (layer, filter_entry) => {
         });
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
       }
     }
