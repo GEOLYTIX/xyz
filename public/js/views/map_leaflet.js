@@ -11,7 +11,7 @@ _xyz().init({
   view: {
     lat: 51.52,
     lng: 0.24,
-    zoom: 12,
+    z: 12,
   },
   btnZoomIn: document.getElementById('btnZoomIn1'),
   btnZoomOut: document.getElementById('btnZoomOut1'),
@@ -26,7 +26,7 @@ _xyz().init({
   view: {
     lat: 51.52,
     lng: 0.24,
-    zoom: 12,
+    z: 12,
   },
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
@@ -51,10 +51,6 @@ function LocatePopup(_xyz){
 
 function Grid(_xyz) {
 
-  _xyz.layers.list.oa.remove();
-
-  _xyz.layers.list.retail_points.remove();
-
   _xyz.layers.list.grid.grid_size = 'gen_female__11';
   
   _xyz.layers.list.grid.grid_color = 'gen_male__11';
@@ -76,13 +72,5 @@ function Legends(_xyz) {
   _xyz.layers.list.oa.style.setTheme('Population \'11');
 
   _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
-
-}
-
-function PopTheme(_xyz){
-
-  _xyz.layers.list.OSM.remove();
-
-  _xyz.layers.list.COUNTRIES.style.setTheme('Population');
 
 }

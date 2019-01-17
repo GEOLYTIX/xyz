@@ -86,6 +86,8 @@ export default _xyz => {
 
     if (!layer.key) return;
 
+    layer.selected = [];
+
     // Create empty legend container.
     if (layer.style) {
       layer.style.legend = _xyz.utils.createElement({

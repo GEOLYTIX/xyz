@@ -80,7 +80,16 @@ export default (_xyz, layer) => () => {
 
       }
     })
-      .on('click', function(e){
+      .on('click', e => {
+
+        e.target.options.style(e.layer.feature);
+
+        let selectedIdx = layer.selected.indexOf(e.layer.feature.properties.id);
+
+        if (selectedIdx >= 0) return layer.selected.splice(selectedIdx, 1);
+  
+        layer.selected.push(e.layer.feature.properties.id);
+
         _xyz.locations.select({
           layer: layer.key,
           table: layer.table,
@@ -88,11 +97,12 @@ export default (_xyz, layer) => () => {
           marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
           edit: layer.edit
         });
+
       })
-      .on('mouseover', function(e){
+      .on('mouseover', e => {
         e.layer.setStyle && e.layer.setStyle(layer.style.highlight);
       })
-      .on('mouseout', function(e){
+      .on('mouseout', e => {
         e.layer.setStyle && e.layer.setStyle(applyLayerStyle(e.layer.feature));
       })
       .addTo(_xyz.map);
@@ -106,6 +116,8 @@ export default (_xyz, layer) => () => {
 
     
   function applyLayerStyle(feature){
+
+    if (layer.selected.includes(feature.properties.id)) return layer.style.selected;
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return layer.style.default;
