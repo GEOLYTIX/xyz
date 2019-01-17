@@ -109,6 +109,29 @@
   .btn_state.active {
     color: #383836; }
 
+.btn_inline {
+  display: inline-block;
+  position: relative;
+  width: 130px;
+  font-size: 12px;
+  border-radius: 2px;
+  line-height: 2;
+  text-align: center;
+  font-weight: 600;
+  color: #090;
+  box-shadow: 1px 1px 3px #666;
+  margin: 6px 3px 12px 3px;
+  cursor: pointer; }
+  .btn_inline:active {
+    box-shadow: 2px 2px 3px #090; }
+  .btn_inline span {
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .btn_inline i {
+    font-size: 14px;
+    vertical-align: text-bottom; }
+
 * {
   margin: 0;
   padding: 0; }
