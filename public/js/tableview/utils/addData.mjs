@@ -1,11 +1,3 @@
-/*import _xyz from '../../_xyz.mjs';
-
-export default layer => {
-    
-  layer.tableview.offset = parseInt(layer.tableview.offset) + 1;
-  _xyz.tableview.requestData(layer, addData);
-};*/
-
 export default _xyz => {
   return layer => _xyz.tableview.requestData(layer, addData);
 };
