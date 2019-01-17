@@ -1,6 +1,4 @@
-import _xyz from '../_xyz.mjs';
-
-export default () => {
+export default _xyz => {
 
   let container = _xyz.utils.createElement({
     tag: 'div',

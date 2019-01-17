@@ -1,6 +1,4 @@
-import _xyz from '../_xyz.mjs';
-
-import * as utils from './utils/_utils.mjs';
+import utils from './utils/_utils.mjs';
 
 import tableview from './tableview.mjs';
 import layout from './layout.mjs';
@@ -8,17 +6,22 @@ import nav from './nav.mjs';
 
 import observe from './observer.mjs';
 
-export default () => {
+export default _xyz => {
+
+  utils(_xyz);
     
-  //if(!Object.values(_xyz.layers.list).some(layer => { return layer.tab === true; })) return;
-  if(!Object.values(_xyz.layers.list).some(layer => !!layer.tab)) return;
-  _xyz.tableview = utils;
-  _xyz.tableview.observe = observe;
+  _xyz.tableview.init = () => {
+
+    if(!Object.values(_xyz.layers.list).some(layer => !!layer.tab)) return;
     
-  _xyz.view.desktop = {};
-  _xyz.view.desktop.tableview = tableview();
-  _xyz.view.desktop.tableview.appendChild(layout());
-  
-  nav();
+    _xyz.tableview = utils;
+    _xyz.tableview.observe = observe;
+      
+    _xyz.view.desktop = {};
+    _xyz.view.desktop.tableview = tableview(_xyz);
+    _xyz.view.desktop.tableview.appendChild(layout(_xyz));
+    
+    nav();
+  };
 
 };
