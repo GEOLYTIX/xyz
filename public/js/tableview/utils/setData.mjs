@@ -2,7 +2,9 @@ import Tabulator from 'tabulator-tables';
 
 export default _xyz => {
 
-  return (layer, data, columns) => {
+  return layer => _xyz.tableview.requestData(layer, setData);
+
+  function setData(layer, data, columns){
 
     layer.tableview.container.innerHTML = '';
   
@@ -58,10 +60,6 @@ export default _xyz => {
       layer.tableview.note.textContent = 'No results.';
     }
   };
-  
-};
 
-/*export default layer => {
-  _xyz.tableview.requestData(layer, setData);
-};*/
+};
 
