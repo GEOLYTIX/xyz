@@ -71,11 +71,21 @@ function Legends(_xyz) {
 
   _xyz.layers.list.retail_points.style.setTheme('Retailer');
 
-  _xyz.layers.list.retail_points.style.setLegend(document.getElementById('location_info_container2'));
+  // _xyz.layers.list.retail_points.style.setLegend(document.getElementById('location_info_container2'));
 
-  _xyz.layers.list.oa.style.setTheme('Population \'11');
+  // _xyz.layers.list.oa.style.setTheme('Population \'11');
 
-  _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
+  // _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
+
+  _xyz.locations.select_popup = location => {
+
+    let container = document.getElementById('location_info_container2');
+
+    container.innerHTML = '';
+
+    container.appendChild(location.info_table);
+
+  };
 
 }
 

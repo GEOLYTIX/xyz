@@ -116,7 +116,7 @@ export default _xyz => {
 
     // Populate leaflet popup with a html table and call scrolly to enable scrollbar.
     _xyz.L.popup({closeButton: false})
-      .setLatLng(lnglat.reverse())
+      .setLatLng([lnglat[1], lnglat[0]])
       .setContent(scrolly)
       .openOn(_xyz.map);
 
