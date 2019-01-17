@@ -980,53 +980,9 @@
                             "filter": "like"
                         },
                         {
-                            "label": "RP competition",
-                            "field": "comp_strgh",
-                            "type": "integer",
-                            "lookup": {
-                                "table_a": "dev.retailpoints",
-                                "geom_a": "ST_Transform(ST_Setsrid(a.geom, 4326), 3857)",
-                                "table_b": "dev.retailplaces",
-                                "geom_b": "b.geom_3857",
-                                "condition": "ST_INTERSECTS",
-                                "aggregate": "AVG"
-                            }
-                        },
-                        {
                             "label": "Households",
                             "field": "hhdooc_11",
                             "type": "integer"
-                        },
-                        {
-                            "label": "Catchment 10min",
-                            "field": "geom_catchment",
-                            "fieldfx": "ST_asGeoJson(geom_catchment)",
-                            "type": "geometry",
-                            "edit": {
-                                "catchment": {
-                                    "minutes": 10
-                                }
-                            },
-                            "style": {
-                                "stroke": true,
-                                "color": "#cf0",
-                                "weight": 2,
-                                "fill": true,
-                                "fillOpacity": 0.5
-                            }
-                        },
-                        {
-                            "label": "Catchment Population",
-                            "field": "catchment_pop",
-                            "fieldfx": "pop__11",
-                            "type": "integer",
-                            "lookup": {
-                                "table_a": "dev.retailpoints",
-                                "geom_a": "a.geom_catchment",
-                                "table_b": "gb_hx_1k",
-                                "geom_b": "b.geomcntr",
-                                "aggregate": "AVG"
-                            }
                         }
                     ]
                 },

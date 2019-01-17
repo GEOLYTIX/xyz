@@ -6,11 +6,9 @@ import tableview from './tableview.mjs';
 
 import layout from './layout.mjs';
 
-// import nav from './nav.mjs';
+import nav from './nav.mjs';
 
-
-
-export default function(_xyz) {
+export default _xyz => {
 
   utils(_xyz);
     
@@ -18,8 +16,6 @@ export default function(_xyz) {
 
     if(!Object.values(_xyz.layers.list).some(layer => !!layer.tab)) return;
     
-    //_xyz.tableview = utils;
-    //console.log(_xyz.tableview);
     _xyz.tableview.observe = observe;
       
     _xyz.view.desktop = {};
