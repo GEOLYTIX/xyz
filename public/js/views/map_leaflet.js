@@ -22,15 +22,10 @@ _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
-  locale: 'GB',
-  view: {
-    lat: 51.52,
-    lng: 0.24,
-    z: 12,
-  },
+  locale: 'Offices',
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Legends
+  callback: Offices
 });
 
 function LocatePopup(_xyz){
@@ -72,5 +67,25 @@ function Legends(_xyz) {
   _xyz.layers.list.oa.style.setTheme('Population \'11');
 
   _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
+
+}
+
+function Offices(_xyz) {
+
+  _xyz.layers.list.offices.show();
+
+  // _xyz.locations.select_popup = location => {
+
+  //   let container = document.getElementById('location_info_container2');
+
+  //   container.innerHTML = '';
+
+  //   container.appendChild(location.info_table);
+
+  // };
+
+  _xyz.locations.select_output = location => {
+    document.getElementById('location_info_container2').innerHTML = location.infoj[1].value;
+  };
 
 }
