@@ -40,6 +40,9 @@ export default _xyz => {
     _xyz.panes.list.push(_xyz.map.createPane('drawing'));
     _xyz.map.getPane('drawing').style.zIndex = _xyz.panes.next++;
 
+    _xyz.panes.list.push(_xyz.map.createPane('default'));
+    _xyz.map.getPane('default').style.zIndex = _xyz.panes.next++;
+
   };
 
 };

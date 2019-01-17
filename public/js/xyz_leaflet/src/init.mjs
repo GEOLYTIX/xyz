@@ -45,7 +45,21 @@ export default _xyz => {
       // Assign params to locale.
       // This makes it possible to override client side workspace entries.
       const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
-  
+
+      if(locale.maskBounds) {
+        // Grey out area outside bbox
+        const world = [[90,180], [90,-180], [-90,-180], [-90,180]];
+        const bbox = [[locale.bounds.north,locale.bounds.east], [locale.bounds.north,locale.bounds.west], [locale.bounds.south,locale.bounds.west], [locale.bounds.south,locale.bounds.east]];
+        const greyoutOptions = {
+          pane: 'markerPane',  // polygon would be hidden under basemap (and thus pointless) if added to any lower pane
+          stroke: false,
+          fill: true,
+          fillColor: '#ccc',  // grey
+          fillOpacity: 0.8  // slightly transparent
+        };
+        _xyz.L.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);  // Add polygon that covers the world but has a hole where bbox is
+      }
+
       // Set min, max zoom and bounds.
       _xyz.map.setMinZoom(locale.minZoom);
       _xyz.map.setMaxZoom(locale.maxZoom);

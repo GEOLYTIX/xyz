@@ -243,23 +243,15 @@ export default _xyz => {
     // Remove existing layer.
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
-    // Add layer to map.
-    _xyz.gazetteer.layer = _xyz.L.geoJson(geom, {
-      interactive: false,
+    _xyz.gazetteer.layer = _xyz.layers.geoJSON({
+      json: geom,
       pane: 'gazetteer',
-      pointToLayer: function (feature, latlng) {
-        return new L.Marker(latlng, {
-          interactive: false,
-          pane: 'gazetteer',
-          icon: _xyz.L.icon({
-            iconUrl: _xyz.gazetteer.icon,
-            iconSize: 40,
-            iconAnchor: [20, 40]
-          })
-        });
-      },
-      style: _xyz.gazetteer.style
-    }).addTo(_xyz.map);
+      icon: {
+        url: _xyz.gazetteer.icon,
+        size: 40,
+        anchor: [20, 40]
+      }
+    });
 
     // Zoom to the extent of the gazetteer layer
     _xyz.map.fitBounds(_xyz.gazetteer.layer.getBounds());

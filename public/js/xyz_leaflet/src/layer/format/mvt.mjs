@@ -112,6 +112,8 @@ export default (_xyz, layer) => () => {
       // Iterate through cat array.
       for (let i = 0; i < theme.cat_arr.length; i++) {
 
+        if (!properties[theme.field]) return layer.style.default;
+
         // Break iteration is cat value is below current cat array value.
         if (parseFloat(properties[theme.field]) < parseFloat(theme.cat_arr[i][0])) break;
 
