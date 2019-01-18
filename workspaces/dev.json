@@ -359,6 +359,44 @@
                 }
             }
         },
+        "Deichmann": {
+            "minZoom": 3,
+            "maxZoom": 11,
+            "layers": {
+                "Mapbox Base": {
+                    "group": "Base Layer",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Mapbox Label": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Deichmann Stores": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "deichmann.stores_deichmann",
+                    "geom": "geomcntr_4326"
+                },
+                "HM Stores": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "deichmann.stores_hm",
+                    "geom": "geomcntr_4326"
+                }
+            }
+        },
         "GB": {
             "minZoom": 5,
             "maxZoom": 17,

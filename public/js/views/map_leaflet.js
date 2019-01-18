@@ -2,20 +2,30 @@
 //   window.history.replaceState( null, null, window.location.href );
 // }
 
+// _xyz().init({
+//   host: document.head.dataset.dir,
+//   //token: API token,
+//   map_id: 'xyz_map1',
+//   locale: 'GB',
+//   scrollWheelZoom: true,
+//   view: {
+//     lat: 51.52,
+//     lng: 0.24,
+//     z: 12,
+//   },
+//   btnZoomIn: document.getElementById('btnZoomIn1'),
+//   btnZoomOut: document.getElementById('btnZoomOut1'),
+//   callback: Grid
+// });
+
 _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
-  locale: 'GB',
-  scrollWheelZoom: true,
-  view: {
-    lat: 51.52,
-    lng: 0.24,
-    z: 12,
-  },
+  locale: 'Offices',
   btnZoomIn: document.getElementById('btnZoomIn1'),
   btnZoomOut: document.getElementById('btnZoomOut1'),
-  callback: Grid
+  callback: Offices
 });
 
 _xyz().init({
@@ -25,7 +35,7 @@ _xyz().init({
   locale: 'Offices',
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Offices
+  callback: Offices2
 });
 
 function LocatePopup(_xyz){
@@ -71,6 +81,28 @@ function Legends(_xyz) {
 }
 
 function Offices(_xyz) {
+
+  _xyz.layers.list.offices.singleSelectOnly = true;
+
+  _xyz.layers.list.offices.show();
+
+  // _xyz.locations.select_popup = location => {
+
+  //   let container = document.getElementById('location_info_container2');
+
+  //   container.innerHTML = '';
+
+  //   container.appendChild(location.info_table);
+
+  // };
+
+  _xyz.locations.select_output = location => {
+    document.getElementById('location_info_container1').innerHTML = location.infoj[1].value;
+  };
+
+}
+
+function Offices2(_xyz) {
 
   _xyz.layers.list.offices.show();
 
