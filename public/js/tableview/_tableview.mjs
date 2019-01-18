@@ -15,14 +15,17 @@ export default _xyz => {
   _xyz.tableview.init = () => {
 
     if(!Object.values(_xyz.layers.list).some(layer => !!layer.tab)) return;
-    
-    _xyz.tableview.observe = observe;
+  
+
+    //_xyz.tableview.observe = observe;
       
     _xyz.view.desktop = {};
 
     _xyz.view.desktop.tableview = tableview(_xyz);
 
     _xyz.view.desktop.tableview.appendChild(layout(_xyz));
+
+    observe(_xyz);
     
     nav(_xyz);
   };

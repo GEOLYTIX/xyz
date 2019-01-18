@@ -11,19 +11,17 @@ export default _xyz => {
     if (layer.tab) tab_layers.push(layer);
   });
 
-  // function nav_tabs() {
+  function nav_tabs(_options) {
 
-  //   options = extend({}, options);
+    options = extend({}, options);
 
-  //   extend(options, _options);
+    extend(options, _options);
 
-  //   show();
+    show();
 
-  //   initEvents();
+    initEvents();
 
-  // }
-
-  show();
+  }
 
   function show(idx) {
 
@@ -41,30 +39,30 @@ export default _xyz => {
 
     document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
 
-    // _xyz.tableview.observe();
+    _xyz.tableview.observe();
 
   }
 
-  // function initEvents() {
+  function initEvents() {
 
-  //   tabs.forEach(function (tab, idx) {
-  //     tab.addEventListener('click', function (e) {
-  //       e.preventDefault();
-  //       show(idx);
-  //       _xyz.tableview.observe();
-  //     });
-  //   });
+    tabs.forEach(function (tab, idx) {
+      tab.addEventListener('click', function (e) {
+        e.preventDefault();
+        show(idx);
+        //_xyz.tableview.observe();
+        //if(_xyz.tableview.observe) _xyz.tableview.observe();
+      });
+    });
+  }
 
-  // }
+  function extend(a, b) {
 
-  // function extend(a, b) {
-
-  //   if (b) Object.keys(b).map(key => {
-  //     if (b.hasOwnProperty(key)) a[key] = b[key];
-  //   });
+    if (b) Object.keys(b).map(key => {
+      if (b.hasOwnProperty(key)) a[key] = b[key];
+    });
   
-  //   return a;
-  // }
+    return a;
+  }
 
-  // nav_tabs();
+  return nav_tabs();
 };
