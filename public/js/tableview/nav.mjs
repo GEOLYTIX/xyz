@@ -1,3 +1,5 @@
+import observe from './observer.mjs';
+
 export default _xyz => {
 
   let
@@ -37,9 +39,11 @@ export default _xyz => {
 
     if (!tab_layers[current].tableview.container.childNodes.length) tab_layers[current].tableview.container = _xyz.tableview.content(tab_layers[current]);
 
-    document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
+    _xyz.tableview.observe = observe(_xyz);
 
     _xyz.tableview.observe();
+
+    document.querySelector('.tableview .tabs li:last-child div').style.transform = 'translate3d(-' + (tabs.length - current - 1) + '00%, 0, 0)';
 
   }
 
@@ -49,8 +53,7 @@ export default _xyz => {
       tab.addEventListener('click', function (e) {
         e.preventDefault();
         show(idx);
-        //_xyz.tableview.observe();
-        //if(_xyz.tableview.observe) _xyz.tableview.observe();
+        _xyz.tableview.observe();
       });
     });
   }

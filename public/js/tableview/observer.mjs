@@ -1,10 +1,9 @@
 export default _xyz => {
-  _xyz.tableview.observe = observe(_xyz);
+  
+  return () => observe(_xyz);
 
-  //export default _xyz => {
+
   function observe(_xyz){
-
-    console.log('observer');
 
     if (_xyz.tableview.observer) _xyz.tableview.observer.disconnect();
 
@@ -16,8 +15,6 @@ export default _xyz => {
 
     let preholder = document.querySelector('.tableview .tabs .content-wrap .content-current .table-preholder');
 
-    console.log(preholder);
-
     let observerOptions = {
       root: null,
       rootMargin: '0px',
@@ -26,8 +23,7 @@ export default _xyz => {
 
     _xyz.tableview.observer = new IntersectionObserver(intersectionCallback, observerOptions);
 
-    //_xyz.tableview.observer.observe(preholder);
-    if(preholder) _xyz.tableview.observer.observe(preholder);
+    _xyz.tableview.observer.observe(preholder);
 
     function intersectionCallback(entries) {
 
