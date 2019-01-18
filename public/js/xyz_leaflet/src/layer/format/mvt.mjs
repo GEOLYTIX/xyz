@@ -70,6 +70,12 @@ export default (_xyz, layer) => () => {
     })
     .on('click', e => {
 
+      let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
+
+      if (selectedIdx >= 0) return layer.selected.splice(selectedIdx, 1);
+
+      layer.selected.push(e.layer.properties.id);
+
       _xyz.locations.select({
         dbs: layer.dbs,
         locale: layer.locale,
@@ -91,6 +97,8 @@ export default (_xyz, layer) => () => {
     .addTo(_xyz.map);
 
   function applyLayerStyle(properties) {
+
+    if (layer.selected.includes(properties.id)) return layer.style.selected;
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return layer.style.default;

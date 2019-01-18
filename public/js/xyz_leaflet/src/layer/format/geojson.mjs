@@ -68,19 +68,54 @@ export default (_xyz, layer) => () => {
       interactive: layer.infoj? true: false,
       pointToLayer: (point, latlng) => {
 
+        let style = applyLayerStyle(point);
+
         return _xyz.L.marker(latlng, {
           pane: layer.key,
           icon: _xyz.L.icon({
-            iconUrl: _xyz.utils.svg_symbols(layer.style.default.marker),
-            iconSize: layer.style.default.marker.iconSize || 40,
-            iconAnchor: layer.style.default.marker.iconAnchor || [20,20]
+            iconUrl: _xyz.utils.svg_symbols(style.marker),
+            iconSize: style.marker.iconSize || 40,
+            iconAnchor: style.marker.iconAnchor || [20,20]
           }),
           interactive: (layer.qID) ? true : false
         });
 
       }
     })
-      .on('click', function(e){
+      .on('click', e => {
+
+        layer.L.getLayers().forEach(l => {
+          l.setIcon && l.setIcon(_xyz.L.icon({
+            iconUrl: _xyz.utils.svg_symbols(layer.style.default.marker),
+            iconSize: layer.style.default.marker.iconSize || 40,
+            iconAnchor: layer.style.default.marker.iconAnchor || [20,20]
+          }));
+        });
+
+        e.layer.setStyle && e.layer.setStyle(layer.style.default);
+
+        e.layer.setIcon && e.layer.setIcon(_xyz.L.icon({
+          iconUrl: _xyz.utils.svg_symbols(layer.style.default.marker),
+          iconSize: layer.style.default.marker.iconSize || 40,
+          iconAnchor: layer.style.default.marker.iconAnchor || [20,20]
+        }));
+
+        let selectedIdx = layer.selected.indexOf(e.layer.feature.properties.id);
+
+        if (selectedIdx >= 0) return layer.selected.splice(selectedIdx, 1);
+
+        layer.selected = [e.layer.feature.properties.id];
+ 
+        //layer.selected.push(e.layer.feature.properties.id);
+
+        e.layer.setStyle && e.layer.setStyle(layer.style.selected);
+
+        e.layer.setIcon && e.layer.setIcon(_xyz.L.icon({
+          iconUrl: _xyz.utils.svg_symbols(layer.style.selected.marker),
+          iconSize: layer.style.selected.marker.iconSize || 40,
+          iconAnchor: layer.style.selected.marker.iconAnchor || [20,20]
+        }));
+
         _xyz.locations.select({
           layer: layer.key,
           table: layer.table,
@@ -88,11 +123,12 @@ export default (_xyz, layer) => () => {
           marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
           edit: layer.edit
         });
+
       })
-      .on('mouseover', function(e){
+      .on('mouseover', e => {
         e.layer.setStyle && e.layer.setStyle(layer.style.highlight);
       })
-      .on('mouseout', function(e){
+      .on('mouseout', e => {
         e.layer.setStyle && e.layer.setStyle(applyLayerStyle(e.layer.feature));
       })
       .addTo(_xyz.map);
@@ -106,6 +142,8 @@ export default (_xyz, layer) => () => {
 
     
   function applyLayerStyle(feature){
+
+    if (layer.selected.includes(feature.properties.id)) return layer.style.selected;
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return layer.style.default;

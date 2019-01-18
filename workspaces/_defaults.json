@@ -77,6 +77,14 @@
                     "fillOpacity": 0.2,
                     "fill": true
                 },
+                "selected": {
+                    "stroke": true,
+                    "color": "#9c27b0",
+                    "weight": 1,
+                    "fillColor": "#9c27b0",
+                    "fillOpacity": 0.2,
+                    "fill": true
+                },
                 "themes": {}
             }
         },
@@ -106,6 +114,14 @@
                     "fill": true,
                     "fillColor": "#ccff99",
                     "fillOpacity": 0.2
+                },
+                "selected": {
+                    "stroke": true,
+                    "color": "#9c27b0",
+                    "weight": 1,
+                    "fillColor": "#9c27b0",
+                    "fillOpacity": 0.4,
+                    "fill": true
                 },
                 "themes": {}
             }
