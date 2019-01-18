@@ -37,7 +37,7 @@ export default _xyz => {
 
         function init() {
 
-        // Init layers.
+          // Init layers.
           _xyz.layers.init();
         
           // Init locations.

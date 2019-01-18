@@ -82,7 +82,7 @@ export default _xyz => {
         || 0
         ],
         _xyz.hooks.current.z
-      || locale.view.zoom
+      || locale.view.z
       || 5);
   
       // Fire viewChangeEnd after map move and zoomend

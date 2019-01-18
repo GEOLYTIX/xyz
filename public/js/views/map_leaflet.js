@@ -11,7 +11,7 @@ _xyz().init({
   view: {
     lat: 51.52,
     lng: 0.24,
-    zoom: 12,
+    z: 12,
   },
   btnZoomIn: document.getElementById('btnZoomIn1'),
   btnZoomOut: document.getElementById('btnZoomOut1'),
@@ -22,15 +22,10 @@ _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
-  locale: 'GB',
-  view: {
-    lat: 51.52,
-    lng: 0.24,
-    zoom: 12,
-  },
+  locale: 'Offices',
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Legends
+  callback: Offices
 });
 
 function LocatePopup(_xyz){
@@ -50,10 +45,6 @@ function LocatePopup(_xyz){
 
 
 function Grid(_xyz) {
-
-  _xyz.layers.list.oa.remove();
-
-  _xyz.layers.list.retail_points.remove();
 
   _xyz.layers.list.grid.grid_size = 'gen_female__11';
   
@@ -79,10 +70,22 @@ function Legends(_xyz) {
 
 }
 
-function PopTheme(_xyz){
+function Offices(_xyz) {
 
-  _xyz.layers.list.OSM.remove();
+  _xyz.layers.list.offices.show();
 
-  _xyz.layers.list.COUNTRIES.style.setTheme('Population');
+  // _xyz.locations.select_popup = location => {
+
+  //   let container = document.getElementById('location_info_container2');
+
+  //   container.innerHTML = '';
+
+  //   container.appendChild(location.info_table);
+
+  // };
+
+  _xyz.locations.select_output = location => {
+    document.getElementById('location_info_container2').innerHTML = location.infoj[1].value;
+  };
 
 }

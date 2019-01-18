@@ -1228,9 +1228,9 @@ input[type=range]::-moz-range-thumb {
   text-align: left;
   font-family: 'PT Mono', monospace; }
   .location_list li {
-    padding-left: 15px; }
+    padding-left: 15px;
+    white-space: nowrap; }
   .location_list li:hover {
-    white-space: nowrap;
     background-color: #cf9;
     cursor: pointer; }
 

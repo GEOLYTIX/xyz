@@ -309,6 +309,16 @@
                             "marker": {
                                 "type": "markerColor",
                                 "style": {
+                                    "colorMarker": "#999999",
+                                    "colorDot": "#333333"
+                                },
+                                "iconAnchor": [20,40]
+                            }
+                        },
+                        "selected": {
+                            "marker": {
+                                "type": "markerColor",
+                                "style": {
                                     "colorMarker": "#64dd17",
                                     "colorDot": "#33691e"
                                 },
