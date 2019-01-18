@@ -36,6 +36,9 @@ export default _xyz => {
         attributionControl: false
       });
 
+      // Add scale bar to map
+      L.control.scale().addTo(_xyz.map);
+
       // Set locale from params or to first in workspace.
       _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
 
