@@ -77,6 +77,10 @@ export default (_xyz, record, group) => {
       cellPadding: '0',
       cellSpacing: '0',
       width: '95%',
+      marginTop: '-5px',
+      marginBottom: '10px',
+      paddingLeft: '20px',
+      borderLeft: '3px solid #009900',
       position: 'relative' // required for responsive chart
     },
     appendTo: group.div
