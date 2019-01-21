@@ -149,6 +149,9 @@ export default (_xyz, record) => {
             entry.type === 'datetime' ? _xyz.utils.formatDateTime(entry.value) :
               entry.value;
 
+      if(entry.prefix)  entry.val.textContent = entry.prefix + entry.val.textContent;
+      if(entry.postfix) entry.val.textContent = entry.val.textContent + entry.postfix;
+
     });
 
   };

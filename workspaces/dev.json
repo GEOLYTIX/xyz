@@ -54,7 +54,8 @@
                         {
                             "label": "GDP",
                             "field": "gdp_md_est",
-                            "type": "integer"
+                            "type": "integer",
+                            "postfix": " dollars"
                         },
                         {
                             "label": "GDP edit",
@@ -723,7 +724,8 @@
                         {
                             "label": "Competition Str.",
                             "field": "comp_strgh",
-                            "type": "integer"
+                            "type": "integer",
+                            "prefix": "£ "
                         },
                         {
                             "label": "OA pop_11",
