@@ -741,8 +741,10 @@
                             "type": "group",
                             "chart": {
                                 "x": "label x",
-                                "y": "label y"
-                            }
+                                "y": "label y",
+                                "active": true
+                            },
+                            "expanded": true
                         },
                         {
                             "group": "Population",

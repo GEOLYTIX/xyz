@@ -20,6 +20,17 @@ export default (_xyz, record, group) => {
     appendTo: group.td
   });
 
+  const toggleExpandedState = e => {
+    if(e) {
+      e.stopPropagation();
+    }
+    _xyz.utils.toggleExpanderParent({
+      expandable: group.div,
+      accordeon: true,
+      scrolly: document.querySelector('.mod_container > .scrolly')
+    });
+  };
+
   group.header = _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -32,14 +43,7 @@ export default (_xyz, record, group) => {
     appendTo: group.div,
     eventListener: {
       event: 'click',
-      funct: e => {
-        e.stopPropagation();
-        _xyz.utils.toggleExpanderParent({
-          expandable: group.div,
-          accordeon: true,
-          scrolly: document.querySelector('.mod_container > .scrolly')
-        });
-      }
+      funct: toggleExpandedState
     }
   });
 
@@ -62,13 +66,7 @@ export default (_xyz, record, group) => {
     appendTo: group.header,
     eventListener: {
       event: 'click',
-      funct: e => {
-        e.stopPropagation();
-        _xyz.utils.toggleExpanderParent({
-          expandable: group.div,
-          scrolly: document.querySelector('.mod_container > .scrolly')
-        });
-      }
+      funct: toggleExpandedState
     }
   });
 
@@ -138,6 +136,12 @@ export default (_xyz, record, group) => {
     } else {
       group.showTable();  // default
     }
+  }
+
+  // If the group is configured to be shown in an expanded state when initialised
+  if(group.expanded) {
+    // call toggleExpandedState once to toggle the state from the default collapsed style to the expanded style
+    toggleExpandedState();
   }
 };
 
