@@ -36,9 +36,6 @@ export default _xyz => {
         attributionControl: false
       });
 
-      // Add scale bar to map
-      L.control.scale().addTo(_xyz.map);
-
       // Set locale from params or to first in workspace.
       _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
 
@@ -48,6 +45,11 @@ export default _xyz => {
       // Assign params to locale.
       // This makes it possible to override client side workspace entries.
       const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
+
+      if(locale.showScaleBar) {
+        // Add scale bar to map
+        L.control.scale().addTo(_xyz.map);
+      }
 
       if(locale.maskBounds) {
         // Grey out area outside bbox
