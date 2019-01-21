@@ -72,38 +72,7 @@ export default (_xyz, record, group) => {
     }
   });
 
-  // Add chart control to group header.
-  if (group.chart) _xyz.utils.createElement({
-    tag: 'i',
-    options: {
-      className: 'material-icons cursor noselect btn_header',
-      title: 'Show chart',
-      textContent: chartIcon(group)
-    },
-    style: {
-      margin: '-6px 10px 0 0'
-    },
-    appendTo: group.header,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        e.stopPropagation();
-        if(e.target.textContent === chartIcon(group)) {
-          group.fields = record.location.infoj.filter(entry => entry.group === group.label);
-          group.div.appendChild(chart(_xyz, group));
-          group.table.style.display = 'none';
-          e.target.textContent = 'view_list';
-          e.target.title = 'Show table';
-        } else if(e.target.textContent === 'view_list'){
-          e.target.textContent = chartIcon(group);
-          e.target.title = 'Show chart';
-          group.table.style.display = 'table';
-          group.div.removeChild(group.div.lastChild);
-        }
-      }
-    }
-  });
-
+  // Add table
   group.table = _xyz.utils.createElement({
     tag: 'table',
     style: {
@@ -115,6 +84,61 @@ export default (_xyz, record, group) => {
     appendTo: group.div
   });
 
+  // If chart option specified
+  if (group.chart) {
+    // Set up
+    group.fields = record.location.infoj.filter(entry => entry.group === group.label);
+    // Create chart element
+    group.chartElem = chart(_xyz, group);
+    // Add chart
+    group.div.appendChild(group.chartElem);
+
+    // Add chart control to group header for toggling
+    group.viewToggler = _xyz.utils.createElement({
+      tag: 'i',
+      options: {
+        className: 'material-icons cursor noselect btn_header',
+        title: 'Show chart',
+        textContent: chartIcon(group)
+      },
+      style: {
+        margin: '-6px 10px 0 0'
+      },
+      appendTo: group.header,
+      eventListener: {
+        event: 'click',
+        funct: e => {
+          e.stopPropagation();
+          if(group.viewToggler.textContent === chartIcon(group)) {
+            group.showChart();
+          } else {
+            group.showTable();
+          }
+        }
+      }
+    });
+
+    // Functions for toggeling between table view and chart view
+    group.showChart = () => {
+      group.table.style.display = 'none';
+      group.chartElem.style.display = 'block';
+      group.viewToggler.textContent = 'view_list';
+      group.viewToggler.title = 'Show table';
+    };
+    group.showTable = () => {
+      group.table.style.display = 'table';
+      group.chartElem.style.display = 'none';
+      group.viewToggler.textContent = chartIcon(group);
+      group.viewToggler.title = 'Show chart';
+    };
+
+    // Use the appropriate toggle function to initialise
+    if(group.chart.active) {
+      group.showChart();  // if explicitly specified
+    } else {
+      group.showTable();  // default
+    }
+  }
 };
 
 function chartIcon(group){
