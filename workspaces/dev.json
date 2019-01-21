@@ -91,6 +91,10 @@
                             "fillColor": "#fce4ec",
                             "fillOpacity": 1
                         },
+                        "selected": {
+                            "color": "#ff69b4",
+                            "fillColor": "#ff69b4"
+                        },
                         "themes": {
                             "Population": {
                                 "type": "graduated",
