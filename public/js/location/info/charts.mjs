@@ -35,7 +35,9 @@ export default (_xyz, group) => {
         display: group.chart.legend
       },
       scales: {
-        yAxes: [
+        // no axis for pie or doughnut charts
+        yAxes: (group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : [
+          // axis for all other charts
           {
             ticks: {
               callback: (label, index, labels) => {
