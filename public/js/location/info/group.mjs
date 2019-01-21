@@ -80,7 +80,7 @@ export default (_xyz, record, group) => {
       marginTop: '-5px',
       marginBottom: '10px',
       paddingLeft: '20px',
-      borderLeft: '3px solid #009900',
+      borderLeft: '3px solid #666',
       position: 'relative' // required for responsive chart
     },
     appendTo: group.div
