@@ -111,8 +111,22 @@ export default (_xyz, layer) => {
       activate: _xyz.draw.catchment,
       finish: _xyz.draw.finish
     });
+
   }
 
-  if(layer.edit.isoline) drawIsoline(layer);
+
+  if(layer.edit.isoline) {
+    
+    drawIsoline(_xyz, layer);
+
+    _xyz.utils.createStateButton(_xyz, {
+      text: 'Isoline',
+      appendTo: layer.edit.panel,
+      layer: layer,
+      activate: _xyz.draw.isoline,
+      finish: _xyz.draw.finish
+    });
+  
+  }
 
 };
