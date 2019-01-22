@@ -60,7 +60,7 @@ export default (_xyz, layer) => () => {
 
     })
     .on('load', () => {
-      
+     
       if (layer.loader)  layer.loader.style.display = 'none';
 
       if (layer.attribution) _xyz.attribution.set(layer.attribution);
@@ -70,11 +70,23 @@ export default (_xyz, layer) => () => {
     })
     .on('click', e => {
 
-      let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
+      if (layer.singleSelectOnly) {
 
-      if (selectedIdx >= 0) return layer.selected.splice(selectedIdx, 1);
+        layer.selected = [e.layer.properties.id];
 
-      layer.selected.push(e.layer.properties.id);
+        layer.L.redraw();
+
+      } else {
+
+        let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
+        
+        selectedIdx >= 0 ?
+          layer.selected.splice(selectedIdx, 1) :
+          layer.selected.push(e.layer.properties.id);
+
+      }
+
+      e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
 
       _xyz.locations.select({
         dbs: layer.dbs,
@@ -98,17 +110,17 @@ export default (_xyz, layer) => () => {
 
   function applyLayerStyle(properties) {
 
-    if (layer.selected.includes(properties.id)) return layer.style.selected;
+    let style = Object.assign({}, layer.style.default, layer.selected.includes(properties.id) ? layer.style.selected : {});
 
     // Return default style if no theme is set on layer.
-    if (!layer.style.theme) return layer.style.default;
+    if (!layer.style.theme) return style;
 
     const theme = layer.style.theme;
 
     // Categorized theme.
     if (theme.type === 'categorized') {
 
-      return Object.assign({}, layer.style.default, theme.cat[properties[theme.field]] || {});
+      return Object.assign({}, style, theme.cat[properties[theme.field]] || {});
 
     }
 
@@ -120,7 +132,7 @@ export default (_xyz, layer) => () => {
       // Iterate through cat array.
       for (let i = 0; i < theme.cat_arr.length; i++) {
 
-        if (!properties[theme.field]) return layer.style.default;
+        if (!properties[theme.field]) return style;
 
         // Break iteration is cat value is below current cat array value.
         if (parseFloat(properties[theme.field]) < parseFloat(theme.cat_arr[i][0])) break;
@@ -131,7 +143,7 @@ export default (_xyz, layer) => () => {
       }
 
       // Assign style from base & cat_style.
-      return Object.assign({}, layer.style.default, theme.cat_style);
+      return Object.assign({}, style, theme.cat_style);
 
     }
 

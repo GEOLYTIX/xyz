@@ -13,17 +13,15 @@ export default (_xyz, record, entry) => {
     fill: true,
     fillOpacity: 0.3
   };
-
-  const geom = _xyz.L.geoJson(
-    {
+  
+  const geom = _xyz.layers.geoJSON({
+    json: {
       type: 'Feature',
       geometry: JSON.parse(entry.value)
     },
-    {
-      interactive: false,
-      pane: 'select_display',
-      style: style
-    }).addTo(_xyz.map);
+    pane: 'select_display',
+    style: style
+  });
 
   if (entry.edit && entry.edit.catchment) entry.edit.catchment.geometry = geom;
 

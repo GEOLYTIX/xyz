@@ -154,6 +154,9 @@ export default _xyz => {
       interactive: params.interactive || false,
       pane: params.pane || 'default',
       pointToLayer: (feature, latlng) => {
+
+        if (!params.icon) return;
+        
         return new _xyz.L.Marker(latlng, {
           interactive: params.interactive || false,
           pane: params.pane || 'default',

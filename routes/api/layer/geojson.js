@@ -26,11 +26,7 @@ module.exports = fastify => {
         geom = layer.geom,
         id = layer.qID || null,
         cat = req.query.cat || null,
-        filter = req.query.filter && JSON.parse(req.query.filter),
-        west = parseFloat(req.query.west),
-        south = parseFloat(req.query.south),
-        east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north);
+        filter = req.query.filter && JSON.parse(req.query.filter);
 
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table]
@@ -40,29 +36,16 @@ module.exports = fastify => {
 
       
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || ' true';
 
-
+      
       var q = `
       SELECT
         ${id} AS id,
         ${cat} AS cat,
         ST_asGeoJson(${geom}) AS geomj
-
       FROM ${req.query.table}
-      WHERE
-        ST_DWithin(
-          ST_MakeEnvelope(
-            ${west},
-            ${south},
-            ${east},
-            ${north},
-            4326
-          ),
-          ${geom},
-          0.000001
-        )
-        ${filter_sql};`;
+      WHERE ${filter_sql};`;
 
       var rows = await global.pg.dbs[layer.dbs](q);
 

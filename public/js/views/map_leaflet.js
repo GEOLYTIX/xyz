@@ -2,45 +2,52 @@
 //   window.history.replaceState( null, null, window.location.href );
 // }
 
+// _xyz().init({
+//   host: document.head.dataset.dir,
+//   //token: API token,
+//   map_id: 'xyz_map1',
+//   locale: 'GB',
+//   scrollWheelZoom: true,
+//   view: {
+//     lat: 51.52,
+//     lng: 0.24,
+//     z: 12,
+//   },
+//   btnZoomIn: document.getElementById('btnZoomIn1'),
+//   btnZoomOut: document.getElementById('btnZoomOut1'),
+//   callback: Grid
+// });
+
 _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map1',
-  locale: 'GB',
-  scrollWheelZoom: true,
-  view: {
-    lat: 51.52,
-    lng: 0.24,
-    z: 12,
-  },
+  locale: 'NE',
   btnZoomIn: document.getElementById('btnZoomIn1'),
   btnZoomOut: document.getElementById('btnZoomOut1'),
-  callback: Grid
+  callback: mvt_select
 });
 
 _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
-  locale: 'Offices',
+  locale: 'NE',
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Offices
+  callback: mvt_select2
 });
 
 function LocatePopup(_xyz){
 
   _xyz.locate.toggle();
 
-  _xyz.locations.select_output = location => {
-    document.getElementById('location_info_container').innerHTML = location.infoj[1].value;
+  _xyz2.locations.select_popup = location => {
+    let container = document.getElementById('location_info_container');
+    container.innerHTML = '';
+    container.appendChild(location.info_table);
   };
 
-  // _xyz2.locations.select_popup = location => {
-  //   let container = document.getElementById('location_info_container');
-  //   container.innerHTML = '';
-  //   container.appendChild(location.info_table);
-  // };
 }
 
 
@@ -72,20 +79,56 @@ function Legends(_xyz) {
 
 function Offices(_xyz) {
 
+  _xyz.layers.list.offices.singleSelectOnly = true;
+
   _xyz.layers.list.offices.show();
 
-  // _xyz.locations.select_popup = location => {
+  _xyz.locations.select_output = location => {
+    document.getElementById('location_info_container1').innerHTML = location.infoj[1].value;
+  };
 
-  //   let container = document.getElementById('location_info_container2');
+}
 
-  //   container.innerHTML = '';
+function Offices2(_xyz) {
 
-  //   container.appendChild(location.info_table);
-
-  // };
+  _xyz.layers.list.offices.show();
 
   _xyz.locations.select_output = location => {
     document.getElementById('location_info_container2').innerHTML = location.infoj[1].value;
+  };
+
+}
+
+function mvt_select(_xyz) {
+
+  _xyz.layers.list.COUNTRIES.style.theme = null;
+
+  _xyz.layers.list.COUNTRIES.show();
+
+  _xyz.locations.select_popup = location => {
+
+    let container = document.getElementById('location_info_container1');
+    container.innerHTML = '';
+    container.appendChild(location.info_table);
+  
+  };
+
+}
+
+function mvt_select2(_xyz) {
+
+  _xyz.layers.list.COUNTRIES.singleSelectOnly = true;
+
+  _xyz.layers.list.COUNTRIES.style.theme = null;
+
+  _xyz.layers.list.COUNTRIES.show();
+
+  _xyz.locations.select_popup = location => {
+
+    let container = document.getElementById('location_info_container2');
+    container.innerHTML = '';
+    container.appendChild(location.info_table);
+  
   };
 
 }
