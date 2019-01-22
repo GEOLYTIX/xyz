@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (record, entry, img) => {
+export default (_xyz, record, entry, img) => {
 
   const xhr = new XMLHttpRequest();
 

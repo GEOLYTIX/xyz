@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import create_block from './create_block.mjs';
 
-export default (layer, filter_entry) => {
+export default (_xyz, layer, filter_entry) => {
 
-  const block = create_block(layer, filter_entry);
+  const block = create_block(_xyz, layer, filter_entry);
 
   // Label for min / greater then control.
   _xyz.utils.createElement({
@@ -73,6 +71,7 @@ export default (layer, filter_entry) => {
       console.log(layer.filter);
 
       // Reload layer.
+      layer.loaded = false;
       layer.get();
 
       if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';

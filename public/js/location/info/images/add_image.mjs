@@ -1,8 +1,6 @@
-import _xyz from '../../../_xyz.mjs';
-
 import upload_image from './upload_image.mjs';
 
-export default (imageControl, entry) => {
+export default (_xyz, imageControl, entry) => {
 
   // Add table cell for image upload input.
   imageControl.add_img_td = _xyz.utils.createElement({
@@ -122,7 +120,7 @@ export default (imageControl, entry) => {
             funct: () => {
               btn_del.remove();
               btn_save.remove();
-              upload_image(imageControl.record, entry, _img, dataURL);
+              upload_image(_xyz, imageControl.record, entry, _img, dataURL);
             }
           }
         });

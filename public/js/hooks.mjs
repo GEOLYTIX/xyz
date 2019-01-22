@@ -1,16 +1,15 @@
-import _xyz from './_xyz.mjs';
+export default _xyz => {
 
-export default () => {
-
-  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
+// Take hooks from URL and store as current hooks.
+  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
     _xyz.hooks.current[key] = value;
   });
 
   // Set view hook containing lat, lng and zoom.
-  _xyz.hooks.setView = cntr => {
+  _xyz.hooks.setView = (cntr, z) => {
     _xyz.hooks.current.lat = cntr.lat;
     _xyz.hooks.current.lng = cntr.lng;
-    _xyz.hooks.current.z = _xyz.map.getZoom();
+    _xyz.hooks.current.z = z;
     try {
       history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
     } catch (me) { console.log(me); }

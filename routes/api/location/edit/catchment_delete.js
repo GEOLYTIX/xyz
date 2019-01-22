@@ -33,7 +33,7 @@ module.exports = fastify => {
         return res.code(406).send('Invalid parameter.');
       }
 
-      var q = `UPDATE ${table} SET ${field} = NULL WHERE ${qID} = $1;`;
+      var q = `UPDATE ${table} SET ${field} = null WHERE ${qID} = $1;`;
 
       var rows = await global.pg.dbs[layer.dbs](q, [id]);
 

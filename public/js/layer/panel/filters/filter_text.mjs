@@ -1,10 +1,8 @@
-import _xyz from '../../../_xyz.mjs';
-
 import create_block from './create_block.mjs';
 
-export default (layer, filter_entry) => {
+export default (_xyz, layer, filter_entry) => {
 
-  const block = create_block(layer, filter_entry);
+  const block = create_block(_xyz, layer, filter_entry);
 
   _xyz.utils.createElement({
     tag: 'input',
@@ -21,7 +19,9 @@ export default (layer, filter_entry) => {
         layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
 
         // Reload layer.
+        layer.loaded = false;
         layer.get();
+        
         if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
 
 

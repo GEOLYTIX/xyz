@@ -1,6 +1,4 @@
-import _xyz from '../../../_xyz.mjs';
-
-export default (layer, style, title) => {
+export default (_xyz, layer, style, title) => {
 
   if (title) _xyz.utils.createElement({
     tag: 'div',
@@ -100,6 +98,7 @@ export default (layer, style, title) => {
 
           block.colour_swatch.style.display = 'none';
 
+          layer.loaded = false;
           layer.get();
           
         }

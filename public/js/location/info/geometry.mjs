@@ -1,9 +1,7 @@
-import _xyz from '../../_xyz.mjs';
-
 import catchment from './catchment.mjs';
 import isoline from './isoline.mjs';
 
-export default (record, entry) => {
+export default (_xyz, record, entry) => {
 
   const style = entry.style || {
     stroke: true,
@@ -13,43 +11,21 @@ export default (record, entry) => {
     fillOpacity: 0.3
   };
 
-  if (entry.edit.catchment) {
-    
-    catchment(record, entry);
-
-    if (!entry.value) return;
-
-    entry.edit.catchment.geometry = L.geoJson(
-      {
-        type: 'Feature',
-        geometry: JSON.parse(entry.value)
-      }, {
-        interactive: false,
-        pane: 'select_display',
-        style: style
-      }).addTo(_xyz.map);
-      
-    record.location.geometries.push(entry.edit.catchment.geometry);
-  }
-    
-  if (entry.edit.isoline) {
-
-    isoline(record, entry);
-
-    if (!entry.value) return;
-
-    entry.edit.isoline.geometry = L.geoJson(
-      {
-        type: 'Feature',
-        geometry: JSON.parse(entry.value)
-      }, {
-        interactive: false,
-        pane: 'select_display',
-        style: style
-      }).addTo(_xyz.map);
-      
-    record.location.geometries.push(entry.edit.isoline.geometry);
-  }
+  if (entry.edit && entry.edit.catchment) catchment(_xyz, record, entry);
   
+  if (entry.edit && entry.edit.isoline) isoline(_xyz, record, entry);
+  
+  if (!entry.value) return;
+  
+  entry._geom = _xyz.layers.geoJSON({
+    json: {
+      type: 'Feature',
+      geometry: JSON.parse(entry.value)
+    },
+    pane: 'select_display',
+    style: style
+  });
+    
+  record.location.geometries.additional.push(entry._geom);
 
 };

@@ -1,7 +1,5 @@
-import _xyz from '../../_xyz.mjs';
+export default (_xyz, record) => {
 
-export default record => {
-    
   _xyz.utils.createElement({
     tag: 'i',
     options: {
@@ -29,13 +27,14 @@ export default record => {
         
         // Clear geometries and delete location to free up record.
         record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-        record.location.geometries = [];
+        delete record.location;
 
         // Run locations init when all records are free.
-        const freeRecords = _xyz.locations.list.filter(record => record.location.geometries.length === 0);
+        const freeRecords = _xyz.locations.list.filter(record => !record.location);
         if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.init();
 
       }
     }
   });
+  
 };

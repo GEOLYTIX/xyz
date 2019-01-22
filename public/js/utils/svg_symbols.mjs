@@ -4,8 +4,6 @@ export default marker => {
 
   if (marker.svg) return marker.svg;
 
-  if (!marker.type) return false;
-
   const markers = {
     dot: dot(marker.style),
     circle: circle(marker.style),
@@ -14,6 +12,8 @@ export default marker => {
     markerColor: markerColor(marker.style),
     geo: geolocation()
   };
+
+  if (!marker.type) return dot({color: '#666'});
 
   return markers[marker.type];
 };
@@ -166,12 +166,12 @@ function markerLetter(style) {//colorMarker, letter
     .attr('cy', 360)
     .attr('r', 250);
 
-  let text = svg
+  svg
     .append('text')
     .attr('x', 500)
-    .attr('y', 360)
+    .attr('y', 500)
     .style('text-anchor', 'middle')
-    .style('alignment-baseline', 'central')
+    //.style('alignment-baseline', 'middle')
     .style('font-weight', 600)
     .style('font-size', '470px')
     .style('font-family', 'sans-serif')

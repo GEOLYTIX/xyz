@@ -1,8 +1,6 @@
-import _xyz from '../../../_xyz.mjs';
-
 import delete_image from './delete_image.mjs';
 
-export default (record, entry, img, dataURL) => {
+export default (_xyz, record, entry, img, dataURL) => {
 
   const blob = dataURLToBlob(dataURL);
 
@@ -43,7 +41,7 @@ export default (record, entry, img, dataURL) => {
         event: 'click',
         funct: e => {
           e.target.remove();
-          delete_image(record, entry, img);
+          delete_image(_xyz, record, entry, img);
         }
       }
     });

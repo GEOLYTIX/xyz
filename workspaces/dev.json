@@ -1,32 +1,38 @@
 {
     "title": "XYZ dev",
+    "locate": {},
     "locales": {
         "NE": {
             "minZoom": 3,
-            "maxZoom": 10,
+            "maxZoom": 11,
             "layers": {
                 "OSM": {
+                    "group": "Base Layer",
                     "format": "tiles",
                     "attribution": {
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 },
-                "COUNTRIES": {
+                "Mapbox Base": {
+                    "group": "Base Layer",
                     "display": true,
-                    "format": "mvt",
-                    "dbs": "XYZ",
+                    "name": "Mapbox Baselayer",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "COUNTRIES": {
                     "attribution": {
                         "Made with Natural Earth.": "https://www.naturalearthdata.com/"
                     },
+                    "format": "mvt",
+                    "dbs": "XYZ",
                     "table": "dev.natural_earth_countries",
                     "mvt_cache": true,
-                    "mvt_fields": [
-                        "pop_est",
-                        "gdp_md_est",
-                        "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000 as gdp_pp",
-                        "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
-                    ],
                     "qID": "id",
                     "infoj": [
                         {
@@ -63,6 +69,13 @@
                             "type": "integer"
                         }
                     ],
+                    "mvt_fields": [
+                        "pop_est",
+                        "pop_est_edit",
+                        "gdp_md_est",
+                        "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000 as gdp_pp",
+                        "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
+                    ],
                     "style": {
                         "default": {
                             "weight": 1,
@@ -78,10 +91,14 @@
                             "fillColor": "#fce4ec",
                             "fillOpacity": 1
                         },
+                        "selected": {
+                            "color": "#ff69b4",
+                            "fillColor": "#ff69b4"
+                        },
                         "themes": {
                             "Population": {
                                 "type": "graduated",
-                                "field": "pop_est",
+                                "field": "pop_est_edit",
                                 "cat": {
                                     "0": {
                                         "label": "0 to 10000",
@@ -221,8 +238,8 @@
                 "TILES": {
                     "format": "mvt",
                     "dbs": "XYZ",
-                    "geom_3857": "tile",
                     "table": "dev.natural_earth_countries__mvts",
+                    "geom_3857": "tile",
                     "style": {
                         "default": {
                             "weight": 1,
@@ -239,32 +256,34 @@
                             "fillOpacity": 1
                         }
                     }
+                },
+                "Mapbox Label": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 }
             }
         },
-        "GB": {
+        "Offices": {
+            "showScaleBar": true,
+            "minZoom": 2,
+            "maxZoom": 18,
+            "view": {
+                "lat": 45,
+                "lng": 60,
+                "z": 3
+            },
             "gazetteer": {
                 "provider": "GOOGLE",
-                "code": "GB",
-                "placeholder": "e.g. London",
-                "datasets": [
-                    {
-                        "layer": "cluster",
-                        "table": "dev.cluster",
-                        "label": "postcode"
-                    }
-                ]
+                "placeholder": "e.g. London"
             },
-            "bounds": {
-                "north": 62,
-                "east": 5,
-                "south": 48,
-                "west": -13
-            },
-            "minZoom": 6,
-            "maxZoom": 17,
             "layers": {
                 "OSM": {
+                    "group": "Base Layer",
                     "format": "tiles",
                     "attribution": {
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -272,6 +291,8 @@
                     "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 },
                 "Mapbox Base": {
+                    "group": "Base Layer",
+                    "display": true,
                     "name": "Mapbox Baselayer",
                     "attribution": {
                         "© Mapbox": "https://www.mapbox.com/about/maps",
@@ -280,11 +301,183 @@
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 },
+                "offices": {
+                    "format": "geojson",
+                    "dbs": "XYZ",
+                    "table": "glx_offices",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "style": {
+                        "default": {
+                            "marker": {
+                                "type": "markerColor",
+                                "style": {
+                                    "colorMarker": "#999999",
+                                    "colorDot": "#333333"
+                                },
+                                "iconAnchor": [20,40]
+                            }
+                        },
+                        "selected": {
+                            "marker": {
+                                "type": "markerColor",
+                                "style": {
+                                    "colorMarker": "#64dd17",
+                                    "colorDot": "#33691e"
+                                },
+                                "iconAnchor": [20,40]
+                            }
+                        }
+                    },
+                    "qID": "id",
+                    "infoj": [
+                        {
+                            "label": "City",
+                            "field": "city",
+                            "type": "text",
+                            "edit": true
+                        },   
+                        {
+                            "label": "Address EDIT",
+                            "field": "address",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Address HTML",
+                            "field": "address_html",
+                            "fieldfx": "address",
+                            "type": "html"
+                        }
+                    ]
+                },
+                "Mapbox Label": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                }
+            }
+        },
+        "Deichmann": {
+            "minZoom": 3,
+            "maxZoom": 11,
+            "layers": {
+                "Mapbox Base": {
+                    "group": "Base Layer",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Mapbox Label": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Deichmann Stores": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "deichmann.stores_deichmann",
+                    "geom": "geomcntr_4326"
+                },
+                "HM Stores": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "deichmann.stores_hm",
+                    "geom": "geomcntr_4326"
+                }
+            }
+        },
+        "GB": {
+            "minZoom": 5,
+            "maxZoom": 17,
+            "bounds": {
+                "north": 62,
+                "east": 5,
+                "south": 48,
+                "west": -13
+            },
+            "maskBounds": true,
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "code": "GB",
+                "placeholder": "e.g. London",
+                "datasets": [
+                    {
+                        "layer": "retail_points",
+                        "table": "dev.retailpoints",
+                        "label": "store"
+                    }
+                ]
+            },
+            "layers": {
+                "OSM": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "attribution": {
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                "Mapbox Base": {
+                    "group": "Base Layer",
+                    "display": true,
+                    "name": "Mapbox Baselayer",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "cluster_catchments": {
+                    "format": "cluster",
+                    "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/file/d/0B1GCK8cPXzg-TGdzNzA4VUY4TGs\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
+                    "dbs": "XYZ",
+                    "table": "dev.cluster_catchments",
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "qID": "id",
+                    "infoj": [
+                        {
+							"label": "Catchment Primary",
+							"field": "catchment",
+							"fieldfx": "ST_asGeoJson(catchment)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#E01A4F",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						}
+                   ]
+                },
                 "edit_layer": {
                     "format": "mvt",
-                    "mvt_cache": true,
                     "dbs": "XYZ",
                     "table": "dev.scratch",
+                    "mvt_cache": true,
                     "qID": "id",
                     "edit": {
                         "polygon": true,
@@ -298,13 +491,16 @@
                 },
                 "oa": {
                     "name": "Output areas",
-                    "display": true,
+                    "attribution": {
+                        "© ONS": "https://www.ons.gov.uk"
+                    },                    
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {
-                        "12": "dev.oa"
+                        "11": null,
+                        "12": "dev.oa",
+                        "13": "dev.oa"
                     },
-                    "qID": "id",
                     "mvt_cache": true,
                     "mvt_fields": [
                         "pop_11"
@@ -347,6 +543,7 @@
                             }
                         }
                     },
+                    "qID": "id",
                     "infoj": [
                         {
                             "label": "OA Code",
@@ -374,30 +571,18 @@
                     ]
                 },
                 "retail_places": {
-                    "group": "RP",
                     "name": "Retail Places",
-                    "display": true,
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {
+                        "8": null,
                         "9": "dev.retailplaces"
                     },
-                    "qID": "tid",
+                    "mvt_cache": true,
                     "mvt_fields": [
                         "rp_type",
                         "pop__11"
                     ],
-                    "filter": {
-                        "infoj": [
-                            {
-                                "label": "ID count",
-                                "field": "id_count",
-                                "type": "integer",
-                                "inline": true,
-                                "fieldfx": "count(id)"
-                            }
-                        ]
-                    },
                     "style": {
                         "themes": {
                             "Retail Place type": {
@@ -528,6 +713,18 @@
                             }
                         }
                     },
+                    "qID": "tid",
+                    "filter": {
+                        "infoj": [
+                            {
+                                "label": "ID count",
+                                "field": "id_count",
+                                "type": "integer",
+                                "inline": true,
+                                "fieldfx": "count(id)"
+                            }
+                        ]
+                    },
                     "infoj": [
                         {
                             "label": "ID",
@@ -635,9 +832,7 @@
                     ]
                 },
                 "retail_points": {
-                    "group": "RP",
                     "name": "Retail Points",
-                    "display": true,
                     "format": "cluster",
                     "cluster_label": "store",
                     "dbs": "XYZ",
@@ -889,13 +1084,14 @@
                 },
                 "grid": {
                     "name": "Grid",
+                    "attribution": {
+                        "© ONS": "https://www.ons.gov.uk"
+                    },
                     "format": "grid",
                     "dbs": "XYZ",
                     "geom": "geomcntr",
-                    "grid_color": "pop__11",
                     "tables": {
-                        "6": "gb_hx_64k",
-                        "7": "gb_hx_32k",
+                        "7": null,
                         "8": "gb_hx_16k",
                         "9": "gb_hx_8k",
                         "10": "gb_hx_4k",
@@ -909,17 +1105,16 @@
                         "Population 2011": "pop__11",
                         "Female population": "gen_female__11",
                         "Male population": "gen_male__11"
-                    },
-                    "style": {
-                        "range": [
-                            "#15773f",
-                            "#66bd63",
-                            "#a6d96a",
-                            "#fdae61",
-                            "#f46d43",
-                            "#d73027"
-                        ]
                     }
+                },
+                "Mapbox Label": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 }
             }
         }

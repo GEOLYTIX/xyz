@@ -1,7 +1,5 @@
-import _xyz from '../_xyz.mjs';
-
 // StateButton factory
-export function createStateButton(param){
+export function createStateButton(_xyz, param){
 
   const btn = _xyz.utils.createElement({
     tag: 'div',

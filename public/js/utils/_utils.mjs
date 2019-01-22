@@ -27,3 +27,5 @@ export {dropdown} from './dropdown.mjs';
 export {hexToRGBA} from './hexToRGBA.mjs';
 
 export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
+
+export const compose = (...fns) => () => fns.forEach(f=>f());

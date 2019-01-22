@@ -4,8 +4,6 @@ module.exports = fastify => {
     url: '/api/location/edit/isoline/create',
     beforeHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
-
-      console.log(req.query);
   
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
   

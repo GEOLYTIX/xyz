@@ -306,7 +306,7 @@
 							"type": "geometry",
 							"edit": {
 								"catchment": {
-									"minutes": 5
+									"minutes": 10
 								}
 							},
 							"style": {

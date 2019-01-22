@@ -3,7 +3,7 @@
 .env
 .DS_Store
 .sass-cache/
-node_modules/
+node_modules/*
 public/css/.sass-cache/
 public/js/build/
 stats.json

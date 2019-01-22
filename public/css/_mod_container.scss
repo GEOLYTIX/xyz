@@ -118,6 +118,16 @@
                     font-size: 14px;
                     margin-bottom: 7px;
                 }
+                .meta {
+                    margin-top: 5px;
+                    a {
+                        color: $glxgreen;
+                        font-weight: 600;
+                    }
+                }
+                .legend > svg{
+                    width: 100%;
+                }
                 .panel {
                     padding: 10px 0;
                     border-bottom: 1px solid #555;

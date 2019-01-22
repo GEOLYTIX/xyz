@@ -1,6 +1,4 @@
-import _xyz from '../../_xyz.mjs';
-
-export default layer => {
+export default (_xyz, layer) => {
 
   // Create cluster panel and add to layer dashboard.
   const panel = _xyz.utils.createElement({

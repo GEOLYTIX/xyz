@@ -1,6 +1,4 @@
-import _xyz from '../_xyz.mjs';
-
-export default groupKey => {
+export default (_xyz, groupKey) => {
 
   // Create group object.
   const group = {};
@@ -14,7 +12,7 @@ export default groupKey => {
     options: {
       className: 'drawer drawer-group expandable-group'
     },
-    appendTo: document.getElementById('layers')
+    appendTo: _xyz.layers.container
   });
   
   // Create layer group header.
@@ -56,9 +54,6 @@ export default groupKey => {
       textContent: 'visibility'
     },
     appendTo: group.header,
-    style: {
-      display: 'none'
-    },
     eventListener: {
       event: 'click',
       funct: e => {

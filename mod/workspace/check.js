@@ -180,7 +180,7 @@ async function chkLayerGeom(layer, layers) {
   for (const table of tables){
 
     // Don't invalidate layer with null in tables array.
-    if (!table && tables.length > 1) return;
+    if (!table && tables.length > 1) continue;
 
     // Invalidate layer without table.
     if (!table) return invalidateLayer();
@@ -229,7 +229,7 @@ async function chkMVTCache(layer) {
   for (const table of tables){
 
     // Table may be null in tables array.
-    if (!table) return;
+    if (!table && tables.length > 1) continue;
 
     // Get a sample MVT from the cache table.
     let rows = await global.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${table}__mvts LIMIT 1`, null, 'no_log');

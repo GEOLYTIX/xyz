@@ -1,6 +1,4 @@
-import _xyz from '../../_xyz.mjs';
-
-export default record => {
+export default (_xyz, record) => {
 
   if (!record.location.edit || !record.location.edit.delete) return;
 
@@ -39,6 +37,7 @@ export default record => {
 
           _xyz.map.removeLayer(layer.L);
 
+          layer.loaded = false;
           layer.get();
 
           record.drawer.remove();
@@ -47,10 +46,10 @@ export default record => {
 
           // Clear geometries and delete location to free up record.
           record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-          record.location.geometries = [];
+          delete record.location;
 
           // Run locations init when all records are free.
-          let freeRecords = _xyz.locations.list.filter(record => record.location);
+          const freeRecords = _xyz.locations.list.filter(record => !record.location);
           if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.init();
 
         };
@@ -59,4 +58,5 @@ export default record => {
       }
     }
   });
+  
 };

@@ -21,8 +21,10 @@ module.exports = fastify => {
         geom = layer.geom,
         geom_3857 = layer.geom_3857;
 
-        // Get table entry from layer or first entry from tables array.
-      const table = layer.table || Object.values(layer.tables)[0];
+      // Get table entry from layer or min table in from tables array.
+      const table = layer.table
+        || Object.values(layer.tables)[0]
+        || Object.values(layer.tables)[1];
 
 
       let _geom;

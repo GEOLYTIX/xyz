@@ -17,6 +17,9 @@
             "south": -90,
             "west": -180
         },
+        "showScaleBar": "optional",
+        "maskBounds": "optional",
+        "view": {},
         "gazetteer": {
             "optional": true,
             "provider": "optional",
@@ -53,6 +56,7 @@
             "table": "optional",
             "tables": "optional",
             "qID": "optional",
+            "singleSelectOnly": "optional",
             "infoj": "optional",
             "geom": "geom",
             "edit": "optional",
@@ -63,7 +67,8 @@
                     "color": "#333333",
                     "fill": true,
                     "fillColor": "#333333",
-                    "fillOpacity": 0.1
+                    "fillOpacity": 0.1,
+                    "marker": {}
                 },
                 "highlight": {
                     "stroke": true,
@@ -73,6 +78,7 @@
                     "fillOpacity": 0.2,
                     "fill": true
                 },
+                "selected": {},
                 "themes": {}
             }
         },
@@ -83,6 +89,7 @@
             "geom_3857": "geom_3857",
             "geom": "optional",
             "qID": "optional",
+            "singleSelectOnly": "optional",
             "infoj": "optional",
             "edit": "optional",
             "mvt_cache": "optional",
@@ -103,6 +110,7 @@
                     "fillColor": "#ccff99",
                     "fillOpacity": 0.2
                 },
+                "selected": {},
                 "themes": {}
             }
         },

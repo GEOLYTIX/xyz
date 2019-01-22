@@ -1,20 +1,18 @@
 module.exports = fastify => {
-  
-  require('./login')(fastify);
-  
+
+  require('./login').route(fastify);
+   
   require('./register')(fastify);
 
   // token
   
-  require('./token/api')(fastify);
-  
-  require('./token/renew')(fastify);
+  require('./token/api').route(fastify);
 
   // user
 
-  require('./user/admin')(fastify);
+  require('./user/admin').route(fastify);
 
-  require('./user/approve')(fastify);
+  require('./user/approve').route(fastify);
 
   require('./user/delete')(fastify);
 

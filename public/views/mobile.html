@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
 </head>
 
-<body data-viewmode = "mobile" data-nanoid = {{:nanoid}}  {{:log}}>
+<body data-viewmode = "mobile" data-nanoid = {{:nanoid}} data-token={{:token}} {{:log}}>
 
     <div class="location_drop">
-        <div class="location_table"></div>
+        <ul class="location_table"></ul>
         <i class="material-icons location_drop__close">vertical_align_top</i>
     </div>
 
@@ -29,15 +29,6 @@
                 </filter>
             </defs>
         </svg>
-        <div class="attribution">
-            <a class="logo" class="noselect tooltip-top" data-tooltip="Please visit our website and find out how we can assist you."
-                href="https://geolytix.co.uk">GEOLYTIX</a>
-            <div id="attribution_links">
-                <a class="leaflet" href="https://leafletjs.com" target="_blank">
-                    <i class="material-icons">favorite</i> Leaflet</a>
-                <a class="xyz" href="https://github.com/geolytix/xyz" target="_blank"> XYZ</a>
-            </div>
-        </div>
     </div>
 
     <div id="Gazetteer" class="input_group" style="display: none">
@@ -73,7 +64,7 @@
         </div>
 
         <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-            <a href="{{:dir}}/login">
+            <a href="{{:dir}}{{:btnLogin_path}}">
                 <i class="material-icons">{{:btnLogin_style}}</i>
             </a>
         </div>
