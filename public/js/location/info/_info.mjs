@@ -29,6 +29,14 @@ export default (_xyz, record) => {
 
   record.update = () => {
 
+    if(record.location.geometries.additional) { 
+      record.location.geometries.additional.map(geom => {
+        _xyz.map.removeLayer(geom);
+      });
+    } else {
+      record.location.geometries.additional = [];
+    }
+
     record.table.innerHTML = '';
 
     // Adds layer to beginning of infoj array.

@@ -7,6 +7,9 @@ export default (_xyz, record, entry) => {
     appendTo: tr,
     options: {
       colSpan: '2'
+    },
+    style: {
+      borderBottom: 'solid 1px ' + (entry.style ? entry.style.color : record.color)
     }
   });
 
@@ -26,6 +29,7 @@ export default (_xyz, record, entry) => {
         entry.value ?
           deleteCatchment(record, entry) :
           createCatchment(record, entry);
+          
       }
     }
   });
@@ -87,13 +91,6 @@ export default (_xyz, record, entry) => {
     xhr.onload = e => {
 
       if (e.target.status !== 200) return;
-
-      // remove deleted catchment from map
-      let i = record.location.geometries.indexOf(entry.edit.catchment.geometry);
-
-      if (i > -1) record.location.geometries.splice(i, 1);
-
-      _xyz.map.removeLayer(entry.edit.catchment.geometry);
 
       // Reset location infoj with response.
       record.location.infoj = JSON.parse(e.target.response);

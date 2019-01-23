@@ -1,10 +1,7 @@
 import catchment from './catchment.mjs';
+import isoline from './isoline.mjs';
 
 export default (_xyz, record, entry) => {
-
-  if (entry.edit && entry.edit.catchment) catchment(_xyz, record, entry);
-
-  if (!entry.value) return;
 
   const style = entry.style || {
     stroke: true,
@@ -13,8 +10,14 @@ export default (_xyz, record, entry) => {
     fill: true,
     fillOpacity: 0.3
   };
+
+  if (entry.edit && entry.edit.catchment) catchment(_xyz, record, entry);
   
-  const geom = _xyz.layers.geoJSON({
+  if (entry.edit && entry.edit.isoline) isoline(_xyz, record, entry);
+  
+  if (!entry.value) return;
+  
+  entry._geom = _xyz.layers.geoJSON({
     json: {
       type: 'Feature',
       geometry: JSON.parse(entry.value)
@@ -22,9 +25,7 @@ export default (_xyz, record, entry) => {
     pane: 'select_display',
     style: style
   });
-
-  if (entry.edit && entry.edit.catchment) entry.edit.catchment.geometry = geom;
-
-  record.location.geometries.push(geom);
+    
+  record.location.geometries.additional.push(entry._geom);
 
 };

@@ -1,0 +1,2223 @@
+{
+	"title": "GEOLYTIX | XYZ aga",
+	"documentation": "documentation",
+	"locate": {},
+	"locale": "UK",
+	"locales": {
+		"UK": {
+			"name": "United Kingdom",
+			"gazetteer": {
+				"provider": "GOOGLE",
+				"code": "GB",
+				"placeholder": "e.g. London"
+			},
+			"bounds": {
+				"north": 62,
+				"east": 5,
+				"south": 48,
+				"west": -11.5
+			},
+			"minZoom": 6,
+			"maxZoom": 17,
+			"layers": {
+				"base": {
+					"display": true,
+					"name": "Mapbox Baselayer",
+					"attribution": ["mapbox", "osm"],
+					"pane": ["base", 500],
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+				},
+				"label": {
+					"display": true,
+					"name": "Mapbox Labels",
+					"attribution": ["mapbox", "osm"],
+					"pane": ["base_labels", 600],
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+					"provider": "MAPBOX",
+					"maxZoom": 8
+				},
+				"here": {
+					"name": "HERE Imagery",
+					"attribution": ["here"],
+					"meta": "Satellite Imagery layer provided by HERE.",
+					"pane": ["base", 500],
+					"format": "tiles",
+					"URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE",
+					"provider": "HERE"
+				},
+				"stores_cat": {
+					"group": "Stores",
+					"edit": {
+						"properties": true,
+						"point": true
+					},
+					"qID": "id",
+					"name": "Stores Categorized",
+					"format": "cluster",
+					"dbs": "XYZ",
+					"table": "adidas.store_survey",
+					"tab": true,
+					"cluster_label": "retailer",
+					"cluster_cat": "retailer",
+					"infoj": [
+						{
+							"field": "date_reviewed_2",
+							"label": "Date reviewed",
+							"type": "date",
+							"inline": true,
+							"edit": true,
+							"filter": "date"
+						},
+						{
+							"field": "category",
+							"label": "Category",
+							"type": "text",
+							"options": [
+								"adidas",
+								"Department Stores",
+								"Fashion Aspirational",
+								"Fashion Mass",
+								"Fashion Premium",
+								"Footwear",
+								"Mono Sports",
+								"Multi Sports",
+								"Outdoor"
+							]
+						},
+						{
+							"field": "retailer",
+							"label": "Retailer",
+							"inline": true,
+							"options": [
+								"& OTHER STORIES;& OTHER STORIES",
+								"7 FOR ALL MANKIND;7 FOR ALL MANKIND",
+								"ADIDAS;ADIDAS SP;ADIDAS OCS;ADIDAS Y3",
+								"ALL SAINTS;ALL SAINTS;ALL SAINTS SIS",
+								"AMERICAN EAGLE OUTFITTERS;AMERICAN EAGLE OUTFITTERS",
+								"ANTHROPOLOGIE;ANTHROPOLOGIE;ANTHROPOLOGIE SIS",
+								"ARMANI;ARMANI EXCHANGE;EMPORIO ARMANI",
+								"ARMANI;ARMANI SIS",
+								"ASICS;ASICS",
+								"BERSHKA;BERSHKA",
+								"CALVIN KLEIN;CALVIN KLEIN",
+								"DEBENHAMS;DEBENHAMS",
+								"DIESEL;DIESEL;DIESEL SIS;DIESEL BLACK GOLD",
+								"DKNY;DKNY",
+								"DOLCE & GABBANA;DOLCE & GABBANA",
+								"EVISU;EVISU",
+								"FOOT ASYLUM;FOOT ASYLUM",
+								"FOOT LOCKER;FOOT LOCKER",
+								"FOREVER 21;FOREVER 21",
+								"FRED PERRY;FRED PERRY",
+								"FRENCH CONNECTION;FRENCH CONNECTION;FRENCH CONNECTION SIS",
+								"G-STAR;G-STAR",
+								"GAP;GAP",
+								"H&M;H&M",
+								"HOLLISTER;HOLLISTER",
+								"HOUSE OF FRASER;HOUSE OF FRASER",
+								"JACK & JONES;JACK & JONES",
+								"JACK WILLS;JACK WILLS",
+								"JACK WOLFSKIN;JACK WOLFSKIN",
+								"JD;JD",
+								"JOHN LEWIS;JOHN LEWIS",
+								"JUICY COUTURE;JUICY COUTURE;JUICY COUTURE SIS",
+								"KENZO;KENZO;KENZO SIS",
+								"LACOSTE;LACOSTE;LACOSTE SIS",
+								"LEVIS;LEVIS",
+								"LULULEMON ATHLETICA;LULULEMON ATHLETICA",
+								"MAX MARA;MAX MARA;MAX MARA SIS",
+								"MICHAEL KORS;MICHAEL KORS;MICHAEL KORS SIS",
+								"MISS SELFRIDGE;MISS SELFRIDGE;MISS SELFRIDGE SIS",
+								"MISS SIXTY;MISS SIXTY",
+								"MIU MIU;MIU MIU;MIU MIU SIS",
+								"NEW BALANCE;NEW BALANCE",
+								"NEW LOOK;NEW LOOK",
+								"NIKE;NIKE;NIKE TOWN",
+								"OFFICE;OFFICE;OFFICE SIS",
+								"PAUL SMITH;PAUL SMITH;PAUL SMITH SIS",
+								"PRIMARK;PRIMARK",
+								"PULL AND BEAR;PULL AND BEAR",
+								"PUMA;PUMA",
+								"RALPH LAUREN;RALPH LAUREN;RALPH LAUREN KIDS",
+								"REPLAY;REPLAY",
+								"SALVATORE FERRAGAMO;SALVATORE FERRAGAMO",
+								"SCHUH;SCHUH",
+								"SELFRIDGES;SELFRIDGES",
+								"SIZE;SIZE",
+								"SKECHERS;SKECHERS",
+								"SOLE;SOLE",
+								"SPORTS DIRECT;SPORTS DIRECT",
+								"STELLA MCCARTNEY;STELLA MCCARTNEY;STELLA MCCARTNEY SIS",
+								"SUPERDRY;SUPERDRY",
+								"SWEATY BETTY;SWEATY BETTY;SWEATY BETTY SIS",
+								"TED BAKER;TED BAKER;TED BAKER SIS",
+								"THE NORTH FACE;THE NORTH FACE",
+								"TOMMY HILFIGER;TOMMY HILFIGER",
+								"TOPMAN;TOPMAN",
+								"TOPSHOP;TOPSHOP;TOPSHOP SIS",
+								"TRUE RELIGION;TRUE RELIGION",
+								"UNIQLO;UNIQLO",
+								"URBAN OUTFITTERS;URBAN OUTFITTERS;URBAN OUTFITTERS SIS",
+								"USC;USC",
+								"VANS;VANS",
+								"VICTORIAS SECRET;VICTORIAS SECRET",
+								"VIVIENNE WESTWOOD;VIVIENNE WESTWOOD",
+								"YVES ST LAURENT;YVES ST LAURENT;YVES ST LAURENT SIS",
+								"ZARA;ZARA"
+							],
+							"subfield": "fascia",
+							"sublabel": "Fascia"
+						},
+						{
+							"field": "store_pitch",
+							"label": "Store pitch",
+							"options": [
+								"Very Good",
+								"Good",
+								"Average",
+								"Poor",
+								"Terrible"
+							]
+						},
+						{
+							"field": "store_size_sqm",
+							"label": "Store size sqm",
+							"options": [
+								"100",
+								"200",
+								"300",
+								"400",
+								"500",
+								"600",
+								"700",
+								"800",
+								"900",
+								"1000",
+								"1250",
+								"1500",
+								"1750",
+								"2000",
+								"3000",
+								"4000",
+								"5000",
+								"more than 5000"
+							]
+						},
+						{
+							"field": "num_floor",
+							"label": "Floor number in venue",
+							"type": "integer",
+							"range": [
+								-5,
+								10
+							],
+							"level": 1
+						},
+						{
+							"field": "total_floors",
+							"label": "Total number of floors in store",
+							"type": "integer",
+							"range": [
+								1,
+								10
+							],
+							"level": 1
+						},
+						{
+							"label": "Floorspace allocated to products %",
+							"type": "label"
+						},
+						{
+							"field": "floorspace_sports_performance_products_pct",
+							"label": "Sports Performance",
+							"type": "integer",
+							"range": [
+								0,
+								100
+							],
+							"level": 1
+						},
+						{
+							"field": "floorspace_sports_style_products_pct",
+							"label": "Sports Style",
+							"type": "integer",
+							"range": [
+								0,
+								100
+							],
+							"level": 1
+						},
+						{
+							"field": "floorspace_kids_sports_products_pct",
+							"label": "Kids Sports",
+							"type": "integer",
+							"range": [
+								0,
+								100
+							],
+							"level": 1
+						},
+						{
+							"field": "floorspace_other_products_pct",
+							"label": "Other products",
+							"type": "integer",
+							"range": [
+								0,
+								100
+							],
+							"level": 1
+						},
+						{
+							"field": "floorspace_adidas_pct",
+							"label": "Adidas floorspace",
+							"type": "integer",
+							"range": [
+								0,
+								100
+							],
+							"level": 1
+						},
+						{
+							"field": "floorspace_nike_pct",
+							"label": "Nike floorspace",
+							"type": "integer",
+							"range": [
+								0,
+								100
+							],
+							"level": 1
+						},
+						{
+							"field": "address",
+							"label": "Address",
+							"text": true
+						},
+						{
+							"field": "comments",
+							"label": "Comments",
+							"text": true
+						},
+						{
+							"label": "Mapbox Catchment 10min",
+							"field": "geom_rplace",
+							"fieldfx": "ST_asGeoJson(geom_rplace)",
+							"type": "geometry",
+							"edit": {
+								"catchment": {
+									"minutes": 10
+								}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#ffca28",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						},
+						{
+							"label": "HERE Catchment 10min",
+							"field": "geom_rplace2",
+							"fieldfx": "ST_asGeoJson(geom_rplace2)",
+							"type": "geometry",
+							"edit": {
+								"isoline": {
+									"range": 10	
+								}
+							},
+							"style": {
+								"stroke": true,
+								"color": "#6BE1FF",
+								"weight": 2,
+								"fill": true,
+								"fillOpacity": 0.2
+							}
+						},
+						{
+							"field": "images",
+							"label": "Images",
+							"type": "images",
+							"edit": true
+						},
+						{
+							"field": "edited_2",
+							"label": "Edited on",
+							"type": "datetime"
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#777",
+							"layers": {
+								"0.75": "#EEE",
+								"0.50": "#777"
+							}
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#777"
+						},
+						"markerMin": 15,
+						"markerMax": 30
+					}
+				},
+				"vector_test": {
+					"edit": {
+						"properties": true,
+						"polygon": true,
+						"rectangle": true,
+						"circle": true,
+						"catchment": true,
+						"isoline": true,
+						"line": true,
+						"delete": true
+					},
+					"display": true,
+					"name": "Vector test",
+					"format": "geojson",
+					"geom": "geom",
+					"dbs": "XYZ",
+					"qID": "id",
+					"tab": true,
+					"table": "aga_vector_test",
+					"infoj": [
+						{
+							"field": "shop_town",
+							"label": "Shoptown",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "town_name",
+							"label": "Town name",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "date_reviewed_2",
+							"label": "Date reviewed",
+							"type": "date",
+							"inline": true,
+							"edit": true,
+							"filter": "date"
+						},
+						{
+							"field": "isoline_mode",
+							"label": "Mode",
+							"inline": true,
+							"edit": {
+								"options": ["Driving", "Walking", "Cargo", "HOV lane"]
+							}
+						},
+						{
+							"field": "isoline_range",
+							"label": "Range",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "isoline_unit",
+							"label": "Unit",
+							"inline": true,
+							"edit": {
+								"options": ["Time", "Distance"]
+							}
+							
+						},
+						{
+							"field": "notes",
+							"label": "Notes",
+							"type": "textarea",
+							"edit": true
+						}
+					]
+				},
+				"mvt_test": {
+					"edit": {
+						"properties": true,
+						"polygon": true,
+						"rectangle": true,
+						"circle": true,
+						"catchment": true,
+						"isoline": true,
+						"line": true,
+						"delete": true
+					},
+					"display": true,
+					"name": "MVT test",
+					"format": "mvt",
+					"geom_3857": "geom_3857",
+					"geom": "geom",
+					"dbs": "XYZ",
+					"qID": "id",
+					"arrayZoom": {
+						"5": "aga_mvt_test"
+					},
+					"table": "aga_mvt_test",
+					"infoj": [
+						{
+							"field": "shop_town",
+							"label": "Shoptown",
+							"type": "text",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "town_name",
+							"label": "Town name",
+							"type": "text",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "date_reviewed_2",
+							"label": "Date reviewed",
+							"type": "date",
+							"inline": true,
+							"edit": true,
+							"filter": "date"
+						},
+						{
+							"field": "isoline_mode",
+							"label": "Mode",
+							"inline": true,
+							"edit": {
+								"options": ["Driving", "Walking", "Cargo", "HOV lane"]
+							}
+						},
+						{
+							"field": "isoline_range",
+							"label": "Range",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "isoline_unit",
+							"label": "Unit",
+							"inline": true,
+							"edit": {
+								"options": ["Time", "Distance"]
+							}
+							
+						},
+						{
+							"field": "notes",
+							"label": "Notes",
+							"type": "textarea",
+							"edit": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#444",
+							"fill": true,
+							"fillColor": "#444",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						}
+					}
+				},
+				"retail_places_mvt": {
+					"group": "Retail",
+					"name": "Retail Places",
+					"meta": "Polygon representing a Retail Place.",
+					"attribution": ["Retail place. Geolytix License."],
+					"format": "mvt",
+					"dbs": "XYZ",
+					"mvt_fields": ["rp_type"],
+					"qID": "id",
+					"tables": {
+						"12": "gb_retailplace"
+					},
+					"infoj": [{
+							"field": "rp_name",
+							"label": "Name",
+							"filter": "like"
+						},
+						{
+							"field": "rp_type",
+							"label": "Type",
+							"filter": "match"
+						},
+						{
+							"field": "ref_pc",
+							"label": "Reference Postcode",
+							"level": 1,
+							"filter": "like"
+						},
+						{
+							"field": "comp_strgh",
+							"label": "Competition Strength",
+							"type": "integer",
+							"level": 1
+						},
+						{
+							"field": "est_units",
+							"label": "Estimate Units",
+							"type": "integer",
+							"level": 1
+						},
+						{
+							"field": "est_brands",
+							"label": "Estimate Brands",
+							"type": "integer",
+							"level": 1
+						},
+						{
+							"label": "Profile",
+							"type": "group",
+							"chart": {
+								"x": "label x",
+								"y": "label y",
+								"type": "horizontalBar",
+								"backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
+								"borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"]
+							}
+						},
+						{
+							"group": "Profile",
+							"label": "Comparison",
+							"field": "comparison",
+							"type": "numeric"
+						},
+						{
+							"group": "Profile",
+							"label": "Convenience",
+							"field": "conv",
+							"type": "numeric"
+						},
+						{
+							"group": "Profile",
+							"label": "F/B/L",
+							"field": "fbl",
+							"type": "numeric",
+							"title": "Food/Beverage/Leisure"
+						},
+						{
+							"group": "Profile",
+							"label": "Services",
+							"field": "services",
+							"type": "numeric"
+						},
+						{
+							"group": "Profile",
+							"label": "Class/Brass",
+							"field": "classbrass",
+							"type": "numeric"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#000",
+							"fill": true,
+							"fillColor": "#000",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						},
+						"themes": {
+							"Retail Place Type": {
+								"type": "categorized",
+								"field": "rp_type",
+								"other": true,
+								"cat": {
+									"Major City Centre": {
+										"weight": 2,
+										"color": "#EF271B",
+										"opacity": 1,
+										"fillColor": "#EF271B"
+									},
+									"City Centre": {
+										"weight": 2,
+										"color": "#BA2D0B",
+										"opacity": 1,
+										"fillColor": "#BA2D0B"
+									},
+									"Large Town Centre": {
+										"weight": 2,
+										"color": "#FE4E00",
+										"opacity": 1,
+										"fillColor": "#FE4E00"
+									},
+									"Major Urban Centre": {
+										"weight": 2,
+										"color": "#E2711D",
+										"opacity": 1,
+										"fillColor": "#E2711D"
+									},
+									"Town Centre": {
+										"weight": 2,
+										"color": "#F3A712",
+										"opacity": 1,
+										"fillColor": "#F3A712"
+									},
+									"Urban Centre": {
+										"weight": 2,
+										"color": "#FADF63",
+										"opacity": 1,
+										"fillColor": "#FADF63"
+									},
+									"Small Town Centre": {
+										"weight": 2,
+										"color": "#FFE74C",
+										"opacity": 1,
+										"fillColor": "#FFE74C"
+									},
+									"Village Centre": {
+										"weight": 2,
+										"color": "#DBFE87",
+										"opacity": 1,
+										"fillColor": "#DBFE87"
+									},
+									"Regional SC": {
+										"weight": 2,
+										"color": "#8ED081",
+										"opacity": 1,
+										"fillColor": "#8ED081",
+										"label": "Regional Shopping Centre"
+									},
+									"Outlet Centre": {
+										"weight": 2,
+										"color": "#7DDF64",
+										"opacity": 1,
+										"fillColor": "#7DDF64"
+									},
+									"Shopping Park": {
+										"weight": 2,
+										"color": "#074F57",
+										"opacity": 1,
+										"fillColor": "#074F57"
+									},
+									"Retail Park": {
+										"weight": 2,
+										"color": "#32746D",
+										"opacity": 1,
+										"fillColor": "#32746D"
+									},
+									"Leisure Park": {
+										"weight": 2,
+										"color": "#41D3BD",
+										"opacity": 1,
+										"fillColor": "#41D3BD"
+									},
+									"Local Hub": {
+										"weight": 2,
+										"color": "#08B2E3",
+										"opacity": 1,
+										"fillColor": "#08B2E3"
+									},
+									"Large Parade": {
+										"weight": 2,
+										"color": "#1F487E",
+										"opacity": 1,
+										"fillColor": "#1F487E"
+									},
+									"Parade": {
+										"weight": 2,
+										"color": "#541388",
+										"opacity": 1,
+										"fillColor": "#541388"
+									},
+									"Weak Parade": {
+										"weight": 2,
+										"color": "#D90368",
+										"opacity": 1,
+										"fillColor": "#D90368"
+									}
+								}
+							}
+						}
+					}
+				},
+				"retail_place_building": {
+					"display": true,
+					"editable": "L",
+					"name": "Retail Place Building",
+					"meta": "Building polygons within the Retail Place boundaries.",
+					"format": "geojson",
+					"geom_3857": "geom_3857",
+					"geom": "geom_4326",
+					"pane": ["retail_place_building", 518],
+					"dbs": "GEODATA",
+					"qID": "id",
+					"arrayZoom": {
+						"13": "retail_place_building"
+					},
+					"infoj": [{
+							"field": "id",
+							"label": "ID",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "uniq_name",
+							"label": "Name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "rp_type",
+							"label": "Retail place type",
+							"type": "text",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#444",
+							"fill": true,
+							"fillColor": "#444",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						},
+						"themes": [{
+							"label": "Retail Place type",
+							"type": "categorized",
+							"field": "rp_type",
+							"other": true,
+							"cat": {
+								"Airport": {
+									"style": {
+										"color": "#F7B2BD",
+										"opacity": 1,
+										"fillColor": "#F7B2BD",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"City Centre": {
+									"style": {
+										"color": "#129490",
+										"opacity": 1,
+										"fillColor": "#129490",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Industrial Estate": {
+									"style": {
+										"color": "#C1B098",
+										"opacity": 1,
+										"fillColor": "#C1B098",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Large Parade": {
+									"style": {
+										"color": "#87BCDE",
+										"opacity": 1,
+										"fillColor": "#87BCDE",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Large Town Centre": {
+									"style": {
+										"color": "#E15554",
+										"opacity": 1,
+										"fillColor": "#E15554",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Leisure Park": {
+									"style": {
+										"color": "#4D9DE0",
+										"opacity": 1,
+										"fillColor": "#4D9DE0",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Local Hub": {
+									"style": {
+										"color": "#646F4B",
+										"opacity": 1,
+										"fillColor": "#646F4B",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Major City Centre": {
+									"style": {
+										"color": "#B3D89C",
+										"opacity": 1,
+										"fillColor": "#B3D89C",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Major Urban Centre": {
+									"style": {
+										"color": "#DB995A",
+										"opacity": 1,
+										"fillColor": "#DB995A",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Outlet Centre": {
+									"style": {
+										"color": "#EC91D8",
+										"opacity": 1,
+										"fillColor": "#EC91D8",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Parade": {
+									"style": {
+										"color": "#508CA4",
+										"opacity": 1,
+										"fillColor": "#508CA4",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Planned Urban Centre": {
+									"style": {
+										"color": "#9A7AA0",
+										"opacity": 1,
+										"fillColor": "#9A7AA0",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Rail Station": {
+									"style": {
+										"color": "#E2EB98",
+										"opacity": 1,
+										"fillColor": "#E2EB98",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Regional SC": {
+									"style": {
+										"color": "#684551",
+										"opacity": 1,
+										"fillColor": "#684551",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Retail Park": {
+									"style": {
+										"color": "#61E294",
+										"opacity": 1,
+										"fillColor": "#61E294",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Rural": {
+									"style": {
+										"color": "#F2ED6F",
+										"opacity": 1,
+										"fillColor": "#F2ED6F",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Service Area": {
+									"style": {
+										"color": "#B8336A",
+										"opacity": 1,
+										"fillColor": "#B8336A",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Shopping Park": {
+									"style": {
+										"color": "#7A918D",
+										"opacity": 1,
+										"fillColor": "#7A918D",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Small Town Centre": {
+									"style": {
+										"color": "#8D775F",
+										"opacity": 1,
+										"fillColor": "#8D775F",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Town Centre": {
+									"style": {
+										"color": "#C2847A",
+										"opacity": 1,
+										"fillColor": "#C2847A",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Trade Park": {
+									"style": {
+										"color": "#2364AA",
+										"opacity": 1,
+										"fillColor": "#2364AA",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Urban Centre": {
+									"style": {
+										"color": "#93032E",
+										"opacity": 1,
+										"fillColor": "#93032E",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Village Centre": {
+									"style": {
+										"color": "#034C3C",
+										"opacity": 1,
+										"fillColor": "#034C3C",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								},
+								"Weak Parade": {
+									"style": {
+										"color": "#A6A15E",
+										"opacity": 1,
+										"fillColor": "#A6A15E",
+										"fill": true,
+										"fillOpacity": 0.3,
+										"weight": 2
+									}
+								}
+							}
+						}]
+					}
+				},
+				"physical_coast_line": {
+					"name": "Coast line",
+					"meta": "Polylines representing the high water mark for the United Kingdom and also the low water mark for Great Britain.",
+					"attribution": ["Physical Geography. Geolytix License."],
+					"format": "mvt",
+					"pane": ["physical_coast_line", 525],
+					"dbs": "GEODATA",
+					"qID": "id",
+					"geom": "geom_4326",
+					"geom_3857": "geom_3857",
+					"arrayZoom": {
+						"8": "physical_coast_line"
+					},
+					"infoj": [{
+							"field": "id",
+							"label": "ID",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "coast_type",
+							"label": "Coast type",
+							"type": "text",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#15B097",
+							"fill": true,
+							"fillColor": "#15B097",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#15B097",
+							"fill": true,
+							"fillOpacity": 0.1
+						}
+					}
+				},
+				"residential_disposableincome_lsoa": {
+					"editable": true,
+					"name": "Disposable income LSOA",
+					"meta": "Rent, mortgage and disposable income at Lower Super Output Area.",
+					"attribution": ["Residential. Geolytix License."],
+					"format": "mvt",
+					"arrayZoom": {
+						"11": "residential_disposableincome_lsoa"
+					},
+					"pane": ["residential_disposableincome_lsoa", 540],
+					"dbs": "GEODATA",
+					"qID": "id",
+					"geom": "geom_4326",
+					"geom_3857": "geom_3857",
+					"infoj": [{
+							"field": "lsoa_code",
+							"label": "LSOA Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"label": "Total",
+							"type": "group",
+							"items": [{
+									"field": "totinc_pm",
+									"label": "Total income monthly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "totrent_pm",
+									"label": "Total rent montly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "totmort_pm",
+									"label": "Total mortgage monthly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "totdis_pm",
+									"label": "Total disposable montly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								}
+							]
+						},
+						{
+							"field": "avginc_yrh",
+							"label": "Average income yearly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avginc_pmh",
+							"label": "Average income monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avgdis_pmh",
+							"label": "Average disposable monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avgmort_pm",
+							"label": "Average mortgage monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avgrent_pm",
+							"label": "Average rent monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"label": "Average",
+							"type": "group",
+							"items": [{
+									"field": "avginc_yrh",
+									"label": "Average income yearly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "avginc_pmh",
+									"label": "Average income monthly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "avgdis_pmh",
+									"label": "Average disposable monthly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "avgmort_pm",
+									"label": "Average mortgage monthly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "avgrent_pm",
+									"label": "Average rent monthly",
+									"type": "numeric",
+									"inline": true,
+									"level": 1
+								}
+							]
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#023618",
+							"fill": true,
+							"fillColor": "#023618",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"weight": 1,
+							"color": "#023618",
+							"fill": true
+						}
+					}
+				},
+				"residential_disposableincome_oa": {
+					"name": "Disposable income OA",
+					"meta": "Rent, mortgage and disposable income at Output Area.",
+					"attribution": ["Residential. Geolytix License."],
+					"format": "mvt",
+					"arrayZoom": {
+						"14": "residential_disposableincome_oa"
+					},
+					"pane": ["residential_disposableincome_oa", 541],
+					"dbs": "GEODATA",
+					"qID": "id",
+					"geom": "geom_4326",
+					"geom_3857": "geom_3857",
+					"infoj": [{
+							"field": "oa_code",
+							"label": "OA Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "lsoa_code",
+							"label": "LSOA Code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"label": "Total",
+							"type": "group",
+							"items": [{
+									"field": "totinc_pm",
+									"label": "Total income monthly",
+									"type": "numeric",
+									"inline": true
+								},
+								{
+									"field": "totrent_pm",
+									"label": "Total rent montly",
+									"type": "numeric",
+									"inline": true
+								},
+								{
+									"field": "totmort_pm",
+									"label": "Total mortgage monthly",
+									"type": "numeric",
+									"inline": true
+								},
+								{
+									"field": "totdis_pm",
+									"label": "Total disposable montly",
+									"type": "numeric",
+									"inline": true
+								}
+							]
+						},
+						{
+							"field": "avginc_yrh",
+							"label": "Average income yearly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avginc_pmh",
+							"label": "Average income monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avgdis_pmh",
+							"label": "Average disposable monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avgmort_pm",
+							"label": "Average mortgage monthly",
+							"type": "numeric",
+							"inline": true
+						},
+						{
+							"field": "avgrent_pm",
+							"label": "Average rent monthly",
+							"type": "numeric",
+							"inline": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#023618",
+							"fill": true,
+							"fillColor": "#023618",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"weight": 1,
+							"color": "#023618",
+							"fill": true
+						}
+					}
+				},
+				"grid": {
+					"name": "Census Grid",
+					"format": "grid",
+					"pane": ["grid", 515],
+					"dbs": "XYZ",
+					"geom": "geomcntr",
+					"grid_color": "pop__11",
+					"arrayZoom": {
+						"6": "gb_hx_64k",
+						"7": "gb_hx_32k",
+						"8": "gb_hx_16k",
+						"9": "gb_hx_8k",
+						"10": "gb_hx_4k",
+						"11": "gb_hx_2k",
+						"12": "gb_hx_1k"
+					},
+					"queryFields": [
+						[
+							"pop__01",
+							"Population 2001"
+						],
+						[
+							"pop__11",
+							"Population 2011"
+						],
+						[
+							"gen_female__11",
+							"Female population"
+						],
+						[
+							"gen_male__11",
+							"Male population"
+						]
+					]
+				},
+				"williamhill": {
+					"name": "William Hill Shops",
+					"meta": "All William Hill Shops May 2018.",
+					"properties": "",
+					"format": "cluster",
+					"tab": true,
+					"dbs": "XYZ",
+					"qID": "id",
+					"table": "wh.williamhill_09052018",
+					"cluster_label": "shop_name",
+					"cluster_cat": "shop_bucket",
+					"cluster_kmeans": 0.01,
+					"infoj": [{
+							"field": "lbo_no",
+							"label": "ID",
+							"inline": true
+						},
+						{
+							"field": "shop_name",
+							"label": "Shop name",
+							"inline": true,
+							"filter": "like"
+						},
+						{
+							"field": "postcode",
+							"label": "Postal code",
+							"inline": true,
+							"filter": "like"
+						},
+						{
+							"field": "wh_region",
+							"label": "WH Region",
+							"inline": true,
+							"filter": "match"
+						},
+						{
+							"field": "wh_area",
+							"label": "WH Area",
+							"inline": true,
+							"filter": "match"
+						},
+						{
+							"field": "wh_cluster",
+							"label": "WH Cluster",
+							"inline": true
+						},
+						{
+							"field": "seamless_town",
+							"label": "Town"
+						},
+						{
+							"field": "region",
+							"label": "Area"
+						},
+						{
+							"field": "country",
+							"label": "Country"
+						},
+						{
+							"field": "open_closed",
+							"label": "Shop status",
+							"inline": true
+						},
+						{
+							"field": "competition",
+							"label": "Competition",
+							"inline": true,
+							"filter": "like"
+						},
+						{
+							"label": "Tenure",
+							"type": "group",
+							"items": [{
+									"field": "tenure",
+									"label": "Tenure type",
+									"type": "text",
+									"inline": true,
+									"level": 1,
+									"filter": {
+										"in": [
+											"Freehold",
+											"Leasehold"
+										]
+									}
+								},
+								{
+									"field": "lease_break2",
+									"label": "Lease break date",
+									"type": "date",
+									"inline": true,
+									"level": 1
+								},
+								{
+									"field": "lease_expire2",
+									"label": "Lease expiry date",
+									"type": "date",
+									"inline": true,
+									"level": 1,
+									"filter": "date"
+								},
+								{
+									"field": "break_v_expire2",
+									"label": "Break vs expire date",
+									"type": "date",
+									"inline": true,
+									"level": 1,
+									"filter": "date"
+								},
+								{
+									"field": "rent",
+									"label": "Rent p.a.",
+									"type": "numeric",
+									"level": 1
+								}
+							]
+						},
+						{
+							"field": "shop_bucket",
+							"label": "Shop profit bucket",
+							"inline": true,
+							"filter": {
+								"in": [
+									"Profitable ex Gaming",
+									"Profit >£100k after triennial hit",
+									"Profit >£75k after triennial hit",
+									"Profit >£50k after triennial hit",
+									"Profit >£20k after triennial hit",
+									"42 loss makers",
+									"Balance"
+								]
+							}
+						},
+						{
+							"label": "EBITDA by year",
+							"type": "group",
+							"items": [{
+									"field": "ebitda_2013",
+									"label": "2013",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "ebitda_2014",
+									"label": "2014",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "ebitda_2015",
+									"label": "2015",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "ebitda_2016",
+									"label": "2016",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "ebitda_2017",
+									"label": "2017",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "ebitda_plan_2018",
+									"label": "Plan 2018",
+									"type": "numeric",
+									"level": 2
+								}
+							]
+						},
+						{
+							"label": "Figures 2017",
+							"type": "group",
+							"items": [{
+									"field": "stakes_2017",
+									"label": "Stakes 2017",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "gross_win_2017",
+									"label": "Gross win 2017",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "margin_pct_2017",
+									"label": "Margin (%) 2017",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "gaming_2017",
+									"label": "Gaming 2017",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "profit_2017",
+									"label": "Profit 2017",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "profitable_ex_gaming_2017",
+									"label": "Profitable Ex Gaming 2017",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								}
+							]
+						},
+						{
+							"label": "Planned 2018",
+							"type": "group",
+							"items": [{
+									"field": "plan_stakes_2018",
+									"label": "Stakes 2018",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "plan_gross_win_2018",
+									"label": "Gross win 2018",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "plan_margin_pct_2018",
+									"label": "Margin (%) 2018",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "plan_gaming_2018",
+									"label": "Gaming 2018",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "plan_profit_2018",
+									"label": "Profit 2018",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								}
+							]
+						},
+						{
+							"label": "Estimates 2019",
+							"type": "group",
+							"items": [{
+									"field": "rp_est_stakes_2019",
+									"label": "Stakes 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_2019",
+									"label": "Gross win 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_2019",
+									"label": "Margin (%) 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_2019",
+									"label": "Gaming 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_2019",
+									"label": "Profit 2019",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "rp_est_stakes_tri_2_2019",
+									"label": "Stakes Tri £2 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_tri_2_2019",
+									"label": "Gross win Tri £2 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_tri_2_2019",
+									"label": "Margin Tri £2 (%) 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "lost_gross_win_tri_2_2019",
+									"label": "Lost gross win Tri £2 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_tri_2_2019",
+									"label": "Gaming Tri £2 2019",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_tri_2_2019",
+									"label": "Profit Tri £2 2019",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								}
+							]
+						},
+						{
+							"label": "Estimates 2020",
+							"type": "group",
+							"items": [{
+									"field": "rp_est_stakes_2020",
+									"label": "Stakes 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_2020",
+									"label": "Gross win 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_2020",
+									"label": "Margin (%) 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_2020",
+									"label": "Gaming 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_2020",
+									"label": "Profit 2020",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "rp_est_stakes_tri_2_2020",
+									"label": "Stakes Tri £2 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_tri_2_2020",
+									"label": "Gross win Tri £2 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_tri_2_2020",
+									"label": "Margin Tri £2 (%) 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "lost_gross_win_tri_2_2020",
+									"label": "Lost gross win Tri £2 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_tri_2_2020",
+									"label": "Gaming Tri £2 2020",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_tri_2_2020",
+									"label": "Profit Tri £2 2020",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								}
+							]
+						},
+						{
+							"label": "Estimates 2021",
+							"type": "group",
+							"items": [{
+									"field": "rp_est_stakes_2021",
+									"label": "Stakes 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_2021",
+									"label": "Gross win 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_2021",
+									"label": "Margin 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_2021",
+									"label": "Gaming 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_2021",
+									"label": "Profit 2021",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "rp_est_stakes_tri_2_2021",
+									"label": "Stakes Tri £2 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_tri_2_2021",
+									"label": "Gross win Tri £2 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_tri_2_2021",
+									"label": "Margin Tri £2 (%) 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "lost_gross_win_tri_2_2021",
+									"label": "Lost gross win Tri £2 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_tri_2_2021",
+									"label": "Gaming Tri £2 2021",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_tri_2_2021",
+									"label": "Profit Tri £2 2021",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								}
+							]
+						},
+						{
+							"label": "Estimates 2022",
+							"type": "group",
+							"items": [{
+									"field": "rp_est_stakes_2022",
+									"label": "Stakes 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_2022",
+									"label": "Gross win 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_2022",
+									"label": "Margin (%) 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_2022",
+									"label": "Gaming 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_2022",
+									"label": "Profit 2022",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								},
+								{
+									"field": "rp_est_stakes_tri_2_2022",
+									"label": "Stakes Tri £2 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gross_win_tri_2_2022",
+									"label": "Gross win Tri £2 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_margin_pct_tri_2_2022",
+									"label": "Margin Tri £2 (%) 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "lost_gross_win_tri_2_2022",
+									"label": "Lost gross win Tri £2 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_gaming_tri_2_2022",
+									"label": "Gaming Tri £2 2022",
+									"type": "numeric",
+									"level": 2
+								},
+								{
+									"field": "rp_est_profit_tri_2_2022",
+									"label": "Profit Tri £2 2022",
+									"type": "numeric",
+									"level": 2,
+									"filter": "numeric"
+								}
+							]
+						}
+					],
+					"style": {
+						"markerMin": 15,
+						"markerMax": 40,
+						"marker": {
+							"type": "target",
+							"fillColor": "#F15946",
+							"layers": {
+								"0.75": "#EEE",
+								"0.50": "#F15946"
+							}
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#F15946"
+						},
+						"themes": [{
+								"label": "Shop profit bucket",
+								"type": "categorized",
+								"field": "shop_bucket",
+								"other": true,
+								"competitors": {
+									"Profitable ex Gaming": {
+										"colour": "#143156",
+										"label": "Profitable ex Gaming"
+									},
+									"Profit >£100k after triennial hit": {
+										"colour": "#2274A5",
+										"label": "Profit >£100k after triennial hit"
+									},
+									"Profit >£75k after triennial hit": {
+										"colour": "#95B8D1",
+										"label": "Profit >£75k after triennial hit"
+									},
+									"Profit >£50k after triennial hit": {
+										"colour": "#FFDE3B",
+										"label": "Profit >£50k after triennial hit"
+									},
+									"Profit >£20k after triennial hit": {
+										"colour": "#1C90DD",
+										"label": "Profit >£20k after triennial hit"
+									},
+									"42 loss makers": {
+										"colour": "#EFAB2D",
+										"label": "42 loss makers"
+									},
+									"Balance": {
+										"colour": "#A8B9C4",
+										"label": "Balance"
+									}
+								},
+								"cat": {
+									"Profitable ex Gaming": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#143156"]
+										},
+										"label": "Profitable ex Gaming"
+									},
+									"Profit >£100k after triennial hit": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#2274A5"]
+										},
+										"label": "Profit >£100k after triennial hit"
+									},
+									"Profit >£75k after triennial hit": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#95B8D1"]
+										},
+										"label": "Profit >£75k after triennial hit"
+									},
+									"Profit >£50k after triennial hit": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#FFDE3B"]
+										},
+										"label": "Profit >£50k after triennial hit"
+									},
+									"Profit >£20k after triennial hit": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#1C90DD"]
+										},
+										"label": "Profit >£20k after triennial hit"
+									},
+									"42 loss makers": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#EFAB2D"]
+										},
+										"label": "42 loss makers"
+									},
+									"Balance": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#A8B9C4"]
+										},
+										"label": "Balance"
+									}
+								}
+							},
+							{
+								"label": "Competition Type",
+								"type": "categorized",
+								"field": "competition",
+								"other": true,
+								"competitors": {
+									"MONOPOLY": {
+										"colour": "#143156",
+										"label": "Monopoly"
+									},
+									"MULTI COMP": {
+										"colour": "#FFDE3B",
+										"label": "Multi competiton"
+									},
+									"SINGLE COMP": {
+										"colour": "#2274A5",
+										"label": "Single competiton"
+									}
+								},
+								"cat": {
+									"MONOPOLY": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#143156"]
+										},
+										"label": "Monopoly"
+									},
+									"MULTI COMP": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#FFDE3B"]
+										},
+										"label": "Multi competition"
+									},
+									"SINGLE COMP": {
+										"marker": {
+											"type": "target",
+											"style": [400, "#2274A5"]
+										},
+										"label": "Single competition"
+									}
+								}
+							}
+						]
+					}
+				},
+				"work_place_hybrid_zone": {
+					"name": "Workers",
+					"meta": "2015 worker counts, densities and occupation splits on hybrid zone level.",
+					"attribution": [
+						"Work Place. Geolytix License."
+					],
+					"format": "mvt",
+					"dbs": "XYZ",
+					"mvt_fields": [
+						"workers_15", "workerskm2"
+					],
+					"tables": {
+						"14": "mapp.work_place_hybrid_zone"
+					},
+					"qID": "id",
+					"geom_3857": "geom_3857",
+					"geom": "geom_4326",
+					"geomj": "ST_asGeoJson(geom_4326)",
+					"infoj": [{
+							"field": "oa_code",
+							"label": "OA Code",
+							"inline": true
+						},
+						{
+							"field": "wz_code",
+							"label": "WZ Code",
+							"inline": true
+						},
+						{
+							"field": "workers_15",
+							"label": "Workers",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"field": "workerskm2",
+							"label": "Workers km2",
+							"type": "integer",
+							"inline": true
+						},
+						{
+							"label": "Occupation Splits",
+							"type": "group",
+							"chart": {
+								"x": "label x",
+								"y": "label y",
+								"type": "doughnut",
+								"backgroundColor": ["#ffb300", "#d81b60", "#8e24aa", "#5e35b1", "#3949ab", "#1e88e5", "#039be5", "#00acc1", "#00897b"],
+								"borderColor": ["#ffb300", "#d81b60", "#8e24aa", "#5e35b1", "#3949ab", "#1e88e5", "#039be5", "#00acc1", "#00897b"]
+							}
+						}, {
+							"group": "Occupation Splits",
+							"label": "Managerial",
+							"field": "managerial",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "profession",
+							"label": "Professional",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "technical",
+							"label": "Technical",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "administra",
+							"label": "Administration",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "trades",
+							"label": "Trades",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "services",
+							"label": "Services",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "sales",
+							"label": "Sales",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "operatives",
+							"label": "Operatives",
+							"type": "integer"
+						},
+						{
+							"group": "Occupation Splits",
+							"field": "elementary",
+							"label": "Elementary",
+							"type": "integer"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#5A9367",
+							"fill": true,
+							"fillColor": "#5A9367",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#5A9367",
+							"fill": true,
+							"fillOpacity": 0.6
+						},
+						"themes": {
+							"Workers km2": {
+								"type": "graduated",
+								"field": "workerskm2",
+								"cat": {
+									"100": {
+										"label": "100 or less per km2",
+										"opacity": 1,
+										"color": "#1e88e5",
+										"fillColor": "#1e88e5"
+									},
+									"1000": {
+										"label": "1,000 per km2",
+										"opacity": 1,
+										"color": "#00897b",
+										"fillColor": "#00897b"
+									},
+									"5000": {
+										"label": "5,000 per km2",
+										"opacity": 1,
+										"color": "#43a047",
+										"fillColor": "#43a047"
+									},
+									"10000": {
+										"label": "10,000 per km2",
+										"color": "#c0ca33",
+										"opacity": 1,
+										"fillColor": "#c0ca33"
+									},
+									"20000": {
+										"label": "20,000 per km2",
+										"opacity": 1,
+										"color": "#fdd835",
+										"fillColor": "#fdd835"
+									},
+									"50000": {
+										"label": "50,000 per km2",
+										"opacity": 1,
+										"color": "#fb8c00",
+										"fillColor": "#fb8c00"
+									},
+									"100000": {
+										"label": "over 100,000 per km2",
+										"opacity": 1,
+										"color": "#f4511e",
+										"fillColor": "#f4511e"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
