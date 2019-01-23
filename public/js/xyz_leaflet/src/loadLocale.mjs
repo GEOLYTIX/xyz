@@ -12,7 +12,7 @@ export default _xyz => {
 
     // Set the layer display from hooks then remove layer hooks.
     if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {
-      _xyz.layers.list[layer].display = (_xyz.hooks.current.layers.indexOf(layer) > -1);
+      _xyz.layers.list[layer].display = (_xyz.hooks.current.layers.indexOf(encodeURIComponent(layer)) > -1);
     });
 
     if (_xyz.hooks.remove) _xyz.hooks.remove('layers');
