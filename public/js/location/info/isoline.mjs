@@ -9,12 +9,12 @@ export default (_xyz, record, entry) => {
       colSpan: '2'
     },
     style: {
-      borderBottom:
-        'solid 1px ' + (entry.style ? entry.style.color : record.color)
+      //borderBottom:
+      //  'solid 1px ' + (entry.style ? entry.style.color : record.color)
     }
   });
 
-  _xyz.utils.createElement({
+  /*_xyz.utils.createElement({
     tag: 'div',
     options: {
       className: 'btn_wide cursor noselect',
@@ -33,6 +33,19 @@ export default (_xyz, record, entry) => {
           ? deleteIsoline(record, entry)
           : createIsoline(record, entry);
       }
+    }
+  });*/
+
+  _xyz.utils.checkbox({
+    label: entry.label,
+    appendTo: td,
+    checked: !!entry.value,
+    onChange: e => {
+
+      e.target.checked ? e.target.parentNode.classList.add('changed') : e.target.parentNode.classList.remove('changed');
+
+      e.target.checked ? createIsoline(record, entry) : deleteIsoline(record, entry);
+
     }
   });
 
