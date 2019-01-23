@@ -35,7 +35,8 @@ export default _xyz => {
         _xyz.map_dom.style.cursor = '';
 
         layer.loaded = false;
-        layer.get();
+        //layer.get();
+        layer.show();
 
         if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
                                 
