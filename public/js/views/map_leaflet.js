@@ -22,10 +22,10 @@ _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
   map_id: 'xyz_map2',
-  locale: 'Offices',
+  locale: 'NE',
   btnZoomIn: document.getElementById('btnZoomIn2'),
   btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: Offices
+  callback: TableView
 });
 
 function LocatePopup(_xyz){
@@ -97,5 +97,20 @@ function Offices(_xyz) {
   _xyz.locations.select_output = location => {
     document.getElementById('location_info_container2').innerHTML = location.infoj[1].value;
   };
+
+}
+
+function TableView(_xyz) {
+
+  _xyz.layers.list['Mapbox Base'].remove();
+
+  _xyz.layers.list.COUNTRIES.style.theme = null;
+
+  _xyz.layers.list.COUNTRIES.show();
+
+  _xyz.tableview.createTable({
+    layer: _xyz.layers.list.COUNTRIES,
+    target: document.getElementById('xyz_table1')
+  });
 
 }

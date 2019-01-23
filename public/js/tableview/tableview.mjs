@@ -1,7 +1,6 @@
 export default _xyz => {
 
   let
-    tableview = document.querySelector('.tableview'),
     el = null,
     y_position = 0,
     y_el = 0,
@@ -15,18 +14,42 @@ export default _xyz => {
     },
     eventListener: {
       event: 'dblclick',
-      funct: () => {
-        transition();
-      }
+      funct: () => transition()
     },
-    appendTo: tableview
+    appendTo: _xyz.tableview.container
+  });
+
+  let container = _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      className: 'tabs'
+    },
+    appendTo: _xyz.tableview.container
+  });
+
+  let nav = _xyz.utils.createElement({
+    tag: 'nav',
+    appendTo: container
+  });
+
+  _xyz.utils.createElement({
+    tag: 'ul',
+    appendTo: nav
+  });
+
+  _xyz.tableview.contentWrap = _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      className: 'content-wrap'
+    },
+    appendTo: container
   });
 
   function transition() {
-    let top = parseInt(tableview.style.top) >= 0 ? 'calc(100% - 16px)' : 0;
-    tableview.style.transition = '1s';
-    tableview.style.top = top;
-    tableview.addEventListener('transitionend', e => {
+    let top = parseInt(_xyz.tableview.container.style.top) >= 0 ? 'calc(100% - 16px)' : 0;
+    _xyz.tableview.container.style.transition = '1s';
+    _xyz.tableview.container.style.top = top;
+    _xyz.tableview.container.addEventListener('transitionend', e => {
       e.target.style.transition = '';
     });
   }
@@ -58,12 +81,10 @@ export default _xyz => {
   pad.addEventListener('mousedown', e => {
     if (e.which === 1) {
       e.target.style.cursor = 'grabbing';
-      initialize(tableview);
+      initialize(_xyz.tableview.container);
     }
   });
 
   document.onmousemove = move;
-
-  return tableview;
 
 };

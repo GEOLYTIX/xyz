@@ -22,7 +22,11 @@
     user-select: none;
     @if $desktop {
         position: absolute;
-        left: -10px;
+        background-color: #fff;
+        height: 100%;
+        box-shadow: inset 4px 0px 4px -4px #777;
+        padding: 2px;
+        opacity: 0.9;
     }
     @if $mobile {
         position: fixed;
@@ -46,12 +50,14 @@
         padding: 0;
         color: $glxgreen;
         background: #fff;
-        border-radius: 50%;
-        box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
         text-align: center;
         cursor: default;
         border: none;
         outline: none;
+        @if $mobile {
+            box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
         a {
             color: $glxgreen;
         }

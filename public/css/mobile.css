@@ -81,12 +81,12 @@
     padding: 0;
     color: #079e00;
     background: #fff;
-    border-radius: 50%;
-    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
     cursor: default;
     border: none;
-    outline: none; }
+    outline: none;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 50%; }
     .btn_column button a,
     .btn_column > div a {
       color: #079e00; }

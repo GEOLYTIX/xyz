@@ -10,6 +10,10 @@ import refresh from './refresh.mjs';
 
 import content from './content.mjs';
 
+import createTable from './createTable.mjs';
+
+import updateTable from './updateTable.mjs';
+
 export default _xyz => {
 
   _xyz.tableview.requestData = requestData(_xyz);
@@ -23,5 +27,9 @@ export default _xyz => {
   _xyz.tableview.refresh = refresh(_xyz);
 
   _xyz.tableview.content = content(_xyz);
+
+  _xyz.tableview.createTable = createTable(_xyz);
+
+  _xyz.tableview.updateTable = updateTable(_xyz);
 
 };

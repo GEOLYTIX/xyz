@@ -56,6 +56,7 @@ export default _xyz => {
         _xyz.tableview.observe();
       });
     });
+
   }
 
   function extend(a, b) {
@@ -65,7 +66,9 @@ export default _xyz => {
     });
   
     return a;
+    
   }
 
   return nav_tabs();
+
 };

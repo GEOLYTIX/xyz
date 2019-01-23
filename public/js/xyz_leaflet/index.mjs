@@ -16,6 +16,8 @@ import _layer from './src/layer/_layer.mjs';
 
 import _location from './src/location/_location.mjs';
 
+import _tableview from '../tableview/_tableview.mjs';
+
 import _draw from './src/draw/_draw.mjs';
 
 import loadLocale from './src/loadLocale.mjs';
@@ -41,6 +43,8 @@ export default () => {
   _layer(_xyz);
 
   _location(_xyz);
+  
+  _tableview(_xyz);
 
   _draw(_xyz);
 

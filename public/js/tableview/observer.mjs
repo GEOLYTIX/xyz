@@ -1,9 +1,6 @@
 export default _xyz => {
   
-  return () => observe(_xyz);
-
-
-  function observe(_xyz){
+  return () => {
 
     if (_xyz.tableview.observer) _xyz.tableview.observer.disconnect();
 

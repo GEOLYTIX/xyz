@@ -5,6 +5,10 @@
         height: 100%;
         padding: 0 20px;
         width: 330px;
+        background-color: #fff;
+        z-index: 999;
+        box-shadow: 0 2px 2px #777;
+        overflow: hidden;
 
         > .scrolly {
             width: calc(100% + 50px);

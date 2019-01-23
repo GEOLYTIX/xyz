@@ -18,6 +18,8 @@ module.exports = fastify => {
 
   require('./layer/mvt')(fastify);
 
+  require('./layer/table')(fastify);
+
   // location/edit
 
   require('./location/edit/delete')(fastify);

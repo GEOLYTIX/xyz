@@ -2,9 +2,10 @@ export default _xyz => {
 
   return (layer, callback) => {
     
-    let xhr = new XMLHttpRequest(), columns = [];
+    const columns = [];
 
     Object.values(layer.infoj).map(entry => {
+
       if(!entry.type || entry.type === 'numeric' || entry.type === 'integer' || entry.type === 'textarea'){
         entry.title = entry.label;
         columns.push(entry);
@@ -21,15 +22,21 @@ export default _xyz => {
         entry.formatter = _xyz.utils.formatDateTime;
         columns.push(entry);
       }
+
     });
+
+    const xhr = new XMLHttpRequest();
     
     xhr.open('POST', _xyz.host + '/api/tab/get?token=' + _xyz.token);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = e => {
+
       if (e.target.status !== 200) return;
-      let data = JSON.parse(e.target.response);
+
+      let data = e.target.response;
       callback(layer, data, columns);
+
     };
 
     let params = {
@@ -51,7 +58,9 @@ export default _xyz => {
         north: bounds.getNorth()
       });
     }
+
     xhr.send(JSON.stringify(params));
+
   };
 
 };
