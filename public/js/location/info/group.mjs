@@ -150,15 +150,17 @@ export default (_xyz, record, group) => {
 };
 
 function chartIcon(group){
-  let _icon;
-  switch(group.chart.type){
-  case 'bar': _icon = 'insert_chart_outlined'; break;
-  case 'pie' : _icon = 'pie_chart'; break;
-  case 'doughnut': _icon = 'donut_small'; break;
-  case 'horizontalBar': _icon = 'notes'; break;
-  case 'bubble': _icon = 'bubble_chart'; break;
-  case 'scatter': _icon = 'scatter_plot'; break;
-  default: 'show_chart';
+  if(!group.chart.type) {
+    group.chart.type = 'line';
   }
-  return _icon;
+  switch(group.chart.type) {
+  case 'line': return 'show_chart';
+  case 'bar': return 'insert_chart_outlined';
+  case 'pie' : return 'pie_chart';
+  case 'doughnut': return 'donut_small';
+  case 'horizontalBar': return 'notes';
+  case 'bubble': return 'bubble_chart';
+  case 'scatter': return 'scatter_plot';
+  default: return 'show_chart';
+  }
 }
