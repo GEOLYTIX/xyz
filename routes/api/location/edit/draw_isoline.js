@@ -56,21 +56,21 @@ module.exports = fastify => {
 
       shape.map(el => {
         el = el.split(',');
+        el = el.map(e => parseFloat(e));
         geojson.coordinates[0].push(el.reverse());
       });
       
       let _geom;
+
+      if (geom_3857) _geom = `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geojson)}'), 4326), 3857)`;
       
       if (geom) _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geojson)}'), 4326)`;
-        
-      if (geom_3857) _geom = `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geojson)}'), 4326), 3857)`;
-  
+          
       var q = `
         INSERT INTO ${table} (${geom || geom_3857})
         SELECT ${_geom}
         RETURNING ${layer.qID} AS id;`;
 
-        
       var rows = await global.pg.dbs[layer.dbs](q);
         
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');

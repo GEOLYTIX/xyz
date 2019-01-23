@@ -34,10 +34,13 @@ export default _xyz => {
       }));
   
       xhr.onload = e => {
+
+        console.log(e.target.responseText);
   
         _xyz.map_dom.style.cursor = '';
     
-        layer.get();
+        //layer.get();
+        layer.show();
     
         if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
                                     
