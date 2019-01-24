@@ -65,6 +65,10 @@
   user-select: none;
   position: fixed;
   left: 10px; }
+  .btn_column.lv0 {
+    box-shadow: inset 2px 0 4px -4px #777; }
+  .btn_column.lv1 {
+    box-shadow: inset 5px 0 4px -4px #777; }
   .btn_column div:hover {
     background: #079e00;
     color: #fff;
@@ -74,6 +78,7 @@
   .btn_column button,
   .btn_column > div {
     margin-top: 10px;
+    border-radius: 10px;
     float: left;
     clear: both;
     height: 50px;

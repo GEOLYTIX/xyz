@@ -13,6 +13,12 @@
 }
 
 .btn_column {
+    &.lv0 {
+        box-shadow: inset 2px 0 4px -4px #777;
+    }
+    &.lv1 {
+        box-shadow: inset 5px 0 4px -4px #777;
+    }
     top: 0;
     z-index: 999;
     -webkit-touch-callout: none;
@@ -24,8 +30,7 @@
         position: absolute;
         background-color: #fff;
         height: 100%;
-        box-shadow: inset 4px 0px 4px -4px #777;
-        padding: 2px;
+        padding: 4px;
         opacity: 0.9;
     }
     @if $mobile {
@@ -43,6 +48,7 @@
     button,
     >div {
         margin-top: 10px;
+        border-radius: 10px;
         float: left;
         clear: both;
         height: 50px;

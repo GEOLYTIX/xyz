@@ -11,6 +11,7 @@ export default _xyz => {
       if(!entry.type
         || entry.type === 'numeric'
         || entry.type === 'integer'
+        || entry.type === 'text'
         || entry.type === 'textarea'){
         entry.title = entry.label;
         columns.push(entry);
@@ -43,17 +44,6 @@ export default _xyz => {
     });
 
     _xyz.tableview.updateTable(params.layer);
-
-    // params.layer.tableView.table.getRows().forEach(row => {
-    //   if (row.getData().qid === 86) row.toggleSelect();
-    // });
-
-    // params.layer.tableView.table.getRows()
-    //   .filter(row => row.getData().qid === 86)
-    //   .forEach(row => row.toggleSelect());
-
-
-
 
   };
 };

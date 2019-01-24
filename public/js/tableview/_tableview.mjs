@@ -12,16 +12,15 @@ export default _xyz => {
 
   _xyz.tableview.init = () => {
 
-    _xyz.tableview.container = document.querySelector('.tableview');
+    _xyz.tableview.container = document.querySelector('.tablecontainer');
 
-    tableview(_xyz);
+    //tableview(_xyz);
 
     _xyz.tableview.createTable({
       layer: _xyz.layers.list.COUNTRIES,
-      target: _xyz.tableview.contentWrap
+      target: _xyz.tableview.container
     });
-
-    
+   
 
   };
     

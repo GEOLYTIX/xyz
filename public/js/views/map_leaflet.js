@@ -113,4 +113,18 @@ function TableView(_xyz) {
     target: document.getElementById('xyz_table1')
   });
 
+  _xyz.locations.select_popup = location => {
+
+    let container = document.getElementById('location_info_container2');
+
+    container.innerHTML = '';
+
+    container.appendChild(location.info_table);
+
+    _xyz.layers.list.COUNTRIES.tableView.table.getRows()
+      .filter(row => row.getData().name === location.infoj[0].value)
+      .forEach(row => row.toggleSelect());
+
+  };
+
 }
