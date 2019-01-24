@@ -9,3 +9,12 @@ public/js/build/
 stats.json
 now
 env
+workspaces/aga.json
+workspaces/coles.json
+workspaces/dev.json
+workspaces/test.json
+workspaces/aga.json
+workspaces/brexit.json
+workspaces/tanaka.json
+workspaces/wh.json
+workspaces/aga.json

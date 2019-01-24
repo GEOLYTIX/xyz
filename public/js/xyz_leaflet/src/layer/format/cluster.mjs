@@ -74,7 +74,8 @@ export default (_xyz, layer) => () => {
     const cluster = e.target.response;
 
     const param = {
-      max_size: cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0)
+      max_size:
+        cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0)
     };
 
       // Create cat array for graduated theme.
@@ -218,7 +219,9 @@ export default (_xyz, layer) => () => {
 
       // Define iconSize base on the point size in relation to the max_size.
       let iconSize = layer.cluster_logscale ?
-        layer.style.markerMin + layer.style.markerMax / Math.log(param.max_size) * Math.log(point.properties.size) :
+        point.properties.count === 1 ?
+          layer.style.markerMin :
+          layer.style.markerMin + layer.style.markerMax / Math.log(param.max_size) * Math.log(point.properties.size) :
         point.properties.count === 1 ?
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / param.max_size * point.properties.size;

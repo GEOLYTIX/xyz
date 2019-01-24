@@ -166,12 +166,12 @@ function markerLetter(style) {//colorMarker, letter
     .attr('cy', 360)
     .attr('r', 250);
 
-  let text = svg
+  svg
     .append('text')
     .attr('x', 500)
-    .attr('y', 360)
+    .attr('y', 500)
     .style('text-anchor', 'middle')
-    .style('alignment-baseline', 'central')
+    //.style('alignment-baseline', 'middle')
     .style('font-weight', 600)
     .style('font-size', '470px')
     .style('font-family', 'sans-serif')

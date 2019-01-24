@@ -1,3 +1,5 @@
+import drawIsoline from './drawIsoline.mjs';
+
 export default (_xyz, layer) => {
 
   // Create cluster panel and add to layer dashboard.
@@ -109,6 +111,22 @@ export default (_xyz, layer) => {
       activate: _xyz.draw.catchment,
       finish: _xyz.draw.finish
     });
+
+  }
+
+
+  if(layer.edit.isoline) {
+    
+    drawIsoline(_xyz, layer);
+
+    _xyz.utils.createStateButton(_xyz, {
+      text: 'Isoline',
+      appendTo: layer.edit.panel,
+      layer: layer,
+      activate: _xyz.draw.isoline,
+      finish: _xyz.draw.finish
+    });
+  
   }
 
 };
