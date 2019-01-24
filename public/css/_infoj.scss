@@ -82,4 +82,13 @@
             }
         }
     }
+
+    .sample-circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px #999;
+        float: right;
+        margin-right: 10px;
+    }
 }

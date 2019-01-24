@@ -2,18 +2,21 @@ export default (_xyz, record, entry) => {
 
   let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: record.table });
 
-  let td = _xyz.utils.createElement({
-    tag: 'td',
-    appendTo: tr,
-    options: {
-      colSpan: '2'
-    },
-    style: {
-      borderBottom: 'solid 1px ' + (entry.style ? entry.style.color : record.color)
+  let td = _xyz.utils.createElement({ tag: 'td', style: {'paddingTop': '10px'}, appendTo: tr });
+
+  _xyz.utils.checkbox({
+    label: entry.name || 'Show additional geometries',
+    appendTo: td,
+    checked: !!entry.value,
+    onChange: e => {
+      e.target.checked ? e.target.parentNode.classList.add('changed') : e.target.parentNode.classList.remove('changed');
+      e.target.checked ? createCatchment(record, entry) : deleteCatchment(record, entry);
     }
   });
 
-  _xyz.utils.createElement({
+  td = _xyz.utils.createElement({tag: 'td', appendTo: tr});
+
+  /*_xyz.utils.createElement({
     tag: 'div',
     options: {
       className: 'btn_wide cursor noselect',
@@ -32,6 +35,19 @@ export default (_xyz, record, entry) => {
           
       }
     }
+  });*/
+  _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      classList: 'sample-circle'
+    },
+    style: {
+      'backgroundColor': entry.style && entry.style.fillColor ? _xyz.utils.hexToRGBA(entry.style.fillColor || entry.style.color, entry.style.fillOpacity || 1) : _xyz.utils.hexToRGBA(entry.style.color || record.color, entry.style.fillOpacity || 1),
+      'borderColor': entry.style && entry.style.color ? _xyz.utils.hexToRGBA(entry.style.color || record.color, entry.style.opacity || 1) : null,
+      'borderStyle': 'solid',
+      'borderWidth': _xyz.utils.setStrokeWeight(entry),
+    },
+    appendTo: td
   });
 
 
@@ -73,7 +89,6 @@ export default (_xyz, record, entry) => {
     xhr.send();
 
   }
-
 
   function deleteCatchment(record, entry) {
 

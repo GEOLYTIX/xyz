@@ -28,4 +28,6 @@ export {hexToRGBA} from './hexToRGBA.mjs';
 
 export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
+export {setStrokeWeight} from './setStrokeWeight.mjs';
+
 export const compose = (...fns) => () => fns.forEach(f=>f());
