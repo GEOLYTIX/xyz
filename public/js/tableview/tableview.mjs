@@ -6,18 +6,18 @@ export default _xyz => {
     y_el = 0,
     min_height;
 
-  let pad = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      title: 'Drag to unfold table view. Else double click.',
-      className: 'tablepad'
-    },
-    eventListener: {
-      event: 'dblclick',
-      funct: () => transition()
-    },
-    appendTo: _xyz.tableview.container
-  });
+  // let pad = _xyz.utils.createElement({
+  //   tag: 'div',
+  //   options: {
+  //     title: 'Drag to unfold table view. Else double click.',
+  //     className: 'tablepad'
+  //   },
+  //   eventListener: {
+  //     event: 'dblclick',
+  //     funct: () => transition()
+  //   },
+  //   appendTo: _xyz.tableview.container
+  // });
 
   let container = _xyz.utils.createElement({
     tag: 'div',

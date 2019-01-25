@@ -64,6 +64,7 @@
   -ms-user-select: none;
   user-select: none;
   position: absolute;
+  left: 0;
   background-color: #fff;
   height: 100%;
   padding: 4px;
@@ -1336,131 +1337,27 @@ input[type=range]::-moz-range-thumb {
 .tableview {
   position: absolute;
   overflow: hidden;
-  top: calc(100% - 16px);
-  right: 0;
+  bottom: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100px;
+  max-height: 100%;
+  padding-left: 58px;
+  height: 100px;
   z-index: 1001;
   background-color: #fff;
   box-shadow: 1px 0 1px #333; }
-  .tableview .tablepad {
-    width: 200px;
-    height: 12px;
-    background-color: #090;
-    opacity: 0.7;
-    border-radius: 8px;
-    margin: auto;
-    cursor: pointer;
-    margin-bottom: 6px;
-    box-shadow: 1px 1px 2px #333; }
-  .tableview .tabs {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    cursor: default;
-    background: white;
-    height: inherit;
-    box-shadow: 0 -0px 1px #777; }
-    .tableview .tabs .content-wrap {
-      position: relative;
-      cursor: default;
-      height: inherit; }
-      .tableview .tabs .content-wrap section {
-        display: none;
-        margin: 0 auto;
-        padding: 5px;
-        text-align: center;
-        height: inherit; }
-        .tableview .tabs .content-wrap section.content-current {
-          display: block;
-          animation: fadein 2s;
-          -webkit-animation: fadein 2s;
-          /* Safari and Chrome */ }
-        .tableview .tabs .content-wrap section .note {
-          font-size: 12px;
-          padding: 2px;
-          margin-top: 5px; }
-          .tableview .tabs .content-wrap section .note div {
-            display: inline; }
-          .tableview .tabs .content-wrap section .note .load_more {
-            margin-left: 3px;
-            color: #090;
-            cursor: pointer; }
-            .tableview .tabs .content-wrap section .note .load_more:hover {
-              text-shadow: 0px 1px 2px #777; }
-            .tableview .tabs .content-wrap section .note .load_more:active {
-              color: #333; }
-        .tableview .tabs .content-wrap section .table-preholder {
-          position: relative;
-          height: 100vh;
-          background: none; }
-        .tableview .tabs .content-wrap section .table-holder {
-          position: absolute;
-          top: 0;
-          left: 0; }
-        .tableview .tabs .content-wrap section p {
-          margin: 0;
-          padding: 0.75em 0;
-          color: rgba(40, 44, 42, 0.05);
-          font-weight: 900;
-          font-size: 4em;
-          line-height: 1; }
-        .tableview .tabs .content-wrap section .checkbox {
-          padding: 5px 5px 10px 0 !important;
-          font-size: 13px;
-          width: 150px;
-          display: inline-block !important;
-          padding-left: 15px;
-          margin-left: 10px; }
-    .tableview .tabs nav {
-      text-align: center; }
-      .tableview .tabs nav ul {
-        position: relative;
-        display: flex;
-        list-style: none;
-        flex-flow: row wrap;
-        justify-content: center; }
-        .tableview .tabs nav ul li {
-          position: relative;
-          z-index: 1;
-          display: block;
-          margin: 0;
-          padding: 5px;
-          text-align: center;
-          -webkit-flex: 1;
-          -moz-flex: 1;
-          -ms-flex: 1;
-          flex: 1; }
-          .tableview .tabs nav ul li.tab-current a {
-            color: #090;
-            -webkit-transform: translate3d(0, 2px, 0);
-            transform: translate3d(0, 2px, 0);
-            line-height: 1.2; }
-          .tableview .tabs nav ul li a {
-            position: relative;
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #74777b;
-            line-height: 1;
-            -webkit-transition: color 0.3s, -webkit-transform 0.3s;
-            transition: color 0.3s, transform 0.3s; }
-            .tableview .tabs nav ul li a:focus {
-              outline: none; }
-            .tableview .tabs nav ul li a span {
-              vertical-align: middle;
-              font-weight: 700; }
-        .tableview .tabs nav ul li:last-child div {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background: #090;
-          content: '';
-          -webkit-transition: -webkit-transform 0.3s;
-          transition: transform 0.3s; }
+  .tableview .resize_bar {
+    height: 5px;
+    background-color: lightgreen; }
+    .tableview .resize_bar:hover {
+      cursor: row-resize; }
+  .tableview .nav_bar {
+    height: 50px;
+    background-color: lightpink; }
+  .tableview .table {
+    position: absolute;
+    width: calc(100% - 58px);
+    height: calc(100% - 55px); }
 
 @keyframes fadein {
   from {

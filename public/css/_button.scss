@@ -28,6 +28,7 @@
     user-select: none;
     @if $desktop {
         position: absolute;
+        left: 0;
         background-color: #fff;
         height: 100%;
         padding: 4px;
