@@ -36,14 +36,18 @@ export default _xyz => {
       autoResize: true,
       selectable: true,
       resizableRows: true,
-      rowClick: (e, row) => {
+      height: 'calc(100% - 55px)'
+      // rowClick: (e, row) => {
 
-        console.log(row);
+      //   console.log(row);
 
-      }
+      // }
     });
 
-    _xyz.tableview.updateTable(params.layer);
+
+    _xyz.tableview.updateTable(_xyz.layers.list.COUNTRIES);
+
+    
 
   };
 };

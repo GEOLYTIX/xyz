@@ -39,12 +39,12 @@
         left: 10px;
     }
     div:hover {
-        background: $glxgreen;
-        color: #fff;
+        // background: $glxgreen;
+        // color: #fff;
         cursor: pointer;
-        a {
-            color: #fff;
-        }
+        // a {
+        //     color: #fff;
+        // }
     }
     button,
     >div {
@@ -80,12 +80,12 @@
             opacity: 0.3;
         }
         &:hover:enabled {
-            background: $glxgreen;
-            color: #fff;
+            // background: $glxgreen;
+            // color: #fff;
             cursor: pointer;
-            a {
-                color: #fff;
-            }
+            // a {
+            //     color: #fff;
+            // }
         }
     }
 }

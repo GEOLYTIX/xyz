@@ -40,11 +40,7 @@
   .btn_column.lv1 {
     box-shadow: inset 5px 0 4px -4px #777; }
   .btn_column div:hover {
-    background: #090;
-    color: #fff;
     cursor: pointer; }
-    .btn_column div:hover a {
-      color: #fff; }
   .btn_column button,
   .btn_column > div {
     margin-top: 10px;
@@ -76,12 +72,7 @@
       opacity: 0.3; }
     .btn_column button:hover:enabled,
     .btn_column > div:hover:enabled {
-      background: #090;
-      color: #fff;
       cursor: pointer; }
-      .btn_column button:hover:enabled a,
-      .btn_column > div:hover:enabled a {
-        color: #fff; }
 
 .btn_header {
   font-size: 25px;
@@ -148,25 +139,39 @@
   overflow: hidden;
   bottom: 0;
   width: 100%;
-  min-height: 100px;
+  min-height: 40px;
   max-height: 100%;
   padding-left: 58px;
-  height: 100px;
+  height: 40px;
   z-index: 1001;
   background-color: #fff;
   box-shadow: 1px 0 1px #333; }
   .tableview .resize_bar {
-    height: 5px;
-    background-color: lightgreen; }
+    height: 5px; }
     .tableview .resize_bar:hover {
+      background-color: #f9fbe7;
       cursor: row-resize; }
   .tableview .nav_bar {
-    height: 50px;
-    background-color: lightpink; }
+    height: 50px; }
   .tableview .table {
     position: absolute;
     width: calc(100% - 58px);
     height: calc(100% - 55px); }
+  .tableview nav {
+    text-align: center; }
+    .tableview nav ul {
+      display: flex;
+      list-style: none;
+      flex-flow: row wrap;
+      justify-content: center; }
+      .tableview nav ul li {
+        padding: 5px;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1; }
+        .tableview nav ul li.tab-current {
+          border-bottom: 3px solid #090; }
 
 @keyframes fadein {
   from {
@@ -550,10 +555,10 @@
   cursor: pointer; }
 
 .tabulator-row.tabulator-selected {
-  background-color: #9ABCEA; }
+  background-color: #f4ff81; }
 
 .tabulator-row.tabulator-selected:hover {
-  background-color: #769BCC;
+  background-color: #c6ff00;
   cursor: pointer; }
 
 .tabulator-row.tabulator-moving {
