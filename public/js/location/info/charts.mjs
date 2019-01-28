@@ -17,6 +17,8 @@ export default (_xyz, group) => {
   const labels = group.fields.map(field => field.label);
 
   const data = group.fields.map(field => field.value);
+
+  const displayValues = group.fields.map(field => field.displayValue);
       
   new Chart(canvas, {
     type: group.chart.type || 'line',
@@ -35,7 +37,9 @@ export default (_xyz, group) => {
         display: group.chart.legend
       },
       scales: {
-        yAxes: [
+        // no axis for pie or doughnut charts
+        yAxes: (group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : [
+          // axis for all other charts
           {
             ticks: {
               callback: (label, index, labels) => {
@@ -48,6 +52,14 @@ export default (_xyz, group) => {
             }
           }
         ]
+      },
+      tooltips: {
+        callbacks: {
+          title: () => '',
+          label: (tooltipItem, data) => {
+            return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
+          }
+        }
       }
     }
   });

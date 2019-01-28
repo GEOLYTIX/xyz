@@ -68,7 +68,7 @@ export default _xyz => {
 
       let
         params = hook.split('!'),
-        layer = _xyz.layers.list[params[0]];
+        layer = _xyz.layers.list[decodeURIComponent(params[0])];
 
       _xyz.locations.select({
         locale: _xyz.locale,

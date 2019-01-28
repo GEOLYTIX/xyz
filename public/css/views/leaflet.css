@@ -319,13 +319,14 @@
       font-size: 15px;
       padding-right: 5px; }
     .infojTable .table-section.expandable {
-      max-height: 35px;
+      max-height: 28px;
       overflow: hidden;
       transition: max-height 0.3s ease-out; }
       .infojTable .table-section.expandable .t-expander::before {
         content: "expand_more"; }
     .infojTable .table-section.expanded {
-      max-height: 2500px; }
+      max-height: none;
+      overflow: auto; }
       .infojTable .table-section.expanded .t-expander::before {
         content: "expand_less"; }
   .infojTable .sample-circle {

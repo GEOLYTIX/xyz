@@ -1,0 +1,896 @@
+{
+    "title": "XYZ Geodata",
+    "locate": {},
+    "locales": {
+        "UK": {
+            "bounds": {
+                "north": 62,
+                "east": 5,
+                "south": 48,
+                "west": -13
+            },
+            "minZoom": 6,
+            "maxZoom": 17,
+            "layers": {
+                "base": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "label": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Retail Points": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "geodata.uk_glx_retail_points_view",
+                    "geom": "geom_4326",
+                    "qID": "id",
+                    "cluster_label": "store_name",
+                    "meta": "<p>Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths, Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose, Wholefoods. Please download for free and use this data openly.</p><br><p><a href=\"https://drive.google.com/file/d/0B1GCK8cPXzg-MzdEVnZmV2hQTDQ\" target=\"_blank\">Download a zip archive containing the latest version of our Open Retail Points data pack.</a></p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/a/geolytix.co.uk/file/d/0B1GCK8cPXzg-ZUl6MDFUUkFBVEU\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
+                    "infoj": [
+                        {
+                            "label": "Retailer",
+                            "field": "retailer",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Society",
+                            "field": "society",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Fascia",
+                            "field": "fascia",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Store Name",
+                            "field": "store_name",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Address",
+                            "field": "add_one",
+                            "type": "text"
+                        },
+                        {
+                            "field": "add_two",
+                            "type": "text"
+                        },
+                        {
+                            "field": "town",
+                            "type": "text"
+                        },
+                        {
+                            "field": "locality",
+                            "type": "text"
+                        },
+                        {
+                            "field": "postcode",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Open Date",
+                            "field": "open_date",
+                            "fieldfx": "(CASE WHEN open_date = 0 THEN NULL ELSE substring(open_date::text from 7 for 2) || '/' || substring(open_date::text from 5 for 2) || '/' || substring(open_date::text from 1 for 4) END)",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Size",
+                            "postfix": " ft²",
+                            "field": "size_sqft",
+                            "type": "text",
+                            "inline": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#93827F"
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#93827F"
+                        },
+                        "themes": {
+                            "Retailers": {
+                                "type": "categorized",
+                                "field": "retailer",
+                                "other": true,
+                                "cat": {
+                                    "Aldi": {
+                                        "fillColor": "#ffbf45",
+                                        "label": "Aldi",
+                                        "layers": {
+                                            "0.875": "#fa6f08",
+                                            "0.75": "#ef3c11",
+                                            "0.625": "#001f79",
+                                            "0.5": "#02bee3",
+                                            "0.25": "ffffff"
+                                        }
+                                    },
+                                    "As Nature Intended": {
+                                        "fillColor": "#9f9984",
+                                        "label": "As Nature Intended",
+                                        "layers": {
+                                            "0.325": "#ffffff"
+                                        }
+                                    },
+                                    "Asda": {
+                                        "fillColor": "#83b923",
+                                        "label": "Asda",
+                                        "layers": {
+                                            "0.5": "#ffffff",
+                                            "0.375": "#fdb839"
+                                        }
+                                    },
+                                    "Booths": {
+                                        "fillColor": "#a12629",
+                                        "label": "Booths",
+                                        "layers": {
+                                            "0.5": "#ffffff",
+                                            "0.375": "#a12629"
+                                        }
+                                    },
+                                    "Budgens": {
+                                        "fillColor": "#EEEEE0",
+                                        "label": "Budgens",
+                                        "layers": {
+                                            "0.5": "#679a00",
+                                            "0.375": "#cccb01"
+                                        }
+                                    },
+                                    "Co-op": {
+                                        "fillColor": "#0b1e60",
+                                        "label": "Co-op",
+                                        "layers": {
+                                            "0.625": "#ffffff",
+                                            "0.5": "#a3d227"
+                                        }
+                                    },
+                                    "Costco": {
+                                        "fillColor": "#005daa",
+                                        "label": "Costco",
+                                        "layers": {
+                                            "0.875": "#ffffff",
+                                            "0.625": "#e31837"
+                                        }
+                                    },
+                                    "Farmfoods": {
+                                        "fillColor": "#77a632",
+                                        "label": "Farmfoods",
+                                        "layers": {
+                                            "0.75": "#f7f900",
+                                            "0.5": "#ff0000"
+                                        }
+                                    },
+                                    "Heron": {
+                                        "fillColor": "#ffffff",
+                                        "label": "Heron",
+                                        "layers": {
+                                            "0.75": "#313590",
+                                            "0.25": "#ffcf00"
+                                        }
+                                    },
+                                    "Iceland": {
+                                        "fillColor": "#ed1b2d",
+                                        "label": "Iceland",
+                                        "layers": {
+                                            "0.75": "#f2552b",
+                                            "0.5": "#f89128",
+                                            "0.25": "#ffffff"
+                                        }
+                                    },
+                                    "Jack Fultons": {
+                                        "fillColor": "#0168aa",
+                                        "label": "Jack Fultons",
+                                        "layers": {
+                                            "0.325": "#ffffff"
+                                        }
+                                    },
+                                    "Jacks": {
+                                        "fillColor": "#f02f26",
+                                        "label": "Jacks",
+                                        "layers": {
+                                            "0.75": "#ffffff",
+                                            "0.325": "#0055a8"
+                                        }
+                                    },
+                                    "Lidl": {
+                                        "fillColor": "#d61408",
+                                        "label": "Lidl",
+                                        "layers": {
+                                            "0.875": "#ffe502",
+                                            "0.5": "#002d7a",
+                                            "0.25": "#d61408"
+                                        }
+                                    },
+                                    "Makro": {
+                                        "fillColor": "#00457a",
+                                        "label": "Makro",
+                                        "layers": {
+                                            "0.325": "#ffe811"
+                                        }
+                                    },
+                                    "Marks and Spencer": {
+                                        "fillColor": "#0a0d10",
+                                        "label": "Marks & Spencer",
+                                        "layers": {
+                                            "0.5": "#def036",
+                                            "0.25": "#0a0d10"
+                                        }
+                                    },
+                                    "Morrisons": {
+                                        "fillColor": "#ffe133",
+                                        "label": "Morrisons",
+                                        "layers": {
+                                            "0.5": "#00614e"
+                                        }
+                                    },
+                                    "Sainsburys": {
+                                        "fillColor": "#ee8a00",
+                                        "label": "Sainsbury's",
+                                        "layers": {
+                                            "0.625": "#ffffff",
+                                            "0.325": "#ee8a00"
+                                        }
+                                    },
+                                    "Tesco": {
+                                        "fillColor": "#0055a8",
+                                        "label": "Tesco",
+                                        "layers": {
+                                            "0.75": "#ffffff",
+                                            "0.325": "#f02f26"
+                                        }
+                                    },
+                                    "Waitrose": {
+                                        "fillColor": "#81ae37",
+                                        "label": "Waitrose",
+                                        "layers": {
+                                            "0.325": "#ffffff"
+                                        }
+                                    },
+                                    "Whole Foods Market": {
+                                        "fillColor": "#00674b",
+                                        "label": "Whole Foods Market",
+                                        "layers": {
+                                            "0.875": "#ffffff",
+                                            "0.5": "#00674b"
+                                        }
+                                    }
+                                }
+                            },
+                            "Shop Size": {
+                                "type": "categorized",
+                                "field": "size_min",
+                                "cat": {
+                                    "0": {
+                                        "label": "Less than 3,013 ft² (280m²)",
+                                        "fillColor": "#98CBB4"
+                                    },
+                                    "3013": {
+                                        "label": "Between 3,013 and 15,069 ft² (280 - 1,400 m²)",
+                                        "fillColor": "#028090"
+                                    },
+                                    "15069": {
+                                        "label": "Between 15,069 and 30,138 ft² (1,400 - 2,800 m²)",
+                                        "fillColor": "#D95D39"
+                                    },
+                                    "30138": {
+                                        "label": "Over 30,138 ft² (2,800 m²)",
+                                        "fillColor": "#5E0B15"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "London": {
+            "bounds": {
+                "north": 51.686,
+                "east": 0.236,
+                "south": 51.28,
+                "west": -0.489
+            },
+            "minZoom": 10,
+            "maxZoom": 17,
+            "view": {
+                "lat": 51.5073,
+                "lng": -0.12755
+            },
+            "layers": {
+                "base": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "label": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Seamless": {
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "table": "geodata.london_glx_seamless_view",
+                    "geom_3857" :"geom_3857",
+                    "qID": "id",
+                    "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/file/d/0B1GCK8cPXzg-TGdzNzA4VUY4TGs\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
+                    "infoj": [
+                        {
+                            "label": "Suburb",
+                            "field": "sub_name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Suburb Population",
+                            "field": "sub_pop",
+                            "type": "numeric",
+                            "inline": true,
+                            "level": 2
+                        },
+                        {
+                            "label": "Town",
+                            "field": "town_name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Town Population",
+                            "field": "town_pop",
+                            "type": "numeric",
+                            "inline": true,
+                            "level" : 2
+                        },
+                        {
+                            "label": "Shop Town",
+                            "field": "shop_town",
+                            "type": "text",
+                            "inline": true
+                        }
+                    ]
+                },
+                "Education": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "geodata.london_glx_education_view",
+                    "geom" :"geom_4326",
+                    "qID": "id",
+                    "cluster_label": "edu_name",
+                    "cluster_cat": "edu_type",
+                    "meta": "<p>All University buildings &amp; entrances digitised and attributed, with student counts. All primary and secondary schools both private and state. Includes school roll data, exam results and pupil demographics. Includes official codes for onward linking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/a/geolytix.co.uk/file/d/0Bxv47xHgfuJ4S0hOaVMyMnRTcmM\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
+                    "infoj": [
+                        {
+                            "label": "Type",
+                            "field": "edu_type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Service Type",
+                            "field": "serv_type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Name",
+                            "field": "edu_name",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Address",
+                            "field": "add_one",
+                            "type": "text"
+                        },
+                        {
+                            "field": "add_two",
+                            "type": "text"
+                        },
+                        {
+                            "field": "town",
+                            "type": "text"
+                        },
+                        {
+                            "field": "postcode",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Capacity",
+                            "field": "capacity",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Management",
+                            "field": "sch_run",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Deprivation",
+                            "field": "deprivatio",
+                            "type": "text",
+                            "inline": true,
+                            "title": "Providers are allocated to one of five deprivation bands, based on quantiles calculated from the IDACI ranks of all 2001 LSOAs."
+                        },
+                        {
+                            "label": "Free School Meal",
+                            "field": "percentfsm",
+                            "type": "text",
+                            "inline": true,
+                            "postfix": " %"
+                        },
+                        {
+                            "label": "Inspection Rating",
+                            "field": "inspect_ra",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Inspection Date",
+                            "field": "inspect_da",
+                            "type": "text",
+                            "inline": true
+                        }
+                    ],
+                    "style": {
+                        "themes": {
+                            "Type": {
+                                "type": "categorized",
+                                "field": "edu_type",
+                                "other": true,
+                                "cat": {
+                                    "Early Years": {
+                                        "fillColor": "#ff0000",
+                                        "label": "Early Years"
+                                    },
+                                    "School": {
+                                        "fillColor": "#00ff00",
+                                        "label": "School"
+                                    },
+                                    "Further Education": {
+                                        "fillColor": "#0000ff",
+                                        "label": "Further Education"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "Retail Places": {
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "table": "geodata.london_glx_retail_place_outline_view",
+                    "geom_3827": "geom_3857",
+                    "qID": "id",
+                    "meta": "<style>.infobox__legend .box {width: 30px;height: 15px;}#major_city_centre {background-color: #ff0000;opacity: 0.7;border: 2px solid #980000;}#city_centre {background-color: #ff0000;opacity: 0.65;border: 2px solid #980000;}#large_town_centre {background-color: #ff0000;opacity: 0.6;border: 2px solid #980000;}#major_urban_centre {background-color: #ff0000;opacity: 0.55;border: 2px solid #980000;}#town_centre {background-color: #ff0000;opacity: 0.45;border: 2px solid #980000;}#urban_centre {background-color: #ff0000;opacity: 0.4;border: 2px solid #980000;}#small_town_centre {background-color: #ff0000;opacity: 0.35;border: 2px solid #980000;}#village_centre {background-color: #ff0000;opacity: 0.3;border: 2px solid #980000;}#regional_sc {background-color: #ff7f00;opacity: 0.7;border: 2px solid #cb6200;}#outlet_centre {background-color: #ff7f00;opacity: 0.6;border: 2px solid #cb6200;}#shopping_park {background-color: #ff7f00;opacity: 0.5;border: 2px solid #cb6200;}#retail_park {background-color: #ff7f00;opacity: 0.4;border: 2px solid #cb6200;}#leisure_park {background-color: #ff7f00;opacity: 0.3;border: 2px solid #cb6200;}#local_hub {background-color: #faf43e;opacity: 0.7;border: 2px solid #d0bc2f;}#large_parade {background-color: #faf43e;opacity: 0.6;border: 2px solid #d0bc2f;}#parade {background-color: #faf43e;opacity: 0.5;border: 2px solid #d0bc2f;}#weak_parade {background-color: #faf43e;opacity: 0.4;border: 2px solid #d0bc2f;}.infobox__legend {font-family: ffmark;font-size: 12px;}.infobox__legend .active {font-family: ffmark_bold, sans-serif;}.infobox__legend td:nth-child(even){padding:5px}.pitch_score {width: 100%;border-collapse: collapse;}.pitch_score .hex {height: 30px;width: 30px;}.pitch_score .hex_dc2520 {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%23dc2520%22%20opacity%3D%220.5%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_c1203c {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%23c1203c%22%20opacity%3D%220.45%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_a51b58 {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%23a51b58%22%20opacity%3D%220.4%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_8a1774 {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%238a1774%22%20opacity%3D%220.35%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_6e1290 {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%236e1290%22%20opacity%3D%220.3%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_520dac {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%23520dac%22%20opacity%3D%220.25%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_3709c8 {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%233709c8%22%20opacity%3D%220.2%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_1b04e4 {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%231b04e4%22%20opacity%3D%220.15%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}.pitch_score .hex_0000ff {background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%3Cpath%20fill%3D%22%230000ff%22%20opacity%3D%220.1%22%20d%3D%22M50%2010L85%2030L85%2070L50%2090L15%2070L15%2030Z%22%3E%3C/path%3E%0A%3C/svg%3E);background-size: contain;}</style><div id=\"gd_retail_places\" class=\"infobox\"><p>More than 20k scored, profiled and named polygons detailing where people shop in the UK, and catchment area demographics. Ideal for locating new sites and understanding micro location performance. Additionally pitch can be purchased along side this pack.</p><br><p><a href=\"https://drive.google.com/open?id=0B5UPsNN3XERXUjgtNW1GTFFZSUU\" target=\"_blank\">Download a sub-set of four hundred centres; scored, profiled and named polygons detailing where people shop in the UK. Note that the Open version requires attribution of the Ordnance Survey, Royal Mail, and GEOLYTIX.</a></p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0B1GCK8cPXzg-OWE4Q3Nrdzk3d2M\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p><br><p class=\"legend_title\">Retail Place</p><br><table class=\"infobox__legend\"><tbody><tr><td><div id=\"major_city_centre\" class=\"box\"></div></td><td><span>Major City Centre</span></td><td><div id=\"city_centre\" class=\"box\"></div></td><td><span>City Centre</span></td></tr><tr><td><div id=\"large_town_centre\" class=\"box\"></div></td><td><span>Large Town Centre</span></td><td><div id=\"major_urban_centre\" class=\"box\"></div></td><td><span>Major Urban Centre</span></td></tr><tr><td><div id=\"town_centre\" class=\"box\"></div></td><td><span>Town Centre</span></td><td><div id=\"urban_centre\" class=\"box\"></div></td><td><span>Urban Centre</span></td></tr><tr><td><div id=\"small_town_centre\" class=\"box\"></div></td><td><span>Small Town Centre</span></td><td><div id=\"village_centre\" class=\"box\"></div></td><td><span>Village Centre</span></td></tr><tr><td><div id=\"regional_sc\" class=\"box\"></div></td><td><span>Regional SC</span></td><td><div id=\"outlet_centre\" class=\"box\"></div></td><td><span>Outlet Centre</span></td></tr><tr><td><div id=\"shopping_park\" class=\"box\"></div></td><td><span>Shopping Park</span></td><td><div id=\"retail_park\" class=\"box\"></div></td><td><span>Retail Park</span></td></tr><tr><td><div id=\"leisure_park\" class=\"box\"></div></td><td><span>Leisure Park</span></td><td><div id=\"local_hub\" class=\"box\"></div></td><td><span>Local Hub</span></td></tr><tr><td><div id=\"large_parade\" class=\"box\"></div></td><td><span>Large Parade</span></td><td><div id=\"parade\" class=\"box\"></div></td><td><span>Parade</span></td></tr><tr><td><div id=\"weak_parade\" class=\"box\"></div></td><td><span>Weak Parade</span></td><td><div class=\"box\"></div></td><td><span></span></td></tr></tbody></table><br><p class=\"legend_title\">Pitch Score</p><table class=\"pitch_score\"><tbody><tr><td><div class=\"hex hex_dc2520\"></div></td><td><div class=\"hex hex_c1203c\"></div></td><td><div class=\"hex hex_a51b58\"></div></td><td><div class=\"hex hex_8a1774\"></div></td><td><div class=\"hex hex_6e1290\"></div></td><td><div class=\"hex hex_520dac\"></div></td><td><div class=\"hex hex_3709c8\"></div></td><td><div class=\"hex hex_1b04e4\"></div></td><td><div class=\"hex hex_0000ff\"></div></td></tr></tbody></table><div><span class=\"legend_text\">90%</span><span class=\"legend_text\" style=\"float:right\">10%</span></div><span class=\"legend_text\">Comparitive strength within Retail Place area.</span></div>",
+                    "infoj": [
+                        {
+                            "label": "Name",
+                            "field": "rp_name",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Postcode",
+                            "field": "ref_pc",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Type",
+                            "field": "rp_type",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Comparison",
+                            "field": "comp_strgh",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ ",
+                            "postfix": "asdf",
+                            "title": "Comparison strength which is modelled spend per week on clothing and home for larger Retail Places"
+                        },
+                        {
+                            "label": "Est. Units",
+                            "field": "est_units",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "label": "Est. Brands",
+                            "field": "est_brands",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "label": "Classy Brassy",
+                            "field": "classbrass",
+                            "type": "numeric",
+                            "inline": true,
+                            "title": "A demographic scoring of the retailers present. ‘Classy’ (+1) will be full of inspirational brands while ‘brassy’ (-1) will have a large number of discounters for the largest Retail Places."
+                        },
+                        {
+                            "label": "Retail Split",
+                            "type": "group",
+                            "expanded": true,
+                            "chart": {
+                                "type": "pie",
+                                "backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263"],
+                                "borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263"]
+                            }
+                        },
+                        {
+                            "group": "Retail Split",
+                            "label": "Comparison",
+                            "field": "comparison",
+                            "fieldfx": "comparison*100",
+                            "type": "numeric",
+                            "inline": true,
+                            "postfix": " %"
+                        },
+                        {
+                            "group": "Retail Split",
+                            "label": "Convenience",
+                            "field": "conv",
+                            "fieldfx": "conv*100",
+                            "type": "numeric",
+                            "inline": true,
+                            "postfix": " %"
+                        },
+                        {
+                            "group": "Retail Split",
+                            "label": "Food, Beverage, Leisure",
+                            "field": "fbl",
+                            "fieldfx": "fbl*100",
+                            "type": "numeric",
+                            "inline": true,
+                            "postfix": " %"
+                        },
+                        {
+                            "group": "Retail Split",
+                            "label": "Services",
+                            "field": "services",
+                            "fieldfx": "services*100",
+                            "type": "numeric",
+                            "inline": true,
+                            "postfix": " %"
+                        }
+                    ]
+                },
+                "Output Area": {
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "table": "geodata.london_glx_output_area_5m_view",
+                    "qID": "id",
+                    "meta": "",
+                    "infoj": [
+                        {
+                            "label": "Urbanity Level",
+                            "field": "urbanity",
+                            "type": "numeric",
+                            "inline": true,
+                            "postfix": " of 9"
+                        },
+                        {
+                            "label": "Urbanity Text",
+                            "field": "urbanitytext",
+                            "fieldfx": "CASE urbanity WHEN 1 THEN 'Major Centre' WHEN 2 THEN 'Major Suburb' WHEN 3 THEN 'Very High Density' WHEN 4 THEN 'High Density' WHEN 5 THEN 'Medium Density' WHEN 6 THEN 'Low Density' WHEN 7 THEN 'Accessible Rural' WHEN 8 THEN 'Rural' WHEN 9 THEN 'Ultra Rural' ELSE NULL END",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Total income per month",
+                            "field": "totinc_pm",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Total rent per month",
+                            "field": "totrent_pm",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Total mortgage payment per month",
+                            "field": "totmort_pm",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Total disposable income per month",
+                            "field": "totdis_pm",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Average yearly income per household",
+                            "field": "avginc_yrh",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Average monthly income per household",
+                            "field": "avginc_pmh",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Average monthly disposable income per household",
+                            "field": "avgdis_pmh",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Average monthly mortgage payment per month",
+                            "field": "avgmort_pm",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Average rent payment per month",
+                            "field": "avgrent_pm",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "Population",
+                            "type": "group",
+                            "chart": {
+                                "type": "line"
+                            }
+                        },
+                        {
+                            "label": "Households",
+                            "type": "group",
+                            "chart": {
+                                "type": "line"
+                            }
+                            
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2011",
+                            "field": "pop_11",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2011",
+                            "field": "hhd_11",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2015",
+                            "field": "pop_15",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2015",
+                            "field": "hhd_15",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2016",
+                            "field": "pop_16",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2016",
+                            "field": "hhd_16",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2017",
+                            "field": "pop_17",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2017",
+                            "field": "hhd_17",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2018",
+                            "field": "pop_18",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2018",
+                            "field": "hhd_18",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2019",
+                            "field": "pop_19",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2019",
+                            "field": "hhd_19",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2020",
+                            "field": "pop_20",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2020",
+                            "field": "hhd_20",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2021",
+                            "field": "pop_21",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2021",
+                            "field": "hhd_21",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Population",
+                            "label": "2022",
+                            "field": "pop_22",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "group": "Households",
+                            "label": "2022",
+                            "field": "hhd_22",
+                            "type": "numeric",
+                            "inline": true
+                        },
+                        {
+                            "label": "Weekly Spend on Grocery",
+                            "type": "group",
+                            "expanded": true
+                        },
+                        {
+                            "group": "Weekly Spend on Grocery",
+                            "label": "Total",
+                            "field": "dg_total",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "group": "Weekly Spend on Grocery",
+                            "label": "Total without online",
+                            "field": "dg_spend",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ ",
+                            "title": "Weekly spend on grocery in £ (food demand minus online food spend)"
+                        },
+                        {
+                            "group": "Weekly Spend on Grocery",
+                            "label": "Grocery Share",
+                            "type": "group",
+                            "expanded": true
+                        },
+                        {
+                            "group": "Grocery Share",
+                            "label": "Main",
+                            "field": "dg_main",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "group": "Grocery Share",
+                            "label": "Convenience",
+                            "field": "dg_conv",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "group": "Grocery Share",
+                            "label": "Online",
+                            "field": "dg_online",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "group": "Grocery Share",
+                            "label": "Kiosk",
+                            "field": "dg_kiosk",
+                            "type": "numeric",
+                            "inline": true,
+                            "prefix": "£ "
+                        },
+                        {
+                            "label": "oac_super",
+                            "field": "oac_super",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "oac_group",
+                            "field": "oac_group",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "oac_sub",
+                            "field": "oac_sub",
+                            "type": "text",
+                            "inline": true
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

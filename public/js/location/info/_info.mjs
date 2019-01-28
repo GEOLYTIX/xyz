@@ -58,10 +58,26 @@ export default (_xyz, record) => {
     // Assign location object to hold info groups.
     record.location.infogroups = {};
 
+    // Iterate through info fields to fill displayValue property
+    // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
+    Object.values(record.location.infoj).forEach(entry => {
+      // Determine the user-friendly string representation of the value
+      entry.displayValue =
+      entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
+        entry.type === 'integer' ? parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
+          entry.type === 'date' ? _xyz.utils.formatDate(entry.value) :
+            entry.type === 'datetime' ? _xyz.utils.formatDateTime(entry.value) :
+              entry.value;
+    
+      // Add pre- or postfix if specified
+      if(entry.prefix)  entry.displayValue = entry.prefix + entry.displayValue;
+      if(entry.postfix) entry.displayValue = entry.displayValue + entry.postfix;
+    });
+    
     // Iterate through info fields and add to info table.
     Object.values(record.location.infoj).forEach(entry => {
 
-    // Create a new table row for the entry.
+      // Create a new table row for the entry.
       if (!entry.group) entry.row = _xyz.utils.createElement({
         tag: 'tr',
         options: {
@@ -150,16 +166,13 @@ export default (_xyz, record) => {
       // Create controls for editable fields.
       if (entry.edit && !entry.fieldfx) return edit(_xyz, record, entry);
 
-      if (entry.type === 'html') return entry.val.innerHTML = entry.value;
-
-      // Set field value.
-      entry.val.textContent =
-      entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
-        entry.type === 'integer' ? parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
-          entry.type === 'date' ? _xyz.utils.formatDate(entry.value) :
-            entry.type === 'datetime' ? _xyz.utils.formatDateTime(entry.value) :
-              entry.value;
-
+      if (entry.type === 'html') {
+        // Directly set the HTML if raw HTML was specified
+        return entry.val.innerHTML = entry.value;
+      } else {
+        // otherwise use the displayValue
+        return entry.val.textContent = entry.displayValue;
+      }
     });
 
   };

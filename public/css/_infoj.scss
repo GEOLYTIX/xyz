@@ -68,7 +68,7 @@
         }
         
         &.expandable {
-            max-height: 35px;
+            max-height: 28px;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .t-expander::before {
@@ -76,7 +76,8 @@
             }
         }
         &.expanded {
-            max-height: 2500px;
+            max-height: none;
+            overflow: auto;
             .t-expander::before {
                content: "expand_less"
             }
