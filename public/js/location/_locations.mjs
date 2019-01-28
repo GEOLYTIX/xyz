@@ -51,6 +51,8 @@ export default _xyz => {
 
       // Remove all geometries associated to the location.
       record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
+      // And add additional geometries
+      record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
   
       // Delete the location.
       delete record.location;
