@@ -33,7 +33,7 @@
                     "dbs": "XYZ",
                     "table": "dev.natural_earth_countries",
                     "mvt_cache": true,
-                    "tableView": {},
+                    "table_view": {},
                     "qID": "id",
                     "infoj": [
                         {
@@ -536,8 +536,7 @@
                         "8": null,
                         "9": "dev.retailplaces"
                     },
-                    "tab": true,
-                    "tableView": {},
+                    "table_view": {},
                     "mvt_cache": true,
                     "mvt_fields": [
                         "rp_type",
@@ -798,8 +797,7 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
-                    "tableView": {},
-                    "tab": true,
+                    "table_view": {},
                     "edit": {
                         "point": true,
                         "delete": true

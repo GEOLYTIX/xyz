@@ -8,22 +8,79 @@ export default _xyz => {
 
   utils(_xyz);
 
+  _xyz.tableview.container = document.getElementById('tableview');
+
+  _xyz.tableview.resize_bar = _xyz.tableview.container.querySelector('.resize_bar');
+    
+  _xyz.tableview.nav_bar = _xyz.tableview.container.querySelector('.nav_bar > ul');
+
   _xyz.tableview.init = () => {
 
-    _xyz.tableview.container = document.getElementById('tableview');
+    _xyz.tableview.nav_bar.innerHTML = '';
 
-    _xyz.tableview.resize_bar = _xyz.tableview.container.querySelector('.resize_bar');
-    
-    _xyz.tableview.nav_bar = _xyz.tableview.container.querySelector('.nav_bar');
+
+    if (Object.values(_xyz.layers.list).some(layer => layer.table_view)) {
+
+      _xyz.map_dom.style.height = 'calc(100% - 40px)';
+      _xyz.map.invalidateSize();
+      _xyz.tableview.container.style.display = 'block';
+
+    } else {
+
+      _xyz.map_dom.style.height = '100%';
+      _xyz.map.invalidateSize();
+      _xyz.tableview.container.style.display = 'none';
+
+      return;
+
+    }
+
+
+
+
+
+    Object.values(_xyz.layers.list).map(layer => {
+      if (layer.table_view) {
+
+        
+        _xyz.utils.createElement({
+          tag: 'li',
+          options: {
+            textContent: layer.name,
+            classList: 'Tab cursor noselect'
+          },
+          // style: {
+          //   display: (data.length < 99 ? 'none' : 'inline')
+          // },
+          eventListener: {
+            event: 'click',
+            funct: e => {
+              // _xyz.tableview.addData(layer);
+
+              Object.values(_xyz.tableview.nav_bar.children).forEach(tab => tab.classList.remove('tab-current'));
+
+              e.target.classList.add('tab-current');
+            }
+          },
+          appendTo: _xyz.tableview.nav_bar
+        });
+        
+      }
+    });
+
+    Object.values(_xyz.tableview.nav_bar.children)[0].click();
+
+
+
 
     _xyz.tableview.table = _xyz.tableview.container.querySelector('.table');
 
 
 
-    _xyz.tableview.createTable({
-      layer: _xyz.layers.list.COUNTRIES,
-      target: _xyz.tableview.table
-    });
+    // _xyz.tableview.createTable({
+    //   layer: _xyz.layers.list.COUNTRIES,
+    //   target: _xyz.tableview.table
+    // });
 
     //_xyz.tableview.appendChild(_xyz.layers.list.COUNTRIES.table);
 
@@ -90,31 +147,31 @@ export default _xyz => {
     }
 
 
-    var tabs = document.getElementsByClassName('Tab');
+    // var tabs = document.getElementsByClassName('Tab');
 
-    Array.prototype.forEach.call(tabs, function(tab) {
-      tab.addEventListener('click', setActiveClass);
-    });
+    // Array.prototype.forEach.call(tabs, function(tab) {
+    //   tab.addEventListener('click', setActiveClass);
+    // });
 
-    function setActiveClass(evt) {
-      Array.prototype.forEach.call(tabs, function(tab) {
-        tab.classList.remove('tab-current');
-      });
+    // function setActiveClass(evt) {
+    //   Array.prototype.forEach.call(tabs, function(tab) {
+    //     tab.classList.remove('tab-current');
+    //   });
 	
-      evt.currentTarget.classList.add('tab-current');
+    //   evt.currentTarget.classList.add('tab-current');
 
 
-      _xyz.layers.list.COUNTRIES.tableView.table.redraw(true);
+    //   _xyz.layers.list.COUNTRIES.tableView.table.redraw(true);
 
 
-      // _xyz.tableview.createTable({
-      //   layer: _xyz.layers.list.COUNTRIES,
-      //   target: _xyz.tableview.table
-      // });
+    //   // _xyz.tableview.createTable({
+    //   //   layer: _xyz.layers.list.COUNTRIES,
+    //   //   target: _xyz.tableview.table
+    //   // });
 
       
 
-    }
+    // }
 
   };
     
