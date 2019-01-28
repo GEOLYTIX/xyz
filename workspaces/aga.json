@@ -447,6 +447,89 @@
 						}
 					}
 				},
+				"mvt_test2": {
+					"edit": {
+						"properties": true,
+						"delete": true
+					},
+					"display": true,
+					"name": "MVT test Limited edits",
+					"format": "mvt",
+					"geom_3857": "geom_3857",
+					"dbs": "XYZ",
+					"qID": "id",
+					"arrayZoom": {
+						"5": "aga_mvt_test"
+					},
+					"table": "aga_mvt_test",
+					"infoj": [
+						{
+							"field": "shop_town",
+							"label": "Shoptown",
+							"type": "text",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "town_name",
+							"label": "Town name",
+							"type": "text",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "date_reviewed_2",
+							"label": "Date reviewed",
+							"type": "date",
+							"inline": true,
+							"edit": true,
+							"filter": "date"
+						},
+						{
+							"field": "isoline_mode",
+							"label": "Mode",
+							"inline": true,
+							"edit": {
+								"options": ["Driving", "Walking", "Cargo", "HOV lane"]
+							}
+						},
+						{
+							"field": "isoline_range",
+							"label": "Range",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "isoline_unit",
+							"label": "Unit",
+							"inline": true,
+							"edit": {
+								"options": ["Time", "Distance"]
+							}
+							
+						},
+						{
+							"field": "notes",
+							"label": "Notes",
+							"type": "textarea",
+							"edit": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#444",
+							"fill": true,
+							"fillColor": "#444",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						}
+					}
+				},
 				"retail_places_mvt": {
 					"group": "Retail",
 					"name": "Retail Places",
@@ -1275,8 +1358,8 @@
 					]
 				},
 				"williamhill": {
-					"name": "William Hill Shops",
-					"meta": "All William Hill Shops May 2018.",
+					"name": "WH Shops",
+					"meta": "All WH Shops May 2018.",
 					"properties": "",
 					"format": "cluster",
 					"tab": true,

@@ -2,6 +2,10 @@ import drawIsoline from './drawIsoline.mjs';
 
 export default (_xyz, layer) => {
 
+  if(layer.edit.properties && Object.keys(layer.edit).length === 1) return;
+
+  if(layer.edit.properties && layer.edit.delete && Object.keys(layer.edit).length === 2) return;
+
   // Create cluster panel and add to layer dashboard.
   layer.edit.panel = _xyz.utils.createElement({
     tag: 'div',
