@@ -83,7 +83,8 @@ export default (_xyz, record) => {
       });
 
       // Create new table cell for the entry label and append to table.
-      if (entry.label) _xyz.utils.createElement({
+      let _label;
+      if (entry.label) {_label = _xyz.utils.createElement({
         tag: 'td',
         options: {
           className: 'label lv-' + (entry.level || 0),
@@ -92,6 +93,7 @@ export default (_xyz, record) => {
         },
         appendTo: entry.row
       });
+      }
 
       // Finish entry creation if entry has not type.
       if(entry.type === 'label') return;
@@ -114,7 +116,8 @@ export default (_xyz, record) => {
       // Create val table cell in a new line.
       if (!entry.inline && !(entry.type === 'integer' ^ entry.type === 'numeric' ^ entry.type === 'date')) {
 
-      // Create new row and append to table.
+        _label.colSpan = '2';
+        // Create new row and append to table.
         entry.row = _xyz.utils.createElement({
           tag: 'tr',
           appendTo: record.table
