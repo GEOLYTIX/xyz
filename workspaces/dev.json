@@ -445,7 +445,15 @@
                         "point": true,
                         "catchment": true,
                         "delete": true
-                    }
+                    },
+                    "infoj": [
+                        {
+							"label": "Images",
+							"field": "images",
+							"type": "images",
+							"edit": true
+						}
+                   ]
                 },
                 "oa": {
                     "name": "Output areas",
