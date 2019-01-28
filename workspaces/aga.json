@@ -226,70 +226,6 @@
 							"level": 1
 						},
 						{
-							"label": "Floorspace allocated to products %",
-							"type": "label"
-						},
-						{
-							"field": "floorspace_sports_performance_products_pct",
-							"label": "Sports Performance",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_sports_style_products_pct",
-							"label": "Sports Style",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_kids_sports_products_pct",
-							"label": "Kids Sports",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_other_products_pct",
-							"label": "Other products",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_adidas_pct",
-							"label": "Adidas floorspace",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_nike_pct",
-							"label": "Nike floorspace",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
 							"field": "address",
 							"label": "Address",
 							"text": true
@@ -300,7 +236,8 @@
 							"text": true
 						},
 						{
-							"label": "Mapbox Catchment 10min",
+							"label": "10min Drivetime",
+							"name": "Mapbox Catchment 10min",
 							"field": "geom_rplace",
 							"fieldfx": "ST_asGeoJson(geom_rplace)",
 							"type": "geometry",
@@ -318,7 +255,7 @@
 							}
 						},
 						{
-							"label": "HERE Catchment 10min",
+							"name": "HERE Catchment 10min",
 							"field": "geom_rplace2",
 							"fieldfx": "ST_asGeoJson(geom_rplace2)",
 							"type": "geometry",
@@ -334,12 +271,44 @@
 								"fill": true,
 								"fillOpacity": 0.2
 							}
+
+						},
+						{
+							"label": "Store Count within HERE Catchment 10min",
+							"field": "store_count",
+							"fieldfx": "b.lbo_no",
+							"lookup": {
+								"table_b": "wh.williamhill_09052018",
+								"table_a": "adidas.store_survey",
+								"geom_b": "geom",
+								"geom_a": "geom_rplace2",
+								"condition": "ST_INTERSECTS",
+								"aggregate": "COUNT"
+							}
+						},
+						{
+							"label": "Store Count within fixed geometry",
+							"field": "store_count_here",
+							"fieldfx": "b.lbo_no",
+							"lookup": {
+								"table_b": "wh.williamhill_09052018",
+								"table_a": "adidas.store_survey",
+								"geom_b": "geom",
+								"geom_a": "fake_add_geom",
+								"condition": "ST_INTERSECTS",
+								"aggregate": "COUNT"
+							}
 						},
 						{
 							"field": "images",
 							"label": "Images",
 							"type": "images",
 							"edit": true
+						}, 
+						{
+							"field": "fake_add_geom",
+							"fieldfx": "ST_asGeoJson(fake_add_geom)",
+							"type": "geometry"
 						},
 						{
 							"field": "edited_2",
@@ -450,7 +419,6 @@
 					"name": "MVT test",
 					"format": "mvt",
 					"geom_3857": "geom_3857",
-					"geom": "geom",
 					"dbs": "XYZ",
 					"qID": "id",
 					"arrayZoom": {
@@ -577,7 +545,7 @@
 							"chart": {
 								"x": "label x",
 								"y": "label y",
-								"type": "horizontalBar",
+								"type": "line",
 								"backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
 								"borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"]
 							}
