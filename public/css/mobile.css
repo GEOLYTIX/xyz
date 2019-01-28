@@ -567,6 +567,8 @@ input[type=range]::-moz-range-thumb {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
     font-size: 12px; }
+    .infojTable .val a {
+      color: #079e00; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
