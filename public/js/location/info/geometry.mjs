@@ -1,5 +1,6 @@
 import catchment from './catchment.mjs';
 import isoline from './isoline.mjs';
+import additionalGeom from './additionalGeom.mjs';
 
 export default (_xyz, record, entry) => {
 
@@ -14,6 +15,8 @@ export default (_xyz, record, entry) => {
   if (entry.edit && entry.edit.catchment) catchment(_xyz, record, entry);
   
   if (entry.edit && entry.edit.isoline) isoline(_xyz, record, entry);
+
+  if(!entry.edit && entry.value) additionalGeom(_xyz, record, entry);
   
   if (!entry.value) return;
   
