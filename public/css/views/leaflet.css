@@ -321,7 +321,8 @@
       font-size: 15px;
       padding-right: 5px; }
     .infojTable .table-section.expandable {
-      max-height: 28px;
+      margin-bottom: 8px;
+      max-height: 25px;
       overflow: hidden;
       transition: max-height 0.3s ease-out; }
       .infojTable .table-section.expandable .t-expander::before {

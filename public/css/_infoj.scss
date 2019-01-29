@@ -72,7 +72,8 @@
         }
         
         &.expandable {
-            max-height: 28px;
+            margin-bottom: 8px;
+            max-height: 25px;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .t-expander::before {
