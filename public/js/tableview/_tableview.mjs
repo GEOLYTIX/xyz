@@ -1,12 +1,12 @@
-import utils from './utils/_utils.mjs';
+import createTable from './createTable.mjs';
 
-import layout from './layout.mjs';
-
-import nav from './nav.mjs';
+import updateTable from './updateTable.mjs';
 
 export default _xyz => {
 
-  utils(_xyz);
+  _xyz.tableview.createTable = createTable(_xyz);
+
+  _xyz.tableview.updateTable = updateTable(_xyz);
 
   _xyz.tableview.container = document.getElementById('tableview');
 
@@ -14,10 +14,13 @@ export default _xyz => {
     
   _xyz.tableview.nav_bar = _xyz.tableview.container.querySelector('.nav_bar > ul');
 
+  _xyz.tableview.table = _xyz.tableview.container.querySelector('.table');
+
   _xyz.tableview.init = () => {
 
     _xyz.tableview.nav_bar.innerHTML = '';
 
+    _xyz.tableview.table.innerHTML = '';
 
     if (Object.values(_xyz.layers.list).some(layer => layer.table_view)) {
 
@@ -32,34 +35,32 @@ export default _xyz => {
       _xyz.tableview.container.style.display = 'none';
 
       return;
-
     }
 
-
-
-
-
     Object.values(_xyz.layers.list).map(layer => {
+
       if (layer.table_view) {
 
-        
         _xyz.utils.createElement({
           tag: 'li',
           options: {
             textContent: layer.name,
             classList: 'Tab cursor noselect'
           },
-          // style: {
-          //   display: (data.length < 99 ? 'none' : 'inline')
-          // },
           eventListener: {
             event: 'click',
             funct: e => {
-              // _xyz.tableview.addData(layer);
-
               Object.values(_xyz.tableview.nav_bar.children).forEach(tab => tab.classList.remove('tab-current'));
 
               e.target.classList.add('tab-current');
+
+              _xyz.tableview.table.innerHTML = '';
+              
+              _xyz.tableview.createTable({
+                layer: layer,
+                target: _xyz.tableview.table
+              });
+
             }
           },
           appendTo: _xyz.tableview.nav_bar
@@ -69,22 +70,6 @@ export default _xyz => {
     });
 
     Object.values(_xyz.tableview.nav_bar.children)[0].click();
-
-
-
-
-    _xyz.tableview.table = _xyz.tableview.container.querySelector('.table');
-
-
-
-    // _xyz.tableview.createTable({
-    //   layer: _xyz.layers.list.COUNTRIES,
-    //   target: _xyz.tableview.table
-    // });
-
-    //_xyz.tableview.appendChild(_xyz.layers.list.COUNTRIES.table);
-
-
 
 
     _xyz.tableview.resize_bar.addEventListener('mousedown', e => {
@@ -130,11 +115,26 @@ export default _xyz => {
       // Required for Firefox
       // window.dispatchEvent(new Event('resize'));
 
-      _xyz.layers.list.COUNTRIES.tableView.table.redraw(true);
+      _xyz.tableview.current_table.redraw(true);
     }
 
-    document.getElementById('toggleTableview').onclick = () =>{
+    document.getElementById('toggleTableview').onclick = function(){
+
+      _xyz.tableview.container.style.transition = 'height 0.2s ease-out';
+
+      setTimeout(()=>_xyz.tableview.container.style.transition = 'none', 200);
+
+      if (this.textContent === 'vertical_align_bottom') {
+
+        this.textContent = 'vertical_align_top';
+        _xyz.tableview.container.style.height = '40px';
+        return;
+
+      }
+
+      this.textContent = 'vertical_align_bottom';
       _xyz.tableview.container.style.height = window.innerHeight + 'px';
+
     };
 
     function resizeFull() {
@@ -145,33 +145,6 @@ export default _xyz => {
         e.target.style.transition = '';
       });
     }
-
-
-    // var tabs = document.getElementsByClassName('Tab');
-
-    // Array.prototype.forEach.call(tabs, function(tab) {
-    //   tab.addEventListener('click', setActiveClass);
-    // });
-
-    // function setActiveClass(evt) {
-    //   Array.prototype.forEach.call(tabs, function(tab) {
-    //     tab.classList.remove('tab-current');
-    //   });
-	
-    //   evt.currentTarget.classList.add('tab-current');
-
-
-    //   _xyz.layers.list.COUNTRIES.tableView.table.redraw(true);
-
-
-    //   // _xyz.tableview.createTable({
-    //   //   layer: _xyz.layers.list.COUNTRIES,
-    //   //   target: _xyz.tableview.table
-    //   // });
-
-      
-
-    // }
 
   };
     

@@ -31,7 +31,7 @@ export default _xyz => {
 
     });
 
-    params.layer.tableView.table = new Tabulator(params.target, {
+    params.layer.table_view.table = new Tabulator(params.target, {
       columns: columns,
       autoResize: true,
       selectable: true,
@@ -45,9 +45,11 @@ export default _xyz => {
     });
 
 
-    _xyz.tableview.updateTable(_xyz.layers.list.COUNTRIES);
+    _xyz.tableview.current_table = params.layer.table_view.table;
 
-    
+
+    _xyz.tableview.updateTable(params.layer);
+     
 
   };
 };

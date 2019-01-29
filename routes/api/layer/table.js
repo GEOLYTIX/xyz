@@ -24,7 +24,7 @@ module.exports = fastify => {
       if (!table) return res.code(406).send('Missing table.');
 
       let
-        geom = layer.geom_3857,
+        //geom = layer.geom_3857,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
@@ -50,11 +50,11 @@ module.exports = fastify => {
       
       let q = `
         SELECT ${layer.qID} AS qID, ${fields}
-        FROM ${table}
-        WHERE ST_DWithin(
-          ST_Transform(ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), 3857),
-            ${geom},
-            0.00001);`;
+        FROM ${table}`;
+        // WHERE ST_DWithin(
+        //   ST_Transform(ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), 3857),
+        //     ${geom},
+        //     0.00001);`;
       //   ${viewport}
       //   ${filter_sql ? (viewport ? ` AND ${filter_sql}` : ` WHERE ${filter_sql}`) : ''} 
       //   ORDER BY ${layer.qID || 'id'}

@@ -9,8 +9,8 @@ export default _xyz => {
     xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
       locale: _xyz.locale,
       layer: layer.key,
-      table: layer.table,
-      //viewport: layer.tableview.viewport,
+      table: layer.tableMax(),
+      //viewport: layer.table_view.viewport,
       west: bounds.getWest(),
       south: bounds.getSouth(),
       east: bounds.getEast(),
@@ -29,7 +29,7 @@ export default _xyz => {
 
       console.log(layer.data);
 
-      layer.tableView.table.setData(layer.data);
+      layer.table_view.table.setData(layer.data);
 
     };
 
