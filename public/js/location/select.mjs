@@ -8,6 +8,9 @@ export default _xyz => {
 
     record.location = location;
 
+    // dbs is required for image upload.
+    record.location.dbs = _xyz.layers.list[record.location.layer].dbs;
+
     // Log the location when logging is enabled.
     if (_xyz.log) console.log(location);
  
