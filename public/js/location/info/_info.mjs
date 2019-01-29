@@ -132,7 +132,7 @@ export default (_xyz, record) => {
       // Create val table cell in a new line.
       if (!entry.inline && !(entry.type === 'integer' ^ entry.type === 'numeric' ^ entry.type === 'date')) {
 
-        _label.colSpan = '2';
+        if(_label) _label.colSpan = '2';
         // Create new row and append to table.
         entry.row = _xyz.utils.createElement({
           tag: 'tr',
