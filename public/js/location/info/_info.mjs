@@ -173,6 +173,13 @@ export default (_xyz, record) => {
         // otherwise use the displayValue
         return entry.val.textContent = entry.displayValue;
       }
+
+    });
+
+    // Hide group if empty
+    Object.values(record.location.infoj).map(entry => {
+      if(!entry.group) return;
+      if(!record.location.infogroups[entry.group].table.innerHTML) record.location.infogroups[entry.group].table.parentNode.style.display = 'none';
     });
 
   };
