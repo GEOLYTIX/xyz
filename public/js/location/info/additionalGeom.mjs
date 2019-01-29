@@ -48,7 +48,9 @@ export default (_xyz, record, entry) => {
   }
 	
   function hideAddGeom(record, entry){
-    record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
+    record.location.geometries.additional.forEach(geom => {
+      if(geom === entry._geom) _xyz.map.removeLayer(geom);
+    });
   }
 
 
