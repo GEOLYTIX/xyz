@@ -114,7 +114,7 @@ export default (_xyz, record, group) => {
           if(group.viewToggler.textContent === chartIcon(group)) {
             group.showChart();
           } else {
-            group.showTable();
+            group.showTable(e);
           }
         }
       }
@@ -128,12 +128,12 @@ export default (_xyz, record, group) => {
       group.viewToggler.title = 'Show table';
       if(!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
-    group.showTable = () => {
+    group.showTable = (e) => {
       group.table.style.display = 'table';
       group.chartElem.style.display = 'none';
       group.viewToggler.textContent = chartIcon(group);
       group.viewToggler.title = 'Show chart';
-      if(!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
+      if(e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
 
     // Use the appropriate toggle function to initialise
