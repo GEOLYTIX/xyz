@@ -13,7 +13,7 @@ module.exports = async (fields, infoj, qID) => {
         || !entry.lookup.geom_b) return;
         
       return fields.push(`
-        (
+        CASE WHEN (
           SELECT ${entry.lookup.aggregate || 'SUM'}(${entry.fieldfx || entry.field})
           FROM
             ${entry.lookup.table_a} a,
@@ -21,10 +21,21 @@ module.exports = async (fields, infoj, qID) => {
           WHERE
             a.${qID} = $1
             AND
-            ${entry.lookup.condition || 'ST_INTERSECTS'}(
+            ${entry.lookup.condition || 'ST_INTERSECTS'}(a.
             ${entry.lookup.geom_a},
-            ${entry.lookup.geom_b})
-        ) AS "${entry.field}"
+            b.${entry.lookup.geom_b}) ) > 0 THEN
+            (
+            SELECT ${entry.lookup.aggregate || 'SUM'}(${entry.fieldfx || entry.field})
+            FROM
+              ${entry.lookup.table_a} a,
+              ${entry.lookup.table_b} b
+            WHERE
+              a.${qID} = $1
+            AND
+              ${entry.lookup.condition || 'ST_INTERSECTS'}(a.
+              ${entry.lookup.geom_a},
+              b.${entry.lookup.geom_b}) 
+        ) ELSE NULL END AS "${entry.field}"
       `);
     
     }

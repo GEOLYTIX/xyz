@@ -567,6 +567,8 @@ input[type=range]::-moz-range-thumb {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
     font-size: 12px; }
+    .infojTable .val a {
+      color: #079e00; }
   .infojTable .num {
     text-align: right; }
   .infojTable .addImageCell {
@@ -587,7 +589,8 @@ input[type=range]::-moz-range-thumb {
       font-size: 15px;
       padding-right: 5px; }
     .infojTable .table-section.expandable {
-      max-height: 28px;
+      margin-bottom: 8px;
+      max-height: 25px;
       overflow: hidden;
       transition: max-height 0.3s ease-out; }
       .infojTable .table-section.expandable .t-expander::before {
@@ -597,6 +600,13 @@ input[type=range]::-moz-range-thumb {
       overflow: auto; }
       .infojTable .table-section.expanded .t-expander::before {
         content: "expand_less"; }
+  .infojTable .sample-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px #999;
+    float: right;
+    margin-right: 10px; }
 
 #Gazetteer {
   display: none;

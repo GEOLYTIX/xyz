@@ -115,48 +115,9 @@
 								"G-STAR;G-STAR",
 								"GAP;GAP",
 								"H&M;H&M",
-								"HOLLISTER;HOLLISTER",
-								"HOUSE OF FRASER;HOUSE OF FRASER",
-								"JACK & JONES;JACK & JONES",
-								"JACK WILLS;JACK WILLS",
-								"JACK WOLFSKIN;JACK WOLFSKIN",
-								"JD;JD",
-								"JOHN LEWIS;JOHN LEWIS",
-								"JUICY COUTURE;JUICY COUTURE;JUICY COUTURE SIS",
-								"KENZO;KENZO;KENZO SIS",
-								"LACOSTE;LACOSTE;LACOSTE SIS",
-								"LEVIS;LEVIS",
-								"LULULEMON ATHLETICA;LULULEMON ATHLETICA",
-								"MAX MARA;MAX MARA;MAX MARA SIS",
-								"MICHAEL KORS;MICHAEL KORS;MICHAEL KORS SIS",
-								"MISS SELFRIDGE;MISS SELFRIDGE;MISS SELFRIDGE SIS",
-								"MISS SIXTY;MISS SIXTY",
-								"MIU MIU;MIU MIU;MIU MIU SIS",
-								"NEW BALANCE;NEW BALANCE",
 								"NEW LOOK;NEW LOOK",
 								"NIKE;NIKE;NIKE TOWN",
 								"OFFICE;OFFICE;OFFICE SIS",
-								"PAUL SMITH;PAUL SMITH;PAUL SMITH SIS",
-								"PRIMARK;PRIMARK",
-								"PULL AND BEAR;PULL AND BEAR",
-								"PUMA;PUMA",
-								"RALPH LAUREN;RALPH LAUREN;RALPH LAUREN KIDS",
-								"REPLAY;REPLAY",
-								"SALVATORE FERRAGAMO;SALVATORE FERRAGAMO",
-								"SCHUH;SCHUH",
-								"SELFRIDGES;SELFRIDGES",
-								"SIZE;SIZE",
-								"SKECHERS;SKECHERS",
-								"SOLE;SOLE",
-								"SPORTS DIRECT;SPORTS DIRECT",
-								"STELLA MCCARTNEY;STELLA MCCARTNEY;STELLA MCCARTNEY SIS",
-								"SUPERDRY;SUPERDRY",
-								"SWEATY BETTY;SWEATY BETTY;SWEATY BETTY SIS",
-								"TED BAKER;TED BAKER;TED BAKER SIS",
-								"THE NORTH FACE;THE NORTH FACE",
-								"TOMMY HILFIGER;TOMMY HILFIGER",
-								"TOPMAN;TOPMAN",
-								"TOPSHOP;TOPSHOP;TOPSHOP SIS",
 								"TRUE RELIGION;TRUE RELIGION",
 								"UNIQLO;UNIQLO",
 								"URBAN OUTFITTERS;URBAN OUTFITTERS;URBAN OUTFITTERS SIS",
@@ -190,14 +151,7 @@
 								"300",
 								"400",
 								"500",
-								"600",
-								"700",
-								"800",
-								"900",
 								"1000",
-								"1250",
-								"1500",
-								"1750",
 								"2000",
 								"3000",
 								"4000",
@@ -226,70 +180,6 @@
 							"level": 1
 						},
 						{
-							"label": "Floorspace allocated to products %",
-							"type": "label"
-						},
-						{
-							"field": "floorspace_sports_performance_products_pct",
-							"label": "Sports Performance",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_sports_style_products_pct",
-							"label": "Sports Style",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_kids_sports_products_pct",
-							"label": "Kids Sports",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_other_products_pct",
-							"label": "Other products",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_adidas_pct",
-							"label": "Adidas floorspace",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
-							"field": "floorspace_nike_pct",
-							"label": "Nike floorspace",
-							"type": "integer",
-							"range": [
-								0,
-								100
-							],
-							"level": 1
-						},
-						{
 							"field": "address",
 							"label": "Address",
 							"text": true
@@ -300,7 +190,8 @@
 							"text": true
 						},
 						{
-							"label": "Mapbox Catchment 10min",
+							"label": "10min Drivetime",
+							"name": "Mapbox Catchment 10min",
 							"field": "geom_rplace",
 							"fieldfx": "ST_asGeoJson(geom_rplace)",
 							"type": "geometry",
@@ -318,7 +209,7 @@
 							}
 						},
 						{
-							"label": "HERE Catchment 10min",
+							"name": "HERE Catchment 10min",
 							"field": "geom_rplace2",
 							"fieldfx": "ST_asGeoJson(geom_rplace2)",
 							"type": "geometry",
@@ -334,12 +225,44 @@
 								"fill": true,
 								"fillOpacity": 0.2
 							}
+
+						},
+						{
+							"label": "Store Count within HERE Catchment 10min",
+							"field": "store_count",
+							"fieldfx": "b.lbo_no",
+							"lookup": {
+								"table_b": "wh.williamhill_09052018",
+								"table_a": "adidas.store_survey",
+								"geom_b": "geom",
+								"geom_a": "geom_rplace2",
+								"condition": "ST_INTERSECTS",
+								"aggregate": "COUNT"
+							}
 						},
 						{
 							"field": "images",
 							"label": "Images",
 							"type": "images",
 							"edit": true
+						}, 
+						{
+							"field": "fake_add_geom",
+							"fieldfx": "ST_asGeoJson(fake_add_geom)",
+							"type": "geometry"
+						},
+						{
+							"label": "Store Count within fixed geometry",
+							"field": "store_count_here",
+							"fieldfx": "b.lbo_no",
+							"lookup": {
+								"table_b": "wh.williamhill_09052018",
+								"table_a": "adidas.store_survey",
+								"geom_b": "geom",
+								"geom_a": "fake_add_geom",
+								"condition": "ST_INTERSECTS",
+								"aggregate": "COUNT"
+							}
 						},
 						{
 							"field": "edited_2",
@@ -450,7 +373,89 @@
 					"name": "MVT test",
 					"format": "mvt",
 					"geom_3857": "geom_3857",
-					"geom": "geom",
+					"dbs": "XYZ",
+					"qID": "id",
+					"arrayZoom": {
+						"5": "aga_mvt_test"
+					},
+					"table": "aga_mvt_test",
+					"infoj": [
+						{
+							"field": "shop_town",
+							"label": "Shoptown",
+							"type": "text",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "town_name",
+							"label": "Town name",
+							"type": "text",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "date_reviewed_2",
+							"label": "Date reviewed",
+							"type": "date",
+							"inline": true,
+							"edit": true,
+							"filter": "date"
+						},
+						{
+							"field": "isoline_mode",
+							"label": "Mode",
+							"inline": true,
+							"edit": {
+								"options": ["Driving", "Walking", "Cargo", "HOV lane"]
+							}
+						},
+						{
+							"field": "isoline_range",
+							"label": "Range",
+							"inline": true,
+							"edit": true
+						},
+						{
+							"field": "isoline_unit",
+							"label": "Unit",
+							"inline": true,
+							"edit": {
+								"options": ["Time", "Distance"]
+							}
+							
+						},
+						{
+							"field": "notes",
+							"label": "Notes",
+							"type": "textarea",
+							"edit": true
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#444",
+							"fill": true,
+							"fillColor": "#444",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0.3
+						}
+					}
+				},
+				"mvt_test2": {
+					"edit": {
+						"properties": true,
+						"delete": true
+					},
+					"display": true,
+					"name": "MVT test Limited edits",
+					"format": "mvt",
+					"geom_3857": "geom_3857",
 					"dbs": "XYZ",
 					"qID": "id",
 					"arrayZoom": {
@@ -577,7 +582,7 @@
 							"chart": {
 								"x": "label x",
 								"y": "label y",
-								"type": "horizontalBar",
+								"type": "line",
 								"backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
 								"borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"]
 							}
@@ -1353,8 +1358,8 @@
 					]
 				},
 				"williamhill": {
-					"name": "William Hill Shops",
-					"meta": "All William Hill Shops May 2018.",
+					"name": "WH Shops",
+					"meta": "All WH Shops May 2018.",
 					"properties": "",
 					"format": "cluster",
 					"tab": true,

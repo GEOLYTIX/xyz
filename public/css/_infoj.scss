@@ -39,6 +39,10 @@
         font-family: 'PT Mono', monospace; // padding-left: 10px;
         font-weight: 400;
         font-size: 12px;
+
+        a {
+            color: $glxgreen;
+        }
     }
     .num {
         text-align: right;
@@ -68,7 +72,8 @@
         }
         
         &.expandable {
-            max-height: 28px;
+            margin-bottom: 8px;
+            max-height: 25px;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .t-expander::before {
@@ -82,5 +87,14 @@
                content: "expand_less"
             }
         }
+    }
+
+    .sample-circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px #999;
+        float: right;
+        margin-right: 10px;
     }
 }

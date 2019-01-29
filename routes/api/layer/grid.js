@@ -39,8 +39,8 @@ module.exports = fastify => {
 
       var q = `
       SELECT
-          lon,
-          lat,
+          ST_X(${layer.geom}) lon,
+          ST_Y(${layer.geom}) lat,
           ${size} size,
           ${color} color
       FROM ${table}
