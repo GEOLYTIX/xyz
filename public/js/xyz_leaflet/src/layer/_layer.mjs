@@ -152,7 +152,8 @@ export default _xyz => {
     if (!params.icon) return _xyz.L.geoJson(params.json, {
       interactive: params.interactive || false,
       pane: params.pane || 'default',
-      style: params.style || {}
+      style: params.style || {},
+      pointToLayer: () => {}
     }).addTo(_xyz.map);
 
     return _xyz.L.geoJson(params.json, {

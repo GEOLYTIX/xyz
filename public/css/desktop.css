@@ -1357,6 +1357,7 @@ input[type=range]::-moz-range-thumb {
 .attribution {
   bottom: 5px;
   right: 5px;
+  margin-left: 150px;
   position: absolute;
   z-index: 999;
   text-align: right;
@@ -2139,5 +2140,8 @@ i,
   font-family: ffmark_black;
   padding-top: 30%;
   text-shadow: 2px 2px #cf9; }
+
+.leaflet-left .leaflet-control-scale {
+  margin-left: 63px; }
 
 /*# sourceMappingURL=desktop.css.map */
