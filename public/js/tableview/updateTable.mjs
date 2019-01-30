@@ -1,6 +1,6 @@
 export default _xyz => {
 
-  return layer => {
+  _xyz.tableview.updateTable = () => {
 
     const xhr = new XMLHttpRequest();
 
@@ -8,9 +8,9 @@ export default _xyz => {
       
     xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
       locale: _xyz.locale,
-      layer: layer.key,
-      table: layer.tableMax(),
-      //viewport: layer.table_view.viewport,
+      layer: _xyz.tableview.current_layer.key,
+      table: _xyz.tableview.current_layer.tableMax(),
+      //viewport: _xyz.tableview.viewport,
       west: bounds.getWest(),
       south: bounds.getSouth(),
       east: bounds.getEast(),
@@ -25,11 +25,9 @@ export default _xyz => {
   
       if (e.target.status !== 200) return;
     
-      layer.data = e.target.response;
+      _xyz.tableview.current_layer.table_view.table.setData(e.target.response);
 
-      console.log(layer.data);
-
-      layer.table_view.table.setData(layer.data);
+      _xyz.tableview.current_layer.table_view.table.redraw(true);
 
     };
 

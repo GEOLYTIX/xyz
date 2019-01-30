@@ -4,24 +4,23 @@ import updateTable from './updateTable.mjs';
 
 export default _xyz => {
 
-  _xyz.tableview.createTable = createTable(_xyz);
+  createTable(_xyz);
 
-  _xyz.tableview.updateTable = updateTable(_xyz);
-
-  _xyz.tableview.container = document.getElementById('tableview');
-
-  _xyz.tableview.resize_bar = _xyz.tableview.container.querySelector('.resize_bar');
-    
-  _xyz.tableview.nav_bar = _xyz.tableview.container.querySelector('.nav_bar > ul');
-
-  _xyz.tableview.table = _xyz.tableview.container.querySelector('.table');
+  updateTable(_xyz);
 
   _xyz.tableview.init = () => {
 
+    _xyz.tableview.container = document.getElementById('tableview');
+
+    _xyz.tableview.height = 'calc(100% - 55px)';
+
+    _xyz.tableview.resize_bar = _xyz.tableview.container.querySelector('.resize_bar');
+      
+    _xyz.tableview.nav_bar = _xyz.tableview.container.querySelector('.nav_bar > ul');
+
     _xyz.tableview.nav_bar.innerHTML = '';
 
-    _xyz.tableview.table.innerHTML = '';
-
+    // Show tableview if some layers have tableview
     if (Object.values(_xyz.layers.list).some(layer => layer.table_view)) {
 
       _xyz.map_dom.style.height = 'calc(100% - 40px)';
@@ -37,50 +36,56 @@ export default _xyz => {
       return;
     }
 
-    Object.values(_xyz.layers.list).map(layer => {
+    // Create tabs in nav_bar for each layer with a table_view.
+    Object.values(_xyz.layers.list).forEach(layer => {
 
-      if (layer.table_view) {
+      if (!layer.table_view) return;
 
-        _xyz.utils.createElement({
-          tag: 'li',
-          options: {
-            textContent: layer.name,
-            classList: 'Tab cursor noselect'
-          },
-          eventListener: {
-            event: 'click',
-            funct: e => {
-              Object.values(_xyz.tableview.nav_bar.children).forEach(tab => tab.classList.remove('tab-current'));
+      _xyz.utils.createElement({
+        tag: 'li',
+        options: {
+          textContent: layer.name,
+          classList: 'Tab cursor noselect'
+        },
+        eventListener: {
+          event: 'click',
+          funct: e => {
 
-              e.target.classList.add('tab-current');
+            // Remove current from all tabs.
+            Object.values(_xyz.tableview.nav_bar.children).forEach(tab => tab.classList.remove('tab-current'));
 
-              _xyz.tableview.table.innerHTML = '';
+            // Make target tab current.
+            e.target.classList.add('tab-current');
               
-              _xyz.tableview.createTable({
-                layer: layer,
-                target: _xyz.tableview.table
-              });
+            _xyz.tableview.createTable({
+              layer: layer,
+              target: _xyz.tableview.container.querySelector('.table')
+            });
 
-            }
-          },
-          appendTo: _xyz.tableview.nav_bar
-        });
-        
-      }
+          }
+        },
+        appendTo: _xyz.tableview.nav_bar
+      });
+
     });
 
+    // Click first tab.
     Object.values(_xyz.tableview.nav_bar.children)[0].click();
 
+
+    // Augment viewChangeEnd method to update table.
     _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
-      _xyz.tableview.updateTable(_xyz.layers.list.COUNTRIES);
+      _xyz.tableview.updateTable();
     });
 
 
+    // Resize tableview while holding mousedown on resize_bar.
     _xyz.tableview.resize_bar.addEventListener('mousedown', e => {
 
+      // Prevent text selection.
       e.preventDefault();
-      document.body.style.cursor = 'grabbing';
 
+      document.body.style.cursor = 'grabbing';
       window.addEventListener('mousemove', resize);
       window.addEventListener('mouseup', stopResize);
     });
@@ -110,6 +115,7 @@ export default _xyz => {
       _xyz.tableview.container.style.height = height + 'px';
     }
 
+    // Remove eventListener after resize event.
     function stopResize() {
 
       document.body.style.cursor = 'auto';
@@ -119,9 +125,10 @@ export default _xyz => {
       // Required for Firefox
       // window.dispatchEvent(new Event('resize'));
 
-      _xyz.tableview.current_table.redraw(true);
+      _xyz.tableview.current_layer.table_view.table.redraw(true);
     }
 
+    // Toggle tableview between full and min height.
     document.getElementById('toggleTableview').onclick = function(){
 
       _xyz.tableview.container.style.transition = 'height 0.2s ease-out';
@@ -138,7 +145,6 @@ export default _xyz => {
 
       this.textContent = 'vertical_align_bottom';
       _xyz.tableview.container.style.height = window.innerHeight + 'px';
-
     };
 
   };

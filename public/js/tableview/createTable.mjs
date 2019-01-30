@@ -2,53 +2,49 @@ import Tabulator from 'tabulator-tables';
 
 export default _xyz => {
 
-  return params => {
+  _xyz.tableview.createTable = params => {
 
-    const columns = [];
+    if (!params.target) return;
+    
+    _xyz.tableview.table = params.target;
 
-    Object.values(params.layer.infoj).map(entry => {
+    _xyz.tableview.table.innerHTML = '';
 
-      if(!entry.type
-        || entry.type === 'numeric'
+    if (!params.layer) return;
+
+    if (params.layer) _xyz.tableview.current_layer = params.layer;
+
+    const columns = Object.values(_xyz.tableview.current_layer.infoj).filter(entry => {
+
+      entry.title = entry.label;
+
+      if(entry.type === 'date') entry.formatter = _xyz.utils.formatDate;
+
+      if(entry.type === 'datetime') entry.formatter = _xyz.utils.formatDateTime;
+
+      return entry.type === 'numeric'
         || entry.type === 'integer'
         || entry.type === 'text'
-        || entry.type === 'textarea'){
-        entry.title = entry.label;
-        columns.push(entry);
-      }
-            
-      if(entry.type === 'date') {
-        entry.title = entry.label;
-        entry.formatter = _xyz.utils.formatDate;
-        columns.push(entry);
-      }
-            
-      if(entry.type === 'datetime') {
-        entry.title = entry.label;
-        entry.formatter = _xyz.utils.formatDateTime;
-        columns.push(entry);
-      }
+        || entry.type === 'textarea'
+        || entry.type === 'date'
+        || entry.type === 'datetime';
 
     });
 
-    params.layer.table_view.table = new Tabulator(params.target, {
+    _xyz.tableview.current_layer.table_view.table = new Tabulator(_xyz.tableview.table, {
       columns: columns,
       autoResize: true,
-      selectable: true,
-      resizableRows: true,
-      height: 'calc(100% - 55px)'
+      //selectable: true,
+      //resizableRows: true,
+      height: _xyz.tableview.height || '100%'
       // rowClick: (e, row) => {
 
       //   console.log(row);
 
       // }
-    });
+    }); 
 
-
-    _xyz.tableview.current_table = params.layer.table_view.table;
-
-
-    _xyz.tableview.updateTable(params.layer);    
+    _xyz.tableview.updateTable();    
 
   };
 };

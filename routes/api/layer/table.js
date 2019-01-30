@@ -85,9 +85,6 @@ module.exports = fastify => {
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
-      // return 202 if no locations found within the envelope.
-      // if (!rows[0] || parseInt(rows[0].count) === 0) return res.code(200).send([]);
-
       res.code(200).send(rows);
     }
   });

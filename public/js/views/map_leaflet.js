@@ -113,6 +113,11 @@ function TableView(_xyz) {
     target: document.getElementById('xyz_table1')
   });
 
+  // Augment viewChangeEnd method to update table.
+  _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+    _xyz.tableview.updateTable();
+  });
+
   _xyz.locations.select_popup = location => {
 
     let container = document.getElementById('location_info_container2');

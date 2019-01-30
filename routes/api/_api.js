@@ -54,8 +54,4 @@ module.exports = fastify => {
 
   require('./location/field_range')(fastify);
 
-  // table view
-
-  require('./tab/get')(fastify);
-
 };
