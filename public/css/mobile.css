@@ -65,15 +65,16 @@
   user-select: none;
   position: fixed;
   left: 10px; }
+  .btn_column.lv0 {
+    box-shadow: inset 2px 0 4px -4px #777; }
+  .btn_column.lv1 {
+    box-shadow: inset 5px 0 4px -4px #777; }
   .btn_column div:hover {
-    background: #079e00;
-    color: #fff;
     cursor: pointer; }
-    .btn_column div:hover a {
-      color: #fff; }
   .btn_column button,
   .btn_column > div {
     margin-top: 10px;
+    border-radius: 10px;
     float: left;
     clear: both;
     height: 50px;
@@ -81,12 +82,12 @@
     padding: 0;
     color: #079e00;
     background: #fff;
-    border-radius: 50%;
-    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
     cursor: default;
     border: none;
-    outline: none; }
+    outline: none;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 50%; }
     .btn_column button a,
     .btn_column > div a {
       color: #079e00; }
@@ -103,12 +104,7 @@
       opacity: 0.3; }
     .btn_column button:hover:enabled,
     .btn_column > div:hover:enabled {
-      background: #079e00;
-      color: #fff;
       cursor: pointer; }
-      .btn_column button:hover:enabled a,
-      .btn_column > div:hover:enabled a {
-        color: #fff; }
 
 .btn_header {
   font-size: 25px;
@@ -142,6 +138,29 @@
   color: #079e00; }
   .btn_state.active {
     color: #383836; }
+
+.btn_inline {
+  display: inline-block;
+  position: relative;
+  width: 130px;
+  font-size: 12px;
+  border-radius: 2px;
+  line-height: 2;
+  text-align: center;
+  font-weight: 600;
+  color: #079e00;
+  box-shadow: 1px 1px 3px #666;
+  margin: 6px 3px 12px 3px;
+  cursor: pointer; }
+  .btn_inline:active {
+    box-shadow: 2px 2px 3px #090; }
+  .btn_inline span {
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .btn_inline i {
+    font-size: 14px;
+    vertical-align: text-bottom; }
 
 .range {
   width: 100%;

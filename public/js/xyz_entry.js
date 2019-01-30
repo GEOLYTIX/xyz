@@ -31,6 +31,9 @@ _locations(_xyz);
 import gazetteer from './gazetteer.mjs';
 gazetteer(_xyz);
 
+import _tableview from './tableview/_tableview.mjs';
+_tableview(_xyz);
+
 // Initiate map control.
 _xyz.init({
   host: document.head.dataset.dir,
@@ -56,6 +59,10 @@ function init() {
 
   // Init gazetteer.
   _xyz.gazetteer.init();
+
+  // Init tableview
+  if(_xyz.view.mode === 'desktop') _xyz.tableview.init();
+  //console.log(_xyz.layers.list);
 
   if (_xyz.log) console.log(_xyz);
 

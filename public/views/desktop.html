@@ -47,7 +47,22 @@
 
     <div class="map_container">
 
-        <div class="btn_column noselect">
+        <div id="Map" class="map" >
+            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+                <defs>
+                    <filter id='dropshadow'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                        <feOffset dx='1' dy='1' result='offsetblur' />
+                        <feMerge>
+                            <feMergeNode />
+                            <feMergeNode in='SourceGraphic' />
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="btn_column lv1 noselect">
             <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
                 <i class="material-icons">search</i>
             </button>
@@ -89,19 +104,42 @@
             </div>
         </div>
 
-        <div id="Map" class="map">
-            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
-                <defs>
-                    <filter id='dropshadow'>
-                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                        <feOffset dx='1' dy='1' result='offsetblur' />
-                        <feMerge>
-                            <feMergeNode />
-                            <feMergeNode in='SourceGraphic' />
-                        </feMerge>
-                    </filter>
-                </defs>
-            </svg>
+        <div id="tableview" class="tableview">
+
+            <div class="resize_bar"></div>
+
+            <nav class="nav_bar"><ul></ul></nav>
+
+            <div class="table"></div>
+
+            <div class="btn_column lv0 noselect">
+            
+                <div style="margin-top: -10px;">
+                    <i id="toggleTableview" class="material-icons">vertical_align_top</i>
+                </div>
+            
+                <!-- <button>
+                    <i class="material-icons">vpn_lock</i>
+                </button>
+            
+                <button>
+                    <i class="material-icons">beenhere</i>
+                </button>
+            
+                <button>
+                    <i class="material-icons">autorenew</i>
+                </button>
+            
+                <button>
+                    <i class="material-icons">save_alt</i>
+                </button>
+            
+                <button>
+                    <i class="material-icons">vertical_align_bottom</i>
+                </button> -->
+            
+            </div>
+
         </div>
 
     </div>

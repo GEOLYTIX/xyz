@@ -25,7 +25,7 @@ export default (_xyz, layer) => {
       
     legend.append('text')
       .attr('x', 25)
-      .attr('y', y + 11)
+      .attr('y', y + 13)
       .style('font-size', '12px')
       .style('alignment-baseline', 'central')
       .style('cursor', 'pointer')
@@ -63,7 +63,7 @@ export default (_xyz, layer) => {
     // Attach text with filter on click for the other/default category.
     legend.append('text')
       .attr('x', 25)
-      .attr('y', y + 11)
+      .attr('y', y + 13)
       .style('font-size', '12px')
       .style('alignment-baseline', 'central')
       .style('cursor', 'pointer')

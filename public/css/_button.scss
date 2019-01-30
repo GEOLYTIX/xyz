@@ -13,6 +13,12 @@
 }
 
 .btn_column {
+    &.lv0 {
+        box-shadow: inset 2px 0 4px -4px #777;
+    }
+    &.lv1 {
+        box-shadow: inset 5px 0 4px -4px #777;
+    }
     top: 0;
     z-index: 999;
     -webkit-touch-callout: none;
@@ -22,23 +28,28 @@
     user-select: none;
     @if $desktop {
         position: absolute;
-        left: -10px;
+        left: 0;
+        background-color: #fff;
+        height: 100%;
+        padding: 4px;
+        opacity: 0.8;
     }
     @if $mobile {
         position: fixed;
         left: 10px;
     }
     div:hover {
-        background: $glxgreen;
-        color: #fff;
+        // background: $glxgreen;
+        // color: #fff;
         cursor: pointer;
-        a {
-            color: #fff;
-        }
+        // a {
+        //     color: #fff;
+        // }
     }
     button,
     >div {
         margin-top: 10px;
+        border-radius: 10px;
         float: left;
         clear: both;
         height: 50px;
@@ -46,12 +57,14 @@
         padding: 0;
         color: $glxgreen;
         background: #fff;
-        border-radius: 50%;
-        box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
         text-align: center;
         cursor: default;
         border: none;
         outline: none;
+        @if $mobile {
+            box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
         a {
             color: $glxgreen;
         }
@@ -67,12 +80,12 @@
             opacity: 0.3;
         }
         &:hover:enabled {
-            background: $glxgreen;
-            color: #fff;
+            // background: $glxgreen;
+            // color: #fff;
             cursor: pointer;
-            a {
-                color: #fff;
-            }
+            // a {
+            //     color: #fff;
+            // }
         }
     }
 }
@@ -114,5 +127,35 @@
     color: $glxgreen;
     &.active {
         color: #383836;
+    }
+}
+
+.btn_inline {
+    display: inline-block;
+    position: relative;
+    width: 130px;
+    font-size: 12px;
+    border-radius: 2px;
+    line-height: 2;
+    text-align: center;
+    font-weight: 600;
+    color: $glxgreen;
+    box-shadow: 1px 1px 3px #666;
+    margin: 6px 3px 12px 3px;
+    cursor: pointer;
+
+    &:active {
+        box-shadow: 2px 2px 3px #090;
+    }
+
+    span {
+        position: absolute;
+        top: 0;
+        left: 0
+    }
+
+    i {
+        font-size: 14px;
+        vertical-align: text-bottom;
     }
 }

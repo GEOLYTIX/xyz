@@ -46,6 +46,9 @@ export default _xyz => {
           // Init gazetteer.
           _xyz.gazetteer.init();
 
+          // Init tableview
+          _xyz.tableview.init();
+
         }
 
       }

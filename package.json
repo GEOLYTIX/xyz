@@ -49,7 +49,8 @@
     "nodemailer": "^4.6.8",
     "pg": "^7.5.0",
     "pino-pretty": "^2.2.1",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "tabulator-tables": "^4.1.5"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

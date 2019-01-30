@@ -98,10 +98,10 @@ export default _xyz => {
       let timer;
       function viewChangeEndTimer() {
         clearTimeout(timer);
-        timer = setTimeout(viewChangeEnd, 500);
+        timer = setTimeout(_xyz.viewChangeEnd, 500);
       }
   
-      function viewChangeEnd() {
+      _xyz.viewChangeEnd = () => {
 
       // Check whether zoom buttons should be disabled for initial view.
         if (_xyz.view.chkZoomBtn) _xyz.view.chkZoomBtn(_xyz.map.getZoom());
@@ -113,7 +113,7 @@ export default _xyz => {
         // layer.get() will return if reload is not required.
         Object.values(_xyz.layers.list).forEach(layer => layer.get());
   
-      }
+      };
 
       // Load locale.
       _xyz.loadLocale(locale);
