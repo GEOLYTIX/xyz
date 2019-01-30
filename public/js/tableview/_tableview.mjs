@@ -71,6 +71,10 @@ export default _xyz => {
 
     Object.values(_xyz.tableview.nav_bar.children)[0].click();
 
+    _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+      _xyz.tableview.updateTable(_xyz.layers.list.COUNTRIES);
+    });
+
 
     _xyz.tableview.resize_bar.addEventListener('mousedown', e => {
 
@@ -136,15 +140,6 @@ export default _xyz => {
       _xyz.tableview.container.style.height = window.innerHeight + 'px';
 
     };
-
-    function resizeFull() {
-      let top = parseInt(_xyz.tableview.container.style.top) >= 0 ? 'calc(100% - 16px)' : 0;
-      _xyz.tableview.container.style.transition = '1s';
-      _xyz.tableview.container.style.top = top;
-      _xyz.tableview.container.addEventListener('transitionend', e => {
-        e.target.style.transition = '';
-      });
-    }
 
   };
     

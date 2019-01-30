@@ -48,8 +48,7 @@ export default _xyz => {
     _xyz.tableview.current_table = params.layer.table_view.table;
 
 
-    _xyz.tableview.updateTable(params.layer);
-     
+    _xyz.tableview.updateTable(params.layer);    
 
   };
 };

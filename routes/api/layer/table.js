@@ -24,16 +24,36 @@ module.exports = fastify => {
       if (!table) return res.code(406).send('Missing table.');
 
       let
-        //geom = layer.geom_3857,
+        viewport,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north);
 
-      //   viewport = `WHERE
-      //   ST_DWithin(
-      //       ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), ${layer.geom}, 0.00001) `;
-      // }
+
+      if (layer.geom) {
+
+        viewport = `
+        WHERE
+          ST_DWithin(
+            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+            ${layer.geom},
+            0.00001)`;
+
+      }
+
+      if (layer.geom_3857) {
+
+        viewport = `
+        WHERE
+          ST_DWithin(
+            ST_Transform(
+              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+              3857),
+            ${layer.geom_3857},
+            0.00001)`;
+
+      }
 
       // let offset = parseInt(req.body.offset);
               
@@ -50,12 +70,9 @@ module.exports = fastify => {
       
       let q = `
         SELECT ${layer.qID} AS qID, ${fields}
-        FROM ${table}`;
-        // WHERE ST_DWithin(
-        //   ST_Transform(ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326), 3857),
-        //     ${geom},
-        //     0.00001);`;
-      //   ${viewport}
+        FROM ${table}
+        ${viewport}
+        FETCH FIRST 99 ROW ONLY;`;
       //   ${filter_sql ? (viewport ? ` AND ${filter_sql}` : ` WHERE ${filter_sql}`) : ''} 
       //   ORDER BY ${layer.qID || 'id'}
       //   OFFSET ${99*offset} ROWS
