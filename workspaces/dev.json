@@ -319,7 +319,10 @@
                                     "colorMarker": "#999999",
                                     "colorDot": "#333333"
                                 },
-                                "iconAnchor": [20,40]
+                                "iconAnchor": [
+                                    20,
+                                    40
+                                ]
                             }
                         },
                         "selected": {
@@ -329,7 +332,10 @@
                                     "colorMarker": "#64dd17",
                                     "colorDot": "#33691e"
                                 },
-                                "iconAnchor": [20,40]
+                                "iconAnchor": [
+                                    20,
+                                    40
+                                ]
                             }
                         }
                     },
@@ -340,7 +346,7 @@
                             "field": "city",
                             "type": "text",
                             "edit": true
-                        },   
+                        },
                         {
                             "label": "Address EDIT",
                             "field": "address",
@@ -421,22 +427,22 @@
                     "qID": "id",
                     "infoj": [
                         {
-							"label": "Catchment Primary",
-							"field": "catchment",
-							"fieldfx": "ST_asGeoJson(catchment)",
-							"type": "geometry",
-							"edit": {
-								"catchment": {}
-							},
-							"style": {
-								"stroke": true,
-								"color": "#E01A4F",
-								"weight": 2,
-								"fill": true,
-								"fillOpacity": 0.2
-							}
-						}
-                   ]
+                            "label": "Catchment Primary",
+                            "field": "catchment",
+                            "fieldfx": "ST_asGeoJson(catchment)",
+                            "type": "geometry",
+                            "edit": {
+                                "catchment": {}
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#E01A4F",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2
+                            }
+                        }
+                    ]
                 },
                 "edit_layer": {
                     "format": "mvt",
@@ -455,18 +461,18 @@
                     },
                     "infoj": [
                         {
-							"label": "Images",
-							"field": "images",
-							"type": "images",
-							"edit": true
-						}
-                   ]
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images",
+                            "edit": true
+                        }
+                    ]
                 },
                 "oa": {
                     "name": "Output areas",
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
-                    },                    
+                    },
                     "format": "mvt",
                     "dbs": "XYZ",
                     "tables": {
@@ -1015,6 +1021,103 @@
                             "type": "integer"
                         }
                     ]
+                },
+                "sites": {
+                    "display": true,
+                    "edit": {
+                        "properties": true,
+                        "point": true,
+                        "delete": true
+                    },
+                    "name": "Sites",
+                    "format": "cluster",
+                    "geom": "geom_4326",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "shepherd_neame.sites",
+                    "cluster_label": "pub_name",
+                    "infoj": [
+                        {
+                            "field": "pub_name",
+                            "label": "Site Name",
+                            "edit": true,
+                            "inline": true
+                        },
+                        {
+                            "label": "Drivetimes",
+                            "type": "label"
+                        },
+                        {
+                            "name": "HERE Catchment 5min",
+                            "field": "isoline_5min",
+                            "fieldfx": "ST_asGeoJson(isoline_5min)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline": {
+                                    "range": 5
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#BB0A21",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2
+                            }
+                        },
+                        {
+                            "label": "Population Growth % (2011-17)",
+                            "field": "pop_growth_11_17_5min",
+                            "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
+                            "level": 1,
+                            "type": "numeric",
+                            "lookup": {
+                                "table_a": "shepherd_neame.sites",
+                                "table_b": "gb_hx_1k",
+                                "geom_a": "isoline_5min",
+                                "geom_b": "geomcntr"
+                            }
+                        },
+                        {
+                            "label": "Competitors 5min",
+                            "field": "comp_5min",
+                            "fieldfx": "COUNT(b.glxid)",
+                            "level": 1,
+                            "type": "integer",
+                            "lookup": {
+                                "table_a": "shepherd_neame.sites",
+                                "table_b": "shepherd_neame.food_beverage",
+                                "geom_a": "isoline_5min",
+                                "geom_b": "geom"
+                            }
+                        },
+                        {
+                            "label": "field_with",
+                            "field": "field_with",
+                            "fieldfx": "comp_5min * pop_growth_11_17_5min",
+                            "level": 1,
+                            "type": "numeric",
+                            "with": true
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#2364AA",
+                            "layers": {
+                                "0.75": "#EEE",
+                                "0.50": "#2364AA"
+                            }
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#2364AA",
+                            "layers": {
+                                "0.75": "#EEE",
+                                "0.50": "#2364AA"
+                            }
+                        }
+                    }
                 },
                 "grid": {
                     "name": "Grid",

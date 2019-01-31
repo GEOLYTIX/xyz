@@ -3,6 +3,8 @@ module.exports = async (fields, infoj, qID) => {
   // Iterate through infoj and push individual entries into fields array.
   await infoj.forEach(entry => {
 
+    if (entry.with) return;
+
     if (entry.lookup) {
     
       if (!qID
@@ -15,7 +17,6 @@ module.exports = async (fields, infoj, qID) => {
       let q = `
       (
         SELECT ${entry.fieldfx || `${entry.lookup.aggregate || 'SUM'}(${entry.field})`}
-        AS "${entry.field}"
         FROM
           ${entry.lookup.table_a} a,
           ${entry.lookup.table_b} b
@@ -26,7 +27,7 @@ module.exports = async (fields, infoj, qID) => {
             a.${entry.lookup.geom_a},
             b.${entry.lookup.geom_b}
           )
-      )`;
+      ) AS ${entry.field}`;
         
       return fields.push(q);
     

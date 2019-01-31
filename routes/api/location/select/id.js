@@ -69,11 +69,26 @@ module.exports = fastify => {
       // ${layer.log_table ? 'rank = 1 AND ' : ''}
       // ${qID} = $1;`;
 
+      const fields_with = [];
 
-      var q =
-      `SELECT ${fields.join()}`
-      + `\n FROM ${table}`
-      + `\n WHERE ${qID} = $1;`;
+      await infoj.forEach(entry => {
+
+        if (entry.with) {
+          fields_with.push(`${entry.fieldfx} as ${entry.field}`);
+        } else if (entry.field) {
+          fields_with.push(entry.field);
+        }
+
+      });
+
+      var q = `
+      with q as (
+      SELECT ${fields.join()}
+      FROM ${table}
+      WHERE ${qID} = $1
+      )
+      select ${fields_with.join()}, geomj from q
+      `;
 
       var rows = await global.pg.dbs[layer.dbs](q, [id]);
 
