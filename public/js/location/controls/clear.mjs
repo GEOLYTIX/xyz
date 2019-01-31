@@ -28,7 +28,7 @@ export default (_xyz, record) => {
         // Clear geometries and delete location to free up record.
         record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
         // Clear additional geometries
-        record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
+        if(record.location.geometries.additional) record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
         delete record.location;
 
         // Run locations init when all records are free.
