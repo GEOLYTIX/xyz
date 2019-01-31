@@ -127,21 +127,23 @@ export default _xyz => {
 
     }
 
-    _xyz.panes.list.push(_xyz.map.createPane(layer.key));
-    _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
+    return;
+
+    // _xyz.panes.list.push(_xyz.map.createPane(layer.key));
+    // _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
     
-    if (layer.format === 'mvt') layer.get = format_mvt(_xyz, layer);
+    // if (layer.format === 'mvt') layer.get = format_mvt(_xyz, layer);
 
-    if (layer.format === 'geojson') layer.get = format_geojson(_xyz, layer);
+    // if (layer.format === 'geojson') layer.get = format_geojson(_xyz, layer);
 
-    if (layer.format === 'cluster') layer.get = format_cluster(_xyz, layer);
+    // if (layer.format === 'cluster') layer.get = format_cluster(_xyz, layer);
 
-    if (layer.format === 'tiles') layer.get = format_tiles(_xyz, layer);
+    // if (layer.format === 'tiles') layer.get = format_tiles(_xyz, layer);
 
-    if (layer.format === 'grid') layer.get = format_grid(_xyz, layer);
+    // if (layer.format === 'grid') layer.get = format_grid(_xyz, layer);
 
-    layer.loaded = false;
-    layer.get();
+    // layer.loaded = false;
+    // layer.get();
 
   };
 

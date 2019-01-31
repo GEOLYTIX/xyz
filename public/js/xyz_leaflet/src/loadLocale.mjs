@@ -22,26 +22,28 @@ export default _xyz => {
 
     Object.values(_xyz.layers.list).forEach(layer => _xyz.layers.add(layer));
 
-    _xyz.panes.list.push(_xyz.map.createPane('gazetteer'));
-    _xyz.map.getPane('gazetteer').style.zIndex = _xyz.panes.next++;
+    return;
 
-    _xyz.panes.list.push(_xyz.map.createPane('select_display'));
-    _xyz.map.getPane('select_display').style.zIndex = _xyz.panes.next++;
+    // _xyz.panes.list.push(_xyz.map.createPane('gazetteer'));
+    // _xyz.map.getPane('gazetteer').style.zIndex = _xyz.panes.next++;
 
-    _xyz.panes.list.push(_xyz.map.createPane('select'));
-    _xyz.map.getPane('select').style.zIndex = _xyz.panes.next++;
+    // _xyz.panes.list.push(_xyz.map.createPane('select_display'));
+    // _xyz.map.getPane('select_display').style.zIndex = _xyz.panes.next++;
 
-    _xyz.panes.list.push(_xyz.map.createPane('select_marker'));
-    _xyz.map.getPane('select_marker').style.zIndex = _xyz.panes.next++;
+    // _xyz.panes.list.push(_xyz.map.createPane('select'));
+    // _xyz.map.getPane('select').style.zIndex = _xyz.panes.next++;
 
-    _xyz.panes.list.push(_xyz.map.createPane('select_circle'));
-    _xyz.map.getPane('select_circle').style.zIndex = _xyz.panes.next++;
+    // _xyz.panes.list.push(_xyz.map.createPane('select_marker'));
+    // _xyz.map.getPane('select_marker').style.zIndex = _xyz.panes.next++;
 
-    _xyz.panes.list.push(_xyz.map.createPane('drawing'));
-    _xyz.map.getPane('drawing').style.zIndex = _xyz.panes.next++;
+    // _xyz.panes.list.push(_xyz.map.createPane('select_circle'));
+    // _xyz.map.getPane('select_circle').style.zIndex = _xyz.panes.next++;
 
-    _xyz.panes.list.push(_xyz.map.createPane('default'));
-    _xyz.map.getPane('default').style.zIndex = _xyz.panes.next++;
+    // _xyz.panes.list.push(_xyz.map.createPane('drawing'));
+    // _xyz.map.getPane('drawing').style.zIndex = _xyz.panes.next++;
+
+    // _xyz.panes.list.push(_xyz.map.createPane('default'));
+    // _xyz.map.getPane('default').style.zIndex = _xyz.panes.next++;
 
   };
 

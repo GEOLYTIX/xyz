@@ -13,7 +13,40 @@ export default _xyz => {
 
     // Get workspace from XYZ host.
     // Proceed with init from callback.
-    _xyz.getWorkspace(init);
+    _xyz.getWorkspace(_init);
+
+    function _init(){
+
+      _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
+
+      const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
+
+      _xyz.loadLocale(locale);
+
+      _xyz.mapview = {};
+      _xyz.mapview.createMap = pp => {
+
+
+        // Create Leaflet map object.
+        _xyz.map = _xyz.L.map(pp.target, {
+          renderer: _xyz.L.svg(),
+          //scrollWheelZoom: params.scrollWheelZoom || false,
+          zoomControl: false,
+          attributionControl: false
+        });
+
+
+        _xyz.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(_xyz.map);
+
+        _xyz.map.setView([0,0],5);
+
+
+      };
+
+      // Continue with callback if provided.
+      if (params.callback) return params.callback(_xyz);
+
+    }
 
     function init(){
 

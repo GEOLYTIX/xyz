@@ -21,21 +21,34 @@
 _xyz().init({
   host: document.head.dataset.dir,
   //token: API token,
-  map_id: 'xyz_map1',
-  locale: 'NE',
-  btnZoomIn: document.getElementById('btnZoomIn1'),
-  btnZoomOut: document.getElementById('btnZoomOut1'),
-  callback: mvt_select
+  // map_id: 'xyz_map1',
+  // locale: 'NE',
+  // btnZoomIn: document.getElementById('btnZoomIn1'),
+  // btnZoomOut: document.getElementById('btnZoomOut1'),
+  callback: _foo => {
+
+    _foo.mapview.createMap({
+      target: document.getElementById('xyz_map1')
+    });
+
+  }
 });
 
 _xyz().init({
   host: document.head.dataset.dir,
-  //token: API token,
-  map_id: 'xyz_map2',
-  locale: 'NE',
-  btnZoomIn: document.getElementById('btnZoomIn2'),
-  btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: TableView
+  // token: API token,
+  // map_id: 'xyz_map2',
+  // locale: 'NE',
+  // btnZoomIn: document.getElementById('btnZoomIn2'),
+  // btnZoomOut: document.getElementById('btnZoomOut2'),
+  callback: _bar => {
+
+    _bar.tableview.createTable({
+      layer: _bar.layers.list.COUNTRIES,
+      target: document.getElementById('xyz_table1')
+    });
+
+  }
 });
 
 function LocatePopup(_xyz){

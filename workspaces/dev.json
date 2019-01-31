@@ -93,10 +93,6 @@
                             "fillColor": "#fce4ec",
                             "fillOpacity": 1
                         },
-                        "selected": {
-                            "color": "#ff69b4",
-                            "fillColor": "#ff69b4"
-                        },
                         "themes": {
                             "Population": {
                                 "type": "graduated",
@@ -408,6 +404,12 @@
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "view_election_ward": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "politics.view_election_ward",
+                    "qID": "gid"
                 },
                 "cluster_catchments": {
                     "format": "cluster",
