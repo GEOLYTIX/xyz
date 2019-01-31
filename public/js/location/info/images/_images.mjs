@@ -25,7 +25,7 @@ export default (_xyz, record, entry) => {
     },
     style: {
       position: 'relative',
-      height: '180px'
+      height: '190px'
     },
     appendTo: entry.row
   });

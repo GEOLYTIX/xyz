@@ -158,7 +158,7 @@ module.exports = fastify => {
 
       if (theme === 'competition') var q = `
       SELECT
-        count(1) count,
+        SUM(size) count,
         SUM(size) size,
         JSON_Agg(JSON_Build_Object(cat, size)) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
