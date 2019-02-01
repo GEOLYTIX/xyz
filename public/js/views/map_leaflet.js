@@ -6,20 +6,26 @@
     host: document.head.dataset.dir,
     // token: API token,
     // map_id: 'xyz_map1',
-    // locale: 'NE',
+    locale: 'GB',
     // scrollWheelZoom: true,
-    // view: {
-    //   lat: 51.52,
-    //   lng: 0.24,
-    //   z: 12,
-    // },
     btnZoomIn: document.getElementById('btnZoomIn1'),
     btnZoomOut: document.getElementById('btnZoomOut1'),
   });
   
+  // _foo.loadLocale({
+  //   locale: 'GB'
+  // });
+
   _foo.mapview.create({
-    target: document.getElementById('xyz_map1')
+    target: document.getElementById('xyz_map1'),
+    view: {
+      lat: 53,
+      lng: -1,
+      z: 8,
+    },
   });
+  
+  _foo.layers.list.retail_points.show();
 
 })();
 
@@ -29,7 +35,7 @@ _xyz().init({
   host: document.head.dataset.dir,
   // token: API token,
   // map_id: 'xyz_map2',
-  // locale: 'NE',
+  locale: 'NE',
   // btnZoomIn: document.getElementById('btnZoomIn2'),
   // btnZoomOut: document.getElementById('btnZoomOut2'),
   callback: _bar => {

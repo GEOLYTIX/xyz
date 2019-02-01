@@ -1,6 +1,10 @@
 export default _xyz => {
 
-  _xyz.loadLocale = locale => {
+  _xyz.loadLocale = params => {
+
+    _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
+
+    const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
 
     // Filter invalid layers
     _xyz.layers.list = Object.keys(locale.layers)

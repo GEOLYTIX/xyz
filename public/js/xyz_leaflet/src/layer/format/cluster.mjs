@@ -178,7 +178,7 @@ export default (_xyz, layer) => () => {
         const xhr = new XMLHttpRequest();
       
         xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-          locale: _xyz.locale,
+          locale: layer.locale,
           layer: layer.key,
           table: layer.table,
           filter: JSON.stringify(layer.filter.current),

@@ -13,27 +13,14 @@ export default _xyz => {
 
     // Get workspace from XYZ host.
     // Proceed with init from callback.
-    if (params.callback) return _xyz.setWorkspace(init);
+    if (params.callback) return _xyz.setWorkspace(params);
 
     // Fetch workspace if no callback is provided.
     _xyz.ws = await _xyz.fetchWorkspace();
 
-    init();
+    _xyz.loadLocale(params);
 
     return _xyz;
-
-
-    function init(){
-
-      _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
-
-      const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
-
-      _xyz.loadLocale(locale);
-
-      if (params.callback) params.callback(_xyz);
-
-    }
 
   };
 

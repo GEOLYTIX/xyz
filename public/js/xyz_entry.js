@@ -38,7 +38,6 @@ gazetteer(_xyz);
 _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
-  scrollWheelZoom: true,
   btnZoomIn: document.getElementById('btnZoomIn'),
   btnZoomOut: document.getElementById('btnZoomOut'),
   btnLocate: document.getElementById('btnLocate'),
@@ -48,7 +47,8 @@ _xyz.init({
 function init(_xyz) {
 
   _xyz.mapview.create({
-    target: document.getElementById('Map')
+    target: document.getElementById('Map'),
+    scrollWheelZoom: true
   });
 
   // Create locales dropdown (if more than one locale in workspace).

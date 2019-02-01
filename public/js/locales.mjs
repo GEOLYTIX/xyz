@@ -18,38 +18,33 @@ export default _xyz => {
       selected: _xyz.locale,
       onchange: e => {
   
-      // Set the locale and remove hooks.
+        // Set the locale and remove hooks.
         _xyz.locale = e.target.value;
 
         _xyz.hooks.removeAll();
   
         _xyz.hooks.set('locale', _xyz.locale);
-  
-        // Initiate map control.
-        _xyz.init({
-          host: document.head.dataset.dir,
-          token: document.body.dataset.token,
-          scrollWheelZoom: true,
-          map_id: 'Map',
-          locale: _xyz.locale,
-          callback: init
+
+        _xyz.loadLocale({
+          locale: _xyz.locale
         });
 
-        function init() {
+        _xyz.mapview.create({
+          target: document.getElementById('Map'),
+          scrollWheelZoom: true
+        });
 
-          // Init layers.
-          _xyz.layers.init();
+        // Init layers.
+        _xyz.layers.init();
         
-          // Init locations.
-          _xyz.locations.init();
+        // Init locations.
+        _xyz.locations.init();
 
-          // Init gazetteer.
-          _xyz.gazetteer.init();
+        // Init gazetteer.
+        _xyz.gazetteer.init();
 
-          // Init tableview
-          _xyz.tableview.init();
-
-        }
+        // Init tableview
+        _xyz.tableview.init();
 
       }
     });

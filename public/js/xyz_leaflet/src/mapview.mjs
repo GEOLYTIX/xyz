@@ -20,13 +20,7 @@ export default _xyz => {
       zoomControl: false,
       attributionControl: false
     });
-    
-    // Set locale from params or to first in workspace.
-    _xyz.locale = _xyz.hooks.current.locale || params.locale || Object.keys(_xyz.ws.locales)[0];
-    
-    // Set locale hook.
-    if (_xyz.hooks.set) _xyz.hooks.set('locale', _xyz.locale);
-    
+            
     // Assign params to locale.
     // This makes it possible to override client side workspace entries.
     const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
@@ -99,6 +93,19 @@ export default _xyz => {
       Object.values(_xyz.layers.list).forEach(layer => layer.get());
       
     };
+
+    _xyz.panes.next = 500;
+
+    _xyz.panes.list = [];
+
+    Object.values(_xyz.layers.list).forEach(layer => {
+
+      _xyz.panes.list.push(_xyz.map.createPane(layer.key));
+      _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
+      layer.loaded = false;
+      layer.get();
+  
+    });
     
     _xyz.panes.list.push(_xyz.map.createPane('gazetteer'));
     _xyz.map.getPane('gazetteer').style.zIndex = _xyz.panes.next++;
@@ -120,15 +127,6 @@ export default _xyz => {
 
     _xyz.panes.list.push(_xyz.map.createPane('default'));
     _xyz.map.getPane('default').style.zIndex = _xyz.panes.next++;
-
-    Object.values(_xyz.layers.list).forEach(layer => {
-
-      _xyz.panes.list.push(_xyz.map.createPane(layer.key));
-      _xyz.map.getPane(layer.key).style.zIndex = _xyz.panes.next++;
-      layer.loaded = false;
-      layer.get();
-
-    });
 
     // Continue with callback if provided.
     if (params.callback) params.callback(_xyz);

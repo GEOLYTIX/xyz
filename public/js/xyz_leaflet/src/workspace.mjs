@@ -18,7 +18,7 @@ export default _xyz => {
 
   };
 
-  _xyz.setWorkspace = done => {
+  _xyz.setWorkspace = params => {
 
     // XHR to retrieve workspace from host backend.
     const xhr = new XMLHttpRequest();
@@ -40,7 +40,10 @@ export default _xyz => {
           return obj;
         }, {});
 
-      done();
+
+      _xyz.loadLocale(params);
+
+      params.callback(_xyz);
 
     };
 

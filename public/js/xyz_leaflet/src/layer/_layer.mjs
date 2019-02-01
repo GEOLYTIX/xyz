@@ -22,6 +22,8 @@ export default _xyz => {
 
   _xyz.layers.add = layer => {
 
+    layer.locale = _xyz.locale;
+
     layer.tableCurrent = () => {
 
       if (!layer.tables) return layer.table;
@@ -126,7 +128,7 @@ export default _xyz => {
       };
 
     }
-    
+   
     if (layer.format === 'mvt') layer.get = format_mvt(_xyz, layer);
 
     if (layer.format === 'geojson') layer.get = format_geojson(_xyz, layer);
