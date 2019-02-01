@@ -3,7 +3,7 @@ module.exports = async (fields, infoj, qID) => {
   // Iterate through infoj and push individual entries into fields array.
   await infoj.forEach(entry => {
 
-    if (entry.with) return;
+    if (entry.withSelect) return;
 
     if (entry.lookup) {
     

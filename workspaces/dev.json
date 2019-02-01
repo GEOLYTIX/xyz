@@ -1092,12 +1092,12 @@
                             }
                         },
                         {
-                            "label": "field_with",
-                            "field": "field_with",
+                            "label": "field_withSelect",
+                            "field": "field_withSelect",
                             "fieldfx": "comp_5min * pop_growth_11_17_5min",
                             "level": 1,
                             "type": "numeric",
-                            "with": true
+                            "withSelect": true
                         }
                     ],
                     "style": {

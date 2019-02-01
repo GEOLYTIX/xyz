@@ -73,7 +73,7 @@ module.exports = fastify => {
 
       await infoj.forEach(entry => {
 
-        if (entry.with) {
+        if (entry.withSelect) {
           fields_with.push(`${entry.fieldfx} as ${entry.field}`);
         } else if (entry.field) {
           fields_with.push(entry.field);
