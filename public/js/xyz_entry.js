@@ -31,14 +31,13 @@ _locations(_xyz);
 import gazetteer from './gazetteer.mjs';
 gazetteer(_xyz);
 
-import _tableview from './tableview/_tableview.mjs';
-_tableview(_xyz);
+// import _tableview from './tableview/_tableview.mjs';
+// _tableview(_xyz);
 
 // Initiate map control.
 _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
-  map_id: 'Map',
   scrollWheelZoom: true,
   btnZoomIn: document.getElementById('btnZoomIn'),
   btnZoomOut: document.getElementById('btnZoomOut'),
@@ -46,7 +45,11 @@ _xyz.init({
   callback: init
 });
 
-function init() {
+function init(_xyz) {
+
+  _xyz.mapview.create({
+    target: document.getElementById('Map')
+  });
 
   // Create locales dropdown (if more than one locale in workspace).
   _xyz.locales(_xyz.ws.locales);
@@ -62,7 +65,6 @@ function init() {
 
   // Init tableview
   if(_xyz.view.mode === 'desktop') _xyz.tableview.init();
-  //console.log(_xyz.layers.list);
 
   if (_xyz.log) console.log(_xyz);
 

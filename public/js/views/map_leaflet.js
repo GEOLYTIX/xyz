@@ -1,38 +1,29 @@
-// if ( window.history.replaceState ) {
-//   window.history.replaceState( null, null, window.location.href );
-// }
+(async () => {
 
-// _xyz().init({
-//   host: document.head.dataset.dir,
-//   //token: API token,
-//   map_id: 'xyz_map1',
-//   locale: 'GB',
-//   scrollWheelZoom: true,
-//   view: {
-//     lat: 51.52,
-//     lng: 0.24,
-//     z: 12,
-//   },
-//   btnZoomIn: document.getElementById('btnZoomIn1'),
-//   btnZoomOut: document.getElementById('btnZoomOut1'),
-//   callback: Grid
-// });
+  const _foo = _xyz();
 
-_xyz().init({
-  host: document.head.dataset.dir,
-  //token: API token,
-  // map_id: 'xyz_map1',
-  // locale: 'NE',
-  // btnZoomIn: document.getElementById('btnZoomIn1'),
-  // btnZoomOut: document.getElementById('btnZoomOut1'),
-  callback: _foo => {
+  await _foo.init({
+    host: document.head.dataset.dir,
+    // token: API token,
+    // map_id: 'xyz_map1',
+    // locale: 'NE',
+    // scrollWheelZoom: true,
+    // view: {
+    //   lat: 51.52,
+    //   lng: 0.24,
+    //   z: 12,
+    // },
+    btnZoomIn: document.getElementById('btnZoomIn1'),
+    btnZoomOut: document.getElementById('btnZoomOut1'),
+  });
+  
+  _foo.mapview.create({
+    target: document.getElementById('xyz_map1')
+  });
 
-    _foo.mapview.createMap({
-      target: document.getElementById('xyz_map1')
-    });
+})();
 
-  }
-});
+
 
 _xyz().init({
   host: document.head.dataset.dir,
@@ -43,10 +34,20 @@ _xyz().init({
   // btnZoomOut: document.getElementById('btnZoomOut2'),
   callback: _bar => {
 
+    _bar.mapview.create({
+      target: document.getElementById('xyz_map2')
+    });
+
     _bar.tableview.createTable({
       layer: _bar.layers.list.COUNTRIES,
       target: document.getElementById('xyz_table1')
     });
+
+    _bar.layers.list['Mapbox Base'].remove();
+
+    _bar.layers.list.COUNTRIES.style.theme = null;
+  
+    _bar.layers.list.COUNTRIES.show();
 
   }
 });

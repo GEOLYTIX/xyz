@@ -153,6 +153,7 @@ export default () => ({
     }
   },
   tableview: {},
+  mapview: {},
   token: null,
   utils: null,
   view: { 
