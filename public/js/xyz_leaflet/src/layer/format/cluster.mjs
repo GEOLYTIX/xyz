@@ -68,8 +68,6 @@ export default (_xyz, layer) => () => {
            
     // Data is returned and the layer is still current.
     if (e.target.status !== 200 || !layer.display) return;
-
-    if (layer.attribution) _xyz.attribution.set(layer.attribution);
     
     const cluster = e.target.response;
 

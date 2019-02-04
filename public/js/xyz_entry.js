@@ -63,6 +63,9 @@ function init(_xyz) {
   // Init gazetteer.
   _xyz.gazetteer.init();
 
+  // Init locator.
+  _xyz.locate.init();
+
   // Init tableview
   if(_xyz.view.mode === 'desktop') _xyz.tableview.init();
 

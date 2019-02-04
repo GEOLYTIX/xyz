@@ -45,8 +45,6 @@ export default _xyz => {
 
       if (layer.loader) layer.loader.style.display = (!table || !layer.display) ? 'none' : 'block';
 
-      if (!table && layer.attribution) _xyz.attribution.remove(layer.attribution);
-
       return table;
 
     };
@@ -75,6 +73,7 @@ export default _xyz => {
       layer.display = true;
       layer.loaded = false;
       layer.get();
+      _xyz.attribution.check();
     };
 
     layer.remove = () => {
@@ -82,6 +81,7 @@ export default _xyz => {
       layer.loaded = false;
       if (layer.L) _xyz.map.removeLayer(layer.L);
       if (layer.attribution) _xyz.attribution.remove(layer.attribution);
+      _xyz.attribution.check();
     };
 
     if (!layer.format) return;

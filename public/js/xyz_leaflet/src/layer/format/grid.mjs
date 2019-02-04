@@ -64,8 +64,6 @@ export default (_xyz, layer) => () => {
 
     if (e.target.status !== 200 || !layer.display) return;
 
-    if (layer.attribution) _xyz.attribution.set(layer.attribution);
-
     // Add geoJSON feature collection to the map.
     layer.L = _xyz.L.geoJson(processGrid(e.target.response), {
       pointToLayer: function (feature, latlng) {

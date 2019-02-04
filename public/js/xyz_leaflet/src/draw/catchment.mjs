@@ -5,7 +5,7 @@ export default _xyz => {
     if(!layer.display) layer.show();
     
     layer.header.classList.add('edited');
-    _xyz.map_dom.style.cursor = 'crosshair';
+    _xyz.mapview.node.style.cursor = 'crosshair';
 
     layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
 
@@ -32,7 +32,7 @@ export default _xyz => {
 
       xhr.onload = e => {
 
-        _xyz.map_dom.style.cursor = '';
+        _xyz.mapview.node.style.cursor = '';
 
         layer.loaded = false;
         //layer.get();
@@ -54,7 +54,7 @@ export default _xyz => {
 
       _xyz.state.finish();
     
-      _xyz.map_dom.style.cursor = 'busy';
+      _xyz.mapview.node.style.cursor = 'busy';
 
     });
   

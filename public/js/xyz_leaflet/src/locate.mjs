@@ -1,5 +1,20 @@
 export default _xyz => {
 
+  // Gazetteer init which is called on change of locale.
+  _xyz.locate.init = () => {
+
+    if (!_xyz.ws.locales[_xyz.locale].locate) {
+
+      document.getElementById('btnLocate').style.display = 'none';
+      return;
+  
+    } else {
+
+      document.getElementById('btnLocate').style.display = 'block';
+    }
+
+  };
+
   _xyz.locate.toggle = () => {
 
     _xyz.locate.active = !_xyz.locate.active;

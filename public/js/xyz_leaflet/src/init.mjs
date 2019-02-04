@@ -18,7 +18,7 @@ export default _xyz => {
     // Fetch workspace if no callback is provided.
     _xyz.ws = await _xyz.fetchWorkspace();
 
-    _xyz.loadLocale(params);
+    //_xyz.loadLocale(params);
 
     return _xyz;
 

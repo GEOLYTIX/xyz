@@ -23,13 +23,13 @@ export default _xyz => {
     // Show tableview if some layers have tableview
     if (Object.values(_xyz.layers.list).some(layer => layer.table_view)) {
 
-      _xyz.map_dom.style.height = 'calc(100% - 40px)';
+      _xyz.mapview.node.style.height = 'calc(100% - 40px)';
       _xyz.map.invalidateSize();
       _xyz.tableview.container.style.display = 'block';
 
     } else {
 
-      _xyz.map_dom.style.height = '100%';
+      _xyz.mapview.node.style.height = '100%';
       _xyz.map.invalidateSize();
       _xyz.tableview.container.style.display = 'none';
 

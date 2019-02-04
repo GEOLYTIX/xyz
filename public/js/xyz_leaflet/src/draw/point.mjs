@@ -7,7 +7,7 @@ export default _xyz => {
     if(!layer.display) layer.show();
     
     layer.header.classList.add('edited');
-    _xyz.map_dom.style.cursor = 'crosshair';
+    _xyz.mapview.node.style.cursor = 'crosshair';
     
     layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
     

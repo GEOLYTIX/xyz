@@ -2,13 +2,14 @@
     "ws": {
         "title": "GEOLYTIX | XYZ",
         "documentation": "optional",
-        "locate": "optional",
         "locales": {
             "zero": {}
         }
     },
     "locale": {
         "name": "optional",
+        "locate": "optional",
+        "attribution": "optional",
         "minZoom": 0,
         "maxZoom": 20,
         "bounds": {

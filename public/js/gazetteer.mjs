@@ -22,7 +22,7 @@ export default _xyz => {
   // Gazetteer init which is called on change of locale.
   _xyz.gazetteer.init = () => {
 
-  // Hide gazetteer button if no gazetteer is set for the locale.
+    // Hide gazetteer button if no gazetteer is set for the locale.
     if (!_xyz.ws.locales[_xyz.locale].gazetteer) {
       _xyz.gazetteer.toggle.classList.remove('active');
       _xyz.gazetteer.toggle.style.display = 'none';

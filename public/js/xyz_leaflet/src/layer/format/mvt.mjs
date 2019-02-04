@@ -63,8 +63,6 @@ export default (_xyz, layer) => () => {
      
       if (layer.loader)  layer.loader.style.display = 'none';
 
-      if (layer.attribution) _xyz.attribution.set(layer.attribution);
-
       layer.loaded = true;
 
     })

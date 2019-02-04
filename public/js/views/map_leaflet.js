@@ -6,15 +6,15 @@
     host: document.head.dataset.dir,
     // token: API token,
     // map_id: 'xyz_map1',
-    locale: 'GB',
+    // locale: 'GB',
     // scrollWheelZoom: true,
     btnZoomIn: document.getElementById('btnZoomIn1'),
     btnZoomOut: document.getElementById('btnZoomOut1'),
   });
   
-  // _foo.loadLocale({
-  //   locale: 'GB'
-  // });
+  _foo.loadLocale({
+    locale: 'GB'
+  });
 
   _foo.mapview.create({
     target: document.getElementById('xyz_map1'),
@@ -35,18 +35,22 @@ _xyz().init({
   host: document.head.dataset.dir,
   // token: API token,
   // map_id: 'xyz_map2',
-  locale: 'NE',
-  view: {
-    lat: 53,
-    lng: -1,
-    z: 8,
-  },
+  // locale: 'NE',
   // btnZoomIn: document.getElementById('btnZoomIn2'),
   // btnZoomOut: document.getElementById('btnZoomOut2'),
   callback: _bar => {
 
+    _bar.loadLocale({
+      locale: 'NE'
+    });
+
     _bar.mapview.create({
-      target: document.getElementById('xyz_map2')
+      target: document.getElementById('xyz_map2'),
+      view: {
+        lat: 53,
+        lng: -1,
+        z: 8,
+      },
     });
 
     _bar.tableview.createTable({

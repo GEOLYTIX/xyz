@@ -6,8 +6,6 @@ export default (_xyz, layer) => () => {
   if (layer.loaded) return;
   layer.loaded = true;
 
-  if (layer.attribution) _xyz.attribution.set(layer.attribution);
-
   // Augment request with token if proxied through backend.
   // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
   let uri = layer.URI.indexOf('provider') > 0 ?

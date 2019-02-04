@@ -2,28 +2,31 @@ export default _xyz => {
 
   _xyz.mapview.create = params => {
 
-    // Set XYZ map DOM.
-    _xyz.map_dom = params.target;
-
-    if (!_xyz.map_dom) return console.error('XYZ map not defined!');
-    
-    // Create attribution in map DOM.
-    _xyz.attribution.create();
-    
     // Remove existing Leaflet map object.
     if (_xyz.map) _xyz.map.remove();
+
+    if (!params.target) return console.error('No target for mapview!');
+
+    // Set XYZ map DOM.
+    _xyz.mapview.node = params.target;
     
     // Create Leaflet map object.
-    _xyz.map = _xyz.L.map(_xyz.map_dom, {
+    _xyz.map = _xyz.L.map(_xyz.mapview.node, {
       renderer: _xyz.L.svg(),
       scrollWheelZoom: params.scrollWheelZoom || false,
       zoomControl: false,
       attributionControl: false
     });
+
+    // Load locale first if not defined.
+    if (!_xyz.locale) _xyz.loadLocale();
             
     // Assign params to locale.
     // This makes it possible to override client side workspace entries.
     const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
+
+    // Create attribution in map DOM.
+    _xyz.attribution.create();
     
     if(locale.showScaleBar) {
       // Add scale bar to map
@@ -127,9 +130,6 @@ export default _xyz => {
 
     _xyz.panes.list.push(_xyz.map.createPane('default'));
     _xyz.map.getPane('default').style.zIndex = _xyz.panes.next++;
-
-    // Continue with callback if provided.
-    if (params.callback) params.callback(_xyz);
 
   };
 

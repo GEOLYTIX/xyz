@@ -4,7 +4,7 @@ export default _xyz => {
 
     layer.header.classList.remove('edited');
 
-    _xyz.map_dom.style.cursor = '';
+    _xyz.mapview.node.style.cursor = '';
     _xyz.map.off('mousemove');
     _xyz.map.off('click');
     _xyz.map.off('contextmenu');

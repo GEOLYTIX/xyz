@@ -1364,10 +1364,6 @@ input[type=range]::-moz-range-thumb {
   font-family: ffmark_bold, sans-serif;
   font-size: 18px;
   text-shadow: 1px 1px 1px #cf9; }
-  .attribution #attribution_links i {
-    font-size: 14px; }
-  .attribution #attribution_links a {
-    margin-left: 5px; }
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
     font-size: 40px; }

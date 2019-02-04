@@ -90,9 +90,10 @@ module.exports = fastify => {
               ${ m - (y * r) - r},
               3857
             ),
-          4096,
-          256,
-          true) geom
+            4096,
+            256,
+            true
+          ) geom
 
         FROM ${table}
 

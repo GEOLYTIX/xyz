@@ -22,6 +22,7 @@ export default _xyz => {
 
     // XHR to retrieve workspace from host backend.
     const xhr = new XMLHttpRequest();
+
     xhr.open('GET', _xyz.host + '/workspace/get?token=' + _xyz.token);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
@@ -29,7 +30,7 @@ export default _xyz => {
 
       if (e.target.status !== 200) return console.error('Failed to retrieve workspace from XYZ host!');
 
-      // Assign workspace to __xyz.
+      // Assign workspace.
       _xyz.ws = e.target.response;
 
       // Filter invalid locales
@@ -41,7 +42,7 @@ export default _xyz => {
         }, {});
 
 
-      _xyz.loadLocale(params);
+      //_xyz.loadLocale(params);
 
       params.callback(_xyz);
 
