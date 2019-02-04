@@ -36,6 +36,11 @@ _xyz().init({
   // token: API token,
   // map_id: 'xyz_map2',
   locale: 'NE',
+  view: {
+    lat: 53,
+    lng: -1,
+    z: 8,
+  },
   // btnZoomIn: document.getElementById('btnZoomIn2'),
   // btnZoomOut: document.getElementById('btnZoomOut2'),
   callback: _bar => {
