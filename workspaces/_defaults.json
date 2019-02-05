@@ -9,7 +9,10 @@
     "locale": {
         "name": "optional",
         "locate": "optional",
-        "attribution": "optional",
+        "attribution": {
+            "XYZ #dev": "https://github.com/geolytix/xyz#development",
+            "Leaflet": "https://leafletjs.com"
+        },
         "minZoom": 0,
         "maxZoom": 20,
         "bounds": {

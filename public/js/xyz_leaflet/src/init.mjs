@@ -1,4 +1,12 @@
+import workspace from './workspace.mjs';
+
+import locale from './locale.mjs';
+
 export default _xyz => {
+
+  workspace(_xyz);
+
+  locale(_xyz);
 
   _xyz.init = async params => {
 
@@ -9,16 +17,12 @@ export default _xyz => {
 
     if (params.token) _xyz.token = params.token;
 
-    _xyz.assignBtn(params);
-
     // Get workspace from XYZ host.
     // Proceed with init from callback.
     if (params.callback) return _xyz.setWorkspace(params);
 
     // Fetch workspace if no callback is provided.
     _xyz.ws = await _xyz.fetchWorkspace();
-
-    //_xyz.loadLocale(params);
 
     return _xyz;
 

@@ -167,7 +167,7 @@ export default (_xyz, layer) => {
 
   //Create cluster_logscale checkbox.
   layer.cluster_logscale = layer.cluster_logscale || false;
-  _xyz.utils.checkbox({
+  _xyz.utils.createCheckbox({
     label: 'Log scale cluster size.',
     appendTo: panel,
     onChange: e => {

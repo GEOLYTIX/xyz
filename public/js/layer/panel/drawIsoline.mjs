@@ -167,17 +167,7 @@ export default (_xyz, layer) => {
     },
     appendTo: row
   });
-        
-  /*_xyz.utils.checkbox({
-            label: 'Use live traffic data',
-            onChange: e => {
-                layer.edit.isoline.traffic = e.target.checked;
-                console.log('if this is checked select departure time');
-                // public transport not supported by isolines endpoint
-            },
-            appendTo: block
-        });*/
-        
+               
   _xyz.utils.slider({
     title: 'Range of isoline: ',
     min: 1, // 3 mins or 3 km

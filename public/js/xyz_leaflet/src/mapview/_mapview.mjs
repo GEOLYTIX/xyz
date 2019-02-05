@@ -1,4 +1,18 @@
+import attribution from './attribution.mjs';
+
+import locate from './locate.mjs';
+
+import draw from './draw/_draw.mjs';
+
+import assignBtn from './assignBtn.mjs';
+
 export default _xyz => {
+
+  attribution(_xyz);
+
+  draw(_xyz);
+
+  locate(_xyz);
 
   _xyz.mapview.create = params => {
 
@@ -18,8 +32,10 @@ export default _xyz => {
       attributionControl: false
     });
 
+    assignBtn(_xyz, params);
+
     // Load locale first if not defined.
-    if (!_xyz.locale) _xyz.loadLocale();
+    if (!_xyz.locale) _xyz.loadLocale(params);
             
     // Assign params to locale.
     // This makes it possible to override client side workspace entries.

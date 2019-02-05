@@ -4,10 +4,6 @@
         "NE": {
             "minZoom": 3,
             "maxZoom": 11,
-            "attribution": {
-                "XYZ 1.1.1": "https://github.com/geolytix/xyz#development",
-                "Leaflet": "https://leafletjs.com"
-            },
             "layers": {
                 "OSM": {
                     "group": "Base Layer",

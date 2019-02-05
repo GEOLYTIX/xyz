@@ -1,83 +1,80 @@
 (async () => {
 
-  const _foo = _xyz();
+  const xyz = _xyz();
 
-  await _foo.init({
-    host: document.head.dataset.dir,
+  await xyz.init({
     // token: API token,
-    // map_id: 'xyz_map1',
-    // locale: 'GB',
-    // scrollWheelZoom: true,
-    btnZoomIn: document.getElementById('btnZoomIn1'),
-    btnZoomOut: document.getElementById('btnZoomOut1'),
+    host: document.head.dataset.dir
   });
   
-  _foo.loadLocale({
+  xyz.loadLocale({
     locale: 'GB'
   });
 
-  _foo.mapview.create({
+  xyz.mapview.create({
     target: document.getElementById('xyz_map1'),
+    scrollWheelZoom: true,
     view: {
       lat: 53,
       lng: -1,
       z: 8,
     },
+    btn: {
+      ZoomIn: document.getElementById('btnZoomIn1'),
+      ZoomOut: document.getElementById('btnZoomOut1')
+    }
   });
   
-  _foo.layers.list.retail_points.show();
+  xyz.layers.list.retail_points.show();
+
+  xyz.locate.toggle();
+
+  xyz.locations.select_popup = location => {
+    let container = document.getElementById('location_info_container1');
+    container.innerHTML = '';
+    container.appendChild(location.info_table);
+  };
 
 })();
 
 
 
 _xyz().init({
-  host: document.head.dataset.dir,
   // token: API token,
-  // map_id: 'xyz_map2',
-  // locale: 'NE',
-  // btnZoomIn: document.getElementById('btnZoomIn2'),
-  // btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: _bar => {
+  host: document.head.dataset.dir,
+  callback: _xyz => {
 
-    _bar.loadLocale({
-      locale: 'NE'
-    });
-
-    _bar.mapview.create({
+    _xyz.mapview.create({
       target: document.getElementById('xyz_map2'),
       view: {
         lat: 53,
         lng: -1,
-        z: 8,
+        z: 6,
       },
+      btn: {
+        ZoomIn: document.getElementById('btnZoomIn2'),
+        ZoomOut: document.getElementById('btnZoomOut2')
+      }
     });
 
-    _bar.tableview.createTable({
-      layer: _bar.layers.list.COUNTRIES,
+    _xyz.tableview.createTable({
+      layer: _xyz.layers.list.COUNTRIES,
       target: document.getElementById('xyz_table1')
     });
 
-    _bar.layers.list['Mapbox Base'].remove();
-
-    _bar.layers.list.COUNTRIES.style.theme = null;
+    _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+      _xyz.tableview.updateTable();
+    });
   
-    _bar.layers.list.COUNTRIES.show();
+    _xyz.layers.list['Mapbox Base'].remove();
+
+    _xyz.layers.list.COUNTRIES.style.theme = null;
+  
+    _xyz.layers.list.COUNTRIES.show();
 
   }
 });
 
-function LocatePopup(_xyz){
-
-  _xyz.locate.toggle();
-
-  _xyz2.locations.select_popup = location => {
-    let container = document.getElementById('location_info_container');
-    container.innerHTML = '';
-    container.appendChild(location.info_table);
-  };
-
-}
 
 
 function Grid(_xyz) {
@@ -104,16 +101,6 @@ function Legends(_xyz) {
 
   // _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
 
-  _xyz.locations.select_popup = location => {
-
-    let container = document.getElementById('location_info_container2');
-
-    container.innerHTML = '';
-
-    container.appendChild(location.info_table);
-
-  };
-
 }
 
 function Offices(_xyz) {
@@ -124,16 +111,6 @@ function Offices(_xyz) {
 
   _xyz.locations.select_output = location => {
     document.getElementById('location_info_container1').innerHTML = location.infoj[1].value;
-  };
-
-}
-
-function Offices2(_xyz) {
-
-  _xyz.layers.list.offices.show();
-
-  _xyz.locations.select_output = location => {
-    document.getElementById('location_info_container2').innerHTML = location.infoj[1].value;
   };
 
 }
@@ -168,40 +145,6 @@ function TableView(_xyz) {
       .filter(row => row.getData().name === location.infoj[0].value)
       .forEach(row => row.toggleSelect());
 
-  };
-
-}
-
-function mvt_select(_xyz) {
-
-  _xyz.layers.list.COUNTRIES.style.theme = null;
-
-  _xyz.layers.list.COUNTRIES.show();
-
-  _xyz.locations.select_popup = location => {
-
-    let container = document.getElementById('location_info_container1');
-    container.innerHTML = '';
-    container.appendChild(location.info_table);
-  
-  };
-
-}
-
-function mvt_select2(_xyz) {
-
-  _xyz.layers.list.COUNTRIES.singleSelectOnly = true;
-
-  _xyz.layers.list.COUNTRIES.style.theme = null;
-
-  _xyz.layers.list.COUNTRIES.show();
-
-  _xyz.locations.select_popup = location => {
-
-    let container = document.getElementById('location_info_container2');
-    container.innerHTML = '';
-    container.appendChild(location.info_table);
-  
   };
 
 }

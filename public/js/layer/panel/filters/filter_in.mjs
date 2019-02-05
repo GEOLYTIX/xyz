@@ -6,7 +6,7 @@ export default (_xyz, layer, filter_entry) => {
 
   filter_entry.filter.in.forEach(val => {
 
-    _xyz.utils.checkbox({
+    _xyz.utils.createCheckbox({
       label: val,
       appendTo: block,
       onChange: e => {

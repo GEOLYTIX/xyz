@@ -4,7 +4,7 @@ export default (_xyz, record, entry) => {
 
   let td = _xyz.utils.createElement({ tag: 'td', style: {'paddingTop': '5px'}, appendTo: tr });
 
-  _xyz.utils.checkbox({
+  _xyz.utils.createCheckbox({
     label: entry.name || 'Additional geometries',
     appendTo: td,
     checked: !!entry.value,

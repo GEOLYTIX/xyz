@@ -1,7 +1,7 @@
 import {createElement} from './createElement.mjs';
 
 // Checkbox factory.
-export function checkbox(param) {
+export function createCheckbox(param) {
 
   const checkbox = createElement({
     tag: 'label',
