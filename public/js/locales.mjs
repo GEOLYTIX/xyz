@@ -43,9 +43,6 @@ export default _xyz => {
         // Init gazetteer.
         _xyz.gazetteer.init();
 
-        // Init locator.
-        _xyz.locate.init();
-
         // Init tableview
         _xyz.tableview.init();
 

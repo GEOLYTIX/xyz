@@ -8,11 +8,11 @@ import assignBtn from './assignBtn.mjs';
 
 export default _xyz => {
 
-  attribution(_xyz);
+  _xyz.mapview.attribution = attribution(_xyz);
+
+  _xyz.mapview.locate = locate(_xyz);
 
   draw(_xyz);
-
-  locate(_xyz);
 
   _xyz.mapview.create = params => {
 
@@ -20,6 +20,13 @@ export default _xyz => {
     if (_xyz.map) _xyz.map.remove();
 
     if (!params.target) return console.error('No target for mapview!');
+
+    // Load locale first if not defined.
+    if (!_xyz.locale) _xyz.loadLocale(params);
+            
+    // Assign params to locale.
+    // This makes it possible to override client side workspace entries.
+    const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
 
     // Set XYZ map DOM.
     _xyz.mapview.node = params.target;
@@ -32,17 +39,10 @@ export default _xyz => {
       attributionControl: false
     });
 
-    assignBtn(_xyz, params);
-
-    // Load locale first if not defined.
-    if (!_xyz.locale) _xyz.loadLocale(params);
-            
-    // Assign params to locale.
-    // This makes it possible to override client side workspace entries.
-    const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
+    _xyz.mapview.btn = assignBtn(_xyz, params);
 
     // Create attribution in map DOM.
-    _xyz.attribution.create();
+    _xyz.mapview.attribution.create();
     
     if(locale.showScaleBar) {
       // Add scale bar to map

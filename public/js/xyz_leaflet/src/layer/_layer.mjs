@@ -73,15 +73,15 @@ export default _xyz => {
       layer.display = true;
       layer.loaded = false;
       layer.get();
-      _xyz.attribution.check();
+      _xyz.mapview.attribution.check();
     };
 
     layer.remove = () => {
       layer.display = false;
       layer.loaded = false;
       if (layer.L) _xyz.map.removeLayer(layer.L);
-      if (layer.attribution) _xyz.attribution.remove(layer.attribution);
-      _xyz.attribution.check();
+      if (layer.attribution) _xyz.mapview.attribution.remove(layer.attribution);
+      _xyz.mapview.attribution.check();
     };
 
     if (!layer.format) return;

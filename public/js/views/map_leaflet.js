@@ -27,7 +27,7 @@
   
   xyz.layers.list.retail_points.show();
 
-  xyz.locate.toggle();
+  xyz.mapview.locate.toggle();
 
   xyz.locations.select_popup = location => {
     let container = document.getElementById('location_info_container1');

@@ -27,7 +27,6 @@ export default _xyz => {
 
     Object.values(_xyz.layers.list).forEach(layer => {
       _xyz.layers.add(layer);
-      // if (layer.display && layer.attribution) _xyz.attribution.set(layer.attribution);
     });
 
   };

@@ -38,9 +38,6 @@ gazetteer(_xyz);
 _xyz.init({
   host: document.head.dataset.dir,
   token: document.body.dataset.token,
-  btnZoomIn: document.getElementById('btnZoomIn'),
-  btnZoomOut: document.getElementById('btnZoomOut'),
-  btnLocate: document.getElementById('btnLocate'),
   callback: init
 });
 
@@ -48,7 +45,12 @@ function init(_xyz) {
 
   _xyz.mapview.create({
     target: document.getElementById('Map'),
-    scrollWheelZoom: true
+    scrollWheelZoom: true,
+    btn: {
+      ZoomIn: document.getElementById('btnZoomIn'),
+      ZoomOut: document.getElementById('btnZoomOut'),
+      Locate: document.getElementById('btnLocate')
+    }
   });
 
   // Create locales dropdown (if more than one locale in workspace).
@@ -62,9 +64,6 @@ function init(_xyz) {
 
   // Init gazetteer.
   _xyz.gazetteer.init();
-
-  // Init locator.
-  _xyz.locate.init();
 
   // Init tableview
   if(_xyz.view.mode === 'desktop') _xyz.tableview.init();

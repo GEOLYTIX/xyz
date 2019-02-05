@@ -1,31 +1,20 @@
 export default _xyz => {
 
-  // Gazetteer init which is called on change of locale.
-  _xyz.locate.init = () => {
-
-    if (!_xyz.ws.locales[_xyz.locale].locate) {
-
-      document.getElementById('btnLocate').style.display = 'none';
-      return;
-  
-    } else {
-
-      document.getElementById('btnLocate').style.display = 'block';
-    }
-
+  return {
+    toggle: toggle
   };
 
-  _xyz.locate.toggle = () => {
+  function toggle() {
 
-    _xyz.locate.active = !_xyz.locate.active;
+    _xyz.mapview.locate.active = !_xyz.mapview.locate.active;
 
     if (_xyz.btnLocate) _xyz.btnLocate.classList.toggle('active');
 
     let flyTo = true;
 
     // Create the geolocation marker if it doesn't exist yet.
-    if (!_xyz.locate.L) {
-      _xyz.locate.L = _xyz.L.marker([0, 0], {
+    if (!_xyz.mapview.locate.L) {
+      _xyz.mapview.locate.L = _xyz.L.marker([0, 0], {
         interactive: false,
         icon: _xyz.L.icon({
           iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
@@ -34,24 +23,24 @@ export default _xyz => {
       });
     }
 
-    // Remove the geolocation marker if _xyz.locate is not active.
-    if (!_xyz.locate.active) return _xyz.map.removeLayer(_xyz.locate.L);
+    // Remove the geolocation marker if _xyz.mapview.locate is not active.
+    if (!_xyz.mapview.locate.active) return _xyz.map.removeLayer(_xyz.mapview.locate.L);
         
     // Add the geolocation marker if the latitude is not 0.
-    if (_xyz.locate.L.getLatLng().lat !== 0) {
-      _xyz.locate.L.addTo(_xyz.map);
+    if (_xyz.mapview.locate.L.getLatLng().lat !== 0) {
+      _xyz.mapview.locate.L.addTo(_xyz.map);
 
       // Fly to marker location and set flyto to false to prevent map tracking.
       if (flyTo) _xyz.map.flyTo(
-        _xyz.locate.L.getLatLng(),
+        _xyz.mapview.locate.L.getLatLng(),
         _xyz.ws.locales[_xyz.locale].maxZoom);
 
       flyTo = false;
     }
 
     // Create a geolocation watcher if it doesn't exist
-    if (!_xyz.locate.watcher) {
-      _xyz.locate.watcher = navigator.geolocation.watchPosition(
+    if (!_xyz.mapview.locate.watcher) {
+      _xyz.mapview.locate.watcher = navigator.geolocation.watchPosition(
         pos => {
           
         // Log position.
@@ -60,12 +49,12 @@ export default _xyz => {
           // Change icon to fixed location.
           if (_xyz.btnLocate) _xyz.btnLocate.children[0].textContent = 'gps_fixed';
 
-          // Reposition marker if _xyz.locate is active
-          if (_xyz.locate.active) {
+          // Reposition marker if _xyz.mapview.locate is active
+          if (_xyz.mapview.locate.active) {
             let pos_ll = [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)];
-            _xyz.map.removeLayer(_xyz.locate.L);
-            _xyz.locate.L.setLatLng(pos_ll);
-            _xyz.locate.L.addTo(_xyz.map);
+            _xyz.map.removeLayer(_xyz.mapview.locate.L);
+            _xyz.mapview.locate.L.setLatLng(pos_ll);
+            _xyz.mapview.locate.L.addTo(_xyz.map);
 
             // Fly to pos_ll and set flyTo to false to prevent map tracking.
             if (flyTo) _xyz.map.flyTo(pos_ll, _xyz.ws.locales[_xyz.locale].maxZoom);

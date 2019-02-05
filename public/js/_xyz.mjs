@@ -1,7 +1,4 @@
 export default () => ({
-  attribution: { 
-    layer: {} 
-  },
   gazetteer: {},
   hooks: {
     current: {}
@@ -12,7 +9,6 @@ export default () => ({
     groups: {},
     list: {}
   },
-  locate: {},
   locations: {
     list: [
       {
