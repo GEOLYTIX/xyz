@@ -20,7 +20,6 @@ import hooks from './hooks.mjs';
 hooks(_xyz);
 
 import locales from './locales.mjs';
-locales(_xyz);
 
 import _layers from './layer/_layers.mjs';
 _layers(_xyz);
@@ -30,9 +29,6 @@ _locations(_xyz);
 
 import gazetteer from './gazetteer.mjs';
 gazetteer(_xyz);
-
-// import _tableview from './tableview/_tableview.mjs';
-// _tableview(_xyz);
 
 // Initiate map control.
 _xyz.init({
@@ -54,7 +50,7 @@ function init(_xyz) {
   });
 
   // Create locales dropdown (if more than one locale in workspace).
-  _xyz.locales(_xyz.ws.locales);
+  locales(_xyz);
 
   // Initialize layers.
   _xyz.layers.init();

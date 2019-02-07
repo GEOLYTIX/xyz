@@ -17,7 +17,7 @@ export default (_xyz, layer) => {
         const xhr = new XMLHttpRequest();
 
         xhr.open('GET', _xyz.host + '/api/layer/extent?' + _xyz.utils.paramString({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: layer.key,
           token: _xyz.token
         }));

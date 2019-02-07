@@ -39,7 +39,7 @@ export default (_xyz, layer) => () => {
   if (layer.loader) layer.loader.style.display = 'block';
     
   layer.xhr.open('GET', _xyz.host + '/api/layer/grid?' + _xyz.utils.paramString({
-    locale: layer.locale,
+    locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     size: layer.grid_size,

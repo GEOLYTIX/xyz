@@ -21,7 +21,7 @@ export default _xyz => {
       const xhr = new XMLHttpRequest();
   
       xhr.open('GET', _xyz.host + '/api/location/edit/draw/isoline?' + _xyz.utils.paramString({
-        locale: _xyz.locale,
+        locale: _xyz.workspace.locale.key,
         layer: layer.key,
         table: layer.table,
         coordinates: [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)].join(','),

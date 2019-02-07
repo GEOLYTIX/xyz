@@ -25,7 +25,7 @@ export default (_xyz, layer) => () => {
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
   let url = _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
-    locale: layer.locale,
+    locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     properties: layer.properties,
@@ -88,7 +88,7 @@ export default (_xyz, layer) => () => {
 
       _xyz.locations.select({
         dbs: layer.dbs,
-        locale: layer.locale,
+        locale: _xyz.workspace.locale.key,
         layer: layer.key,
         table: layer.table,
         qID: layer.qID,

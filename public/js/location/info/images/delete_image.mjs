@@ -3,7 +3,7 @@ export default (_xyz, record, entry, img) => {
   const xhr = new XMLHttpRequest();
 
   xhr.open('GET', _xyz.host + '/api/location/edit/images/delete?' + _xyz.utils.paramString({
-    locale: _xyz.locale,
+    locale: _xyz.workspace.locale.key,
     layer: record.location.layer,
     table: record.location.table,
     field: entry.field,

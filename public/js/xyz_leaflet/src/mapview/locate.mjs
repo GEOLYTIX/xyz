@@ -8,8 +8,6 @@ export default _xyz => {
 
     _xyz.mapview.locate.active = !_xyz.mapview.locate.active;
 
-    if (_xyz.btnLocate) _xyz.btnLocate.classList.toggle('active');
-
     let flyTo = true;
 
     // Create the geolocation marker if it doesn't exist yet.
@@ -33,7 +31,7 @@ export default _xyz => {
       // Fly to marker location and set flyto to false to prevent map tracking.
       if (flyTo) _xyz.map.flyTo(
         _xyz.mapview.locate.L.getLatLng(),
-        _xyz.ws.locales[_xyz.locale].maxZoom);
+        _xyz.workspace.locale.maxZoom);
 
       flyTo = false;
     }
@@ -46,9 +44,6 @@ export default _xyz => {
         // Log position.
           if (_xyz.log) console.log('pos: ' + [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)]);
                     
-          // Change icon to fixed location.
-          if (_xyz.btnLocate) _xyz.btnLocate.children[0].textContent = 'gps_fixed';
-
           // Reposition marker if _xyz.mapview.locate is active
           if (_xyz.mapview.locate.active) {
             let pos_ll = [parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)];
@@ -57,7 +52,7 @@ export default _xyz => {
             _xyz.mapview.locate.L.addTo(_xyz.map);
 
             // Fly to pos_ll and set flyTo to false to prevent map tracking.
-            if (flyTo) _xyz.map.flyTo(pos_ll, _xyz.ws.locales[_xyz.locale].maxZoom);
+            if (flyTo) _xyz.map.flyTo(pos_ll, _xyz.workspace.locale.maxZoom);
             flyTo = false;
           }
         },

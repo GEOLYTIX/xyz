@@ -7,7 +7,7 @@ export default _xyz => {
     const bounds = _xyz.map && _xyz.map.getBounds();
       
     xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
-      locale: _xyz.locale,
+      locale: _xyz.workspace.locale.key,
       layer: _xyz.tableview.current_layer.key,
       table: _xyz.tableview.current_layer.tableMax(),
       viewport: bounds ? true : false,

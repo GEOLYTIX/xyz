@@ -67,7 +67,7 @@ export default (_xyz, record) => {
           });
 
         xhr.send(JSON.stringify({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: record.location.layer,
           table: record.location.table,
           id: record.location.id,

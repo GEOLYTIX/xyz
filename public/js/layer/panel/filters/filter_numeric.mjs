@@ -5,7 +5,7 @@ export default (_xyz, layer, filter_entry) => {
   const xhr = new XMLHttpRequest();
 
   xhr.open('GET', _xyz.host + '/api/location/field/range?' + _xyz.utils.paramString({
-    locale: _xyz.locale,
+    locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     field: filter_entry.field,

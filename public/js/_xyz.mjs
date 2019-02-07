@@ -154,5 +154,6 @@ export default () => ({
   utils: null,
   view: { 
     mode: null
-  }
+  },
+  workspace: {}
 });

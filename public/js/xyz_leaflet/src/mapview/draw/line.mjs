@@ -82,7 +82,7 @@ export default _xyz => {
           
         // Send path geometry to endpoint.
         xhr.send(JSON.stringify({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: layer.table,
           geometry: layer.edit.path.toGeoJSON().features[0].geometry

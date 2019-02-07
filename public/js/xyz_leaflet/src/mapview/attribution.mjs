@@ -22,9 +22,9 @@ export default _xyz => {
     _xyz.mapview.attribution.links = _xyz.utils.hyperHTML.wire()`<div></div>`;
     _xyz.mapview.attribution.container.appendChild(_xyz.mapview.attribution.links);
 
-    if (_xyz.ws.locales[_xyz.locale].attribution) {
+    if (_xyz.workspace.locale.attribution) {
 
-      Object.entries(_xyz.ws.locales[_xyz.locale].attribution).forEach(entry => {
+      Object.entries(_xyz.workspace.locale.attribution).forEach(entry => {
 
         _xyz.mapview.attribution.links.appendChild(
           _xyz.utils.hyperHTML.wire()`

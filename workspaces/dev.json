@@ -31,7 +31,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.natural_earth_countries",
-                    "mvt_cache": true,
+
                     "table_view": {},
                     "qID": "id",
                     "infoj": [

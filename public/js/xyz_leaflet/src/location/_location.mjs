@@ -9,7 +9,7 @@ export default _xyz => {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host + '/api/location/select/id?' + _xyz.utils.paramString({
-      locale: _xyz.locale,
+      locale: _xyz.workspace.locale.key,
       layer: location.layer,
       table: location.table,
       id: location.id,
@@ -75,7 +75,7 @@ export default _xyz => {
           funct: e => {
 
             _xyz.locations.select({
-              locale: layer.locale,
+              locale: _xyz.workspace.locale.key,
               layer: layer.key,
               table: layer.table,
               id: e.target['data-id'],

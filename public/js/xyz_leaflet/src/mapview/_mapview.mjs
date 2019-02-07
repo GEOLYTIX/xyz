@@ -22,11 +22,11 @@ export default _xyz => {
     if (!params.target) return console.error('No target for mapview!');
 
     // Load locale first if not defined.
-    if (!_xyz.locale) _xyz.loadLocale(params);
+    if (!_xyz.workspace.locale) _xyz.workspace.loadLocale(params);
             
     // Assign params to locale.
     // This makes it possible to override client side workspace entries.
-    const locale = Object.assign({}, _xyz.ws.locales[_xyz.locale], params);
+    Object.assign(_xyz.workspace.locale, params);
 
     // Set XYZ map DOM.
     _xyz.mapview.node = params.target;
@@ -39,20 +39,36 @@ export default _xyz => {
       attributionControl: false
     });
 
+    _xyz.mapview.changeEnd = () => {
+       
+      // Set view hooks when method is available.
+      if (_xyz.hooks.setView) _xyz.hooks.setView(_xyz.map.getCenter(), _xyz.map.getZoom());
+      
+      // Reload layers.
+      // layer.get() will return if reload is not required.
+      Object.values(_xyz.layers.list).forEach(layer => layer.get());
+      
+    };
+
     _xyz.mapview.btn = assignBtn(_xyz, params);
 
     // Create attribution in map DOM.
     _xyz.mapview.attribution.create();
     
-    if(locale.showScaleBar) {
+    if(_xyz.workspace.locale.showScaleBar) {
       // Add scale bar to map
       L.control.scale().addTo(_xyz.map);
     }
     
-    if(locale.maskBounds) {
+    if(_xyz.workspace.locale.maskBounds) {
       // Grey out area outside bbox
       const world = [[90,180], [90,-180], [-90,-180], [-90,180]];
-      const bbox = [[locale.bounds.north,locale.bounds.east], [locale.bounds.north,locale.bounds.west], [locale.bounds.south,locale.bounds.west], [locale.bounds.south,locale.bounds.east]];
+      const bbox = [
+        [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.east],
+        [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.west],
+        [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.west],
+        [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.east]
+      ];
       const greyoutOptions = {
         pane: 'markerPane',  // polygon would be hidden under basemap (and thus pointless) if added to any lower pane
         stroke: false,
@@ -64,28 +80,28 @@ export default _xyz => {
     }
     
     // Set min, max zoom and bounds.
-    _xyz.map.setMinZoom(locale.minZoom);
-    _xyz.map.setMaxZoom(locale.maxZoom);
+    _xyz.map.setMinZoom(_xyz.workspace.locale.minZoom);
+    _xyz.map.setMaxZoom(_xyz.workspace.locale.maxZoom);
     _xyz.map.setMaxBounds([[
-      locale.bounds.south,
-      locale.bounds.west
+      _xyz.workspace.locale.bounds.south,
+      _xyz.workspace.locale.bounds.west
     ], [
-      locale.bounds.north,
-      locale.bounds.east
+      _xyz.workspace.locale.bounds.north,
+      _xyz.workspace.locale.bounds.east
     ]]);
       
     // Set view if defined in workspace.
     _xyz.map.setView(
       [
         _xyz.hooks.current.lat
-            || locale.view.lat
+            || _xyz.workspace.locale.view.lat
             || 0,
         _xyz.hooks.current.lng
-            || locale.view.lng
+            || _xyz.workspace.locale.view.lng
             || 0
       ],
       _xyz.hooks.current.z
-          || locale.view.z
+          || _xyz.workspace.locale.view.z
           || 5);
       
     // Fire viewChangeEnd after map move and zoomend
@@ -96,23 +112,9 @@ export default _xyz => {
     let timer;
     function viewChangeEndTimer() {
       clearTimeout(timer);
-      timer = setTimeout(_xyz.viewChangeEnd, 500);
+      timer = setTimeout(_xyz.mapview.changeEnd, 500);
     }
-      
-    _xyz.viewChangeEnd = () => {
-    
-      // Check whether zoom buttons should be disabled for initial view.
-      if (_xyz.view.chkZoomBtn) _xyz.view.chkZoomBtn(_xyz.map.getZoom());
-    
-      // Set view hooks when method is available.
-      if (_xyz.hooks.setView) _xyz.hooks.setView(_xyz.map.getCenter(), _xyz.map.getZoom());
-      
-      // Reload layers.
-      // layer.get() will return if reload is not required.
-      Object.values(_xyz.layers.list).forEach(layer => layer.get());
-      
-    };
-
+     
     _xyz.panes.next = 500;
 
     _xyz.panes.list = [];

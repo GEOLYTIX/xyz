@@ -71,7 +71,7 @@ export default _xyz => {
               
           // Select polygon when post request returned 200.
           _xyz.locations.select({
-            locale: _xyz.locale,
+            locale: _xyz.workspace.locale.key,
             layer: layer.key,
             table: layer.table,
             id: e.target.response,
@@ -83,7 +83,7 @@ export default _xyz => {
       
         // Send path geometry to endpoint.
         xhr.send(JSON.stringify({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: layer.table,
           geometry: layer.edit.path.toGeoJSON().features[0].geometry

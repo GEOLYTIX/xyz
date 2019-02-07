@@ -11,7 +11,7 @@ export default (_xyz, layer) => () => {
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
       
   layer.xhr.open('GET', _xyz.host + '/api/layer/geojson?' + _xyz.utils.paramString({
-    locale: _xyz.locale,
+    locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     cat: layer.style.theme && layer.style.theme.field,

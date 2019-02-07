@@ -7,7 +7,7 @@
     host: document.head.dataset.dir
   });
   
-  xyz.loadLocale({
+  xyz.workspace.loadLocale({
     locale: 'GB'
   });
 
@@ -62,7 +62,7 @@ _xyz().init({
       target: document.getElementById('xyz_table1')
     });
 
-    _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+    _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
       _xyz.tableview.updateTable();
     });
   
@@ -129,7 +129,7 @@ function TableView(_xyz) {
   });
 
   // Augment viewChangeEnd method to update table.
-  _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+  _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
     _xyz.tableview.updateTable();
   });
 

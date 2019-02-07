@@ -74,7 +74,7 @@ export default _xyz => {
 
 
     // Augment viewChangeEnd method to update table.
-    _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+    _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
       _xyz.tableview.updateTable();
     });
 

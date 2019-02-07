@@ -22,7 +22,7 @@ export default _xyz => {
 
   _xyz.layers.add = layer => {
 
-    layer.locale = _xyz.locale;
+    //layer.locale = _xyz.workspace.locale.key;
 
     layer.tableCurrent = () => {
 

@@ -39,7 +39,7 @@ export default (_xyz, record, entry) => {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host + '/api/location/edit/catchment/create?' + _xyz.utils.paramString({
-      locale: _xyz.locale,
+      locale: _xyz.workspace.locale.key,
       layer: record.location.layer,
       table: record.location.table,
       field: entry.field,
@@ -76,7 +76,7 @@ export default (_xyz, record, entry) => {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host + '/api/location/edit/catchment/delete?' + _xyz.utils.paramString({
-      locale: _xyz.locale,
+      locale: _xyz.workspace.locale.key,
       layer: record.location.layer,
       table: record.location.table,
       field: entry.field,

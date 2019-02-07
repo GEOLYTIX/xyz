@@ -83,7 +83,7 @@ export default _xyz => {
           funct: e => {
   
             _xyz.locations.select({
-              locale: layer.locale,
+              locale: _xyz.workspace.locale.key,
               layer: layer.key,
               table: layer.table,
               id: e.target['data-id'],

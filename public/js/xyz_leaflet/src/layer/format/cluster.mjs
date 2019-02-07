@@ -39,7 +39,7 @@ export default (_xyz, layer) => () => {
       
   // Build XHR request.
   layer.xhr.open('GET', _xyz.host + '/api/layer/cluster?' + _xyz.utils.paramString({
-    locale: layer.locale,
+    locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
@@ -176,7 +176,7 @@ export default (_xyz, layer) => () => {
         const xhr = new XMLHttpRequest();
       
         xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-          locale: layer.locale,
+          locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: layer.table,
           filter: JSON.stringify(layer.filter.current),
@@ -197,7 +197,7 @@ export default (_xyz, layer) => () => {
           if (cluster.length > 1) return _xyz.locations.select_list(cluster, lnglat, layer);
       
           if (cluster.length === 1) return _xyz.locations.select({
-            locale: layer.locale,
+            locale: _xyz.workspace.locale.key,
             layer: layer.key,
             table: layer.table,
             id: cluster[0].id,

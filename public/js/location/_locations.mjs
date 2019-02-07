@@ -71,7 +71,7 @@ export default _xyz => {
         layer = _xyz.layers.list[decodeURIComponent(params[0])];
 
       _xyz.locations.select({
-        locale: _xyz.locale,
+        locale: _xyz.workspace.locale.key,
         layer: layer.key,
         table: params[1],
         id: params[2],

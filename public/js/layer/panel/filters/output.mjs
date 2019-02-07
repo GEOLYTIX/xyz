@@ -20,7 +20,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
       const filter = Object.assign({},layer.filter.current,layer.filter.legend);
     
       xhr.open('GET', _xyz.host + '/api/location/select/aggregate?' + _xyz.utils.paramString({
-        locale: _xyz.locale,
+        locale: _xyz.workspace.locale.key,
         layer: layer.key,
         table: layer.table,
         filter: JSON.stringify(filter),
