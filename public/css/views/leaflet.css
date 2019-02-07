@@ -271,7 +271,8 @@
   text-align: left;
   width: 100%;
   font-size: 12px;
-  padding-top: 5px; }
+  padding-top: 5px;
+  table-layout: fixed; }
   .infojTable .changed {
     color: #090; }
   .infojTable .label {
