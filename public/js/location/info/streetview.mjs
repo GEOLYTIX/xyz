@@ -20,7 +20,7 @@ export default (_xyz, record, entry) => {
     appendTo: streetview_td
   });
 
-  const width = _xyz.locations.container.clientWidth;
+  const width = _xyz.locations.listview.node.clientWidth;
  
   // Create StreetView image and append into link element.
   _xyz.utils.createElement({

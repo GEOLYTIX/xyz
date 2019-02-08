@@ -30,7 +30,7 @@ export default (_xyz, record, entry) => {
   });
 
   function showAddGeom(record, entry){
-    entry._geom = _xyz.layers.geoJSON({
+    entry._geom = _xyz.locations.drawGeoJSON({
       json: {
         type: 'Feature',
         geometry: JSON.parse(entry.value)

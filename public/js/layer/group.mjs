@@ -4,7 +4,7 @@ export default (_xyz, groupKey) => {
   const group = {};
 
   // Create new layer group.
-  _xyz.layers.groups[groupKey] = group;
+  _xyz.layers.listview.groups[groupKey] = group;
 
   // Create layer group container.
   group.container = _xyz.utils.createElement({
@@ -12,7 +12,7 @@ export default (_xyz, groupKey) => {
     options: {
       className: 'drawer drawer-group expandable-group'
     },
-    appendTo: _xyz.layers.container
+    appendTo: _xyz.layers.listview.node
   });
   
   // Create layer group header.

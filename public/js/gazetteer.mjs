@@ -1,6 +1,6 @@
 export default _xyz => {
 
-// Create gazetteer object.
+  // Create gazetteer object.
   _xyz.gazetteer = {
     icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}}),
     style: {

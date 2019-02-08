@@ -43,7 +43,7 @@ async function view(req, res, token = { access: 'public' }) {
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: token.signed,
-    bundle_js: 'build/lib_leaflet_bundle.js',
+    bundle_js: 'build/xyz_control_bundle.js',
     script_js: 'views/map_leaflet.js'
   }));
 

@@ -1,5 +1,5 @@
 export default (_xyz, layer) => {
-        
+
   // set defaults
   layer.edit.isoline = {
     type: 'fastest',
@@ -77,7 +77,7 @@ export default (_xyz, layer) => {
     },
     appendTo: row
   });
-        
+
   row = _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -85,7 +85,7 @@ export default (_xyz, layer) => {
     },
     appendTo: block
   });
-          
+
   _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -97,7 +97,7 @@ export default (_xyz, layer) => {
     },
     appendTo: row
   });
-        
+
   _xyz.utils.dropdown({
     style: {
       width: '50%',
@@ -120,7 +120,7 @@ export default (_xyz, layer) => {
     },
     appendTo: row
   });
-        
+
   row = _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -128,7 +128,7 @@ export default (_xyz, layer) => {
     },
     appendTo: block
   });
-        
+
   _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -140,7 +140,7 @@ export default (_xyz, layer) => {
     },
     appendTo: row
   });
-        
+
   _xyz.utils.dropdown({
     style: {
       width: '50%',
@@ -167,7 +167,7 @@ export default (_xyz, layer) => {
     },
     appendTo: row
   });
-               
+
   _xyz.utils.slider({
     title: 'Range of isoline: ',
     min: 1, // 3 mins or 3 km

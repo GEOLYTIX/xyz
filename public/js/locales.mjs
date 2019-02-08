@@ -20,11 +20,8 @@ export default _xyz => {
   
       _xyz.hooks.set('locale', e.target.value);
 
-      _xyz.workspace.loadLocale({
-        locale: e.target.value
-      });
-
       _xyz.mapview.create({
+        locale: e.target.value,
         target: document.getElementById('Map'),
         scrollWheelZoom: true,
         btn: {
@@ -34,11 +31,11 @@ export default _xyz => {
         }
       });
 
-      // Init layers.
-      _xyz.layers.init();
+      // Init layers listview.
+      _xyz.layers.listview.init();
         
-      // Init locations.
-      _xyz.locations.init();
+      // Init locations listview.
+      _xyz.locations.listview.init();
 
       // Init gazetteer.
       _xyz.gazetteer.init();

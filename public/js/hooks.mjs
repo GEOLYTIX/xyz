@@ -1,12 +1,34 @@
 export default _xyz => {
 
-// Take hooks from URL and store as current hooks.
+  let current = {
+    layers: []
+  };       
+
+  // Take hooks from URL and store as current hooks.
   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-    _xyz.hooks.current[key] = value;
+    current[key] = value;
   });
 
+  return {
+
+    current: current,
+
+    setView: setView,
+
+    set: set,
+
+    remove: remove,
+
+    removeAll: removeAll,
+
+    push: push,
+
+    filter: filter,
+
+  };
+
   // Set view hook containing lat, lng and zoom.
-  _xyz.hooks.setView = (cntr, z) => {
+  function setView(cntr, z) {
     _xyz.hooks.current.lat = cntr.lat;
     _xyz.hooks.current.lng = cntr.lng;
     _xyz.hooks.current.z = z;
@@ -16,7 +38,7 @@ export default _xyz => {
   };
 
   // Add kvp hook to _xyz.hooks.current and URI.
-  _xyz.hooks.set = (key, val) => {
+  function set(key, val) {
     _xyz.hooks.current[key] = val;
     try {
       history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
@@ -24,7 +46,7 @@ export default _xyz => {
   };
 
   // Remove hook from _xyz.hooks.current and URI.
-  _xyz.hooks.remove = key => {
+  function remove(key) {
     delete _xyz.hooks.current[key];
     try {
       history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
@@ -32,7 +54,7 @@ export default _xyz => {
   };
 
   // Remove all hooks.
-  _xyz.hooks.removeAll = () => {
+  function removeAll() {
     Object.keys(_xyz.hooks.current).map(key => delete _xyz.hooks.current[key]);
     try {
       history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
@@ -40,7 +62,7 @@ export default _xyz => {
   };
 
   // Push key into an array hook.
-  _xyz.hooks.push = (key, val) => {
+  function push (key, val) {
     if (_xyz.hooks.current[key]) {
       _xyz.hooks.current[key].push(val);
     } else {
@@ -52,7 +74,7 @@ export default _xyz => {
   };
 
   // Filter key from an array hook.
-  _xyz.hooks.filter = (key, val) => {
+  function filter(key, val) {
     if (_xyz.hooks.current[key]) {
       _xyz.hooks.current[key] = _xyz.hooks.current[key].filter(el => el !== val);
       if (_xyz.hooks.current[key].length === 0) delete _xyz.hooks.current[key];

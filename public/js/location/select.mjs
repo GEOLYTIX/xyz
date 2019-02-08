@@ -2,7 +2,7 @@ export default _xyz => {
 
   _xyz.locations.select_output = location => {
 
-    const record = _xyz.locations.getFreeRecord();
+    const record = _xyz.locations.listview.getFreeRecord();
 
     if (!record) return;
 
@@ -18,19 +18,24 @@ export default _xyz => {
     if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
   
     // Push the hook for the location.
-    _xyz.hooks.push('select',
-      record.location.layer + '!' +
-        record.location.table + '!' +
-        record.location.id + '!' +
-        record.location.marker[0] + ';' +
-        record.location.marker[1]
+    _xyz.hooks.push(
+      'select',
+      `${record.location.layer}!${record.location.table}!${record.location.id}`
     );
+
+    record.location.style = {
+      color: record.color,
+      letter: record.letter,
+      stroke: true,
+      fill: true,
+      fillOpacity: 0
+    };
     
     // Draw the record to the map.
-    _xyz.locations.draw(record);
+    _xyz.locations.draw(record.location);
   
     // List the record
-    _xyz.locations.add(record);
+    _xyz.locations.listview.add(record);
 
   };
 

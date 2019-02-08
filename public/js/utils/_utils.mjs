@@ -33,3 +33,9 @@ export {setStrokeWeight} from './setStrokeWeight.mjs';
 export const compose = (...fns) => () => fns.forEach(f=>f());
 
 export {default as hyperHTML} from 'hyperhtml/esm';
+
+import pointOnFeature from '@turf/point-on-feature';
+
+export const turf = {
+  pointOnFeature: pointOnFeature
+};

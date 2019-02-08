@@ -1,8 +1,6 @@
 (async () => {
 
-  const xyz = _xyz();
-
-  await xyz.init({
+  const xyz = await _xyz({
     // token: API token,
     host: document.head.dataset.dir
   });
@@ -39,7 +37,7 @@
 
 
 
-_xyz().init({
+_xyz({
   // token: API token,
   host: document.head.dataset.dir,
   callback: _xyz => {

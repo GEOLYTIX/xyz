@@ -10,7 +10,7 @@ export default (_xyz, layer) => {
     _xyz.hooks.filter('layers', layer.key);   
 
     // Check whether other group layers are visible.
-    if (layer.group) _xyz.layers.groups[layer.group].chkVisibleLayer();
+    if (layer.group) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
 
   });
 
