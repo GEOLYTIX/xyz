@@ -17,7 +17,20 @@ export default (_xyz, record) => {
 
         e.stopPropagation();
 
-        _xyz.map.flyToBounds(record.location.Layer.getBounds());
+        if (record.location.geometry.type === 'Point') {
+
+          _xyz.map.flyTo(
+            {
+              lat: record.location.geometry.coordinates[1],
+              lng: record.location.geometry.coordinates[0],
+            },
+            _xyz.workspace.locale.maxZoom);
+
+        } else {
+
+          _xyz.map.flyToBounds(record.location.Marker.getBounds());
+
+        }
 
       }
     }
