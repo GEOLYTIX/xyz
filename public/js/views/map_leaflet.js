@@ -1,54 +1,78 @@
-// if ( window.history.replaceState ) {
-//   window.history.replaceState( null, null, window.location.href );
-// }
+(async () => {
 
-// _xyz().init({
-//   host: document.head.dataset.dir,
-//   //token: API token,
-//   map_id: 'xyz_map1',
-//   locale: 'GB',
-//   scrollWheelZoom: true,
-//   view: {
-//     lat: 51.52,
-//     lng: 0.24,
-//     z: 12,
-//   },
-//   btnZoomIn: document.getElementById('btnZoomIn1'),
-//   btnZoomOut: document.getElementById('btnZoomOut1'),
-//   callback: Grid
-// });
+  const xyz = await _xyz({
+    // token: API token,
+    host: document.head.dataset.dir
+  });
+  
+  xyz.workspace.loadLocale({
+    locale: 'GB'
+  });
 
-_xyz().init({
-  host: document.head.dataset.dir,
-  //token: API token,
-  map_id: 'xyz_map1',
-  locale: 'NE',
-  btnZoomIn: document.getElementById('btnZoomIn1'),
-  btnZoomOut: document.getElementById('btnZoomOut1'),
-  callback: mvt_select
-});
+  xyz.mapview.create({
+    target: document.getElementById('xyz_map1'),
+    scrollWheelZoom: true,
+    view: {
+      lat: 53,
+      lng: -1,
+      z: 8,
+    },
+    btn: {
+      ZoomIn: document.getElementById('btnZoomIn1'),
+      ZoomOut: document.getElementById('btnZoomOut1')
+    }
+  });
+  
+  xyz.layers.list.retail_points.show();
 
-_xyz().init({
-  host: document.head.dataset.dir,
-  //token: API token,
-  map_id: 'xyz_map2',
-  locale: 'NE',
-  btnZoomIn: document.getElementById('btnZoomIn2'),
-  btnZoomOut: document.getElementById('btnZoomOut2'),
-  callback: TableView
-});
+  xyz.mapview.locate.toggle();
 
-function LocatePopup(_xyz){
-
-  _xyz.locate.toggle();
-
-  _xyz2.locations.select_popup = location => {
-    let container = document.getElementById('location_info_container');
+  xyz.locations.select_popup = location => {
+    let container = document.getElementById('location_info_container1');
     container.innerHTML = '';
     container.appendChild(location.info_table);
   };
 
-}
+})();
+
+
+
+_xyz({
+  // token: API token,
+  host: document.head.dataset.dir,
+  callback: _xyz => {
+
+    _xyz.mapview.create({
+      target: document.getElementById('xyz_map2'),
+      view: {
+        lat: 53,
+        lng: -1,
+        z: 6,
+      },
+      btn: {
+        ZoomIn: document.getElementById('btnZoomIn2'),
+        ZoomOut: document.getElementById('btnZoomOut2')
+      }
+    });
+
+    _xyz.tableview.createTable({
+      layer: _xyz.layers.list.COUNTRIES,
+      target: document.getElementById('xyz_table1')
+    });
+
+    _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
+      _xyz.tableview.updateTable();
+    });
+  
+    _xyz.layers.list['Mapbox Base'].remove();
+
+    _xyz.layers.list.COUNTRIES.style.theme = null;
+  
+    _xyz.layers.list.COUNTRIES.show();
+
+  }
+});
+
 
 
 function Grid(_xyz) {
@@ -75,16 +99,6 @@ function Legends(_xyz) {
 
   // _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
 
-  _xyz.locations.select_popup = location => {
-
-    let container = document.getElementById('location_info_container2');
-
-    container.innerHTML = '';
-
-    container.appendChild(location.info_table);
-
-  };
-
 }
 
 function Offices(_xyz) {
@@ -95,16 +109,6 @@ function Offices(_xyz) {
 
   _xyz.locations.select_output = location => {
     document.getElementById('location_info_container1').innerHTML = location.infoj[1].value;
-  };
-
-}
-
-function Offices2(_xyz) {
-
-  _xyz.layers.list.offices.show();
-
-  _xyz.locations.select_output = location => {
-    document.getElementById('location_info_container2').innerHTML = location.infoj[1].value;
   };
 
 }
@@ -123,7 +127,7 @@ function TableView(_xyz) {
   });
 
   // Augment viewChangeEnd method to update table.
-  _xyz.viewChangeEnd = _xyz.utils.compose(_xyz.viewChangeEnd, () => {
+  _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
     _xyz.tableview.updateTable();
   });
 
@@ -139,40 +143,6 @@ function TableView(_xyz) {
       .filter(row => row.getData().name === location.infoj[0].value)
       .forEach(row => row.toggleSelect());
 
-  };
-
-}
-
-function mvt_select(_xyz) {
-
-  _xyz.layers.list.COUNTRIES.style.theme = null;
-
-  _xyz.layers.list.COUNTRIES.show();
-
-  _xyz.locations.select_popup = location => {
-
-    let container = document.getElementById('location_info_container1');
-    container.innerHTML = '';
-    container.appendChild(location.info_table);
-  
-  };
-
-}
-
-function mvt_select2(_xyz) {
-
-  _xyz.layers.list.COUNTRIES.singleSelectOnly = true;
-
-  _xyz.layers.list.COUNTRIES.style.theme = null;
-
-  _xyz.layers.list.COUNTRIES.show();
-
-  _xyz.locations.select_popup = location => {
-
-    let container = document.getElementById('location_info_container2');
-    container.innerHTML = '';
-    container.appendChild(location.info_table);
-  
   };
 
 }

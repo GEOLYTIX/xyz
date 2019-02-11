@@ -171,7 +171,8 @@
         -ms-flex: 1;
         flex: 1; }
         .tableview nav ul li.tab-current {
-          border-bottom: 3px solid #090; }
+          border-bottom: 3px solid #090;
+          box-shadow: 0 6px 8px -6px #444; }
 
 @keyframes fadein {
   from {

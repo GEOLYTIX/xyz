@@ -2,13 +2,17 @@
     "ws": {
         "title": "GEOLYTIX | XYZ",
         "documentation": "optional",
-        "locate": "optional",
         "locales": {
             "zero": {}
         }
     },
     "locale": {
         "name": "optional",
+        "locate": "optional",
+        "attribution": {
+            "XYZ #dev": "https://github.com/geolytix/xyz#development",
+            "Leaflet": "https://leafletjs.com"
+        },
         "minZoom": 0,
         "maxZoom": 20,
         "bounds": {

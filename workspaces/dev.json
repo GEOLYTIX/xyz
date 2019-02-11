@@ -1,6 +1,5 @@
 {
     "title": "XYZ dev",
-    "locate": {},
     "locales": {
         "NE": {
             "minZoom": 3,
@@ -32,7 +31,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.natural_earth_countries",
-                    "mvt_cache": true,
+
                     "table_view": {},
                     "qID": "id",
                     "infoj": [
@@ -92,10 +91,6 @@
                             "fill": true,
                             "fillColor": "#fce4ec",
                             "fillOpacity": 1
-                        },
-                        "selected": {
-                            "color": "#ff69b4",
-                            "fillColor": "#ff69b4"
                         },
                         "themes": {
                             "Population": {
@@ -374,6 +369,7 @@
         },
         "GB": {
             "showScaleBar": true,
+            "locate": {},
             "minZoom": 5,
             "maxZoom": 17,
             "bounds": {

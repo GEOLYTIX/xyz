@@ -12,8 +12,8 @@ export function createStateButton(_xyz, param){
   
   btn.activate = () => {
   
-    if (_xyz.state.finish) _xyz.state.finish();
-    _xyz.state = btn;
+    if (_xyz.mapview.state.finish) _xyz.mapview.state.finish();
+    _xyz.mapview.state = btn;
     btn.classList.add('active');
     param.activate(param.layer);
   
@@ -21,7 +21,7 @@ export function createStateButton(_xyz, param){
   
   btn.finish = () => {
   
-    _xyz.state = 'select';
+    _xyz.mapview.state = 'select';
     btn.classList.remove('active');
     param.finish(param.layer);
       
@@ -31,9 +31,9 @@ export function createStateButton(_xyz, param){
   
     e.stopPropagation();
   
-    if (_xyz.state === btn) return _xyz.state.finish();
+    if (_xyz.mapview.state === btn) return _xyz.mapview.state.finish();
   
-    _xyz.state.finish && _xyz.state.finish();
+    _xyz.mapview.state.finish && _xyz.mapview.state.finish();
     btn.activate(e);
         
   });

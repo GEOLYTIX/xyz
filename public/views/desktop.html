@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
 </head>
 
-<body data-viewmode="desktop" data-nanoid={{:nanoid}} data-token={{:token}} {{:log}}>
+<body data-viewmode="desktop" data-nanoid={{:nanoid}} data-log={{:log}} data-token={{:token}}>
 
     <div class="mod_container">
 
@@ -29,7 +29,7 @@
 
             <div class="module">
                 <div class="title">Layers</div>
-                <div id="locale"></div>
+                <div id="localeDropdown"></div>
                 <div id="layers" class="content"></div>
             </div>
 
@@ -67,7 +67,7 @@
                 <i class="material-icons">search</i>
             </button>
 
-            <button id="btnLocate" title="Current location" {{:btnLocate}}>
+            <button id="btnLocate" title="Current location" style="display: none;">
                 <i class="material-icons">gps_not_fixed</i>
             </button>
 

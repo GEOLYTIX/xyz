@@ -34,7 +34,7 @@ export default (_xyz, layer) => {
   });
 
   // Create grid_ratio checkbox.
-  _xyz.utils.checkbox({
+  _xyz.utils.createCheckbox({
     label: 'Display colour values as a ratio to the size value.',
     checked: layer.grid_ratio,
     appendTo: panel,

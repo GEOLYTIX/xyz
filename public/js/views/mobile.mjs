@@ -1,6 +1,6 @@
 export default _xyz => {
 
-  _xyz.view.mobile = {};
+  _xyz.mobile = {};
     
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -27,9 +27,9 @@ export default _xyz => {
     tabs.classList.remove('pane_shadow');
   }
 
-  _xyz.view.mobile.activateLayersTab = () => activateTab(tabLayers, modLayers);
+  _xyz.mobile.activateLayersTab = () => activateTab(tabLayers, modLayers);
 
-  _xyz.view.mobile.activateLocationsTab = () => {
+  _xyz.mobile.activateLocationsTab = () => {
     tabLocations.classList.remove('hidden');
     activateTab(tabLocations, modLocations);
   };
@@ -83,7 +83,7 @@ export default _xyz => {
           funct: e => {
   
             _xyz.locations.select({
-              locale: layer.locale,
+              locale: _xyz.workspace.locale.key,
               layer: layer.key,
               table: layer.table,
               id: e.target['data-id'],

@@ -16,7 +16,7 @@ export {copyToClipboard} from './copyToClipboard.mjs';
 
 export {createElement} from './createElement.mjs';
 
-export {checkbox} from './checkbox.mjs';
+export {createCheckbox} from './createCheckbox.mjs';
 
 export {createStateButton} from './createStateButton.mjs';
 
@@ -31,3 +31,11 @@ export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.
 export {setStrokeWeight} from './setStrokeWeight.mjs';
 
 export const compose = (...fns) => () => fns.forEach(f=>f());
+
+export {default as hyperHTML} from 'hyperhtml/esm';
+
+import pointOnFeature from '@turf/point-on-feature';
+
+export const turf = {
+  pointOnFeature: pointOnFeature
+};

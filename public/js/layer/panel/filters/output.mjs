@@ -1,5 +1,3 @@
-import pointOnFeature from '@turf/point-on-feature';
-
 export default (_xyz, panel, layer) => _xyz.utils.createElement({
   tag: 'div',
   options: {
@@ -20,7 +18,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
       const filter = Object.assign({},layer.filter.current,layer.filter.legend);
     
       xhr.open('GET', _xyz.host + '/api/location/select/aggregate?' + _xyz.utils.paramString({
-        locale: _xyz.locale,
+        locale: _xyz.workspace.locale.key,
         layer: layer.key,
         table: layer.table,
         filter: JSON.stringify(filter),
@@ -33,24 +31,29 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
 
         const json = JSON.parse(e.target.response);
     
-        const record = _xyz.locations.getFreeRecord();
+        const record = _xyz.locations.listview.getFreeRecord();
 
         if (!record) return;
-
-        let pof = pointOnFeature(JSON.parse(json.geomj));
 
         record.location = {
           geometry: JSON.parse(json.geomj),
           infoj: json.infoj,
           layer: layer.key,
-          marker: pof.geometry.coordinates
+          marker: _xyz.utils.turf.pointOnFeature(JSON.parse(json.geomj)).geometry.coordinates,
+          style: {
+            color: record.color,
+            letter: record.letter,
+            stroke: true,
+            fill: true,
+            fillOpacity: 0
+          }
         };
 
         // Draw the record to the map.
-        _xyz.locations.draw(record);
+        _xyz.locations.draw(record.location);
 
         // List the record
-        _xyz.locations.add(record);
+        _xyz.locations.listview.add(record);
 
       };
     

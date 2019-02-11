@@ -19,7 +19,7 @@ export default (_xyz, record) => {
 
         record.drawer.remove();
 
-        if (_xyz.state && _xyz.state != 'select') _xyz.switchState(record.location.layer, _xyz.state);
+        if (_xyz.mapview.state && _xyz.mapview.state != 'select') _xyz.switchState(record.location.layer, _xyz.mapview.state);
 
         if (record.location.id) {
           _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
@@ -33,7 +33,7 @@ export default (_xyz, record) => {
 
         // Run locations init when all records are free.
         const freeRecords = _xyz.locations.list.filter(record => !record.location);
-        if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.init();
+        if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.listview.init();
 
       }
     }

@@ -1,6 +1,6 @@
 export default _xyz => {
 
-// Create gazetteer object.
+  // Create gazetteer object.
   _xyz.gazetteer = {
     icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}}),
     style: {
@@ -22,8 +22,8 @@ export default _xyz => {
   // Gazetteer init which is called on change of locale.
   _xyz.gazetteer.init = () => {
 
-  // Hide gazetteer button if no gazetteer is set for the locale.
-    if (!_xyz.ws.locales[_xyz.locale].gazetteer) {
+    // Hide gazetteer button if no gazetteer is set for the locale.
+    if (!_xyz.workspace.locale.gazetteer) {
       _xyz.gazetteer.toggle.classList.remove('active');
       _xyz.gazetteer.toggle.style.display = 'none';
       _xyz.gazetteer.group.style.display = 'none';
@@ -35,7 +35,7 @@ export default _xyz => {
 
     // Empty input value, results and set placeholder.
     _xyz.gazetteer.input.value = '';
-    _xyz.gazetteer.input.placeholder = _xyz.ws.locales[_xyz.locale].gazetteer.placeholder || '';
+    _xyz.gazetteer.input.placeholder = _xyz.workspace.locale.gazetteer.placeholder || '';
     _xyz.gazetteer.result.innerHTML = '';
 
     // Remove existing layer if exists
@@ -144,7 +144,7 @@ export default _xyz => {
 
     // Send gazetteer query to backend.
     _xyz.gazetteer.xhr.open('GET', _xyz.host + '/api/gazetteer/autocomplete?' + _xyz.utils.paramString({
-      locale: _xyz.locale,
+      locale: _xyz.workspace.locale.key,
       q: encodeURIComponent(term),
       token: _xyz.token
     }));
@@ -200,7 +200,7 @@ export default _xyz => {
   
     if (record['data-source'] === 'glx') {
       _xyz.locations.select({
-        locale: _xyz.locale,
+        locale: _xyz.workspace.locale.key,
         layer: record['data-layer'],
         table: record['data-table'],
         id: record['data-id'],

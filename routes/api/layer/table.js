@@ -24,14 +24,14 @@ module.exports = fastify => {
       if (!table) return res.code(406).send('Missing table.');
 
       let
-        viewport,
+        viewport = req.query.viewport,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north);
 
 
-      if (layer.geom) {
+      if (viewport && layer.geom) {
 
         viewport = `
         WHERE
@@ -42,7 +42,7 @@ module.exports = fastify => {
 
       }
 
-      if (layer.geom_3857) {
+      if (viewport && layer.geom_3857) {
 
         viewport = `
         WHERE
@@ -71,7 +71,7 @@ module.exports = fastify => {
       let q = `
         SELECT ${layer.qID} AS qID, ${fields}
         FROM ${table}
-        ${viewport}
+        ${viewport || ''}
         FETCH FIRST 99 ROW ONLY;`;
       //   ${filter_sql ? (viewport ? ` AND ${filter_sql}` : ` WHERE ${filter_sql}`) : ''} 
       //   ORDER BY ${layer.qID || 'id'}

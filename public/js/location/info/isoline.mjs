@@ -4,7 +4,7 @@ export default (_xyz, record, entry) => {
 
   let td = _xyz.utils.createElement({ tag: 'td', style: {'paddingTop': '5px'}, appendTo: tr });
 
-  _xyz.utils.checkbox({
+  _xyz.utils.createCheckbox({
     label: entry.name || 'Additional geometries',
     appendTo: td,
     checked: !!entry.value,
@@ -43,7 +43,7 @@ export default (_xyz, record, entry) => {
       _xyz.host +
         '/api/location/edit/isoline/create?' +
         _xyz.utils.paramString({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: record.location.layer,
           table: record.location.table,
           field: entry.field,
@@ -82,7 +82,7 @@ export default (_xyz, record, entry) => {
       _xyz.host +
         '/api/location/edit/isoline/delete?' +
         _xyz.utils.paramString({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: record.location.layer,
           table: record.location.table,
           field: entry.field,

@@ -1,59 +1,49 @@
 export default _xyz => {
 
-  _xyz.locales = locales => {
+  // Return if length of locales array is 1.
+  if (Object.keys(_xyz.workspace.locales).length === 1) return;
 
-    // Return if length of locales array is 1.
-    if (Object.keys(locales).length === 1) return;
+  // Create control to change locale for multiple locales in workspace.
+  const localeDropdown = document.getElementById('localeDropdown');
 
-    // Create control to change locale for multiple locales in workspace.
-    const locale = document.getElementById('locale');
-
-    // Create locales dropdown.
-    _xyz.utils.dropdown({
-      title: 'Show layers for the following locale:',
-      appendTo: locale,
-      entries: locales,
-      label: 'name',
-      val: 'loc',
-      selected: _xyz.locale,
-      onchange: e => {
+  // Create locales dropdown.
+  _xyz.utils.dropdown({
+    title: 'Show layers for the following locale:',
+    appendTo: localeDropdown,
+    entries: _xyz.workspace.locales,
+    label: 'name',
+    val: 'loc',
+    selected: _xyz.workspace.locale.key,
+    onchange: e => {
   
-      // Set the locale and remove hooks.
-        _xyz.locale = e.target.value;
-
-        _xyz.hooks.removeAll();
+      _xyz.hooks.removeAll();
   
-        _xyz.hooks.set('locale', _xyz.locale);
-  
-        // Initiate map control.
-        _xyz.init({
-          host: document.head.dataset.dir,
-          token: document.body.dataset.token,
-          scrollWheelZoom: true,
-          map_id: 'Map',
-          locale: _xyz.locale,
-          callback: init
-        });
+      _xyz.hooks.set('locale', e.target.value);
 
-        function init() {
-
-          // Init layers.
-          _xyz.layers.init();
-        
-          // Init locations.
-          _xyz.locations.init();
-
-          // Init gazetteer.
-          _xyz.gazetteer.init();
-
-          // Init tableview
-          _xyz.tableview.init();
-
+      _xyz.mapview.create({
+        locale: e.target.value,
+        target: document.getElementById('Map'),
+        scrollWheelZoom: true,
+        btn: {
+          ZoomIn: document.getElementById('btnZoomIn'),
+          ZoomOut: document.getElementById('btnZoomOut'),
+          Locate: document.getElementById('btnLocate')
         }
+      });
 
-      }
-    });
+      // Init layers listview.
+      _xyz.layers.listview.init();
+        
+      // Init locations listview.
+      _xyz.locations.listview.init();
 
-  };
+      // Init gazetteer.
+      _xyz.gazetteer.init();
+
+      // Init tableview
+      _xyz.tableview.init();
+
+    }
+  });
 
 };

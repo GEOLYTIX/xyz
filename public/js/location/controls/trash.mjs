@@ -24,7 +24,7 @@ export default (_xyz, record) => {
         const xhr = new XMLHttpRequest();
 
         xhr.open('GET', _xyz.host + '/api/location/edit/delete?' + _xyz.utils.paramString({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: record.location.table,
           id: record.location.id,
@@ -54,7 +54,7 @@ export default (_xyz, record) => {
 
           // Run locations init when all records are free.
           const freeRecords = _xyz.locations.list.filter(record => !record.location);
-          if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.init();
+          if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.listview.init();
 
         };
         xhr.send();

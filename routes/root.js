@@ -43,16 +43,15 @@ async function view(req, res, token = { access: 'public' }) {
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: token.signed,
-    log: process.env.LOG_LEVEL ? 'data-log = true' : '',
-    bundle_js: 'build/xyz_bundle.js',
+    log: process.env.LOG_LEVEL ? 'true' : 'false',
+    bundle_js: 'build/xyz_ui_bundle.js',
     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
     hrefDocumentation: config.documentation ? config.documentation : '',
     btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
     btnLogin_style: token.email ? 'face' : 'lock_open',
     btnLogin_path: token.email ? '' : '/login',
     btnLogin_text: token.email ? token.email : 'anonymous (public)',
-    btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"',
-    btnLocate: config.locate ? '' : 'style="display: none;"'
+    btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"'
   }));
 
 };

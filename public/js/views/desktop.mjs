@@ -1,5 +1,7 @@
 export default _xyz => {
 
+  _xyz.desktop = {};
+
   // remove polyfill for IE11
   if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function () {

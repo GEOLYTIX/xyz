@@ -1,5 +1,3 @@
-// import pointOnFeature from '@turf/point-on-feature';
-
 export default (_xyz, record) => {
 
   record.upload = _xyz.utils.createElement({
@@ -41,19 +39,6 @@ export default (_xyz, record) => {
           // Update the record.
           record.update();       
 
-          // try {
-          //     let pof = pointOnFeature(record.location.L.toGeoJSON());
-
-          //     record
-          //         .location
-          //         .M
-          //         .getLayers()[0]
-          //         .setLatLng(L.latLng(pof.geometry.coordinates.reverse()));
-
-          // } catch (err) {
-          //     Object.keys(err).forEach(key => !err[key] && delete err[key]);
-          //     console.error(err);
-          // }
         };
 
         const infoj_newValues = record.location.infoj
@@ -67,7 +52,7 @@ export default (_xyz, record) => {
           });
 
         xhr.send(JSON.stringify({
-          locale: _xyz.locale,
+          locale: _xyz.workspace.locale.key,
           layer: record.location.layer,
           table: record.location.table,
           id: record.location.id,

@@ -41,8 +41,8 @@ export default (_xyz, layer) => {
     text: 'Point',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.draw.point,
-    finish: _xyz.draw.finish
+    activate: _xyz.mapview.draw.point,
+    finish: _xyz.mapview.draw.finish
   });
 
   
@@ -50,8 +50,8 @@ export default (_xyz, layer) => {
     text: 'Polygon',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.draw.polygon,
-    finish: _xyz.draw.finish
+    activate: _xyz.mapview.draw.polygon,
+    finish: _xyz.mapview.draw.finish
   });
 
   
@@ -59,8 +59,8 @@ export default (_xyz, layer) => {
     text: 'Rectangle',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.draw.rectangle,
-    finish: _xyz.draw.finish
+    activate: _xyz.mapview.draw.rectangle,
+    finish: _xyz.mapview.draw.finish
   });
 
 
@@ -68,8 +68,8 @@ export default (_xyz, layer) => {
     text: 'Circle',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.draw.circle,
-    finish: _xyz.draw.finish
+    activate: _xyz.mapview.draw.circle,
+    finish: _xyz.mapview.draw.finish
   });
 
 
@@ -77,8 +77,8 @@ export default (_xyz, layer) => {
     text: 'Linestring',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.draw.line,
-    finish: _xyz.draw.finish
+    activate: _xyz.mapview.draw.line,
+    finish: _xyz.mapview.draw.finish
   });
 
   
@@ -112,8 +112,8 @@ export default (_xyz, layer) => {
       text: 'Catchment',
       appendTo: layer.edit.panel,
       layer: layer,
-      activate: _xyz.draw.catchment,
-      finish: _xyz.draw.finish
+      activate: _xyz.mapview.draw.catchment,
+      finish: _xyz.mapview.draw.finish
     });
 
   }
@@ -127,8 +127,8 @@ export default (_xyz, layer) => {
       text: 'Isoline',
       appendTo: layer.edit.panel,
       layer: layer,
-      activate: _xyz.draw.isoline,
-      finish: _xyz.draw.finish
+      activate: _xyz.mapview.draw.isoline,
+      finish: _xyz.mapview.draw.finish
     });
   
   }

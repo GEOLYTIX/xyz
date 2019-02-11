@@ -42,6 +42,7 @@
                 flex: 1;
                 &.tab-current {
                     border-bottom: 3px solid #090;
+                    box-shadow: 0 6px 8px -6px #444;
                 }
             }
         }

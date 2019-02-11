@@ -1365,13 +1365,11 @@ input[type=range]::-moz-range-thumb {
   font-family: ffmark_bold, sans-serif;
   font-size: 18px;
   text-shadow: 1px 1px 1px #cf9; }
-  .attribution #attribution_links i {
-    font-size: 14px; }
-  .attribution #attribution_links a {
-    margin-left: 5px; }
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
     font-size: 40px; }
+  .attribution a:hover {
+    border-bottom: 4px solid #cf9; }
 
 .tableview {
   position: absolute;
@@ -1410,7 +1408,8 @@ input[type=range]::-moz-range-thumb {
         -ms-flex: 1;
         flex: 1; }
         .tableview nav ul li.tab-current {
-          border-bottom: 3px solid #090; }
+          border-bottom: 3px solid #090;
+          box-shadow: 0 6px 8px -6px #444; }
 
 @keyframes fadein {
   from {

@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    xyz: ['./public/js/xyz_entry.js'],
-    lib_leaflet: ['./public/js/xyz_leaflet/lib.js']
+    xyz_ui: ['./public/js/xyz_ui.js'],
+    xyz_control: ['./public/js/xyz_control/lib.js']
   },
   output: {
     path: path.resolve(__dirname, 'public/js/build'),
