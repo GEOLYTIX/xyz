@@ -31,6 +31,13 @@ export default _xyz => {
         }
       });
 
+      _xyz.tableview.create({
+        target: document.getElementById('tableview'),
+        btn: {
+          toggleTableview: document.getElementById('toggleTableview')
+        }
+      });
+
       // Init layers listview.
       _xyz.layers.listview.init();
         
@@ -39,9 +46,6 @@ export default _xyz => {
 
       // Init gazetteer.
       _xyz.gazetteer.init();
-
-      // Init tableview
-      _xyz.tableview.init();
 
     }
   });

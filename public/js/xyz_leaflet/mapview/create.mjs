@@ -6,6 +6,9 @@ export default _xyz => params => {
   if (_xyz.map) _xyz.map.remove();
     
   if (!params.target) return console.error('No target for mapview!');
+
+  // Set XYZ map DOM.
+  _xyz.mapview.node = params.target;  
     
   // Load locale if defined in params or if no locale is yet loaded.
   if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
@@ -14,9 +17,6 @@ export default _xyz => params => {
   // This makes it possible to override client side workspace entries.
   Object.assign(_xyz.workspace.locale, params);
     
-  // Set XYZ map DOM.
-  _xyz.mapview.node = params.target;
-        
   // Create Leaflet map object.
   _xyz.map = _xyz.L.map(_xyz.mapview.node, {
     renderer: _xyz.L.svg(),

@@ -51,7 +51,7 @@
             "display": "optional",
             "attribution": "optional",
             "restriction": "optional",
-            "table_view": "optional"
+            "tableview": "optional"
         },
         "tiles": {
             "URI": "optional"

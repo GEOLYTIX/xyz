@@ -55,7 +55,7 @@ _xyz({
       }
     });
 
-    _xyz.tableview.createTable({
+    _xyz.tableview.layerTable({
       layer: _xyz.layers.list.COUNTRIES,
       target: document.getElementById('xyz_table1')
     });

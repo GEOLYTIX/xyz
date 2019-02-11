@@ -39,3 +39,7 @@ import pointOnFeature from '@turf/point-on-feature';
 export const turf = {
   pointOnFeature: pointOnFeature
 };
+
+import Tabulator from 'tabulator-tables';
+
+export {Tabulator};

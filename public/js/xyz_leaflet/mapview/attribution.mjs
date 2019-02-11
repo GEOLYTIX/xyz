@@ -28,7 +28,7 @@ export default _xyz => {
 
         _xyz.mapview.attribution.links.appendChild(
           _xyz.utils.hyperHTML.wire()`
-            <a target="_blank" href="${entry[1]}"> ${entry[0]}</a>`);
+            <a target="_blank" href="${entry[1]}">${entry[0]}</a>`);
   
       });
 
@@ -56,7 +56,7 @@ export default _xyz => {
       if (!_xyz.mapview.attribution.layer[entry[0]]) {
 
         _xyz.mapview.attribution.layer[entry[0]] = _xyz.utils.hyperHTML.wire()`
-        <a target="_blank" href="${entry[1]}"> ${entry[0]}</a>`;
+        <a target="_blank" href="${entry[1]}">${entry[0]}</a>`;
 
         _xyz.mapview.attribution.links.appendChild(_xyz.mapview.attribution.layer[entry[0]]);
 

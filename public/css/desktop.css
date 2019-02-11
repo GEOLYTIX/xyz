@@ -918,11 +918,11 @@ input[type=range]::-moz-range-thumb {
   right: 0;
   width: calc(100% - 330px);
   height: 100%; }
-  .map_container .map {
+  .map_container .mapview {
     width: 100%;
     height: 100%;
     box-shadow: inset 4px 0px 4px -4px #777; }
-    .map_container .map div.leaflet-select-pane svg > g path {
+    .map_container .mapview div.leaflet-select-pane svg > g path {
       filter: url(#dropshadow); }
   .map_container .leaflet-interactive.wait-cursor-enabled {
     cursor: wait !important; }
@@ -1367,6 +1367,8 @@ input[type=range]::-moz-range-thumb {
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
     font-size: 40px; }
+  .attribution a {
+    margin-left: 10px; }
   .attribution a:hover {
     border-bottom: 4px solid #cf9; }
 

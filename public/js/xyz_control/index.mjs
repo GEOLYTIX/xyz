@@ -12,7 +12,7 @@ import layer from './layer/_layer.mjs';
 
 import location from './location/_location.mjs';
 
-import mapview from './mapview/_mapview.mjs';
+import mapview from '../xyz_leaflet/mapview/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
 

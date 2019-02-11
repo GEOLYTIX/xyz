@@ -20,7 +20,7 @@ _xyz({
   token: document.body.dataset.token,
   log: document.body.dataset.log,
   nanoid: document.body.dataset.nanoid,
-  callback: init
+  callback: init,
 });
 
 function init(_xyz) {
@@ -31,19 +31,28 @@ function init(_xyz) {
 
   _xyz.hooks = hooks(_xyz);
 
+  // Create mapview control.
   _xyz.mapview.create({
     target: document.getElementById('Map'),
     locale: _xyz.hooks.current.locale,
     view: {
       lat: _xyz.hooks.current.lat,
       lng: _xyz.hooks.current.lng,
-      z: _xyz.hooks.current.z
+      z: _xyz.hooks.current.z,
     },
     scrollWheelZoom: true,
     btn: {
       ZoomIn: document.getElementById('btnZoomIn'),
       ZoomOut: document.getElementById('btnZoomOut'),
-      Locate: document.getElementById('btnLocate')
+      Locate: document.getElementById('btnLocate'),
+    }
+  });
+
+  // Create tableview control.
+  _xyz.tableview.create({
+    target: document.getElementById('tableview'),
+    btn: {
+      toggleTableview: document.getElementById('toggleTableview')
     }
   });
 
@@ -61,9 +70,6 @@ function init(_xyz) {
   // Init gazetteer.
   gazetteer(_xyz);
   _xyz.gazetteer.init();
-
-  // Init tableview
-  if(_xyz.desktop) _xyz.tableview.init();
 
   if (_xyz.log) console.log(_xyz);
 
