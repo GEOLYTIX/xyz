@@ -1,5 +1,8 @@
 export default _xyz => () => {
 
+  if (!_xyz.tableview.current_layer
+    || !_xyz.tableview.current_layer.tableview.table) return;
+
   const xhr = new XMLHttpRequest();
 
   const bounds = _xyz.map && _xyz.map.getBounds();
