@@ -800,6 +800,8 @@
   .attribution .logo {
     font-family: ffmark_black, sans-serif;
     font-size: 40px; }
+  .attribution a {
+    margin-left: 10px; }
   .attribution a:hover {
     border-bottom: 4px solid #cf9; }
 

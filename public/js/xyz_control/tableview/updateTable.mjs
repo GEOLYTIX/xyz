@@ -23,9 +23,9 @@ export default _xyz => () => {
   
     if (e.target.status !== 200) return;
     
-    _xyz.tableview.current_layer.table_view.table.setData(e.target.response);
+    _xyz.tableview.current_layer.tableview.table.setData(e.target.response);
 
-    _xyz.tableview.current_layer.table_view.table.redraw(true);
+    _xyz.tableview.current_layer.tableview.table.redraw(true);
 
   };
 

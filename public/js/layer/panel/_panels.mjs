@@ -8,6 +8,8 @@ import panel_grid from './grid.mjs';
 
 import panel_cluster from './cluster.mjs';
 
+import panel_table from './table.mjs';
+
 export default (_xyz, layer) => {
 
   // Create layer dashboard.
@@ -30,6 +32,9 @@ export default (_xyz, layer) => {
 
   // Add draw panel to dashboard.
   if (layer.edit) panel_draw(_xyz, layer);
+
+  // Add draw panel to dashboard.
+  if (layer.tableview) panel_table(_xyz, layer);
 
   // Add cluster panel to dashboard.
   if (layer.format === 'cluster') panel_cluster(_xyz, layer);
