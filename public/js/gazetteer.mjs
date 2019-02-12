@@ -243,7 +243,7 @@ export default _xyz => {
     // Remove existing layer.
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
-    _xyz.gazetteer.layer = _xyz.layers.geoJSON({
+    _xyz.gazetteer.layer = _xyz.locations.drawGeoJSON({
       json: geom,
       pane: 'gazetteer',
       icon: {
