@@ -2,9 +2,9 @@ import create from './create.mjs';
 
 import addTab from './addTab.mjs';
 
-import layerTable from './layerTable.mjs';
+import removeTab from './removeTab.mjs';
 
-import updateTable from './updateTable.mjs';
+import layerTable from './layerTable.mjs';
 
 export default _xyz => {
 
@@ -14,9 +14,9 @@ export default _xyz => {
 
     addTab: addTab(_xyz),
 
-    layerTable: layerTable(_xyz),
+    removeTab: removeTab(_xyz),
 
-    updateTable: updateTable(_xyz),
+    layerTable: layerTable(_xyz),
 
   };
     

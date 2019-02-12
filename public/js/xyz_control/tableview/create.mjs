@@ -2,15 +2,13 @@ import assignBtn from './assignBtn.mjs';
 
 export default _xyz => params => {
 
-  // Remove existing Leaflet map object.
-  if (_xyz.tableview.node) {
-    //_xyz.tableview.node.innerHTML = '';
-    _xyz.tableview.node.style.display = 'none';
-  }
+  _xyz.tableview.tables = [];
+
+  if (_xyz.tableview.node) _xyz.tableview.node.style.display = 'none';
     
   if (!params.target) return console.error('No target for tableview!');
 
-  // Set XYZ map DOM.
+  // Set tableview node.
   _xyz.tableview.node = params.target;
 
   _xyz.tableview.height = 'calc(100% - 55px)';
@@ -34,6 +32,16 @@ export default _xyz => params => {
     window.addEventListener('mousemove', resize);
     window.addEventListener('mouseup', stopResize);
   });
+
+  // Resize tableview while holding mousedown on resize_bar.
+  _xyz.tableview.resize_bar.addEventListener('touchstart', e => {
+
+    // Prevent text selection.
+    e.preventDefault();
+    
+    window.addEventListener('touchmove', resize);
+    window.addEventListener('touchend', stopResizeTouch);
+  });
       
   _xyz.tableview.nav_bar = _xyz.tableview.node.querySelector('.nav_bar > ul');
 
@@ -42,22 +50,35 @@ export default _xyz => params => {
   _xyz.tableview.btn = assignBtn(_xyz, params);
 
   // Augment viewChangeEnd method to update table.
-  _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
-    _xyz.tableview.updateTable();
-  });
+  _xyz.mapview.changeEnd = _xyz.utils.compose(
+    _xyz.mapview.changeEnd,
+    () => _xyz.tableview.current_table.update(),
+  );
 
   // Resize the tableview container
   function resize(e) {
 
-    // Get height from window height minus cursor position.
-    const height = window.innerHeight - e.pageY;
+    let height;
+
+    if (e.touches) {
+
+      // Get height from window height minus first finger touch position.
+      height = window.innerHeight - e.touches[0].pageY;
+
+    } else {
+
+      // Get height from window height minus cursor position.
+      height = window.innerHeight - e.pageY;
+
+    }
   
     // Min height snap.
     if (height < 30) {
   
       // Stop resizing when minHeight is reached.
       _xyz.tableview.node.style.height = '40px';
-      return stopResize();
+
+      if (params.btn.toggleTableview) params.btn.toggleTableview.textContent = 'vertical_align_top';
     }
   
     // Full height snap.
@@ -65,7 +86,8 @@ export default _xyz => params => {
   
       // Stop resizing when full height is reached.
       _xyz.tableview.node.style.height = window.innerHeight + 'px';
-      return stopResize();
+      
+      if (params.btn.toggleTableview) params.btn.toggleTableview.textContent = 'vertical_align_bottom';
     }
   
     _xyz.tableview.node.style.height = height + 'px';
@@ -77,11 +99,17 @@ export default _xyz => params => {
     document.body.style.cursor = 'auto';
     window.removeEventListener('mousemove', resize);
     window.removeEventListener('mouseup', stopResize);
+   
+    _xyz.tableview.current_table.Tabulator.redraw(true);
+  }
+
+  // Remove eventListener after resize event.
+  function stopResizeTouch() {
   
-    // Required for Firefox
-    // window.dispatchEvent(new Event('resize'));
-  
-    _xyz.tableview.current_layer.tableview.table.redraw(true);
+    window.removeEventListener('touchmove', resize);
+    window.removeEventListener('touchend', stopResizeTouch);
+     
+    _xyz.tableview.current_table.Tabulator.redraw(true);
   }
      
 };
