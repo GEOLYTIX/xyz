@@ -79,7 +79,7 @@ module.exports = fastify => {
       //   FETCH FIRST 99 ROW ONLY;
       // `;
 
-      //console.log(q);
+      console.log(q);
 
       var rows = await global.pg.dbs[layer.dbs](q);
 

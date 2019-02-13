@@ -6,6 +6,8 @@ import images from './images/_images.mjs';
 
 import geometry from './geometry.mjs';
 
+import tableDefinition from './tableDefinition.mjs';
+
 import log from './log.mjs';
 
 import edit from './edit/_edit.mjs';
@@ -100,15 +102,16 @@ export default (_xyz, record) => {
 
       // Create new table cell for the entry label and append to table.
       let _label;
-      if (entry.label) {_label = _xyz.utils.createElement({
-        tag: 'td',
-        options: {
-          className: 'label lv-' + (entry.level || 0),
-          textContent: entry.label,
-          title: entry.title || null
-        },
-        appendTo: entry.row
-      });
+      if (entry.label) {
+        _label = _xyz.utils.createElement({
+          tag: 'td',
+          options: {
+            className: 'label lv-' + (entry.level || 0),
+            textContent: entry.label,
+            title: entry.title || null
+          },
+          appendTo: entry.row
+        });
       }
 
       // Finish entry creation if entry has not type.
@@ -124,7 +127,10 @@ export default (_xyz, record) => {
       if (entry.type === 'log') return log(_xyz, record, entry);
 
       // Create geometry control.
-      if (entry.type === 'geometry') return geometry(_xyz, record, entry);    
+      if (entry.type === 'geometry') return geometry(_xyz, record, entry);  
+
+      // Create table definition - to do
+      if(entry.type === 'tableDefinition') return tableDefinition(_xyz, record, entry);  
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();

@@ -4,6 +4,8 @@ import addTab from './addTab.mjs';
 
 import layerTable from './layerTable.mjs';
 
+import locationTable from './locationTable.mjs';
+
 import updateTable from './updateTable.mjs';
 
 export default _xyz => {
@@ -16,7 +18,9 @@ export default _xyz => {
 
     layerTable: layerTable(_xyz),
 
-    updateTable: updateTable(_xyz),
+    locationTable: locationTable(_xyz),
+
+    updateTable: updateTable(_xyz)
 
   };
     

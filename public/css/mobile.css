@@ -1407,11 +1407,11 @@ button {
 .spacer_mobile {
   height: calc(100% - 50px); }
 
-.map {
+.mapview {
   position: fixed;
   width: 100%;
   height: calc(100% - 50px); }
-  .map div.leaflet-select-pane svg > g path {
+  .mapview div.leaflet-select-pane svg > g path {
     filter: url(#dropshadow); }
 
 #timeout_mask {
