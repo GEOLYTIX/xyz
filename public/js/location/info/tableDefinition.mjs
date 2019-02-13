@@ -1,6 +1,14 @@
 export default (_xyz, record, entry) => {
 
-	  _xyz.tableview.locationTable({record: record, entry: entry});
+  console.log(record);
+  console.log(entry);
+
+
+	  _xyz.tableview.locationTable({
+	  	target: _xyz.tableview.node.querySelector('.table'),
+	  	record: record,
+	  	table: entry
+	  });
 
   //console.log(entry);
 };

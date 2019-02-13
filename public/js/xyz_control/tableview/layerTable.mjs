@@ -1,7 +1,5 @@
 export default _xyz => params => {
 
-  console.log(params);
-
   if (!params.target) return;
 
   if (_xyz.tableview.node) _xyz.tableview.node.style.display = 'block';
