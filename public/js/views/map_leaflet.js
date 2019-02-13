@@ -57,12 +57,30 @@ _xyz({
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list.COUNTRIES,
-      target: document.getElementById('xyz_table1')
+      target: document.getElementById('xyz_table1'),
+      table: {
+        'columns': [
+          {
+            'field': 'name',
+            'type': 'text',
+          },
+          {
+            'title': 'Population Est',
+            'field': 'pop_est',
+            'type': 'integer',
+          },
+          {
+            'field': 'gdp_md_est',
+            'type': 'integer',
+          }
+        ]
+      }
     });
 
-    _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
-      _xyz.tableview.updateTable();
-    });
+    _xyz.mapview.changeEnd = _xyz.utils.compose(
+      _xyz.mapview.changeEnd,
+      () => _xyz.tableview.current_table.update(),
+    );
   
     _xyz.layers.list['Mapbox Base'].remove();
 

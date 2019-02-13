@@ -78,7 +78,7 @@ export default _xyz => params => {
 
   params.table.activate();
 
-  _xyz.tableview.tables.push(params.table);
+  if (_xyz.tableview.tables) _xyz.tableview.tables.push(params.table);
 
   if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(params);
 
