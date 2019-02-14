@@ -79,7 +79,7 @@ _xyz({
 
     _xyz.mapview.changeEnd = _xyz.utils.compose(
       _xyz.mapview.changeEnd,
-      () => _xyz.tableview.current_table.update(),
+      () => {if(_xyz.tableview && _xyz.tableview.current_table) _xyz.tableview.current_table.update();}
     );
   
     _xyz.layers.list['Mapbox Base'].remove();
