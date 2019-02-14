@@ -1,6 +1,8 @@
 export default _xyz => params => {
 
   //console.log(params);
+  console.log('hello location table');
+
 
 	  if (!params.target) return;
 

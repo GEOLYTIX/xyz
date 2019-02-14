@@ -31,29 +31,32 @@ module.exports = fastify => {
         return res.code(406).send('Invalid parameter.');
       }
 
+      Object.values(layer.infoj).map(entry => {
+        if(entry.type === 'tableDefinition'){
+          console.log(entry);
+        }
+      });
+
       // SQL filter
       // const filter_sql = layer.filter && await require(global.appRoot + '/mod/pg/sql_filter')(layer.filter) || '';
 
-      let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], layer.infoj, layer.qID);
+      //let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], layer.infoj, layer.qID);
       
-      let q = `
+      /*let q = `
         SELECT ${layer.qID} AS qID, ${fields}
         FROM ${table}
         ${viewport || ''}
-        FETCH FIRST 99 ROW ONLY;`;
-      //   ${filter_sql ? (viewport ? ` AND ${filter_sql}` : ` WHERE ${filter_sql}`) : ''} 
-      //   ORDER BY ${layer.qID || 'id'}
-      //   OFFSET ${99*offset} ROWS
-      //   FETCH FIRST 99 ROW ONLY;
-      // `;
+        FETCH FIRST 99 ROW ONLY;`;*/
 
-      console.log(q);
+      //console.log(q);
 
-      var rows = await global.pg.dbs[layer.dbs](q);
+      //var rows = await global.pg.dbs[layer.dbs](q);
 
-      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+      //if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
-      res.code(200).send(rows);
+      //res.code(200).send(rows);
+      res.code(200).send();
+
     }
   });
 };
