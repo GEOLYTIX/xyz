@@ -27,4 +27,20 @@ export default _xyz => params => {
 
   });
 
+	  params.table.update = () => {
+
+	  	const xhr = new XMLHttpRequest();
+
+	  	xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
+	  		// here parameters that need to be sent to location_table endpoint
+	  		// turned into query on server side
+	  		// sent back and visualized
+	  		locale: _xyz.workspace.locale.key,
+	  		layer: params.record.location.layer.key,
+	  		table: params.record.location.layer.tableMax(),
+	  		vie
+	  	}));
+
+	  };
+
 };
