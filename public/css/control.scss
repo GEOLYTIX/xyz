@@ -1,0 +1,89 @@
+$glxgreen: #090;
+$glxlightgreen: #cf9;
+$onyx: #383836;
+@font-face {
+    font-family: ffmark_black;
+    src: url(../fonts/MarkWeb-Black.woff) format("woff");
+}
+
+@font-face {
+    font-family: ffmark;
+    src: url(../fonts/MarkWebPro.woff) format("woff");
+}
+
+@font-face {
+    font-family: ffmark_bold;
+    src: url(../fonts/MarkWebPro-Bold.woff) format("woff");
+}
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+@import 'locationview';
+@import 'input';
+@import 'range';
+@import 'dropdown';
+@import 'datepicker';
+@import 'images';
+@import 'chkbox';
+@import 'button';
+@import 'scrolly';
+@import 'leaflet';
+@import 'attribution';
+@import 'tabulator';
+@import 'mapview';
+@import 'mod_container';
+@import 'gazetteer';
+*,
+*::after,
+*::before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+}
+
+body {
+    font-family: ffmark, sans-serif;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: $onyx;
+}
+
+a {
+    color: $onyx;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+select {
+    width: 100%;
+    margin: 5px 0;
+    font-family: 'PT Mono', monospace;
+    background: #fff;
+}
+
+i,
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cursor:hover {
+    cursor: pointer;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.bold {
+    font-weight: 800;
+}

@@ -2053,44 +2053,4 @@ i,
 .bold {
   font-weight: 800; }
 
-body {
-  overflow-y: scroll;
-  overflow-x: hidden; }
-
-.tab_btn i {
-  font-size: 40px; }
-
-.spacer_mobile {
-  height: calc(100% - 50px); }
-
-.mapview {
-  position: fixed;
-  height: calc(100% - 50px); }
-
-.mod_container {
-  position: absolute;
-  background-color: white;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 0 10px slategrey;
-  z-index: 1000; }
-  .mod_container .module {
-    padding: 20px;
-    overflow-y: scroll;
-    height: calc(100% - 50px); }
-
-#Gazetteer {
-  position: fixed;
-  left: 0;
-  box-shadow: 0 3px 3px -3px #000; }
-  #Gazetteer input {
-    padding: 5px 0 5px 70px; }
-  #Gazetteer > ul {
-    padding-left: 70px; }
-    #Gazetteer > ul li {
-      font-size: 20px;
-      color: #090;
-      list-style: none;
-      line-height: 1.5em; }
-
-/*# sourceMappingURL=mobile.css.map */
+/*# sourceMappingURL=control.css.map */

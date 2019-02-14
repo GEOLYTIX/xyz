@@ -9,37 +9,19 @@ export default _xyz => params => {
    
   _xyz.tableview.table = params.target;
 
-  if (!params.layer) return;
-
   if (!params.table) return;
 
   params.table.columns.forEach(col => {
 
     col.title = col.title || col.field;
 
-    if(col.type === 'date') col.formatter = _xyz.utils.formatDate;
-
-    if(col.type === 'datetime') col.formatter = _xyz.utils.formatDateTime;
-
   });
 
   params.table.update = () => {
 
     const xhr = new XMLHttpRequest();
-
-    const bounds = _xyz.map && _xyz.map.getBounds();
-        
-    xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
-      locale: _xyz.workspace.locale.key,
-      layer: params.layer.key,
-      table: params.layer.tableMax(),
-      viewport: bounds ? true : false,
-      west: bounds && bounds.getWest(),
-      south: bounds && bounds.getSouth(),
-      east: bounds && bounds.getEast(),
-      north: bounds && bounds.getNorth(),
-      token: _xyz.token
-    }));
+       
+    xhr.open('GET', _xyz.host + '/api/location/table');
   
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
@@ -63,12 +45,8 @@ export default _xyz => params => {
     params.table.Tabulator =
     new _xyz.utils.Tabulator(_xyz.tableview.table, {
       columns: params.table.columns,
-      //columns: _xyz.tableview.current_layer.tableview.columns,
       autoResize: true,
-      //selectable: true,
-      //resizableRows: true,
       height: _xyz.tableview.height || '100%'
-      //rowClick: (e, row) => console.log(row)
     });
 
     params.table.update();

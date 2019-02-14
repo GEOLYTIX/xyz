@@ -1,3 +1,8 @@
+button {
+    border: none;
+    outline: none;
+}
+
 .btn_text {
     font-family: ffmark_bold;
     font-size: 15px;
@@ -19,14 +24,7 @@
     &.lv1 {
         box-shadow: inset 5px 0 4px -4px #777;
     }
-    top: 0;
-    z-index: 999;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    @if $desktop {
+    &.desktop {
         position: absolute;
         left: 0;
         background-color: #fff;
@@ -34,17 +32,19 @@
         padding: 4px;
         opacity: 0.8;
     }
-    @if $mobile {
+    &.mobile {
         position: fixed;
         left: 10px;
+        button,
+        >div {
+            box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
     }
+    top: 0;
+    z-index: 999;
     div:hover {
-        // background: $glxgreen;
-        // color: #fff;
         cursor: pointer;
-        // a {
-        //     color: #fff;
-        // }
     }
     button,
     >div {
@@ -61,10 +61,6 @@
         cursor: default;
         border: none;
         outline: none;
-        @if $mobile {
-            box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
-            border-radius: 50%;
-        }
         a {
             color: $glxgreen;
         }
@@ -80,12 +76,7 @@
             opacity: 0.3;
         }
         &:hover:enabled {
-            // background: $glxgreen;
-            // color: #fff;
             cursor: pointer;
-            // a {
-            //     color: #fff;
-            // }
         }
     }
 }
@@ -143,17 +134,14 @@
     box-shadow: 1px 1px 3px #666;
     margin: 6px 3px 12px 3px;
     cursor: pointer;
-
     &:active {
         box-shadow: 2px 2px 3px #090;
     }
-
     span {
         position: absolute;
         top: 0;
         left: 0
     }
-
     i {
         font-size: 14px;
         vertical-align: text-bottom;

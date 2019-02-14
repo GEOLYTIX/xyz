@@ -6,6 +6,8 @@ import removeTab from './removeTab.mjs';
 
 import layerTable from './layerTable.mjs';
 
+import locationTable from './locationTable.mjs';
+
 export default _xyz => {
 
   return {
@@ -17,6 +19,8 @@ export default _xyz => {
     removeTab: removeTab(_xyz),
 
     layerTable: layerTable(_xyz),
+
+    locationTable: locationTable(_xyz),
 
   };
     

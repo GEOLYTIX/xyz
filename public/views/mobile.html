@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head data-dir = "{{:dir}}">
+<head data-dir="{{:dir}}">
     <title>{{:title}}</title>
     <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
 </head>
 
-<body data-viewmode = "mobile" data-nanoid = {{:nanoid}} data-log={{:log}} data-token={{:token}}>
+<body data-viewmode="mobile" data-nanoid={{:nanoid}} data-log={{:log}} data-token={{:token}}>
 
     <div class="location_drop">
         <ul class="location_table"></ul>
@@ -23,7 +23,7 @@
                     <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
                     <feOffset dx='1' dy='1' result='offsetblur' />
                     <feMerge>
-                        <feMergeNode/>
+                        <feMergeNode />
                         <feMergeNode in='SourceGraphic' />
                     </feMerge>
                 </filter>
@@ -40,7 +40,7 @@
         <ul></ul>
     </div>
 
-    <div class="btn_column noselect">
+    <div class="btn_column noselect mobile">
         <button id="btnGazetteer" {{:btnSearch}}>
             <i class="material-icons">search</i>
         </button>
@@ -87,9 +87,9 @@
         </table>
 
         <div id="modLayers" class="module">
-                <div class="title">Layers</div>
-                <div id="localeDropdown"></div>
-                <div id="layers" class="content"></div>
+            <div class="title">Layers</div>
+            <div id="localeDropdown"></div>
+            <div id="layers" class="content"></div>
         </div>
 
         <div id="modLocations" class="module hidden">
@@ -100,10 +100,8 @@
 
     </div>
 
-    <div id="timeout_mask">Session expired.</div>
-
 </body>
 
-<script src="{{:dir}}/js/{{:bundle_js}}"></script>
+<script src="{{:dir}}/js/build/xyz_ui_bundle.js"></script>
 
 </html>

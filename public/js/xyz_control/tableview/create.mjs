@@ -2,12 +2,15 @@ import assignBtn from './assignBtn.mjs';
 
 export default _xyz => params => {
 
-  _xyz.tableview.tables = [];
-
-  if (_xyz.tableview.node) _xyz.tableview.node.style.display = 'none';
-    
   if (!params.target) return console.error('No target for tableview!');
 
+  _xyz.tableview.tables = [];
+
+  if (_xyz.tableview.node) {
+    _xyz.tableview.node.style.display = 'none';
+    _xyz.mapview.node.style.height = '100%';
+  }
+  
   // Set tableview node.
   _xyz.tableview.node = params.target;
 

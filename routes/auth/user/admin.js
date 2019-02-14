@@ -35,7 +35,7 @@ async function view(req, res, token) {
   res
     .type('text/html')
     .send(require('jsrender')
-      .templates('./public/views/admin.html')
+      .templates('./public/views/user_admin.html')
       .render({
         users: rows,
         dir: global.dir,

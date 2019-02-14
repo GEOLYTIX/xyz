@@ -1,7 +1,7 @@
 export default _xyz => {
 
   _xyz.mobile = {};
-    
+
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
   //move map up on document scroll
@@ -16,10 +16,10 @@ export default _xyz => {
     tabLocations = document.getElementById('tabLocations'),
     modLocations = document.getElementById('modLocations');
 
-  modLayers.addEventListener('scroll', e => checkOverlap (e.target));
-  modLocations.addEventListener('scroll', e => checkOverlap (e.target));
+  modLayers.addEventListener('scroll', e => checkOverlap(e.target));
+  modLocations.addEventListener('scroll', e => checkOverlap(e.target));
 
-  function checkOverlap (mod) {
+  function checkOverlap(mod) {
     if (mod.scrollTop > 0) {
       tabs.classList.add('pane_shadow');
       return;
@@ -46,7 +46,7 @@ export default _xyz => {
     target.classList.add('active');
     modules.forEach(m => m.classList.add('hidden'));
     mod.classList.remove('hidden');
-    checkOverlap (mod);
+    checkOverlap(mod);
 
     // Run locations init when all records are free.
     const freeRecords = _xyz.locations.list.filter(record => !record.location);
@@ -55,7 +55,7 @@ export default _xyz => {
   }
 
   _xyz.locations.select_list = (list, lnglat, layer) => {
-  
+
     let dom = {
       map: document.getElementById('Map'),
       location_drop: document.querySelector('.location_drop'),
@@ -81,7 +81,7 @@ export default _xyz => {
         eventListener: {
           event: 'click',
           funct: e => {
-  
+
             _xyz.locations.select({
               locale: _xyz.workspace.locale.key,
               layer: layer.key,
@@ -90,11 +90,11 @@ export default _xyz => {
               marker: e.target['data-marker'],
               edit: layer.edit
             });
-  
+
           }
         }
       });
-  
+
     }
 
     // Button event to close the .location_drop.

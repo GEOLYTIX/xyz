@@ -28,6 +28,8 @@ module.exports = fastify => {
 
   require('./location/edit/image_upload')(fastify);
 
+  require('./location/table')(fastify);
+
   // Mapbox Isochrones
 
   require('./location/edit/catchment_create')(fastify);

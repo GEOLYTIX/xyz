@@ -77,6 +77,38 @@ _xyz({
       }
     });
 
+    // _xyz.tableview.locationTable({
+    //   target: document.getElementById('xyz_table1'),
+    //   table: {
+    //     'columns': [
+    //       {
+    //         'title': 'fields',
+    //         'field': 'fields',
+    //       },
+    //       {
+    //         'title': 'min_15',
+    //         'field': 'min_15',
+    //       },
+    //       {
+    //         'title': 'uk',
+    //         'field': 'uk',
+    //       },
+    //       {
+    //         'title': 'pct_15',
+    //         'field': 'pct_15',
+    //       },
+    //       {
+    //         'title': 'pct_uk',
+    //         'field': 'pct_uk',
+    //       },
+    //       {
+    //         'title': 'index',
+    //         'field': 'index',
+    //       },                                        
+    //     ]
+    //   }
+    // });
+
     _xyz.mapview.changeEnd = _xyz.utils.compose(
       _xyz.mapview.changeEnd,
       () => {if(_xyz.tableview && _xyz.tableview.current_table) _xyz.tableview.current_table.update();}

@@ -1,6 +1,6 @@
 export default (_xyz, layer) => {
 
-  if(!layer.tableview || !layer.tableview.tables) return;
+  if(_xyz.mobile || !layer.tableview || !layer.tableview.tables) return;
 
   // Create cluster panel and add to layer dashboard.
   layer.tableview.panel = _xyz.utils.createElement({
