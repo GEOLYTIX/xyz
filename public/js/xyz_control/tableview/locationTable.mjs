@@ -38,8 +38,20 @@ export default _xyz => params => {
 	  		locale: _xyz.workspace.locale.key,
 	  		layer: params.record.location.layer.key,
 	  		table: params.record.location.layer.tableMax(),
-	  		vie
+	  		id: record.location.id,
+	  		token: _xyz.token
 	  	}));
+
+	  	xhr.setRequestHeader('Content-Type', 'application/json');
+	  	xhr.responseType = 'json';
+
+	  	xhr.onload = e => {
+	  		if (e.target.status !== 200) return;
+
+	  		console.log(e.response);
+	  	};
+
+	  	xhr.send();
 
 	  };
 
