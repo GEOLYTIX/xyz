@@ -1,6 +1,6 @@
 export default _xyz => params => {
 
-  //console.log(params);
+  console.log(params);
   console.log('hello location table');
 
 
@@ -38,11 +38,17 @@ export default _xyz => params => {
 	  		// turned into query on server side
 	  		// sent back and visualized
 	  		locale: _xyz.workspace.locale.key,
-	  		layer: params.record.location.layer.key,
-	  		table: params.record.location.layer.tableMax(),
-	  		id: record.location.id,
+	  		layer: params.record.location.layer,
+	  		id: params.record.location.id,
 	  		token: _xyz.token
 	  	}));
+
+	  	console.log({
+	  		locale: _xyz.workspace.locale.key,
+	  		layer: params.record.location.layer,
+	  		id: params.record.location.id,
+	  		token: _xyz.token
+	  	});
 
 	  	xhr.setRequestHeader('Content-Type', 'application/json');
 	  	xhr.responseType = 'json';
@@ -50,11 +56,13 @@ export default _xyz => params => {
 	  	xhr.onload = e => {
 	  		if (e.target.status !== 200) return;
 
-	  		console.log(e.response);
+	  		console.log(e.target.response);
 	  	};
 
 	  	xhr.send();
 
 	  };
+
+	  params.table.update();
 
 };

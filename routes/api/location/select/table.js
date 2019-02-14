@@ -18,23 +18,79 @@ module.exports = fastify => {
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
-      const table = req.query.table;
+      //const table = req.query.table;
 
       // Return 406 if table is not defined as request parameter.
-      if (!table) return res.code(406).send('Missing table.');
+      //if (!table) return res.code(406).send('Missing table.');
 
       // let offset = parseInt(req.body.offset);
               
       // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
+      /*if ([table]
         .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Invalid parameter.');
-      }
+      }*/
+
+      let q;
+
+      let id = req.query.id;
 
       Object.values(layer.infoj).map(entry => {
         if(entry.type === 'tableDefinition'){
-          console.log(entry);
+          // here process tableDef object into a query
+          
+          let withTable = [];
+          let col_alias = [];
+          let row_alias = [];
+          let rows = [];
+
+          entry.rows.map(row => {
+            rows.push(`${row.fieldfx || row.field} AS row_${entry.rows.indexOf(row)}`);
+            row_alias.push(`row_${entry.rows.indexOf(row)}`);
+            //row_alias.push(row.field);
+          });
+
+
+          for(let j = 0; j < entry.columns.length; j++){
+
+            col_alias.push(`col_${j}`);
+
+            withTable.push(`col_${j} as 
+            (SELECT ${rows.join(',')} 
+            FROM ${entry.columns[j].lookup.table_a} a, ${entry.columns[j].lookup.table_b} b
+            WHERE a.${layer.qID || 'id'} = ${id}
+            AND 
+            ST_INTERSECTS(a.${entry.columns[j].lookup.geom_a}, b.${entry.columns[j].lookup.geom_b}))`);
+          
+          }
+
+          //console.log(`WITH ${withTable.join(',')}`); // 1st part
+
+
+          let lines = [];
+
+          lines[0] = `UNNEST(ARRAY['${row_alias.join('\',\'')}']) AS rows`;
+
+          for(let col of col_alias){
+
+            let arr = [];
+
+            for(let row of row_alias){
+              arr.push(`${col}.${row}`);
+            }
+
+            let str = `UNNEST(ARRAY[${arr.join(',')}]) AS ${col}`;
+
+            lines.push(str);
+
+          }
+
+          //console.log(lines.join(',')); // 2nd part
+
+          q = `WITH ${withTable.join(',')} SELECT ${lines.join(',')} FROM ${col_alias.join(',')};`;
+        
         }
+
       });
 
       // SQL filter
@@ -50,13 +106,12 @@ module.exports = fastify => {
 
       //console.log(q);
 
-      //var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await global.pg.dbs[layer.dbs](q);
 
-      //if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
-      //res.code(200).send(rows);
-      res.code(200).send();
-
+      res.code(200).send(rows);
+      //res.code(200).send();
     }
   });
 };
