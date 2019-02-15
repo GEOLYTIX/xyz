@@ -83,9 +83,9 @@ module.exports = fastify => {
 
       var q = `
       with q as (
-      SELECT ${fields.join()}
-      FROM ${table}
-      WHERE ${qID} = $1
+        SELECT ${fields.join()}
+        FROM ${table}
+        WHERE ${qID} = $1
       )
       select ${fields_with.join()}, geomj from q
       `;

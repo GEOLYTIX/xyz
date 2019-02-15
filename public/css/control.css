@@ -197,6 +197,38 @@
   .input_group input:focus ~ .bar:before, .input_group input:focus ~ .bar:after {
     width: 50%; }
 
+.loader {
+  height: 2px;
+  margin-top: -2px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: none; }
+
+.loader:before {
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 2px;
+  background-color: #fff;
+  animation: loading 2s linear infinite; }
+
+@keyframes loading {
+  from {
+    left: -200px;
+    width: 30%; }
+  50% {
+    width: 30%; }
+  70% {
+    width: 70%; }
+  80% {
+    left: 50%; }
+  95% {
+    left: 120%; }
+  to {
+    left: 100%; } }
 .range {
   width: 100%;
   width: calc(100% - 5px);
@@ -567,6 +599,35 @@ input[type=range]::-moz-range-thumb {
         opacity: 0.9;
         border: 1px solid #cf7;
         box-shadow: 2px 2px 1px #cf7; }
+
+.bar {
+  fill: #5AB664 !important;
+  width: 10px; }
+
+.chart-tooltip {
+  position: absolute;
+  text-align: center;
+  width: 40px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: #EFC9A5;
+  border: 0px;
+  border-radius: 2px;
+  pointer-events: none;
+  vertical-align: baseline; }
+
+.bar:hover {
+  fill: #D8BC8E !important; }
+
+.axis {
+  font: 10px sans-serif;
+  color: #333; }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #333;
+  shape-rendering: crispEdges; }
 
 .checkbox {
   padding: 5px 0 5px 25px;
@@ -1774,24 +1835,6 @@ button {
 .leaflet-popup-content {
   width: 301px !important; }
 
-.mod_container .tab_bar {
-  width: 100%;
-  color: #090;
-  border-bottom: 1px solid #090;
-  text-align: center;
-  table-layout: fixed;
-  height: 50px; }
-  .mod_container .tab_bar .swipe_icon {
-    display: none; }
-  .mod_container .tab_bar .active {
-    color: white;
-    background-color: #090; }
-    .mod_container .tab_bar .active .tab_icon {
-      display: none; }
-    .mod_container .tab_bar .active .swipe_icon {
-      display: inline-block; }
-.mod_container .hidden {
-  display: none; }
 .mod_container .module .title {
   font-family: ffmark_bold, sans-serif;
   font-size: 18px;
@@ -1916,62 +1959,7 @@ button {
       margin: 1px; }
       .mod_container .module .drawer .dashboard .third.right {
         float: right; }
-  .mod_container .module .drawer .bar {
-    fill: #5AB664 !important;
-    width: 10px; }
-  .mod_container .module .drawer div.chart-tooltip {
-    position: absolute;
-    text-align: center;
-    width: 40px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: #EFC9A5;
-    border: 0px;
-    border-radius: 2px;
-    pointer-events: none;
-    vertical-align: baseline; }
-  .mod_container .module .drawer .bar:hover {
-    fill: #D8BC8E !important; }
-  .mod_container .module .drawer .axis {
-    font: 10px sans-serif;
-    color: #333; }
-  .mod_container .module .drawer .axis path,
-  .mod_container .module .drawer .axis line {
-    fill: none;
-    stroke: #333;
-    shape-rendering: crispEdges; }
-.mod_container .pane_shadow {
-  box-shadow: 0 3px 3px -3px #000; }
-.mod_container .loader {
-  height: 2px;
-  margin-top: -2px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  display: none; }
-.mod_container .loader:before {
-  display: block;
-  position: absolute;
-  content: "";
-  left: -200px;
-  width: 200px;
-  height: 2px;
-  background-color: #fff;
-  animation: loading 2s linear infinite; }
-@keyframes loading {
-  from {
-    left: -200px;
-    width: 30%; }
-  50% {
-    width: 30%; }
-  70% {
-    width: 70%; }
-  80% {
-    left: 50%; }
-  95% {
-    left: 120%; }
-  to {
-    left: 100%; } }
+
 #Gazetteer {
   display: none;
   background-color: #fff; }
@@ -2050,7 +2038,13 @@ i,
 .hidden {
   visibility: hidden; }
 
+.displaynone {
+  display: none; }
+
 .bold {
   font-weight: 800; }
+
+.pane_shadow {
+  box-shadow: 0 3px 3px -3px #000; }
 
 /*# sourceMappingURL=control.css.map */

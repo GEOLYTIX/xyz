@@ -30,7 +30,7 @@ export default _xyz => {
   _xyz.mobile.activateLayersTab = () => activateTab(tabLayers, modLayers);
 
   _xyz.mobile.activateLocationsTab = () => {
-    tabLocations.classList.remove('hidden');
+    tabLocations.classList.remove('displaynone');
     activateTab(tabLocations, modLocations);
   };
 
@@ -44,13 +44,13 @@ export default _xyz => {
       el.classList.remove('active');
     });
     target.classList.add('active');
-    modules.forEach(m => m.classList.add('hidden'));
-    mod.classList.remove('hidden');
+    modules.forEach(m => m.classList.add('displaynone'));
+    mod.classList.remove('displaynone');
     checkOverlap(mod);
 
     // Run locations init when all records are free.
     const freeRecords = _xyz.locations.list.filter(record => !record.location);
-    if (freeRecords.length === _xyz.locations.list.length) tabLocations.classList.add('hidden');
+    if (freeRecords.length === _xyz.locations.list.length) tabLocations.classList.add('displaynone');
 
   }
 

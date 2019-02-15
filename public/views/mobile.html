@@ -3,9 +3,12 @@
 
 <head data-dir="{{:dir}}">
     <title>{{:title}}</title>
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-control" content="no-cache">
+    
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
 </head>
 
@@ -80,7 +83,7 @@
                 <i class="material-icons tab_icon">layers</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
-            <td id="tabLocations" class="tab_btn hidden">
+            <td id="tabLocations" class="tab_btn displaynone">
                 <i class="material-icons tab_icon">location_on</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
@@ -92,7 +95,7 @@
             <div id="layers" class="content"></div>
         </div>
 
-        <div id="modLocations" class="module hidden">
+        <div id="modLocations" class="module displaynone">
             <div class="title">Locations</div>
             <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
             <div id="locations" class="content"></div>

@@ -61,6 +61,7 @@ export default (_xyz, record) => {
     // Iterate through info fields to fill displayValue property
     // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
     Object.values(record.location.infoj).forEach(entry => {
+
       // Determine the user-friendly string representation of the value
       entry.displayValue =
       entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :

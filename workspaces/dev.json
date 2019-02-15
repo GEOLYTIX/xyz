@@ -807,7 +807,7 @@
                         },
                         {
                             "label": "OA pop_11",
-                            "field": "pop_11",
+                            "field": "pop__11",
                             "type": "integer",
                             "lookup": {
                                 "table": "dev_oa",

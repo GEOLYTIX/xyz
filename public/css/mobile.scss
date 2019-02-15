@@ -31,6 +31,27 @@ body {
         overflow-y: scroll;
         height: calc(100% - 50px);
     }
+    .tab_bar {
+        width: 100%;
+        color: $glxgreen;
+        border-bottom: 1px solid $glxgreen;
+        text-align: center;
+        table-layout: fixed;
+        height: 50px; // box-shadow: 0 3px 3px -3px #000;
+        .swipe_icon {
+            display: none;
+        }
+        .active {
+            color: white;
+            background-color: $glxgreen;
+            .tab_icon {
+                display: none;
+            }
+            .swipe_icon {
+                display: inline-block;
+            }
+        }
+    }
 }
 
 #Gazetteer {

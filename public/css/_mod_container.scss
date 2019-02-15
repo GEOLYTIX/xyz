@@ -1,37 +1,17 @@
 .mod_container {
-    .tab_bar {
-        width: 100%;
-        color: $glxgreen;
-        border-bottom: 1px solid $glxgreen;
-        text-align: center;
-        table-layout: fixed;
-        height: 50px; // box-shadow: 0 3px 3px -3px #000;
-        .swipe_icon {
-            display: none;
-        }
-        .active {
-            color: white;
-            background-color: $glxgreen;
-            .tab_icon {
-                display: none;
-            }
-            .swipe_icon {
-                display: inline-block;
-            }
-        }
-    }
-    .hidden {
-        display: none;
-    }
+
     .module {
+
         .title {
             font-family: ffmark_bold, sans-serif;
             font-size: 18px;
             margin-bottom: 10px;
         }
+
         input {
             width: 100%;
         }
+
         .drawer {
             margin-top: 10px;
             &.expandable {
@@ -199,82 +179,6 @@
                     }
                 }
             }
-            
-            .bar {
-                fill: #5AB664!important;
-                width: 10px;
-            }
-           
-            div.chart-tooltip {	
-                position: absolute;			
-                text-align: center;			
-                width: 40px;						
-                padding: 2px;				
-                font: 12px sans-serif;
-                background: #EFC9A5;	
-                border: 0px;		
-                border-radius: 2px;			
-                pointer-events: none;	
-                vertical-align: baseline;
-            }
-                     
-            .bar:hover{
-                fill: #D8BC8E!important;
-            }
-                    
-            .axis {
-                font: 10px sans-serif;
-                color: #333;
-            }
-                    
-            .axis path,
-            .axis line {
-                fill: none;
-                stroke: #333;
-                shape-rendering: crispEdges;
-            }
-        }
-    }
-    .pane_shadow {
-        box-shadow: 0 3px 3px -3px #000;
-    }
-    .loader {
-        height: 2px;
-        margin-top: -2px;
-        width: 100%;
-        position: relative;
-        overflow: hidden;
-        display: none;
-    }
-    .loader:before {
-        display: block;
-        position: absolute;
-        content: "";
-        left: -200px;
-        width: 200px;
-        height: 2px;
-        background-color: #fff;
-        animation: loading 2s linear infinite;
-    }
-    @keyframes loading {
-        from {
-            left: -200px;
-            width: 30%;
-        }
-        50% {
-            width: 30%;
-        }
-        70% {
-            width: 70%;
-        }
-        80% {
-            left: 50%;
-        }
-        95% {
-            left: 120%;
-        }
-        to {
-            left: 100%;
         }
     }
 }

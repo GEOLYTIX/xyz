@@ -67,6 +67,8 @@ export function meltDateStr(str){
 
 export function formatDate(unix_timestamp){
 
+  if (!unix_timestamp) return;
+
   // this line checks if unix_timestamp is a table cell object
   unix_timestamp = parseInt(unix_timestamp) ?  unix_timestamp : unix_timestamp.getValue();
 
@@ -85,6 +87,8 @@ export function formatDate(unix_timestamp){
 }
   
 export function formatDateTime(unix_timestamp){
+
+  if (!unix_timestamp) return;
 
   // this line checks if unix_timestamp is a table cell object
   unix_timestamp = parseInt(unix_timestamp) ?  unix_timestamp : unix_timestamp.getValue();
