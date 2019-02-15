@@ -2,7 +2,8 @@
     position: absolute;
     overflow: hidden;
     bottom: 0;
-    width: 100%;
+    right: 0;
+    width: calc(100% - 330px);
     min-height: 40px;
     max-height: 100%;
     padding-left: 58px;

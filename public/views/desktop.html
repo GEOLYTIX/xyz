@@ -14,7 +14,7 @@
 
 <body data-viewmode="desktop" data-nanoid={{:nanoid}} data-log={{:log}} data-token={{:token}}>
 
-    <div class="mod_container">
+    <div class="listviews">
 
         <div id="Gazetteer" class="input_group" style="display: none">
             <input class="pane_shadow" type="text" required>
@@ -29,13 +29,13 @@
                 <div class="scrolly_bar"></div>
             </div>
 
-            <div class="module">
+            <div class="listview">
                 <div class="title">Layers</div>
                 <div id="localeDropdown"></div>
                 <div id="layers" class="content"></div>
             </div>
 
-            <div class="module">
+            <div class="listview">
                 <div class="title">Locations</div>
                 <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
                 <div id="locations" class="content"></div>
@@ -47,9 +47,9 @@
 
     </div>
 
-    <div class="map_container">
+    <div class="mapview">
 
-        <div id="Map" class="mapview" >
+        <div id="Map" class="map" >
             <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
                 <defs>
                     <filter id='dropshadow'>
@@ -106,27 +106,25 @@
             </div>
         </div>
 
-        <div id="tableview" class="tableview" style="display: none">
+    </div>
 
-            <div class="resize_bar"></div>
+    <div id="tableview" class="tableview" style="display: none">
 
-            <nav class="nav_bar"><ul></ul></nav>
+        <div class="resize_bar"></div>
 
-            <div class="table"></div>
+        <nav class="nav_bar"><ul></ul></nav>
 
-            <div class="btn_column lv0 noselect desktop">
-            
-                <div style="margin-top: -10px;">
-                    <i id="toggleTableview" class="material-icons">vertical_align_top</i>
-                </div>
-                        
+        <div class="table"></div>
+
+        <div class="btn_column lv0 noselect desktop">
+        
+            <div style="margin-top: -10px;">
+                <i id="toggleTableview" class="material-icons">vertical_align_top</i>
             </div>
-
+                    
         </div>
 
     </div>
-
-    <div id="timeout_mask">Session expired.</div>
 
 </body>
 

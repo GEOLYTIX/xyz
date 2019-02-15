@@ -45,7 +45,7 @@ export default _xyz => record => {
         _xyz.utils.toggleExpanderParent({
           expandable: record.drawer,
           accordeon: true,
-          scrolly: document.querySelector('.mod_container > .scrolly')
+          scrolly: _xyz.desktop && _xyz.desktop.listviews,
         });
       }
     }
@@ -82,8 +82,7 @@ export default _xyz => record => {
   _xyz.locations.listview.node.insertBefore(record.drawer, _xyz.locations.listview.node.children[idx]);
 
   if (_xyz.desktop) setTimeout(() => {
-    let el = document.querySelector('.mod_container > .scrolly');
-    el.scrollTop = el.clientHeight;
+    _xyz.desktop.listviews.scrollTop = _xyz.desktop.listviews.clientHeight;
   }, 500);
 
   // Make select tab active on mobile device.

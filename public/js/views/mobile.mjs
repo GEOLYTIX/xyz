@@ -6,10 +6,12 @@ export default _xyz => {
 
   //move map up on document scroll
   document.addEventListener('scroll',
-    () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
+    () => document.getElementById('Map')
+      .style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px'
+  );
 
   let
-    modules = document.querySelectorAll('.mod_container > .module'),
+    listViews = document.querySelectorAll('.listview'),
     tabs = document.querySelector('.tab_bar'),
     tabLayers = document.getElementById('tabLayers'),
     modLayers = document.getElementById('modLayers'),
@@ -44,7 +46,7 @@ export default _xyz => {
       el.classList.remove('active');
     });
     target.classList.add('active');
-    modules.forEach(m => m.classList.add('displaynone'));
+    listViews.forEach(m => m.classList.add('displaynone'));
     mod.classList.remove('displaynone');
     checkOverlap(mod);
 

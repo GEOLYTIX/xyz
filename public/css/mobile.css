@@ -163,6 +163,47 @@
     padding: 4px 2px 4px 2px;
     color: #090; }
 
+.tableview {
+  position: absolute;
+  overflow: hidden;
+  bottom: 0;
+  right: 0;
+  width: calc(100% - 330px);
+  min-height: 40px;
+  max-height: 100%;
+  padding-left: 58px;
+  height: 40px;
+  z-index: 1001;
+  background-color: #fff;
+  box-shadow: 1px 0 1px #333; }
+  .tableview .resize_bar {
+    height: 5px; }
+    .tableview .resize_bar:hover {
+      background-color: #f9fbe7;
+      cursor: row-resize; }
+  .tableview .nav_bar {
+    height: 50px; }
+  .tableview .table {
+    position: absolute;
+    width: calc(100% - 58px);
+    height: calc(100% - 55px); }
+  .tableview nav {
+    text-align: center; }
+    .tableview nav ul {
+      display: flex;
+      list-style: none;
+      flex-flow: row wrap;
+      justify-content: center; }
+      .tableview nav ul li {
+        padding: 5px;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1; }
+        .tableview nav ul li.tab-current {
+          border-bottom: 3px solid #090;
+          box-shadow: 0 6px 8px -6px #444; }
+
 .input_group {
   width: 100%; }
   .input_group input {
@@ -1822,11 +1863,11 @@ button {
   color: #333;
   font-weight: bold; }
 
-.mapview {
+.map {
   width: 100%;
   height: 100%;
   box-shadow: inset 4px 0px 4px -4px #777; }
-  .mapview div.leaflet-select-pane svg > g path {
+  .map div.leaflet-select-pane svg > g path {
     filter: url(#dropshadow); }
 
 .leaflet-interactive.wait-cursor-enabled {
@@ -1835,97 +1876,95 @@ button {
 .leaflet-popup-content {
   width: 301px !important; }
 
-.mod_container .module .title {
+.listview .title {
   font-family: ffmark_bold, sans-serif;
   font-size: 18px;
   margin-bottom: 10px; }
-.mod_container .module input {
-  width: 100%; }
-.mod_container .module .drawer {
+.listview .drawer {
   margin-top: 10px; }
-  .mod_container .module .drawer.expandable {
+  .listview .drawer.expandable {
     max-height: 35px;
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
-    .mod_container .module .drawer.expandable .expander::before {
+    .listview .drawer.expandable .expander::before {
       content: "expand_more"; }
-  .mod_container .module .drawer.expanded {
+  .listview .drawer.expanded {
     max-height: 2500px; }
-    .mod_container .module .drawer.expanded .expander::before {
+    .listview .drawer.expanded .expander::before {
       content: "expand_less"; }
-  .mod_container .module .drawer.drawer-group .header-group {
+  .listview .drawer.drawer-group .header-group {
     font-family: ffmark_bold, sans-serif !important;
     font-size: 15px !important;
     line-height: 2; }
-    .mod_container .module .drawer.drawer-group .header-group:hover {
+    .listview .drawer.drawer-group .header-group:hover {
       cursor: pointer; }
-  .mod_container .module .drawer.drawer-group.expandable-group {
+  .listview .drawer.drawer-group.expandable-group {
     max-height: 30px;
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
-    .mod_container .module .drawer.drawer-group.expandable-group .expander-group::before {
+    .listview .drawer.drawer-group.expandable-group .expander-group::before {
       content: "expand_more"; }
-  .mod_container .module .drawer.drawer-group.expanded-group {
+  .listview .drawer.drawer-group.expanded-group {
     max-height: 2500px; }
-    .mod_container .module .drawer.drawer-group.expanded-group .expander-group::before {
+    .listview .drawer.drawer-group.expanded-group .expander-group::before {
       content: "expand_less"; }
-  .mod_container .module .drawer .header {
+  .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
     font-family: ffmark, sans-serif; }
-    .mod_container .module .drawer .header:hover {
+    .listview .drawer .header:hover {
       cursor: pointer; }
-    .mod_container .module .drawer .header.edited {
+    .listview .drawer .header.edited {
       background-image: linear-gradient(white, #cf9); }
-  .mod_container .module .drawer .dashboard {
+  .listview .drawer .dashboard {
     border-bottom: 1px solid #333;
     font-size: 14px; }
-    .mod_container .module .drawer .dashboard .title {
+    .listview .drawer .dashboard .title {
       font-family: ffmark_bold, sans-serif;
       font-size: 14px;
       margin-bottom: 7px; }
-    .mod_container .module .drawer .dashboard .meta {
+    .listview .drawer .dashboard .meta {
       margin-top: 5px; }
-      .mod_container .module .drawer .dashboard .meta a {
+      .listview .drawer .dashboard .meta a {
         color: #090;
         font-weight: 600; }
-    .mod_container .module .drawer .dashboard .legend > svg {
+    .listview .drawer .dashboard .legend > svg {
       width: 100%; }
-    .mod_container .module .drawer .dashboard .panel {
+    .listview .drawer .dashboard .panel {
       padding: 10px 0;
       border-bottom: 1px solid #555; }
-      .mod_container .module .drawer .dashboard .panel.expandable {
+      .listview .drawer .dashboard .panel.expandable {
         max-height: 30px;
         overflow: hidden;
         transition: max-height 0.3s ease-out; }
-        .mod_container .module .drawer .dashboard .panel.expandable .expander::before {
+        .listview .drawer .dashboard .panel.expandable .expander::before {
           content: "expand_more"; }
-      .mod_container .module .drawer .dashboard .panel.expanded {
+      .listview .drawer .dashboard .panel.expanded {
         max-height: 2500px !important; }
-        .mod_container .module .drawer .dashboard .panel.expanded .expander::before {
+        .listview .drawer .dashboard .panel.expanded .expander::before {
           content: "expand_less"; }
-    .mod_container .module .drawer .dashboard .block-title {
+    .listview .drawer .dashboard .block-title {
       width: 100%;
       border-bottom: 1px solid #ccc;
       line-height: 1.5;
       padding-top: 5px;
       margin-bottom: 6px; }
-    .mod_container .module .drawer .dashboard .block {
+    .listview .drawer .dashboard .block {
       padding: 5px 0;
       position: relative; }
-      .mod_container .module .drawer .dashboard .block .cancel-btn {
+      .listview .drawer .dashboard .block .cancel-btn {
         color: #090;
         font-size: 20px;
         top: 2px;
         right: -4px;
         position: absolute; }
-      .mod_container .module .drawer .dashboard .block .range-label {
+      .listview .drawer .dashboard .block .range-label {
         display: inline;
         line-height: 1.7; }
-      .mod_container .module .drawer .dashboard .block .range-input {
+      .listview .drawer .dashboard .block .range-input {
         float: right;
         width: 60%; }
-      .mod_container .module .drawer .dashboard .block .sample-poly {
+      .listview .drawer .dashboard .block .sample-poly {
         width: 30%;
         height: 32px;
         border-radius: 5px;
@@ -1933,7 +1972,7 @@ button {
         position: absolute;
         right: 2px;
         top: 5px; }
-      .mod_container .module .drawer .dashboard .block .sample-circle {
+      .listview .drawer .dashboard .block .sample-circle {
         width: 32px;
         height: 32px;
         border-radius: 50%;
@@ -1941,23 +1980,23 @@ button {
         position: absolute;
         right: 2px;
         top: 0; }
-      .mod_container .module .drawer .dashboard .block .colour-label {
+      .listview .drawer .dashboard .block .colour-label {
         color: #090; }
-      .mod_container .module .drawer .dashboard .block .colour-swatch {
+      .listview .drawer .dashboard .block .colour-swatch {
         width: 100%;
         margin-bottom: 10px; }
-      .mod_container .module .drawer .dashboard .block .colour-td {
+      .listview .drawer .dashboard .block .colour-td {
         height: 20px; }
-    .mod_container .module .drawer .dashboard .half {
+    .listview .drawer .dashboard .half {
       width: 48%;
       display: inline-block; }
-      .mod_container .module .drawer .dashboard .half.right {
+      .listview .drawer .dashboard .half.right {
         float: right; }
-    .mod_container .module .drawer .dashboard .third {
+    .listview .drawer .dashboard .third {
       width: 15%;
       display: inline-block;
       margin: 1px; }
-      .mod_container .module .drawer .dashboard .third.right {
+      .listview .drawer .dashboard .third.right {
         float: right; }
 
 #Gazetteer {
@@ -2061,32 +2100,32 @@ body {
   position: fixed;
   height: calc(100% - 50px); }
 
-.mod_container {
+.listviews {
   position: absolute;
   background-color: white;
   width: 100%;
   height: 100%;
   box-shadow: 0 0 10px slategrey;
   z-index: 1000; }
-  .mod_container .module {
+  .listviews .listview {
     padding: 20px;
     overflow-y: scroll;
     height: calc(100% - 50px); }
-  .mod_container .tab_bar {
+  .listviews .tab_bar {
     width: 100%;
     color: #090;
     border-bottom: 1px solid #090;
     text-align: center;
     table-layout: fixed;
     height: 50px; }
-    .mod_container .tab_bar .swipe_icon {
+    .listviews .tab_bar .swipe_icon {
       display: none; }
-    .mod_container .tab_bar .active {
+    .listviews .tab_bar .active {
       color: white;
       background-color: #090; }
-      .mod_container .tab_bar .active .tab_icon {
+      .listviews .tab_bar .active .tab_icon {
         display: none; }
-      .mod_container .tab_bar .active .swipe_icon {
+      .listviews .tab_bar .active .swipe_icon {
         display: inline-block; }
 
 #Gazetteer {

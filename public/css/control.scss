@@ -19,6 +19,7 @@ $onyx: #383836;
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url('https://fonts.googleapis.com/css?family=PT+Mono');
 @import 'locationview';
+@import 'tableview';
 @import 'input';
 @import 'loader';
 @import 'range';
@@ -33,7 +34,7 @@ $onyx: #383836;
 @import 'attribution';
 @import 'tabulator';
 @import 'mapview';
-@import 'mod_container';
+@import 'listview';
 @import 'gazetteer';
 *,
 *::after,
