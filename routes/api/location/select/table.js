@@ -43,31 +43,26 @@ module.exports = fastify => {
           let col_alias = [];
           let row_alias = [];
           let rows = [];
+          let col_labels = [];
+          let lines = [];
 
           entry.rows.map(row => {
-            rows.push(`${row.fieldfx || row.field} AS row_${entry.rows.indexOf(row)}`);
-            row_alias.push(`row_${entry.rows.indexOf(row)}`);
-            //row_alias.push(row.field);
+            rows.push(`${row.fieldfx || row.field} AS ${row.field}`);
+            row_alias.push(row.field);
           });
 
+          entry.columns.map(col => {
+            col_alias.push(col.field);
+            col_labels.push(col.label || col.field);
 
-          for(let j = 0; j < entry.columns.length; j++){
-
-            col_alias.push(`col_${j}`);
-
-            withTable.push(`col_${j} as 
-            (SELECT ${rows.join(',')} 
-            FROM ${entry.columns[j].lookup.table_a} a, ${entry.columns[j].lookup.table_b} b
-            WHERE a.${layer.qID || 'id'} = ${id}
-            AND 
-            ST_INTERSECTS(a.${entry.columns[j].lookup.geom_a}, b.${entry.columns[j].lookup.geom_b}))`);
-          
-          }
+            withTable.push(`${col.field} AS (SELECT ${rows.join(',')}
+              FROM ${col.lookup.table_a} a, ${col.lookup.table_b} b
+              WHERE a.${layer.qID || 'id'} = ${id}
+              AND ${col.lookup.condition ? col.lookup.condition : 'ST_INTERSECTS'}(a.${col.lookup.geom_a}, b.${col.lookup.geom_b})
+              )`);
+          });
 
           //console.log(`WITH ${withTable.join(',')}`); // 1st part
-
-
-          let lines = [];
 
           lines[0] = `UNNEST(ARRAY['${row_alias.join('\',\'')}']) AS rows`;
 
@@ -88,6 +83,18 @@ module.exports = fastify => {
           //console.log(lines.join(',')); // 2nd part
 
           q = `WITH ${withTable.join(',')} SELECT ${lines.join(',')} FROM ${col_alias.join(',')};`;
+
+          console.log('col alias');
+          console.log(col_alias); // sql safe column names (fields)
+
+          console.log('row alias');
+          console.log(row_alias); // sql safe row names - fields
+
+          console.log('rows'); // sql functions or columns
+          console.log(rows);
+
+          console.log('col labels'); // column label for display or field
+          console.log(col_labels);
         
         }
 
