@@ -1,17 +1,17 @@
 import delete_image from './delete_image.mjs';
 
-export default (_xyz, record, entry, img, dataURL) => {
+export default (_xyz, location, entry, img, dataURL) => {
 
   const blob = dataURLToBlob(dataURL);
 
   const xhr = new XMLHttpRequest();
 
   xhr.open('POST', _xyz.host + '/api/location/edit/images/upload?' + _xyz.utils.paramString({
-    dbs: record.location.dbs,
-    table: record.location.table,
+    dbs: _xyz.layers.list[location.layer].dbs,
+    table: location.table,
     field: entry.field,
-    qID: record.location.qID,
-    id: record.location.id,
+    qID: location.qID,
+    id: location.id,
     token: _xyz.token
   }));
 
@@ -41,7 +41,7 @@ export default (_xyz, record, entry, img, dataURL) => {
         event: 'click',
         funct: e => {
           e.target.remove();
-          delete_image(_xyz, record, entry, img);
+          delete_image(_xyz, location, entry, img);
         }
       }
     });

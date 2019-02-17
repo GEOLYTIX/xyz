@@ -1,3 +1,11 @@
+let
+  Map1 = document.getElementById('xyz_map1'),
+  Map2 = document.getElementById('xyz_map2'),
+  Info1 = document.getElementById('location_info_container1'),
+  Info2 = document.getElementById('location_info_container2'),
+  Table1 = document.getElementById('xyz_table1');
+
+
 (async () => {
 
   const xyz = await _xyz({
@@ -10,7 +18,7 @@
   });
 
   xyz.mapview.create({
-    target: document.getElementById('xyz_map1'),
+    target: Map1,
     scrollWheelZoom: true,
     view: {
       lat: 53,
@@ -27,11 +35,10 @@
 
   xyz.mapview.locate.toggle();
 
-  xyz.locations.select_popup = location => {
-    let container = document.getElementById('location_info_container1');
-    container.innerHTML = '';
-    container.appendChild(location.info_table);
-  };
+  // xyz.locations.select_popup = location => {
+  //   Info1.innerHTML = '';
+  //   Info1.appendChild(location.view.node);
+  // };
 
 })();
 
@@ -43,7 +50,7 @@ _xyz({
   callback: _xyz => {
 
     _xyz.mapview.create({
-      target: document.getElementById('xyz_map2'),
+      target: Map2,
       view: {
         lat: 53,
         lng: -1,
@@ -57,7 +64,7 @@ _xyz({
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list.COUNTRIES,
-      target: document.getElementById('xyz_table1'),
+      target: Table1,
       table: {
         'columns': [
           {
@@ -78,7 +85,7 @@ _xyz({
     });
 
     // _xyz.tableview.locationTable({
-    //   target: document.getElementById('xyz_table1'),
+    //   target: Table1,
     //   table: {
     //     'columns': [
     //       {
@@ -111,7 +118,7 @@ _xyz({
 
     _xyz.mapview.changeEnd = _xyz.utils.compose(
       _xyz.mapview.changeEnd,
-      () => {if(_xyz.tableview && _xyz.tableview.current_table) _xyz.tableview.current_table.update();}
+      () => _xyz.tableview.current_table.update()
     );
   
     _xyz.layers.list['Mapbox Base'].remove();
@@ -119,6 +126,21 @@ _xyz({
     _xyz.layers.list.COUNTRIES.style.theme = null;
   
     _xyz.layers.list.COUNTRIES.show();
+
+    _xyz.locations.select(
+      //params
+      {
+        locale: 'NE',
+        dbs: 'XYZ',
+        layer: 'COUNTRIES',
+        table: 'dev.natural_earth_countries',
+        qID: 'id',
+        id: 80,
+      },
+      //callback
+      location=>{
+        document.getElementById('location_info_container2').appendChild(location.view.node);
+      });
 
   }
 });
@@ -135,7 +157,7 @@ function Grid(_xyz) {
 
   _xyz.layers.list.grid.show();
 
-  _xyz.layers.list.grid.style.setLegend(document.getElementById('location_info_container1'));
+  _xyz.layers.list.grid.style.setLegend(Info1);
 
 }
 
@@ -143,11 +165,11 @@ function Legends(_xyz) {
 
   _xyz.layers.list.retail_points.style.setTheme('Retailer');
 
-  // _xyz.layers.list.retail_points.style.setLegend(document.getElementById('location_info_container2'));
+  // _xyz.layers.list.retail_points.style.setLegend(Info2);
 
   // _xyz.layers.list.oa.style.setTheme('Population \'11');
 
-  // _xyz.layers.list.oa.style.setLegend(document.getElementById('location_info_container2'));
+  // _xyz.layers.list.oa.style.setLegend(Info2);
 
 }
 
@@ -158,7 +180,7 @@ function Offices(_xyz) {
   _xyz.layers.list.offices.show();
 
   _xyz.locations.select_output = location => {
-    document.getElementById('location_info_container1').innerHTML = location.infoj[1].value;
+    Info1.innerHTML = location.infoj[1].value;
   };
 
 }
@@ -173,7 +195,7 @@ function TableView(_xyz) {
 
   _xyz.tableview.createTable({
     layer: _xyz.layers.list.COUNTRIES,
-    target: document.getElementById('xyz_table1')
+    target: Table1
   });
 
   // Augment viewChangeEnd method to update table.
@@ -183,11 +205,9 @@ function TableView(_xyz) {
 
   _xyz.locations.select_popup = location => {
 
-    let container = document.getElementById('location_info_container2');
+    Info2.innerHTML = '';
 
-    container.innerHTML = '';
-
-    container.appendChild(location.info_table);
+    Info2.appendChild(location.info_table);
 
     _xyz.layers.list.COUNTRIES.tableView.table.getRows()
       .filter(row => row.getData().name === location.infoj[0].value)

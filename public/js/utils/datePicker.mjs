@@ -1,6 +1,6 @@
 import datepicker from 'js-datepicker';
 
-export function datePicker(element, record, entry, callback){
+export function datePicker(element, location, entry, callback){
 
   // Create datepicker for input element.
   datepicker(element, {
@@ -33,7 +33,7 @@ export function datePicker(element, record, entry, callback){
         entry.newValue = timestamp;
         
         // Change styling of input and display upload button.
-        record.upload.style.display = 'block';
+        location.view.upload.style.display = 'block';
         instance.el.classList.add('changed');
     
       } else {
@@ -45,7 +45,7 @@ export function datePicker(element, record, entry, callback){
         instance.el.classList.remove('changed');
         
         // Hide upload button if no other field in the infoj has a newValue.
-        if (!record.location.infoj.some(field => field.newValue)) record.upload.style.display = 'none';
+        if (!location.infoj.some(field => field.newValue)) location.view.upload.style.display = 'none';
       } 
 
     },

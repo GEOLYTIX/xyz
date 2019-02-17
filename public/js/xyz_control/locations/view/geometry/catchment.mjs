@@ -1,6 +1,6 @@
-export default (_xyz, record, entry) => {
+export default (_xyz, location, entry) => {
 
-  let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: record.table });
+  let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: location.view.node });
 
   let td = _xyz.utils.createElement({ tag: 'td', style: {'paddingTop': '5px'}, appendTo: tr });
 
@@ -10,12 +10,11 @@ export default (_xyz, record, entry) => {
     checked: !!entry.value,
     onChange: e => {
       e.target.checked ? e.target.parentNode.classList.add('changed') : e.target.parentNode.classList.remove('changed');
-      e.target.checked ? createCatchment(record, entry) : deleteCatchment(record, entry);
+      e.target.checked ? createCatchment(location, entry) : deleteCatchment(location, entry);
     }
   });
 
   td = _xyz.utils.createElement({tag: 'td', appendTo: tr});
-
 
   _xyz.utils.createElement({
     tag: 'div',
@@ -23,8 +22,8 @@ export default (_xyz, record, entry) => {
       classList: 'sample-circle'
     },
     style: {
-      'backgroundColor': entry.style && entry.style.fillColor ? _xyz.utils.hexToRGBA(entry.style.fillColor || entry.style.color, entry.style.fillOpacity || 0.3) : _xyz.utils.hexToRGBA(entry.style ? entry.style.color : record.color, entry.style && entry.style.fillOpacity ? entry.style.fillOpacity : 0.3),
-      'borderColor': entry.style && entry.style.color ? _xyz.utils.hexToRGBA(entry.style.color, entry.style.opacity ? entry.style.opacity : 1) : _xyz.utils.hexToRGBA(record.color, entry.style && entry.style.opacity ?  entry.style.opacity : 1),
+      'backgroundColor': _xyz.utils.hexToRGBA(location.style.fillColor, location.style.fillOpacity),
+      'borderColor': _xyz.utils.hexToRGBA(location.style.color, location.style.fillOpacity),
       'borderStyle': 'solid',
       'borderWidth': _xyz.utils.setStrokeWeight(entry)
     },
@@ -32,18 +31,18 @@ export default (_xyz, record, entry) => {
   });
 
 
-  function createCatchment(record, entry) {
+  function createCatchment(location, entry) {
 
-    entry.edit.catchment.coordinates = record.location.geometry.coordinates.join(',');
+    entry.edit.catchment.coordinates = location.geometry.coordinates.join(',');
 
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host + '/api/location/edit/catchment/create?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: record.location.layer,
-      table: record.location.table,
+      layer: location.layer,
+      table: location.table,
       field: entry.field,
-      id: record.location.id,
+      id: location.id,
       coordinates: entry.edit.catchment.coordinates,
       minutes: entry.edit.catchment.minutes,
       profile: entry.edit.catchment.profile,
@@ -57,13 +56,13 @@ export default (_xyz, record, entry) => {
       if (e.target.status !== 200) return alert('No route found. Try a longer travel time.');
 
       // Reload layer.
-      _xyz.layers.list[record.location.layer].get();
+      _xyz.layers.list[location.layer].get();
 
       // Reset location infoj with response.
-      record.location.infoj = JSON.parse(e.target.response);
+      location.infoj = JSON.parse(e.target.response);
 
-      // Update the record.
-      record.update();
+      // Update the location view.
+      location.view.update();
 
     };
 
@@ -71,16 +70,16 @@ export default (_xyz, record, entry) => {
 
   }
 
-  function deleteCatchment(record, entry) {
+  function deleteCatchment(location, entry) {
 
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host + '/api/location/edit/catchment/delete?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: record.location.layer,
-      table: record.location.table,
+      layer: location.layer,
+      table: location.table,
       field: entry.field,
-      id: record.location.id,
+      id: location.id,
       token: _xyz.token
     }));
 
@@ -89,13 +88,13 @@ export default (_xyz, record, entry) => {
       if (e.target.status !== 200) return;
 
       // Reset location infoj with response.
-      record.location.infoj = JSON.parse(e.target.response);
+      location.infoj = JSON.parse(e.target.response);
 
-      // Update the record.
-      record.update();
+      // Update the location view.
+      location.view.update();
 
       // Reload layer.
-      _xyz.layers.list[record.location.layer].get();
+      _xyz.layers.list[location.layer].get();
 
     };
 

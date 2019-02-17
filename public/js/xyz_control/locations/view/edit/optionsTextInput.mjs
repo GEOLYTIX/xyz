@@ -1,4 +1,4 @@
-export default (_xyz, entry, record) => {
+export default (_xyz, location, entry) => {
 
   if (!typeof entry.edit.options[entry.select.selectedIndex] === 'object') return;
 
@@ -13,7 +13,7 @@ export default (_xyz, entry, record) => {
     appendTo: entry.val,
     eventListener: {
       event: 'keyup',
-      funct: e => valChange(e.target, record, entry)
+      funct: e => valChange(e.target, location, entry)
     }
   });
 

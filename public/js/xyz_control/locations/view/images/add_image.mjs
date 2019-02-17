@@ -1,23 +1,23 @@
 import upload_image from './upload_image.mjs';
 
-export default (_xyz, imageControl, entry) => {
+export default (_xyz, location, entry) => {
 
   // Add table cell for image upload input.
-  imageControl.add_img_td = _xyz.utils.createElement({
+  entry.ctrl.add_img_td = _xyz.utils.createElement({
     tag: 'td',
     options: {
       className: 'addImageCell'
     },
-    appendTo: imageControl.row
+    appendTo: entry.ctrl.row
   });
 
   // Add label for image upload icon.
-  imageControl.add_img_label = _xyz.utils.createElement({
+  entry.ctrl.add_img_label = _xyz.utils.createElement({
     tag: 'label',
     options: {
-      htmlFor: 'addImage_' + imageControl.record.letter
+      htmlFor: 'addImage_' + location.layer + entry.field
     },
-    appendTo: imageControl.add_img_td
+    appendTo: entry.ctrl.add_img_td
   });
 
   // Add image upload icon to label.
@@ -27,25 +27,25 @@ export default (_xyz, imageControl, entry) => {
       className: 'material-icons cursor noselect',
       textContent: 'add_a_photo'
     },
-    appendTo: imageControl.add_img_label
+    appendTo: entry.ctrl.add_img_label
   });
 
   // Add image input.
-  imageControl.add_img_input = _xyz.utils.createElement({
+  entry.ctrl.add_img_input = _xyz.utils.createElement({
     tag: 'input',
     options: {
-      id: 'addImage_' + imageControl.record.letter,
+      id: 'addImage_' + location.layer + entry.field,
       type: 'file',
       accept: 'image/*;capture=camera'
     },
-    appendTo: imageControl.add_img_td
+    appendTo: entry.ctrl.add_img_td
   });
 
   // empty the file input value
-  imageControl.add_img_input.addEventListener('click', () => imageControl.add_img_input.value);
+  entry.ctrl.add_img_input.addEventListener('click', () => entry.ctrl.add_img_input.value);
 
   // add change event 
-  imageControl.add_img_input.addEventListener('change', function () {
+  entry.ctrl.add_img_input.addEventListener('change', function () {
 
     const newImage = document.createElement('td');
 
@@ -120,7 +120,7 @@ export default (_xyz, imageControl, entry) => {
             funct: () => {
               btn_del.remove();
               btn_save.remove();
-              upload_image(_xyz, imageControl.record, entry, _img, dataURL);
+              upload_image(_xyz, location, entry, _img, dataURL);
             }
           }
         });
@@ -135,7 +135,7 @@ export default (_xyz, imageControl, entry) => {
     reader.readAsDataURL(this.files[0]);
 
     // insert new image before last image
-    imageControl.row.insertBefore(newImage, imageControl.row.childNodes[1]);
+    entry.ctrl.row.insertBefore(newImage, entry.ctrl.row.childNodes[1]);
   });
 
 };

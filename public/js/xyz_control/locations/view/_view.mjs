@@ -4,65 +4,61 @@ import streetview from './streetview.mjs';
 
 import images from './images/_images.mjs';
 
-import geometry from './geometry.mjs';
+import geometry from './geometry/_geometry.mjs';
 
 import log from './log.mjs';
 
 import edit from './edit/_edit.mjs';
 
-export default (_xyz, record) => {
+export default _xyz => {
 
-  // Add table element to record drawer.
-  // info fields will be added to this table.
-  record.table = _xyz.utils.createElement({
-    tag: 'table',
-    options: {
-      className: 'infojTable'
-    },
-    style: {
-      cellPadding: '0',
-      cellSpacing: '0',
-      borderBottom: '1px solid ' + record.color
-    },
-    appendTo: record.drawer
-  });
+  return {
+  
+    update: update,
 
-  record.update = () => {
+    node: _xyz.utils.createElement({
+      tag: 'table',
+      options: {
+        className: 'locationview'
+      },
+      style: {
+        cellPadding: '0',
+        cellSpacing: '0',
+        //borderBottom: '1px solid ' + record.color
+      },
+      //appendTo: record.drawer
+    })
 
-    if(record.location.geometries.additional) { 
-      record.location.geometries.additional.map(geom => {
+  };
+
+  function update (location) {
+
+    if(location.geometries.additional) { 
+      location.geometries.additional.map(geom => {
         _xyz.map.removeLayer(geom);
       });
     } else {
-      record.location.geometries.additional = [];
+      location.geometries.additional = [];
     }
 
-    record.table.innerHTML = '';
+    location.view.node.innerHTML = '';
 
     // Adds layer to beginning of infoj array.
-    record.location.infoj.unshift({
+    location.infoj.unshift({
       'label': 'Layer',
-      'value': _xyz.layers.list[record.location.layer].name,
+      'value': _xyz.layers.list[location.layer].name,
       'type': 'text',
       'inline': true
     });
 
-    // Adds layer group to beginning of infoj array.
-    if (_xyz.layers.list[record.location.layer].group) record.location.infoj.unshift({
-      'label': 'Group',
-      'value': _xyz.layers.list[record.location.layer].group,
-      'type': 'text',
-      'inline': true
-    });
-
-    // Assign location object to hold info groups.
-    record.location.infogroups = {};
+    // Create object to hold view groups.
+    location.view.groups = {};
 
     // Iterate through info fields to fill displayValue property
     // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
-    Object.values(record.location.infoj).forEach(entry => {
+    Object.values(location.infoj).forEach(entry => {
 
-      // Determine the user-friendly string representation of the value
+    // Determine the user-friendly string representation of the value
       entry.displayValue =
       entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
         entry.type === 'integer' ? parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
@@ -76,27 +72,27 @@ export default (_xyz, record) => {
     });
     
     // Iterate through info fields and add to info table.
-    Object.values(record.location.infoj).forEach(entry => {
+    Object.values(location.infoj).forEach(entry => {
 
-      // Create a new table row for the entry.
+    // Create a new table row for the entry.
       if (!entry.group) entry.row = _xyz.utils.createElement({
         tag: 'tr',
         options: {
           className: 'lv-' + (entry.level || 0)
         },
-        appendTo: record.table
+        appendTo: location.view.node
       });
 
       // Create a new info group.
-      if (entry.type === 'group') return group(_xyz, record, entry);
+      if (entry.type === 'group') return group(_xyz, location, entry);
 
       // Create entry.row inside previously created group.
-      if (entry.group && record.location.infogroups[entry.group]) entry.row = _xyz.utils.createElement({
+      if (entry.group && location.view.groups[entry.group]) entry.row = _xyz.utils.createElement({
         tag: 'tr',
         options: {
           className: 'lv-' + (entry.level || 0)
         },
-        appendTo: record.location.infogroups[entry.group].table
+        appendTo: location.view.groups[entry.group].table
       });
 
       // Create new table cell for the entry label and append to table.
@@ -116,16 +112,16 @@ export default (_xyz, record) => {
       if(entry.type === 'label') return;
 
       // Create streetview control.
-      if (entry.type === 'streetview') return streetview(_xyz, record, entry);
+      if (entry.type === 'streetview') return streetview(_xyz, location, entry);
 
       // If input is images create image control and return from object.map function.
-      if (entry.type === 'images') return images(_xyz, record, entry);
+      if (entry.type === 'images') return images(_xyz, location, entry);
 
       // Create log control.
-      if (entry.type === 'log') return log(_xyz, record, entry);
+      if (entry.type === 'log') return log(_xyz, location, entry);
 
       // Create geometry control.
-      if (entry.type === 'geometry') return geometry(_xyz, record, entry);    
+      if (entry.type === 'geometry') return geometry(_xyz, location, entry);    
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();
@@ -137,7 +133,7 @@ export default (_xyz, record) => {
         // Create new row and append to table.
         entry.row = _xyz.utils.createElement({
           tag: 'tr',
-          appendTo: record.table
+          appendTo: location.view.node
         });
 
         // Create val table cell with colSpan 2 in the new row to span full width.
@@ -150,7 +146,7 @@ export default (_xyz, record) => {
           appendTo: entry.row
         });
 
-        // Else create val table cell inline.
+      // Else create val table cell inline.
       } else {
 
       // Append val table cell to the same row as the label table cell.
@@ -165,26 +161,26 @@ export default (_xyz, record) => {
       }
 
       // Create controls for editable fields.
-      if (entry.edit && !entry.fieldfx) return edit(_xyz, record, entry);
+      if (entry.edit && !entry.fieldfx) return edit(_xyz, location, entry);
 
       if (entry.type === 'html') {
-        // Directly set the HTML if raw HTML was specified
+      // Directly set the HTML if raw HTML was specified
         return entry.val.innerHTML = entry.value;
       } else {
-        // otherwise use the displayValue
+      // otherwise use the displayValue
         return entry.val.textContent = entry.displayValue;
       }
 
     });
 
     // Hide group if empty
-    Object.values(record.location.infoj).map(entry => {
+    Object.values(location.infoj).map(entry => {
       if(!entry.group) return;
-      if(!record.location.infogroups[entry.group].table.innerHTML) record.location.infogroups[entry.group].table.parentNode.style.display = 'none';
+      if(!location.view.groups[entry.group].table.innerHTML) {
+        location.groups[entry.group].table.parentNode.style.display = 'none';
+      }
     });
 
   };
 
-  record.update();
-  
 };

@@ -94,6 +94,17 @@ export default _xyz => params => {
     clearTimeout(timer);
     timer = setTimeout(_xyz.mapview.changeEnd, 500);
   }
+
+  _xyz.mapview.popup = params => {
+
+    if (!params || !params.latlng || !params.content) return;
+
+    _xyz.L.popup({ closeButton: false })
+      .setLatLng(params.latlng)
+      .setContent(params.content)
+      .openOn(_xyz.map);
+
+  };
          
   const panes = {
     next: 500,

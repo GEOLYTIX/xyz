@@ -1,8 +1,8 @@
 import chart from './charts.mjs';
 
-export default (_xyz, record, group) => {
+export default (_xyz, location, group) => {
 
-  record.location.infogroups[group.label] = group;
+  location.view.groups[group.label] = group;
 
   group.td = _xyz.utils.createElement({
     tag: 'td',
@@ -21,7 +21,7 @@ export default (_xyz, record, group) => {
   });
 
   const toggleExpandedState = e => {
-    if(e) {
+    if (e) {
       e.stopPropagation();
     }
     _xyz.utils.toggleExpanderParent({
@@ -89,7 +89,7 @@ export default (_xyz, record, group) => {
   // If chart option specified
   if (group.chart) {
     // Set up
-    group.fields = record.location.infoj.filter(entry => entry.group === group.label);
+    group.fields = location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
     group.chartElem = chart(_xyz, group);
     // Add chart
@@ -111,7 +111,7 @@ export default (_xyz, record, group) => {
         event: 'click',
         funct: e => {
           e.stopPropagation();
-          if(group.viewToggler.textContent === chartIcon(group)) {
+          if (group.viewToggler.textContent === chartIcon(group)) {
             group.showChart();
           } else {
             group.showTable(e);
@@ -126,18 +126,18 @@ export default (_xyz, record, group) => {
       group.chartElem.style.display = 'block';
       group.viewToggler.textContent = 'view_list';
       group.viewToggler.title = 'Show table';
-      if(!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
+      if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
     group.showTable = (e) => {
       group.table.style.display = 'table';
       group.chartElem.style.display = 'none';
       group.viewToggler.textContent = chartIcon(group);
       group.viewToggler.title = 'Show chart';
-      if(e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');
+      if (e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
 
     // Use the appropriate toggle function to initialise
-    if(group.chart.active) {
+    if (group.chart.active) {
       group.showChart();  // if explicitly specified
     } else {
       group.showTable();  // default
@@ -145,20 +145,20 @@ export default (_xyz, record, group) => {
   }
 
   // If the group is configured to be shown in an expanded state when initialised
-  if(group.expanded) {
+  if (group.expanded) {
     // call toggleExpandedState once to toggle the state from the default collapsed style to the expanded style
     toggleExpandedState();
   }
 };
 
-function chartIcon(group){
-  if(!group.chart.type) {
+function chartIcon(group) {
+  if (!group.chart.type) {
     group.chart.type = 'line';
   }
-  switch(group.chart.type) {
+  switch (group.chart.type) {
   case 'line': return 'show_chart';
   case 'bar': return 'insert_chart_outlined';
-  case 'pie' : return 'pie_chart';
+  case 'pie': return 'pie_chart';
   case 'doughnut': return 'donut_small';
   case 'horizontalBar': return 'notes';
   case 'bubble': return 'bubble_chart';

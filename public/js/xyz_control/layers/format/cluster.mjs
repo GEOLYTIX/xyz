@@ -191,7 +191,7 @@ export default (_xyz, layer) => () => {
         
           let cluster = e.target.response;
     
-          if (cluster.length > 1) return _xyz.locations.select_list(cluster, lnglat, layer);
+          if (cluster.length > 1) return select(cluster, lnglat);
       
           if (cluster.length === 1) return _xyz.locations.select({
             locale: _xyz.workspace.locale.key,
@@ -236,5 +236,45 @@ export default (_xyz, layer) => () => {
   };
     
   layer.xhr.send();
+
+  function select(list, lnglat) {
+
+    const ul = document.createElement('ul');
+
+    for (let i = 0; i < list.length; i++) {
+
+      _xyz.utils.createElement({
+        tag: 'li',
+        options: {
+          textContent: list[i].label,
+          'data-id': list[i].id,
+          'data-marker': list[i].lnglat
+        },
+        appendTo: ul,
+        eventListener: {
+          event: 'click',
+          funct: e => {
+
+            _xyz.locations.select({
+              locale: _xyz.workspace.locale.key,
+              layer: layer.key,
+              table: layer.table,
+              id: e.target['data-id'],
+              marker: e.target['data-marker'],
+              edit: layer.edit
+            });
+
+          }
+        }
+      });
+
+    }
+
+    _xyz.mapview.popup({
+      latlng: [lnglat[1], lnglat[0]],
+      content: ul
+    });
+
+  };
 
 };

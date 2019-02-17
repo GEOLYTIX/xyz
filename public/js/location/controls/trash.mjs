@@ -53,8 +53,8 @@ export default (_xyz, record) => {
           delete record.location;
 
           // Run locations init when all records are free.
-          const freeRecords = _xyz.locations.list.filter(record => !record.location);
-          if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.listview.init();
+          const freeRecords = _xyz.locations.listview.list.filter(record => !record.location);
+          if (freeRecords.length === _xyz.locations.listview.list.length) _xyz.locations.listview.init();
 
         };
         xhr.send();

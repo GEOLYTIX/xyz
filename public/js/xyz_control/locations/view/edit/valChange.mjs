@@ -1,4 +1,4 @@
-export default (input, record, entry) => {
+export default (input, location, entry) => {
 
   if (!entry.value) entry.value = '';
 
@@ -8,7 +8,7 @@ export default (input, record, entry) => {
     entry.newValue = input.value;
 
     // Change styling of input and display upload button.
-    record.upload.style.display = 'block';
+    location.view.upload.style.display = 'block';
     input.classList.add('changed');
 
   } else {
@@ -20,7 +20,7 @@ export default (input, record, entry) => {
     input.classList.remove('changed');
 
     // Hide upload button if no other field in the infoj has a newValue.
-    if (!record.location.infoj.some(field => field.newValue)) record.upload.style.display = 'none';
+    if (!location.infoj.some(field => field.newValue)) location.view.upload.style.display = 'none';
   }
 
 };

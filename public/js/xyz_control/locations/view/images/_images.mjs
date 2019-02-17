@@ -2,7 +2,7 @@ import add_image from './add_image.mjs';
 
 import delete_image from './delete_image.mjs';
 
-export default (_xyz, record, entry) => {
+export default (_xyz, location, entry) => {
 
   const images = entry.value.reverse() || [];
 
@@ -13,7 +13,7 @@ export default (_xyz, record, entry) => {
     options: {
       className: 'lv-0'
     },
-    appendTo: record.table
+    appendTo: location.view.node
   });
 
   // Create a table cell for image control.
@@ -30,12 +30,10 @@ export default (_xyz, record, entry) => {
     appendTo: entry.row
   });
 
-  const imageControl = {};
-
-  imageControl.record = record;
+  entry.ctrl = {};
 
   // Create a container for image control.
-  imageControl.container = _xyz.utils.createElement({
+  entry.ctrl.container = _xyz.utils.createElement({
     tag: 'div',
     options: {
       className: 'img-container'
@@ -44,19 +42,19 @@ export default (_xyz, record, entry) => {
   });
 
   // Create a table row to hold image array.
-  imageControl.row = _xyz.utils.createElement({
+  entry.ctrl.row = _xyz.utils.createElement({
     tag: 'tr',
-    appendTo: imageControl.container
+    appendTo: entry.ctrl.container
   });
 
-  if (entry.edit) add_image(_xyz, imageControl, entry);
+  if (entry.edit) add_image(_xyz, location, entry);
 
   // add images if there are any
   for (let image of images) {
 
     const imageCell = _xyz.utils.createElement({
       tag: 'td',
-      appendTo: imageControl.row
+      appendTo: entry.ctrl.row
     });
 
     const img = _xyz.utils.createElement({
@@ -84,7 +82,7 @@ export default (_xyz, record, entry) => {
         event: 'click',
         funct: e => {
           e.target.remove();
-          delete_image(_xyz, record, entry, img);
+          delete_image(_xyz, location, entry, img);
         }
       }
     });
