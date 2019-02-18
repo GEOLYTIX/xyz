@@ -2,7 +2,7 @@ import catchment from './catchment.mjs';
 import isoline from './isoline.mjs';
 import additionalGeom from './additionalGeom.mjs';
 
-export default (_xyz, location, entry) => {
+export default _xyz => (location, entry) => {
 
   location.style = entry.style || {
     stroke: true,
@@ -27,7 +27,7 @@ export default (_xyz, location, entry) => {
       geometry: JSON.parse(entry.value)
     },
     pane: 'select_display',
-    style: style
+    style: location.style
   });
     
   location.geometries.additional.push(geom);

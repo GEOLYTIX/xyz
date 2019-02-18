@@ -1,4 +1,4 @@
-export default (_xyz, location, entry, img) => {
+export default _xyz => (location, entry, img) => {
 
   const xhr = new XMLHttpRequest();
 

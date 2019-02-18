@@ -573,15 +573,6 @@
                             "type": "integer",
                             "filter": "numeric",
                             "edit": true
-                        },
-                        {
-                            "label": "GRID pop__01",
-                            "field": "pop__01",
-                            "type": "integer",
-                            "lookup": {
-                                "layer": "grid",
-                                "function": "AVG"
-                            }
                         }
                     ]
                 },

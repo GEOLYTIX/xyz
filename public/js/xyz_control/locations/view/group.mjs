@@ -1,6 +1,6 @@
 import chart from './charts.mjs';
 
-export default (_xyz, location, group) => {
+export default _xyz => (location, group) => {
 
   location.view.groups[group.label] = group;
 

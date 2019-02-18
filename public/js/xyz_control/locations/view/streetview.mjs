@@ -1,4 +1,4 @@
-export default (_xyz, location, entry) => {
+export default _xyz => (location, entry) => {
 
   entry.row.classList.add('tr_streetview');
   

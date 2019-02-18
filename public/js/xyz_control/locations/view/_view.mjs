@@ -14,7 +14,20 @@ export default _xyz => {
   
     update: update,
 
-    node: _xyz.utils.createElement({
+    node: node(),
+
+    streetview: streetview(_xyz),
+
+    images: images(_xyz),
+
+    group: group(_xyz),
+
+    geometry: geometry(_xyz),
+
+  };
+
+  function node() {
+    return _xyz.utils.createElement({
       tag: 'table',
       options: {
         className: 'locationview'
@@ -25,9 +38,8 @@ export default _xyz => {
         //borderBottom: '1px solid ' + record.color
       },
       //appendTo: record.drawer
-    })
-
-  };
+    });
+  }
 
   function update (location) {
 
@@ -82,7 +94,7 @@ export default _xyz => {
       });
 
       // Create a new info group.
-      if (entry.type === 'group') return group(_xyz, location, entry);
+      if (entry.type === 'group') return location.view.group(location, entry);
 
       // Create entry.row inside previously created group.
       if (entry.group && location.view.groups[entry.group]) entry.row = _xyz.utils.createElement({
@@ -111,13 +123,13 @@ export default _xyz => {
       if(entry.type === 'label') return;
 
       // Create streetview control.
-      if (entry.type === 'streetview') return streetview(_xyz, location, entry);
+      if (entry.type === 'streetview') return location.view.streetview(location, entry);
 
       // If input is images create image control and return from object.map function.
-      if (entry.type === 'images') return images(_xyz, location, entry);
+      if (entry.type === 'images') return location.view.images.ctrl(location, entry);
 
       // Create geometry control.
-      if (entry.type === 'geometry') return geometry(_xyz, location, entry);    
+      if (entry.type === 'geometry') return location.view.geometry(location, entry);    
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();

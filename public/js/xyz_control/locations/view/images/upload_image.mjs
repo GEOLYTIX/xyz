@@ -1,6 +1,4 @@
-import delete_image from './delete_image.mjs';
-
-export default (_xyz, location, entry, img, dataURL) => {
+export default _xyz => (location, entry, img, dataURL) => {
 
   const blob = dataURLToBlob(dataURL);
 
@@ -41,7 +39,7 @@ export default (_xyz, location, entry, img, dataURL) => {
         event: 'click',
         funct: e => {
           e.target.remove();
-          delete_image(_xyz, location, entry, img);
+          location.view.images.delete_image(location, entry, img);
         }
       }
     });

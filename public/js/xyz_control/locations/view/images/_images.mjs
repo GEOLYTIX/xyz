@@ -2,91 +2,109 @@ import add_image from './add_image.mjs';
 
 import delete_image from './delete_image.mjs';
 
-export default (_xyz, location, entry) => {
+import upload_image from './upload_image.mjs';
 
-  const images = entry.value.reverse() || [];
+export default _xyz => {
 
-  if (!images.length && !entry.edit) return entry.row.remove();
+  return {
 
-  if (entry.label) entry.row = _xyz.utils.createElement({
-    tag: 'tr',
-    options: {
-      className: 'lv-0'
-    },
-    appendTo: location.view.node
-  });
+    ctrl: ctrl,
 
-  // Create a table cell for image control.
-  entry.val = _xyz.utils.createElement({
-    tag: 'td',
-    options: {
-      className: 'val',
-      colSpan: '2'
-    },
-    style: {
-      position: 'relative',
-      height: '190px'
-    },
-    appendTo: entry.row
-  });
+    add_image: add_image(_xyz),
 
-  entry.ctrl = {};
+    delete_image: delete_image(_xyz),
 
-  // Create a container for image control.
-  entry.ctrl.container = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'img-container'
-    },
-    appendTo: entry.val
-  });
+    upload_image: upload_image(_xyz),
 
-  // Create a table row to hold image array.
-  entry.ctrl.row = _xyz.utils.createElement({
-    tag: 'tr',
-    appendTo: entry.ctrl.container
-  });
+  };
 
-  if (entry.edit) add_image(_xyz, location, entry);
+  function ctrl(location, entry) {
 
-  // add images if there are any
-  for (let image of images) {
+    const images = entry.value.reverse() || [];
 
-    const imageCell = _xyz.utils.createElement({
-      tag: 'td',
-      appendTo: entry.ctrl.row
+    if (!images.length && !entry.edit) return entry.row.remove();
+
+    if (entry.label) entry.row = _xyz.utils.createElement({
+      tag: 'tr',
+      options: {
+        className: 'lv-0'
+      },
+      appendTo: location.view.node
     });
 
-    const img = _xyz.utils.createElement({
-      tag: 'img',
+    // Create a table cell for image control.
+    entry.val = _xyz.utils.createElement({
+      tag: 'td',
       options: {
-        id: image.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
-        src: image
+        className: 'val',
+        colSpan: '2'
       },
       style: {
-        border: '3px solid #EEE'
+        position: 'relative',
+        height: '190px'
       },
-      appendTo: imageCell
+      appendTo: entry.row
     });
 
-    // Add delete button if images entry is editable.
-    if (entry.edit) _xyz.utils.createElement({
-      tag: 'button',
+    entry.ctrl = {};
+
+    // Create a container for image control.
+    entry.ctrl.container = _xyz.utils.createElement({
+      tag: 'div',
       options: {
-        title: 'Delete image',
-        className: 'btn_del',
-        innerHTML: '<i class="material-icons">delete_forever</i>'
+        className: 'img-container'
       },
-      appendTo: imageCell,
-      eventListener: {
-        event: 'click',
-        funct: e => {
-          e.target.remove();
-          delete_image(_xyz, location, entry, img);
-        }
-      }
+      appendTo: entry.val
     });
 
-  }
+    // Create a table row to hold image array.
+    entry.ctrl.row = _xyz.utils.createElement({
+      tag: 'tr',
+      appendTo: entry.ctrl.container
+    });
+
+    if (entry.edit) location.view.images.add_image(location, entry);
+
+    // add images if there are any
+    for (let image of images) {
+
+      const imageCell = _xyz.utils.createElement({
+        tag: 'td',
+        appendTo: entry.ctrl.row
+      });
+
+      const img = _xyz.utils.createElement({
+        tag: 'img',
+        options: {
+          id: image.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
+          src: image
+        },
+        style: {
+          border: '3px solid #EEE'
+        },
+        appendTo: imageCell
+      });
+
+      // Add delete button if images entry is editable.
+      if (entry.edit) _xyz.utils.createElement({
+        tag: 'button',
+        options: {
+          title: 'Delete image',
+          className: 'btn_del',
+          innerHTML: '<i class="material-icons">delete_forever</i>'
+        },
+        appendTo: imageCell,
+        eventListener: {
+          event: 'click',
+          funct: e => {
+            e.target.remove();
+            location.view.images.delete_image(location, entry, img);
+          }
+        }
+      });
+
+    }
+
+  };
 
 };
