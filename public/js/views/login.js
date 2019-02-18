@@ -16,6 +16,6 @@ password.addEventListener('keyup', () => check());
 function check() {
   btnLogin.disabled =
     email.validity.valid &&
-    password.validity.valid
+      password.validity.valid
       ? false : true;
 }

@@ -15,11 +15,11 @@ password.addEventListener('keyup', () => check());
 
 password_retype.addEventListener('keyup', () => check());
 
-function check() {    
+function check() {
   btnRegister.disabled =
-        email.validity.valid &&
-            password.validity.valid &&
-            password.value.length > 0 &&
-            password.value === password_retype.value
-          ? false : true;
+    email.validity.valid &&
+      password.validity.valid &&
+      password.value.length > 0 &&
+      password.value === password_retype.value
+      ? false : true;
 }

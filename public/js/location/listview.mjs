@@ -20,7 +20,7 @@ export default _xyz => {
 
   };
 
-  // Clear locations button to remove hooks and reset locations module.
+  // Clear locations button to remove hooks and reset location listview.
   listview.clear.onclick = () => {
     _xyz.hooks.remove('select');
     _xyz.locations.listview.init();

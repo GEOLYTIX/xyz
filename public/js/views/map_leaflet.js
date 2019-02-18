@@ -55,24 +55,56 @@ _xyz({
       }
     });
 
-    _xyz.tableview.layerTable({
-      layer: _xyz.layers.list.COUNTRIES,
+    // _xyz.tableview.layerTable({
+    //   layer: _xyz.layers.list.COUNTRIES,
+    //   target: document.getElementById('xyz_table1'),
+    //   table: {
+    //     'columns': [
+    //       {
+    //         'field': 'name',
+    //         'type': 'text',
+    //       },
+    //       {
+    //         'title': 'Population Est',
+    //         'field': 'pop_est',
+    //         'type': 'integer',
+    //       },
+    //       {
+    //         'field': 'gdp_md_est',
+    //         'type': 'integer',
+    //       }
+    //     ]
+    //   }
+    // });
+
+    _xyz.tableview.locationTable({
       target: document.getElementById('xyz_table1'),
       table: {
         'columns': [
           {
-            'field': 'name',
-            'type': 'text',
+            'title': 'rows',
+            'field': 'rows',
           },
           {
-            'title': 'Population Est',
-            'field': 'pop_est',
-            'type': 'integer',
+            'title': 'min15',
+            'field': 'min15',
           },
           {
-            'field': 'gdp_md_est',
-            'type': 'integer',
-          }
+            'title': 'uk',
+            'field': 'uk',
+          },
+          {
+            'title': 'pct_15',
+            'field': 'pct_15',
+          },
+          {
+            'title': 'pct_uk',
+            'field': 'pct_uk',
+          },
+          {
+            'title': 'index',
+            'field': 'index',
+          },                                        
         ]
       }
     });

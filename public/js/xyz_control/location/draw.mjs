@@ -21,6 +21,8 @@ export default _xyz => location => {
 
   location.geometries.push(location.Marker);
 
+  if (location.geometry.type === 'MultiPoint' || location.geometry.type === 'Point') return;
+
   location.Layer = _xyz.locations.drawGeoJSON({
     json: {
       type: 'Feature',

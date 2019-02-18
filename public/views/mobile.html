@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head data-dir = "{{:dir}}">
+<head data-dir="{{:dir}}">
     <title>{{:title}}</title>
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-control" content="no-cache">
+    
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
 </head>
 
-<body data-viewmode = "mobile" data-nanoid = {{:nanoid}} data-log={{:log}} data-token={{:token}}>
+<body data-viewmode="mobile" data-nanoid={{:nanoid}} data-log={{:log}} data-token={{:token}}>
 
     <div class="location_drop">
         <ul class="location_table"></ul>
         <i class="material-icons location_drop__close">vertical_align_top</i>
     </div>
 
-    <div id="Map" class="mapview" style="margin-top: 0;">
+    <div id="Map" class="mapview map" style="margin-top: 0;">
         <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
             <defs>
                 <filter id='dropshadow'>
                     <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
                     <feOffset dx='1' dy='1' result='offsetblur' />
                     <feMerge>
-                        <feMergeNode/>
+                        <feMergeNode />
                         <feMergeNode in='SourceGraphic' />
                     </feMerge>
                 </filter>
@@ -40,7 +43,7 @@
         <ul></ul>
     </div>
 
-    <div class="btn_column noselect">
+    <div class="btn_column noselect mobile">
         <button id="btnGazetteer" {{:btnSearch}}>
             <i class="material-icons">search</i>
         </button>
@@ -73,26 +76,26 @@
 
     <div class="spacer_mobile"></div>
 
-    <div class="mod_container">
+    <div class="listviews">
 
         <table class="tab_bar" cellpadding="0" cellspacing="0">
             <td id="tabLayers" class="tab_btn active">
                 <i class="material-icons tab_icon">layers</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
-            <td id="tabLocations" class="tab_btn hidden">
+            <td id="tabLocations" class="tab_btn displaynone">
                 <i class="material-icons tab_icon">location_on</i>
                 <i class="material-icons swipe_icon">touch_app</i>
             </td>
         </table>
 
-        <div id="modLayers" class="module">
-                <div class="title">Layers</div>
-                <div id="localeDropdown"></div>
-                <div id="layers" class="content"></div>
+        <div id="modLayers" class="listview">
+            <div class="title">Layers</div>
+            <div id="localeDropdown"></div>
+            <div id="layers" class="content"></div>
         </div>
 
-        <div id="modLocations" class="module hidden">
+        <div id="modLocations" class="listview displaynone">
             <div class="title">Locations</div>
             <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
             <div id="locations" class="content"></div>
@@ -100,10 +103,8 @@
 
     </div>
 
-    <div id="timeout_mask">Session expired.</div>
-
 </body>
 
-<script src="{{:dir}}/js/{{:bundle_js}}"></script>
+<script src="{{:dir}}/js/build/xyz_ui_bundle.js"></script>
 
 </html>

@@ -10,6 +10,8 @@ import tableDefinition from './tableDefinition.mjs';
 
 import log from './log.mjs';
 
+import table from './table.mjs';
+
 import edit from './edit/_edit.mjs';
 
 export default (_xyz, record) => {
@@ -63,6 +65,7 @@ export default (_xyz, record) => {
     // Iterate through info fields to fill displayValue property
     // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
     Object.values(record.location.infoj).forEach(entry => {
+
       // Determine the user-friendly string representation of the value
       entry.displayValue =
       entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
@@ -125,6 +128,9 @@ export default (_xyz, record) => {
 
       // Create log control.
       if (entry.type === 'log') return log(_xyz, record, entry);
+
+      // Create log control.
+      if (entry.type === 'table') return table(_xyz, record, entry);
 
       // Create geometry control.
       if (entry.type === 'geometry') return geometry(_xyz, record, entry);  

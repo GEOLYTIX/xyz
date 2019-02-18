@@ -23,8 +23,6 @@ export default _xyz => params => {
         // Make target tab current.
         e.target.classList.add('tab-current');
 
-        _xyz.tableview.current_layer = params.layer;
-
         params.table.activate();
 
       }

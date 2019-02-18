@@ -5,7 +5,7 @@ export default _xyz => params => {
   // Remove existing Leaflet map object.
   if (_xyz.map) _xyz.map.remove();
     
-  if (!params.target) return console.error('No target for mapview!');
+  if (!params.target) return console.log('No target for mapview!');
 
   // Set XYZ map DOM.
   _xyz.mapview.node = params.target;  

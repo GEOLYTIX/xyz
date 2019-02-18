@@ -11,9 +11,11 @@ export default _xyz => {
     };
   }
 
+  _xyz.desktop.listviews = document.querySelector('.listviews > .scrolly');
+
   // add scrollbar on the left to control container.
-  _xyz.utils.scrolly(document.querySelector('.mod_container > .scrolly'));
+  _xyz.utils.scrolly(_xyz.desktop.listviews);
 
   // reset scrollbar on control container after window resize.
-  window.addEventListener('resize', () => _xyz.utils.scrolly(document.querySelector('.mod_container > .scrolly')));
+  window.addEventListener('resize', () => _xyz.utils.scrolly(_xyz.desktop.listviews));
 };

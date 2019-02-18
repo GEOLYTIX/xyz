@@ -44,7 +44,6 @@ async function view(req, res, token = { access: 'public' }) {
     nanoid: nanoid(6),
     token: token.signed,
     log: process.env.LOG_LEVEL ? 'true' : 'false',
-    bundle_js: 'build/xyz_ui_bundle.js',
     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
     hrefDocumentation: config.documentation ? config.documentation : '',
     btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',

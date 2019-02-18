@@ -75,7 +75,7 @@ module.exports = fastify => {
 
         if (entry.withSelect) {
           fields_with.push(`${entry.fieldfx} as ${entry.field}`);
-        } else if (entry.field) {
+        } else if (entry.field && !entry.columns) {
           fields_with.push(entry.field);
         }
 
@@ -83,9 +83,9 @@ module.exports = fastify => {
 
       var q = `
       with q as (
-      SELECT ${fields.join()}
-      FROM ${table}
-      WHERE ${qID} = $1
+        SELECT ${fields.join()}
+        FROM ${table}
+        WHERE ${qID} = $1
       )
       select ${fields_with.join()}, geomj from q
       `;

@@ -22,7 +22,7 @@ export default (_xyz, record) => {
         if (_xyz.mapview.state && _xyz.mapview.state != 'select') _xyz.switchState(record.location.layer, _xyz.mapview.state);
 
         if (record.location.id) {
-          _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+          _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id);
         }
         
         // Clear geometries and delete location to free up record.

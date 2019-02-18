@@ -31,7 +31,7 @@ export default (_xyz, groupKey) => {
           expandedTag: 'expanded-group',
           expandableTag: 'expandable-group',
           accordeon: true,
-          scrolly: document.querySelector('.mod_container > .scrolly')
+          scrolly: _xyz.desktop && _xyz.desktop.listviews,
         });
       }
     }
@@ -84,7 +84,7 @@ export default (_xyz, groupKey) => {
           expandable: group.container,
           expandedTag: 'expanded-group',
           expandableTag: 'expandable-group',
-          scrolly: document.querySelector('.mod_container > .scrolly')
+          scrolly: _xyz.desktop && _xyz.desktop.listviews,
         });
       }
     }

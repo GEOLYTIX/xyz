@@ -1,25 +1,27 @@
 export default _xyz => {
 
   _xyz.mobile = {};
-    
+
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
   //move map up on document scroll
   document.addEventListener('scroll',
-    () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
+    () => document.getElementById('Map')
+      .style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px'
+  );
 
   let
-    modules = document.querySelectorAll('.mod_container > .module'),
+    listViews = document.querySelectorAll('.listview'),
     tabs = document.querySelector('.tab_bar'),
     tabLayers = document.getElementById('tabLayers'),
     modLayers = document.getElementById('modLayers'),
     tabLocations = document.getElementById('tabLocations'),
     modLocations = document.getElementById('modLocations');
 
-  modLayers.addEventListener('scroll', e => checkOverlap (e.target));
-  modLocations.addEventListener('scroll', e => checkOverlap (e.target));
+  modLayers.addEventListener('scroll', e => checkOverlap(e.target));
+  modLocations.addEventListener('scroll', e => checkOverlap(e.target));
 
-  function checkOverlap (mod) {
+  function checkOverlap(mod) {
     if (mod.scrollTop > 0) {
       tabs.classList.add('pane_shadow');
       return;
@@ -30,7 +32,7 @@ export default _xyz => {
   _xyz.mobile.activateLayersTab = () => activateTab(tabLayers, modLayers);
 
   _xyz.mobile.activateLocationsTab = () => {
-    tabLocations.classList.remove('hidden');
+    tabLocations.classList.remove('displaynone');
     activateTab(tabLocations, modLocations);
   };
 
@@ -44,18 +46,18 @@ export default _xyz => {
       el.classList.remove('active');
     });
     target.classList.add('active');
-    modules.forEach(m => m.classList.add('hidden'));
-    mod.classList.remove('hidden');
-    checkOverlap (mod);
+    listViews.forEach(m => m.classList.add('displaynone'));
+    mod.classList.remove('displaynone');
+    checkOverlap(mod);
 
     // Run locations init when all records are free.
     const freeRecords = _xyz.locations.list.filter(record => !record.location);
-    if (freeRecords.length === _xyz.locations.list.length) tabLocations.classList.add('hidden');
+    if (freeRecords.length === _xyz.locations.list.length) tabLocations.classList.add('displaynone');
 
   }
 
   _xyz.locations.select_list = (list, lnglat, layer) => {
-  
+
     let dom = {
       map: document.getElementById('Map'),
       location_drop: document.querySelector('.location_drop'),
@@ -81,7 +83,7 @@ export default _xyz => {
         eventListener: {
           event: 'click',
           funct: e => {
-  
+
             _xyz.locations.select({
               locale: _xyz.workspace.locale.key,
               layer: layer.key,
@@ -90,11 +92,11 @@ export default _xyz => {
               marker: e.target['data-marker'],
               edit: layer.edit
             });
-  
+
           }
         }
       });
-  
+
     }
 
     // Button event to close the .location_drop.

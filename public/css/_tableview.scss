@@ -2,7 +2,8 @@
     position: absolute;
     overflow: hidden;
     bottom: 0;
-    width: 100%;
+    right: 0;
+    width: calc(100% - 330px);
     min-height: 40px;
     max-height: 100%;
     padding-left: 58px;
@@ -25,8 +26,6 @@
         width: calc(100% - 58px);
         height: calc(100% - 55px);
     }
-
-
     nav {
         text-align: center;
         ul {
@@ -46,35 +45,5 @@
                 }
             }
         }
-    }
-
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@-moz-keyframes fadein {
-    /* Firefox */
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@-webkit-keyframes fadein {
-    /* Safari and Chrome */
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
     }
 }

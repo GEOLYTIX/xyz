@@ -63,7 +63,7 @@ function init(_xyz) {
   _xyz.layers.listview = layerlistview(_xyz);
   _xyz.layers.listview.init();
 
-  // Initialize locations module.
+  // Initialize location listview.
   _xyz.locations.listview = locationlistview(_xyz);
   _xyz.locations.listview.init();
 

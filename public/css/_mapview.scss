@@ -1,0 +1,15 @@
+.map {
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 4px 0px 4px -4px #777;
+    div.leaflet-select-pane svg>g path {
+        filter: url(#dropshadow);
+    }
+}
+
+.leaflet-interactive.wait-cursor-enabled {
+    cursor: wait !important;
+}
+.leaflet-popup-content {
+    width: 301px !important;
+}

@@ -1,14 +1,6 @@
 #Gazetteer {
     display: none;
     background-color: #fff;
-    @if $desktop {
-        padding-top: 5px;
-    }
-    @if $mobile {
-        position: fixed;
-        left: 0;
-        box-shadow: 0 3px 3px -3px #000;
-    }
     .clear {
         position: absolute;
         top: 0;
@@ -29,9 +21,6 @@
     input {
         width: 100%;
         font-size: 20px;
-        @if $mobile {
-          padding: 5px 0 5px 70px;
-        }
     }
     >ul {
         -webkit-padding-start: 0;
@@ -45,32 +34,5 @@
         z-index: 999;
         box-shadow: 0 3px 3px -3px #000;
         width: 100%;
-        @if $desktop {
-            
-            li {
-                list-style: none;
-                line-height: 1.2em;
-                white-space: nowrap;
-                &:hover {
-                    cursor: pointer;
-                    background-color: $glxlightgreen;
-                }
-                &:focus {
-                    background-color: $glxlightgreen;
-                }
-                &.active {
-                    background-color: $glxlightgreen;
-                }
-            }
-        }
-        @if $mobile {
-            padding-left: 70px;
-            li {
-                font-size: 20px;
-                color: $glxgreen;
-                list-style: none;
-                line-height: 1.5em;
-            }
-        }
     }
 }

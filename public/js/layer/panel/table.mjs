@@ -1,6 +1,6 @@
 export default (_xyz, layer) => {
 
-  if(!layer.tableview || !layer.tableview.tables) return;
+  if(_xyz.mobile || !layer.tableview || !layer.tableview.tables) return;
 
   // Create cluster panel and add to layer dashboard.
   layer.tableview.panel = _xyz.utils.createElement({
@@ -26,7 +26,7 @@ export default (_xyz, layer) => {
         _xyz.utils.toggleExpanderParent({
           expandable: layer.tableview.panel,
           accordeon: true,
-          scrolly: document.querySelector('.mod_container > .scrolly')
+          scrolly: _xyz.desktop && _xyz.desktop.listviews,
         });
       }
     }

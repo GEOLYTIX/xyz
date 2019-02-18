@@ -2086,41 +2086,4 @@ i,
 .pane_shadow {
   box-shadow: 0 3px 3px -3px #000; }
 
-.mapview {
-  position: fixed;
-  right: 0;
-  width: calc(100% - 330px);
-  height: 100%; }
-
-.leaflet-left .leaflet-control-scale {
-  margin-left: 63px; }
-
-.listviews {
-  position: fixed;
-  height: 100%;
-  padding: 0 20px;
-  width: 330px;
-  background-color: #fff;
-  z-index: 999;
-  box-shadow: 0 2px 2px #777;
-  overflow: hidden; }
-  .listviews > .scrolly {
-    width: calc(100% + 50px); }
-  .listviews .listview {
-    padding: 10px 0; }
-
-#Gazetteer {
-  padding-top: 5px; }
-  #Gazetteer > ul li {
-    list-style: none;
-    line-height: 1.2em;
-    white-space: nowrap; }
-    #Gazetteer > ul li:hover {
-      cursor: pointer;
-      background-color: #cf9; }
-    #Gazetteer > ul li:focus {
-      background-color: #cf9; }
-    #Gazetteer > ul li.active {
-      background-color: #cf9; }
-
-/*# sourceMappingURL=desktop.css.map */
+/*# sourceMappingURL=control.css.map */

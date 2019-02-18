@@ -8,6 +8,8 @@ export default _xyz => {
 
     record.location = location;
 
+    record.location.geometries = [];
+
     // dbs is required for image upload.
     record.location.dbs = _xyz.layers.list[record.location.layer].dbs;
 
@@ -17,12 +19,6 @@ export default _xyz => {
     // Set marker coordinates from point geometry.
     if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
   
-    // Push the hook for the location.
-    _xyz.hooks.push(
-      'select',
-      `${record.location.layer}!${record.location.table}!${record.location.id}`
-    );
-
     record.location.style = {
       color: record.color,
       letter: record.letter,
@@ -36,6 +32,12 @@ export default _xyz => {
   
     // List the record
     _xyz.locations.listview.add(record);
+
+    // Push the hook for the location.
+    _xyz.hooks.push(
+      'select',
+      `${record.location.layer}!${record.location.table}!${record.location.id}`
+    );
 
   };
 

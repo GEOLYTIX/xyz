@@ -61,7 +61,7 @@ export default (_xyz, layer) => {
       _xyz.utils.toggleExpanderParent({
         expandable: layer.drawer,
         accordeon: true,
-        scrolly: document.querySelector('.mod_container > .scrolly')
+        scrolly: _xyz.desktop && _xyz.desktop.listviews,
       });
     });
 
@@ -82,7 +82,7 @@ export default (_xyz, layer) => {
           e.stopPropagation();
           _xyz.utils.toggleExpanderParent({
             expandable: layer.drawer,
-            scrolly: document.querySelector('.mod_container > .scrolly')
+            scrolly: _xyz.desktop && _xyz.desktop.listviews,
           });
         }
       }

@@ -27,7 +27,7 @@ export default (_xyz, record, group) => {
     _xyz.utils.toggleExpanderParent({
       expandable: group.div,
       accordeon: true,
-      scrolly: document.querySelector('.mod_container > .scrolly')
+      scrolly: _xyz.desktop && _xyz.desktop.listviews
     });
   };
 

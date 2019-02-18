@@ -1,8 +1,12 @@
 export default _xyz => params => {
 
+
 	  if (!params.target) return;
 
-	  if (_xyz.tableview.node) _xyz.tableview.node.style.display = 'block';
+	  if (_xyz.tableview.node) {
+	  	_xyz.tableview.node.style.display = 'block';
+	  	_xyz.mapview.node.style.height = 'calc(100% - 40px)';
+	  }
 
 	  _xyz.tableview.table = params.target;
 
@@ -25,42 +29,58 @@ export default _xyz => params => {
 
   });
 
-	  params.table.update = () => {
+  params.table.update = () => {
 
-	  	const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
-	  	xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
-	  		// here parameters that need to be sent to location_table endpoint
-	  		// turned into query on server side
-	  		// sent back and visualized
+    xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
+
 	  		locale: _xyz.workspace.locale.key,
 	  		layer: params.record.location.layer,
 	  		id: params.record.location.id,
 	  		token: _xyz.token,
 	  		tableDef: (params.record.location.infoj.indexOf(params.table)-1)
 	  	}));
+  
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.responseType = 'json';
+    
+    xhr.onload = e => {
+    
+      if (e.target.status !== 200) return;
 
-	  	console.log({
-	  		locale: _xyz.workspace.locale.key,
-	  		layer: params.record.location.layer,
-	  		id: params.record.location.id,
-	  		token: _xyz.token,
-	  		tableDef: (params.record.location.infoj.indexOf(params.table)-1)
-	  	});
+      console.log(e.target.response);
+      
+      params.table.Tabulator.setData(e.target.response);
+  
+      params.table.Tabulator.redraw(true);
+  
+    };
+  
+    xhr.send();
 
-	  	xhr.setRequestHeader('Content-Type', 'application/json');
-	  	xhr.responseType = 'json';
+  };
+   
+  params.table.activate = () => {
 
-	  	xhr.onload = e => {
-	  		if (e.target.status !== 200) return;
+    params.table.Tabulator =
+    new _xyz.utils.Tabulator(_xyz.tableview.table, {
+      columns: params.table.columns,
+      autoResize: true,
+      height: _xyz.tableview.height || '100%'
+    });
 
-	  		console.log(e.target.response);
-	  	};
+    params.table.update();
 
-	  	xhr.send();
+    _xyz.tableview.current_table = params.table;
 
-	  };
+  };
 
-	  params.table.update();
+  params.table.activate();
+
+  if (_xyz.tableview.tables) _xyz.tableview.tables.push(params.table);
+
+  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(params);
+
 
 };

@@ -18,7 +18,7 @@ export default (_xyz, record) => {
 
         _xyz.utils.toggleExpanderParent({
           expandable: record.drawer,
-          scrolly: document.querySelector('.mod_container > .scrolly')
+          scrolly: _xyz.desktop && _xyz.desktop.listviews
         });
 
       }

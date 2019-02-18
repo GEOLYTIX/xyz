@@ -8,7 +8,6 @@ import locationTable from './locationTable.mjs';
 
 import layerTable from './layerTable.mjs';
 
-
 export default _xyz => {
 
   return {
@@ -22,7 +21,6 @@ export default _xyz => {
     locationTable: locationTable(_xyz),
 
     layerTable: layerTable(_xyz)
-
 
   };
     
