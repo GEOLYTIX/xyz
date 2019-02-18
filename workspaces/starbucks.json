@@ -1,0 +1,2025 @@
+{
+    "title": "GEOLYTIX | Starbucks",
+    "locales": {
+      "SK": {
+        "gazetteer": {
+          "provider": "GOOGLE",
+          "code": "KR",
+          "placeholder": "e.g. Seoul Square",
+          "optional": true
+        },
+        "minZoom": 7,
+        "maxZoom": 17,
+        "bounds": {
+          "north": 39,
+          "east": 130,
+          "south": 32,
+          "west": 123
+        },
+        "layers": {
+          "Mapbox": {
+            "group": "Base Maps",
+            "display": true,
+            "name": "Mapbox Baselayer",
+            "attribution": {
+              "© Mapbox": "https://www.mapbox.com/about/maps",
+              "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            },
+            "format": "tiles",
+            "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+            "key": "Mapbox",
+            "locale": "SK"
+          },
+          "OSM": {
+            "group": "Base Maps",
+            "display": false,
+            "format": "tiles",
+            "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            "key": "OSM",
+            "name": "OSM",
+            "locale": "SK"
+          },
+          "geodem": {
+            "group": "Demographics",
+            "name": "Demography by Dong",
+            "format": "mvt",
+            "mvt_cache": true,
+            "display": false,
+            "mvt_fields": [
+              "pop_15",
+              "workers",
+              "avg_price_1000krw"
+            ],
+            "dbs": "XYZ",
+            "qID": "dong_id",
+            "tables": {
+              "9": null,
+              "10": "geodata.sk_admin_dong"
+            },
+            "style": {
+              "default": {
+                "weight": 1,
+                "stroke": false,
+                "opacity": 1,
+                "fillColor": "#EEEEEE",
+                "fill": true,
+                "fillOpacity": 0.8
+              },
+              "highlight": {
+                "color": "#56A3A6",
+                "stroke": false,
+                "fillColor": "#DBD56E",
+                "fill": true,
+                "fillOpacity": 0.3
+              },
+              "themes": {
+                "Population": {
+                  "type": "graduated",
+                  "field": "pop_15",
+                  "cat": {
+                    "0": {
+                      "label": "0 to 8500",
+                      "fillColor": "#f1eef6"
+                    },
+                    "8500": {
+                      "label": "8500 to 18500",
+                      "fillColor": "#bdc9e1"
+                    },
+                    "18500": {
+                      "label": "18500 to 30000",
+                      "fillColor": "#74a9cf"
+                    },
+                    "30000": {
+                      "label": "30000 to 50000",
+                      "fillColor": "#2b8cbe"
+                    },
+                    "50000": {
+                      "label": "50000 and over",
+                      "fillColor": "#045a8d"
+                    }
+                  }
+                },
+                "Workers": {
+                  "type": "graduated",
+                  "field": "workers",
+                  "cat": {
+                    "0": {
+                      "label": "0 to 4200",
+                      "fillColor": "#cce2da"
+                    },
+                    "4200": {
+                      "label": "4200 to 12000",
+                      "fillColor": "#99c5b6"
+                    },
+                    "12000": {
+                      "label": "12000 to 26000",
+                      "fillColor": "#66a992"
+                    },
+                    "26000": {
+                      "label": "26000 to 80000",
+                      "fillColor": "#328c6e"
+                    },
+                    "80000": {
+                      "label": "80000 and above",
+                      "fillColor": "#00704a"
+                    }
+                  }
+                },
+                "Average Apartment Price (10,000 KRW)": {
+                  "type": "graduated",
+                  "field": "avg_price_1000krw",
+                  "cat": {
+                    "0": {
+                      "label": "0 to 10,000",
+                      "fillColor": "#feebe2"
+                    },
+                    "10000": {
+                      "label": "10,000 to 30,000",
+                      "fillColor": "#fbb4b9"
+                    },
+                    "30000": {
+                      "label": "30,000 to 60,000",
+                      "fillColor": "#f768a1"
+                    },
+                    "60000": {
+                      "label": "60,000 to 100,000",
+                      "fillColor": "#c51b8a"
+                    },
+                    "100000": {
+                      "label": "100,000 and above",
+                      "fillColor": "#7a0177"
+                    }
+                  }
+                }
+              },
+              "selected": {}
+            },
+            "infoj": [
+              {
+                "field": "dong_id",
+                "label": "Dong ID",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "dong_name",
+                "label": "Dong Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "dong_kor",
+                "label": "Dong Name (Korean)",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "pop_15",
+                "label": "Total Population (2015)",
+                "type": "numeric",
+                "inline": true
+              },
+              {
+                "label": "Gender Breakdown",
+                "type": "group",
+                "chart": {
+                  "x": "label x",
+                  "y": "label y",
+                  "type": "doughnut",
+                  "backgroundColor": [
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#8da0cb",
+                    "#e78ac3"
+                  ],
+                  "borderColor": [
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#8da0cb",
+                    "#e78ac3"
+                  ]
+                }
+              },
+              {
+                "group": "Gender Breakdown",
+                "field": "male_kor",
+                "label": "Male Korean",
+                "type": "integer"
+              },
+              {
+                "group": "Gender Breakdown",
+                "field": "female_kor",
+                "label": "Female Korean",
+                "type": "integer"
+              },
+              {
+                "group": "Gender Breakdown",
+                "field": "male_for",
+                "label": "Male Foreign",
+                "type": "integer"
+              },
+              {
+                "group": "Gender Breakdown",
+                "field": "female_for",
+                "label": "Female Foreign",
+                "type": "integer"
+              },
+              {
+                "label": "Age Breakdown",
+                "type": "group",
+                "chart": {
+                  "x": "label x",
+                  "y": "label y",
+                  "type": "bar",
+                  "backgroundColor": [
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090"
+                  ],
+                  "borderColor": [
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090",
+                    "#090"
+                  ]
+                }
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_0_15",
+                "label": "0 to 15",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_15_19",
+                "label": "15 to 19",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_20_24",
+                "label": "20 to 24",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_25_29",
+                "label": "25 to 29",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_30_34",
+                "label": "30 to 34",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_35_39",
+                "label": "35 to 39",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_40_44",
+                "label": "40 to 44",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_45_49",
+                "label": "45 to 49",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_50_54",
+                "label": "50 to 54",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_55_59",
+                "label": "55 to 59",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_60_64",
+                "label": "60 to 64",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Age Breakdown",
+                "field": "tot_65pl",
+                "label": "65 plus",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "label": "Workers",
+                "type": "label"
+              },
+              {
+                "field": "workers",
+                "label": "Worker Numbers (2014)",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "label": "Workers Breakdown",
+                "type": "group",
+                "chart": {
+                  "x": "label x",
+                  "y": "label y",
+                  "type": "doughnut",
+                  "backgroundColor": [
+                    "#cb6464",
+                    "#64cbcb",
+                    "#CB64CB",
+                    "#64CB64",
+                    "#6464CB",
+                    "#CBCB64",
+                    "#98CB64",
+                    "#D18B2E",
+                    "#ef1a08",
+                    "#1424ab",
+                    "#757961",
+                    "#db1b35",
+                    "#88a91b",
+                    "#8acce9",
+                    "#bb526c",
+                    "#8743e6",
+                    "#ccfb40",
+                    "#ccf900",
+                    "#f2b482",
+                    "#e9d419"
+                  ],
+                  "borderColor": [
+                    "#cb6464",
+                    "#64cbcb",
+                    "#CB64CB",
+                    "#64CB64",
+                    "#6464CB",
+                    "#CBCB64",
+                    "#98CB64",
+                    "#D18B2E",
+                    "#ef1a08",
+                    "#1424ab",
+                    "#757961",
+                    "#db1b35",
+                    "#88a91b",
+                    "#8acce9",
+                    "#bb526c",
+                    "#8743e6",
+                    "#ccfb40",
+                    "#ccf900",
+                    "#f2b482",
+                    "#e9d419"
+                  ]
+                }
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "serv_ind",
+                "label": "Service Industry",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "ag_fo_fi",
+                "label": "Agriculture, Forestry, Fishery",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "mining",
+                "label": "Mining",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "manufact",
+                "label": "Manufacturing",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "utility",
+                "label": "Electricity, Gas, Steam, Waterwork",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "refuse",
+                "label": "Sewage, Waste Treatment, Raw Material Recycling, Environment Restoration",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "construct",
+                "label": "Construction",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "retail",
+                "label": "Wholesale, Retail",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "transport",
+                "label": "Transportation",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "acc_food",
+                "label": "Lodging, Food",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "media",
+                "label": "Publication, Picture, Broadcasting Communication, Information Service",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "fin_ins",
+                "label": "Finance, Insurance",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "property",
+                "label": "Real Estate, Leasing Services",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "tech",
+                "label": "Speciality, Science, Technology Service",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "business",
+                "label": "Business Facility Management, Business Supporting Services",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "public",
+                "label": "Public Administration, National Defence, Social Security Administration",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "education",
+                "label": "Education Service",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "health",
+                "label": "Public Health, Social Welfare Service",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "culture",
+                "label": "Arts, Sports, Leisure Service",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "group": "Workers Breakdown",
+                "field": "work_other",
+                "label": "Associations, Organisations, Repair, Misc. Industrial Service",
+                "type": "numeric",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "label": "Housing",
+                "type": "group"
+              },
+              {
+                "group": "Housing",
+                "field": "apt_2017",
+                "label": "Apartment Total (2017)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "apt_2018",
+                "label": "Apartment Total (2018)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "hhd_15",
+                "label": "Household Total (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "occ_type",
+                "label": "Type of occupancy (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "hhd_instit",
+                "label": "Institutional Household (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "hhd_for",
+                "label": "Foreigner Household (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "hhd_units",
+                "label": "Housing Units - Total (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "detached",
+                "label": "Detached Dwelling (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "apartment",
+                "label": "Apartment (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "row_house",
+                "label": "Row House (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "apt_privat",
+                "label": "Apartment Unit In A Private House (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "apt_commer",
+                "label": "House Within Comercial Building (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "dwu_other",
+                "label": "Living Quarters Other Than Housing Unit (2015)",
+                "type": "numeric",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Housing",
+                "field": "avg_price_1000krw",
+                "label": "Average Apartment Price, 10,000 KRW (2018)",
+                "type": "numeric",
+                "inline": true
+              },
+              {
+                "group": "Housing",
+                "field": "max_price_1000krw",
+                "label": "Highest Apartment Price Paid, 10,000 KRW (2018)",
+                "type": "numeric",
+                "inline": true
+              },
+              {
+                "group": "Housing",
+                "field": "min_price_1000krw",
+                "label": "Lowest Apartment Price Paid, 10,000 KRW (2018)",
+                "type": "numeric",
+                "inline": true
+              },
+              {
+                "group": "Housing",
+                "field": "number_of_transactions",
+                "label": "Number of Apartment Transactions (2018)",
+                "type": "numeric",
+                "inline": true
+              }
+            ],
+            "key": "geodem",
+            "locale": "SK",
+            "geom_3857": "geom_3857",
+            "filter": {}
+          },
+          "roads": {
+            "name": "Road Connectivity",
+            "format": "mvt",
+            "mvt_cache": true,
+            "display": false,
+            "mvt_fields": [
+              "average"
+            ],
+            "dbs": "XYZ",
+            "geom_3857": "geom",
+            "tables": {
+              "11": null,
+              "12": "starbucks.k25_edge_centrality"
+            },
+            "style": {
+              "default": {
+                "weight": 1,
+                "stroke": true,
+                "opacity": 1,
+                "fillColor": "#bdbdbd",
+                "fill": true,
+                "fillOpacity": 0.8
+              },
+              "highlight": {
+                "color": "#56A3A6",
+                "stroke": true,
+                "fillColor": "#DBD56E",
+                "fill": true,
+                "fillOpacity": 0.3
+              },
+              "themes": {
+                "average": {
+                  "type": "graduated",
+                  "field": "average",
+                  "cat": {
+                    "0": {
+                      "label": "Less connected",
+                      "color": "#4747ff",
+                      "fillColor": "#4747ff"
+                    },
+                    "100000": {
+                      "label": "",
+                      "color": "#6e3bc7",
+                      "fillColor": "#6e3bc7"
+                    },
+                    "400000": {
+                      "label": "",
+                      "color": "#95308e",
+                      "fillColor": "#95308e"
+                    },
+                    "1110000": {
+                      "label": "",
+                      "color": "#bc2555",
+                      "fillColor": "#bc2555"
+                    },
+                    "3500000": {
+                      "label": "More connected",
+                      "color": "#e31a1c",
+                      "fillColor": "#e31a1c"
+                    }
+                  }
+                }
+              },
+              "selected": {}
+            },
+            "infoj": [
+              {
+                "field": "gid",
+                "label": "Retail Place Name",
+                "type": "numeric",
+                "inline": true
+              }
+            ],
+            "key": "roads",
+            "locale": "SK",
+            "filter": {}
+          },
+          "traffic_count": {
+            "name": "Traffic Counts",
+            "format": "cluster",
+            "cluster_label": "gid",
+            "qID": "gid",
+            "display": true,
+            "dbs": "XYZ",
+            "geom": "geom_point_4326",
+            "tables": {
+              "9": null,
+              "10": "starbucks.vw_sk_starbucks_traffic_counts"
+            },
+            "style": {
+              "themes": {
+                "average": {
+                  "type": "graduated",
+                  "field": "modelled_traffic_counts",
+                  "cat": {
+                    "0": {
+                      "label": "Less traffic",
+                      "color": "#4747ff",
+                      "fillColor": "#4747ff"
+                    },
+                    "7785": {
+                      "label": " ",
+                      "color": "#6e3bc7",
+                      "fillColor": "#6e3bc7"
+                    },
+                    "21797": {
+                      "label": " ",
+                      "color": "#95308e",
+                      "fillColor": "#95308e"
+                    },
+                    "44608": {
+                      "label": " ",
+                      "color": "#bc2555",
+                      "fillColor": "#bc2555"
+                    },
+                    "102719": {
+                      "label": "More traffic",
+                      "color": "#e31a1c",
+                      "fillColor": "#e31a1c"
+                    }
+                  }
+                }
+              },
+              "markerMin": 10,
+              "markerMax": 20,
+              "marker": {
+                "type": "target",
+                "fillColor": "#999999"
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#333333"
+              },
+              "______________________________________________________________________________________________default": {
+                "weight": 1,
+                "stroke": false,
+                "opacity": 1,
+                "fillColor": "#bdbdbd",
+                "fill": true,
+                "fillOpacity": 0.8
+              },
+              "______________________________________________________________________________________________highlight": {
+                "color": "#56A3A6",
+                "stroke": false,
+                "fillColor": "#DBD56E",
+                "fill": true,
+                "fillOpacity": 0.3
+              }
+            },
+            "infoj": [
+              {
+                "field": "gid",
+                "label": "Unique ID",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "road_type",
+                "label": "Road Type",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "modelled_traffic_counts",
+                "label": "Traffic Counts",
+                "type": "integer",
+                "inline": true
+              },
+              {
+                "field": "actual",
+                "label": "Actual Counts",
+                "type": "text",
+                "inline": true
+              }
+            ],
+            "key": "traffic_count",
+            "locale": "SK",
+            "filter": {},
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01
+          },
+          "actual_count": {
+            "name": "Actual Traffic Counts",
+            "format": "cluster",
+            "cluster_label": "gid",
+            "qID": "gid",
+            "display": true,
+            "dbs": "XYZ",
+            "geom": "geom_point_4326",
+            "tables": {
+              "9": null,
+              "10": "starbucks.vw_sk_starbucks_actual_counts"
+            },
+            "style": {
+              "themes": {
+                "average": {
+                  "type": "graduated",
+                  "field": "modelled_traffic_counts",
+                  "cat": {
+                    "0": {
+                      "label": "Less traffic",
+                      "color": "#4747ff",
+                      "fillColor": "#4747ff"
+                    },
+                    "7785": {
+                      "label": " ",
+                      "color": "#6e3bc7",
+                      "fillColor": "#6e3bc7"
+                    },
+                    "21797": {
+                      "label": " ",
+                      "color": "#95308e",
+                      "fillColor": "#95308e"
+                    },
+                    "44608": {
+                      "label": " ",
+                      "color": "#bc2555",
+                      "fillColor": "#bc2555"
+                    },
+                    "102719": {
+                      "label": "More traffic",
+                      "color": "#e31a1c",
+                      "fillColor": "#e31a1c"
+                    }
+                  }
+                }
+              },
+              "markerMin": 10,
+              "markerMax": 20,
+              "marker": {
+                "type": "target",
+                "fillColor": "#999999"
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#333333"
+              },
+              "______________________________________________________________________________________________default": {
+                "weight": 1,
+                "stroke": false,
+                "opacity": 1,
+                "fillColor": "#bdbdbd",
+                "fill": true,
+                "fillOpacity": 0.8
+              },
+              "______________________________________________________________________________________________highlight": {
+                "color": "#56A3A6",
+                "stroke": false,
+                "fillColor": "#DBD56E",
+                "fill": true,
+                "fillOpacity": 0.3
+              }
+            },
+            "infoj": [
+              {
+                "field": "gid",
+                "label": "Unique ID",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "road_type",
+                "label": "Road Type",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "modelled_traffic_counts",
+                "label": "Traffic Counts",
+                "type": "integer",
+                "inline": true
+              },
+              {
+                "field": "actual",
+                "label": "Actual Counts",
+                "type": "text",
+                "inline": true
+              }
+            ],
+            "key": "actual_count",
+            "locale": "SK",
+            "filter": {},
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01
+          },
+          "retail_places": {
+            "group": "Retail Place",
+            "name": "Retail Places",
+            "format": "mvt",
+            "mvt_cache": true,
+            "dbs": "XYZ",
+            "qID": "id",
+            "tables": {
+              "9": null,
+              "10": "starbucks.sk_glx_retail_place_view"
+            },
+            "style": {
+              "default": {
+                "weight": 1,
+                "stroke": false,
+                "opacity": 1,
+                "fillColor": "#ff3300",
+                "fill": true,
+                "fillOpacity": 0.5
+              },
+              "highlight": {
+                "color": "#ff3300",
+                "stroke": true,
+                "fillColor": "#DBD56E",
+                "fill": true,
+                "fillOpacity": 0.3
+              },
+              "themes": {},
+              "selected": {}
+            },
+            "infoj": [
+              {
+                "field": "rp_name",
+                "label": "Retail Place Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "rp_type",
+                "label": "Retail Place Type",
+                "type": "numeric",
+                "inline": true
+              }
+            ],
+            "key": "retail_places",
+            "locale": "SK",
+            "geom_3857": "geom_3857",
+            "filter": {}
+          },
+          "retail_venues": {
+            "group": "Retail Place",
+            "name": "Retail Venues",
+            "format": "cluster",
+            "dbs": "XYZ",
+            "qID": "id",
+            "geom": "geom_4326",
+            "tables": {
+              "9": null,
+              "10": "starbucks.sk_glx_retail_venue_view"
+            },
+            "cluster_label": "venue_name",
+            "style": {
+              "markerMin": 20,
+              "markerMax": 40,
+              "marker": {
+                "type": "target",
+                "fillColor": "#FFE28A",
+                "layers": {
+                  "0.5": "#ffffff"
+                }
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#FFE28A",
+                "layers": {
+                  "0.75": "#ffffff",
+                  "0.5": "#FFE28A"
+                }
+              },
+              "themes": {}
+            },
+            "infoj": [
+              {
+                "field": "venue_name",
+                "label": "Venue Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "venuelocal",
+                "label": "Local Venue Name",
+                "type": "text",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "field": "venue_add",
+                "label": "Venue Address",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "local_add",
+                "label": "Local Venue Address",
+                "type": "text",
+                "inline": true,
+                "level": 1
+              },
+              {
+                "field": "venue_type",
+                "label": "Venue Type",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "developer",
+                "label": "Venue Developer",
+                "type": "text",
+                "inline": true,
+                "level": 1
+              }
+            ],
+            "key": "retail_venues",
+            "locale": "SK",
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01,
+            "filter": {}
+          },
+          "visitor_sites": {
+            "name": "Popular Visitor Sites",
+            "format": "cluster",
+            "dbs": "XYZ",
+            "qID": "id",
+            "geom": "geom_4326",
+            "table": "starbucks.sk_popular_visitor_sites_view",
+            "cluster_label": "site_name",
+            "style": {
+              "markerMin": 20,
+              "markerMax": 40,
+              "marker": {
+                "type": "target",
+                "fillColor": "#ff5c33",
+                "layers": {
+                  "0.5": "#ffffff"
+                }
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#ff5c33",
+                "layers": {
+                  "0.75": "#ffffff",
+                  "0.5": "#ff5c33"
+                }
+              },
+              "themes": {}
+            },
+            "infoj": [
+              {
+                "field": "site_name",
+                "label": "Site Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "type": "streetview"
+              }
+            ],
+            "key": "visitor_sites",
+            "locale": "SK",
+            "cluster_kmeans": 0.01,
+            "cluster_dbscan": 0.01,
+            "filter": {}
+          },
+          "transport_hubs": {
+            "name": "Transport Hubs",
+            "format": "cluster",
+            "dbs": "XYZ",
+            "qID": "id",
+            "geom": "geom_4326",
+            "table": "starbucks.sk_transport_hubs_top10_view",
+            "cluster_label": "stat_name",
+            "style": {
+              "markerMin": 20,
+              "markerMax": 40,
+              "marker": {
+                "type": "target",
+                "fillColor": "#3366ff",
+                "layers": {
+                  "0.5": "#ffffff"
+                }
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#3366ff",
+                "layers": {
+                  "0.75": "#ffffff",
+                  "0.5": "#3366ff"
+                }
+              },
+              "themes": {}
+            },
+            "infoj": [
+              {
+                "field": "stat_name",
+                "label": "Station Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "local_name",
+                "label": "Local Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "label": "Passengers",
+                "type": "group",
+                "chart": {
+                  "x": "label x",
+                  "y": "label y",
+                  "type": "doughnut",
+                  "backgroundColor": [
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#8da0cb",
+                    "#e78ac3"
+                  ],
+                  "borderColor": [
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#8da0cb",
+                    "#e78ac3"
+                  ]
+                }
+              },
+              {
+                "group": "Passengers",
+                "field": "pass_board",
+                "label": "Boarding",
+                "type": "integer"
+              },
+              {
+                "group": "Passengers",
+                "field": "pass_alite",
+                "label": "Alighting",
+                "type": "integer"
+              }
+            ],
+            "key": "transport_hubs",
+            "locale": "SK",
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01,
+            "filter": {}
+          },
+          "transport_subway": {
+            "name": "Subways",
+            "format": "cluster",
+            "dbs": "XYZ",
+            "qID": "id",
+            "geom": "geom_4326",
+            "table": "geodata.vw_sk_glx_geodata_transport_subway",
+            "cluster_label": "sub_line",
+            "style": {
+              "markerMin": 20,
+              "markerMax": 40,
+              "marker": {
+                "type": "target",
+                "fillColor": "#85929E",
+                "layers": {}
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#85929E",
+                "layers": {}
+              },
+              "themes": {
+                "Line": {
+                  "type": "competition",
+                  "field": "sub_line",
+                  "other": true,
+                  "cat": {
+                    "1호선": {
+                      "label": "1호선",
+                      "fillColor": "#C0392B",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "2호선": {
+                      "label": "2호선",
+                      "fillColor": "#E74C3C",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "3호선": {
+                      "label": "3호선",
+                      "fillColor": "#9B59B6",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "4호선": {
+                      "label": "4호선",
+                      "fillColor": "#8E44AD",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "5호선": {
+                      "label": "5호선",
+                      "fillColor": "#2980B9",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "6호선": {
+                      "label": "6호선",
+                      "fillColor": "#3498DB",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "7호선": {
+                      "label": "7호선",
+                      "fillColor": "#16A085",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "8호선": {
+                      "label": "8호선",
+                      "fillColor": "#F1C40F",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "9호선": {
+                      "label": "9호선",
+                      "fillColor": "#F39C12",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "9호선2단계": {
+                      "label": "9호선2단계",
+                      "fillColor": "#D35400",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    },
+                    "우이신설선": {
+                      "label": "우이신설선",
+                      "fillColor": "#784212",
+                      "layers": {
+                        "0.5": "#ffffff"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "infoj": [
+              {
+                "field": "sub_stat",
+                "label": "Subway Station",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "sub_line",
+                "label": "Subway Line",
+                "type": "text",
+                "inline": true
+              }
+            ],
+            "key": "transport_subway",
+            "locale": "SK",
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01,
+            "filter": {}
+          },
+          "competitors": {
+            "name": "Competitor Stores",
+            "format": "cluster",
+            "dbs": "XYZ",
+            "qID": "glx_id",
+            "geom": "geom_4326",
+            "table": "starbucks.sk_starbucks_competitors_20181299",
+            "cluster_label": "store_name",
+            "style": {
+              "markerMin": 20,
+              "markerMax": 40,
+              "marker": {
+                "type": "target",
+                "fillColor": "#979da8",
+                "layers": {
+                  "0.5": "#ffffff"
+                }
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#979da8",
+                "layers": {
+                  "0.75": "#ffffff",
+                  "0.5": "#979da8"
+                }
+              },
+              "themes": {
+                "Brand": {
+                  "type": "categorized",
+                  "field": "brand_display",
+                  "other": true,
+                  "cat": {
+                    "McDonald s": {
+                      "label": "McDonald s",
+                      "fillColor": "#E74C3C",
+                      "layers": {
+                        "0.75": "#F4D03F",
+                        "0.5": "#E74C3C"
+                      }
+                    },
+                    "McDonald s McDrive": {
+                      "label": "McDonald s McDrive",
+                      "fillColor": "#E74C3C",
+                      "layers": {
+                        "0.5": "#F4D03F"
+                      }
+                    },
+                    "TOM N TOMS": {
+                      "label": "Tom N Toms",
+                      "fillColor": "#0091ea",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#0091ea"
+                      }
+                    },
+                    "THE COFFEE  BEAN": {
+                      "label": "The Coffee Bean",
+                      "fillColor": "#ffff1e",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#ffff1e"
+                      }
+                    },
+                    "PAUL BASSETT": {
+                      "label": "Paul Bassett",
+                      "fillColor": "#ff4081",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#ff4081"
+                      }
+                    },
+                    "HOLLYS COFFEE": {
+                      "label": "Hollys Coffee",
+                      "fillColor": "#ad1457",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#ad1457"
+                      }
+                    },
+                    "EDIYA": {
+                      "label": "Ediya",
+                      "fillColor": "#6a1b9a",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#6a1b9a"
+                      }
+                    },
+                    "CAFFE BENE": {
+                      "label": "Caffe Bene",
+                      "fillColor": "#46c438",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#46c438"
+                      }
+                    },
+                    "CAFE DROPTOP": {
+                      "label": "Cafe Droptop",
+                      "fillColor": "#cc1e1e",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#cc1e1e"
+                      }
+                    },
+                    "ANGEL-IN-US": {
+                      "label": "Angel-In-Us",
+                      "fillColor": "#9575cd",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#9575cd"
+                      }
+                    },
+                    "A TWOSOME PLACE": {
+                      "label": "A Twosome Place",
+                      "fillColor": "#ff9721",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#ff9721"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "infoj": [
+              {
+                "field": "brand",
+                "label": "Competitor Brand",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "store_name",
+                "label": "Store Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "store_add",
+                "label": "Store Address",
+                "type": "text",
+                "inline": true
+              }
+            ],
+            "key": "competitors",
+            "locale": "SK",
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01,
+            "filter": {}
+          },
+          "stores": {
+            "name": "Starbucks Stores",
+            "format": "cluster",
+            "display": true,
+            "dbs": "XYZ",
+            "qID": "id",
+            "geom": "geom_4326",
+            "table": "starbucks.vw_sk_starbucks_restrict_stores",
+            "cluster_label": "store_name",
+            "style": {
+              "markerMin": 20,
+              "markerMax": 40,
+              "marker": {
+                "type": "target",
+                "fillColor": "#00704a",
+                "layers": {
+                  "0.5": "#ffffff"
+                }
+              },
+              "markerMulti": {
+                "type": "target",
+                "fillColor": "#00704a",
+                "layers": {
+                  "0.75": "#ffffff",
+                  "0.5": "#00704a"
+                }
+              },
+              "themes": {
+                "Store Type": {
+                  "type": "categorized",
+                  "field": "store_ty_1",
+                  "other": true,
+                  "cat": {
+                    "Café": {
+                      "label": "Café",
+                      "fillColor": "#00704a",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#00704a"
+                      }
+                    },
+                    "Drive-Thru": {
+                      "label": "Drive-Thru",
+                      "fillColor": "#af2d2d",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.5": "#af2d2d"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "infoj": [
+              {
+                "field": "site_id",
+                "label": "Site ID",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "store_name",
+                "label": "Store Name",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "field": "store_loca",
+                "label": "Store (Local)",
+                "type": "text",
+                "inline": true
+              },
+              {
+                "label": "Store Details",
+                "type": "group"
+              },
+              {
+                "field": "street",
+                "label": "Street",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "city",
+                "label": "City",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "state",
+                "label": "State",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "postal",
+                "label": "Postal code",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "venue_name",
+                "label": "Venue Name",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "store_ty_1",
+                "label": "Store Type",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "filter": {
+                  "in": [
+                    "Drive-Thru",
+                    "Café"
+                  ]
+                },
+                "group": "Store Details"
+              },
+              {
+                "field": "concept_2",
+                "label": "Concept",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "filter": {
+                  "in": [
+                    "Teavana Bar",
+                    "Reserve Bar",
+                    "Clover Reserve"
+                  ]
+                },
+                "group": "Store Details"
+              },
+              {
+                "field": "segment",
+                "label": "Segment",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "filter": {
+                  "in": [
+                    "High Street",
+                    "Neighborhood",
+                    "Military",
+                    "Grocery/Hypermarket",
+                    "Other",
+                    "Department Store",
+                    "Air",
+                    "Educational Institution",
+                    "Shopping Mall",
+                    "Exhibition Center",
+                    "Leisure/Entertainment",
+                    "Healthcare",
+                    "Business Park"
+                  ]
+                },
+                "group": "Store Details"
+              },
+              {
+                "field": "size_sqm",
+                "label": "Size (sqm)",
+                "type": "integer",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "levels",
+                "label": "Levels",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "open_date",
+                "label": "Open date",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "leasestart",
+                "label": "Lease Start",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "field": "leaseend",
+                "label": "Lease End",
+                "type": "text",
+                "inline": true,
+                "level": 2,
+                "group": "Store Details"
+              },
+              {
+                "label": "Sales 2017",
+                "type": "group"
+              },
+              {
+                "field": "aws_lc_17",
+                "label": "Average Weekly Sales 2017 (₩)",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2017",
+                "level": 2
+              },
+              {
+                "field": "sales_lc_17",
+                "label": "Annual Sales 2017 (₩)",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2017",
+                "level": 2
+              },
+              {
+                "field": "adt_17",
+                "label": "Average Daily Transactions 2017",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2017",
+                "level": 2
+              },
+              {
+                "field": "at_lc_17",
+                "label": "Average Transaction Value 2017 (₩)",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2017",
+                "level": 2
+              },
+              {
+                "label": "Sales 2018",
+                "type": "group"
+              },
+              {
+                "field": "aws_lc_18",
+                "label": "Average Weekly Sales 2018 (₩)",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2018",
+                "level": 2
+              },
+              {
+                "field": "sales_lc_18",
+                "label": "Annual Sales 2018 (₩)",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2018",
+                "level": 2
+              },
+              {
+                "field": "adt_18",
+                "label": "Average Daily Transactions 2018",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2018",
+                "level": 2
+              },
+              {
+                "field": "at_lc_18",
+                "label": "Average Transaction Value 2018 (₩)",
+                "type": "text",
+                "inline": true,
+                "group": "Sales 2018",
+                "level": 2
+              },
+              {
+                "label": "Cafe / Drive-Thru Sales Split",
+                "type": "group",
+                "chart": {
+                  "x": "label x",
+                  "y": "label y",
+                  "type": "bar",
+                  "backgroundColor": [
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#66c2a5",
+                    "#fc8d62"
+                  ],
+                  "borderColor": [
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#66c2a5",
+                    "#fc8d62",
+                    "#66c2a5",
+                    "#fc8d62"
+                  ]
+                }
+              },
+              {
+                "group": "Cafe / Drive-Thru Sales Split",
+                "field": "cafe_pos_total_net_sales_2016",
+                "label": "Cafe Sales, 2016",
+                "type": "integer",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Cafe / Drive-Thru Sales Split",
+                "field": "dt_pos_total_net_sales_2016",
+                "label": "Drive-Thru Sales, 2016",
+                "type": "integer",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Cafe / Drive-Thru Sales Split",
+                "field": "cafe_pos_total_net_sales_2017",
+                "label": "Cafe Sales, 2017",
+                "type": "integer",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Cafe / Drive-Thru Sales Split",
+                "field": "dt_pos_total_net_sales_2017",
+                "label": "Drive-Thru Sales, 2017",
+                "type": "integer",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Cafe / Drive-Thru Sales Split",
+                "field": "cafe_pos_total_net_sales_2018",
+                "label": "Cafe Sales, 2018",
+                "type": "integer",
+                "inline": true,
+                "level": 2
+              },
+              {
+                "group": "Cafe / Drive-Thru Sales Split",
+                "field": "dt_pos_total_net_sales_2018",
+                "label": "Drive-Thru Sales, 2018",
+                "type": "integer",
+                "inline": true,
+                "level": 2
+              }
+            ],
+            "key": "stores",
+            "locale": "SK",
+            "cluster_kmeans": 0.05,
+            "cluster_dbscan": 0.01,
+            "filter": {}
+          },
+          "label": {
+            "group": "Base Maps",
+            "display": true,
+            "format": "tiles",
+            "attribution": {
+              "© Mapbox": "https://www.mapbox.com/about/maps",
+              "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            },
+            "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+            "key": "label",
+            "name": "label",
+            "locale": "SK"
+          },
+          "grid": {
+            "group": "Demographics",
+            "name": "Demography Grid",
+            "format": "grid",
+            "dbs": "XYZ",
+            "geom": "geom_point",
+            "grid_color": "total",
+            "tables": {
+              "12": null,
+              "13": "starbucks.sk_hx_500"
+            },
+            "style": {
+              "range": [
+                "#15773f",
+                "#66bd63",
+                "#a6d96a",
+                "#fdae61",
+                "#f46d43",
+                "#d73027"
+              ]
+            },
+            "grid_fields": {
+              "Total Population 2015": "total",
+              "Female population": "female",
+              "Male population": "male",
+              "Total Population (Korean)": "korean_total",
+              "Female population (Korean)": "korean_female",
+              "Male population (Korean)": "korean_male",
+              "Total Population (Foreign)": "foreigner_total",
+              "Female population (Foreign)": "foreigner_female",
+              "Male population (Foreign)": "foreigner_male",
+              "Under 15 (Total)": "t_u_15",
+              "15 to 19 (Total)": "t_15_19",
+              "20 to 24 (Total)": "t_20_24",
+              "25 to 29 (Total)": "t_25_29",
+              "30 to 34 (Total)": "t_30_34",
+              "35 to 39 (Total)": "t_35_39",
+              "40 to 44 (Total)": "t_40_44",
+              "45 to 49 (Total)": "t_45_49",
+              "50 to 54 (Total)": "t_50_54",
+              "55 to 59 (Total)": "t_55_59",
+              "60 to 64 (Total)": "t_60_64",
+              "65 and over (Total)": "t_65_plus",
+              "Under 15 (Male)": "m_u_15",
+              "15 to 19 (Male)": "m_15_19",
+              "20 to 24 (Male)": "m_20_24",
+              "25 to 29 (Male)": "m_25_29",
+              "30 to 34 (Male)": "m_30_34",
+              "35 to 39 (Male)": "m_35_39",
+              "40 to 44 (Male)": "m_40_44",
+              "45 to 49 (Male)": "m_45_49",
+              "50 to 54 (Male)": "m_50_54",
+              "55 to 59 (Male)": "m_55_59",
+              "60 to 64 (Male)": "m_60_64",
+              "65 and over (Male)": "m_65_plus",
+              "Under 15 (Female)": "f_u_15",
+              "15 to 19 (Female)": "f_15_19",
+              "20 to 24 (Female)": "f_20_24",
+              "25 to 29 (Female)": "f_25_29",
+              "30 to 34 (Female)": "f_30_34",
+              "35 to 39 (Female)": "f_35_39",
+              "40 to 44 (Female)": "f_40_44",
+              "45 to 49 (Female)": "f_45_49",
+              "50 to 54 (Female)": "f_50_54",
+              "55 to 59 (Female)": "f_55_59",
+              "60 to 64 (Female)": "f_60_64",
+              "65 and over (Female)": "f_65_plus",
+              "Household Total": "household_total",
+              "Type of occupancy": "type_of_occupancy",
+              "Institutional Households": "institutional_households",
+              "Foreigner Households": "foreigner_households",
+              "Housing Units Total": "housing_units_total",
+              "Detached Dwelling": "detached_dwelling",
+              "Apartment": "apartment",
+              "Row House": "row_house",
+              "Apartment Unit in a private house": "apartment_unit_in_a_private_house",
+              "House within a commercial building": "house_within_commercial_building",
+              "Living quarters other than housing unit": "living_quaters_other_than_housing_unit",
+              "Average Apartement Cost": "price_10000krw",
+              "Total Workers": "tot_worker",
+              "Workers: Agriculture": "ag_fo_fi",
+              "Workers: Mining": "mining",
+              "Workers: Manufacture": "manufact",
+              "Workers: Utility": "utility",
+              "Workers: Refuse": "refuse",
+              "Workers: Construction": "construct",
+              "Workers: Retail": "retail",
+              "Workers: Transport": "transport",
+              "Workers: Food": "acc_food",
+              "Workers: Media": "media",
+              "Workers: Finance and Insurance": "refin_insfuse",
+              "Workers: Property": "property",
+              "Workers: Tech": "tech",
+              "Workers: Business": "business",
+              "Workers: Public": "public",
+              "Workers: Education": "education",
+              "Workers: Health": "health",
+              "Workers: Culture": "culture",
+              "Workers: Other": "work_other"
+            },
+            "key": "grid",
+            "locale": "SK",
+            "filter": {},
+            "__________________________________qID": "qid"
+          }
+        },
+        "view": {}
+      }
+    }
+  }
