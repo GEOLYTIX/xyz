@@ -6,8 +6,6 @@ import images from './images/_images.mjs';
 
 import geometry from './geometry/_geometry.mjs';
 
-import log from './log.mjs';
-
 import edit from './edit/_edit.mjs';
 
 export default _xyz => {
@@ -97,15 +95,16 @@ export default _xyz => {
 
       // Create new table cell for the entry label and append to table.
       let _label;
-      if (entry.label) {_label = _xyz.utils.createElement({
-        tag: 'td',
-        options: {
-          className: 'label lv-' + (entry.level || 0),
-          textContent: entry.label,
-          title: entry.title || null
-        },
-        appendTo: entry.row
-      });
+      if (entry.label) {
+        _label = _xyz.utils.createElement({
+          tag: 'td',
+          options: {
+            className: 'label lv-' + (entry.level || 0),
+            textContent: entry.label,
+            title: entry.title || null
+          },
+          appendTo: entry.row
+        });
       }
 
       // Finish entry creation if entry has not type.
@@ -117,9 +116,6 @@ export default _xyz => {
       // If input is images create image control and return from object.map function.
       if (entry.type === 'images') return images(_xyz, location, entry);
 
-      // Create log control.
-      if (entry.type === 'log') return log(_xyz, location, entry);
-
       // Create geometry control.
       if (entry.type === 'geometry') return geometry(_xyz, location, entry);    
 
@@ -130,6 +126,7 @@ export default _xyz => {
       if (!entry.inline && !(entry.type === 'integer' ^ entry.type === 'numeric' ^ entry.type === 'date')) {
 
         if(_label) _label.colSpan = '2';
+
         // Create new row and append to table.
         entry.row = _xyz.utils.createElement({
           tag: 'tr',
@@ -149,7 +146,7 @@ export default _xyz => {
       // Else create val table cell inline.
       } else {
 
-      // Append val table cell to the same row as the label table cell.
+        // Append val table cell to the same row as the label table cell.
         entry.val = _xyz.utils.createElement({
           tag: 'td',
           options: {
@@ -164,18 +161,24 @@ export default _xyz => {
       if (entry.edit && !entry.fieldfx) return edit(_xyz, location, entry);
 
       if (entry.type === 'html') {
-      // Directly set the HTML if raw HTML was specified
+
+        // Directly set the HTML if raw HTML was specified
         return entry.val.innerHTML = entry.value;
+
       } else {
-      // otherwise use the displayValue
+
+        // otherwise use the displayValue
         return entry.val.textContent = entry.displayValue;
+
       }
 
     });
 
     // Hide group if empty
     Object.values(location.infoj).map(entry => {
+
       if(!entry.group) return;
+      
       if(!location.view.groups[entry.group].table.innerHTML) {
         location.groups[entry.group].table.parentNode.style.display = 'none';
       }
