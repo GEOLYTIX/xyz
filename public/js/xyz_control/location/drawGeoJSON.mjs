@@ -5,8 +5,7 @@ export default _xyz => params => {
   if (!params.icon) return _xyz.L.geoJson(params.json, {
     interactive: params.interactive || false,
     pane: params.pane || 'default',
-    style: params.style || {},
-    pointToLayer: () => { }
+    style: params.style || {}
   }).addTo(_xyz.map);
 
   return _xyz.L.geoJson(params.json, {
