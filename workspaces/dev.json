@@ -108,6 +108,85 @@
                             "field": "area_",
                             "fieldfx": "ST_Area(geom_3857)",
                             "type": "integer"
+                        },
+                        {
+                            "label": "Table 1",
+                            "title": "Table 1",
+                            "field": "table1",
+                            "type": "table",
+                            "columns": [
+                                {
+                                  "title": "rows",
+                                  "field": "rows",
+                                  "rows": {
+                                    "age18_24": "'age18_24'",
+                                    "age25_44": "'age25_44'",
+                                    "total": "'total'"
+                                  }
+                                },
+                                {
+                                  "title": "min15",
+                                  "field": "min15",
+                                  "with": {
+                                    "select": {
+                                      "age18_24": "sum(b.age18_24)",
+                                      "age25_44": "sum(b.age25_44)",
+                                      "total": "sum(b.pop__17)"
+                                    },
+                                    "from": "shepherd_neame.sites a, gb_hx_1k b",
+                                    "where": "a.id = 38 AND ST_INTERSECTS(a.isoline_15min, b.geomcntr)"
+                                  },
+                                  "rows": {
+                                    "age18_24": "min15.age18_24",
+                                    "age25_44": "min15.age25_44",
+                                    "total": "min15.total"
+                                  }
+                                },
+                                {
+                                  "title": "uk",
+                                  "field": "uk",
+                                  "with": {
+                                    "select": {
+                                      "age18_24": "age_18to24_uk",
+                                      "age25_44": "age_25to29_uk + age_30to44_uk",
+                                      "total": "age_total_uk"
+                                    },
+                                    "from": "shepherd_neame.report_summary"
+                                  },
+                                  "rows": {
+                                    "age18_24": "uk.age18_24",
+                                    "age25_44": "uk.age25_44",
+                                    "total": "uk.total"
+                                  }
+                                },
+                                {
+                                  "title": "pct_15",
+                                  "field": "pct_15",
+                                  "rows": {
+                                    "age18_24": "min15.age18_24 / min15.total * 100",
+                                    "age25_44": "min15.age25_44 / min15.total * 100",
+                                    "total": "min15.total / min15.total * 100"
+                                  }
+                                },
+                                {
+                                  "title": "pct_uk",
+                                  "field": "pct_uk",
+                                  "rows": {
+                                    "age18_24": "uk.age18_24 / uk.total * 100",
+                                    "age25_44": "uk.age25_44 / uk.total * 100",
+                                    "total": "uk.total / uk.total * 100"
+                                  }
+                                },
+                                {
+                                  "title": "index",
+                                  "field": "index",
+                                  "rows": {
+                                    "age18_24": "(min15.age18_24 / min15.total) / (uk.age18_24 / uk.total) * 100",
+                                    "age25_44": "(min15.age25_44 / min15.total) / (uk.age25_44 / uk.total) * 100",
+                                    "total": "(min15.total / min15.total) / (uk.total / uk.total) * 100"
+                                  }
+                                }
+                            ]
                         }
                     ],
                     "mvt_fields": [

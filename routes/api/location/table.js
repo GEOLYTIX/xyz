@@ -6,67 +6,23 @@ module.exports = fastify => {
     beforeHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
-      const cols = {
-        rows: {
-          rows:{
-            age18_24: '\'age18_24\'',
-            age25_44: '\'age25_44\'',
-            total: '\'total\'',
-          },
-        },
-        min15: {
-          with: {
-            select: {
-              age18_24: 'sum(b.age18_24)',
-              age25_44: 'sum(b.age25_44)',
-              total: 'sum(b.pop__17)',
-            },
-            from: 'shepherd_neame.sites a, gb_hx_1k b',
-            where: 'a.id = 38 AND ST_INTERSECTS(a.isoline_15min, b.geomcntr)'
-          },
-          rows: {
-            age18_24: 'min15.age18_24',
-            age25_44: 'min15.age25_44',
-            total: 'min15.total',
-          },
-        },
-        uk: {
-          with: {
-            select: {
-              age18_24: 'age_18to24_uk',
-              age25_44: 'age_25to29_uk + age_30to44_uk',
-              total: 'age_total_uk',
-            },
-            from: 'shepherd_neame.report_summary',
-          },
-          rows: {
-            age18_24: 'uk.age18_24',
-            age25_44: 'uk.age25_44',
-            total: 'uk.total',
-          },
-        },
-        pct_15: {
-          rows: {
-            age18_24: 'min15.age18_24 / min15.total * 100',
-            age25_44: 'min15.age25_44 / min15.total * 100',
-            total: 'min15.total / min15.total * 100',
-          },
-        },
-        pct_uk: {
-          rows: {
-            age18_24: 'uk.age18_24 / uk.total * 100',
-            age25_44: 'uk.age25_44 / uk.total * 100',
-            total: 'uk.total / uk.total * 100',
-          },
-        },
-        index: {
-          rows: {
-            age18_24: '(min15.age18_24 / min15.total) / (uk.age18_24 / uk.total) * 100',
-            age25_44: '(min15.age25_44 / min15.total) / (uk.age25_44 / uk.total) * 100',
-            total: '(min15.total / min15.total) / (uk.total / uk.total) * 100',
-          },
-        }
-      };
+      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
+
+      const locale = global.workspace[token.access].config.locales[req.query.locale];
+
+      // Return 406 if locale is not found in workspace.
+      if (!locale) return res.code(406).send('Invalid locale.');
+
+      const layer = locale.layers[req.query.layer];
+
+      // Return 406 if layer is not found in locale.
+      if (!layer) return res.code(406).send('Invalid layer.');
+
+     
+      // Clone the infoj from the memory workspace layer.
+      const infoj = JSON.parse(JSON.stringify(layer.infoj));
+
+      const cols = infoj[6].columns;
 
       let _with = [];
 
@@ -74,36 +30,36 @@ module.exports = fastify => {
 
       let _from = [];
     
-      Object.entries(cols).forEach(col => {
+      cols.forEach(col => {
 
-        if (col[1].with) {
+        if (col.with) {
 
-          _from.push(col[0]);
+          _from.push(col.field);
 
           let _select = [];
 
-          Object.entries(col[1].with.select).forEach(sel => {
+          Object.entries(col.with.select).forEach(sel => {
 
             _select.push(`\n ${sel[1]} ${sel[0]}`);
 
           });
 
-          _with.push(`${col[0]} as (
+          _with.push(`${col.field} as (
             SELECT ${_select.join()}
-            FROM ${col[1].with.from}
-            ${ col[1].with.where ? 'WHERE ' + col[1].with.where : ''}) `);
+            FROM ${col.with.from}
+            ${ col.with.where ? 'WHERE ' + col.with.where : ''}) `);
 
         }
 
         let _rows = [];
 
-        Object.entries(col[1].rows).forEach(row => {
+        Object.entries(col.rows).forEach(row => {
 
           _rows.push(`${row[1]}`);
 
         });
 
-        _row_queries.push(`unnest (array[${_rows.join()}]) as ${col[0]} `);
+        _row_queries.push(`unnest (array[${_rows.join()}]) as ${col.field} `);
 
       });
 

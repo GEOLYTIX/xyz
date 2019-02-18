@@ -21,7 +21,12 @@ export default _xyz => params => {
 
     const xhr = new XMLHttpRequest();
        
-    xhr.open('GET', _xyz.host + '/api/location/table');
+    xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: params.layer,
+      table: params.table.field,
+      token: _xyz.token
+    }));
   
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';

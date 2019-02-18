@@ -8,6 +8,8 @@ import geometry from './geometry.mjs';
 
 import log from './log.mjs';
 
+import table from './table.mjs';
+
 import edit from './edit/_edit.mjs';
 
 export default (_xyz, record) => {
@@ -123,6 +125,9 @@ export default (_xyz, record) => {
 
       // Create log control.
       if (entry.type === 'log') return log(_xyz, record, entry);
+
+      // Create log control.
+      if (entry.type === 'table') return table(_xyz, record, entry);
 
       // Create geometry control.
       if (entry.type === 'geometry') return geometry(_xyz, record, entry);    

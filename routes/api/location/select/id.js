@@ -75,7 +75,7 @@ module.exports = fastify => {
 
         if (entry.withSelect) {
           fields_with.push(`${entry.fieldfx} as ${entry.field}`);
-        } else if (entry.field) {
+        } else if (entry.field && !entry.columns) {
           fields_with.push(entry.field);
         }
 
