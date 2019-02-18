@@ -55,59 +55,59 @@ _xyz({
       }
     });
 
-    _xyz.tableview.layerTable({
-      layer: _xyz.layers.list.COUNTRIES,
-      target: document.getElementById('xyz_table1'),
-      table: {
-        'columns': [
-          {
-            'field': 'name',
-            'type': 'text',
-          },
-          {
-            'title': 'Population Est',
-            'field': 'pop_est',
-            'type': 'integer',
-          },
-          {
-            'field': 'gdp_md_est',
-            'type': 'integer',
-          }
-        ]
-      }
-    });
-
-    // _xyz.tableview.locationTable({
+    // _xyz.tableview.layerTable({
+    //   layer: _xyz.layers.list.COUNTRIES,
     //   target: document.getElementById('xyz_table1'),
     //   table: {
     //     'columns': [
     //       {
-    //         'title': 'fields',
-    //         'field': 'fields',
+    //         'field': 'name',
+    //         'type': 'text',
     //       },
     //       {
-    //         'title': 'min_15',
-    //         'field': 'min_15',
+    //         'title': 'Population Est',
+    //         'field': 'pop_est',
+    //         'type': 'integer',
     //       },
     //       {
-    //         'title': 'uk',
-    //         'field': 'uk',
-    //       },
-    //       {
-    //         'title': 'pct_15',
-    //         'field': 'pct_15',
-    //       },
-    //       {
-    //         'title': 'pct_uk',
-    //         'field': 'pct_uk',
-    //       },
-    //       {
-    //         'title': 'index',
-    //         'field': 'index',
-    //       },                                        
+    //         'field': 'gdp_md_est',
+    //         'type': 'integer',
+    //       }
     //     ]
     //   }
     // });
+
+    _xyz.tableview.locationTable({
+      target: document.getElementById('xyz_table1'),
+      table: {
+        'columns': [
+          {
+            'title': 'rows',
+            'field': 'rows',
+          },
+          {
+            'title': 'min15',
+            'field': 'min15',
+          },
+          {
+            'title': 'uk',
+            'field': 'uk',
+          },
+          {
+            'title': 'pct_15',
+            'field': 'pct_15',
+          },
+          {
+            'title': 'pct_uk',
+            'field': 'pct_uk',
+          },
+          {
+            'title': 'index',
+            'field': 'index',
+          },                                        
+        ]
+      }
+    });
 
     _xyz.mapview.changeEnd = _xyz.utils.compose(
       _xyz.mapview.changeEnd,
