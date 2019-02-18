@@ -1,9 +1,5 @@
 export default _xyz => params => {
 
-  console.log(params);
-  console.log('hello location table');
-
-
 	  if (!params.target) return;
 
 	  if (_xyz.tableview.node) _xyz.tableview.node.style.display = 'block';
@@ -24,7 +20,7 @@ export default _xyz => params => {
 	  	if(col.type === 'datetime') col.formatter = _xyz.utils.formatDateTime;*/
 
 	  	params.table.rows.forEach(row => {
-	  		console.log({col: col, row: row});
+	  		//console.log({col: col, row: row});
 	  	});
 
   });
@@ -40,14 +36,16 @@ export default _xyz => params => {
 	  		locale: _xyz.workspace.locale.key,
 	  		layer: params.record.location.layer,
 	  		id: params.record.location.id,
-	  		token: _xyz.token
+	  		token: _xyz.token,
+	  		tableDef: (params.record.location.infoj.indexOf(params.table)-1)
 	  	}));
 
 	  	console.log({
 	  		locale: _xyz.workspace.locale.key,
 	  		layer: params.record.location.layer,
 	  		id: params.record.location.id,
-	  		token: _xyz.token
+	  		token: _xyz.token,
+	  		tableDef: (params.record.location.infoj.indexOf(params.table)-1)
 	  	});
 
 	  	xhr.setRequestHeader('Content-Type', 'application/json');
