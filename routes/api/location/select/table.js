@@ -45,7 +45,7 @@ module.exports = fastify => {
 
 
       tableDef.rows.map(row => {
-        rows.push(`${row.fieldfx || row.field} AS ${row.field}`);
+        rows.push(`${row.fieldfx || row.field}::$1 AS ${row.field}`);
         row_alias.push(row.field);
       });
 
@@ -55,6 +55,8 @@ module.exports = fastify => {
 
           col_alias.push(col.field);
           col_labels.push(col.label || col.field);
+
+          rows = rows.map(row => row.replace('$1', col.type || 'text'));
 
           withTable.push(`${col.field} AS (SELECT ${rows.join(',')}
           FROM ${col.lookup.table_a} a, ${col.lookup.table_b} b
@@ -85,8 +87,11 @@ module.exports = fastify => {
 
 
       if(tableDef.agg){
+
         for(let key of Object.keys(tableDef.agg)){
-          str = `UNNEST(ARRAY[${tableDef.agg[key].rows.join(',')}]) AS ${key}`;
+          let fields = tableDef.agg[key].rows.map(row => `(${row})::${tableDef.agg[key].type || 'text'}`);
+          //str = `UNNEST(ARRAY[${tableDef.agg[key].rows.join(',')}]) AS ${key}`;
+          str = `UNNEST(ARRAY[${fields.join(',')}]) AS ${key}`;
           lines.push(str);
         }
       }
@@ -98,8 +103,8 @@ module.exports = fastify => {
 
       //let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], layer.infoj, layer.qID);
       
-      console.log(q);
-      console.log('================================');
+      //console.log(q);
+      //console.log('================================');
 
       var _rows = await global.pg.dbs[layer.dbs](q);
 
