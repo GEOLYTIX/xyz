@@ -15,6 +15,8 @@ module.exports = fastify => {
 
       const layer = locale.layers[req.query.layer];
 
+      console.log(decodeURIComponent(req.query.tableDef));
+
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
@@ -32,8 +34,7 @@ module.exports = fastify => {
 
       let q;
 
-
-      let tableDef = layer.infoj[parseInt(req.query.tableDef)];
+      let tableDef = layer.infoj.filter(entry => entry.title === decodeURIComponent(req.query.tableDef))[0] || null;
 
       if (!tableDef) return res.code(406).send('Missing table definition.');
 

@@ -50,7 +50,7 @@ export default _xyz => params => {
 	  		layer: params.record.location.layer,
 	  		id: params.record.location.id,
 	  		token: _xyz.token,
-	  		tableDef: (params.record.location.infoj.indexOf(params.table)-1)
+	  		tableDef: encodeURIComponent(params.table.title)
 	  	}));
   
     xhr.setRequestHeader('Content-Type', 'application/json');

@@ -13,19 +13,8 @@ export default (_xyz, record, entry) => {
     checked: !!entry.value,
     onChange: e => {
     	e.target.checked ?  showTab(record, entry) : hideTab(record, entry);
-      //e.target.checked ? e.target.parentNode.classList.add('changed') : e.target.parentNode.classList.remove('changed');
-      //e.target.checked ? createIsoline(record, entry) : deleteIsoline(record, entry);
     }
   });
-
-
-	  /*_xyz.tableview.locationTable({
-	  	target: _xyz.tableview.node.querySelector('.table'),
-	  	record: record,
-	  	table: entry
-	  });*/
-
-  //console.log(entry);
 
   function showTab(record, entry){
   	_xyz.tableview.locationTable({
@@ -36,7 +25,6 @@ export default (_xyz, record, entry) => {
   }
   
   function hideTab(record, entry){
-  	//console.log('hide tab');
   	_xyz.tableview.removeTab({
   		record: record,
   		table: entry
