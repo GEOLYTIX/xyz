@@ -86,7 +86,7 @@ module.exports = fastify => {
 
       if(tableDef.agg){
         for(let key of Object.keys(tableDef.agg)){
-          str = `UNNEST(ARRAY[${tableDef.agg[key].join(',')}]) AS ${key}`;
+          str = `UNNEST(ARRAY[${tableDef.agg[key].rows.join(',')}]) AS ${key}`;
           lines.push(str);
         }
       }

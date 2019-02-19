@@ -21,9 +21,22 @@ export default _xyz => params => {
 	  	let columns = [{'field': 'rows', 'title': params.table.title}];
 
 	  	params.table.columns.map(col => {
-	  		columns.push({'field': col.field, 'title': (col.label ? col.label : col.field)});
+	  		if(!col.exp) columns.push({'field': col.field, 'title': (col.label ? col.label : col.field)});
 	  	});
+
+	  	if(params.table.agg){
+	  		Object.keys(params.table.agg).map(key => {
+	  			columns.push({'field': key, 'title': params.table.agg[key].label || key});
+	  		});
+	  	}
 	  	return columns;
+	  }
+
+	  function formatRows(params, json){
+	  	for(let i = 0; i < json.length; i++){
+	  		if(params.table.rows[i].label) json[i].rows = params.table.rows[i].label;
+	  	}
+	  	return json;
 	  }
 
 
@@ -47,9 +60,9 @@ export default _xyz => params => {
     
       if (e.target.status !== 200) return;
 
-      //console.log(JSON.stringify(e.target.response));
+      console.log(e.target.response);
       
-      params.table.Tabulator.setData(e.target.response);
+      params.table.Tabulator.setData(formatRows(params, e.target.response));
   
       params.table.Tabulator.redraw(true);
   

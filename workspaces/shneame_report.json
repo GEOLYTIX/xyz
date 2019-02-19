@@ -123,6 +123,10 @@
               }
             },
             {
+              "label": "Available tableviews",
+              "type": "label"
+            },
+            {
               "type": "tableDefinition",
               "title": "Population Summary",
               "columns": [
@@ -264,8 +268,8 @@
               "rows": [
                 {
                   "field": "age_under_18",
-                  "fieldfx": "SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus)",
-                  "label": "<18"
+                  "label": "< 18",
+                  "fieldfx": "SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus)"
                 },
                 {
                   "field": "age_18to24",
@@ -299,33 +303,42 @@
                 }
               ],
               "agg": {
-                "share15": [
-                  "100*min15.age_under_18/min15.age_profile_total",
-                  "100*min15.age_18to24/min15.age_profile_total",
-                  "100*min15.age_25to29/min15.age_profile_total",
-                  "100*min15.age_30to44/min15.age_profile_total",
-                  "100*min15.age_45to59/min15.age_profile_total",
-                  "100*min15.age_60plus/min15.age_profile_total",
-                  "100*min15.age_profile_total/min15.age_profile_total"
-                ],
-                "age_uk_total": [
-                  "uk.age_under_18_uk", 
-                  "uk.age_18to24_uk", 
-                  "uk.age_25to29_uk", 
-                  "uk.age_30to44_uk", 
-                  "uk.age_45to59_uk", 
-                  "uk.age_60plus_uk", 
-                  "uk.age_total_uk"
-                ],
-                "age_index": [
-                  "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
-                  "uk.age_total_uk*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_uk",
-                  "uk.age_total_uk*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_uk",
-                  "uk.age_total_uk*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_uk",
-                  "uk.age_total_uk*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_uk",
-                  "uk.age_total_uk*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_uk",
-                  "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
-                ]
+                "share15": {
+                  "label": "% with 15 min",
+                  "rows": [
+                    "100*min15.age_under_18/min15.age_profile_total",
+                    "100*min15.age_18to24/min15.age_profile_total",
+                    "100*min15.age_25to29/min15.age_profile_total",
+                    "100*min15.age_30to44/min15.age_profile_total",
+                    "100*min15.age_45to59/min15.age_profile_total",
+                    "100*min15.age_60plus/min15.age_profile_total",
+                    "100*min15.age_profile_total/min15.age_profile_total"
+                  ]
+                },
+                "age_uk_total": {
+                  "label": "UK Total",
+                  "rows": [
+                    "uk.age_under_18_uk",
+                    "uk.age_18to24_uk",
+                    "uk.age_25to29_uk",
+                    "uk.age_30to44_uk",
+                    "uk.age_45to59_uk", 
+                    "uk.age_60plus_uk", 
+                    "uk.age_total_uk"
+                  ]
+                },
+                "age_index": {
+                  "label": "Age Profile Index",
+                  "rows": [
+                    "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
+                    "uk.age_total_uk*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_uk",
+                    "uk.age_total_uk*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_uk",
+                    "uk.age_total_uk*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_uk",
+                    "uk.age_total_uk*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_uk",
+                    "uk.age_total_uk*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_uk",
+                    "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
+                  ]
+                }
               }
             },
             {
@@ -399,27 +412,36 @@
                 }
               ],
               "agg": {
-                "share15": [
-                  "100*min15.sg_ab/min15.sg_total",
-                  "100*min15.sg_c1/min15.sg_total",
-                  "100*min15.sg_c2/min15.sg_total",
-                  "100*min15.sg_de/min15.sg_total",
-                  "100*min15.sg_total/min15.sg_total"
-                ],
-                "sg_uk_total": [
-                  "uk.social_grade_ab_uk", 
-                  "uk.social_grade_c1_uk", 
-                  "uk.social_grade_c2_uk", 
-                  "uk.social_grade_de_uk", 
-                  "uk.social_grade_total_uk"
-                ],
-                "sg_index": [
-                  "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
-                  "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
-                  "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
-                  "uk.social_grade_total_uk*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_uk",
-                  "uk.social_grade_total_uk*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_uk"
-                ]
+                "share15": {
+                  "label": "% with 15 min",
+                  "rows": [
+                    "100*min15.sg_ab/min15.sg_total",
+                    "100*min15.sg_c1/min15.sg_total",
+                    "100*min15.sg_c2/min15.sg_total",
+                    "100*min15.sg_de/min15.sg_total",
+                    "100*min15.sg_total/min15.sg_total"
+                  ]
+                },
+                "sg_uk_total": {
+                  "label": "UK Total",
+                  "rows": [
+                    "uk.social_grade_ab_uk", 
+                    "uk.social_grade_c1_uk", 
+                    "uk.social_grade_c2_uk", 
+                    "uk.social_grade_de_uk", 
+                    "uk.social_grade_total_uk"
+                  ]
+                },
+                "sg_index": {
+                  "label": "Social Grade Index",
+                  "rows":[
+                    "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
+                    "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
+                    "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
+                    "uk.social_grade_total_uk*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_uk",
+                    "uk.social_grade_total_uk*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_uk"
+                  ]
+                }
               }
             },
             {
