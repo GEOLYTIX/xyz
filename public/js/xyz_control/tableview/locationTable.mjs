@@ -16,18 +16,16 @@ export default _xyz => params => {
 
 	  if (!params.table) return;
 
-	  params.table.columns.forEach(col => {
-	  	
-	  	/*col.title = col.title || col.field;
-	  	
-	  	if(col.type === 'date') col.formatter = _xyz.utils.formatDate;
-	  	if(col.type === 'datetime') col.formatter = _xyz.utils.formatDateTime;*/
 
-	  	params.table.rows.forEach(row => {
-	  		//console.log({col: col, row: row});
+	  function formatColumns(params){
+	  	let columns = [{'field': 'rows', 'title': params.table.title}];
+
+	  	params.table.columns.map(col => {
+	  		columns.push({'field': col.field, 'title': (col.label ? col.label : col.field)});
 	  	});
+	  	return columns;
+	  }
 
-  });
 
   params.table.update = () => {
 
@@ -49,7 +47,7 @@ export default _xyz => params => {
     
       if (e.target.status !== 200) return;
 
-      console.log(e.target.response);
+      //console.log(JSON.stringify(e.target.response));
       
       params.table.Tabulator.setData(e.target.response);
   
@@ -65,7 +63,7 @@ export default _xyz => params => {
 
     params.table.Tabulator =
     new _xyz.utils.Tabulator(_xyz.tableview.table, {
-      columns: params.table.columns,
+      columns: formatColumns(params),
       autoResize: true,
       height: _xyz.tableview.height || '100%'
     });
