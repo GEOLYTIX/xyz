@@ -38,6 +38,14 @@ module.exports = fastify => {
         return res.code(406).send('Invalid parameter.');
       }
 
+      const access_filter = layer.access_filter
+        && token.email
+        && layer.access_filter[token.email.toLowerCase()] ?
+        layer.access_filter[token.email] :
+        null;
+
+      Object.assign(filter, access_filter);
+
       // SQL filter
       const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
