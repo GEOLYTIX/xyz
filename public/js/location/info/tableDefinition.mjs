@@ -10,7 +10,7 @@ export default (_xyz, record, entry) => {
   _xyz.utils.createCheckbox({
     label: entry.title || 'Show table',
     appendTo: td,
-    checked: !!entry.value,
+    checked: !!entry.checked,//!!entry.value, // check for existing tab
     onChange: e => {
     	e.target.checked ?  showTab(record, entry) : hideTab(record, entry);
     }

@@ -41,6 +41,17 @@ export default (_xyz, record) => {
       record.location.geometries.additional = [];
     }
 
+    // checks if location table tab should be still visible after record update
+    if(_xyz.tableview.tables){
+      Object.values(record.location.infoj).map(entry => {
+        if(entry.type === 'tableDefinition'){
+          _xyz.tableview.tables.map(tab => {
+            if(tab.tab.textContent === entry.title) entry.checked = true; 
+          });
+        }
+      });
+    }
+
     record.table.innerHTML = '';
 
     // Adds layer to beginning of infoj array.
