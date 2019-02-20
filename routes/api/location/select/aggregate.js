@@ -27,8 +27,17 @@ module.exports = fastify => {
         layer.geom_3857 ?
           `ST_Transform(ST_SetSRID(ST_Extent(${layer.geom_3857}), 3857), 4326)`:
           null;
+
+
+      const access_filter = layer.access_filter
+          && token.email
+          && layer.access_filter[token.email.toLowerCase()] ?
+        layer.access_filter[token.email] :
+        null;
+  
+      Object.assign(filter, access_filter);
     
-      
+
       // SQL filter
       const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
