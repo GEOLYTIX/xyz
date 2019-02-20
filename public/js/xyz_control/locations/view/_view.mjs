@@ -14,8 +14,6 @@ export default _xyz => {
   
     update: update,
 
-    node: node(),
-
     streetview: streetview(_xyz),
 
     images: images(_xyz),
@@ -26,8 +24,17 @@ export default _xyz => {
 
   };
 
-  function node() {
-    return _xyz.utils.createElement({
+  function update (location) {
+
+    if(location.geometries) { 
+      location.geometries.forEach(geom => {
+        _xyz.map.removeLayer(geom);
+      });
+    }
+    
+    location.geometries = [];
+
+    location.view.node = _xyz.utils.createElement({
       tag: 'table',
       options: {
         className: 'locationview'
@@ -39,19 +46,6 @@ export default _xyz => {
       },
       //appendTo: record.drawer
     });
-  }
-
-  function update (location) {
-
-    if(location.geometries.additional) { 
-      location.geometries.additional.map(geom => {
-        _xyz.map.removeLayer(geom);
-      });
-    } else {
-      location.geometries.additional = [];
-    }
-
-    location.view.node.innerHTML = '';
 
     // Adds layer to beginning of infoj array.
     location.infoj.unshift({
@@ -129,7 +123,7 @@ export default _xyz => {
       if (entry.type === 'images') return location.view.images.ctrl(location, entry);
 
       // Create geometry control.
-      if (entry.type === 'geometry') return location.view.geometry(location, entry);    
+      if (entry.type === 'geometry') return location.view.geometry.ctrl(location, entry);    
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();
@@ -194,6 +188,7 @@ export default _xyz => {
       if(!location.view.groups[entry.group].table.innerHTML) {
         location.groups[entry.group].table.parentNode.style.display = 'none';
       }
+      
     });
 
   };

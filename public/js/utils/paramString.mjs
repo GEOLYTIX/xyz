@@ -1,13 +1,15 @@
 // Create param string for XHR request.
 export function paramString(param) {
 
-  let encodedString = '';
+  const arr = [];
 
   Object.keys(param).forEach(key => {
-    if (param[key] && encodedString.length > 0) encodedString += '&';
-    if (param[key]) encodedString += encodeURI(key + '=' + param[key]);
+    if (param[key]
+      && (param[key].length > 0 || typeof(param[key]) === 'number')) {
+      arr.push(encodeURI(key + '=' + param[key]));
+    }
   });
 
-  return encodedString;
+  return arr.join('&');
 
 }

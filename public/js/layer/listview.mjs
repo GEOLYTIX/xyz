@@ -32,15 +32,10 @@ export default _xyz => {
     // Reset groups.
     _xyz.layers.listview.groups = {};
 
-    // Set the layer display from hooks then remove layer hooks.
-    if (_xyz.hooks.current.layers) Object.keys(_xyz.layers.list).forEach(layer => {
-      _xyz.layers.list[layer].display = (_xyz.hooks.current.layers.indexOf(encodeURIComponent(layer)) > -1);
-    });
-
-    if (_xyz.hooks.remove) _xyz.hooks.remove('layers');
-
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
+
+      layer.display = layer.display || !!~_xyz.hooks.current.layers.indexOf(layer.key);
 
       // Create new layer group if group does not exist yet.
       if (layer.group && !_xyz.layers.listview.groups[layer.group]) layer_group(_xyz, layer.group);

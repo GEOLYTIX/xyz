@@ -109,7 +109,7 @@ export default _xyz => {
 
       // Push the hook for the location.
       _xyz.hooks.push(
-        'select',
+        'locations',
         `${record.location.layer}!${record.location.table}!${record.location.id}`
       );
 
@@ -119,7 +119,7 @@ export default _xyz => {
 
   // Clear locations button to remove hooks and reset location listview.
   listview.clear.onclick = () => {
-    _xyz.hooks.remove('select');
+    _xyz.hooks.remove('locations');
     _xyz.locations.listview.init();
   };
 
@@ -170,7 +170,7 @@ export default _xyz => {
       
     // Set the layer display from hooks if present; Overwrites the default setting.
     // layer!table!id
-    if (_xyz.hooks.current.select) _xyz.hooks.current.select.split(',').forEach(hook => {
+    _xyz.hooks.current.locations.forEach(hook => {
 
       let
         params = hook.split('!'),
@@ -185,9 +185,7 @@ export default _xyz => {
       });
       
     });
-  
-    _xyz.hooks.remove('select');
-  
+   
   };
 
 };

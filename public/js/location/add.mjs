@@ -12,8 +12,6 @@ import trash from './controls/trash.mjs';
 
 import expander from './controls/expander.mjs';
 
-// import info from './info/_info.mjs';
-
 export default _xyz => record => {
 
   _xyz.locations.listview.node.parentElement.style.display = 'block';

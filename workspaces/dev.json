@@ -463,12 +463,33 @@
                     "qID": "id",
                     "infoj": [
                         {
-                            "label": "Catchment Primary",
-                            "field": "catchment",
-                            "fieldfx": "ST_asGeoJson(catchment)",
+                            "label": "Catchment Here",
+                            "field": "isoline_here",
+                            "fieldfx": "ST_asGeoJson(isoline_here)",
                             "type": "geometry",
+                            "checked": true,
                             "edit": {
-                                "catchment": {}
+                                "isoline": {
+                                    "provider": "here",
+                                    "range": 5
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#E01A4F",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2
+                            }
+                        },
+                        {
+                            "label": "Catchment Mapbox",
+                            "field": "isoline_mapbox",
+                            "fieldfx": "ST_asGeoJson(isoline_mapbox)",
+                            "type": "geometry",
+                            "checked": true,
+                            "edit": {
+                                "isoline_mapbox": {}
                             },
                             "style": {
                                 "stroke": true,

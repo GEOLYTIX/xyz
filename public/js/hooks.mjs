@@ -1,19 +1,11 @@
 export default _xyz => {
 
-  let current = {
-    layers: []
-  };       
+  const hooks = {
 
-  // Take hooks from URL and store as current hooks.
-  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-    current[key] = value;
-  });
-
-  return {
-
-    current: current,
-
-    setView: setView,
+    current: {
+      layers: [],
+      locations: [],
+    },
 
     set: set,
 
@@ -25,63 +17,73 @@ export default _xyz => {
 
     filter: filter,
 
-  };
+  }; 
 
-  // Set view hook containing lat, lng and zoom.
-  function setView(cntr, z) {
-    _xyz.hooks.current.lat = cntr.lat;
-    _xyz.hooks.current.lng = cntr.lng;
-    _xyz.hooks.current.z = z;
-    try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
-    } catch (me) { console.log(me); }
-  };
+  // Take hooks from URL and store as current hooks.
+  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+    if (hooks.current[key]) {
+      hooks.current[key] = decodeURI(value).split(',');
+    } else {
+      hooks.current[key] = value;
+    }
+  });
+
+  return hooks;
 
   // Add kvp hook to _xyz.hooks.current and URI.
-  function set(key, val) {
-    _xyz.hooks.current[key] = val;
-    try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
-    } catch (me) { console.log(me); }
+  function set(hooks) {
+
+    Object.assign(_xyz.hooks.current, hooks);
+
+    pushState();
   };
 
   // Remove hook from _xyz.hooks.current and URI.
   function remove(key) {
-    delete _xyz.hooks.current[key];
-    try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
-    } catch (me) { console.log(me); }
+
+    if (Array.isArray(_xyz.hooks.current[key])) {
+      _xyz.hooks.current[key] = [];
+    } else {
+      delete _xyz.hooks.current[key];
+    }
+
+    pushState();
   };
 
   // Remove all hooks.
   function removeAll() {
-    Object.keys(_xyz.hooks.current).map(key => delete _xyz.hooks.current[key]);
-    try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
-    } catch (me) { console.log(me); }
+
+    Object.keys(_xyz.hooks.current).forEach(key => remove(key));
+
+    pushState();
   };
 
   // Push key into an array hook.
   function push (key, val) {
+
     if (_xyz.hooks.current[key]) {
-      _xyz.hooks.current[key].push(val);
+      if (_xyz.hooks.current[key].indexOf(val)<0) _xyz.hooks.current[key].push(val);
     } else {
       _xyz.hooks.current[key] = [val];
     }
-    try {
-      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
-    } catch (me) { console.log(me); }
+
+    pushState();
   };
 
   // Filter key from an array hook.
   function filter(key, val) {
-    if (_xyz.hooks.current[key]) {
-      _xyz.hooks.current[key] = _xyz.hooks.current[key].filter(el => el !== val);
-      if (_xyz.hooks.current[key].length === 0) delete _xyz.hooks.current[key];
-      try {
-        history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
-      } catch (me) { console.log(me); }
-    }
+
+    _xyz.hooks.current[key] = _xyz.hooks.current[key].filter(el => el !== val);
+
+    pushState();
   };
+
+  function pushState() {
+
+    try {
+      history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
+    } catch (me) { console.log(me); }
+
+  }
 
 };

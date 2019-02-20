@@ -28,7 +28,15 @@ export default _xyz => params => {
   _xyz.mapview.changeEnd = () => {
            
     // Set view hooks when method is available.
-    if (_xyz.hooks && _xyz.hooks.setView) _xyz.hooks.setView(_xyz.map.getCenter(), _xyz.map.getZoom());
+    if (_xyz.hooks) {
+      const center = _xyz.map.getCenter();
+
+      _xyz.hooks.set({
+        lat: center.lat,
+        lng: center.lng,
+        z: _xyz.map.getZoom()
+      });
+    }
           
     // Reload layers.
     // layer.get() will return if reload is not required.

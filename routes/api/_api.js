@@ -30,18 +30,9 @@ module.exports = fastify => {
 
   require('./location/table')(fastify);
 
-  // Mapbox Isochrones
+  require('./location/edit/isoline_mapbox')(fastify);
 
-  require('./location/edit/catchment_create')(fastify);
-
-  require('./location/edit/catchment_delete')(fastify);
-
-  // HERE Isolines
-
-  require('./location/edit/isoline_create')(fastify);
-
-  require('./location/edit/isoline_delete')(fastify);
-  
+  require('./location/edit/isoline_here')(fastify); 
 
   require('./location/edit/draw')(fastify);
 
@@ -50,6 +41,8 @@ module.exports = fastify => {
   require('./location/edit/draw_isoline')(fastify);
 
   require('./location/edit/update')(fastify);
+
+  require('./location/edit/setnull')(fastify);
 
   // location/select
 

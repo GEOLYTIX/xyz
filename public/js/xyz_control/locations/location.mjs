@@ -16,8 +16,6 @@ export default _xyz => {
 
   function get(location, callback) {
 
-    if (!location) location = this;
-
     Object.assign(location, _xyz.locations.location);
 
     const xhr = new XMLHttpRequest();
