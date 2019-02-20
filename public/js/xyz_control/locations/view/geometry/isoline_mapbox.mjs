@@ -1,6 +1,6 @@
-export default _xyz => (location, entry) => {
+export default _xyz => entry => {
 
-  entry.edit.catchment.coordinates = location.geometry.coordinates.join(',');
+  entry.edit.catchment.coordinates = entry.location.geometry.coordinates.join(',');
 
   const xhr = new XMLHttpRequest();
 
@@ -10,10 +10,10 @@ export default _xyz => (location, entry) => {
     '/api/location/edit/catchment/create?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: location.layer,
-      table: location.table,
+      layer: entry.location.layer,
+      table: entry.location.table,
       field: entry.field,
-      id: location.id,
+      id: entry.location.id,
       coordinates: entry.edit.catchment.coordinates,
       minutes: entry.edit.catchment.minutes,
       profile: entry.edit.catchment.profile,
@@ -28,13 +28,13 @@ export default _xyz => (location, entry) => {
     if (e.target.status !== 200) return alert('No route found. Try a longer travel time.');
 
     // Reload layer.
-    _xyz.layers.list[location.layer].get();
+    _xyz.layers.list[entry.location.layer].get();
 
     // Reset location infoj with response.
-    location.infoj = JSON.parse(e.target.response);
+    entry.location.infoj = JSON.parse(e.target.response);
 
     // Update the location view.
-    location.view.update();
+    entry.location.view.update();
 
   };
 

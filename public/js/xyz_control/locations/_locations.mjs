@@ -6,7 +6,7 @@ import drawGeoJSON from './drawGeoJSON.mjs';
 
 export default _xyz => {
 
-  const locations = {
+  return {
 
     select: select,
 
@@ -18,11 +18,11 @@ export default _xyz => {
 
   };
 
-  return locations;
-
   function select(location, callback) {
 
     if (_xyz.locations.current) _xyz.locations.current.remove();
+
+    Object.assign(location, _xyz.locations.location());
 
     _xyz.locations.current = location;
 
@@ -45,7 +45,7 @@ export default _xyz => {
       });
     };
 
-    _xyz.locations.location.get(location, callback);
+    location.get(callback);
 
     return location;
 

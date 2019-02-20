@@ -1,13 +1,13 @@
-export default _xyz => (location, entry, img) => {
+export default _xyz => (entry, img) => {
 
   const xhr = new XMLHttpRequest();
 
   xhr.open('GET', _xyz.host + '/api/location/edit/images/delete?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
-    layer: location.layer,
-    table: location.table,
+    layer: entry.location.layer,
+    table: entry.location.table,
     field: entry.field,
-    id: location.id,
+    id: entry.location.id,
     image_id: img.id,
     image_src: encodeURIComponent(img.src),
     token: _xyz.token

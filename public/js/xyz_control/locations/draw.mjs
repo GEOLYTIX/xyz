@@ -1,7 +1,5 @@
 export default _xyz => location => {
 
-  location.geometries = [];
-
   location.Marker = _xyz.locations.drawGeoJSON({
     json: {
       type: 'Feature',
@@ -19,8 +17,6 @@ export default _xyz => location => {
     }
   });
 
-  location.geometries.push(location.Marker);
-
   location.Layer = _xyz.locations.drawGeoJSON({
     json: {
       type: 'Feature',
@@ -30,6 +26,4 @@ export default _xyz => location => {
     style: location.style,
   });
          
-  location.geometries.push(location.Layer);
-
 };

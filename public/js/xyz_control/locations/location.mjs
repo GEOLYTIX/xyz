@@ -1,10 +1,10 @@
 import view from './view/_view.mjs';
 
-export default _xyz => {
+export default _xyz => () => {
 
   return {
 
-    view: view(_xyz),
+    view: view,
   
     geometries: [],
   
@@ -14,9 +14,9 @@ export default _xyz => {
   
   };
 
-  function get(location, callback) {
+  function get(callback) {
 
-    Object.assign(location, _xyz.locations.location);
+    const location = this;
 
     const xhr = new XMLHttpRequest();
 
@@ -33,13 +33,20 @@ export default _xyz => {
 
     xhr.onload = e => {
 
-      if (e.target.status !== 200) return;
+      if (e.target.status !== 200) {
+        if (callback) callback(location);
+        return;
+      }
 
       location.infoj = e.target.response.infoj;
 
       location.geometry = e.target.response.geomj;
 
-      location.view.update(location);
+      location.marker = location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+
+      location.view = location.view(_xyz);
+
+      location.view.update();
 
       if (callback) callback(location);
 
@@ -51,9 +58,15 @@ export default _xyz => {
 
 
   function remove() {
+
+    const location = this;
  
     // Clear geometries and delete location to free up record.
-    this.geometries.forEach(geom => _xyz.map.removeLayer(geom));
+    location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
+
+    if (location.Layer) _xyz.map.removeLayer(location.Layer);
+
+    if (location.Marker) _xyz.map.removeLayer(location.Marker);
 
   };
 

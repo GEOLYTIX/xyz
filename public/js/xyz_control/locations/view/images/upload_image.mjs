@@ -1,15 +1,15 @@
-export default _xyz => (location, entry, img, dataURL) => {
+export default _xyz => (entry, img, dataURL) => {
 
   const blob = dataURLToBlob(dataURL);
 
   const xhr = new XMLHttpRequest();
 
   xhr.open('POST', _xyz.host + '/api/location/edit/images/upload?' + _xyz.utils.paramString({
-    dbs: _xyz.layers.list[location.layer].dbs,
-    table: location.table,
+    dbs: _xyz.layers.list[entry.location.layer].dbs,
+    table: entry.location.table,
     field: entry.field,
-    qID: location.qID,
-    id: location.id,
+    qID: entry.location.qID,
+    id: entry.location.id,
     token: _xyz.token
   }));
 
@@ -39,7 +39,7 @@ export default _xyz => (location, entry, img, dataURL) => {
         event: 'click',
         funct: e => {
           e.target.remove();
-          location.view.images.delete_image(location, entry, img);
+          entry.ctrl.delete_image(entry, img);
         }
       }
     });

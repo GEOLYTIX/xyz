@@ -1,8 +1,8 @@
-export default _xyz => (location, entry) => {
+export default _xyz => entry => {
 
   const origin = [
-    location.geometry.coordinates[1],
-    location.geometry.coordinates[0]
+    entry.location.geometry.coordinates[1],
+    entry.location.geometry.coordinates[0]
   ].join(',');
 
   const xhr = new XMLHttpRequest();
@@ -13,10 +13,10 @@ export default _xyz => (location, entry) => {
     '/api/location/edit/isoline/here?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: location.layer,
-      table: location.table,
+      layer: entry.location.layer,
+      table: entry.location.table,
       field: entry.field,
-      id: location.id,
+      id: entry.location.id,
       coordinates: origin,
       mode: entry.edit.isoline.mode,
       type: entry.edit.isoline.type,
@@ -33,13 +33,13 @@ export default _xyz => (location, entry) => {
     if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
 
     // Reload layer.
-    _xyz.layers.list[location.layer].get();
+    _xyz.layers.list[entry.location.layer].get();
 
     // Reset location infoj with response.
-    location.infoj = JSON.parse(e.target.response);
+    entry.location.infoj = JSON.parse(e.target.response);
 
     // Update the location view.
-    location.view.update(location);
+    entry.location.view.update();
 
   };
 

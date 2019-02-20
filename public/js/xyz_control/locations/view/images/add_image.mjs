@@ -1,4 +1,4 @@
-export default _xyz => (location, entry) => {
+export default _xyz => (entry) => {
 
   // Add table cell for image upload input.
   entry.ctrl.add_img_td = _xyz.utils.createElement({
@@ -12,9 +12,6 @@ export default _xyz => (location, entry) => {
   // Add label for image upload icon.
   entry.ctrl.add_img_label = _xyz.utils.createElement({
     tag: 'label',
-    options: {
-      htmlFor: 'addImage_' + location.layer + entry.field
-    },
     appendTo: entry.ctrl.add_img_td
   });
 
@@ -32,11 +29,10 @@ export default _xyz => (location, entry) => {
   entry.ctrl.add_img_input = _xyz.utils.createElement({
     tag: 'input',
     options: {
-      id: 'addImage_' + location.layer + entry.field,
       type: 'file',
       accept: 'image/*;capture=camera'
     },
-    appendTo: entry.ctrl.add_img_td
+    appendTo: entry.ctrl.add_img_label
   });
 
   // empty the file input value
@@ -118,7 +114,7 @@ export default _xyz => (location, entry) => {
             funct: () => {
               btn_del.remove();
               btn_save.remove();
-              location.view.images.upload_image(location, entry, _img, dataURL);
+              entry.ctrl.upload_image(entry, _img, dataURL);
             }
           }
         });

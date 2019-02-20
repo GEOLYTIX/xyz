@@ -8,9 +8,11 @@ import geometry from './geometry/_geometry.mjs';
 
 import edit from './edit/_edit.mjs';
 
-export default _xyz => {
+export default function(_xyz) {
 
   return {
+
+    location: this,
   
     update: update,
 
@@ -24,7 +26,9 @@ export default _xyz => {
 
   };
 
-  function update (location) {
+  function update () {
+
+    const location = this.location;
 
     if(location.geometries) { 
       location.geometries.forEach(geom => {
@@ -62,7 +66,9 @@ export default _xyz => {
     // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
     Object.values(location.infoj).forEach(entry => {
 
-    // Determine the user-friendly string representation of the value
+      entry.location = location;
+
+      // Determine the user-friendly string representation of the value
       entry.displayValue =
       entry.type === 'numeric' ? parseFloat(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 2 }) :
         entry.type === 'integer' ? parseInt(entry.value).toLocaleString('en-GB', { maximumFractionDigits: 0 }) :
@@ -88,7 +94,7 @@ export default _xyz => {
       });
 
       // Create a new info group.
-      if (entry.type === 'group') return location.view.group(location, entry);
+      if (entry.type === 'group') return location.view.group(entry);
 
       // Create entry.row inside previously created group.
       if (entry.group && location.view.groups[entry.group]) entry.row = _xyz.utils.createElement({
@@ -114,16 +120,16 @@ export default _xyz => {
       }
 
       // Finish entry creation if entry has not type.
-      if(entry.type === 'label') return;
+      if (entry.type === 'label') return;
 
       // Create streetview control.
-      if (entry.type === 'streetview') return location.view.streetview(location, entry);
+      if (entry.type === 'streetview') return location.view.streetview(entry);
 
       // If input is images create image control and return from object.map function.
-      if (entry.type === 'images') return location.view.images.ctrl(location, entry);
+      if (entry.type === 'images') return location.view.images(entry);
 
       // Create geometry control.
-      if (entry.type === 'geometry') return location.view.geometry.ctrl(location, entry);    
+      if (entry.type === 'geometry') return location.view.geometry(entry);    
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();

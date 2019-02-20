@@ -86,9 +86,22 @@ export default _xyz => {
   
     if (!record) return;
 
+    Object.assign(location, _xyz.locations.location());
+
     record.location = location;
 
-    _xyz.locations.location.get(location, ()=>{
+    location.get(()=>{
+
+      if(!location.infoj) {
+
+        // Push the hook for the location.
+        _xyz.hooks.filter(
+          'locations',
+          `${record.location.layer}!${record.location.table}!${record.location.id}`
+        );
+
+        return;
+      }
 
       // Set marker coordinates from point geometry.
       if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;

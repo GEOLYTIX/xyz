@@ -1,8 +1,8 @@
 import chart from './charts.mjs';
 
-export default _xyz => (location, group) => {
+export default _xyz => group => {
 
-  location.view.groups[group.label] = group;
+  group.location.view.groups[group.label] = group;
 
   group.td = _xyz.utils.createElement({
     tag: 'td',
@@ -89,7 +89,7 @@ export default _xyz => (location, group) => {
   // If chart option specified
   if (group.chart) {
     // Set up
-    group.fields = location.infoj.filter(entry => entry.group === group.label);
+    group.fields = group.location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
     group.chartElem = chart(_xyz, group);
     // Add chart
