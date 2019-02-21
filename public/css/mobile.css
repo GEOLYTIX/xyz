@@ -1815,6 +1815,8 @@ button {
     .leaflet-popup-content > ul li:hover {
       background-color: #cf9;
       cursor: pointer; }
+  .leaflet-popup-content .locationview {
+    padding: 5px; }
 
 .listview .title {
   font-family: ffmark_bold, sans-serif;

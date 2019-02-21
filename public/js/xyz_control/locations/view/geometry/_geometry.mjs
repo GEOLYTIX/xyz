@@ -2,7 +2,7 @@ import isoline_mapbox from './isoline_mapbox.mjs';
 
 import isoline_here from './isoline_here.mjs';
 
-import delete_geom from './delete.mjs';
+import delete_geom from './delete_geom.mjs';
 
 export default _xyz => entry => {
 
@@ -15,17 +15,23 @@ export default _xyz => entry => {
     delete_geom: delete_geom(_xyz),
 
   };
-  
+
   if (!entry.value && !entry.edit) return;
 
-  entry.style = entry.style || {
-    stroke: true,
-    color: '#009900',
-    fillColor: '#ccff99',
-    weight: 2,
-    fill: true,
-    fillOpacity: 0.3
-  };
+  entry.style = Object.assign(
+    {},
+    entry.location.style,
+    entry.style
+  );
+  
+  // entry.style || {
+  //   stroke: true,
+  //   color: '#009900',
+  //   fillColor: '#ccff99',
+  //   weight: 2,
+  //   fill: true,
+  //   fillOpacity: 0.3
+  // };
 
   let tr = _xyz.utils.createElement({
     tag: 'tr',
@@ -39,27 +45,74 @@ export default _xyz => entry => {
     },
     appendTo: tr
   });
-  
-  _xyz.utils.createCheckbox({
+
+  entry.ctrl.showGeom = () => {
+    entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
+      json: {
+        type: 'Feature',
+        geometry: JSON.parse(entry.value)
+      },
+      pane: 'select_display',
+      style: entry.style
+    });
+    entry.location.geometries.push(entry.ctrl.geometry);
+  };
+
+  if (entry.edit && entry.edit.isoline) {
+    if (entry.edit.isoline.provider === 'here') entry.ctrl.showGeom = entry.ctrl.isoline_here;
+    if (entry.edit.isoline.provider === 'mapbox') entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
+  }
+
+  entry.ctrl.hideGeom = () => {
+
+    entry.location.geometries.splice(
+      entry.location.geometries.indexOf(entry.ctrl.geometry),
+      1
+    );
+
+    _xyz.map.removeLayer(entry.ctrl.geometry);
+  };
+
+  if (entry.edit) {
+    entry.ctrl.hideGeom = entry.ctrl.delete_geom;
+  }
+
+  entry.ctrl.toggle = _xyz.utils.createCheckbox({
     label: entry.name || 'Additional geometries',
     appendTo: td,
-    checked: !!entry.value,
-    onChange: e => {
+    onChange: () => {
 
-      e.target.checked ?
-        entry.ctrl.isoline_here(entry) :
-        entry.ctrl.delete_geom(entry);
+      entry.ctrl.toggle.checked ?
+        entry.ctrl.showGeom(entry) :
+        entry.ctrl.hideGeom(entry);
 
     }
   });
 
-  // if (entry)
-  
+  if (entry.value && !entry.edit) {
+    entry.ctrl.toggle.checked = true;
+    entry.ctrl.toggle.onchange();
+  }
+
+  if (entry.value && entry.edit) {
+    entry.ctrl.toggle.checked = true;
+
+    entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
+      json: {
+        type: 'Feature',
+        geometry: JSON.parse(entry.value)
+      },
+      pane: 'select_display',
+      style: entry.style
+    });
+    entry.location.geometries.push(entry.ctrl.geometry);
+  }
+
   td = _xyz.utils.createElement({
     tag: 'td',
     appendTo: tr
   });
-  
+
   _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -67,44 +120,11 @@ export default _xyz => entry => {
     },
     style: {
       'backgroundColor': _xyz.utils.hexToRGBA(entry.style.fillColor, entry.style.fillOpacity),
-      'borderColor': _xyz.utils.hexToRGBA(entry.style.color, entry.style.fillOpacity),
+      'borderColor': _xyz.utils.hexToRGBA(entry.style.color, 1),
       'borderStyle': 'solid',
       'borderWidth': _xyz.utils.setStrokeWeight(entry)
     },
     appendTo: td
   });
-  
-  if (!entry.value) return;
-  
-  const geom = _xyz.locations.drawGeoJSON({
-    json: {
-      type: 'Feature',
-      geometry: JSON.parse(entry.value)
-    },
-    pane: 'select_display',
-    style: entry.style
-  });
-
-  console.log(geom);
-    
-  entry.location.geometries.push(geom);
-
-  // function showAddGeom(){
-  //   const geom = _xyz.locations.drawGeoJSON({
-  //     json: {
-  //       type: 'Feature',
-  //       geometry: JSON.parse(entry.value)
-  //     },
-  //     pane: 'select_display',
-  //     style: entry.style
-  //   });
-  //   entry.location.geometries.push(geom);
-  // }
-    
-  // function hideAddGeom(){
-  //   location.geometries.forEach(geom => {
-  //     if(geom === entry._geom) _xyz.map.removeLayer(geom);
-  //   });
-  // }
 
 };

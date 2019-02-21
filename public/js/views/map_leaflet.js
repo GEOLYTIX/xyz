@@ -49,40 +49,41 @@ _xyz({
   host: document.head.dataset.dir,
   callback: _xyz => {
 
-    _xyz.mapview.create({
-      target: Map2,
-      view: {
-        lat: 53,
-        lng: -1,
-        z: 6,
-      },
-      btn: {
-        ZoomIn: document.getElementById('btnZoomIn2'),
-        ZoomOut: document.getElementById('btnZoomOut2')
-      }
-    });
 
-    _xyz.tableview.layerTable({
-      layer: _xyz.layers.list.COUNTRIES,
-      target: Table1,
-      table: {
-        'columns': [
-          {
-            'field': 'name',
-            'type': 'text',
-          },
-          {
-            'title': 'Population Est',
-            'field': 'pop_est',
-            'type': 'integer',
-          },
-          {
-            'field': 'gdp_md_est',
-            'type': 'integer',
-          }
-        ]
-      }
-    });
+    // _xyz.mapview.create({
+    //   target: Map2,
+    //   view: {
+    //     lat: 53,
+    //     lng: -1,
+    //     z: 6,
+    //   },
+    //   btn: {
+    //     ZoomIn: document.getElementById('btnZoomIn2'),
+    //     ZoomOut: document.getElementById('btnZoomOut2')
+    //   }
+    // });
+
+    // _xyz.tableview.layerTable({
+    //   layer: _xyz.layers.list.COUNTRIES,
+    //   target: Table1,
+    //   table: {
+    //     'columns': [
+    //       {
+    //         'field': 'name',
+    //         'type': 'text',
+    //       },
+    //       {
+    //         'title': 'Population Est',
+    //         'field': 'pop_est',
+    //         'type': 'integer',
+    //       },
+    //       {
+    //         'field': 'gdp_md_est',
+    //         'type': 'integer',
+    //       }
+    //     ]
+    //   }
+    // });
 
     // _xyz.tableview.locationTable({
     //   target: Table1,
@@ -116,16 +117,16 @@ _xyz({
     //   }
     // });
 
-    _xyz.mapview.changeEnd = _xyz.utils.compose(
-      _xyz.mapview.changeEnd,
-      () => _xyz.tableview.current_table.update()
-    );
+    // _xyz.mapview.changeEnd = _xyz.utils.compose(
+    //   _xyz.mapview.changeEnd,
+    //   () => _xyz.tableview.current_table.update()
+    // );
   
-    _xyz.layers.list['Mapbox Base'].remove();
+    // _xyz.layers.list['Mapbox Base'].remove();
 
-    _xyz.layers.list.COUNTRIES.style.theme = null;
+    // _xyz.layers.list.COUNTRIES.style.theme = null;
   
-    _xyz.layers.list.COUNTRIES.show();
+    // _xyz.layers.list.COUNTRIES.show();
 
     _xyz.locations.select(
       //params
@@ -138,9 +139,10 @@ _xyz({
         id: 80,
       },
       //callback
-      location=>{
-        document.getElementById('location_info_container2').appendChild(location.view.node);
-      });
+      // location=>{
+      //   document.getElementById('location_info_container2').appendChild(location.view.node);
+      // }
+    );
 
   }
 });

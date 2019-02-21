@@ -1,6 +1,6 @@
 export default _xyz => entry => {
 
-  entry.edit.catchment.coordinates = entry.location.geometry.coordinates.join(',');
+  const origin = entry.location.geometry.coordinates.join(',');
 
   const xhr = new XMLHttpRequest();
 
@@ -14,9 +14,9 @@ export default _xyz => entry => {
       table: entry.location.table,
       field: entry.field,
       id: entry.location.id,
-      coordinates: entry.edit.catchment.coordinates,
-      minutes: entry.edit.catchment.minutes,
-      profile: entry.edit.catchment.profile,
+      coordinates: origin,
+      minutes: entry.edit.isoline.minutes,
+      profile: entry.edit.isoline.profile,
       token: _xyz.token
     })
   );

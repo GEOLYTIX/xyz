@@ -463,39 +463,48 @@
                     "qID": "id",
                     "infoj": [
                         {
-                            "label": "Catchment Here",
-                            "field": "isoline_here",
-                            "fieldfx": "ST_asGeoJson(isoline_here)",
+                            "label": "Catchment Geometry",
+                            "name": "Show / Hide",
+                            "field": "catchment",
+                            "fieldfx": "ST_asGeoJson(catchment)",
                             "type": "geometry",
-                            "checked": true,
-                            "edit": {
-                                "isoline": {
-                                    "provider": "here",
-                                    "range": 5
-                                }
-                            },
                             "style": {
-                                "stroke": true,
-                                "color": "#E01A4F",
-                                "weight": 2,
                                 "fill": true,
+                                "fillColor": "#c62828",
                                 "fillOpacity": 0.2
                             }
                         },
                         {
+                            "label": "Catchment Here",
+                            "name": "Create / Delete",
+                            "field": "isoline_here",
+                            "fieldfx": "ST_asGeoJson(isoline_here)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline": {
+                                    "provider": "here",
+                                    "range": 10
+                                }
+                            }
+                        },
+                        {
                             "label": "Catchment Mapbox",
+                            "name": "Create / Delete",
                             "field": "isoline_mapbox",
                             "fieldfx": "ST_asGeoJson(isoline_mapbox)",
                             "type": "geometry",
-                            "checked": true,
                             "edit": {
-                                "isoline_mapbox": {}
+                                "isoline": {
+                                    "provider": "mapbox",
+                                    "minutes": 10
+                                }
                             },
                             "style": {
                                 "stroke": true,
-                                "color": "#E01A4F",
+                                "color": "#ffb300",
                                 "weight": 2,
                                 "fill": true,
+                                "fillColor": "#ffb300",
                                 "fillOpacity": 0.2
                             }
                         }

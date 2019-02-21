@@ -17,13 +17,17 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
       // Create filter from legend and current filter.
       const filter = Object.assign({},layer.filter.current,layer.filter.legend);
     
-      xhr.open('GET', _xyz.host + '/api/location/select/aggregate?' + _xyz.utils.paramString({
-        locale: _xyz.workspace.locale.key,
-        layer: layer.key,
-        table: layer.table,
-        filter: JSON.stringify(filter),
-        token: _xyz.token
-      }));
+      xhr.open(
+        'GET',
+        _xyz.host +
+        '/api/location/select/aggregate?' +
+        _xyz.utils.paramString({
+          locale: _xyz.workspace.locale.key,
+          layer: layer.key,
+          table: layer.table,
+          filter: JSON.stringify(filter),
+          token: _xyz.token
+        }));
     
       xhr.onload = e => {
 
@@ -50,7 +54,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
         };
 
         // Draw the record to the map.
-        _xyz.locations.draw(record.location);
+        record.location.draw();
 
         // List the record
         _xyz.locations.listview.add(record);

@@ -39,7 +39,7 @@ export default _xyz => (entry) => {
   entry.ctrl.add_img_input.addEventListener('click', () => entry.ctrl.add_img_input.value);
 
   // add change event 
-  entry.ctrl.add_img_input.addEventListener('change', function () {
+  entry.ctrl.add_img_input.addEventListener('change', () => {
 
     const newImage = document.createElement('td');
 
@@ -49,7 +49,7 @@ export default _xyz => (entry) => {
 
       const img = new Image();
 
-      img.onload = function () {
+      img.onload = () => {
 
         let
           canvas = document.createElement('canvas'),
@@ -69,6 +69,7 @@ export default _xyz => (entry) => {
 
         canvas.width = width;
         canvas.height = height;
+
         canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
         const dataURL = canvas.toDataURL('image/jpeg', 0.5);
@@ -94,9 +95,7 @@ export default _xyz => (entry) => {
           appendTo: newImage,
           eventListener: {
             event: 'click',
-            funct: () => {
-              newImage.remove();
-            }
+            funct: () => newImage.remove()
           }
         });
 
@@ -126,7 +125,7 @@ export default _xyz => (entry) => {
 
     };
 
-    reader.readAsDataURL(this.files[0]);
+    reader.readAsDataURL(entry.ctrl.add_img_input.files[0]);
 
     // insert new image before last image
     entry.ctrl.row.insertBefore(newImage, entry.ctrl.row.childNodes[1]);

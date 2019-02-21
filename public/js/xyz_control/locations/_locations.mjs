@@ -1,18 +1,10 @@
 import location from './location.mjs';
 
-import draw from './draw.mjs';
-
-import drawGeoJSON from './drawGeoJSON.mjs';
-
 export default _xyz => {
 
   return {
 
     select: select,
-
-    draw: draw(_xyz),
-
-    drawGeoJSON: drawGeoJSON(_xyz),
 
     location: location(_xyz),
 
@@ -20,24 +12,19 @@ export default _xyz => {
 
   function select(location, callback) {
 
+    if (!location) return;
+
     if (_xyz.locations.current) _xyz.locations.current.remove();
 
     Object.assign(location, _xyz.locations.location());
 
     _xyz.locations.current = location;
 
-    location.style = {
-      color: '#090',
-      stroke: true,
-      fill: true,
-      fillOpacity: 0
-    };
-
     if (!callback) callback = location => {
 
-      _xyz.locations.draw(location);
+      location.draw();
 
-      if(!_xyz.mapview.popup || !location.marker) return alert(JSON.stringify(location.infoj, null, ' '));
+      if(!_xyz.mapview.popup || !location.marker) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
 
       _xyz.mapview.popup({
         latlng: [location.marker[1], location.marker[0]],

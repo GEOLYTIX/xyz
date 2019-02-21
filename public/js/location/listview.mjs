@@ -80,13 +80,25 @@ export default _xyz => {
 
 
   // Overwrite locations select method.
-  _xyz.locations.select = (location) => {
+  _xyz.locations.select = location => {
 
     const record = _xyz.locations.listview.getFreeRecord();
   
     if (!record) return;
 
     Object.assign(location, _xyz.locations.location());
+
+    location.style = Object.assign(
+      {},
+      _xyz.workspace.locale.layers[location.layer].style,
+      {
+        color: record.color,
+        fillColor: record.color,
+        letter: record.letter,
+        stroke: true,
+        fill: true,
+        fillOpacity: 0.2
+      }); 
 
     record.location = location;
 
@@ -105,17 +117,9 @@ export default _xyz => {
 
       // Set marker coordinates from point geometry.
       if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
-          
-      location.style = {
-        color: record.color,
-        letter: record.letter,
-        stroke: true,
-        fill: true,
-        fillOpacity: 0
-      };
-        
+       
       // Draw the location to the map.
-      _xyz.locations.draw(location);
+      location.draw();
       
       // Add record to listview;
       _xyz.locations.listview.add(record);

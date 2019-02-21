@@ -1,63 +1,60 @@
-export default _xyz => {
-  
-  return layer => {
+export default _xyz => layer => {
     
-    if(!layer.display) layer.show();
+  if(!layer.display) layer.show();
 
-    layer.header.classList.add('edited');
-    _xyz.mapview.node.style.cursor = 'crosshair';
+  layer.header.classList.add('edited');
+  _xyz.mapview.node.style.cursor = 'crosshair';
 
-    layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = L.featureGroup().addTo(_xyz.map);
 
-    _xyz.map.once('click', e => {
+  _xyz.map.once('click', e => {
 
-      const marker = [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)];
+    const marker = [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)];
   
-      // Add vertice from click.
-      layer.edit.vertices.addLayer(
-        L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
-      );
+    // Add vertice from click.
+    layer.edit.vertices.addLayer(
+      L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+    );
   
-      const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
   
-      xhr.open('GET', _xyz.host + '/api/location/edit/draw/isoline?' + _xyz.utils.paramString({
-        locale: _xyz.workspace.locale.key,
+    xhr.open('GET', _xyz.host + '/api/location/edit/draw/isoline?' + _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      coordinates: [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)].join(','),
+      mode: layer.edit.isoline.mode,
+      type: layer.edit.isoline.type,
+      rangetype: layer.edit.isoline.rangetype,
+      traffic: null,
+      range: layer.edit.isoline.range,
+      token: _xyz.token
+    }));
+  
+    xhr.onload = e => {
+
+      console.log(e.target.responseText);
+  
+      _xyz.mapview.node.style.cursor = '';
+    
+      //layer.get();
+      layer.show();
+    
+      if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
+                                    
+      _xyz.locations.select({
         layer: layer.key,
         table: layer.table,
-        coordinates: [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)].join(','),
-        mode: layer.edit.isoline.mode,
-        type: layer.edit.isoline.type,
-        rangetype: layer.edit.isoline.rangetype,
-        traffic: null,
-        range: layer.edit.isoline.range,
-        token: _xyz.token
-      }));
-  
-      xhr.onload = e => {
-
-        console.log(e.target.responseText);
-  
-        _xyz.mapview.node.style.cursor = '';
+        id: e.target.response,
+        marker: marker
+      });
     
-        //layer.get();
-        layer.show();
-    
-        if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
-                                    
-        _xyz.locations.select({
-          layer: layer.key,
-          table: layer.table,
-          id: e.target.response,
-          marker: marker
-        });
-    
-      };
+    };
   
-      xhr.send();
-      _xyz.mapview.state.finish();
-      _xyz.mapview.node.style.cursor = 'busy';
+    xhr.send();
+    _xyz.mapview.state.finish();
+    _xyz.mapview.node.style.cursor = 'busy';
   
-    });
+  });
   
-  };
 };

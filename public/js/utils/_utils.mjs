@@ -26,6 +26,10 @@ export {dropdown} from './dropdown.mjs';
 
 export {hexToRGBA} from './hexToRGBA.mjs';
 
+export {dataURLtoBlob} from './dataURLtoBlob.mjs';
+
+export {getCircularReplacer} from './getCircularReplacer.mjs';
+
 export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
 export {setStrokeWeight} from './setStrokeWeight.mjs';

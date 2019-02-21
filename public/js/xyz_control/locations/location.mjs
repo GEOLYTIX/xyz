@@ -4,13 +4,22 @@ export default _xyz => () => {
 
   return {
 
+    get: get,
+  
+    remove: remove,
+
+    draw: draw,
+
     view: view,
   
     geometries: [],
-  
-    remove: remove,
-  
-    get: get,
+
+    style: {
+      color: '#090',
+      stroke: true,
+      fill: true,
+      fillOpacity: 0
+    }
   
   };
 
@@ -56,7 +65,6 @@ export default _xyz => () => {
  
   };
 
-
   function remove() {
 
     const location = this;
@@ -68,6 +76,40 @@ export default _xyz => () => {
 
     if (location.Marker) _xyz.map.removeLayer(location.Marker);
 
+  };
+
+  function draw() {
+
+    if (!_xyz.map) return;
+
+    const location = this;
+
+    location.Marker = _xyz.mapview.draw.geoJSON({
+      json: {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
+        }
+      },
+      pane: 'select_marker',
+      icon: {
+        url: _xyz.utils.svg_symbols({
+          type: 'markerLetter',
+          style: location.style,
+        })
+      }
+    });
+  
+    location.Layer = _xyz.mapview.draw.geoJSON({
+      json: {
+        type: 'Feature',
+        geometry: location.geometry,
+      },
+      pane: 'select',
+      style: location.style,
+    });
+           
   };
 
 };
