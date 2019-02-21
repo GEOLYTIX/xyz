@@ -956,6 +956,13 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
+                    "access_filter": {
+                        "dbauszus@gmail.com": {
+                            "retailer": {
+                                "like": "Tesco"
+                            }
+                        }
+                    },
                     "tableview": {
                         "tables": {
                             "Retail Points": {
