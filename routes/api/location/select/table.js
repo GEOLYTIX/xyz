@@ -37,10 +37,10 @@ module.exports = fastify => {
       if (!tableDef) return res.code(406).send('Missing table definition.');
 
       // Check whether string params are found in the settings to prevent SQL injections.
-      /*if ([table]
+      if ([tableDef]
         .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
         return res.code(406).send('Invalid parameter.');
-      }*/
+      }
 
 
       tableDef.rows.map(row => {
