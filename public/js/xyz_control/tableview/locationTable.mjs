@@ -21,7 +21,7 @@ export default _xyz => params => {
 	  	let columns = [{'field': 'rows', 'title': params.table.title}];
 
 	  	params.table.columns.map(col => {
-	  		if(!col.exp) columns.push({'field': col.field, 'title': (col.label ? col.label : col.field)});
+	  		if(!col.aspatial) columns.push({'field': col.field, 'title': (col.label ? col.label : col.field)});
 	  	});
 
 	  	if(params.table.agg){

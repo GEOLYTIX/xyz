@@ -65,7 +65,7 @@ module.exports = fastify => {
         }
 
         // include helper column to calculate from
-        if(col.exp){ withTable.push(`${col.field} AS (SELECT ${col.exp})`); }
+        if(col.aspatial){ withTable.push(`${col.field} AS (SELECT ${col.aspatial})`); }
       });
 
       lines[0] = `UNNEST(ARRAY['${row_alias.join('\',\'')}']) AS rows`;
@@ -96,7 +96,7 @@ module.exports = fastify => {
       }
 
       // include helper column
-      tableDef.columns.map(col => {if(col.exp) col_alias.push(col.field);});
+      tableDef.columns.map(col => {if(col.aspatial) col_alias.push(col.field);});
 
       q = `WITH ${withTable.join(',')} SELECT ${lines.join(',')} FROM ${col_alias.join(',')};`;
 

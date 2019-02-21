@@ -261,7 +261,7 @@
                 },
                 {
                   "field": "uk",
-                  "exp": "age_under_18_uk, age_18to24_uk, age_25to29_uk, age_30to44_uk ,age_45to59_uk, age_60plus_uk, age_total_uk FROM shepherd_neame.report_summary"
+                  "aspatial": "age_under_18_uk, age_18to24_uk, age_25to29_uk, age_30to44_uk ,age_45to59_uk, age_60plus_uk, age_total_uk FROM shepherd_neame.report_summary"
                 }
               ],
               "rows": [
@@ -383,7 +383,7 @@
                 {
                   "type": "integer",
                   "field": "uk",
-                  "exp": "social_grade_ab_uk, social_grade_c1_uk, social_grade_c2_uk, social_grade_de_uk, social_grade_total_uk FROM shepherd_neame.report_summary"
+                  "aspatial": "social_grade_ab_uk, social_grade_c1_uk, social_grade_c2_uk, social_grade_de_uk, social_grade_total_uk FROM shepherd_neame.report_summary"
                 }
               ],
               "rows": [
