@@ -59,8 +59,6 @@ export default _xyz => params => {
     xhr.onload = e => {
     
       if (e.target.status !== 200) return;
-
-      console.log(e.target.response);
       
       params.table.Tabulator.setData(formatRows(params, e.target.response));
   
@@ -71,7 +69,7 @@ export default _xyz => params => {
     xhr.send();
 
   };
-   
+
   params.table.activate = () => {
 
     params.table.Tabulator =
@@ -89,9 +87,11 @@ export default _xyz => params => {
 
   params.table.activate();
 
-  if (_xyz.tableview.tables) _xyz.tableview.tables.push(params.table);
+  if(!params.table.checked) {
 
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(params);
-
+  	if (_xyz.tableview.tables) _xyz.tableview.tables.push(params.table);
+  	if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(params);
+  
+  }
 
 };

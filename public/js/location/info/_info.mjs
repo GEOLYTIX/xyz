@@ -199,6 +199,16 @@ export default (_xyz, record) => {
 
     });
 
+    Object.values(record.location.infoj).map(entry => {
+      if(entry.type === 'tableDefinition' && entry.checked) {
+        _xyz.tableview.locationTable({
+          target: _xyz.tableview.node.querySelector('.table'),
+          record: record,
+          table: entry
+        });
+      }; 
+    });
+
     // Hide group if empty
     Object.values(record.location.infoj).map(entry => {
       if(!entry.group) return;

@@ -1,14 +1,5 @@
 export default _xyz => params => {
 
-  /*Object
-  .values(_xyz.tableview.nav_bar.children)
-  .map(tab => { 
-    if(tab.textContent === params.table.title) {
-      //console.log(params);
-      _xyz.tableview.removeTab(params.table);
-    } 
-  });*/
-
   if(_xyz.tableview.nav_bar.children) {
   // Remove current from all tabs.
     Object

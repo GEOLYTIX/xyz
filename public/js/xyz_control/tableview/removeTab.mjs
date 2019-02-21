@@ -6,7 +6,12 @@ export default _xyz => params => {
 
   _xyz.tableview.tables.splice(idx, 1);
 
-  if (_xyz.tableview.tables.length > 0) return _xyz.tableview.tables[_xyz.tableview.tables.length -1].activate();
+  _xyz.tableview.current_table = null;
+
+  if (_xyz.tableview.tables.length > 0) {
+  	document.querySelectorAll('#tableview li')[_xyz.tableview.tables.length-1].classList.add('tab-current');
+  	return _xyz.tableview.tables[_xyz.tableview.tables.length-1].activate();
+  }
 
   if (_xyz.tableview.node) {
     _xyz.tableview.node.style.display = 'none';

@@ -131,7 +131,7 @@
               "title": "Population Summary",
               "columns": [
                 {
-                  "type": "numeric",
+                  "type": "integer",
                   "label": "0-5 mins",
                   "field": "min5",
                   "lookup": {
@@ -142,7 +142,7 @@
                   }
                 },
                 {
-                  "type": "numeric",
+                  "type": "integer",
                   "label": "0-10 mins",
                   "field": "min10",
                   "lookup": {
@@ -153,7 +153,7 @@
                   }
                 },
                 {
-                  "type": "numeric",
+                  "type": "integer",
                   "label": "0-15 mins",
                   "field": "min15",
                   "lookup": {
