@@ -15,8 +15,6 @@ module.exports = fastify => {
 
       const layer = locale.layers[req.query.layer];
 
-      console.log(decodeURIComponent(req.query.tableDef));
-
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
@@ -46,7 +44,7 @@ module.exports = fastify => {
 
 
       tableDef.rows.map(row => {
-        rows.push(`${row.fieldfx || row.field}::$1 AS ${row.field}`);
+        rows.push(`(${row.fieldfx || row.field})::$1 AS ${row.field}`);
         row_alias.push(row.field);
       });
 
