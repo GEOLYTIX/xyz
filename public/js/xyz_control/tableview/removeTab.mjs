@@ -9,7 +9,9 @@ export default _xyz => params => {
   _xyz.tableview.current_table = null;
 
   if (_xyz.tableview.tables.length > 0) {
-  	document.querySelectorAll('#tableview li')[_xyz.tableview.tables.length-1].classList.add('tab-current');
+  	if(_xyz.tableview.nav_bar.children) {
+  		_xyz.tableview.nav_bar.children[_xyz.tableview.tables.length-1].classList.add('tab-current');
+  	}
   	return _xyz.tableview.tables[_xyz.tableview.tables.length-1].activate();
   }
 

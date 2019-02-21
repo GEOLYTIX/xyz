@@ -17,6 +17,13 @@ export default (_xyz, record, entry) => {
   function showTab(record, entry){
   	_xyz.tableview.current_table = entry;
 
+  	if(_xyz.tableview.tables){
+  		let tabs = document.querySelectorAll('#tableview li');
+  		tabs.forEach(tab => {
+  			if(tab.textContent === entry.title) tab.classList.add('tab-current');
+  		});
+  	}
+
   	entry.target = _xyz.tableview.locationTable({
   		target: _xyz.tableview.node.querySelector('.table'),
   		record: record,

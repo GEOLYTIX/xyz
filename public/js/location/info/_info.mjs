@@ -206,7 +206,17 @@ export default (_xyz, record) => {
           record: record,
           table: entry
         });
+
+        if(_xyz.tableview.nav_bar.children) {
+          Object
+            .values(_xyz.tableview.nav_bar.children)
+            .forEach(tab => tab.classList.remove('tab-current'));
+
+          _xyz.tableview.nav_bar.children[0].classList.add('tab-current');
+          _xyz.tableview.tables[0].activate();
+        }
       }; 
+
     });
 
     // Hide group if empty
