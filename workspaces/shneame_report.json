@@ -94,6 +94,7 @@
           "infoj": [
             {
               "field": "isoline_5min",
+              "name": "Drivetime 5 min",
               "fieldfx": "ST_asGeoJson(isoline_5min)",
               "type": "geometry",
               "edit": {
@@ -104,6 +105,7 @@
             },
             {
               "field": "isoline_10min",
+              "name": "Drivetime 10 min",
               "fieldfx": "ST_asGeoJson(isoline_10min)",
               "type": "geometry",
               "edit": {
@@ -114,6 +116,7 @@
             },
             {
               "field": "isoline_15min",
+              "name": "Drivetime 15 min",
               "fieldfx": "ST_asGeoJson(isoline_15min)",
               "type": "geometry",
               "edit": {
