@@ -1816,7 +1816,7 @@ button {
       background-color: #cf9;
       cursor: pointer; }
   .leaflet-popup-content .locationview {
-    padding: 5px; }
+    padding: 10px; }
 
 .listview .title {
   font-family: ffmark_bold, sans-serif;

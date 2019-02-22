@@ -10,6 +10,8 @@ export default _xyz => () => {
 
     draw: draw,
 
+    drawMarker: drawMarker,
+
     view: view,
   
     geometries: [],
@@ -18,7 +20,20 @@ export default _xyz => () => {
       color: '#090',
       stroke: true,
       fill: true,
-      fillOpacity: 0
+      fillOpacity: 0,
+      icon: {
+        url: _xyz.utils.svg_symbols({
+          type: 'circle',
+          style: {
+            letter: 'X',
+            colorMarker: '#090',
+            colorDot: '#cf9',
+            color: '#090'
+          }
+        }),
+        size: 40,
+        //anchor: [20, 40]
+      }
     }
   
   };
@@ -29,13 +44,17 @@ export default _xyz => () => {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', _xyz.host + '/api/location/select/id?' + _xyz.utils.paramString({
-      locale: _xyz.workspace.locale.key,
-      layer: location.layer,
-      table: location.table,
-      id: location.id,
-      token: _xyz.token
-    }));
+    xhr.open(
+      'GET',
+      _xyz.host +
+      '/api/location/select/id?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: location.layer,
+        table: location.table,
+        id: location.id,
+        token: _xyz.token
+      }));
 
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
@@ -78,7 +97,24 @@ export default _xyz => () => {
 
   };
 
-  function draw() {
+  function draw(style) {
+
+    if (!_xyz.map) return;
+
+    const location = this;
+
+    location.Layer = _xyz.mapview.draw.geoJSON({
+      json: {
+        type: 'Feature',
+        geometry: location.geometry,
+      },
+      pane: 'select',
+      style: style || location.style,
+    });
+           
+  };
+
+  function drawMarker(style) {
 
     if (!_xyz.map) return;
 
@@ -93,23 +129,9 @@ export default _xyz => () => {
         }
       },
       pane: 'select_marker',
-      icon: {
-        url: _xyz.utils.svg_symbols({
-          type: 'markerLetter',
-          style: location.style,
-        })
-      }
+      style: style || location.style
     });
-  
-    location.Layer = _xyz.mapview.draw.geoJSON({
-      json: {
-        type: 'Feature',
-        geometry: location.geometry,
-      },
-      pane: 'select',
-      style: location.style,
-    });
-           
-  };
+
+  }
 
 };

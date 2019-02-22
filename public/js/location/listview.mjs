@@ -97,8 +97,36 @@ export default _xyz => {
         letter: record.letter,
         stroke: true,
         fill: true,
-        fillOpacity: 0.2
-      }); 
+        fillOpacity: 0.2,
+        icon: {
+          url: _xyz.utils.svg_symbols({
+            type: 'circle',
+            style: {
+              letter: 'X',
+              colorMarker: '#090',
+              colorDot: '#cf9',
+              color: '#090',
+              opacity: '0'
+            }
+          }),
+          size: 40,
+          //anchor: [20, 40]
+        }
+      });
+
+    const markerStyle = {
+      icon: {
+        url: _xyz.utils.svg_symbols({
+          type: 'markerLetter',
+          style: {
+            letter: record.letter,
+            color: record.color,
+          }
+        }),
+        size: 40,
+        anchor: [20, 40]
+      }
+    };
 
     record.location = location;
 
@@ -120,6 +148,8 @@ export default _xyz => {
        
       // Draw the location to the map.
       location.draw();
+
+      location.drawMarker(markerStyle);
       
       // Add record to listview;
       _xyz.locations.listview.add(record);

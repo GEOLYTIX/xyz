@@ -20,21 +20,18 @@ export default _xyz => {
 
     _xyz.locations.current = location;
 
-    if (!callback) callback = location => {
+    if (callback) return location.get(callback);
 
+    location.get(location => {
       location.draw();
 
       if(!_xyz.mapview.popup || !location.marker) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
-
+  
       _xyz.mapview.popup({
         latlng: [location.marker[1], location.marker[0]],
         content: location.view.node
       });
-    };
-
-    location.get(callback);
-
-    return location;
+    });
 
   };
 

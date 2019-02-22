@@ -10,14 +10,16 @@ let
 
   const xyz = await _xyz({
     // token: API token,
+    //locale: 'GB',
     host: document.head.dataset.dir
   });
   
-  xyz.workspace.loadLocale({
-    locale: 'GB'
-  });
+  // xyz.workspace.loadLocale({
+  //   locale: 'GB'
+  // });
 
   xyz.mapview.create({
+    locale: 'GB',
     target: Map1,
     scrollWheelZoom: true,
     view: {
@@ -33,12 +35,8 @@ let
   
   xyz.layers.list.retail_points.show();
 
-  xyz.mapview.locate.toggle();
+  // xyz.mapview.locate.toggle();
 
-  // xyz.locations.select_popup = location => {
-  //   Info1.innerHTML = '';
-  //   Info1.appendChild(location.view.node);
-  // };
 
 })();
 
@@ -50,40 +48,40 @@ _xyz({
   callback: _xyz => {
 
 
-    // _xyz.mapview.create({
-    //   target: Map2,
-    //   view: {
-    //     lat: 53,
-    //     lng: -1,
-    //     z: 6,
-    //   },
-    //   btn: {
-    //     ZoomIn: document.getElementById('btnZoomIn2'),
-    //     ZoomOut: document.getElementById('btnZoomOut2')
-    //   }
-    // });
+    _xyz.mapview.create({
+      target: Map2,
+      view: {
+        lat: 53,
+        lng: -1,
+        z: 6,
+      },
+      btn: {
+        ZoomIn: document.getElementById('btnZoomIn2'),
+        ZoomOut: document.getElementById('btnZoomOut2')
+      }
+    });
 
-    // _xyz.tableview.layerTable({
-    //   layer: _xyz.layers.list.COUNTRIES,
-    //   target: Table1,
-    //   table: {
-    //     'columns': [
-    //       {
-    //         'field': 'name',
-    //         'type': 'text',
-    //       },
-    //       {
-    //         'title': 'Population Est',
-    //         'field': 'pop_est',
-    //         'type': 'integer',
-    //       },
-    //       {
-    //         'field': 'gdp_md_est',
-    //         'type': 'integer',
-    //       }
-    //     ]
-    //   }
-    // });
+    _xyz.tableview.layerTable({
+      layer: _xyz.layers.list.COUNTRIES,
+      target: Table1,
+      table: {
+        'columns': [
+          {
+            'field': 'name',
+            'type': 'text',
+          },
+          {
+            'title': 'Population Est',
+            'field': 'pop_est',
+            'type': 'integer',
+          },
+          {
+            'field': 'gdp_md_est',
+            'type': 'integer',
+          }
+        ]
+      }
+    });
 
     // _xyz.tableview.locationTable({
     //   target: Table1,
@@ -122,11 +120,11 @@ _xyz({
     //   () => _xyz.tableview.current_table.update()
     // );
   
-    // _xyz.layers.list['Mapbox Base'].remove();
+    _xyz.layers.list['Mapbox Base'].remove();
 
-    // _xyz.layers.list.COUNTRIES.style.theme = null;
+    _xyz.layers.list.COUNTRIES.style.theme = null;
   
-    // _xyz.layers.list.COUNTRIES.show();
+    _xyz.layers.list.COUNTRIES.show();
 
     _xyz.locations.select(
       //params
@@ -135,13 +133,15 @@ _xyz({
         dbs: 'XYZ',
         layer: 'COUNTRIES',
         table: 'dev.natural_earth_countries',
-        qID: 'id',
         id: 80,
       },
       //callback
-      // location=>{
-      //   document.getElementById('location_info_container2').appendChild(location.view.node);
-      // }
+      location=>{
+        // location.style.fillColor = '#f44336';
+        // location.style.fillOpacity = 1;
+        location.draw();
+        document.getElementById('location_info_container2').appendChild(location.view.node);
+      }
     );
 
   }
@@ -183,38 +183,6 @@ function Offices(_xyz) {
 
   _xyz.locations.select_output = location => {
     Info1.innerHTML = location.infoj[1].value;
-  };
-
-}
-
-function TableView(_xyz) {
-
-  _xyz.layers.list['Mapbox Base'].remove();
-
-  _xyz.layers.list.COUNTRIES.style.theme = null;
-
-  _xyz.layers.list.COUNTRIES.show();
-
-  _xyz.tableview.createTable({
-    layer: _xyz.layers.list.COUNTRIES,
-    target: Table1
-  });
-
-  // Augment viewChangeEnd method to update table.
-  _xyz.mapview.changeEnd = _xyz.utils.compose(_xyz.mapview.changeEnd, () => {
-    _xyz.tableview.updateTable();
-  });
-
-  _xyz.locations.select_popup = location => {
-
-    Info2.innerHTML = '';
-
-    Info2.appendChild(location.info_table);
-
-    _xyz.layers.list.COUNTRIES.tableView.table.getRows()
-      .filter(row => row.getData().name === location.infoj[0].value)
-      .forEach(row => row.toggleSelect());
-
   };
 
 }

@@ -11,7 +11,7 @@ export default _xyz => params => {
   _xyz.mapview.node = params.target;  
     
   // Load locale if defined in params or if no locale is yet loaded.
-  if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
+  if (params.locale) _xyz.workspace.loadLocale(params);
                 
   // Assign params to locale.
   // This makes it possible to override client side workspace entries.

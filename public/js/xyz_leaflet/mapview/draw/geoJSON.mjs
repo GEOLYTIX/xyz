@@ -2,13 +2,6 @@ export default _xyz => params => {
 
   if (!params.json) return;
   
-  if (!params.icon) return _xyz.L.geoJson(params.json, {
-    interactive: params.interactive || false,
-    pane: params.pane || 'default',
-    style: params.style || {},
-    pointToLayer: () => { }
-  }).addTo(_xyz.map);
-  
   return _xyz.L.geoJson(params.json, {
     interactive: params.interactive || false,
     pane: params.pane || 'default',
@@ -16,9 +9,9 @@ export default _xyz => params => {
       interactive: params.interactive || false,
       pane: params.pane || 'default',
       icon: _xyz.L.icon({
-        iconUrl: params.icon.url,
-        iconSize: params.icon.size || 40,
-        iconAnchor: params.icon.anchor || [20, 40]
+        iconUrl: params.style.icon.url,
+        iconSize: params.style.icon.size,
+        iconAnchor: params.style.icon.anchor
       })
     }),
     style: params.style || {}
