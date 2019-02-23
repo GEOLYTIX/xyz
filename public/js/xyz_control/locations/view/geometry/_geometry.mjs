@@ -23,15 +23,6 @@ export default _xyz => entry => {
     entry.location.style,
     entry.style
   );
-  
-  // entry.style || {
-  //   stroke: true,
-  //   color: '#009900',
-  //   fillColor: '#ccff99',
-  //   weight: 2,
-  //   fill: true,
-  //   fillOpacity: 0.3
-  // };
 
   let tr = _xyz.utils.createElement({
     tag: 'tr',

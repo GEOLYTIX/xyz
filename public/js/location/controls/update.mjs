@@ -37,7 +37,7 @@ export default (_xyz, record) => {
           record.location.infoj = JSON.parse(e.target.response);
 
           // Update the record.
-          record.update();       
+          record.location.view.update();       
 
         };
 
@@ -62,5 +62,16 @@ export default (_xyz, record) => {
       }
     }
   });
+
+  record.location.showUpload = () => {
+
+    // Hide upload button if no other field in the infoj has a newValue.
+    if (!record.location.infoj.some(field => field.newValue)) {
+      return record.upload.style.display = 'none';
+    }
+
+    record.upload.style.display = 'block';
+
+  };
   
 };

@@ -68,23 +68,13 @@ export default (_xyz, layer) => () => {
     })
     .on('click', e => {
 
-      if (layer.singleSelectOnly) {
-
-        layer.selected = [e.layer.properties.id];
-
-        layer.L.redraw();
-
-      } else {
-
-        let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
+      // let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
         
-        selectedIdx >= 0 ?
-          layer.selected.splice(selectedIdx, 1) :
-          layer.selected.push(e.layer.properties.id);
+      // selectedIdx >= 0 ?
+      //   layer.selected.splice(selectedIdx, 1) :
+      //   layer.selected.push(e.layer.properties.id);
 
-      }
-
-      e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
+      // e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
 
       _xyz.locations.select({
         dbs: layer.dbs,

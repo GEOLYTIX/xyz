@@ -1,6 +1,4 @@
-import valChange from './valChange.mjs';
-
-export default (_xyz, location, entry) => {
+export default _xyz => entry => {
 
   _xyz.utils.createElement({
     tag: 'span',
@@ -27,7 +25,7 @@ export default (_xyz, location, entry) => {
     oninput: e => {
 
       lbl.innerHTML = e.target.value;
-      valChange(e.target, location, entry);
+      //valChange(e.target, location, entry);
       
     }
   });

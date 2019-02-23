@@ -10,8 +10,6 @@ export default _xyz => () => {
 
     draw: draw,
 
-    drawMarker: drawMarker,
-
     view: view,
   
     geometries: [],
@@ -25,14 +23,10 @@ export default _xyz => () => {
         url: _xyz.utils.svg_symbols({
           type: 'circle',
           style: {
-            letter: 'X',
-            colorMarker: '#090',
-            colorDot: '#cf9',
             color: '#090'
           }
         }),
-        size: 40,
-        //anchor: [20, 40]
+        size: 40
       }
     }
   
@@ -113,25 +107,5 @@ export default _xyz => () => {
     });
            
   };
-
-  function drawMarker(style) {
-
-    if (!_xyz.map) return;
-
-    const location = this;
-
-    location.Marker = _xyz.mapview.draw.geoJSON({
-      json: {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
-        }
-      },
-      pane: 'select_marker',
-      style: style || location.style
-    });
-
-  }
 
 };

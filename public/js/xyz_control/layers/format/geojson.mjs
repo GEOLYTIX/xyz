@@ -63,37 +63,21 @@ export default (_xyz, layer) => () => {
     })
       .on('click', e => {
 
-        if (layer.singleSelectOnly) {
-
-          layer.L.getLayers().forEach(l => {
-            l.setIcon && l.setIcon(_xyz.L.icon({
-              iconUrl: _xyz.utils.svg_symbols(layer.style.default.marker),
-              iconSize: layer.style.default.marker.iconSize || 40,
-              iconAnchor: layer.style.default.marker.iconAnchor || [20,20]
-            }));
-          });
-
-          layer.selected = [e.layer.feature.properties.id];
-
-        } else {
-
-          let selectedIdx = layer.selected.indexOf(e.layer.feature.properties.id);
+        // let selectedIdx = layer.selected.indexOf(e.layer.feature.properties.id);
           
-          selectedIdx >= 0 ?
-            layer.selected.splice(selectedIdx, 1) :
-            layer.selected.push(e.layer.feature.properties.id);
+        // selectedIdx >= 0 ?
+        //   layer.selected.splice(selectedIdx, 1) :
+        //   layer.selected.push(e.layer.feature.properties.id);
 
-        }
-          
-        let style = applyLayerStyle(e.layer.feature);
+        // let style = applyLayerStyle(e.layer.feature);
 
-        e.layer.setStyle && e.layer.setStyle(style);
+        // e.layer.setStyle && e.layer.setStyle(style);
           
-        e.layer.setIcon && e.layer.setIcon(_xyz.L.icon({
-          iconUrl: _xyz.utils.svg_symbols(style.marker),
-          iconSize: style.marker.iconSize || 40,
-          iconAnchor: style.marker.iconAnchor || [20,20]
-        }));
+        // e.layer.setIcon && e.layer.setIcon(_xyz.L.icon({
+        //   iconUrl: _xyz.utils.svg_symbols(style.marker),
+        //   iconSize: style.marker.iconSize || 40,
+        //   iconAnchor: style.marker.iconAnchor || [20,20]
+        // }));
           
         _xyz.locations.select({
           layer: layer.key,

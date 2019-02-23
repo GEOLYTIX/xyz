@@ -1,8 +1,4 @@
-import valChange from './valChange.mjs';
-
-import optionsTextInput from './optionsTextInput.mjs';
-
-export default (_xyz, location, entry) => {
+export default _xyz => entry => {
 
   // Map first level options and keys to the options object.
   const options = entry.edit.options.map(option => {
@@ -27,16 +23,16 @@ export default (_xyz, location, entry) => {
     onchange: e => {
 
       // Set newValue and compare with current value.
-      valChange(e.target, location, entry);
+      //valChange(e.target, location, entry);
 
       // Remove the custom text input.
       if (entry.select_other) entry.select_other.remove();
 
-      optionsTextInput(_xyz, location, entry);
+      entry.ctrl.optionsTextInput(entry);
 
     }
   });
 
-  optionsTextInput(_xyz, location, entry);
+  entry.ctrl.optionsTextInput(entry);
 
 };

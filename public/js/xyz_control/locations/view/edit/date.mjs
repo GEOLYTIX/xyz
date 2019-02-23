@@ -1,4 +1,4 @@
-export default (_xyz, location, entry) => {
+export default _xyz => entry => {
 
   if(entry.type === 'datetime') entry.value = _xyz.utils.formatDateTime(entry.value);
 
@@ -13,5 +13,5 @@ export default (_xyz, location, entry) => {
     appendTo: entry.val,
   });
 
-  _xyz.utils.datePicker(input, location, entry);
+  _xyz.utils.datePicker(input, entry.location, entry);
 };

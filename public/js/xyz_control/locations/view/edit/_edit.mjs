@@ -6,23 +6,39 @@ import suboptions from './suboptions.mjs';
 
 import date from './date.mjs';
 
-import valChange from './valChange.mjs';
+import optionsTextInput from './optionsTextInput.mjs';
 
-export default (_xyz, location, entry) => {
+// import valChange from './valChange.mjs';
+
+export default _xyz => entry => {
+
+  entry.ctrl = {
+
+    range: range(_xyz),
+
+    date: date(_xyz),
+
+    options: options(_xyz),
+
+    suboptions: suboptions(_xyz),
+
+    optionsTextInput: optionsTextInput(_xyz),
+
+  };
 
   if(!entry.edit) return;
 
   // Create a date control.
-  if (entry.type === 'date') return date(_xyz, location, entry);
+  if (entry.type === 'date') return entry.ctrl.date(entry);
 
   // Create range input for range fields.
-  if (entry.edit.range) return range(_xyz, location, entry);
+  if (entry.edit.range) return entry.ctrl.range(entry);
 
   // Create select input for options.
-  if (entry.edit.options) return options(_xyz, location, entry);
+  if (entry.edit.options) return entry.ctrl.options(entry);
 
   // Create select input for asscoiated options.
-  if (entry.edit.options_field) return suboptions(_xyz, location, entry);
+  if (entry.edit.options_field) return entry.ctrl.suboptions(entry);
 
   // Create a 3 line textarea for textarea type entry.
   if (entry.type === 'textarea') return _xyz.utils.createElement({
@@ -34,7 +50,9 @@ export default (_xyz, location, entry) => {
     appendTo: entry.val,
     eventListener: {
       event: 'keyup',
-      funct: e => valChange(e.target, location, entry)
+      funct: e => {
+        entry.location.view.valChange(e.target, entry);
+      }
     }
   });
 
@@ -48,7 +66,9 @@ export default (_xyz, location, entry) => {
     appendTo: entry.val,
     eventListener: {
       event: 'keyup',
-      funct: e => valChange(e.target, location, entry)
+      funct: e => {
+        entry.location.view.valChange(e.target, entry);
+      }
     }
   });
 

@@ -1,11 +1,7 @@
-import valChange from './valChange.mjs';
-
-import optionsTextInput from './optionsTextInput.mjs';
-
-export default (_xyz, location, entry) => {
+export default _xyz => entry => {
 
   // Get the associated entry for the prime select.
-  const _entry = Object.values(location.infoj).find(_entry => _entry.field === entry.edit.options_field);
+  const _entry = Object.values(entry.location.infoj).find(_entry => _entry.field === entry.edit.options_field);
 
   const _options = typeof _entry.edit.options[_entry.select.selectedIndex] === 'object'
         && _entry.edit.options[_entry.select.selectedIndex][_entry.value] !== 'text' ?
@@ -17,20 +13,20 @@ export default (_xyz, location, entry) => {
     appendTo: entry.val,
     entries: _options,
     selected: entry.value,
-    onchange: e => valChange(e.target, location, entry)
+    // onchange: e => valChange(e.target, location, entry)
   });
 
   // Assign onchange event for the prime select dropdown.
   _entry.select.onchange = e => {
 
     // Call value change event for the prime select.
-    valChange(e.target, location, _entry);
+    //valChange(e.target, location, _entry);
 
     // Remove the custom text input.
     if (_entry.select_other) _entry.select_other.remove();
 
     // Create a custom text input
-    optionsTextInput(_xyz, location, _entry);
+    entry.ctrl.optionsTextInput(_entry);
 
     // Remove options from suboptions select.
     entry.select.innerHTML = '';
@@ -56,7 +52,7 @@ export default (_xyz, location, entry) => {
     entry.select.disabled = (entry.select.childElementCount <= 1);
 
     // Call value change event for the suboptions.
-    valChange(entry.select, location, entry);
+    //valChange(entry.select, location, entry);
 
   };
 

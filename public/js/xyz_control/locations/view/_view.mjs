@@ -8,6 +8,8 @@ import geometry from './geometry/_geometry.mjs';
 
 import edit from './edit/_edit.mjs';
 
+import valChange from './edit/valChange.mjs';
+
 export default function(_xyz) {
 
   return {
@@ -24,6 +26,10 @@ export default function(_xyz) {
 
     geometry: geometry(_xyz),
 
+    edit: edit(_xyz),
+
+    valChange: valChange,
+
   };
 
   function update () {
@@ -37,6 +43,8 @@ export default function(_xyz) {
     }
     
     location.geometries = [];
+
+    // if (location.view.node) location.view.node.innerHTML = '';
 
     location.view.node = _xyz.utils.createElement({
       tag: 'table',
@@ -170,7 +178,7 @@ export default function(_xyz) {
       }
 
       // Create controls for editable fields.
-      if (entry.edit && !entry.fieldfx) return edit(_xyz, location, entry);
+      if (entry.edit && !entry.fieldfx) return location.view.edit(entry);
 
       if (entry.type === 'html') {
 

@@ -28,7 +28,7 @@ export default (_xyz, record) => {
 
         } else {
 
-          _xyz.map.flyToBounds(record.location.Marker.getBounds());
+          _xyz.map.flyToBounds(record.location.Layer.getBounds());
 
         }
 

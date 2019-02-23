@@ -102,31 +102,13 @@ export default _xyz => {
           url: _xyz.utils.svg_symbols({
             type: 'circle',
             style: {
-              letter: 'X',
-              colorMarker: '#090',
-              colorDot: '#cf9',
               color: '#090',
               opacity: '0'
             }
           }),
-          size: 40,
-          //anchor: [20, 40]
+          size: 40
         }
       });
-
-    const markerStyle = {
-      icon: {
-        url: _xyz.utils.svg_symbols({
-          type: 'markerLetter',
-          style: {
-            letter: record.letter,
-            color: record.color,
-          }
-        }),
-        size: 40,
-        anchor: [20, 40]
-      }
-    };
 
     record.location = location;
 
@@ -149,8 +131,31 @@ export default _xyz => {
       // Draw the location to the map.
       location.draw();
 
-      location.drawMarker(markerStyle);
-      
+      // Draw letter marker.
+      location.Marker = _xyz.mapview.draw.geoJSON({
+        json: {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
+          }
+        },
+        pane: 'select_marker',
+        style: {
+          icon: {
+            url: _xyz.utils.svg_symbols({
+              type: 'markerLetter',
+              style: {
+                letter: record.letter,
+                color: record.color,
+              }
+            }),
+            size: 40,
+            anchor: [20, 40]
+          }
+        }
+      });
+    
       // Add record to listview;
       _xyz.locations.listview.add(record);
 
@@ -204,8 +209,10 @@ export default _xyz => {
 
       // Remove all geometries associated to the location.
       record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-      // And add additional geometries
-      if(record.location.geometries.additional) record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
+
+      if(record.location.Layer) _xyz.map.removeLayer(record.location.Layer);
+
+      if(record.location.Marker) _xyz.map.removeLayer(record.location.Marker);
   
       // Delete the location.
       delete record.location;
