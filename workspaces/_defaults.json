@@ -10,7 +10,7 @@
         "name": "optional",
         "locate": "optional",
         "attribution": {
-            "XYZ #v1.2.1": "https://github.com/GEOLYTIX/xyz/tree/v1.2.1",
+            "XYZ #v1.2.1": "https://github.com/GEOLYTIX/xyz/releases/tag/v1.2.1",
             "Leaflet": "https://leafletjs.com"
         },
         "minZoom": 0,
