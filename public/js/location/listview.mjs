@@ -80,7 +80,7 @@ export default _xyz => {
 
 
   // Overwrite locations select method.
-  _xyz.locations.select = location => {
+  _xyz.locations.select = (location, flyTo) => {
 
     const record = _xyz.locations.listview.getFreeRecord();
   
@@ -164,6 +164,8 @@ export default _xyz => {
         'locations',
         `${record.location.layer}!${record.location.table}!${record.location.id}`
       );
+
+      if (flyTo) record.location.flyTo();
 
     });
 

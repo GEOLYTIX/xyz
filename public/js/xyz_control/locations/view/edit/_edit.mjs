@@ -8,8 +8,6 @@ import date from './date.mjs';
 
 import optionsTextInput from './optionsTextInput.mjs';
 
-// import valChange from './valChange.mjs';
-
 export default _xyz => entry => {
 
   entry.ctrl = {

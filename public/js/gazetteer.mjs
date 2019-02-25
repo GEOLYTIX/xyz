@@ -199,13 +199,15 @@ export default _xyz => {
     _xyz.gazetteer.input.value = record.innerText;
   
     if (record['data-source'] === 'glx') {
+
       _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
         layer: record['data-layer'],
         table: record['data-table'],
         id: record['data-id'],
         marker: record['data-marker'].split(',')
-      });
+      }, true);
+
       return;
     }
   

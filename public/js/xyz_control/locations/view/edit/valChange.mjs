@@ -1,11 +1,11 @@
-export default (input, entry) => {
+export default (input, entry, value) => {
 
   if (!entry.value) entry.value = '';
 
   // Create newValue if input value is different from entry value.
-  if (entry.value !== input.value) {
+  if (entry.value.toString() !== input.value) {
 
-    entry.newValue = input.value;
+    entry.newValue = value || input.value || '';
     input.classList.add('changed');
 
   } else {

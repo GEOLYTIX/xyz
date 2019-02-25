@@ -44,20 +44,26 @@ export default function(_xyz) {
     
     location.geometries = [];
 
-    // if (location.view.node) location.view.node.innerHTML = '';
+    // Remove all children from view node prior to update.
+    if (location.view.node) while (location.view.node.lastChild) {
+      location.view.node.removeChild(location.view.node.lastChild);
 
-    location.view.node = _xyz.utils.createElement({
-      tag: 'table',
-      options: {
-        className: 'locationview'
-      },
-      style: {
-        cellPadding: '0',
-        cellSpacing: '0',
-        //borderBottom: '1px solid ' + record.color
-      },
-      //appendTo: record.drawer
-    });
+    } else {
+
+      // Create view node.
+      location.view.node = _xyz.utils.createElement({
+        tag: 'table',
+        options: {
+          className: 'locationview'
+        },
+        style: {
+          cellPadding: '0',
+          cellSpacing: '0',
+          borderBottom: '1px solid ' + location.style.color
+        },
+      });
+
+    }
 
     // Adds layer to beginning of infoj array.
     location.infoj.unshift({

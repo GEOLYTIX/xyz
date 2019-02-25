@@ -49,7 +49,7 @@ export default _xyz => {
 
       if (layer.drawer) layer.drawer.style.opacity = !table ? 0.4 : 1;
 
-      if (layer.loader) layer.loader.style.display = (!table || !layer.display) ? 'none' : 'block';
+      if (layer.loader && !table) layer.loader.style.display = 'none';
 
       return table;
 

@@ -23,7 +23,7 @@ export default _xyz => entry => {
     onchange: e => {
 
       // Set newValue and compare with current value.
-      //valChange(e.target, location, entry);
+      entry.location.view.valChange(e.target, entry);
 
       // Remove the custom text input.
       if (entry.select_other) entry.select_other.remove();

@@ -531,6 +531,26 @@
                             "field": "images",
                             "type": "images",
                             "edit": true
+                        },
+                        {
+                            "label": "Date:",
+                            "field": "dev_date",
+                            "type": "date",
+                            "edit": true
+                        },
+                        {
+                            "label": "Options",
+                            "field": "dev_options",
+                            "type": "text",
+                            "edit": {
+                                "options": [
+                                  "Open",
+                                  "Closed",
+                                  {
+                                    "Other": "text"
+                                  }
+                                ]
+                              }
                         }
                     ]
                 },

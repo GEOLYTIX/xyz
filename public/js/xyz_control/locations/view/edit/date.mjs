@@ -1,8 +1,8 @@
 export default _xyz => entry => {
 
-  if(entry.type === 'datetime') entry.value = _xyz.utils.formatDateTime(entry.value);
-
-  if(entry.type === 'date') entry.value = _xyz.utils.formatDate(entry.value);
+  entry.value = entry.type === 'datetime'?
+    _xyz.utils.formatDateTime(entry.value):
+    _xyz.utils.formatDate(entry.value);
 
   const input = _xyz.utils.createElement({
     tag: 'input',
@@ -13,5 +13,33 @@ export default _xyz => entry => {
     appendTo: entry.val,
   });
 
-  _xyz.utils.datePicker(input, entry.location, entry);
+  _xyz.utils.datePicker({
+    element: input,
+    position: 'c',
+    formatter: (input, date) => {
+          
+      const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
+
+      input.value = entry.type === 'datetime'?
+        _xyz.utils.formatDateTime(meltDateStr):
+        _xyz.utils.formatDate(meltDateStr);
+  
+    },
+    onSelect: (instance, date) => {
+      entry.location.view.valChange(
+        input,
+        entry,
+        _xyz.utils.meltDateStr(new Date(input.value))
+      );
+    },
+    onShow: instance => {
+   
+      const yPosition = instance.el.getBoundingClientRect().top;
+
+      instance.calendar.style.top = (yPosition - 100) + 'px';
+
+    }
+  });
+
+
 };

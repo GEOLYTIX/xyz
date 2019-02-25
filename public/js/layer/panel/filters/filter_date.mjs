@@ -51,9 +51,49 @@ export default (_xyz, layer, filter_entry) => {
     appendTo: block
   });
 
-  _xyz.utils.datePicker(input_min, layer, filter_entry, applyFilter);
+  _xyz.utils.datePicker({
+    element: input_min,
+    position: 'c',
+    formatter: (input, date) => {
+          
+      const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
+
+      input.value = filter_entry.type === 'datetime'?
+        _xyz.utils.formatDateTime(meltDateStr):
+        _xyz.utils.formatDate(meltDateStr);
   
-  _xyz.utils.datePicker(input_max, layer, filter_entry, applyFilter);
+    },
+    onSelect: applyFilter,
+    onShow: instance => {
+   
+      const yPosition = instance.el.getBoundingClientRect().top;
+
+      instance.calendar.style.top = (yPosition - 100) + 'px';
+
+    }
+  });
+
+  _xyz.utils.datePicker({
+    element: input_max,
+    position: 'c',
+    formatter: (input, date) => {
+          
+      const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
+
+      input.value = filter_entry.type === 'datetime'?
+        _xyz.utils.formatDateTime(meltDateStr):
+        _xyz.utils.formatDate(meltDateStr);
+  
+    },
+    onSelect: applyFilter,
+    onShow: instance => {
+   
+      const yPosition = instance.el.getBoundingClientRect().top;
+
+      instance.calendar.style.top = (yPosition - 100) + 'px';
+
+    }
+  });  
 
   let timeout;
 

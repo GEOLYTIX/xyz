@@ -11,6 +11,10 @@ export default _xyz => () => {
     draw: draw,
 
     view: view,
+
+    flyTo: flyTo,
+
+    update: update,
   
     geometries: [],
 
@@ -78,6 +82,52 @@ export default _xyz => () => {
  
   };
 
+  function update(callback) {
+
+    const location = this;
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('POST', _xyz.host + '/api/location/update?token=' + _xyz.token);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = e => {
+
+      if (e.target.status !== 200) return console.log(e.target.response);
+
+      // Reset location infoj with response.
+      location.infoj = JSON.parse(e.target.response);
+
+      // Update the record.
+      location.view.update();
+
+      // Reload layer.
+      _xyz.layers.list[location.layer].loaded = false;
+      _xyz.layers.list[location.layer].get();
+
+      if (callback) callback();
+
+    };
+
+    const infoj_newValues = location.infoj
+      .filter(entry => (entry.newValue))
+      .map(entry => {
+        return {
+          field: entry.field,
+          newValue: entry.newValue,
+          type: entry.type
+        };
+      });
+
+    xhr.send(JSON.stringify({
+      locale: _xyz.workspace.locale.key,
+      layer: location.layer,
+      table: location.table,
+      id: location.id,
+      infoj: infoj_newValues
+    }));
+
+  }
+
   function remove() {
 
     const location = this;
@@ -107,5 +157,28 @@ export default _xyz => () => {
     });
            
   };
+
+  function flyTo(){
+
+    if (!_xyz.map) return;
+
+    const location = this;
+
+    if (location.geometry.type === 'Point') {
+
+      _xyz.map.flyTo(
+        {
+          lat: location.geometry.coordinates[1],
+          lng: location.geometry.coordinates[0],
+        },
+        _xyz.workspace.locale.maxZoom);
+
+    } else {
+
+      _xyz.map.flyToBounds(location.Layer.getBounds());
+
+    }
+
+  }
 
 };

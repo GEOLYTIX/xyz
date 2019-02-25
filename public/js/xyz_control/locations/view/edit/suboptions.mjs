@@ -13,7 +13,12 @@ export default _xyz => entry => {
     appendTo: entry.val,
     entries: _options,
     selected: entry.value,
-    // onchange: e => valChange(e.target, location, entry)
+    onchange: e => {
+
+      // Set newValue and compare with current value.
+      entry.location.view.valChange(e.target, entry);
+
+    }
   });
 
   // Assign onchange event for the prime select dropdown.
@@ -52,7 +57,7 @@ export default _xyz => entry => {
     entry.select.disabled = (entry.select.childElementCount <= 1);
 
     // Call value change event for the suboptions.
-    //valChange(entry.select, location, entry);
+    entry.location.view.valChange(entry.select, entry);
 
   };
 
