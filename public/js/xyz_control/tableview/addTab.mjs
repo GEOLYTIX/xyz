@@ -1,9 +1,13 @@
 export default _xyz => params => {
 
+  if(_xyz.tableview.nav_bar.children) {
   // Remove current from all tabs.
-  Object
-    .values(_xyz.tableview.nav_bar.children)
-    .forEach(tab => tab.classList.remove('tab-current'));
+    Object
+      .values(_xyz.tableview.nav_bar.children)
+      .forEach(tab => tab.classList.remove('tab-current'));
+  }
+
+  if(params.table.tab) params.table.tab.remove();
 
   params.table.tab = _xyz.utils.createElement({
     tag: 'li',

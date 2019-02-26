@@ -28,8 +28,6 @@ module.exports = fastify => {
 
   require('./location/edit/image_upload')(fastify);
 
-  require('./location/table')(fastify);
-
   // Mapbox Isochrones
 
   require('./location/edit/catchment_create')(fastify);
@@ -66,5 +64,7 @@ module.exports = fastify => {
   require('./location/select/aggregate')(fastify);
 
   require('./location/field_range')(fastify);
+
+  require('./location/select/table')(fastify);
 
 };

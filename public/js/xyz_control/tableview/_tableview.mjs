@@ -4,9 +4,9 @@ import addTab from './addTab.mjs';
 
 import removeTab from './removeTab.mjs';
 
-import layerTable from './layerTable.mjs';
-
 import locationTable from './locationTable.mjs';
+
+import layerTable from './layerTable.mjs';
 
 export default _xyz => {
 
@@ -18,9 +18,9 @@ export default _xyz => {
 
     removeTab: removeTab(_xyz),
 
-    layerTable: layerTable(_xyz),
-
     locationTable: locationTable(_xyz),
+
+    layerTable: layerTable(_xyz)
 
   };
     
