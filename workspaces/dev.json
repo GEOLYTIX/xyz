@@ -1174,6 +1174,7 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline": {
+                                    "provider": "here",
                                     "range": 5
                                 }
                             },

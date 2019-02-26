@@ -40,8 +40,17 @@ export {default as hyperHTML} from 'hyperhtml/esm';
 
 import pointOnFeature from '@turf/point-on-feature';
 
+import bbox from '@turf/bbox';
+
+import meta from '@turf/meta';
+
+import helpers from '@turf/helpers';
+
 export const turf = {
-  pointOnFeature: pointOnFeature
+  pointOnFeature: pointOnFeature,
+  bbox: bbox,
+  meta: meta,
+  helpers: helpers,
 };
 
 import Tabulator from 'tabulator-tables';

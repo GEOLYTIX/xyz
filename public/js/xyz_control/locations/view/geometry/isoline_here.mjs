@@ -41,6 +41,8 @@ export default _xyz => entry => {
     // Update the location view.
     entry.location.view.update();
 
+    entry.location.flyTo();
+
   };
 
   xhr.send();

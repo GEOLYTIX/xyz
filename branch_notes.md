@@ -110,6 +110,9 @@ _xyz.locations.select(
 
 **location.draw()** will draw the location to the mapview.
 
+**location.flyTo()** will create a featuregroup of all of the locations geometries and fly the map to the extent of the featuregroup.
+
+**location.update()** will update the location in the database. A post request with the newValues will be sent to the api/location/update endpoint. The update method accepts a callback to be fired after the location view has been updated.
 
 
 A location's own methods know their parent.
@@ -123,6 +126,8 @@ locations : {
     select : {},
     location : {
         infoj : [],
+        update: ()={},
+        flyTo: ()=>{},
         geometry : {},
         Geometry : {},
         marker : {},

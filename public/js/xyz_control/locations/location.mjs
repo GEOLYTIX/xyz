@@ -164,20 +164,11 @@ export default _xyz => () => {
 
     const location = this;
 
-    if (location.geometry.type === 'Point') {
+    const allLayer = [location.Layer];
 
-      _xyz.map.flyTo(
-        {
-          lat: location.geometry.coordinates[1],
-          lng: location.geometry.coordinates[0],
-        },
-        _xyz.workspace.locale.maxZoom);
+    location.geometries.forEach(layer => allLayer.push(layer));
 
-    } else {
-
-      _xyz.map.flyToBounds(location.Layer.getBounds());
-
-    }
+    _xyz.map.flyToBounds(_xyz.L.featureGroup(allLayer).getBounds());
 
   }
 
