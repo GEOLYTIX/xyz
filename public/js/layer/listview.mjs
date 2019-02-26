@@ -96,8 +96,7 @@ export default _xyz => {
       //Add icon to layer header.
       layer_icon(_xyz, layer);
 
-      //Run tableCurrent function to disable layer drawer if necessary.
-      layer.tableCurrent();
+      layer.get();
 
       if (_xyz.log) console.log(layer);
 

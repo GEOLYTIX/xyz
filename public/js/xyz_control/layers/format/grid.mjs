@@ -183,13 +183,23 @@ export default (_xyz, layer) => () => {
     }
 
 
-    let digits = layer.grid_ratio ? 2 : 0;
     if (layer.style.legend.size_min) layer.style.legend.size_min.textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
     if (layer.style.legend.size_avg) layer.style.legend.size_avg.textContent = layer.sizeAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});
     if (layer.style.legend.size_max) layer.style.legend.size_max.textContent = layer.sizeMax.toLocaleString('en-GB', {maximumFractionDigits: 0});
-    if (layer.style.legend.color_min) layer.style.legend.color_min.textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: digits});
-    if (layer.style.legend.color_avg) layer.style.legend.color_avg.textContent = layer.colorAvg.toLocaleString('en-GB', {maximumFractionDigits: digits});
-    if (layer.style.legend.color_max) layer.style.legend.color_max.textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: digits});
+
+    if (layer.grid_ratio) {
+
+      if (layer.style.legend.color_min) layer.style.legend.color_min.textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: 0, style:'percent'});
+      if (layer.style.legend.color_avg) layer.style.legend.color_avg.textContent = layer.colorAvg.toLocaleString('en-GB', {maximumFractionDigits: 0, style:'percent'});
+      if (layer.style.legend.color_max) layer.style.legend.color_max.textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: 0, style:'percent'});
+
+    } else {
+
+      if (layer.style.legend.color_min) layer.style.legend.color_min.textContent = layer.colorMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
+      if (layer.style.legend.color_avg) layer.style.legend.color_avg.textContent = layer.colorAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});
+      if (layer.style.legend.color_max) layer.style.legend.color_max.textContent = layer.colorMax.toLocaleString('en-GB', {maximumFractionDigits: 0});
+
+    }
 
     return dots;
   }
