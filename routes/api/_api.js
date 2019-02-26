@@ -32,13 +32,9 @@ module.exports = fastify => {
 
   require('./location/edit/isoline_mapbox')(fastify);
 
-  require('./location/edit/isoline_here')(fastify); 
+  require('./location/edit/isoline_here')(fastify);
 
   require('./location/edit/draw')(fastify);
-
-  require('./location/edit/draw_catchment')(fastify);
-
-  require('./location/edit/draw_isoline')(fastify);
 
   require('./location/edit/update')(fastify);
 

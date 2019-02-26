@@ -137,7 +137,7 @@ export default _xyz => {
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
+            coordinates: location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
           }
         },
         pane: 'select_marker',

@@ -3,7 +3,7 @@ export default _xyz => entry => {
   const origin = [
     entry.location.geometry.coordinates[1],
     entry.location.geometry.coordinates[0]
-  ].join(',');
+  ];
 
   const xhr = new XMLHttpRequest();
 
@@ -17,20 +17,27 @@ export default _xyz => entry => {
       table: entry.location.table,
       field: entry.field,
       id: entry.location.id,
-      coordinates: origin,
-      mode: entry.edit.isoline.mode,
-      type: entry.edit.isoline.type,
-      rangetype: entry.edit.isoline.rangetype,
-      range: entry.edit.isoline.range,
+      coordinates: origin.join(','),
+      mode: entry.edit.isoline_here.mode,
+      type: entry.edit.isoline_here.type,
+      rangetype: entry.edit.isoline_here.rangetype,
+      minutes: entry.edit.isoline_here.minutes,
+      distance: entry.edit.isoline_here.distance,
       token: _xyz.token
     })
   );
 
   xhr.onload = e => {
 
-    if (e.target.status === 406) return alert(e.target.responseText);
+    if (e.target.status === 406) {
+      entry.location.view.update();
+      return alert(e.target.responseText);
+    }
       
-    if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
+    if (e.target.status !== 200) {
+      entry.location.view.update();
+      return alert('No route found. Try alternative set up.');
+    }
 
     // Reload layer.
     _xyz.layers.list[entry.location.layer].get();

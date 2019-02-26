@@ -162,3 +162,38 @@ locations : {
     }
 }
 ```
+
+**Isolines**
+
+Isoline endpoints are:
+
+/api/location/edit/isoline/here
+
+/api/location/edit/isoline/mapbox
+
+The isoline will be added to an existing location if provided with an ID and field; The infoj of the updated location will be returned.
+
+Otherwise a new location will created in the specified layer and the location ID will be returned.
+
+The defaults for the *isoline_mapbox* object are:
+
+```
+isoline_mapbox = {
+    profile : 'driving',
+    minutes : 10,
+    coordinates : [lng, lat]
+}
+```
+
+The defaults for the *isoline_here* object are:
+
+```
+isoline_here = {
+    mode : 'car',
+    type : 'fastest',
+    rangetype : 'time', // or 'distance'
+    minutes : 10,
+    distance : 10, //km, will only be used if rangetype is 'distance'
+    coordinates : [lat, lng]
+}
+```

@@ -481,8 +481,7 @@
                             "fieldfx": "ST_asGeoJson(isoline_here)",
                             "type": "geometry",
                             "edit": {
-                                "isoline": {
-                                    "provider": "here",
+                                "isoline_here": {
                                     "range": 10
                                 }
                             }
@@ -494,8 +493,7 @@
                             "fieldfx": "ST_asGeoJson(isoline_mapbox)",
                             "type": "geometry",
                             "edit": {
-                                "isoline": {
-                                    "provider": "mapbox",
+                                "isoline_mapbox": {
                                     "minutes": 10
                                 }
                             },
@@ -522,7 +520,8 @@
                         "rectangle": true,
                         "line": true,
                         "point": true,
-                        "catchment": true,
+                        "isoline_mapbox": true,
+                        "isoline_here": true,
                         "delete": true
                     },
                     "infoj": [
@@ -1173,8 +1172,7 @@
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
                             "edit": {
-                                "isoline": {
-                                    "provider": "here",
+                                "isoline_here": {
                                     "range": 5
                                 }
                             },

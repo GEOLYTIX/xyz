@@ -49,10 +49,9 @@ export default _xyz => entry => {
     entry.location.geometries.push(entry.ctrl.geometry);
   };
 
-  if (entry.edit && entry.edit.isoline) {
-    if (entry.edit.isoline.provider === 'here') entry.ctrl.showGeom = entry.ctrl.isoline_here;
-    if (entry.edit.isoline.provider === 'mapbox') entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
-  }
+  if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
+
+  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
 
   entry.ctrl.hideGeom = () => {
 

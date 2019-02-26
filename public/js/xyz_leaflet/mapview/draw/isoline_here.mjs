@@ -9,7 +9,7 @@ export default _xyz => layer => {
 
   _xyz.map.once('click', e => {
 
-    const marker = [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)];
+    const origin = [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)];
   
     // Add vertice from click.
     layer.edit.vertices.addLayer(
@@ -18,41 +18,46 @@ export default _xyz => layer => {
   
     const xhr = new XMLHttpRequest();
   
-    xhr.open('GET', _xyz.host + '/api/location/edit/draw/isoline?' + _xyz.utils.paramString({
-      locale: _xyz.workspace.locale.key,
-      layer: layer.key,
-      table: layer.table,
-      coordinates: [e.latlng.lat.toFixed(5), e.latlng.lng.toFixed(5)].join(','),
-      mode: layer.edit.isoline.mode,
-      type: layer.edit.isoline.type,
-      rangetype: layer.edit.isoline.rangetype,
-      traffic: null,
-      range: layer.edit.isoline.range,
-      token: _xyz.token
-    }));
+    xhr.open(
+      'GET',
+      _xyz.host +
+      '/api/location/edit/isoline/here?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: layer.table,
+        coordinates: origin.join(','),
+        mode: layer.edit.isoline_here.mode,
+        type: layer.edit.isoline_here.type,
+        rangetype: layer.edit.isoline_here.rangetype,
+        //traffic: null,
+        minutes: layer.edit.isoline_here.minutes,
+        distance: layer.edit.isoline_here.distance,
+        token: _xyz.token
+      }));
   
     xhr.onload = e => {
-
-      console.log(e.target.responseText);
   
       _xyz.mapview.node.style.cursor = '';
-    
-      //layer.get();
+
       layer.show();
-    
+        
       if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
                                     
       _xyz.locations.select({
         layer: layer.key,
         table: layer.table,
         id: e.target.response,
-        marker: marker
+        marker: origin.reverse(),
+        edit: {delete: true}
       });
     
     };
   
     xhr.send();
+
     _xyz.mapview.state.finish();
+
     _xyz.mapview.node.style.cursor = 'busy';
   
   });

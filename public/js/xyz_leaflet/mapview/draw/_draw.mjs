@@ -8,9 +8,9 @@ import line from './line.mjs';
 
 import point from './point.mjs';
 
-import catchment from './catchment.mjs';
+import isoline_mapbox from './isoline_mapbox.mjs';
 
-import isoline from './isoline.mjs';
+import isoline_here from './isoline_here.mjs';
 
 import polygon from './polygon.mjs';
 
@@ -30,9 +30,9 @@ export default _xyz => ({
 
   polygon: polygon(_xyz),
 
-  catchment: catchment(_xyz),
+  isoline_mapbox: isoline_mapbox(_xyz),
 
-  isoline: isoline(_xyz),
+  isoline_here: isoline_here(_xyz),
 
   finish: finish(_xyz),
 
