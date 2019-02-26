@@ -3,7 +3,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'POST',
     url: '/auth/user/delete',
-    beforeHandler: fastify.auth([fastify.authAdminAPI]),
+    preHandler: fastify.auth([fastify.authAdminAPI]),
     handler: async (req, res) => {
 
       const email = req.body.email.replace(/\s+/g,'');

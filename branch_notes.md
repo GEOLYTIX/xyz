@@ -1,3 +1,21 @@
+**Fastify** is now version 2 release.
+
+Fastify plugins have been upgraded to the latest versions.
+
+fastify-auth 0.4.0
+
+fastify-cors 2.1.2
+
+fastify-formbody 3.1.0
+
+fastify-helmet 3.0.0
+
+fastify-jwt 0.9.3
+
+fastify-static 2.3.4
+
+Pino-pretty has been removed from dependencies.
+
 **Update leaflet to version 1.4.0.**
 
 **_xyz()** instantiation will load the first locale if no locale is specified as parameter.

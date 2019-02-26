@@ -14,7 +14,7 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/',
-    beforeHandler: fastify.auth([fastify.authAccess]),
+    preHandler: fastify.auth([fastify.authAccess]),
     handler: view
   });
 

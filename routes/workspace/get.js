@@ -3,7 +3,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/workspace/get',
-    beforeHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([fastify.authAPI]),
     handler: (req, res) => {
 
       // Decode token from query or use a public access if no token has been provided.

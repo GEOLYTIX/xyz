@@ -3,7 +3,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/table',
-    beforeHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
       let q = `
