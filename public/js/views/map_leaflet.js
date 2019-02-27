@@ -115,14 +115,14 @@ _xyz({
     //   }
     // });
 
-    // _xyz.mapview.changeEnd = _xyz.utils.compose(
-    //   _xyz.mapview.changeEnd,
-    //   () => _xyz.tableview.current_table.update()
-    // );
+    _xyz.mapview.changeEnd = _xyz.utils.compose(
+      _xyz.mapview.changeEnd,
+      () => _xyz.tableview.current_table.update()
+    );
   
     _xyz.layers.list['Mapbox Base'].remove();
 
-    _xyz.layers.list.COUNTRIES.style.theme = null;
+    //_xyz.layers.list.COUNTRIES.style.theme = null;
   
     _xyz.layers.list.COUNTRIES.show();
 
@@ -143,6 +143,8 @@ _xyz({
         document.getElementById('location_info_container2').appendChild(location.view.node);
       }
     );
+
+    _xyz.layers.list.COUNTRIES.style.setLegend(document.getElementById('location_info_container2'));
 
   }
 });

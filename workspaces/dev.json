@@ -342,10 +342,6 @@
                     "format": "geojson",
                     "dbs": "XYZ",
                     "table": "glx_offices",
-                    "edit": {
-                        "point": true,
-                        "delete": true
-                    },
                     "style": {
                         "default": {
                             "marker": {
@@ -376,18 +372,6 @@
                     },
                     "qID": "id",
                     "infoj": [
-                        {
-                            "label": "City",
-                            "field": "city",
-                            "type": "text",
-                            "edit": true
-                        },
-                        {
-                            "label": "Address EDIT",
-                            "field": "address",
-                            "type": "text",
-                            "edit": true
-                        },
                         {
                             "label": "Address HTML",
                             "field": "address_html",
@@ -911,6 +895,7 @@
                     ]
                 },
                 "retail_points": {
+                    "display": true,
                     "name": "Retail Points",
                     "format": "cluster",
                     "cluster_label": "store",
@@ -940,10 +925,6 @@
                                 ]
                             }
                         }
-                    },
-                    "edit": {
-                        "point": true,
-                        "delete": true
                     },
                     "filter": {
                         "roles": {
@@ -1096,8 +1077,7 @@
                         {
                             "label": "Retailer",
                             "field": "retailer",
-                            "type": "text",
-                            "edit": true
+                            "type": "text"
                         },
                         {
                             "label": "Fascia",
@@ -1142,7 +1122,6 @@
                     ]
                 },
                 "sites": {
-                    "display": true,
                     "edit": {
                         "properties": true,
                         "point": true,

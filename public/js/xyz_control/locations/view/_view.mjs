@@ -59,7 +59,7 @@ export default function(_xyz) {
         style: {
           cellPadding: '0',
           cellSpacing: '0',
-          borderBottom: '1px solid ' + location.style.color
+          //borderBottom: '1px solid ' + location.style.color
         },
       });
 

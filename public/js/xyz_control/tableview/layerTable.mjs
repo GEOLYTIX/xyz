@@ -28,12 +28,12 @@ export default _xyz => params => {
     const xhr = new XMLHttpRequest();
 
     const bounds = _xyz.map && _xyz.map.getBounds();
-        
+       
     xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: params.layer.key,
       table: params.layer.tableMax(),
-      viewport: bounds ? true : false,
+      viewport: !!bounds,
       west: bounds && bounds.getWest(),
       south: bounds && bounds.getSouth(),
       east: bounds && bounds.getEast(),
