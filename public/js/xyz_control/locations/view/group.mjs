@@ -20,7 +20,7 @@ export default _xyz => group => {
     appendTo: group.td
   });
 
-  const toggleExpandedState = e => {
+  function toggleExpandedState(e) {
     if (e) {
       e.stopPropagation();
     }
@@ -144,11 +144,6 @@ export default _xyz => group => {
     }
   }
 
-  // If the group is configured to be shown in an expanded state when initialised
-  if (group.expanded) {
-    // call toggleExpandedState once to toggle the state from the default collapsed style to the expanded style
-    toggleExpandedState();
-  }
 };
 
 function chartIcon(group) {

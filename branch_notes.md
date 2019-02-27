@@ -126,6 +126,8 @@ _xyz.locations.select(
 );
 ```
 
+**Groups** setting `expanded: true` in the group will have the group automatically expanded when the location view is added.
+
 **location.draw()** will draw the location to the mapview.
 
 **location.flyTo()** will create a featuregroup of all of the locations geometries and fly the map to the extent of the featuregroup.
