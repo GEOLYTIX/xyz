@@ -1,8 +1,12 @@
-export default (_xyz, record, entry) => {
+export default _xyz => entry => {
 
-  let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: record.table });
+  // let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: entry.row });
   
-  let td = _xyz.utils.createElement({ tag: 'td', style: {'paddingTop': '5px'}, appendTo: tr });
+  let td = _xyz.utils.createElement({
+    tag: 'td',
+    style: {'paddingTop': '5px'},
+    appendTo: entry.row
+  });
   
   _xyz.utils.createCheckbox({
     label: entry.name || 'Table',
@@ -14,7 +18,7 @@ export default (_xyz, record, entry) => {
 
       if (e.target.checked) _xyz.tableview.locationTable({
         target: _xyz.tableview.node.querySelector('.table'),
-        layer: record.location.layer,
+        layer: entry.location.layer,
         table: entry
       });
 

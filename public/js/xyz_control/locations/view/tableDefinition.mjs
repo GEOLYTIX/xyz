@@ -1,20 +1,24 @@
-export default (_xyz, record, entry) => {
+export default _xyz => entry => {
 
-  let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: record.table });
+//   let tr = _xyz.utils.createElement({ tag: 'tr', appendTo: entry.row });
 
-  let td = _xyz.utils.createElement({ tag: 'td', style: {'paddingTop': '5px'}, appendTo: tr });
-
+  let td = _xyz.utils.createElement({
+	  tag: 'td',
+	  style: {'paddingTop': '5px'},
+	  appendTo: entry.row
+  });
 
   _xyz.utils.createCheckbox({
     label: entry.title || 'Show table',
     appendTo: td,
     checked: !!entry.checked,
     onChange: e => {
-    	e.target.checked ?  showTab(record, entry) : hideTab(record, entry);
+    	e.target.checked ?  showTab() : hideTab();
     }
   });
 
-  function showTab(record, entry){
+  function showTab(){
+
   	_xyz.tableview.current_table = entry;
 
   	if(_xyz.tableview.tables){
@@ -26,15 +30,15 @@ export default (_xyz, record, entry) => {
 
   	entry.target = _xyz.tableview.locationTable({
   		target: _xyz.tableview.node.querySelector('.table'),
-  		record: record,
+  		location: entry.location,
   		table: entry
   	});
   }
   
-  function hideTab(record, entry){
+  function hideTab(){
   	
   	_xyz.tableview.removeTab({
-  		record: record,
+  		location: entry.location,
   		table: entry
   	});
 

@@ -12,6 +12,8 @@ export default _xyz => params => {
     
   // Load locale if defined in params or if no locale is yet loaded.
   if (params.locale) _xyz.workspace.loadLocale(params);
+
+  if (params.view && (!params.view.z || !params.view.lat || !params.view.lng)) delete params.view;
                 
   // Assign params to locale.
   // This makes it possible to override client side workspace entries.

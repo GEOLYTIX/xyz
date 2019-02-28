@@ -22,21 +22,19 @@ module.exports = fastify => {
       // Return 406 if table is not defined as request parameter.
       if (!table) return res.code(406).send('Missing table.');
 
-      const range = req.query.rangetype === 'time' ?
-        req.query.minutes * 60 || 600 :
-        req.query.rangetype === 'distance' ?
-          req.query.distance * 1000 || 1000 :
-          600;
-
-
       const params = {
         coordinates: req.query.coordinates,
         mode: req.query.mode || 'car',
         type: req.query.type || 'fastest', //'shortest'
         rangetype: req.query.rangetype || 'time',
-        range: range,
         traffic: 'traffic:disabled'
       };
+
+      params.range = params.rangetype === 'time' ?
+        req.query.minutes * 60 || 600 :
+        params.rangetype === 'distance' ?
+          req.query.distance * 1000 || 1000 :
+          600;
 
       if (!params.coordinates) return res.code(406).send('Invalid coordinates.');
 

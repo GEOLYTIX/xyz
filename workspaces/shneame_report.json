@@ -1,6 +1,5 @@
 {
   "title": "GEOLYTIX | Shepherd Neame",
-  "locate": {},
   "documentation": "documentation",
   "locales": {
     "GB": {
@@ -14,6 +13,13 @@
         "lng": -0.37,
         "z": 9
       },
+      "bounds": {
+        "north": 62,
+        "east": 5,
+        "south": 48,
+        "west": -13
+      },
+      "maskBounds": true,
       "minZoom": 6,
       "maxZoom": 18,
       "layers": {
@@ -21,23 +27,12 @@
           "group": "Base maps",
           "display": true,
           "name": "Mapbox Baselayer",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
-        },
-        "label": {
-          "group": "Base maps",
-          "display": true,
-          "name": "Mapbox Labels",
-          "attribution": [
-            "mapbox",
-            "osm"
-          ],
-          "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "demographics": {
           "display": false,
@@ -98,8 +93,8 @@
               "fieldfx": "ST_asGeoJson(isoline_5min)",
               "type": "geometry",
               "edit": {
-                "isoline": {
-                  "range": 5
+                "isoline_here": {
+                  "minutes": 5
                 }
               }
             },
@@ -109,8 +104,8 @@
               "fieldfx": "ST_asGeoJson(isoline_10min)",
               "type": "geometry",
               "edit": {
-                "isoline": {
-                  "range": 10
+                "isoline_here": {
+                  "minutes": 10
                 }
               }
             },
@@ -120,8 +115,8 @@
               "fieldfx": "ST_asGeoJson(isoline_15min)",
               "type": "geometry",
               "edit": {
-                "isoline": {
-                  "range": 15
+                "isoline_here": {
+                  "minutes": 15
                 }
               }
             },
@@ -326,8 +321,8 @@
                     "uk.age_18to24_uk",
                     "uk.age_25to29_uk",
                     "uk.age_30to44_uk",
-                    "uk.age_45to59_uk", 
-                    "uk.age_60plus_uk", 
+                    "uk.age_45to59_uk",
+                    "uk.age_60plus_uk",
                     "uk.age_total_uk"
                   ]
                 },
@@ -432,17 +427,17 @@
                   "label": "UK Total",
                   "type": "integer",
                   "rows": [
-                    "uk.social_grade_ab_uk", 
-                    "uk.social_grade_c1_uk", 
-                    "uk.social_grade_c2_uk", 
-                    "uk.social_grade_de_uk", 
+                    "uk.social_grade_ab_uk",
+                    "uk.social_grade_c1_uk",
+                    "uk.social_grade_c2_uk",
+                    "uk.social_grade_de_uk",
                     "uk.social_grade_total_uk"
                   ]
                 },
                 "sg_index": {
                   "label": "Social Grade Index",
                   "type": "integer",
-                  "rows":[
+                  "rows": [
                     "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
                     "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
                     "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
@@ -629,6 +624,17 @@
               ]
             }
           ]
+        },
+        "label": {
+          "group": "Base maps",
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         }
       }
     }

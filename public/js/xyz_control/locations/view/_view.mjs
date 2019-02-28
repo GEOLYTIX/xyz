@@ -10,6 +10,10 @@ import edit from './edit/_edit.mjs';
 
 import valChange from './edit/valChange.mjs';
 
+import table from './table.mjs';
+
+import tableDefinition from './tableDefinition.mjs';
+
 export default function(_xyz) {
 
   return {
@@ -27,6 +31,10 @@ export default function(_xyz) {
     geometry: geometry(_xyz),
 
     edit: edit(_xyz),
+
+    table: table(_xyz),
+
+    tableDefinition: tableDefinition(_xyz),
 
     valChange: valChange,
 
@@ -145,6 +153,10 @@ export default function(_xyz) {
       // Create geometry control.
       if (entry.type === 'geometry') return location.view.geometry(entry);    
 
+      if (entry.type === 'table') return location.view.table(entry);
+
+      if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);    
+
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();
 
@@ -199,6 +211,29 @@ export default function(_xyz) {
       }
 
     });
+
+
+    Object.values(location.infoj).map(entry => {
+      if(entry.type === 'tableDefinition' && entry.checked) {
+        _xyz.tableview.locationTable({
+          target: _xyz.tableview.node.querySelector('.table'),
+          location: location,
+          table: entry
+        });
+
+        if(_xyz.tableview.nav_bar.children) {
+          Object
+            .values(_xyz.tableview.nav_bar.children)
+            .forEach(tab => tab.classList.remove('tab-current'));
+
+          _xyz.tableview.nav_bar.children[0].classList.add('tab-current');
+          _xyz.tableview.tables[0].activate();
+        }
+      }; 
+
+    });
+
+
 
     // Hide group if empty
     Object.values(location.infoj).map(entry => {
