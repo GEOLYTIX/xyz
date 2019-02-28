@@ -27,6 +27,7 @@ workspaces/xyz.json
 workspaces/coles.json
 workspaces/test.json
 workspaces/brexit.json
+workspaces/mb.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
