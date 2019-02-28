@@ -26,6 +26,10 @@ export {dropdown} from './dropdown.mjs';
 
 export {hexToRGBA} from './hexToRGBA.mjs';
 
+export {dataURLtoBlob} from './dataURLtoBlob.mjs';
+
+export {getCircularReplacer} from './getCircularReplacer.mjs';
+
 export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
 export {setStrokeWeight} from './setStrokeWeight.mjs';
@@ -36,8 +40,17 @@ export {default as hyperHTML} from 'hyperhtml/esm';
 
 import pointOnFeature from '@turf/point-on-feature';
 
+import bbox from '@turf/bbox';
+
+import meta from '@turf/meta';
+
+import helpers from '@turf/helpers';
+
 export const turf = {
-  pointOnFeature: pointOnFeature
+  pointOnFeature: pointOnFeature,
+  bbox: bbox,
+  meta: meta,
+  helpers: helpers,
 };
 
 import Tabulator from 'tabulator-tables';

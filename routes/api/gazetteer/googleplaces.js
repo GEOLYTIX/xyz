@@ -2,7 +2,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/gazetteer/googleplaces',
-    beforeHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
       const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}&${global.KEYS.GOOGLE}`;

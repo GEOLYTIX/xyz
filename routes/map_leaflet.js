@@ -15,7 +15,7 @@ function route(fastify) {
     method: 'GET',
     url: '/map/leaflet',
 
-    // No beforeHandler for map control pages.
+    // No preHandler for map control pages.
     handler: view
   });
 

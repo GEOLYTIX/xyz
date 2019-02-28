@@ -30,6 +30,8 @@ export function createCheckbox(param) {
   
   if (param.checked) input.checked = true;
   
-  if (typeof (param.onChange) === 'function') input.addEventListener('change', param.onChange);
+  if (typeof (param.onChange) === 'function') input.onchange = param.onChange;
+
+  return input;
 
 }

@@ -12,8 +12,6 @@ import trash from './controls/trash.mjs';
 
 import expander from './controls/expander.mjs';
 
-import info from './info/_info.mjs';
-
 export default _xyz => record => {
 
   _xyz.locations.listview.node.parentElement.style.display = 'block';
@@ -51,6 +49,9 @@ export default _xyz => record => {
     }
   });
 
+  // Add location view to drawer.
+  record.drawer.appendChild(record.location.view.node);
+
   // Create the clear control element to control the removal of a feature from the select.layers.
   clear(_xyz, record);
 
@@ -73,11 +74,8 @@ export default _xyz => record => {
   // Create the expand control element which controls whether the data table is displayed for the feature.
   expander(_xyz, record);
 
-  // Add create and append infoj table to drawer.
-  info(_xyz, record);
-
   // Find free space and insert record.
-  let idx = _xyz.locations.list.indexOf(record);
+  let idx = _xyz.locations.listview.list.indexOf(record);
   
   _xyz.locations.listview.node.insertBefore(record.drawer, _xyz.locations.listview.node.children[idx]);
 

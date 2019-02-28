@@ -21,19 +21,18 @@ export default (_xyz, record) => {
 
         if (_xyz.mapview.state && _xyz.mapview.state != 'select') _xyz.switchState(record.location.layer, _xyz.mapview.state);
 
-        if (record.location.id) {
-          _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id);
-        }
+        _xyz.hooks.filter(
+          'locations',
+          `${record.location.layer}!${record.location.table}!${record.location.id}`
+        );
+
+        record.location.remove();    
         
-        // Clear geometries and delete location to free up record.
-        record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-        // Clear additional geometries
-        if(record.location.geometries.additional) record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
         delete record.location;
 
         // Run locations init when all records are free.
-        const freeRecords = _xyz.locations.list.filter(record => !record.location);
-        if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.listview.init();
+        const freeRecords = _xyz.locations.listview.list.filter(record => !record.location);
+        if (freeRecords.length === _xyz.locations.listview.list.length) _xyz.locations.listview.init();
 
       }
     }

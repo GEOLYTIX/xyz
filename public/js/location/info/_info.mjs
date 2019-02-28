@@ -6,11 +6,7 @@ import images from './images/_images.mjs';
 
 import geometry from './geometry.mjs';
 
-import tableDefinition from './tableDefinition.mjs';
-
 import log from './log.mjs';
-
-import table from './table.mjs';
 
 import edit from './edit/_edit.mjs';
 
@@ -39,17 +35,6 @@ export default (_xyz, record) => {
       });
     } else {
       record.location.geometries.additional = [];
-    }
-
-    // checks if location table tab should be still visible after record update
-    if(_xyz.tableview.tables){
-      Object.values(record.location.infoj).map(entry => {
-        if(entry.type === 'tableDefinition'){
-          _xyz.tableview.tables.map(tab => {
-            if(tab.tab.textContent === entry.title) entry.checked = true; 
-          });
-        }
-      });
     }
 
     record.table.innerHTML = '';
@@ -116,16 +101,15 @@ export default (_xyz, record) => {
 
       // Create new table cell for the entry label and append to table.
       let _label;
-      if (entry.label) {
-        _label = _xyz.utils.createElement({
-          tag: 'td',
-          options: {
-            className: 'label lv-' + (entry.level || 0),
-            textContent: entry.label,
-            title: entry.title || null
-          },
-          appendTo: entry.row
-        });
+      if (entry.label) {_label = _xyz.utils.createElement({
+        tag: 'td',
+        options: {
+          className: 'label lv-' + (entry.level || 0),
+          textContent: entry.label,
+          title: entry.title || null
+        },
+        appendTo: entry.row
+      });
       }
 
       // Finish entry creation if entry has not type.
@@ -140,14 +124,8 @@ export default (_xyz, record) => {
       // Create log control.
       if (entry.type === 'log') return log(_xyz, record, entry);
 
-      // Create log control.
-      if (entry.type === 'table') return table(_xyz, record, entry);
-
       // Create geometry control.
-      if (entry.type === 'geometry') return geometry(_xyz, record, entry);  
-
-      // Create table definition - to do
-      if(entry.type === 'tableDefinition') return tableDefinition(_xyz, record, entry);  
+      if (entry.type === 'geometry') return geometry(_xyz, record, entry);    
 
       // Remove empty row which is not editable.
       if (!entry.edit && !entry.value) return entry.row.remove();
@@ -196,26 +174,6 @@ export default (_xyz, record) => {
         // otherwise use the displayValue
         return entry.val.textContent = entry.displayValue;
       }
-
-    });
-
-    Object.values(record.location.infoj).map(entry => {
-      if(entry.type === 'tableDefinition' && entry.checked) {
-        _xyz.tableview.locationTable({
-          target: _xyz.tableview.node.querySelector('.table'),
-          record: record,
-          table: entry
-        });
-
-        if(_xyz.tableview.nav_bar.children) {
-          Object
-            .values(_xyz.tableview.nav_bar.children)
-            .forEach(tab => tab.classList.remove('tab-current'));
-
-          _xyz.tableview.nav_bar.children[0].classList.add('tab-current');
-          _xyz.tableview.tables[0].activate();
-        }
-      }; 
 
     });
 

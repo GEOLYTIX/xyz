@@ -421,10 +421,6 @@
                     "format": "geojson",
                     "dbs": "XYZ",
                     "table": "glx_offices",
-                    "edit": {
-                        "point": true,
-                        "delete": true
-                    },
                     "style": {
                         "default": {
                             "marker": {
@@ -455,18 +451,6 @@
                     },
                     "qID": "id",
                     "infoj": [
-                        {
-                            "label": "City",
-                            "field": "city",
-                            "type": "text",
-                            "edit": true
-                        },
-                        {
-                            "label": "Address EDIT",
-                            "field": "address",
-                            "type": "text",
-                            "edit": true
-                        },
                         {
                             "label": "Address HTML",
                             "field": "address_html",
@@ -542,18 +526,46 @@
                     "qID": "id",
                     "infoj": [
                         {
-                            "label": "Catchment Primary",
+                            "label": "Catchment Geometry",
+                            "name": "Show / Hide",
                             "field": "catchment",
                             "fieldfx": "ST_asGeoJson(catchment)",
                             "type": "geometry",
+                            "style": {
+                                "fill": true,
+                                "fillColor": "#c62828",
+                                "fillOpacity": 0.2
+                            }
+                        },
+                        {
+                            "label": "Catchment Here",
+                            "name": "Create / Delete",
+                            "field": "isoline_here",
+                            "fieldfx": "ST_asGeoJson(isoline_here)",
+                            "type": "geometry",
                             "edit": {
-                                "catchment": {}
+                                "isoline_here": {
+                                    "range": 10
+                                }
+                            }
+                        },
+                        {
+                            "label": "Catchment Mapbox",
+                            "name": "Create / Delete",
+                            "field": "isoline_mapbox",
+                            "fieldfx": "ST_asGeoJson(isoline_mapbox)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline_mapbox": {
+                                    "minutes": 10
+                                }
                             },
                             "style": {
                                 "stroke": true,
-                                "color": "#E01A4F",
+                                "color": "#ffb300",
                                 "weight": 2,
                                 "fill": true,
+                                "fillColor": "#ffb300",
                                 "fillOpacity": 0.2
                             }
                         }
@@ -571,7 +583,8 @@
                         "rectangle": true,
                         "line": true,
                         "point": true,
-                        "catchment": true,
+                        "isoline_mapbox": true,
+                        "isoline_here": true,
                         "delete": true
                     },
                     "infoj": [
@@ -580,6 +593,26 @@
                             "field": "images",
                             "type": "images",
                             "edit": true
+                        },
+                        {
+                            "label": "Date:",
+                            "field": "dev_date",
+                            "type": "date",
+                            "edit": true
+                        },
+                        {
+                            "label": "Options",
+                            "field": "dev_options",
+                            "type": "text",
+                            "edit": {
+                                "options": [
+                                  "Open",
+                                  "Closed",
+                                  {
+                                    "Other": "text"
+                                  }
+                                ]
+                              }
                         }
                     ]
                 },
@@ -652,15 +685,6 @@
                             "type": "integer",
                             "filter": "numeric",
                             "edit": true
-                        },
-                        {
-                            "label": "GRID pop__01",
-                            "field": "pop__01",
-                            "type": "integer",
-                            "lookup": {
-                                "layer": "grid",
-                                "function": "AVG"
-                            }
                         }
                     ]
                 },
@@ -950,6 +974,7 @@
                     ]
                 },
                 "retail_points": {
+                    "display": true,
                     "name": "Retail Points",
                     "format": "cluster",
                     "cluster_label": "store",
@@ -986,10 +1011,6 @@
                                 ]
                             }
                         }
-                    },
-                    "edit": {
-                        "point": true,
-                        "delete": true
                     },
                     "filter": {
                         "roles": {
@@ -1142,8 +1163,7 @@
                         {
                             "label": "Retailer",
                             "field": "retailer",
-                            "type": "text",
-                            "edit": true
+                            "type": "text"
                         },
                         {
                             "label": "Fascia",
@@ -1188,7 +1208,6 @@
                     ]
                 },
                 "sites": {
-                    "display": true,
                     "edit": {
                         "properties": true,
                         "point": true,
@@ -1218,7 +1237,7 @@
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
                             "edit": {
-                                "isoline": {
+                                "isoline_here": {
                                     "range": 5
                                 }
                             },

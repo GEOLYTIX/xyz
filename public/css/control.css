@@ -9,151 +9,79 @@
 @font-face {
   font-family: ffmark_bold;
   src: url(../fonts/MarkWebPro-Bold.woff) format("woff"); }
-.infojTable {
+.locationview {
   text-align: left;
   width: 100%;
   font-size: 12px;
   padding-top: 5px;
   table-layout: fixed; }
-  .infojTable .changed {
+  .locationview .changed {
     color: #090; }
-  .infojTable .label {
+  .locationview .label {
     padding-top: 5px; }
-  .infojTable textarea {
+  .locationview textarea {
     resize: none;
     width: 100%; }
-  .infojTable input {
+  .locationview input {
     width: 100%;
     font-family: 'PT Mono', monospace;
     margin: 5px 0 7px 0;
     box-sizing: border-box;
     padding-left: 3px; }
-  .infojTable .range {
+  .locationview .range {
     padding: 10px 0 10px 10px; }
-  .infojTable .lv-0 {
+  .locationview .lv-0 {
     font-size: 14px;
     font-weight: 700; }
-  .infojTable .lv-1 {
+  .locationview .lv-1 {
     font-size: 13px; }
-  .infojTable .lv-2 {
+  .locationview .lv-2 {
     font-size: 12px;
     padding-left: 10px; }
-  .infojTable .val {
+  .locationview .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
     font-size: 12px; }
-    .infojTable .val a {
+    .locationview .val a {
       color: #090; }
-  .infojTable .num {
+  .locationview .num {
     text-align: right; }
-  .infojTable .addImageCell {
+  .locationview .addImageCell {
     vertical-align: middle;
     height: 170px; }
-    .infojTable .addImageCell i {
+    .locationview .addImageCell i {
       color: #090;
       font-size: 70px;
       padding: 20px;
       text-shadow: 2px 2px 1px #777; }
-    .infojTable .addImageCell input {
+    .locationview .addImageCell input {
       display: none; }
-  .infojTable .table-section {
+  .locationview .table-section {
     margin-top: 10px; }
-    .infojTable .table-section .t-expander {
+    .locationview .table-section .t-expander {
       vertical-align: bottom;
       float: right;
       font-size: 15px;
       padding-right: 5px; }
-    .infojTable .table-section.expandable {
+    .locationview .table-section.expandable {
       margin-bottom: 8px;
       max-height: 25px;
       overflow: hidden;
       transition: max-height 0.3s ease-out; }
-      .infojTable .table-section.expandable .t-expander::before {
+      .locationview .table-section.expandable .t-expander::before {
         content: "expand_more"; }
-    .infojTable .table-section.expanded {
+    .locationview .table-section.expanded {
       max-height: none;
       overflow: auto; }
-      .infojTable .table-section.expanded .t-expander::before {
+      .locationview .table-section.expanded .t-expander::before {
         content: "expand_less"; }
-  .infojTable .sample-circle {
+  .locationview .sample-circle {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     box-shadow: 2px 2px 2px #999;
     float: right;
     margin-right: 10px; }
-
-.leaflet-popup-content {
-  overflow-x: hidden; }
-  .leaflet-popup-content .scrollbar_container {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    top: 0;
-    width: 10px;
-    background-color: lightgrey; }
-    .leaflet-popup-content .scrollbar_container > .scrollbar {
-      position: absolute;
-      width: 10px;
-      background: rgba(0, 0, 0, 0.5); }
-    .leaflet-popup-content .scrollbar_container:hover {
-      cursor: ns-resize; }
-  .leaflet-popup-content .content::-webkit-scrollbar {
-    display: none; }
-
-.location_list {
-  min-height: 30px;
-  max-height: 300px;
-  width: 450px;
-  list-style-type: none;
-  text-align: left;
-  font-family: 'PT Mono', monospace; }
-  .location_list li {
-    padding-left: 15px;
-    white-space: nowrap; }
-  .location_list li:hover {
-    background-color: #cf9;
-    cursor: pointer; }
-
-.location_drop {
-  display: none;
-  position: fixed;
-  height: 100%;
-  max-height: 30%;
-  width: 100%;
-  z-index: 999;
-  border-bottom: 2px solid #079e00;
-  box-shadow: 0 0 10px slategrey; }
-  .location_drop > ul {
-    -webkit-padding-start: 0;
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    list-style-type: none;
-    position: absolute;
-    background-color: white;
-    width: 100%;
-    padding-left: 70px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    height: 100%; }
-    .location_drop > ul li {
-      font-size: 20px;
-      color: #090;
-      list-style: none;
-      line-height: 1.5em; }
-  .location_drop td {
-    padding: 5px 0 5px 10px;
-    font-size: 20px;
-    color: #090; }
-  .location_drop td:first-child {
-    font-size: 14px; }
-  .location_drop .location_drop__close {
-    position: fixed;
-    top: 0;
-    right: 0;
-    color: #090;
-    font-size: 50px;
-    z-index: 1000; }
 
 .stage-tooltip {
   padding: 0 0 0 4px; }
@@ -1874,7 +1802,21 @@ button {
   cursor: wait !important; }
 
 .leaflet-popup-content {
-  width: 301px !important; }
+  width: 320px !important;
+  overflow-x: hidden; }
+  .leaflet-popup-content > ul {
+    max-height: 300px;
+    list-style-type: none;
+    text-align: left;
+    font-family: 'PT Mono', monospace; }
+    .leaflet-popup-content > ul li {
+      padding-left: 15px;
+      white-space: nowrap; }
+    .leaflet-popup-content > ul li:hover {
+      background-color: #cf9;
+      cursor: pointer; }
+  .leaflet-popup-content .locationview {
+    padding: 10px; }
 
 .listview .title {
   font-family: ffmark_bold, sans-serif;

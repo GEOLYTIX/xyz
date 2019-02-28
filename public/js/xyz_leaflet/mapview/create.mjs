@@ -11,7 +11,7 @@ export default _xyz => params => {
   _xyz.mapview.node = params.target;  
     
   // Load locale if defined in params or if no locale is yet loaded.
-  if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
+  if (params.locale) _xyz.workspace.loadLocale(params);
                 
   // Assign params to locale.
   // This makes it possible to override client side workspace entries.
@@ -28,7 +28,15 @@ export default _xyz => params => {
   _xyz.mapview.changeEnd = () => {
            
     // Set view hooks when method is available.
-    if (_xyz.hooks && _xyz.hooks.setView) _xyz.hooks.setView(_xyz.map.getCenter(), _xyz.map.getZoom());
+    if (_xyz.hooks) {
+      const center = _xyz.map.getCenter();
+
+      _xyz.hooks.set({
+        lat: center.lat,
+        lng: center.lng,
+        z: _xyz.map.getZoom()
+      });
+    }
           
     // Reload layers.
     // layer.get() will return if reload is not required.
@@ -94,6 +102,17 @@ export default _xyz => params => {
     clearTimeout(timer);
     timer = setTimeout(_xyz.mapview.changeEnd, 500);
   }
+
+  _xyz.mapview.popup = params => {
+
+    if (!params || !params.latlng || !params.content) return;
+
+    _xyz.L.popup({ closeButton: false })
+      .setLatLng(params.latlng)
+      .setContent(params.content)
+      .openOn(_xyz.map);
+
+  };
          
   const panes = {
     next: 500,

@@ -199,13 +199,15 @@ export default _xyz => {
     _xyz.gazetteer.input.value = record.innerText;
   
     if (record['data-source'] === 'glx') {
+
       _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
         layer: record['data-layer'],
         table: record['data-table'],
         id: record['data-id'],
         marker: record['data-marker'].split(',')
-      });
+      }, true);
+
       return;
     }
   
@@ -243,7 +245,7 @@ export default _xyz => {
     // Remove existing layer.
     if (_xyz.gazetteer.layer) _xyz.map.removeLayer(_xyz.gazetteer.layer);
 
-    _xyz.gazetteer.layer = _xyz.locations.drawGeoJSON({
+    _xyz.gazetteer.layer = _xyz.mapview.draw.geoJSON({
       json: geom,
       pane: 'gazetteer',
       icon: {

@@ -41,12 +41,12 @@ function startFastify(){
   const fastify = require('fastify')({
     logger: {
       level: process.env.LOG_LEVEL || 'error',
-      prettifier: require('pino-pretty'),
-      prettyPrint: {
-        errorProps: ['hint', 'detail'],
-        levelFirst: true,
-        crlf: true
-      }
+      // prettifier: require('pino-pretty'),
+      // prettyPrint: {
+      //   errorProps: ['hint', 'detail'],
+      //   levelFirst: true,
+      //   crlf: true
+      // }
     }
   });
 

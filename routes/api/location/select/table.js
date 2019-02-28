@@ -2,8 +2,8 @@ module.exports = fastify => {
 
   fastify.route({
     method: 'GET',
-    url: '/api/location/table',
-    beforeHandler: fastify.auth([fastify.authAPI]),
+    url: '/api/location/table', 
+    prehandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };

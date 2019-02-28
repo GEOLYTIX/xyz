@@ -25,11 +25,13 @@ _xyz({
 
 function init(_xyz) {
 
+  _xyz.hooks = hooks(_xyz);
+
   // Set platform specific interface functions.
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
   if (document.body.dataset.viewmode === 'desktop') desktop(_xyz);
 
-  _xyz.hooks = hooks(_xyz);
+  // _xyz.hooks = hooks(_xyz);
 
   // Create mapview control.
   _xyz.mapview.create({

@@ -46,6 +46,8 @@ export default _xyz => {
           return obj;
         }, {});
 
+      loadLocale(params);
+
       params.callback(_xyz);
 
     };

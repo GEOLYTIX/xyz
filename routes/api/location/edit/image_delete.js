@@ -2,7 +2,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/images/delete',
-    beforeHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([fastify.authAPI]),
     handler: (req, res) => {
 
       const cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [];

@@ -8,9 +8,9 @@ import * as utils from '../utils/_utils.mjs';
 
 import workspace from '../workspace.mjs';
 
-import layer from './layer/_layer.mjs';
+import layers from './layers/_layers.mjs';
 
-import location from './location/_location.mjs';
+import locations from './locations/_locations.mjs';
 
 import mapview from '../xyz_leaflet/mapview/_mapview.mjs';
 
@@ -24,9 +24,9 @@ export default async (params) => {
 
   _xyz.utils = utils;
 
-  _xyz.layers.layer = layer(_xyz);
+  _xyz.layers = layers(_xyz);
 
-  _xyz.locations = location(_xyz);
+  _xyz.locations = locations(_xyz);
 
   _xyz.mapview = mapview(_xyz);
 
@@ -50,6 +50,8 @@ export default async (params) => {
 
   // Fetch workspace if no callback is provided.
   await _xyz.workspace.fetchWS();
+
+  _xyz.workspace.loadLocale(params);
 
   return _xyz;
 

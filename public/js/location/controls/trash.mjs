@@ -42,21 +42,21 @@ export default (_xyz, record) => {
 
           record.drawer.remove();
 
-          _xyz.hooks.filter('select', record.location.layer + '!' + record.location.table + '!' + record.location.id + '!' + record.location.marker[0] + ';' + record.location.marker[1]);
+          _xyz.hooks.filter(
+            'locations',
+            `${record.location.layer}!${record.location.table}!${record.location.id}`
+          );
 
-          // Clear geometries and delete location to free up record.
-          record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
-
-          // Clear additional geometries
-          if(record.location.geometries.additional) record.location.geometries.additional.forEach(geom => _xyz.map.removeLayer(geom));
+          record.location.remove();
 
           delete record.location;
 
           // Run locations init when all records are free.
-          const freeRecords = _xyz.locations.list.filter(record => !record.location);
-          if (freeRecords.length === _xyz.locations.list.length) _xyz.locations.listview.init();
+          const freeRecords = _xyz.locations.listview.list.filter(record => !record.location);
+          if (freeRecords.length === _xyz.locations.listview.list.length) _xyz.locations.listview.init();
 
         };
+        
         xhr.send();
 
       }

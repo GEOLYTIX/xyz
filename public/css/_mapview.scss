@@ -11,5 +11,23 @@
     cursor: wait !important;
 }
 .leaflet-popup-content {
-    width: 301px !important;
+    width: 320px !important;
+    overflow-x: hidden;
+    >ul {
+        max-height: 300px;
+        list-style-type: none;
+        text-align: left;
+        font-family: 'PT Mono', monospace;
+        li {
+            padding-left: 15px;
+            white-space: nowrap;
+        }
+        li:hover {
+            background-color: $glxlightgreen;
+            cursor: pointer;
+        }
+    }
+    .locationview {
+        padding: 10px;
+    }
 }

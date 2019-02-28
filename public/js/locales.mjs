@@ -18,7 +18,7 @@ export default _xyz => {
   
       _xyz.hooks.removeAll();
   
-      _xyz.hooks.set('locale', e.target.value);
+      _xyz.hooks.set({locale : e.target.value});
 
       _xyz.mapview.create({
         locale: e.target.value,

@@ -5,7 +5,7 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/workspace/admin',
-    beforeHandler: fastify.auth([fastify.authAdmin]),
+    preHandler: fastify.auth([fastify.authAdmin]),
     handler: view
   });
 

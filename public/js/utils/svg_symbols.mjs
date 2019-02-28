@@ -70,7 +70,7 @@ function circle(style) {
     .attr('r', 350)
     .style('stroke', style.color)
     .style('stroke-width', 250)
-    .style('opacity', 0.5)
+    .style('opacity', style.opacity || 0.5)
     .style('fill', 'none');
 
   return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));

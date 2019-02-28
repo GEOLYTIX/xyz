@@ -5,7 +5,7 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/auth/token/api',
-    beforeHandler: fastify.auth([fastify.authAdmin]),
+    preHandler: fastify.auth([fastify.authAdmin]),
     handler: view
   });
 

@@ -3,7 +3,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'POST',
     url: '/workspace/load',
-    beforeHandler: fastify.auth([fastify.authAdminAPI]),
+    preHandler: fastify.auth([fastify.authAdminAPI]),
     handler: async (req, res) => {
       
       // Check workspace.

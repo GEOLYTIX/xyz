@@ -2,7 +2,7 @@ module.exports = fastify => {
   fastify.route({
     method: 'POST',
     url: '/api/location/edit/draw',
-    beforeHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
