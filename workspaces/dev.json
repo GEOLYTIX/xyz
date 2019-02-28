@@ -701,7 +701,7 @@
                             "Retail Places": {
                                 "columns": [
                                     {
-                                        "label": "ID",
+                                        "title": "ID",
                                         "field": "id",
                                         "type": "text"
                                     },
@@ -994,17 +994,17 @@
                                 "display": true,
                                 "columns": [
                                     {
-                                        "label": "ID",
+                                        "title": "ID",
                                         "field": "retailpoint_id",
                                         "type": "text"
                                     },
                                     {
-                                        "label": "Retailer",
+                                        "title": "Retailer",
                                         "field": "retailer",
                                         "type": "text"
                                     },
                                     {
-                                        "label": "Fascia",
+                                        "title": "Fascia",
                                         "field": "fascia",
                                         "type": "text"
                                     }

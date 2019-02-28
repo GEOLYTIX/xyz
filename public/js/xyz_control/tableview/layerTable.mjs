@@ -47,6 +47,8 @@ export default _xyz => params => {
     xhr.onload = e => {
     
       if (e.target.status !== 200) return;
+
+      console.log(e.target.response);
       
       params.table.Tabulator.setData(e.target.response);
   

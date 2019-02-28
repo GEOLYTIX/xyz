@@ -35,7 +35,6 @@
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         },
         "demographics": {
-          "display": false,
           "name": "Demographics",
           "format": "grid",
           "dbs": "XYZ",
@@ -86,6 +85,34 @@
           "qID": "id",
           "table": "shepherd_neame.sites",
           "cluster_label": "pub_name",
+          "tableview": {
+            "tables": {
+              "Sites": {
+                "columns": [
+                  {
+                    "title": "ID",
+                    "field": "id",
+                    "type": "text"
+                  },
+                  {
+                    "title": "Iso5min area",
+                    "field": "st_area(isoline_5min)",
+                    "type": "text"
+                  },
+                  {
+                    "title": "Iso10min area",
+                    "field": "st_area(isoline_10min)",
+                    "type": "text"
+                  },
+                  {
+                    "title": "Iso15min area",
+                    "field": "st_area(isoline_15min)",
+                    "type": "text"
+                  }
+                ]
+              }
+            }
+          },
           "infoj": [
             {
               "field": "isoline_5min",
@@ -127,10 +154,11 @@
             {
               "type": "tableDefinition",
               "title": "Population Summary",
+              "display": true,
               "columns": [
                 {
                   "type": "integer",
-                  "label": "0-5 mins",
+                  "title": "0-5 mins",
                   "field": "min5",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -141,7 +169,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-10 mins",
+                  "title": "0-10 mins",
                   "field": "min10",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -152,7 +180,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-15 mins",
+                  "title": "0-15 mins",
                   "field": "min15",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -166,57 +194,57 @@
                 {
                   "field": "pop__17",
                   "fieldfx": "SUM(b.pop__17)",
-                  "label": "Current Population"
+                  "title": "Current Population"
                 },
                 {
                   "field": "pop__11",
                   "fieldfx": "SUM(b.pop__11)",
-                  "label": "Population 2011"
+                  "title": "Population 2011"
                 },
                 {
                   "field": "pop_growth",
                   "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
-                  "label": "Population Growth"
+                  "title": "Population Growth"
                 },
                 {
                   "field": "students",
                   "fieldfx": "SUM(eac_student__11) + SUM(ein_student__11)",
-                  "label": "Students"
+                  "title": "Students"
                 },
                 {
                   "field": "non_white",
                   "fieldfx": "100*(SUM(pop__11) - SUM(ret_white_tot__11))/SUM(pop__11)",
-                  "label": "% Non-White"
+                  "title": "% Non-White"
                 },
                 {
                   "field": "own_home",
                   "fieldfx": "100*SUM(own)/SUM(own+rent+social)",
-                  "label": "Own Home"
+                  "title": "Own Home"
                 },
                 {
                   "field": "private_rented",
                   "fieldfx": "100*SUM(rent)/SUM(own+rent+social)",
-                  "label": "Private Rented"
+                  "title": "Private Rented"
                 },
                 {
                   "field": "social_rented",
                   "fieldfx": "100*SUM(social)/SUM(own+rent+social)",
-                  "label": "Social Rented"
+                  "title": "Social Rented"
                 },
                 {
                   "field": "single_hhds",
                   "fieldfx": "100*SUM(pers1hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
-                  "label": "Single Hhds"
+                  "title": "Single Hhds"
                 },
                 {
                   "field": "hhds_two_ppl",
                   "fieldfx": "100*SUM(pers2hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
-                  "label": "2 Person Hhds"
+                  "title": "2 Person Hhds"
                 },
                 {
                   "field": "hhds_3plus",
                   "fieldfx": "100*SUM(pers2plushhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
-                  "label": "3+ Hhds"
+                  "title": "3+ Hhds"
                 }
               ]
             },
@@ -226,7 +254,7 @@
               "columns": [
                 {
                   "type": "integer",
-                  "label": "0-5 mins",
+                  "title": "0-5 mins",
                   "field": "min5",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -237,7 +265,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-10 mins",
+                  "title": "0-10 mins",
                   "field": "min10",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -248,7 +276,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-15 mins",
+                  "title": "0-15 mins",
                   "field": "min15",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -265,43 +293,43 @@
               "rows": [
                 {
                   "field": "age_under_18",
-                  "label": "< 18",
+                  "title": "< 18",
                   "fieldfx": "SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus)"
                 },
                 {
                   "field": "age_18to24",
                   "fieldfx": "SUM(age_18to19__11 + age_20to24__11)",
-                  "label": "18 to 24"
+                  "title": "18 to 24"
                 },
                 {
                   "field": "age_25to29",
                   "fieldfx": "SUM(age_25to29__11)",
-                  "label": "25 to 29"
+                  "title": "25 to 29"
                 },
                 {
                   "field": "age_30to44",
                   "fieldfx": "SUM(age_30to44__11)",
-                  "label": "30 to 44"
+                  "title": "30 to 44"
                 },
                 {
                   "field": "age_45to59",
                   "fieldfx": "SUM(age_45to59__11)",
-                  "label": "45 to 59"
+                  "title": "45 to 59"
                 },
                 {
                   "field": "age_60plus",
                   "fieldfx": "SUM(age60plus)",
-                  "label": "60+"
+                  "title": "60+"
                 },
                 {
                   "field": "age_profile_total",
                   "fieldfx": "SUM(pop__11)",
-                  "label": "Total"
+                  "title": "Total"
                 }
               ],
               "agg": {
                 "share15": {
-                  "label": "% with 15 min",
+                  "title": "% with 15 min",
                   "type": "integer",
                   "rows": [
                     "100*min15.age_under_18/min15.age_profile_total",
@@ -314,7 +342,7 @@
                   ]
                 },
                 "age_uk_total": {
-                  "label": "UK Total",
+                  "title": "UK Total",
                   "type": "integer",
                   "rows": [
                     "uk.age_under_18_uk",
@@ -327,7 +355,7 @@
                   ]
                 },
                 "age_index": {
-                  "label": "Age Profile Index",
+                  "title": "Age Profile Index",
                   "type": "numeric(1000, 2)",
                   "rows": [
                     "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
@@ -347,7 +375,7 @@
               "columns": [
                 {
                   "type": "integer",
-                  "label": "0-5 mins",
+                  "title": "0-5 mins",
                   "field": "min5",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -358,7 +386,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-10 mins",
+                  "title": "0-10 mins",
                   "field": "min10",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -369,7 +397,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-15 mins",
+                  "title": "0-15 mins",
                   "field": "min15",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -388,32 +416,32 @@
                 {
                   "field": "sg_ab",
                   "fieldfx": "SUM(ski_ab__11)",
-                  "label": "AB"
+                  "title": "AB"
                 },
                 {
                   "field": "sg_c1",
                   "fieldfx": "SUM(ski_c1__11)",
-                  "label": "C1"
+                  "title": "C1"
                 },
                 {
                   "field": "sg_c2",
                   "fieldfx": "SUM(ski_c2__11)",
-                  "label": "C2"
+                  "title": "C2"
                 },
                 {
                   "field": "sg_de",
                   "fieldfx": "SUM(ski_de__11)",
-                  "label": "DE"
+                  "title": "DE"
                 },
                 {
                   "field": "sg_total",
                   "fieldfx": "SUM(pop__11)",
-                  "label": "Total"
+                  "title": "Total"
                 }
               ],
               "agg": {
                 "share15": {
-                  "label": "% with 15 min",
+                  "title": "% with 15 min",
                   "type": "integer",
                   "rows": [
                     "100*min15.sg_ab/min15.sg_total",
@@ -424,7 +452,7 @@
                   ]
                 },
                 "sg_uk_total": {
-                  "label": "UK Total",
+                  "title": "UK Total",
                   "type": "integer",
                   "rows": [
                     "uk.social_grade_ab_uk",
@@ -435,7 +463,7 @@
                   ]
                 },
                 "sg_index": {
-                  "label": "Social Grade Index",
+                  "title": "Social Grade Index",
                   "type": "integer",
                   "rows": [
                     "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
@@ -453,7 +481,7 @@
               "columns": [
                 {
                   "type": "integer",
-                  "label": "0-5 mins",
+                  "title": "0-5 mins",
                   "field": "min5",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -464,7 +492,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-10 mins",
+                  "title": "0-10 mins",
                   "field": "min10",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -475,7 +503,7 @@
                 },
                 {
                   "type": "integer",
-                  "label": "0-15 mins",
+                  "title": "0-15 mins",
                   "field": "min15",
                   "lookup": {
                     "table_a": "shepherd_neame.sites",
@@ -489,137 +517,137 @@
                 {
                   "field": "oac_1a",
                   "fieldfx": "SUM(CASE WHEN oac_group=1 THEN pop__17 ELSE 0 END)",
-                  "label": "1a - Farming communities"
+                  "title": "1a - Farming communities"
                 },
                 {
                   "field": "oac_1b",
                   "fieldfx": "sum(case when oac_group=2 then pop__17 else 0 end)",
-                  "label": "1b - Rural tenants"
+                  "title": "1b - Rural tenants"
                 },
                 {
                   "field": "oac_1c",
                   "fieldfx": "sum(case when oac_group=3 then pop__17 else 0 end)",
-                  "label": "1c - Ageing rural dwellers"
+                  "title": "1c - Ageing rural dwellers"
                 },
                 {
                   "field": "oac_2a",
                   "fieldfx": "sum(case when oac_group=3 then pop__17 else 0 end)",
-                  "label": "2a - Students around campus"
+                  "title": "2a - Students around campus"
                 },
                 {
                   "field": "oac_2b",
                   "fieldfx": "sum(case when oac_group=4 then pop__17 else 0 end)",
-                  "label": "2b - Inner city students"
+                  "title": "2b - Inner city students"
                 },
                 {
                   "field": "oac_2c",
                   "fieldfx": "sum(case when oac_group=5 then pop__17 else 0 end)",
-                  "label": "2c - Comforable cosmopolitans"
+                  "title": "2c - Comforable cosmopolitans"
                 },
                 {
                   "field": "oac_2d",
                   "fieldfx": "sum(case when oac_group=6 then pop__17 else 0 end)",
-                  "label": "2d - Aspiring and affluent"
+                  "title": "2d - Aspiring and affluent"
                 },
                 {
                   "field": "oac_3a",
                   "fieldfx": "sum(case when oac_group=7 then pop__17 else 0 end)",
-                  "label": "3a - Ethnic family life"
+                  "title": "3a - Ethnic family life"
                 },
                 {
                   "field": "oac_3b",
                   "fieldfx": "sum(case when oac_group=8 then pop__17 else 0 end)",
-                  "label": "3b - Endeavouring ethnic mix"
+                  "title": "3b - Endeavouring ethnic mix"
                 },
                 {
                   "field": "oac_3c",
                   "fieldfx": "sum(case when oac_group=9 then pop__17 else 0 end)",
-                  "label": "3c - Ethnic dynamics"
+                  "title": "3c - Ethnic dynamics"
                 },
                 {
                   "field": "oac_3d",
                   "fieldfx": "sum(case when oac_group=10 then pop__17 else 0 end)",
-                  "label": "3d - Aspirational techies"
+                  "title": "3d - Aspirational techies"
                 },
                 {
                   "field": "oac_4a",
                   "fieldfx": "sum(case when oac_group=11 then pop__17 else 0 end)",
-                  "label": "4a - Rented family living"
+                  "title": "4a - Rented family living"
                 },
                 {
                   "field": "oac_4b",
                   "fieldfx": "sum(case when oac_group=13 then pop__17 else 0 end)",
-                  "label": "4b - Challenged Asian terraces"
+                  "title": "4b - Challenged Asian terraces"
                 },
                 {
                   "field": "oac_4c",
                   "fieldfx": "sum(case when oac_group=14 then pop__17 else 0 end)",
-                  "label": "4c - Asian traits"
+                  "title": "4c - Asian traits"
                 },
                 {
                   "field": "oac_5a",
                   "fieldfx": "sum(case when oac_group=15 then pop__17 else 0 end)",
-                  "label": "5a - Urban professionals and families"
+                  "title": "5a - Urban professionals and families"
                 },
                 {
                   "field": "oac_5b",
                   "fieldfx": "sum(case when oac_group=16 then pop__17 else 0 end)",
-                  "label": "5b - Ageing urban living"
+                  "title": "5b - Ageing urban living"
                 },
                 {
                   "field": "oac_6a",
                   "fieldfx": "sum(case when oac_group=17 then pop__17 else 0 end)",
-                  "label": "6a - Suburban achievers"
+                  "title": "6a - Suburban achievers"
                 },
                 {
                   "field": "oac_6b",
                   "fieldfx": "sum(case when oac_group=18 then pop__17 else 0 end)",
-                  "label": "6b - Semi-detached suburbia"
+                  "title": "6b - Semi-detached suburbia"
                 },
                 {
                   "field": "oac_7a",
                   "fieldfx": "sum(case when oac_group=19 then pop__17 else 0 end)",
-                  "label": "7a - Challenged diversity"
+                  "title": "7a - Challenged diversity"
                 },
                 {
                   "field": "oac_7b",
                   "fieldfx": "sum(case when oac_group=20 then pop__17 else 0 end)",
-                  "label": "7b - Constrained flat dwellers"
+                  "title": "7b - Constrained flat dwellers"
                 },
                 {
                   "field": "oac_7c",
                   "fieldfx": "sum(case when oac_group=21 then pop__17 else 0 end)",
-                  "label": "7c - White communities"
+                  "title": "7c - White communities"
                 },
                 {
                   "field": "oac_7d",
                   "fieldfx": "sum(case when oac_group=22 then pop__17 else 0 end)",
-                  "label": "7d - Ageing city dwellers"
+                  "title": "7d - Ageing city dwellers"
                 },
                 {
                   "field": "oac_8a",
                   "fieldfx": "sum(case when oac_group=23 then pop__17 else 0 end)",
-                  "label": "8a - Industrious communities"
+                  "title": "8a - Industrious communities"
                 },
                 {
                   "field": "oac_8b",
                   "fieldfx": "sum(case when oac_group=24 then pop__17 else 0 end)",
-                  "label": "8b - Challenged terraced workers"
+                  "title": "8b - Challenged terraced workers"
                 },
                 {
                   "field": "oac_8c",
                   "fieldfx": "sum(case when oac_group=25 then pop__17 else 0 end)",
-                  "label": "8c - Hard-pressed ageing workers"
+                  "title": "8c - Hard-pressed ageing workers"
                 },
                 {
                   "field": "oac_8d",
                   "fieldfx": "sum(case when oac_group=26 then pop__17 else 0 end)",
-                  "label": "8d - Migration and churn"
+                  "title": "8d - Migration and churn"
                 },
                 {
                   "field": "oac_total",
                   "fieldfx": "sum(case when oac_group>0 then pop__17 else 0 end)",
-                  "label": "Total"
+                  "title": "Total"
                 }
               ]
             }
