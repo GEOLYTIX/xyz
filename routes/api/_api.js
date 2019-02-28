@@ -28,8 +28,6 @@ module.exports = fastify => {
 
   require('./location/edit/image_upload')(fastify);
 
-  require('./location/table')(fastify);
-
   require('./location/edit/isoline_mapbox')(fastify);
 
   require('./location/edit/isoline_here')(fastify);
