@@ -110,9 +110,7 @@ export default (_xyz, layer, filter_entry) => {
 
       console.log(layer.filter);
 
-      // Reload layer.
-      layer.loaded = false;
-      layer.get();
+      layer.show();
 
       if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
 

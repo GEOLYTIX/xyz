@@ -1,20 +1,22 @@
-export default _xyz => params => {
+export default _xyz => table => {
 
-  if (!params.target) return;
+  if (!table || !table.target || !table.location) return;
 
   if (_xyz.tableview.node) {
     _xyz.tableview.node.style.display = 'block';
     _xyz.mapview.node.style.height = 'calc(100% - 40px)';
   }
 
-  if (!params.table) return;
 
-  const table = params.table;
+  if (!table.columns) {
 
+    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+ 
+    const infoj_table = Object.values(infoj).find(v => v.title === table.title);
+      
+    Object.assign(table, infoj_table);
 
-  if (!table.location) return;
-
-
+  }
 
   const columns = [{ 'field': 'rows', 'title': table.title }];
 
@@ -26,6 +28,9 @@ export default _xyz => params => {
     columns.push({ 'field': key, 'title': table.agg[key].title || key });
   });
 
+  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
+
+  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
 
   table.update = () => {
 
@@ -47,9 +52,6 @@ export default _xyz => params => {
 
       if (e.target.status !== 200) return;
 
-      console.log(e.target.response);
-
-      //table.Tabulator.setData(formatRows(e.target.response));
       table.Tabulator.setData(e.target.response);
 
       table.Tabulator.redraw(true);
@@ -63,7 +65,7 @@ export default _xyz => params => {
   table.activate = () => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
-      params.target,
+      table.target,
       {
         columns: columns,
         autoResize: true,
@@ -77,14 +79,5 @@ export default _xyz => params => {
   };
 
   table.activate();
-
-
-  if (!table.checked) {
-
-    if (_xyz.tableview.tables) _xyz.tableview.tables.push(table);
-
-    if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(params);
-
-  }
 
 };

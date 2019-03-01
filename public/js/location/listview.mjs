@@ -171,6 +171,7 @@ export default _xyz => {
 
   };
 
+  
   // Clear locations button to remove hooks and reset location listview.
   listview.clear.onclick = () => {
     _xyz.hooks.remove('locations');
@@ -209,13 +210,8 @@ export default _xyz => {
       // Return if location doesn't exist. ie. on init.
       if (!record.location) return;
 
-      // Remove all geometries associated to the location.
-      record.location.geometries.forEach(geom => _xyz.map.removeLayer(geom));
+      record.location.remove();
 
-      if(record.location.Layer) _xyz.map.removeLayer(record.location.Layer);
-
-      if(record.location.Marker) _xyz.map.removeLayer(record.location.Marker);
-  
       // Delete the location.
       delete record.location;
 

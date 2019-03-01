@@ -1,9 +1,11 @@
-export default _xyz => params => {
+export default _xyz => table => {
 
-  params.table.tab.remove();
+  if (table.tab) table.tab.remove();
 
-  let idx = _xyz.tableview.tables.indexOf(params.table);
+  let idx = _xyz.tableview.tables.indexOf(table);
 
+  if (idx < 0) return;
+  
   _xyz.tableview.tables.splice(idx, 1);
 
   _xyz.tableview.current_table = null;

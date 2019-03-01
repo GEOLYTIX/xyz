@@ -1,19 +1,21 @@
-export default _xyz => params => {
+export default _xyz => table => {
 
-  if (!params.target) return;
+  if (!table || !table.target || !table.layer || !table.key) return;
+
+  if (!table.layer.tableview.tables[table.key]) return;
 
   if (_xyz.tableview.node) {
     _xyz.tableview.node.style.display = 'block';
     _xyz.mapview.node.style.height = 'calc(100% - 40px)';
   }
-   
-  _xyz.tableview.table = params.target;
 
-  if (!params.layer) return;
+  Object.assign(table, table.layer.tableview.tables[table.key]);
 
-  if (!params.table) return;
+  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
 
-  params.table.columns.forEach(col => {
+  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
+
+  table.columns.forEach(col => {
 
     col.title = col.title || col.field;
 
@@ -23,17 +25,21 @@ export default _xyz => params => {
 
   });
 
-  params.table.update = () => {
+  table.update = () => {
 
     const xhr = new XMLHttpRequest();
 
     const bounds = _xyz.map && _xyz.map.getBounds();
-       
+
+    // Create filter from legend and current filter.
+    const filter = table.layer.filter && Object.assign({}, table.layer.filter.legend, table.layer.filter.current);
+      
     xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: params.layer.key,
-      table: params.layer.tableMax(),
+      layer: table.layer.key,
+      table: table.key,
       viewport: !!bounds,
+      filter: JSON.stringify(filter),
       west: bounds && bounds.getWest(),
       south: bounds && bounds.getSouth(),
       east: bounds && bounds.getEast(),
@@ -47,12 +53,10 @@ export default _xyz => params => {
     xhr.onload = e => {
     
       if (e.target.status !== 200) return;
-
-      console.log(e.target.response);
       
-      params.table.Tabulator.setData(e.target.response);
+      table.Tabulator.setData(e.target.response);
   
-      params.table.Tabulator.redraw(true);
+      table.Tabulator.redraw(true);
   
     };
   
@@ -60,29 +64,22 @@ export default _xyz => params => {
 
   };
    
-  params.table.activate = () => {
+  table.activate = () => {
 
-    params.table.Tabulator =
-    new _xyz.utils.Tabulator(_xyz.tableview.table, {
-      columns: params.table.columns,
-      //columns: _xyz.tableview.current_layer.tableview.columns,
-      autoResize: true,
-      //selectable: true,
-      //resizableRows: true,
-      height: _xyz.tableview.height || '100%'
-      //rowClick: (e, row) => console.log(row)
-    });
+    table.Tabulator = new _xyz.utils.Tabulator(
+      table.target,
+      {
+        columns: table.columns,
+        autoResize: true,
+        height: _xyz.tableview.height || '100%'
+      });
 
-    params.table.update();
+    table.update();
 
-    _xyz.tableview.current_table = params.table;
+    _xyz.tableview.current_table = table;
 
   };
 
-  params.table.activate();
-
-  if (_xyz.tableview.tables) _xyz.tableview.tables.push(params.table);
-
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(params);
+  table.activate();
 
 };

@@ -36,40 +36,35 @@ export default (_xyz, layer) => {
   if(!layer.tableview.tables) return;
 
   // Iterate through tables entries.
-  Object.entries(layer.tableview.tables).forEach(table => {
+  Object.keys(layer.tableview.tables).forEach(key => {
 
-    // Assign table key.
-    table[1].key = table[0];
+    const table = layer.tableview.tables[key];
 
-    // Create table immediately if display is set to true.
-    if (table[1].display) _xyz.tableview.layerTable({
-      target: _xyz.tableview.node.querySelector('.table'),
-      layer: layer,
-      table: table[1],
-    });
+    table.key = key;
+    table.layer = layer;
+    table.title = table.title || key;
+    table.target = _xyz.tableview.node.querySelector('.table');
+
+    table.show = ()=>_xyz.tableview.layerTable(table);
+    table.remove = ()=>_xyz.tableview.removeTab(table);
 
     // Create checkbox to toggle whether table is in tabs list.
     _xyz.utils.createCheckbox({
-      label: table[1].title || table[0],
+      label: table.title,
       appendTo: layer.tableview.panel,
-      checked: !!table[1].display,
+      checked: !!table.display,
       onChange: e => {
 
-        e.stopPropagation();
+        table.display = e.target.checked;
 
-        if (e.target.checked) _xyz.tableview.layerTable({
-          target: _xyz.tableview.node.querySelector('.table'),
-          layer: layer,
-          table: table[1],
-        });
+        if (!table.display) return table.remove();
 
-        if (!e.target.checked) _xyz.tableview.removeTab({
-          layer: layer,
-          table: table[1],
-        });
-
+        layer.show();
+          
       }
     });
+
+    if (table.display && layer.display) table.show();
 
   });
 

@@ -18,13 +18,14 @@ module.exports = fastify => {
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
-      const table = req.query.table;
+      const table = layer.tableview.tables[req.query.table];
 
       // Return 406 if table is not defined as request parameter.
       if (!table) return res.code(406).send('Missing table.');
 
       let
         viewport = req.query.viewport,
+        filter = req.query.filter && JSON.parse(req.query.filter),
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
@@ -54,30 +55,32 @@ module.exports = fastify => {
             0.00001)`;
 
       }
+             
 
-      // let offset = parseInt(req.body.offset);
-              
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
-      }
+      const access_filter = layer.access_filter
+        && token.email
+        && layer.access_filter[token.email.toLowerCase()] ?
+        layer.access_filter[token.email] :
+        null;
+
+      Object.assign(filter, access_filter);
 
       // SQL filter
-      // const filter_sql = layer.filter && await require(global.appRoot + '/mod/pg/sql_filter')(layer.filter) || '';
+      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
-      let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], layer.infoj, layer.qID);
+
+      let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], table.columns);
       
       let q = `
         SELECT ${layer.qID} AS qID, ${fields}
-        FROM ${table}
+        FROM ${table.from}
         ${viewport || ''}
+        ${filter_sql}
         FETCH FIRST 99 ROW ONLY;`;
-      //   ${filter_sql ? (viewport ? ` AND ${filter_sql}` : ` WHERE ${filter_sql}`) : ''} 
+
       //   ORDER BY ${layer.qID || 'id'}
       //   OFFSET ${99*offset} ROWS
       //   FETCH FIRST 99 ROW ONLY;
-      // `;
 
       //console.log(q);
 

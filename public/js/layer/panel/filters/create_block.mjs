@@ -32,14 +32,16 @@ export default (_xyz, layer, filter_entry) => {
         block.remove();
         delete layer.filter.current[filter_entry.field];
 
+        // Hide clear all filter.
+        if (Object.keys(layer.filter.current).length < 1) layer.filter.clear_all.style.display = 'none';
+
         // Enable filter in select dropdown.
         Object.values(layer.filter.select.options).forEach(opt => {
           if (opt.value === filter_entry.field) opt.disabled = false;
         });
 
-        // Reload layer.
-        layer.loaded = false;
-        layer.get();
+        layer.show();
+
       }
     }
   });

@@ -124,9 +124,7 @@ export default (_xyz, layer, filter_entry) => {
         layer.filter.current[filter_entry.field].gt = parseFloat(input_min.value);
         layer.filter.current[filter_entry.field].lt = parseFloat(input_max.value);
 
-        // Reload layer.
-        layer.loaded = false;
-        layer.get();
+        layer.show();
 
         if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
 

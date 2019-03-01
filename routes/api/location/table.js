@@ -18,17 +18,18 @@ module.exports = fastify => {
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
-      var id = req.query.id;
+      // Return 406 if location id is missing.
+      if (!req.query.id) return res.code(406).send('Missing location id.');
 
       // Get table definition from layer infoj.
       const tableDef = layer.infoj.find(
         entry => entry.title === decodeURIComponent(req.query.tableDef)
       );
 
-
       if (!tableDef) return res.code(406).send('Missing table definition.');
 
 
+      // Add first column for row titles.
       const lines = [`
       UNNEST(
         ARRAY['${tableDef.rows.map(row => row.title || row.field).join('\',\'')}']
@@ -49,14 +50,13 @@ module.exports = fastify => {
 
           lines.push(`UNNEST(ARRAY[${arr.join(',')}]) AS ${col.field}`);
 
-
           withTable.push(`
           ${col.field} AS (
             SELECT ${rows.join(',')}
             FROM
               ${col.lookup.table_a} a,
               ${col.lookup.table_b} b
-            WHERE a.${layer.qID} = ${id}
+            WHERE a.${layer.qID} = $1
             AND
               ${col.lookup.condition ? col.lookup.condition : 'ST_INTERSECTS'}
               (a.${col.lookup.geom_a}, b.${col.lookup.geom_b})
@@ -90,11 +90,11 @@ module.exports = fastify => {
         SELECT ${lines.join(',')}
         FROM ${col_alias.join(',')};`;
 
-      var _rows = await global.pg.dbs[layer.dbs](q);
+      const rows = await global.pg.dbs[layer.dbs](q, [req.query.id]);
 
-      if (_rows.err) return res.code(500).send('Failed to query PostGIS table.');
+      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
-      res.code(200).send(_rows);
+      res.code(200).send(rows);
 
     }
   });

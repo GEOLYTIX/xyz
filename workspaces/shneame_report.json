@@ -71,6 +71,17 @@
             "Private renters": "rent"
           }
         },
+        "label": {
+          "group": "Base maps",
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+        },        
         "report_test": {
           "display": true,
           "edit": {
@@ -88,6 +99,7 @@
           "tableview": {
             "tables": {
               "Sites": {
+                "from": "shepherd_neame.sites",
                 "columns": [
                   {
                     "title": "ID",
@@ -96,17 +108,20 @@
                   },
                   {
                     "title": "Iso5min area",
-                    "field": "st_area(isoline_5min)",
+                    "field": "isoline_5min",
+                    "fieldfx": "st_area(isoline_5min)",
                     "type": "text"
                   },
                   {
                     "title": "Iso10min area",
-                    "field": "st_area(isoline_10min)",
+                    "field": "isoline_10min",
+                    "fieldfx": "st_area(isoline_10min)",
                     "type": "text"
                   },
                   {
                     "title": "Iso15min area",
-                    "field": "st_area(isoline_15min)",
+                    "field": "isoline_15min",
+                    "fieldfx": "st_area(isoline_15min)",
                     "type": "text"
                   }
                 ]
@@ -652,17 +667,6 @@
               ]
             }
           ]
-        },
-        "label": {
-          "group": "Base maps",
-          "display": true,
-          "name": "Mapbox Labels",
-          "attribution": {
-            "© Mapbox": "https://www.mapbox.com/about/maps",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
         }
       }
     }

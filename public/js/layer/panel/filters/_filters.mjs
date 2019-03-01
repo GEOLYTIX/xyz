@@ -104,9 +104,8 @@ export default (_xyz, layer) => {
         // Reset layer filter object.
         layer.filter.current = {};
 
-        // Reload layer.
-        layer.loaded = false;
-        layer.get();
+        layer.show();
+
       }
     }
   });

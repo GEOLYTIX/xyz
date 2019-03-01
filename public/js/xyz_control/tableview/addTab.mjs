@@ -1,18 +1,16 @@
-export default _xyz => params => {
+export default _xyz => table => {
 
-  if(_xyz.tableview.nav_bar.children) {
   // Remove current from all tabs.
-    Object
-      .values(_xyz.tableview.nav_bar.children)
-      .forEach(tab => tab.classList.remove('tab-current'));
-  }
+  Object
+    .values(_xyz.tableview.nav_bar.children)
+    .forEach(tab => tab.classList.remove('tab-current'));
 
-  if(params.table.tab) params.table.tab.remove();
+  if(table.tab) table.tab.remove();
 
-  params.table.tab = _xyz.utils.createElement({
+  table.tab = _xyz.utils.createElement({
     tag: 'li',
     options: {
-      textContent: params.table.title || params.table.key,
+      textContent: table.title,
       classList: 'Tab cursor noselect tab-current'
     },
     eventListener: {
@@ -27,7 +25,7 @@ export default _xyz => params => {
         // Make target tab current.
         e.target.classList.add('tab-current');
 
-        params.table.activate();
+        table.activate();
 
       }
     },

@@ -15,7 +15,10 @@ export default _xyz => entry => {
 
       entry.display = e.target.checked;
 		
-      e.target.checked ?  showTab() : hideTab();
+      e.target.checked ?
+        showTab() :
+        _xyz.tableview.removeTab(entry);
+        
     }
   });
 
@@ -23,17 +26,12 @@ export default _xyz => entry => {
 
   function showTab(){
 
-  	_xyz.tableview.locationTable({
-  		target: _xyz.tableview.node.querySelector('.table'),
-  		table: entry
-    });
-	  
-  }
-  
-  function hideTab(){
-  	
-  	_xyz.tableview.removeTab({ table: entry });
+    entry.location.tables.push(entry);
 
+    entry.target = _xyz.tableview.node.querySelector('.table');
+
+  	_xyz.tableview.locationTable(entry);
+	  
   }
 
 };

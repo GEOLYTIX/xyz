@@ -32,11 +32,15 @@ export default _xyz => {
     // Reset groups.
     _xyz.layers.listview.groups = {};
 
+    const layer_hooks = Object.keys(_xyz.hooks.current.layers).length > 0;
+
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
 
-      layer.display = layer.display || !!~_xyz.hooks.current.layers.indexOf(layer.key);
-
+      if (layer_hooks) {
+        layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
+      }
+      
       // Create new layer group if group does not exist yet.
       if (layer.group && !_xyz.layers.listview.groups[layer.group]) layer_group(_xyz, layer.group);
 
@@ -56,7 +60,6 @@ export default _xyz => {
       layer.header = _xyz.utils.createElement({
         tag: 'div',
         options: {
-          //textContent: (layer.group ? '' : (layer.name || layer.key)),
           innerHTML: (layer.group ? ('&#10149; ' + layer.name) : (layer.name || layer.key)),
           className: 'header'
         },

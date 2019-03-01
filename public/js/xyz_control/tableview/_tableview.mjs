@@ -11,6 +11,8 @@ import layerTable from './layerTable.mjs';
 export default _xyz => {
 
   return {
+
+    tables: [],
     
     create: create(_xyz),
 

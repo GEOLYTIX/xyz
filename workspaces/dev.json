@@ -35,7 +35,7 @@
                         "tables": {
                             "table1": {
                                 "title": "Population / GDP",
-                                "display": true,
+                                "from": "dev.natural_earth_countries",
                                 "columns": [
                                     {
                                         "field": "name",
@@ -54,6 +54,7 @@
                             },
                             "GDP / Population": {
                                 "display": true,
+                                "from": "dev.natural_earth_countries",
                                 "columns": [
                                     {
                                         "field": "name",
@@ -89,6 +90,7 @@
                             "label": "Population Est edit",
                             "field": "pop_est_edit",
                             "type": "integer",
+                            "filter": "numeric",
                             "edit": true
                         },
                         {
@@ -699,6 +701,7 @@
                     "tableview": {
                         "tables": {
                             "Retail Places": {
+                                "from": "dev.retailplaces",
                                 "columns": [
                                     {
                                         "title": "ID",
@@ -992,6 +995,7 @@
                         "tables": {
                             "Retail Points": {
                                 "display": true,
+                                "from": "dev.retailpoints",
                                 "columns": [
                                     {
                                         "title": "ID",
