@@ -1,4 +1,4 @@
-export default _xyz => entry => {
+export default _xyz => (entry) => {
 
   let td = _xyz.utils.createElement({
 	  tag: 'td',
@@ -16,8 +16,7 @@ export default _xyz => entry => {
       entry.display = e.target.checked;
 		
       e.target.checked ?
-        showTab() :
-        _xyz.tableview.removeTab(entry);
+        showTab() : hideTab();
         
     }
   });
@@ -32,6 +31,11 @@ export default _xyz => entry => {
 
   	_xyz.tableview.locationTable(entry);
 	  
+  }
+
+  function hideTab(){
+    _xyz.tableview.removeTab(entry);
+    if(entry.chart && entry.chart.tr) entry.location.view.node.removeChild(entry.chart.tr);
   }
 
 };

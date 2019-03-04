@@ -56,6 +56,42 @@ export default _xyz => table => {
 
       table.Tabulator.redraw(true);
 
+      if(table.chart){
+
+      	let trs = table.location.view.node.children;
+
+      	let prev_tr = Array.from(trs).filter(tr => tr.getAttribute('data-name') === table.title);
+
+      	if(table.checked && table.chart.tr){
+      		return;
+      	} 
+
+      	let fields = [];
+      	
+      	e.target.response.map(field => fields.push({'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field]}));
+
+      	table.chart.tr = _xyz.utils.createElement({tag: 'tr'});
+
+      	table.chart.tr.setAttribute('data-name', table.title);
+
+      	let td = _xyz.utils.createElement({tag: 'td', options: {colSpan: '2'}, appendTo: table.chart.tr});
+
+      	let section = _xyz.utils.createElement({tag: 'div', options: {classList: 'table-section'}, appendTo: td});
+
+      	let header = _xyz.utils.createElement({tag: 'div', options: {classList: 'btn_subtext cursor noselect'}, style: {textAlign: 'left', fontStyle: 'italic'}, appendTo: section});
+
+      	_xyz.utils.createElement({tag: 'span', options: {textContent: table.title}, appendTo: header});
+
+      	section.appendChild(_xyz.utils.chart({
+      		label: table.title,
+      		fields: fields,
+      		chart: table.chart
+      	}));
+
+      	table.location.view.node.appendChild(table.chart.tr);
+
+      }
+
     };
 
     xhr.send();
