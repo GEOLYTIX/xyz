@@ -5,4 +5,5 @@ module.exports = fastify => {
   require('./auth/_auth')(fastify);
   require('./workspace/_workspace')(fastify);
   require('./map_leaflet').route(fastify);
+  require('./report').route(fastify);
 };

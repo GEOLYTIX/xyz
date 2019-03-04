@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>{{:title}}</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-control" content="no-cache">
+
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <link rel="stylesheet" href="{{:dir}}/css/control.css" />
+    <link rel="stylesheet" href="{{:dir}}/css/views/report.css" />
+</head>
+
+<body data-viewmode="desktop" data-nanoid={{:nanoid}} data-token={{:token}}>
+
+    <div class="page">
+        <div class="report1">
+            <div id="xyz_location"></div>
+            <div id="xyz_map"></div>
+            <div id="xyz_table1"></div>
+            <div id="xyz_table2"></div>
+            <div id="xyz_table3"></div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="report2">
+            <div id="xyz_table4"></div>
+        </div>
+    </div>
+
+</body>
+
+<script src="{{:dir}}/js/build/xyz_control_bundle.js"></script>
+<script src="{{:dir}}/js/{{:script_js}}"></script>
+
+</html>

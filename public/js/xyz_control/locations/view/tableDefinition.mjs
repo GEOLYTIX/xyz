@@ -22,7 +22,7 @@ export default _xyz => entry => {
     }
   });
 
-  if (entry.display) showTab();
+  if (entry.display && _xyz.tableview.node) showTab();
 
   function showTab(){
 

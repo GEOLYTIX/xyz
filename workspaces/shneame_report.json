@@ -81,7 +81,51 @@
           },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
-        },        
+        },
+        "locations": {
+          "name": "Locations",
+          "format": "cluster",
+          "geom": "geom_4326",
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "shepherd_neame.sites",
+          "cluster_label": "pub_name",
+          "infoj": [
+            {
+              "field": "isoline_5min",
+              "name": "Drivetime 5 min",
+              "fieldfx": "ST_asGeoJson(isoline_5min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 5
+                }
+              }
+            },
+            {
+              "field": "isoline_10min",
+              "name": "Drivetime 10 min",
+              "fieldfx": "ST_asGeoJson(isoline_10min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 10
+                }
+              }
+            },
+            {
+              "field": "isoline_15min",
+              "name": "Drivetime 15 min",
+              "fieldfx": "ST_asGeoJson(isoline_15min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 15
+                }
+              }
+            }
+          ]
+        },
         "report_test": {
           "display": true,
           "edit": {
@@ -665,6 +709,12 @@
                   "title": "Total"
                 }
               ]
+            },
+            {
+              "type": "report",
+              "report": {
+                "template": "shneame"
+              }
             }
           ]
         }

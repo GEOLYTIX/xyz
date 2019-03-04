@@ -108,6 +108,9 @@ export default (_xyz, location) => () => {
     // Create streetview control.
     if (entry.type === 'streetview') return location.view.streetview(entry);
 
+    // Create report control.
+    if (entry.type === 'report') return location.view.report(entry);
+
     // If input is images create image control and return from object.map function.
     if (entry.type === 'images') return location.view.images(entry);
 
