@@ -1,15 +1,16 @@
 import Chart from 'chart.js';
+import {createElement} from './createElement.mjs';
 
-export default (_xyz, group) => {
+export default (group) => {
 
-  const graph = _xyz.utils.createElement({
+  const graph = createElement({
     tag: 'div',
     style: {
       position: 'relative'
     }
   });
 
-  const canvas = _xyz.utils.createElement({
+  const canvas = createElement({
     tag: 'canvas',
     appendTo: graph
   });

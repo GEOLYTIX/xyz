@@ -46,6 +46,8 @@ import meta from '@turf/meta';
 
 import helpers from '@turf/helpers';
 
+export {default as chart} from './charts.mjs';
+
 export const turf = {
   pointOnFeature: pointOnFeature,
   bbox: bbox,

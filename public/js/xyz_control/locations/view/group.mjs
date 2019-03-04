@@ -1,5 +1,3 @@
-import chart from './charts.mjs';
-
 export default _xyz => group => {
 
   group.location.view.groups[group.label] = group;
@@ -91,7 +89,7 @@ export default _xyz => group => {
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
-    group.chartElem = chart(_xyz, group);
+    group.chartElem = _xyz.utils.chart(group);
     // Add chart
     group.div.appendChild(group.chartElem);
 
@@ -158,6 +156,7 @@ function chartIcon(group) {
   case 'horizontalBar': return 'notes';
   case 'bubble': return 'bubble_chart';
   case 'scatter': return 'scatter_plot';
+  case 'radar': return 'multiline_chart';
   default: return 'show_chart';
   }
 }
