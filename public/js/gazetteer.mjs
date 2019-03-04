@@ -248,10 +248,12 @@ export default _xyz => {
     _xyz.gazetteer.layer = _xyz.mapview.draw.geoJSON({
       json: geom,
       pane: 'gazetteer',
-      icon: {
-        url: _xyz.gazetteer.icon,
-        size: 40,
-        anchor: [20, 40]
+      style: {
+        icon: {
+          url: _xyz.gazetteer.icon,
+          size: 40,
+          anchor: [20, 40]
+        }
       }
     });
 
