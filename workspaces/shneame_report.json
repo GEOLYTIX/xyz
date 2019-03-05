@@ -307,7 +307,7 @@
                 },
                 {
                   "field": "uk",
-                  "aspatial": "age_under_18_uk, age_18to24_uk, age_25to29_uk, age_30to44_uk ,age_45to59_uk, age_60plus_uk, age_total_uk FROM shepherd_neame.report_summary"
+                  "aspatial": "age_under_18_se_lon, age_18to24_se_lon, age_25to29_se_lon, age_30to44_se_lon, age_45to59_se_lon, age_60plus_se_lon, age_total_se_lon FROM shepherd_neame.report_summary"
                 }
               ],
               "rows": [
@@ -361,30 +361,30 @@
                     "100*min15.age_profile_total/min15.age_profile_total"
                   ]
                 },
-                "age_uk_total": {
-                  "title": "UK Total",
+                "age_se_lon_total": {
+                  "title": "SE and London",
                   "type": "integer",
                   "rows": [
-                    "uk.age_under_18_uk",
-                    "uk.age_18to24_uk",
-                    "uk.age_25to29_uk",
-                    "uk.age_30to44_uk",
-                    "uk.age_45to59_uk",
-                    "uk.age_60plus_uk",
-                    "uk.age_total_uk"
+                    "uk.age_under_18_se_lon",
+                    "uk.age_18to24_se_lon",
+                    "uk.age_25to29_se_lon",
+                    "uk.age_30to44_se_lon",
+                    "uk.age_45to59_se_lon",
+                    "uk.age_60plus_se_lon",
+                    "uk.age_total_se_lon"
                   ]
                 },
                 "age_index": {
                   "title": "Age Profile Index",
                   "type": "numeric(1000, 2)",
                   "rows": [
-                    "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
-                    "uk.age_total_uk*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_uk",
-                    "uk.age_total_uk*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_uk",
-                    "uk.age_total_uk*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_uk",
-                    "uk.age_total_uk*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_uk",
-                    "uk.age_total_uk*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_uk",
-                    "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
+                    "uk.age_total_se_lon*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_se_lon"
                   ]
                 }
               }
@@ -392,6 +392,12 @@
             {
               "type": "tableDefinition",
               "title": "Social Grade",
+              "chart": {
+                "type": "horizontalBar",
+                "active": true,
+                "field": "sg_index",
+                "backgroundColor": ["#8e24aa", "#1e88e5", "#00897b", "#ff8a65", "#a1887f", "#78909c"]
+              },
               "columns": [
                 {
                   "type": "integer",
@@ -429,7 +435,7 @@
                 {
                   "type": "integer",
                   "field": "uk",
-                  "aspatial": "social_grade_ab_uk, social_grade_c1_uk, social_grade_c2_uk, social_grade_de_uk, social_grade_total_uk FROM shepherd_neame.report_summary"
+                  "aspatial": "social_grade_ab_se_lon, social_grade_c1_se_lon, social_grade_c2_se_lon, social_grade_de_se_lon, social_grade_total_se_lon FROM shepherd_neame.report_summary"
                 }
               ],
               "rows": [
@@ -471,26 +477,26 @@
                     "100*min15.sg_total/min15.sg_total"
                   ]
                 },
-                "sg_uk_total": {
-                  "title": "UK Total",
+                "sg_se_lon_total": {
+                  "title": "SE and London",
                   "type": "integer",
                   "rows": [
-                    "uk.social_grade_ab_uk",
-                    "uk.social_grade_c1_uk",
-                    "uk.social_grade_c2_uk",
-                    "uk.social_grade_de_uk",
-                    "uk.social_grade_total_uk"
+                    "uk.social_grade_ab_se_lon",
+                    "uk.social_grade_c1_se_lon",
+                    "uk.social_grade_c2_se_lon",
+                    "uk.social_grade_de_se_lon",
+                    "uk.social_grade_total_se_lon"
                   ]
                 },
                 "sg_index": {
                   "title": "Social Grade Index",
                   "type": "integer",
                   "rows": [
-                    "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
-                    "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
-                    "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
-                    "uk.social_grade_total_uk*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_uk",
-                    "uk.social_grade_total_uk*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_uk"
+                    "uk.social_grade_total_se_lon*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_se_lon"
                   ]
                 }
               }
