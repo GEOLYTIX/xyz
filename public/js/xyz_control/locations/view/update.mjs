@@ -89,9 +89,8 @@ export default (_xyz, location) => () => {
     });
 
     // Create new table cell for the entry label and append to table.
-    let _label;
     if (entry.label) {
-      _label = _xyz.utils.createElement({
+      entry.label_td = _xyz.utils.createElement({
         tag: 'td',
         options: {
           className: 'label lv-' + (entry.level || 0),
@@ -125,7 +124,7 @@ export default (_xyz, location) => () => {
     // Create val table cell in a new line.
     if (!entry.inline && !(entry.type === 'integer' ^ entry.type === 'numeric' ^ entry.type === 'date')) {
 
-      if(_label) _label.colSpan = '2';
+      if(entry.label_td) entry.label_td.colSpan = '2';
 
       // Create new row and append to table.
       entry.row = _xyz.utils.createElement({
@@ -181,7 +180,7 @@ export default (_xyz, location) => () => {
     if(!entry.group) return;
       
     if(!location.view.groups[entry.group].table.innerHTML) {
-      location.groups[entry.group].table.parentNode.style.display = 'none';
+      location.view.groups[entry.group].table.parentNode.style.display = 'none';
     }
       
   });

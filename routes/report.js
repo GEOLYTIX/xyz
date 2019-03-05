@@ -28,6 +28,8 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
+  // console.log(req.query.token);
+
   const config = global.workspace[token.access].config;
 
   // Check whether request comes from a mobile platform and set template.
@@ -40,7 +42,7 @@ async function view(req, res, token = { access: 'public' }) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: token.signed,
+    token: req.query.token || token.signed,
     script_js: 'views/report.js'
   }));
 
