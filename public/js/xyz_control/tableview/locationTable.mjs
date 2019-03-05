@@ -11,9 +11,9 @@ export default _xyz => table => {
   if (!table.columns) {
 
     const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
- 
+
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
-      
+
     Object.assign(table, infoj_table);
 
   }
@@ -56,53 +56,49 @@ export default _xyz => table => {
 
       table.Tabulator.redraw(true);
 
-      if(table.chart){
+      if (table.chart) {
 
-      	let trs = table.location.view.node.children;
+        let trs = table.location.view.node.children;
 
-      	let prev_tr = Array.from(trs).filter(tr => tr.getAttribute('data-name') === table.title);
+        let prev_tr = Array.from(trs).filter(tr => tr.getAttribute('data-name') === table.title);
 
-      	if(table.checked && table.chart.tr){
-      		return;
-      	} 
+        if (table.checked && table.chart.tr) {
+          return;
+        }
 
-      	let fields = [];
-      	
-      	e.target.response.map(field => fields.push({'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field]}));
+        if (!table.chart.tr) {
 
-      	table.chart.tr = _xyz.utils.createElement({tag: 'tr'});
+          let fields = [];
 
-      	table.chart.tr.setAttribute('data-name', table.title);
+          e.target.response.map(field => fields.push({ 'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field] }));
 
-      	let td = _xyz.utils.createElement({tag: 'td', options: {colSpan: '2'}, appendTo: table.chart.tr});
+          table.chart.tr = _xyz.utils.createElement({ tag: 'tr' });
+          //table.chart.tr.setAttribute('data-name', table.title);
 
-      	let section = _xyz.utils.createElement({tag: 'div', options: {classList: 'table-section'}, appendTo: td});
+          let td = _xyz.utils.createElement({ tag: 'td', options: { colSpan: '2' }, appendTo: table.chart.tr }),
+            section = _xyz.utils.createElement({ tag: 'div', options: { classList: 'table-section' }, appendTo: td }),
+            header = _xyz.utils.createElement({ tag: 'div', options: { classList: 'btn_subtext cursor noselect' }, style: { textAlign: 'left', fontStyle: 'italic' }, appendTo: section });
 
-      	let header = _xyz.utils.createElement({tag: 'div', options: {classList: 'btn_subtext cursor noselect'}, style: {textAlign: 'left', fontStyle: 'italic'}, appendTo: section});
+          _xyz.utils.createElement({ tag: 'span', options: { textContent: table.title }, appendTo: header });
 
-      	_xyz.utils.createElement({tag: 'span', options: {textContent: table.title}, appendTo: header});
+          section.appendChild(_xyz.utils.chart({
+            label: table.title,
+            fields: fields,
+            chart: table.chart
+          }));
 
-      	section.appendChild(_xyz.utils.chart({
-      		label: table.title,
-      		fields: fields,
-      		chart: table.chart
-      	}));
-
-      	table.location.view.node.appendChild(table.chart.tr);
-
+          table.location.view.node.appendChild(table.chart.tr);
+        }
       }
-
     };
 
     xhr.send();
-
   };
 
   table.activate = () => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
-      table.target,
-      {
+      table.target, {
         columns: columns,
         autoResize: true,
         height: _xyz.tableview.height || '100%'

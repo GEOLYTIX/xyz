@@ -35,7 +35,10 @@ export default _xyz => (entry) => {
 
   function hideTab(){
     _xyz.tableview.removeTab(entry);
-    if(entry.chart && entry.chart.tr) entry.location.view.node.removeChild(entry.chart.tr);
+    if(entry.chart && entry.chart.tr) {
+      entry.location.view.node.removeChild(entry.chart.tr);
+      entry.chart.tr = null;
+    }
   }
 
 };
