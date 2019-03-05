@@ -70,24 +70,32 @@ export default _xyz => table => {
 
           let fields = [];
 
-          e.target.response.map(field => fields.push({ 'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field] }));
+          e.target.response.map(field => {
+          	if(!!field[table.chart.field]) {
+          		fields.push({ 'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field]});
+          	}
+          });
 
-          table.chart.tr = _xyz.utils.createElement({ tag: 'tr' });
-          //table.chart.tr.setAttribute('data-name', table.title);
+          if(fields.length){
 
-          let td = _xyz.utils.createElement({ tag: 'td', options: { colSpan: '2' }, appendTo: table.chart.tr }),
-            section = _xyz.utils.createElement({ tag: 'div', options: { classList: 'table-section' }, appendTo: td }),
-            header = _xyz.utils.createElement({ tag: 'div', options: { classList: 'btn_subtext cursor noselect' }, style: { textAlign: 'left', fontStyle: 'italic' }, appendTo: section });
+          	table.chart.tr = _xyz.utils.createElement({ tag: 'tr' });
 
-          _xyz.utils.createElement({ tag: 'span', options: { textContent: table.title }, appendTo: header });
+            let td = _xyz.utils.createElement({ tag: 'td', options: { colSpan: '2' }, appendTo: table.chart.tr }),
+              section = _xyz.utils.createElement({ tag: 'div', options: { classList: 'table-section' }, appendTo: td }),
+              header = _xyz.utils.createElement({ tag: 'div', options: { classList: 'btn_subtext cursor noselect' }, style: { textAlign: 'left', fontStyle: 'italic' }, appendTo: section });
 
-          section.appendChild(_xyz.utils.chart({
-            label: table.title,
-            fields: fields,
-            chart: table.chart
-          }));
+            _xyz.utils.createElement({ tag: 'span', options: { textContent: table.title }, appendTo: header });
 
-          table.location.view.node.appendChild(table.chart.tr);
+            section.appendChild(_xyz.utils.chart({
+              label: table.title,
+              fields: fields,
+              chart: table.chart
+            }));
+
+            table.location.view.node.appendChild(table.chart.tr);
+          } else {
+      	    return;
+          }
         }
       }
     };
