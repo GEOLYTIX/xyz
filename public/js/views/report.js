@@ -24,7 +24,7 @@ function Report(_xyz) {
     {
       locale: 'GB',
       dbs: 'XYZ',
-      layer: 'report_test',
+      layer: 'sites',
       table: 'shepherd_neame.sites',
       id: report_params.id,
     },
@@ -39,7 +39,7 @@ function Report(_xyz) {
   _xyz.tableview.locationTable({
     title: 'Population Summary',
     location: {
-      layer: 'report_test',
+      layer: 'sites',
       id: report_params.id
     },
     target: document.getElementById('xyz_table1')
@@ -48,7 +48,7 @@ function Report(_xyz) {
   _xyz.tableview.locationTable({
     title: 'Age Profile',
     location: {
-      layer: 'report_test',
+      layer: 'sites',
       id: report_params.id
     },
     target: document.getElementById('xyz_table2')
@@ -57,7 +57,7 @@ function Report(_xyz) {
   _xyz.tableview.locationTable({
     title: 'Social Grade',
     location: {
-      layer: 'report_test',
+      layer: 'sites',
       id: report_params.id
     },
     target: document.getElementById('xyz_table3')
@@ -66,7 +66,7 @@ function Report(_xyz) {
   _xyz.tableview.locationTable({
     title: 'OAC Profile',
     location: {
-      layer: 'report_test',
+      layer: 'sites',
       id: report_params.id
     },
     target: document.getElementById('xyz_table4')
