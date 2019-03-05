@@ -266,6 +266,11 @@
             {
               "type": "tableDefinition",
               "title": "Age Profile",
+              "chart": {
+                "type": "horizontalBar",
+                "active": true,
+                "field": "age_index"
+              },
               "columns": [
                 {
                   "type": "integer",
