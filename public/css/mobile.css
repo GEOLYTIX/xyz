@@ -13,7 +13,6 @@
   text-align: left;
   width: 100%;
   font-size: 12px;
-  padding-top: 5px;
   table-layout: fixed; }
   .locationview .changed {
     color: #090; }
@@ -44,6 +43,8 @@
     font-size: 12px; }
     .locationview .val a {
       color: #090; }
+  .locationview .img_streetview {
+    width: 100%; }
   .locationview .num {
     text-align: right; }
   .locationview .addImageCell {

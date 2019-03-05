@@ -56,19 +56,19 @@ export default _xyz => group => {
     appendTo: group.header
   });
 
-  // Add expander to group header.
-  _xyz.utils.createElement({
-    tag: 'i',
-    options: {
-      className: 'material-icons cursor noselect btn_header t-expander',
-      title: 'Show section'
-    },
-    appendTo: group.header,
-    eventListener: {
-      event: 'click',
-      funct: toggleExpandedState
-    }
-  });
+  // // Add expander to group header.
+  // _xyz.utils.createElement({
+  //   tag: 'i',
+  //   options: {
+  //     className: 'material-icons cursor noselect btn_header t-expander',
+  //     title: 'Show section'
+  //   },
+  //   appendTo: group.header,
+  //   eventListener: {
+  //     event: 'click',
+  //     funct: toggleExpandedState
+  //   }
+  // });
 
   // Add table
   group.table = _xyz.utils.createElement({

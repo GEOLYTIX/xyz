@@ -13,34 +13,25 @@ export default (_xyz, location) => () => {
   location.tables = [];
 
 
-  // Remove all children from view node prior to update.
+  // Wire up locationview table to view node.
   if (location.view.node) while (location.view.node.lastChild) {
     location.view.node.removeChild(location.view.node.lastChild);
 
   } else {
 
-    // Create view node.
-    location.view.node = _xyz.utils.createElement({
-      tag: 'table',
-      options: {
-        className: 'locationview'
-      },
-      style: {
-        cellPadding: '0',
-        cellSpacing: '0',
-        //borderBottom: '1px solid ' + location.style.color
-      },
-    });
-
+    location.view.node = _xyz.utils.hyperHTML.wire()`
+    <table class="locationview">`;
   }
 
+
   // Adds layer to beginning of infoj array.
-  location.infoj.unshift({
-    'label': 'Layer',
-    'value': _xyz.layers.list[location.layer].name,
-    'type': 'text',
-    'inline': true
-  });
+  // This should not be forced without a parameter.
+  // location.infoj.unshift({
+  //   'label': 'Layer',
+  //   'value': _xyz.layers.list[location.layer].name,
+  //   'type': 'text',
+  //   'inline': true
+  // });
 
   // Create object to hold view groups.
   location.view.groups = {};
@@ -48,6 +39,8 @@ export default (_xyz, location) => () => {
   // Iterate through info fields to fill displayValue property
   // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
   Object.values(location.infoj).forEach(entry => {
+
+    if (document.body.dataset.viewmode === 'report') entry.edit = null;
 
     entry.location = location;
 
@@ -102,7 +95,7 @@ export default (_xyz, location) => () => {
     }
 
     // Finish entry creation if entry has not type.
-    if (entry.type === 'label') return;
+    if (entry.type === 'label') return entry.label_td.colSpan = '2';
 
     // Create streetview control.
     if (entry.type === 'streetview') return location.view.streetview(entry);

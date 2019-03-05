@@ -4,6 +4,8 @@ The group symbol to show / hide layers in a group was bugged. This is fixed in t
 
 Streetview control in location view is now created with hyperHTML. Does no longer break table columns.
 
+Empty groups are now hidden in location view.
+
 
 **Reports**
 

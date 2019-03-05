@@ -20,7 +20,13 @@ export default _xyz => entry => {
 
   if (!images.length && !entry.edit) return entry.row.remove();
 
-  if (entry.label) entry.row = _xyz.utils.createElement({
+  if(entry.label_td) {
+    entry.label_td.colSpan = '2';
+  } else {
+    entry.row.remove();
+  }
+
+  entry.row = _xyz.utils.createElement({
     tag: 'tr',
     options: {
       className: 'lv-0'

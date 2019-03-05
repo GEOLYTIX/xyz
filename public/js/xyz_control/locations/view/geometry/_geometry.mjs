@@ -24,17 +24,18 @@ export default _xyz => entry => {
     entry.style
   );
 
-  let tr = _xyz.utils.createElement({
-    tag: 'tr',
-    appendTo: entry.location.view.node
-  });
+  entry.row.classList.add('tr_geometry');
 
   let td = _xyz.utils.createElement({
     tag: 'td',
     style: {
-      paddingTop: '5px'
+      paddingTop: '5px',
+      position: 'relative'
     },
-    appendTo: tr
+    options: {
+      colSpan: '2'
+    },
+    appendTo: entry.row
   });
 
   entry.ctrl.showGeom = () => {
@@ -98,21 +99,19 @@ export default _xyz => entry => {
     entry.location.geometries.push(entry.ctrl.geometry);
   }
 
-  td = _xyz.utils.createElement({
-    tag: 'td',
-    appendTo: tr
-  });
-
   _xyz.utils.createElement({
     tag: 'div',
     options: {
       classList: 'sample-circle'
     },
     style: {
-      'backgroundColor': _xyz.utils.hexToRGBA(entry.style.fillColor, entry.style.fillOpacity),
-      'borderColor': _xyz.utils.hexToRGBA(entry.style.color, 1),
-      'borderStyle': 'solid',
-      'borderWidth': _xyz.utils.setStrokeWeight(entry)
+      backgroundColor: _xyz.utils.hexToRGBA(entry.style.fillColor, entry.style.fillOpacity),
+      borderColor: _xyz.utils.hexToRGBA(entry.style.color, 1),
+      borderStyle: 'solid',
+      borderWidth: _xyz.utils.setStrokeWeight(entry),
+      position: 'absolute',
+      right: 0,
+      top: '5px'
     },
     appendTo: td
   });

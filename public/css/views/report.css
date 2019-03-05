@@ -31,7 +31,7 @@
 
 #xyz_location {
   grid-column: 1;
-  grid-row: 1/4;
+  grid-row: 1/5;
 }
 
 #xyz_map { 
@@ -56,22 +56,14 @@
 }
 
 #xyz_table4 {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 3;
-}
-
-.checkbox_i {
-  display: none;
-}
-
-.checkbox {
-  padding: 0;
 }
 
 .tr_report {
   display: none;
 }
 
-.img_streetview {
-  width: 100%;
+.tr_tableview {
+  display: none;
 }

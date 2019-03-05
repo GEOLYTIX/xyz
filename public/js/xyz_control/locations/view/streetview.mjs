@@ -1,6 +1,10 @@
 export default _xyz => entry => {
 
-  if(entry.label_td) entry.label_td.colSpan = '2';
+  if(entry.label_td) {
+    entry.label_td.colSpan = '2';
+  } else {
+    entry.row.remove();
+  }
 
   const width = 300;
 
