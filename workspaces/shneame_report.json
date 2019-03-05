@@ -344,7 +344,7 @@
                 {
                   "field": "age_profile_total",
                   "fieldfx": "SUM(pop__11)",
-                  "title": "Total"
+                  "title": "Total UK"
                 }
               ],
               "agg": {
@@ -462,7 +462,7 @@
                 {
                   "field": "sg_total",
                   "fieldfx": "SUM(pop__11)",
-                  "title": "Total"
+                  "title": "Total UK"
                 }
               ],
               "agg": {
@@ -673,7 +673,7 @@
                 {
                   "field": "oac_total",
                   "fieldfx": "sum(case when oac_group>0 then pop__17 else 0 end)",
-                  "title": "Total"
+                  "title": "Total UK"
                 }
               ]
             }
