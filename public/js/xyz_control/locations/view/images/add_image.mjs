@@ -2,11 +2,11 @@ export default _xyz => (entry) => {
 
   // Add table cell for image upload input.
   entry.ctrl.add_img_td = _xyz.utils.createElement({
-    tag: 'td',
+    tag: 'div',
     options: {
-      className: 'addImageCell'
+      className: 'addImage'
     },
-    appendTo: entry.ctrl.row
+    appendTo: entry.ctrl.container
   });
 
   // Add label for image upload icon.
@@ -41,7 +41,7 @@ export default _xyz => (entry) => {
   // add change event 
   entry.ctrl.add_img_input.addEventListener('change', () => {
 
-    const newImage = document.createElement('td');
+    const newImage = document.createElement('div');
 
     const reader = new FileReader();
 
@@ -78,45 +78,10 @@ export default _xyz => (entry) => {
           tag: 'img',
           options: {
             src: dataURL
-          },
-          style: {
-            border: '3px solid #090'
           }
         });
 
-        // Add control to delete image which is not uploaded yet.
-        const btn_del = _xyz.utils.createElement({
-          tag: 'button',
-          options: {
-            title: 'Delete image',
-            className: 'btn_del',
-            innerHTML: '<i class="material-icons">delete_forever</i>'
-          },
-          appendTo: newImage,
-          eventListener: {
-            event: 'click',
-            funct: () => newImage.remove()
-          }
-        });
-
-        // Add control to upload image.
-        const btn_save = _xyz.utils.createElement({
-          tag: 'button',
-          options: {
-            title: 'Save image',
-            className: 'btn_save',
-            innerHTML: '<i class="material-icons">cloud_upload</i>'
-          },
-          appendTo: newImage,
-          eventListener: {
-            event: 'click',
-            funct: () => {
-              btn_del.remove();
-              btn_save.remove();
-              entry.ctrl.upload_image(entry, _img, dataURL);
-            }
-          }
-        });
+        entry.ctrl.upload_image(entry, _img, dataURL);
 
         newImage.appendChild(_img);
       };
@@ -128,7 +93,7 @@ export default _xyz => (entry) => {
     reader.readAsDataURL(entry.ctrl.add_img_input.files[0]);
 
     // insert new image before last image
-    entry.ctrl.row.insertBefore(newImage, entry.ctrl.row.childNodes[1]);
+    entry.ctrl.container.insertBefore(newImage, entry.ctrl.container.childNodes[1]);
   });
 
 };

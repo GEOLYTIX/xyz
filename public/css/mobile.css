@@ -47,16 +47,6 @@
     width: 100%; }
   .locationview .num {
     text-align: right; }
-  .locationview .addImageCell {
-    vertical-align: middle;
-    height: 170px; }
-    .locationview .addImageCell i {
-      color: #090;
-      font-size: 70px;
-      padding: 20px;
-      text-shadow: 2px 2px 1px #777; }
-    .locationview .addImageCell input {
-      display: none; }
   .locationview .table-section {
     margin-top: 10px; }
     .locationview .table-section .t-expander {
@@ -76,6 +66,33 @@
       overflow: auto; }
       .locationview .table-section.expanded .t-expander::before {
         content: "expand_less"; }
+  .locationview .td_images {
+    text-align: center; }
+    .locationview .td_images > div {
+      padding: 3px 0;
+      position: relative; }
+    .locationview .td_images .addImage i {
+      color: #090;
+      font-size: 70px;
+      text-shadow: 2px 2px 2px #999; }
+    .locationview .td_images .addImage input {
+      display: none; }
+    .locationview .td_images img {
+      width: 100%;
+      -webkit-transition: opacity 0.2s linear;
+      -moz-transition: opacity 0.2s linear;
+      -o-transition: opacity 0.2s linear;
+      transition: opacity 0.2s linear; }
+    .locationview .td_images button {
+      background: rgba(255, 255, 255, 0.8);
+      position: absolute;
+      width: 100%;
+      font-size: 20px;
+      font-family: ffmark_bold;
+      text-align: right;
+      top: 0;
+      right: 0;
+      color: #090; }
   .locationview .sample-circle {
     width: 24px;
     height: 24px;
@@ -83,14 +100,6 @@
     box-shadow: 2px 2px 2px #999;
     float: right;
     margin-right: 10px; }
-
-.stage-tooltip {
-  padding: 0 0 0 4px; }
-  .stage-tooltip .btn-tooltip {
-    display: table-cell;
-    font-size: 25px;
-    padding: 4px 2px 4px 2px;
-    color: #090; }
 
 .tableview {
   position: absolute;
@@ -527,48 +536,6 @@ input[type=range]::-moz-range-thumb {
 
 .qs-datepicker .qs-square:not(.qs-empty):not(.qs-disabled):not(.qs-day):not(.qs-active):hover {
   background: #090; }
-
-.img-container {
-  overflow-x: scroll;
-  position: absolute;
-  bottom: 0;
-  width: 100%; }
-  .img-container td {
-    position: relative;
-    padding: 5px; }
-    .img-container td img {
-      height: 160px;
-      box-shadow: 2px 2px 1px #777;
-      border-radius: 10px;
-      -webkit-transition: opacity 0.2s linear;
-      -moz-transition: opacity 0.2s linear;
-      -o-transition: opacity 0.2s linear;
-      transition: opacity 0.2s linear; }
-    .img-container td button {
-      display: block;
-      background: none;
-      position: absolute;
-      border: none; }
-      .img-container td button.btn_del {
-        right: 6px;
-        top: 10px; }
-      .img-container td button.btn_save {
-        left: 5px;
-        bottom: 14px; }
-      .img-container td button :hover {
-        cursor: pointer; }
-      .img-container td button i {
-        padding: 1px;
-        width: 30px;
-        height: 30px;
-        font-size: 28px;
-        color: #090;
-        align-content: center;
-        border-radius: 5px;
-        background-color: #fff;
-        opacity: 0.9;
-        border: 1px solid #cf7;
-        box-shadow: 2px 2px 1px #cf7; }
 
 .bar {
   fill: #5AB664 !important;

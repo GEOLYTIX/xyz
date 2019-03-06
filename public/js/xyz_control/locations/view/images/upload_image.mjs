@@ -22,19 +22,17 @@ export default _xyz => (entry, img, dataURL) => {
     const json = JSON.parse(e.target.responseText);
 
     img.style.opacity = 1;
-    img.style.border = '3px solid #eee';
     img.id = json.image_id;
     img.src = json.image_url;
 
-    // add delete button / control
     _xyz.utils.createElement({
       tag: 'button',
       options: {
         title: 'Delete image',
-        className: 'btn_del',
-        innerHTML: '<i class="material-icons">delete_forever</i>'
+        className: 'cursor',
+        textContent: 'Delete'
       },
-      appendTo: img.parentElement,
+      appendTo: img.parentNode,
       eventListener: {
         event: 'click',
         funct: e => {
