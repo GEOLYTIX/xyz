@@ -42,7 +42,7 @@ async function view(req, res, token = { access: 'public' }) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: token.signed,
+    token: req.query.token || token.signed,
     log: process.env.LOG_LEVEL ? 'true' : 'false',
     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
     hrefDocumentation: config.documentation ? config.documentation : '',
