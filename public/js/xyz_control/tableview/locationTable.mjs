@@ -58,27 +58,29 @@ export default _xyz => table => {
 
       if (table.chart) {
 
-        let trs = table.location.view.node.children;
-
-        let prev_tr = Array.from(trs).filter(tr => tr.getAttribute('data-name') === table.title);
-
-        if (table.checked && table.chart.tr) {
+        if (table.display && table.chart.tr) {
           return;
         }
 
-        if (!table.chart.tr) {
+        if (!table.display && table.chart.tr) {
+          table.location.view.node.removeChild(table.chart.tr);
+          table.chart.tr = null;
+        }
+
+        if (table.display) {
 
           let fields = [];
 
+          // get data from chart
           e.target.response.map(field => {
-          	if(!!field[table.chart.field]) {
-          		fields.push({ 'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field]});
-          	}
+            if (!!field[table.chart.field]) {
+              fields.push({ 'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field] });
+            }
           });
 
-          if(fields.length){
+          if (fields.length) { // is chart not empty
 
-          	table.chart.tr = _xyz.utils.createElement({ tag: 'tr' });
+            table.chart.tr = _xyz.utils.createElement({ tag: 'tr', options: { classList: 'table-chart' } });
 
             let td = _xyz.utils.createElement({ tag: 'td', options: { colSpan: '2' }, appendTo: table.chart.tr }),
               section = _xyz.utils.createElement({ tag: 'div', options: { classList: 'table-section' }, appendTo: td }),
@@ -94,7 +96,8 @@ export default _xyz => table => {
 
             table.location.view.node.appendChild(table.chart.tr);
           } else {
-      	    return;
+            table.display = false;
+            return;
           }
         }
       }

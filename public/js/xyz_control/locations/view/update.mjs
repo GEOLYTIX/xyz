@@ -16,6 +16,7 @@ export default (_xyz, location) => () => {
   // Remove all children from view node prior to update.
   if (location.view.node) while (location.view.node.lastChild) {
     location.view.node.removeChild(location.view.node.lastChild);
+    console.log('lv node children removed');
 
   } else {
 
