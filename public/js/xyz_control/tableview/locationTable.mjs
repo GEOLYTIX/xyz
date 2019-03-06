@@ -10,7 +10,7 @@ export default _xyz => table => {
 
   if (!table.columns) {
 
-    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+    const infoj = _xyz.layers.list[table.location.layer].infoj;
  
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
       

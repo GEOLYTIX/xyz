@@ -16,8 +16,11 @@ _xyz({
 function Report(_xyz) {
 
   _xyz.mapview.create({
+    scrollWheelZoom: true,
     target: document.getElementById('xyz_map')
   });
+
+  _xyz.layers.list[report_params.layer].show();
 
   _xyz.locations.select(
     //params
@@ -30,7 +33,24 @@ function Report(_xyz) {
     },
     //callback
     location=>{
-      location.draw();
+      location.draw({
+        //pane: report_params.layer,
+        color: '#090',
+        stroke: true,
+        fill: true,
+        fillOpacity: 0,
+        icon: {
+          url: _xyz.utils.svg_symbols({
+            type: 'markerColor',
+            style: {
+              colorMarker: '#090',
+              colorDot: '#cf9'
+            }
+          }),
+          anchor: [20,40],
+          size: 40
+        }
+      });
       location.flyTo();
       document.getElementById('xyz_location').appendChild(location.view.node);
     }

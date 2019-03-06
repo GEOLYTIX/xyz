@@ -38,17 +38,22 @@ export default _xyz => entry => {
     appendTo: entry.row
   });
 
-  entry.ctrl.showGeom = () => {
+
+  function drawGeom() {
+
     entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
       json: {
         type: 'Feature',
         geometry: JSON.parse(entry.value)
       },
-      pane: 'select_display',
+      pane: entry.location.layer,
       style: entry.style
     });
     entry.location.geometries.push(entry.ctrl.geometry);
-  };
+  
+  }
+
+  entry.ctrl.showGeom = () => drawGeom();
 
   if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
 
@@ -88,15 +93,7 @@ export default _xyz => entry => {
   if (entry.value && entry.edit) {
     entry.ctrl.toggle.checked = true;
 
-    entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
-      json: {
-        type: 'Feature',
-        geometry: JSON.parse(entry.value)
-      },
-      pane: 'select_display',
-      style: entry.style
-    });
-    entry.location.geometries.push(entry.ctrl.geometry);
+    drawGeom();
   }
 
   _xyz.utils.createElement({

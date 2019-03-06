@@ -101,7 +101,7 @@ module.exports = fastify => {
   
       if (kmeans >= count) kmeans = count;
   
-      if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
+      //if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
   
       dbscan *= xEnvelope;
 

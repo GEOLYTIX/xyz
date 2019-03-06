@@ -60,6 +60,8 @@ export default (_xyz, location) => () => {
   // Iterate through info fields and add to info table.
   Object.values(location.infoj).forEach(entry => {
 
+    if (entry.hideInReport && document.body.dataset.viewmode === 'report') return;
+
     // Create a new table row for the entry.
     if (!entry.group) entry.row = _xyz.utils.createElement({
       tag: 'tr',

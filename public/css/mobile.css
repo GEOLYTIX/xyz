@@ -843,7 +843,7 @@ button {
   z-index: 100; }
 
 .leaflet-map-pane svg {
-  z-index: 200; }
+  z-index: 100; }
 
 .leaflet-vml-shape {
   width: 1px;
