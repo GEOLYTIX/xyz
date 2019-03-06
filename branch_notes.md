@@ -6,6 +6,10 @@ Streetview control in location view is now created with hyperHTML. Does no longe
 
 Empty groups are now hidden in location view.
 
+Fix for filters. Current filter must be assigned to legend filter not the other way around.
+
+Zoom to layer extent will now use filter.
+
 
 **Changes**
 
