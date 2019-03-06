@@ -29,6 +29,8 @@ Location geometries are drawn on the same pane.
 
 The pane can be supplied as a style property to the location draw method.
 
+New mvts cache tables will only have a spatial index. The x,y,z index should not be necessary due to the primary key.
+
 **Reports**
 
 Currently only one report.

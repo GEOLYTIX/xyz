@@ -3,6 +3,21 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/workspace/get',
+    schema: {
+      querystring: {
+        token: { type: 'string' }
+      },
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            title: { type: 'string' },
+            documentation: { type: 'string' },
+            locales: {},
+          }
+        }
+      }
+    },
     preHandler: fastify.auth([fastify.authAPI]),
     handler: (req, res) => {
 
