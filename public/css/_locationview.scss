@@ -2,7 +2,6 @@
     text-align: left;
     width: 100%;
     font-size: 12px;
-    padding-top: 5px;
     table-layout: fixed;
     .changed {
         color: #090;
@@ -43,21 +42,11 @@
             color: $glxgreen;
         }
     }
+    .img_streetview {
+        width: 100%;
+      }
     .num {
         text-align: right;
-    }
-    .addImageCell {
-        vertical-align: middle;
-        height: 170px;
-        i {
-            color: #090;
-            font-size: 70px;
-            padding: 20px;
-            text-shadow: 2px 2px 1px #777;
-        }
-        input {
-            display: none;
-        }
     }
     .table-section {
         margin-top: 10px;
@@ -84,6 +73,41 @@
             }
         }
     }
+    .td_images {
+        text-align: center;
+        >div {
+            padding: 3px 0;
+            position: relative;
+        }
+        .addImage {
+            i {
+                color: #090;
+                font-size: 70px;
+                text-shadow: 2px 2px 2px #999;
+            }
+            input {
+                display: none;
+            }
+        }
+        img {
+            width: 100%;
+            -webkit-transition: opacity 0.2s linear;
+            -moz-transition: opacity 0.2s linear;
+            -o-transition: opacity 0.2s linear;
+            transition: opacity 0.2s linear;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.8);
+            position: absolute;
+            width: 100%;
+            font-size: 20px;
+            font-family: ffmark_bold;
+            text-align: right;
+            top: 0;
+            right: 0;
+            color: #090;
+        }
+    }
     .sample-circle {
         width: 24px;
         height: 24px;
@@ -92,14 +116,5 @@
         float: right;
         margin-right: 10px;
     }
-}
 
-.stage-tooltip {
-    padding: 0 0 0 4px;
-    .btn-tooltip {
-        display: table-cell;
-        font-size: 25px;
-        padding: 4px 2px 4px 2px;
-        color: #090;
-    }
 }

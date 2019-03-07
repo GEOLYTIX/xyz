@@ -17,7 +17,7 @@ export default _xyz => (entry, img) => {
 
     if (e.target.status !== 200) return;
 
-    document.getElementById(img.id).remove();
+    document.getElementById(img.id).parentNode.remove();
   };
 
   xhr.send();

@@ -2,6 +2,24 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/layer/cluster',
+    schema: {
+      querystring: {
+        locale: { type: 'string' }
+      },
+      response: {
+        200: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties : {
+              type: { type: 'string' },
+              geometry: {},
+              properties: {},
+            }
+          }
+        }
+      }
+    },
     preHandler: fastify.auth([fastify.authAPI]),
     handler: async (req, res) => {
 
@@ -101,7 +119,7 @@ module.exports = fastify => {
   
       if (kmeans >= count) kmeans = count;
   
-      if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
+      //if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
   
       dbscan *= xEnvelope;
 

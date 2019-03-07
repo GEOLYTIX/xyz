@@ -1,8 +1,8 @@
-module.exports = filter => {
+module.exports = async filter => {
 
   let sql_filter = '';
-    
-  Object.keys(filter).forEach(field => {
+   
+  for (const field of await Object.keys(filter)) {
     if (filter[field].ni && filter[field].ni.length > 0) sql_filter += ` AND ${field} NOT IN ('${filter[field].ni.join('\',\'')}')`;
     if (filter[field].in && filter[field].in.length > 0) sql_filter += ` AND ${field} IN ('${filter[field].in.join('\',\'')}')`;
           
@@ -15,7 +15,7 @@ module.exports = filter => {
           
     if((filter[field].like)) sql_filter += ` AND ${field} ILIKE '${filter[field].like}%'`;
     if((filter[field].match)) sql_filter += ` AND ${field} ILIKE '${filter[field].match}'`;
-  });
+  };
       
   return sql_filter;
 };

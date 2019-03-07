@@ -1,219 +1,54 @@
-**Fastify** is now version 2 release.
+**Fixes**
 
-Fastify plugins have been upgraded to the latest versions.
+The group symbol to show / hide layers in a group was bugged. This is fixed in this branch.
 
-fastify-auth 0.4.0
+Streetview control in location view is now created with hyperHTML. Does no longer break table columns.
 
-fastify-cors 2.1.2
+Empty groups are now hidden in location view.
 
-fastify-formbody 3.1.0
+Fix for filters. Current filter must be assigned to legend filter not the other way around.
 
-fastify-helmet 3.0.0
-
-fastify-jwt 0.9.3
-
-fastify-static 2.3.4
-
-Pino-pretty has been removed from dependencies.
-
-**Update leaflet to version 1.4.0.**
-
-**_xyz()** instantiation will load the first locale if no locale is specified as parameter.
-
-**_xyz()** instantiation will async load the workspace if no callback is defined.
-
-Async instantiation:
-```
-const xyz = await _xyz({
-    host: document.head.dataset.dir
-});
-```
-
-Instantiation with callback:
-```
-_xyz({
-  host: document.head.dataset.dir
-  callback: xyz => {}
-})
-```
+Zoom to layer extent will now use filter.
 
 
-**_xyz.workspace.loadLocale()** will load a locale from the workspace.
+**Changes**
+
+Set zindex for svg in panes to 100 to prevent polygons drawn on top of images.
 
 ```
-_xyz.workspace.loadLocale({
-    locale: 'GB'
-});
-```
-
-**_xyz.mapview.create()** will load a locale if the locale parameter is given as parameter.
-
-
-**utils.paramstring()** will not add empty keys to output.
-
-**utils.createCheckbox()** returns the input.
-
-**utils.getCircularReplacer()** Replace circular reference when stringyfying JSON.
-
-**utils.dataURLtoBlob()** Return Blob from dataURL.
-
-**utils.turf.pointOnFeature()** Return [lat, lng] coordinate pair from a point in polygon. Will also work with point geometry.
-
-**hooks.remove()** will empty but not remove array hooks.
-
-select hooks are retired. 
-
-locations are now stored in **hooks.current.locations[]**.
-
-The location hook will be removed if a location cannot be selected.
-
-**hooks.set()** uses now Object.assign instead of a single key/value pair.
-
-The **_xyz.hooks** object is structured as follows:
-
-```
-hooks : {
-    current : {
-        layers : [],
-        locations : []
-    },
-    filter : ()=>{},
-    push : ()=>{},
-    remove : ()=>{},
-    removeAll : ()=>{},
-    set : ()=>{},
+.leaflet-map-pane svg {
+    z-index: 100;
 }
 ```
 
-**mapview.draw.geoJSON({})**
+Image control is no longer vertical with scroll but column.
 
-Drawing GeoJSON to the map is now a drawing method on the mapview.
+Images are uploaded automatically.
 
-**mapview.popup()**
+Location geometries are drawn on the same pane.
 
-Will open a popup on the mapview. Content and latlng must be supplied as input param.
+The pane can be supplied as a style property to the location draw method.
 
+New mvts cache tables will only have a spatial index. The x,y,z index should not be necessary due to the primary key.
 
-**Locations**
+**Reports**
 
-**_xyz.locations** has a **select()** method as well as location prototype object.
+Currently only one report.
 
-Calling **_xyz.locations.select()** with input parameters will create a location and get it's data from the XYZ middleware.
+Template: public/views/report.html
+Script: public/js/views/report.js
 
-Without a mapview and no callback the select method will create an alert with the stringified infoj object.
+Endpoint: routes/report.js
 
-With a mapview the location will be drawn to the map and a popup with the location view will be displayed.
+The report endpoint will check for token and require login for private endpoints if the token is not supplied in URL.
 
-A callback can be passed to the select method to control the display of the location view.
+The report script stores URL param as report_params object.
 
-```
-_xyz.locations.select(
-  //params
-  {
-    locale: 'NE',
-    dbs: 'XYZ',
-    layer: 'COUNTRIES',
-    table: 'dev.natural_earth_countries',
-    id: 80,
-  },
-  //callback
-  location=>{
-    location.style.fillColor = '#f44336';
-    location.style.fillOpacity = 1;
-    location.draw();
-    document.getElementById('location_info_container2').appendChild(location.view.node);
-  }
-);
-```
+The report is an infoj field `type: report` which will create a link to the report endpoint with URL params.
 
-**Groups** setting `expanded: true` in the group will have the group automatically expanded when the location view is added.
+The report template has viewmode 'report' on the body. Locations will not be editable if the viewmode is report. Cluster are not selectable if the viewmode is report.
 
-**location.draw()** will draw the location to the mapview.
+Location table entries and the report button itself will not be shown in the report view.
 
-**location.flyTo()** will create a featuregroup of all of the locations geometries and fly the map to the extent of the featuregroup.
+`hideInReport : true` fields will return immediately from the view update if the viewmode is 'report'.
 
-**location.update()** will update the location in the database. A post request with the newValues will be sent to the api/location/update endpoint. The update method accepts a callback to be fired after the location view has been updated.
-
-
-A location's own methods know their parent.
-
-location.draw(), location.remove(), etc. do not need the location object as input parameter. 
-
-
-
-```
-locations : {
-    select : {},
-    location : {
-        infoj : [],
-        update: ()={},
-        flyTo: ()=>{},
-        geometry : {},
-        Geometry : {},
-        marker : {},
-        Marker : {},
-        geometries : [],
-        remove : ()=>{},
-        get : ()=>{},
-        draw : ()=>{},
-        view : {
-            update : {},
-            node : {},
-            geometry : {
-                ctrl : {
-                    isoline_here : ()=>{},
-                    isoline_mapbox : ()=>{},
-                    delete_geom : ()=>{},
-                    show_geom : ()=>{},
-                    hide_geom : ()=>{},
-                }
-            },
-            group : {},
-            groups : {},
-            streetview : ()=>{},
-            images : {
-                ctrl : {
-                    add_image : ()=>{},
-                    delete_image : ()=>{},
-                    upload_image : ()=>{},
-                },
-            }
-        }
-    }
-}
-```
-
-**Isolines**
-
-Isoline endpoints are:
-
-/api/location/edit/isoline/here
-
-/api/location/edit/isoline/mapbox
-
-The isoline will be added to an existing location if provided with an ID and field; The infoj of the updated location will be returned.
-
-Otherwise a new location will created in the specified layer and the location ID will be returned.
-
-The defaults for the *isoline_mapbox* object are:
-
-```
-isoline_mapbox = {
-    profile : 'driving',
-    minutes : 10,
-    coordinates : [lng, lat]
-}
-```
-
-The defaults for the *isoline_here* object are:
-
-```
-isoline_here = {
-    mode : 'car',
-    type : 'fastest',
-    rangetype : 'time', // or 'distance'
-    minutes : 10,
-    distance : 10, //km, will only be used if rangetype is 'distance'
-    coordinates : [lat, lng]
-}
-```

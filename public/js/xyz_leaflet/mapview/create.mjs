@@ -132,10 +132,7 @@ export default _xyz => params => {
         
   panes.list.push(_xyz.map.createPane('gazetteer'));
   _xyz.map.getPane('gazetteer').style.zIndex = panes.next++;
-    
-  panes.list.push(_xyz.map.createPane('select_display'));
-  _xyz.map.getPane('select_display').style.zIndex = panes.next++;
-    
+       
   panes.list.push(_xyz.map.createPane('select'));
   _xyz.map.getPane('select').style.zIndex = panes.next++;
     
