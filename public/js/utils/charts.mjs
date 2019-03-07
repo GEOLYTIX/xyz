@@ -3,6 +3,8 @@ import {createElement} from './createElement.mjs';
 
 export default (group) => {
 
+  console.log(group.fields);
+
   const graph = createElement({
     tag: 'div',
     style: {
@@ -15,11 +17,43 @@ export default (group) => {
     appendTo: graph
   });
 
-  const labels = group.fields.map(field => field.label);
+  const labels = (group.chart.stacks && group.chart.stacks.length) ? group.chart.stacks : group.fields.map(field => field.label);
 
   const data = group.fields.map(field => field.value);
 
   const displayValues = group.fields.map(field => field.displayValue);
+
+  let datasets = [];
+
+  let stack_labels = [];
+
+  if(group.chart.stacks && group.chart.stacks.length){
+    group.fields.map(field => { 
+      if(!stack_labels.includes(field.label)) {
+        stack_labels.push(field.label);
+      } 
+    });
+      
+    //console.log(stack_labels);
+    //stack_labels.map()
+    for(let i = 0; i < labels.length; i++){
+      for(let j = 0; i < stack_labels.length; j++){
+        let data = [];
+        Object.values(group.fields).map(field => {
+          /*if(field.stack === labels[i] && field.label === stack_labels[j]){
+              console.log({
+                 "stack": field.stack,
+                 "label": field.label // ok
+              });
+            }*/
+          if(field.stack === labels[i]){
+              
+          }
+        });
+      }
+    }
+  }
+
       
   new Chart(canvas, {
     type: group.chart.type || 'line',
@@ -40,6 +74,7 @@ export default (group) => {
       scales: {
         // no axis for pie or doughnut charts
         yAxes: (group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : [
+          {stacked: ((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false},
           // axis for all other charts
           {
             ticks: {
@@ -52,7 +87,10 @@ export default (group) => {
               labelString: (group.chart.unit ? scale(group) : false)
             }
           }
-        ]
+        ],
+        xAxes: [{
+          stacked: ((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false
+        }]
       },
       tooltips: {
         callbacks: {

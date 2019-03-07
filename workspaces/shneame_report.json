@@ -81,7 +81,227 @@
           },
           "format": "tiles",
           "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
-        },        
+        },
+                "retail_places_mvt": {
+                    "display": true,
+                    "group": "Retail",
+                    "name": "Retail Places",
+                    "meta": "Polygon representing a Retail Place.",
+                    "attribution": ["Retail place. Geolytix License."],
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "mvt_fields": ["rp_type"],
+                    "qID": "id",
+                    "tables": {
+                        "11": null,
+                        "12": "gb_retailplace"
+                    },
+                    "infoj": [{
+                            "field": "rp_name",
+                            "label": "Name",
+                            "filter": "like"
+                        },
+                        {
+                            "field": "rp_type",
+                            "label": "Type",
+                            "filter": "match"
+                        },
+                        {
+                            "field": "ref_pc",
+                            "label": "Reference Postcode",
+                            "level": 1,
+                            "filter": "like"
+                        },
+                        {
+                            "field": "comp_strgh",
+                            "label": "Competition Strength",
+                            "type": "integer",
+                            "level": 1
+                        },
+                        {
+                            "field": "est_units",
+                            "label": "Estimate Units",
+                            "type": "integer",
+                            "level": 1
+                        },
+                        {
+                            "field": "est_brands",
+                            "label": "Estimate Brands",
+                            "type": "integer",
+                            "level": 1
+                        },
+                        {
+                            "label": "Profile",
+                            "type": "group",
+                            "chart": {
+                                "active": true,
+                                "x": "label x",
+                                "y": "label y",
+                                "type": "bar",
+                                "stacked": true,
+                                "backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
+                                "borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"]
+                            }
+                        },
+                        {
+                            "group": "Profile",
+                            "label": "Comparison",
+                            "field": "comparison",
+                            "type": "numeric"
+                        },
+                        {
+                            "group": "Profile",
+                            "label": "Convenience",
+                            "field": "conv",
+                            "type": "numeric"
+                        },
+                        {
+                            "group": "Profile",
+                            "label": "F/B/L",
+                            "field": "fbl",
+                            "type": "numeric",
+                            "title": "Food/Beverage/Leisure"
+                        },
+                        {
+                            "group": "Profile",
+                            "label": "Services",
+                            "field": "services",
+                            "type": "numeric"
+                        },
+                        {
+                            "group": "Profile",
+                            "label": "Class/Brass",
+                            "field": "classbrass",
+                            "type": "numeric"
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#000",
+                            "fill": true,
+                            "fillColor": "#000",
+                            "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                            "color": "#e91e63",
+                            "fill": true,
+                            "fillOpacity": 0.3
+                        },
+                        "themes": {
+                            "Retail Place Type": {
+                                "type": "categorized",
+                                "field": "rp_type",
+                                "other": true,
+                                "cat": {
+                                    "Major City Centre": {
+                                        "weight": 2,
+                                        "color": "#EF271B",
+                                        "opacity": 1,
+                                        "fillColor": "#EF271B"
+                                    },
+                                    "City Centre": {
+                                        "weight": 2,
+                                        "color": "#BA2D0B",
+                                        "opacity": 1,
+                                        "fillColor": "#BA2D0B"
+                                    },
+                                    "Large Town Centre": {
+                                        "weight": 2,
+                                        "color": "#FE4E00",
+                                        "opacity": 1,
+                                        "fillColor": "#FE4E00"
+                                    },
+                                    "Major Urban Centre": {
+                                        "weight": 2,
+                                        "color": "#E2711D",
+                                        "opacity": 1,
+                                        "fillColor": "#E2711D"
+                                    },
+                                    "Town Centre": {
+                                        "weight": 2,
+                                        "color": "#F3A712",
+                                        "opacity": 1,
+                                        "fillColor": "#F3A712"
+                                    },
+                                    "Urban Centre": {
+                                        "weight": 2,
+                                        "color": "#FADF63",
+                                        "opacity": 1,
+                                        "fillColor": "#FADF63"
+                                    },
+                                    "Small Town Centre": {
+                                        "weight": 2,
+                                        "color": "#FFE74C",
+                                        "opacity": 1,
+                                        "fillColor": "#FFE74C"
+                                    },
+                                    "Village Centre": {
+                                        "weight": 2,
+                                        "color": "#DBFE87",
+                                        "opacity": 1,
+                                        "fillColor": "#DBFE87"
+                                    },
+                                    "Regional SC": {
+                                        "weight": 2,
+                                        "color": "#8ED081",
+                                        "opacity": 1,
+                                        "fillColor": "#8ED081",
+                                        "label": "Regional Shopping Centre"
+                                    },
+                                    "Outlet Centre": {
+                                        "weight": 2,
+                                        "color": "#7DDF64",
+                                        "opacity": 1,
+                                        "fillColor": "#7DDF64"
+                                    },
+                                    "Shopping Park": {
+                                        "weight": 2,
+                                        "color": "#074F57",
+                                        "opacity": 1,
+                                        "fillColor": "#074F57"
+                                    },
+                                    "Retail Park": {
+                                        "weight": 2,
+                                        "color": "#32746D",
+                                        "opacity": 1,
+                                        "fillColor": "#32746D"
+                                    },
+                                    "Leisure Park": {
+                                        "weight": 2,
+                                        "color": "#41D3BD",
+                                        "opacity": 1,
+                                        "fillColor": "#41D3BD"
+                                    },
+                                    "Local Hub": {
+                                        "weight": 2,
+                                        "color": "#08B2E3",
+                                        "opacity": 1,
+                                        "fillColor": "#08B2E3"
+                                    },
+                                    "Large Parade": {
+                                        "weight": 2,
+                                        "color": "#1F487E",
+                                        "opacity": 1,
+                                        "fillColor": "#1F487E"
+                                    },
+                                    "Parade": {
+                                        "weight": 2,
+                                        "color": "#541388",
+                                        "opacity": 1,
+                                        "fillColor": "#541388"
+                                    },
+                                    "Weak Parade": {
+                                        "weight": 2,
+                                        "color": "#D90368",
+                                        "opacity": 1,
+                                        "fillColor": "#D90368"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },        
         "report_test": {
           "display": true,
           "edit": {
@@ -382,6 +602,11 @@
                     "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
                   ]
                 }
+              },
+              "chart": {
+                "active": true,
+                "type": "horizontalBar",
+                "field": "age_index"
               }
             },
             {
@@ -667,6 +892,303 @@
               ]
             }
           ]
+        },
+        "costa_stores": {
+          "display": true,
+          "name": "Costa Stores",
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "costa.store_estate_view",
+          "geom": "geom_4326",
+          "cluster_label": "name",
+          "cluster_kmeans": 0.2,
+          "cluster_dbscan": 0.012,
+          "qID": "storeid",
+          "infoj": [
+            {
+              "label": "Details",
+              "type": "group"
+            },
+            {
+              "field": "name",
+              "label": "Store Name",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "government",
+              "label": "Government",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "london_zone",
+              "label": "London Zone",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "caz_split",
+              "label": "Split",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "status",
+              "label": "Status",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "equity_franchise",
+              "label": "Equity/Franchise",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "status_2018_2019",
+              "label": "Status 2018/2019",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "channel_split",
+              "label": "Channel Split",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "detail_split",
+              "label": "Detail Split",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "region",
+              "label": "Region",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "rp_type",
+              "label": "Retail Point Type",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "hybrid_channel",
+              "label": "Hybrid Channel",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "label": "Financials",
+              "type": "group"
+            },
+            {
+              "field": "sales_actual",
+              "label": "Actual Sales",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "sales_model",
+              "label": "Modelled Sales",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "sales_par",
+              "label": "PAR",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "error_par",
+              "label": "Relative Error of PAR",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "label": "Bar Chart",
+              "type": "group",
+              "chart": {
+                "active": true,
+                "x": "label x",
+                "y": "label y",
+                "type": "bar",
+                "backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
+                "borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
+                "stacks": ["Actual Sales", "Model Sales"]
+              }
+            },
+            {
+              "group": "Bar Chart",
+              "label": "Eat In Weekday",
+              "title": "Eat In Leaisurley Weekday Treat (Actual Sales)",
+              "field": "actual_sales_eat_in_leisurely_weekday_treat",
+              "type": "integer",
+              "stack": "Actual Sales"
+            },
+            {
+              "group": "Bar Chart",
+              "label": "Takeaway Weekend",
+              "title": "Takeaway Weekend Lunch (Actual Sales)",
+              "field": "actual_sales_takeaway_weekend_lunch",
+              "type": "integer",
+              "stack": "Actual Sales"
+            },
+            {
+              "group": "Bar Chart",
+              "label": "Eat In Weekday",
+              "title": "Eat In Leisurley Weekday Treat (Model Sales)",
+              "field": "model_sale_eat_in_leisurely_weekday_treat",
+              "type": "integer",
+              "stack": "Model Sales"
+            },
+            {
+              "group": "Bar Chart",
+              "label": "Takeaway Weekend",
+              "title": "Takeaway Weekend Lunch (Model Sales)",
+              "field": "model_sale_takeaway_weekend_lunch",
+              "type": "integer",
+              "stack": "Model Sales"
+            },
+            {
+              "type": "streetview"
+            }
+          ],
+          "style": {
+            "marker": {
+              "type": "target",
+              "fillColor": "#8f0a31",
+              "layers": {
+                "0.75": "#ffffff",
+                "0.50": "#4f1823"
+              }
+            },
+            "markerMulti": {
+              "type": "target",
+              "fillColor": "#8f0a31"
+            },
+            "themes": {
+              "Hybrid Channel": {
+                "label": "Hybrid Channel",
+                "type": "categorized",
+                "field": "hybrid_channel",
+                "other": true,
+                "cat": {
+                  "concession": {
+                    "label": "Concession",
+                    "fillColor": "#4286f4",
+                    "layers": {
+                      "0.75": "#FFF"
+                    }
+                  },
+                  "secondary_centre": {
+                    "label": "Secondary Centre",
+                    "fillColor": "#28B463",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "drive_thru": {
+                    "label": "Drive Thru",
+                    "fillColor": "#76D7C4",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "rail": {
+                    "label": "Rail",
+                    "fillColor": "#DAF7A6",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "airport": {
+                    "label": "Airport",
+                    "fillColor": "#F4D03F",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "caz_business": {
+                    "label": "Caz Business",
+                    "fillColor": "#7D3C98",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "tertiary_centre": {
+                    "label": "Tertiary Centre",
+                    "fillColor": "#99A3A4",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "primary_centre": {
+                    "label": "Primary Centre",
+                    "fillColor": "#EDBB99",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "retail_park_main": {
+                    "label": "Retail Park Main",
+                    "fillColor": "#2471A3",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "controlled_access": {
+                    "label": "Controlled Access",
+                    "fillColor": "#1ABC9C",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "retail_park_local": {
+                    "label": "Retail Park Local",
+                    "fillColor": "#F5B7B1",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "outlet_centre": {
+                    "label": "Outlet Centre",
+                    "fillColor": "#17202A",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "shopping_centre": {
+                    "label": "Shopping Centre",
+                    "fillColor": "#F9E79F",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
