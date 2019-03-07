@@ -1,4 +1,4 @@
-export default _xyz => table => {
+export default _xyz => (table, callback) => {
 
   if (!table || !table.target || !table.location) return;
 
@@ -56,51 +56,8 @@ export default _xyz => table => {
 
       table.Tabulator.redraw(true);
 
-      if (table.chart) {
+      if (callback) callback(e.target.response);
 
-        if (table.display && table.chart.tr) {
-          return;
-        }
-
-        if (!table.display && table.chart.tr) {
-          table.location.view.node.removeChild(table.chart.tr);
-          table.chart.tr = null;
-        }
-
-        if (table.display) {
-
-          let fields = [];
-
-          // get data from chart
-          e.target.response.map(field => {
-            if (!!field[table.chart.field]) {
-              fields.push({ 'label': field.rows, 'field': table.chart.field, 'value': field[table.chart.field], 'displayValue': field[table.chart.field] });
-            }
-          });
-
-          if (fields.length) { // is chart not empty
-
-            table.chart.tr = _xyz.utils.createElement({ tag: 'tr', options: { classList: 'table-chart' } });
-
-            let td = _xyz.utils.createElement({ tag: 'td', options: { colSpan: '2' }, appendTo: table.chart.tr }),
-              section = _xyz.utils.createElement({ tag: 'div', options: { classList: 'table-section' }, appendTo: td }),
-              header = _xyz.utils.createElement({ tag: 'div', options: { classList: 'btn_subtext cursor noselect' }, style: { textAlign: 'left', fontStyle: 'italic' }, appendTo: section });
-
-            _xyz.utils.createElement({ tag: 'span', options: { textContent: table.title }, appendTo: header });
-
-            section.appendChild(_xyz.utils.chart({
-              label: table.title,
-              fields: fields,
-              chart: table.chart
-            }));
-
-            table.location.view.node.appendChild(table.chart.tr);
-          } else {
-            table.display = false;
-            return;
-          }
-        }
-      }
     };
 
     xhr.send();
