@@ -10,7 +10,7 @@ export default _xyz => table => {
 
   if (!table.columns) {
 
-    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+    const infoj = _xyz.layers.list[table.location.layer].infoj;
  
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
       
@@ -18,14 +18,14 @@ export default _xyz => table => {
 
   }
 
-  const columns = [{ 'field': 'rows', 'title': table.title }];
+  const columns = [{ field: 'rows', title: table.title, headerSort: false }];
 
   table.columns.forEach(col => {
-    if (!col.aspatial) columns.push({ 'field': col.field, 'title': col.title || col.field });
+    if (!col.aspatial) columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
   });
 
   Object.keys(table.agg || {}).forEach(key => {
-    columns.push({ 'field': key, 'title': table.agg[key].title || key });
+    columns.push({ field: key, title: table.agg[key].title || key, headerSort: false });
   });
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
@@ -68,8 +68,9 @@ export default _xyz => table => {
       table.target,
       {
         columns: columns,
-        autoResize: true,
-        height: _xyz.tableview.height || '100%'
+        // autoResize: true,
+        layout: 'fitDataFill',
+        //height: _xyz.tableview.height || '100%'
       });
 
     table.update();

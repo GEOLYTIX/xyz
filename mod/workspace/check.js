@@ -287,8 +287,6 @@ async function createMVTCache(layer, table){
         primary key (z, x, y)
     );
     
-    create index ${table.replace(/\./,'_')}__mvts_z_x_y_idx on ${table}__mvts (z, x, y);
-
     create index ${table.replace(/\./,'_')}__mvts_tile on ${table}__mvts (tile);`);
 
   if (rows && rows.err) {

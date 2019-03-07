@@ -1,11 +1,10 @@
 export default _xyz => entry => {
 
-  let td = _xyz.utils.createElement({
-	  tag: 'td',
-	  style: { paddingTop: '5px' },
-	  options: { colSpan: '2' },
-	  appendTo: entry.row
-  });
+  entry.row.classList.add('tr_tableview');
+
+  const td = _xyz.utils.hyperHTML.wire()`<td colspan=2 style="padding-top: 5px;">`;
+
+  entry.row.appendChild(td);
 
   _xyz.utils.createCheckbox({
     label: entry.title || 'Show table',
@@ -22,7 +21,7 @@ export default _xyz => entry => {
     }
   });
 
-  if (entry.display) showTab();
+  if (entry.display && _xyz.tableview.node) showTab();
 
   function showTab(){
 

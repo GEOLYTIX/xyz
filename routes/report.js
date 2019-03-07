@@ -1,7 +1,7 @@
 module.exports = {route, view};
 
 // Create constructor for mobile detect module.
-const Md = require('mobile-detect');
+// const Md = require('mobile-detect');
 
 // Set jsrender module for server-side templates.
 const jsr = require('jsrender');
@@ -13,14 +13,14 @@ function route(fastify) {
 
   fastify.route({
     method: 'GET',
-    url: '/',
+    url: '/report',
     preHandler: fastify.auth([fastify.authAccess]),
     handler: view
   });
 
   fastify.route({
     method: 'POST',
-    url: '/',
+    url: '/report',
     handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
   });
 
@@ -28,14 +28,14 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
+  // console.log(req.query.token);
+
   const config = global.workspace[token.access].config;
 
   // Check whether request comes from a mobile platform and set template.
-  const md = new Md(req.headers['user-agent']);
+  // const md = new Md(req.headers['user-agent']);
 
-  const tmpl = (md.mobile() === null || md.tablet() !== null) ?
-    jsr.templates('./public/views/desktop.html') :
-    jsr.templates('./public/views/mobile.html');
+  const tmpl = jsr.templates('./public/views/report.html');
 
   // Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
@@ -43,14 +43,7 @@ async function view(req, res, token = { access: 'public' }) {
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: req.query.token || token.signed,
-    log: process.env.LOG_LEVEL ? 'true' : 'false',
-    btnDocumentation: config.documentation ? '' : 'style="display: none;"',
-    hrefDocumentation: config.documentation ? config.documentation : '',
-    btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
-    btnLogin_style: token.email ? 'face' : 'lock_open',
-    btnLogin_path: token.email ? '' : '/login',
-    btnLogin_text: token.email ? token.email : 'anonymous (public)',
-    btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"'
+    script_js: 'views/report.js'
   }));
 
 };

@@ -90,7 +90,7 @@ export default _xyz => {
 
     location.style = Object.assign(
       {},
-      _xyz.workspace.locale.layers[location.layer].style,
+      _xyz.layers.list[location.layer].style,
       {
         color: record.color,
         fillColor: record.color,
