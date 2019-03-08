@@ -19,7 +19,7 @@ let
   // });
 
   xyz.mapview.create({
-    //locale: 'GB',
+    locale: 'GB',
     target: Map1,
     scrollWheelZoom: true,
     view: {
@@ -64,31 +64,25 @@ function Dev(_xyz) {
     }
   });
 
-  // _xyz.tableview.layerTable({
-  //   layer: _xyz.layers.list.COUNTRIES,
-  //   key: 'table1',
-  //   target: Table1
-  // });
-
-  _xyz.tableview.locationTable({
-    title: 'Age Profile',
-    location: {
-      layer: 'report_test',
-      id: 41
-    },
-    target: Table1
-  });
-
-  // _xyz.mapview.changeEnd = _xyz.utils.compose(
-  //   _xyz.mapview.changeEnd,
-  //   () => _xyz.tableview.current_table.update()
-  // );
 
   // _xyz.layers.list['Mapbox Base'].remove();
 
-  //_xyz.layers.list.COUNTRIES.style.theme = null;
+  // _xyz.layers.list.COUNTRIES.style.theme = null;
 
-  // _xyz.layers.list.COUNTRIES.show();
+  _xyz.layers.list.COUNTRIES.show();
+
+  _xyz.layers.list.COUNTRIES.style.setLegend(document.getElementById('location_info_container2'));
+
+  _xyz.tableview.layerTable({
+    layer: _xyz.layers.list.COUNTRIES,
+    key: 'table1',
+    target: Table1
+  });
+
+  _xyz.mapview.changeEnd = _xyz.utils.compose(
+    _xyz.mapview.changeEnd,
+    () => _xyz.tableview.current_table.update()
+  );
 
   // _xyz.locations.select(
   //   //params
@@ -108,7 +102,15 @@ function Dev(_xyz) {
   //   }
   // );
 
-  // _xyz.layers.list.COUNTRIES.style.setLegend(document.getElementById('location_info_container2'));
+  // _xyz.tableview.locationTable({
+  //   title: 'Age Profile',
+  //   location: {
+  //     layer: 'report_test',
+  //     id: 41
+  //   },
+  //   target: Table1
+  // });
+
 
 }
 

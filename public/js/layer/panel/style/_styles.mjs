@@ -88,13 +88,15 @@ export default (_xyz, layer) => {
   
       if (layer.style.highlight) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
   
-      return layer.get();
+      //return layer.get();
+
+      return;
     }
 
     layer.style.setLegend(panel);
     
     
-    layer.get();
+    //layer.get();
   
   }
 
