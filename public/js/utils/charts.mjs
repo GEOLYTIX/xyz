@@ -56,7 +56,6 @@ export default (group) => {
     };
   };
 
-
   new Chart(canvas, {
     type: group.chart.type || 'line',
     data: {
@@ -70,24 +69,26 @@ export default (group) => {
       },
       scales: {
         // no axis for pie or doughnut charts
-        yAxes: (group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : [
-          {stacked: ((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false},
+        yAxes: (group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : 
+          [
           // axis for all other charts
-          {
-            ticks: {
-              callback: (label, index, labels) => {
-                return group.chart.unit ? units(group, label) : label;
-              }
-            },
-            scaleLabel: {
-              display: (group.chart.unit ? true : false),
-              labelString: (group.chart.unit ? scale(group) : false)
+            {
+              ticks: {
+                callback: (label, index, labels) => {
+                  return group.chart.unit ? units(group, label) : label;
+                }
+              },
+              scaleLabel: {
+                display: (group.chart.unit ? true : false),
+                labelString: (group.chart.unit ? scale(group) : false)
+              },
+              stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false)
             }
-          }
-        ],
-        xAxes: [{
-          stacked: ((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false
-        }]
+          ],
+        xAxes: (!group.chart.stacks) ? [] : 
+          [{
+            stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false)
+          }]
       },
       tooltips: {
         mode: 'index',
