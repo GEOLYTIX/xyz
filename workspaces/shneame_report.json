@@ -12,16 +12,324 @@
               "lng": -0.37,
               "z": 9
           },
-          "minZoom": 6,
-          "maxZoom": 18,
-          "layers": {
-              "base": {
-                  "group": "Base maps",
-                  "display": true,
-                  "name": "Mapbox Baselayer",
-                  "attribution": {
-                      "© Mapbox": "https://www.mapbox.com/about/maps",
-                      "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          "grid_fields": {
+            "Population 2017": "pop__17",
+            "Population 2011": "pop__11",
+            "Age 18 to 24": "age18_24",
+            "Age 25 to 44": "age25_44",
+            "Age 45 to 59": "age45_59",
+            "Age 60 plus": "age60plus",
+            "AB": "abhrp",
+            "C1C2": "c1c2hrp",
+            "DE": "dehrp",
+            "Employed": "employed",
+            "Unemployed": "eaunemp",
+            "White Total Population": "whitetot",
+            "Non White Population": "nonwhite",
+            "Household - single": "pers1hhd",
+            "Household - 2 persons": "pers2hhd",
+            "Household - 2+ persons": "pers2plushhd",
+            "Dwelling - own home (mortgaged/outright)": "own",
+            "Social": "social",
+            "Private renters": "rent"
+          }
+        },
+        "label": {
+          "group": "Base maps",
+          "display": true,
+          "name": "Mapbox Labels",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
+          "format": "tiles",
+          "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+        },
+        "retail_places_mvt": {
+          "display": true,
+          "group": "Retail",
+          "name": "Retail Places",
+          "meta": "Polygon representing a Retail Place.",
+          "attribution": ["Retail place. Geolytix License."],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "mvt_fields": ["rp_type"],
+          "qID": "id",
+          "tables": {
+            "11": null,
+            "12": "gb_retailplace"
+          },
+          "infoj": [{
+              "field": "rp_name",
+              "label": "Name",
+              "filter": "like"
+            },
+            {
+              "field": "rp_type",
+              "label": "Type",
+              "filter": "match"
+            },
+            {
+              "field": "ref_pc",
+              "label": "Reference Postcode",
+              "level": 1,
+              "filter": "like"
+            },
+            {
+              "field": "comp_strgh",
+              "label": "Competition Strength",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_units",
+              "label": "Estimate Units",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "field": "est_brands",
+              "label": "Estimate Brands",
+              "type": "integer",
+              "level": 1
+            },
+            {
+              "label": "Profile",
+              "type": "group",
+              "chart": {
+                "active": true,
+                "x": "label x",
+                "y": "label y",
+                "type": "bar",
+                "stacked": true,
+                "backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
+                "borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"]
+              }
+            },
+            {
+              "group": "Profile",
+              "label": "Comparison",
+              "field": "comparison",
+              "type": "numeric"
+            },
+            {
+              "group": "Profile",
+              "label": "Convenience",
+              "field": "conv",
+              "type": "numeric"
+            },
+            {
+              "group": "Profile",
+              "label": "F/B/L",
+              "field": "fbl",
+              "type": "numeric",
+              "title": "Food/Beverage/Leisure"
+            },
+            {
+              "group": "Profile",
+              "label": "Services",
+              "field": "services",
+              "type": "numeric"
+            },
+            {
+              "group": "Profile",
+              "label": "Class/Brass",
+              "field": "classbrass",
+              "type": "numeric"
+            }
+          ],
+          "style": {
+            "default": {
+              "weight": 1,
+              "color": "#000",
+              "fill": true,
+              "fillColor": "#000",
+              "fillOpacity": 0.3
+            },
+            "highlight": {
+              "color": "#e91e63",
+              "fill": true,
+              "fillOpacity": 0.3
+            },
+            "themes": {
+              "Retail Place Type": {
+                "type": "categorized",
+                "field": "rp_type",
+                "other": true,
+                "cat": {
+                  "Major City Centre": {
+                    "weight": 2,
+                    "color": "#EF271B",
+                    "opacity": 1,
+                    "fillColor": "#EF271B"
+                  },
+                  "City Centre": {
+                    "weight": 2,
+                    "color": "#BA2D0B",
+                    "opacity": 1,
+                    "fillColor": "#BA2D0B"
+                  },
+                  "Large Town Centre": {
+                    "weight": 2,
+                    "color": "#FE4E00",
+                    "opacity": 1,
+                    "fillColor": "#FE4E00"
+                  },
+                  "Major Urban Centre": {
+                    "weight": 2,
+                    "color": "#E2711D",
+                    "opacity": 1,
+                    "fillColor": "#E2711D"
+                  },
+                  "Town Centre": {
+                    "weight": 2,
+                    "color": "#F3A712",
+                    "opacity": 1,
+                    "fillColor": "#F3A712"
+                  },
+                  "Urban Centre": {
+                    "weight": 2,
+                    "color": "#FADF63",
+                    "opacity": 1,
+                    "fillColor": "#FADF63"
+                  },
+                  "Small Town Centre": {
+                    "weight": 2,
+                    "color": "#FFE74C",
+                    "opacity": 1,
+                    "fillColor": "#FFE74C"
+                  },
+                  "Village Centre": {
+                    "weight": 2,
+                    "color": "#DBFE87",
+                    "opacity": 1,
+                    "fillColor": "#DBFE87"
+                  },
+                  "Regional SC": {
+                    "weight": 2,
+                    "color": "#8ED081",
+                    "opacity": 1,
+                    "fillColor": "#8ED081",
+                    "label": "Regional Shopping Centre"
+                  },
+                  "Outlet Centre": {
+                    "weight": 2,
+                    "color": "#7DDF64",
+                    "opacity": 1,
+                    "fillColor": "#7DDF64"
+                  },
+                  "Shopping Park": {
+                    "weight": 2,
+                    "color": "#074F57",
+                    "opacity": 1,
+                    "fillColor": "#074F57"
+                  },
+                  "Retail Park": {
+                    "weight": 2,
+                    "color": "#32746D",
+                    "opacity": 1,
+                    "fillColor": "#32746D"
+                  },
+                  "Leisure Park": {
+                    "weight": 2,
+                    "color": "#41D3BD",
+                    "opacity": 1,
+                    "fillColor": "#41D3BD"
+                  },
+                  "Local Hub": {
+                    "weight": 2,
+                    "color": "#08B2E3",
+                    "opacity": 1,
+                    "fillColor": "#08B2E3"
+                  },
+                  "Large Parade": {
+                    "weight": 2,
+                    "color": "#1F487E",
+                    "opacity": 1,
+                    "fillColor": "#1F487E"
+                  },
+                  "Parade": {
+                    "weight": 2,
+                    "color": "#541388",
+                    "opacity": 1,
+                    "fillColor": "#541388"
+                  },
+                  "Weak Parade": {
+                    "weight": 2,
+                    "color": "#D90368",
+                    "opacity": 1,
+                    "fillColor": "#D90368"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "locations": {
+          "name": "Locations",
+          "format": "cluster",
+          "geom": "geom_4326",
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "shepherd_neame.sites",
+          "cluster_label": "pub_name",
+          "infoj": [{
+              "field": "isoline_5min",
+              "name": "Drivetime 5 min",
+              "fieldfx": "ST_asGeoJson(isoline_5min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 5
+                }
+              }
+            },
+            {
+              "field": "isoline_10min",
+              "name": "Drivetime 10 min",
+              "fieldfx": "ST_asGeoJson(isoline_10min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 10
+                }
+              }
+            },
+            {
+              "field": "isoline_15min",
+              "name": "Drivetime 15 min",
+              "fieldfx": "ST_asGeoJson(isoline_15min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 15
+                }
+              }
+            }
+          ]
+        },
+        "report_test": {
+          "display": true,
+          "edit": {
+            "properties": true,
+            "point": true,
+            "delete": true
+          },
+          "name": "Sites",
+          "format": "cluster",
+          "geom": "geom_4326",
+          "dbs": "XYZ",
+          "qID": "id",
+          "table": "shepherd_neame.sites",
+          "cluster_label": "pub_name",
+          "tableview": {
+            "tables": {
+              "Sites": {
+                "from": "shepherd_neame.sites",
+                "columns": [{
+                    "title": "ID",
+                    "field": "id",
+                    "type": "text"
                   },
                   "format": "tiles",
                   "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
@@ -342,93 +650,60 @@
                           }
                       }
                   }
-              },
-              "retail_pitch": {
-                  "group": "Retail Places",
-                  "name": "Retail Place Pitch",
-                  "meta": "Comparitive strength within Retail Place area. Hex grid created using Retail Place to determine ranking of each cell within the centre.",
-                  "format": "mvt",
-                  "dbs": "XYZ",
-                  "geom_3857": "geom_3857",
-                  "mvt_cache": true,
-                  "mvt_fields": [
-                      "pitch_dec"
-                  ],
-                  "tables": {
-                      "15": null,
-                      "16": "shepherd_neame.uk_glx_retail_place_pitch_view"
-                  },
-                  "style": {
-                      "themes": {
-                          "Retail pitch rank in decimal scale": {
-                              "type": "categorized",
-                              "field": "pitch_dec",
-                              "label": "Retail pitch rank in decimal scale",
-                              "applied": true,
-                              "cat": {
-                                  "1": {
-                                      "stroke": false,
-                                      "fillColor": "#ca0020",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "2": {
-                                      "stroke": false,
-                                      "fillColor": "#dd494b",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "3": {
-                                      "stroke": false,
-                                      "fillColor": "#f09377",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "4": {
-                                      "stroke": false,
-                                      "fillColor": "#f5c1a9",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "5": {
-                                      "stroke": false,
-                                      "fillColor": "#f7e5dd",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "6": {
-                                      "stroke": false,
-                                      "fillColor": "#e1ecf2",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "7": {
-                                      "stroke": false,
-                                      "fillColor": "#b4d6e7",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "8": {
-                                      "stroke": false,
-                                      "fillColor": "#82bcd9",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "9": {
-                                      "stroke": false,
-                                      "fillColor": "#4396c5",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "10": {
-                                      "stroke": false,
-                                      "fillColor": "#0571b0",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  }
-                              }
-                          }
-                      }
+                ]
+              }
+            }
+          },
+          "infoj": [{
+              "field": "isoline_5min",
+              "name": "Drivetime 5 min",
+              "fieldfx": "ST_asGeoJson(isoline_5min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 5
+                }
+              }
+            },
+            {
+              "field": "isoline_10min",
+              "name": "Drivetime 10 min",
+              "fieldfx": "ST_asGeoJson(isoline_10min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 10
+                }
+              }
+            },
+            {
+              "field": "isoline_15min",
+              "name": "Drivetime 15 min",
+              "fieldfx": "ST_asGeoJson(isoline_15min)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {
+                  "minutes": 15
+                }
+              }
+            },
+            {
+              "label": "Available tableviews",
+              "type": "label"
+            },
+            {
+              "type": "tableDefinition",
+              "title": "Population Summary",
+              "display": true,
+              "columns": [{
+                  "type": "integer",
+                  "title": "0-5 mins",
+                  "field": "min5",
+                  "lookup": {
+                    "table_a": "shepherd_neame.sites",
+                    "table_b": "gb_hx_1k",
+                    "geom_a": "isoline_5min",
+                    "geom_b": "geomcntr"
                   }
               },
               "stations": {
@@ -585,65 +860,82 @@
                           }
                       }
                   }
+                }
+              ],
+              "rows": [{
+                  "field": "pop__17",
+                  "fieldfx": "SUM(b.pop__17)",
+                  "title": "Current Population"
+                },
+                {
+                  "field": "pop__11",
+                  "fieldfx": "SUM(b.pop__11)",
+                  "title": "Population 2011"
+                },
+                {
+                  "field": "pop_growth",
+                  "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
+                  "title": "Population Growth"
+                },
+                {
+                  "field": "students",
+                  "fieldfx": "SUM(eac_student__11) + SUM(ein_student__11)",
+                  "title": "Students"
+                },
+                {
+                  "field": "non_white",
+                  "fieldfx": "100*(SUM(pop__11) - SUM(ret_white_tot__11))/SUM(pop__11)",
+                  "title": "% Non-White"
+                },
+                {
+                  "field": "own_home",
+                  "fieldfx": "100*SUM(own)/SUM(own+rent+social)",
+                  "title": "Own Home"
+                },
+                {
+                  "field": "private_rented",
+                  "fieldfx": "100*SUM(rent)/SUM(own+rent+social)",
+                  "title": "Private Rented"
+                },
+                {
+                  "field": "social_rented",
+                  "fieldfx": "100*SUM(social)/SUM(own+rent+social)",
+                  "title": "Social Rented"
+                },
+                {
+                  "field": "single_hhds",
+                  "fieldfx": "100*SUM(pers1hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                  "title": "Single Hhds"
+                },
+                {
+                  "field": "hhds_two_ppl",
+                  "fieldfx": "100*SUM(pers2hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                  "title": "2 Person Hhds"
+                },
+                {
+                  "field": "hhds_3plus",
+                  "fieldfx": "100*SUM(pers2plushhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                  "title": "3+ Hhds"
+                }
+              ]
+            },
+            {
+              "type": "tableDefinition",
+              "title": "Age Profile",
+              "chart": {
+                "type": "horizontalBar",
+                "active": true,
+                "field": "age_index"
               },
-              "seamless_town": {
-                  "name": "Seamless towns and suburbs",
-                  "group": "Towns",
-                  "meta": "Seamless boundaries for towns and suburbs in the UK.",
-                  "format": "mvt",
-                  "mvt_cache": true,
-                  "mvt_fields": [
-                      "census11pp"
-                  ],
-                  "dbs": "XYZ",
-                  "qID": "id",
-                  "tables": {
-                      "10": "shepherd_neame.seamless_town",
-                      "11": "shepherd_neame.seamless_town",
-                      "12": "shepherd_neame.seamless_town",
-                      "13": "shepherd_neame.seamless_town",
-                      "14": "shepherd_neame.seamless_town_suburb"
-                  },
-                  "infoj": [
-                      {
-                          "field": "town_name",
-                          "label": "Town name",
-                          "type": "text",
-                          "inline": true
-                      },
-                      {
-                          "field": "sub_name",
-                          "label": "Suburb name",
-                          "type": "text",
-                          "inline": true
-                      },
-                      {
-                          "field": "shop_town",
-                          "label": "Shop town",
-                          "type": "text",
-                          "inline": true
-                      },
-                      {
-                          "field": "census11pp",
-                          "label": "Population 2011",
-                          "type": "numeric",
-                          "inline": true
-                      }
-                  ],
-                  "style": {
-                      "default": {
-                          "weight": 1,
-                          "color": "#4F7CAC",
-                          "fill": true,
-                          "fillColor": "#EEE",
-                          "fillOpacity": 0
-                      },
-                      "highlight": {
-                          "color": "#4F7CAC",
-                          "fill": true,
-                          "fillOpacity": 0,
-                          "weight": 3
-                      }
+              "columns": [{
+                  "type": "integer",
+                  "title": "0-5 mins",
+                  "field": "min5",
+                  "lookup": {
+                    "table_a": "shepherd_neame.sites",
+                    "table_b": "gb_hx_1k",
+                    "geom_a": "isoline_5min",
+                    "geom_b": "geomcntr"
                   }
               },
               "shoppertown": {
@@ -926,45 +1218,108 @@
                           }
                       }
                   }
+                },
+                {
+                  "field": "uk",
+                  "aspatial": "age_under_18_se_lon, age_18to24_se_lon, age_25to29_se_lon, age_30to44_se_lon, age_45to59_se_lon, age_60plus_se_lon, age_total_se_lon FROM shepherd_neame.report_summary"
+                }
+              ],
+              "rows": [{
+                  "field": "age_under_18",
+                  "title": "< 18",
+                  "fieldfx": "SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus)"
+                },
+                {
+                  "field": "age_18to24",
+                  "fieldfx": "SUM(age_18to19__11 + age_20to24__11)",
+                  "title": "18 to 24"
+                },
+                {
+                  "field": "age_25to29",
+                  "fieldfx": "SUM(age_25to29__11)",
+                  "title": "25 to 29"
+                },
+                {
+                  "field": "age_30to44",
+                  "fieldfx": "SUM(age_30to44__11)",
+                  "title": "30 to 44"
+                },
+                {
+                  "field": "age_45to59",
+                  "fieldfx": "SUM(age_45to59__11)",
+                  "title": "45 to 59"
+                },
+                {
+                  "field": "age_60plus",
+                  "fieldfx": "SUM(age60plus)",
+                  "title": "60+"
+                },
+                {
+                  "field": "age_profile_total",
+                  "fieldfx": "SUM(pop__11)",
+                  "title": "Total UK"
+                }
+              ],
+              "agg": {
+                "share15": {
+                  "title": "% with 15 min",
+                  "type": "integer",
+                  "rows": [
+                    "100*min15.age_under_18/min15.age_profile_total",
+                    "100*min15.age_18to24/min15.age_profile_total",
+                    "100*min15.age_25to29/min15.age_profile_total",
+                    "100*min15.age_30to44/min15.age_profile_total",
+                    "100*min15.age_45to59/min15.age_profile_total",
+                    "100*min15.age_60plus/min15.age_profile_total",
+                    "100*min15.age_profile_total/min15.age_profile_total"
+                  ]
+                },
+                "age_se_lon_total": {
+                  "title": "SE and London",
+                  "type": "integer",
+                  "rows": [
+                    "uk.age_under_18_se_lon",
+                    "uk.age_18to24_se_lon",
+                    "uk.age_25to29_se_lon",
+                    "uk.age_30to44_se_lon",
+                    "uk.age_45to59_se_lon",
+                    "uk.age_60plus_se_lon",
+                    "uk.age_total_se_lon"
+                  ]
+                },
+                "age_index": {
+                  "title": "Age Profile Index",
+                  "type": "numeric(1000, 2)",
+                  "rows": [
+                    "uk.age_total_se_lon*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_se_lon",
+                    "uk.age_total_se_lon*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_se_lon"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "tableDefinition",
+              "title": "Social Grade",
+              "chart": {
+                "type": "horizontalBar",
+                "active": true,
+                "field": "sg_index",
+                "backgroundColor": ["#8e24aa", "#1e88e5", "#00897b", "#ff8a65", "#a1887f", "#78909c"]
               },
-              "demographics": {
-                  "name": "Demographics",
-                  "format": "grid",
-                  "dbs": "XYZ",
-                  "geom": "geomcntr",
-                  "grid_color": "pop__11",
-                  "tables": {
-                      "5": null,
-                      "6": "gb_hx_64k",
-                      "7": "gb_hx_32k",
-                      "8": "gb_hx_16k",
-                      "9": "gb_hx_8k",
-                      "10": "gb_hx_4k",
-                      "11": "gb_hx_2k",
-                      "12": "gb_hx_1k",
-                      "13": "gb_hx_1k",
-                      "14": null
-                  },
-                  "grid_fields": {
-                      "Population 2017": "pop__17",
-                      "Population 2011": "pop__11",
-                      "Age 18 to 24": "age18_24",
-                      "Age 25 to 44": "age25_44",
-                      "Age 45 to 59": "age45_59",
-                      "Age 60 plus": "age60plus",
-                      "AB": "abhrp",
-                      "C1C2": "c1c2hrp",
-                      "DE": "dehrp",
-                      "Employed": "employed",
-                      "Unemployed": "eaunemp",
-                      "White Total Population": "whitetot",
-                      "Non White Population": "nonwhite",
-                      "Household - single": "pers1hhd",
-                      "Household - 2 persons": "pers2hhd",
-                      "Household - 2+ persons": "pers2plushhd",
-                      "Dwelling - own home (mortgaged/outright)": "own",
-                      "Social": "social",
-                      "Private renters": "rent"
+              "columns": [{
+                  "type": "integer",
+                  "title": "0-5 mins",
+                  "field": "min5",
+                  "lookup": {
+                    "table_a": "shepherd_neame.sites",
+                    "table_b": "gb_hx_1k",
+                    "geom_a": "isoline_5min",
+                    "geom_b": "geomcntr"
                   }
               },
               "food_bev": {
@@ -1278,385 +1633,87 @@
                           }
                       }
                   }
-              },
-              "oac": {
-                  "name": "OAC",
-                  "format": "mvt",
-                  "mvt_cache": true,
-                  "mvt_fields": [
-                      "oac_supergroup_txt",
-                      "oac_group_txt"
-                  ],
-                  "dbs": "XYZ",
-                  "qID": "id",
-                  "geom_3857": "geom_3857",
-                  "tables": {
-                      "10": null,
-                      "11": "shepherd_neame.uk_glx_lsoa_oac_view",
-                      "12": "shepherd_neame.uk_glx_lsoa_oac_view",
-                      "13": "shepherd_neame.uk_glx_lsoa_oac_view",
-                      "14": "shepherd_neame.uk_glx_oa_oac_view",
-                      "15": "shepherd_neame.uk_glx_oa_oac_view",
-                      "16": "shepherd_neame.uk_glx_oa_oac_view",
-                      "17": "shepherd_neame.uk_glx_oa_oac_view",
-                      "18": "shepherd_neame.uk_glx_oa_oac_view"
-                  },
-                  "infoj": [
-                      {
-                          "field": "oac_supergroup_txt",
-                          "label": "OAC Supergroup",
-                          "type": "text"
-                      },
-                      {
-                          "field": "oac_group_txt",
-                          "label": "OAC Group",
-                          "type": "text"
-                      },
-                      {
-                          "field": "oac_subgroup_txt",
-                          "label": "OAC Subgroup",
-                          "type": "text"
-                      }
-                  ],
-                  "style": {
-                      "default": {
-                          "weight": 1,
-                          "color": "#2ECC71",
-                          "fill": true,
-                          "fillColor": "#2ECC71",
-                          "fillOpacity": 0.3
-                      },
-                      "highlight": {
-                          "weight": 1,
-                          "color": "#2ECC71",
-                          "fill": true
-                      },
-                      "themes": {
-                          "Super Group": {
-                              "label": "Super Group",
-                              "type": "categorized",
-                              "field": "oac_supergroup_txt",
-                              "applied": true,
-                              "other": true,
-                              "cat": {
-                                  "1 - Rural Residents": {
-                                      "label": "1 - Rural Residents",
-                                      "weight": 2,
-                                      "color": "#4daf4a",
-                                      "opacity": 1,
-                                      "fillColor": "#4daf4a",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "2 - Cosmopolitans": {
-                                      "label": "2 - Cosmopolitans",
-                                      "weight": 2,
-                                      "color": "#e41a1c",
-                                      "opacity": 1,
-                                      "fillColor": "#e41a1c",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "3 - Ethnicity Central": {
-                                      "label": "3 - Ethnicity Central",
-                                      "weight": 2,
-                                      "color": "#f781bf",
-                                      "opacity": 1,
-                                      "fillColor": "#f781bf",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "4 - Multicultural Metropolitans": {
-                                      "label": "4 - Multicultural Metropolitans",
-                                      "weight": 2,
-                                      "color": "#ff7f00",
-                                      "opacity": 1,
-                                      "fillColor": "#ff7f00",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "5 - Urbanites": {
-                                      "label": "5 - Urbanites",
-                                      "weight": 2,
-                                      "color": "#a65628",
-                                      "opacity": 1,
-                                      "fillColor": "#a65628",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "6 - Suburbanites": {
-                                      "label": "6 - Suburbanites",
-                                      "weight": 2,
-                                      "color": "#984ea3",
-                                      "opacity": 1,
-                                      "fillColor": "#984ea3",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "7 - Constrained City Dwellers": {
-                                      "label": "7 - Constrained City Dwellers",
-                                      "weight": 2,
-                                      "color": "#377eb8",
-                                      "opacity": 1,
-                                      "fillColor": "#377eb8",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "8 - Hard-Pressed Living": {
-                                      "label": "8 - Hard-Pressed Living",
-                                      "weight": 2,
-                                      "color": "#ffcb1f",
-                                      "opacity": 1,
-                                      "fillColor": "#ffcb1f",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  }
-                              }
-                          },
-                          "Group": {
-                              "label": "Group",
-                              "type": "categorized",
-                              "field": "oac_group_txt",
-                              "applied": true,
-                              "other": true,
-                              "cat": {
-                                  "1a - Farming Communities": {
-                                      "label": "1a - Farming Communities",
-                                      "weight": 2,
-                                      "color": "#398237",
-                                      "opacity": 1,
-                                      "fillColor": "#398237",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "1b - Rural Tenants": {
-                                      "label": "1b - Rural Tenants",
-                                      "weight": 2,
-                                      "color": "#72af70",
-                                      "opacity": 1,
-                                      "fillColor": "#72af70",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "1c - Ageing Rural Dwellers": {
-                                      "label": "1c - Ageing Rural Dwellers",
-                                      "weight": 2,
-                                      "color": "#aadba9",
-                                      "opacity": 1,
-                                      "fillColor": "#aadba9",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "2a - Students Around Campus": {
-                                      "label": "2a - Students Around Campus",
-                                      "weight": 2,
-                                      "color": "#8a0f11",
-                                      "opacity": 1,
-                                      "fillColor": "#8a0f11",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "2b - Inner-City Students": {
-                                      "label": "2b - Inner-City Students",
-                                      "weight": 2,
-                                      "color": "#ae4142",
-                                      "opacity": 1,
-                                      "fillColor": "#ae4142",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "2c - Comfortable Cosmopolitans": {
-                                      "label": "2c - Comfortable Cosmopolitans",
-                                      "weight": 2,
-                                      "color": "#d17274",
-                                      "opacity": 1,
-                                      "fillColor": "#d17274",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "2d - Aspiring and Affluent": {
-                                      "label": "2d - Aspiring and Affluent",
-                                      "weight": 2,
-                                      "color": "#f5a4a5",
-                                      "opacity": 1,
-                                      "fillColor": "#f5a4a5",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "3a - Ethnic Family Life": {
-                                      "label": "3a - Ethnic Family Life",
-                                      "weight": 2,
-                                      "color": "#a70a5d",
-                                      "opacity": 1,
-                                      "fillColor": "#a70a5d",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "3b - Endeavouring Ethnic Mix": {
-                                      "label": "3b - Endeavouring Ethnic Mix",
-                                      "weight": 2,
-                                      "color": "#c34186",
-                                      "opacity": 1,
-                                      "fillColor": "#c34186",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "3c - Ethnic Dynamics": {
-                                      "label": "3c - Ethnic Dynamics",
-                                      "weight": 2,
-                                      "color": "#de79af",
-                                      "opacity": 1,
-                                      "fillColor": "#de79af",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "3d - Aspirational Techies": {
-                                      "label": "3d - Aspirational Techies",
-                                      "weight": 2,
-                                      "color": "#fab1d8",
-                                      "opacity": 1,
-                                      "fillColor": "#fab1d8",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "4a - Rented Family Living": {
-                                      "label": "4a - Rented Family Living",
-                                      "weight": 2,
-                                      "color": "#e67300",
-                                      "opacity": 1,
-                                      "fillColor": "#e67300",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "4b - Challenged Asian Terraces": {
-                                      "label": "4b - Challenged Asian Terraces",
-                                      "weight": 2,
-                                      "color": "#e7903a",
-                                      "opacity": 1,
-                                      "fillColor": "#e7903a",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "4c - Asian Traits": {
-                                      "label": "4c - Asian Traits",
-                                      "weight": 2,
-                                      "color": "#e8ae74",
-                                      "opacity": 1,
-                                      "fillColor": "#e8ae74",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "5a - Urban Professionals and Families": {
-                                      "label": "5a - Urban Professionals and Families",
-                                      "weight": 2,
-                                      "color": "#974e24",
-                                      "opacity": 1,
-                                      "fillColor": "#974e24",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "5b - Ageing Urban Living": {
-                                      "label": "5b - Ageing Urban Living",
-                                      "weight": 2,
-                                      "color": "#bf8361",
-                                      "opacity": 1,
-                                      "fillColor": "#bf8361",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "6a - Suburban Achievers": {
-                                      "label": "6a - Suburban Achievers",
-                                      "weight": 2,
-                                      "color": "#944d9f",
-                                      "opacity": 1,
-                                      "fillColor": "#944d9f",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "6b - Semi-Detached Suburbia": {
-                                      "label": "6b - Semi-Detached Suburbia",
-                                      "weight": 2,
-                                      "color": "#b784bf",
-                                      "opacity": 1,
-                                      "fillColor": "#b784bf",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "7a - Challenged Diversity": {
-                                      "label": "7a - Challenged Diversity",
-                                      "weight": 2,
-                                      "color": "#1f4869",
-                                      "opacity": 1,
-                                      "fillColor": "#1f4869",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "7b - Constrained Flat Dwellers": {
-                                      "label": "7b - Constrained Flat Dwellers",
-                                      "weight": 2,
-                                      "color": "#4b7392",
-                                      "opacity": 1,
-                                      "fillColor": "#4b7392",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "7c - White Communities": {
-                                      "label": "7c - White Communities",
-                                      "weight": 2,
-                                      "color": "#779dbb",
-                                      "opacity": 1,
-                                      "fillColor": "#779dbb",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "7d - Ageing City Dwellers": {
-                                      "label": "7d - Ageing City Dwellers",
-                                      "weight": 2,
-                                      "color": "#a4c7e4",
-                                      "opacity": 1,
-                                      "fillColor": "#a4c7e4",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "8a - Industrious Communities": {
-                                      "label": "8a - Industrious Communities",
-                                      "weight": 2,
-                                      "color": "#bd9100",
-                                      "opacity": 1,
-                                      "fillColor": "#bd9100",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "8b - Challenged Terraced Workers": {
-                                      "label": "8b - Challenged Terraced Workers",
-                                      "weight": 2,
-                                      "color": "#d3b141",
-                                      "opacity": 1,
-                                      "fillColor": "#d3b141",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "8c - Hard-Pressed Ageing Workers": {
-                                      "label": "8c - Hard-Pressed Ageing Workers",
-                                      "weight": 2,
-                                      "color": "#e9d181",
-                                      "opacity": 1,
-                                      "fillColor": "#e9d181",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  },
-                                  "8d - Migration and Churn": {
-                                      "label": "8d - Migration and Churn",
-                                      "weight": 2,
-                                      "color": "#fff1c2",
-                                      "opacity": 1,
-                                      "fillColor": "#fff1c2",
-                                      "fill": true,
-                                      "fillOpacity": 0.3
-                                  }
-                              }
-                          }
-                      }
+                },
+                {
+                  "type": "integer",
+                  "field": "uk",
+                  "aspatial": "social_grade_ab_se_lon, social_grade_c1_se_lon, social_grade_c2_se_lon, social_grade_de_se_lon, social_grade_total_se_lon FROM shepherd_neame.report_summary"
+                }
+              ],
+              "rows": [{
+                  "field": "sg_ab",
+                  "fieldfx": "SUM(ski_ab__11)",
+                  "title": "AB"
+                },
+                {
+                  "field": "sg_c1",
+                  "fieldfx": "SUM(ski_c1__11)",
+                  "title": "C1"
+                },
+                {
+                  "field": "sg_c2",
+                  "fieldfx": "SUM(ski_c2__11)",
+                  "title": "C2"
+                },
+                {
+                  "field": "sg_de",
+                  "fieldfx": "SUM(ski_de__11)",
+                  "title": "DE"
+                },
+                {
+                  "field": "sg_total",
+                  "fieldfx": "SUM(pop__11)",
+                  "title": "Total UK"
+                }
+              ],
+              "agg": {
+                "share15": {
+                  "title": "% with 15 min",
+                  "type": "integer",
+                  "rows": [
+                    "100*min15.sg_ab/min15.sg_total",
+                    "100*min15.sg_c1/min15.sg_total",
+                    "100*min15.sg_c2/min15.sg_total",
+                    "100*min15.sg_de/min15.sg_total",
+                    "100*min15.sg_total/min15.sg_total"
+                  ]
+                },
+                "sg_se_lon_total": {
+                  "title": "SE and London",
+                  "type": "integer",
+                  "rows": [
+                    "uk.social_grade_ab_se_lon",
+                    "uk.social_grade_c1_se_lon",
+                    "uk.social_grade_c2_se_lon",
+                    "uk.social_grade_de_se_lon",
+                    "uk.social_grade_total_se_lon"
+                  ]
+                },
+                "sg_index": {
+                  "title": "Social Grade Index",
+                  "type": "integer",
+                  "rows": [
+                    "uk.social_grade_total_se_lon*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_se_lon",
+                    "uk.social_grade_total_se_lon*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_se_lon"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "tableDefinition",
+              "title": "OAC Profile",
+              "columns": [{
+                  "type": "integer",
+                  "title": "0-5 mins",
+                  "field": "min5",
+                  "lookup": {
+                    "table_a": "shepherd_neame.sites",
+                    "table_b": "gb_hx_1k",
+                    "geom_a": "isoline_5min",
+                    "geom_b": "geomcntr"
                   }
               },
               "sites": {
@@ -2718,8 +2775,460 @@
                           }
                       }
                   }
+                },
+                {
+                  "type": "integer",
+                  "title": "0-15 mins",
+                  "field": "min15",
+                  "lookup": {
+                    "table_a": "shepherd_neame.sites",
+                    "table_b": "gb_hx_1k",
+                    "geom_a": "isoline_15min",
+                    "geom_b": "geomcntr"
+                  }
+                }
+              ],
+              "rows": [{
+                  "field": "oac_1a",
+                  "fieldfx": "SUM(CASE WHEN oac_group=1 THEN pop__17 ELSE 0 END)",
+                  "title": "1a - Farming communities"
+                },
+                {
+                  "field": "oac_1b",
+                  "fieldfx": "sum(case when oac_group=2 then pop__17 else 0 end)",
+                  "title": "1b - Rural tenants"
+                },
+                {
+                  "field": "oac_1c",
+                  "fieldfx": "sum(case when oac_group=3 then pop__17 else 0 end)",
+                  "title": "1c - Ageing rural dwellers"
+                },
+                {
+                  "field": "oac_2a",
+                  "fieldfx": "sum(case when oac_group=3 then pop__17 else 0 end)",
+                  "title": "2a - Students around campus"
+                },
+                {
+                  "field": "oac_2b",
+                  "fieldfx": "sum(case when oac_group=4 then pop__17 else 0 end)",
+                  "title": "2b - Inner city students"
+                },
+                {
+                  "field": "oac_2c",
+                  "fieldfx": "sum(case when oac_group=5 then pop__17 else 0 end)",
+                  "title": "2c - Comforable cosmopolitans"
+                },
+                {
+                  "field": "oac_2d",
+                  "fieldfx": "sum(case when oac_group=6 then pop__17 else 0 end)",
+                  "title": "2d - Aspiring and affluent"
+                },
+                {
+                  "field": "oac_3a",
+                  "fieldfx": "sum(case when oac_group=7 then pop__17 else 0 end)",
+                  "title": "3a - Ethnic family life"
+                },
+                {
+                  "field": "oac_3b",
+                  "fieldfx": "sum(case when oac_group=8 then pop__17 else 0 end)",
+                  "title": "3b - Endeavouring ethnic mix"
+                },
+                {
+                  "field": "oac_3c",
+                  "fieldfx": "sum(case when oac_group=9 then pop__17 else 0 end)",
+                  "title": "3c - Ethnic dynamics"
+                },
+                {
+                  "field": "oac_3d",
+                  "fieldfx": "sum(case when oac_group=10 then pop__17 else 0 end)",
+                  "title": "3d - Aspirational techies"
+                },
+                {
+                  "field": "oac_4a",
+                  "fieldfx": "sum(case when oac_group=11 then pop__17 else 0 end)",
+                  "title": "4a - Rented family living"
+                },
+                {
+                  "field": "oac_4b",
+                  "fieldfx": "sum(case when oac_group=13 then pop__17 else 0 end)",
+                  "title": "4b - Challenged Asian terraces"
+                },
+                {
+                  "field": "oac_4c",
+                  "fieldfx": "sum(case when oac_group=14 then pop__17 else 0 end)",
+                  "title": "4c - Asian traits"
+                },
+                {
+                  "field": "oac_5a",
+                  "fieldfx": "sum(case when oac_group=15 then pop__17 else 0 end)",
+                  "title": "5a - Urban professionals and families"
+                },
+                {
+                  "field": "oac_5b",
+                  "fieldfx": "sum(case when oac_group=16 then pop__17 else 0 end)",
+                  "title": "5b - Ageing urban living"
+                },
+                {
+                  "field": "oac_6a",
+                  "fieldfx": "sum(case when oac_group=17 then pop__17 else 0 end)",
+                  "title": "6a - Suburban achievers"
+                },
+                {
+                  "field": "oac_6b",
+                  "fieldfx": "sum(case when oac_group=18 then pop__17 else 0 end)",
+                  "title": "6b - Semi-detached suburbia"
+                },
+                {
+                  "field": "oac_7a",
+                  "fieldfx": "sum(case when oac_group=19 then pop__17 else 0 end)",
+                  "title": "7a - Challenged diversity"
+                },
+                {
+                  "field": "oac_7b",
+                  "fieldfx": "sum(case when oac_group=20 then pop__17 else 0 end)",
+                  "title": "7b - Constrained flat dwellers"
+                },
+                {
+                  "field": "oac_7c",
+                  "fieldfx": "sum(case when oac_group=21 then pop__17 else 0 end)",
+                  "title": "7c - White communities"
+                },
+                {
+                  "field": "oac_7d",
+                  "fieldfx": "sum(case when oac_group=22 then pop__17 else 0 end)",
+                  "title": "7d - Ageing city dwellers"
+                },
+                {
+                  "field": "oac_8a",
+                  "fieldfx": "sum(case when oac_group=23 then pop__17 else 0 end)",
+                  "title": "8a - Industrious communities"
+                },
+                {
+                  "field": "oac_8b",
+                  "fieldfx": "sum(case when oac_group=24 then pop__17 else 0 end)",
+                  "title": "8b - Challenged terraced workers"
+                },
+                {
+                  "field": "oac_8c",
+                  "fieldfx": "sum(case when oac_group=25 then pop__17 else 0 end)",
+                  "title": "8c - Hard-pressed ageing workers"
+                },
+                {
+                  "field": "oac_8d",
+                  "fieldfx": "sum(case when oac_group=26 then pop__17 else 0 end)",
+                  "title": "8d - Migration and churn"
+                },
+                {
+                  "field": "oac_total",
+                  "fieldfx": "sum(case when oac_group>0 then pop__17 else 0 end)",
+                  "title": "Total UK"
+                }
+              ]
+            },
+            {
+              "type": "report",
+              "report": {
+                "template": "shneame"
               }
+            }
+          ]
+        },
+        "costa_stores": {
+          "display": true,
+          "name": "Costa Stores",
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "costa.store_estate_view",
+          "geom": "geom_4326",
+          "cluster_label": "name",
+          "cluster_kmeans": 0.2,
+          "cluster_dbscan": 0.012,
+          "qID": "storeid",
+          "infoj": [{
+              "label": "Details",
+              "type": "group"
+            },
+            {
+              "field": "name",
+              "label": "Store Name",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "government",
+              "label": "Government",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "london_zone",
+              "label": "London Zone",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "caz_split",
+              "label": "Split",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "status",
+              "label": "Status",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "equity_franchise",
+              "label": "Equity/Franchise",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "status_2018_2019",
+              "label": "Status 2018/2019",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "channel_split",
+              "label": "Channel Split",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "detail_split",
+              "label": "Detail Split",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "region",
+              "label": "Region",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "rp_type",
+              "label": "Retail Point Type",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "field": "hybrid_channel",
+              "label": "Hybrid Channel",
+              "type": "text",
+              "group": "Details",
+              "inline": true
+            },
+            {
+              "label": "Financials",
+              "type": "group"
+            },
+            {
+              "field": "sales_actual",
+              "label": "Actual Sales",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "sales_model",
+              "label": "Modelled Sales",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "sales_par",
+              "label": "PAR",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "error_par",
+              "label": "Relative Error of PAR",
+              "group": "Financials",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "label": "Sales",
+              "type": "group",
+              "chart": {
+                "active": true,
+                "x": "label x",
+                "y": "label y",
+                "type": "bar",
+                "backgroundColor": ["#FFA630", "#C6DEA6"],
+                "borderColor": ["#FFA630", "#C6DEA6"],
+                "stacks": ["Actual Sales", "Model Sales"]
+              }
+            },
+            {
+              "group": "Sales",
+              "label": "Eat In Weekday",
+              "title": "Eat In Leaisurley Weekday Treat (Actual Sales)",
+              "field": "actual_sales_eat_in_leisurely_weekday_treat",
+              "type": "integer",
+              "stack": "Actual Sales"
+            },
+            {
+              "group": "Sales",
+              "label": "Takeaway Weekend",
+              "title": "Takeaway Weekend Lunch (Actual Sales)",
+              "field": "actual_sales_takeaway_weekend_lunch",
+              "type": "integer",
+              "stack": "Actual Sales"
+            },
+            {
+              "group": "Sales",
+              "label": "Eat In Weekday",
+              "title": "Eat In Leisurley Weekday Treat (Model Sales)",
+              "field": "model_sale_eat_in_leisurely_weekday_treat",
+              "type": "integer",
+              "stack": "Model Sales"
+            },
+            {
+              "group": "Sales",
+              "label": "Takeaway Weekend",
+              "title": "Takeaway Weekend Lunch (Model Sales)",
+              "field": "model_sale_takeaway_weekend_lunch",
+              "type": "integer",
+              "stack": "Model Sales"
+            },
+            {
+              "type": "streetview"
+            }
+          ],
+          "style": {
+            "marker": {
+              "type": "target",
+              "fillColor": "#8f0a31",
+              "layers": {
+                "0.75": "#ffffff",
+                "0.50": "#4f1823"
+              }
+            },
+            "markerMulti": {
+              "type": "target",
+              "fillColor": "#8f0a31"
+            },
+            "themes": {
+              "Hybrid Channel": {
+                "label": "Hybrid Channel",
+                "type": "categorized",
+                "field": "hybrid_channel",
+                "other": true,
+                "cat": {
+                  "concession": {
+                    "label": "Concession",
+                    "fillColor": "#4286f4",
+                    "layers": {
+                      "0.75": "#FFF"
+                    }
+                  },
+                  "secondary_centre": {
+                    "label": "Secondary Centre",
+                    "fillColor": "#28B463",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "drive_thru": {
+                    "label": "Drive Thru",
+                    "fillColor": "#76D7C4",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "rail": {
+                    "label": "Rail",
+                    "fillColor": "#DAF7A6",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "airport": {
+                    "label": "Airport",
+                    "fillColor": "#F4D03F",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "caz_business": {
+                    "label": "Caz Business",
+                    "fillColor": "#7D3C98",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "tertiary_centre": {
+                    "label": "Tertiary Centre",
+                    "fillColor": "#99A3A4",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "primary_centre": {
+                    "label": "Primary Centre",
+                    "fillColor": "#EDBB99",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "retail_park_main": {
+                    "label": "Retail Park Main",
+                    "fillColor": "#2471A3",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "controlled_access": {
+                    "label": "Controlled Access",
+                    "fillColor": "#1ABC9C",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "retail_park_local": {
+                    "label": "Retail Park Local",
+                    "fillColor": "#F5B7B1",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "outlet_centre": {
+                    "label": "Outlet Centre",
+                    "fillColor": "#17202A",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  },
+                  "shopping_centre": {
+                    "label": "Shopping Centre",
+                    "fillColor": "#F9E79F",
+                    "layers": {
+                      "0.50": "#FFF"
+                    }
+                  }
+                }
+              }
+            }
           }
+        }
       }
   }
 }
