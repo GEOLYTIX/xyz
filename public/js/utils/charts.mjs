@@ -15,22 +15,53 @@ export default (group) => {
     appendTo: graph
   });
 
-  const labels = group.fields.map(field => field.label);
+  const labels = (group.chart.stacks && group.chart.stacks.length) ? group.chart.stacks : group.fields.map(field => field.label);
 
   const data = group.fields.map(field => field.value);
 
   const displayValues = group.fields.map(field => field.displayValue);
-      
+
+  let datasets = [];
+
+  if(group.chart.stacks && group.chart.stacks.length){
+
+    let tmp = {};
+    datasets = [];
+
+    Object.values(group.fields).map(field => {
+      tmp[field.label] = {};
+      tmp[field.label].data = [];
+    });
+
+    Object.values(group.fields).map(field => {
+      Object.keys(tmp).map(key => {
+        if(key === field.label){
+          let idx = Object.keys(tmp).indexOf(key);
+          tmp[key].data.push(Number(field.value));
+          tmp[key].label = field.label;
+          tmp[key].backgroundColor = (group.chart.backgroundColor[idx] || '#cf9');
+          tmp[key].borderColor = (group.chart.borderColor[idx] || '#079e00');
+        }
+      });
+    });
+
+    Object.values(tmp).map(val => datasets.push(val));
+
+  } else {
+    datasets[0] = {
+      label: group.label,
+      backgroundColor: group.chart.backgroundColor || '#cf9',
+      borderColor: group.chart.borderColor || '#079e00',
+      data: data
+    };
+  };
+
+
   new Chart(canvas, {
     type: group.chart.type || 'line',
     data: {
       labels: labels,
-      datasets: [{
-        label: group.label,
-        backgroundColor: group.chart.backgroundColor || '#cf9',
-        borderColor: group.chart.borderColor || '#079e00',
-        data: data
-      }]
+      datasets: datasets
     },
     options: {
       responsive: true,
@@ -40,6 +71,7 @@ export default (group) => {
       scales: {
         // no axis for pie or doughnut charts
         yAxes: (group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : [
+          {stacked: ((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false},
           // axis for all other charts
           {
             ticks: {
@@ -52,14 +84,19 @@ export default (group) => {
               labelString: (group.chart.unit ? scale(group) : false)
             }
           }
-        ]
+        ],
+        xAxes: [{
+          stacked: ((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false
+        }]
       },
       tooltips: {
+        mode: 'index',
+        intersect: false,
         callbacks: {
-          title: () => '',
-          label: (tooltipItem, data) => {
+          title: () =>  ''//,
+          /*label: (tooltipItem, data) => {
             return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
-          }
+          }*/
         }
       }
     }

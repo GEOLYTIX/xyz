@@ -5,13 +5,12 @@ window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
   report_params[key] = decodeURI(value);
 });
 
-
 _xyz({
   token: document.body.dataset.token,
   host: document.head.dataset.dir,
+  locale: report_params.locale,
   callback: Report
 });
-
 
 function Report(_xyz) {
 
@@ -25,7 +24,7 @@ function Report(_xyz) {
   _xyz.locations.select(
     //params
     {
-      locale: 'GB',
+      locale: report_params.locale,
       dbs: 'XYZ',
       layer: report_params.layer,
       table: 'shepherd_neame.sites',
@@ -34,7 +33,7 @@ function Report(_xyz) {
     //callback
     location=>{
       location.draw({
-        //pane: report_params.layer,
+        pane: report_params.layer,
         color: '#090',
         stroke: true,
         fill: true,
