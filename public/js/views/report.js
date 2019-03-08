@@ -8,6 +8,7 @@ window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
 _xyz({
   token: document.body.dataset.token,
   host: document.head.dataset.dir,
+  locale: report_params.locale,
   callback: Report
 });
 
@@ -16,10 +17,6 @@ function Report(_xyz) {
   _xyz.mapview.create({
     scrollWheelZoom: true,
     target: document.getElementById('xyz_map')
-  });
-
-  _xyz.workspace.loadLocale({
-    locale: report_params.locale
   });
 
   _xyz.layers.list[report_params.layer].show();
