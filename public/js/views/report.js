@@ -56,40 +56,40 @@ function Report(_xyz) {
     }
   );
 
-  _xyz.tableview.locationTable({
-    title: 'Population Summary',
-    location: {
-      layer: report_params.layer,
-      id: report_params.id
-    },
-    target: document.getElementById('xyz_table1')
-  });
+  // _xyz.tableview.locationTable({
+  //   title: 'Population Summary',
+  //   location: {
+  //     layer: report_params.layer,
+  //     id: report_params.id
+  //   },
+  //   target: document.getElementById('xyz_table1')
+  // });
 
-  _xyz.tableview.locationTable({
-    title: 'Age Profile',
-    location: {
-      layer: report_params.layer,
-      id: report_params.id
-    },
-    target: document.getElementById('xyz_table2')
-  });
+  // _xyz.tableview.locationTable({
+  //   title: 'Age Profile',
+  //   location: {
+  //     layer: report_params.layer,
+  //     id: report_params.id
+  //   },
+  //   target: document.getElementById('xyz_table2')
+  // });
 
-  _xyz.tableview.locationTable({
-    title: 'Social Grade',
-    location: {
-      layer: report_params.layer,
-      id: report_params.id
-    },
-    target: document.getElementById('xyz_table3')
-  });
+  // _xyz.tableview.locationTable({
+  //   title: 'Social Grade',
+  //   location: {
+  //     layer: report_params.layer,
+  //     id: report_params.id
+  //   },
+  //   target: document.getElementById('xyz_table3')
+  // });
 
-  _xyz.tableview.locationTable({
-    title: 'OAC Profile',
-    location: {
-      layer: report_params.layer,
-      id: report_params.id
-    },
-    target: document.getElementById('xyz_table4')
-  });
+  // _xyz.tableview.locationTable({
+  //   title: 'OAC Profile',
+  //   location: {
+  //     layer: report_params.layer,
+  //     id: report_params.id
+  //   },
+  //   target: document.getElementById('xyz_table4')
+  // });
 
 }

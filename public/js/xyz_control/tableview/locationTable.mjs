@@ -1,6 +1,6 @@
 export default _xyz => (table, callback) => {
 
-  if (!table || !table.target || !table.location) return;
+  if (!table || !table.location) return;
 
   if (_xyz.tableview.node) {
     _xyz.tableview.node.style.display = 'block';

@@ -18,8 +18,7 @@ export default _xyz => (entry) => {
       if (entry.display) {
         showTab();
       } else {
-        _xyz.tableview.removeTab(entry);
-        if (entry.chart) entry.chart.node.innerHTML = '';
+        removeTab();
       }
 
     }
@@ -41,21 +40,38 @@ export default _xyz => (entry) => {
 
   }
 
-  if (entry.display && _xyz.tableview.node) showTab();
+  if (entry.display) showTab();
 
   function showTab() {
 
     entry.location.tables.push(entry);
 
-    entry.target = _xyz.tableview.node.querySelector('.table');
+    entry.target = _xyz.tableview.node && _xyz.tableview.node.querySelector('.table') ||
+      document.getElementById(entry.target_id);
 
-    _xyz.tableview.locationTable(entry, tableChart);
+    if (entry.target) _xyz.tableview.locationTable(entry, tableChart);
+
+  }
+
+  function removeTab() {
+
+    let idx = entry.location.tables.indexOf(entry);
+
+    if (idx < 0) return;
+    
+    entry.location.tables.splice(idx, 1);
+
+    _xyz.tableview.removeTab(entry);
+
+    if (entry.chart) entry.chart.node.innerHTML = '';
 
   }
 
   function tableChart(data) {
 
     if (!entry.chart) return;
+
+    entry.chart.node.innerHTML = '';
 
     const fields = data.map(field => ({
       label: field.rows,
