@@ -174,7 +174,7 @@ export default (_xyz, location) => () => {
 
     if(!entry.group) return;
       
-    if(!location.view.groups[entry.group].table.innerHTML) {
+    if(location.view.groups[entry.group] && location.view.groups[entry.group].table && !location.view.groups[entry.group].table.innerHTML) {
       location.view.groups[entry.group].table.parentNode.style.display = 'none';
     }
       

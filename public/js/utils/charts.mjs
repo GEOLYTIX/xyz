@@ -3,8 +3,6 @@ import {createElement} from './createElement.mjs';
 
 export default (group) => {
 
-  console.log(group.fields);
-
   const graph = createElement({
     tag: 'div',
     style: {
@@ -25,46 +23,45 @@ export default (group) => {
 
   let datasets = [];
 
-  let stack_labels = [];
-
   if(group.chart.stacks && group.chart.stacks.length){
-    group.fields.map(field => { 
-      if(!stack_labels.includes(field.label)) {
-        stack_labels.push(field.label);
-      } 
-    });
-      
-    //console.log(stack_labels);
-    //stack_labels.map()
-    for(let i = 0; i < labels.length; i++){
-      for(let j = 0; i < stack_labels.length; j++){
-        let data = [];
-        Object.values(group.fields).map(field => {
-          /*if(field.stack === labels[i] && field.label === stack_labels[j]){
-              console.log({
-                 "stack": field.stack,
-                 "label": field.label // ok
-              });
-            }*/
-          if(field.stack === labels[i]){
-              
-          }
-        });
-      }
-    }
-  }
 
-      
+    let tmp = {};
+    datasets = [];
+
+    Object.values(group.fields).map(field => {
+      tmp[field.label] = {};
+      tmp[field.label].data = [];
+    });
+
+    Object.values(group.fields).map(field => {
+      Object.keys(tmp).map(key => {
+        if(key === field.label){
+          let idx = Object.keys(tmp).indexOf(key);
+          tmp[key].data.push(Number(field.value));
+          tmp[key].label = field.label;
+          tmp[key].backgroundColor = (group.chart.backgroundColor[idx] || '#cf9');
+          tmp[key].borderColor = (group.chart.borderColor[idx] || '#079e00');
+        }
+      });
+    });
+
+    Object.values(tmp).map(val => datasets.push(val));
+
+  } else {
+    datasets[0] = {
+      label: group.label,
+      backgroundColor: group.chart.backgroundColor || '#cf9',
+      borderColor: group.chart.borderColor || '#079e00',
+      data: data
+    };
+  };
+
+
   new Chart(canvas, {
     type: group.chart.type || 'line',
     data: {
       labels: labels,
-      datasets: [{
-        label: group.label,
-        backgroundColor: group.chart.backgroundColor || '#cf9',
-        borderColor: group.chart.borderColor || '#079e00',
-        data: data
-      }]
+      datasets: datasets
     },
     options: {
       responsive: true,
@@ -93,11 +90,13 @@ export default (group) => {
         }]
       },
       tooltips: {
+        mode: 'index',
+        intersect: false,
         callbacks: {
-          title: () => '',
-          label: (tooltipItem, data) => {
+          title: () =>  ''//,
+          /*label: (tooltipItem, data) => {
             return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
-          }
+          }*/
         }
       }
     }

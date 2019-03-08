@@ -1070,20 +1070,20 @@
               "inline": true
             },
             {
-              "label": "Bar Chart",
+              "label": "Sales",
               "type": "group",
               "chart": {
                 "active": true,
                 "x": "label x",
                 "y": "label y",
                 "type": "bar",
-                "backgroundColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
-                "borderColor": ["#FFA630", "#C6DEA6", "#7EBDC3", "#7A6263", "#CED097"],
+                "backgroundColor": ["#FFA630", "#C6DEA6"],
+                "borderColor": ["#FFA630", "#C6DEA6"],
                 "stacks": ["Actual Sales", "Model Sales"]
               }
             },
             {
-              "group": "Bar Chart",
+              "group": "Sales",
               "label": "Eat In Weekday",
               "title": "Eat In Leaisurley Weekday Treat (Actual Sales)",
               "field": "actual_sales_eat_in_leisurely_weekday_treat",
@@ -1091,7 +1091,7 @@
               "stack": "Actual Sales"
             },
             {
-              "group": "Bar Chart",
+              "group": "Sales",
               "label": "Takeaway Weekend",
               "title": "Takeaway Weekend Lunch (Actual Sales)",
               "field": "actual_sales_takeaway_weekend_lunch",
@@ -1099,7 +1099,7 @@
               "stack": "Actual Sales"
             },
             {
-              "group": "Bar Chart",
+              "group": "Sales",
               "label": "Eat In Weekday",
               "title": "Eat In Leisurley Weekday Treat (Model Sales)",
               "field": "model_sale_eat_in_leisurely_weekday_treat",
@@ -1107,7 +1107,7 @@
               "stack": "Model Sales"
             },
             {
-              "group": "Bar Chart",
+              "group": "Sales",
               "label": "Takeaway Weekend",
               "title": "Takeaway Weekend Lunch (Model Sales)",
               "field": "model_sale_takeaway_weekend_lunch",
