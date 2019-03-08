@@ -26,6 +26,17 @@ export default _xyz => (table, callback) => {
 
   Object.keys(table.agg || {}).forEach(key => {
     columns.push({ field: key, title: table.agg[key].title || key, headerSort: false });
+    if(table.agg[key].formatter) {
+    	columns.push({ 
+    		field: key, 
+    		title: table.agg[key].title || key, 
+    		headerSort: false, 
+    		formatter:  table.agg[key].formatter,
+    		formatterParams: table.agg[key].formatterParams || null,
+    		width: table.agg[key].width || null,
+    		sorter: table.agg[key].sorter || null
+    	});
+    }
   });
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
@@ -53,6 +64,8 @@ export default _xyz => (table, callback) => {
       if (e.target.status !== 200) return;
 
       table.Tabulator.setData(e.target.response);
+
+      console.log(e.target.response);
 
       table.Tabulator.redraw(true);
 
