@@ -15,6 +15,30 @@ function route(fastify) {
     handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
   });
 
+  fastify.route({
+    method: 'GET',
+    url: '/auth/user/list',
+    preHandler: fastify.auth([fastify.authAdmin]),
+    handler: async (req, res) => {
+
+
+      // Get user list from ACL.
+      var rows = await global.pg.users(`
+      SELECT
+        email,
+        verified,
+        approved,
+        admin,
+        failedattempts
+      FROM acl_schema.acl_table;`);
+
+      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+
+      res.code(200).send(rows);
+
+    }
+  });
+
 };
 
 async function view(req, res, token) {

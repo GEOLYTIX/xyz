@@ -7,63 +7,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{:dir}}/css/views/tabulator_simple.css">
     <link rel="stylesheet" href="{{:dir}}/css/views/user_admin.css">
+    <script src="{{:dir}}/js/views/tabulator.min.js"></script>
 </head>
 
 <body data-token={{:token}}>
-    <div>
-        <h1>Account admin</h1>
-        <table>
-            <th>
-                <i class="material-icons" title="Account email">face</i>
-            </th>
-            <th>
-                <i class="material-icons"
-                    title="The account email has been verified through a token sent to the email address.">done</i>
-            </th>
-            <th>
-                <i class="material-icons"
-                    title="The account has been approved by a site administrator and is permitted to access the application.">done_all</i>
-            </th>
-            <th>
-                <i class="material-icons"
-                    title="The account is an admin account which can access this page and change other account credentials.">font_download</i>
-            </th>
-            <th>
-                <i class="material-icons" title="Failed login attempts.">warning</i>
-            </th>
-            <th></th>
-            {{for users}}
-            <tr>
-                <td class="email_field text">{{:email}}</td>
-                <td>
-                    <label class="checkbox">
-                        <input name="verified" type="checkbox" {{if verified}}checked{{/if}}>
-                        <div class="checkbox_i"></div>
-                    </label>
-                </td>
-                <td>
-                    <label class="checkbox">
-                        <input name="approved" type="checkbox" {{if approved}}checked{{/if}}>
-                        <div class="checkbox_i"></div>
-                    </label>
-                </td>
-                <td>
-                    <label class="checkbox">
-                        <input name="admin" type="checkbox" {{if admin}}checked{{/if}}>
-                        <div class="checkbox_i"></div>
-                    </label>
-                </td>
-                <td class="failedattempts text">{{:failedattempts}}
-                </td>
-                <td>
-                    <i class="material-icons delete_account" title="The account will be deleted.">delete</i>
-                </td>
-            </tr>
-            {{/for}}
-        </table>
 
-    </div>
+    <h1>Account admin</h1>
+    
+    <div id="userTable"></div>
+
 </body>
 
 <script src="{{:dir}}/js/views/admin.js"></script>
