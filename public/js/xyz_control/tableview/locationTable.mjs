@@ -65,8 +65,6 @@ export default _xyz => (table, callback) => {
 
       table.Tabulator.setData(e.target.response);
 
-      console.log(e.target.response);
-
       table.Tabulator.redraw(true);
 
       if (callback) callback(e.target.response);
