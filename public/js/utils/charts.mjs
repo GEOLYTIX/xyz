@@ -15,7 +15,11 @@ export default (group) => {
     appendTo: graph
   });
 
-  const labels = (group.chart.stacks && group.chart.stacks.length) ? group.chart.stacks : group.fields.map(field => field.label);
+  let stacked_labels = group.fields.map(field => field.stack);
+  
+  if(stacked_labels.length) stacked_labels = stacked_labels.filter((item, idx) => {return stacked_labels.indexOf(item) >= idx;});
+
+  const labels = stacked_labels.length > 1 ? stacked_labels : group.fields.map(field => field.label);
 
   const data = group.fields.map(field => field.value);
 
@@ -23,7 +27,7 @@ export default (group) => {
 
   let datasets = [];
 
-  if(group.chart.stacks && group.chart.stacks.length){
+  if(stacked_labels.length > 1){
 
     let tmp = {};
     datasets = [];
@@ -82,12 +86,12 @@ export default (group) => {
                 display: (group.chart.unit ? true : false),
                 labelString: (group.chart.unit ? scale(group) : false)
               },
-              stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false)
+              stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && stacked_labels.length && stacked_labels.length > 1) ? true : false)
             }
           ],
-        xAxes: (!group.chart.stacks) ? [] : 
+        xAxes: (!stacked_labels.length || stacked_labels.length < 1) ? [] : 
           [{
-            stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && group.chart.stacks && group.chart.stacks.length) ? true : false)
+            stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && stacked_labels.length && stacked_labels.length > 1) ? true : false)
           }]
       },
       tooltips: {
