@@ -10,7 +10,8 @@
 * {box-sizing: border-box;}
 
 .page {
-    width: 210mm;
+   width: 297mm; /* landscape orientation */
+   /* width: 210mm;*/
     /* height: 297mm; */
     margin: 0 auto;
     page-break-after: always;
