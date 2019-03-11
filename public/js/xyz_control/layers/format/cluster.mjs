@@ -166,6 +166,9 @@ export default (_xyz, layer) => () => {
       }
     })
       .on('click', e => {
+
+        if (document.body.dataset.viewmode === 'report') return;
+
         let
           count = e.layer.feature.properties.count,
           lnglat = e.layer.feature.geometry.coordinates;

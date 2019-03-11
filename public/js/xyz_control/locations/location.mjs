@@ -160,7 +160,7 @@ export default _xyz => () => {
         type: 'Feature',
         geometry: location.geometry,
       },
-      pane: 'select',
+      pane: (style && style.pane) || 'select',
       style: style || location.style,
     });
            

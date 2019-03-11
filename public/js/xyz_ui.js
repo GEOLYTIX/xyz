@@ -31,8 +31,6 @@ function init(_xyz) {
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
   if (document.body.dataset.viewmode === 'desktop') desktop(_xyz);
 
-  // _xyz.hooks = hooks(_xyz);
-
   // Create mapview control.
   _xyz.mapview.create({
     target: document.getElementById('Map'),
@@ -40,7 +38,7 @@ function init(_xyz) {
     view: {
       lat: _xyz.hooks.current.lat,
       lng: _xyz.hooks.current.lng,
-      z: _xyz.hooks.current.z,
+      z: _xyz.hooks.current.z
     },
     scrollWheelZoom: true,
     btn: {

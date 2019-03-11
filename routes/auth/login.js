@@ -65,6 +65,9 @@ async function post(req, res, fastify) {
     // Return leaflet map control view.
     if(/\/map\/leaflet/.test(req.headers.referer)) return require(global.appRoot + '/routes/map_leaflet').view(req, res, token);
 
+    // Return leaflet map control view.
+    if(/\/report/.test(req.headers.referer)) return require(global.appRoot + '/routes/report').view(req, res, token);
+
     // Return API key.
     if(/\/auth\/token\/api/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/token/api').view(req, res, token, fastify);
 

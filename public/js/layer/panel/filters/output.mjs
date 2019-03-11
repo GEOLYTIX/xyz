@@ -15,8 +15,8 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
       const xhr = new XMLHttpRequest();
 
       // Create filter from legend and current filter.
-      const filter = Object.assign({},layer.filter.current,layer.filter.legend);
-    
+      const filter = Object.assign({}, layer.filter.legend, layer.filter.current);
+          
       xhr.open(
         'GET',
         _xyz.host +

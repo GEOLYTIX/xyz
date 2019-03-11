@@ -1,6 +1,10 @@
 export default _xyz => table => {
 
-  if (table.tab) table.tab.remove();
+  if (table.tab) {
+    table.tab.remove();
+  } else {
+    table.target.innerHTML = '';
+  }
 
   let idx = _xyz.tableview.tables.indexOf(table);
 
@@ -10,7 +14,7 @@ export default _xyz => table => {
 
   _xyz.tableview.current_table = null;
 
-  if (_xyz.tableview.tables.length > 0) {
+  if (_xyz.tableview.node && _xyz.tableview.tables.length > 0) {
   	document.querySelectorAll('#tableview li')[_xyz.tableview.tables.length-1].classList.add('tab-current');
   	return _xyz.tableview.tables[_xyz.tableview.tables.length-1].activate();
   }

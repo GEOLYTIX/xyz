@@ -24,30 +24,36 @@ export default _xyz => entry => {
     entry.style
   );
 
-  let tr = _xyz.utils.createElement({
-    tag: 'tr',
-    appendTo: entry.location.view.node
-  });
+  entry.row.classList.add('tr_geometry');
 
   let td = _xyz.utils.createElement({
     tag: 'td',
     style: {
-      paddingTop: '5px'
+      paddingTop: '5px',
+      position: 'relative'
     },
-    appendTo: tr
+    options: {
+      colSpan: '2'
+    },
+    appendTo: entry.row
   });
 
-  entry.ctrl.showGeom = () => {
+
+  function drawGeom() {
+
     entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
       json: {
         type: 'Feature',
         geometry: JSON.parse(entry.value)
       },
-      pane: 'select_display',
+      pane: entry.location.layer,
       style: entry.style
     });
     entry.location.geometries.push(entry.ctrl.geometry);
-  };
+  
+  }
+
+  entry.ctrl.showGeom = () => drawGeom();
 
   if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
 
@@ -87,21 +93,8 @@ export default _xyz => entry => {
   if (entry.value && entry.edit) {
     entry.ctrl.toggle.checked = true;
 
-    entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
-      json: {
-        type: 'Feature',
-        geometry: JSON.parse(entry.value)
-      },
-      pane: 'select_display',
-      style: entry.style
-    });
-    entry.location.geometries.push(entry.ctrl.geometry);
+    drawGeom();
   }
-
-  td = _xyz.utils.createElement({
-    tag: 'td',
-    appendTo: tr
-  });
 
   _xyz.utils.createElement({
     tag: 'div',
@@ -109,10 +102,13 @@ export default _xyz => entry => {
       classList: 'sample-circle'
     },
     style: {
-      'backgroundColor': _xyz.utils.hexToRGBA(entry.style.fillColor, entry.style.fillOpacity),
-      'borderColor': _xyz.utils.hexToRGBA(entry.style.color, 1),
-      'borderStyle': 'solid',
-      'borderWidth': _xyz.utils.setStrokeWeight(entry)
+      backgroundColor: _xyz.utils.hexToRGBA(entry.style.fillColor, entry.style.fillOpacity),
+      borderColor: _xyz.utils.hexToRGBA(entry.style.color, 1),
+      borderStyle: 'solid',
+      borderWidth: _xyz.utils.setStrokeWeight(entry),
+      position: 'absolute',
+      right: 0,
+      top: '5px'
     },
     appendTo: td
   });

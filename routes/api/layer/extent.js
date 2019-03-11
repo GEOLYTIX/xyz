@@ -19,7 +19,8 @@ module.exports = fastify => {
 
       let
         geom = layer.geom,
-        geom_3857 = layer.geom_3857;
+        geom_3857 = layer.geom_3857,
+        filter = req.query.filter && JSON.parse(req.query.filter);
 
       // Get table entry from layer or min table in from tables array.
       const table = layer.table
@@ -33,8 +34,20 @@ module.exports = fastify => {
       
       if (geom_3857) _geom = `Box2D(ST_Transform(ST_SetSRID(ST_Extent(${geom_3857}), 3857), 4326))`;
 
+      const access_filter = layer.access_filter
+        && token.email
+        && layer.access_filter[token.email.toLowerCase()] ?
+        layer.access_filter[token.email] :
+        null;
+
+      Object.assign(filter, access_filter);
+
+      // SQL filter
+      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+
+    
       // Query the estimated extent for the layer geometry field from layer table.
-      rows = await global.pg.dbs[layer.dbs](`SELECT ${_geom} FROM ${table};`);
+      rows = await global.pg.dbs[layer.dbs](`SELECT ${_geom} FROM ${table} WHERE true ${filter_sql};`);
 
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');

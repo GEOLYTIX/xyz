@@ -12,6 +12,8 @@ import valChange from './edit/valChange.mjs';
 
 import tableDefinition from './tableDefinition.mjs';
 
+import report from './report.mjs';
+
 import update from './update.mjs';
 
 export default function(_xyz) {
@@ -33,6 +35,8 @@ export default function(_xyz) {
     edit: edit(_xyz),
 
     tableDefinition: tableDefinition(_xyz),
+
+    report: report(_xyz),
 
     valChange: valChange,
 

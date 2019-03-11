@@ -1,6 +1,6 @@
-export default _xyz => table => {
+export default _xyz => (table, callback) => {
 
-  if (!table || !table.target || !table.location) return;
+  if (!table || !table.location) return;
 
   if (_xyz.tableview.node) {
     _xyz.tableview.node.style.display = 'block';
@@ -11,21 +11,32 @@ export default _xyz => table => {
   if (!table.columns) {
 
     const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
- 
+
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
-      
+
     Object.assign(table, infoj_table);
 
   }
 
-  const columns = [{ 'field': 'rows', 'title': table.title }];
+  const columns = [{ field: 'rows', title: table.title, headerSort: false }];
 
   table.columns.forEach(col => {
-    if (!col.aspatial) columns.push({ 'field': col.field, 'title': col.title || col.field });
+    if (!col.aspatial) columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
   });
 
   Object.keys(table.agg || {}).forEach(key => {
-    columns.push({ 'field': key, 'title': table.agg[key].title || key });
+    columns.push({ field: key, title: table.agg[key].title || key, headerSort: false });
+    if(table.agg[key].formatter) {
+    	columns.push({ 
+    		field: key, 
+    		title: table.agg[key].title || key, 
+    		headerSort: false, 
+    		formatter:  table.agg[key].formatter,
+    		formatterParams: table.agg[key].formatterParams || null,
+    		width: table.agg[key].width || null,
+    		sorter: table.agg[key].sorter || null
+    	});
+    }
   });
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
@@ -56,20 +67,21 @@ export default _xyz => table => {
 
       table.Tabulator.redraw(true);
 
+      if (callback) callback(e.target.response);
+
     };
 
     xhr.send();
-
   };
 
   table.activate = () => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
-      table.target,
-      {
+      table.target, {
         columns: columns,
-        autoResize: true,
-        height: _xyz.tableview.height || '100%'
+        // autoResize: true,
+        layout: 'fitDataFill',
+        //height: _xyz.tableview.height || '100%'
       });
 
     table.update();
