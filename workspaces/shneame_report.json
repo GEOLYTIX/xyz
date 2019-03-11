@@ -129,6 +129,12 @@
                     },
                     "infoj": [
                         {
+                            "type": "report",
+                            "report": {
+                                "template": "shneame"
+                            }
+                        },
+                        {
                             "field": "pub_name",
                             "label": "Site Name",
                             "edit": true
@@ -188,7 +194,8 @@
                         },
                         {
                             "label": "Available tableviews",
-                            "type": "label"
+                            "type": "label",
+                            "hideInReport": true
                         },
                         {
                             "type": "tableDefinition",
@@ -364,7 +371,7 @@
                                 {
                                     "field": "age_profile_total",
                                     "fieldfx": "SUM(pop__11)",
-                                    "title": "Total UK"
+                                    "title": "Total"
                                 }
                             ],
                             "agg": {
@@ -486,7 +493,7 @@
                                 {
                                     "field": "sg_total",
                                     "fieldfx": "SUM(pop__11)",
-                                    "title": "Total UK"
+                                    "title": "Total"
                                 }
                             ],
                             "agg": {
@@ -707,7 +714,7 @@
                                 {
                                     "field": "oac_total",
                                     "fieldfx": "sum(case when oac_group>0 then pop__17 else 0 end)",
-                                    "title": "Total UK"
+                                    "title": "Total"
                                 }
                             ],
                             "agg": {
