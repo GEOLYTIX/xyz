@@ -67,6 +67,12 @@ export default (group) => {
       datasets: datasets
     },
     options: {
+      title: {
+        display: group.chart.title || true,
+        position: 'bottom',
+        text: group.label
+
+      },
       responsive: true,
       legend: {
         display: group.chart.legend

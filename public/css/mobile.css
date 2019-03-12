@@ -1537,6 +1537,9 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
+  .tabulator-row .tabulator-cell div div {
+    display: block !important;
+    vertical-align: middle; }
 
 .tabulator-row .tabulator-cell:last-of-type {
   border-right: none; }

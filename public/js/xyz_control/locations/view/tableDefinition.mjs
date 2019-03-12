@@ -34,8 +34,6 @@ export default _xyz => (entry) => {
 
     entry.chart.node = _xyz.utils.hyperHTML.wire()`<div class="table-section">`;
 
-    td.appendChild(_xyz.utils.createElement({tag: 'div', options: {classList: 'btn_subtext cursor noselect', textContent: entry.title}}));
-
     td.appendChild(entry.chart.node);
 
     entry.location.view.node.appendChild(tr);

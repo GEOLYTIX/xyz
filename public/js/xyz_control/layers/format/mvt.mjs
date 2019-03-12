@@ -96,6 +96,7 @@ export default (_xyz, layer) => () => {
     })
     .addTo(_xyz.map);
 
+
   function applyLayerStyle(properties) {
 
     let style = Object.assign({}, layer.style.default, layer.selected.includes(properties.id) ? layer.style.selected : {});
