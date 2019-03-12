@@ -89,7 +89,7 @@ export default (group) => {
               stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && stacked_labels.length && stacked_labels.length > 1) ? true : false)
             }
           ],
-        xAxes: (!stacked_labels.length || stacked_labels.length < 1) ? [] : 
+        xAxes: (!stacked_labels.length || stacked_labels.length < 1 || group.chart.type == 'pie' || group.chart.type == 'doughnut') ? [] : 
           [{
             stacked: (((group.chart.type == 'bar' || group.chart.type == 'horizontalBar') && stacked_labels.length && stacked_labels.length > 1) ? true : false)
           }]
