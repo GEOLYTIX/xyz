@@ -21,6 +21,8 @@ function Report(_xyz) {
 
   _xyz.layers.list[report_params.layer].show();
 
+  _xyz.layers.list['pubs'].style.setLegend(document.getElementById('xyz_legends'));
+
   _xyz.locations.select(
     //params
     {
@@ -52,8 +54,16 @@ function Report(_xyz) {
       });
       location.flyTo();
       document.getElementById('xyz_location').appendChild(location.view.node);
+      let chxs = document.querySelectorAll('.locationview .checkbox');
+      for(let i = 0; i < chxs.length; i++){
+        chxs[i].parentNode.style.display = 'none';
+
+      }
     }
   );
+
+  //_xyz.layers.list[report_params.layer].style.setLegend(document.getElementById('xyz_location'));
+
 
   // _xyz.tableview.locationTable({
   //   title: 'Population Summary',
