@@ -14,10 +14,14 @@ module.exports = fastify => {
 
   require('./user/approve').route(fastify);
 
+  require('./user/block').route(fastify);
+
   require('./user/delete')(fastify);
 
   require('./user/update')(fastify);
 
   require('./user/verify')(fastify);
+
+  require('./user/log')(fastify);
     
 };

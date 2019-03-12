@@ -1,12 +1,12 @@
 module.exports = fastify => {
     
   fastify.route({
-    method: 'POST',
+    method: 'GET',
     url: '/auth/user/delete',
     preHandler: fastify.auth([fastify.authAdminAPI]),
     handler: async (req, res) => {
 
-      const email = req.body.email.replace(/\s+/g,'');
+      const email = req.query.email.replace(/\s+/g,'');
 
       // Delete user account in ACL.
       var rows = await global.pg.users(`
@@ -18,7 +18,7 @@ module.exports = fastify => {
 
       // Sent email to inform user that their account has been deleted.
       await require(global.appRoot + '/mod/mailer')({
-        to: req.body.email,
+        to: email,
         subject: `This ${global.alias || req.headers.host}${global.dir} account has been deleted.`,
         text: `You will no longer be able to log in to ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}`
       });

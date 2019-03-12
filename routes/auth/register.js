@@ -37,6 +37,8 @@ module.exports = fastify => {
   
       // Set password for existing user and remove existing verification.
       if (user) {
+
+        if (user.blocked) return res.redirect(global.dir + '/login?msg=fail');
   
         rows = await global.pg.users(`
         UPDATE acl_schema.acl_table SET
@@ -58,14 +60,17 @@ module.exports = fastify => {
   
         return res.redirect(global.dir + '/login?msg=validation');
       }
+
+      const date = new Date();
   
       // Create new user account
       rows = await global.pg.users(`
-      INSERT INTO acl_schema.acl_table (email, password, verificationtoken)
+      INSERT INTO acl_schema.acl_table (email, password, verificationtoken, access_log)
       SELECT
         '${email}' AS email,
         '${password}' AS password,
-        '${verificationtoken}' AS verificationtoken;`);
+        '${verificationtoken}' AS verificationtoken,
+        array['${date.toUTCString()} @ ${req.req.ips.pop()}'] AS access_log;`);
   
       if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
   

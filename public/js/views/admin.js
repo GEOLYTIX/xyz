@@ -13,17 +13,45 @@ const cellToggle = (e, cell) => {
 
   const col = cell.getColumn();
 
-  xhr.open('POST', document.head.dataset.dir + '/auth/user/update?token=' + token);
+  xhr.open(
+    'GET',
+    document.head.dataset.dir + 
+    '/auth/user/update' + 
+    '?email=' + user.email +
+    '&role=' + col.getField() +
+    '&chk=' + !cell.getValue() +
+    '&token=' + token);
+
   xhr.setRequestHeader('Content-Type', 'application/json');
+
   xhr.onload = () => {
     if (xhr.status === 500) alert('Soz. It\'s me not you.');
     if (xhr.status === 200) cell.setValue(!cell.getValue());
   };
-  xhr.send(JSON.stringify({
-    email: user.email,
-    role: col.getField(),
-    chk: !cell.getValue()
-  }));
+
+  xhr.send();
+
+};
+
+const getAccessLog = (e, cell) => {
+
+  const user = cell.getData();
+
+  xhr.open(
+    'GET',
+    document.head.dataset.dir + 
+    '/auth/user/log' + 
+    '?email=' + user.email +
+    '&token=' + token);
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  xhr.onload = e => {
+    if (xhr.status === 500) alert('Soz. It\'s me not you.');
+    if (xhr.status === 200) alert(e.target.response.join('\n'));
+  };
+
+  xhr.send();
 
 };
 
@@ -34,15 +62,22 @@ const rowDelete = (e, cell) => {
   const row = cell.getRow();
 
   if (confirm('Delete account ' + user.email)) {
-    xhr.open('POST', document.head.dataset.dir + '/auth/user/delete?token=' + token);
+
+    xhr.open(
+      'GET',
+      document.head.dataset.dir +
+      '/auth/user/delete?' +
+      'email=' + user.email +
+      '&token=' + token);
+
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = () => {
-      if (xhr.status === 500) alert('Soz. It\'s me not you.');
-      if (xhr.status === 200) row.delete();
+
+    xhr.onload = e => {
+      if (e.target.status === 500) alert('Soz. It\'s me not you.');
+      if (e.target.status === 200) row.delete();
     };
-    xhr.send(JSON.stringify({
-      email: user.email
-    }));
+
+    xhr.send();
   }
 };
 
@@ -93,21 +128,40 @@ xhr.onload = e => {
           // cellClick: cellToggle,
         },
         {
+          field: 'access_log',
+          title: 'Access Log',
+          cellClick: getAccessLog,
+        },
+        {
+          field: 'approved_by',
+          title: 'Approved by',
+        },
+        {
+          field: 'blocked',
+          align: 'center',
+          titleFormatter: ()=> '<i class="material-icons">lock</i>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+        },
+        {
           field: 'delete',
           headerSort: false,
-          formatter: ()=> '<i class="material-icons">delete</i>',
+          formatter: ()=> '<span style="color:red; font-weight:bold;">DELETE</span>',
           cellClick: rowDelete,
         }
       ],
-      autoResize: true,
-      resizable: false,
+      // autoResize: false,
+      //columnVertAlign: 'middle',
+      resizableColumns: false,
+      resizableRows: false,
       layout: 'fitDataFill',
-      //height: _xyz.tableview.height || '100%'
+      // layoutColumnsOnNewData: true,
+      // height: _xyz.tableview.height || '100%'
     });
 
   userTable.setData(e.target.response);
 
-  userTable.redraw(true);
+  //userTable.redraw(true);
 
 };
 

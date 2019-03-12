@@ -9,6 +9,10 @@
   transform: translatez(0);
 }
 
+.tabulator-cell > svg {
+  padding: 2px;
+}
+
 .tabulator[tabulator-layout="fitDataFill"] .tabulator-tableHolder .tabulator-table {
   min-width: 100%;
 }
@@ -499,7 +503,7 @@
 }
 
 .tabulator-row .tabulator-cell {
-  display: table-cell;
+  display: inline-block;
   position: relative;
   box-sizing: border-box;
   padding: 4px;

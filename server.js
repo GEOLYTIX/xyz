@@ -39,6 +39,7 @@ function startFastify(){
 
   // Set fastify
   const fastify = require('fastify')({
+    trustProxy: true,
     logger: {
       level: process.env.LOG_LEVEL || 'error',
       prettifier: require('pino-pretty'),

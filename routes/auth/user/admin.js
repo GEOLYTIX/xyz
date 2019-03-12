@@ -21,7 +21,6 @@ function route(fastify) {
     preHandler: fastify.auth([fastify.authAdmin]),
     handler: async (req, res) => {
 
-
       // Get user list from ACL.
       var rows = await global.pg.users(`
       SELECT
@@ -29,7 +28,10 @@ function route(fastify) {
         verified,
         approved,
         admin,
-        failedattempts
+        failedattempts,
+        access_log[array_upper(access_log, 1)],
+        approved_by,
+        blocked
       FROM acl_schema.acl_table;`);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
@@ -43,28 +45,15 @@ function route(fastify) {
 
 async function view(req, res, token) {
 
-  // Get user list from ACL.
-  var rows = await global.pg.users(`
-        SELECT
-          email,
-          verified,
-          approved,
-          admin,
-          failedattempts
-        FROM acl_schema.acl_table;
-      `);
-
-  if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+  const template = require('jsrender')
+    .templates('./public/views/user_admin.html')
+    .render({
+      dir: global.dir,
+      token: token.signed
+    });
 
   res
     .type('text/html')
-    .send(require('jsrender')
-      .templates('./public/views/user_admin.html')
-      .render({
-        users: rows,
-        dir: global.dir,
-        token: token.signed
-      })
-    );
+    .send(template);
 
 }

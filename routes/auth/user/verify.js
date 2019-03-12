@@ -52,7 +52,8 @@ module.exports = fastify => {
           bcc: adminmail,
           subject: `A new account has been verified on ${global.alias || req.headers.host}${global.dir}`,
           text: `Please log into the admin panel ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/admin to approve ${user.email} \n \n`
-                + `You can also approve the account by following this link: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/approve/${approvaltoken}`
+              + `You can also approve the account by following this link: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/approve/${approvaltoken} \n \n`
+              + `!!! If you do not recognize this email address consider blocking the account >>> ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/block/${approvaltoken}`
         });
   
         return res.redirect(global.dir + '/login?msg=approval');

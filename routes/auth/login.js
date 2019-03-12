@@ -22,15 +22,23 @@ async function post(req, res, fastify) {
 
   if (!req.body.password) return;
 
-  // Query user by email from ACL.
-  var rows = await global.pg.users(`
-  SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`,
-  [req.body.email]);
+  const date = new Date();
+
+  var q = `
+  UPDATE acl_schema.acl_table
+  SET
+    access_log = array_append(access_log, '${date.toUTCString()} @ ${req.req.ips.pop()}')
+  WHERE lower(email) = lower($1)
+  RETURNING *;`;
+
+  var rows = await global.pg.users(q, [req.body.email]);
 
   if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
 
   // Get user record from first row.
   const user = rows[0];
+
+  if (user && user.blocked) return res.redirect(global.dir + '/login?msg=fail');
 
   // Redirect back to login (get) with error msg if user is not found.
   if (!user) return res.redirect(global.dir + '/login?msg=fail');
@@ -75,7 +83,10 @@ async function post(req, res, fastify) {
     if(/\/auth\/user\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/admin').view(req, res, token);
 
     // Approve user.
-    if(/\/auth\/user\/approve/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/approve').view(req, res);
+    if(/\/auth\/user\/approve/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/approve').view(req, res, token);
+
+    // Block user.
+    if(/\/auth\/user\/block/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/block').view(req, res, token);
 
     // Return workspace admin json view.
     if(/\/workspace\/admin\/json/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin_json').view(req, res, token);
