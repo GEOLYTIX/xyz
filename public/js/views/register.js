@@ -4,6 +4,7 @@ const password_retype = document.getElementById('auth_user_password_retype');
 const btnRegister = document.getElementById('btnRegister');
 const captcha_input = document.getElementById('captcha_input');
 const captcha_key = document.body.dataset.captcha;
+const privacy_agreement = document.getElementById('privacy_agreement');
 
 setTimeout(() => {
   email.value.length > 0 ?
@@ -20,12 +21,17 @@ password.addEventListener('keyup', () => check());
 password_retype.addEventListener('change', () => check());
 password_retype.addEventListener('keyup', () => check());
 
+privacy_agreement.addEventListener('change', () => check());
+
+
 function check() {
+
   btnRegister.disabled = !(
     email.validity.valid &&
     password.validity.valid &&
     password.value === password_retype.value &&
-    captcha_input.validity.valid);
+    captcha_input.validity.valid &&
+    privacy_agreement.checked);
 }
 
 if (captcha_key) {

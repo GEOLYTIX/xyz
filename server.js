@@ -26,6 +26,7 @@ global.dir = process.env.DIR || '';
 // If set the alias will override the host header in notifications.
 global.alias = process.env.ALIAS ? process.env.ALIAS : null;
 
+// Assign Google Captcha site_key[0] and secret_key[1].
 global.captcha = process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|');
 
 // Application access. Default is public.

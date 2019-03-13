@@ -1,11 +1,9 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
 body {
     margin: 0;
-    padding: 0;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-body>div {
     padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 .input_group {
@@ -85,8 +83,16 @@ button:hover:enabled {
     background-color: white;
 }
 
-p {
+.login_form p {
     font-size: 20px;
+}
+
+.register_form p {
+    font-size: 14px;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .switch {
@@ -106,4 +112,45 @@ button:disabled {
 
 .msg {
     color: #f57c00;
+}
+
+.mailto {
+    color: #090;
+    text-decoration: none;
+}
+
+.checkbox {
+    padding: 5px 0 5px 25px;
+    position: relative;
+    cursor: pointer;
+    display: block;
+    width: 90%;
+}
+
+.checkbox_i {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+    font-size: 22px;
+    color: #090;
+    cursor: pointer;
+}
+
+.checkbox_i:after {
+    font-family: "Material Icons";
+    content: '\E835';
+}
+
+input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    overflow: hidden;
+    display: none;
+}
+
+input[type=checkbox]:checked+.checkbox_i:after {
+    font-family: "Material Icons";
+    content: '\E834';
 }

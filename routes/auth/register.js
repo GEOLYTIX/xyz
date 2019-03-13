@@ -46,6 +46,8 @@ module.exports = fastify => {
       const password = require('bcrypt-nodejs').hashSync(req.body.password, require('bcrypt-nodejs').genSaltSync(8));
       const verificationtoken = require('crypto').randomBytes(20).toString('hex');
   
+      const date = new Date();
+
       // Set password for existing user and remove existing verification.
       if (user) {
 
@@ -54,7 +56,8 @@ module.exports = fastify => {
         rows = await global.pg.users(`
         UPDATE acl_schema.acl_table SET
           password_reset = '${password}',
-          verificationtoken = '${verificationtoken}'
+          verificationtoken = '${verificationtoken}',
+          access_log = array_append(access_log, '${date.toUTCString()} @ ${req.req.ips.pop()}')
         WHERE lower(email) = lower($1);`,
         [email]);
     
@@ -71,8 +74,6 @@ module.exports = fastify => {
   
         return res.redirect(global.dir + '/login?msg=validation');
       }
-
-      const date = new Date();
   
       // Create new user account
       rows = await global.pg.users(`

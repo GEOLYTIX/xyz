@@ -10,69 +10,77 @@
     <script src="https://www.google.com/recaptcha/api.js?render={{:captcha}}"></script>
 </head>
 
-<body data-captcha="{{:captcha}}">
-    <div>
-        <form method="post">
+<body class="register_form" data-captcha="{{:captcha}}">
+    <form method="post">
 
-            <div class="input_group">
-                <input
-                    id="auth_user_email"
-                    name="email"
-                    type="email"
-                    autocomplete="username"
-                    required
-                    maxlength="50">
+        <div class="input_group">
+            <input id="auth_user_email" name="email" type="email" autocomplete="username" required maxlength="50">
 
-                <span class="bar"></span>
-                <label for="auth_user_email">E-mail</label>
-            </div>
+            <span class="bar"></span>
+            <label for="auth_user_email">E-mail</label>
+        </div>
 
-            <br>
+        <br>
 
-            <div class="input_group">
-                <input
-                    id="auth_user_password"
-                    name="password"
-                    type="password"
-                    autocomplete="new-password"
-                    required
-                    minlength="8">
+        <div class="input_group">
+            <input id="auth_user_password" name="password" type="password" autocomplete="new-password" required
+                minlength="8">
 
-                <span class="bar"></span>
-                <label for="auth_user_password">New Password (min. length 8 character)</label>
-            </div>
+            <span class="bar"></span>
+            <label for="auth_user_password">New Password (min. length 8 character)</label>
+        </div>
 
-            <br>
+        <br>
 
-            <div class="input_group">
-                <input
-                    id="auth_user_password_retype"
-                    name="password_retype"
-                    type="password"
-                    autocomplete="new-password"
-                    required
-                    minlength="8">
+        <div class="input_group">
+            <input id="auth_user_password_retype" name="password_retype" type="password" autocomplete="new-password"
+                required minlength="8">
 
-                <span class="bar"></span>
-                <label for="auth_user_password_retype">Re-type password</label>
-            </div>
+            <span class="bar"></span>
+            <label for="auth_user_password_retype">Re-type password</label>
+        </div>
 
-            <br>
+        <br>
 
-            <button id="btnRegister" type="submit" formaction="register" disabled>
-                Register or Re-set Password
-            </button>
+        <p class="bold">Privacy</p>
 
-            <input style="display:none;" id="captcha_input" required name="captcha">
+        <p>Here at Geolytix we take your privacy seriously and will only use your personal information to administer
+            your account and provide the products and services requested from us. We will never share your personal
+            data with a third party.</p>
 
-            <p>A verification link will be sent to your email address. Follow the link to verify that you are the
-                account holder.</p>
-            <p>Password re-sets will be completed once the verification link has been followed</p>
-            <p>A site administrator must approve new accounts once the email address has been verified by following the
-                link.</p>
-            <a class="switch" href="{{:dir}}/login">Already registered? Login.</p>
-        </form>
-    </div>
+        <p>Disabling your account can be done through your administrator however if you wish for your details to be
+            permanently removed please email <a class="mailto"
+                href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a></p>
+
+        <p>This website is owned and operated by Geolytix, with its principal place of business at Phoenix Yard, 65
+            Kings Cross Road, London, WC1X 9LW</p>
+
+        <label class="checkbox">I agree<input id="privacy_agreement" type="checkbox">
+            <div class="checkbox_i"></div>
+        </label>
+
+        <button id="btnRegister" type="submit" formaction="register" disabled>
+            Register or Re-set Password
+        </button>
+
+        <input style="display:none;" id="captcha_input" required name="captcha">
+
+        <p class="bold">What happens next? Confirming your account</p>
+
+        <p>An email will will be sent to the email address you have provided, from <a class="mailto"
+                href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to
+            verify your account.</p>
+
+        <p>If this has not been received in a few minutes please check any spam / junk folders. Adding
+            <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will
+            ensure messages get through.</p>
+
+        <p>After verification, a site administrator will approve new accounts. You will receive a further email once
+            your account has been approved.</p>
+
+        <a class="switch" href="{{:dir}}/login">Already registered? Login.</p>
+    </form>
+
 </body>
 
 <script src="{{:dir}}/js/views/register.js"></script>

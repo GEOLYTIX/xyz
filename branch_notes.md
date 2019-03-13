@@ -1,54 +1,27 @@
 **Fixes**
 
-The group symbol to show / hide layers in a group was bugged. This is fixed in this branch.
+check() method in login and register script was borked. Validity.valid is only true on required fields.
 
-Streetview control in location view is now created with hyperHTML. Does no longer break table columns.
-
-Empty groups are now hidden in location view.
-
-Fix for filters. Current filter must be assigned to legend filter not the other way around.
-
-Zoom to layer extent will now use filter.
-
-
-**Changes**
-
-Set zindex for svg in panes to 100 to prevent polygons drawn on top of images.
+check() will now be called on keyup and change to work with manual input as well as copy/paste/autofill.
 
 ```
-.leaflet-map-pane svg {
-    z-index: 100;
+function check() {
+  btnRegister.disabled = !(
+    email.validity.valid &&
+    password.validity.valid &&
+    password.value === password_retype.value &&
+    captcha_input.validity.valid);
 }
 ```
 
-Image control is no longer vertical with scroll but column.
+**Enhacements**
 
-Images are uploaded automatically.
+Registration text
 
-Location geometries are drawn on the same pane.
+Captcha
 
-The pane can be supplied as a style property to the location draw method.
+ACL fields
 
-New mvts cache tables will only have a spatial index. The x,y,z index should not be necessary due to the primary key.
-
-**Reports**
-
-Currently only one report.
-
-Template: public/views/report.html
-Script: public/js/views/report.js
-
-Endpoint: routes/report.js
-
-The report endpoint will check for token and require login for private endpoints if the token is not supplied in URL.
-
-The report script stores URL param as report_params object.
-
-The report is an infoj field `type: report` which will create a link to the report endpoint with URL params.
-
-The report template has viewmode 'report' on the body. Locations will not be editable if the viewmode is report. Cluster are not selectable if the viewmode is report.
-
-Location table entries and the report button itself will not be shown in the report view.
-
-`hideInReport : true` fields will return immediately from the view update if the viewmode is 'report'.
-
+blocked
+approved_by
+access_log
