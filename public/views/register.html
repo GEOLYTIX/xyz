@@ -7,14 +7,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{:dir}}/css/views/login.css" />
+    <script src="https://www.google.com/recaptcha/api.js?render={{:captcha}}"></script>
 </head>
 
-<body>
+<body data-captcha="{{:captcha}}">
     <div>
         <form method="post">
 
             <div class="input_group">
-                <input id="auth_user_email" name="email" type="email" autocomplete="username" value="" maxlength="50">
+                <input
+                    id="auth_user_email"
+                    name="email"
+                    type="email"
+                    autocomplete="username"
+                    required
+                    maxlength="50">
+
                 <span class="bar"></span>
                 <label for="auth_user_email">E-mail</label>
             </div>
@@ -22,8 +30,14 @@
             <br>
 
             <div class="input_group">
-                <input id="auth_user_password" name="password" type="password" autocomplete="new-password" value=""
+                <input
+                    id="auth_user_password"
+                    name="password"
+                    type="password"
+                    autocomplete="new-password"
+                    required
                     minlength="8">
+
                 <span class="bar"></span>
                 <label for="auth_user_password">New Password (min. length 8 character)</label>
             </div>
@@ -31,8 +45,14 @@
             <br>
 
             <div class="input_group">
-                <input id="auth_user_password_retype" name="password_retype" type="password" autocomplete="new-password"
-                    value="">
+                <input
+                    id="auth_user_password_retype"
+                    name="password_retype"
+                    type="password"
+                    autocomplete="new-password"
+                    required
+                    minlength="8">
+
                 <span class="bar"></span>
                 <label for="auth_user_password_retype">Re-type password</label>
             </div>
@@ -42,6 +62,8 @@
             <button id="btnRegister" type="submit" formaction="register" disabled>
                 Register or Re-set Password
             </button>
+
+            <input style="display:none;" id="captcha_input" required name="captcha">
 
             <p>A verification link will be sent to your email address. Follow the link to verify that you are the
                 account holder.</p>

@@ -100,7 +100,7 @@ p {
     cursor: pointer;
 }
 
-#btnLogin:disabled {
+button:disabled {
     background-color: darkslategrey;
 }
 

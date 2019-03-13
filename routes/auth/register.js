@@ -8,7 +8,10 @@ module.exports = fastify => {
         .type('text/html')
         .send(require('jsrender')
           .templates('./public/views/register.html')
-          .render({ dir: global.dir }));
+          .render({
+            dir: global.dir,
+            captcha: global.captcha && global.captcha[0],
+          }));
     }
   });
   
@@ -16,6 +19,14 @@ module.exports = fastify => {
     method: 'POST',
     url: '/register',
     handler: async (req, res) => {
+
+      if (global.captcha && global.captcha[1]) {
+
+        const captcha_verification = await require(global.appRoot + '/mod/fetch')(`https://www.google.com/recaptcha/api/siteverify?secret=${global.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
+      
+        if (captcha_verification.score < 0.6) return res.redirect(global.dir + '/login?msg=fail');
+    
+      }
   
       const email = req.body.email;
   

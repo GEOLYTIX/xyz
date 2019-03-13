@@ -7,81 +7,6 @@ xhr.open('GET', document.head.dataset.dir + '/auth/user/list?token=' + token);
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.responseType = 'json';
 
-const cellToggle = (e, cell) => {
-
-  const user = cell.getData();
-
-  const col = cell.getColumn();
-
-  xhr.open(
-    'GET',
-    document.head.dataset.dir + 
-    '/auth/user/update' + 
-    '?email=' + user.email +
-    '&role=' + col.getField() +
-    '&chk=' + !cell.getValue() +
-    '&token=' + token);
-
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
-  xhr.onload = () => {
-    if (xhr.status === 500) alert('Soz. It\'s me not you.');
-    if (xhr.status === 200) cell.setValue(!cell.getValue());
-  };
-
-  xhr.send();
-
-};
-
-const getAccessLog = (e, cell) => {
-
-  const user = cell.getData();
-
-  xhr.open(
-    'GET',
-    document.head.dataset.dir + 
-    '/auth/user/log' + 
-    '?email=' + user.email +
-    '&token=' + token);
-
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
-  xhr.onload = e => {
-    if (xhr.status === 500) alert('Soz. It\'s me not you.');
-    if (xhr.status === 200) alert(e.target.response.join('\n'));
-  };
-
-  xhr.send();
-
-};
-
-const rowDelete = (e, cell) => {
-
-  const user = cell.getData();
-
-  const row = cell.getRow();
-
-  if (confirm('Delete account ' + user.email)) {
-
-    xhr.open(
-      'GET',
-      document.head.dataset.dir +
-      '/auth/user/delete?' +
-      'email=' + user.email +
-      '&token=' + token);
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.onload = e => {
-      if (e.target.status === 500) alert('Soz. It\'s me not you.');
-      if (e.target.status === 200) row.delete();
-    };
-
-    xhr.send();
-  }
-};
-
-
 xhr.onload = e => {
 
   if (e.target.status !== 200) return;
@@ -166,3 +91,77 @@ xhr.onload = e => {
 };
 
 xhr.send();
+
+function cellToggle(e, cell) {
+
+  const user = cell.getData();
+
+  const col = cell.getColumn();
+
+  xhr.open(
+    'GET',
+    document.head.dataset.dir + 
+    '/auth/user/update' + 
+    '?email=' + user.email +
+    '&role=' + col.getField() +
+    '&chk=' + !cell.getValue() +
+    '&token=' + token);
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  xhr.onload = () => {
+    if (xhr.status === 500) alert('Soz. It\'s me not you.');
+    if (xhr.status === 200) cell.setValue(!cell.getValue());
+  };
+
+  xhr.send();
+
+};
+
+function getAccessLog(e, cell) {
+
+  const user = cell.getData();
+
+  xhr.open(
+    'GET',
+    document.head.dataset.dir + 
+    '/auth/user/log' + 
+    '?email=' + user.email +
+    '&token=' + token);
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  xhr.onload = e => {
+    if (xhr.status === 500) alert('Soz. It\'s me not you.');
+    if (xhr.status === 200) alert(e.target.response.join('\n'));
+  };
+
+  xhr.send();
+
+};
+
+function rowDelete(e, cell) {
+
+  const user = cell.getData();
+
+  const row = cell.getRow();
+
+  if (confirm('Delete account ' + user.email)) {
+
+    xhr.open(
+      'GET',
+      document.head.dataset.dir +
+      '/auth/user/delete?' +
+      'email=' + user.email +
+      '&token=' + token);
+
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = e => {
+      if (e.target.status === 500) alert('Soz. It\'s me not you.');
+      if (e.target.status === 200) row.delete();
+    };
+
+    xhr.send();
+  }
+};

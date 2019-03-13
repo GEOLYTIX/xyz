@@ -26,6 +26,8 @@ global.dir = process.env.DIR || '';
 // If set the alias will override the host header in notifications.
 global.alias = process.env.ALIAS ? process.env.ALIAS : null;
 
+global.captcha = process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|');
+
 // Application access. Default is public.
 global.access = process.env.PRIVATE ? 'private' : 'public';
 

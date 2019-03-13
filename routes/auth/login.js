@@ -18,6 +18,14 @@ function route(fastify) {
 
 async function post(req, res, fastify) {
 
+  if (global.captcha && global.captcha[1]) {
+
+    const captcha_verification = await require(global.appRoot + '/mod/fetch')(`https://www.google.com/recaptcha/api/siteverify?secret=${global.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
+  
+    if (captcha_verification.score < 0.6) return res.redirect(global.dir + '/login?msg=fail');
+
+  }
+
   if (!req.body.email) return;
 
   if (!req.body.password) return;
@@ -177,7 +185,8 @@ async function view(req, res) {
       .render({
         dir: global.dir,
         action: req.req.url,
-        msg: req.query.msg ? msgs[req.query.msg] : null
+        msg: req.query.msg ? msgs[req.query.msg] : null,
+        captcha: global.captcha && global.captcha[0],
       }));  
 
 }
