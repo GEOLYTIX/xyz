@@ -11,11 +11,15 @@
 
 .page {
    width: 297mm; /* landscape orientation */
-   height: 210mm;
+   height: 200mm;
    /* width: 210mm;*/
     /* height: 297mm; */
     margin: 0 auto;
-    page-break-after: always;
+    page-break-after: auto;
+}
+
+.page:last-child {
+  page-break-after: auto;
 }
 
 .report1 {
