@@ -1821,7 +1821,8 @@ button {
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
-    font-family: ffmark, sans-serif; }
+    font-family: ffmark, sans-serif;
+    margin-bottom: 5px; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {

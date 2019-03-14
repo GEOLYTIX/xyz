@@ -1,3 +1,13 @@
+import LogRocket from 'logrocket';
+
+if (document.body.dataset.logrocket) {
+
+  LogRocket.init(document.body.dataset.logrocket);
+
+  LogRocket.identify(document.body.dataset.user);
+
+}
+
 // use leaflet map control
 import _xyz from './xyz_control/index.mjs';
 

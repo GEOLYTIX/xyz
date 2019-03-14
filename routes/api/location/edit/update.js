@@ -7,7 +7,7 @@ module.exports = fastify => {
 
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
 
-      const locale = global.workspace[token.access].config.locales[req.body.locale];
+      const locale = global.workspace['admin'].config.locales[req.body.locale];
 
       // Return 406 if locale is not found in workspace.
       if (!locale) return res.code(406).send('Invalid locale.');
@@ -25,7 +25,7 @@ module.exports = fastify => {
 
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table, geom, qID]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace['admin'].values.indexOf(val) < 0))) {
         return res.code(406).send('Invalid parameter.');
       }
 

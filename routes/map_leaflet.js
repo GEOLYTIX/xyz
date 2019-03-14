@@ -30,7 +30,7 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const config = global.workspace[token.access].config;
+  const config = global.workspace['admin'].config;
 
   // Check whether request comes from a mobile platform and set template.
   // const md = new Md(req.headers['user-agent']);

@@ -25,7 +25,7 @@ module.exports = fastify => {
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
 
       // Send workspace
-      res.send(global.workspace[token.access].config);
+      res.send(global.workspace['admin'].config);
       
     }
   });

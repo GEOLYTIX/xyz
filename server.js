@@ -32,6 +32,9 @@ global.captcha = process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split(
 // Application access. Default is public.
 global.access = process.env.PRIVATE ? 'private' : 'public';
 
+// Assign logrocket key.
+global.logrocket = process.env.LOG_ROCKET;
+
 // Additional logs will be written to console if global.logs is true.
 global.logs = (process.env.LOG_LEVEL === 'info');
 
@@ -59,7 +62,7 @@ function startFastify(){
     .register(require('fastify-helmet'), {
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ['\'self\''],
+          defaultSrc: ['\'self\'', '*.logrocket.io'],
           baseURI: ['\'self\''],
           objectSrc: ['\'self\''],
           workerSrc: ['\'self\'', 'blob:'],
@@ -67,7 +70,7 @@ function startFastify(){
           formAction: ['\'self\''],
           styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
           fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-          scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com'],
+          scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', 'cdn.logrocket.io'],
           imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'data:']
         },
         setAllHeaders: true

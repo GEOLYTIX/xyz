@@ -28,7 +28,7 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const config = global.workspace[token.access].config;
+  const config = global.workspace['admin'].config;
 
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
@@ -41,6 +41,7 @@ async function view(req, res, token = { access: 'public' }) {
   res.type('text/html').send(tmpl.render({
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
+    user: token.email || 'anon',
     nanoid: nanoid(6),
     token: req.query.token || token.signed,
     log: process.env.LOG_LEVEL ? 'true' : 'false',
@@ -52,6 +53,7 @@ async function view(req, res, token = { access: 'public' }) {
     btnLogin_text: token.email ? token.email : 'anonymous (public)',
     btnAdmin: token.admin ? '' : 'style="display: none;"',
     btnEditor: token.editor ? '' : 'style="display: none;"',
+    logrocket: global.logrocket,
   }));
 
 };

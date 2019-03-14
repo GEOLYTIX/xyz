@@ -8,7 +8,7 @@ module.exports = fastify => {
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
 
       // Set locale from workspace and access token.
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
+      const locale = global.workspace['admin'].config.locales[req.query.locale];
       
       // Return 406 if locale is not found in workspace.
       if (!locale) return res.code(406).send('Invalid locale.');

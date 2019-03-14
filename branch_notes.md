@@ -16,6 +16,8 @@ function check() {
 
 **Enhacements**
 
+Logrocket
+
 Registration text
 
 Captcha

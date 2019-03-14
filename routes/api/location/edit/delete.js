@@ -7,7 +7,7 @@ module.exports = fastify => {
 
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
 
-      const layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer];
+      const layer = global.workspace['admin'].config.locales[req.query.locale].layers[req.query.layer];
 
       if (!layer) return res.code(500).send('Layer not found.');
 
@@ -18,7 +18,7 @@ module.exports = fastify => {
 
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table, qID]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace['admin'].values.indexOf(val) < 0))) {
         return res.code(406).send('Invalid parameter.');
       }
 
