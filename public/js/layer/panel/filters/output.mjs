@@ -52,8 +52,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
           fillColor: record.color,
           letter: record.letter,
           stroke: true,
-          fill: true,
-          fillOpacity: 0.2
+          fill: false
         };
 
         location.view = location.view(_xyz);
@@ -86,6 +85,8 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
             }
           }
         });
+
+        location.flyTo();
 
         record.location = location;
 
