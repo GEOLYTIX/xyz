@@ -102,12 +102,13 @@ export default (group) => {
       },
       tooltips: {
         mode: 'index',
-        intersect: false,
+        //intersect: false,
         callbacks: {
           title: () =>  ''//,
           /*label: (tooltipItem, data) => {
-            return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
-          }*/
+          return labels[tooltipItem.index] + ': ' + displayValues[tooltipItem.index];
+          }
+        }*/
         }
       }
     }
