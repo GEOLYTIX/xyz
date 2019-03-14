@@ -1862,6 +1862,8 @@ button {
     .listview .drawer .dashboard .block {
       padding: 5px 0;
       position: relative; }
+      .listview .drawer .dashboard .block input {
+        width: 100%; }
       .listview .drawer .dashboard .block .cancel-btn {
         color: #090;
         font-size: 20px;
