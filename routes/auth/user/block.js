@@ -32,9 +32,6 @@ async function view(req, res, token) {
   rows = await global.pg.users(`
   UPDATE acl_schema.acl_table SET
     blocked = true,
-    verified = false,
-    approved = false,
-    admin = false,
     approvaltoken = null,
     approved_by = '${token.email}'
   WHERE lower(email) = lower($1);`,

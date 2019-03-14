@@ -30,12 +30,12 @@ async function post(req, res, fastify) {
 
   if (!req.body.password) return;
 
-  const date = new Date();
+  const date = require(global.appRoot + '/mod/date')();
 
   var q = `
   UPDATE acl_schema.acl_table
   SET
-    access_log = array_append(access_log, '${date.toUTCString()} @ ${req.req.ips.pop()}')
+    access_log = array_append(access_log, '${date}@${req.req.ips.pop()}')
   WHERE lower(email) = lower($1)
   RETURNING *;`;
 
@@ -73,7 +73,10 @@ async function post(req, res, fastify) {
     // Create token with 8 hour expiry.
     const token = {
       email: user.email,
-      access: user.admin ? 'admin' : 'private'
+      access: user.admin ? 'admin' : 'private',
+      admin: user.admin,
+      editor: user.editor,
+      roles: user.roles
     };
     
     token.signed = fastify.jwt.sign(token, { expiresIn: 28800 });

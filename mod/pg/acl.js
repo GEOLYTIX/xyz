@@ -71,15 +71,17 @@ module.exports = async () => {
 	    password text not null,
 	    verified boolean default false,
 	    approved boolean default false,
-	    admin boolean default false,
+      admin boolean default false,
+      editor boolean default false,
 	    verificationtoken text,
 	    approvaltoken text,
 	    failedattempts integer default 0,
 	    password_reset text,
       api text,
       approved_by text,
-      access_log text[],
-      blocked boolean
+      access_log text[] default '{}'::text[],
+      roles text[] default '{}'::text[],
+      blocked boolean default false
     );
     
     INSERT INTO acl_schema.acl_table (email, password, verified, approved, admin)

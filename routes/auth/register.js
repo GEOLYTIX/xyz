@@ -46,7 +46,7 @@ module.exports = fastify => {
       const password = require('bcrypt-nodejs').hashSync(req.body.password, require('bcrypt-nodejs').genSaltSync(8));
       const verificationtoken = require('crypto').randomBytes(20).toString('hex');
   
-      const date = new Date();
+      const date = require(global.appRoot + '/mod/date')();
 
       // Set password for existing user and remove existing verification.
       if (user) {
@@ -57,7 +57,7 @@ module.exports = fastify => {
         UPDATE acl_schema.acl_table SET
           password_reset = '${password}',
           verificationtoken = '${verificationtoken}',
-          access_log = array_append(access_log, '${date.toUTCString()} @ ${req.req.ips.pop()}')
+          access_log = array_append(access_log, '${date}@${req.req.ips.pop()}')
         WHERE lower(email) = lower($1);`,
         [email]);
     
@@ -82,7 +82,7 @@ module.exports = fastify => {
         '${email}' AS email,
         '${password}' AS password,
         '${verificationtoken}' AS verificationtoken,
-        array['${date.toUTCString()} @ ${req.req.ips.pop()}'] AS access_log;`);
+        array['${date}@${req.req.ips.pop()}'] AS access_log;`);
   
       if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
   

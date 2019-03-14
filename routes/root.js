@@ -50,7 +50,8 @@ async function view(req, res, token = { access: 'public' }) {
     btnLogin_style: token.email ? 'face' : 'lock_open',
     btnLogin_path: token.email ? '' : '/login',
     btnLogin_text: token.email ? token.email : 'anonymous (public)',
-    btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"'
+    btnAdmin: token.admin ? '' : 'style="display: none;"',
+    btnEditor: token.editor ? '' : 'style="display: none;"',
   }));
 
 };
