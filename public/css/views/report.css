@@ -22,6 +22,10 @@
   page-break-after: auto;
 }
 
+.page h3 {
+  margin: 20px;
+}
+
 .report1 {
     display: grid;
     grid-template-columns: 1fr 2fr;
