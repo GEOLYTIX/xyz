@@ -1,11 +1,13 @@
 module.exports = { route, view };
 
-function route(fastify) {
+function route(fastify, authToken) {
     
   fastify.route({
     method: 'GET',
     url: '/auth/user/approve/:token',
-    preHandler: fastify.auth([fastify.authAdmin]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: false })
+    ]),
     handler: view
   });
 

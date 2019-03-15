@@ -1,11 +1,13 @@
 module.exports = { route, view };
 
-function route(fastify) {
+function route(fastify, authToken) {
 
   fastify.route({
     method: 'GET',
     url: '/auth/user/admin',
-    preHandler: fastify.auth([fastify.authAdmin]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: false })
+    ]),
     handler: view
   });
 
@@ -18,7 +20,9 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/auth/user/list',
-    preHandler: fastify.auth([fastify.authAdmin]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: false })
+    ]),
     handler: async (req, res) => {
 
       // Get user list from ACL.

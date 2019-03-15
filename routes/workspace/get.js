@@ -1,5 +1,6 @@
 // Get the stored workspace config for the token access level.
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
+
   fastify.route({
     method: 'GET',
     url: '/workspace/get',
@@ -18,7 +19,9 @@ module.exports = fastify => {
         }
       }
     },
-    preHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: global.access, API: false })
+    ]),
     handler: (req, res) => {
 
       // Decode token from query or use a public access if no token has been provided.

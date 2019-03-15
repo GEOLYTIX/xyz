@@ -35,7 +35,7 @@ async function post(req, res, fastify) {
   var q = `
   UPDATE acl_schema.acl_table
   SET
-    access_log = array_append(access_log, '${date}@${req.req.ips.pop()}')
+    access_log = array_append(access_log, '${date}@${req.req.ips.pop()||req.req.ip}')
   WHERE lower(email) = lower($1)
   RETURNING *;`;
 

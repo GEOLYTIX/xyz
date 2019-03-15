@@ -61,6 +61,7 @@ module.exports = fastify => {
   
       res.redirect(global.dir + '/login');
     }
+    
   });
 
 };

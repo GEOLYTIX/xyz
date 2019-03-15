@@ -1,8 +1,10 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/field/setnull',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: global.access, API: true })
+    ]),
     handler: async (req, res) => {
               
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };

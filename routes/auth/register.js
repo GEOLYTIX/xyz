@@ -57,7 +57,7 @@ module.exports = fastify => {
         UPDATE acl_schema.acl_table SET
           password_reset = '${password}',
           verificationtoken = '${verificationtoken}',
-          access_log = array_append(access_log, '${date}@${req.req.ips.pop()}')
+          access_log = array_append(access_log, '${date}@${req.req.ips.pop()||req.req.ip}')
         WHERE lower(email) = lower($1);`,
         [email]);
     
@@ -82,7 +82,7 @@ module.exports = fastify => {
         '${email}' AS email,
         '${password}' AS password,
         '${verificationtoken}' AS verificationtoken,
-        array['${date}@${req.req.ips.pop()}'] AS access_log;`);
+        array['${date}@${req.req.ips.pop()||req.req.ip}'] AS access_log;`);
   
       if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
   

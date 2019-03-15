@@ -1,4 +1,4 @@
-module.exports = function(req, res, fastify, access, done) {
+module.exports = fastify => (req, res, done, access) => {
 
   // Public access
   if (access.lv === 'public') {
@@ -28,7 +28,7 @@ module.exports = function(req, res, fastify, access, done) {
     if (!token.email) return res.code(401).send('Invalid token');
 
     // Check API token.
-    if (access.API && token.access === 'api') {
+    if (access.API && token.api) {
 
       // Get user from ACL.
 
@@ -52,7 +52,7 @@ module.exports = function(req, res, fastify, access, done) {
     }
 
     // Check admin privileges.
-    if (access.lv === 'admin' && token.access !== 'admin') {
+    if (access.lv === 'admin' && token.admin) {
 
       // Do not redirect API calls.
       if (access.API) return res.code(401).send('Invalid token');
@@ -63,6 +63,7 @@ module.exports = function(req, res, fastify, access, done) {
     }
 
     done();
+
   });
-  
+
 };

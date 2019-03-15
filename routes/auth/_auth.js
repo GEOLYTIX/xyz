@@ -1,4 +1,4 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
 
   require('./login').route(fastify);
    
@@ -6,22 +6,22 @@ module.exports = fastify => {
 
   // token
   
-  require('./token/api').route(fastify);
+  require('./token/api').route(fastify, authToken);
 
   // user
 
-  require('./user/admin').route(fastify);
+  require('./user/admin').route(fastify, authToken);
 
-  require('./user/approve').route(fastify);
+  require('./user/approve').route(fastify, authToken);
 
-  require('./user/block').route(fastify);
+  require('./user/block').route(fastify, authToken);
 
-  require('./user/delete')(fastify);
+  require('./user/delete')(fastify, authToken);
 
-  require('./user/update')(fastify);
+  require('./user/update')(fastify, authToken);
 
-  require('./user/verify')(fastify);
+  require('./user/verify')(fastify, authToken);
 
-  require('./user/log')(fastify);
+  require('./user/log')(fastify, authToken);
     
 };

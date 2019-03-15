@@ -1,9 +1,11 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
     
   fastify.route({
     method: 'GET',
     url: '/auth/user/update',
-    preHandler: fastify.auth([fastify.authAdminAPI]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: true })
+    ]),
     handler: async (req, res) => {
 
       const token = await fastify.jwt.decode(req.query.token);

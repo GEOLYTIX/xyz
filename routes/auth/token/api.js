@@ -1,11 +1,13 @@
 module.exports = { route, view };
 
-function route(fastify) {
+function route(fastify, authToken) {
     
   fastify.route({
     method: 'GET',
     url: '/auth/token/api',
-    preHandler: fastify.auth([fastify.authAdmin]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: false })
+    ]),
     handler: view
   });
 
@@ -21,7 +23,8 @@ async function view(req, res, token, fastify) {
 
   // Get user from ACL.
   var rows = await global.pg.users(`
-    SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`,
+    SELECT * FROM acl_schema.acl_table
+    WHERE lower(email) = lower($1);`,
   [token.email]);
     
   if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
@@ -31,12 +34,13 @@ async function view(req, res, token, fastify) {
   if (!user
     || !user.api
     || !user.verified
-    || !user.approved) return res.code(401).send('Invalid token');
+    || !user.approved
+    || user.blocked) return res.code(401).send('Invalid token');
   
   // Create signed api_token
   const api_token = fastify.jwt.sign({
     email: user.email,
-    access: 'api'
+    api: true
   });
   
     // Store api_token in ACL.

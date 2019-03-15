@@ -1,9 +1,11 @@
 // Save workspace provided in post body to the Postgres table.
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
   fastify.route({
     method: 'POST',
     url: '/workspace/load',
-    preHandler: fastify.auth([fastify.authAdminAPI]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: true })
+    ]),
     handler: async (req, res) => {
       
       // Check workspace.

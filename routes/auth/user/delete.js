@@ -1,9 +1,11 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
     
   fastify.route({
     method: 'GET',
     url: '/auth/user/delete',
-    preHandler: fastify.auth([fastify.authAdminAPI]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: true })
+    ]),
     handler: async (req, res) => {
 
       const email = req.query.email.replace(/\s+/g,'');

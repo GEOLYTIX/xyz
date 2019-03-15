@@ -1,8 +1,10 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
   fastify.route({
     method: 'GET',
     url: '/proxy/request',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preHandler: fastify.auth([
+      (req, res, done)=>authToken(req, res, done, { lv: global.access, API: true })
+    ]),
     handler: (req, res) => {
 
       // Split token and provider param from originalUrl.

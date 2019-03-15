@@ -89,18 +89,15 @@ function startFastify(){
     })
     .register(require('fastify-auth'))
     .register(require('fastify-jwt'), {
-      secret: process.env.SECRET || 'Kill process'// should be at least 32 characters long
+      secret: process.env.SECRET || 'ChinaCatSunflower'
     })
     .addContentTypeParser('*', (req, done) => done())
-    .decorate('authAccess', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: global.access, API: false }, done))
-    .decorate('authAPI', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: global.access, API: true }, done))
-    .decorate('authAdmin', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: 'admin', API: false }, done))
-    .decorate('authAdminAPI', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: 'admin', API: true }, done))
     .register((fastify, opts, next) => {
       require('./routes/_routes')(fastify);
       next(); 
     }, { prefix: global.dir });
 
+    
   fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
     if (err) {
       Object.keys(err).forEach(key => !err[key] && delete err[key]);

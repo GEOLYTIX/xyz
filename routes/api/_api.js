@@ -1,61 +1,61 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
 
   // gazetteer
 
-  require('./gazetteer/autocomplete')(fastify);
+  require('./gazetteer/autocomplete')(fastify, authToken);
 
-  require('./gazetteer/googleplaces')(fastify);
+  require('./gazetteer/googleplaces')(fastify, authToken);
 
   // layer
 
-  require('./layer/cluster')(fastify);
+  require('./layer/cluster')(fastify, authToken);
 
-  require('./layer/extent')(fastify);
+  require('./layer/extent')(fastify, authToken);
 
-  require('./layer/geojson')(fastify);
+  require('./layer/geojson')(fastify, authToken);
 
-  require('./layer/grid')(fastify);  
+  require('./layer/grid')(fastify, authToken);  
 
-  require('./layer/mvt')(fastify);
+  require('./layer/mvt')(fastify, authToken);
 
-  require('./layer/table')(fastify);
+  require('./layer/table')(fastify, authToken);
 
   // location
 
-  require('./location/field_range')(fastify);
+  require('./location/field_range')(fastify, authToken);
 
-  require('./location/table')(fastify);
+  require('./location/table')(fastify, authToken);
 
   // location/edit
 
-  require('./location/edit/delete')(fastify);
+  require('./location/edit/delete')(fastify, authToken);
 
-  require('./location/edit/image_delete')(fastify);
+  require('./location/edit/image_delete')(fastify, authToken);
 
-  require('./location/edit/image_upload')(fastify);
+  require('./location/edit/image_upload')(fastify, authToken);
 
-  require('./location/edit/isoline_mapbox')(fastify);
+  require('./location/edit/isoline_mapbox')(fastify, authToken);
 
-  require('./location/edit/isoline_here')(fastify);
+  require('./location/edit/isoline_here')(fastify, authToken);
 
-  require('./location/edit/draw')(fastify);
+  require('./location/edit/draw')(fastify, authToken);
 
-  require('./location/edit/update')(fastify);
+  require('./location/edit/update')(fastify, authToken);
 
-  require('./location/edit/setnull')(fastify);
+  require('./location/edit/setnull')(fastify, authToken);
 
   // location/select
 
-  require('./location/select/cluster')(fastify);
+  require('./location/select/cluster')(fastify, authToken);
 
-  require('./location/select/id')(fastify);
+  require('./location/select/id')(fastify, authToken);
 
-  require('./location/select/latlng_intersect')(fastify);
+  require('./location/select/latlng_intersect')(fastify, authToken);
 
-  require('./location/select/latlng_nnearest')(fastify);
+  require('./location/select/latlng_nnearest')(fastify, authToken);
 
-  require('./location/select/latlng_contains')(fastify);
+  require('./location/select/latlng_contains')(fastify, authToken);
 
-  require('./location/select/aggregate')(fastify);
+  require('./location/select/aggregate')(fastify, authToken);
 
 };

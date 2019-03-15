@@ -1,11 +1,11 @@
-module.exports = fastify => {
+module.exports = (fastify, authToken) => {
 
-  require('./admin').route(fastify);
+  require('./admin').route(fastify, authToken);
 
-  require('./admin_json').route(fastify);
+  require('./admin_json').route(fastify, authToken);
 
-  require('./get')(fastify);
+  require('./get')(fastify, authToken);
 
-  require('./load')(fastify);
+  require('./load')(fastify, authToken);
 
 };
