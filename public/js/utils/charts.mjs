@@ -12,6 +12,9 @@ export default (group) => {
 
   const canvas = createElement({
     tag: 'canvas',
+    options: {
+      height: group.chart.height || undefined
+    },
     appendTo: graph
   });
 
@@ -102,7 +105,8 @@ export default (group) => {
       },
       tooltips: {
         mode: 'index',
-        position: 'average',
+        xAlign: group.chart.xAlign || null,
+        yAlign: group.chart.yAlign || null,
         //intersect: false,
         callbacks: {
           title: () =>  ''//,
