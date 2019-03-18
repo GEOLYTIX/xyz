@@ -45,7 +45,7 @@
     padding: 5mm;
 }
 
-#xyz_legends {
+/*#xyz_legends {
   grid-column: 2;
   grid-row: 2;
 }
@@ -59,7 +59,7 @@
   grid-column: 2;
   grid-row: 1;
   height: 300px;
-}
+}*/
 
 #xyz_table1 {
   grid-column: 1;

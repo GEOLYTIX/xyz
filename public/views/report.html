@@ -15,30 +15,84 @@
 
 <body data-viewmode="report" data-nanoid={{:nanoid}} data-token={{:token}}>
 
-    <div class="page">
-        <h3>Shepherd Neame Site Report</h3>
-        <div class="report1">
-            <div id="xyz_legends"></div>
-            <div id="xyz_location"></div>
+    <template id="map_full_screen">
+        <style>
+            #xyz_legends {
+                width: 20%;
+            }
+            #xyz_map {
+                height: 100%;
+                width: 80%;
+                float: right;
+            }
+        </style>
+        <div class="page">
             <div id="xyz_map"></div>
-            <!--<div id="xyz_table1"></div>-->
+            <div id="xyz_legends"></div>
         </div>
-    </div>
+    </template>
 
-    <div class="page">
-        <div class="report2">
-            <div id="xyz_table1"></div>
-            <div id="xyz_table4"></div>
-           <!-- <div id="xyz_table3"></div>-->
-            <div id="xyz_table2"></div>
+    <template id="map_location">
+        <style>
+            #xyz_legends {
+                width: 20%;
+            }
+            #xyz_location {
+                width: 20%;
+            }
+            #xyz_map {
+                height: 100%;
+                width: 80%;
+                float: right;
+            }
+        </style>
+        <div class="page">
+            <div id="xyz_map"></div>
+            <div id="xyz_location"></div>
+            <div id="xyz_legends"></div>
         </div>
-    </div>
+    </template>
 
-    <div class="page">
-        <div class="report3">
-        <div id="xyz_table3"></div>
+    <template id="shneame">
+        <style>
+            #xyz_legends {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            #xyz_location {
+                grid-column: 1;
+                grid-row: 1/5;
+            }
+            #xyz_map { 
+                grid-column: 2;
+                grid-row: 1;
+                height: 300px;
+            }
+        </style>
+        <div class="page">
+            <h3>Shepherd Neame Site Report</h3>
+            <div class="report1">
+                 <div id="xyz_legends"></div>
+                <div id="xyz_location"></div>
+                <div id="xyz_map"></div>
+            </div>
         </div>
-    </div>
+
+        <div class="page">
+            <div class="report2">
+                <div id="xyz_table1"></div>
+                <div id="xyz_table4"></div>
+                <div id="xyz_table2"></div>
+            </div>
+        </div>
+
+        <div class="page">
+            <div class="report3">
+                <div id="xyz_table3"></div>
+            </div>
+        </div>
+    </template>
 
 </body>
 

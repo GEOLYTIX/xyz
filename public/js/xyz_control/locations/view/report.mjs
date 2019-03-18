@@ -1,5 +1,7 @@
 export default _xyz => entry => {
 
+  let template = entry.report ? (entry.report.template ? entry.report.template : 'map') : 'map'; 
+
   entry.row.classList.add('tr_report');
 
   entry.row.appendChild(
@@ -8,7 +10,7 @@ export default _xyz => entry => {
       <a
         style="color: #090;"
         target="_blank"
-        href="${_xyz.host + '/report?layer=' + entry.location.layer  + '&id=' + entry.location.id + '&locale=' + _xyz.workspace.locale.key + '&token=' + _xyz.token}"
+        href="${_xyz.host + '/report?layer=' + entry.location.layer  + '&id=' + entry.location.id + '&locale=' + _xyz.workspace.locale.key + '&token=' + _xyz.token + '&template=' + template}"
         >Site Report`
   );
 
