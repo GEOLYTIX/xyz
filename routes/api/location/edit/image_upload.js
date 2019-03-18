@@ -1,9 +1,9 @@
-module.exports = (fastify, authToken) => {
+module.exports = fastify => {
   fastify.route({
     method: 'POST',
     url: '/api/location/edit/images/upload',
     preHandler: fastify.auth([
-      (req, res, done)=>authToken(req, res, done, { lv: global.access, API: true })
+      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: true })
     ]),
     handler: (req, res) => {
 

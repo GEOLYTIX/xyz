@@ -1,10 +1,10 @@
-module.exports = (fastify, authToken) => {
+module.exports = fastify => {
 
   fastify.route({
     method: 'GET',
     url: '/api/layer/table',
     preHandler: fastify.auth([
-      (req, res, done)=>authToken(req, res, done, { lv: global.access, API: true })
+      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: true })
     ]),
     handler: async (req, res) => {
 

@@ -9,13 +9,13 @@ const jsr = require('jsrender');
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
 
-function route(fastify, authToken) {
+function route(fastify) {
 
   fastify.route({
     method: 'GET',
     url: '/',
     preHandler: fastify.auth([
-      (req, res, done)=>authToken(req, res, done, { lv: global.access, API: false })
+      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: false })
     ]),
     handler: view
   });

@@ -88,6 +88,7 @@ function startFastify(){
       prefix: (process.env.DIR || '') + '/'
     })
     .register(require('fastify-auth'))
+    .decorate('authToken', require(global.appRoot +'/mod/authToken')(fastify))
     .register(require('fastify-jwt'), {
       secret: process.env.SECRET || 'ChinaCatSunflower'
     })

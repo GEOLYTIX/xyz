@@ -1,19 +1,17 @@
 module.exports = fastify => {
 
-  const authToken = require(global.appRoot +'/mod/authToken')(fastify);
+  require('./root').route(fastify);
 
-  require('./root').route(fastify, authToken);
+  require('./proxy_request')(fastify);
 
-  require('./proxy_request')(fastify, authToken);
+  require('./api/_api')(fastify);
 
-  require('./api/_api')(fastify, authToken);
+  require('./auth/_auth')(fastify);
 
-  require('./auth/_auth')(fastify, authToken);
-
-  require('./workspace/_workspace')(fastify, authToken);
+  require('./workspace/_workspace')(fastify);
 
   require('./map_leaflet').route(fastify);
 
-  require('./report').route(fastify, authToken);
+  require('./report').route(fastify);
 
 };

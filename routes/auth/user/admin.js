@@ -1,12 +1,12 @@
 module.exports = { route, view };
 
-function route(fastify, authToken) {
+function route(fastify) {
 
   fastify.route({
     method: 'GET',
     url: '/auth/user/admin',
     preHandler: fastify.auth([
-      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: false })
+      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: false })
     ]),
     handler: view
   });
@@ -21,7 +21,7 @@ function route(fastify, authToken) {
     method: 'GET',
     url: '/auth/user/list',
     preHandler: fastify.auth([
-      (req, res, done)=>authToken(req, res, done, { lv: 'admin', API: false })
+      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: false })
     ]),
     handler: async (req, res) => {
 
