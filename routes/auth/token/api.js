@@ -5,8 +5,8 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/auth/token/api',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done)
     ]),
     handler: view
   });

@@ -14,8 +14,10 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/report',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        public: global.public
+      })
     ]),
     handler: view
   });
@@ -44,8 +46,7 @@ async function view(req, res, token = { access: 'public' }) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: req.query.token || token.signed,
-    script_js: 'views/report.js'
+    token: req.query.token || token.signed
   }));
 
 };

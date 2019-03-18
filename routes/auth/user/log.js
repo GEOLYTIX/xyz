@@ -3,8 +3,10 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/auth/user/log',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: true })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        admin: true
+      })
     ]),
     handler: async (req, res) => {
 

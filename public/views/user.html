@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head data-dir="{{:dir}}">
+    <title>XYZ | User Administration</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{:dir}}/tabulator/tabulator.css">
+    <script src="{{:dir}}/tabulator/tabulator.js"></script>
+
+    <style>
+        @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+        body {
+            margin: 40px;
+            padding: 0;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        .material-icons {
+            font-size: 40px !important;
+            -moz-user-select: -moz-none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+    
+</head>
+
+<body data-token={{:token}}>
+
+    <h1>Account admin</h1>
+
+    <div id="userTable"></div>
+
+</body>
+
+<script src="{{:dir}}/views/user.js"></script>
+
+</html>

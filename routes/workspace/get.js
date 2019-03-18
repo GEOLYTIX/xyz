@@ -19,8 +19,10 @@ module.exports = fastify => {
         }
       }
     },
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        public: global.public
+      })
     ]),
     handler: (req, res) => {
 

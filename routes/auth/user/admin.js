@@ -5,8 +5,10 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/auth/user/admin',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        admin: true
+      })
     ]),
     handler: view
   });
@@ -14,14 +16,17 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/auth/user/admin',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/auth/login')
+      .post(req, res, fastify, { admin: true })
   });
 
   fastify.route({
     method: 'GET',
     url: '/auth/user/list',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        admin: true
+      })
     ]),
     handler: async (req, res) => {
 
@@ -52,7 +57,7 @@ function route(fastify) {
 async function view(req, res, token) {
 
   const template = require('jsrender')
-    .templates('./public/views/user_admin.html')
+    .templates('./public/views/user.html')
     .render({
       dir: global.dir,
       token: token.signed

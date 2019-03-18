@@ -8,7 +8,9 @@ export default _xyz => {
 
   async function fetchWS() { 
 
-    const promise = await fetch(_xyz.host + '/workspace/get?token=' + _xyz.token);
+    const promise = await fetch(_xyz.host + '/workspace/get?' + _xyz.utils.paramString({
+      token: _xyz.token
+    }));
 
     // Assign workspace.
     const workspace = await promise.json();
@@ -28,7 +30,9 @@ export default _xyz => {
     // XHR to retrieve workspace from host backend.
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', _xyz.host + '/workspace/get?token=' + _xyz.token);
+    xhr.open('GET', _xyz.host + '/workspace/get?' + _xyz.utils.paramString({
+      token: _xyz.token
+    }));
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = e => {

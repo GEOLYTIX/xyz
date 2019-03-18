@@ -5,8 +5,10 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/auth/user/block/:token',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: 'admin', API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        admin: true
+      })
     ]),
     handler: view
   });
@@ -14,7 +16,10 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/auth/user/block/:token',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/auth/login')
+      .post(req, res, fastify, {
+        admin: true
+      })
   });
 
 };

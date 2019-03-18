@@ -14,8 +14,10 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: false })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        public: global.public
+      })
     ]),
     handler: view
   });

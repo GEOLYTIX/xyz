@@ -43,7 +43,6 @@ async function view(req, res, token = { access: 'public' }) {
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: token.signed,
-    script_js: 'views/map_leaflet.js'
   }));
 
 }

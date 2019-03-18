@@ -16,7 +16,7 @@ function route(fastify) {
 
 }
 
-async function post(req, res, fastify) {
+async function post(req, res, fastify, access) {
 
   if (global.captcha && global.captcha[1]) {
 
@@ -51,6 +51,10 @@ async function post(req, res, fastify) {
   // Redirect back to login (get) with error msg if user is not found.
   if (!user) return res.redirect(global.dir + '/login?msg=fail');
 
+  if (access && access.admin && !user.admin) return res.redirect(global.dir + '/login?msg=fail');
+
+  if (access && access.editor && !user.editor) return res.redirect(global.dir + '/login?msg=fail');
+
   // Redirect back to login (get) with error msg if user is not valid.
   if (!user.verified || !user.approved) {
 
@@ -73,7 +77,6 @@ async function post(req, res, fastify) {
     // Create token with 8 hour expiry.
     const token = {
       email: user.email,
-      access: user.admin ? 'admin' : 'private',
       admin: user.admin,
       editor: user.editor,
       roles: user.roles
@@ -98,9 +101,6 @@ async function post(req, res, fastify) {
 
     // Block user.
     if(/\/auth\/user\/block/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/block').view(req, res, token);
-
-    // Return workspace admin json view.
-    if(/\/workspace\/admin\/json/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin_json').view(req, res, token);
 
     // Return workspace admin view.
     if(/\/workspace\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin').view(req, res, token);

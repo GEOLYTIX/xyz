@@ -2,7 +2,22 @@ const xhr = new XMLHttpRequest();
 
 xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + document.body.dataset.token);
 
-xhr.onload = e => init(JSON.parse(e.target.response));
+xhr.responseType = 'json';
+
+// xhr.onload = e => init(JSON.parse(e.target.response));
+
+xhr.onload = e => {
+
+  const codeMirror = CodeMirror(document.body, {
+    value: JSON.stringify(e.target.response, null, '  '),
+    lineNumbers: true,
+    mode: 'application/json',
+    gutters: ['CodeMirror-lint-markers'],
+    lint: true,
+    lineWrapping: true
+  });
+
+};
 
 xhr.send();
 

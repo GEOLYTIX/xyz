@@ -11,9 +11,9 @@ if (document.body.dataset.logrocket) {
 // use leaflet map control
 import _xyz from './xyz_control/index.mjs';
 
-import mobile from './views/mobile.mjs';
+import mobile from '../views/mobile.mjs';
 
-import desktop from './views/desktop.mjs';
+import desktop from '../views/desktop.mjs';
 
 import hooks from './hooks.mjs';
 

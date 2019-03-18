@@ -2,8 +2,10 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/images/delete',
-    preHandler: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, { lv: global.access, API: true })
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        public: global.public
+      })
     ]),
     handler: (req, res) => {
 
