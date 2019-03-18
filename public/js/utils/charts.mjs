@@ -102,6 +102,7 @@ export default (group) => {
       },
       tooltips: {
         mode: 'index',
+        position: 'average',
         //intersect: false,
         callbacks: {
           title: () =>  ''//,
