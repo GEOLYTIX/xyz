@@ -14,53 +14,66 @@ _xyz({
 
 function Report(_xyz) {
 
+  const layer = _xyz.layers.list[report_params.layer];
+
+  const template = document.getElementById(report_params.template);
+
+  let templateContent = template.content;
+
+  document.body.appendChild(templateContent.cloneNode(true));
+
   _xyz.mapview.create({
     scrollWheelZoom: true,
     target: document.getElementById('xyz_map')
   });
 
-  _xyz.layers.list[report_params.layer].show();
+  layer.show();
 
   _xyz.layers.list['pubs'].style.setLegend(document.getElementById('xyz_legends'));
 
-  _xyz.locations.select(
-    //params
-    {
-      locale: report_params.locale,
-      dbs: 'XYZ',
-      layer: report_params.layer,
-      table: 'shepherd_neame.sites',
-      id: report_params.id,
-    },
-    //callback
-    location=>{
-      location.draw({
-        pane: report_params.layer,
-        color: '#090',
-        stroke: true,
-        fill: true,
-        fillOpacity: 0,
-        icon: {
-          url: _xyz.utils.svg_symbols({
-            type: 'markerColor',
-            style: {
-              colorMarker: '#090',
-              colorDot: '#cf9'
-            }
-          }),
-          anchor: [20,40],
-          size: 40
-        }
-      });
-      location.flyTo();
-      document.getElementById('xyz_location').appendChild(location.view.node);
-      let chxs = document.querySelectorAll('.locationview .checkbox');
-      for(let i = 0; i < chxs.length; i++){
-        chxs[i].parentNode.style.display = 'none';
+  // check if location is selected
+  let location_container = document.getElementById('xyz_location');
 
+  if(location_container){
+    _xyz.locations.select(
+    //params
+      {
+        locale: report_params.locale,
+        dbs: 'XYZ',
+        layer: report_params.layer,
+        table: layer.table,
+        id: report_params.id,
+      },
+      //callback
+      location=>{
+        location.draw({
+          pane: report_params.layer,
+          color: '#090',
+          stroke: true,
+          fill: true,
+          fillOpacity: 0,
+          icon: {
+            url: _xyz.utils.svg_symbols({
+              type: 'markerColor',
+              style: {
+                colorMarker: '#090',
+                colorDot: '#cf9'
+              }
+            }),
+            anchor: [20,40],
+            size: 40
+          }
+        });
+        location.flyTo();
+        location_container.appendChild(location.view.node);
+        let chxs = document.querySelectorAll('.locationview .checkbox');
+        for(let i = 0; i < chxs.length; i++){
+          chxs[i].parentNode.style.display = 'none';
+
+        }
       }
-    }
-  );
+    );
+  }
 
   //_xyz.layers.list[report_params.layer].style.setLegend(document.getElementById('xyz_location'));
 
