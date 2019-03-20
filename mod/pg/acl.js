@@ -45,7 +45,8 @@ module.exports = async () => {
     password: 'text',
     verified: 'boolean',
     approved: 'boolean',
-    admin: 'boolean',
+    admin_user: 'boolean',
+    admin_workspace: 'boolean',
     verificationtoken: 'text',
     approvaltoken: 'text',
     failedattempts: 'integer',
@@ -71,8 +72,8 @@ module.exports = async () => {
 	    password text not null,
 	    verified boolean default false,
 	    approved boolean default false,
-      admin boolean default false,
-      editor boolean default false,
+      admin_user boolean default false,
+      admin_workspace boolean default false,
 	    verificationtoken text,
 	    approvaltoken text,
 	    failedattempts integer default 0,
@@ -84,13 +85,14 @@ module.exports = async () => {
       blocked boolean default false
     );
     
-    INSERT INTO acl_schema.acl_table (email, password, verified, approved, admin)
+    INSERT INTO acl_schema.acl_table (email, password, verified, approved, admin_user, admin_workspace)
     SELECT
       'admin@geolytix.xyz' AS email,
       '${password}' AS password,
       true AS verified,
       true AS approved,
-      true AS admin;
+      true AS admin_user
+      true AS admin_workspace;
     `);
 
     console.log('A new ACL has been created');  

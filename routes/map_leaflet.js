@@ -23,7 +23,7 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/map/leaflet',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/login').post(req, res, fastify)
   });
 
 };

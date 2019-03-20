@@ -12,7 +12,7 @@ module.exports = fastify => (req, res, done, access) => {
     if (access.API) return res.code(401).send('Invalid token');
 
     // Redirect to login with request URL as redirect parameter
-    return require(global.appRoot + '/routes/auth/login').view(req, res);
+    return require(global.appRoot + '/routes/login').view(req, res);
   }
 
   // Verify token (checks token expiry)
@@ -32,7 +32,7 @@ module.exports = fastify => (req, res, done, access) => {
           SELECT * FROM acl_schema.acl_table
           WHERE lower(email) = lower($1);`, [token.email]);
     
-      if (rows.err) return require(global.appRoot + '/routes/auth/login').view(req, res);
+      if (rows.err) return require(global.appRoot + '/routes/login').view(req, res);
     
       const user = rows[0];
     
@@ -49,15 +49,15 @@ module.exports = fastify => (req, res, done, access) => {
     }
 
     // Continue if neither admin nor editor previliges are required.
-    if (!access.admin && !access.editor) return done();
+    if (!access.admin_user && !access.admin_workspace) return done();
 
-    // Check admin privileges.
-    if (access.admin && token.admin) return done();
+    // Check admin_user privileges.
+    if (access.admin_user && token.admin_user) return done();
 
-    // Check editor privileges.
-    if (access.editor && token.editor) return done();
+    // Check admibn_workspace privileges.
+    if (access.admin_workspace && token.admin_workspace) return done();
     
-    return require(global.appRoot + '/routes/auth/login').view(req, res);
+    return require(global.appRoot + '/routes/login').view(req, res);
 
   });
 

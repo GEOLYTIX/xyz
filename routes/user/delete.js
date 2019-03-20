@@ -2,10 +2,10 @@ module.exports = fastify => {
     
   fastify.route({
     method: 'GET',
-    url: '/auth/user/delete',
+    url: '/user/delete',
     preValidation: fastify.auth([
       (req, res, done) => fastify.authToken(req, res, done, {
-        admin: true
+        admin_user: true
       })
     ]),
     handler: async (req, res) => {

@@ -4,10 +4,10 @@ function route(fastify) {
     
   fastify.route({
     method: 'GET',
-    url: '/auth/user/approve/:token',
+    url: '/user/block/:token',
     preValidation: fastify.auth([
       (req, res, done) => fastify.authToken(req, res, done, {
-        admin: true
+        admin_user: true
       })
     ]),
     handler: view
@@ -15,10 +15,10 @@ function route(fastify) {
 
   fastify.route({
     method: 'POST',
-    url: '/auth/user/approve/:token',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login')
+    url: '/user/block/:token',
+    handler: (req, res) => require(global.appRoot + '/routes/login')
       .post(req, res, fastify, {
-        admin: true
+        admin_user: true
       })
   });
 
@@ -38,7 +38,7 @@ async function view(req, res, token) {
 
   rows = await global.pg.users(`
   UPDATE acl_schema.acl_table SET
-    approved = true,
+    blocked = true,
     approvaltoken = null,
     approved_by = '${token.email}'
   WHERE lower(email) = lower($1);`,
@@ -48,10 +48,10 @@ async function view(req, res, token) {
 
   require(global.appRoot + '/mod/mailer')({
     to: user.email,
-    subject: `This account has been approved on ${global.alias || req.headers.host}${global.dir}`,
-    text: `You are now able to log on to ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}`
+    subject: `This account has been blocked on ${global.alias || req.headers.host}${global.dir}`,
+    text: `You are will no longer be able to log on to ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}`
   });
 
-  res.send('The account has been approved by you. An email has been sent to the account holder.');
+  res.send('The account has been blocked by you. An email has been sent to the account holder.');
 
 }

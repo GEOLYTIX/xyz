@@ -24,7 +24,7 @@
 
 .CodeMirror-gutters {
   border-right: 1px solid #ddd;
-  background-color: #f7f7f7;
+  /* background-color: #f7f7f7; */
   white-space: nowrap;
 }
 .CodeMirror-linenumbers {}
@@ -173,6 +173,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #a22;}
 .CodeMirror-sizer {
   position: relative;
   border-right: 30px solid transparent;
+  /* box-shadow: inset 2px 0 4px -4px #777; */
 }
 
 /* The fake, visible scrollbars. Used to force redraw during scrolling

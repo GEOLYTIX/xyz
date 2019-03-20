@@ -67,7 +67,7 @@ module.exports = fastify => {
           to: user.email,
           subject: `Please verify your password reset for ${global.alias || req.headers.host}${global.dir}`,
           text: 'A new password has been set for this account. \n \n'
-                + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/verify/${verificationtoken} \n \n`
+                + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/user/verify/${verificationtoken} \n \n`
                 + `The reset occured from this remote address ${req.req.connection.remoteAddress} \n \n`
                 + 'This wasn\'t you? Please let your manager know. \n \n'
         });
@@ -90,7 +90,7 @@ module.exports = fastify => {
         to: email,
         subject: `Please verify your account on ${global.alias || req.headers.host}${global.dir}`,
         text: `A new account for this email address has been registered with ${global.alias || req.headers.host}${global.dir} \n \n`
-                + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/verify/${verificationtoken} \n \n`
+                + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/user/verify/${verificationtoken} \n \n`
                 + 'A site administrator must approve the account before you are able to login. \n \n'
                 + 'You will be notified via email once an adimistrator has approved your account. \n \n'
                 + `The account was registered from this remote address ${req.req.connection.remoteAddress} \n \n`

@@ -2,7 +2,7 @@ const token = document.body.dataset.token;
 
 const xhr = new XMLHttpRequest();
 
-xhr.open('GET', document.head.dataset.dir + '/auth/user/list?token=' + token);
+xhr.open('GET', document.head.dataset.dir + '/user/list?token=' + token);
 
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.responseType = 'json';
@@ -37,7 +37,7 @@ xhr.onload = e => {
           cellClick: cellToggle,
         },
         {
-          field: 'admin',
+          field: 'admin_user',
           align: 'center',
           headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
           titleFormatter: ()=> '<i class="material-icons">supervisor_account</i>',
@@ -45,9 +45,9 @@ xhr.onload = e => {
           cellClick: cellToggle,
         },
         {
-          field: 'editor',
+          field: 'admin_workspace',
           align: 'center',
-          headerTooltip: 'The account is an editor account which can modify the workspace configuration.',
+          headerTooltip: 'The account has priviliges to modify the workspace.',
           titleFormatter: ()=> '<i class="material-icons">settings</i>',
           formatter: 'tickCross',
           cellClick: cellToggle,
@@ -117,7 +117,7 @@ function cellToggle(e, cell) {
   xhr.open(
     'GET',
     document.head.dataset.dir + 
-    '/auth/user/update' + 
+    '/user/update' + 
     '?email=' + user.email +
     '&role=' + col.getField() +
     '&chk=' + !cell.getValue() +
@@ -141,7 +141,7 @@ function getAccessLog(e, cell) {
   xhr.open(
     'GET',
     document.head.dataset.dir + 
-    '/auth/user/log' + 
+    '/user/log' + 
     '?email=' + user.email +
     '&token=' + token);
 
@@ -167,7 +167,7 @@ function rowDelete(e, cell) {
     xhr.open(
       'GET',
       document.head.dataset.dir +
-      '/auth/user/delete?' +
+      '/user/delete?' +
       'email=' + user.email +
       '&token=' + token);
 

@@ -51,9 +51,9 @@ async function post(req, res, fastify, access) {
   // Redirect back to login (get) with error msg if user is not found.
   if (!user) return res.redirect(global.dir + '/login?msg=fail');
 
-  if (access && access.admin && !user.admin) return res.redirect(global.dir + '/login?msg=fail');
+  if (access && access.admin_user && !user.admin_user) return res.redirect(global.dir + '/login?msg=fail');
 
-  if (access && access.editor && !user.editor) return res.redirect(global.dir + '/login?msg=fail');
+  if (access && access.admin_workspace && !user.admin_workspace) return res.redirect(global.dir + '/login?msg=fail');
 
   // Redirect back to login (get) with error msg if user is not valid.
   if (!user.verified || !user.approved) {
@@ -77,8 +77,8 @@ async function post(req, res, fastify, access) {
     // Create token with 8 hour expiry.
     const token = {
       email: user.email,
-      admin: user.admin,
-      editor: user.editor,
+      admin_user: user.admin_user,
+      admin_workspace: user.admin_workspace,
       roles: user.roles
     };
     
@@ -91,16 +91,16 @@ async function post(req, res, fastify, access) {
     if(/\/report/.test(req.headers.referer)) return require(global.appRoot + '/routes/report').view(req, res, token);
 
     // Return API key.
-    if(/\/auth\/token\/api/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/token/api').view(req, res, token, fastify);
+    if(/\/token/.test(req.headers.referer)) return require(global.appRoot + '/routes/token/api').view(req, res, token, fastify);
 
     // Return user admin view.
-    if(/\/auth\/user\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/admin').view(req, res, token);
+    if(/\/user\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/user/admin').view(req, res, token);
 
     // Approve user.
-    if(/\/auth\/user\/approve/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/approve').view(req, res, token);
+    if(/\/user\/approve/.test(req.headers.referer)) return require(global.appRoot + '/routes/user/approve').view(req, res, token);
 
     // Block user.
-    if(/\/auth\/user\/block/.test(req.headers.referer)) return require(global.appRoot + '/routes/auth/user/block').view(req, res, token);
+    if(/\/user\/block/.test(req.headers.referer)) return require(global.appRoot + '/routes/user/block').view(req, res, token);
 
     // Return workspace admin view.
     if(/\/workspace\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin').view(req, res, token);
@@ -143,7 +143,7 @@ async function post(req, res, fastify, access) {
         subject: `Too many failed login attempts occured on ${global.alias || req.headers.host}${global.dir}`,
         text: `${global.failed_attempts} failed login attempts have been recorded on this account. \n \n`
               + 'This account has now been locked until verified. \n \n'
-              + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/auth/user/verify/${verificationtoken} \n \n`
+              + `Please verify that you are the account holder: ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}/user/verify/${verificationtoken} \n \n`
               + 'Verifying the account will reset the failed login attempts. \n \n'
               + `The failed attempt occured from this remote address ${req.req.connection.remoteAddress} \n \n`
               + 'This wasn\'t you? Please let your manager know. \n \n'

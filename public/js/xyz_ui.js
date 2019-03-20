@@ -2,10 +2,23 @@ import LogRocket from 'logrocket';
 
 if (document.body.dataset.logrocket) {
 
-  LogRocket.init(document.body.dataset.logrocket);
+  const btnLogRocket = document.getElementById('btnLogRocket');
 
-  LogRocket.identify(document.body.dataset.user);
+  let logging = false;
 
+  btnLogRocket.onclick = ()=>{
+
+    if (!logging) {
+
+      LogRocket.init(document.body.dataset.logrocket);
+
+      LogRocket.identify(document.body.dataset.user);
+
+    }
+
+    logging = true;
+
+  };
 }
 
 // use leaflet map control

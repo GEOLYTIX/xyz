@@ -25,7 +25,7 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/login').post(req, res, fastify)
   });
 
 };
@@ -45,19 +45,20 @@ async function view(req, res, token = { access: 'public' }) {
   res.type('text/html').send(tmpl.render({
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
-    user: token.email || 'anon',
+    user: token.email || '""',
     nanoid: nanoid(6),
     token: req.query.token || token.signed,
-    log: process.env.LOG_LEVEL ? 'true' : 'false',
+    log: process.env.LOG_LEVEL || '""',
     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
     hrefDocumentation: config.documentation ? config.documentation : '',
     btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
     btnLogin_style: token.email ? 'face' : 'lock_open',
     btnLogin_path: token.email ? '' : '/login',
-    btnLogin_text: token.email ? token.email : 'anonymous (public)',
-    btnAdmin: token.admin ? '' : 'style="display: none;"',
-    btnEditor: token.editor ? '' : 'style="display: none;"',
+    btnLogin_text: token.email || 'anonymous (public)',
+    btnAdmin: token.admin_user ? '' : 'style="display: none;"',
+    btnEditor: token.admin_workspace ? '' : 'style="display: none;"',
     logrocket: global.logrocket || '""',
+    btnLogRocket: global.logrocket ? '' : 'style="display: none;"',
   }));
 
 };

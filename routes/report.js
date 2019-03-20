@@ -25,7 +25,7 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/report',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/login').post(req, res, fastify)
   });
 
 };

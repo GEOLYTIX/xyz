@@ -4,10 +4,10 @@ function route(fastify) {
 
   fastify.route({
     method: 'GET',
-    url: '/workspace/admin',
+    url: '/user/admin',
     preValidation: fastify.auth([
       (req, res, done) => fastify.authToken(req, res, done, {
-        admin_workspace: true
+        admin_user: true
       })
     ]),
     handler: view
@@ -15,19 +15,24 @@ function route(fastify) {
 
   fastify.route({
     method: 'POST',
-    url: '/workspace/admin',
+    url: '/user/admin',
     handler: (req, res) => require(global.appRoot + '/routes/login')
-      .post(req, res, fastify, { admin_workspace: true })
+      .post(req, res, fastify, { admin_user: true })
   });
 
 };
 
 async function view(req, res, token) {
 
-  // Render and send admin template with 'tree' as view mode.
-  res.type('text/html').send(require('jsrender').templates('./public/views/workspace.html').render({
-    dir: global.dir,
-    token: token.signed
-  }));
+  const template = require('jsrender')
+    .templates('./public/views/user.html')
+    .render({
+      dir: global.dir,
+      token: token.signed
+    });
+
+  res
+    .type('text/html')
+    .send(template);
 
 }
