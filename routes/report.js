@@ -28,8 +28,6 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  // console.log(req.query.token);
-
   const config = global.workspace[token.access].config;
 
   // Check whether request comes from a mobile platform and set template.
@@ -37,12 +35,15 @@ async function view(req, res, token = { access: 'public' }) {
 
   const tmpl = jsr.templates('./public/views/report.html');
 
+  let html = await require('fs').readFileSync(`${global.appRoot}/public/views/report/${req.query.template}.html`, 'utf8');
+
   // Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: req.query.token || token.signed,
+    template: html || null,
     script_js: 'views/report.js'
   }));
 

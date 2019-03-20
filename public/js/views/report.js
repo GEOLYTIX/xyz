@@ -15,23 +15,54 @@ _xyz({
 function Report(_xyz) {
 
   const layer = _xyz.layers.list[report_params.layer];
-
+  
+  // Get template
   const template = document.getElementById(report_params.template);
 
   let templateContent = template.content;
 
   document.body.appendChild(templateContent.cloneNode(true));
 
+  // Make map
   _xyz.mapview.create({
     scrollWheelZoom: true,
     target: document.getElementById('xyz_map')
   });
 
-  layer.show();
+  // Add legends for displayed layers if requested
+  Object.values(_xyz.layers.list).map(layer => {
 
-  _xyz.layers.list['pubs'].style.setLegend(document.getElementById('xyz_legends'));
+    if(layer.display && layer.table && layer.style && layer.style.theme){
 
-  // check if location is selected
+      let legends_container = document.getElementById('xyz_legends');
+
+      if(legends_container) {
+
+        _xyz.utils.createElement({
+          tag: 'div',
+          options: {
+            textContent: layer.name
+          },
+          appendTo: legends_container
+        });
+
+        _xyz.utils.createElement({
+          tag: 'small',
+          options: {
+            textContent: layer.style.theme.label || ''
+          },
+          appendTo: legends_container
+        });
+
+      }
+
+      _xyz.layers.list[layer.key].style.setLegend(document.getElementById('xyz_legends'));
+
+    }
+  });
+
+
+  // check if location is requested
   let location_container = document.getElementById('xyz_location');
 
   if(location_container){
@@ -71,8 +102,7 @@ function Report(_xyz) {
           chxs[i].parentNode.style.display = 'none';
 
         }
-      }
-    );
+      });
   }
 
   //_xyz.layers.list[report_params.layer].style.setLegend(document.getElementById('xyz_location'));
