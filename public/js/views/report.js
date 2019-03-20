@@ -30,9 +30,12 @@ function Report(_xyz) {
   });
 
   // Add legends for displayed layers if requested
+  console.log(_xyz.layers.list);
+  const current_layers = report_params.layers.split(',');
+
   Object.values(_xyz.layers.list).map(layer => {
 
-    if(layer.display && layer.table && layer.style && layer.style.theme){
+    if(current_layers.includes(layer.key) && layer.table && layer.style && layer.style.theme){
 
       let legends_container = document.getElementById('xyz_legends');
 
