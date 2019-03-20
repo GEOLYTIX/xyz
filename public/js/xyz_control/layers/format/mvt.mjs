@@ -116,6 +116,9 @@ export default (_xyz, layer) => () => {
     // Graduated theme.
     if (theme.type === 'graduated') {
 
+      theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
+  
+
       theme.cat_style = {};
 
       // Iterate through cat array.

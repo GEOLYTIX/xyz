@@ -60,6 +60,7 @@ export default (_xyz, layer) => {
       layer.loaded = false;
 
       applyTheme(layer);
+      layer.get();
       
     }
   });
