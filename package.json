@@ -14,11 +14,7 @@
     "lint": "eslint --debug ./",
     "lint:write": "eslint --debug ./ --fix"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+
   "lint-staged": {
     "*.(js|mjs)": [
       "npm run lint:write",

@@ -61,6 +61,8 @@ export default (_xyz, layer) => () => {
   // Process XHR onload.
   layer.xhr.onload = e => {
 
+    delete layer.xhr;
+
     if (layer.loader) layer.loader.style.display = 'none';
 
     // Check for existing layer and remove from map.

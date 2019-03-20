@@ -83,6 +83,8 @@ export default _xyz => {
       // Push the layer into the layers hook array.
       if (layer.display) _xyz.hooks.push('layers', layer.key);
 
+      if (!layer.display) layer.remove();
+
       // Method to show layer on map.
       layer_show(_xyz, layer);
 
@@ -101,7 +103,7 @@ export default _xyz => {
       //Add icon to layer header.
       layer_icon(_xyz, layer);
 
-      layer.get();
+      // layer.get();
 
       if (_xyz.log) console.log(layer);
 
