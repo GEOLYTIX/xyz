@@ -42,7 +42,7 @@ async function view(req, res, token = { access: 'public' }) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: token.signed,
+    token: req.query.token || token.signed,
     template: html || null,
     script_js: 'views/report.js'
   }));
