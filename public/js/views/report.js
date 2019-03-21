@@ -34,7 +34,17 @@ function Report(_xyz) {
 
   Object.values(_xyz.layers.list).map(layer => {
 
+    console.log({
+      'name': layer.key,
+      'key': current_layers.includes(layer.key),
+      'table': layer.table,
+      'style': layer.style || 'no style',
+      'theme': layer.style ? (layer.style.theme ? layer.style.theme : 'no theme') : 'no style'
+    });
+
     if(current_layers.includes(layer.key) && layer.table && layer.style && layer.style.theme){
+
+      layer.show();
 
       let legends_container = document.getElementById('xyz_legends');
 
