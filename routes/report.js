@@ -26,9 +26,7 @@ function route(fastify) {
 
 };
 
-async function view(req, res) {
-
-  const token = req.query.token ? fastify.jwt.decode(req.query.token) :  { access: 'public' };
+async function view(req, res, token = { access: 'public' }) {
 
   const config = global.workspace[token.access].config;
 
@@ -44,7 +42,7 @@ async function view(req, res) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: req.query.token || token.signed,
+    token: token.signed,
     template: html || null,
     script_js: 'views/report.js'
   }));
