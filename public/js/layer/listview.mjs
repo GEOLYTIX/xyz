@@ -37,9 +37,9 @@ export default _xyz => {
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
 
-      if (layer_hooks) {
-        layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
-      }
+      const displayOrg = layer.display;
+
+      if (layer_hooks)  layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
       
       // Create new layer group if group does not exist yet.
       if (layer.group && !_xyz.layers.listview.groups[layer.group]) layer_group(_xyz, layer.group);
@@ -103,7 +103,7 @@ export default _xyz => {
       //Add icon to layer header.
       layer_icon(_xyz, layer);
 
-      // layer.get();
+      if (!displayOrg && layer.display) layer.show();
 
       if (_xyz.log) console.log(layer);
 

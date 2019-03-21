@@ -1,28 +1,6 @@
-import LogRocket from 'logrocket';
-
-if (document.body.dataset.logrocket) {
-
-  const btnLogRocket = document.getElementById('btnLogRocket');
-
-  let logging = false;
-
-  btnLogRocket.onclick = ()=>{
-
-    if (!logging) {
-
-      LogRocket.init(document.body.dataset.logrocket);
-
-      LogRocket.identify(document.body.dataset.user);
-
-    }
-
-    logging = true;
-
-  };
-}
-
-// use leaflet map control
 import _xyz from './xyz_control/index.mjs';
+
+import logRocket from './logRocket.mjs';
 
 import mobile from '../views/mobile.mjs';
 
@@ -54,46 +32,27 @@ function init(_xyz) {
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
   if (document.body.dataset.viewmode === 'desktop') desktop(_xyz);
 
-  // Create mapview control.
-  _xyz.mapview.create({
-    target: document.getElementById('Map'),
-    locale: _xyz.hooks.current.locale,
-    view: {
-      lat: _xyz.hooks.current.lat,
-      lng: _xyz.hooks.current.lng,
-      z: _xyz.hooks.current.z
-    },
-    scrollWheelZoom: true,
-    btn: {
-      ZoomIn: document.getElementById('btnZoomIn'),
-      ZoomOut: document.getElementById('btnZoomOut'),
-      Locate: document.getElementById('btnLocate'),
-    }
-  });
-
-  // Create tableview control.
-  _xyz.tableview.create({
-    target: document.getElementById('tableview'),
-    btn: {
-      toggleTableview: document.getElementById('toggleTableview')
-    }
-  });
-
-  // Create locales dropdown (if more than one locale in workspace).
-  locales(_xyz);
+  const btnWorkspace = document.getElementById('btnWorkspace');
+  if (btnWorkspace) btnWorkspace.onclick = () => {
+    _xyz.workspace.admin();
+  };
 
   // Initialize layers.
   _xyz.layers.listview = layerlistview(_xyz);
-  _xyz.layers.listview.init();
 
   // Initialize location listview.
   _xyz.locations.listview = locationlistview(_xyz);
-  _xyz.locations.listview.init();
 
   // Init gazetteer.
   gazetteer(_xyz);
-  _xyz.gazetteer.init();
+
+  // Compose locales load function and locales drop down.
+  locales(_xyz);
 
   if (_xyz.log) console.log(_xyz);
+
+  logRocket(document.body.dataset.logrocket);
+
+  //document.head.appendChild(_xyz.utils.hyperHTML.wire()`<script src="/dev/js/foo.js">`);
 
 }

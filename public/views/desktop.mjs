@@ -11,6 +11,8 @@ export default _xyz => {
     };
   }
 
+  _xyz.desktop.mask = document.getElementById('desktop_mask');
+
   _xyz.desktop.listviews = document.querySelector('.listviews > .scrolly');
 
   // add scrollbar on the left to control container.

@@ -8,6 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
+
+    <link rel="stylesheet" href="{{:dir}}/codemirror/codemirror.css">
+    <script src="{{:dir}}/codemirror/codemirror.js" defer></script>
+    <script src="{{:dir}}/codemirror/javascript.js" defer></script>
+    <script src="{{:dir}}/codemirror/jsonlint.js" defer></script>
+    <script src="{{:dir}}/codemirror/lint.js" defer></script>
+    <script src="{{:dir}}/codemirror/lintjson.js" defer></script>
+
+    <script src="{{:dir}}/js/build/xyz_ui_bundle.js" async></script>
 </head>
 
 <body
@@ -104,14 +113,13 @@ data-token={{:token}}>
             </div>
 
             <div id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
-                <a href="{{:dir}}/workspace/admin" target="_blank">
-                    <i class="material-icons">settings</i>
-                </a>
-            </div>
+                <i class="material-icons">settings</i>
+            </div>            
 
             <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
                 <i class="material-icons">bug_report</i>
             </div>
+
         </div>
 
     </div>
@@ -134,8 +142,32 @@ data-token={{:token}}>
 
     </div>
 
-</body>
+    <div id="workspace" class="workspace" style="display: none;">
 
-<script src="{{:dir}}/js/build/xyz_ui_bundle.js"></script>
+        <div class="btn_column noselect">
+        
+            <button id="btnCloseWS">
+                <i class="material-icons">clear</i>
+            </button>
+        
+            <button id="btnUploadWS">
+                <i class="material-icons">backup</i>
+            </button>
+        
+            <button id="btnFileWS">
+                <i class="material-icons">description</i>
+            </button>
+        
+            <input id="fileInputWS" type="file" accept=".json" style="display: none;">
+        
+        </div>
+
+        <div id="codemirror" class="codemirror"></div>
+
+    </div>
+
+    <div id="desktop_mask"></div>
+
+</body>
 
 </html>

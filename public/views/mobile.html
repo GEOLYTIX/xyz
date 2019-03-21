@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
+
+    <script src="{{:dir}}/js/build/xyz_ui_bundle.js" async></script>
 </head>
 
 <body 
@@ -71,6 +73,10 @@ data-token={{:token}}>
             </a>
         </div>
 
+        <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
+            <i class="material-icons">bug_report</i>
+        </div>
+
     </div>
 
     <div class="spacer_mobile"></div>
@@ -103,7 +109,5 @@ data-token={{:token}}>
     </div>
 
 </body>
-
-<script src="{{:dir}}/js/build/xyz_ui_bundle.js"></script>
 
 </html>

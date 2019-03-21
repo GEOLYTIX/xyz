@@ -87,9 +87,6 @@ async function post(req, res, fastify, access) {
     // Return leaflet map control view.
     if(/\/map\/leaflet/.test(req.headers.referer)) return require(global.appRoot + '/routes/map_leaflet').view(req, res, token);
 
-    // Return leaflet map control view.
-    if(/\/report/.test(req.headers.referer)) return require(global.appRoot + '/routes/report').view(req, res, token);
-
     // Return API key.
     if(/\/token/.test(req.headers.referer)) return require(global.appRoot + '/routes/token/api').view(req, res, token, fastify);
 
@@ -102,8 +99,8 @@ async function post(req, res, fastify, access) {
     // Block user.
     if(/\/user\/block/.test(req.headers.referer)) return require(global.appRoot + '/routes/user/block').view(req, res, token);
 
-    // Return workspace admin view.
-    if(/\/workspace\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/workspace/admin').view(req, res, token);
+    // Return report view.
+    if(/\/report/.test(req.headers.referer)) return require(global.appRoot + '/routes/report').view(req, res, token);
 
     // Return root view.
     require(global.appRoot + '/routes/root').view(req, res, token);

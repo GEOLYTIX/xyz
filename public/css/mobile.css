@@ -1944,6 +1944,24 @@ button {
     box-shadow: 0 3px 3px -3px #000;
     width: 100%; }
 
+.workspace {
+  position: absolute;
+  height: 100%;
+  right: 0;
+  width: calc(100% - 330px);
+  z-index: 1002;
+  background-color: #fff; }
+  .workspace .btn_column {
+    position: fixed;
+    height: 100%;
+    padding: 4px;
+    background-color: #fff;
+    box-shadow: inset 2px 0 4px -4px #777; }
+  .workspace .codemirror {
+    position: absolute;
+    right: 0;
+    width: calc(100% - 50px); }
+
 *,
 *::after,
 *::before {

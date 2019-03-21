@@ -62,7 +62,7 @@ function startFastify(){
     .register(require('fastify-helmet'), {
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ['\'self\'', '*.logrocket.io'],
+          defaultSrc: ['\'self\''],
           baseURI: ['\'self\''],
           objectSrc: ['\'self\''],
           workerSrc: ['\'self\'', 'blob:'],
@@ -70,7 +70,7 @@ function startFastify(){
           formAction: ['\'self\''],
           styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
           fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-          scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', 'cdn.logrocket.io'],
+          scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
           imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'data:']
         },
         setAllHeaders: true
