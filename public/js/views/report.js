@@ -30,7 +30,6 @@ function Report(_xyz) {
   });
 
   // Add legends for displayed layers if requested
-  console.log(_xyz.layers.list);
   const current_layers = report_params.layers.split(',');
 
   Object.values(_xyz.layers.list).map(layer => {
