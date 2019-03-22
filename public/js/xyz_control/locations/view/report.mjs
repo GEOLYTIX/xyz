@@ -2,7 +2,7 @@ export default _xyz => entry => {
 
   let template = entry.report ? (entry.report.template ? entry.report.template : 'map') : 'map'; 
 
-  let name = {'name': (entry.report ? entry.report.name : 'Site Report')};
+  let name = {'name': (entry.report ? (entry.report.name || 'Site Report') : 'Site Report')};
 
   entry.row.classList.add('tr_report');
 
