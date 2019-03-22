@@ -149,15 +149,14 @@ export default _xyz => {
         if (e.target.status !== 200) alert('I am not here. This is not happening.');
 
         // Assign workspace.
-        const workspace = e.target.response;
-
-        // Filter invalid locales
-        _xyz.workspace.locales = filterLocales(workspace.locales);
-       
+        const workspace = e.target.response;     
     
         // Set cleaned json to editor;
         codeMirror.setValue(JSON.stringify(workspace, null, '  '));
         codeMirror.refresh();
+
+        // Filter invalid locales
+        _xyz.workspace.locales = filterLocales(workspace.locales);
 
         const locale = _xyz.hooks.current.locale;
 

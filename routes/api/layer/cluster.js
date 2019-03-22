@@ -39,6 +39,17 @@ module.exports = fastify => {
       // Return 406 if layer is not found in locale.
       if (!layer) return res.code(406).send('Invalid layer.');
 
+
+      // Check layer roles.
+      token.roles = token.roles || [];
+
+      const rolechk = layer.roles && Object.keys(layer.roles).some(
+        role => token.roles.includes(role)
+      );
+
+      if (!rolechk) return res.code(406).send('Insufficient role priviliges.');
+
+
       const table = req.query.table;
 
       // Return 406 if table is not defined as request parameter.
@@ -62,15 +73,13 @@ module.exports = fastify => {
         .some(val => (typeof val === 'string' && global.workspace['admin'].values.indexOf(val) < 0))) {
         return res.code(406).send('Invalid parameter.');
       }
-  
-      const access_filter = layer.access_filter
-        && token.email
-        && layer.access_filter[token.email.toLowerCase()] ?
-        layer.access_filter[token.email] :
-        null;
 
-      Object.assign(filter, access_filter);
-
+      // Apply role filter
+      token.roles.filter(
+        role => layer.roles[role]).forEach(
+        role => Object.assign(filter, layer.roles[role])
+      );
+        
       // SQL filter
       const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
