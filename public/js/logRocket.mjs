@@ -3,14 +3,22 @@ import LogRocket from 'logrocket';
 export default logRocketID => {
 
   if(!logRocketID) return;
- 
-  document.getElementById('btnLogRocket').onclick = e => {
 
-    //console.log(e.target);
+  const btnLogRocket = document.getElementById('btnLogRocket');
+ 
+  btnLogRocket.onclick = () => {
+
+    if (confirm('Start LogRocket session?')) {
+
+      btnLogRocket.classList.add('active');
+
+      btnLogRocket.onclick = null;
   
-    LogRocket.init(logRocketID);
+      LogRocket.init(logRocketID);
   
-    if (document.body.dataset.user) LogRocket.identify(document.body.dataset.user);
+      if (document.body.dataset.user) LogRocket.identify(document.body.dataset.user);
+
+    }
    
   };
 
