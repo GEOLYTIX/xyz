@@ -16,6 +16,7 @@
     /* height: 297mm; */
     margin: 0 auto;
     page-break-after: auto;
+    padding-bottom: 10px;
 }
 
 .page:last-child {
