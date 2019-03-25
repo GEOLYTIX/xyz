@@ -33,28 +33,62 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
 
         if (e.target.status !== 200) return;
 
-        const json = JSON.parse(e.target.response);
-    
         const record = _xyz.locations.listview.getFreeRecord();
 
         if (!record) return;
 
-        record.location = {
+        const json = JSON.parse(e.target.response);
+
+        const location = {
           geometry: JSON.parse(json.geomj),
           infoj: json.infoj,
-          layer: layer.key,
-          marker: _xyz.utils.turf.pointOnFeature(JSON.parse(json.geomj)).geometry.coordinates,
-          style: {
-            color: record.color,
-            letter: record.letter,
-            stroke: true,
-            fill: true,
-            fillOpacity: 0
-          }
+          layer: layer.key
         };
 
-        // Draw the record to the map.
-        record.location.draw();
+        Object.assign(location, _xyz.locations.location());
+
+        location.style = {
+          color: record.color,
+          fillColor: record.color,
+          letter: record.letter,
+          stroke: true,
+          fill: false
+        };
+
+        location.view = location.view(_xyz);
+
+        location.view.update();
+
+        // Draw the location to the map.
+        location.draw();
+
+        location.Marker = _xyz.mapview.draw.geoJSON({
+          json: {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
+            }
+          },
+          pane: 'select_marker',
+          style: {
+            icon: {
+              url: _xyz.utils.svg_symbols({
+                type: 'markerLetter',
+                style: {
+                  letter: record.letter,
+                  color: record.color,
+                }
+              }),
+              size: 40,
+              anchor: [20, 40]
+            }
+          }
+        });
+
+        location.flyTo();
+
+        record.location = location;
 
         // List the record
         _xyz.locations.listview.add(record);

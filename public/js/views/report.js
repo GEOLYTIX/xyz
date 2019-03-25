@@ -14,46 +14,111 @@ _xyz({
 
 function Report(_xyz) {
 
+  const layer = _xyz.layers.list[report_params.layer];
+  
+  // Get template
+  const template = document.getElementById(report_params.template);
+
+  let templateContent = template.content;
+
+  document.body.appendChild(templateContent.cloneNode(true));
+
+  // Make map
   _xyz.mapview.create({
     scrollWheelZoom: true,
     target: document.getElementById('xyz_map')
   });
 
-  _xyz.layers.list[report_params.layer].show();
+  // Add legends for displayed layers if requested
+  const current_layers = report_params.layers.split(',');
 
-  _xyz.locations.select(
+  Object.values(_xyz.layers.list).map(layer => {
+
+    console.log({
+      'name': layer.key,
+      'key': current_layers.includes(layer.key),
+      'table': layer.table,
+      'style': layer.style || 'no style',
+      'theme': layer.style ? (layer.style.theme ? layer.style.theme : 'no theme') : 'no style'
+    });
+
+    if(current_layers.includes(layer.key) && layer.table && layer.style && layer.style.theme){
+
+      layer.show();
+
+      let legends_container = document.getElementById('xyz_legends');
+
+      if(legends_container) {
+
+        _xyz.utils.createElement({
+          tag: 'div',
+          options: {
+            textContent: layer.name
+          },
+          appendTo: legends_container
+        });
+
+        _xyz.utils.createElement({
+          tag: 'small',
+          options: {
+            textContent: layer.style.theme.label || ''
+          },
+          appendTo: legends_container
+        });
+
+      }
+
+      _xyz.layers.list[layer.key].style.setLegend(document.getElementById('xyz_legends'));
+
+    }
+  });
+
+
+  // check if location is requested
+  let location_container = document.getElementById('xyz_location');
+
+  if(location_container){
+    _xyz.locations.select(
     //params
-    {
-      locale: report_params.locale,
-      dbs: 'XYZ',
-      layer: report_params.layer,
-      table: 'shepherd_neame.sites',
-      id: report_params.id,
-    },
-    //callback
-    location=>{
-      location.draw({
-        pane: report_params.layer,
-        color: '#090',
-        stroke: true,
-        fill: true,
-        fillOpacity: 0,
-        icon: {
-          url: _xyz.utils.svg_symbols({
-            type: 'markerColor',
-            style: {
-              colorMarker: '#090',
-              colorDot: '#cf9'
-            }
-          }),
-          anchor: [20,40],
-          size: 40
+      {
+        locale: report_params.locale,
+        dbs: 'XYZ',
+        layer: report_params.layer,
+        table: layer.table,
+        id: report_params.id,
+      },
+      //callback
+      location=>{
+        location.draw({
+          pane: report_params.layer,
+          color: '#090',
+          stroke: true,
+          fill: true,
+          fillOpacity: 0,
+          icon: {
+            url: _xyz.utils.svg_symbols({
+              type: 'markerColor',
+              style: {
+                colorMarker: '#090',
+                colorDot: '#cf9'
+              }
+            }),
+            anchor: [20,40],
+            size: 40
+          }
+        });
+        location.flyTo();
+        location_container.appendChild(location.view.node);
+        let chxs = document.querySelectorAll('.locationview .checkbox');
+        for(let i = 0; i < chxs.length; i++){
+          chxs[i].parentNode.style.display = 'none';
+
         }
       });
-      location.flyTo();
-      document.getElementById('xyz_location').appendChild(location.view.node);
-    }
-  );
+  }
+
+  //_xyz.layers.list[report_params.layer].style.setLegend(document.getElementById('xyz_location'));
+
 
   // _xyz.tableview.locationTable({
   //   title: 'Population Summary',

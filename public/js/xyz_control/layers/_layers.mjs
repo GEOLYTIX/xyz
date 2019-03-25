@@ -112,6 +112,8 @@ export default _xyz => {
 
       layer.style.getLegend = () => {
 
+        if(!layer.style.theme) return;
+
         if (layer.format === 'mvt' && layer.style.theme.type === 'categorized') legend_polyCategorized(_xyz, layer);
 
         if (layer.format === 'mvt' && layer.style.theme.type === 'graduated') legend_polyGraduated(_xyz, layer);

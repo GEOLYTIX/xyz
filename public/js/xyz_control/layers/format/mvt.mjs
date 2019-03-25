@@ -96,6 +96,7 @@ export default (_xyz, layer) => () => {
     })
     .addTo(_xyz.map);
 
+
   function applyLayerStyle(properties) {
 
     let style = Object.assign({}, layer.style.default, layer.selected.includes(properties.id) ? layer.style.selected : {});
@@ -114,6 +115,9 @@ export default (_xyz, layer) => () => {
 
     // Graduated theme.
     if (theme.type === 'graduated') {
+
+      theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
+  
 
       theme.cat_style = {};
 

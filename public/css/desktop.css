@@ -1537,6 +1537,9 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
+  .tabulator-row .tabulator-cell div div {
+    display: block !important;
+    vertical-align: middle; }
 
 .tabulator-row .tabulator-cell:last-of-type {
   border-right: none; }
@@ -1862,6 +1865,8 @@ button {
     .listview .drawer .dashboard .block {
       padding: 5px 0;
       position: relative; }
+      .listview .drawer .dashboard .block input {
+        width: 100%; }
       .listview .drawer .dashboard .block .cancel-btn {
         color: #090;
         font-size: 20px;

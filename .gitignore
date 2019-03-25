@@ -28,6 +28,7 @@ workspaces/coles.json
 workspaces/test.json
 workspaces/brexit.json
 workspaces/mb.json
+workspaces/richersounds.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
