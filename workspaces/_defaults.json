@@ -10,7 +10,7 @@
         "name": "optional",
         "locate": "optional",
         "attribution": {
-            "XYZ #v1.4.0": "https://github.com/GEOLYTIX/xyz/releases/tag/v1.4.0",
+            "XYZ #v1.4.1": "https://github.com/GEOLYTIX/xyz/releases/tag/v1.4.1",
             "Leaflet": "https://leafletjs.com"
         },
         "minZoom": 0,
