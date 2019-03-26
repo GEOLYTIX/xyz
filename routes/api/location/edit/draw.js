@@ -11,14 +11,23 @@ module.exports = fastify => {
 
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
 
-      const locale = global.workspace['admin'].config.locales[req.body.locale];
+      const locale = global.workspace.current.locales[req.body.locale];
 
       // Return 406 if locale is not found in workspace.
       if (!locale) return res.code(406).send('Invalid locale.');
 
       const layer = locale.layers[req.body.layer];
 
-      if (!layer) return res.code(406).send('Layer not found.');
+      if (!layer) return res.code(406).send('Invalid layer.');
+
+
+      // Check layer roles.
+      token.roles = token.roles || [];
+
+      if (!(layer.roles && Object.keys(layer.roles).some(
+        role => token.roles.includes(role)
+      ))) return res.code(406).send('Insufficient role priviliges.');
+            
 
       let
         table = req.body.table,
@@ -28,7 +37,7 @@ module.exports = fastify => {
       
         // Check whether string params are found in the settings to prevent SQL injections.
       if ([table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace['admin'].values.indexOf(val) < 0))) {
+        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
         return res.code(406).send('Invalid parameter.');
       }
       

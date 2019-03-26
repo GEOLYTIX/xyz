@@ -4,6 +4,11 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/workspace/get',
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        public: global.public
+      })
+    ]),
     schema: {
       querystring: {
         token: { type: 'string' }
@@ -19,17 +24,12 @@ module.exports = fastify => {
         }
       }
     },
-    preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
-        public: global.public
-      })
-    ]),
     handler: (req, res) => {
 
       // Decode token from query or use a public access if no token has been provided.
       const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public', roles: [] };
 
-      const locales = JSON.parse(JSON.stringify(global.workspace['admin'].config.locales));
+      const locales = JSON.parse(JSON.stringify(global.workspace.current.locales));
 
       (function objectEval(o, parent, key) {
  

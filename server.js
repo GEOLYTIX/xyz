@@ -89,8 +89,13 @@ function startFastify(){
     })
     .register(require('fastify-auth'))
     .decorate('authToken', require(global.appRoot +'/mod/authToken')(fastify))
+    .decorate('evalParam', require(global.appRoot +'/mod/evalParam')(fastify))
     .register(require('fastify-jwt'), {
       secret: process.env.SECRET || 'ChinaCatSunflower'
+    })
+    .register(require('fastify-swagger'), {
+      routePrefix: global.dir + '/swagger',
+      exposeRoute: true,
     })
     .addContentTypeParser('*', (req, done) => done())
     .register((fastify, opts, next) => {
@@ -106,7 +111,9 @@ function startFastify(){
       process.exit(1);
     }
 
-    console.log(`Serving ${global.workspace.admin.config.title} workspace.`);
+    fastify.swagger();
+
+    console.log(`Serving ${global.workspace.current.title} workspace.`);
   });
   
 }

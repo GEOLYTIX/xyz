@@ -979,11 +979,7 @@
                 "retail_points": {
                     "roles": {
                         "a" : null,
-                        "foo" : {
-                            "retailer": {
-                                "like": "Tesco"
-                            }
-                        }
+                        "foo" : null
                     },
                     "display": true,
                     "name": "Retail Points",

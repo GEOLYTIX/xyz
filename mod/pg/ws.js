@@ -3,9 +3,7 @@ module.exports = async () => {
 
   // Load zero config workspace if workspace is not defined in environment settings.
   if (!process.env.WORKSPACE) {
-    return await require(global.appRoot + '/mod/workspace/load')(
-      await require(global.appRoot + '/mod/workspace/check')({})
-    );
+    return await require(global.appRoot + '/mod/workspace/check')({});
   }
 
   if (process.env.WORKSPACE.split(':')[0] === 'file') {
@@ -58,16 +56,15 @@ module.exports = async () => {
       settings json not null
     );`);
     
-    if (create.err) return await require(global.appRoot + '/mod/workspace/load')(
-      await require(global.appRoot + '/mod/workspace/check')({})
-    );
+    if (create.err) {
+      return await require(global.appRoot + '/mod/workspace/check')({});
+    }
 
   } else if (schema.some(row => (!ws_schema[row.column_name] || ws_schema[row.column_name] !== row.data_type))) {
     console.log('There seems to be a problem with the WS configuration.');
 
-    return await require(global.appRoot + '/mod/workspace/load')(
-      await require(global.appRoot + '/mod/workspace/check')({})
-    );
+    return await require(global.appRoot + '/mod/workspace/check')({});
+
   }
 
   // Get workspace from PostgreSQL.
@@ -92,10 +89,8 @@ module.exports = async () => {
   };
 
   // Check and load workspace.
-  await require(global.appRoot + '/mod/workspace/load')(
-    await require(global.appRoot + '/mod/workspace/check')(
-      await global.pg.ws_get()
-    )
+  await require(global.appRoot + '/mod/workspace/check')(
+    await global.pg.ws_get()
   );
 
 };
@@ -114,8 +109,7 @@ async function getWorkspaceFromFile(file){
 
   // Check and load the workspace from file into memory.
   } finally {
-    await require(global.appRoot + '/mod/workspace/load')(
-      await require(global.appRoot + '/mod/workspace/check')(workspace)
-    );
+    await require(global.appRoot + '/mod/workspace/check')(workspace);
   }
+  
 }

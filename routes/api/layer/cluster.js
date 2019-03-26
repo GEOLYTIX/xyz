@@ -1,10 +1,24 @@
 module.exports = fastify => {
+
   fastify.route({
     method: 'GET',
     url: '/api/layer/cluster',
+    preValidation: fastify.auth([
+      (req, res, done) => fastify.authToken(req, res, done, {
+        public: global.public
+      })
+    ]),
     schema: {
       querystring: {
-        locale: { type: 'string' }
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table']
       },
       response: {
         200: {
@@ -20,47 +34,22 @@ module.exports = fastify => {
         }
       }
     },
-    preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
-        public: global.public
-      })
-    ]),
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+    ],
     handler: async (req, res) => {
-
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace['admin'].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-
-      // Check layer roles.
-      token.roles = token.roles || [];
-
-      const rolechk = layer.roles && Object.keys(layer.roles).some(
-        role => token.roles.includes(role)
-      );
-
-      if (!rolechk) return res.code(406).send('Insufficient role priviliges.');
-
-
-      const table = req.query.table;
-
-      // Return 406 if table is not defined as request parameter.
-      if (!table) return res.code(406).send('Missing table.');
-  
+ 
       let
+        layer = req.params.layer,
+        table = req.query.table,
         geom = layer.geom,
         cat = req.query.cat || null,
         size = req.query.size || 1,
         theme = req.query.theme,
-        filter = req.query.filter && JSON.parse(req.query.filter),
+        filter = req.params.filter,
         kmeans = parseInt(1 / req.query.kmeans),
         dbscan = parseFloat(req.query.dbscan),
         west = parseFloat(req.query.west),
@@ -68,21 +57,19 @@ module.exports = fastify => {
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north);
   
+
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table, cat]
-        .some(val => (typeof val === 'string' && global.workspace['admin'].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
+        .some(val => (typeof val === 'string'
+          && global.workspace.lookupValues.indexOf(val) < 0))) {
+        return res.code(406).send(new Error('Invalid parameter.'));
       }
-
-      // Apply role filter
-      token.roles.filter(
-        role => layer.roles[role]).forEach(
-        role => Object.assign(filter, layer.roles[role])
-      );
         
+
       // SQL filter
       const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
+      
       // // Set log table filter.
       // let qLog = layer.log_table ? `
       // ( SELECT *, ROW_NUMBER() OVER (
@@ -127,7 +114,7 @@ module.exports = fastify => {
   
       let
         count = rows[0].count,
-        xExtent = rows[0].xextent,
+        //xExtent = rows[0].xextent,
         xEnvelope = rows[0].xenvelope;
   
       if (kmeans >= count) kmeans = count;

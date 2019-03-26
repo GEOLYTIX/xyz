@@ -32,7 +32,7 @@ module.exports = fastify => {
           fastify.jwt.decode(req.query.token) : { access: 'public' };
 
         let
-          layer = global.workspace['admin'].config.locales[req.query.locale].layers[req.query.layer],
+          layer = global.workspace.current.locales[req.query.locale].layers[req.query.layer],
           table = req.query.table,
           field = req.query.field,
           qID = layer.qID ? layer.qID : 'id',
@@ -41,7 +41,7 @@ module.exports = fastify => {
 
         // Check whether string params are found in the settings to prevent SQL injections.
         if ([table, qID]
-          .some(val => (typeof val === 'string' && val.length > 0 && global.workspace['admin'].values.indexOf(val) < 0))) {
+          .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
           return res.code(406).send('Invalid parameter.');
         }
 

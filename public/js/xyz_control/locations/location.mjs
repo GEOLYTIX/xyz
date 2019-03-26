@@ -163,7 +163,7 @@ export default _xyz => () => {
       pane: (style && style.pane) || 'select',
       style: style || location.style,
     });
-           
+
   };
 
   function flyTo(){

@@ -16,6 +16,8 @@ function check() {
 
 **Enhacements**
 
+workspace get/set routes
+
 Logrocket
 
 Registration text
@@ -37,3 +39,9 @@ compose load workspace
 desktop mask
 
 composition params
+
+https://github.com/fastify/fastify-swagger
+
+400 / 406 codes
+
+gazetteer filter

@@ -14,7 +14,6 @@
     "lint": "eslint --debug ./",
     "lint:write": "eslint --debug ./ --fix"
   },
-
   "lint-staged": {
     "*.(js|mjs)": [
       "npm run lint:write",
@@ -35,6 +34,7 @@
     "fastify-helmet": "^3.0.0",
     "fastify-jwt": "^0.9.3",
     "fastify-static": "^2.3.4",
+    "fastify-swagger": "^2.3.2",
     "hyperhtml": "^2.25.4",
     "js-datepicker": "^4.0.6",
     "jsrender": "^0.9.91",

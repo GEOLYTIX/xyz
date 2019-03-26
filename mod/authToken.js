@@ -1,9 +1,9 @@
-module.exports = fastify => (req, res, done, access) => {
+module.exports = fastify => (req, res, next, access) => {
 
   if (req.query.token === 'null') console.log(req.req.originalUrl);
 
   // Public access
-  if (access.public) return done();
+  if (access.public) return next();
 
   // No token found.
   if (!req.query.token) {
@@ -45,17 +45,17 @@ module.exports = fastify => (req, res, done, access) => {
         expiresIn: 10
       });
     
-      return done();
+      return next();
     }
 
     // Continue if neither admin nor editor previliges are required.
-    if (!access.admin_user && !access.admin_workspace) return done();
+    if (!access.admin_user && !access.admin_workspace) return next();
 
     // Check admin_user privileges.
-    if (access.admin_user && token.admin_user) return done();
+    if (access.admin_user && token.admin_user) return next();
 
     // Check admibn_workspace privileges.
-    if (access.admin_workspace && token.admin_workspace) return done();
+    if (access.admin_workspace && token.admin_workspace) return next();
     
     return require(global.appRoot + '/routes/login').view(req, res);
 

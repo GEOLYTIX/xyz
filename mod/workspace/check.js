@@ -2,10 +2,7 @@ module.exports = async workspace => {
   
   // Set global workspace.
   global.workspace = {
-    _defaults: await JSON.parse(require('fs').readFileSync('./workspaces/_defaults.json'), 'utf8'),
-    public: {},
-    private: {},
-    admin: {}
+    _defaults: await JSON.parse(require('fs').readFileSync('./workspaces/_defaults.json'), 'utf8')
   };
 
   console.log(' ');
@@ -19,11 +16,31 @@ module.exports = async workspace => {
 
   console.log('-----------------------------');
   console.log(' ');
+
+  global.workspace.current = workspace;
+
+  global.workspace.lookupValues = await createLookup(workspace); 
   
   return workspace;
 };
 
-function chkOptionals(chk, opt) {
+async function createLookup(workspace) {
+  
+  // store all workspace string values in lookup arrays.
+  const lookupValues = ['', 'geom', 'geom_3857', 'id', 'ST_asGeoJson(geom)', 'ST_asGeoJson(geom_4326)'];
+  (function objectEval(o) {
+    Object.keys(o).forEach((key) => {
+      if (typeof key === 'string') lookupValues.push(key);
+      if (typeof o[key] === 'string') lookupValues.push(o[key]);
+      if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
+    });
+  })(workspace);
+
+  return lookupValues;
+  
+}
+
+async function chkOptionals(chk, opt) {
 
   // Check defaults => workspace first.
   Object.keys(opt).forEach(key => {
@@ -87,6 +104,7 @@ async function chkLocales(locales) {
     await chkLayers(locale.layers, key);
   
   }
+
 }
 
 async function chkLayers(layers, locale_key) {
@@ -125,6 +143,7 @@ async function chkLayers(layers, locale_key) {
     await chkLayerConnect(layer, layers);
 
   }
+
 }
 
 // Checks PostGIS geometries, tile caches or 3rd party URL.
@@ -171,6 +190,7 @@ async function chkLayerURL(layer, layers) {
   delete layers['__'+layer.key];
 
   console.log(`${layer.locale}.${layer.key} (${layer.format}) => 'A-ok'`);
+  
 }
 
 async function chkLayerGeom(layer, layers) {

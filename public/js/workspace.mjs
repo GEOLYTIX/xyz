@@ -141,7 +141,7 @@ export default _xyz => {
     btnUpload.onclick = () => {
     
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', document.head.dataset.dir + '/workspace/load?token=' + document.body.dataset.token);
+      xhr.open('POST', document.head.dataset.dir + '/workspace/set?token=' + document.body.dataset.token);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.responseType = 'json';
       xhr.onload = e => {
