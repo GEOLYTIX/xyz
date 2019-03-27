@@ -1,27 +1,19 @@
-//#layers 
+/*#layers */
 .qs-datepicker {
     position: fixed;
     left: 40px;
     top: -10000px;
-    //display: none;
+    display: flex;
     /*transform: translateY(-50%);
     -webkit-transform: translateY(-50%);*/
 }
 
-//.infojTable .qs-datepicker {
-//    position: fixed;
-//    left: 40px;
-    /*transform: translateY(50%);
-    -webkit-transform: translateY(50%);*/
-    /*transform: translate(20%, 340%);
-    -webkit-transform: translate(20%, 340%);*/
-//}
 
 .qs-datepicker {
     color:#000;
-    //position: fixed;
+    /*//position: fixed;
     //transform: translate(20%, 340%);
-    //-webkit-transform: translate(20%, 340%);
+    //-webkit-transform: translate(20%, 340%);*/
     width: 250px;
     display:-webkit-box;
     display:-ms-flexbox;
@@ -56,7 +48,7 @@
     transform:translate(-50%,-50%);*/
 }
 .qs-datepicker.qs-hidden{
-    display:none;
+    /*display:none;*/
     top: -10000px;
 }
 .qs-datepicker .qs-overlay{

@@ -18,7 +18,8 @@ export default (_xyz, layer, filter_entry) => {
     tag: 'input',
     options: {
       classList: 'range-input',
-      type: 'text'
+      type: 'text',
+      readonly: 'readonly'
     },
     appendTo: block
   });
@@ -46,7 +47,8 @@ export default (_xyz, layer, filter_entry) => {
     tag: 'input',
     options: {
       classList: 'range-input',
-      type: 'text'
+      type: 'text',
+      readonly: 'readonly'
     },
     appendTo: block
   });
@@ -63,7 +65,10 @@ export default (_xyz, layer, filter_entry) => {
         _xyz.utils.formatDate(meltDateStr);
   
     },
-    onSelect: applyFilter,
+    onSelect: (instance, date) => {
+      applyFilter();
+      instance.calendar.style.top = '-10000px';
+    },
     onShow: instance => {
    
       const yPosition = instance.el.getBoundingClientRect().top;
@@ -85,7 +90,10 @@ export default (_xyz, layer, filter_entry) => {
         _xyz.utils.formatDate(meltDateStr);
   
     },
-    onSelect: applyFilter,
+    onSelect: (instance, date) => {
+      applyFilter();
+      instance.calendar.style.top = '-10000px';
+    },
     onShow: instance => {
    
       const yPosition = instance.el.getBoundingClientRect().top;
