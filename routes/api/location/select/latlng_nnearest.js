@@ -37,9 +37,8 @@ module.exports = fastify => {
         lat = req.query.lat,
         lng = req.query.lng,
         nnearest = parseInt(req.query.nnearest || 3),
-        infoj = JSON.parse(JSON.stringify(layer.infoj));
-
-      const geom = req.query.geom || layer.geom;
+        infoj = JSON.parse(JSON.stringify(layer.infoj)),
+        geom = req.query.geom || layer.geom;
       
       // Return 406 if table does not have EPSG:4326 geometry field.
       if (!geom) return res.code(400).send(new Error('Missing geom (SRID 4326) field on layer.'));

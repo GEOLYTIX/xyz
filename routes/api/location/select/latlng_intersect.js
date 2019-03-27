@@ -7,70 +7,64 @@ module.exports = fastify => {
         public: global.public
       })
     ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          nnearest: { type: 'integer' },
+          lat: { type: 'number' },
+          lng: { type: 'number' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'lat', 'lng']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace.current.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-
-      // Check layer roles.
-      token.roles = token.roles || [];
-
-      if (!(layer.roles && Object.keys(layer.roles).some(
-        role => token.roles.includes(role)
-      ))) return res.code(406).send('Insufficient role priviliges.');
-            
-
-      const table = req.query.table
-        || layer.table
-        || Object.values(layer.tables)[Object.values(layer.tables).length - 1]
-        || Object.values(layer.tables)[Object.values(layer.tables).length - 2];
-    
-      // Clone the infoj from the memory workspace layer.
-      const infoj = JSON.parse(JSON.stringify(layer.infoj));
-
-      const geom = req.query.geom || layer.geom;
+      let
+        layer = req.params.layer,
+        table = req.query.table,
+        lat = req.query.lat,
+        lng = req.query.lng,
+        infoj = JSON.parse(JSON.stringify(layer.infoj)),
+        geom = req.query.geom || layer.geom;
 
       // Return 406 if table does not have EPSG:4326 geometry field.
-      if (!geom) return res.code(406).send('Missing geom (SRID 4326) field on layer.');
+      if (!geom) return res.code(400).send(new Error('Missing geom (SRID 4326) field on layer.'));
   
-      const lat = parseFloat(req.query.lat);
-      if (!lat) return res.code(406).send('Missing lat.');
-
-      const lng = parseFloat(req.query.lng);
-      if (!lng) return res.code(406).send('Missing lng.');      
-   
       // Check whether string params are found in the settings to prevent SQL injections.
       if ([table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
+        .some(val => (typeof val === 'string'
+          && global.workspace.lookupValues.indexOf(val) < 0))) {
+        return res.code(406).send(new Error('Invalid parameter.'));
       }
   
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);
+      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj);
 
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
   
       var q = `
-      WITH T AS (
-          SELECT
-          ${geom} AS _geom
-          FROM ${table}
-          WHERE ST_Contains(${geom}, ST_SetSRID(ST_Point(${lng}, ${lat}), 4326))
-          LIMIT 1
-      )
-      SELECT ${fields.join()} FROM ${table}, T
-      WHERE ST_Intersects(${geom}, _geom);`;
+        WITH T AS (
+            SELECT
+            ${geom} AS _geom
+            FROM ${table}
+            WHERE ST_Contains(${geom}, ST_SetSRID(ST_Point(${lng}, ${lat}), 4326))
+            LIMIT 1
+        )
+        SELECT ${fields.join()} FROM ${table}, T
+        WHERE ST_Intersects(${geom}, _geom);`;
   
       var rows = await global.pg.dbs[layer.dbs](q);
   
