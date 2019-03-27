@@ -6,12 +6,6 @@ const captcha_input = document.getElementById('captcha_input');
 const captcha_key = document.body.dataset.captcha;
 const privacy_agreement = document.getElementById('privacy_agreement');
 
-setTimeout(() => {
-  email.value.length > 0 ?
-    password.focus() :
-    email.focus();
-}, 10);
-
 email.addEventListener('change', () => check());
 email.addEventListener('keyup', () => check());
 

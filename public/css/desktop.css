@@ -628,8 +628,6 @@ button {
     .btn_column.mobile > div {
       box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
       border-radius: 50%; }
-  .btn_column div:hover {
-    cursor: pointer; }
   .btn_column button,
   .btn_column > div {
     margin-top: 10px;
@@ -1863,6 +1861,8 @@ button {
     .listview .drawer .dashboard .block {
       padding: 5px 0;
       position: relative; }
+      .listview .drawer .dashboard .block input {
+        width: 100%; }
       .listview .drawer .dashboard .block .cancel-btn {
         color: #090;
         font-size: 20px;

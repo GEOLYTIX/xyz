@@ -38,22 +38,26 @@ export default (_xyz, layer) => () => {
   layer.xhr = new XMLHttpRequest();
       
   // Build XHR request.
-  layer.xhr.open('GET', _xyz.host + '/api/layer/cluster?' + _xyz.utils.paramString({
-    locale: _xyz.workspace.locale.key,
-    layer: layer.key,
-    table: layer.table,
-    kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
-    dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
-    theme: layer.style.theme && layer.style.theme.type,
-    cat: layer.style.theme && layer.style.theme.field,
-    size: layer.style.theme && layer.style.theme.size,
-    filter: JSON.stringify(filter),
-    west: bounds.getWest(),
-    south: bounds.getSouth(),
-    east: bounds.getEast(),
-    north: bounds.getNorth(),
-    token: _xyz.token
-  }));
+  layer.xhr.open(
+    'GET',
+    _xyz.host +
+    '/api/layer/cluster?' +
+    _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
+      dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
+      theme: layer.style.theme && layer.style.theme.type,
+      cat: layer.style.theme && layer.style.theme.field,
+      size: layer.style.theme && layer.style.theme.size,
+      filter: JSON.stringify(filter),
+      west: bounds.getWest(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      north: bounds.getNorth(),
+      token: _xyz.token
+    }));
 
   layer.xhr.setRequestHeader('Content-Type', 'application/json');
   layer.xhr.responseType = 'json';
@@ -176,12 +180,14 @@ export default (_xyz, layer) => () => {
           lnglat = e.layer.feature.geometry.coordinates;
     
         const xhr = new XMLHttpRequest();
+
+        const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
       
         xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
           locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: layer.table,
-          filter: JSON.stringify(layer.filter.current),
+          filter: JSON.stringify(filter),
           count: count > 99 ? 99 : count,
           lnglat: lnglat,
           token: _xyz.token

@@ -979,7 +979,14 @@
                 "retail_points": {
                     "roles": {
                         "a" : null,
-                        "foo" : null
+                        "foo" : {
+                            "retailer": {
+                                "in": [
+                                    "Tesco",
+                                    "Sainsburys"
+                                ]
+                            }
+                        }
                     },
                     "display": true,
                     "name": "Retail Points",

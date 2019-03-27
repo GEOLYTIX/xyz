@@ -14,6 +14,8 @@ function check() {
 }
 ```
 
+remove querystring params from payload on edit xhr due to the validation order of the fastify backend.
+
 **Enhacements**
 
 workspace get/set routes

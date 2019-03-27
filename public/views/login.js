@@ -4,13 +4,6 @@ const btnLogin = document.getElementById('btnLogin');
 const captcha_input = document.getElementById('captcha_input');
 const captcha_key = document.body.dataset.captcha;
 
-setTimeout(() => {
-  email.value.length > 0 ?
-    password.focus() :
-    email.focus();
-  check();
-}, 10);
-
 email.addEventListener('change', () => check());
 email.addEventListener('keyup', () => check());
 
@@ -22,6 +15,8 @@ function check() {
     email.validity.valid &&
     password.validity.valid &&
     captcha_input.validity.valid);
+
+  console.log(btnLogin.disabled);
 }
 
 if (captcha_key) {

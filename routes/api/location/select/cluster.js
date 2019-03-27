@@ -1,4 +1,5 @@
 module.exports =  fastify => {
+  
   fastify.route({
     method: 'GET',
     url: '/api/location/select/cluster',
@@ -16,8 +17,10 @@ module.exports =  fastify => {
           layer: { type: 'string' },
           table: { type: 'string' },
           filter: { type: 'string' },
+          lnglat: { type: 'string' },
+          count: { type: 'integer' },
         },
-        required: ['locale', 'layer', 'table']
+        required: ['locale', 'layer', 'table', 'lnglat']
       }
     },
     preHandler: [
@@ -25,20 +28,16 @@ module.exports =  fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      fastify.evalParam.lnglat,
     ],
     handler: async (req, res) => {
-
-
-      const lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
-
-      // Return 406 if lnglat is not defined as query parameter.
-      if (!lnglat) return res.code(406).send('Missing lnglat.');
   
       let
         layer = req.params.layer,
         table = req.query.table,
         geom = layer.geom,
         qID = layer.qID,
+        lnglat = req.params.lnglat,
         filter = req.params.filter,
         label = layer.cluster_label ? layer.cluster_label : qID,
         count = parseInt(req.query.count) || 99;

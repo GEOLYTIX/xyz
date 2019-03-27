@@ -1,4 +1,5 @@
 module.exports = fastify => {
+  
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/images/delete',
@@ -40,9 +41,10 @@ module.exports = fastify => {
           image_src = decodeURIComponent(req.query.image_src);
 
         // Check whether string params are found in the settings to prevent SQL injections.
-        if ([table, qID]
-          .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
-          return res.code(406).send('Invalid parameter.');
+        if ([table]
+          .some(val => (typeof val === 'string'
+          && global.workspace.lookupValues.indexOf(val) < 0))) {
+          return res.code(406).send(new Error('Invalid parameter.'));
         }
 
         var q = `

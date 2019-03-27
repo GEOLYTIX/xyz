@@ -57,7 +57,18 @@ export default _xyz => layer => {
         marker = [center.lng.toFixed(5), center.lat.toFixed(5)];
       
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', _xyz.host + '/api/location/edit/draw?token=' + _xyz.token);
+      
+      xhr.open(
+        'POST', 
+        _xyz.host + 
+        '/api/location/edit/draw?' +
+        _xyz.utils.paramString({
+          locale: _xyz.workspace.locale.key,
+          layer: layer.key,
+          table: layer.table,
+          token: _xyz.token
+        }));
+
       xhr.setRequestHeader('Content-Type', 'application/json');
     
       xhr.onload = e => {
@@ -81,9 +92,6 @@ export default _xyz => layer => {
       
       // Send path geometry to endpoint.
       xhr.send(JSON.stringify({
-        locale: _xyz.workspace.locale.key,
-        layer: layer.key,
-        table: layer.table,
         geometry: layer.edit.path.toGeoJSON().features[0].geometry
       }));
 

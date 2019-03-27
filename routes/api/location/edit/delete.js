@@ -1,4 +1,5 @@
 module.exports = fastify => {
+
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/delete',
@@ -7,23 +8,38 @@ module.exports = fastify => {
         public: global.public
       })
     ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const layer = global.workspace.current.locales[req.query.locale].layers[req.query.layer];
-
-      if (!layer) return res.code(500).send('Layer not found.');
-
       let
+        layer = req.params.layer,
         table = req.query.table,
         qID = layer.qID,
         id = req.query.id;
 
       // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table, qID]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
+      if ([table]
+        .some(val => (typeof val === 'string'
+          && global.workspace.lookupValues.indexOf(val) < 0))) {
+        return res.code(406).send(new Error('Invalid parameter.'));
       }
 
       // const d = new Date();
@@ -56,5 +72,6 @@ module.exports = fastify => {
       res.code(200).send('Location delete successful');
 
     }
+
   });
 };

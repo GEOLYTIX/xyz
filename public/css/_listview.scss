@@ -102,6 +102,9 @@
             .block {
                 padding: 5px 0;
                 position: relative;
+                input {
+                    width: 100%;
+                }
                 .cancel-btn {
                     color: $glxgreen;
                     font-size: 20px;
