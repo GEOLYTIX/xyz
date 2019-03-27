@@ -1,0 +1,1283 @@
+{
+	"title": "GEOLYTIX | XYZ OPEN",
+	"locales": {
+		"Global": {
+			"gazetteer": {
+				"provider": "MAPBOX",
+				"placeholder": "e.g. Shanghai"
+			},
+			"view": {
+				"lat": 21.7,
+				"lng": 54.1,
+				"z": 3
+			},
+			"minZoom": 3,
+			"maxZoom": 15,
+			"layers": {
+				"base": {
+					"group": "Base maps",
+					"display": true,
+					"name": "Mapbox Baselayer",
+					"attribution": {
+						"© Mapbox": "https://www.mapbox.com/about/maps"
+					},
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+				},
+				"label": {
+					"group": "Base maps",
+					"display": true,
+					"name": "Mapbox Labels",
+					"attribution": {
+						"© Mapbox": "https://www.mapbox.com/about/maps",
+						"© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+					},
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+				},
+				"here": {
+					"group": "Base maps",
+					"name": "HERE Imagery",
+					"attribution": {
+						"Here": "https://www.here.com/"
+					},
+					"format": "tiles",
+					"URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
+				},
+				"here_hybrid": {
+					"group": "Base maps",
+					"name": "HERE Hybrid",
+					"attribution": {
+						"Here": "https://www.here.com/"
+					},
+					"format": "tiles",
+					"URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE"
+				},
+				"sprawls": {
+					"display": true,
+					"name": "World Cities",
+					"meta": "Urban agglomerations with a population greater than 100,000.",
+					"mvt_fields": [
+						"pop_density"
+					],
+					"format": "mvt",
+					"dbs": "XYZ",
+					"qID": "id",
+					"mvt_cache": true,
+					"tables": {
+						"2": null,
+						"3": "open.vw_global_glx_open_citiesoftheworld"
+					},
+					"tableview": {
+						"tables": {
+							"World Cities": {
+								"display": true,
+								"from": "open.vw_global_glx_open_citiesoftheworld",
+								"columns": [
+									{
+										"field": "nameascii",
+										"title": "City"
+						},
+						{
+							"field": "sov0name",
+							"title": "Country"
+						},
+						{
+							"field": "pop_ghs",
+							"title": "Population (ghs)",
+							"type": "integer"
+						},
+						{
+							"field": "area",
+							"title": "Area (km2)",
+							"type": "numeric"
+						},
+						{
+							"field": "pop_density",
+							"title": "Population Density",
+							"type": "numeric"
+						}
+					]
+							}
+						}
+					},
+					"filter": {
+						"infoj": [{
+							"label": "ID count",
+							"field": "id_count",
+							"type": "integer",
+							"inline": true,
+							"fieldfx": "count(id)"
+						}]
+					},
+					"infoj": [
+						{
+							"field": "nameascii",
+							"label": "City",
+							"filter": "like"
+						},
+						{
+							"field": "sov0name",
+							"label": "Country",
+							"filter": "like"
+						},
+						{
+							"field": "pop_ghs",
+							"label": "Population (ghs)",
+							"type": "integer",
+							"filter": "numeric"
+						},
+						{
+							"field": "area",
+							"label": "Area (km2)",
+							"type": "numeric",
+							"filter": "numeric"
+						},
+						{
+							"field": "pop_density",
+							"label": "Population Density",
+							"type": "numeric",
+							"filter": "numeric"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#000",
+							"fill": true,
+							"fillColor": "#000",
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#e91e63",
+							"fill": true,
+							"fillOpacity": 0
+						},
+						"themes": {
+							"Population Density": {
+								"type": "graduated",
+								"field": "pop_density",
+								"cat": {
+									"5000": {
+										"label": "up to 5,000 per km2 square",
+										"color": "#bcdf27",
+										"opacity": 1,
+										"fillColor": "#fde725"
+									},
+									"10000": {
+										"label": "10,000",
+										"color": "#7ad251",
+										"opacity": 1,
+										"fillColor": "#bcdf27"
+									},
+									"15000": {
+										"label": "15,000",
+										"color": "#43bf70",
+										"opacity": 1,
+										"fillColor": "#7ad251"
+									},
+									"20000": {
+										"label": "20,000",
+										"color": "#22a884",
+										"opacity": 1,
+										"fillColor": "#43bf70"
+									},
+									"25000": {
+										"label": "25,000",
+										"color": "#20908d",
+										"opacity": 1,
+										"fillColor": "#22a884"
+									},
+									"30000": {
+										"label": "30,000",
+										"color": "#29788e",
+										"opacity": 1,
+										"fillColor": "#20908d"
+									},
+									"35000": {
+										"label": "35,000",
+										"color": "#345f8d",
+										"opacity": 1,
+										"fillColor": "#29788e"
+									},
+									"40000": {
+										"label": "40,000",
+										"color": "#404387",
+										"opacity": 1,
+										"fillColor": "#345f8d"
+									},
+									"45000": {
+										"label": "45,000",
+										"color": "#482475",
+										"opacity": 1,
+										"fillColor": "#404387"
+									},
+									"50000": {
+										"label": "50,000",
+										"color": "#440154",
+										"opacity": 1,
+										"fillColor": "#482475"
+									},
+									"1000000": {
+										"label": "50,000 or more",
+										"color": "#000",
+										"opacity": 1,
+										"fillColor": "#440154"
+									}
+								}
+							}
+						}
+					}
+				},
+				"global airports": {
+					"name": "Global Airports",
+					"format": "cluster",
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_4326",
+					"tables": {
+						"5": null,
+						"6": "geodata.global_glx_geodata_transport_airport"
+					},
+					"tableview": {
+						"tables": {
+							"airports": {
+								"display": true,
+								"title": "Global Airports",
+								"from": "geodata.global_glx_geodata_transport_airport",
+								"columns": [
+									{
+										"field": "full_name",
+										"title": "Full name"
+									},
+									{
+										"field": "short_name",
+										"title": "Short name"
+									},
+									{
+										"field": "main_city",
+										"title": "Main city"
+									},
+									{
+										"field": "country",
+										"title": "Country"
+									},
+									{
+										"field": "iata",
+										"title": "IATA Code"
+									},
+									{
+										"field": "iaca",
+										"title": "IACA Code"
+									},
+									{
+										"field": "rank_group",
+										"title": "Rank group",
+										"type": "integer"
+									},
+									{
+										"field": "rannk",
+										"title": "Rank",
+										"type": "integer"
+									}
+								]
+							}
+						}
+					},
+					"cluster_label": "short_name",
+					"style": {
+						"markerMin": 20,
+						"markerMax": 40,
+						"marker": {
+							"svg": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjEgMTZ2LTJsLTgtNVYzLjVjMC0uODMtLjY3LTEuNS0xLjUtMS41UzEwIDIuNjcgMTAgMy41VjlsLTggNXYybDgtMi41VjE5bC0yIDEuNVYyMmwzLjUtMSAzLjUgMXYtMS41TDEzIDE5di01LjVsOCAyLjV6IiBmaWxsPSIjMmU3NzA5Ii8+PHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=="
+						},
+						"markerMulti": {
+							"svg": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjEgMTZ2LTJsLTgtNVYzLjVjMC0uODMtLjY3LTEuNS0xLjUtMS41UzEwIDIuNjcgMTAgMy41VjlsLTggNXYybDgtMi41VjE5bC0yIDEuNVYyMmwzLjUtMSAzLjUgMXYtMS41TDEzIDE5di01LjVsOCAyLjV6IiBmaWxsPSIjMmU3NzA5Ii8+PHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=="
+						}
+					},
+					"filter": {
+						"infoj": [{
+							"label": "ID count",
+							"field": "id_count",
+							"type": "integer",
+							"inline": true,
+							"fieldfx": "count(id)"
+						}]
+					},
+					"infoj": [
+						{
+							"field": "full_name",
+							"label": "Full Name"
+
+						},
+						{
+							"field": "short_name",
+							"label": "Short Name"
+						},
+						{
+							"field": "main_city",
+							"label": "City"
+						},
+						{
+							"field": "country",
+							"label": "Country",
+							"filter": "like"
+						},
+						{
+							"field": "rannk",
+							"label": "Rank",
+							"filter": "numeric"
+						}
+					],
+					"key": "transport_locations",
+					"locale": "Global",
+					"cluster_kmeans": 0.05,
+					"cluster_dbscan": 0.01
+				},
+				"glx_offices": {
+					"name": "Geolytix Locations",
+					"key": "glx_offices",
+					"format" : "cluster",
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_p_4326",
+					"table": "open.glx_offices",
+					"cluster_label": "office",
+					"cluster_kmeans": 0.05,
+					"cluster_dbscan": 0.01,
+					"tableview": {
+						"tables": {
+							"offices": {
+								"title": "Geolytix Locations",
+								"from": "open.glx_offices",
+								"columns": [
+									{
+										"field": "office",
+										"title": "Office"
+									},
+									{
+										"field": "address",
+										"title": "Address"
+									},
+									{
+										"field": "open_date",
+										"title": "Date Open"
+									},
+									{
+										"field": "dist_to_py",
+										"title": "Distance from HQ",
+										"type": "integer"
+									}
+								]
+							}
+						}
+					},
+					"style": {
+						"markerMin": 40,
+						"marker": {
+							"type": "markerColor",
+							"style": {
+								"colorMarker": "#090",
+								"colorDot": "#cf9"
+							},
+							"iconAnchor": [20, 40]
+						},
+						"markerMulti": {
+								"type": "markerColor",
+								"style": {
+									"colorMarker": "#090",
+									"colorDot": "#cf9"
+								},
+                                "iconAnchor": [
+                                    20,
+                                    40
+                                ]
+							}
+					},
+					"infoj": [
+						{
+							"field": "office",
+							"label": "Office",
+							"inline": true
+						},
+						{
+							"field": "address",
+							"label": "Address"
+						},
+						{
+							"field": "open_date",
+							"label": "Date Open",
+							"inline": true
+						},
+						{
+							"field": "dist_to_py",
+							"label": "Distance from HQ",
+							"type": "integer",
+							"inline": true,
+							"filter": "numeric"
+						}
+					]
+				}
+			}
+		},
+		"UK": {
+			"bounds": {
+				"north": 62,
+				"east": 5,
+				"south": 48,
+				"west": -13
+			},
+			"gazetteer": {
+				"provider": "GOOGLE",
+				"code": "GB",
+				"placeholder": "e.g. London"
+			},
+			"minZoom": 6,
+			"maxZoom": 17,
+			"layers": {
+				"base": {
+					"display": true,
+					"group": "Base maps",
+					"format": "tiles",
+					"attribution": {
+						"© Mapbox": "https://www.mapbox.com/about/maps",
+						"© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+					},
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+					"key": "base",
+					"name": "base",
+					"locale": "UK"
+				},
+				"label": {
+					"display": true,
+					"group": "Base maps",
+					"format": "tiles",
+					"attribution": {
+						"© Mapbox": "https://www.mapbox.com/about/maps",
+						"© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+					},
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+					"key": "label",
+					"name": "label",
+					"locale": "UK"
+				},
+				"seamless_town": {
+					"name": "Seamless shopper towns",
+					"meta": "<div style='padding:10px;background-color:#f2f2f2;font-size:95%;'><p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p></div>",
+					"attribution": [
+						"Seamless Towns and Suburbs. Geolytix License."
+					],
+					"format": "mvt",
+					"geom_3857": "geom_3857",
+					"dbs": "XYZ",
+					"qID": "id",
+					"mvt_cache": false,
+					"tables": {
+						"5": null,
+						"6": "open.vw_glx_geodata_shoppertown"
+					},
+					"infoj": [{
+							"field": "shoptown",
+							"label": "Shopper Town",
+							"inline": true,
+							"filter": "like"
+						},
+						{
+							"label": "Store Count",
+							"type": "group",
+							"chart": {
+								"x": "label x",
+								"y": "label y",
+								"type": "bar",
+								"backgroundColor": [
+									"#4FE339",
+									"#E6A21A",
+									"#172FB7",
+									"#E6E51A",
+									"#197F0A",
+									"#BDBDBD"
+								],
+								"borderColor": [
+									"#4FE339",
+									"#E6A21A",
+									"#172FB7",
+									"#E6E51A",
+									"#197F0A",
+									"#BDBDBD"
+								]
+							}
+						},
+						{
+							"group": "Store Count",
+							"field": "asda",
+							"label": "Asda",
+							"type": "integer",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"group": "Store Count",
+							"field": "sainsburys",
+							"label": "Sainsburys",
+							"type": "integer",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"group": "Store Count",
+							"field": "tesco",
+							"label": "Tesco",
+							"type": "integer",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"group": "Store Count",
+							"field": "waitrose",
+							"label": "Waitrose",
+							"type": "integer",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"group": "Store Count",
+							"field": "other",
+							"label": "Other",
+							"type": "integer",
+							"inline": true,
+							"level": 2
+						},
+						{
+							"field": "js_asda_perc",
+							"label": "Sainsbury / Asda concentration",
+							"inline": true,
+							"type": "numeric",
+							"filter": "numeric"
+						}
+					],
+					"style": {
+						"default": {
+							"weight": 1,
+							"color": "#4F7CAC",
+							"fill": true,
+							"fillColor": "#EEE",
+							"fillOpacity": 0
+						},
+						"highlight": {
+							"color": "#4F7CAC",
+							"fill": true,
+							"fillOpacity": 0,
+							"weight": 3
+						},
+						"themes": {},
+						"selected": {}
+					},
+					"key": "seamless_town",
+					"locale": "UK",
+					"filter": {}
+				},
+				"retailpoints": {
+					"name": "Retail Points",
+					"meta": "<div style='padding:10px;background-color:#f2f2f2;font-size:95%;'><p>Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths, Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose, Wholefoods.</p></div>",
+					"format": "cluster",
+					"attribution": [
+						"Geolytix Retail Points"
+					],
+					"dbs": "XYZ",
+					"table": "geodata.uk_glx_open_retail_points_ed",
+					"qID": "id",
+					"geom": "geom_p_4326",
+					"cluster_label": "store_name",
+					"cluster_kmeans": 0.02,
+					"cluster_dbscan": 0.2,
+					"infoj": [{
+							"field": "retailer",
+							"label": "Retailer",
+							"inline": true
+						},
+						{
+							"field": "fascia",
+							"label": "Fascia",
+							"inline": true
+						},
+						{
+							"field": "store_name",
+							"label": "Name",
+							"inline": true
+						},
+						{
+							"label": "Address",
+							"type": "label"
+						},
+						{
+							"field": "add_one"
+						},
+						{
+							"field": "add_two"
+						},
+						{
+							"field": "locality"
+						},
+						{
+							"field": "postcode"
+						},
+						{
+							"field": "town"
+						},
+						{
+							"field": "size_sqft",
+							"label": "Size in sqft"
+						},
+						{
+							"field": "size_sqm",
+							"label": "Size in sqm"
+						},
+						{
+							"field": "pqi",
+							"label": "Accuracy"
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#93827F"
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#93827F"
+						},
+						"themes": {
+							"Retailers": {
+								"type": "categorized",
+								"field": "retailer",
+								"other": true,
+								"cat": {
+									"Aldi": {
+										"fillColor": "#ffbf45",
+										"label": "Aldi",
+										"layers": {
+											"0.875": "#fa6f08",
+											"0.75": "#ef3c11",
+											"0.625": "#001f79",
+											"0.5": "#02bee3",
+											"0.25": "ffffff"
+										}
+									},
+									"Asda": {
+										"fillColor": "#83b923",
+										"label": "Asda",
+										"layers": {
+											"0.5": "#ffffff",
+											"0.375": "#fdb839"
+										}
+									},
+									"Booths": {
+										"fillColor": "#a12629",
+										"label": "Booths",
+										"layers": {
+											"0.5": "#ffffff",
+											"0.375": "#a12629"
+										}
+									},
+									"Budgens": {
+										"fillColor": "#EEEEE0",
+										"label": "Budgens",
+										"layers": {
+											"0.5": "#679a00",
+											"0.375": "#cccb01"
+										}
+									},
+									"Co-op": {
+										"fillColor": "#0b1e60",
+										"label": "The Co-Operative",
+										"layers": {
+											"0.625": "#ffffff",
+											"0.5": "#a3d227"
+										}
+									},
+									"Costco": {
+										"fillColor": "#005daa",
+										"label": "Costco",
+										"layers": {
+											"0.875": "#ffffff",
+											"0.625": "#e31837"
+										}
+									},
+									"Farmfoods": {
+										"fillColor": "#77a632",
+										"label": "Farm Foods",
+										"layers": {
+											"0.75": "#f7f900",
+											"0.5": "#ff0000"
+										}
+									},
+									"Heron": {
+										"fillColor": "#ffffff",
+										"label": "Heron",
+										"layers": {
+											"0.75": "#313590",
+											"0.25": "#ffcf00"
+										}
+									},
+									"Iceland": {
+										"fillColor": "#ed1b2d",
+										"label": "Iceland",
+										"layers": {
+											"0.75": "#f2552b",
+											"0.5": "#f89128",
+											"0.25": "#ffffff"
+										}
+									},
+									"Lidl": {
+										"fillColor": "#d61408",
+										"label": "Lidl",
+										"layers": {
+											"0.875": "#ffe502",
+											"0.5": "#002d7a",
+											"0.25": "#d61408"
+										}
+									},
+									"Makro": {
+										"fillColor": "#00457a",
+										"label": "Makro",
+										"layers": {
+											"0.325": "#ffe811"
+										}
+									},
+									"Marks and Spencer": {
+										"fillColor": "#0a0d10",
+										"label": "Marks & Spencer",
+										"layers": {
+											"0.5": "#def036",
+											"0.25": "#0a0d10"
+										}
+									},
+									"Morrisons": {
+										"fillColor": "#ffe133",
+										"label": "Morrisons",
+										"layers": {
+											"0.5": "#00614e"
+										}
+									},
+									"Sainsburys": {
+										"fillColor": "#ee8a00",
+										"label": "Sainsbury's",
+										"layers": {
+											"0.625": "#ffffff",
+											"0.325": "#ee8a00"
+										}
+									},
+									"Tesco": {
+										"fillColor": "#0055a8",
+										"label": "Tesco",
+										"layers": {
+											"0.75": "#ffffff",
+											"0.325": "#f02f26"
+										}
+									},
+									"Waitrose": {
+										"fillColor": "#81ae37",
+										"label": "Waitrose",
+										"layers": {
+											"0.325": "#ffffff"
+										}
+									},
+									"Whole Foods Market": {
+										"fillColor": "#00674b",
+										"label": "Whole Foods Market",
+										"layers": {
+											"0.875": "#ffffff",
+											"0.5": "#00674b"
+										}
+									}
+								}
+							}
+						},
+						"markerMin": 20,
+						"markerMax": 40
+					},
+					"key": "retailpoints",
+					"locale": "UK",
+					"filter": {}
+				},
+				"pubs": {
+					"display": true,
+					"name": "Public Houses",
+					"format": "cluster",
+					"dbs": "XYZ",
+					"edit": {
+						"properties": true
+					},
+					"tables": {
+						"9": null,
+						"10": "open.vw_cga_pub_locations"
+					},
+					"geom": "geom",
+					"qID": "id",
+					"cluster_label": "dpname",
+					"cluster_kmeans": 0.2,
+					"cluster_dbscan": 0.012,
+					"infoj": [{
+							"field": "id",
+							"label": "ID",
+							"type": "text"
+						},
+						{
+							"field": "CGAIdent",
+							"label": "CGA Identifier",
+							"type": "text"
+						},
+						{
+							"field": "dpname",
+							"label": "Site Name",
+							"type": "text"
+						},
+						{
+							"field": "address",
+							"label": "Address",
+							"type": "text"
+						},
+						{
+							"field": "postcode",
+							"label": "Postal Code",
+							"type": "text"
+						},
+						{
+							"field": "ownname",
+							"label": "Owner Name",
+							"type": "text"
+						},
+						{
+							"field": "dpownergro",
+							"label": "Owner Group",
+							"type": "text"
+						},
+						{
+							"field": "dpopera_01",
+							"label": "Operator Name",
+							"type": "text"
+						},
+						{
+							"field": "dpopera_02",
+							"label": "Operator Group",
+							"type": "text"
+						},
+						{
+							"field": "tenname",
+							"label": "Tenure Name",
+							"type": "text"
+						},
+						{
+							"field": "DPTName",
+							"label": "Drink Places Name",
+							"type": "text"
+						},
+						{
+							"field": "rbrname",
+							"label": "Brand/Fascia Name",
+							"type": "text"
+						},
+						{
+							"type": "streetview"
+						},
+						{
+							"field": "images",
+							"label": "Images",
+							"type": "images",
+							"edit": true
+						}
+					],
+					"style": {
+						"marker": {
+							"type": "target",
+							"fillColor": "#A44A3F",
+							"layers": {
+								"0.75": "FFF",
+								"0.50": "#A44A3F"
+							}
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#748386",
+							"layers": {
+								"0.75": "FFF",
+								"0.50": "#A44A3F"
+							}
+						},
+						"themes": {
+							"Owner Group": {
+								"label": "Owner Group",
+								"type": "categorized",
+								"field": "dpownergro",
+								"other": true,
+								"cat": {
+									"Independent": {
+										"label": "Independent",
+										"fillColor": "#6A3937",
+										"layers": {
+											"0.75": "FFF",
+											"0.50": "#3B0D11"
+										}
+									},
+									"Large Pub Group": {
+										"label": "Large Pub Group",
+										"fillColor": "#748386",
+										"layers": {
+											"0.75": "FFF",
+											"0.50": "#32746D"
+										}
+									},
+									"Medium Pub Group": {
+										"label": "Medium Pub Group",
+										"fillColor": "#748386",
+										"layers": {
+											"0.75": "FFF",
+											"0.50": "#B7999C"
+										}
+									},
+									"Small Pub Group": {
+										"label": "Small Pub Group",
+										"fillColor": "#748386",
+										"layers": {
+											"0.75": "FFF",
+											"0.50": "#F7934C"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"transport_stations": {
+					"name": "Rail Stations",
+					"format": "cluster",
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_4326",
+					"table": "geodata.vw_uk_glx_geodata_transport_station",
+					"cluster_label": "stat_name",
+					"style": {
+						"markerMin": 20,
+						"markerMax": 40,
+						"marker": {
+							"type": "target",
+							"fillColor": "#e53935",
+							"layers": {
+								"0.75": "#ffffff",
+								"0.5": "#e53935",
+								"0.25": "#fff"
+
+							}
+						},
+						"markerMulti": {
+							"type": "target",
+							"fillColor": "#e53935",
+							"layers": {
+								"0.75": "#ffffff",
+								"0.5": "#e53935",
+								"0.25": "#fff"
+
+							}
+						},
+						"themes": {
+							"Station type": {
+								"type": "categorized",
+								"field": "stat_type",
+								"other": true,
+								"cat": {
+									"Rail Station": {
+										"label": "Rail",
+										"fillColor": "#0019a8",
+										"layers": {
+											"0.75": "#ffffff",
+											"0.5": "#0019a8"
+										}
+									},
+									"Light Rail Station": {
+										"label": "Light Rail",
+										"fillColor": "#00afad",
+										"layers": {
+											"0.75": "#FFFFFF",
+											"0.50": "#00afad"
+										}
+									},
+									"Underground Station": {
+										"label": "Underground",
+										"fillColor": "#0019A8",
+										"layers": {
+											"0.75": "#ffffff",
+											"0.5": "#DC241F"
+										}
+									}
+								}
+							}
+						}
+					},
+					"infoj": [{
+							"field": "glx_town",
+							"label": "Town",
+							"type": "text"
+						},
+						{
+							"field": "stat_name",
+							"label": "Station Name",
+							"type": "text"
+						},
+						{
+							"field": "stat_type",
+							"label": "Station Type",
+							"type": "text"
+						},
+						{
+							"field": "pass_ly",
+							"label": "pass_ly",
+							"type": "text"
+						}
+					],
+					"key": "transport_stations",
+					"locale": "UK",
+					"cluster_kmeans": 0.01,
+					"cluster_dbscan": 0.01,
+					"filter": {}
+				},
+				"glx_offices": {
+					"name": "Geolytix Locations",
+					"key": "glx_offices",
+					"format" : "cluster",
+					"dbs": "XYZ",
+					"qID": "id",
+					"geom": "geom_p_4326",
+					"table": "open.glx_offices",
+					"cluster_label": "office",
+					"cluster_kmeans": 0.05,
+					"cluster_dbscan": 0.01,
+					"style": {
+						"markerMin": 40,
+						"marker": {
+							"type": "markerColor",
+							"style": {
+								"colorMarker": "#090",
+								"colorDot": "#cf9"
+							},
+							"iconAnchor": [20, 40]
+						},
+						"markerMulti": {
+								"type": "markerColor",
+								"style": {
+									"colorMarker": "#090",
+									"colorDot": "#cf9"
+								},
+                                "iconAnchor": [
+                                    20,
+                                    40
+                                ]
+							}
+					},
+					"infoj": [
+						{
+							"field": "office",
+							"label": "Office",
+							"inline": true
+						},
+						{
+							"field": "address",
+							"label": "Address"
+						},
+						{
+							"field": "open_date",
+							"label": "Date Open",
+							"inline": true
+						},
+						{
+							"field": "dist_to_py",
+							"label": "Distance from HQ",
+							"type": "integer",
+							"inline": true,
+							"filter": "numeric"
+						}
+					]
+				}
+			},
+			"view": {},
+			"attribution": {
+				"XYZ #v1.4.0": "https://github.com/GEOLYTIX/xyz/releases/tag/v1.4.0",
+				"Leaflet": "https://leafletjs.com"
+			}
+		},
+		"Japan": {
+			"gazetteer": {
+				"provider": "GOOGLE",
+				"code": "JP",
+				"placeholder": "e.g. Yamanashi",
+				"optional": true
+			},
+			"bounds": {
+				"north": 50,
+				"east": 168,
+				"south": 28,
+				"west": 125
+			},
+			"minZoom": 6,
+			"maxZoom": 17,
+			"layers": {
+				"base": {
+					"group": "Base maps",
+					"display": true,
+					"name": "Mapbox Baselayer",
+					"attribution": {
+						"Â© Mapbox": "https://www.mapbox.com/about/maps",
+						"Â© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+					},
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+					"key": "base",
+					"locale": "JP"
+				},
+				"here": {
+					"group": "Base maps",
+					"name": "HERE Imagery",
+					"format": "tiles",
+					"URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&provider=HERE",
+					"key": "here",
+					"locale": "JP"
+				},
+				"here_hybrid": {
+					"group": "Base maps",
+					"name": "HERE Hybrid",
+					"format": "tiles",
+					"URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE",
+					"key": "here_hybrid",
+					"locale": "JP"
+				},
+				"chomoku": {
+					"name": "Demographics",
+					"format": "mvt",
+					"mvt_cache": false,
+					"mvt_fields": [
+						"totalpop",
+						"average_age"
+					],
+					"dbs": "XYZ",
+					"qID": "chomoku_cd",
+					"tables": {
+						"10": null,
+						"11": "open.vw_jpn_chomoku"
+					},
+					"style": {
+						"default": {
+							"weight": 1,
+							"stroke": false,
+							"opacity": 1,
+							"fillColor": "#d9d9d9",
+							"fill": true,
+							"fillOpacity": 0.3
+						},
+						"highlight": {
+							"color": "#56A3A6",
+							"stroke": false,
+							"fillColor": "#DBD56E",
+							"fill": true,
+							"fillOpacity": 0.3
+						},
+						"themes": {
+							"Population": {
+								"type": "graduated",
+								"field": "totalpop",
+								"cat": {
+									"0": {
+										"label": "0 to 500",
+										"fillColor": "#f1eef6"
+									},
+									"500": {
+										"label": "500 to 1500",
+										"fillColor": "#bdc9e1"
+									},
+									"1500": {
+										"label": "1500 to 3000",
+										"fillColor": "#74a9cf"
+									},
+									"3000": {
+										"label": "3000 to 6000",
+										"fillColor": "#2b8cbe"
+									},
+									"6000": {
+										"label": "6000 and over",
+										"fillColor": "#045a8d"
+									}
+								}
+							},
+
+							"Average Age": {
+								"type": "graduated",
+								"field": "average_age",
+								"cat": {
+									"18": {
+										"label": "18 to 40",
+										"fillColor": "#edf8e9"
+									},
+									"40": {
+										"label": "40 to 47",
+										"fillColor": "#bae4b3"
+									},
+									"47": {
+										"label": "47 to 53",
+										"fillColor": "#74c476"
+									},
+									"53": {
+										"label": "53 to 62",
+										"fillColor": "#31a354"
+									},
+									"62": {
+										"label": "62 and above",
+										"fillColor": "#006d2c"
+									}
+								}
+							}
+						}
+					},
+					"infoj": [
+						{
+							"field": "chomoku_cd",
+							"label": "Chomoku code",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "chomoku_nm",
+							"label": "Chomoku name",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "city_nm",
+							"label": "City",
+							"type": "text",
+							"inline": true
+						},
+						{
+							"field": "region",
+							"label": "Region",
+							"type": "text",
+							"inline": true,
+							"filter": "like"
+						},
+						{
+							"field": "totalpop",
+							"label": "Population",
+							"type": "text",
+							"inline": true,
+							"filter": "numeric"
+						},
+						{
+							"field": "average_age",
+							"label": "Average Age",
+							"type": "text",
+							"inline": true,
+							"filter": "numeric"
+						}
+					]
+				}
+			}
+		}
+	}
+}
