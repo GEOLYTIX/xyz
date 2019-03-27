@@ -7,43 +7,41 @@ module.exports = fastify => {
         public: global.public
       })
     ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          id: { type: 'string' },
+          field: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'id', 'field']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+    ],
     handler: async (req, res) => {
               
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-              
-      const locale = global.workspace.current.locales[req.query.locale];
-  
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-              
-      const layer = locale.layers[req.query.layer];
-              
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-
-      // Check layer roles.
-      token.roles = token.roles || [];
-
-      if (!(layer.roles && Object.keys(layer.roles).some(
-        role => token.roles.includes(role)
-      ))) return res.code(406).send('Insufficient role priviliges.');
-            
-              
-      const table = req.query.table;
-              
-      // Return 406 if table is not defined as request parameter.
-      if (!table) return res.code(406).send('Missing table.');
   
       let
+        layer = req.params.layer,
+        table = req.query.table,
         qID = layer.qID,
         id = req.query.id,
         field = req.query.field;
   
         // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table, field]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
+      if ([table]
+        .some(val => (typeof val === 'string'
+          && global.workspace.lookupValues.indexOf(val) < 0))) {
+        return res.code(406).send(new Error('Invalid parameter.'));
       }
   
       var q = `UPDATE ${table} SET ${field} = null WHERE ${qID} = $1;`;

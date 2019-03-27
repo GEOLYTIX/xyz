@@ -7,30 +7,40 @@ module.exports = fastify => {
         public: global.public
       })
     ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          id: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'id']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace.current.locales[req.body.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.body.layer];
-
-      if (!layer) return res.code(500).send('Layer not found.');
-
       let
-        table = req.body.table,
+        layer = req.params.layer,
+        table = req.query.table,
         qID = layer.qID,
-        id = req.body.id,
+        id = req.query.id,
         infoj = req.body.infoj,
         geom = layer.geom;
 
       // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table, geom, qID]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
+      if ([table]
+        .some(val => (typeof val === 'string'
+          && global.workspace.lookupValues.indexOf(val) < 0))) {
+        return res.code(406).send(new Error('Invalid parameter.'));
       }
 
       let fields = await require(global.appRoot + '/mod/pg/sql_infoj')(infoj);
@@ -67,10 +77,10 @@ module.exports = fastify => {
       // Push JSON geometry field into fields array.
       //fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
 
-      var q =
-      `SELECT ${fields.join()}`
-      + `\n FROM ${table}`
-      + `\n WHERE ${qID} = $1;`;
+      var q = `
+        SELECT ${fields.join()}
+        FROM ${table}
+        WHERE ${qID} = $1;`;
 
       var rows = await global.pg.dbs[layer.dbs](q, [id]);
 
