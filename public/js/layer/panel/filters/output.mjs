@@ -63,7 +63,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
         location.draw();
 
         if(!location.geometry.coordinates.length){
-          alert('Not enough features found to calculate aggregate data.');
+          alert('Not enough features found to calculate aggregate data. Try zooming to layer extent.');
           return;
         }
     
