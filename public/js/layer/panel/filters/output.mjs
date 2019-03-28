@@ -61,6 +61,11 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
     
         // Draw the location to the map.
         location.draw();
+
+        if(!location.geometry.coordinates.length){
+          alert('Not enough features found to calculate aggregate data.');
+          return;
+        }
     
         location.Marker = _xyz.mapview.draw.geoJSON({
           json: {
