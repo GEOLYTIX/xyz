@@ -50,13 +50,15 @@ module.exports = fastify => {
 
     req.params.token.roles = req.params.token.roles || [];
 
-    if (!req.params.layer.roles) return next();
+    if (req.params.layer.roles) {
 
-    if (!Object.keys(req.params.layer.roles).some(
-      role => req.params.token.roles.includes(role)
-    )){
-      res.code(400);
-      return next(new Error('Insufficient role priviliges.'));
+      if (!Object.keys(req.params.layer.roles).some(
+        role => req.params.token.roles.includes(role)
+      )){
+        res.code(400);
+        return next(new Error('Insufficient role priviliges.'));
+      }
+      
     }
 
     // Parse filter from query string.
@@ -64,7 +66,7 @@ module.exports = fastify => {
 
     // Apply role filter
     req.params.token.roles.filter(
-      role => req.params.layer.roles[role]).forEach(
+      role => req.params.layer.roles && req.params.layer.roles[role]).forEach(
       role => Object.assign(req.params.filter, req.params.layer.roles[role])
     );
 

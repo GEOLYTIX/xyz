@@ -103,7 +103,11 @@ export default _xyz => {
       //Add icon to layer header.
       layer_icon(_xyz, layer);
 
-      if (!displayOrg && layer.display) layer.show();
+      if (!displayOrg && layer.display) {
+        layer.show();
+      } else {
+        layer.tableCurrent();
+      }
 
       if (_xyz.log) console.log(layer);
 

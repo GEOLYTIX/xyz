@@ -76,28 +76,26 @@
                                 "from": "open.global_glx_open_citiesoftheworld",
                                 "columns": [
                                     {
-                                        "title": "City",
                                         "field": "nameascii",
-                                        "type": "text"
+                                        "title": "City"
                                     },
                                     {
-                                        "title": "Country",
                                         "field": "sov0name",
-                                        "type": "text"
+                                        "title": "Country"
                                     },
                                     {
-                                        "title": "Population (ghs)",
                                         "field": "pop_ghs",
+                                        "title": "Population (ghs)",
                                         "type": "integer"
                                     },
                                     {
-                                        "title": "Area (km2)",
                                         "field": "area",
+                                        "title": "Area (km2)",
                                         "type": "numeric"
                                     },
                                     {
-                                        "title": "Population Density",
                                         "field": "pop_density",
+                                        "title": "Population Density",
                                         "type": "numeric"
                                     }
                                 ]
@@ -495,7 +493,7 @@
                     "geom_3857": "geom_3857",
                     "dbs": "XYZ",
                     "qID": "id",
-                    "mvt_cache": false,
+                    "mvt_cache": true,
                     "tables": {
                         "5": null,
                         "6": "open.vw_glx_geodata_shoppertown"
@@ -1182,19 +1180,18 @@
                 "chomoku": {
                     "name": "Demographics",
                     "format": "mvt",
-                    "mvt_cache": false,
+                    "mvt_cache": true,
                     "mvt_fields": [
-                        "totalpop",
                         "average_age"
                     ],
                     "geom": "geom_3857",
                     "dbs": "XYZ",
                     "qID": "chomoku_cd",
-                    "table": "open.jpn_chomoku",
+                    "table": "open.vw_jpn_chomoku_with_stats",
                     "tableview": {
                         "tables": {
                             "Chomoku": {
-                                "from": "open.jpn_chomoku",
+                                "from": "open.vw_jpn_chomoku_with_stats",
                                 "columns": [
                                     {
                                         "field": "chomoku_cd",
@@ -1221,6 +1218,10 @@
                                         "field": "average_age",
                                         "title": "Average Age",
                                         "type": "numeric"
+                                    },
+                                    {
+                                        "field": "pop_stats",
+                                        "title": "Population stats"
                                     }
                                 ]
                             }
@@ -1243,32 +1244,6 @@
                             "fillOpacity": 0.3
                         },
                         "themes": {
-                            "Population": {
-                                "type": "graduated",
-                                "field": "totalpop",
-                                "cat": {
-                                    "0": {
-                                        "label": "0 to 500",
-                                        "fillColor": "#f1eef6"
-                                    },
-                                    "500": {
-                                        "label": "500 to 1500",
-                                        "fillColor": "#bdc9e1"
-                                    },
-                                    "1500": {
-                                        "label": "1500 to 3000",
-                                        "fillColor": "#74a9cf"
-                                    },
-                                    "3000": {
-                                        "label": "3000 to 6000",
-                                        "fillColor": "#2b8cbe"
-                                    },
-                                    "6000": {
-                                        "label": "6000 and over",
-                                        "fillColor": "#045a8d"
-                                    }
-                                }
-                            },
                             "Average Age": {
                                 "type": "graduated",
                                 "field": "average_age",
@@ -1325,22 +1300,32 @@
                             "field": "region",
                             "label": "Region",
                             "type": "text",
-                            "inline": true,
-                            "filter": "like"
+                            "inline": true
                         },
                         {
                             "field": "totalpop",
                             "label": "Population",
                             "type": "text",
-                            "inline": true,
-                            "filter": "numeric"
+                            "inline": true
                         },
                         {
                             "field": "average_age",
                             "label": "Average Age",
                             "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "pop_stats",
+                            "label": "Population Stats",
+                            "type": "text",
                             "inline": true,
-                            "filter": "numeric"
+                            "filter": {
+                                "in": [
+                                    "Youngest population",
+                                    "Oldest population",
+                                    "Largest population"
+                                ]
+                            }
                         }
                     ],
                     "filter": {
@@ -1416,17 +1401,14 @@
                 "malls": {
                     "name": "Shopping Malls",
                     "format": "mvt",
-                    "mvt_cache": false,
+                    "mvt_cache": true,
                     "mvt_fields": [
                         "gfa_sqft"
                     ],
                     "geom": "geom_3857",
                     "dbs": "XYZ",
                     "qID": "id",
-                    "tables": {
-                        "4": null,
-                        "5": "open.aus_glx_retail_venue_sizes"
-                    },
+                    "table": "open.aus_glx_retail_venue_sizes",
                     "style": {
                         "default": {
                             "weight": 2,
@@ -1472,12 +1454,36 @@
                             }
                         }
                     },
+                    "tableview": {
+                        "tables": {
+                            "Shopping Malls": {
+                                "display": true,
+                                "from": "open.aus_glx_retail_venue_sizes",
+                                "columns": [
+                                    {
+                                        "title": "Retail Venue",
+                                        "field": "venue_name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "title": "Retail Venue Type",
+                                        "field": "venue_type",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "title": "Size (sqft)",
+                                        "field": "gfa_sqft",
+                                        "type": "integer"
+                                    }
+                                ]
+                            }
+                        }
+                    },
                     "infoj": [
                         {
                             "field": "venue_name",
                             "label": "Retail Venue",
-                            "inline": true,
-                            "filter": "like"
+                            "inline": true
                         },
                         {
                             "field": "venue_type",
@@ -1490,8 +1496,130 @@
                             "type": "numeric",
                             "inline": true,
                             "filter": "numeric"
+                        },
+                        {
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images"
                         }
                     ]
+                },
+                "retailuniverse": {
+                    "name": "Retail Universe",
+                    "format": "cluster",
+                    "attribution": [
+                        "Geolytix Retail Points"
+                    ],
+                    "dbs": "XYZ",
+                    "table": "open.vw_aus_glx_retail_universe",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                    "cluster_label": "store_name",
+                    "cluster_kmeans": 0.02,
+                    "cluster_dbscan": 0.2,
+                    "infoj": [
+                        {
+                            "field": "retailer",
+                            "label": "Retailer",
+                            "inline": true
+                        },
+                        {
+                            "field": "fascia",
+                            "label": "Fascia",
+                            "inline": true
+                        },
+                        {
+                            "field": "store_name",
+                            "label": "Name",
+                            "inline": true
+                        },
+                        {
+                            "label": "Address",
+                            "type": "label"
+                        },
+                        {
+                            "field": "add_one"
+                        },
+                        {
+                            "field": "add_two"
+                        },
+                        {
+                            "field": "suburb"
+                        },
+                        {
+                            "field": "postcode"
+                        },
+                        {
+                            "field": "state"
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#93827F"
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#93827F"
+                        },
+                        "themes": {
+                            "Retailers": {
+                                "type": "categorized",
+                                "field": "retailer",
+                                "other": true,
+                                "cat": {
+                                    "Aldi": {
+                                        "fillColor": "#ffbf45",
+                                        "label": "Aldi",
+                                        "layers": {
+                                            "0.875": "#fa6f08",
+                                            "0.75": "#ef3c11",
+                                            "0.625": "#001f79",
+                                            "0.5": "#02bee3",
+                                            "0.25": "ffffff"
+                                        }
+                                    },
+                                    "Coles": {
+                                        "fillColor": "#83b923",
+                                        "label": "Coles",
+                                        "layers": {
+                                            "0.5": "#ffffff",
+                                            "0.375": "#fdb839"
+                                        }
+                                    },
+                                    "David Jones": {
+                                        "fillColor": "#a12629",
+                                        "label": "David Jones",
+                                        "layers": {
+                                            "0.5": "#ffffff",
+                                            "0.375": "#a12629"
+                                        }
+                                    },
+                                    "MYER": {
+                                        "fillColor": "#EEEEE0",
+                                        "label": "MYER",
+                                        "layers": {
+                                            "0.5": "#679a00",
+                                            "0.375": "#cccb01"
+                                        }
+                                    },
+                                    "Woolworths": {
+                                        "fillColor": "#0b1e60",
+                                        "label": "Woolworths",
+                                        "layers": {
+                                            "0.625": "#ffffff",
+                                            "0.5": "#a3d227"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "markerMin": 20,
+                        "markerMax": 40
+                    },
+                    "key": "retailuniverse",
+                    "locale": "Australia",
+                    "filter": {}
                 }
             }
         }
