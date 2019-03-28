@@ -112,6 +112,10 @@
                     },
                     "infoj": [
                         {
+                            "field": "images",
+                            "type": "images"
+                        },
+                        {
                             "field": "nameascii",
                             "label": "City",
                             "filter": "like"
@@ -138,11 +142,6 @@
                             "label": "Population Density",
                             "type": "numeric",
                             "filter": "numeric"
-                        },
-                        {
-                            "label": "Images",
-                            "field": "images",
-                            "type": "images"
                         }
                     ],
                     "style": {
@@ -528,6 +527,11 @@
                     },
                     "infoj": [
                         {
+                            "field": "images",
+                            "type": "images",
+                            "edit": false
+                        },
+                        {
                             "field": "shoptown",
                             "label": "Shopper Town",
                             "inline": true,
@@ -600,17 +604,12 @@
                         },
                         {
                             "field": "js_asda_perc",
-                            "fieldfx" : "js_asda_perc * 100",
+                            "fieldfx": "js_asda_perc * 100",
                             "label": "Sainsbury / Asda concentration",
                             "inline": true,
                             "type": "integer",
                             "filter": "numeric"
-                },{
-                    "field": "images",
-                    "label": "Images",
-                    "type": "images",
-                    "edit": true
-                }
+                        }
                     ],
                     "style": {
                         "default": {
@@ -853,155 +852,6 @@
                     "locale": "UK",
                     "filter": {}
                 },
-                "pubs": {
-                    "display": true,
-                    "name": "Public Houses",
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "edit": {
-                        "properties": true
-                    },
-                    "tables": {
-                        "9": null,
-                        "10": "open.vw_cga_pub_locations"
-                    },
-                    "geom": "geom",
-                    "qID": "id",
-                    "cluster_label": "dpname",
-                    "cluster_kmeans": 0.2,
-                    "cluster_dbscan": 0.012,
-                    "infoj": [
-                        {
-                            "field": "id",
-                            "label": "ID",
-                            "type": "text"
-                        },
-                        {
-                            "field": "CGAIdent",
-                            "label": "CGA Identifier",
-                            "type": "text"
-                        },
-                        {
-                            "field": "dpname",
-                            "label": "Site Name",
-                            "type": "text"
-                        },
-                        {
-                            "field": "address",
-                            "label": "Address",
-                            "type": "text"
-                        },
-                        {
-                            "field": "postcode",
-                            "label": "Postal Code",
-                            "type": "text"
-                        },
-                        {
-                            "field": "ownname",
-                            "label": "Owner Name",
-                            "type": "text"
-                        },
-                        {
-                            "field": "dpownergro",
-                            "label": "Owner Group",
-                            "type": "text"
-                        },
-                        {
-                            "field": "dpopera_01",
-                            "label": "Operator Name",
-                            "type": "text"
-                        },
-                        {
-                            "field": "dpopera_02",
-                            "label": "Operator Group",
-                            "type": "text"
-                        },
-                        {
-                            "field": "tenname",
-                            "label": "Tenure Name",
-                            "type": "text"
-                        },
-                        {
-                            "field": "DPTName",
-                            "label": "Drink Places Name",
-                            "type": "text"
-                        },
-                        {
-                            "field": "rbrname",
-                            "label": "Brand/Fascia Name",
-                            "type": "text"
-                        },
-                        {
-                            "type": "streetview"
-                        },
-                        {
-                            "field": "images",
-                            "label": "Images",
-                            "type": "images",
-                            "edit": true
-                        }
-                    ],
-                    "style": {
-                        "marker": {
-                            "type": "target",
-                            "fillColor": "#A44A3F",
-                            "layers": {
-                                "0.75": "FFF",
-                                "0.50": "#A44A3F"
-                            }
-                        },
-                        "markerMulti": {
-                            "type": "target",
-                            "fillColor": "#748386",
-                            "layers": {
-                                "0.75": "FFF",
-                                "0.50": "#A44A3F"
-                            }
-                        },
-                        "themes": {
-                            "Owner Group": {
-                                "label": "Owner Group",
-                                "type": "categorized",
-                                "field": "dpownergro",
-                                "other": true,
-                                "cat": {
-                                    "Independent": {
-                                        "label": "Independent",
-                                        "fillColor": "#6A3937",
-                                        "layers": {
-                                            "0.75": "FFF",
-                                            "0.50": "#3B0D11"
-                                        }
-                                    },
-                                    "Large Pub Group": {
-                                        "label": "Large Pub Group",
-                                        "fillColor": "#748386",
-                                        "layers": {
-                                            "0.75": "FFF",
-                                            "0.50": "#32746D"
-                                        }
-                                    },
-                                    "Medium Pub Group": {
-                                        "label": "Medium Pub Group",
-                                        "fillColor": "#748386",
-                                        "layers": {
-                                            "0.75": "FFF",
-                                            "0.50": "#B7999C"
-                                        }
-                                    },
-                                    "Small Pub Group": {
-                                        "label": "Small Pub Group",
-                                        "fillColor": "#748386",
-                                        "layers": {
-                                            "0.75": "FFF",
-                                            "0.50": "#F7934C"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 "transport_stations": {
                     "name": "Rail Stations",
                     "format": "cluster",
@@ -1092,71 +942,11 @@
                     "cluster_kmeans": 0.01,
                     "cluster_dbscan": 0.01,
                     "filter": {}
-                },
-                "glx_offices": {
-                    "name": "Geolytix Locations",
-                    "key": "glx_offices",
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "qID": "id",
-                    "geom": "geom_p_4326",
-                    "table": "open.glx_offices",
-                    "cluster_label": "office",
-                    "cluster_kmeans": 0.05,
-                    "cluster_dbscan": 0.01,
-                    "style": {
-                        "markerMin": 40,
-                        "marker": {
-                            "type": "markerColor",
-                            "style": {
-                                "colorMarker": "#090",
-                                "colorDot": "#cf9"
-                            },
-                            "iconAnchor": [
-                                20,
-                                40
-                            ]
-                        },
-                        "markerMulti": {
-                            "type": "markerColor",
-                            "style": {
-                                "colorMarker": "#090",
-                                "colorDot": "#cf9"
-                            },
-                            "iconAnchor": [
-                                20,
-                                40
-                            ]
-                        }
-                    },
-                    "infoj": [
-                        {
-                            "field": "office",
-                            "label": "Office",
-                            "inline": true
-                        },
-                        {
-                            "field": "address",
-                            "label": "Address"
-                        },
-                        {
-                            "field": "open_date",
-                            "label": "Date Open",
-                            "inline": true
-                        },
-                        {
-                            "field": "dist_to_py",
-                            "label": "Distance from HQ",
-                            "type": "integer",
-                            "inline": true,
-                            "filter": "numeric"
-                        }
-                    ]
                 }
             },
             "view": {},
             "attribution": {
-                "XYZ #v1.4.0": "https://github.com/GEOLYTIX/xyz/releases/tag/v1.4.0",
+                "XYZ #dev": "https://github.com/GEOLYTIX/xyz/releases/tag/v1.4.0",
                 "Leaflet": "https://leafletjs.com"
             }
         },
@@ -1168,13 +958,13 @@
                 "optional": true
             },
             "bounds": {
-                "north": 50,
-                "east": 168,
+                "north": 47,
+                "east": 148,
                 "south": 28,
                 "west": 125
             },
             "showScaleBar": true,
-            "minZoom": 8,
+            "minZoom": 6,
             "maxZoom": 17,
             "layers": {
                 "base": {
@@ -1182,13 +972,24 @@
                     "display": true,
                     "name": "Mapbox Baselayer",
                     "attribution": {
-                        "Â© Mapbox": "https://www.mapbox.com/about/maps",
-                        "Â© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
                     "key": "base",
                     "locale": "JP"
+                },
+                "label": {
+                    "group": "Base maps",
+                    "display": true,
+                    "name": "Mapbox Labels",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 },
                 "here": {
                     "group": "Base maps",
@@ -1217,12 +1018,13 @@
                     "dbs": "XYZ",
                     "qID": "chomoku_cd",
                     "tables": {
-                        "5": null,
-                        "6": "open.vw_jpn_chomoku_with_stats"
+                        "10": null,
+                        "11": "open.vw_jpn_chomoku_with_stats"
                     },
                     "tableview": {
                         "tables": {
                             "Chomoku": {
+                                "display": true,
                                 "from": "open.vw_jpn_chomoku_with_stats",
                                 "columns": [
                                     {
@@ -1308,8 +1110,7 @@
                         {
                             "field": "images",
                             "label": "Images",
-                            "type": "images",
-                            "edit": true
+                            "type": "images"
                         },
                         {
                             "field": "chomoku_cd",
@@ -1360,301 +1161,289 @@
                                 ]
                             }
                         }
-                    ],
-                    "filter": {
-                        "infoj": [
-                            {
-                                "label": "Average Age",
-                                "field": "average_age",
-                                "fieldfx": "max(average_age)",
-                                "type": "numeric"
-                            }
-                        ]
-                    }
+                    ]
                 }
             }
+        }
+    },
+    "Australia": {
+        "gazetteer": {
+            "provider": "GOOGLE",
+            "code": "Aus",
+            "placeholder": "e.g. Sydney",
+            "optional": true
         },
-        "Australia": {
-            "gazetteer": {
-                "provider": "GOOGLE",
-                "code": "Aus",
-                "placeholder": "e.g. Sydney",
-                "optional": true
+        "bounds": {
+            "north": -13,
+            "east": 163,
+            "south": -44,
+            "west": 107
+        },
+        "showScaleBar": true,
+        "minZoom": 4,
+        "maxZoom": 17,
+        "layers": {
+            "base": {
+                "group": "Base maps",
+                "display": true,
+                "name": "Mapbox Baselayer",
+                "attribution": {
+                    "© Mapbox": "https://www.mapbox.com/about/maps",
+                    "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                },
+                "format": "tiles",
+                "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
+                "key": "base",
+                "locale": "JP"
             },
-            "bounds": {
-                "north": -13,
-                "east": 163,
-                "south": -44,
-                "west": 107
+            "label": {
+                "group": "Base maps",
+                "display": true,
+                "name": "Mapbox Labels",
+                "attribution": {
+                    "© Mapbox": "https://www.mapbox.com/about/maps",
+                    "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                },
+                "format": "tiles",
+                "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
             },
-            "showScaleBar": true,
-            "minZoom": 4,
-            "maxZoom": 17,
-            "layers": {
-                "base": {
-                    "group": "Base maps",
-                    "display": true,
-                    "name": "Mapbox Baselayer",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            "here": {
+                "group": "Base maps",
+                "name": "HERE Imagery",
+                "format": "tiles",
+                "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&provider=HERE",
+                "key": "here",
+                "locale": "JP"
+            },
+            "here_hybrid": {
+                "group": "Base maps",
+                "name": "HERE Hybrid",
+                "format": "tiles",
+                "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE",
+                "key": "here_hybrid",
+                "locale": "JP"
+            },
+            "malls": {
+                "name": "Shopping Malls",
+                "format": "mvt",
+                "mvt_cache": true,
+                "mvt_fields": [
+                    "gfa_sqft"
+                ],
+                "geom": "geom_3857",
+                "dbs": "XYZ",
+                "qID": "id",
+                "table": "open.aus_glx_retail_venue_sizes",
+                "style": {
+                    "default": {
+                        "weight": 2,
+                        "stroke": false,
+                        "opacity": 1,
+                        "fillColor": "#d9d9d9",
+                        "fill": true,
+                        "fillOpacity": 0.7
                     },
-                    "format": "tiles",
-                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX",
-                    "key": "base",
-                    "locale": "JP"
-                },
-                "label": {
-                    "group": "Base maps",
-                    "display": true,
-                    "name": "Mapbox Labels",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    "highlight": {
+                        "color": "#56A3A6",
+                        "stroke": false,
+                        "fillColor": "#DBD56E",
+                        "fill": true,
+                        "fillOpacity": 0.7
                     },
-                    "format": "tiles",
-                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
-                },
-                "here": {
-                    "group": "Base maps",
-                    "name": "HERE Imagery",
-                    "format": "tiles",
-                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&provider=HERE",
-                    "key": "here",
-                    "locale": "JP"
-                },
-                "here_hybrid": {
-                    "group": "Base maps",
-                    "name": "HERE Hybrid",
-                    "format": "tiles",
-                    "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE",
-                    "key": "here_hybrid",
-                    "locale": "JP"
-                },
-                "malls": {
-                    "name": "Shopping Malls",
-                    "format": "mvt",
-                    "mvt_cache": true,
-                    "mvt_fields": [
-                        "gfa_sqft"
-                    ],
-                    "geom": "geom_3857",
-                    "dbs": "XYZ",
-                    "qID": "id",
-                    "table": "open.aus_glx_retail_venue_sizes",
-                    "style": {
-                        "default": {
-                            "weight": 2,
-                            "stroke": false,
-                            "opacity": 1,
-                            "fillColor": "#d9d9d9",
-                            "fill": true,
-                            "fillOpacity": 0.7
-                        },
-                        "highlight": {
-                            "color": "#56A3A6",
-                            "stroke": false,
-                            "fillColor": "#DBD56E",
-                            "fill": true,
-                            "fillOpacity": 0.7
-                        },
-                        "themes": {
-                            "Size (sqft)": {
-                                "type": "graduated",
-                                "field": "gfa_sqft",
-                                "cat": {
-                                    "0": {
-                                        "label": "Less than 1m sqft",
-                                        "fillColor": "#1b9e77",
-                                        "color": "#1b9e77"
-                                    },
-                                    "1000000": {
-                                        "label": "1 to 1.5m sqft",
-                                        "fillColor": "#d95f02",
-                                        "color": "#d95f02"
-                                    },
-                                    "1500000": {
-                                        "label": "1.5 to 2m sqft",
-                                        "fillColor": "#7570b3",
-                                        "color": "#7570b3"
-                                    },
-                                    "2000000": {
-                                        "label": "Over 2m sqft",
-                                        "fillColor": "#e7298a",
-                                        "color": "#e7298a"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "tableview": {
-                        "tables": {
-                            "Shopping Malls": {
-                                "display": true,
-                                "from": "open.aus_glx_retail_venue_sizes",
-                                "columns": [
-                                    {
-                                        "title": "Retail Venue",
-                                        "field": "venue_name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "title": "Retail Venue Type",
-                                        "field": "venue_type",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "title": "Size (sqft)",
-                                        "field": "gfa_sqft",
-                                        "type": "integer"
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    "infoj": [
-                        {
-                            "field": "venue_name",
-                            "label": "Retail Venue",
-                            "inline": true
-                        },
-                        {
-                            "field": "venue_type",
-                            "label": "Retail Venue Type",
-                            "inline": true
-                        },
-                        {
+                    "themes": {
+                        "Size (sqft)": {
+                            "type": "graduated",
                             "field": "gfa_sqft",
-                            "label": "Size (sqft)",
-                            "type": "numeric",
-                            "inline": true,
-                            "filter": "numeric"
-                        },
-                        {
-                            "field": "images",
-                            "label": "Images",
-                            "type": "images",
-                            "edit": true
+                            "cat": {
+                                "0": {
+                                    "label": "Less than 1m sqft",
+                                    "fillColor": "#1b9e77",
+                                    "color": "#1b9e77"
+                                },
+                                "1000000": {
+                                    "label": "1 to 1.5m sqft",
+                                    "fillColor": "#d95f02",
+                                    "color": "#d95f02"
+                                },
+                                "1500000": {
+                                    "label": "1.5 to 2m sqft",
+                                    "fillColor": "#7570b3",
+                                    "color": "#7570b3"
+                                },
+                                "2000000": {
+                                    "label": "Over 2m sqft",
+                                    "fillColor": "#e7298a",
+                                    "color": "#e7298a"
+                                }
+                            }
                         }
-                    ]
+                    }
                 },
-                "retailuniverse": {
-                    "name": "Retail Universe",
-                    "format": "cluster",
-                    "attribution": [
-                        "Geolytix Retail Points"
-                    ],
-                    "dbs": "XYZ",
-                    "table": "open.vw_aus_glx_retail_universe",
-                    "qID": "id",
-                    "geom": "geom_4326",
-                    "cluster_label": "store_name",
-                    "cluster_kmeans": 0.02,
-                    "cluster_dbscan": 0.2,
-                    "infoj": [
-                        {
-                            "field": "retailer",
-                            "label": "Retailer",
-                            "inline": true
-                        },
-                        {
-                            "field": "fascia",
-                            "label": "Fascia",
-                            "inline": true
-                        },
-                        {
-                            "field": "store_name",
-                            "label": "Name",
-                            "inline": true
-                        },
-                        {
-                            "label": "Address",
-                            "type": "label"
-                        },
-                        {
-                            "field": "add_one"
-                        },
-                        {
-                            "field": "add_two"
-                        },
-                        {
-                            "field": "suburb"
-                        },
-                        {
-                            "field": "postcode"
-                        },
-                        {
-                            "field": "state"
+                "tableview": {
+                    "tables": {
+                        "Shopping Malls": {
+                            "display": true,
+                            "from": "open.aus_glx_retail_venue_sizes",
+                            "columns": [
+                                {
+                                    "title": "Retail Venue",
+                                    "field": "venue_name",
+                                    "type": "text"
+                                },
+                                {
+                                    "title": "Retail Venue Type",
+                                    "field": "venue_type",
+                                    "type": "text"
+                                },
+                                {
+                                    "title": "Size (sqft)",
+                                    "field": "gfa_sqft",
+                                    "type": "integer"
+                                }
+                            ]
                         }
-                    ],
-                    "style": {
-                        "marker": {
-                            "type": "target",
-                            "fillColor": "#93827F"
-                        },
-                        "markerMulti": {
-                            "type": "target",
-                            "fillColor": "#93827F"
-                        },
-                        "themes": {
-                            "Retailers": {
-                                "type": "categorized",
-                                "field": "retailer",
-                                "other": true,
-                                "cat": {
-                                    "Aldi": {
-                                        "fillColor": "#ffbf45",
-                                        "label": "Aldi",
-                                        "layers": {
-                                            "0.875": "#fa6f08",
-                                            "0.75": "#ef3c11",
-                                            "0.625": "#001f79",
-                                            "0.5": "#02bee3",
-                                            "0.25": "ffffff"
-                                        }
-                                    },
-                                    "Coles": {
-                                        "fillColor": "#83b923",
-                                        "label": "Coles",
-                                        "layers": {
-                                            "0.5": "#ffffff",
-                                            "0.375": "#fdb839"
-                                        }
-                                    },
-                                    "David Jones": {
-                                        "fillColor": "#a12629",
-                                        "label": "David Jones",
-                                        "layers": {
-                                            "0.5": "#ffffff",
-                                            "0.375": "#a12629"
-                                        }
-                                    },
-                                    "MYER": {
-                                        "fillColor": "#EEEEE0",
-                                        "label": "MYER",
-                                        "layers": {
-                                            "0.5": "#679a00",
-                                            "0.375": "#cccb01"
-                                        }
-                                    },
-                                    "Woolworths": {
-                                        "fillColor": "#0b1e60",
-                                        "label": "Woolworths",
-                                        "layers": {
-                                            "0.625": "#ffffff",
-                                            "0.5": "#a3d227"
-                                        }
+                    }
+                },
+                "infoj": [
+                    {
+                        "field": "images",
+                        "type": "images"
+                    },
+                    {
+                        "field": "venue_name",
+                        "label": "Retail Venue",
+                        "inline": true
+                    },
+                    {
+                        "field": "venue_type",
+                        "label": "Retail Venue Type",
+                        "inline": true
+                    },
+                    {
+                        "field": "gfa_sqft",
+                        "label": "Size (sqft)",
+                        "type": "numeric",
+                        "inline": true,
+                        "filter": "numeric"
+                    }
+                ]
+            },
+            "retailuniverse": {
+                "name": "Retail Universe",
+                "format": "cluster",
+                "attribution": [
+                    "Geolytix Retail Points"
+                ],
+                "dbs": "XYZ",
+                "table": "open.vw_aus_glx_retail_universe",
+                "qID": "id",
+                "geom": "geom_4326",
+                "cluster_label": "store_name",
+                "cluster_kmeans": 0.02,
+                "cluster_dbscan": 0.2,
+                "infoj": [
+                    {
+                        "field": "retailer",
+                        "label": "Retailer",
+                        "inline": true
+                    },
+                    {
+                        "field": "fascia",
+                        "label": "Fascia",
+                        "inline": true
+                    },
+                    {
+                        "field": "store_name",
+                        "label": "Name",
+                        "inline": true
+                    },
+                    {
+                        "label": "Address",
+                        "type": "label"
+                    },
+                    {
+                        "field": "add_one"
+                    },
+                    {
+                        "field": "add_two"
+                    },
+                    {
+                        "field": "suburb"
+                    },
+                    {
+                        "field": "postcode"
+                    },
+                    {
+                        "field": "state"
+                    }
+                ],
+                "style": {
+                    "marker": {
+                        "type": "target",
+                        "fillColor": "#93827F"
+                    },
+                    "markerMulti": {
+                        "type": "target",
+                        "fillColor": "#93827F"
+                    },
+                    "themes": {
+                        "Retailers": {
+                            "type": "categorized",
+                            "field": "retailer",
+                            "other": true,
+                            "cat": {
+                                "Aldi": {
+                                    "fillColor": "#ffbf45",
+                                    "label": "Aldi",
+                                    "layers": {
+                                        "0.875": "#fa6f08",
+                                        "0.75": "#ef3c11",
+                                        "0.625": "#001f79",
+                                        "0.5": "#02bee3",
+                                        "0.25": "ffffff"
+                                    }
+                                },
+                                "Coles": {
+                                    "fillColor": "#83b923",
+                                    "label": "Coles",
+                                    "layers": {
+                                        "0.5": "#ffffff",
+                                        "0.375": "#fdb839"
+                                    }
+                                },
+                                "David Jones": {
+                                    "fillColor": "#a12629",
+                                    "label": "David Jones",
+                                    "layers": {
+                                        "0.5": "#ffffff",
+                                        "0.375": "#a12629"
+                                    }
+                                },
+                                "MYER": {
+                                    "fillColor": "#EEEEE0",
+                                    "label": "MYER",
+                                    "layers": {
+                                        "0.5": "#679a00",
+                                        "0.375": "#cccb01"
+                                    }
+                                },
+                                "Woolworths": {
+                                    "fillColor": "#0b1e60",
+                                    "label": "Woolworths",
+                                    "layers": {
+                                        "0.625": "#ffffff",
+                                        "0.5": "#a3d227"
                                     }
                                 }
                             }
-                        },
-                        "markerMin": 20,
-                        "markerMax": 40
+                        }
                     },
-                    "key": "retailuniverse",
-                    "locale": "Australia",
-                    "filter": {}
-                }
+                    "markerMin": 20,
+                    "markerMax": 40
+                },
+                "key": "retailuniverse",
+                "locale": "Australia",
+                "filter": {}
             }
         }
     }
