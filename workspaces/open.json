@@ -65,10 +65,7 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "mvt_cache": true,
-                    "tables": {
-                        "2": null,
-                        "3": "open.global_glx_open_citiesoftheworld"
-                    },
+                    "table": "open.global_glx_open_citiesoftheworld",
                     "tableview": {
                         "tables": {
                             "World Cities": {
@@ -115,10 +112,6 @@
                     },
                     "infoj": [
                         {
-                            "field": "images",
-                            "type": "images"
-                        },
-                        {
                             "field": "nameascii",
                             "label": "City",
                             "filter": "like"
@@ -145,6 +138,11 @@
                             "label": "Population Density",
                             "type": "numeric",
                             "filter": "numeric"
+                        },
+                        {
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images"
                         }
                     ],
                     "style": {
@@ -486,9 +484,6 @@
                 "seamless_town": {
                     "name": "Seamless shopper towns",
                     "meta": "<div style='padding:10px;background-color:#f2f2f2;font-size:95%;'><p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p></div>",
-                    "attribution": [
-                        "Seamless Towns and Suburbs. Geolytix License."
-                    ],
                     "format": "mvt",
                     "geom_3857": "geom_3857",
                     "dbs": "XYZ",
@@ -497,6 +492,39 @@
                     "tables": {
                         "5": null,
                         "6": "open.vw_glx_geodata_shoppertown"
+                    },
+                    "tableview": {
+                        "tables": {
+                            "Shopper Town": {
+                                "from": "open.vw_glx_geodata_shoppertown",
+                                "columns": [
+                                    {
+                                        "field": "shoptown",
+                                        "title": "Shopper Town"
+                                    },
+                                    {
+                                        "field": "asda",
+                                        "title": "ASDA"
+                                    },
+                                    {
+                                        "field": "sainsburys",
+                                        "title": "Sainsburys"
+                                    },
+                                    {
+                                        "field": "waitrose",
+                                        "title": "Waitrose"
+                                    },
+                                    {
+                                        "field": "other",
+                                        "title": "Other"
+                                    },
+                                    {
+                                        "field": "js_asda_perc",
+                                        "title": "JS Asda %"
+                                    }
+                                ]
+                            }
+                        }
                     },
                     "infoj": [
                         {
@@ -572,11 +600,17 @@
                         },
                         {
                             "field": "js_asda_perc",
+                            "fieldfx" : "js_asda_perc * 100",
                             "label": "Sainsbury / Asda concentration",
                             "inline": true,
-                            "type": "numeric",
+                            "type": "integer",
                             "filter": "numeric"
-                        }
+                },{
+                    "field": "images",
+                    "label": "Images",
+                    "type": "images",
+                    "edit": true
+                }
                     ],
                     "style": {
                         "default": {
@@ -595,17 +629,12 @@
                         "themes": {},
                         "selected": {}
                     },
-                    "key": "seamless_town",
-                    "locale": "UK",
                     "filter": {}
                 },
                 "retailpoints": {
                     "name": "Retail Points",
                     "meta": "<div style='padding:10px;background-color:#f2f2f2;font-size:95%;'><p>Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths, Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose, Wholefoods.</p></div>",
                     "format": "cluster",
-                    "attribution": [
-                        "Geolytix Retail Points"
-                    ],
                     "dbs": "XYZ",
                     "table": "geodata.uk_glx_open_retail_points_ed",
                     "qID": "id",
@@ -1145,7 +1174,7 @@
                 "west": 125
             },
             "showScaleBar": true,
-            "minZoom": 6,
+            "minZoom": 8,
             "maxZoom": 17,
             "layers": {
                 "base": {
@@ -1187,7 +1216,10 @@
                     "geom": "geom_3857",
                     "dbs": "XYZ",
                     "qID": "chomoku_cd",
-                    "table": "open.vw_jpn_chomoku_with_stats",
+                    "tables": {
+                        "5": null,
+                        "6": "open.vw_jpn_chomoku_with_stats"
+                    },
                     "tableview": {
                         "tables": {
                             "Chomoku": {
@@ -1275,6 +1307,7 @@
                     "infoj": [
                         {
                             "field": "images",
+                            "label": "Images",
                             "type": "images",
                             "edit": true
                         },
@@ -1498,9 +1531,10 @@
                             "filter": "numeric"
                         },
                         {
-                            "label": "Images",
                             "field": "images",
-                            "type": "images"
+                            "label": "Images",
+                            "type": "images",
+                            "edit": true
                         }
                     ]
                 },
