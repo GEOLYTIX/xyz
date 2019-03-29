@@ -16,7 +16,8 @@ function route(fastify) {
     url: '/report',
     preValidation: fastify.auth([
       (req, res, done) => fastify.authToken(req, res, done, {
-        public: global.public
+        public: global.public,
+        login: true
       })
     ]),
     handler: view
@@ -25,7 +26,8 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/report',
-    handler: (req, res) => require(global.appRoot + '/routes/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/login')
+      .post(req, res, fastify)
   });
 
 };

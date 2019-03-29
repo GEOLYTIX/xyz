@@ -12,6 +12,9 @@ Get the workspace from XYZ host.
 
 Post a workspace to the XYZ host. Will run checks, load workspace into memory and store the workspace as a new record in the workspace table.
 
+The workspace is stored in global.workspace.current
+
+
 
 **Views**
 
@@ -38,6 +41,11 @@ Log rocket has been added to the repo. A confirmation dialog will ask whether a 
 Token authentication is now happening pre route validation.
 
 
+**Token**
+
+The /token endpoint will return an API key and store the key in the ACL database in the api field for the user. Token do not timeout but can never be used to login or for administrative tasks. An API token will always be checked against the database to create a signed token with the user roles.
+
+
 **Validation**
 
 All params must be provided on the querystring. The querystring params must be validated in route schema.
@@ -45,19 +53,49 @@ All params must be provided on the querystring. The querystring params must be v
 Additional checks are run in an array of pre-handler methods.
 
 
+**User routes**
+
+Routes for the management of users are:
+
+/user/admin The admin view for the ACL.
+
+/user/approve The endroute to approve a user with an approval token.
+
+/user/verify The endroute to approve a user with an verification token.
+
+/user/log Returns the access log for a user.
+
+/user/list Returns a list of all users.
+
+/user/update Updates a user field in the ACL.
+
+/user/delete Endpoint to delete a user from the ACL.
+
+/user/block Endpoint to block a user.
+
 **User schema**
 
-Additional fields have been added to the ACL.
-
-admin_user
-
-admin_workspace
-
-blocked
-
-approved_by
-
-access_log
+```
+create table users
+(
+	"_id" serial not null,
+	email text not null,
+	password text not null,
+	verified boolean default false,
+	approved boolean default false,
+	verificationtoken text,
+	approvaltoken text,
+	failedattempts integer default 0,
+	password_reset text,
+	api text,
+	approved_by text,
+	access_log text[] default '{}'::text[],
+	blocked boolean default false,
+	roles text[] default '{}'::text[],
+	admin_workspace boolean default false,
+	admin_user boolean default false
+);
+```
 
 
 **Error Codes**

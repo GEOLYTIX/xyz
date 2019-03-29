@@ -84,11 +84,8 @@ async function post(req, res, fastify, access) {
     
     token.signed = fastify.jwt.sign(token, { expiresIn: 28800 });
 
-    // Return leaflet map control view.
-    if(/\/map\/leaflet/.test(req.headers.referer)) return require(global.appRoot + '/routes/map_leaflet').view(req, res, token);
-
     // Return API key.
-    if(/\/token/.test(req.headers.referer)) return require(global.appRoot + '/routes/token/api').view(req, res, token, fastify);
+    if(/\/token/.test(req.headers.referer)) return require(global.appRoot + '/routes/token').view(req, res, token, fastify);
 
     // Return user admin view.
     if(/\/user\/admin/.test(req.headers.referer)) return require(global.appRoot + '/routes/user/admin').view(req, res, token);

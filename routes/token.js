@@ -6,7 +6,9 @@ function route(fastify) {
     method: 'GET',
     url: '/token',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done)
+      (req, res, done) => fastify.authToken(req, res, done, {
+        login: true
+      })
     ]),
     handler: view
   });
@@ -14,7 +16,8 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/token',
-    handler: (req, res) => require(global.appRoot + '/routes/login').post(req, res, fastify)
+    handler: (req, res) => require(global.appRoot + '/routes/login')
+      .post(req, res, fastify)
   });
 
 };
@@ -32,14 +35,14 @@ async function view(req, res, token, fastify) {
   const user = rows[0];
   
   if (!user
-    || !user.api
     || !user.verified
     || !user.approved
-    || user.blocked) return res.code(401).send('Invalid token');
+    || user.blocked) return res.code(401).send(new Error('Invalid token'));
   
   // Create signed api_token
   const api_token = fastify.jwt.sign({
     email: user.email,
+    roles: [],
     api: true
   });
   

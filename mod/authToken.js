@@ -1,46 +1,52 @@
-module.exports = fastify => (req, res, next, access) => {
+module.exports = fastify => (req, res, next, access = {}) => {
 
-  if (req.query.token === 'null') console.log(req.req.originalUrl);
+  // Public access without token.
+  if (!req.query.token && access.public) {
+    return next();
+  }
 
-  // Public access
-  if (access.public) return next();
-
-  // No token found.
-  if (!req.query.token) {
-
-    // Do not redirect API calls.
-    if (access.API) return res.code(401).send('Invalid token');
-
-    // Redirect to login with request URL as redirect parameter
+  // Redirect to login
+  if (access.login) {
     return require(global.appRoot + '/routes/login').view(req, res);
+  }
+
+  // Private access without token.
+  if (!req.query.token) {
+    return res.code(401).send(new Error('Missing token'));
   }
 
   // Verify token (checks token expiry)
   fastify.jwt.verify(req.query.token, async (err, token) => {
     if (err) {
       fastify.log.error(err);
-      return res.code(401).send('Invalid token');
+      return res.code(401).send(new Error('Invalid token'));
     }
 
     // Token must have an email
-    if (!token.email) return res.code(401).send('Invalid token');
+    if (!token.email) {
+      return res.code(401).send(new Error('Invalid token'));
+    }
 
     if (token.api) {
 
       // Get user from ACL.
       rows = await global.pg.users(`
-          SELECT * FROM acl_schema.acl_table
-          WHERE lower(email) = lower($1);`, [token.email]);
+        SELECT * FROM acl_schema.acl_table
+        WHERE lower(email) = lower($1);`, [token.email]);
     
       if (rows.err) return require(global.appRoot + '/routes/login').view(req, res);
     
       const user = rows[0];
     
-      if (!user.api || (user.api !== req.query.token)) return res.code(401).send('Invalid token');
+      if (!user.api
+        || (user.api !== req.query.token)) {
+        return res.code(401).send(new Error('Invalid token'));
+      }
     
       // Create a private token with 10second expiry.
       req.query.token = fastify.jwt.sign({
-        email: user.email
+        email: user.email,
+        roles: user.roles
       }, {
         expiresIn: 10
       });

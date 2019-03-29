@@ -7,7 +7,8 @@ function route(fastify) {
     url: '/user/approve/:token',
     preValidation: fastify.auth([
       (req, res, done) => fastify.authToken(req, res, done, {
-        admin_user: true
+        admin_user: true,
+        login: true
       })
     ]),
     handler: view
