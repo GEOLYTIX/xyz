@@ -97,6 +97,26 @@ create table users
 );
 ```
 
+**Roles**
+
+Roles are set on the layer.
+
+```
+"roles": {
+  "boo" : null,
+  "foo" : {
+    "retailer": {
+      "in": [
+        "Tesco",
+        "Sainsburys"
+      ]
+    }
+  }
+}
+```
+
+If a roles are set means that the layer is not available to anybody who doesn't have a role from the layer. If a filter is set on the role means that the user has access to the layer but the filter will be applied to any query.
+
 
 **Error Codes**
 
