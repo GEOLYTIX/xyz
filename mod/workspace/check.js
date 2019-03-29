@@ -22,22 +22,6 @@ module.exports = async workspace => {
   return workspace;
 };
 
-// async function createLookup(workspace) {
-  
-//   // store all workspace string values in lookup arrays.
-//   const lookupValues = ['', 'geom', 'geom_3857', 'id', 'ST_asGeoJson(geom)', 'ST_asGeoJson(geom_4326)'];
-//   (function objectEval(o) {
-//     Object.keys(o).forEach((key) => {
-//       if (typeof key === 'string') lookupValues.push(key);
-//       if (typeof o[key] === 'string') lookupValues.push(o[key]);
-//       if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
-//     });
-//   })(workspace);
-
-//   return lookupValues;
-  
-// }
-
 async function chkOptionals(chk, opt) {
 
   // Check defaults => workspace first.

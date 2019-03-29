@@ -8,6 +8,7 @@ module.exports = fastify => {
     lnglat: _lnglat,
     layerTable: _layerTable,
     geomTable: _geomTable,
+    layerValues: _layerValues,
     tableDef: _tableDef,
   };
 
@@ -112,6 +113,35 @@ module.exports = fastify => {
     }
 
     next();
+
+  };
+
+  function createLookup(entry) {
+  
+    // store all workspace string values in lookup arrays.
+    const lookupValues = new Set();
+    (function objectEval(o) {
+      Object.keys(o).forEach((key) => {
+        if (typeof key === 'string') lookupValues.add(key);
+        if (typeof o[key] === 'string') lookupValues.add(o[key]);
+        if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
+      });
+    })(entry);
+  
+    return lookupValues;
+    
+  }
+
+  async function _layerValues (req, res, next, vals) {
+
+    const lookupValues = await createLookup(req.params.layer);
+
+    if (!vals.some(
+      val => req.query[val] && !lookupValues.has(req.query[val])
+    )) return next();
+
+    res.code(400);
+    return next(new Error('Invalid querystring parameter.'));
 
   };
 

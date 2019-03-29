@@ -25,6 +25,9 @@ module.exports = fastify => {
       fastify.evalParam.layer,
       fastify.evalParam.roles,
       fastify.evalParam.geomTable,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['size','color']);
+      },
     ],
     handler: async (req, res) => {
 
@@ -38,14 +41,6 @@ module.exports = fastify => {
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north);
-
-
-      // Check whether string params are found in the settings to prevent SQL injections.
-      // if ([size, color]
-      //   .some(val => (typeof val === 'string'
-      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
-      //   return res.code(406).send(new Error('Invalid parameter.'));
-      // }
 
       
       var q = `

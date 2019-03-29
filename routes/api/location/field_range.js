@@ -1,4 +1,5 @@
 module.exports = fastify => {
+
   fastify.route({
     method: 'GET',
     url: '/api/location/field/range',
@@ -24,7 +25,10 @@ module.exports = fastify => {
       fastify.evalParam.token,
       fastify.evalParam.locale,
       fastify.evalParam.layer,
-      fastify.evalParam.roles
+      fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
     ],
     handler: async (req, res) => {
         
@@ -32,13 +36,6 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         field = req.query.field;
-  
-      // Check whether string params are found in the settings to prevent SQL injections.
-      // if ([table, field]
-      //   .some(val => (typeof val === 'string'
-      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
-      //   return res.code(406).send(new Error('Invalid parameter.'));
-      // }
            
       var q = `
       SELECT min(${field}), max(${field})
@@ -58,5 +55,6 @@ module.exports = fastify => {
       });
   
     }
+    
   });
 };

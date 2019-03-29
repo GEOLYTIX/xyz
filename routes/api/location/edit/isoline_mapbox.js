@@ -26,6 +26,9 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
     ],
     handler: async(req, res) => {
       
@@ -38,17 +41,9 @@ module.exports = fastify => {
         minutes: req.query.minutes || 10,
         profile: req.query.profile || 'driving',
       };
-
-      // Check whether string params are found in the settings to prevent SQL injections.
-      // if ([table]
-      //   .some(val => (typeof val === 'string'
-      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
-      //   return res.code(406).send(new Error('Invalid parameter.'));
-      // }
          
       var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${global.KEYS.MAPBOX}`;
       
-      // console.log(q);
 
       // Fetch results from Google maps places API.
       const mapbox_isolines = await require(global.appRoot + '/mod/fetch')(q);
@@ -58,13 +53,6 @@ module.exports = fastify => {
       const geojson = JSON.stringify(mapbox_isolines.features[0].geometry);
 
       if (req.query.id) {
-
-        // Check whether string params are found in the settings to prevent SQL injections.
-        // if ([req.query.field]
-        //   .some(val => (typeof val === 'string'
-        //   && global.workspace.lookupValues.indexOf(val) < 0))) {
-        //   return res.code(406).send(new Error('Invalid parameter.'));
-        // }
 
         var q = `
         UPDATE ${table}

@@ -26,23 +26,18 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table']);
+      },
     ],
     handler: async (req, res) => {
-              
-  
+
       let
         layer = req.params.layer,
         table = req.query.table,
         qID = layer.qID,
         id = req.query.id,
         field = req.query.field;
-  
-      // Check whether string params are found in the settings to prevent SQL injections.
-      // if ([table]
-      //   .some(val => (typeof val === 'string'
-      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
-      //   return res.code(406).send(new Error('Invalid parameter.'));
-      // }
   
       var q = `UPDATE ${table} SET ${field} = null WHERE ${qID} = $1;`;
   
