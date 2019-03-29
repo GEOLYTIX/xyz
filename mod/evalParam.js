@@ -7,6 +7,7 @@ module.exports = fastify => {
     roles: _roles,
     lnglat: _lnglat,
     layerTable: _layerTable,
+    geomTable: _geomTable,
     tableDef: _tableDef,
   };
 
@@ -88,16 +89,16 @@ module.exports = fastify => {
 
   };
 
-  function _table (req, res, next) {
+  function _geomTable (req, res, next) {
 
-    // Get table if not defined in params.
+    if (req.query.table === req.params.layer.table) return next();
 
-    const table = req.query.table
-    || layer.table
-    || Object.values(layer.tables)[Object.values(layer.tables).length - 1]
-    || Object.values(layer.tables)[Object.values(layer.tables).length - 2];
-    
-    next();
+    if (Object.values(req.params.layer.tables || {}).some(
+      table => table === req.query.table
+    )) return next();
+
+    res.code(400);
+    return next(new Error('Missing layer table.'));
     
   };
 

@@ -25,6 +25,7 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
     ],
     handler: async (req, res) => {
 
@@ -35,12 +36,6 @@ module.exports = fastify => {
         geom_3857 = layer.geom_3857,
         geometry = JSON.stringify(req.body.geometry);
       
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
       
       // const d = new Date();
       

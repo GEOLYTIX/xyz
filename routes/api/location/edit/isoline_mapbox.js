@@ -40,11 +40,11 @@ module.exports = fastify => {
       };
 
       // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
+      // if ([table]
+      //   .some(val => (typeof val === 'string'
+      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
+      //   return res.code(406).send(new Error('Invalid parameter.'));
+      // }
          
       var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${global.KEYS.MAPBOX}`;
       
@@ -60,11 +60,11 @@ module.exports = fastify => {
       if (req.query.id) {
 
         // Check whether string params are found in the settings to prevent SQL injections.
-        if ([req.query.field]
-          .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-          return res.code(406).send(new Error('Invalid parameter.'));
-        }
+        // if ([req.query.field]
+        //   .some(val => (typeof val === 'string'
+        //   && global.workspace.lookupValues.indexOf(val) < 0))) {
+        //   return res.code(406).send(new Error('Invalid parameter.'));
+        // }
 
         var q = `
         UPDATE ${table}

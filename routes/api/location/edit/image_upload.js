@@ -46,12 +46,6 @@ module.exports = fastify => {
             qID = req.query.qID ? req.query.qID : 'id',
             id = req.query.id;
 
-          // Check whether string params are found in the settings to prevent SQL injections.
-          if ([table]
-            .some(val => (typeof val === 'string'
-              && global.workspace.lookupValues.indexOf(val) < 0))) {
-            return res.code(406).send(new Error('Invalid parameter.'));
-          }
 
           var q = `
           UPDATE ${table} SET ${field} = array_append(${field}, '${body.secure_url}')

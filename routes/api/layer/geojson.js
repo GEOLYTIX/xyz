@@ -26,6 +26,7 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
     ],
     handler: async (req, res) => {
 
@@ -35,16 +36,7 @@ module.exports = fastify => {
         geom = layer.geom,
         id = layer.qID || null,
         cat = req.query.cat || null,
-        filter = req.params.filter;
-
-        
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
-      
+        filter = req.params.filter;     
 
       // SQL filter
       const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || ' true';

@@ -26,6 +26,7 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
     ],
     handler: async (req, res) => {
 
@@ -35,12 +36,6 @@ module.exports = fastify => {
         qID = layer.qID,
         id = req.query.id;
 
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
 
       // const d = new Date();
 
@@ -54,8 +49,6 @@ module.exports = fastify => {
       //   RETURNING ${qID} AS id;`;
 
       //   var rows = await global.pg.dbs[layer.dbs](q);
-
-      //   if (rows.err) return res.code(500).send('soz. it\'s not you. it\'s me.');
 
       //   await writeLog(layer, rows[0].id);
 

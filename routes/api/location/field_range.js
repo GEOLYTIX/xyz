@@ -34,11 +34,11 @@ module.exports = fastify => {
         field = req.query.field;
   
       // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table, field]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
+      // if ([table, field]
+      //   .some(val => (typeof val === 'string'
+      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
+      //   return res.code(406).send(new Error('Invalid parameter.'));
+      // }
            
       var q = `
       SELECT min(${field}), max(${field})

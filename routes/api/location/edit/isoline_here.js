@@ -48,11 +48,11 @@ module.exports = fastify => {
           600;
 
       // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
+      // if ([table]
+      //   .some(val => (typeof val === 'string'
+      //     && global.workspace.lookupValues.indexOf(val) < 0))) {
+      //   return res.code(406).send(new Error('Invalid parameter.'));
+      // }
 
       var q = `https://isoline.route.api.here.com/routing/7.2/calculateisoline.json?${global.KEYS.HERE}&mode=${params.type};${params.mode};${params.traffic}&start=geo!${params.coordinates}&range=${params.range}&rangetype=${params.rangetype}`;
 
@@ -81,11 +81,11 @@ module.exports = fastify => {
       if (req.query.id) {
 
         // Check whether string params are found in the settings to prevent SQL injections.
-        if ([req.query.field]
-          .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-          return res.code(406).send(new Error('Invalid parameter.'));
-        }
+        // if ([req.query.field]
+        //   .some(val => (typeof val === 'string'
+        //   && global.workspace.lookupValues.indexOf(val) < 0))) {
+        //   return res.code(406).send(new Error('Invalid parameter.'));
+        // }
 
 
         var q = `

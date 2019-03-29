@@ -27,6 +27,7 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
     ],
     handler: async (req, res) => {
       
@@ -41,12 +42,6 @@ module.exports = fastify => {
       // Return 406 if table does not have EPSG:4326 geometry field.
       if (!geom) return res.code(400).send(new Error('Missing geom (SRID 4326) field on layer.'));
   
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
   
       // The fields array stores all fields to be queried for the location info.
       const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);

@@ -27,6 +27,7 @@ module.exports =  fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
     ],
     handler: async (req, res) => {
 
@@ -45,13 +46,6 @@ module.exports =  fastify => {
         `${table}.${layer.geom}`
         : `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
 
-
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string'
-          && global.workspace.lookupValues.indexOf(val) < 0))) {
-        return res.code(406).send(new Error('Invalid parameter.'));
-      }
 
 
       // The fields array stores all fields to be queried for the location info.
