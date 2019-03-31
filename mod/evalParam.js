@@ -16,7 +16,7 @@ module.exports = fastify => {
 
     req.params.token = req.query.token ?
       fastify.jwt.decode(req.query.token) :
-      { access: 'public' };
+      { access: 'public', roles: [] };
         
     next();
 

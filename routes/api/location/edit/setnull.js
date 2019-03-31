@@ -3,7 +3,7 @@ module.exports = fastify => {
     method: 'GET',
     url: '/api/location/edit/field/setnull',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         public: global.public
       })
     ]),

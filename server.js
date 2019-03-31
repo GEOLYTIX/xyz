@@ -88,6 +88,7 @@ function startFastify(){
       prefix: (process.env.DIR || '') + '/'
     })
     .register(require('fastify-auth'))
+    .decorate('login', require(global.appRoot + '/routes/login')(fastify))
     .decorate('authToken', require(global.appRoot +'/mod/authToken')(fastify))
     .decorate('evalParam', require(global.appRoot +'/mod/evalParam')(fastify))
     .register(require('fastify-jwt'), {

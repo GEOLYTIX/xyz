@@ -4,7 +4,7 @@ module.exports = fastify => {
     method: 'GET',
     url: '/api/location/edit/images/delete',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         public: global.public
       })
     ]),
@@ -28,9 +28,6 @@ module.exports = fastify => {
       }, async (err, response, body) => {
 
         if (err) return console.error(err);
-
-        const token = req.query.token ?
-          fastify.jwt.decode(req.query.token) : { access: 'public' };
 
         let
           layer = global.workspace.current.locales[req.query.locale].layers[req.query.layer],

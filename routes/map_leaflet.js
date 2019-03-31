@@ -14,8 +14,12 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/map/leaflet',
-
-    // No preHandler for map control pages.
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: global.public,
+        login: true
+      })
+    ]),
     handler: view
   });
 
@@ -23,7 +27,9 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/map/leaflet',
-    handler: (req, res) => require(global.appRoot + '/routes/login').post(req, res, fastify)
+    handler: (req, res) => fastify.login.post(req, res, {
+      view: view
+    })
   });
 
 };
@@ -42,7 +48,7 @@ async function view(req, res, token = { access: 'public' }) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: token.signed,
+    token: req.query.token || token.signed || '""'
   }));
 
 }

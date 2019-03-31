@@ -6,7 +6,7 @@ function route(fastify) {
     method: 'GET',
     url: '/token',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         login: true
       })
     ]),
@@ -16,8 +16,9 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/token',
-    handler: (req, res) => require(global.appRoot + '/routes/login')
-      .post(req, res, fastify)
+    handler: (req, res) => fastify.login.post(req, res, {
+      view: (req, res, token) => view(req, res, token, fastify)
+    })
   });
 
 };

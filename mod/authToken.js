@@ -7,7 +7,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
 
   // Redirect to login
   if (access.login) {
-    return require(global.appRoot + '/routes/login').view(req, res);
+    return fastify.login.view(req, res);
   }
 
   // Private access without token.
@@ -34,7 +34,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
         SELECT * FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`, [token.email]);
     
-      if (rows.err) return require(global.appRoot + '/routes/login').view(req, res);
+      if (rows.err) return fastify.login.view(req, res);
     
       const user = rows[0];
     
@@ -62,8 +62,8 @@ module.exports = fastify => (req, res, next, access = {}) => {
 
     // Check admibn_workspace privileges.
     if (access.admin_workspace && token.admin_workspace) return next();
-    
-    return require(global.appRoot + '/routes/login').view(req, res);
+
+    res.code(401).send(new Error('Invalid token'));
 
   });
 

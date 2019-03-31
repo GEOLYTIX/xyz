@@ -6,7 +6,7 @@ function route(fastify) {
     method: 'GET',
     url: '/user/admin',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         admin_user: true,
         login: true
       })
@@ -17,10 +17,10 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/user/admin',
-    handler: (req, res) => require(global.appRoot + '/routes/login')
-      .post(req, res, fastify, {
-        admin_user: true
-      })
+    handler: (req, res) => fastify.login.post(req, res, {
+      admin_user: true,
+      view: view
+    })
   });
 
 };

@@ -5,7 +5,7 @@ module.exports = fastify => {
     method: 'GET',
     url: '/workspace/get',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         public: global.public
       })
     ]),
@@ -24,10 +24,10 @@ module.exports = fastify => {
         }
       }
     },
+    preHandler: [
+      fastify.evalParam.token
+    ],
     handler: (req, res) => {
-
-      // Decode token from query or use a public access if no token has been provided.
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public', roles: [] };
 
       const locales = JSON.parse(JSON.stringify(global.workspace.current.locales));
 
@@ -36,7 +36,7 @@ module.exports = fastify => {
         // check whether the object has an access key matching the current level.
         if (Object.entries(o).some(
           e => e[0] === 'roles' && !Object.keys(e[1]).some(
-            role=> token.roles.includes(role)
+            role=> req.params.token.roles.includes(role)
           )
         )) {
       

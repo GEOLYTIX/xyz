@@ -2,7 +2,7 @@ module.exports = fastify => {
 
   require('./root').route(fastify);
 
-  require('./login').route(fastify);
+  fastify.login.route(fastify);
   
   require('./register')(fastify);
 
@@ -19,7 +19,5 @@ module.exports = fastify => {
   require('./workspace/_workspace')(fastify);
 
   require('./map_leaflet').route(fastify);
-
-
 
 };

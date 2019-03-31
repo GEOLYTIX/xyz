@@ -3,7 +3,7 @@ module.exports = fastify => {
     method: 'POST',
     url: '/api/location/edit/images/upload',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         public: global.public
       })
     ]),
@@ -36,9 +36,6 @@ module.exports = fastify => {
         }, async (err, response, body) => {
 
           if (err) return console.error(err);
-
-          const token = req.query.token ?
-            fastify.jwt.decode(req.query.token) : { access: 'public' };
 
           let
             table = req.query.table,

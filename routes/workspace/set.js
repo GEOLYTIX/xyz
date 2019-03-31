@@ -4,7 +4,7 @@ module.exports = fastify => {
     method: 'POST',
     url: '/workspace/set',
     preValidation: fastify.auth([
-      (req, res, done) => fastify.authToken(req, res, done, {
+      (req, res, next) => fastify.authToken(req, res, next, {
         admin_workspace: true
       })
     ]),
