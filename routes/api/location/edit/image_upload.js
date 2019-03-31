@@ -1,4 +1,5 @@
 module.exports = fastify => {
+
   fastify.route({
     method: 'POST',
     url: '/api/location/edit/images/upload',
@@ -7,9 +8,40 @@ module.exports = fastify => {
         public: global.public
       })
     ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          id: { type: 'string' },
+          field: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'id', 'field']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
+    ],
     handler: (req, res) => {
 
-      const cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [];
+      let
+        layer = req.params.layer,
+        table = req.query.table,
+        qID = layer.qID,
+        id = req.query.id,
+        field = req.query.field,
+        cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [],
+        ts = Date.now(),
+        sig = require('crypto').createHash('sha1').update(`folder=${cloudinary[3]}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
 
       var data = [];
 
@@ -18,10 +50,6 @@ module.exports = fastify => {
       req.req.on('end', () => {
 
         req.body = Buffer.concat(data);
-
-        let
-          ts = Date.now(),
-          sig = require('crypto').createHash('sha1').update(`folder=${cloudinary[3]}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
 
         require('request').post({
           url: `https://api.cloudinary.com/v1_1/${cloudinary[2]}/image/upload`,
@@ -37,19 +65,13 @@ module.exports = fastify => {
 
           if (err) return console.error(err);
 
-          let
-            table = req.query.table,
-            field = req.query.field,
-            qID = req.query.qID ? req.query.qID : 'id',
-            id = req.query.id;
-
-
           var q = `
-          UPDATE ${table} SET ${field} = array_append(${field}, '${body.secure_url}')
-          WHERE ${qID} = $1;`;
+            UPDATE ${table}
+            SET ${field} = array_append(${field}, '${body.secure_url}')
+            WHERE ${qID} = $1;`;
 
           // add filename to images field
-          await global.pg.dbs[req.query.dbs](q, [id]);
+          await global.pg.dbs[layer.dbs](q, [id]);
 
           res.code(200).send({
             'image_id': body.public_id,
@@ -58,6 +80,7 @@ module.exports = fastify => {
         });
 
       });
+      
     }
 
   });

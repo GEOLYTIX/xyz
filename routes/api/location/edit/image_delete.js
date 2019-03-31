@@ -8,11 +8,39 @@ module.exports = fastify => {
         public: global.public
       })
     ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          id: { type: 'string' },
+          field: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'id', 'field']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
+    ],
     handler: (req, res) => {
 
-      const cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [];
-
       let
+        layer = req.params.layer,
+        table = req.query.table,
+        qID = layer.qID,
+        id = req.query.id,
+        field = req.query.field,
+        image_src = decodeURIComponent(req.query.image_src),
+        cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [],
         ts = Date.now(),
         sig = require('crypto').createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
 
@@ -29,24 +57,18 @@ module.exports = fastify => {
 
         if (err) return console.error(err);
 
-        let
-          layer = global.workspace.current.locales[req.query.locale].layers[req.query.layer],
-          table = req.query.table,
-          field = req.query.field,
-          qID = layer.qID ? layer.qID : 'id',
-          id = req.query.id,
-          image_src = decodeURIComponent(req.query.image_src);
-
-
         var q = `
-        UPDATE ${table} SET ${field} = array_remove(${field}, '${image_src}')
-        WHERE ${qID} = $1;`;
+          UPDATE ${table}
+          SET ${field} = array_remove(${field}, '${image_src}')
+          WHERE ${qID} = $1;`;
 
         await global.pg.dbs[layer.dbs](q, [id]);
 
         res.code(200).send('Image deleted.');
+        
       });
 
     }
+
   });
 };

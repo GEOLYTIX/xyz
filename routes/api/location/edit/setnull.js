@@ -27,7 +27,7 @@ module.exports = fastify => {
       fastify.evalParam.layer,
       fastify.evalParam.roles,
       (req, res, next) => {
-        fastify.evalParam.layerValues(req, res, next, ['table']);
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
       },
     ],
     handler: async (req, res) => {
