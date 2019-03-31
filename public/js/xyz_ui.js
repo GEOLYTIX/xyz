@@ -17,7 +17,7 @@ import locationlistview from './location/listview.mjs';
 import gazetteer from './gazetteer.mjs';
 
 _xyz({
-  host: document.head.dataset.dir,
+  host: document.head.dataset.dir || new String(''),
   token: document.body.dataset.token,
   log: document.body.dataset.log,
   nanoid: document.body.dataset.nanoid,
