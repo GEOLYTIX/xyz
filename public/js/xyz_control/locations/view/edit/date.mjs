@@ -31,6 +31,7 @@ export default _xyz => entry => {
         entry,
         _xyz.utils.meltDateStr(new Date(input.value))
       );
+      instance.calendar.style.top = '-10000px';
     },
     onShow: instance => {
    
