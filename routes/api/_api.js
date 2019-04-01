@@ -26,6 +26,8 @@ module.exports = fastify => {
 
   require('./location/table')(fastify);
 
+  require('./location/list')(fastify);
+
   // location/edit
 
   require('./location/edit/delete')(fastify);

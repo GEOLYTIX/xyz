@@ -6,6 +6,8 @@ import removeTab from './removeTab.mjs';
 
 import locationTable from './locationTable.mjs';
 
+import orderedList from './orderedList.mjs';
+
 import layerTable from './layerTable.mjs';
 
 export default _xyz => {
@@ -21,6 +23,8 @@ export default _xyz => {
     removeTab: removeTab(_xyz),
 
     locationTable: locationTable(_xyz),
+
+    orderedList: orderedList(_xyz),
 
     layerTable: layerTable(_xyz)
 

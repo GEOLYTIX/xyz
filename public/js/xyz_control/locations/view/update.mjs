@@ -111,7 +111,9 @@ export default (_xyz, location) => () => {
     // Create geometry control.
     if (entry.type === 'geometry') return location.view.geometry(entry);    
 
-    if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);    
+    if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);
+
+    if (entry.type === 'orderedList') return location.view.orderedList(entry);    
 
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();
