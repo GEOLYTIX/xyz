@@ -36,24 +36,6 @@ module.exports = fastify => {
         qID = layer.qID,
         id = req.query.id;
 
-
-      // const d = new Date();
-
-      // // Set the log stamp and create duplicate in log table prior to delete.
-      // if (layer.log && layer.log.table) {
-
-      //   var q = `
-      //   UPDATE ${table}
-      //   SET ${layer.log.field || 'log'} = 
-      //     '{ "user": "${token.email}", "op": "delete", "time": "${d.toUTCString()}"}'
-      //   RETURNING ${qID} AS id;`;
-
-      //   var rows = await global.pg.dbs[layer.dbs](q);
-
-      //   await writeLog(layer, rows[0].id);
-
-      // }
-
       if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, id);
 
       var q = `DELETE FROM ${table} WHERE ${qID} = $1;`;

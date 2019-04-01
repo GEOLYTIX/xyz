@@ -43,34 +43,14 @@ module.exports =  fastify => {
       // Get a EPSG:4326 geom field which is used to generate geojson for the client map.
       // The geom field is also required for lookup fields.
       const geom = layer.geom ?
-        `${table}.${layer.geom}`
-        : `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
-
-
+        `${table}.${layer.geom}` :
+        `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
 
       // The fields array stores all fields to be queried for the location info.
       const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);
 
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
-        
-       
-      // let qLog = layer.log_table ?
-      //   `( SELECT *, ROW_NUMBER() OVER (
-      //       PARTITION BY ${layer.qID || 'id'}
-      //       ORDER BY ((${layer.log_table.field || 'log'} -> 'time') :: VARCHAR) :: TIMESTAMP DESC ) AS rank
-      //       FROM gb_retailpoint_editable_logs  AS logfilter`
-      //   : null;
-        
-      // q = `
-      // SELECT
-      //     ${fields}
-      //     ${geomj} AS geomj
-      // FROM ${layer.log_table ? qLog : table}
-      // WHERE 
-      // ${layer.log_table ? 'rank = 1 AND ' : ''}
-      // ${qID} = $1;`;
-      
 
       const fields_with = [];
 

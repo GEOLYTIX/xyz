@@ -64,7 +64,7 @@ xhr.onload = e => {
           title: 'Roles',
           headerTooltip: 'Account roles',
           headerSort: false,
-          //editor: roleEdit,
+          editor: roleEdit,
         },
         {
           field: 'access_log',
@@ -92,13 +92,9 @@ xhr.onload = e => {
           cellClick: rowDelete,
         }
       ],
-      // autoResize: false,
-      //columnVertAlign: 'middle',
       resizableColumns: false,
       resizableRows: false,
       layout: 'fitDataFill',
-      // layoutColumnsOnNewData: true,
-      // height: _xyz.tableview.height || '100%'
     });
 
   userTable.setData(e.target.response);
@@ -120,15 +116,15 @@ function cellToggle(e, cell) {
     document.head.dataset.dir + 
     '/user/update' + 
     '?email=' + user.email +
-    '&role=' + col.getField() +
-    '&chk=' + !cell.getValue() +
+    '&field=' + col.getField() +
+    '&value=' + !cell.getValue() +
     '&token=' + token);
 
   xhr.setRequestHeader('Content-Type', 'application/json');
 
   xhr.onload = () => {
-    if (xhr.status === 500) alert('Soz. It\'s me not you.');
-    if (xhr.status === 200) cell.setValue(!cell.getValue());
+    if (xhr.status !== 200) return alert(xhr.response.message);
+    cell.setValue(!cell.getValue());
   };
 
   xhr.send();
@@ -185,54 +181,45 @@ function rowDelete(e, cell) {
 };
 
 function roleEdit(cell, onRendered, success, cancel, editorParams){
-  //cell - the cell component for the editable cell
-  //onRendered - function to call when the editor has been rendered
-  //success - function to call to pass the successfuly updated value to Tabulator
-  //cancel - function to call to abort the edit and return to a normal cell
-  //editorParams - params object passed into the editorParams column definition property
 
   //create and style editor
-  var editor = document.createElement('select');
+  var editor = document.createElement('input');
 
+  editor.style.padding = '4px';
+  editor.style.width = '100%';
 
-  var option = document.createElement('option');
+  editor.value = cell.getValue();
 
-  option.textContent = 'foo';
+  onRendered(()=>editor.focus());
 
-  editor.appendChild(option);
+  const user = cell.getData();
 
-  var option = document.createElement('option');
+  editor.addEventListener('keyup', e => {
+    let key = e.keyCode || e.charCode;
 
-  option.textContent = 'boo';
+    if (key === 13) {
 
-  editor.appendChild(option);
+      xhr.open(
+        'GET',
+        document.head.dataset.dir + 
+        '/user/update' + 
+        '?email=' + user.email +
+        '&field=roles' +
+        '&value=' + editor.value +
+        '&token=' + token);
+    
+      xhr.setRequestHeader('Content-Type', 'application/json');
+    
+      xhr.onload = () => {
+        if (xhr.status !== 200) return alert(xhr.response.message);
+        success(editor.value);
+      };
+    
+      xhr.send();
 
+    }
 
-
-  //editor.setAttribute('type', 'date');
-
-  //create and style input
-  // editor.style.padding = '3px';
-  // editor.style.width = '100%';
-  // editor.style.boxSizing = 'border-box';
-
-  //Set value of editor to the current value of the cell
-  //editor.value = cell.getValue();
-
-  //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
-  onRendered(function(){
-    editor.focus();
-    editor.style.css = '100%';
   });
 
-  //when the value has been set, trigger the cell to update
-  function successFunc(){
-    alert(editor.value);
-  }
-
-  editor.addEventListener('change', successFunc);
-  editor.addEventListener('blur', successFunc);
-
-  //return the editor element
   return editor;
 };
