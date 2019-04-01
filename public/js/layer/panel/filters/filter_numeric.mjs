@@ -23,7 +23,7 @@ export default (_xyz, layer, filter_entry) => {
       tag: 'div',
       options: {
         classList: 'range-label',
-        textContent: 'Greater then >',
+        textContent: 'Greater or equal',
       },
       appendTo: block
     });
@@ -67,7 +67,7 @@ export default (_xyz, layer, filter_entry) => {
       tag: 'div',
       options: {
         classList: 'range-label',
-        textContent: 'Smaller then <'
+        textContent: 'Smaller or equal'
       },
       appendTo: block
     });
@@ -121,8 +121,8 @@ export default (_xyz, layer, filter_entry) => {
 
         // Create filter.
         layer.filter.current[filter_entry.field] = {};
-        layer.filter.current[filter_entry.field].gt = parseFloat(input_min.value);
-        layer.filter.current[filter_entry.field].lt = parseFloat(input_max.value);
+        layer.filter.current[filter_entry.field].gte = parseFloat(input_min.value);
+        layer.filter.current[filter_entry.field].lte = parseFloat(input_max.value);
 
         layer.show();
 

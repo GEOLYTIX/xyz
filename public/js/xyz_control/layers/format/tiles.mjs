@@ -8,12 +8,15 @@ export default (_xyz, layer) => () => {
 
   // Augment request with token if proxied through backend.
   // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
-  let uri = layer.URI.indexOf('provider') > 0 ?
-    _xyz.host + '/proxy/request?uri=' + layer.URI + '&token=' + _xyz.token :
+  const uri = layer.URI.indexOf('provider') > 0 ?
+    _xyz.host + '/proxy/request?' + _xyz.utils.paramString({
+      uri: layer.URI,
+      token: _xyz.token
+    }) :
     layer.URI;
 
     // Assign the tile layer to the layer L object and add to map.
-  layer.L = L.tileLayer(uri, {
+  layer.L = L.tileLayer(decodeURIComponent(uri), {
     updateWhenIdle: true,
     pane: layer.key
   })

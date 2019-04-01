@@ -3,30 +3,37 @@ module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/table', 
-    prehandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: global.public
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          tableDef: { type: 'string' },
+          id: { type: 'string' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'tableDef', 'id']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      fastify.evalParam.tableDef,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-      // Return 406 if location id is missing.
-      if (!req.query.id) return res.code(406).send('Missing location id.');
-
-      // Get table definition from layer infoj.
-      const tableDef = layer.infoj.find(
-        entry => entry.title === decodeURIComponent(req.query.tableDef)
-      );
-
-      if (!tableDef) return res.code(406).send('Missing table definition.');
+      let
+        layer = req.params.layer,
+        tableDef = req.params.tableDef;
 
 
       // Add first column for row titles.

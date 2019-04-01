@@ -2,6 +2,7 @@
     "ws": {
         "title": "GEOLYTIX | XYZ",
         "documentation": "optional",
+        "roles": "optional",
         "locales": {
             "zero": {}
         }
@@ -53,7 +54,7 @@
             "restriction": "optional",
             "tableview": "optional",
             "hidden": "optional",
-            "access_filter": "optional"
+            "roles": "optional"
         },
         "tiles": {
             "URI": "optional"

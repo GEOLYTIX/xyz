@@ -14,8 +14,12 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/map/leaflet',
-
-    // No preHandler for map control pages.
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: global.public,
+        login: true
+      })
+    ]),
     handler: view
   });
 
@@ -23,14 +27,16 @@ function route(fastify) {
   fastify.route({
     method: 'POST',
     url: '/map/leaflet',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => fastify.login.post(req, res, {
+      view: view
+    })
   });
 
 };
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const config = global.workspace[token.access].config;
+  const config = global.workspace.current;
 
   // Check whether request comes from a mobile platform and set template.
   // const md = new Md(req.headers['user-agent']);
@@ -42,8 +48,7 @@ async function view(req, res, token = { access: 'public' }) {
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
-    token: token.signed,
-    script_js: 'views/map_leaflet.js'
+    token: req.query.token || token.signed || '""'
   }));
 
 }

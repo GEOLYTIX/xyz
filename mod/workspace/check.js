@@ -2,10 +2,7 @@ module.exports = async workspace => {
   
   // Set global workspace.
   global.workspace = {
-    _defaults: await JSON.parse(require('fs').readFileSync('./workspaces/_defaults.json'), 'utf8'),
-    public: {},
-    private: {},
-    admin: {}
+    _defaults: await JSON.parse(require('fs').readFileSync('./workspaces/_defaults.json'), 'utf8')
   };
 
   console.log(' ');
@@ -19,11 +16,13 @@ module.exports = async workspace => {
 
   console.log('-----------------------------');
   console.log(' ');
+
+  global.workspace.current = workspace;
   
   return workspace;
 };
 
-function chkOptionals(chk, opt) {
+async function chkOptionals(chk, opt) {
 
   // Check defaults => workspace first.
   Object.keys(opt).forEach(key => {
@@ -87,6 +86,7 @@ async function chkLocales(locales) {
     await chkLayers(locale.layers, key);
   
   }
+
 }
 
 async function chkLayers(layers, locale_key) {
@@ -125,6 +125,7 @@ async function chkLayers(layers, locale_key) {
     await chkLayerConnect(layer, layers);
 
   }
+
 }
 
 // Checks PostGIS geometries, tile caches or 3rd party URL.
@@ -171,6 +172,7 @@ async function chkLayerURL(layer, layers) {
   delete layers['__'+layer.key];
 
   console.log(`${layer.locale}.${layer.key} (${layer.format}) => 'A-ok'`);
+  
 }
 
 async function chkLayerGeom(layer, layers) {

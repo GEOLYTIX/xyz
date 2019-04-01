@@ -1,44 +1,49 @@
 module.exports = fastify => {
+
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/isoline/mapbox',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: global.public
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          coordinates: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'coordinates']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
+    ],
     handler: async(req, res) => {
       
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-      const table = req.query.table;
-
-      // Return 406 if table is not defined as request parameter.
-      if (!table) return res.code(406).send('Missing table.');
+      let
+        layer = req.params.layer,
+        table = req.query.table;
 
       const params = {
         coordinates: req.query.coordinates,
         minutes: req.query.minutes || 10,
         profile: req.query.profile || 'driving',
       };
-
-      if (!params.coordinates) return res.code(406).send('Invalid coordinates.');
-
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
-      }
          
       var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${global.KEYS.MAPBOX}`;
       
-      // console.log(q);
 
       // Fetch results from Google maps places API.
       const mapbox_isolines = await require(global.appRoot + '/mod/fetch')(q);
@@ -48,12 +53,6 @@ module.exports = fastify => {
       const geojson = JSON.stringify(mapbox_isolines.features[0].geometry);
 
       if (req.query.id) {
-
-        // Check whether string params are found in the settings to prevent SQL injections.
-        if ([req.query.field]
-          .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-          return res.code(406).send('Invalid parameter.');
-        }
 
         var q = `
         UPDATE ${table}
@@ -107,5 +106,6 @@ module.exports = fastify => {
       res.code(200).send(rows[0].id.toString());   
       
     }
+    
   });
 };

@@ -161,7 +161,7 @@ export default _xyz => {
       if (e.target.status !== 200) return;
       
       // Parse the response as JSON and check for results length.
-      let json = e.target.response;
+      const json = e.target.response;
 
       if (json.length === 0) {
         _xyz.utils.createElement({
@@ -221,15 +221,17 @@ export default _xyz => {
   
     if (record['data-source'] === 'google') {
   
-    // Get the geometry from the gazetteer database.
-      let xhr = new XMLHttpRequest();
+      // Get the geometry from the gazetteer database.
+      const xhr = new XMLHttpRequest();
   
       xhr.open('GET', _xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id'] + '&token=' + _xyz.token);
+
+      xhr.responseType = 'json';
   
       xhr.onload = e => {
   
       // Send results to createFeature
-        if (e.target.status === 200) createFeature(JSON.parse(e.target.responseText));
+        if (e.target.status === 200) createFeature(e.target.response);
   
       };
       xhr.send();

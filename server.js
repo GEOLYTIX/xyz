@@ -26,8 +26,14 @@ global.dir = process.env.DIR || '';
 // If set the alias will override the host header in notifications.
 global.alias = process.env.ALIAS ? process.env.ALIAS : null;
 
+// Assign Google Captcha site_key[0] and secret_key[1].
+global.captcha = process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|');
+
 // Application access. Default is public.
-global.access = process.env.PRIVATE ? 'private' : 'public';
+global.public = !process.env.PRIVATE;
+
+// Assign logrocket key.
+global.logrocket = process.env.LOG_ROCKET;
 
 // Additional logs will be written to console if global.logs is true.
 global.logs = (process.env.LOG_LEVEL === 'info');
@@ -39,6 +45,7 @@ function startFastify(){
 
   // Set fastify
   const fastify = require('fastify')({
+    trustProxy: true,
     logger: {
       level: process.env.LOG_LEVEL || 'error',
       prettifier: require('pino-pretty'),
@@ -63,7 +70,7 @@ function startFastify(){
           formAction: ['\'self\''],
           styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
           fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-          scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com'],
+          scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
           imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'data:']
         },
         setAllHeaders: true
@@ -81,19 +88,23 @@ function startFastify(){
       prefix: (process.env.DIR || '') + '/'
     })
     .register(require('fastify-auth'))
+    .decorate('login', require(global.appRoot + '/routes/login')(fastify))
+    .decorate('authToken', require(global.appRoot +'/mod/authToken')(fastify))
+    .decorate('evalParam', require(global.appRoot +'/mod/evalParam')(fastify))
     .register(require('fastify-jwt'), {
-      secret: process.env.SECRET || 'Kill process'// should be at least 32 characters long
+      secret: process.env.SECRET || 'ChinaCatSunflower'
+    })
+    .register(require('fastify-swagger'), {
+      routePrefix: global.dir + '/swagger',
+      exposeRoute: true,
     })
     .addContentTypeParser('*', (req, done) => done())
-    .decorate('authAccess', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: global.access, API: false }, done))
-    .decorate('authAPI', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: global.access, API: true }, done))
-    .decorate('authAdmin', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: 'admin', API: false }, done))
-    .decorate('authAdminAPI', (req, res, done) => require('./mod/authToken')(req, res, fastify, { lv: 'admin', API: true }, done))
     .register((fastify, opts, next) => {
       require('./routes/_routes')(fastify);
       next(); 
     }, { prefix: global.dir });
 
+    
   fastify.listen(process.env.PORT || 3000, '0.0.0.0', err => {
     if (err) {
       Object.keys(err).forEach(key => !err[key] && delete err[key]);
@@ -101,7 +112,9 @@ function startFastify(){
       process.exit(1);
     }
 
-    console.log(`Serving ${global.workspace.admin.config.title} workspace.`);
+    fastify.swagger();
+
+    console.log(`Serving ${global.workspace.current.title} workspace.`);
   });
   
 }

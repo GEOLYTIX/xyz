@@ -35,6 +35,7 @@ $onyx: #383836;
 @import 'mapview';
 @import 'listview';
 @import 'gazetteer';
+@import 'workspace';
 *,
 *::after,
 *::before {
@@ -97,3 +98,4 @@ i,
 .pane_shadow {
     box-shadow: 0 3px 3px -3px #000;
 }
+

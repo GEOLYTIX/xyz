@@ -3,16 +3,22 @@
 
 <head data-dir="{{:dir}}">
     <title>{{:title}}</title>
-    
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-control" content="no-cache">
-    
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
+
+    <script src="{{:dir}}/js/build/xyz_ui_bundle.js" async></script>
 </head>
 
-<body data-viewmode="mobile" data-nanoid={{:nanoid}} data-log={{:log}} data-token={{:token}}>
+<body 
+data-viewmode="mobile" 
+data-nanoid={{:nanoid}} 
+data-log={{:log}} 
+data-user={{:user}} 
+data-logrocket={{:logrocket}}
+data-token={{:token}}>
 
     <div id="Map" class="mapview map" style="margin-top: 0;">
         <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
@@ -67,6 +73,10 @@
             </a>
         </div>
 
+        <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
+            <i class="material-icons">bug_report</i>
+        </div>
+
     </div>
 
     <div class="spacer_mobile"></div>
@@ -99,7 +109,5 @@
     </div>
 
 </body>
-
-<script src="{{:dir}}/js/build/xyz_ui_bundle.js"></script>
 
 </html>
