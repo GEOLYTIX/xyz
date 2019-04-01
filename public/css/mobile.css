@@ -629,8 +629,6 @@ button {
     .btn_column.mobile > div {
       box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
       border-radius: 50%; }
-  .btn_column div:hover {
-    cursor: pointer; }
   .btn_column button,
   .btn_column > div {
     margin-top: 10px;
@@ -1825,7 +1823,8 @@ button {
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
-    font-family: ffmark, sans-serif; }
+    font-family: ffmark, sans-serif;
+    margin-bottom: 5px; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {
@@ -1948,6 +1947,24 @@ button {
     z-index: 999;
     box-shadow: 0 3px 3px -3px #000;
     width: 100%; }
+
+.workspace {
+  position: absolute;
+  height: 100%;
+  right: 0;
+  width: calc(100% - 330px);
+  z-index: 1002;
+  background-color: #fff; }
+  .workspace .btn_column {
+    position: fixed;
+    height: 100%;
+    padding: 4px;
+    background-color: #fff;
+    box-shadow: inset 2px 0 4px -4px #777; }
+  .workspace .codemirror {
+    position: absolute;
+    right: 0;
+    width: calc(100% - 50px); }
 
 *,
 *::after,

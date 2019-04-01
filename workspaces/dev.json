@@ -977,6 +977,17 @@
                     ]
                 },
                 "retail_points": {
+                    "roles": {
+                        "a" : null,
+                        "foo" : {
+                            "retailer": {
+                                "in": [
+                                    "Tesco",
+                                    "Sainsburys"
+                                ]
+                            }
+                        }
+                    },
                     "display": true,
                     "name": "Retail Points",
                     "format": "cluster",
@@ -984,13 +995,6 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
-                    "access_filter": {
-                        "dbauszus@gmail.com": {
-                            "retailer": {
-                                "like": "Tesco"
-                            }
-                        }
-                    },
                     "tableview": {
                         "tables": {
                             "Retail Points": {
@@ -1017,9 +1021,6 @@
                         }
                     },
                     "filter": {
-                        "roles": {
-                            "n1": "some_filter"
-                        },
                         "infoj": [
                             {
                                 "label": "ID count",

@@ -14,21 +14,28 @@ function route(fastify) {
   fastify.route({
     method: 'GET',
     url: '/',
-    preHandler: fastify.auth([fastify.authAccess]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: global.public,
+        login: true
+      })
+    ]),
     handler: view
   });
 
   fastify.route({
     method: 'POST',
     url: '/',
-    handler: (req, res) => require(global.appRoot + '/routes/auth/login').post(req, res, fastify)
+    handler: (req, res) => fastify.login.post(req, res, {
+      view: view
+    })
   });
 
 };
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const config = global.workspace[token.access].config;
+  const config = global.workspace.current;
 
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
@@ -41,16 +48,20 @@ async function view(req, res, token = { access: 'public' }) {
   res.type('text/html').send(tmpl.render({
     dir: global.dir,
     title: config.title || 'GEOLYTIX | XYZ',
+    user: token.email || '""',
     nanoid: nanoid(6),
-    token: req.query.token || token.signed,
-    log: process.env.LOG_LEVEL ? 'true' : 'false',
+    token: req.query.token || token.signed || '""',
+    log: process.env.LOG_LEVEL || '""',
     btnDocumentation: config.documentation ? '' : 'style="display: none;"',
     hrefDocumentation: config.documentation ? config.documentation : '',
     btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
     btnLogin_style: token.email ? 'face' : 'lock_open',
     btnLogin_path: token.email ? '' : '/login',
-    btnLogin_text: token.email ? token.email : 'anonymous (public)',
-    btnAdmin: token.access === 'admin' ? '' : 'style="display: none;"'
+    btnLogin_text: token.email || 'anonymous (public)',
+    btnAdmin: token.admin_user ? '' : 'style="display: none;"',
+    btnEditor: token.admin_workspace ? '' : 'style="display: none;"',
+    logrocket: global.logrocket || '""',
+    btnLogRocket: global.logrocket ? '' : 'style="display: none;"',
   }));
 
 };

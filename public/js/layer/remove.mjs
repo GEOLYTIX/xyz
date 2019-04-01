@@ -18,7 +18,7 @@ export default (_xyz, layer) => {
 
         const table = layer.tableview.tables[key];
     
-        table.remove();
+        if (table.tab) table.remove();
     
       });
 

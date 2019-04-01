@@ -1,22 +1,44 @@
-module.exports = async (term, locale) => {
+module.exports = async (req, locale) => {
+
+  const term = req.query.q;
 
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
+
+    const layer = locale.layers[dataset.layer];
+
+    req.params.token.roles = req.params.token.roles || [];
+
+    if (!(layer.roles && Object.keys(layer.roles).some(
+      role => req.params.token.roles.includes(role)
+    ))) return [];
+
+    // Parse filter from query string.
+    const filter = {};
+
+    // Apply role filter
+    req.params.token.roles.filter(
+      role => layer.roles[role]).forEach(
+      role => Object.assign(filter, layer.roles[role])
+    );
+
+    const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `
     SELECT
       ${dataset.label} AS label,
-      ${locale.layers[dataset.layer].qID} AS id,
-      ST_X(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lng,
-      ST_Y(ST_PointOnSurface(${locale.layers[dataset.layer].geom || 'geom'})) AS lat
+      ${layer.qID} AS id,
+      ST_X(ST_PointOnSurface(${layer.geom || 'geom'})) AS lng,
+      ST_Y(ST_PointOnSurface(${layer.geom || 'geom'})) AS lat
       FROM ${dataset.table}
       WHERE ${dataset.qterm || dataset.label} ILIKE $1
+      ${filter_sql}
       ORDER BY length(${dataset.label})
       LIMIT 10`;
 
     // Get gazetteer results from dataset table.
-    var rows = await global.pg.dbs[locale.layers[dataset.layer].dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(term)}%`]);
+    var rows = await global.pg.dbs[layer.dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(term)}%`]);
 
     if (rows.err) return {err: 'Error fetching gazetteer results.'};
 

@@ -22,7 +22,7 @@ export default _xyz => {
 
     locationTable: locationTable(_xyz),
 
-    layerTable: layerTable(_xyz)
+    layerTable: layerTable(_xyz),
 
   };
     

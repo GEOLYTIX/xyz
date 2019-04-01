@@ -3,23 +3,35 @@ export default _xyz => {
   return {
     fetchWS: fetchWS,
     setWS: setWS,
-    loadLocale: loadLocale
+    loadLocale: loadLocale,
+    admin: admin,
   };
+
+  function filterLocales(locales) {
+
+    return Object.keys(locales)
+      .filter(key => key.indexOf('__') === -1)
+      .reduce((obj, key) => {
+        obj[key] = locales[key];
+        return obj;
+      }, {});
+
+  }
 
   async function fetchWS() { 
 
-    const promise = await fetch(_xyz.host + '/workspace/get?token=' + _xyz.token);
+    const promise = await fetch(
+      _xyz.host +
+      '/workspace/get?' +
+      _xyz.utils.paramString({
+        token: _xyz.token
+      }));
 
     // Assign workspace.
     const workspace = await promise.json();
 
     // Filter invalid locales
-    _xyz.workspace.locales = Object.keys(workspace.locales)
-      .filter(key => key.indexOf('__') === -1)
-      .reduce((obj, key) => {
-        obj[key] = workspace.locales[key];
-        return obj;
-      }, {});
+    _xyz.workspace.locales = filterLocales(workspace.locales);
 
   };
 
@@ -28,7 +40,9 @@ export default _xyz => {
     // XHR to retrieve workspace from host backend.
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', _xyz.host + '/workspace/get?token=' + _xyz.token);
+    xhr.open('GET', _xyz.host + '/workspace/get?' + _xyz.utils.paramString({
+      token: _xyz.token
+    }));
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = e => {
@@ -39,14 +53,9 @@ export default _xyz => {
       const workspace = e.target.response;
 
       // Filter invalid locales
-      _xyz.workspace.locales = Object.keys(workspace.locales)
-        .filter(key => key.indexOf('__') === -1)
-        .reduce((obj, key) => {
-          obj[key] = workspace.locales[key];
-          return obj;
-        }, {});
+      _xyz.workspace.locales = filterLocales(workspace.locales);
 
-      loadLocale(params);
+      if (params.locale) loadLocale(params);
 
       params.callback(_xyz);
 
@@ -76,5 +85,109 @@ export default _xyz => {
       .forEach(key => _xyz.layers.list[key] = _xyz.layers.layer(key));
 
   };
+
+
+  function admin(){
+
+    const workspace = document.getElementById('workspace');
+
+    workspace.style.display = 'block';
+
+    const btnCloseWS = document.getElementById('btnCloseWS');
+
+    btnCloseWS.onclick = () => {
+      workspace.style.display = 'none';
+      document.getElementById('codemirror').innerHTML = '';
+    };
+
+    const codeMirror = CodeMirror(document.getElementById('codemirror'), {
+      value: '{}',
+      lineNumbers: true,
+      mode: 'application/json',
+      gutters: ['CodeMirror-lint-markers'],
+      lint: true,
+      lineWrapping: true,
+      autofocus: true,
+    });
+    
+    
+    const fileInput = document.getElementById('fileInputWS');
+    
+    fileInput.addEventListener('change', function () {
+    
+      let reader = new FileReader();
+      reader.onload = function () {
+        try {
+          fileInput.value = null;
+          codeMirror.setValue(this.result);
+          codeMirror.refresh();
+    
+        } catch (err) {
+          alert('Failed to parse JSON');
+        }
+      };
+      reader.readAsText(this.files[0]);
+    
+    });
+
+
+    const btnFile = document.getElementById('btnFileWS');
+    
+    btnFile.onclick = () => fileInput.click();
+    
+    
+    const btnUpload = document.getElementById('btnUploadWS');
+    
+    btnUpload.onclick = () => {
+    
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', document.head.dataset.dir + '/workspace/set?token=' + document.body.dataset.token);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
+      xhr.onload = e => {
+
+        if (e.target.status !== 200) alert('I am not here. This is not happening.');
+
+        // Assign workspace.
+        const workspace = e.target.response;     
+    
+        // Set cleaned json to editor;
+        codeMirror.setValue(JSON.stringify(workspace, null, '  '));
+        codeMirror.refresh();
+
+        // Filter invalid locales
+        _xyz.workspace.locales = filterLocales(workspace.locales);
+
+        const locale = _xyz.hooks.current.locale;
+
+        _xyz.hooks.removeAll();
+  
+        _xyz.hooks.set({locale : locale});
+  
+        _xyz.workspace.loadLocale({ locale: locale });
+    
+        _xyz.desktop.mask.style.display = 'none';
+      };
+
+      _xyz.utils.hyperHTML.bind(_xyz.desktop.mask)`<p class="msg">Updating Workspace</p>`;
+    
+      _xyz.desktop.mask.style.display = 'block';
+       
+      xhr.send(JSON.stringify({ settings: codeMirror.getValue() }));
+      
+    };
+    
+
+    // Load workspace in codemirror.
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + document.body.dataset.token);
+    xhr.responseType = 'json';
+    xhr.onload = e => {
+      codeMirror.setValue(JSON.stringify(e.target.response, null, '  '));
+      codeMirror.refresh();
+    };
+    xhr.send();
+
+  }
 
 };

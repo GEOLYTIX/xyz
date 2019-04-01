@@ -1,54 +1,128 @@
-**Fixes**
+**Workspaces**
 
-The group symbol to show / hide layers in a group was bugged. This is fixed in this branch.
+The workspace editor is now nested in the desktop. Workspace methods are in the XYZ control library. The json editor library has been removed from the repo. The code mirror library has been added and should be used to edit json. 
 
-Streetview control in location view is now created with hyperHTML. Does no longer break table columns.
+Workspace routes are:
 
-Empty groups are now hidden in location view.
+/workspace/get
 
-Fix for filters. Current filter must be assigned to legend filter not the other way around.
+Get the workspace from XYZ host.
 
-Zoom to layer extent will now use filter.
+/workspace/set
+
+Post a workspace to the XYZ host. Will run checks, load workspace into memory and store the workspace as a new record in the workspace table.
+
+The workspace is stored in global.workspace.current
 
 
-**Changes**
 
-Set zindex for svg in panes to 100 to prevent polygons drawn on top of images.
+**Views**
+
+Scripts which only apply to a single view are stored with the html template in the public /views folder. Styles which only apply to a single view are in the head of that view. Only shared SCSS stylesheets are in the public /css folder.
+
+Scripts sources should not be defined after the body. All sources should be defined in the head and user the defer / async declaration in order to prevent the page locking while loading the script.
+
+/register
+
+Small print has been added to the register view. The submit button should only be active if the checkbox in regard to the small print is checked.
+
+Google recaptcha has been added to Login and Register forms. This is enabled if a captcha key and secret are provided in the environment key GOOGLE_CAPTCHA.
+
+A mask has been added to the desktop view. This mask shades the view to prevent user input. e.g. While waiting for a response to workspace checks / load.
+
+
+**Log rocket**
+
+Log rocket has been added to the repo. A confirmation dialog will ask whether a session should be recorded. The log rocket button will be visible if a log rocket key is provided in the environment key LOG_ROCKET.
+
+
+**Authentication**
+
+Token authentication is now happening pre route validation.
+
+
+**Token**
+
+The /token endpoint will return an API key and store the key in the ACL database in the api field for the user. Token do not timeout but can never be used to login or for administrative tasks. An API token will always be checked against the database to create a signed token with the user roles.
+
+
+**Validation**
+
+All params must be provided on the querystring. The querystring params must be validated in route schema.
+
+Additional checks are run in an array of pre-handler methods.
+
+
+**User routes**
+
+Routes for the management of users are:
+
+/user/admin The admin view for the ACL.
+
+/user/approve The endroute to approve a user with an approval token.
+
+/user/verify The endroute to approve a user with an verification token.
+
+/user/log Returns the access log for a user.
+
+/user/list Returns a list of all users.
+
+/user/update Updates a user field in the ACL.
+
+/user/delete Endpoint to delete a user from the ACL.
+
+/user/block Endpoint to block a user.
+
+**User schema**
 
 ```
-.leaflet-map-pane svg {
-    z-index: 100;
+create table users
+(
+	"_id" serial not null,
+	email text not null,
+	password text not null,
+	verified boolean default false,
+	approved boolean default false,
+	verificationtoken text,
+	approvaltoken text,
+	failedattempts integer default 0,
+	password_reset text,
+	api text,
+	approved_by text,
+	access_log text[] default '{}'::text[],
+	blocked boolean default false,
+	roles text[] default '{}'::text[],
+	admin_workspace boolean default false,
+	admin_user boolean default false
+);
+```
+
+**Roles**
+
+Roles are set on the layer.
+
+```
+"roles": {
+  "boo" : null,
+  "foo" : {
+    "retailer": {
+      "in": [
+        "Tesco",
+        "Sainsburys"
+      ]
+    }
+  }
 }
 ```
 
-Image control is no longer vertical with scroll but column.
+If a roles are set means that the layer is not available to anybody who doesn't have a role from the layer. If a filter is set on the role means that the user has access to the layer but the filter will be applied to any query.
 
-Images are uploaded automatically.
 
-Location geometries are drawn on the same pane.
+**Error Codes**
 
-The pane can be supplied as a style property to the location draw method.
+The 406 error code has been retired in favour of the more common 400 error code. Error code should return a new Error('msg').
 
-New mvts cache tables will only have a spatial index. The x,y,z index should not be necessary due to the primary key.
 
-**Reports**
+**Swagger**
 
-Currently only one report.
-
-Template: public/views/report.html
-Script: public/js/views/report.js
-
-Endpoint: routes/report.js
-
-The report endpoint will check for token and require login for private endpoints if the token is not supplied in URL.
-
-The report script stores URL param as report_params object.
-
-The report is an infoj field `type: report` which will create a link to the report endpoint with URL params.
-
-The report template has viewmode 'report' on the body. Locations will not be editable if the viewmode is report. Cluster are not selectable if the viewmode is report.
-
-Location table entries and the report button itself will not be shown in the report view.
-
-`hideInReport : true` fields will return immediately from the view update if the viewmode is 'report'.
-
+The [fastify swagger plugin](https://github.com/fastify/fastify-swagger) has been added to respond with a json to describe the API on the /swagger/json route.

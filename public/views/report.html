@@ -3,23 +3,102 @@
 
 <head data-dir="{{:dir}}">
     <title>{{:title}}</title>
-
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-control" content="no-cache">
-
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    
     <link rel="stylesheet" href="{{:dir}}/css/control.css" />
-    <link rel="stylesheet" href="{{:dir}}/css/views/report.css" />
 
+    <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
+    <script src="{{:dir}}/views/report.js" async></script>
+
+    <style>
+        .attribution {
+            margin-left: 0px !important;
+            font-size: 10px;
+        }
+
+        .attribution .logo {
+            font-size: 15px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .page {
+            width: 210mm;
+            /* height: 297mm; */
+            margin: 0 auto;
+            page-break-after: always;
+        }
+
+        .report1 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-gap: 10px;
+            padding: 5mm;
+        }
+
+        .report2 {
+            display: grid;
+            grid-gap: 10px;
+            padding: 5mm;
+        }
+
+        #xyz_location {
+            grid-column: 1;
+            grid-row: 1/5;
+        }
+
+        #xyz_map {
+            grid-column: 2;
+            grid-row: 1;
+            height: 300px;
+        }
+
+        #xyz_table1 {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        #xyz_table2 {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        #xyz_table3 {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        #xyz_table4 {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .tr_report {
+            display: none;
+        }
+
+        .tr_tableview {
+            display: none;
+        }
+    </style>
 </head>
 
 <body data-viewmode="report" data-nanoid={{:nanoid}} data-token={{:token}}>
 
     {{:template}}
 
-    <script src="{{:dir}}/js/build/xyz_control_bundle.js"></script>
-    <script src="{{:dir}}/js/{{:script_js}}"></script>
+    <div class="page">
+        <div class="report2">
+            <div id="xyz_table2"></div>
+            <div id="xyz_table3"></div>
+
+        </div>
+    </div>
+
 </body>
 
 </html>
