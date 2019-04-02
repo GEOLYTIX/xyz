@@ -10,6 +10,7 @@ module.exports = fastify => {
     geomTable: _geomTable,
     layerValues: _layerValues,
     tableDef: _tableDef,
+    userSchemaField: _userSchemaField,
   };
 
   function _token (req, res, next) {
@@ -139,6 +140,24 @@ module.exports = fastify => {
     if (!vals.some(
       val => req.query[val] && !lookupValues.has(req.query[val])
     )) return next();
+
+    res.code(400);
+    return next(new Error('Invalid querystring parameter.'));
+
+  };
+
+  function _userSchemaField (req, res, next) {
+
+    const userSchemaFields = new Set([
+      'approved',
+      'verified',
+      'admin_user',
+      'admin_workspace',
+      'blocked',
+      'roles'
+    ]);
+
+    if (userSchemaFields.has(req.query.field)) return next();
 
     res.code(400);
     return next(new Error('Invalid querystring parameter.'));

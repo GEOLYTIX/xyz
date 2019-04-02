@@ -34,43 +34,28 @@ module.exports = fastify => {
         table = req.query.table,
         qID = layer.qID,
         id = req.query.id,
-        infoj = req.body.infoj,
-        geom = layer.geom;
-
+        infoj = req.body.infoj;
 
       let fields = await require(global.appRoot + '/mod/pg/sql_infoj')(infoj);
-
-      // const d = new Date();
-
-      // const q_log = layer.log && layer.log.table ?
-      //   `, ${layer.log.field || 'log'} = '{ "user": "${token.email}", "op": "update", "time": "${d.toUTCString()}"}'`
-      //   : '';
-
-      // Write into logtable if logging is enabled.
-      // if (layer.log && layer.log.table) await writeLog(layer, id);
 
       var q = `UPDATE ${table} SET ${fields} WHERE ${qID} = $1;`;
 
       var rows = await global.pg.dbs[layer.dbs](q, [id]);
 
       if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
-
       
+      // Remove tiles from mvt_cache.
       if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, id);
+
+
+      // Get the updated infoj.
 
 
       // Query field for updated infoj
       infoj = JSON.parse(JSON.stringify(layer.infoj));
 
-      geom = layer.geom ?
-        `${table}.${layer.geom}`
-        : `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
-
       // The fields array stores all fields to be queried for the location info.
       fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);
-
-      // Push JSON geometry field into fields array.
-      //fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
 
       var q = `
         SELECT ${fields.join()}

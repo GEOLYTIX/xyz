@@ -6,25 +6,25 @@ module.exports = fastify => (req, res, next, access = {}) => {
   }
 
   // Redirect to login
-  if (access.login) {
+  if (!req.query.token && access.login) {
     return fastify.login.view(req, res);
   }
 
   // Private access without token.
   if (!req.query.token) {
-    return res.code(401).send(new Error('Missing token'));
+    return res.code(401).send(new Error('Missing token.'));
   }
 
   // Verify token (checks token expiry)
   fastify.jwt.verify(req.query.token, async (err, token) => {
     if (err) {
       fastify.log.error(err);
-      return res.code(401).send(new Error('Invalid token'));
+      return res.code(401).send(new Error('Invalid token.'));
     }
 
     // Token must have an email
     if (!token.email) {
-      return res.code(401).send(new Error('Invalid token'));
+      return res.code(401).send(new Error('Invalid token.'));
     }
 
     if (token.api) {
@@ -40,7 +40,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
     
       if (!user.api
         || (user.api !== req.query.token)) {
-        return res.code(401).send(new Error('Invalid token'));
+        return res.code(401).send(new Error('Invalid token.'));
       }
     
       // Create a private token with 10second expiry.
@@ -63,7 +63,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
     // Check admibn_workspace privileges.
     if (access.admin_workspace && token.admin_workspace) return next();
 
-    res.code(401).send(new Error('Invalid token'));
+    res.code(401).send(new Error('Invalid token.'));
 
   });
 

@@ -63,17 +63,7 @@ module.exports = fastify => {
           
 
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
-
-      
-      // // Set log table filter.
-      // let qLog = layer.log_table ? `
-      // ( SELECT *, ROW_NUMBER() OVER (
-      //     PARTITION BY ${layer.qID}
-      //     ORDER BY ((${layer.log_table.field || 'log'} -> 'time') :: VARCHAR) :: TIMESTAMP DESC ) AS rank
-      //   FROM ${log_table}
-      // ) AS logfilter` : null;
-  
+      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || ''; 
 
       // Query the feature count from lat/lng bounding box.
       var q = `
