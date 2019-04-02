@@ -199,6 +199,8 @@ function roleEdit(cell, onRendered, success, cancel, editorParams){
 
     if (key === 13) {
 
+      editor.blur();
+
       xhr.open(
         'GET',
         document.head.dataset.dir + 
