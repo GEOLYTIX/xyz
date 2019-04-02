@@ -35,6 +35,7 @@ module.exports = fastify => {
         table = req.params.table,
         viewport = req.query.viewport,
         filter = req.params.filter,
+        orderby = layer.qID,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
@@ -49,7 +50,6 @@ module.exports = fastify => {
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
             ${layer.geom},
             0.00001)`;
-
       }
 
       if (viewport && layer.geom_3857) {
@@ -62,26 +62,24 @@ module.exports = fastify => {
               3857),
             ${layer.geom_3857},
             0.00001)`;
-
       }
              
 
       // SQL filter
       const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
 
-
-      let fields = await require(global.appRoot + '/mod/pg/sql_fields')([], table.columns);
+      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], table.columns);
       
-      let q = `
+      var q = `
         SELECT ${layer.qID} AS qID, ${fields}
         FROM ${table.from}
         ${viewport || ''}
         ${filter_sql}
+        ORDER BY ${orderby}
         FETCH FIRST 99 ROW ONLY;`;
 
       //   ORDER BY ${layer.qID || 'id'}
       //   OFFSET ${99*offset} ROWS
-      //   FETCH FIRST 99 ROW ONLY;
 
       var rows = await global.pg.dbs[layer.dbs](q);
 

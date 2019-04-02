@@ -71,7 +71,13 @@ export default _xyz => table => {
       {
         columns: table.columns,
         autoResize: true,
-        height: _xyz.tableview.height || '100%'
+        height: _xyz.tableview.height || '100%',
+        dataSorting: sorters => {
+
+          console.log(sorters[0].field);
+          table.update();
+
+        }
       });
 
     table.update();

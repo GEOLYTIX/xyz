@@ -182,8 +182,7 @@ function rowDelete(e, cell) {
 
 function roleEdit(cell, onRendered, success, cancel, editorParams){
 
-  //create and style editor
-  var editor = document.createElement('input');
+  const editor = document.createElement('input');
 
   editor.style.padding = '4px';
   editor.style.width = '100%';
@@ -222,6 +221,8 @@ function roleEdit(cell, onRendered, success, cancel, editorParams){
     }
 
   });
+
+  editor.addEventListener('blur', ()=>success(editor.value));
 
   return editor;
 };
