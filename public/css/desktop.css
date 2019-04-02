@@ -2019,6 +2019,10 @@ i,
 .pane_shadow {
   box-shadow: 0 3px 3px -3px #000; }
 
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
 .mapview {
   position: fixed;
   right: 0;
