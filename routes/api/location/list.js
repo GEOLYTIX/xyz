@@ -52,7 +52,7 @@ module.exports = fastify => {
 
       let q = `SELECT ${fields.join(',')} 
                 FROM ${layer.table} a, ${tableDef.table} b 
-                WHERE ${layer.qID} = $1 
+                WHERE a.${layer.qID} = $1 
                 ${conditions.length ? `AND ${conditions.join(',')}` : ''}
                 ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} LIMIT ${tableDef.limit || 100};`;
 
