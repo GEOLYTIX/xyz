@@ -6,7 +6,7 @@ export default _xyz => entry => {
     entry.row.remove();
   }
 
-  const width = 300;
+  const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${entry.location.marker[1]},${entry.location.marker[0]}&size=300x230&provider=GOOGLE&token=${_xyz.token}`;
 
   entry.location.view.node.appendChild(
     _xyz.utils.hyperHTML.wire()`
@@ -17,7 +17,7 @@ export default _xyz => entry => {
         href="${'https://www.google.com/maps?cbll=' + entry.location.marker[1] + ',' + entry.location.marker[0] + '&layer=c'}">
           <img
           class="img_streetview"
-          src="${_xyz.host + '/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=' + entry.location.marker[1] + ',' + entry.location.marker[0] + '&size=' + width + 'x230&provider=GOOGLE&token=' + _xyz.token}">`
+          src="${src}">`
   );
   
 };

@@ -1,5 +1,9 @@
 module.exports = fastify => (req, res, next, access = {}) => {
 
+  if (req.query.token === 'null') {
+    delete req.query.token;
+  }
+
   // Public access without token.
   if (!req.query.token && access.public) {
     return next();

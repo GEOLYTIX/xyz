@@ -1,4 +1,5 @@
 module.exports = fastify => {
+
   fastify.route({
     method: 'POST',
     url: '/api/location/update',
@@ -75,5 +76,6 @@ module.exports = fastify => {
       res.code(200).send(infoj);
 
     }
+    
   });
 };

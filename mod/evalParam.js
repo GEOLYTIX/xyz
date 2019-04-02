@@ -91,19 +91,6 @@ module.exports = fastify => {
 
   };
 
-  function _geomTable (req, res, next) {
-
-    if (req.query.table === req.params.layer.table) return next();
-
-    if (Object.values(req.params.layer.tables || {}).some(
-      table => table === req.query.table
-    )) return next();
-
-    res.code(400);
-    return next(new Error('Missing layer table.'));
-    
-  };
-
   function _layerTable (req, res, next) {
 
     req.params.table = req.params.layer.tableview.tables[req.query.table];
@@ -117,21 +104,18 @@ module.exports = fastify => {
 
   };
 
-  function createLookup(entry) {
-  
-    // store all workspace string values in lookup arrays.
-    const lookupValues = new Set();
-    (function objectEval(o) {
-      Object.keys(o).forEach((key) => {
-        if (typeof key === 'string') lookupValues.add(key);
-        if (typeof o[key] === 'string') lookupValues.add(o[key]);
-        if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
-      });
-    })(entry);
-  
-    return lookupValues;
+  function _geomTable (req, res, next) {
+
+    if (req.query.table === req.params.layer.table) return next();
+
+    if (Object.values(req.params.layer.tables || {}).some(
+      table => table === req.query.table
+    )) return next();
+
+    res.code(400);
+    return next(new Error('Missing layer table.'));
     
-  }
+  };
 
   async function _layerValues (req, res, next, vals) {
 
@@ -140,24 +124,6 @@ module.exports = fastify => {
     if (!vals.some(
       val => req.query[val] && !lookupValues.has(req.query[val])
     )) return next();
-
-    res.code(400);
-    return next(new Error('Invalid querystring parameter.'));
-
-  };
-
-  function _userSchemaField (req, res, next) {
-
-    const userSchemaFields = new Set([
-      'approved',
-      'verified',
-      'admin_user',
-      'admin_workspace',
-      'blocked',
-      'roles'
-    ]);
-
-    if (userSchemaFields.has(req.query.field)) return next();
 
     res.code(400);
     return next(new Error('Invalid querystring parameter.'));
@@ -179,4 +145,38 @@ module.exports = fastify => {
 
   };
 
+  function _userSchemaField (req, res, next) {
+
+    const userSchemaFields = new Set([
+      'approved',
+      'verified',
+      'admin_user',
+      'admin_workspace',
+      'blocked',
+      'roles'
+    ]);
+
+    if (userSchemaFields.has(req.query.field)) return next();
+
+    res.code(400);
+    return next(new Error('Invalid querystring parameter.'));
+
+  };
+
 };
+
+function createLookup(entry) {
+  
+  // store all workspace string values in lookup arrays.
+  const lookupValues = new Set();
+  (function objectEval(o) {
+    Object.keys(o).forEach((key) => {
+      if (typeof key === 'string') lookupValues.add(key);
+      if (typeof o[key] === 'string') lookupValues.add(o[key]);
+      if (o[key] && typeof o[key] === 'object') objectEval(o[key]);
+    });
+  })(entry);
+
+  return lookupValues;
+  
+}

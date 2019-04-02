@@ -53,6 +53,6 @@ module.exports = fastify => {
   
       return res.code(200).send('Update successful.');
     }
-  });
 
+  });
 };
