@@ -26,7 +26,8 @@ export default _xyz => {
       _xyz.tableview.create({
         target: document.getElementById('tableview'),
         btn: {
-          toggleTableview: document.getElementById('toggleTableview')
+          toggleTableview: document.getElementById('toggleTableview'),
+          tableViewport: document.getElementById('btnTableViewport')
         }
       });
 

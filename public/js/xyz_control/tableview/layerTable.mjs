@@ -39,6 +39,7 @@ export default _xyz => table => {
       layer: table.layer.key,
       table: table.key,
       //viewport: !!bounds,
+      viewport: table.viewport,
       orderby: table.orderby,
       order: table.order,
       filter: JSON.stringify(filter),
@@ -70,6 +71,19 @@ export default _xyz => table => {
   let stopHammertime = false;
 
   table.activate = () => {
+
+    if (_xyz.tableview.btn.tableViewport) {
+
+
+      if (table.viewport) {
+        _xyz.tableview.btn.tableViewport.classList.add('active');
+
+      } else {
+        _xyz.tableview.btn.tableViewport.classList.remove('active');
+      }
+
+      _xyz.tableview.btn.tableViewport.style.display = 'block';
+    }
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,

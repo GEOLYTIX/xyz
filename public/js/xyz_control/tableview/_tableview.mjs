@@ -24,7 +24,6 @@ export default _xyz => {
 
     locationTable: locationTable(_xyz),
 
-
     orderedList: orderedList(_xyz),
 
     layerTable: layerTable(_xyz)
