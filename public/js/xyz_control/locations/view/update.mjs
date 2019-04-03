@@ -23,16 +23,6 @@ export default (_xyz, location) => () => {
     <table class="locationview">`;
   }
 
-
-  // Adds layer to beginning of infoj array.
-  // This should not be forced without a parameter.
-  // location.infoj.unshift({
-  //   'label': 'Layer',
-  //   'value': _xyz.layers.list[location.layer].name,
-  //   'type': 'text',
-  //   'inline': true
-  // });
-
   // Create object to hold view groups.
   location.view.groups = {};
 
@@ -95,6 +85,44 @@ export default (_xyz, location) => () => {
         appendTo: entry.row
       });
     }
+
+    if(entry.type === 'key') { // display layer name in location view
+
+      entry.row = _xyz.utils.createElement({
+        tag: 'tr',
+        appendTo: location.view.node
+      });
+
+      entry.td = _xyz.utils.createElement({
+        tag: 'td',
+        options: {
+          className: 'label lv-0',
+          colSpan: 2
+        },
+        style: {
+          padding: '10px 0'
+        },
+        appendTo: entry.row
+      });
+
+      _xyz.utils.createElement({
+        tag: 'span',
+        options: {
+          textContent: _xyz.layers.list[location.layer].name,
+          title: 'Source layer'
+        },
+        style: {
+          fontSize: '12px',
+          padding: '3px',
+          backgroundColor: _xyz.utils.hexToRGBA(location.style.color, 0.3),
+          borderRadius: '2px',
+          cursor: 'help'
+        },
+        appendTo: entry.td
+      });
+
+      return;
+  }
 
     // Finish entry creation if entry has not type.
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
