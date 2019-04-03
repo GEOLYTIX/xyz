@@ -77,11 +77,9 @@ export default (_xyz, layer) => () => {
       // e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
 
       _xyz.locations.select({
-        dbs: layer.dbs,
         locale: _xyz.workspace.locale.key,
         layer: layer.key,
         table: layer.table,
-        qID: layer.qID,
         id: e.layer.properties.id,
         marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
         edit: layer.edit
