@@ -27,6 +27,8 @@ export default (_xyz, layer, filter_entry) => {
       },
       appendTo: block
     });
+
+    const step = setStep(filter_entry);
   
     const input_min = _xyz.utils.createElement({
       tag: 'input',
@@ -35,7 +37,8 @@ export default (_xyz, layer, filter_entry) => {
         type: 'number',
         min: field_range.min,
         max: field_range.max,
-        value: field_range.min
+        value: field_range.min,
+        step: step
       },
       appendTo: block,
       eventListener: {
@@ -53,6 +56,7 @@ export default (_xyz, layer, filter_entry) => {
       min: field_range.min,
       max: field_range.max,
       value: field_range.min,
+      step: step,
       appendTo: block,
       oninput: e => {
   
@@ -79,7 +83,8 @@ export default (_xyz, layer, filter_entry) => {
         type: 'number',
         min: field_range.min,
         max: field_range.max,
-        value: field_range.max
+        value: field_range.max,
+        step: step
       },
       appendTo: block,
       eventListener: {
@@ -98,6 +103,7 @@ export default (_xyz, layer, filter_entry) => {
       max: field_range.max,
       value: field_range.max,
       appendTo: block,
+      step: step,
       oninput: e => {
   
         // Set input value and apply filter.
@@ -129,6 +135,15 @@ export default (_xyz, layer, filter_entry) => {
         if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
 
       }, 500);
+    }
+
+    function setStep(entry){
+      let step;
+      switch(entry.type){
+        case 'integer': step = 1; break;
+        case 'numeric': step = 0.01 ; break;
+      }
+      return step;
     }
 
   };
