@@ -85,6 +85,8 @@ export default _xyz => params => {
     _xyz.workspace.locale.bounds.north,
     _xyz.workspace.locale.bounds.east
   ]]);
+
+  const z = _xyz.workspace.locale.view.z || 5;
           
   // Set view if defined in workspace.
   _xyz.map.setView(
@@ -92,11 +94,20 @@ export default _xyz => params => {
       _xyz.workspace.locale.view.lat || 0,
       _xyz.workspace.locale.view.lng || 0
     ],
-    _xyz.workspace.locale.view.z || 5);
+    z);
+
+  // Check zoomBtn
+  if (_xyz.mapview.btn 
+    && _xyz.mapview.btn.ZoomIn) _xyz.mapview.btn.ZoomIn.disabled = !(z < _xyz.workspace.locale.maxZoom);
+
+  if (_xyz.mapview.btn 
+    && _xyz.mapview.btn.ZoomOut) _xyz.mapview.btn.ZoomOut.disabled = !(z > _xyz.workspace.locale.minZoom);
           
   // Fire viewChangeEnd after map move and zoomend
   _xyz.map.on('moveend', () => viewChangeEndTimer());
   _xyz.map.on('zoomend', () => viewChangeEndTimer());
+
+
           
   // Use timeout to prevent the viewChangeEvent to be executed multiple times.
   let timer;

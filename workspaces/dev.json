@@ -25,6 +25,7 @@
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 },
                 "COUNTRIES": {
+                    "display": true,
                     "attribution": {
                         "Made with Natural Earth.": "https://www.naturalearthdata.com/"
                     },

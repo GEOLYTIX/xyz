@@ -35,7 +35,8 @@ module.exports = fastify => {
         table = req.params.table,
         viewport = req.query.viewport,
         filter = req.params.filter,
-        orderby = layer.qID,
+        orderby = req.query.orderby || layer.qID,
+        order = req.query.order || 'asc',
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
@@ -71,11 +72,13 @@ module.exports = fastify => {
       const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], table.columns);
       
       var q = `
-        SELECT ${layer.qID} AS qID, ${fields}
+        SELECT
+          ${layer.qID} AS qID,
+          ${fields}
         FROM ${table.from}
         ${viewport || ''}
         ${filter_sql}
-        ORDER BY ${orderby}
+        ORDER BY ${orderby} ${order}
         FETCH FIRST 99 ROW ONLY;`;
 
       //   ORDER BY ${layer.qID || 'id'}

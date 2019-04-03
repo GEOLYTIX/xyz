@@ -38,7 +38,9 @@ export default _xyz => table => {
       locale: _xyz.workspace.locale.key,
       layer: table.layer.key,
       table: table.key,
-      viewport: !!bounds,
+      //viewport: !!bounds,
+      orderby: table.orderby,
+      order: table.order,
       filter: JSON.stringify(filter),
       west: bounds && bounds.getWest(),
       south: bounds && bounds.getSouth(),
@@ -63,7 +65,10 @@ export default _xyz => table => {
     xhr.send();
 
   };
-   
+  
+
+  let stopHammertime = false;
+
   table.activate = () => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
@@ -74,9 +79,22 @@ export default _xyz => table => {
         height: _xyz.tableview.height || '100%',
         dataSorting: sorters => {
 
-          console.log(sorters[0].field);
-          table.update();
+          if (!sorters[0]) return;
+            
+          if (table.orderby === sorters[0].field
+              && table.order === sorters[0].dir) return;
 
+          stopHammertime = false;
+
+          table.orderby = sorters[0].field;
+
+          table.order = sorters[0].dir;
+
+          if (!stopHammertime) table.update();
+          
+        },
+        dataSorted: (sorters, rows) => {
+          stopHammertime = true;
         }
       });
 
