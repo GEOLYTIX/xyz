@@ -38,7 +38,6 @@ export default _xyz => table => {
       locale: _xyz.workspace.locale.key,
       layer: table.layer.key,
       table: table.key,
-      //viewport: !!bounds,
       viewport: table.viewport,
       orderby: table.orderby,
       order: table.order,
@@ -74,7 +73,6 @@ export default _xyz => table => {
 
     if (_xyz.tableview.btn.tableViewport) {
 
-
       if (table.viewport) {
         _xyz.tableview.btn.tableViewport.classList.add('active');
 
@@ -109,6 +107,20 @@ export default _xyz => table => {
         },
         dataSorted: (sorters, rows) => {
           stopHammertime = true;
+        },
+        rowClick: (e, row) => {
+
+          const rowData = row.getData();
+
+          if (!rowData.qid) return;
+
+          _xyz.locations.select({
+            locale: _xyz.workspace.locale.key,
+            layer: table.layer.key,
+            table: table.from,
+            id: rowData.qid,
+          });
+
         }
       });
 
