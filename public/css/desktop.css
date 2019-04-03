@@ -118,7 +118,8 @@
       background-color: #f9fbe7;
       cursor: row-resize; }
   .tableview .nav_bar {
-    height: 50px; }
+    height: 50px;
+    font-size: 14px; }
   .tableview .table {
     position: absolute;
     width: calc(100% - 58px);
@@ -2021,7 +2022,12 @@ i,
 
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+  /* Chrome */
   margin: 0; }
+
+input[type=number] {
+  -moz-appearance: textfield;
+  /* Firefox */ }
 
 .mapview {
   position: fixed;

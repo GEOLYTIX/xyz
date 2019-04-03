@@ -1,5 +1,14 @@
 export default _xyz => table => {
 
+  let style = {};
+
+  // Give selection colour if relevant
+  if(table.location && table.location.style && table.location.style.color) style = {
+      background: `-moz-linear-gradient(180deg, ${table.location.style.color} 0%, rgba(255,255,255,1) 12%)`,
+      background: `-webkit-linear-gradient(180deg, ${table.location.style.color} 0%, rgba(255,255,255,1) 12%)`,
+      background: `linear-gradient(180deg, ${table.location.style.color} 0%, rgba(255,255,255,1) 12%)`
+    };
+
   // Remove current from all tabs.
   Object
     .values(_xyz.tableview.nav_bar.children)
@@ -13,6 +22,7 @@ export default _xyz => table => {
       textContent: table.title,
       classList: 'Tab cursor noselect tab-current'
     },
+    style: style,
     eventListener: {
       event: 'click',
       funct: e => {
