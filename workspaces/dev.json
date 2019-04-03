@@ -557,7 +557,7 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline_here": {
-                                    "range": 10
+                                    "minutes": 10
                                 }
                             }
                         },
@@ -1268,7 +1268,7 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline_here": {
-                                    "range": 5
+                                    "minutes": 5
                                 }
                             },
                             "style": {
@@ -1312,7 +1312,42 @@
                             "level": 1,
                             "type": "numeric",
                             "withSelect": true
-                        }
+                        },
+                        {
+                            "type": "orderedList",
+                            "title": "Nearest competitors",
+                            "display": true,
+                            "table": "shepherd_neame.food_beverage",
+                            "geom": "geom",
+                            "columns": [
+                                {
+                                    "title": "Competitor name",
+                                    "field": "fascia"
+                                },
+                                {
+                                  "title": "Category",
+                                  "field": "rlcategory"
+                                },
+                                {
+                                  "title": "Postcode",
+                                  "field": "postcode"
+                                },
+                                {
+                                  "title": "Retail place type",
+                                  "field": "rp_type"
+                                },
+                                {
+                                  "type": "integer",
+                                  "geography": true,
+                                  "title": "Distance (m)",
+                                  "fx": "ST_DISTANCE",
+                                  "field": "dist",
+                                  "orderby": true
+                                }
+                              ],
+                              "order": "ASC",
+                              "limit": 8
+                            }
                     ],
                     "style": {
                         "marker": {
