@@ -35,6 +35,8 @@ export default _xyz => table => {
         // Make target tab current.
         e.target.classList.add('tab-current');
 
+        if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
+
         table.activate();
 
       }
