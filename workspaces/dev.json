@@ -78,6 +78,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "Name",
                             "field": "name",
                             "type": "text"
@@ -455,6 +458,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "Address HTML",
                             "field": "address_html",
                             "fieldfx": "address",
@@ -529,6 +535,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "Catchment Geometry",
                             "name": "Show / Hide",
                             "field": "catchment",
@@ -591,6 +600,9 @@
                         "delete": true
                     },
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "Images",
                             "field": "images",
@@ -675,6 +687,9 @@
                     },
                     "qID": "id",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "OA Code",
                             "field": "oacode",
@@ -869,6 +884,9 @@
                         ]
                     },
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "ID",
                             "field": "id",
@@ -1156,6 +1174,9 @@
                             "type": "streetview"
                         },
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "ID",
                             "field": "retailpoint_id",
                             "type": "text",
@@ -1227,6 +1248,9 @@
                     "table": "shepherd_neame.sites",
                     "cluster_label": "pub_name",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "field": "pub_name",
                             "label": "Site Name",
@@ -1381,6 +1405,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "rpid",
                             "field": "rpid",
                             "type": "numeric"
@@ -1414,6 +1441,9 @@
                     },
                     "qID": "id",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "vname_eng",
                             "field": "vname_eng",
@@ -1471,6 +1501,9 @@
                     },
                     "qID": "id",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "brand_flagship",
                             "field": "brand_flagship",
