@@ -44,8 +44,8 @@ export default _xyz => {
   };
 
   // Toggle visibility of the gazetteer group
-  _xyz.gazetteer.toggle.addEventListener('click', e => {
-    e.target.classList.toggle('active');
+  _xyz.gazetteer.toggle.addEventListener('click', () => {
+    _xyz.gazetteer.toggle.classList.toggle('active');
     _xyz.gazetteer.group.style.display =
             _xyz.gazetteer.group.style.display === 'block' ? 'none' : 'block';
 
