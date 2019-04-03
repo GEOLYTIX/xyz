@@ -40,12 +40,13 @@ module.exports = fastify => {
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north);
+        north = parseFloat(req.query.north),
+        viewport_sql = 'WHERE true ';
 
 
       if (viewport && layer.geom) {
 
-        viewport = `
+        viewport_sql = `
         WHERE
           ST_DWithin(
             ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
@@ -55,7 +56,7 @@ module.exports = fastify => {
 
       if (viewport && layer.geom_3857) {
 
-        viewport = `
+        viewport_sql = `
         WHERE
           ST_DWithin(
             ST_Transform(
@@ -76,13 +77,12 @@ module.exports = fastify => {
           ${layer.qID} AS qID,
           ${fields}
         FROM ${table.from}
-        ${viewport || ''}
+        ${viewport_sql}
         ${filter_sql}
         ORDER BY ${orderby} ${order}
         FETCH FIRST 99 ROW ONLY;`;
 
-      //   ORDER BY ${layer.qID || 'id'}
-      //   OFFSET ${99*offset} ROWS
+      // OFFSET ${offset} ROWS
 
       var rows = await global.pg.dbs[layer.dbs](q);
 
