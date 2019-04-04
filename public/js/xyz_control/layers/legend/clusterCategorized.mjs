@@ -33,12 +33,14 @@ export default (_xyz, layer) => {
       .on('click', function () {
         if (this.style.opacity == 0.5) {
           this.style.opacity = 1;
+          this.style.fillOpacity = 1;
 
           // Splice value out of the NI (not in) legend filter.
           layer.filter.legend[layer.style.theme.field].ni.splice(layer.filter.legend[layer.style.theme.field].ni.indexOf(cat[0]), 1);
 
         } else {
           this.style.opacity = 0.5;
+          this.style.fillOpacity = 0.5;
           
           // Push value into the NI (not in) legend filter.
           layer.filter.legend[layer.style.theme.field].ni.push(cat[0]);
