@@ -16,6 +16,8 @@ export default _xyz => table => {
 
   if(table.tab) table.tab.remove();
 
+  if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
+
   table.tab = _xyz.utils.createElement({
     tag: 'li',
     options: {
