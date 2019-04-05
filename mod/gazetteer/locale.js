@@ -9,9 +9,14 @@ module.exports = async (req, locale) => {
 
     req.params.token.roles = req.params.token.roles || [];
 
-    if (!(layer.roles && Object.keys(layer.roles).some(
-      role => req.params.token.roles.includes(role)
-    ))) return [];
+    if (layer.roles) {
+
+      if (!(layer.roles && Object.keys(layer.roles).some(
+        role => req.params.token.roles.includes(role)
+      ))) return [];
+
+    }
+
 
     // Parse filter from query string.
     const filter = {};

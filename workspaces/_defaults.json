@@ -30,7 +30,8 @@
             "provider": "optional",
             "code": "optional",
             "placeholder": "optional",
-            "datasets": "optional"
+            "datasets": "optional",
+            "bounds": "optional"
         },
         "restriction": "optional",
         "layers": {

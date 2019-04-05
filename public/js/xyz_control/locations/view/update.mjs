@@ -122,7 +122,7 @@ export default (_xyz, location) => () => {
       });
 
       return;
-  }
+    }
 
     // Finish entry creation if entry has not type.
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
