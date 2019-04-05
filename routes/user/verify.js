@@ -38,7 +38,7 @@ module.exports = fastify => {
       if (!user.approved) {
   
         // Get all admin accounts from the ACL.
-        rows = await global.pg.users('SELECT email FROM acl_schema.acl_table WHERE admin = true;');
+        rows = await global.pg.users('SELECT email FROM acl_schema.acl_table WHERE admin_user = true;');
     
         if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
   
