@@ -1,7 +1,7 @@
 module.exports = async (layer, table, id) => {
 
   var q = `
-  DELETE FROM ${table}__mvts 
+  DELETE FROM ${layer.mvt_cache} 
   WHERE
     ST_Intersects(
       tile, 

@@ -52,7 +52,7 @@ module.exports = fastify => {
       if (mvt_cache) {
 
         // Get MVT from cache table.
-        var rows = await global.pg.dbs[layer.dbs](`SELECT mvt FROM ${table}__mvts WHERE z = ${z} AND x = ${x} AND y = ${y}`);
+        var rows = await global.pg.dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
 
         if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
@@ -67,7 +67,7 @@ module.exports = fastify => {
       // Create a new tile and store in cache table if defined.
       // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
       var q = `
-      ${mvt_cache ? `INSERT INTO ${table}__mvts (z, x, y, mvt, tile)` : ''}
+      ${mvt_cache ? `INSERT INTO ${layer.mvt_cache} (z, x, y, mvt, tile)` : ''}
       SELECT
         ${z},
         ${x},

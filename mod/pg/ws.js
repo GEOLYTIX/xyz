@@ -3,7 +3,7 @@ module.exports = async () => {
 
   // Load zero config workspace if workspace is not defined in environment settings.
   if (!process.env.WORKSPACE) {
-    return await require(global.appRoot + '/mod/workspace/check')({});
+    return await require(global.appRoot + '/mod/checkWorkspace')({});
   }
 
   if (process.env.WORKSPACE.split(':')[0] === 'file') {
@@ -57,13 +57,13 @@ module.exports = async () => {
     );`);
     
     if (create.err) {
-      return await require(global.appRoot + '/mod/workspace/check')({});
+      return await require(global.appRoot + '/mod/checkWorkspace')({});
     }
 
   } else if (schema.some(row => (!ws_schema[row.column_name] || ws_schema[row.column_name] !== row.data_type))) {
     console.log('There seems to be a problem with the WS configuration.');
 
-    return await require(global.appRoot + '/mod/workspace/check')({});
+    return await require(global.appRoot + '/mod/checkWorkspace')({});
 
   }
 
@@ -89,7 +89,7 @@ module.exports = async () => {
   };
 
   // Check and load workspace.
-  await require(global.appRoot + '/mod/workspace/check')(
+  await require(global.appRoot + '/mod/checkWorkspace')(
     await global.pg.ws_get()
   );
 
@@ -109,7 +109,7 @@ async function getWorkspaceFromFile(file){
 
   // Check and load the workspace from file into memory.
   } finally {
-    await require(global.appRoot + '/mod/workspace/check')(workspace);
+    await require(global.appRoot + '/mod/checkWorkspace')(workspace);
   }
   
 }
