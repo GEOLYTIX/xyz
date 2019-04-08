@@ -27,6 +27,7 @@ module.exports = async () => {
   global.pg.users = async (q, arr) => {
 
     try {
+
       const { rows } = await pool.query(q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema), arr);
       return rows;
     
@@ -69,7 +70,7 @@ module.exports = async () => {
     // Set the default password for the admin user.
     const password = require('bcrypt-nodejs').hashSync('admin123', require('bcrypt-nodejs').genSaltSync(8));
     
-    await global.pg.users(`
+    const new_acl = await global.pg.users(`
     CREATE TABLE IF NOT EXISTS acl_schema.acl_table (
       "_id" serial not null,
       email text not null,
@@ -95,9 +96,13 @@ module.exports = async () => {
       '${password}' AS password,
       true AS verified,
       true AS approved,
-      true AS admin_user
+      true AS admin_user,
       true AS admin_workspace;
     `);
+
+    if (new_acl && new_acl.err) {
+      return process.exit();
+    }
 
     console.log('A new ACL has been created');  
 
