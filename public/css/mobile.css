@@ -126,20 +126,43 @@
     height: calc(100% - 55px); }
   .tableview nav {
     text-align: center; }
-    .tableview nav ul {
-      display: flex;
+    .tableview nav ul.nav_bar-nav {
+      display: inline-flex;
       list-style: none;
       flex-flow: row wrap;
-      justify-content: center; }
-      .tableview nav ul li {
+      justify-content: center;
+      width: calc(100% - 30px); }
+      .tableview nav ul.nav_bar-nav li {
         padding: 5px;
         -webkit-flex: 1;
         -moz-flex: 1;
         -ms-flex: 1;
         flex: 1; }
-        .tableview nav ul li.tab-current {
+        .tableview nav ul.nav_bar-nav li.tab-current {
           border-bottom: 3px solid #090;
           box-shadow: 0 6px 8px -6px #444; }
+    .tableview nav .tab-dropdown-container {
+      width: 20px;
+      display: inline-flex; }
+      .tableview nav .tab-dropdown-container button.tab-dropdown {
+        width: 30px;
+        font-size: 14px;
+        display: none; }
+      .tableview nav .tab-dropdown-container .tab-dropdown-content {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 10px;
+        padding: 4px;
+        background-color: #fff;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 2px rgba(0, 0, 0, 0.3);
+        z-index: 1000; }
+        .tableview nav .tab-dropdown-container .tab-dropdown-content.show {
+          display: block !important; }
+        .tableview nav .tab-dropdown-container .tab-dropdown-content li {
+          padding: 5px; }
 
 .input_group {
   width: 100%; }
