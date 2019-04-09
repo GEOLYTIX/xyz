@@ -12,6 +12,8 @@ module.exports = fastify => {
 
   require('./layer/extent')(fastify);
 
+  require('./layer/count')(fastify);  
+
   require('./layer/geojson')(fastify);
 
   require('./layer/grid')(fastify);  

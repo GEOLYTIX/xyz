@@ -658,7 +658,8 @@ button {
       color: #fff; }
     .btn_column button:disabled,
     .btn_column > div:disabled {
-      opacity: 0.3; }
+      opacity: 0.3;
+      cursor: default; }
     .btn_column button:hover:enabled,
     .btn_column > div:hover:enabled {
       cursor: pointer; }
@@ -686,10 +687,17 @@ button {
   text-align: center;
   font-weight: 600;
   color: #090;
-  box-shadow: 1px 1px 3px #383836;
-  margin: 5px 2px 5px 1px; }
+  box-shadow: 1px 1px 2px #999999;
+  margin: 5px 2px 5px 1px;
+  width: calc(100% - 5px); }
   .btn_wide.disabled {
-    opacity: 0.3; }
+    opacity: 0.3;
+    cursor: default; }
+  .btn_wide:disabled {
+    opacity: 0.3;
+    cursor: default; }
+  .btn_wide:hover:enabled {
+    cursor: pointer; }
 
 .btn_state {
   color: #090; }

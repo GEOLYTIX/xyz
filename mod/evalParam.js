@@ -70,7 +70,16 @@ module.exports = fastify => {
     // Apply role filter
     req.params.token.roles.filter(
       role => req.params.layer.roles && req.params.layer.roles[role]).forEach(
-      role => Object.assign(req.params.filter, req.params.layer.roles[role])
+      role => {
+        let key = Object.keys(req.params.layer.roles[role])[0];
+        if (!req.params.filter[key]) {
+          Object.assign(req.params.filter, req.params.layer.roles[role]);
+
+        } else {
+          req.params.filter[key] = Array.prototype.concat(req.params.filter[key], req.params.layer.roles[role][key]);
+        
+        }
+      }
     );
 
     next();

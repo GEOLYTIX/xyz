@@ -1,16 +1,16 @@
 export default (_xyz, panel, layer) => _xyz.utils.createElement({
-  tag: 'div',
+  tag: 'button',
   options: {
-    className: 'btn_wide cursor noselect',
+    className: 'btn_wide noselect',
     textContent: 'Run Output',
-  },
-  style: {
-    display: 'none'
+    disabled: true
   },
   appendTo: panel,
   eventListener: {
     event: 'click',
-    funct: () => {
+    funct: e => {
+
+      if (e.target.disabled) return;
     
       const xhr = new XMLHttpRequest();
 

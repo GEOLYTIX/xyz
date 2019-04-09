@@ -8,6 +8,8 @@ import filter_date from './filter_date.mjs';
 
 import output from './output.mjs';
 
+import chkCount from './chkCount.mjs';
+
 export default (_xyz, layer) => {
 
   // Create current filter object.
@@ -116,5 +118,11 @@ export default (_xyz, layer) => {
   });
 
   layer.filter.run_output = output(_xyz, panel, layer);
+
+  if (!layer.filter.infoj) layer.filter.run_output.style.display = 'none';
+
+  layer.filter.check_count = chkCount(_xyz, layer);
+
+  layer.filter.check_count();
 
 };

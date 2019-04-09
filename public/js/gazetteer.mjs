@@ -62,10 +62,8 @@ export default _xyz => {
 
     if (key !== 37 && key !== 38 && key !== 39 && key !== 40 && key !== 13 && term.length > 0 && isNaN(term.value)) {
 
-    //initiate search if either split value is not a number
-      let NaN_check = e.target.value.split(',').map(isNaN);
       if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
-      if (NaN_check[0] || NaN_check[1]) search(term);
+      search(term);
     }
   });
 
@@ -102,6 +100,8 @@ export default _xyz => {
     // Get possible coordinates from input and draw location if valid
       let latlng = e.target.value.split(',').map(parseFloat);
       if ((latlng[1] > -90 && latlng[1] < 90) && (latlng[0] > -180 && latlng[0] < 180)) {
+        if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
+        results = [];
         _xyz.gazetteer.result.innerHTML = '';
         createFeature({
           type: 'Point',

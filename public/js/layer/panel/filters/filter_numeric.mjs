@@ -4,11 +4,14 @@ export default (_xyz, layer, filter_entry) => {
 
   const xhr = new XMLHttpRequest();
 
+  const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
+
   xhr.open('GET', _xyz.host + '/api/location/field/range?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     field: filter_entry.field,
+    filter: JSON.stringify(filter),
     token: _xyz.token
   }));
 
@@ -130,9 +133,9 @@ export default (_xyz, layer, filter_entry) => {
         layer.filter.current[filter_entry.field].gte = parseFloat(input_min.value);
         layer.filter.current[filter_entry.field].lte = parseFloat(input_max.value);
 
-        layer.show();
+        layer.filter.check_count();
 
-        if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
+        layer.show();
 
       }, 500);
     }
@@ -140,8 +143,8 @@ export default (_xyz, layer, filter_entry) => {
     function setStep(entry){
       let step;
       switch(entry.type){
-        case 'integer': step = 1; break;
-        case 'numeric': step = 0.01 ; break;
+      case 'integer': step = 1; break;
+      case 'numeric': step = 0.01 ; break;
       }
       return step;
     }

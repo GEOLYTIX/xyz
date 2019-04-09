@@ -116,11 +116,9 @@ export default (_xyz, layer, filter_entry) => {
       layer.filter.current[filter_entry.field].gt = _xyz.utils.meltDateStr(input_min.value) || null;
       layer.filter.current[filter_entry.field].lt = _xyz.utils.meltDateStr(input_max.value) || null;
 
-      console.log(layer.filter);
+      layer.filter.check_count();
 
       layer.show();
-
-      if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
 
     }, 500);
   }

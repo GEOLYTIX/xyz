@@ -35,11 +35,19 @@ module.exports = fastify => {
       let
         layer = req.params.layer,
         table = req.query.table,
+        filter = req.params.filter,
         field = req.query.field;
+
+      // SQL filter
+      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || ''; 
+
            
       var q = `
-      SELECT min(${field}), max(${field})
-      FROM ${table};`;
+      SELECT
+        min(${field}),
+        max(${field})
+      FROM ${table}
+      WHERE true ${filter_sql};`;
   
       var rows = await global.pg.dbs[layer.dbs](q);
   
