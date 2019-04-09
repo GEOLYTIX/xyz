@@ -14,7 +14,7 @@ export default _xyz => (entry) => {
     	onChange: e => {
     		entry.display = e.target.checked;
 
-    		entry.dsplay ? showTab() : removeTab();
+    		entry.display ? showTab() : removeTab();
     	}
   });
 
