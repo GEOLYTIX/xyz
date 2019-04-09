@@ -234,9 +234,9 @@ async function chkMVTCache(layer) {
     if (!table && tables.length > 1) continue;
 
     // Get a sample MVT from the cache table.
-    let rows = await global.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${table}__mvts LIMIT 1`, null, 'no_log');
+    let rows = await global.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${layer.mvt_cache} LIMIT 1`, null, 'no_log');
 
-    if (rows && rows.err) await createMVTCache(layer, table);
+    if (rows && rows.err) return await createMVTCache(layer, table);
 
     // Check sample MVT.
     if (rows.length > 0) {
@@ -255,21 +255,21 @@ async function chkMVTCache(layer) {
         if (Object.keys(tile.layers).length > 0 && tile.layers[layer.key]._keys.indexOf(field.split(' as ').pop()) < 0) {
 
           // Truncate the cache table.
-          rows = await global.pg.dbs[layer.dbs](`TRUNCATE ${table}__mvts;`);
+          rows = await global.pg.dbs[layer.dbs](`TRUNCATE ${layer.mvt_cache};`);
 
           if (rows.err) {
-            return console.log(`!!! ${layer.locale}.${layer.key} | ${table}__mvts (mvt cache) => Failed to truncate cache table`);
+            return console.log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to truncate cache table`);
           }
 
-          return console.log(`${layer.locale}.${layer.key} | ${table}__mvts (mvt cache) => Cache table has been truncated`);
+          return console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table has been truncated`);
         }
       }
 
-      return console.log(`${layer.locale}.${layer.key} | ${table}__mvts (mvt cache) => 'A-ok'`);
+      return console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => 'A-ok'`);
 
     }
 
-    console.log(`${layer.locale}.${layer.key} | ${table}__mvts (mvt cache) => 'Huh? Cache table seems to be empty.'`);
+    console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => 'Huh? Cache table seems to be empty.'`);
 
   }
   
@@ -278,25 +278,25 @@ async function chkMVTCache(layer) {
 async function createMVTCache(layer, table){
 
   let rows = await global.pg.dbs[layer.dbs](`
-    create table ${table}__mvts
+    create table ${layer.mvt_cache}
     (
       z integer not null,
       x integer not null,
       y integer not null,
       mvt bytea,
       tile geometry(Polygon,3857),
-      constraint ${table.replace(/\./,'_')}__mvts_z_x_y_pk
+      constraint ${layer.mvt_cache.replace(/\./,'_')}_z_x_y_pk
         primary key (z, x, y)
     );
     
-    create index ${table.replace(/\./,'_')}__mvts_tile on ${table}__mvts (tile);`);
+    create index ${layer.mvt_cache.replace(/\./,'_')}_tile on ${layer.mvt_cache} (tile);`);
 
   if (rows && rows.err) {
-    console.log(`!!! ${layer.locale}.${layer.key} | ${table}__mvts (mvt cache) => Failed to create cache table`);
-    return layer.mvt_cache = false;
+    console.log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to create cache table`);
+    return delete layer.mvt_cache;
   }
 
-  console.log(`${layer.locale}.${layer.key} | ${table}__mvts (mvt cache) => Cache table created`);
+  console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table created`);
 
 }
 
