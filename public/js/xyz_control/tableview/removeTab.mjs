@@ -6,8 +6,6 @@ export default _xyz => table => {
     table.target.innerHTML = '';
   }
 
-  console.log("hi i'm a remove tab " + table.title);
-
   let idx = _xyz.tableview.tables.indexOf(table);
 
   if (idx < 0) return;
@@ -16,21 +14,20 @@ export default _xyz => table => {
 
   _xyz.tableview.current_table = null;
 
+  if(idx <= _xyz.tableview.max_tabs && _xyz.tableview.nav_dropdown.firstChild) _xyz.tableview.nav_bar.appendChild(_xyz.tableview.nav_dropdown.firstChild);
 
-  if(document.querySelectorAll('#tableview ul.nav_bar-nav li').length <= _xyz.tableview.max_tabs){
-
-    if(!_xyz.tableview.nav_dropdown.firstChild) _xyz.tableview.nav_dropdown_btn.style.display = 'none';
-  
-  }
+  if(!_xyz.tableview.nav_dropdown.firstChild) _xyz.tableview.nav_dropdown_btn.style.display = 'none';
 
   if (_xyz.tableview.node && _xyz.tableview.tables.length > 0) {
 
     Object
       .values(_xyz.tableview.nav_bar.children)
       .forEach(tab => tab.classList.remove('tab-current'));
+      
+      let nodes = document.querySelectorAll('#tableview ul.nav_bar-nav li');
+      nodes[nodes.length-1].classList.add('tab-current');
+      return _xyz.tableview.tables[nodes.length-1].activate();
 
-      document.querySelectorAll('#tableview ul.nav_bar-nav li')[_xyz.tableview.max_tabs-1].classList.add('tab-current');
-      return _xyz.tableview.tables[_xyz.tableview.max_tabs-1].activate();
   }
 
   if (_xyz.tableview.node) {

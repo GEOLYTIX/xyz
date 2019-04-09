@@ -24,8 +24,6 @@ export default _xyz => table => {
       count2 = _xyz.tableview.nav_dropdown.children.length || 0,
       total_count = count1 + count2;
 
-  console.log("hi I'm an add tab " + table.title);
-
   table.tab = _xyz.utils.createElement({
     tag: 'li',
     options: {
@@ -73,8 +71,8 @@ export default _xyz => table => {
   count1 = _xyz.tableview.nav_bar.children.length || 0;
   count2 = _xyz.tableview.nav_dropdown.children.length || 0;  
   total_count = count1 + count2;
-
-  //_xyz.tableview.nav_bar.lastChild.classList.add('tab-current');
+  
+  // activate only tab from navbar
   if(!table.tab.classList.contains('folded')) {
     table.tab.classList.add('tab-current');
   } else {
@@ -83,34 +81,5 @@ export default _xyz => table => {
   
   if(count2 > 0) _xyz.tableview.nav_dropdown_btn.style.display = 'inline-flex';
 
-
-
-  /*table.tab = _xyz.utils.createElement({
-    tag: 'li',
-    options: {
-      textContent: table.title,
-      classList: 'Tab cursor noselect tab-current'
-    },
-    style: style,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-
-        // Remove current from all tabs.
-        Object
-          .values(_xyz.tableview.nav_bar.children)
-          .forEach(tab => tab.classList.remove('tab-current'));
-
-        // Make target tab current.
-        e.target.classList.add('tab-current');
-
-        if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
-
-        table.activate();
-
-      }
-    },
-    appendTo: _xyz.tableview.nav_bar
-  });*/
 
 };
