@@ -67,12 +67,11 @@ export default _xyz => {
 
   function loadLocale(params) {
 
-    // Set locale from params or first locale in workspace.
-    const localeKey = params.locale || Object.keys(_xyz.workspace.locales)[0];
+    if (params.locale && !_xyz.workspace.locales[params.locale]) params.locale = Object.keys(_xyz.workspace.locales)[0];
 
-    _xyz.workspace.locale = { key: localeKey };
+    _xyz.workspace.locale = { key: params.locale };
 
-    Object.assign(_xyz.workspace.locale, _xyz.workspace.locales[localeKey], params);
+    Object.assign(_xyz.workspace.locale, _xyz.workspace.locales[params.locale], params);
 
     // Create layers list.
     _xyz.layers.list = {};

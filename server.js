@@ -62,7 +62,7 @@ function startFastify(){
     .register(require('fastify-helmet'), {
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ['\'self\''],
+          defaultSrc: ['\'self\'', '*.logrocket.io'],
           baseURI: ['\'self\''],
           objectSrc: ['\'self\''],
           workerSrc: ['\'self\'', 'blob:'],

@@ -587,7 +587,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.scratch",
-                    "mvt_cache": true,
+                    "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
                     "edit": {
                         "polygon": true,
@@ -643,7 +643,7 @@
                         "12": "dev.oa",
                         "13": "dev.oa"
                     },
-                    "mvt_cache": true,
+                    "mvt_cache": "dev.oa__mvts",
                     "mvt_fields": [
                         "pop_11"
                     ],
@@ -736,7 +736,7 @@
                             }
                         }
                     },
-                    "mvt_cache": true,
+                    "mvt_cache": "dev.retailplaces__mvts",
                     "mvt_fields": [
                         "rp_type",
                         "pop__11"
