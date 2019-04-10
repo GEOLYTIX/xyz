@@ -130,6 +130,7 @@ export default _xyz => table => {
 
   };
 
-  table.activate();
+  // active only if displayed in the navbar 
+  if(!table.tab.classList.contains('folded')) table.activate();
 
 };

@@ -18,32 +18,68 @@ export default _xyz => table => {
 
   if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
 
+  _xyz.tableview.max_tabs = 6; // max tabs displayed in the panel
+  
+  let count1 = _xyz.tableview.nav_bar.children.length || 0,
+      count2 = _xyz.tableview.nav_dropdown.children.length || 0,
+      total_count = count1 + count2;
+
   table.tab = _xyz.utils.createElement({
     tag: 'li',
     options: {
       textContent: table.title,
-      classList: 'Tab cursor noselect tab-current'
+      classList: 'Tab cursor noselect'
     },
     style: style,
     eventListener: {
       event: 'click',
       funct: e => {
-
-        // Remove current from all tabs.
+        
         Object
           .values(_xyz.tableview.nav_bar.children)
           .forEach(tab => tab.classList.remove('tab-current'));
 
-        // Make target tab current.
-        e.target.classList.add('tab-current');
+        if(e.target.classList.contains('folded')){
+          // put last tab in the dropdown
+          _xyz.tableview.nav_bar.lastChild.classList.add('folded');
+          _xyz.tableview.nav_dropdown.appendChild(_xyz.tableview.nav_bar.lastChild);
 
+          // put new tab in the nav bar
+          e.target.classList.remove('folded');
+          _xyz.tableview.nav_bar.appendChild(e.target);
+        } //else {
+          //e.target.classList.add('tab-current');
+        //}
+          e.target.classList.add('tab-current');
+          table.activate();
+
+        //e.target.classList.add('tab-current');
+
+        // set tab to current
         if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
 
-        table.activate();
-
+        // hide dropdown if visible
+        _xyz.tableview.nav_dropdown_content.classList.remove('show');
+        
       }
-    },
-    appendTo: _xyz.tableview.nav_bar
+    }
   });
+
+  // assign the parent for tab based on count
+  (total_count < _xyz.tableview.max_tabs) ? _xyz.tableview.nav_bar.appendChild(table.tab) : (table.tab.classList.add('folded'), _xyz.tableview.nav_dropdown.appendChild(table.tab));
+
+  count1 = _xyz.tableview.nav_bar.children.length || 0;
+  count2 = _xyz.tableview.nav_dropdown.children.length || 0;  
+  total_count = count1 + count2;
+  
+  // activate only tab from navbar
+  if(!table.tab.classList.contains('folded')) {
+    table.tab.classList.add('tab-current');
+  } else {
+    _xyz.tableview.nav_bar.lastChild.classList.add('tab-current');
+  }
+  
+  if(count2 > 0) _xyz.tableview.nav_dropdown_btn.style.display = 'inline-flex';
+
 
 };
