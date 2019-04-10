@@ -67,7 +67,7 @@ export default _xyz => {
 
   function loadLocale(params = {}) {
 
-    params.locale = _xyz.workspace.locales[params.locale] || Object.keys(_xyz.workspace.locales)[0];
+    params.locale = (_xyz.workspace.locales[params.locale] && params.locale) || Object.keys(_xyz.workspace.locales)[0];
 
     _xyz.workspace.locale = { key: params.locale };
 
