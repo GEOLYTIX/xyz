@@ -1,4 +1,7 @@
-// Save workspace provided in post body to the Postgres table.
+const env = require(global.__approot + '/mod/env');
+
+const checkWorkspace = require(global.__approot + '/mod/checkWorkspace');
+
 module.exports = fastify => {
   fastify.route({
     method: 'POST',
@@ -11,10 +14,10 @@ module.exports = fastify => {
     handler: async (req, res) => {
       
       // Check workspace.
-      const workspace = await require(global.appRoot + '/mod/checkWorkspace')(JSON.parse(req.body.settings));
+      const workspace = await checkWorkspace(JSON.parse(req.body.settings));
       
       // Save checked workspace to PostgreSQL table.
-      if (global.pg.ws_save) await global.pg.ws_save(workspace);
+      if (env.pg.ws_save) await env.pg.ws_save(workspace);
          
       // Return checked workspace to sender.
       res.code(200).send(workspace);

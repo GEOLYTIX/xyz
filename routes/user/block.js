@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = { route, view };
 
 function route(fastify) {
@@ -27,17 +29,17 @@ function route(fastify) {
 
 async function view(req, res, token) {
 
-  var rows = await global.pg.users(`
+  var rows = await env.pg.users(`
   SELECT * FROM acl_schema.acl_table WHERE approvaltoken = $1;`,
   [req.params.token]);
 
-  if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+  if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
   const user = rows[0];
 
   if (!user) return res.send('Token not found. The token has probably been resolved already.');
 
-  rows = await global.pg.users(`
+  rows = await env.pg.users(`
   UPDATE acl_schema.acl_table SET
     blocked = true,
     approvaltoken = null,
@@ -45,12 +47,12 @@ async function view(req, res, token) {
   WHERE lower(email) = lower($1);`,
   [user.email]);
 
-  if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+  if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
-  require(global.appRoot + '/mod/mailer')({
+  require(global.__approot + '/mod/mailer')({
     to: user.email,
-    subject: `This account has been blocked on ${global.alias || req.headers.host}${global.dir}`,
-    text: `You are will no longer be able to log on to ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}`
+    subject: `This account has been blocked on ${env.alias || req.headers.host}${env.path}`,
+    text: `You are will no longer be able to log on to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`
   });
 
   res.send('The account has been blocked by you. An email has been sent to the account holder.');

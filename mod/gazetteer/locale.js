@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = async (req, locale) => {
 
   const term = req.query.q;
@@ -27,7 +29,7 @@ module.exports = async (req, locale) => {
       role => Object.assign(filter, layer.roles[role])
     );
 
-    const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+    const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `
@@ -43,7 +45,7 @@ module.exports = async (req, locale) => {
       LIMIT 10`;
 
     // Get gazetteer results from dataset table.
-    var rows = await global.pg.dbs[layer.dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(term)}%`]);
+    var rows = await env.pg.dbs[layer.dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(term)}%`]);
 
     if (rows.err) return {err: 'Error fetching gazetteer results.'};
 

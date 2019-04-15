@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 async function writeLog(layer, id) {
 
   // Create duplicate of item in log table.
@@ -6,7 +8,7 @@ async function writeLog(layer, id) {
       SELECT *
       FROM ${layer.table} WHERE ${layer.qID || 'id'} = $1;`;
   
-  var rows = await global.pg.dbs[layer.dbs](q, [id]);
+  var rows = await env.pg.dbs[layer.dbs](q, [id]);
   
   if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 }

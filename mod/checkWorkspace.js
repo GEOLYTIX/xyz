@@ -1,15 +1,12 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = async workspace => {
   
-  // Set global workspace.
-  global.workspace = {
-    _defaults: await JSON.parse(require('fs').readFileSync('./workspaces/_defaults.json'), 'utf8')
-  };
-
   console.log(' ');
   console.log('------Checking Workspace------');
   
   // Check whether workspace keys are valid or missing.
-  await chkOptionals(workspace, global.workspace._defaults.ws);
+  await chkOptionals(workspace, env._defaults.workspace);
   
   // Check locales.
   await chkLocales(workspace.locales);
@@ -17,7 +14,7 @@ module.exports = async workspace => {
   console.log('-----------------------------');
   console.log(' ');
 
-  global.workspace.current = workspace;
+  env.workspace = workspace;
   
   return workspace;
 };
@@ -65,7 +62,7 @@ async function chkLocales(locales) {
     // Set default locale.
     const
       locale = locales[key],
-      _locale = global.workspace._defaults.locale;
+      _locale = env._defaults.locale;
   
     // Invalidate locale if it is not an object.
     if (typeof locale !== 'object') {
@@ -99,15 +96,15 @@ async function chkLayers(layers, locale_key) {
     // Invalidate layer if it is not an object or does not have a valid layer format.
     if (typeof layer !== 'object'
         || !layer.format
-        || !global.workspace._defaults.layers[layer.format]) {
+        || !env._defaults.layers[layer.format]) {
       layers['__' + key] = layer;
       return delete locale.layers[key];
     }
 
     // Assign layer default from layer and format defaults.
     const _layer = Object.assign({},
-      global.workspace._defaults.layers.default,
-      global.workspace._defaults.layers[layer.format]
+      env._defaults.layers.default,
+      env._defaults.layers[layer.format]
     );
 
     // Set layer key and name.
@@ -149,13 +146,13 @@ async function chkLayerURL(layer, layers) {
   let uri = layer.URI.split('&provider=');
 
   // Replace provider definition with provider key.
-  uri = `${uri[0]}${uri[1] ? global.KEYS[uri[1]] : ''}`;
+  uri = `${uri[0]}${uri[1] ? env.keys[uri[1]] : ''}`;
 
   // Replace subdomain (a) and x,y,z (0) location.
   uri = uri.replace(/\{s\}/i,'a').replace(/\{.\}/ig,'0');
 
   // Fetch results from Google maps places API.
-  const fetched = await require(global.appRoot + '/mod/fetch')(uri, 'no_log');
+  const fetched = await require(global.__approot + '/mod/fetch')(uri, 'no_log');
 
   if (fetched._err) {
 
@@ -188,13 +185,13 @@ async function chkLayerGeom(layer, layers) {
     if (!table) return invalidateLayer();
 
     // Invalidate layer if no dbs has been defined.
-    if (!layer.dbs || !global.pg.dbs[layer.dbs]) {
+    if (!layer.dbs || !env.pg.dbs[layer.dbs]) {
       console.log(`!!! ${layer.locale}.__${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
       return invalidateLayer();
     }
 
     // Check whether table has layer geom or geom_3857 field.
-    let rows = await global.pg.dbs[layer.dbs](`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
+    let rows = await env.pg.dbs[layer.dbs](`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
       console.log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => ${rows.err.message}`);
@@ -234,7 +231,7 @@ async function chkMVTCache(layer) {
     if (!table && tables.length > 1) continue;
 
     // Get a sample MVT from the cache table.
-    let rows = await global.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${layer.mvt_cache} LIMIT 1`, null, 'no_log');
+    let rows = await env.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${layer.mvt_cache} LIMIT 1`, null, 'no_log');
 
     if (rows && rows.err) return await createMVTCache(layer, table);
 
@@ -255,7 +252,7 @@ async function chkMVTCache(layer) {
         if (Object.keys(tile.layers).length > 0 && tile.layers[layer.key]._keys.indexOf(field.split(' as ').pop()) < 0) {
 
           // Truncate the cache table.
-          rows = await global.pg.dbs[layer.dbs](`TRUNCATE ${layer.mvt_cache};`);
+          rows = await env.pg.dbs[layer.dbs](`TRUNCATE ${layer.mvt_cache};`);
 
           if (rows.err) {
             return console.log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to truncate cache table`);
@@ -277,7 +274,7 @@ async function chkMVTCache(layer) {
 
 async function createMVTCache(layer, table){
 
-  let rows = await global.pg.dbs[layer.dbs](`
+  let rows = await env.pg.dbs[layer.dbs](`
     create table ${layer.mvt_cache}
     (
       z integer not null,
@@ -320,7 +317,7 @@ async function chkLayerSelect(layer) {
 
     if (!table) return;
 
-    let rows = await global.pg.dbs[layer.dbs](`SELECT ${layer.qID} FROM ${table} LIMIT 1`, null, 'no_log');
+    let rows = await env.pg.dbs[layer.dbs](`SELECT ${layer.qID} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
       console.log(`!!! ${layer.locale}.${layer.key} | ${table}.__${layer.qID} (${layer.format}) => '¡No bueno!'`);

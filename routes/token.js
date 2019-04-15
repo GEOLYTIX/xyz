@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = { route, view };
 
 function route(fastify) {
@@ -26,12 +28,12 @@ function route(fastify) {
 async function view(req, res, token, fastify) {
 
   // Get user from ACL.
-  var rows = await global.pg.users(`
+  var rows = await env.pg.users(`
     SELECT * FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`,
   [token.email]);
     
-  if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+  if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
   const user = rows[0];
   
@@ -48,12 +50,12 @@ async function view(req, res, token, fastify) {
   });
   
     // Store api_token in ACL.
-  var rows = await global.pg.users(`
+  var rows = await env.pg.users(`
     UPDATE acl_schema.acl_table SET api = '${api_token}'
     WHERE lower(email) = lower($1);`,
   [user.email]);
     
-  if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+  if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
   // Send ACL token.
   res.send(api_token);

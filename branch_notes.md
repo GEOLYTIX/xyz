@@ -12,7 +12,7 @@ Get the workspace from XYZ host.
 
 Post a workspace to the XYZ host. Will run checks, load workspace into memory and store the workspace as a new record in the workspace table.
 
-The workspace is stored in global.workspace.current
+The workspace is stored in env.workspace
 
 
 

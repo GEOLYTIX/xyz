@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
   
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/location/edit/images/delete',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -40,14 +42,13 @@ module.exports = fastify => {
         id = req.query.id,
         field = req.query.field,
         image_src = decodeURIComponent(req.query.image_src),
-        cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [],
         ts = Date.now(),
-        sig = require('crypto').createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
+        sig = require('crypto').createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${env.cloudinary[1]}`).digest('hex');
 
       require('request').post({
-        url: `https://api.cloudinary.com/v1_1/${cloudinary[2]}/image/destroy`,
+        url: `https://api.cloudinary.com/v1_1/${env.cloudinary[2]}/image/destroy`,
         body: {
-          'api_key': cloudinary[0],
+          'api_key': env.cloudinary[0],
           'public_id': req.query.image_id,
           'timestamp': ts,
           'signature': sig
@@ -62,7 +63,7 @@ module.exports = fastify => {
           SET ${field} = array_remove(${field}, '${image_src}')
           WHERE ${qID} = $1;`;
 
-        await global.pg.dbs[layer.dbs](q, [id]);
+        await env.pg.dbs[layer.dbs](q, [id]);
 
         res.code(200).send('Image deleted.');
         

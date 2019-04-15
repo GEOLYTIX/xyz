@@ -1,10 +1,12 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/select/aggregate',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -40,12 +42,12 @@ module.exports = fastify => {
           null;    
 
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
 
       const infoj = layer.filter.infoj;
 
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj);
+      const fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj);
 
       
       var q = `
@@ -92,7 +94,7 @@ module.exports = fastify => {
         FROM ${table}
         WHERE true ${filter_sql};`;
       
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.pg.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = async (layer, table, id) => {
 
   var q = `
@@ -8,7 +10,7 @@ module.exports = async (layer, table, id) => {
       (SELECT ${layer.geom_3857} FROM ${table} WHERE ${layer.qID} = $1)
     );`;
 
-  await global.pg.dbs[layer.dbs](q, [id]);
+  await env.pg.dbs[layer.dbs](q, [id]);
 
   return;
 

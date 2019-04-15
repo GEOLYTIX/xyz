@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   return {
@@ -25,7 +27,7 @@ module.exports = fastify => {
 
   function _locale (req, res, next) {
 
-    req.params.locale = global.workspace.current.locales[req.query.locale];
+    req.params.locale = env.workspace.locales[req.query.locale];
 
     if (!req.params.locale) {
       res.code(400);

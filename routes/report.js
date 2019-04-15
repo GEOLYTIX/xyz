@@ -1,7 +1,6 @@
-module.exports = {route, view};
+const env = require(global.__approot + '/mod/env');
 
-// Create constructor for mobile detect module.
-// const Md = require('mobile-detect');
+module.exports = {route, view};
 
 // Set jsrender module for server-side templates.
 const jsr = require('jsrender');
@@ -16,7 +15,7 @@ function route(fastify) {
     url: '/report',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public,
+        public: true,
         login: true
       })
     ]),
@@ -35,21 +34,14 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  // console.log(req.query.token);
-
-  const config = global.workspace.current;
-
-  // Check whether request comes from a mobile platform and set template.
-  // const md = new Md(req.headers['user-agent']);
-
   const tmpl = jsr.templates('./public/views/report.html');
 
-  let html = await require('fs').readFileSync(`${global.appRoot}/public/views/report/${req.query.template}.html`, 'utf8');
+  let html = await require('fs').readFileSync(`${global.__approot}/public/views/report/${req.query.template}.html`, 'utf8');
 
   // Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
-    dir: global.dir,
-    title: config.title || 'GEOLYTIX | XYZ',
+    dir: env.path,
+    title: env.workspace.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: req.query.token || token.signed || '""',
     template: html || null,

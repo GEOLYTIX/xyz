@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => (req, res, next, access = {}) => {
 
   if (req.query.token === 'null') {
@@ -5,7 +7,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
   }
 
   // Public access without token.
-  if (!req.query.token && access.public) {
+  if (!req.query.token && access.public && env.public) {
     return next();
   }
 
@@ -34,7 +36,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
     if (token.api) {
 
       // Get user from ACL.
-      rows = await global.pg.users(`
+      rows = await env.pg.users(`
         SELECT * FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`, [token.email]);
     

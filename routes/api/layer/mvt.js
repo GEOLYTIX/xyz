@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/layer/mvt/:z/:x/:y',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -44,7 +46,7 @@ module.exports = fastify => {
 
 
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
 
       // Use MVT cache if set on layer and no filter active.
       const mvt_cache = (!filter_sql && layer.mvt_cache);
@@ -52,7 +54,7 @@ module.exports = fastify => {
       if (mvt_cache) {
 
         // Get MVT from cache table.
-        var rows = await global.pg.dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
+        var rows = await env.pg.dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`);
 
         if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
@@ -121,7 +123,7 @@ module.exports = fastify => {
       
       ${mvt_cache ? 'RETURNING mvt;' : ';'}`;
 
-      rows = await global.pg.dbs[layer.dbs](q);
+      rows = await env.pg.dbs[layer.dbs](q);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

@@ -1,4 +1,5 @@
-// Get the stored workspace config for the token access level.
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -6,7 +7,7 @@ module.exports = fastify => {
     url: '/workspace/get',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -29,7 +30,7 @@ module.exports = fastify => {
     ],
     handler: (req, res) => {
 
-      const locales = JSON.parse(JSON.stringify(global.workspace.current.locales));
+      const locales = JSON.parse(JSON.stringify(env.workspace.locales));
 
       (function objectEval(o, parent, key) {
  

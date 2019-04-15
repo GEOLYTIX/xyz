@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/location/edit/draw',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -50,11 +52,11 @@ module.exports = fastify => {
       SELECT ${_geom}
       RETURNING ${layer.qID} AS id;`;
       
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.pg.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
     
-      if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, rows[0].id);
+      if (layer.mvt_cache) await require(global.__approot + '/mod/mvt_cache')(layer, table, rows[0].id);
       
       res.code(200).send(rows[0].id.toString());    
 

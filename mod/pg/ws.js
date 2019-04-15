@@ -1,21 +1,24 @@
-// Create workspace connection pool for PostgreSQL.
+const env = require(global.__approot + '/mod/env');
+
+const checkWorkspace = require(global.__approot + '/mod/checkWorkspace');
+
 module.exports = async () => {
 
   // Load zero config workspace if workspace is not defined in environment settings.
-  if (!process.env.WORKSPACE) {
-    return await require(global.appRoot + '/mod/checkWorkspace')({});
+  if (!env._workspace) {
+    return await checkWorkspace({});
   }
 
-  if (process.env.WORKSPACE.split(':')[0] === 'file') {
-    return getWorkspaceFromFile(process.env.WORKSPACE.split(':').pop());
+  if (env._workspace.split(':')[0] === 'file') {
+    return getWorkspaceFromFile(env._workspace.split(':').pop());
   }
 
   // Global workspace table name.
-  const workspace_table = process.env.WORKSPACE.split('|')[1] || 'workspace';
+  const workspace_table = env._workspace.split('|')[1] || 'workspace';
 
   // Create PostgreSQL connection pool for workspace table.
   const pool = new require('pg').Pool({
-    connectionString: process.env.WORKSPACE.split('|')[0]
+    connectionString: env._workspace.split('|')[0]
   });
 
   const ws_query = async (q, arr) => {
@@ -57,18 +60,21 @@ module.exports = async () => {
     );`);
     
     if (create.err) {
-      return await require(global.appRoot + '/mod/checkWorkspace')({});
+      return await checkWorkspace({});
     }
 
-  } else if (schema.some(row => (!ws_schema[row.column_name] || ws_schema[row.column_name] !== row.data_type))) {
+  } else if (schema.some(
+    row => (!ws_schema[row.column_name]
+      || ws_schema[row.column_name] !== row.data_type))) {
+
     console.log('There seems to be a problem with the WS configuration.');
 
-    return await require(global.appRoot + '/mod/checkWorkspace')({});
+    return await checkWorkspace({});
 
   }
 
   // Get workspace from PostgreSQL.
-  global.pg.ws_get = async () => {
+  env.pg.ws_get = async () => {
 
     var config = await ws_query(`SELECT * FROM ${workspace_table} ORDER BY _id DESC LIMIT 1`);
 
@@ -80,7 +86,7 @@ module.exports = async () => {
   };
 
   // Save workspace to PostgreSQL.
-  global.pg.ws_save = async workspace => {
+  env.pg.ws_save = async workspace => {
  
     await ws_query(`
     INSERT INTO ${workspace_table} (settings) SELECT $1 AS settings;`,
@@ -89,27 +95,27 @@ module.exports = async () => {
   };
 
   // Check and load workspace.
-  await require(global.appRoot + '/mod/checkWorkspace')(
-    await global.pg.ws_get()
+  await checkWorkspace(
+    await env.pg.ws_get()
   );
 
-};
+  async function getWorkspaceFromFile(file){
 
-async function getWorkspaceFromFile(file){
-
-  var workspace = {};
- 
-  // Attempt to read workspace from file in workspaces folder.
-  try {
-    workspace = await JSON.parse(require('fs').readFileSync('./workspaces/' + file), 'utf8');
-
-  } catch (err) {
-    Object.keys(err).forEach(key => !err[key] && delete err[key]);
-    console.error(err);
-
-  // Check and load the workspace from file into memory.
-  } finally {
-    await require(global.appRoot + '/mod/checkWorkspace')(workspace);
-  }
+    let workspace = {};
+   
+    // Attempt to read workspace from file in workspaces folder.
+    try {
+      workspace = await JSON.parse(require('fs').readFileSync('./workspaces/' + file), 'utf8');
   
-}
+    } catch (err) {
+      Object.keys(err).forEach(key => !err[key] && delete err[key]);
+      console.error(err);
+  
+    // Check and load the workspace from file into memory.
+    } finally {
+      await checkWorkspace(workspace);
+    }
+    
+  }
+
+};

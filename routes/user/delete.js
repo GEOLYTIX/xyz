@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
     
   fastify.route({
@@ -13,18 +15,18 @@ module.exports = fastify => {
       const email = req.query.email.replace(/\s+/g,'');
 
       // Delete user account in ACL.
-      var rows = await global.pg.users(`
+      var rows = await env.pg.users(`
       DELETE FROM acl_schema.acl_table
       WHERE lower(email) = lower($1);`,
       [email]);
 
-      if (rows.err) return res.redirect(global.dir + '/login?msg=badconfig');
+      if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
       // Sent email to inform user that their account has been deleted.
-      await require(global.appRoot + '/mod/mailer')({
+      await require(global.__approot + '/mod/mailer')({
         to: email,
-        subject: `This ${global.alias || req.headers.host}${global.dir} account has been deleted.`,
-        text: `You will no longer be able to log in to ${process.env.HTTP || 'https'}://${global.alias || req.headers.host}${global.dir}`
+        subject: `This ${env.alias || req.headers.host}${env.path} account has been deleted.`,
+        text: `You will no longer be able to log in to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`
       });
 
       res.code(200).send('User account deleted.');
