@@ -147,7 +147,8 @@
       .tableview nav .tab-dropdown-container button.tab-dropdown {
         width: 30px;
         font-size: 14px;
-        display: none; }
+        display: none;
+        color: #090; }
       .tableview nav .tab-dropdown-container .tab-dropdown-content {
         display: none;
         position: absolute;
