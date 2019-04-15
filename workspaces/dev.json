@@ -1368,6 +1368,110 @@
                         }
                     }
                 },
+                "poi": {
+                    "name": "Points of Interest",
+                    "meta": "A subset of collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, car parks, cinemas and service areas.",
+                    "attribution": [
+                        "Point of Interest. Geolytix License."
+                    ],
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "mapp.poi",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                    "cluster_label": "poi_name",
+                    "cluster_kmeans": 0.1,
+                    "cluster_dbscan": 0.05,
+                    "infoj": [
+                        {
+                            "field": "poi_type",
+                            "label": "Category",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_name",
+                            "label": "Name",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_fascia",
+                            "label": "Brand",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_flag",
+                            "label": "Type",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_address",
+                            "label": "Address",
+                            "inline": true
+                        },
+                        {
+                            "field": "postcode",
+                            "label": "Postcode",
+                            "inline": true
+                        },
+                        {
+                            "field": "town",
+                            "label": "Town",
+                            "inline": true
+                        },
+                        {
+                            "field": "locality",
+                            "label": "locality",
+                            "inline": true
+                        },
+                        {
+                            "type": "streetview"
+                        }
+                    ],
+                    "style": {
+                        "markerMin": 40,
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#C2095A"
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#C2095A"
+                        },
+                        "themes": {
+                            "POI Type": {
+                                "field": "poi_type",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "Airport": {
+                                        "label": "Airport",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_transport_airport.svg?sanitize=true"
+                                    },
+                                    "Cinema": {
+                                        "label": "Cinema",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_entertainment_cinema.svg?sanitize=true"
+                                    },
+                                    "Hospital": {
+                                        "label": "Hospital",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_health_hospital.svg?sanitize=true"
+                                    },
+                                    "Pharmacy": {
+                                        "label": "Pharmacy",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_health_pharmacy.svg?sanitize=true"
+                                    },
+                                    "Sport and Leisure": {
+                                        "label": "Sport and Leisure",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_sports_leisure_sports_centre.svg?sanitize=true"
+                                    },
+                                    "Stadium": {
+                                        "label": "Stadium",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_entertainment_stadium.svg?sanitize=true"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "grid": {
                     "name": "Grid",
                     "attribution": {
