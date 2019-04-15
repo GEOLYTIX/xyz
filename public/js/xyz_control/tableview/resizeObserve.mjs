@@ -1,5 +1,7 @@
 export default _xyz => () => {
 
+	if (typeof ResizeObserver !== 'function') return;
+
 	const resizeObserver = new ResizeObserver(entries => {
 		for (let entry of entries) {
 			
