@@ -47,13 +47,9 @@ export default _xyz => table => {
           // put new tab in the nav bar
           e.target.classList.remove('folded');
           _xyz.tableview.nav_bar.appendChild(e.target);
-        } //else {
-          //e.target.classList.add('tab-current');
-        //}
+        } 
           e.target.classList.add('tab-current');
           table.activate();
-
-        //e.target.classList.add('tab-current');
 
         // set tab to current
         if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';

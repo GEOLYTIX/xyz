@@ -50,7 +50,7 @@ export default (_xyz, layer) => {
         layer.get();
       });
       
-    y += 20;
+    y += 23;
   });
       
   // Attach box for other/default categories.

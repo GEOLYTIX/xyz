@@ -16,8 +16,10 @@ $onyx: #383836;
     src: url(../fonts/MarkWebPro-Bold.woff) format("woff");
 }
 
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+@import 'material_icons';
+/* @import url('https://fonts.googleapis.com/css?family=PT+Mono'); */
+@import 'pt_mono';
 @import 'locationview';
 @import 'tableview';
 @import 'input';

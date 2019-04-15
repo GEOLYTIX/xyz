@@ -97,6 +97,7 @@ export default _xyz => params => {
     }
   
     _xyz.tableview.node.style.height = height + 'px';
+
   }
   
   // Remove eventListener after resize event.
@@ -122,5 +123,7 @@ export default _xyz => params => {
   _xyz.tableview.nav_dropdown_btn.addEventListener('click', e => {
     _xyz.tableview.nav_dropdown_content.classList.toggle('show');
   });
+
+  _xyz.tableview.resizeObserve();
      
 };
