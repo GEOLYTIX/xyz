@@ -26,7 +26,7 @@ module.exports = {
   // Additional logs will be written to console if env.logs is true.
   logs: process.env.LOG_LEVEL,
 
-  keys: {},
+  keys: keys(),
 
   pg: {
     dbs: {}
@@ -46,4 +46,20 @@ module.exports = {
 
   secret: process.env.SECRET || 'ChinaCatSunflower',
 
+  debug: process.env.DEBUG,
+
 };
+
+function keys() {
+
+  const keys = {};
+
+  Object.keys(process.env).forEach(key => {
+    if (key.split('_')[0] === 'KEY') {
+      keys[key.split('_')[1]] = process.env[key];
+    }
+  });
+
+  return keys;
+
+}

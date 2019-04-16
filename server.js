@@ -26,13 +26,6 @@ global.__approot = require('path').resolve(__dirname);
 // Initiate environment module.
 const env = require(global.__approot + '/mod/env');
 
-// Store provider keys.
-Object.keys(process.env).forEach(key => {
-  if (key.split('_')[0] === 'KEY') {
-    env.keys[key.split('_')[1]] = process.env[key];
-  }
-});
-
 // Create PostGIS dbs connection pools.
 require(global.__approot + '/mod/pg/dbs')();
 
@@ -40,7 +33,7 @@ require(global.__approot + '/mod/pg/dbs')();
 require(global.__approot + '/mod/pg/acl')();
 
 // Create PostgreSQL Workspace connection pool.
-require(global.__approot + '/mod/pg/ws')();
+require(global.__approot + '/mod/workspace/init')();
 
 // Set fastify
 const fastify = require('fastify')({

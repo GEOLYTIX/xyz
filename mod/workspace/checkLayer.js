@@ -3,129 +3,41 @@ const env = require(global.__approot + '/mod/env');
 module.exports = async workspace => {
   
   console.log(' ');
-  console.log('------Checking Workspace------');
-  
-  // Check whether workspace keys are valid or missing.
-  await chkOptionals(workspace, env._defaults.workspace);
-  
-  // Check locales.
-  await chkLocales(workspace.locales);
-
-  console.log('-----------------------------');
-  console.log(' ');
-
-  env.workspace = workspace;
-  
-  return workspace;
-};
-
-async function chkOptionals(chk, opt) {
-
-  // Check defaults => workspace first.
-  Object.keys(opt).forEach(key => {
-
-    // Return if the object is optional.
-    if (typeof opt[key] === 'object' && opt[key].optional) return;
-
-    // Non optional keys will be written from the defaults to the workspace
-    // if not already defined !(key in chk)
-    if (!(key in chk) && opt[key] !== 'optional') {
-      chk[key] = opt[key];
-    }
-  });
-  
-  // Check workspace => defaults second.
-  Object.keys(chk).forEach(key => {
-  
-    // Optional may have been introduced as entries of default objects.
-    if (chk[key] === 'optional') {
-      return delete chk[key];
-    }
-  
-    // Workspace key does not exist in defaults.
-    if (!(key in opt)) {
-  
-      // Prefix key with double underscore and delete original.
-      // Double underscore invalidates a key!
-      chk['__' + key] = chk[key];
-      delete chk[key];
-    }
-  });
-  
-}
-
-async function chkLocales(locales) {   
-  
+  console.log('------Checking Layers------');
+   
   // Iterate through locales.
-  for (const key of Object.keys(locales)) {
+  for (const key of Object.keys(workspace.locales)) {
   
     // Set default locale.
-    const
-      locale = locales[key],
-      _locale = env._defaults.locale;
+    const locale = workspace.locales[key];
   
     // Invalidate locale if it is not an object.
     if (typeof locale !== 'object') {
-      locales['__' + key] = locale;
+      workspace.locales['__' + key] = locale;
       return delete locales[key];
     }
   
-    // Check whether locale keys are valid or missing.
-    await chkOptionals(locale, _locale);
-  
-    // Check bounds.
-    await chkOptionals(locale.bounds, _locale.bounds);
-  
-    // Check gazetteer.
-    if (locale.gazetteer) await chkOptionals(locale.gazetteer, _locale.gazetteer);
-  
     // Check layers in locale.
-    await chkLayers(locale.layers, key);
-  
+    await chkLayers(locale.layers);
   }
 
-}
+  console.log('-----------------------------');
+  console.log(' ');
+};
 
-async function chkLayers(layers, locale_key) {
+async function chkLayers(layers) {
 
   // Iterate through loayers.
   for (const key of Object.keys(layers)) {
 
     const layer = layers[key];
 
-    // Invalidate layer if it is not an object or does not have a valid layer format.
-    if (typeof layer !== 'object'
-        || !layer.format
-        || !env._defaults.layers[layer.format]) {
-      layers['__' + key] = layer;
-      return delete locale.layers[key];
-    }
-
-    // Assign layer default from layer and format defaults.
-    const _layer = Object.assign({},
-      env._defaults.layers.default,
-      env._defaults.layers[layer.format]
-    );
-
-    // Set layer key and name.
-    layer.key = key;
-    layer.name = layer.name || key;
-    layer.locale = locale_key;
-
-    // Check whether layer keys are valid or missing.
-    await chkOptionals(layer, _layer);
-
-    // Check whether layer.style keys are valid or missing.
-    if (layer.style) await chkOptionals(layer.style, _layer.style);
-
     // Check whether the layer connects.
     await chkLayerConnect(layer, layers);
 
   }
-
 }
 
-// Checks PostGIS geometries, tile caches or 3rd party URL.
 async function chkLayerConnect(layer, layers) {
 
   if (layer.format === 'tiles') await chkLayerURL(layer, layers);
@@ -137,7 +49,6 @@ async function chkLayerConnect(layer, layers) {
   if (layer.format === 'grid') await chkLayerGeom(layer, layers);
 
   if (layer.format === 'mvt') await chkLayerGeom(layer, layers);
-
 }
 
 async function chkLayerURL(layer, layers) {
@@ -158,18 +69,10 @@ async function chkLayerURL(layer, layers) {
 
     console.log(`!!! ${layer.locale}.__${layer.key} (${layer.format}) => '¡No bueno!'`);
 
-    // Make layer invalid if tiles service is not readable.
-    layers['__'+layer.key] = layer;
-    return delete layers[layer.key];
+    return invalidateLayer(layer, layers);
   }
 
-  // Remove invalidation flag from layer if test is passed.
-  layer.key = layer.key.replace(/^__/, '');
-  layers[layer.key] = layer;
-  delete layers['__'+layer.key];
-
   console.log(`${layer.locale}.${layer.key} (${layer.format}) => 'A-ok'`);
-  
 }
 
 async function chkLayerGeom(layer, layers) {
@@ -182,12 +85,12 @@ async function chkLayerGeom(layer, layers) {
     if (!table && tables.length > 1) continue;
 
     // Invalidate layer without table.
-    if (!table) return invalidateLayer();
+    if (!table) return invalidateLayer(layer, layers);
 
     // Invalidate layer if no dbs has been defined.
     if (!layer.dbs || !env.pg.dbs[layer.dbs]) {
       console.log(`!!! ${layer.locale}.__${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
-      return invalidateLayer();
+      return invalidateLayer(layer, layers);
     }
 
     // Check whether table has layer geom or geom_3857 field.
@@ -195,13 +98,8 @@ async function chkLayerGeom(layer, layers) {
 
     if (rows.err) {
       console.log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => ${rows.err.message}`);
-      return invalidateLayer();
+      return invalidateLayer(layer, layers);
     }
-
-    // Remove invalidation flag from layer if test is passed.
-    layer.key = layer.key.replace(/^__/, '');
-    layers[layer.key] = layer;
-    delete layers['__'+layer.key];
 
     console.log(`${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => 'A-ok'`);
 
@@ -210,10 +108,9 @@ async function chkLayerGeom(layer, layers) {
 
     // Check or create mvt_cache table.
     if (layer.mvt_cache) await chkMVTCache(layer);
-
   }
 
-  function invalidateLayer() {
+  function invalidateLayer(layer, layers) {
     layers['__'+layer.key] = layer;
     delete layers[layer.key];
   }
@@ -233,7 +130,7 @@ async function chkMVTCache(layer) {
     // Get a sample MVT from the cache table.
     let rows = await env.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${layer.mvt_cache} LIMIT 1`, null, 'no_log');
 
-    if (rows && rows.err) return await createMVTCache(layer, table);
+    if (rows && rows.err) return await createMVTCache(layer);
 
     // Check sample MVT.
     if (rows.length > 0) {
@@ -272,7 +169,7 @@ async function chkMVTCache(layer) {
   
 }
 
-async function createMVTCache(layer, table){
+async function createMVTCache(layer){
 
   let rows = await env.pg.dbs[layer.dbs](`
     create table ${layer.mvt_cache}
@@ -294,7 +191,6 @@ async function createMVTCache(layer, table){
   }
 
   console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table created`);
-
 }
 
 async function chkLayerSelect(layer) {
@@ -327,7 +223,5 @@ async function chkLayerSelect(layer) {
     }
 
     console.log(`${layer.locale}.${layer.key} | ${table}.${layer.qID} (${layer.format}) => 'A-ok'`);
-
   }
-
 }
