@@ -1,6 +1,6 @@
 export default _xyz => entry => {
 
-  let template = entry.report ? (entry.report.template ? entry.report.template : 'map') : 'map'; 
+  let template = entry.report ? (entry.report.template ? entry.report.template : 'map_location') : 'map_location'; 
 
   let name = {'name': (entry.report ? (entry.report.name || 'Site Report') : 'Site Report')};
 
