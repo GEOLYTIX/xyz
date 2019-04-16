@@ -222,6 +222,8 @@ export default (_xyz, layer) => () => {
     function marker(latlng, layer, point, param){
 
       param.icon = _xyz.utils.svg_symbols(param.marker);
+      // allow icon anchor set on individual category marker
+      if(!param.anchor) param.anchor = layer.style ? layer.style.anchor : null;
 
       // Define iconSize base on the point size in relation to the max_size.
       let iconSize = layer.cluster_logscale ?
@@ -238,7 +240,8 @@ export default (_xyz, layer) => () => {
         zIndexOffset: parseInt(1000 - 1000 / param.max_size * point.properties.size),
         icon: _xyz.L.icon({
           iconUrl: param.icon,
-          iconSize: iconSize
+          iconSize: iconSize,
+          iconAnchor: param.anchor
         }),
         interactive: (layer.qID) ? true : false
       });

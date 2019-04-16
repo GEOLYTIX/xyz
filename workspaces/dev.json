@@ -1429,6 +1429,7 @@
                     ],
                     "style": {
                         "markerMin": 40,
+                        "anchor": [20, 40],
                         "marker": {
                             "type": "target",
                             "fillColor": "#C2095A"
