@@ -65,6 +65,7 @@ export default _xyz => () => {
 
 	// unfold elements as width grows
 	function unfoldElements(){
+		if(!_xyz.tableview.nav_dropdown.children.length) return;
 		if(_xyz.tableview.nav_bar.children.length < _xyz.tableview.max_tabs){
 			let d = _xyz.tableview.max_tabs - _xyz.tableview.nav_bar.children.length;
 			for(let i = 0; i < d; i++){

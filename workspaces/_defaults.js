@@ -135,6 +135,7 @@ module.exports = {
       style: {
         markerMin: 20,
         markerMax: 40,
+        anchor: 'optional',
         marker: {
           type: 'target',
           fillColor: '#999999'
