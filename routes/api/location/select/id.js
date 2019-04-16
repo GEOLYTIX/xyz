@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports =  fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports =  fastify => {
     url: '/api/location/select/id',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -47,7 +49,7 @@ module.exports =  fastify => {
         `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
 
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);
+      const fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj, qID);
 
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
@@ -73,7 +75,7 @@ module.exports =  fastify => {
       select ${fields_with.join()}, geomj from q
       `;
 
-      var rows = await global.pg.dbs[layer.dbs](q, [id]);
+      var rows = await env.pg.dbs[layer.dbs](q, [id]);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

@@ -1,30 +1,25 @@
-// Create ACL connection pool for PostgreSQL.
+const env = require(global.__approot + '/mod/env');
+
 module.exports = async () => {
 
-  const acl_connection = (process.env.PUBLIC || process.env.PRIVATE) ?
-    (process.env.PUBLIC || process.env.PRIVATE).split('|') : null;
+  if (!env.acl_connection) return;
 
-  if (!acl_connection) return;
-
-  if (!process.env.SECRET) {
+  if (!env.secret) {
     console.log('No secret provided for JWT. Process will be killed now!');
     return process.exit();
   }
 
-  const acl_table = acl_connection[1].split('.').pop();
+  const acl_table = env.acl_connection[1].split('.').pop();
 
-  const acl_schema = acl_connection[1].split('.')[0] === acl_table ? 'public' : acl_connection[1].split('.')[0];
-
-  // Set the maximum number of failed login attempts before an account will be locked.
-  global.failed_attempts = parseInt(process.env.FAILED_ATTEMPTS) || 3;
+  const acl_schema = env.acl_connection[1].split('.')[0] === acl_table ? 'public' : env.acl_connection[1].split('.')[0];
 
   // Create PostgreSQL connection pool for ACL table.
   const pool = new require('pg').Pool({
-    connectionString: acl_connection[0]
+    connectionString: env.acl_connection[0]
   });
   
   // Method to query ACL. arr must be empty array by default.
-  global.pg.users = async (q, arr) => {
+  env.pg.users = async (q, arr) => {
 
     try {
 
@@ -59,7 +54,7 @@ module.exports = async () => {
     roles: 'ARRAY',
   };
     
-  const users = await global.pg.users(`
+  const users = await env.pg.users(`
   SELECT column_name, data_type
   FROM INFORMATION_SCHEMA.COLUMNS
   WHERE table_name = 'acl_table'
@@ -70,7 +65,7 @@ module.exports = async () => {
     // Set the default password for the admin user.
     const password = require('bcrypt-nodejs').hashSync('admin123', require('bcrypt-nodejs').genSaltSync(8));
     
-    const new_acl = await global.pg.users(`
+    const new_acl = await env.pg.users(`
     CREATE TABLE IF NOT EXISTS acl_schema.acl_table (
       "_id" serial not null,
       email text not null,

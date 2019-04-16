@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/location/edit/isoline/mapbox',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -42,11 +44,11 @@ module.exports = fastify => {
         profile: req.query.profile || 'driving',
       };
          
-      var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${global.KEYS.MAPBOX}`;
+      var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${env.keys.MAPBOX}`;
       
 
       // Fetch results from Google maps places API.
-      const mapbox_isolines = await require(global.appRoot + '/mod/fetch')(q);
+      const mapbox_isolines = await require(global.__approot + '/mod/fetch')(q);
   
       if(!mapbox_isolines.features) return res.code(202).send('No catchment found within this time frame.');
 
@@ -59,7 +61,7 @@ module.exports = fastify => {
         SET ${req.query.field} = ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)
         WHERE ${layer.qID} = $1;`;
 
-        var rows = await global.pg.dbs[layer.dbs](q, [req.query.id]);
+        var rows = await env.pg.dbs[layer.dbs](q, [req.query.id]);
   
         if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
   
@@ -67,14 +69,14 @@ module.exports = fastify => {
         const infoj = JSON.parse(JSON.stringify(layer.infoj));
   
         // The fields array stores all fields to be queried for the location info.
-        fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, layer.qID);
+        fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj, layer.qID);
   
         var q = `
         SELECT ${fields.join()}
         FROM ${table}
         WHERE ${layer.qID} = $1;`;
   
-        var rows = await global.pg.dbs[layer.dbs](q, [req.query.id]);
+        var rows = await env.pg.dbs[layer.dbs](q, [req.query.id]);
   
         if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   
@@ -97,11 +99,11 @@ module.exports = fastify => {
       SELECT ${geom}
       RETURNING ${layer.qID} AS id;`;
       
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.pg.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
       
-      if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, rows[0].id);
+      if (layer.mvt_cache) await require(global.__approot + '/mod/mvt_cache')(layer, table, rows[0].id);
       
       res.code(200).send(rows[0].id.toString());   
       

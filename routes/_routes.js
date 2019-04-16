@@ -18,4 +18,6 @@ module.exports = fastify => {
 
   require('./workspace/_workspace')(fastify);
 
+  require('./stream').route(fastify);
+
 };

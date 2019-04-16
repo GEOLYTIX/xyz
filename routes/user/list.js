@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -11,7 +13,7 @@ module.exports = fastify => {
     handler: async (req, res) => {
 
       // Get user list from ACL.
-      var rows = await global.pg.users(`
+      var rows = await env.pg.users(`
       SELECT
         email,
         verified,

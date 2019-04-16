@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = {route, view};
 
 // Create constructor for mobile detect module.
@@ -16,7 +18,7 @@ function route(fastify) {
     url: '/',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public,
+        public: true,
         login: true
       })
     ]),
@@ -35,8 +37,6 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const config = global.workspace.current;
-
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
 
@@ -46,22 +46,22 @@ async function view(req, res, token = { access: 'public' }) {
 
   // Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
-    dir: global.dir,
-    title: config.title || 'GEOLYTIX | XYZ',
+    dir: env.path,
+    title: env.workspace.title || 'GEOLYTIX | XYZ',
     user: token.email || '""',
     nanoid: nanoid(6),
     token: req.query.token || token.signed || '""',
-    log: process.env.LOG_LEVEL || '""',
-    btnDocumentation: config.documentation ? '' : 'style="display: none;"',
-    hrefDocumentation: config.documentation ? config.documentation : '',
-    btnLogin: process.env.PRIVATE || process.env.PUBLIC ? '' : 'style="display: none;"',
+    log: env.logs || '""',
+    btnDocumentation: env.workspace.documentation ? '' : 'style="display: none;"',
+    hrefDocumentation: env.workspace.documentation ? env.workspace.documentation : '',
+    btnLogin: env.acl_connection ? '' : 'style="display: none;"',
     btnLogin_style: token.email ? 'face' : 'lock_open',
     btnLogin_path: token.email ? '' : '/login',
     btnLogin_text: token.email || 'anonymous (public)',
     btnAdmin: token.admin_user ? '' : 'style="display: none;"',
     btnEditor: token.admin_workspace ? '' : 'style="display: none;"',
-    logrocket: global.logrocket || '""',
-    btnLogRocket: global.logrocket ? '' : 'style="display: none;"',
+    logrocket: env.logrocket || '""',
+    btnLogRocket: env.logrocket ? '' : 'style="display: none;"',
   }));
 
 };

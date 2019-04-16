@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/location/edit/images/upload',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -39,9 +41,8 @@ module.exports = fastify => {
         qID = layer.qID,
         id = req.query.id,
         field = req.query.field,
-        cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [],
         ts = Date.now(),
-        sig = require('crypto').createHash('sha1').update(`folder=${cloudinary[3]}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
+        sig = require('crypto').createHash('sha1').update(`folder=${env.cloudinary[3]}&timestamp=${ts}${env.cloudinary[1]}`).digest('hex');
 
       var data = [];
 
@@ -52,11 +53,11 @@ module.exports = fastify => {
         req.body = Buffer.concat(data);
 
         require('request').post({
-          url: `https://api.cloudinary.com/v1_1/${cloudinary[2]}/image/upload`,
+          url: `https://api.cloudinary.com/v1_1/${env.cloudinary[2]}/image/upload`,
           body: {
             'file': `data:image/jpeg;base64,${req.body.toString('base64')}`,
-            'api_key': cloudinary[0],
-            'folder': cloudinary[3],
+            'api_key': env.cloudinary[0],
+            'folder': env.cloudinary[3],
             'timestamp': ts,
             'signature': sig
           },
@@ -71,7 +72,7 @@ module.exports = fastify => {
             WHERE ${qID} = $1;`;
 
           // add filename to images field
-          await global.pg.dbs[layer.dbs](q, [id]);
+          await env.pg.dbs[layer.dbs](q, [id]);
 
           res.code(200).send({
             'image_id': body.public_id,

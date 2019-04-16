@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = async (term, gazetteer) => {
 
   //https://www.mapbox.com/api-documentation/#search-for-places
@@ -7,10 +9,10 @@ module.exports = async (term, gazetteer) => {
         + `${gazetteer.code ? 'country=' + gazetteer.code : ''}`
         + `${gazetteer.bounds ? '&' + gazetteer.bounds : ''}`
         + '&types=postcode,district,locality,place,neighborhood,address,poi'
-        + `&${global.KEYS[gazetteer.provider]}`;
+        + `&${env.keys[gazetteer.provider]}`;
 
   // Fetch results from Google maps places API.
-  const fetched = await require(global.appRoot + '/mod/fetch')(url);
+  const fetched = await require(global.__approot + '/mod/fetch')(url);
 
   if (fetched._err) return fetched;
   

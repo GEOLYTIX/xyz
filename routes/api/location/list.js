@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/location/list',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -56,7 +58,7 @@ module.exports = fastify => {
                 ${conditions.length ? `AND ${conditions.join(',')}` : ''}
                 ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} LIMIT ${tableDef.limit || 100};`;
 
-      const rows = await global.pg.dbs[layer.dbs](q, [req.query.id]);
+      const rows = await env.pg.dbs[layer.dbs](q, [req.query.id]);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

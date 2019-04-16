@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
   
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/layer/extent',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -49,11 +51,11 @@ module.exports = fastify => {
 
 
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
 
     
       // Query the estimated extent for the layer geometry field from layer table.
-      rows = await global.pg.dbs[layer.dbs](`
+      rows = await env.pg.dbs[layer.dbs](`
         SELECT ${_geom}
         FROM ${table}
         WHERE true ${filter_sql};

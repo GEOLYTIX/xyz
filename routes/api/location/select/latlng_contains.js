@@ -1,10 +1,12 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/select/latlng/contains',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -44,7 +46,7 @@ module.exports = fastify => {
   
   
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);
+      const fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj, qID);
   
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
@@ -54,7 +56,7 @@ module.exports = fastify => {
         FROM ${table}
         WHERE ST_Contains(${geom}, ST_SetSRID(ST_Point(${lng}, ${lat}), 4326));`;
     
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.pg.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

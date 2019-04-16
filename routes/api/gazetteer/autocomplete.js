@@ -4,7 +4,7 @@ module.exports = fastify => {
     url: '/api/gazetteer/autocomplete',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -33,7 +33,7 @@ module.exports = fastify => {
 
       // Locale gazetteer which can query datasources in the same locale.
       if (locale.gazetteer.datasets) {
-        results = await require(global.appRoot + '/mod/gazetteer/locale')(req, locale);
+        results = await require(global.__approot + '/mod/gazetteer/locale')(req, locale);
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);
@@ -44,7 +44,7 @@ module.exports = fastify => {
 
       // Query Google Maps API
       if (locale.gazetteer.provider === 'GOOGLE') {
-        results = await require(global.appRoot + '/mod/gazetteer/google')(req.query.q, locale.gazetteer);
+        results = await require(global.__approot + '/mod/gazetteer/google')(req.query.q, locale.gazetteer);
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);
@@ -52,7 +52,7 @@ module.exports = fastify => {
 
       // Query Mapbox Geocoder API
       if (locale.gazetteer.provider === 'MAPBOX') {
-        results = await require(global.appRoot + '/mod/gazetteer/mapbox')(req.query.q, locale.gazetteer);
+        results = await require(global.__approot + '/mod/gazetteer/mapbox')(req.query.q, locale.gazetteer);
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);

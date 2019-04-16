@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -5,7 +7,7 @@ module.exports = fastify => {
     url: '/api/location/edit/delete',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -36,11 +38,11 @@ module.exports = fastify => {
         qID = layer.qID,
         id = req.query.id;
 
-      if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, id);
+      if (layer.mvt_cache) await require(global.__approot + '/mod/mvt_cache')(layer, table, id);
 
       var q = `DELETE FROM ${table} WHERE ${qID} = $1;`;
 
-      var rows = await global.pg.dbs[layer.dbs](q, [id]);
+      var rows = await env.pg.dbs[layer.dbs](q, [id]);
 
       if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
 

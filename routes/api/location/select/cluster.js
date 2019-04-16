@@ -1,3 +1,5 @@
+const env = require(global.__approot + '/mod/env');
+
 module.exports =  fastify => {
   
   fastify.route({
@@ -5,7 +7,7 @@ module.exports =  fastify => {
     url: '/api/location/select/cluster',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
-        public: global.public
+        public: true
       })
     ]),
     schema: {
@@ -45,7 +47,7 @@ module.exports =  fastify => {
   
         
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
   
       // Query the feature count from lat/lng bounding box.
       var q = `
@@ -58,7 +60,7 @@ module.exports =  fastify => {
         ${filter_sql} 
       ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
   
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.pg.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   
