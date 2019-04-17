@@ -714,6 +714,16 @@
                         "8": null,
                         "9": "dev.retailplaces"
                     },
+                    "report": {
+                        "templates": {
+                            "Report 1": {
+                                "template": "default"
+                            },
+                            "Report 2": {
+                                "template": "default"
+                            }
+                        }
+                    },
                     "tableview": {
                         "tables": {
                             "Retail Places": {
@@ -1231,6 +1241,35 @@
                             "label": "Households",
                             "field": "hhdooc_11",
                             "type": "integer"
+                        },
+                        {
+                            "field": "test_flag",
+                            "label": "Test boolean field",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "label": "Catchment 10min",
+                            "type": "label"
+                        },
+                        {
+                            "field": "catchment_10min",
+                            "fieldfx": "ST_asGeoJson(catchment_10min)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline_here": {
+                                    "minutes": 10
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#ffca28",
+                                "fillColor": "#ffca28",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2
+                            }
                         }
                     ]
                 },

@@ -223,7 +223,7 @@ export default (_xyz, layer) => () => {
 
       param.icon = _xyz.utils.svg_symbols(param.marker);
       // allow icon anchor set on individual category marker
-      if(!param.anchor) param.anchor = layer.style ? layer.style.anchor : null;
+      if(!param.anchor) param.anchor = layer.style ? (layer.style.anchor || null) : null;
 
       // Define iconSize base on the point size in relation to the max_size.
       let iconSize = layer.cluster_logscale ?

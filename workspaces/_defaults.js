@@ -80,6 +80,7 @@ module.exports = {
       style: {
         markerMin: 20,
         markerMax: 40,
+        anchor: null,
         marker: {
           type: 'target',
           fillColor: '#999999',
