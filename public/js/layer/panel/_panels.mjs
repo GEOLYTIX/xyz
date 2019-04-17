@@ -10,6 +10,8 @@ import panel_cluster from './cluster.mjs';
 
 import panel_table from './table.mjs';
 
+import panel_report from './report.mjs';
+
 export default (_xyz, layer) => {
 
   // Create layer dashboard.
@@ -29,6 +31,9 @@ export default (_xyz, layer) => {
     },
     appendTo: layer.dashboard
   });
+
+  // Add report panel
+  if(layer.report) panel_report(_xyz,layer);
 
   // Add draw panel to dashboard.
   if (layer.edit) panel_draw(_xyz, layer);

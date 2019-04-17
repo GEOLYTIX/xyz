@@ -54,7 +54,8 @@ module.exports = {
       restriction: 'optional',
       tableview: 'optional',
       hidden: 'optional',
-      roles: 'optional'
+      roles: 'optional',
+      report: 'optional'
     },
     tiles: {
       URI: 'optional'
