@@ -94,7 +94,8 @@
     .locationview .val a {
       color: #090; }
   .locationview .img_streetview {
-    width: 100%; }
+    width: 100%;
+    padding: 6px; }
   .locationview .num {
     text-align: right; }
   .locationview .table-section .t-expander {

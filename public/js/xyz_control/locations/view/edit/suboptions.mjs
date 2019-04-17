@@ -16,7 +16,7 @@ export default _xyz => entry => {
     onchange: e => {
 
       // Set newValue and compare with current value.
-      entry.location.view.valChange(e.target, entry);
+      entry.location.view.valChange({input: e.target, entry: entry});
 
     }
   });
@@ -57,7 +57,7 @@ export default _xyz => entry => {
     entry.select.disabled = (entry.select.childElementCount <= 1);
 
     // Call value change event for the suboptions.
-    entry.location.view.valChange(entry.select, entry);
+    entry.location.view.valChange({input: entry.select, entry: entry});
 
   };
 

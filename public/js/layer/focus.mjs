@@ -3,7 +3,7 @@ export default (_xyz, layer) => {
   layer.focus = _xyz.utils.createElement({
     tag: 'i',
     options: {
-      textContent: 'aspect_ratio',
+      textContent: 'fullscreen',
       className: 'material-icons cursor noselect btn_header',
       title: 'Zoom to layer extent'
     },

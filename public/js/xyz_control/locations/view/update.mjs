@@ -46,6 +46,7 @@ export default (_xyz, location) => () => {
     if(entry.prefix)  entry.displayValue = entry.prefix + entry.displayValue;
     if(entry.postfix) entry.displayValue = entry.displayValue + entry.postfix;
   });
+
     
   // Iterate through info fields and add to info table.
   Object.values(location.infoj).forEach(entry => {
@@ -197,7 +198,6 @@ export default (_xyz, location) => () => {
     }
 
   });
-
 
   // Hide group if empty
   Object.values(location.infoj).map(entry => {
