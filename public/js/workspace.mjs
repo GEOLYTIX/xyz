@@ -57,7 +57,7 @@ export default _xyz => {
 
       if (params.locale) loadLocale(params);
 
-      params.callback(_xyz);
+      if (params.callback) params.callback(_xyz);
 
     };
 
@@ -140,32 +140,45 @@ export default _xyz => {
     btnUpload.onclick = () => {
     
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', document.head.dataset.dir + '/workspace/set?token=' + document.body.dataset.token);
+      xhr.open('POST', document.head.dataset.dir + '/workspace/check?token=' + document.body.dataset.token);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.responseType = 'json';
       xhr.onload = e => {
 
         if (e.target.status !== 200) alert('I am not here. This is not happening.');
 
-        // Assign workspace.
-        const workspace = e.target.response;     
+        if (confirm(e.target.response.join('\r\n'))) {
+
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', document.head.dataset.dir + '/workspace/set?token=' + document.body.dataset.token);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.responseType = 'json';
+          xhr.onload = e => {
     
-        // Set cleaned json to editor;
-        codeMirror.setValue(JSON.stringify(workspace, null, '  '));
-        codeMirror.refresh();
+            if (e.target.status !== 200) alert('I am not here. This is not happening.');
 
-        // Filter invalid locales
-        _xyz.workspace.locales = filterLocales(workspace.locales);
+            const locale = _xyz.hooks.current.locale;
 
-        const locale = _xyz.hooks.current.locale;
-
-        _xyz.hooks.removeAll();
+            setWS({locale : locale,
+              callback: ()=> {
+                _xyz.hooks.removeAll();
   
-        _xyz.hooks.set({locale : locale});
-  
-        _xyz.workspace.loadLocale({ locale: locale });
+                _xyz.hooks.set({locale : locale});
     
-        _xyz.desktop.mask.style.display = 'none';
+                _xyz.workspace.loadLocale({ locale: locale });
+  
+                _xyz.desktop.mask.style.display = 'none';
+              }});
+          };
+
+          xhr.send(JSON.stringify({ settings: codeMirror.getValue() }));
+
+        } else {
+
+          _xyz.desktop.mask.style.display = 'none';
+
+        }
+    
       };
 
       _xyz.utils.hyperHTML.bind(_xyz.desktop.mask)`<p class="msg">Updating Workspace</p>`;

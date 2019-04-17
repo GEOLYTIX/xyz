@@ -1,13 +1,18 @@
 const env = require(global.__approot + '/mod/env');
 
-const setWorkspace = require(global.__approot + '/mod/workspace/set');
+const assignDefaults = require(global.__approot + '/mod/workspace/assignDefaults');
 
-const checkTable = require(global.__approot + '/mod/workspace/checkTable');
+const checkLayer = require(global.__approot + '/mod/workspace/checkLayer');
+
+const checkWorkspaceTable = require(global.__approot + '/mod/workspace/checkWorkspaceTable');
 
 module.exports = async () => {
 
   // Load zero config workspace if workspace is not defined in environment settings.
-  if (!env._workspace) return await setWorkspace({});
+  if (!env._workspace) {
+    env.workspace = await assignDefaults({});
+    return;
+  }
 
   // Load workspace from file.
   if (env._workspace.split(':')[0] === 'file') {
@@ -23,17 +28,22 @@ module.exports = async () => {
       console.error(err);
   
     } finally {
-      return await setWorkspace(workspace);
+      env.workspace = await assignDefaults(workspace);
+      if (env.debug) checkLayer(env.workspace);
+      return;
     }
   }
 
-  // Load workspace from file.
+  // Load workspace from database.
   if (env._workspace.split(':')[0] === 'postgres') {
 
     // Global workspace table name.
     const table = env._workspace.split('|')[1];
 
-    if (!table) return setWorkspace({});
+    if (!table) {
+      env.workspace = await assignDefaults({});
+      return;
+    }
 
     // Create PostgreSQL connection pool for workspace table.
     const pool = new require('pg').Pool({
@@ -52,17 +62,21 @@ module.exports = async () => {
       }
     };
 
-    if (env.debug) checkTable(table);
+    if (env.debug) checkWorkspaceTable(table);
 
     var config = await env.pg.workspace(`
     SELECT * FROM ${table}
     ORDER BY _id DESC LIMIT 1`);
 
     // Return empty object as workspace if no rows are returned from Postgres query.
-    if (config.err || config.length === 0) return setWorkspace({});
+    if (config.err || config.length === 0) {
+      env.workspace = await assignDefaults({});
+      return;
+    }
 
     // Check and load workspace.
-    setWorkspace(config[0].settings || {});
+    env.workspace = await assignDefaults(config[0].settings || {});
+    if (env.debug) checkLayer(env.workspace);
 
   }
 

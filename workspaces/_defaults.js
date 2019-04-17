@@ -1,17 +1,14 @@
 module.exports = {
   workspace: {
     title: 'GEOLYTIX | XYZ',
-    documentation: 'optional',
     locales: {
-      zero: {}
-    }
+      zero: {},
+    },
   },
   locale: {
-    name: 'optional',
-    locate: 'optional',
     attribution: {
       'XYZ #v1.4.1': 'https://github.com/GEOLYTIX/xyz/releases/tag/v1.4.1',
-      Leaflet: 'https://leafletjs.com'
+      Leaflet: 'https://leafletjs.com',
     },
     minZoom: 0,
     maxZoom: 20,
@@ -21,53 +18,20 @@ module.exports = {
       south: -90,
       west: -180
     },
-    showScaleBar: 'optional',
-    maskBounds: 'optional',
     view: {},
-    gazetteer: {
-      optional: true,
-      provider: 'optional',
-      code: 'optional',
-      placeholder: 'optional',
-      datasets: 'optional',
-      bounds: 'optional'
-    },
-    restriction: 'optional',
     layers: {
       OSM: {
         display: true,
         format: 'tiles',
-        URI: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      }
-    }
+        URI: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      },
+    },
   },
   layers: {
-    default: {
-      key: 'optional',
-      locale: 'optional',
-      name: 'optional',
-      group: 'optional',
-      meta: 'optional',
-      format: 'optional',
-      display: 'optional',
-      attribution: 'optional',
-      restriction: 'optional',
-      tableview: 'optional',
-      hidden: 'optional',
-      roles: 'optional'
-    },
-    tiles: {
-      URI: 'optional'
-    },
+    tiles: {},
     geojson: {
-      dbs: 'required',
-      table: 'optional',
-      tables: 'optional',
-      qID: 'optional',
-      infoj: 'optional',
-      geom: 'geom',
-      edit: 'optional',
       filter: {},
+      geom: 'geom',
       style: {
         default: {
           weight: 1,
@@ -75,7 +39,6 @@ module.exports = {
           fill: true,
           fillColor: '#333333',
           fillOpacity: 0.1,
-          marker: {}
         },
         highlight: {
           stroke: true,
@@ -83,79 +46,53 @@ module.exports = {
           weight: 2,
           fillColor: '#ccff99',
           fillOpacity: 0.2,
-          fill: true
+          fill: true,
         },
-        selected: {},
-        themes: {}
-      }
+        themes: {},
+      },
     },
     mvt: {
-      dbs: 'optional',
-      table: 'optional',
-      tables: 'optional',
-      geom_3857: 'geom_3857',
-      geom: 'optional',
-      qID: 'optional',
-      infoj: 'optional',
-      edit: 'optional',
-      mvt_cache: 'optional',
-      mvt_fields: 'optional',
       filter: {},
+      geom_3857: 'geom_3857',
       style: {
         default: {
           weight: 1,
           color: '#333333',
           fill: true,
           fillColor: '#333333',
-          fillOpacity: 0.1
+          fillOpacity: 0.1,
         },
         highlight: {
           weight: 2,
           color: '#009900',
           fill: true,
           fillColor: '#ccff99',
-          fillOpacity: 0.2
+          fillOpacity: 0.2,
         },
-        selected: {},
-        themes: {}
-      }
+        themes: {},
+      },
     },
     cluster: {
-      dbs: 'optional',
-      table: 'optional',
-      tables: 'optional',
-      qID: 'optional',
-      infoj: 'optional',
+      filter: {},
       geom: 'geom',
-      edit: 'optional',
-      cluster_label: 'optional',
       cluster_kmeans: 0.05,
       cluster_dbscan: 0.01,
-      filter: {},
       style: {
         markerMin: 20,
         markerMax: 40,
-        anchor: 'optional',
         marker: {
           type: 'target',
-          fillColor: '#999999'
+          fillColor: '#999999',
         },
         markerMulti: {
           type: 'target',
-          fillColor: '#333333'
+          fillColor: '#333333',
         },
-        themes: {}
-      }
+        themes: {},
+      },
     },
     grid: {
-      dbs: 'optional',
-      table: 'optional',
-      tables: 'optional',
-      grid_size: 'optional',
-      grid_color: 'optional',
-      grid_fields: 'optional',
       geom: 'geom',
-      filter: {},
       style: {
         range: [
           '#15773f',
@@ -164,16 +101,9 @@ module.exports = {
           '#d9ef8b',
           '#fdae61',
           '#f46d43',
-          '#d73027'
-        ]
-      }
-    }
+          '#d73027',
+        ],
+      },
+    },
   },
-  infoj: [
-    {
-      field: 'id',
-      label: 'qID',
-      type: 'text'
-    }
-  ]
 };

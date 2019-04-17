@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const assignDefaults = require(global.__approot + '/mod/workspace/assignDefaults');
+
 module.exports = fastify => {
   fastify.route({
     method: 'POST',
@@ -10,25 +12,19 @@ module.exports = fastify => {
       })
     ]),
     handler: async (req, res) => {
+
+      const workspace = JSON.parse(req.body.settings);
       
       // Check workspace.
-      const workspace = await checkWorkspace(JSON.parse(req.body.settings));
+      env.workspace = await assignDefaults(workspace);
 
-      // // Save workspace to PostgreSQL.
-      // env.pg.ws_save = async workspace => {
- 
-      //   await ws_query(`
-      // INSERT INTO ${workspace_table} (settings)
-      // SELECT $1 AS settings;`,
-      //   [JSON.stringify(workspace)]);
- 
-      // };
-      
-      // // Save checked workspace to PostgreSQL table.
-      // if (env.pg.ws_save) await env.pg.ws_save(workspace);
+      // Save workspace to PostgreSQL.
+      if (env.pg.workspace) await env.pg.workspace(`
+        INSERT INTO ${env._workspace.split('|')[1]} (settings)
+        SELECT $1 AS settings;`, [JSON.stringify(workspace)]);
          
       // Return checked workspace to sender.
-      res.code(200).send(workspace);
+      res.code(200).send();
         
     }
   });

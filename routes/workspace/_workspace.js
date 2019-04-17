@@ -4,4 +4,6 @@ module.exports = fastify => {
 
   require('./set')(fastify);
 
+  require('./check')(fastify);
+
 };

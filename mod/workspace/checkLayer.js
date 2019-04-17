@@ -1,28 +1,34 @@
 const env = require(global.__approot + '/mod/env');
 
+const logArray = [];
+
+function log(msg) {
+  console.log(msg);
+  logArray.push(msg);
+}
+
 module.exports = async workspace => {
-  
-  console.log(' ');
-  console.log('------Checking Layers------');
+
+  logArray.length = 0;
+
+  log(' ');
+  log('------Checking Layers------');
    
   // Iterate through locales.
   for (const key of Object.keys(workspace.locales)) {
   
     // Set default locale.
     const locale = workspace.locales[key];
-  
-    // Invalidate locale if it is not an object.
-    if (typeof locale !== 'object') {
-      workspace.locales['__' + key] = locale;
-      return delete locales[key];
-    }
-  
+   
     // Check layers in locale.
     await chkLayers(locale.layers);
   }
 
-  console.log('-----------------------------');
-  console.log(' ');
+  return logArray;
+
+  log('-----------------------------');
+  log(' ');
+
 };
 
 async function chkLayers(layers) {
@@ -67,12 +73,12 @@ async function chkLayerURL(layer, layers) {
 
   if (fetched._err) {
 
-    console.log(`!!! ${layer.locale}.__${layer.key} (${layer.format}) => '¡No bueno!'`);
+    log(`!!! ${layer.locale}.${layer.key} (${layer.format}) => '¡No bueno!'`);
 
-    return invalidateLayer(layer, layers);
+    return;
   }
 
-  console.log(`${layer.locale}.${layer.key} (${layer.format}) => 'A-ok'`);
+  log(`${layer.locale}.${layer.key} (${layer.format}) => 'A-ok'`);
 }
 
 async function chkLayerGeom(layer, layers) {
@@ -85,34 +91,29 @@ async function chkLayerGeom(layer, layers) {
     if (!table && tables.length > 1) continue;
 
     // Invalidate layer without table.
-    if (!table) return invalidateLayer(layer, layers);
+    if (!table) return;
 
     // Invalidate layer if no dbs has been defined.
     if (!layer.dbs || !env.pg.dbs[layer.dbs]) {
-      console.log(`!!! ${layer.locale}.__${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
-      return invalidateLayer(layer, layers);
+      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
+      return;
     }
 
     // Check whether table has layer geom or geom_3857 field.
     let rows = await env.pg.dbs[layer.dbs](`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
-      console.log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => ${rows.err.message}`);
-      return invalidateLayer(layer, layers);
+      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => ${rows.err.message}`);
+      return;
     }
 
-    console.log(`${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => 'A-ok'`);
+    log(`${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => 'A-ok'`);
 
     // Check whether the defined qID is returned.
     if (layer.qID) await chkLayerSelect(layer);
 
     // Check or create mvt_cache table.
     if (layer.mvt_cache) await chkMVTCache(layer);
-  }
-
-  function invalidateLayer(layer, layers) {
-    layers['__'+layer.key] = layer;
-    delete layers[layer.key];
   }
 
 }
@@ -152,14 +153,14 @@ async function chkMVTCache(layer) {
           rows = await env.pg.dbs[layer.dbs](`TRUNCATE ${layer.mvt_cache};`);
 
           if (rows.err) {
-            return console.log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to truncate cache table`);
+            return log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to truncate cache table`);
           }
 
-          return console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table has been truncated`);
+          return log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table has been truncated`);
         }
       }
 
-      return console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => 'A-ok'`);
+      return log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => 'A-ok'`);
 
     }
 
@@ -186,11 +187,11 @@ async function createMVTCache(layer){
     create index ${layer.mvt_cache.replace(/\./,'_')}_tile on ${layer.mvt_cache} (tile);`);
 
   if (rows && rows.err) {
-    console.log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to create cache table`);
+    log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to create cache table`);
     return delete layer.mvt_cache;
   }
 
-  console.log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table created`);
+  log(`${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Cache table created`);
 }
 
 async function chkLayerSelect(layer) {
@@ -216,12 +217,11 @@ async function chkLayerSelect(layer) {
     let rows = await env.pg.dbs[layer.dbs](`SELECT ${layer.qID} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
-      console.log(`!!! ${layer.locale}.${layer.key} | ${table}.__${layer.qID} (${layer.format}) => '¡No bueno!'`);
+      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.qID} (${layer.format}) => '¡No bueno!'`);
 
-      layer['__qID'] = layer.qID;
-      return delete layer.qID;
+      return;
     }
 
-    console.log(`${layer.locale}.${layer.key} | ${table}.${layer.qID} (${layer.format}) => 'A-ok'`);
+    log(`${layer.locale}.${layer.key} | ${table}.${layer.qID} (${layer.format}) => 'A-ok'`);
   }
 }

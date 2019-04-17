@@ -60,10 +60,10 @@ async function chkLocales(locales) {
       locale = locales[key],
       _locale = env._defaults.locale;
   
-    // Invalidate locale if it is not an object.
+    // Remove locale which is not an object.
     if (typeof locale !== 'object') {
-      locales['__' + key] = locale;
-      return delete locales[key];
+      delete locales[key];
+      continue;
     }
   
     // Check whether locale keys are valid or missing.
