@@ -13,7 +13,7 @@ module.exports = fastify => {
     handler: async (req, res) => {
 
       // Get user list from ACL.
-      var rows = await env.pg.users(`
+      var rows = await env.acl(`
       SELECT
         email,
         verified,

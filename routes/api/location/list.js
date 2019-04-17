@@ -58,7 +58,7 @@ module.exports = fastify => {
                 ${conditions.length ? `AND ${conditions.join(',')}` : ''}
                 ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} LIMIT ${tableDef.limit || 100};`;
 
-      const rows = await env.pg.dbs[layer.dbs](q, [req.query.id]);
+      const rows = await env.dbs[layer.dbs](q, [req.query.id]);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

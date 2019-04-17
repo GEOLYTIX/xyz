@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const jsr = require('jsrender');
+
 module.exports = { route, view };
 
 function route(fastify) {
@@ -29,7 +31,7 @@ function route(fastify) {
 
 async function view(req, res, token) {
 
-  const template = require('jsrender')
+  const template = jsr
     .templates('./public/views/user.html')
     .render({
       dir: env.path,

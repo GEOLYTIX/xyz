@@ -1,5 +1,17 @@
 const env = require(global.__approot + '/mod/env');
 
+const fetch = require(global.__approot + '/mod/fetch');
+
+const bcrypt = require('bcrypt-nodejs');
+
+const crypto = require('crypto');
+
+const transformDate = require(global.__approot + '/mod/date');
+
+const mailer = require(global.__approot + '/mod/mailer');
+
+const jsr = require('jsrender');
+
 module.exports = fastify => {
     
   fastify.route({
@@ -8,7 +20,7 @@ module.exports = fastify => {
     handler: (req, res) => {
       res
         .type('text/html')
-        .send(require('jsrender')
+        .send(jsr
           .templates('./public/views/register.html')
           .render({
             dir: env.path,
@@ -24,7 +36,7 @@ module.exports = fastify => {
 
       if (env.captcha && env.captcha[1]) {
 
-        const captcha_verification = await require(global.__approot + '/mod/fetch')(`https://www.google.com/recaptcha/api/siteverify?secret=${env.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
+        const captcha_verification = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${env.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
       
         if (captcha_verification.score < 0.6) return res.redirect(env.path + '/login?msg=fail');
     
@@ -38,24 +50,24 @@ module.exports = fastify => {
         return res.redirect(env.path + '/login?msg=validation');
       }
   
-      var rows = await env.pg.users(`
+      var rows = await env.acl(`
       SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`,
       [email]);
   
       if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
       const user = rows[0];
-      const password = require('bcrypt-nodejs').hashSync(req.body.password, require('bcrypt-nodejs').genSaltSync(8));
-      const verificationtoken = require('crypto').randomBytes(20).toString('hex');
+      const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8));
+      const verificationtoken = crypto.randomBytes(20).toString('hex');
   
-      const date = require(global.__approot + '/mod/date')();
+      const date = transformDate();
 
       // Set password for existing user and remove existing verification.
       if (user) {
 
         if (user.blocked) return res.redirect(env.path + '/login?msg=fail');
   
-        rows = await env.pg.users(`
+        rows = await env.acl(`
         UPDATE acl_schema.acl_table SET
           password_reset = '${password}',
           verificationtoken = '${verificationtoken}',
@@ -65,7 +77,7 @@ module.exports = fastify => {
     
         if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
-        require(global.__approot + '/mod/mailer')({
+        mailer({
           to: user.email,
           subject: `Please verify your password reset for ${env.alias || req.headers.host}${env.path}`,
           text: 'A new password has been set for this account. \n \n'
@@ -78,7 +90,7 @@ module.exports = fastify => {
       }
   
       // Create new user account
-      rows = await env.pg.users(`
+      rows = await env.acl(`
       INSERT INTO acl_schema.acl_table (email, password, verificationtoken, access_log)
       SELECT
         '${email}' AS email,
@@ -88,7 +100,7 @@ module.exports = fastify => {
   
       if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
-      require(global.__approot + '/mod/mailer')({
+      mailer({
         to: email,
         subject: `Please verify your account on ${env.alias || req.headers.host}${env.path}`,
         text: `A new account for this email address has been registered with ${env.alias || req.headers.host}${env.path} \n \n`

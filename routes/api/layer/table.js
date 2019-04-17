@@ -1,5 +1,9 @@
 const env = require(global.__approot + '/mod/env');
 
+const sql_filter = require(global.__approot + '/mod/pg/sql_filter');
+
+const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -70,9 +74,9 @@ module.exports = fastify => {
              
 
       // SQL filter
-      const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await sql_filter(filter) || '';
 
-      const fields = await require(global.__approot + '/mod/pg/sql_fields')([], table.columns);
+      const fields = await sql_fields([], table.columns);
       
       var q = `
         SELECT
@@ -86,7 +90,7 @@ module.exports = fastify => {
 
       // OFFSET ${offset} ROWS
 
-      var rows = await env.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

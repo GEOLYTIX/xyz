@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const request = require('request');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -18,7 +20,7 @@ module.exports = fastify => {
         .split('&provider=').shift();
 
       // Decorate the URI with a provider key and send response object to client.
-      res.send(require('request')(`${uri}&${env.keys[req.query.provider]}`));
+      res.send(request(`${uri}&${env.keys[req.query.provider]}`));
 
     }
   });

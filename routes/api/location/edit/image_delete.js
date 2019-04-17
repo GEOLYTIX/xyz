@@ -1,5 +1,9 @@
 const env = require(global.__approot + '/mod/env');
 
+const crypto = require('crypto');
+
+const request = require('request');
+
 module.exports = fastify => {
   
   fastify.route({
@@ -43,9 +47,9 @@ module.exports = fastify => {
         field = req.query.field,
         image_src = decodeURIComponent(req.query.image_src),
         ts = Date.now(),
-        sig = require('crypto').createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${env.cloudinary[1]}`).digest('hex');
+        sig = crypto.createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${env.cloudinary[1]}`).digest('hex');
 
-      require('request').post({
+      request.post({
         url: `https://api.cloudinary.com/v1_1/${env.cloudinary[2]}/image/destroy`,
         body: {
           'api_key': env.cloudinary[0],
@@ -63,7 +67,7 @@ module.exports = fastify => {
           SET ${field} = array_remove(${field}, '${image_src}')
           WHERE ${qID} = $1;`;
 
-        await env.pg.dbs[layer.dbs](q, [id]);
+        await env.dbs[layer.dbs](q, [id]);
 
         res.code(200).send('Image deleted.');
         

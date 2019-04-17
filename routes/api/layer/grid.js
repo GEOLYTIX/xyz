@@ -59,7 +59,7 @@ module.exports = fastify => {
           AND ${size} >= 1 LIMIT 10000;`;
 
 
-      var rows = await env.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

@@ -10,7 +10,7 @@ module.exports = async (layer, table, id) => {
       (SELECT ${layer.geom_3857} FROM ${table} WHERE ${layer.qID} = $1)
     );`;
 
-  await env.pg.dbs[layer.dbs](q, [id]);
+  await env.dbs[layer.dbs](q, [id]);
 
   return;
 

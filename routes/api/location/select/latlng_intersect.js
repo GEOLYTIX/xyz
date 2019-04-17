@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -47,7 +49,7 @@ module.exports = fastify => {
   
 
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj);
+      const fields = await sql_fields([], infoj);
 
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
@@ -63,7 +65,7 @@ module.exports = fastify => {
         SELECT ${fields.join()} FROM ${table}, T
         WHERE ST_Intersects(${geom}, _geom);`;
   
-      var rows = await env.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

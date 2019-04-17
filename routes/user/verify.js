@@ -1,5 +1,9 @@
 const env = require(global.__approot + '/mod/env');
 
+const mailer = require(global.__approot + '/mod/mailer');
+
+const crypto = require('crypto');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -8,7 +12,7 @@ module.exports = fastify => {
     handler: async (req, res) => {
   
       // Find user account in ACL from matching token.
-      var rows = await env.pg.users(`
+      var rows = await env.acl(`
       SELECT * FROM acl_schema.acl_table WHERE verificationtoken = $1;`,
       [req.params.token]);
   
@@ -18,10 +22,10 @@ module.exports = fastify => {
   
       if (!user) return res.send('Token not found.');
   
-      const approvaltoken = require('crypto').randomBytes(20).toString('hex');
+      const approvaltoken = crypto.randomBytes(20).toString('hex');
   
       // Update user account in ACL.
-      rows = await env.pg.users(`
+      rows = await env.acl(`
       UPDATE acl_schema.acl_table SET
         failedattempts = 0,
         ${user.password_reset ? `password = '${user.password_reset}', password_reset = null,` : ''}
@@ -40,7 +44,7 @@ module.exports = fastify => {
       if (!user.approved) {
   
         // Get all admin accounts from the ACL.
-        rows = await env.pg.users('SELECT email FROM acl_schema.acl_table WHERE admin_user = true;');
+        rows = await env.acl('SELECT email FROM acl_schema.acl_table WHERE admin_user = true;');
     
         if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
@@ -50,7 +54,7 @@ module.exports = fastify => {
         let adminmail = rows.map(admin => admin.email);
   
         // Sent an email to all admin account emails with a request to approve the new user account.
-        require(global.__approot + '/mod/mailer')({
+        mailer({
           bcc: adminmail,
           subject: `A new account has been verified on ${env.alias || req.headers.host}${env.path}`,
           text: `Please log into the admin panel ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/user/admin to approve ${user.email} \n \n`

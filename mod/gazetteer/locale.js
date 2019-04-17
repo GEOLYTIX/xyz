@@ -45,7 +45,7 @@ module.exports = async (req, locale) => {
       LIMIT 10`;
 
     // Get gazetteer results from dataset table.
-    var rows = await env.pg.dbs[layer.dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(term)}%`]);
+    var rows = await env.dbs[layer.dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(term)}%`]);
 
     if (rows.err) return {err: 'Error fetching gazetteer results.'};
 

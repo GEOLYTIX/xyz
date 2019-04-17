@@ -1,5 +1,19 @@
 const env = require(global.__approot + '/mod/env');
 
+const fetch = require(global.__approot + '/mod/fetch');
+
+const transformDate = require(global.__approot + '/mod/date');
+
+const mailer = require(global.__approot + '/mod/mailer');
+
+const bcrypt = require('bcrypt-nodejs');
+
+const crypto = require('crypto');
+
+const root = require(global.__approot + '/routes/root');
+
+const jsr = require('jsrender');
+
 module.exports = fastify => {
   
   return {
@@ -28,7 +42,7 @@ module.exports = fastify => {
 
     if (env.captcha && env.captcha[1]) {
 
-      const captcha_verification = await require(global.__approot + '/mod/fetch')(`https://www.google.com/recaptcha/api/siteverify?secret=${env.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
+      const captcha_verification = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${env.captcha[1]}&response=${req.body.captcha}&remoteip=${req.req.ips.pop()}`);
   
       if (captcha_verification.score < 0.6) return res.redirect(env.path + '/login?msg=fail');
 
@@ -38,7 +52,7 @@ module.exports = fastify => {
 
     if (!req.body.password) return;
 
-    const date = require(global.__approot + '/mod/date')();
+    const date = transformDate();
 
     var q = `
       UPDATE acl_schema.acl_table
@@ -46,7 +60,7 @@ module.exports = fastify => {
       WHERE lower(email) = lower($1)
       RETURNING *;`;
 
-    var rows = await env.pg.users(q, [req.body.email]);
+    var rows = await env.acl(q, [req.body.email]);
 
     if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
@@ -66,7 +80,7 @@ module.exports = fastify => {
     if (!user.verified || !user.approved) {
 
     // Sent fail mail when to account email if login failed.
-      require(global.__approot + '/mod/mailer')({
+      mailer({
         to: user.email,
         subject: `A failed login attempt was made on ${env.alias || req.headers.host}${env.path}`,
         text: `${user.verified ? 'The account is verified. \n \n' : 'The account is NOT verified. \n \n'}`
@@ -79,7 +93,7 @@ module.exports = fastify => {
     }
 
     // Check password from post body against encrypted password from ACL.
-    if (require('bcrypt-nodejs').compareSync(req.body.password, user.password)) {
+    if (bcrypt.compareSync(req.body.password, user.password)) {
 
       // Create token with 8 hour expiry.
       const token = {
@@ -93,13 +107,13 @@ module.exports = fastify => {
       
       if (access.view) return access.view(req, res, token);
 
-      return require(global.__approot + '/routes/root').view(req, res, token);
+      return root.view(req, res, token);
 
     // Password from login form does NOT match encrypted password in ACL!
     } else {
 
     // Increase failed login attempts counter by 1 for user in ACL.
-      rows = await env.pg.users(`
+      rows = await env.acl(`
         UPDATE acl_schema.acl_table
         SET failedattempts = failedattempts + 1
         WHERE lower(email) = lower($1)
@@ -112,10 +126,10 @@ module.exports = fastify => {
       if (rows[0].failedattempts >= env.failed_attempts) {
 
         // Create a new verification token and remove verified status in ACL.
-        const verificationtoken = require('crypto').randomBytes(20).toString('hex');
+        const verificationtoken = crypto.randomBytes(20).toString('hex');
 
         // Store new verification token in ACL.
-        rows = await env.pg.users(`
+        rows = await env.acl(`
           UPDATE acl_schema.acl_table
           SET
             verified = false,
@@ -126,7 +140,7 @@ module.exports = fastify => {
         if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
         // Sent email with verification link to user.
-        require(global.__approot + '/mod/mailer')({
+        mailer({
           to: user.email,
           subject: `Too many failed login attempts occured on ${env.alias || req.headers.host}${env.path}`,
           text: `${env.failed_attempts} failed login attempts have been recorded on this account. \n \n`
@@ -140,8 +154,8 @@ module.exports = fastify => {
         // Failed login attempts have not yet exceeded limit.
       } else {
 
-      // Sent fail mail.
-        require(global.__approot + '/mod/mailer')({
+        // Sent fail mail.
+        mailer({
           to: user.email,
           subject: `A failed login attempt was made on ${env.alias || req.headers.host}${env.path}`,
           text: 'An incorrect password was entered! \n \n'
@@ -171,7 +185,7 @@ module.exports = fastify => {
     // Send login view to client.
     res
       .type('text/html')
-      .send(require('jsrender')
+      .send(jsr
         .templates('./public/views/login.html')
         .render({
           dir: env.path,

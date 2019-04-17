@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const fetch = require(global.__approot + '/mod/fetch');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -13,7 +15,7 @@ module.exports = fastify => {
 
       const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}&${env.keys.GOOGLE}`;
 
-      const fetched = await require(global.__approot + '/mod/fetch')(url);
+      const fetched = await fetch(url);
 
       if (fetched._err) res.code(500).send(fetched._err);
 

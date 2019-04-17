@@ -16,7 +16,7 @@ module.exports = async () => {
     const dbs = key.split('_')[1];
 
     // Request which accepts q and arr and will return rows or rows.err.
-    env.pg.dbs[dbs] = async (q, arr, no_log) => {
+    env.dbs[dbs] = async (q, arr, no_log) => {
 
       try {
         const { rows } = await pool.query(q, arr);
@@ -30,11 +30,11 @@ module.exports = async () => {
 
     };
 
-    const PostGIS = await env.pg.dbs[dbs]('SELECT postgis_version();');
+    const PostGIS = await env.dbs[dbs]('SELECT postgis_version();');
 
     if (PostGIS.err) {
       console.log(`${key}: Can't detect PostGIS.`);
-      delete env.pg.dbs[dbs];
+      delete env.dbs[dbs];
     }
 
   });

@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const sql_filter = require(global.__approot + '/mod/pg/sql_filter');
+
 module.exports =  fastify => {
   
   fastify.route({
@@ -47,7 +49,7 @@ module.exports =  fastify => {
   
         
       // SQL filter
-      const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await sql_filter(filter) || '';
   
       // Query the feature count from lat/lng bounding box.
       var q = `
@@ -60,7 +62,7 @@ module.exports =  fastify => {
         ${filter_sql} 
       ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
   
-      var rows = await env.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   

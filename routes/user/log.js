@@ -17,7 +17,7 @@ module.exports = fastify => {
       const email = req.query.email.replace(/\s+/g,'');
 
       // Get user to update from ACL.
-      var rows = await env.pg.users(`
+      var rows = await env.acl(`
       SELECT access_log
       FROM acl_schema.acl_table
       WHERE lower(email) = lower($1);`,

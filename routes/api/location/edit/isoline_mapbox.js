@@ -1,5 +1,11 @@
 const env = require(global.__approot + '/mod/env');
 
+const fetch = require(global.__approot + '/mod/fetch');
+
+const mvt_cache = require(global.__approot + '/mod/mvt_cache');
+
+const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -48,7 +54,7 @@ module.exports = fastify => {
       
 
       // Fetch results from Google maps places API.
-      const mapbox_isolines = await require(global.__approot + '/mod/fetch')(q);
+      const mapbox_isolines = await fetch(q);
   
       if(!mapbox_isolines.features) return res.code(202).send('No catchment found within this time frame.');
 
@@ -61,7 +67,7 @@ module.exports = fastify => {
         SET ${req.query.field} = ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)
         WHERE ${layer.qID} = $1;`;
 
-        var rows = await env.pg.dbs[layer.dbs](q, [req.query.id]);
+        var rows = await env.dbs[layer.dbs](q, [req.query.id]);
   
         if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
   
@@ -69,14 +75,14 @@ module.exports = fastify => {
         const infoj = JSON.parse(JSON.stringify(layer.infoj));
   
         // The fields array stores all fields to be queried for the location info.
-        fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj, layer.qID);
+        fields = await sql_fields([], infoj, layer.qID);
   
         var q = `
         SELECT ${fields.join()}
         FROM ${table}
         WHERE ${layer.qID} = $1;`;
   
-        var rows = await env.pg.dbs[layer.dbs](q, [req.query.id]);
+        var rows = await env.dbs[layer.dbs](q, [req.query.id]);
   
         if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   
@@ -99,11 +105,11 @@ module.exports = fastify => {
       SELECT ${geom}
       RETURNING ${layer.qID} AS id;`;
       
-      var rows = await env.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
       
-      if (layer.mvt_cache) await require(global.__approot + '/mod/mvt_cache')(layer, table, rows[0].id);
+      if (layer.mvt_cache) await mvt_cache(layer, table, rows[0].id);
       
       res.code(200).send(rows[0].id.toString());   
       

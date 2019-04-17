@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const mailer = require(global.__approot + '/mod/mailer');
+
 module.exports = fastify => {
     
   fastify.route({
@@ -35,7 +37,7 @@ module.exports = fastify => {
       }
 
       // Get user to update from ACL.
-      var rows = await env.pg.users(`
+      var rows = await env.acl(`
         UPDATE acl_schema.acl_table
         SET
           ${req.query.field} = ${req.query.value},
@@ -47,7 +49,7 @@ module.exports = fastify => {
   
       // Send email to the user account if an account has been approved.
       if (req.query.field === 'approved' && req.query.value)
-        await require(global.__approot + '/mod/mailer')({
+        await mailer({
           to: email,
           subject: `This account has been approved for ${env.alias || req.headers.host}${env.path}`,
           text: `You are now able to log on to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`

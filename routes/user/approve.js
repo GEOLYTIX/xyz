@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const mailer = require(global.__approot + '/mod/mailer');
+
 module.exports = { route, view };
 
 function route(fastify) {
@@ -29,7 +31,7 @@ function route(fastify) {
 
 async function view(req, res, token) {
 
-  var rows = await env.pg.users(`
+  var rows = await env.acl(`
   SELECT * FROM acl_schema.acl_table WHERE approvaltoken = $1;`,
   [req.params.token]);
 
@@ -39,7 +41,7 @@ async function view(req, res, token) {
 
   if (!user) return res.send('Token not found. The token has probably been resolved already.');
 
-  rows = await env.pg.users(`
+  rows = await env.acl(`
   UPDATE acl_schema.acl_table SET
     approved = true,
     approvaltoken = null,
@@ -49,7 +51,7 @@ async function view(req, res, token) {
 
   if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
-  require(global.__approot + '/mod/mailer')({
+  mailer({
     to: user.email,
     subject: `This account has been approved on ${env.alias || req.headers.host}${env.path}`,
     text: `You are now able to log on to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`

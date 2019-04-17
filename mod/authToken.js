@@ -36,7 +36,7 @@ module.exports = fastify => (req, res, next, access = {}) => {
     if (token.api) {
 
       // Get user from ACL.
-      rows = await env.pg.users(`
+      rows = await env.acl(`
       SELECT * FROM acl_schema.acl_table
       WHERE lower(email) = lower($1);`, [token.email]);
     

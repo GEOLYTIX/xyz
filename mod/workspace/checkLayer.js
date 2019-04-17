@@ -94,13 +94,13 @@ async function chkLayerGeom(layer, layers) {
     if (!table) return;
 
     // Invalidate layer if no dbs has been defined.
-    if (!layer.dbs || !env.pg.dbs[layer.dbs]) {
+    if (!layer.dbs || !env.dbs[layer.dbs]) {
       log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
       return;
     }
 
     // Check whether table has layer geom or geom_3857 field.
-    let rows = await env.pg.dbs[layer.dbs](`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
+    let rows = await env.dbs[layer.dbs](`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
       log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => ${rows.err.message}`);
@@ -129,7 +129,7 @@ async function chkMVTCache(layer) {
     if (!table && tables.length > 1) continue;
 
     // Get a sample MVT from the cache table.
-    let rows = await env.pg.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${layer.mvt_cache} LIMIT 1`, null, 'no_log');
+    let rows = await env.dbs[layer.dbs](`SELECT z, x, y, mvt, tile FROM ${layer.mvt_cache} LIMIT 1`, null, 'no_log');
 
     if (rows && rows.err) return await createMVTCache(layer);
 
@@ -150,7 +150,7 @@ async function chkMVTCache(layer) {
         if (Object.keys(tile.layers).length > 0 && tile.layers[layer.key]._keys.indexOf(field.split(' as ').pop()) < 0) {
 
           // Truncate the cache table.
-          rows = await env.pg.dbs[layer.dbs](`TRUNCATE ${layer.mvt_cache};`);
+          rows = await env.dbs[layer.dbs](`TRUNCATE ${layer.mvt_cache};`);
 
           if (rows.err) {
             return log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to truncate cache table`);
@@ -172,7 +172,7 @@ async function chkMVTCache(layer) {
 
 async function createMVTCache(layer){
 
-  let rows = await env.pg.dbs[layer.dbs](`
+  let rows = await env.dbs[layer.dbs](`
     create table ${layer.mvt_cache}
     (
       z integer not null,
@@ -214,7 +214,7 @@ async function chkLayerSelect(layer) {
 
     if (!table) return;
 
-    let rows = await env.pg.dbs[layer.dbs](`SELECT ${layer.qID} FROM ${table} LIMIT 1`, null, 'no_log');
+    let rows = await env.dbs[layer.dbs](`SELECT ${layer.qID} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
       log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.qID} (${layer.format}) => '¡No bueno!'`);

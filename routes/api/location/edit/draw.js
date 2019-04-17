@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const mvt_cache = require(global.__approot + '/mod/mvt_cache');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -52,11 +54,11 @@ module.exports = fastify => {
       SELECT ${_geom}
       RETURNING ${layer.qID} AS id;`;
       
-      var rows = await env.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
     
-      if (layer.mvt_cache) await require(global.__approot + '/mod/mvt_cache')(layer, table, rows[0].id);
+      if (layer.mvt_cache) await mvt_cache(layer, table, rows[0].id);
       
       res.code(200).send(rows[0].id.toString());    
 

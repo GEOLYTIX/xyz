@@ -1,7 +1,5 @@
 const env = require(global.__approot + '/mod/env');
 
-module.exports = {route, view};
-
 // Create constructor for mobile detect module.
 const Md = require('mobile-detect');
 
@@ -10,6 +8,8 @@ const jsr = require('jsrender');
 
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
+
+module.exports = {route, view};
 
 function route(fastify) {
 

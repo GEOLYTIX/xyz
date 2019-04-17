@@ -28,9 +28,9 @@ module.exports = {
 
   keys: keys(),
 
-  pg: {
-    dbs: {}
-  },
+  pg: {},
+
+  dbs: {},
 
   _defaults: require(global.__approot + '/workspaces/_defaults'),
 

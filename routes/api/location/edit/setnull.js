@@ -1,5 +1,7 @@
 const env = require(global.__approot + '/mod/env');
 
+const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -43,7 +45,7 @@ module.exports = fastify => {
   
       var q = `UPDATE ${table} SET ${field} = null WHERE ${qID} = $1;`;
   
-      var rows = await env.pg.dbs[layer.dbs](q, [id]);
+      var rows = await env.dbs[layer.dbs](q, [id]);
   
       if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
   
@@ -51,11 +53,11 @@ module.exports = fastify => {
       const infoj = JSON.parse(JSON.stringify(layer.infoj));
   
       // The fields array stores all fields to be queried for the location info.
-      fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj, qID);
+      fields = await sql_fields([], infoj, qID);
   
       var q = `SELECT ${fields.join()} FROM ${table} WHERE ${qID} = $1;`;
   
-      var rows = await env.pg.dbs[layer.dbs](q, [id]);
+      var rows = await env.dbs[layer.dbs](q, [id]);
   
       if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
   

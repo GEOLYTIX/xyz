@@ -19,7 +19,7 @@ module.exports = async () => {
   });
   
   // Method to query ACL. arr must be empty array by default.
-  env.pg.users = async (q, arr) => {
+  env.acl = async (q, arr) => {
 
     try {
 
@@ -54,7 +54,7 @@ module.exports = async () => {
     roles: 'ARRAY',
   };
     
-  const users = await env.pg.users(`
+  const users = await env.acl(`
   SELECT column_name, data_type
   FROM INFORMATION_SCHEMA.COLUMNS
   WHERE table_name = 'acl_table'
@@ -65,7 +65,7 @@ module.exports = async () => {
     // Set the default password for the admin user.
     const password = require('bcrypt-nodejs').hashSync('admin123', require('bcrypt-nodejs').genSaltSync(8));
     
-    const new_acl = await env.pg.users(`
+    const new_acl = await env.acl(`
     CREATE TABLE IF NOT EXISTS acl_schema.acl_table (
       "_id" serial not null,
       email text not null,

@@ -1,5 +1,11 @@
 const env = require(global.__approot + '/mod/env');
 
+const sql_infoj = require(global.__approot + '/mod/pg/sql_infoj');
+
+const mvt_cache = require(global.__approot + '/mod/mvt_cache');
+
+const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -39,16 +45,16 @@ module.exports = fastify => {
         id = req.query.id,
         infoj = req.body.infoj;
 
-      let fields = await require(global.__approot + '/mod/pg/sql_infoj')(infoj);
+      let fields = await sql_infoj(infoj);
 
       var q = `UPDATE ${table} SET ${fields} WHERE ${qID} = $1;`;
 
-      var rows = await env.pg.dbs[layer.dbs](q, [id]);
+      var rows = await env.dbs[layer.dbs](q, [id]);
 
       if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
       
       // Remove tiles from mvt_cache.
-      if (layer.mvt_cache) await require(global.__approot + '/mod/mvt_cache')(layer, table, id);
+      if (layer.mvt_cache) await mvt_cache(layer, table, id);
 
 
       // Get the updated infoj.
@@ -58,14 +64,14 @@ module.exports = fastify => {
       infoj = JSON.parse(JSON.stringify(layer.infoj));
 
       // The fields array stores all fields to be queried for the location info.
-      fields = await require(global.__approot + '/mod/pg/sql_fields')([], infoj, qID);
+      fields = await sql_fields([], infoj, qID);
 
       var q = `
         SELECT ${fields.join()}
         FROM ${table}
         WHERE ${qID} = $1;`;
 
-      var rows = await env.pg.dbs[layer.dbs](q, [id]);
+      var rows = await env.dbs[layer.dbs](q, [id]);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

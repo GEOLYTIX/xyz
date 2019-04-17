@@ -28,7 +28,7 @@ function route(fastify) {
 async function view(req, res, token, fastify) {
 
   // Get user from ACL.
-  var rows = await env.pg.users(`
+  var rows = await env.acl(`
     SELECT * FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`,
   [token.email]);
@@ -50,7 +50,7 @@ async function view(req, res, token, fastify) {
   });
   
     // Store api_token in ACL.
-  var rows = await env.pg.users(`
+  var rows = await env.acl(`
     UPDATE acl_schema.acl_table SET api = '${api_token}'
     WHERE lower(email) = lower($1);`,
   [user.email]);

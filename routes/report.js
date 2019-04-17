@@ -1,12 +1,16 @@
 const env = require(global.__approot + '/mod/env');
 
-module.exports = { route, view };
-
 // Set jsrender module for server-side templates.
 const jsr = require('jsrender');
 
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
+
+const fetch = require(global.__approot + '/mod/fetch');
+
+const fs = require('fs');
+
+module.exports = { route, view };
 
 function route(fastify) {
 
@@ -42,10 +46,10 @@ async function view(req, res, token = { access: 'public' }) {
 
   try {
     // try if template exists in repository
-    local_html = await require('fs').readFileSync(`${global.__approot}/public/views/report/${req.query.template}.html`, 'utf8');
+    local_html = await fs.readFileSync(`${global.__approot}/public/views/report/${req.query.template}.html`, 'utf8');
   } catch (err) {
     // apply fallback default template
-    local_html = await require('fs').readFileSync(`${global.__approot}/public/views/report/map_location.html`, 'utf8');
+    local_html = await fs.readFileSync(`${global.__approot}/public/views/report/map_location.html`, 'utf8');
   }
 
   // send back local if no github resources
@@ -63,7 +67,7 @@ async function view(req, res, token = { access: 'public' }) {
 
   try {
     // Get file meta from Github
-    const fetched = await require(global.__approot + '/mod/fetch')(url);
+    const fetched = await fetch(url);
     // Process file content
     let base64 = fetched.content,
       buff = Buffer.from(base64, 'base64'),
