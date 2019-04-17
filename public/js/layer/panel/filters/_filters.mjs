@@ -10,6 +10,8 @@ import output from './output.mjs';
 
 import chkCount from './chkCount.mjs';
 
+import filter_boolean from './filter_boolean.mjs';
+
 export default (_xyz, layer) => {
 
   // Create current filter object.
@@ -77,6 +79,8 @@ export default (_xyz, layer) => {
       if (entry.filter === 'like' || entry.filter === 'match') return filter_text(_xyz, layer, entry);
 
       if (entry.filter.in) return filter_in(_xyz, layer, entry);
+
+      if (entry.filter === 'boolean') return filter_boolean(_xyz, layer, entry);
 
     }
   });

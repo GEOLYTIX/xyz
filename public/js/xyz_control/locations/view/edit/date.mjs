@@ -26,11 +26,12 @@ export default _xyz => entry => {
   
     },
     onSelect: (instance, date) => {
-      entry.location.view.valChange(
-        input,
-        entry,
-        _xyz.utils.meltDateStr(new Date(input.value))
-      );
+
+      entry.location.view.valChange({
+        input: input,
+        entry: entry,
+        value: _xyz.utils.meltDateStr(new Date(input.value))});
+
       instance.calendar.style.top = '-10000px';
     },
     onShow: instance => {

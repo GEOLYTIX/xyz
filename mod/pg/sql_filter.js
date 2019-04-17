@@ -69,5 +69,10 @@ module.exports = async filter => {
       sql_filter.push(conjunction);
     }
 
+    if((filter.boolean)){
+      sql_filter.push(`${field} IS ${filter.boolean}`);
+      sql_filter.push(conjunction);
+    }
+
   }
 };
