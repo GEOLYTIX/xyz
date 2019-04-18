@@ -44,15 +44,15 @@ async function view(req, res, token = { access: 'public' }) {
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
 
-  const _tmpl = (md.mobile() === null || md.tablet() !== null) ?
-    fs.readFileSync(path.resolve(__dirname, '../public/views/desktop.html'), 'utf8') :
-    fs.readFileSync(path.resolve(__dirname, '../public/views/mobile.html'), 'utf8');
+  // const _tmpl = (md.mobile() === null || md.tablet() !== null) ?
+  //   fs.readFileSync(path.resolve(__dirname, '../public/views/desktop.html'), 'utf8') :
+  //   fs.readFileSync(path.resolve(__dirname, '../public/views/mobile.html'), 'utf8');
 
-  const tmpl = jsr.templates('tmpl', _tmpl);
+  // const tmpl = jsr.templates('tmpl', _tmpl);
 
-  // const tmpl = (md.mobile() === null || md.tablet() !== null) ?
-  //   jsr.templates('test', mytemplate) :
-  //   jsr.templates('./public/views/mobile.html');
+  const tmpl = (md.mobile() === null || md.tablet() !== null) ?
+    jsr.templates('./public/views/desktop.html') :
+    jsr.templates('./public/views/mobile.html');
 
   // Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
