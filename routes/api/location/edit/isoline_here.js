@@ -1,10 +1,10 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../../../mod/env');
 
-const fetch = require(global.__approot + '/mod/fetch');
+const fetch = require('../../../../mod/fetch');
 
-const mvt_cache = require(global.__approot + '/mod/mvt_cache');
+const mvt_cache = require('../../../../mod/mvt_cache');
 
-const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+const sql_fields = require('../../../../mod/pg/sql_fields');
 
 module.exports = fastify => {
 

@@ -1,14 +1,14 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../mod/env');
 
-const fetch = require(global.__approot + '/mod/fetch');
+const fetch = require('../mod/fetch');
 
 const bcrypt = require('bcrypt-nodejs');
 
 const crypto = require('crypto');
 
-const transformDate = require(global.__approot + '/mod/date');
+const transformDate = require('../mod/date');
 
-const mailer = require(global.__approot + '/mod/mailer');
+const mailer = require('../mod/mailer');
 
 const jsr = require('jsrender');
 

@@ -1,6 +1,6 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../../mod/env');
 
-const fetch = require(global.__approot + '/mod/fetch');
+const fetch = require('../../../mod/fetch');
 
 module.exports = fastify => {
   fastify.route({

@@ -19,21 +19,17 @@ const dotenv = req_res('dotenv');
 
 if (dotenv) dotenv.load();
 
-
-// Global appRoot for absolute require paths.
-global.__approot = require('path').resolve(__dirname);
-
 // Initiate environment module.
-const env = require(global.__approot + '/mod/env');
+const env = require('./mod/env');
 
 // Create PostGIS dbs connection pools.
-require(global.__approot + '/mod/pg/dbs')();
+require('./mod/pg/dbs')();
 
 // Create PostgreSQL ACL connection pool.
-require(global.__approot + '/mod/pg/acl')();
+require('./mod/pg/acl')();
 
 // Create PostgreSQL Workspace connection pool.
-require(global.__approot + '/mod/workspace/init')();
+require('./mod/workspace/init')();
 
 // Set fastify
 const fastify = require('fastify')({
@@ -76,13 +72,13 @@ fastify
   })
   .register(require('fastify-formbody'))
   .register(require('fastify-static'), {
-    root: global.__approot + '/public',
-    prefix: env.path + '/'
+    root: require('path').resolve(__dirname) + '/public',
+    prefix: env.path
   })
   .register(require('fastify-auth'))
-  .decorate('login', require(global.__approot + '/routes/login')(fastify))
-  .decorate('authToken', require(global.__approot + '/mod/authToken')(fastify))
-  .decorate('evalParam', require(global.__approot + '/mod/evalParam')(fastify))
+  .decorate('login', require('./routes/login')(fastify))
+  .decorate('authToken', require('./mod/authToken')(fastify))
+  .decorate('evalParam', require('./mod/evalParam')(fastify))
   .register(require('fastify-jwt'), {
     secret: env.secret
   })

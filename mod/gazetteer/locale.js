@@ -1,4 +1,4 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../env');
 
 module.exports = async (req, locale) => {
 
@@ -29,7 +29,7 @@ module.exports = async (req, locale) => {
       role => Object.assign(filter, layer.roles[role])
     );
 
-    const filter_sql = filter && await require(global.__approot + '/mod/pg/sql_filter')(filter) || '';
+    const filter_sql = filter && await require('../pg/sql_filter')(filter) || '';
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `

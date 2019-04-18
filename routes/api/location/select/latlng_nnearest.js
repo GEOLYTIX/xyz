@@ -1,6 +1,6 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../../../mod/env');
 
-const sql_fields = require(global.__approot + '/mod/pg/sql_fields');
+const sql_fields = require('../../../../mod/pg/sql_fields');
 
 module.exports = fastify => {
   fastify.route({

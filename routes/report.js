@@ -1,4 +1,4 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../mod/env');
 
 // Set jsrender module for server-side templates.
 const jsr = require('jsrender');
@@ -6,7 +6,7 @@ const jsr = require('jsrender');
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
 
-const fetch = require(global.__approot + '/mod/fetch');
+const fetch = require('../mod/fetch');
 
 const fs = require('fs');
 
@@ -46,10 +46,10 @@ async function view(req, res, token = { access: 'public' }) {
 
   try {
     // try if template exists in repository
-    local_html = await fs.readFileSync(`${global.__approot}/public/views/report/${req.query.template}.html`, 'utf8');
+    local_html = await fs.readFileSync(`/public/views/report/${req.query.template}.html`, 'utf8');
   } catch (err) {
     // apply fallback default template
-    local_html = await fs.readFileSync(`${global.__approot}/public/views/report/map_location.html`, 'utf8');
+    local_html = await fs.readFileSync(`/public/views/report/map_location.html`, 'utf8');
   }
 
   // send back local if no github resources

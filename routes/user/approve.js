@@ -1,6 +1,6 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../mod/env');
 
-const mailer = require(global.__approot + '/mod/mailer');
+const mailer = require('../../mod/mailer');
 
 module.exports = { route, view };
 

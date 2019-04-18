@@ -1,6 +1,6 @@
-const assignDefaults = require(global.__approot + '/mod/workspace/assignDefaults');
+const assignDefaults = require('../../mod/workspace/assignDefaults');
 
-const checkLayer = require(global.__approot + '/mod/workspace/checkLayer');
+const checkLayer = require('../../mod/workspace/checkLayer');
 
 module.exports = fastify => {
   fastify.route({

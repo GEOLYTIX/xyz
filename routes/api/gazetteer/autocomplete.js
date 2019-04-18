@@ -1,8 +1,8 @@
-const gaz_locale = require(global.__approot + '/mod/gazetteer/locale');
+const gaz_locale = require('../../../mod/gazetteer/locale');
 
-const gaz_google = require(global.__approot + '/mod/gazetteer/google');
+const gaz_google = require('../../../mod/gazetteer/google');
 
-const gaz_mapbox = require(global.__approot + '/mod/gazetteer/mapbox');
+const gaz_mapbox = require('../../../mod/gazetteer/mapbox');
 
 module.exports = fastify => {
   fastify.route({

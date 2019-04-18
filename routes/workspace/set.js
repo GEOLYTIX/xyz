@@ -1,6 +1,6 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../mod/env');
 
-const assignDefaults = require(global.__approot + '/mod/workspace/assignDefaults');
+const assignDefaults = require('../../mod/workspace/assignDefaults');
 
 module.exports = fastify => {
   fastify.route({

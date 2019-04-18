@@ -1,6 +1,6 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../env');
 
-const checkLayer = require(global.__approot + '/mod/workspace/checkLayer');
+const checkLayer = require('./checkLayer');
 
 module.exports = async workspace => {
   

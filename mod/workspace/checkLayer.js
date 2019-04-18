@@ -1,4 +1,4 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../env');
 
 const logArray = [];
 
@@ -69,7 +69,7 @@ async function chkLayerURL(layer, layers) {
   uri = uri.replace(/\{s\}/i,'a').replace(/\{.\}/ig,'0');
 
   // Fetch results from Google maps places API.
-  const fetched = await require(global.__approot + '/mod/fetch')(uri, 'no_log');
+  const fetched = await require('../fetch')(uri, 'no_log');
 
   if (fetched._err) {
 

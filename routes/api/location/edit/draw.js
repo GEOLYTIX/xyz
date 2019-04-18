@@ -1,6 +1,6 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../../../mod/env');
 
-const mvt_cache = require(global.__approot + '/mod/mvt_cache');
+const mvt_cache = require('../../../../mod/mvt_cache');
 
 module.exports = fastify => {
 

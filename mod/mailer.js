@@ -1,4 +1,4 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('./env');
 
 module.exports = mail => {
   if (!env.transport) return console.log('Transport not set.');

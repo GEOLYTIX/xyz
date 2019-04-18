@@ -1,4 +1,4 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../env');
 
 module.exports = async (term, gazetteer) => {
 
@@ -11,7 +11,7 @@ module.exports = async (term, gazetteer) => {
           + `&${env.keys.GOOGLE}`;
 
   // Fetch results from Google maps places API.
-  const fetched = await require(global.__approot + '/mod/fetch')(url);
+  const fetched = await require('../fetch')(url);
 
   if (fetched._err) return fetched;
     

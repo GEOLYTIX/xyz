@@ -1,4 +1,4 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../../../../mod/env');
 
 const crypto = require('crypto');
 

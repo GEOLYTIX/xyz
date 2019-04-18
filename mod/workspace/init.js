@@ -1,10 +1,10 @@
-const env = require(global.__approot + '/mod/env');
+const env = require('../env');
 
-const assignDefaults = require(global.__approot + '/mod/workspace/assignDefaults');
+const assignDefaults = require('./assignDefaults');
 
-const checkLayer = require(global.__approot + '/mod/workspace/checkLayer');
+const checkLayer = require('./checkLayer');
 
-const checkWorkspaceTable = require(global.__approot + '/mod/workspace/checkWorkspaceTable');
+const checkWorkspaceTable = require('./checkWorkspaceTable');
 
 module.exports = async () => {
 

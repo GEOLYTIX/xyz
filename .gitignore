@@ -8,6 +8,7 @@ public/css/.sass-cache/
 public/js/build/
 stats.json
 now
+now.json
 env
 workspaces/aga.json
 workspaces/amfresh.json

@@ -32,7 +32,7 @@ module.exports = {
 
   dbs: {},
 
-  _defaults: require(global.__approot + '/workspaces/_defaults'),
+  _defaults: require('../workspaces/_defaults'),
 
   _workspace: process.env.WORKSPACE,
 
