@@ -46,10 +46,10 @@ async function view(req, res, token = { access: 'public' }) {
 
   try {
     // try if template exists in repository
-    local_html = await fs.readFileSync(`/public/views/report/${req.query.template}.html`, 'utf8');
+    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}${req.query.template}.html`, 'utf8');
   } catch (err) {
     // apply fallback default template
-    local_html = await fs.readFileSync(`/public/views/report/map_location.html`, 'utf8');
+    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}map_location.html`, 'utf8');
   }
 
   // send back local if no github resources
