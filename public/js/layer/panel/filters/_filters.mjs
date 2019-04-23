@@ -127,6 +127,6 @@ export default (_xyz, layer) => {
 
   layer.filter.check_count = chkCount(_xyz, layer);
 
-  layer.filter.check_count();
+  //layer.filter.check_count();
 
 };
