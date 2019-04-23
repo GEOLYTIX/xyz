@@ -9,9 +9,9 @@ const jsr = require('jsrender');
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
 
-const fs = require('fs');
+// const fs = require('fs');
 
-const path = require('path');
+// const path = require('path');
 
 module.exports = {route, view};
 
