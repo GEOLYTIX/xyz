@@ -1,5 +1,7 @@
 const env = require('../mod/env');
 
+const path = require('path');
+
 // Set jsrender module for server-side templates.
 const jsr = require('jsrender');
 
@@ -38,42 +40,41 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  let
-    github,
-    github_env = process.env.RESOURCES_GITHUB ? process.env.RESOURCES_GITHUB.split(' ') : null;
-
   let local_html;
 
   try {
     // try if template exists in repository
-    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}${req.query.template}.html`, 'utf8');
+    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}/${req.query.template}.html`, 'utf8');
+
   } catch (err) {
     // apply fallback default template
-    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}map_location.html`, 'utf8');
+    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}/map_location.html`, 'utf8');
   }
 
-  // send back local if no github resources
-  if (!github_env) sendBack(local_html);
+  // send back local if no resource
+  if(!req.query.resource) sendBack(local_html);
 
-  // Github settings
-  github = {
-    access_token: github_env[0],
-    owner: github_env[1],
-    repo: github_env[2],
-    folder: github_env[3] || null
-  };
+  if(req.query.resource === 'github') {
 
-  const url = `https://api.github.com/repos/${github.owner}/${github.repo}/contents/${github.folder ? `${github.folder}/` : ''}${req.query.template}.html?access_token=${github.access_token}`;
+    let github = process.env.GITHUB;
 
-  try {
-    // Get file meta from Github
-    const fetched = await fetch(url);
-    // Process file content
-    let base64 = fetched.content,
-      buff = Buffer.from(base64, 'base64'),
-      html = buff.toString('utf8');
-    sendBack(html);
-  } catch (err) {
+    if (!github || !req.query.repo || !req.query.owner) sendBack(local_html);
+
+    const url = `https://api.github.com/repos/${req.query.owner}/${req.query.repo}/contents/${req.query.dir ? `${req.query.dir}/` : ''}${req.query.template}.html?access_token=${github}`;
+
+    try {
+      // Get file meta from Github
+      const fetched = await fetch(url);
+      // Process file content
+      let base64 = fetched.content,
+        buff = Buffer.from(base64, 'base64'),
+        html = buff.toString('utf8');
+      sendBack(html);
+    } catch (err) {
+      sendBack(local_html);
+    }
+
+  } else {
     sendBack(local_html);
   }
 
@@ -81,6 +82,7 @@ async function view(req, res, token = { access: 'public' }) {
   // const md = new Md(req.headers['user-agent']);
 
   function sendBack(html) {
+
     const tmpl = jsr.templates('./public/views/report.html');
 
     // Build the template with jsrender and send to client.

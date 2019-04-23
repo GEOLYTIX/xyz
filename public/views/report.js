@@ -17,7 +17,10 @@ function Report(_xyz) {
   const layer = _xyz.layers.list[report_params.layer];
   
   // Get template
-  const template = document.getElementById(report_params.template);
+  let template = document.getElementById(report_params.template);
+  
+  // Fallback
+  if(!template) template = document.getElementById('map_location');
 
   let templateContent = template.content;
 
