@@ -138,7 +138,10 @@ export default (_xyz, location) => () => {
     if (entry.type === 'images') return location.view.images(entry);
 
     // Create geometry control.
-    if (entry.type === 'geometry') return location.view.geometry(entry);    
+    if (entry.type === 'geometry') return location.view.geometry(entry);
+
+    // Create boolean control.
+    if (entry.type === 'boolean') return location.view.boolean(entry);    
 
     if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);
 

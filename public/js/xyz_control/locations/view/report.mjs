@@ -11,9 +11,7 @@ export default _xyz => entry => {
   entry.row.appendChild(
     _xyz.utils.hyperHTML.wire(name)`
     <td style="padding: 10px 0;" colSpan=2>
-      <a
-        style="color: #090;cursor:pointer;"
-        >${name.name}`
+      <a style="color: #090; cursor:pointer;">${name.name}`
   );
 
   entry.row.addEventListener('click', () => {
@@ -31,7 +29,8 @@ export default _xyz => entry => {
           resource: entry.report.resource || null
         },
         (entry.report[entry.report.resource] || null)
-        )), '_blank');
+      )), '_blank');
+
   });
 
 };

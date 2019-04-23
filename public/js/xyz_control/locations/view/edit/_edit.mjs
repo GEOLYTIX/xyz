@@ -8,8 +8,6 @@ import date from './date.mjs';
 
 import optionsTextInput from './optionsTextInput.mjs';
 
-import boolean from './boolean.mjs';
-
 export default _xyz => entry => {
 
   entry.ctrl = {
@@ -23,8 +21,6 @@ export default _xyz => entry => {
     suboptions: suboptions(_xyz),
 
     optionsTextInput: optionsTextInput(_xyz),
-
-    boolean: boolean(_xyz)
 
   };
 
@@ -58,8 +54,6 @@ export default _xyz => entry => {
       }
     }
   });
-
-  if(entry.type === 'boolean') return entry.ctrl.boolean(entry);
 
   // Create a text input if no other rule applies.
   _xyz.utils.createElement({

@@ -18,6 +18,8 @@ import report from './report.mjs';
 
 import update from './update.mjs';
 
+import boolean from './boolean.mjs';
+
 export default function(_xyz) {
 
   return {
@@ -35,6 +37,8 @@ export default function(_xyz) {
     geometry: geometry(_xyz),
 
     edit: edit(_xyz),
+
+    boolean: boolean(_xyz),
 
     tableDefinition: tableDefinition(_xyz),
 
