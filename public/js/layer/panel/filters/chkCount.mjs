@@ -19,6 +19,8 @@ export default (_xyz, layer) =>
 
       layer.filter.run_output.disabled = !(parseInt(e.target.response) > 1);
 
+      if (parseInt(e.target.response) > 1) layer.zoomToExtent();
+
     };
 
     xhr.send();
