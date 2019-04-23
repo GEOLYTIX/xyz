@@ -57,6 +57,8 @@ export default (_xyz, params) => {
       params.btn.Locate.classList.toggle('active');
     };
 
+    if (_xyz.workspace.locale.locate.default) params.btn.Locate.click();
+
     return params.btn.Locate;
 
   }

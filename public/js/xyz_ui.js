@@ -53,6 +53,4 @@ function init(_xyz) {
 
   logRocket(document.body.dataset.logrocket);
 
-  //document.head.appendChild(_xyz.utils.hyperHTML.wire()`<script src="/dev/js/foo.js">`);
-
 }

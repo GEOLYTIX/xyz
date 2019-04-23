@@ -33,16 +33,22 @@ export default (_xyz, layer) => {
           layer.show();
 
           // Split the bounds from response.
-          let bounds = e.target.responseText.split(',');
-        
+          const bounds = e.target.responseText.split(',');
+
+          const fGroup = [_xyz.L.polygon([
+            [bounds[1], bounds[0]],
+            [bounds[1], bounds[2]],
+            [bounds[3], bounds[2]],
+            [bounds[3], bounds[0]],
+          ])];
+
+          if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.L) fGroup.push(_xyz.mapview.locate.L);
+
           // Fly to the bounds.
-          _xyz.map.flyToBounds([[
-            parseFloat(bounds[1]), //south
-            parseFloat(bounds[0])  //west
-          ], [
-            parseFloat(bounds[3]), //north
-            parseFloat(bounds[2])  //east
-          ]]);
+          _xyz.map.flyToBounds(_xyz.L.featureGroup(fGroup).getBounds(),{
+            padding: [25, 25]
+          });
+        
         };
 
         xhr.send();
