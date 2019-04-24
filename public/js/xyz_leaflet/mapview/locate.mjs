@@ -24,7 +24,7 @@ export default _xyz => {
     // Remove the geolocation marker if _xyz.mapview.locate is not active.
     if (!_xyz.mapview.locate.active) {
       _xyz.map.removeLayer(_xyz.mapview.locate.L);
-      delete _xyz.mapview.locate.L;
+      //delete _xyz.mapview.locate.L;
       return;
     }
         

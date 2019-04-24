@@ -183,7 +183,7 @@ export default _xyz => () => {
 
     location.geometries.forEach(layer => allLayer.push(layer));
 
-    if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.L) allLayer.push(_xyz.mapview.locate.L);
+    if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) allLayer.push(_xyz.mapview.locate.L);
 
     _xyz.map.flyToBounds(_xyz.L.featureGroup(allLayer).getBounds(),{
       padding: [25, 25]

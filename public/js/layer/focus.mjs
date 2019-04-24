@@ -50,7 +50,7 @@ export default (_xyz, layer) => {
         [bounds[3], bounds[0]],
       ])];
 
-      if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.L) fGroup.push(_xyz.mapview.locate.L);
+      if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) fGroup.push(_xyz.mapview.locate.L);
 
       // Fly to the bounds.
       _xyz.map.flyToBounds(_xyz.L.featureGroup(fGroup).getBounds(),{
