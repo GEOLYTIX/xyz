@@ -2097,7 +2097,7 @@ i,
   visibility: hidden; }
 
 .displaynone {
-  display: none; }
+  display: none !important; }
 
 .bold {
   font-weight: 800; }

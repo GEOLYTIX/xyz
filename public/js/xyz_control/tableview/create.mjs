@@ -2,7 +2,7 @@ import assignBtn from './assignBtn.mjs';
 
 export default _xyz => params => {
 
-  if (!params.target) return console.error('No target for tableview!');
+  if (!params.target) return;
 
   _xyz.tableview.tables = [];
 
