@@ -42,7 +42,7 @@ export default (_xyz, layer) => {
   if (layer.tableview) panel_table(_xyz, layer);
 
   // Add cluster panel to dashboard.
-  if (layer.format === 'cluster') panel_cluster(_xyz, layer);
+  if (layer.format === 'cluster' && layer.cluster_panel) panel_cluster(_xyz, layer);
 
   // Add grid panel to dashboard.
   if (layer.format === 'grid') panel_grid(_xyz, layer);
