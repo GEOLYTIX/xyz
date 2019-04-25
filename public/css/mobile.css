@@ -1915,6 +1915,11 @@ button {
       cursor: pointer; }
     .listview .drawer .header.edited {
       background-image: linear-gradient(white, #cf9); }
+  .listview .drawer .meta {
+    margin-top: 5px; }
+    .listview .drawer .meta a {
+      color: #090;
+      font-weight: 600; }
   .listview .drawer .dashboard {
     border-bottom: 1px solid #333;
     font-size: 14px; }
@@ -1922,11 +1927,6 @@ button {
       font-family: ffmark_bold, sans-serif;
       font-size: 14px;
       margin-bottom: 7px; }
-    .listview .drawer .dashboard .meta {
-      margin-top: 5px; }
-      .listview .drawer .dashboard .meta a {
-        color: #090;
-        font-weight: 600; }
     .listview .drawer .dashboard .legend > svg {
       width: 100%; }
     .listview .drawer .dashboard .panel {

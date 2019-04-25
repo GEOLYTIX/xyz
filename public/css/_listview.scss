@@ -57,6 +57,13 @@
                 background-image: linear-gradient(white, #cf9);
             }
         }
+        .meta {
+            margin-top: 5px;
+            a {
+                color: $glxgreen;
+                font-weight: 600;
+            }
+        }
         .dashboard {
             border-bottom: 1px solid #333;
             font-size: 14px;
@@ -64,13 +71,6 @@
                 font-family: ffmark_bold, sans-serif;
                 font-size: 14px;
                 margin-bottom: 7px;
-            }
-            .meta {
-                margin-top: 5px;
-                a {
-                    color: $glxgreen;
-                    font-weight: 600;
-                }
             }
             .legend>svg {
                 width: 100%;

@@ -42,9 +42,20 @@ export default _xyz => {
       if (layer_hooks)  layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
       
       // Create new layer group if group does not exist yet.
-      if (layer.group && !_xyz.layers.listview.groups[layer.group]) layer_group(_xyz, layer.group);
+      if (layer.group && !_xyz.layers.listview.groups[layer.group]) layer_group(_xyz, layer);
 
       if (layer.group && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
+
+      if (layer.group && layer.groupmeta) {
+        _xyz.utils.createElement({
+          tag: 'p',
+          options: {
+            className: 'meta',
+            innerHTML: layer.groupmeta
+          },
+          appendTo: _xyz.layers.listview.groups[layer.group].meta
+        });
+      }
 
       // Create layer drawer.
       layer.drawer = _xyz.utils.createElement({
