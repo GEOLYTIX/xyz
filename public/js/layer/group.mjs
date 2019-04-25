@@ -69,7 +69,7 @@ export default (_xyz, layer) => {
     
         // Iterate through all layers and remove layer if layer is in group.
         Object.values(_xyz.layers.list).forEach(_layer => {
-          if (_layer.group === layer.group && _layer.display) layer.remove();
+          if (_layer.group === layer.group && _layer.display) _layer.remove();
         });
 
       }
