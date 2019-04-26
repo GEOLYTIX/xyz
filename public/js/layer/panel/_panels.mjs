@@ -50,7 +50,6 @@ export default (_xyz, layer) => {
   // Add filters panel.
   if (layer.infoj && layer.infoj.some(entry => entry.filter)) panel_filters(_xyz, layer);
 
-
   // Add styles panel.
   panel_style(_xyz, layer);
 

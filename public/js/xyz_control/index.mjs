@@ -6,7 +6,7 @@ import 'leaflet.vectorgrid';
 
 import * as utils from '../utils/_utils.mjs';
 
-import workspace from '../workspace.mjs';
+import workspace from './workspace.mjs';
 
 import layers from './layers/_layers.mjs';
 

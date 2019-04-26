@@ -85,7 +85,6 @@ export default _xyz => {
 
   };
 
-
   function admin(){
 
     const workspace = document.getElementById('workspace');
