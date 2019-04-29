@@ -41,7 +41,7 @@ export default (_xyz, layer) => {
   // Set layer theme to be the first theme defined in the workspace.
   layer.style.theme = Object.values(layer.style.themes)[0];
 
-  if(layer.style.theme) panel.classList.add('expanded');
+  // if(layer.style.theme) panel.classList.add('expanded');
 
   // Assign 'Basic' style entry to themes object.
   const themes = Object.assign({},{ 'Basic': null }, layer.style.themes);
@@ -88,16 +88,11 @@ export default (_xyz, layer) => {
       if (layer.style.default) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
   
       if (layer.style.highlight) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
-  
-      //return layer.get();
 
       return;
     }
 
     layer.style.setLegend(panel);
-    
-    
-    //layer.get();
   
   }
 

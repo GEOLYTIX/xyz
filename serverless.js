@@ -29,38 +29,38 @@ const fastify = require('fastify')({
 
 // Register fastify modules and routes.
 fastify
-  // .register(require('fastify-helmet'), {
-  //   contentSecurityPolicy: {
-  //     directives: {
-  //       defaultSrc: ['\'self\'', '*.logrocket.io'],
-  //       baseURI: ['\'self\''],
-  //       objectSrc: ['\'self\''],
-  //       workerSrc: ['\'self\'', 'blob:'],
-  //       frameSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com'],
-  //       formAction: ['\'self\''],
-  //       styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
-  //       fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-  //       scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
-  //       imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'data:']
-  //     },
-  //     setAllHeaders: true
-  //   },
-  //   // Must be set to false to allow iframe embeds.
-  //   frameguard: false,
-  //   noCache: true
-  // })
+  .register(require('fastify-helmet'), {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ['\'self\'', '*.logrocket.io'],
+        baseURI: ['\'self\''],
+        objectSrc: ['\'self\''],
+        workerSrc: ['\'self\'', 'blob:'],
+        frameSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com'],
+        formAction: ['\'self\''],
+        styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
+        fontSrc: ['\'self\'', 'fonts.gstatic.com'],
+        scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
+        imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'data:']
+      },
+      setAllHeaders: true
+    },
+    // Must be set to false to allow iframe embeds.
+    frameguard: false,
+    noCache: true
+  })
   .register(require('fastify-cors'), {
     origin: true
   })
   .register(require('fastify-formbody'))
-  // .register(require('fastify-static'), {
-  //   root: require('path').resolve(__dirname) + '/public',
-  //   prefix: env.path + '/public'
-  // })
+  .register(require('fastify-static'), {
+    root: require('path').resolve(__dirname) + '/public',
+    prefix: env.path// + '/public'
+  })
   .register(require('fastify-auth'))
   .decorate('login', require('./routes/login')(fastify))
   .decorate('authToken', require('./mod/authToken')(fastify))
-  .decorate('evalParam', require('./mod/evalParam')(fastify))
+  .decorate('evalParam', require('./mod/evalParam'))
   .register(require('fastify-jwt'), {
     secret: env.secret
   })

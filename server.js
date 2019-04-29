@@ -78,7 +78,7 @@ fastify
   .register(require('fastify-auth'))
   .decorate('login', require('./routes/login')(fastify))
   .decorate('authToken', require('./mod/authToken')(fastify))
-  .decorate('evalParam', require('./mod/evalParam')(fastify))
+  .decorate('evalParam', require('./mod/evalParam'))
   .register(require('fastify-jwt'), {
     secret: env.secret
   })
