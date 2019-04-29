@@ -1,23 +1,35 @@
-export default (input, entry, value) => {
+export default (param) => {
 
-  if (!entry.value) entry.value = '';
+  if(param.input.type === 'checkbox'){
 
-  // Create newValue if input value is different from entry value.
-  if (entry.value.toString() !== input.value) {
-
-    entry.newValue = value || input.value || '';
-    input.classList.add('changed');
-
+    if(!!param.entry.value !== !!param.input.checked){
+      
+      param.entry.newValue = param.value || param.input.checked || 'false';
+      param.input.parentNode.classList.add('changed');
+     
+    } else {
+      
+      delete param.entry.newValue;
+      param.input.parentNode.classList.remove('changed');
+    }
+  
   } else {
 
-    // Delete newValue if it is the same as the entry value.
-    delete entry.newValue;
+    if(!param.entry.value) param.entry.value = '';
+
+    if (param.entry.value.toString() !== param.input.value) {
+
+      param.entry.newValue = param.value || param.input.value || '';
+      param.input.classList.add('changed');
+
+    } else {
+      delete param.entry.newValue;
 
     // Change styling of input.
-    input.classList.remove('changed');
-
+    param.input.classList.remove('changed');
   }
+}
 
-  if (entry.location.showUpload) entry.location.showUpload();
+if (param.entry.location.showUpload) param.entry.location.showUpload();
 
-};
+}

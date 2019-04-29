@@ -52,7 +52,12 @@ export default (_xyz, params) => {
 
     params.btn.Locate.style.display = !_xyz.workspace.locale.locate ? 'none' : 'block';
 
-    params.btn.Locate.onclick = _xyz.mapview.locate.toggle;
+    params.btn.Locate.onclick = () => {
+      _xyz.mapview.locate.toggle();
+      params.btn.Locate.classList.toggle('active');
+    };
+
+    if (_xyz.workspace.locale.locate && _xyz.workspace.locale.locate.default) params.btn.Locate.click();
 
     return params.btn.Locate;
 

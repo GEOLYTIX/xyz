@@ -3,16 +3,29 @@
 
 <head data-dir="{{:dir}}">
     <title>{{:title}}</title>
-
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-control" content="no-cache">
 
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
     <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
+
+    <link rel="stylesheet" href="{{:dir}}/codemirror/codemirror.css">
+    <script src="{{:dir}}/codemirror/codemirror.js" defer></script>
+    <script src="{{:dir}}/codemirror/javascript.js" defer></script>
+    <script src="{{:dir}}/codemirror/jsonlint.js" defer></script>
+    <script src="{{:dir}}/codemirror/lint.js" defer></script>
+    <script src="{{:dir}}/codemirror/lintjson.js" defer></script>
+
+    <script src="{{:dir}}/js/build/xyz_ui_bundle.js" async></script>
 </head>
 
-<body data-viewmode="desktop" data-nanoid={{:nanoid}} data-log={{:log}} data-token={{:token}}>
+<body
+data-viewmode="desktop"
+data-nanoid={{:nanoid}}
+data-log={{:log}}
+data-user={{:user}}
+data-logrocket={{:logrocket}}
+data-token={{:token}}>
 
     <div class="listviews">
 
@@ -94,16 +107,19 @@
             </div>
 
             <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
-                <a href="{{:dir}}/auth/user/admin" target="_blank">
+                <a href="{{:dir}}/user/admin" target="_blank">
                     <i class="material-icons">supervisor_account</i>
                 </a>
             </div>
 
-            <div id="btnWorkspace" title="Open workspace configuration view" {{:btnAdmin}}>
-                <a href="{{:dir}}/workspace/admin" target="_blank">
-                    <i class="material-icons">settings</i>
-                </a>
+            <div id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
+                <i class="material-icons">settings</i>
+            </div>            
+
+            <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
+                <i class="material-icons">bug_report</i>
             </div>
+
         </div>
 
     </div>
@@ -112,7 +128,15 @@
 
         <div class="resize_bar"></div>
 
-        <nav class="nav_bar"><ul></ul></nav>
+        <nav class="nav_bar">
+            <ul class="nav_bar-nav"></ul>
+            <div class="tab-dropdown-container">
+                <button class="tab-dropdown">»</button>
+                <div class="tab-dropdown-content">
+                    <ul></ul>
+                </div>
+            </div>
+        </nav>
 
         <div class="table"></div>
 
@@ -121,13 +145,41 @@
             <div style="margin-top: -10px;">
                 <i id="toggleTableview" class="material-icons">vertical_align_top</i>
             </div>
+
+            <button id="btnTableViewport" style="display: none;">
+                <i class="material-icons">fullscreen</i>
+            </button>
                     
         </div>
 
     </div>
 
-</body>
+    <div id="workspace" class="workspace" style="display: none;">
 
-<script src="{{:dir}}/js/build/xyz_ui_bundle.js"></script>
+        <div class="btn_column noselect">
+        
+            <button id="btnCloseWS">
+                <i class="material-icons">clear</i>
+            </button>
+        
+            <button id="btnUploadWS">
+                <i class="material-icons">backup</i>
+            </button>
+        
+            <button id="btnFileWS">
+                <i class="material-icons">description</i>
+            </button>
+        
+            <input id="fileInputWS" type="file" accept=".json" style="display: none;">
+        
+        </div>
+
+        <div id="codemirror" class="codemirror"></div>
+
+    </div>
+
+    <div id="desktop_mask"></div>
+
+</body>
 
 </html>

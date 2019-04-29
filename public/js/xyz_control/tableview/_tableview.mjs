@@ -6,7 +6,11 @@ import removeTab from './removeTab.mjs';
 
 import locationTable from './locationTable.mjs';
 
+import orderedList from './orderedList.mjs';
+
 import layerTable from './layerTable.mjs';
+
+import resizeObserve from './resizeObserve.mjs';
 
 export default _xyz => {
 
@@ -22,7 +26,11 @@ export default _xyz => {
 
     locationTable: locationTable(_xyz),
 
-    layerTable: layerTable(_xyz)
+    orderedList: orderedList(_xyz),
+
+    layerTable: layerTable(_xyz),
+
+    resizeObserve: resizeObserve(_xyz)
 
   };
     

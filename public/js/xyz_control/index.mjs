@@ -6,7 +6,7 @@ import 'leaflet.vectorgrid';
 
 import * as utils from '../utils/_utils.mjs';
 
-import workspace from '../workspace.mjs';
+import workspace from './workspace.mjs';
 
 import layers from './layers/_layers.mjs';
 
@@ -51,7 +51,7 @@ export default async (params) => {
   // Fetch workspace if no callback is provided.
   await _xyz.workspace.fetchWS();
 
-  _xyz.workspace.loadLocale(params);
+  if (params.locale) _xyz.workspace.loadLocale(params);
 
   return _xyz;
 

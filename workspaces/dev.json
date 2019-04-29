@@ -25,6 +25,7 @@
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 },
                 "COUNTRIES": {
+                    "display": true,
                     "attribution": {
                         "Made with Natural Earth.": "https://www.naturalearthdata.com/"
                     },
@@ -77,6 +78,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "Name",
                             "field": "name",
                             "type": "text"
@@ -118,75 +122,75 @@
                             "type": "table",
                             "columns": [
                                 {
-                                  "title": "rows",
-                                  "field": "rows",
-                                  "rows": {
-                                    "age18_24": "'age18_24'",
-                                    "age25_44": "'age25_44'",
-                                    "total": "'total'"
-                                  }
+                                    "title": "rows",
+                                    "field": "rows",
+                                    "rows": {
+                                        "age18_24": "'age18_24'",
+                                        "age25_44": "'age25_44'",
+                                        "total": "'total'"
+                                    }
                                 },
                                 {
-                                  "title": "min15",
-                                  "field": "min15",
-                                  "with": {
-                                    "select": {
-                                      "age18_24": "sum(b.age18_24)",
-                                      "age25_44": "sum(b.age25_44)",
-                                      "total": "sum(b.pop__17)"
+                                    "title": "min15",
+                                    "field": "min15",
+                                    "with": {
+                                        "select": {
+                                            "age18_24": "sum(b.age18_24)",
+                                            "age25_44": "sum(b.age25_44)",
+                                            "total": "sum(b.pop__17)"
+                                        },
+                                        "from": "shepherd_neame.sites a, gb_hx_1k b",
+                                        "where": "a.id = 38 AND ST_INTERSECTS(a.isoline_15min, b.geomcntr)"
                                     },
-                                    "from": "shepherd_neame.sites a, gb_hx_1k b",
-                                    "where": "a.id = 38 AND ST_INTERSECTS(a.isoline_15min, b.geomcntr)"
-                                  },
-                                  "rows": {
-                                    "age18_24": "min15.age18_24",
-                                    "age25_44": "min15.age25_44",
-                                    "total": "min15.total"
-                                  }
+                                    "rows": {
+                                        "age18_24": "min15.age18_24",
+                                        "age25_44": "min15.age25_44",
+                                        "total": "min15.total"
+                                    }
                                 },
                                 {
-                                  "title": "uk",
-                                  "field": "uk",
-                                  "with": {
-                                    "select": {
-                                      "age18_24": "age_18to24_uk",
-                                      "age25_44": "age_25to29_uk + age_30to44_uk",
-                                      "total": "age_total_uk"
+                                    "title": "uk",
+                                    "field": "uk",
+                                    "with": {
+                                        "select": {
+                                            "age18_24": "age_18to24_uk",
+                                            "age25_44": "age_25to29_uk + age_30to44_uk",
+                                            "total": "age_total_uk"
+                                        },
+                                        "from": "shepherd_neame.report_summary"
                                     },
-                                    "from": "shepherd_neame.report_summary"
-                                  },
-                                  "rows": {
-                                    "age18_24": "uk.age18_24",
-                                    "age25_44": "uk.age25_44",
-                                    "total": "uk.total"
-                                  }
+                                    "rows": {
+                                        "age18_24": "uk.age18_24",
+                                        "age25_44": "uk.age25_44",
+                                        "total": "uk.total"
+                                    }
                                 },
                                 {
-                                  "title": "pct_15",
-                                  "field": "pct_15",
-                                  "rows": {
-                                    "age18_24": "min15.age18_24 / min15.total * 100",
-                                    "age25_44": "min15.age25_44 / min15.total * 100",
-                                    "total": "min15.total / min15.total * 100"
-                                  }
+                                    "title": "pct_15",
+                                    "field": "pct_15",
+                                    "rows": {
+                                        "age18_24": "min15.age18_24 / min15.total * 100",
+                                        "age25_44": "min15.age25_44 / min15.total * 100",
+                                        "total": "min15.total / min15.total * 100"
+                                    }
                                 },
                                 {
-                                  "title": "pct_uk",
-                                  "field": "pct_uk",
-                                  "rows": {
-                                    "age18_24": "uk.age18_24 / uk.total * 100",
-                                    "age25_44": "uk.age25_44 / uk.total * 100",
-                                    "total": "uk.total / uk.total * 100"
-                                  }
+                                    "title": "pct_uk",
+                                    "field": "pct_uk",
+                                    "rows": {
+                                        "age18_24": "uk.age18_24 / uk.total * 100",
+                                        "age25_44": "uk.age25_44 / uk.total * 100",
+                                        "total": "uk.total / uk.total * 100"
+                                    }
                                 },
                                 {
-                                  "title": "index",
-                                  "field": "index",
-                                  "rows": {
-                                    "age18_24": "(min15.age18_24 / min15.total) / (uk.age18_24 / uk.total) * 100",
-                                    "age25_44": "(min15.age25_44 / min15.total) / (uk.age25_44 / uk.total) * 100",
-                                    "total": "(min15.total / min15.total) / (uk.total / uk.total) * 100"
-                                  }
+                                    "title": "index",
+                                    "field": "index",
+                                    "rows": {
+                                        "age18_24": "(min15.age18_24 / min15.total) / (uk.age18_24 / uk.total) * 100",
+                                        "age25_44": "(min15.age25_44 / min15.total) / (uk.age25_44 / uk.total) * 100",
+                                        "total": "(min15.total / min15.total) / (uk.total / uk.total) * 100"
+                                    }
                                 }
                             ]
                         }
@@ -419,7 +423,7 @@
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
                 },
-                "offices": {
+                "Offices": {
                     "format": "geojson",
                     "dbs": "XYZ",
                     "table": "glx_offices",
@@ -453,6 +457,9 @@
                     },
                     "qID": "id",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "Address HTML",
                             "field": "address_html",
@@ -528,6 +535,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "Catchment Geometry",
                             "name": "Show / Hide",
                             "field": "catchment",
@@ -547,7 +557,7 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline_here": {
-                                    "range": 10
+                                    "minutes": 10
                                 }
                             }
                         },
@@ -577,7 +587,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.scratch",
-                    "mvt_cache": true,
+                    "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
                     "edit": {
                         "polygon": true,
@@ -590,6 +600,9 @@
                         "delete": true
                     },
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "Images",
                             "field": "images",
@@ -608,13 +621,13 @@
                             "type": "text",
                             "edit": {
                                 "options": [
-                                  "Open",
-                                  "Closed",
-                                  {
-                                    "Other": "text"
-                                  }
+                                    "Open",
+                                    "Closed",
+                                    {
+                                        "Other": "text"
+                                    }
                                 ]
-                              }
+                            }
                         }
                     ]
                 },
@@ -630,7 +643,7 @@
                         "12": "dev.oa",
                         "13": "dev.oa"
                     },
-                    "mvt_cache": true,
+                    "mvt_cache": "dev.oa__mvts",
                     "mvt_fields": [
                         "pop_11"
                     ],
@@ -675,6 +688,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "OA Code",
                             "field": "oacode",
                             "type": "text",
@@ -698,6 +714,16 @@
                         "8": null,
                         "9": "dev.retailplaces"
                     },
+                    "report": {
+                        "templates": {
+                            "Report 1": {
+                                "template": "default"
+                            },
+                            "Report 2": {
+                                "template": "default"
+                            }
+                        }
+                    },
                     "tableview": {
                         "tables": {
                             "Retail Places": {
@@ -720,7 +746,7 @@
                             }
                         }
                     },
-                    "mvt_cache": true,
+                    "mvt_cache": "dev.retailplaces__mvts",
                     "mvt_fields": [
                         "rp_type",
                         "pop__11"
@@ -869,6 +895,9 @@
                     },
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "ID",
                             "field": "id",
                             "type": "text",
@@ -977,6 +1006,17 @@
                     ]
                 },
                 "retail_points": {
+                    "roles": {
+                        "a": null,
+                        "foo": {
+                            "retailer": {
+                                "in": [
+                                    "Tesco",
+                                    "Sainsburys"
+                                ]
+                            }
+                        }
+                    },
                     "display": true,
                     "name": "Retail Points",
                     "format": "cluster",
@@ -984,13 +1024,6 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
-                    "access_filter": {
-                        "dbauszus@gmail.com": {
-                            "retailer": {
-                                "like": "Tesco"
-                            }
-                        }
-                    },
                     "tableview": {
                         "tables": {
                             "Retail Points": {
@@ -1017,9 +1050,6 @@
                         }
                     },
                     "filter": {
-                        "roles": {
-                            "n1": "some_filter"
-                        },
                         "infoj": [
                             {
                                 "label": "ID count",
@@ -1154,6 +1184,9 @@
                             "type": "streetview"
                         },
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "ID",
                             "field": "retailpoint_id",
                             "type": "text",
@@ -1208,6 +1241,35 @@
                             "label": "Households",
                             "field": "hhdooc_11",
                             "type": "integer"
+                        },
+                        {
+                            "field": "test_flag",
+                            "label": "Test boolean field",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "label": "Catchment 10min",
+                            "type": "label"
+                        },
+                        {
+                            "field": "catchment_10min",
+                            "fieldfx": "ST_asGeoJson(catchment_10min)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline_here": {
+                                    "minutes": 10
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#ffca28",
+                                "fillColor": "#ffca28",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2
+                            }
                         }
                     ]
                 },
@@ -1222,9 +1284,25 @@
                     "geom": "geom_4326",
                     "dbs": "XYZ",
                     "qID": "id",
-                    "table": "shepherd_neame.sites",
+                    "table": "mapp.sites",
                     "cluster_label": "pub_name",
                     "infoj": [
+                        {
+                            "type": "report",
+                            "report": {
+                                "template": "shneame",
+                                "resource": "github",
+                                "name": "Test site report",
+                                "github": {
+                                    "repo": "xyz_resources",
+                                    "owner": "geolytix",
+                                    "dir": "report_templates"
+                                }
+                            }
+                        },
+                        {
+                            "type": "key"
+                        },
                         {
                             "field": "pub_name",
                             "label": "Site Name",
@@ -1242,7 +1320,7 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline_here": {
-                                    "range": 5
+                                    "minutes": 5
                                 }
                             },
                             "style": {
@@ -1260,7 +1338,7 @@
                             "level": 1,
                             "type": "numeric",
                             "lookup": {
-                                "table_a": "shepherd_neame.sites",
+                                "table_a": "mapp.sites",
                                 "table_b": "gb_hx_1k",
                                 "geom_a": "isoline_5min",
                                 "geom_b": "geomcntr"
@@ -1273,7 +1351,7 @@
                             "level": 1,
                             "type": "integer",
                             "lookup": {
-                                "table_a": "shepherd_neame.sites",
+                                "table_a": "mapp.sites",
                                 "table_b": "shepherd_neame.food_beverage",
                                 "geom_a": "isoline_5min",
                                 "geom_b": "geom"
@@ -1286,6 +1364,743 @@
                             "level": 1,
                             "type": "numeric",
                             "withSelect": true
+                        },
+                        {
+                            "label": "Available tableviews",
+                            "type": "label",
+                            "hideInReport": true
+                        },
+                        {
+                            "type": "tableDefinition",
+                            "title": "Population Summary",
+                            "target_id": "xyz_table1",
+                            "columns": [
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "integer",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                }
+                            ],
+                            "rows": [
+                                {
+                                    "field": "pop__17",
+                                    "fieldfx": "SUM(b.pop__17)",
+                                    "title": "Current Population"
+                                },
+                                {
+                                    "field": "pop__11",
+                                    "fieldfx": "SUM(b.pop__11)",
+                                    "title": "Population 2011"
+                                },
+                                {
+                                    "field": "pop_growth",
+                                    "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
+                                    "title": "Population Growth"
+                                },
+                                {
+                                    "field": "students",
+                                    "fieldfx": "SUM(eac_student__11) + SUM(ein_student__11)",
+                                    "title": "Students"
+                                },
+                                {
+                                    "field": "non_white",
+                                    "fieldfx": "100*(SUM(pop__11) - SUM(ret_white_tot__11))/SUM(pop__11)",
+                                    "title": "% Non-White"
+                                },
+                                {
+                                    "field": "own_home",
+                                    "fieldfx": "100*SUM(own)/SUM(own+rent+social)",
+                                    "title": "Own Home"
+                                },
+                                {
+                                    "field": "private_rented",
+                                    "fieldfx": "100*SUM(rent)/SUM(own+rent+social)",
+                                    "title": "Private Rented"
+                                },
+                                {
+                                    "field": "social_rented",
+                                    "fieldfx": "100*SUM(social)/SUM(own+rent+social)",
+                                    "title": "Social Rented"
+                                },
+                                {
+                                    "field": "single_hhds",
+                                    "fieldfx": "100*SUM(pers1hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                                    "title": "Single Hhds"
+                                },
+                                {
+                                    "field": "hhds_two_ppl",
+                                    "fieldfx": "100*SUM(pers2hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                                    "title": "2 Person Hhds"
+                                },
+                                {
+                                    "field": "hhds_3plus",
+                                    "fieldfx": "100*SUM(pers2plushhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                                    "title": "3+ Hhds"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "tableDefinition",
+                            "title": "Worker Summary",
+                            "display": true,
+                            "target_id": "xyz_table8",
+                            "columns": [
+                                {
+                                    "type": "integer",
+                                    "title": "Total Workers",
+                                    "field": "workers",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                }
+                            ],
+                            "rows": [
+                                {
+                                    "field": "workers_250",
+                                    "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geomcntr,27700))<=250 then b.workers else 0 end)",
+                                    "title": "Workers 250m"
+                                },
+                                {
+                                    "field": "workers_500",
+                                    "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geomcntr,27700))<=500 then b.workers else 0 end)",
+                                    "title": "Workers 500m"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "tableDefinition",
+                            "title": "OAC Profile",
+                            "target_id": "xyz_table3",
+                            "display": true,
+                            "columns": [
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "numeric",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "numeric",
+                                    "field": "se_lon",
+                                    "aspatial": "oac_1a_se_lon, oac_1b_se_lon, oac_1c_se_lon, oac_2a_se_lon,oac_2b_se_lon, oac_2c_se_lon, oac_2d_se_lon, oac_3a_se_lon, oac_3b_se_lon, oac_3c_se_lon, oac_3d_se_lon, oac_4a_se_lon, oac_4b_se_lon, oac_4c_se_lon, oac_5a_se_lon, oac_5b_se_lon, oac_6a_se_lon, oac_6b_se_lon, oac_7a_se_lon, oac_7b_se_lon, oac_7c_se_lon, oac_7d_se_lon, oac_8a_se_lon, oac_8b_se_lon, oac_8c_se_lon, oac_8d_se_lon, oac_total_se_lon FROM shepherd_neame.report_summary"
+                                }
+                            ],
+                            "rows": [
+                                {
+                                    "field": "oac_1a",
+                                    "fieldfx": "round(SUM(CASE WHEN oac_group=1 THEN pop__17 ELSE 0 END))",
+                                    "title": "1a - Farming communities"
+                                },
+                                {
+                                    "field": "oac_1b",
+                                    "fieldfx": "round(sum(case when oac_group=2 then pop__17 else 0 end))",
+                                    "title": "1b - Rural tenants"
+                                },
+                                {
+                                    "field": "oac_1c",
+                                    "fieldfx": "round(sum(case when oac_group=3 then pop__17 else 0 end))",
+                                    "title": "1c - Ageing rural dwellers"
+                                },
+                                {
+                                    "field": "oac_2a",
+                                    "fieldfx": "round(sum(case when oac_group=4 then pop__17 else 0 end))",
+                                    "title": "2a - Students around campus"
+                                },
+                                {
+                                    "field": "oac_2b",
+                                    "fieldfx": "round(sum(case when oac_group=5 then pop__17 else 0 end))",
+                                    "title": "2b - Inner city students"
+                                },
+                                {
+                                    "field": "oac_2c",
+                                    "fieldfx": "round(sum(case when oac_group=6 then pop__17 else 0 end))",
+                                    "title": "2c - Comforable cosmopolitans"
+                                },
+                                {
+                                    "field": "oac_2d",
+                                    "fieldfx": "round(sum(case when oac_group=7 then pop__17 else 0 end))",
+                                    "title": "2d - Aspiring and affluent"
+                                },
+                                {
+                                    "field": "oac_3a",
+                                    "fieldfx": "round(sum(case when oac_group=8 then pop__17 else 0 end))",
+                                    "title": "3a - Ethnic family life"
+                                },
+                                {
+                                    "field": "oac_3b",
+                                    "fieldfx": "round(sum(case when oac_group=9 then pop__17 else 0 end))",
+                                    "title": "3b - Endeavouring ethnic mix"
+                                },
+                                {
+                                    "field": "oac_3c",
+                                    "fieldfx": "round(sum(case when oac_group=10 then pop__17 else 0 end))",
+                                    "title": "3c - Ethnic dynamics"
+                                },
+                                {
+                                    "field": "oac_3d",
+                                    "fieldfx": "round(sum(case when oac_group=11 then pop__17 else 0 end))",
+                                    "title": "3d - Aspirational techies"
+                                },
+                                {
+                                    "field": "oac_4a",
+                                    "fieldfx": "round(sum(case when oac_group=12 then pop__17 else 0 end))",
+                                    "title": "4a - Rented family living"
+                                },
+                                {
+                                    "field": "oac_4b",
+                                    "fieldfx": "round(sum(case when oac_group=13 then pop__17 else 0 end))",
+                                    "title": "4b - Challenged Asian terraces"
+                                },
+                                {
+                                    "field": "oac_4c",
+                                    "fieldfx": "round(sum(case when oac_group=14 then pop__17 else 0 end))",
+                                    "title": "4c - Asian traits"
+                                },
+                                {
+                                    "field": "oac_5a",
+                                    "fieldfx": "round(sum(case when oac_group=15 then pop__17 else 0 end))",
+                                    "title": "5a - Urban professionals and families"
+                                },
+                                {
+                                    "field": "oac_5b",
+                                    "fieldfx": "round(sum(case when oac_group=16 then pop__17 else 0 end))",
+                                    "title": "5b - Ageing urban living"
+                                },
+                                {
+                                    "field": "oac_6a",
+                                    "fieldfx": "round(sum(case when oac_group=17 then pop__17 else 0 end))",
+                                    "title": "6a - Suburban achievers"
+                                },
+                                {
+                                    "field": "oac_6b",
+                                    "fieldfx": "round(sum(case when oac_group=18 then pop__17 else 0 end))",
+                                    "title": "6b - Semi-detached suburbia"
+                                },
+                                {
+                                    "field": "oac_7a",
+                                    "fieldfx": "round(sum(case when oac_group=19 then pop__17 else 0 end))",
+                                    "title": "7a - Challenged diversity"
+                                },
+                                {
+                                    "field": "oac_7b",
+                                    "fieldfx": "round(sum(case when oac_group=20 then pop__17 else 0 end))",
+                                    "title": "7b - Constrained flat dwellers"
+                                },
+                                {
+                                    "field": "oac_7c",
+                                    "fieldfx": "round(sum(case when oac_group=21 then pop__17 else 0 end))",
+                                    "title": "7c - White communities"
+                                },
+                                {
+                                    "field": "oac_7d",
+                                    "fieldfx": "round(sum(case when oac_group=22 then pop__17 else 0 end))",
+                                    "title": "7d - Ageing city dwellers"
+                                },
+                                {
+                                    "field": "oac_8a",
+                                    "fieldfx": "round(sum(case when oac_group=23 then pop__17 else 0 end))",
+                                    "title": "8a - Industrious communities"
+                                },
+                                {
+                                    "field": "oac_8b",
+                                    "fieldfx": "round(sum(case when oac_group=24 then pop__17 else 0 end))",
+                                    "title": "8b - Challenged terraced workers"
+                                },
+                                {
+                                    "field": "oac_8c",
+                                    "fieldfx": "round(sum(case when oac_group=25 then pop__17 else 0 end))",
+                                    "title": "8c - Hard-pressed ageing workers"
+                                },
+                                {
+                                    "field": "oac_8d",
+                                    "fieldfx": "round(sum(case when oac_group=26 then pop__17 else 0 end))",
+                                    "title": "8d - Migration and churn"
+                                },
+                                {
+                                    "field": "oac_total",
+                                    "fieldfx": "round(sum(case when oac_group>0 then pop__17 else 0 end))",
+                                    "title": "Total"
+                                }
+                            ],
+                            "agg": {
+                                "share15": {
+                                    "title": "% with 15 min",
+                                    "type": "integer",
+                                    "rows": [
+                                        "100*min15.oac_1a/min15.oac_total",
+                                        "100*min15.oac_1b/min15.oac_total",
+                                        "100*min15.oac_1c/min15.oac_total",
+                                        "100*min15.oac_2a/min15.oac_total",
+                                        "100*min15.oac_2b/min15.oac_total",
+                                        "100*min15.oac_2c/min15.oac_total",
+                                        "100*min15.oac_2d/min15.oac_total",
+                                        "100*min15.oac_3a/min15.oac_total",
+                                        "100*min15.oac_3b/min15.oac_total",
+                                        "100*min15.oac_3c/min15.oac_total",
+                                        "100*min15.oac_3d/min15.oac_total",
+                                        "100*min15.oac_4a/min15.oac_total",
+                                        "100*min15.oac_4b/min15.oac_total",
+                                        "100*min15.oac_4c/min15.oac_total",
+                                        "100*min15.oac_5a/min15.oac_total",
+                                        "100*min15.oac_5b/min15.oac_total",
+                                        "100*min15.oac_6a/min15.oac_total",
+                                        "100*min15.oac_6b/min15.oac_total",
+                                        "100*min15.oac_7a/min15.oac_total",
+                                        "100*min15.oac_7b/min15.oac_total",
+                                        "100*min15.oac_7c/min15.oac_total",
+                                        "100*min15.oac_7d/min15.oac_total",
+                                        "100*min15.oac_8a/min15.oac_total",
+                                        "100*min15.oac_8b/min15.oac_total",
+                                        "100*min15.oac_8c/min15.oac_total",
+                                        "100*min15.oac_8d/min15.oac_total"
+                                    ]
+                                },
+                                "oac_se_lon_total": {
+                                    "title": "SE and London %",
+                                    "type": "integer",
+                                    "rows": [
+                                        "se_lon.oac_1a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_1b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_1c_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_2a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_2b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_2c_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_2d_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_3a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_3b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_3c_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_3d_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_4a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_4b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_4c_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_5a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_5b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_6a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_6b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_7a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_7b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_7c_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_7d_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_8a_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_8b_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_8c_se_lon*100/se_lon.oac_total_se_lon",
+                                        "se_lon.oac_8d_se_lon*100/se_lon.oac_total_se_lon"
+                                    ]
+                                },
+                                "oac_index": {
+                                    "title": "OAC Profile Index",
+                                    "type": "integer",
+                                    "formatter": "progress",
+                                    "formatterParams": {
+                                        "color": [
+                                            "#2196f3",
+                                            "orange",
+                                            "red"
+                                        ],
+                                        "max": 250
+                                    },
+                                    "width": 200,
+                                    "sorter": "number",
+                                    "rows": [
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_1a/min15.oac_total)/se_lon.oac_1a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_1b/min15.oac_total)/se_lon.oac_1b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_1c/min15.oac_total)/se_lon.oac_1c_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_2a/min15.oac_total)/se_lon.oac_2a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_2b/min15.oac_total)/se_lon.oac_2b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_2c/min15.oac_total)/se_lon.oac_2c_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_2d/min15.oac_total)/se_lon.oac_2d_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_3a/min15.oac_total)/se_lon.oac_3a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_3b/min15.oac_total)/se_lon.oac_3b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_3c/min15.oac_total)/se_lon.oac_3c_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_3d/min15.oac_total)/se_lon.oac_3d_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_4a/min15.oac_total)/se_lon.oac_4a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_4b/min15.oac_total)/se_lon.oac_4b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_4c/min15.oac_total)/se_lon.oac_4c_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_5a/min15.oac_total)/se_lon.oac_5a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_5b/min15.oac_total)/se_lon.oac_5b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_6a/min15.oac_total)/se_lon.oac_6a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_6b/min15.oac_total)/se_lon.oac_6b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_7a/min15.oac_total)/se_lon.oac_7a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_7b/min15.oac_total)/se_lon.oac_7b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_7c/min15.oac_total)/se_lon.oac_7c_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_7d/min15.oac_total)/se_lon.oac_7d_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_8a/min15.oac_total)/se_lon.oac_8a_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_8b/min15.oac_total)/se_lon.oac_8b_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_8c/min15.oac_total)/se_lon.oac_8c_se_lon",
+                                        "se_lon.oac_total_se_lon*(100*min15.oac_8d/min15.oac_total)/se_lon.oac_8d_se_lon"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "tableDefinition",
+                            "title": "Age Profile",
+                            "display": true,
+                            "target_id": "xyz_table2",
+                            "chart": {
+                                "type": "horizontalBar",
+                                "active": true,
+                                "field": "age_index"
+                            },
+                            "columns": [
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "numeric",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "numeric",
+                                    "field": "uk",
+                                    "aspatial": "age_under_18_se_lon, age_18to24_se_lon, age_25to29_se_lon, age_30to44_se_lon, age_45to59_se_lon, age_60plus_se_lon, age_total_se_lon FROM shepherd_neame.report_summary"
+                                }
+                            ],
+                            "rows": [
+                                {
+                                    "field": "age_under_18",
+                                    "title": "< 18",
+                                    "fieldfx": "round(SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus))"
+                                },
+                                {
+                                    "field": "age_18to24",
+                                    "fieldfx": "round(SUM(age_18to19__11 + age_20to24__11))",
+                                    "title": "18 to 24"
+                                },
+                                {
+                                    "field": "age_25to29",
+                                    "fieldfx": "round(SUM(age_25to29__11))",
+                                    "title": "25 to 29"
+                                },
+                                {
+                                    "field": "age_30to44",
+                                    "fieldfx": "round(SUM(age_30to44__11))",
+                                    "title": "30 to 44"
+                                },
+                                {
+                                    "field": "age_45to59",
+                                    "fieldfx": "round(SUM(age_45to59__11))",
+                                    "title": "45 to 59"
+                                },
+                                {
+                                    "field": "age_60plus",
+                                    "fieldfx": "round(SUM(age60plus))",
+                                    "title": "60+"
+                                },
+                                {
+                                    "field": "age_profile_total",
+                                    "fieldfx": "round(SUM(pop__11))",
+                                    "title": "Total"
+                                }
+                            ],
+                            "agg": {
+                                "share15": {
+                                    "title": "% with 15 min",
+                                    "type": "integer",
+                                    "rows": [
+                                        "100*min15.age_under_18/min15.age_profile_total",
+                                        "100*min15.age_18to24/min15.age_profile_total",
+                                        "100*min15.age_25to29/min15.age_profile_total",
+                                        "100*min15.age_30to44/min15.age_profile_total",
+                                        "100*min15.age_45to59/min15.age_profile_total",
+                                        "100*min15.age_60plus/min15.age_profile_total",
+                                        "100*min15.age_profile_total/min15.age_profile_total"
+                                    ]
+                                },
+                                "age_se_lon_total": {
+                                    "title": "SE and London %",
+                                    "type": "integer",
+                                    "rows": [
+                                        "uk.age_under_18_se_lon*100/uk.age_total_se_lon",
+                                        "uk.age_18to24_se_lon*100/uk.age_total_se_lon",
+                                        "uk.age_25to29_se_lon*100/uk.age_total_se_lon",
+                                        "uk.age_30to44_se_lon*100/uk.age_total_se_lon",
+                                        "uk.age_45to59_se_lon*100/uk.age_total_se_lon",
+                                        "uk.age_60plus_se_lon*100/uk.age_total_se_lon",
+                                        "uk.age_total_se_lon*100/uk.age_total_se_lon"
+                                    ]
+                                },
+                                "age_index": {
+                                    "title": "Age Profile Index",
+                                    "type": "integer",
+                                    "formatter": "progress",
+                                    "formatterParams": {
+                                        "color": [
+                                            "#2196f3",
+                                            "orange",
+                                            "red"
+                                        ],
+                                        "max": 250
+                                    },
+                                    "width": 200,
+                                    "sorter": "number",
+                                    "rows": [
+                                        "uk.age_total_se_lon*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_se_lon",
+                                        "uk.age_total_se_lon*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_se_lon",
+                                        "uk.age_total_se_lon*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_se_lon",
+                                        "uk.age_total_se_lon*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_se_lon",
+                                        "uk.age_total_se_lon*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_se_lon",
+                                        "uk.age_total_se_lon*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_se_lon",
+                                        "uk.age_total_se_lon*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_se_lon"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "tableDefinition",
+                            "title": "Social Grade",
+                            "display": true,
+                            "target_id": "xyz_table4",
+                            "chart": {
+                                "type": "horizontalBar",
+                                "active": true,
+                                "field": "sg_index",
+                                "backgroundColor": [
+                                    "#8e24aa",
+                                    "#1e88e5",
+                                    "#00897b",
+                                    "#ff8a65",
+                                    "#a1887f",
+                                    "#78909c"
+                                ]
+                            },
+                            "columns": [
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "numeric",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "mapp.sites",
+                                        "table_b": "gb_hx_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geomcntr"
+                                    }
+                                },
+                                {
+                                    "type": "numeric",
+                                    "field": "uk",
+                                    "aspatial": "social_grade_ab_se_lon, social_grade_c1_se_lon, social_grade_c2_se_lon, social_grade_de_se_lon, social_grade_total_se_lon FROM shepherd_neame.report_summary"
+                                }
+                            ],
+                            "rows": [
+                                {
+                                    "field": "sg_ab",
+                                    "fieldfx": "round(SUM(ski_ab__11))",
+                                    "title": "AB"
+                                },
+                                {
+                                    "field": "sg_c1",
+                                    "fieldfx": "round(SUM(ski_c1__11))",
+                                    "title": "C1"
+                                },
+                                {
+                                    "field": "sg_c2",
+                                    "fieldfx": "round(SUM(ski_c2__11))",
+                                    "title": "C2"
+                                },
+                                {
+                                    "field": "sg_de",
+                                    "fieldfx": "round(SUM(ski_de__11))",
+                                    "title": "DE"
+                                },
+                                {
+                                    "field": "sg_total",
+                                    "fieldfx": "round(SUM(ski_hrp_base__11))",
+                                    "title": "Total"
+                                }
+                            ],
+                            "agg": {
+                                "share15": {
+                                    "title": "% with 15 min",
+                                    "type": "integer",
+                                    "rows": [
+                                        "100*min15.sg_ab/min15.sg_total",
+                                        "100*min15.sg_c1/min15.sg_total",
+                                        "100*min15.sg_c2/min15.sg_total",
+                                        "100*min15.sg_de/min15.sg_total",
+                                        "100*min15.sg_total/min15.sg_total"
+                                    ]
+                                },
+                                "sg_se_lon_total": {
+                                    "title": "SE and London %",
+                                    "type": "integer",
+                                    "rows": [
+                                        "uk.social_grade_ab_se_lon*100/uk.social_grade_total_se_lon",
+                                        "uk.social_grade_c1_se_lon*100/uk.social_grade_total_se_lon",
+                                        "uk.social_grade_c2_se_lon*100/uk.social_grade_total_se_lon",
+                                        "uk.social_grade_de_se_lon*100/uk.social_grade_total_se_lon",
+                                        "uk.social_grade_total_se_lon*100/uk.social_grade_total_se_lon"
+                                    ]
+                                },
+                                "sg_index": {
+                                    "title": "Social Grade Index",
+                                    "type": "integer",
+                                    "formatter": "progress",
+                                    "formatterParams": {
+                                        "color": [
+                                            "#2196f3",
+                                            "orange",
+                                            "red"
+                                        ],
+                                        "max": 250
+                                    },
+                                    "width": 200,
+                                    "sorter": "number",
+                                    "rows": [
+                                        "uk.social_grade_total_se_lon*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_se_lon",
+                                        "uk.social_grade_total_se_lon*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_se_lon",
+                                        "uk.social_grade_total_se_lon*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_se_lon",
+                                        "uk.social_grade_total_se_lon*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_se_lon",
+                                        "uk.social_grade_total_se_lon*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_se_lon"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "orderedList",
+                            "title": "Nearest competitors",
+                            "display": true,
+                            "table": "shepherd_neame.food_beverage",
+                            "target_id": "xyz_table5",
+                            "geom": "geom",
+                            "columns": [
+                                {
+                                    "title": "Competitor name",
+                                    "field": "fascia"
+                                },
+                                {
+                                    "title": "Category",
+                                    "field": "rlcategory"
+                                },
+                                {
+                                    "title": "Postcode",
+                                    "field": "postcode"
+                                },
+                                {
+                                    "title": "Retail place type",
+                                    "field": "rp_type"
+                                },
+                                {
+                                    "type": "integer",
+                                    "geography": true,
+                                    "title": "Distance (m)",
+                                    "fx": "ST_DISTANCE",
+                                    "field": "dist",
+                                    "orderby": true
+                                }
+                            ],
+                            "order": "ASC",
+                            "limit": 8
+                        },
+                        {
+                            "type": "streetview",
+                            "hideInReport": true
                         }
                     ],
                     "style": {
@@ -1303,6 +2118,114 @@
                             "layers": {
                                 "0.75": "#EEE",
                                 "0.50": "#2364AA"
+                            }
+                        }
+                    }
+                },
+                "poi": {
+                    "name": "Points of Interest",
+                    "meta": "A subset of collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, car parks, cinemas and service areas.",
+                    "attribution": [
+                        "Point of Interest. Geolytix License."
+                    ],
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "mapp.poi",
+                    "qID": "id",
+                    "geom": "geom_4326",
+                    "cluster_label": "poi_name",
+                    "cluster_kmeans": 0.1,
+                    "cluster_dbscan": 0.05,
+                    "infoj": [
+                        {
+                            "field": "poi_type",
+                            "label": "Category",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_name",
+                            "label": "Name",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_fascia",
+                            "label": "Brand",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_flag",
+                            "label": "Type",
+                            "inline": true
+                        },
+                        {
+                            "field": "poi_address",
+                            "label": "Address",
+                            "inline": true
+                        },
+                        {
+                            "field": "postcode",
+                            "label": "Postcode",
+                            "inline": true
+                        },
+                        {
+                            "field": "town",
+                            "label": "Town",
+                            "inline": true
+                        },
+                        {
+                            "field": "locality",
+                            "label": "locality",
+                            "inline": true
+                        },
+                        {
+                            "type": "streetview"
+                        }
+                    ],
+                    "style": {
+                        "markerMin": 40,
+                        "anchor": [
+                            20,
+                            40
+                        ],
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#C2095A"
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#C2095A"
+                        },
+                        "themes": {
+                            "POI Type": {
+                                "field": "poi_type",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "Airport": {
+                                        "label": "Airport",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_transport_airport.svg?sanitize=true"
+                                    },
+                                    "Cinema": {
+                                        "label": "Cinema",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_entertainment_cinema.svg?sanitize=true"
+                                    },
+                                    "Hospital": {
+                                        "label": "Hospital",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_health_hospital.svg?sanitize=true"
+                                    },
+                                    "Pharmacy": {
+                                        "label": "Pharmacy",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_health_pharmacy.svg?sanitize=true"
+                                    },
+                                    "Sport and Leisure": {
+                                        "label": "Sport and Leisure",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_sports_leisure_sports_centre.svg?sanitize=true"
+                                    },
+                                    "Stadium": {
+                                        "label": "Stadium",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_entertainment_stadium.svg?sanitize=true"
+                                    }
+                                }
                             }
                         }
                     }
@@ -1379,6 +2302,9 @@
                     "qID": "id",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "label": "rpid",
                             "field": "rpid",
                             "type": "numeric"
@@ -1412,6 +2338,9 @@
                     },
                     "qID": "id",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "vname_eng",
                             "field": "vname_eng",
@@ -1469,6 +2398,9 @@
                     },
                     "qID": "id",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "label": "brand_flagship",
                             "field": "brand_flagship",

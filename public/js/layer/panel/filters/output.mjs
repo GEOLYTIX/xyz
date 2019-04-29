@@ -1,16 +1,16 @@
 export default (_xyz, panel, layer) => _xyz.utils.createElement({
-  tag: 'div',
+  tag: 'button',
   options: {
-    className: 'btn_wide cursor noselect',
+    className: 'btn_wide noselect',
     textContent: 'Run Output',
-  },
-  style: {
-    display: 'none'
+    disabled: true
   },
   appendTo: panel,
   eventListener: {
     event: 'click',
-    funct: () => {
+    funct: e => {
+
+      if (e.target.disabled) return;
     
       const xhr = new XMLHttpRequest();
 
@@ -30,23 +30,23 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
         }));
     
       xhr.onload = e => {
-
+  
         if (e.target.status !== 200) return;
-
+    
         const record = _xyz.locations.listview.getFreeRecord();
-
+    
         if (!record) return;
-
+    
         const json = JSON.parse(e.target.response);
-
+    
         const location = {
           geometry: JSON.parse(json.geomj),
           infoj: json.infoj,
           layer: layer.key
         };
-
+    
         Object.assign(location, _xyz.locations.location());
-
+    
         location.style = {
           color: record.color,
           fillColor: record.color,
@@ -54,19 +54,19 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
           stroke: true,
           fill: false
         };
-
+    
         location.view = location.view(_xyz);
-
+    
         location.view.update();
-
+    
         // Draw the location to the map.
         location.draw();
 
         if(!location.geometry.coordinates.length){
-          alert('Not enough features found to calculate aggregate data.');
+          alert('Not enough features found to calculate aggregate data. Try zooming to layer extent.');
           return;
         }
-
+    
         location.Marker = _xyz.mapview.draw.geoJSON({
           json: {
             type: 'Feature',
@@ -90,14 +90,14 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
             }
           }
         });
-
+    
         location.flyTo();
-
+    
         record.location = location;
-
+    
         // List the record
         _xyz.locations.listview.add(record);
-
+    
       };
     
       xhr.send();

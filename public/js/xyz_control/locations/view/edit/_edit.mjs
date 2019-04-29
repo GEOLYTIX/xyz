@@ -49,7 +49,8 @@ export default _xyz => entry => {
     eventListener: {
       event: 'keyup',
       funct: e => {
-        entry.location.view.valChange(e.target, entry);
+        //entry.location.view.valChange(e.target, entry);
+        entry.location.view.valChange({input: e.target, entry: entry});
       }
     }
   });
@@ -65,7 +66,8 @@ export default _xyz => entry => {
     eventListener: {
       event: 'keyup',
       funct: e => {
-        entry.location.view.valChange(e.target, entry);
+        //entry.location.view.valChange(e.target, entry);
+        entry.location.view.valChange({input: e.target, entry: entry});
       }
     }
   });

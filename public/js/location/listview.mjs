@@ -82,6 +82,10 @@ export default _xyz => {
   // Overwrite locations select method.
   _xyz.locations.select = (location, flyTo) => {
 
+    const existingRecord = getRecord(location);
+
+    if (existingRecord) return existingRecord.clear();
+
     const record = _xyz.locations.listview.getFreeRecord();
   
     if (!record) return;
@@ -194,6 +198,19 @@ export default _xyz => {
     return freeRecords[0];
   };
 
+  function getRecord(location) {
+
+    // Find free records in locations array.
+    const records = _xyz.locations.listview.list.filter(record => record.location);
+
+    const record = records.filter(record => record.location.id === location.id && record.location.layer === location.layer);
+
+    // Return from selection if no free record is available.
+    if (record.length === 0) return null;
+  
+    // Return the matching record.
+    return record[0];
+  };
 
   // Init sequence to be called on locale init;
   function init() {

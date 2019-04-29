@@ -1,50 +1,57 @@
+const env = require('../../../../mod/env');
+
+const sql_filter = require('../../../../mod/pg/sql_filter');
+
+const sql_fields = require('../../../../mod/pg/sql_fields');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/select/aggregate',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+    ],
     handler: async (req, res) => {
     
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      if (!layer) return res.code(500).send('Layer not found.');
-
-      const table = req.query.table;
-
-      if (!table) return res.code(500).send('Table not found.');
-
-      const filter = JSON.parse(req.query.filter);
+      let
+        layer = req.params.layer,
+        table = req.query.table,
+        filter = req.params.filter;
 
       const geom_extent = layer.geom ?
         `ST_Extent(${layer.geom})` :
         layer.geom_3857 ?
           `ST_Transform(ST_SetSRID(ST_Extent(${layer.geom_3857}), 3857), 4326)`:
-          null;
-
-
-      const access_filter = layer.access_filter
-          && token.email
-          && layer.access_filter[token.email.toLowerCase()] ?
-        layer.access_filter[token.email] :
-        null;
-  
-      Object.assign(filter, access_filter);
-    
+          null;    
 
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await sql_filter(filter) || '';
 
       const infoj = layer.filter.infoj;
 
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj);
+      const fields = await sql_fields([], infoj);
 
       
       var q = `
@@ -91,7 +98,7 @@ module.exports = fastify => {
         FROM ${table}
         WHERE true ${filter_sql};`;
       
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

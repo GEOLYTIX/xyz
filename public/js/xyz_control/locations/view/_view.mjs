@@ -12,9 +12,13 @@ import valChange from './edit/valChange.mjs';
 
 import tableDefinition from './tableDefinition.mjs';
 
+import orderedList from './orderedList.mjs';
+
 import report from './report.mjs';
 
 import update from './update.mjs';
+
+import boolean from './boolean.mjs';
 
 export default function(_xyz) {
 
@@ -34,7 +38,11 @@ export default function(_xyz) {
 
     edit: edit(_xyz),
 
+    boolean: boolean(_xyz),
+
     tableDefinition: tableDefinition(_xyz),
+
+    orderedList: orderedList(_xyz),
 
     report: report(_xyz),
 

@@ -2,7 +2,7 @@ import assignBtn from './assignBtn.mjs';
 
 export default _xyz => params => {
 
-  if (!params.target) return console.error('No target for tableview!');
+  if (!params.target) return;
 
   _xyz.tableview.tables = [];
 
@@ -46,7 +46,10 @@ export default _xyz => params => {
     window.addEventListener('touchend', stopResizeTouch);
   });
       
-  _xyz.tableview.nav_bar = _xyz.tableview.node.querySelector('.nav_bar > ul');
+  _xyz.tableview.nav_bar = _xyz.tableview.node.querySelector('.nav_bar > ul.nav_bar-nav');
+  _xyz.tableview.nav_dropdown = _xyz.tableview.node.querySelector('.nav_bar .tab-dropdown-content ul'); 
+  _xyz.tableview.nav_dropdown_content = _xyz.tableview.node.querySelector('.nav_bar .tab-dropdown-content');
+  _xyz.tableview.nav_dropdown_btn = _xyz.tableview.node.querySelector('.nav_bar .tab-dropdown');
 
   _xyz.tableview.nav_bar.innerHTML = '';
 
@@ -55,7 +58,7 @@ export default _xyz => params => {
   // Augment viewChangeEnd method to update table.
   _xyz.mapview.changeEnd = _xyz.utils.compose(
     _xyz.mapview.changeEnd,
-    () => _xyz.tableview.current_table && _xyz.tableview.current_table.update(),
+    () => _xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update(),
   );
 
   // Resize the tableview container
@@ -94,6 +97,7 @@ export default _xyz => params => {
     }
   
     _xyz.tableview.node.style.height = height + 'px';
+
   }
   
   // Remove eventListener after resize event.
@@ -114,5 +118,12 @@ export default _xyz => params => {
      
     _xyz.tableview.current_table.Tabulator.redraw(true);
   }
+
+  // Show or hide dropdown with collapsed tabs
+  _xyz.tableview.nav_dropdown_btn.addEventListener('click', e => {
+    _xyz.tableview.nav_dropdown_content.classList.toggle('show');
+  });
+
+  _xyz.tableview.resizeObserve();
      
 };

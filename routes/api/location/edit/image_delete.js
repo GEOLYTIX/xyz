@@ -1,20 +1,58 @@
+const env = require('../../../../mod/env');
+
+const crypto = require('crypto');
+
+const request = require('request');
+
 module.exports = fastify => {
+  
   fastify.route({
     method: 'GET',
     url: '/api/location/edit/images/delete',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          id: { type: 'string' },
+          field: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'id', 'field']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
+    ],
     handler: (req, res) => {
 
-      const cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [];
-
       let
+        layer = req.params.layer,
+        table = req.query.table,
+        qID = layer.qID,
+        id = req.query.id,
+        field = req.query.field,
+        image_src = decodeURIComponent(req.query.image_src),
         ts = Date.now(),
-        sig = require('crypto').createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
+        sig = crypto.createHash('sha1').update(`public_id=${req.query.image_id}&timestamp=${ts}${env.cloudinary[1]}`).digest('hex');
 
-      require('request').post({
-        url: `https://api.cloudinary.com/v1_1/${cloudinary[2]}/image/destroy`,
+      request.post({
+        url: `https://api.cloudinary.com/v1_1/${env.cloudinary[2]}/image/destroy`,
         body: {
-          'api_key': cloudinary[0],
+          'api_key': env.cloudinary[0],
           'public_id': req.query.image_id,
           'timestamp': ts,
           'signature': sig
@@ -24,32 +62,18 @@ module.exports = fastify => {
 
         if (err) return console.error(err);
 
-        const token = req.query.token ?
-          fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-        let
-          layer = global.workspace[token.access].config.locales[req.query.locale].layers[req.query.layer],
-          table = req.query.table,
-          field = req.query.field,
-          qID = layer.qID ? layer.qID : 'id',
-          id = req.query.id,
-          image_src = decodeURIComponent(req.query.image_src);
-
-        // Check whether string params are found in the settings to prevent SQL injections.
-        if ([table, qID]
-          .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-          return res.code(406).send('Invalid parameter.');
-        }
-
         var q = `
-        UPDATE ${table} SET ${field} = array_remove(${field}, '${image_src}')
-        WHERE ${qID} = $1;`;
+          UPDATE ${table}
+          SET ${field} = array_remove(${field}, '${image_src}')
+          WHERE ${qID} = $1;`;
 
-        await global.pg.dbs[layer.dbs](q, [id]);
+        await env.dbs[layer.dbs](q, [id]);
 
         res.code(200).send('Image deleted.');
+        
       });
 
     }
+
   });
 };

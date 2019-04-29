@@ -1,32 +1,45 @@
+const gaz_locale = require('../../../mod/gazetteer/locale');
+
+const gaz_google = require('../../../mod/gazetteer/google');
+
+const gaz_mapbox = require('../../../mod/gazetteer/mapbox');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/gazetteer/autocomplete',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          locale: { type: 'string' },
+          q: { type: 'string' },
+        },
+        required: ['locale', 'q']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
+      const locale = req.params.locale;
 
-      // Set locale from workspace and access token.
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-      
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-      
       // Return 406 is gazetteer is not found in locale.
-      if (!locale.gazetteer) return res.code(406).send('Gazetteer not defined for locale.');
-
-      // Set search term from query parameter.
-      // Return 406 if search term is missing.
-      const term = req.query.q;
-      if (!term) return res.code(406).send('No serch term.');
+      if (!locale.gazetteer) return res.code(400).send(new Error('Gazetteer not defined for locale.'));
 
       // Create an empty results object to be populated with the results from the different gazetteer methods.
       let results = [];
 
       // Locale gazetteer which can query datasources in the same locale.
       if (locale.gazetteer.datasets) {
-        results = await require(global.appRoot + '/mod/gazetteer/locale')(term, locale);
+        results = await gaz_locale(req, locale);
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);
@@ -37,7 +50,7 @@ module.exports = fastify => {
 
       // Query Google Maps API
       if (locale.gazetteer.provider === 'GOOGLE') {
-        results = await require(global.appRoot + '/mod/gazetteer/google')(term, locale.gazetteer);
+        results = await gaz_google(req.query.q, locale.gazetteer);
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);
@@ -45,7 +58,7 @@ module.exports = fastify => {
 
       // Query Mapbox Geocoder API
       if (locale.gazetteer.provider === 'MAPBOX') {
-        results = await require(global.appRoot + '/mod/gazetteer/mapbox')(term, locale.gazetteer);
+        results = await gaz_mapbox(req.query.q, locale.gazetteer);
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);

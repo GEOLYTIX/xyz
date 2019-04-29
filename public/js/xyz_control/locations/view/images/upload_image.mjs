@@ -5,10 +5,10 @@ export default _xyz => (entry, img, dataURL) => {
   const xhr = new XMLHttpRequest();
 
   xhr.open('POST', _xyz.host + '/api/location/edit/images/upload?' + _xyz.utils.paramString({
-    dbs: _xyz.layers.list[entry.location.layer].dbs,
+    locale: _xyz.workspace.locale.key,
+    layer: entry.location.layer,
     table: entry.location.table,
     field: entry.field,
-    qID: entry.location.qID,
     id: entry.location.id,
     token: _xyz.token
   }));

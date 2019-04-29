@@ -34,7 +34,7 @@ export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.
 
 export {setStrokeWeight} from './setStrokeWeight.mjs';
 
-export const compose = (...fns) => () => fns.forEach(f=>f());
+export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
 export {default as hyperHTML} from 'hyperhtml/esm';
 

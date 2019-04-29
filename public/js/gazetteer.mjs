@@ -44,8 +44,8 @@ export default _xyz => {
   };
 
   // Toggle visibility of the gazetteer group
-  _xyz.gazetteer.toggle.addEventListener('click', e => {
-    e.target.classList.toggle('active');
+  _xyz.gazetteer.toggle.addEventListener('click', () => {
+    _xyz.gazetteer.toggle.classList.toggle('active');
     _xyz.gazetteer.group.style.display =
             _xyz.gazetteer.group.style.display === 'block' ? 'none' : 'block';
 
@@ -62,10 +62,8 @@ export default _xyz => {
 
     if (key !== 37 && key !== 38 && key !== 39 && key !== 40 && key !== 13 && term.length > 0 && isNaN(term.value)) {
 
-    //initiate search if either split value is not a number
-      let NaN_check = e.target.value.split(',').map(isNaN);
       if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
-      if (NaN_check[0] || NaN_check[1]) search(term);
+      search(term);
     }
   });
 
@@ -102,6 +100,8 @@ export default _xyz => {
     // Get possible coordinates from input and draw location if valid
       let latlng = e.target.value.split(',').map(parseFloat);
       if ((latlng[1] > -90 && latlng[1] < 90) && (latlng[0] > -180 && latlng[0] < 180)) {
+        if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
+        results = [];
         _xyz.gazetteer.result.innerHTML = '';
         createFeature({
           type: 'Point',
@@ -161,7 +161,7 @@ export default _xyz => {
       if (e.target.status !== 200) return;
       
       // Parse the response as JSON and check for results length.
-      let json = e.target.response;
+      const json = e.target.response;
 
       if (json.length === 0) {
         _xyz.utils.createElement({
@@ -221,15 +221,17 @@ export default _xyz => {
   
     if (record['data-source'] === 'google') {
   
-    // Get the geometry from the gazetteer database.
-      let xhr = new XMLHttpRequest();
+      // Get the geometry from the gazetteer database.
+      const xhr = new XMLHttpRequest();
   
       xhr.open('GET', _xyz.host + '/api/gazetteer/googleplaces?id=' + record['data-id'] + '&token=' + _xyz.token);
+
+      xhr.responseType = 'json';
   
       xhr.onload = e => {
   
       // Send results to createFeature
-        if (e.target.status === 200) createFeature(JSON.parse(e.target.responseText));
+        if (e.target.status === 200) createFeature(e.target.response);
   
       };
       xhr.send();

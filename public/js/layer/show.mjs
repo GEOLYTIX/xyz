@@ -11,7 +11,7 @@ export default (_xyz, layer) => {
     if (layer.group) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
 
     // Iterate through tables to check whether table should be shown.
-    if (layer.tableview) Object.keys(layer.tableview.tables).forEach(
+    if (layer.tableview && _xyz.tableview.node) Object.keys(layer.tableview.tables).forEach(
       key => {
 
         const table = layer.tableview.tables[key];

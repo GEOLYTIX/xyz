@@ -1,3 +1,5 @@
+const env = require('../env');
+
 module.exports = async (term, gazetteer) => {
 
   //https://developers.google.com/places/web-service/autocomplete
@@ -6,10 +8,10 @@ module.exports = async (term, gazetteer) => {
   const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
           + `${gazetteer.code ? '&components=country:' + gazetteer.code : ''}`
           + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) : ''}`
-          + `&${global.KEYS.GOOGLE}`;
+          + `&${env.keys.GOOGLE}`;
 
   // Fetch results from Google maps places API.
-  const fetched = await require(global.appRoot + '/mod/fetch')(url);
+  const fetched = await require('../fetch')(url);
 
   if (fetched._err) return fetched;
     

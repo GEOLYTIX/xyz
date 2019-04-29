@@ -1,32 +1,45 @@
+const env = require('../../../../mod/env');
+
+const mvt_cache = require('../../../../mod/mvt_cache');
+
 module.exports = fastify => {
+
   fastify.route({
     method: 'POST',
     url: '/api/location/edit/draw',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.body.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.body.layer];
-
-      if (!layer) return res.code(406).send('Layer not found.');
-
       let
-        table = req.body.table,
+        layer = req.params.layer,
+        table = req.query.table,
         geom = layer.geom,
         geom_3857 = layer.geom_3857,
         geometry = JSON.stringify(req.body.geometry);
       
-        // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
-      }
       
       // const d = new Date();
       
@@ -41,14 +54,15 @@ module.exports = fastify => {
       SELECT ${_geom}
       RETURNING ${layer.qID} AS id;`;
       
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
     
-      if (layer.mvt_cache) await require(global.appRoot + '/mod/mvt_cache')(layer, table, rows[0].id);
+      if (layer.mvt_cache) await mvt_cache(layer, table, rows[0].id);
       
       res.code(200).send(rows[0].id.toString());    
 
     }
+
   });
 };

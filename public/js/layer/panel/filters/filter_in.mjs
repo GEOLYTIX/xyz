@@ -29,9 +29,9 @@ export default (_xyz, layer, filter_entry) => {
 
         }
 
-        layer.show();
+        layer.filter.check_count();
 
-        if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
+        layer.show();
 
       }
     });

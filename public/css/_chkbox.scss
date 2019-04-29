@@ -13,7 +13,7 @@
     .checkbox_i {
         position: absolute;
         top: 0;
-        left: 0;
+        left: -3px;
         height: 0;
         width: 0;
         font-size: 22px;
@@ -27,5 +27,8 @@
     input[type=checkbox]:checked+.checkbox_i:after {
         font-family: "Material Icons";
         content: '\E834';
+    }
+    input[type=checkbox]:disabled+.checkbox_i:after {
+        color: #999;
     }
 }

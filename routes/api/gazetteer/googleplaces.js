@@ -1,13 +1,21 @@
+const env = require('../../../mod/env');
+
+const fetch = require('../../../mod/fetch');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/gazetteer/googleplaces',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
     handler: async (req, res) => {
 
-      const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}&${global.KEYS.GOOGLE}`;
+      const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}&${env.keys.GOOGLE}`;
 
-      const fetched = await require(global.appRoot + '/mod/fetch')(url);
+      const fetched = await fetch(url);
 
       if (fetched._err) res.code(500).send(fetched._err);
 

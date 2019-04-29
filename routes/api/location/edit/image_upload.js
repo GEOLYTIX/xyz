@@ -1,11 +1,52 @@
+const env = require('../../../../mod/env');
+
+const crypto = require('crypto');
+
+const request = require('request');
+
 module.exports = fastify => {
+
   fastify.route({
     method: 'POST',
     url: '/api/location/edit/images/upload',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          id: { type: 'string' },
+          field: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'id', 'field']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      (req, res, next) => {
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      },
+    ],
     handler: (req, res) => {
 
-      const cloudinary = process.env.CLOUDINARY ? process.env.CLOUDINARY.split(' ') : [];
+      let
+        layer = req.params.layer,
+        table = req.query.table,
+        qID = layer.qID,
+        id = req.query.id,
+        field = req.query.field,
+        ts = Date.now(),
+        sig = crypto.createHash('sha1').update(`folder=${env.cloudinary[3]}&timestamp=${ts}${env.cloudinary[1]}`).digest('hex');
 
       var data = [];
 
@@ -15,16 +56,12 @@ module.exports = fastify => {
 
         req.body = Buffer.concat(data);
 
-        let
-          ts = Date.now(),
-          sig = require('crypto').createHash('sha1').update(`folder=${cloudinary[3]}&timestamp=${ts}${cloudinary[1]}`).digest('hex');
-
-        require('request').post({
-          url: `https://api.cloudinary.com/v1_1/${cloudinary[2]}/image/upload`,
+        request.post({
+          url: `https://api.cloudinary.com/v1_1/${env.cloudinary[2]}/image/upload`,
           body: {
             'file': `data:image/jpeg;base64,${req.body.toString('base64')}`,
-            'api_key': cloudinary[0],
-            'folder': cloudinary[3],
+            'api_key': env.cloudinary[0],
+            'folder': env.cloudinary[3],
             'timestamp': ts,
             'signature': sig
           },
@@ -33,27 +70,13 @@ module.exports = fastify => {
 
           if (err) return console.error(err);
 
-          const token = req.query.token ?
-            fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-          let
-            table = req.query.table,
-            field = req.query.field,
-            qID = req.query.qID ? req.query.qID : 'id',
-            id = req.query.id;
-
-          // Check whether string params are found in the settings to prevent SQL injections.
-          if ([table, qID]
-            .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-            return res.code(406).send('Invalid parameter.');
-          }
-
           var q = `
-          UPDATE ${table} SET ${field} = array_append(${field}, '${body.secure_url}')
-          WHERE ${qID} = $1;`;
+            UPDATE ${table}
+            SET ${field} = array_append(${field}, '${body.secure_url}')
+            WHERE ${qID} = $1;`;
 
           // add filename to images field
-          await global.pg.dbs[req.query.dbs](q, [id]);
+          await env.dbs[layer.dbs](q, [id]);
 
           res.code(200).send({
             'image_id': body.public_id,
@@ -62,6 +85,7 @@ module.exports = fastify => {
         });
 
       });
+      
     }
 
   });

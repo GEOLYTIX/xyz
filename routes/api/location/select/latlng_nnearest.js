@@ -1,60 +1,67 @@
+const env = require('../../../../mod/env');
+
+const sql_fields = require('../../../../mod/pg/sql_fields');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
     url: '/api/location/select/latlng/nnearest',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          nnearest: { type: 'integer' },
+          lat: { type: 'number' },
+          lng: { type: 'number' },
+          filter: { type: 'string' },
+        },
+        required: ['locale', 'layer', 'table', 'lat', 'lng']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      fastify.evalParam.geomTable,
+    ],
     handler: async (req, res) => {
 
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-      const table = req.query.table
-        || layer.table
-        || Object.values(layer.tables)[Object.values(layer.tables).length - 1]
-        || Object.values(layer.tables)[Object.values(layer.tables).length - 2];
-      
-      // Clone the infoj from the memory workspace layer.
-      const infoj = JSON.parse(JSON.stringify(layer.infoj));
-
-      const geom = req.query.geom || layer.geom;
+      let
+        layer = req.params.layer,
+        table = req.query.table,
+        lat = req.query.lat,
+        lng = req.query.lng,
+        nnearest = parseInt(req.query.nnearest || 3),
+        infoj = JSON.parse(JSON.stringify(layer.infoj)),
+        geom = req.query.geom || layer.geom;
       
       // Return 406 if table does not have EPSG:4326 geometry field.
-      if (!geom) return res.code(406).send('Missing geom (SRID 4326) field on layer.');
-        
-      const lat = parseFloat(req.query.lat);
-      if (!lat) return res.code(406).send('Missing lat.');
-      
-      const lng = parseFloat(req.query.lng);
-      if (!lng) return res.code(406).send('Missing lng.');
-  
-      const nnearest = parseInt(req.query.nnearest || 3);
-  
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table]
-        .some(val => (typeof val === 'string' && val.length > 0 && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
-      }
+      if (!geom) return res.code(400).send(new Error('Missing geom (SRID 4326) field on layer.'));
+
   
       // The fields array stores all fields to be queried for the location info.
-      const fields = await require(global.appRoot + '/mod/pg/sql_fields')([], infoj, qID);
+      const fields = await sql_fields([], infoj);
+
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
   
       var q = `
-      SELECT ${fields.join()} FROM ${table}
-      ORDER BY ST_SetSRID(ST_Point(${lng}, ${lat}), 4326) <#> ${geom}
-      LIMIT ${nnearest};`;
+        SELECT ${fields.join()}
+        FROM ${table}
+        ORDER BY ST_SetSRID(ST_Point(${lng}, ${lat}), 4326) <#> ${geom}
+        LIMIT ${nnearest};`;
   
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 

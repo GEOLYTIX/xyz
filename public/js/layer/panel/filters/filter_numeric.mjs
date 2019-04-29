@@ -4,11 +4,14 @@ export default (_xyz, layer, filter_entry) => {
 
   const xhr = new XMLHttpRequest();
 
+  const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
+
   xhr.open('GET', _xyz.host + '/api/location/field/range?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
     layer: layer.key,
     table: layer.table,
     field: filter_entry.field,
+    filter: JSON.stringify(filter),
     token: _xyz.token
   }));
 
@@ -23,10 +26,12 @@ export default (_xyz, layer, filter_entry) => {
       tag: 'div',
       options: {
         classList: 'range-label',
-        textContent: 'Greater then >',
+        textContent: 'Greater or equal',
       },
       appendTo: block
     });
+
+    const step = setStep(filter_entry);
   
     const input_min = _xyz.utils.createElement({
       tag: 'input',
@@ -35,7 +40,8 @@ export default (_xyz, layer, filter_entry) => {
         type: 'number',
         min: field_range.min,
         max: field_range.max,
-        value: field_range.min
+        value: field_range.min,
+        step: step
       },
       appendTo: block,
       eventListener: {
@@ -53,6 +59,7 @@ export default (_xyz, layer, filter_entry) => {
       min: field_range.min,
       max: field_range.max,
       value: field_range.min,
+      step: step,
       appendTo: block,
       oninput: e => {
   
@@ -67,7 +74,7 @@ export default (_xyz, layer, filter_entry) => {
       tag: 'div',
       options: {
         classList: 'range-label',
-        textContent: 'Smaller then <'
+        textContent: 'Smaller or equal'
       },
       appendTo: block
     });
@@ -79,7 +86,8 @@ export default (_xyz, layer, filter_entry) => {
         type: 'number',
         min: field_range.min,
         max: field_range.max,
-        value: field_range.max
+        value: field_range.max,
+        step: step
       },
       appendTo: block,
       eventListener: {
@@ -98,6 +106,7 @@ export default (_xyz, layer, filter_entry) => {
       max: field_range.max,
       value: field_range.max,
       appendTo: block,
+      step: step,
       oninput: e => {
   
         // Set input value and apply filter.
@@ -121,14 +130,23 @@ export default (_xyz, layer, filter_entry) => {
 
         // Create filter.
         layer.filter.current[filter_entry.field] = {};
-        layer.filter.current[filter_entry.field].gt = parseFloat(input_min.value);
-        layer.filter.current[filter_entry.field].lt = parseFloat(input_max.value);
+        layer.filter.current[filter_entry.field].gte = parseFloat(input_min.value);
+        layer.filter.current[filter_entry.field].lte = parseFloat(input_max.value);
+
+        layer.filter.check_count();
 
         layer.show();
 
-        if (layer.filter.infoj) layer.filter.run_output.style.display = 'block';
-
       }, 500);
+    }
+
+    function setStep(entry){
+      let step;
+      switch(entry.type){
+      case 'integer': step = 1; break;
+      case 'numeric': step = 0.01 ; break;
+      }
+      return step;
     }
 
   };

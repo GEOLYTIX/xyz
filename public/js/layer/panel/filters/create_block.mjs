@@ -33,7 +33,10 @@ export default (_xyz, layer, filter_entry) => {
         delete layer.filter.current[filter_entry.field];
 
         // Hide clear all filter.
-        if (Object.keys(layer.filter.current).length < 1) layer.filter.clear_all.style.display = 'none';
+        if (Object.keys(layer.filter.current).length < 1) {
+          layer.filter.clear_all.style.display = 'none';
+          layer.filter.check_count();
+        }
 
         // Enable filter in select dropdown.
         Object.values(layer.filter.select.options).forEach(opt => {

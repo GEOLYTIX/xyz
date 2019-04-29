@@ -14,7 +14,7 @@ export default _xyz => entry => {
     appendTo: entry.val,
     eventListener: {
       event: 'keyup',
-      funct: e => entry.location.view.valChange(e.target, entry)
+      funct: e => entry.location.view.valChange({input: e.target, entry: entry})
     }
   });
 

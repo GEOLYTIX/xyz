@@ -10,6 +10,8 @@ import panel_cluster from './cluster.mjs';
 
 import panel_table from './table.mjs';
 
+import panel_report from './report.mjs';
+
 export default (_xyz, layer) => {
 
   // Create layer dashboard.
@@ -30,6 +32,9 @@ export default (_xyz, layer) => {
     appendTo: layer.dashboard
   });
 
+  // Add report panel
+  if(layer.report) panel_report(_xyz,layer);
+
   // Add draw panel to dashboard.
   if (layer.edit) panel_draw(_xyz, layer);
 
@@ -37,14 +42,13 @@ export default (_xyz, layer) => {
   if (layer.tableview) panel_table(_xyz, layer);
 
   // Add cluster panel to dashboard.
-  if (layer.format === 'cluster') panel_cluster(_xyz, layer);
+  if (layer.format === 'cluster' && layer.cluster_panel) panel_cluster(_xyz, layer);
 
   // Add grid panel to dashboard.
   if (layer.format === 'grid') panel_grid(_xyz, layer);
 
   // Add filters panel.
   if (layer.infoj && layer.infoj.some(entry => entry.filter)) panel_filters(_xyz, layer);
-
 
   // Add styles panel.
   panel_style(_xyz, layer);

@@ -62,7 +62,18 @@ export default _xyz => layer => {
     }
                
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', _xyz.host + '/api/location/edit/draw?token=' + _xyz.token);
+    
+    xhr.open(
+      'POST', 
+      _xyz.host + 
+      '/api/location/edit/draw?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: layer.table,
+        token: _xyz.token
+      }));
+      
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = e => {
@@ -85,9 +96,6 @@ export default _xyz => layer => {
     
     // Send circle geometry to endpoint.
     xhr.send(JSON.stringify({
-      locale: _xyz.workspace.locale.key,
-      layer: layer.key,
-      table: layer.table,
       geometry: circle(origin_lnglat, radius, options).geometry
     }));
 

@@ -1,47 +1,55 @@
-module.exports = fastify => {
+const env = require('../../../../mod/env');
+
+const sql_filter = require('../../../../mod/pg/sql_filter');
+
+module.exports =  fastify => {
+  
   fastify.route({
     method: 'GET',
     url: '/api/location/select/cluster',
-    preHandler: fastify.auth([fastify.authAPI]),
+    preValidation: fastify.auth([
+      (req, res, next) => fastify.authToken(req, res, next, {
+        public: true
+      })
+    ]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+          locale: { type: 'string' },
+          layer: { type: 'string' },
+          table: { type: 'string' },
+          filter: { type: 'string' },
+          lnglat: { type: 'string' },
+          count: { type: 'integer' },
+        },
+        required: ['locale', 'layer', 'table', 'lnglat']
+      }
+    },
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+      fastify.evalParam.layer,
+      fastify.evalParam.roles,
+      fastify.evalParam.lnglat,
+      fastify.evalParam.geomTable,
+    ],
     handler: async (req, res) => {
-
-      const token = req.query.token ? fastify.jwt.decode(req.query.token) : { access: 'public' };
-
-      const locale = global.workspace[token.access].config.locales[req.query.locale];
-
-      // Return 406 if locale is not found in workspace.
-      if (!locale) return res.code(406).send('Invalid locale.');
-
-      const layer = locale.layers[req.query.layer];
-
-      // Return 406 if layer is not found in locale.
-      if (!layer) return res.code(406).send('Invalid layer.');
-
-      const table = req.query.table;
-
-      // Return 406 if table is not defined as query parameter.
-      if (!table) return res.code(406).send('Missing table.');
-
-      const lnglat = req.query.lnglat.split(',').map(ll => parseFloat(ll));
-
-      // Return 406 if lnglat is not defined as query parameter.
-      if (!lnglat) return res.code(406).send('Missing lnglat.');
   
       let
+        layer = req.params.layer,
+        table = req.query.table,
         geom = layer.geom,
         qID = layer.qID,
-        filter = req.query.filter && JSON.parse(req.query.filter),
+        lnglat = req.params.lnglat,
+        filter = req.params.filter,
         label = layer.cluster_label ? layer.cluster_label : qID,
         count = parseInt(req.query.count) || 99;
   
-      // Check whether string params are found in the settings to prevent SQL injections.
-      if ([table, geom, qID, label]
-        .some(val => (typeof val === 'string' && global.workspace[token.access].values.indexOf(val) < 0))) {
-        return res.code(406).send('Invalid parameter.');
-      }
-  
+        
       // SQL filter
-      const filter_sql = filter && await require(global.appRoot + '/mod/pg/sql_filter')(filter) || '';
+      const filter_sql = filter && await sql_filter(filter) || '';
   
       // Query the feature count from lat/lng bounding box.
       var q = `
@@ -54,7 +62,7 @@ module.exports = fastify => {
         ${filter_sql} 
       ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
   
-      var rows = await global.pg.dbs[layer.dbs](q);
+      var rows = await env.dbs[layer.dbs](q);
   
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
   

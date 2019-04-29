@@ -2,8 +2,26 @@ export default (_xyz, params) => {
 
   if (!params.btn) return;
 
+  if (params.btn.tableViewport) {
+    params.btn.tableViewport.onclick = () => {
+    
+      _xyz.tableview.current_table.viewport = !_xyz.tableview.current_table.viewport;
+
+      if (_xyz.tableview.current_table.viewport) {
+        params.btn.tableViewport.classList.add('active');
+
+      } else {
+        params.btn.tableViewport.classList.remove('active');
+      }
+
+      _xyz.tableview.current_table.update();
+    
+    };
+  }
+
   return {
     toggleTableview: toggleTableview(params),
+    tableViewport: params.btn.tableViewport,
   };
 
   function toggleTableview(params) {
@@ -30,5 +48,5 @@ export default (_xyz, params) => {
     };
 
   }
-  
+
 };

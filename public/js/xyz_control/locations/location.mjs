@@ -90,7 +90,18 @@ export default _xyz => () => {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open('POST', _xyz.host + '/api/location/update?token=' + _xyz.token);
+    xhr.open(
+      'POST', 
+      _xyz.host + 
+      '/api/location/update?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: location.layer,
+        table: location.table,
+        id: location.id,
+        token: _xyz.token
+      }));
+
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = e => {
 
@@ -121,10 +132,6 @@ export default _xyz => () => {
       });
 
     xhr.send(JSON.stringify({
-      locale: _xyz.workspace.locale.key,
-      layer: location.layer,
-      table: location.table,
-      id: location.id,
       infoj: infoj_newValues
     }));
 
@@ -163,7 +170,7 @@ export default _xyz => () => {
       pane: (style && style.pane) || 'select',
       style: style || location.style,
     });
-           
+
   };
 
   function flyTo(){
@@ -176,7 +183,11 @@ export default _xyz => () => {
 
     location.geometries.forEach(layer => allLayer.push(layer));
 
-    _xyz.map.flyToBounds(_xyz.L.featureGroup(allLayer).getBounds());
+    if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) allLayer.push(_xyz.mapview.locate.L);
+
+    _xyz.map.flyToBounds(_xyz.L.featureGroup(allLayer).getBounds(),{
+      padding: [25, 25]
+    });
 
   }
 

@@ -23,16 +23,6 @@ export default (_xyz, location) => () => {
     <table class="locationview">`;
   }
 
-
-  // Adds layer to beginning of infoj array.
-  // This should not be forced without a parameter.
-  // location.infoj.unshift({
-  //   'label': 'Layer',
-  //   'value': _xyz.layers.list[location.layer].name,
-  //   'type': 'text',
-  //   'inline': true
-  // });
-
   // Create object to hold view groups.
   location.view.groups = {};
 
@@ -56,6 +46,7 @@ export default (_xyz, location) => () => {
     if(entry.prefix)  entry.displayValue = entry.prefix + entry.displayValue;
     if(entry.postfix) entry.displayValue = entry.displayValue + entry.postfix;
   });
+
     
   // Iterate through info fields and add to info table.
   Object.values(location.infoj).forEach(entry => {
@@ -96,6 +87,44 @@ export default (_xyz, location) => () => {
       });
     }
 
+    if(entry.type === 'key') { // display layer name in location view
+
+      entry.row = _xyz.utils.createElement({
+        tag: 'tr',
+        appendTo: location.view.node
+      });
+
+      entry.td = _xyz.utils.createElement({
+        tag: 'td',
+        options: {
+          className: 'label lv-0',
+          colSpan: 2
+        },
+        style: {
+          padding: '10px 0'
+        },
+        appendTo: entry.row
+      });
+
+      _xyz.utils.createElement({
+        tag: 'span',
+        options: {
+          textContent: _xyz.layers.list[location.layer].name,
+          title: 'Source layer'
+        },
+        style: {
+          fontSize: '12px',
+          padding: '3px',
+          backgroundColor: _xyz.utils.hexToRGBA(location.style.color, 0.3),
+          borderRadius: '2px',
+          cursor: 'help'
+        },
+        appendTo: entry.td
+      });
+
+      return;
+    }
+
     // Finish entry creation if entry has not type.
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
 
@@ -109,9 +138,14 @@ export default (_xyz, location) => () => {
     if (entry.type === 'images') return location.view.images(entry);
 
     // Create geometry control.
-    if (entry.type === 'geometry') return location.view.geometry(entry);    
+    if (entry.type === 'geometry') return location.view.geometry(entry);
 
-    if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);    
+    // Create boolean control.
+    if (entry.type === 'boolean') return location.view.boolean(entry);    
+
+    if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);
+
+    if (entry.type === 'orderedList') return location.view.orderedList(entry);    
 
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();
@@ -167,7 +201,6 @@ export default (_xyz, location) => () => {
     }
 
   });
-
 
   // Hide group if empty
   Object.values(location.infoj).map(entry => {

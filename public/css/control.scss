@@ -16,8 +16,10 @@ $onyx: #383836;
     src: url(../fonts/MarkWebPro-Bold.woff) format("woff");
 }
 
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+@import 'material_icons';
+/* @import url('https://fonts.googleapis.com/css?family=PT+Mono'); */
+@import 'pt_mono';
 @import 'locationview';
 @import 'tableview';
 @import 'input';
@@ -35,6 +37,7 @@ $onyx: #383836;
 @import 'mapview';
 @import 'listview';
 @import 'gazetteer';
+@import 'workspace';
 *,
 *::after,
 *::before {
@@ -87,7 +90,7 @@ i,
 }
 
 .displaynone {
-    display: none;
+    display: none !important;
 }
 
 .bold {
@@ -97,3 +100,13 @@ i,
 .pane_shadow {
     box-shadow: 0 3px 3px -3px #000;
 }
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; /* Chrome */
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+

@@ -38,7 +38,9 @@ export default _xyz => table => {
       locale: _xyz.workspace.locale.key,
       layer: table.layer.key,
       table: table.key,
-      viewport: !!bounds,
+      viewport: table.viewport,
+      orderby: table.orderby,
+      order: table.order,
       filter: JSON.stringify(filter),
       west: bounds && bounds.getWest(),
       south: bounds && bounds.getSouth(),
@@ -63,15 +65,63 @@ export default _xyz => table => {
     xhr.send();
 
   };
-   
+  
+
+  let stopHammertime = false;
+
   table.activate = () => {
+
+    if (_xyz.tableview.btn.tableViewport) {
+
+      if (table.viewport) {
+        _xyz.tableview.btn.tableViewport.classList.add('active');
+
+      } else {
+        _xyz.tableview.btn.tableViewport.classList.remove('active');
+      }
+
+      _xyz.tableview.btn.tableViewport.style.display = 'block';
+    }
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
       {
         columns: table.columns,
         autoResize: true,
-        height: _xyz.tableview.height || '100%'
+        height: _xyz.tableview.height || '100%',
+        dataSorting: sorters => {
+
+          if (!sorters[0]) return;
+            
+          if (table.orderby === sorters[0].field
+              && table.order === sorters[0].dir) return;
+
+          stopHammertime = false;
+
+          table.orderby = sorters[0].field;
+
+          table.order = sorters[0].dir;
+
+          if (!stopHammertime) table.update();
+          
+        },
+        dataSorted: (sorters, rows) => {
+          stopHammertime = true;
+        },
+        rowClick: (e, row) => {
+
+          const rowData = row.getData();
+
+          if (!rowData.qid) return;
+
+          _xyz.locations.select({
+            locale: _xyz.workspace.locale.key,
+            layer: table.layer.key,
+            table: table.from,
+            id: rowData.qid,
+          });
+
+        }
       });
 
     table.update();
@@ -80,6 +130,7 @@ export default _xyz => table => {
 
   };
 
-  table.activate();
+  // active only if displayed in the navbar 
+  if(!table.tab || !table.tab.classList.contains('folded')) table.activate();
 
 };

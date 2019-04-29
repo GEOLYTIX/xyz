@@ -22,7 +22,11 @@ export default _xyz => {
     }
 
     // Remove the geolocation marker if _xyz.mapview.locate is not active.
-    if (!_xyz.mapview.locate.active) return _xyz.map.removeLayer(_xyz.mapview.locate.L);
+    if (!_xyz.mapview.locate.active) {
+      _xyz.map.removeLayer(_xyz.mapview.locate.L);
+      //delete _xyz.mapview.locate.L;
+      return;
+    }
         
     // Add the geolocation marker if the latitude is not 0.
     if (_xyz.mapview.locate.L.getLatLng().lat !== 0) {
@@ -65,6 +69,7 @@ export default _xyz => {
         }
       );
     }
+
   };
 
 };
