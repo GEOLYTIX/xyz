@@ -63,22 +63,6 @@ export default (_xyz, layer) => () => {
     })
       .on('click', e => {
 
-        // let selectedIdx = layer.selected.indexOf(e.layer.feature.properties.id);
-          
-        // selectedIdx >= 0 ?
-        //   layer.selected.splice(selectedIdx, 1) :
-        //   layer.selected.push(e.layer.feature.properties.id);
-
-        // let style = applyLayerStyle(e.layer.feature);
-
-        // e.layer.setStyle && e.layer.setStyle(style);
-          
-        // e.layer.setIcon && e.layer.setIcon(_xyz.L.icon({
-        //   iconUrl: _xyz.utils.svg_symbols(style.marker),
-        //   iconSize: style.marker.iconSize || 40,
-        //   iconAnchor: style.marker.iconAnchor || [20,20]
-        // }));
-          
         _xyz.locations.select({
           layer: layer.key,
           table: layer.table,
@@ -89,13 +73,24 @@ export default (_xyz, layer) => () => {
           
       })
       .on('mouseover', e => {
+
         e.layer.setStyle && e.layer.setStyle(layer.style.highlight);
+
+        if (layer.hover) layer.hover.add({
+          id: e.layer.feature.properties.id,
+          x: e.originalEvent.clientX,
+          y: e.originalEvent.clientY,
+        });
+
       })
       .on('mouseout', e => {
         e.layer.setStyle && e.layer.setStyle(applyLayerStyle(e.layer.feature));
+
+        if (layer.hover) layer.hover.remove();
+
       })
       .addTo(_xyz.map);
-          
+         
     // Check whether layer.display has been set to false during the drawing process and remove layer from map if necessary.
     if (!layer.display) _xyz.map.removeLayer(layer.L);
     

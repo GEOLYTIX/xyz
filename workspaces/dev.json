@@ -76,6 +76,9 @@
                         }
                     },
                     "qID": "id",
+                    "hover": {
+                        "field": "pop_est"
+                    },
                     "infoj": [
                         {
                             "type": "key"
@@ -455,15 +458,17 @@
                             }
                         }
                     },
+                    "hover": {
+                        "field": "address"
+                    },
                     "qID": "id",
                     "infoj": [
                         {
                             "type": "key"
                         },
                         {
-                            "label": "Address HTML",
-                            "field": "address_html",
-                            "fieldfx": "address",
+                            "label": "Address",
+                            "field": "address",
                             "type": "html"
                         }
                     ]
@@ -1006,17 +1011,6 @@
                     ]
                 },
                 "retail_points": {
-                    "roles": {
-                        "a": null,
-                        "foo": {
-                            "retailer": {
-                                "in": [
-                                    "Tesco",
-                                    "Sainsburys"
-                                ]
-                            }
-                        }
-                    },
                     "display": true,
                     "name": "Retail Points",
                     "format": "cluster",
@@ -1024,6 +1018,9 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
+                    "hover": {
+                        "field": "store"
+                    },
                     "tableview": {
                         "tables": {
                             "Retail Points": {

@@ -68,14 +68,6 @@ export default (_xyz, layer) => () => {
     })
     .on('click', e => {
 
-      // let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
-        
-      // selectedIdx >= 0 ?
-      //   layer.selected.splice(selectedIdx, 1) :
-      //   layer.selected.push(e.layer.properties.id);
-
-      // e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
-
       _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
         layer: layer.key,
@@ -88,9 +80,19 @@ export default (_xyz, layer) => () => {
     })
     .on('mouseover', e => {
       e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight);
+
+      if (layer.hover) layer.hover.add({
+        id: e.layer.properties.id,
+        x: e.originalEvent.clientX,
+        y: e.originalEvent.clientY,
+      });
+
     })
     .on('mouseout', e => {
       e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
+
+      if (layer.hover) layer.hover.remove();
+
     })
     .addTo(_xyz.map);
 

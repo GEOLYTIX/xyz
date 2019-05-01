@@ -43,8 +43,8 @@ async function view(req, res, token = { access: 'public' }) {
   const md = new Md(req.headers['user-agent']);
 
   const _tmpl = (md.mobile() === null || md.tablet() !== null) ?
-    await fetch(`${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/views/desktop.html`) :
-    await fetch(`${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/views/mobile.html`);
+    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop.html`) :
+    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
 
   const tmpl = jsr.templates('tmpl', await _tmpl.text());
 

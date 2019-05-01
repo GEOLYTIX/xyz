@@ -33,8 +33,8 @@
 					"display": false,
 					"format": "tiles",
 					"attribution": {
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
+						"© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+					},
 					"URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 				},
 				"Mapbox Label": {
@@ -3168,68 +3168,68 @@
 						}
 					}
 				},
-				"Scratch": {
-                    "format": "mvt",
-                    "dbs": "XYZ",
-					"table": "starbucks.scratch",                   
-                    "edit": {
-                        "polygon": true,
-                        "circle": true,
-                        "rectangle": true,
-                        "delete": true
+				"Polygon Select": {
+					"format": "mvt",
+					"dbs": "XYZ",
+					"table": "starbucks.scratch",
+					"edit": {
+						"polygon": true,
+						"circle": true,
+						"rectangle": true,
+						"delete": true
 					},
 					"qID": "id",
-                    "infoj": [
-                        {
-                            "label": "Population 2015",
-                            "field": "dong_pop_15",
-                            "fieldfx": "SUM(b.pop_15)",
-                            "type": "integer",
-                            "lookup": {
-                                "table_a": "starbucks.scratch",
-                                "table_b": "geodata.sk_admin_dong",
-                                "geom_a": "geom_3857",
-                                "geom_b": "geom_3857"
-                            }
+					"infoj": [
+						{
+							"label": "Population 2015",
+							"field": "dong_pop_15",
+							"fieldfx": "SUM(b.pop_15)",
+							"type": "integer",
+							"lookup": {
+								"table_a": "starbucks.scratch",
+								"table_b": "geodata.sk_admin_dong",
+								"geom_a": "geom_3857",
+								"geom_b": "geom_3857"
+							}
 						},
 						{
-                            "label": "Worker 2014",
-                            "field": "dong_worker_15",
-                            "fieldfx": "SUM(b.workers)",
-                            "type": "integer",
-                            "lookup": {
-                                "table_a": "starbucks.scratch",
-                                "table_b": "geodata.sk_admin_dong",
-                                "geom_a": "geom_3857",
-                                "geom_b": "geom_3857"
-                            }
-                        },
+							"label": "Worker 2014",
+							"field": "dong_worker_15",
+							"fieldfx": "SUM(b.workers)",
+							"type": "integer",
+							"lookup": {
+								"table_a": "starbucks.scratch",
+								"table_b": "geodata.sk_admin_dong",
+								"geom_a": "geom_3857",
+								"geom_b": "geom_3857"
+							}
+						},
 						{
 							"label": "Average Apartment Price, 10,000 KRW (2018)",
 							"field": "avg_price_1000krw",
-                            "fieldfx": "AVG(b.avg_price_1000krw)",
-                            "type": "numeric",
-                            "lookup": {
-                                "table_a": "starbucks.scratch",
-                                "table_b": "geodata.sk_admin_dong",
-                                "geom_a": "geom_3857",
-                                "geom_b": "geom_3857"
-                            }
+							"fieldfx": "AVG(b.avg_price_1000krw)",
+							"type": "numeric",
+							"lookup": {
+								"table_a": "starbucks.scratch",
+								"table_b": "geodata.sk_admin_dong",
+								"geom_a": "geom_3857",
+								"geom_b": "geom_3857"
+							}
 						},
 						{
 							"label": "Competitor Count",
 							"field": "competitor_count",
-                            "fieldfx": "COUNT(b.geom_3857)",
-                            "type": "integer",
-                            "lookup": {
-                                "table_a": "starbucks.scratch",
-                                "table_b": "starbucks.sk_starbucks_competitors_20181299",
-                                "geom_a": "geom_3857",
-                                "geom_b": "geom_3857"
-                            }
-                        }
-                    ]
-                }
+							"fieldfx": "COUNT(b.geom_3857)",
+							"type": "integer",
+							"lookup": {
+								"table_a": "starbucks.scratch",
+								"table_b": "starbucks.sk_starbucks_competitors_20181299",
+								"geom_a": "geom_3857",
+								"geom_b": "geom_3857"
+							}
+						}
+					]
+				}
 			}
 		}
 	}

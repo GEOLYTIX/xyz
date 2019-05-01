@@ -26,6 +26,8 @@ module.exports = fastify => {
 
   require('./location/field_range')(fastify);
 
+  require('./location/field')(fastify);
+
   require('./location/table')(fastify);
 
   require('./location/list')(fastify);
