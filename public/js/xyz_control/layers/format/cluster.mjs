@@ -1,4 +1,4 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
   // Get table for the current zoom level.
   const table = layer.tableCurrent();

@@ -1,4 +1,4 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
   // Remove layer from map if currently drawn.
   if (layer.L) _xyz.map.removeLayer(layer.L);

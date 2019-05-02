@@ -6,25 +6,19 @@ import layer_toggle from './toggle.mjs';
 
 import layer_focus from './focus.mjs';
 
-import layer_show from './show.mjs';
-
-import layer_remove from './remove.mjs';
-
 import layer_icon from './icon.mjs';
 
 export default _xyz => {
 
-  const listview = {
-
-    node: document.getElementById('layers'),
+  return {
 
     init: init,
 
   };
 
-  return listview;
+  function init(target) {
 
-  function init() {
+    _xyz.layers.listview.node = target;
 
     // Empty the layers list.
     _xyz.layers.listview.node.innerHTML = '';
@@ -57,50 +51,16 @@ export default _xyz => {
         });
       }
 
-      // Create layer drawer.
-      layer.drawer = _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          className: 'drawer'
-        },
-        style: {
-          display: layer.hidden ? 'none' : 'block'
-        },
-        appendTo: layer.group ? _xyz.layers.listview.groups[layer.group].container : _xyz.layers.listview.node
-      });
 
-      // Create layer header.
-      layer.header = _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          innerHTML: (layer.group ? ('&#10149; ' + layer.name) : (layer.name || layer.key)),
-          className: 'header'
-        },
-        style: {
-          borderBottom: '2px solid ' + (((layer.style || {}).default || {}).color ? layer.style.default.color : '#333')
-        },
-        appendTo: layer.drawer
-      });
+      layer.group ? 
+        _xyz.layers.listview.groups[layer.group].container.appendChild(layer.drawer) :
+        _xyz.layers.listview.node.appendChild(layer.drawer);
 
-      // Add loader bar to layer drawer.
-      layer.loader = _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          className: 'loader'
-        },
-        appendTo: layer.drawer
-      });
 
       // Push the layer into the layers hook array.
       if (layer.display) _xyz.hooks.push('layers', layer.key);
 
       if (!layer.display) layer.remove();
-
-      // Method to show layer on map.
-      layer_show(_xyz, layer);
-
-      // Method to remove layer from map.
-      layer_remove(_xyz, layer);
 
       // Create control to toggle layer visibility.
       layer_toggle(_xyz, layer);

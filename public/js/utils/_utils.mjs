@@ -34,6 +34,8 @@ export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.
 
 export {setStrokeWeight} from './setStrokeWeight.mjs';
 
+export {deepMerge} from './deepMerge.mjs';
+
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
 export {default as hyperHTML} from 'hyperhtml/esm';

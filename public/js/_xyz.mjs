@@ -1,6 +1,7 @@
 export default () => ({
   gazetteer: {},
   host: null,
+  hooks: null,
   layers: {},
   locations: {},
   log: null,

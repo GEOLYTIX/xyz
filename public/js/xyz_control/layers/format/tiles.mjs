@@ -1,4 +1,4 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
   if (!layer.display) return layer.remove();
 

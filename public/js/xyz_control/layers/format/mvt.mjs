@@ -1,4 +1,4 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
@@ -99,7 +99,7 @@ export default (_xyz, layer) => () => {
 
   function applyLayerStyle(properties) {
 
-    let style = Object.assign({}, layer.style.default, layer.selected.includes(properties.id) ? layer.style.selected : {});
+    let style = Object.assign({}, layer.style.default);
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return style;

@@ -1,38 +1,15 @@
 import location from './location.mjs';
 
-export default _xyz => {
+import select from './select.mjs';
 
-  return {
+import listview from './listview.mjs';
 
-    select: select,
+export default _xyz => ({
 
-    location: location(_xyz),
+  select: select(_xyz),
 
-  };
+  location: location(_xyz),
 
-  function select(location, callback) {
+  listview: listview(_xyz),
 
-    if (!location) return;
-
-    if (_xyz.locations.current) _xyz.locations.current.remove();
-
-    Object.assign(location, _xyz.locations.location());
-
-    _xyz.locations.current = location;
-
-    if (callback) return location.get(callback);
-
-    location.get(location => {
-      location.draw();
-
-      if(!_xyz.mapview.popup || !location.marker) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
-  
-      _xyz.mapview.popup({
-        latlng: [location.marker[1], location.marker[0]],
-        content: location.view.node
-      });
-    });
-
-  };
-
-};
+});

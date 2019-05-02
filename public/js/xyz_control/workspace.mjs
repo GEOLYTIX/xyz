@@ -79,10 +79,16 @@ export default _xyz => {
     // Filter invalid layers.
     Object.keys(_xyz.workspace.locale.layers)
       .filter(key => key.indexOf('__') === -1)
+      .forEach(key => {
 
-      // Create layer objects.
-      .forEach(key => _xyz.layers.list[key] = _xyz.layers.layer(key));
+        const layer = Object.assign(
+          {},
+          _xyz.workspace.locale.layers[key],
+          _xyz.layers.layer());
 
+        layer.load(key);
+
+      });
   };
 
   function admin(){
