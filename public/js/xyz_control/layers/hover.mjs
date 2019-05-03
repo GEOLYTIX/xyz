@@ -20,17 +20,7 @@ export default _xyz => layer => {
     layer.hover.remove();
 
     layer.hover.tooltip = _xyz.utils.hyperHTML.wire()`
-      <div style="
-      position: fixed;
-      margin: 0;
-      padding: 5px;
-      background: #eee;
-      box-shadow: 2px 2px 2px #666;
-      transition-property: opacity;
-      transition-duration: 0.3s;
-      transition-delay: 0.2s;
-      opacity: 0;
-      z-index: 9999">`;
+      <div class="hover-box">`;
 
     const xhr = new XMLHttpRequest();
 
