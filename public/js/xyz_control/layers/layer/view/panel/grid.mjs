@@ -1,11 +1,13 @@
 export default (_xyz, layer) => {
 
+  if (layer.format !== 'grid') return;
+
   const panel = _xyz.utils.createElement({
     tag: 'div',
     options: {
       className: 'panel'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Create grid_size dropdown.

@@ -1,6 +1,6 @@
 export default _xyz => layer => {
 
-  layer.header.classList.remove('edited');
+  layer.view.header.classList.remove('edited');
 
   _xyz.mapview.node.style.cursor = '';
   _xyz.map.off('mousemove');

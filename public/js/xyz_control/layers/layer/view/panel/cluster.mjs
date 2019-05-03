@@ -1,12 +1,16 @@
 export default (_xyz, layer) => {
 
+  if (layer.format !== 'cluster') return;
+
+  if (!layer.cluster_panel) return;
+
   // Create cluster panel and add to layer dashboard.
   const panel = _xyz.utils.createElement({
     tag: 'div',
     options: {
       classList: 'panel expandable'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Panel title / expander.

@@ -2,7 +2,11 @@ import polyStyle from './polyStyle.mjs';
 
 import clusterStyle from './clusterStyle.mjs';
 
+import _legends from './legend/_legends.mjs';
+
 export default (_xyz, layer) => {
+
+  const legends = _legends(_xyz);
 
   // Meaningful styles can only be set for vector and cluster objects.
   if (layer.format === 'grid' || layer.format === 'tiles') return;
@@ -13,7 +17,7 @@ export default (_xyz, layer) => {
     options: {
       classList: 'panel expandable'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Style panel title / expander.
@@ -65,6 +69,9 @@ export default (_xyz, layer) => {
     }
   });
 
+  layer.style.legend = _xyz.utils.hyperHTML.wire()`
+  <div class="legend">`;
+
   panel.appendChild(layer.style.legend);
 
   // Apply the current theme.
@@ -92,8 +99,26 @@ export default (_xyz, layer) => {
       return;
     }
 
-    layer.style.setLegend(panel);
+    setLegend();
   
+  }
+
+  function setLegend() {
+
+    if(!layer.style.theme && layer.format != 'grid') return;
+  
+    if (layer.format === 'mvt' && layer.style.theme.type === 'categorized') legends.polyCategorized(layer);
+  
+    if (layer.format === 'mvt' && layer.style.theme.type === 'graduated') legends.polyGraduated(layer);
+  
+    if (layer.format === 'cluster' && layer.style.theme.type === 'categorized') legends.clusterCategorized(layer);
+  
+    if (layer.format === 'cluster' && layer.style.theme.type === 'competition') legends.clusterCategorized(layer);
+  
+    if (layer.format === 'cluster' && layer.style.theme.type === 'graduated') legends.clusterGraduated(layer);
+  
+    if (layer.format === 'grid') legends.grid(layer);
+
   }
 
 };

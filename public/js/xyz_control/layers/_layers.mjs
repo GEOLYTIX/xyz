@@ -4,10 +4,6 @@ import listview from './listview.mjs';
 
 import hover from './hover.mjs';
 
-import style from './style.mjs';
-
-import legends from './legend/_legends.mjs';
-
 import format from './format/_format.mjs';
 
 export default _xyz => ({
@@ -19,10 +15,6 @@ export default _xyz => ({
   listview: listview(_xyz),
 
   hover: hover(_xyz),
-
-  style: style(_xyz),
-
-  legends: legends(_xyz),
 
   format: format(_xyz),
 

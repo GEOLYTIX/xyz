@@ -25,7 +25,7 @@ export default _xyz => layer => () => {
   // Draw layer on load event.
   layer.xhr.onload = e => {
 
-    if (layer.loader) layer.loader.style.display = 'none';
+    if (layer.view.loader) layer.view.loader.style.display = 'none';
 
     // Remove layer from map if currently drawn.
     if (layer.L) _xyz.map.removeLayer(layer.L);

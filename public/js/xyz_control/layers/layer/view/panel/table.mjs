@@ -1,5 +1,5 @@
 export default (_xyz, layer) => {
-
+  
   if(_xyz.mobile || !layer.tableview || !layer.tableview.tables) return;
 
   // Create cluster panel and add to layer dashboard.
@@ -8,7 +8,7 @@ export default (_xyz, layer) => {
     options: {
       classList: 'panel expandable'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Panel title / expander.

@@ -36,7 +36,7 @@ export default _xyz => layer => () => {
   // Create XHR for fetching data from middleware.
   layer.xhr = new XMLHttpRequest();
 
-  if (layer.loader) layer.loader.style.display = 'block';
+  if (layer.view.loader) layer.view.loader.style.display = 'block';
     
   layer.xhr.open('GET', _xyz.host + '/api/layer/grid?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
@@ -57,7 +57,7 @@ export default _xyz => layer => () => {
   // Draw layer on load event.
   layer.xhr.onload = e => {
 
-    if (layer.loader) layer.loader.style.display = 'none';
+    if (layer.view.loader) layer.view.loader.style.display = 'none';
 
     // Check for existing layer and remove from map.
     if (layer.L) _xyz.map.removeLayer(layer.L);

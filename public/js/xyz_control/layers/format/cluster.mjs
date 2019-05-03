@@ -67,7 +67,7 @@ export default _xyz => layer => () => {
 
     delete layer.xhr;
 
-    if (layer.loader) layer.loader.style.display = 'none';
+    if (layer.view.loader) layer.view.loader.style.display = 'none';
 
     // Check for existing layer and remove from map.
     if (layer.L) _xyz.map.removeLayer(layer.L);

@@ -9,8 +9,8 @@ export default _xyz => function () {
 
 
   
-  if (layer.loader) layer.loader.style.display = 'block';
-  if (layer.toggle) layer.toggle.textContent = 'layers';
+  if (layer.view.loader) layer.view.loader.style.display = 'block';
+  if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers';
 
   // Push the layer into the layers hook array.
   if (_xyz.hooks) _xyz.hooks.push('layers', layer.key);
@@ -22,7 +22,7 @@ export default _xyz => function () {
   if (layer.tableview && _xyz.tableview.node) Object.keys(layer.tableview.tables).forEach(
     key => {
       const table = layer.tableview.tables[key];
-      if (table.display) table.show();
+      //if (table.display) table.show();
     }
   );
 

@@ -11,8 +11,8 @@ export default _xyz => function () {
   
 
   // Set layer display to false, hide the loader element and change the toggle icon.
-  if (layer.loader) layer.loader.style.display = 'none';
-  if (layer.toggle) layer.toggle.textContent = 'layers_clear';
+  if (layer.view.loader) layer.view.loader.style.display = 'none';
+  if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers_clear';
   
   // Filter the layer from the layers hook array.
   if (_xyz.hooks) _xyz.hooks.filter('layers', layer.key);   

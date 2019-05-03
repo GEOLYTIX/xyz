@@ -1,12 +1,4 @@
-import layer_panels from './panel/_panels.mjs';
-
 import layer_group from './group.mjs';
-
-import layer_toggle from './toggle.mjs';
-
-import layer_focus from './focus.mjs';
-
-import layer_icon from './icon.mjs';
 
 export default _xyz => {
 
@@ -31,6 +23,8 @@ export default _xyz => {
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
 
+      layer.view();
+
       const displayOrg = layer.display;
 
       if (layer_hooks)  layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
@@ -53,26 +47,14 @@ export default _xyz => {
 
 
       layer.group ? 
-        _xyz.layers.listview.groups[layer.group].container.appendChild(layer.drawer) :
-        _xyz.layers.listview.node.appendChild(layer.drawer);
+        _xyz.layers.listview.groups[layer.group].container.appendChild(layer.view.drawer) :
+        _xyz.layers.listview.node.appendChild(layer.view.drawer);
 
 
       // Push the layer into the layers hook array.
       if (layer.display) _xyz.hooks.push('layers', layer.key);
 
       if (!layer.display) layer.remove();
-
-      // Create control to toggle layer visibility.
-      layer_toggle(_xyz, layer);
-
-      // Create zoom to layer control
-      layer_focus(_xyz, layer);
-
-      //Add panel to layer control.
-      layer_panels(_xyz, layer);
-
-      //Add icon to layer header.
-      layer_icon(_xyz, layer);
 
       if (!displayOrg && layer.display) {
         layer.show();

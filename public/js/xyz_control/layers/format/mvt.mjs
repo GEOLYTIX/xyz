@@ -56,12 +56,12 @@ export default _xyz => layer => () => {
     .on('error', err => console.error(err))
     .on('loading', () => {
       
-      if (layer.loader) layer.loader.style.display = 'block';
+      if (layer.view.loader) layer.view.loader.style.display = 'block';
 
     })
     .on('load', () => {
      
-      if (layer.loader)  layer.loader.style.display = 'none';
+      if (layer.view.loader)  layer.view.loader.style.display = 'none';
 
       layer.loaded = true;
 
