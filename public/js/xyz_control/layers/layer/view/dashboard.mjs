@@ -4,8 +4,6 @@ import style from './panel/style/_styles.mjs';
 
 import draw from './panel/draw.mjs';
 
-import grid from './panel/grid.mjs';
-
 import cluster from './panel/cluster.mjs';
 
 import table from './panel/table.mjs';
@@ -36,9 +34,7 @@ export default (_xyz, layer) => {
   table(_xyz, layer);
     
   cluster(_xyz, layer);
-
-  grid(_xyz, layer);
-    
+   
   filters(_xyz, layer);
     
   style(_xyz, layer);

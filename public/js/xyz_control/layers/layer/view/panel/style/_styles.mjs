@@ -8,8 +8,7 @@ export default (_xyz, layer) => {
 
   const legends = _legends(_xyz);
 
-  // Meaningful styles can only be set for vector and cluster objects.
-  if (layer.format === 'grid' || layer.format === 'tiles') return;
+  if (!layer.style) return;
 
   // Add style panel to layer dashboard.
   const panel = _xyz.utils.createElement({
@@ -43,9 +42,21 @@ export default (_xyz, layer) => {
   });
 
   // Set layer theme to be the first theme defined in the workspace.
-  layer.style.theme = Object.values(layer.style.themes)[0];
+  //layer.style.theme = Object.values(layer.style.themes)[0];
 
   // if(layer.style.theme) panel.classList.add('expanded');
+
+
+  layer.style.legend = _xyz.utils.hyperHTML.wire()`
+  <div class="legend">`;
+
+  panel.appendChild(layer.style.legend);
+
+  if (layer.format === 'grid') legends.grid(layer);
+
+  if (!layer.style.themes) return;
+
+
 
   // Assign 'Basic' style entry to themes object.
   const themes = Object.assign({},{ 'Basic': null }, layer.style.themes);
@@ -68,11 +79,6 @@ export default (_xyz, layer) => {
       
     }
   });
-
-  layer.style.legend = _xyz.utils.hyperHTML.wire()`
-  <div class="legend">`;
-
-  panel.appendChild(layer.style.legend);
 
   // Apply the current theme.
   applyTheme(layer);
@@ -104,8 +110,6 @@ export default (_xyz, layer) => {
   }
 
   function setLegend() {
-
-    if(!layer.style.theme && layer.format != 'grid') return;
   
     if (layer.format === 'mvt' && layer.style.theme.type === 'categorized') legends.polyCategorized(layer);
   
@@ -117,8 +121,6 @@ export default (_xyz, layer) => {
   
     if (layer.format === 'cluster' && layer.style.theme.type === 'graduated') legends.clusterGraduated(layer);
   
-    if (layer.format === 'grid') legends.grid(layer);
-
   }
 
 };
