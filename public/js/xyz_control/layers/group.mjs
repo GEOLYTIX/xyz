@@ -21,13 +21,16 @@ export default (_xyz, layer) => {
 
   group.container.appendChild(group.header);
 
-  group.header.onclick = e => _xyz.utils.toggleExpanderParent({
-    expandable: e.target.parentNode,
-    expandedTag: 'expanded-group',
-    expandableTag: 'expandable-group',
-    accordeon: true,
-    scrolly: _xyz.desktop && _xyz.desktop.listviews,
-  });
+  group.header.onclick = e => {
+    e.stopPropagation();
+    _xyz.utils.toggleExpanderParent({
+      expandable: e.target.parentNode,
+      expandedTag: 'expanded-group',
+      expandableTag: 'expandable-group',
+      accordeon: true,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+  };
 
 
   // Create group meta container
@@ -54,7 +57,7 @@ export default (_xyz, layer) => {
   
   group.header.appendChild(group.visible);
   
-  group.header.onclick = e => {
+  group.visible.onclick = e => {
     e.stopPropagation();
     
     // Iterate through all layers and remove layer if layer is in group.

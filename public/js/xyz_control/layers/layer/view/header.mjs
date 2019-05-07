@@ -43,9 +43,7 @@ export default (_xyz, layer) => {
   header.appendChild(header.zoomToExtent);
 
   header.zoomToExtent.onclick = e => {
-
     e.stopPropagation();
-
     layer.zoomToExtent();
   };
 

@@ -46,13 +46,14 @@ export default (_xyz, layer) => {
     layer.view.drawer.classList.add('expandable');
     
     // Expander control for layer drawer.
-    layer.view.header.addEventListener('click', () => {
+    layer.view.header.onclick = e => {
+      e.stopPropagation();
       _xyz.utils.toggleExpanderParent({
         expandable: layer.view.drawer,
         accordeon: true,
         scrolly: _xyz.desktop && _xyz.desktop.listviews,
       });
-    });
+    };
 
     const expander = _xyz.utils.hyperHTML.wire()`
     <i
