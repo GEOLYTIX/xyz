@@ -56,8 +56,9 @@ export default (_xyz, record) => {
           if (freeRecords.length === _xyz.locations.listview.list.length) _xyz.locations.listview.init();
 
         };
-        
-        xhr.send();
+
+
+        if(confirm('Are you sure you want to delete this feature? This cannot be undone.')) xhr.send(); 
 
       }
     }
