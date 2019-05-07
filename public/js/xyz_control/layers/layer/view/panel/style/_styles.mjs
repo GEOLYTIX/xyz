@@ -41,11 +41,6 @@ export default (_xyz, layer) => {
     }
   });
 
-  // Set layer theme to be the first theme defined in the workspace.
-  //layer.style.theme = Object.values(layer.style.themes)[0];
-
-  // if(layer.style.theme) panel.classList.add('expanded');
-
 
   layer.style.legend = _xyz.utils.hyperHTML.wire()`
   <div class="legend">`;
