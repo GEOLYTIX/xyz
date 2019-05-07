@@ -58,7 +58,7 @@ fastify
         formAction: ['\'self\''],
         styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
         fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-        scriptSrc: ['\'self\'', '\'unsafe-inline\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
+        scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
         imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'data:']
       },
       setAllHeaders: true
