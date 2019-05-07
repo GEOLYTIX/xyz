@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>{{:title}}</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
+
+    <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
+    <script src="{{:dir}}/js/test.js" defer></script>
+
+</head>
+
+<body
+data-viewmode="desktop"
+data-nanoid={{:nanoid}}
+data-log={{:log}}
+data-user={{:user}}
+data-logrocket={{:logrocket}}
+data-token={{:token}}>
+
+    <div id="listviews" class="listviews"></div>
+
+    <div class="mapview">
+
+        <div id="Map" class="map" ></div>
+
+    </div>
+
+</body>
+
+</html>

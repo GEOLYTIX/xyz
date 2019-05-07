@@ -2,6 +2,8 @@ module.exports = fastify => {
 
   require('./root').route(fastify);
 
+  require('./view').route(fastify);
+
   fastify.login.route(fastify);
   
   require('./register')(fastify);
