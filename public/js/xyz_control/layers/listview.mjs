@@ -35,14 +35,9 @@ export default _xyz => {
       if (layer.group && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
 
       if (layer.group && layer.groupmeta) {
-        _xyz.utils.createElement({
-          tag: 'p',
-          options: {
-            className: 'meta',
-            innerHTML: layer.groupmeta
-          },
-          appendTo: _xyz.layers.listview.groups[layer.group].meta
-        });
+        const meta = _xyz.utils.hyperHTML.wire()`<div class="meta">`;
+        meta.innerHTML = layer.groupmeta;
+        _xyz.layers.listview.groups[layer.group].meta.appendChild(meta);
       }
 
 
