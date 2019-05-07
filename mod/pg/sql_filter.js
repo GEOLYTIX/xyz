@@ -60,12 +60,12 @@ module.exports = async filter => {
     }
           
     if((filter.like)) {
-      sql_filter.push(`${field} ILIKE '${filter.like}%'`);
+      sql_filter.push(`${field}::text ILIKE '${filter.like}%'`);
       sql_filter.push(conjunction);
     }
 
     if((filter.match)) {
-      sql_filter.push(`${field} ILIKE '${filter.match}'`);
+      sql_filter.push(`${field}::text ILIKE '${filter.match}'`);
       sql_filter.push(conjunction);
     }
 
