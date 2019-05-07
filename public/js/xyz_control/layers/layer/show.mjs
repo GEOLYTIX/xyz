@@ -7,8 +7,6 @@ export default _xyz => function () {
   layer.get();
   _xyz.mapview.attribution.check();
 
-
-  
   if (layer.view.loader) layer.view.loader.style.display = 'block';
   if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers';
 
@@ -22,7 +20,7 @@ export default _xyz => function () {
   if (layer.tableview && _xyz.tableview.node) Object.keys(layer.tableview.tables).forEach(
     key => {
       const table = layer.tableview.tables[key];
-      //if (table.display) table.show();
+      if (table.display) table.show();
     }
   );
 
