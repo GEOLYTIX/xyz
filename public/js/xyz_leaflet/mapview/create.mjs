@@ -45,7 +45,7 @@ export default _xyz => params => {
     Object.values(_xyz.layers.list).forEach(layer => layer.get());
           
   };
-    
+   
   _xyz.mapview.btn = assignBtn(_xyz, params);
     
   // Create attribution in map DOM.
