@@ -31,7 +31,7 @@ export default _xyz => {
         }
       });
 
-      _xyz.layers.listview.init();
+      _xyz.layers.listview.init(document.getElementById('layers'));
 
       _xyz.locations.listview.init();
 

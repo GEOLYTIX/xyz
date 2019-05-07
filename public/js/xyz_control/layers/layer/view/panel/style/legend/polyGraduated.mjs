@@ -1,6 +1,6 @@
 import d3_selection from 'd3-selection';
 
-export default (_xyz, layer) => {
+export default _xyz => layer => {
 
   const legend = d3_selection.select(layer.style.legend).append('svg');
 

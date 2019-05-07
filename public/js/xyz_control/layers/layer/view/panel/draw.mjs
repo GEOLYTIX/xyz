@@ -1,5 +1,7 @@
 export default (_xyz, layer) => {
 
+  if (!layer.edit) return;
+
   if(layer.edit.properties && Object.keys(layer.edit).length === 1) return;
 
   if(layer.edit.properties && layer.edit.delete && Object.keys(layer.edit).length === 2) return;
@@ -10,7 +12,7 @@ export default (_xyz, layer) => {
     options: {
       classList: 'panel expandable'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Panel title / expander.

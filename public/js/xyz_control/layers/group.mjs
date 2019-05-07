@@ -1,0 +1,85 @@
+export default (_xyz, layer) => {
+
+  // Create group object.
+  const group = {};
+
+  // Create new layer group.
+  _xyz.layers.listview.groups[layer.group] = group;
+
+
+  // Create layer group container.
+  group.container = _xyz.utils.hyperHTML.wire()`
+  <div class="drawer drawer-group expandable-group">`;
+
+  _xyz.layers.listview.node.appendChild(group.container);
+
+  
+  // Create layer group header.
+  group.header = _xyz.utils.hyperHTML.wire()`
+  <div class="header-group">
+  ${layer.group}`;
+
+  group.container.appendChild(group.header);
+
+  group.header.onclick = e => _xyz.utils.toggleExpanderParent({
+    expandable: e.target.parentNode,
+    expandedTag: 'expanded-group',
+    expandableTag: 'expandable-group',
+    accordeon: true,
+    scrolly: _xyz.desktop && _xyz.desktop.listviews,
+  });
+
+
+  // Create group meta container
+  group.meta = _xyz.utils.hyperHTML.wire()`<div>`;
+  group.container.appendChild(group.meta);
+
+  
+  // Check whether some layers group are visible and toggle visible button display accordingly.
+  group.chkVisibleLayer = () => {
+    let someVisible = Object.values(_xyz.layers.list)
+      .some(_layer => (_layer.group === layer.group && _layer.display));
+    
+    group.visible.style.display = someVisible ? 'block' : 'none';
+  };
+
+
+
+  // Create hide all group layers button.
+  group.visible = _xyz.utils.hyperHTML.wire()`
+    <i
+    class="material-icons cursor noselect btn_header hide-group"
+    title="Hide layers from group">
+    visibility`;
+  
+  group.header.appendChild(group.visible);
+  
+  group.header.onclick = e => {
+    e.stopPropagation();
+    
+    // Iterate through all layers and remove layer if layer is in group.
+    Object.values(_xyz.layers.list).forEach(_layer => {
+      if (_layer.group === layer.group && _layer.display) _layer.remove();
+    });
+  };
+
+
+  // Create group expander button.
+  const expander = _xyz.utils.hyperHTML.wire()`
+  <i
+  class="material-icons cursor noselect btn_header expander-group"
+  title="Toggle group panel">`;
+
+  group.header.appendChild(expander);
+
+  expander.onclick = e => {
+    e.stopPropagation();
+    _xyz.utils.toggleExpanderParent({
+      expandable: group.container,
+      expandedTag: 'expanded-group',
+      expandableTag: 'expandable-group',
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+  };
+
+};

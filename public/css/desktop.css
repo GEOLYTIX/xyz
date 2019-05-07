@@ -255,8 +255,7 @@
   margin-top: -2px;
   width: 100%;
   position: relative;
-  overflow: hidden;
-  display: none; }
+  overflow: hidden; }
 
 .loader:before {
   display: block;
@@ -1854,6 +1853,18 @@ button {
   .map div.leaflet-select-pane svg > g path {
     filter: url(#dropshadow); }
 
+.hover-box {
+  position: fixed;
+  margin: 0;
+  padding: 5px;
+  background: #eee;
+  box-shadow: 2px 2px 2px #666;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-delay: 0.2s;
+  opacity: 0;
+  z-index: 9999; }
+
 .leaflet-interactive.wait-cursor-enabled {
   cursor: wait !important; }
 
@@ -1909,8 +1920,7 @@ button {
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
-    font-family: ffmark, sans-serif;
-    margin-bottom: 5px; }
+    font-family: ffmark, sans-serif; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {

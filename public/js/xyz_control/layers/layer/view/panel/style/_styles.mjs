@@ -2,10 +2,13 @@ import polyStyle from './polyStyle.mjs';
 
 import clusterStyle from './clusterStyle.mjs';
 
+import _legends from './legend/_legends.mjs';
+
 export default (_xyz, layer) => {
 
-  // Meaningful styles can only be set for vector and cluster objects.
-  if (layer.format === 'grid' || layer.format === 'tiles') return;
+  const legends = _legends(_xyz);
+
+  if (!layer.style) return;
 
   // Add style panel to layer dashboard.
   const panel = _xyz.utils.createElement({
@@ -13,7 +16,7 @@ export default (_xyz, layer) => {
     options: {
       classList: 'panel expandable'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Style panel title / expander.
@@ -38,10 +41,17 @@ export default (_xyz, layer) => {
     }
   });
 
-  // Set layer theme to be the first theme defined in the workspace.
-  layer.style.theme = Object.values(layer.style.themes)[0];
 
-  // if(layer.style.theme) panel.classList.add('expanded');
+  layer.style.legend = _xyz.utils.hyperHTML.wire()`
+  <div class="legend">`;
+
+  panel.appendChild(layer.style.legend);
+
+  if (layer.format === 'grid') legends.grid(layer);
+
+  if (!layer.style.themes) return;
+
+
 
   // Assign 'Basic' style entry to themes object.
   const themes = Object.assign({},{ 'Basic': null }, layer.style.themes);
@@ -64,8 +74,6 @@ export default (_xyz, layer) => {
       
     }
   });
-
-  panel.appendChild(layer.style.legend);
 
   // Apply the current theme.
   applyTheme(layer);
@@ -92,7 +100,21 @@ export default (_xyz, layer) => {
       return;
     }
 
-    layer.style.setLegend(panel);
+    setLegend();
+  
+  }
+
+  function setLegend() {
+  
+    if (layer.format === 'mvt' && layer.style.theme.type === 'categorized') legends.polyCategorized(layer);
+  
+    if (layer.format === 'mvt' && layer.style.theme.type === 'graduated') legends.polyGraduated(layer);
+  
+    if (layer.format === 'cluster' && layer.style.theme.type === 'categorized') legends.clusterCategorized(layer);
+  
+    if (layer.format === 'cluster' && layer.style.theme.type === 'competition') legends.clusterCategorized(layer);
+  
+    if (layer.format === 'cluster' && layer.style.theme.type === 'graduated') legends.clusterGraduated(layer);
   
   }
 

@@ -10,10 +10,6 @@ import hooks from './hooks.mjs';
 
 import locales from './locales.mjs';
 
-import layerlistview from './layer/listview.mjs';
-
-import locationlistview from './location/listview.mjs';
-
 import gazetteer from './gazetteer.mjs';
 
 _xyz({
@@ -36,12 +32,6 @@ function init(_xyz) {
   if (btnWorkspace) btnWorkspace.onclick = () => {
     _xyz.workspace.admin();
   };
-
-  // Initialize layers.
-  _xyz.layers.listview = layerlistview(_xyz);
-
-  // Initialize location listview.
-  _xyz.locations.listview = locationlistview(_xyz);
 
   // Init gazetteer.
   gazetteer(_xyz);

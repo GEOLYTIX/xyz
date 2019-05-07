@@ -14,6 +14,10 @@ import filter_boolean from './filter_boolean.mjs';
 
 export default (_xyz, layer) => {
 
+  if (!layer.infoj) return;
+
+  if (!layer.infoj.some(entry => entry.filter)) return;
+
   // Create current filter object.
   layer.filter.current = {};
 
@@ -28,7 +32,7 @@ export default (_xyz, layer) => {
     options: {
       classList: 'panel expandable'
     },
-    appendTo: layer.dashboard
+    appendTo: layer.view.dashboard
   });
 
   // Filter panel title / expander.
