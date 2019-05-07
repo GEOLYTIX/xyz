@@ -17,7 +17,7 @@ const req_res = m => {
 // Load environment from dotenv if available.
 const dotenv = req_res('dotenv');
 
-if (dotenv) dotenv.load();
+if (dotenv) dotenv.config();
 
 // Initiate environment module.
 const env = require('./mod/env');
