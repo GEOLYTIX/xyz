@@ -4,7 +4,7 @@ export default _xyz => layer => () => {
   const table = layer.tableCurrent();
 
   // Return if layer should not be displayed.
-  if (!layer.display) return layer.remove();
+  if (!layer.display) return ;//layer.remove();
 
   if (!table) {
 

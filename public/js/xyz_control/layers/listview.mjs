@@ -18,34 +18,43 @@ export default _xyz => {
     // Reset groups.
     _xyz.layers.listview.groups = {};
 
-    const layer_hooks = Object.keys(_xyz.hooks.current.layers).length > 0;
-
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
 
+      // Create the layer view.
       layer.view();
 
       const displayOrg = layer.display;
 
-      if (layer_hooks)  layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
-      
-      // Create new layer group if group does not exist yet.
-      if (layer.group && !_xyz.layers.listview.groups[layer.group]) layer_group(_xyz, layer);
+      // Set layer display from hook.
+      if (Object.keys(_xyz.hooks.current.layers).length) layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
 
-      if (layer.group && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
+      if (layer.group) {
 
-      if (layer.group && layer.groupmeta) {
-        const meta = _xyz.utils.hyperHTML.wire()`<div class="meta">`;
-        meta.innerHTML = layer.groupmeta;
-        _xyz.layers.listview.groups[layer.group].meta.appendChild(meta);
-      }
+        // Create new layer group if group does not exist yet.
+        if (!_xyz.layers.listview.groups[layer.group]) {
+          layer_group(_xyz, layer);
 
+        } else {
+          _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
+        }
 
-      layer.group ? 
-        _xyz.layers.listview.groups[layer.group].container.appendChild(layer.view.drawer) :
+        // Add group meta to group container.
+        if (layer.groupmeta) {
+          const meta = _xyz.utils.hyperHTML.wire()`<div class="meta">`;
+          meta.innerHTML = layer.groupmeta;
+          _xyz.layers.listview.groups[layer.group].meta.appendChild(meta);
+        }
+
+        // Append the layer drawer to group.
+        _xyz.layers.listview.groups[layer.group].container.appendChild(layer.view.drawer);
+
+      } else {
+
+        // Append the layer drawer to listview.
         _xyz.layers.listview.node.appendChild(layer.view.drawer);
-
-
+      }
+             
       // Push the layer into the layers hook array.
       if (layer.display) _xyz.hooks.push('layers', layer.key);
 
@@ -53,11 +62,12 @@ export default _xyz => {
 
       if (!displayOrg && layer.display) {
         layer.show();
+
       } else {
+
+        // This updates whether the layer can be shown at current zoom.
         layer.tableCurrent();
       }
-
-      if (_xyz.log) console.log(layer);
 
     });
 

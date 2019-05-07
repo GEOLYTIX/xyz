@@ -47,7 +47,6 @@ export default (_xyz, layer) => {
   };
 
 
-
   // Create hide all group layers button.
   group.visible = _xyz.utils.hyperHTML.wire()`
     <i
@@ -69,9 +68,9 @@ export default (_xyz, layer) => {
 
   // Create group expander button.
   const expander = _xyz.utils.hyperHTML.wire()`
-  <i
-  class="material-icons cursor noselect btn_header expander-group"
-  title="Toggle group panel">`;
+    <i
+    class="material-icons cursor noselect btn_header expander-group"
+    title="Toggle group panel">`;
 
   group.header.appendChild(expander);
 

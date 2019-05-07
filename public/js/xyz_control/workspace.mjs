@@ -7,17 +7,6 @@ export default _xyz => {
     admin: admin,
   };
 
-  function filterLocales(locales) {
-
-    return Object.keys(locales)
-      .filter(key => key.indexOf('__') === -1)
-      .reduce((obj, key) => {
-        obj[key] = locales[key];
-        return obj;
-      }, {});
-
-  }
-
   async function fetchWS() { 
 
     const promise = await fetch(
@@ -30,9 +19,7 @@ export default _xyz => {
     // Assign workspace.
     const workspace = await promise.json();
 
-    // Filter invalid locales
-    _xyz.workspace.locales = filterLocales(workspace.locales);
-
+    _xyz.workspace.locales = workspace.locales;
   };
 
   function setWS(params) {
@@ -49,43 +36,42 @@ export default _xyz => {
 
       if (e.target.status !== 200) return console.error('Failed to retrieve workspace from XYZ host!');
 
-      // Assign workspace.
-      const workspace = e.target.response;
-
-      // Filter invalid locales
-      _xyz.workspace.locales = filterLocales(workspace.locales);
+      _xyz.workspace.locales = e.target.response.locales;
 
       if (params.locale) loadLocale(params);
 
       if (params.callback) params.callback(_xyz);
-
     };
 
     xhr.send();
-
   };
 
   function loadLocale(params = {}) {
 
-    params.locale = (_xyz.workspace.locales[params.locale] && params.locale) || Object.keys(_xyz.workspace.locales)[0];
+    // Assign key from params of first in locales list.
+    const locale = (_xyz.workspace.locales[params.locale] && params.locale) || Object.keys(_xyz.workspace.locales)[0];
 
-    _xyz.workspace.locale = { key: params.locale };
+    // Create locale object with key.
+    _xyz.workspace.locale = { key: locale };
 
-    Object.assign(_xyz.workspace.locale, _xyz.workspace.locales[params.locale], params);
+    // Assigne workspace locales from locales list and input params.
+    Object.assign(_xyz.workspace.locale, _xyz.workspace.locales[locale], params);
 
     // Create layers list.
     _xyz.layers.list = {};
     
-    // Filter invalid layers.
+    // Load layers.
     Object.keys(_xyz.workspace.locale.layers)
       .filter(key => key.indexOf('__') === -1)
       .forEach(key => {
 
+        // Create layer from locale definition and layers.layer object.
         const layer = Object.assign(
           {},
           _xyz.workspace.locale.layers[key],
           _xyz.layers.layer());
 
+        // Load the layer (adds layer to list).
         layer.load(key);
 
       });

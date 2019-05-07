@@ -11,7 +11,7 @@ export default _xyz => params => {
   _xyz.mapview.node = params.target;  
     
   // Load locale if defined in params or if no locale is yet loaded.
-  if (params.locale) _xyz.workspace.loadLocale(params);
+  if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
 
   if (params.view && (!params.view.z || !params.view.lat || !params.view.lng)) delete params.view;
                 
@@ -89,12 +89,9 @@ export default _xyz => params => {
   const z = _xyz.workspace.locale.view.z || 5;
           
   // Set view if defined in workspace.
-  _xyz.map.setView(
-    [
-      _xyz.workspace.locale.view.lat || 0,
-      _xyz.workspace.locale.view.lng || 0
-    ],
-    z);
+  _xyz.map.setView([
+    _xyz.workspace.locale.view.lat || 0,
+    _xyz.workspace.locale.view.lng || 0], z);
 
   // Check zoomBtn
   if (_xyz.mapview.btn 

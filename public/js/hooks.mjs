@@ -19,6 +19,8 @@ export default _xyz => {
 
   }; 
 
+  _xyz.hooks = hooks;
+
   // Take hooks from URL and store as current hooks.
   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
     if (hooks.current[key]) {
@@ -27,8 +29,6 @@ export default _xyz => {
       hooks.current[key] = value;
     }
   });
-
-  return hooks;
 
   // Add kvp hook to _xyz.hooks.current and URI.
   function set(hooks) {
@@ -84,6 +84,6 @@ export default _xyz => {
       history.pushState({ hooks: true }, 'hooks', '?' + _xyz.utils.paramString(_xyz.hooks.current));
     } catch (me) { console.log(me); }
 
-  }
+  };
 
 };

@@ -22,7 +22,7 @@ _xyz({
 
 function init(_xyz) {
 
-  _xyz.hooks = hooks(_xyz);
+  hooks(_xyz);
 
   // Set platform specific interface functions.
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
