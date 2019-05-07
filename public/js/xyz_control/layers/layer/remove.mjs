@@ -18,7 +18,7 @@ export default _xyz => function () {
   if (_xyz.hooks) _xyz.hooks.filter('layers', layer.key);   
   
   // Check whether other group layers are visible.
-  if (layer.group && _xyz.layers.listview.groups) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
+  if (layer.group && _xyz.layers.listview.groups && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
   
   // Iterate through tables to check whether table should be removed.
   if (layer.tableview) Object.keys(layer.tableview.tables).forEach(

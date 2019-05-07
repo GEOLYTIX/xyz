@@ -14,7 +14,7 @@ export default _xyz => function () {
   if (_xyz.hooks) _xyz.hooks.push('layers', layer.key);
 
   // Check whether other group layers are visible.
-  if (layer.group && _xyz.layers.listview.groups) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
+  if (layer.group && _xyz.layers.listview.groups && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
 
   // Iterate through tables to check whether table should be shown.
   if (layer.tableview && _xyz.tableview.node) Object.keys(layer.tableview.tables).forEach(
