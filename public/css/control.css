@@ -1901,6 +1901,11 @@ button {
     max-height: 2500px; }
     .listview .drawer.expanded .expander::before {
       content: "expand_less"; }
+  .listview .drawer.drawer-group div:not(:first-child) {
+    font-style: italic;
+    padding-left: 12px; }
+    .listview .drawer.drawer-group div:not(:first-child) .header {
+      border-bottom: 1px solid #bbb; }
   .listview .drawer.drawer-group .header-group {
     font-family: ffmark_bold, sans-serif !important;
     font-size: 15px !important;
@@ -1920,7 +1925,8 @@ button {
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
-    font-family: ffmark, sans-serif; }
+    font-family: ffmark, sans-serif;
+    border-bottom: 2px solid #333; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {

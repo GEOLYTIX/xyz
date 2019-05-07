@@ -634,7 +634,21 @@
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#083D77",
+                            "fill": true,
+                            "fillColor": "#083D77",
+                            "fillOpacity": 0.3
+                        },
+                        "highlight": {
+                            "color": "#F78764",
+                            "fill": true,
+                            "fillOpacity": 0.2
+                        }
+                    }
                 },
                 "oa": {
                     "name": "Output areas",

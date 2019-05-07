@@ -2,9 +2,10 @@ export default (_xyz, layer) => {
 
   const header = _xyz.utils.hyperHTML.wire()`
     <div
-    class="header"
-    style="${'border-bottom: ' + ((layer.group && '1px solid #bbb') || '2px solid #333')}">
+    class="header">
     ${layer.name || layer.key}`;
+
+  header.style.borderBottomColor = layer.style && layer.style.default && layer.style.default.fillColor ? layer.style.default.fillColor : `#333`;
 
   layer.view.header = header;
 
