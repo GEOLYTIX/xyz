@@ -114,7 +114,7 @@ export default _xyz => table => {
         dataSorted: (sorters, rows) => {
           stopHammertime = true;
         },
-        rowClick: (e, row) => {
+        /*rowClick: (e, row) => {
 
           const rowData = row.getData();
 
@@ -127,12 +127,26 @@ export default _xyz => table => {
             id: rowData.qid,
           });
 
-        }
+        }*/
+        rowClick: table.rowClick || rowClick
       });
 
     table.update();
 
     _xyz.tableview.current_table = table;
+
+    function rowClick(e, row){
+      const rowData = row.getData();
+
+      if (!rowData.qid) return;
+
+      _xyz.locations.select({
+        locale: _xyz.workspace.locale.key,
+        layer: table.layer.key,
+        table: table.from,
+        id: rowData.qid,
+      });
+    }
 
   };
 

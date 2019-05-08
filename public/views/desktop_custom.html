@@ -12,11 +12,41 @@
     <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
     <script src="{{:dir}}/js/test.js" defer></script>
 
+    <style>
+
+        #location {
+            left:-100%; 
+            top: 0; 
+            z-index:1001;
+        }
+
+        #location div {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 60px; 
+            height: 28px; 
+            background-color: #090;
+            text-align: center;
+            text-align: -webkit-center;
+        }
+
+        #location div i {
+            color: white;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
     <div id="listviews" class="listviews"></div>
+    <div id="location" class="listviews">
+        <div class="btn-location-back" role="button">
+            <i class="material-icons">keyboard_backspace</i>
+        </div>
+    </div>
 
     <div class="mapview">
 

@@ -29,8 +29,26 @@ _xyz({
           {
             column: 'borough', dir: 'asc'
           }
-      ]
+      ],
+      rowClick: (e, row) => {
+        const rowData = row.getData();
+
+        if (!rowData.qid) return;
+
+        _xyz.locations.select({
+          locale: _xyz.workspace.locale.key,
+          layer: _xyz.layers.list['Advice Center'].key,
+          //table: table.from,
+          table: 'gla',
+          id: rowData.qid,
+        });
+
+        document.querySelector('#location').style.left = 0;
+
+      }
     });
 
   }
 });
+
+

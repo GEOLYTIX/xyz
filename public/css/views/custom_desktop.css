@@ -8,28 +8,7 @@
   font-family: ffmark_bold;
   src: url(../../fonts/MarkWebPro-Bold.woff) format("woff"); }
 /* @import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
-/* fallback */
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  /*src: url(https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');*/
-  src: url(../fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2); }
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased; }
-
+/*@import '../material_icons';*/
 /* @import url('https://fonts.googleapis.com/css?family=PT+Mono'); */
 /* cyrillic-ext */
 @font-face {
@@ -2186,5 +2165,30 @@ input[type=number] {
     position: absolute;
     width: 100%;
     text-align: center; }
+
+/* Begin Material Icons */
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  /*src: url(https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');*/
+  src: url(../../fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2); }
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased; }
+
+/* End Material Icons */
 
 /*# sourceMappingURL=custom_desktop.css.map */
