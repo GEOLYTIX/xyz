@@ -14,7 +14,7 @@ _xyz({
     });
 
     //_xyz.layers.list['Advice Center'].show();
-    //console.log(_xyz.layers.list['Advice Center']);
+    console.log(_xyz.layers.list['Advice Center']);
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list['Advice Center'],
@@ -38,8 +38,7 @@ _xyz({
         _xyz.locations.select({
           locale: _xyz.workspace.locale.key,
           layer: _xyz.layers.list['Advice Center'].key,
-          //table: table.from,
-          table: 'gla',
+          table: _xyz.layers.list['Advice Center'].table,
           id: rowData.qid,
         });
 
