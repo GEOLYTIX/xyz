@@ -8,6 +8,8 @@ import * as utils from '../utils/_utils.mjs';
 
 import workspace from './workspace.mjs';
 
+import hooks from './hooks.mjs';
+
 import layers from './layers/_layers.mjs';
 
 import locations from './locations/_locations.mjs';
@@ -33,6 +35,8 @@ export default async (params) => {
   _xyz.tableview = tableview(_xyz);
 
   _xyz.workspace = workspace(_xyz);
+
+  if (params.hooks) hooks(_xyz);
 
   _xyz.host = params.host;
 

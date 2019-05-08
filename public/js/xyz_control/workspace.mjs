@@ -49,7 +49,9 @@ export default _xyz => {
   function loadLocale(params = {}) {
 
     // Assign key from params of first in locales list.
-    const locale = (_xyz.workspace.locales[params.locale] && params.locale) || Object.keys(_xyz.workspace.locales)[0];
+    const locale = (_xyz.workspace.locales[params.locale] && params.locale)
+    || (_xyz.hooks && _xyz.hooks.current.locale)
+    || Object.keys(_xyz.workspace.locales)[0];
 
     // Create locale object with key.
     _xyz.workspace.locale = { key: locale };

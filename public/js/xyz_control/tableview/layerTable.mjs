@@ -73,17 +73,17 @@ export default _xyz => table => {
 
   table.activate = () => {
 
-    // if (_xyz.tableview.btn.tableViewport) {
+    if (_xyz.tableview && _xyz.tableview.btn && _xyz.tableview.btn.tableViewport) {
 
-    //   if (table.viewport) {
-    //     _xyz.tableview.btn.tableViewport.classList.add('active');
+      if (table.viewport) {
+        _xyz.tableview.btn.tableViewport.classList.add('active');
 
-    //   } else {
-    //     _xyz.tableview.btn.tableViewport.classList.remove('active');
-    //   }
+      } else {
+        _xyz.tableview.btn.tableViewport.classList.remove('active');
+      }
 
-    //   _xyz.tableview.btn.tableViewport.style.display = 'block';
-    // }
+      _xyz.tableview.btn.tableViewport.style.display = 'block';
+    }
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,

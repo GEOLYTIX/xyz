@@ -6,10 +6,6 @@ import mobile from '../views/mobile.mjs';
 
 import desktop from '../views/desktop.mjs';
 
-import hooks from './hooks.mjs';
-
-import locales from './locales.mjs';
-
 import gazetteer from './gazetteer.mjs';
 
 _xyz({
@@ -17,30 +13,88 @@ _xyz({
   token: document.body.dataset.token,
   log: document.body.dataset.log,
   nanoid: document.body.dataset.nanoid,
+  hooks: true,
   callback: init,
 });
 
 function init(_xyz) {
 
-  hooks(_xyz);
+  createMap(_xyz);
+
+  // Create locales dropdown if length of locales array is > 1.
+  if (Object.keys(_xyz.workspace.locales).length > 1) _xyz.utils.dropdown({
+    title: 'Show layers for the following locale:',
+    appendTo: document.getElementById('localeDropdown'),
+    entries: _xyz.workspace.locales,
+    label: 'name',
+    val: 'loc',
+    selected: _xyz.workspace.locale.key,
+    onchange: e => {
+    
+      _xyz.hooks.removeAll();
+    
+      _xyz.hooks.set({locale : e.target.value});
+  
+      _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
+  
+      createMap(_xyz);
+    }
+  });
+
+  _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
 
   // Set platform specific interface functions.
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
   if (document.body.dataset.viewmode === 'desktop') desktop(_xyz);
+
 
   const btnWorkspace = document.getElementById('btnWorkspace');
   if (btnWorkspace) btnWorkspace.onclick = () => {
     _xyz.workspace.admin();
   };
 
-  // Init gazetteer.
-  gazetteer(_xyz);
 
-  // Compose locales load function and locales drop down.
-  locales(_xyz);
+  // Init gazetteer.
+  //gazetteer(_xyz);
+
 
   if (_xyz.log) console.log(_xyz);
 
   logRocket(document.body.dataset.logrocket);
 
 }
+
+function createMap (_xyz) {
+
+  // Create mapview control.
+  _xyz.mapview.create({
+    target: document.getElementById('Map'),
+    view: {
+      lat: _xyz.hooks.current.lat,
+      lng: _xyz.hooks.current.lng,
+      z: _xyz.hooks.current.z
+    },
+    scrollWheelZoom: true,
+    btn: {
+      ZoomIn: document.getElementById('btnZoomIn'),
+      ZoomOut: document.getElementById('btnZoomOut'),
+      Locate: document.getElementById('btnLocate'),
+    }
+  });
+
+  // Create tableview control.
+  _xyz.tableview.create({
+    target: document.getElementById('tableview'),
+    btn: {
+      toggleTableview: document.getElementById('toggleTableview'),
+      tableViewport: document.getElementById('btnTableViewport')
+    }
+  });
+
+  _xyz.layers.listview.init(document.getElementById('layers'));
+
+  _xyz.locations.listview.init();
+
+  //_xyz.gazetteer.init();
+
+};
