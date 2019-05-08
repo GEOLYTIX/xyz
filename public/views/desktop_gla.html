@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>Custom</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{:dir}}/css/views/custom_desktop.css" />
+
+    <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
+    <script src="{{:dir}}/js/gla.js" defer></script>
+    <style>
+        #mayor_header {
+            background-color: #353d42;
+            color: #FFF;
+            height: 65px;
+            font-size: 21px;
+            font-weight: 600;
+            white-space: nowrap;
+            line-height: 3.2;
+            width: 100%;
+            text-align: center;
+        }
+
+        #app_body {
+            min-width: 768px;
+            max-width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #F5F5F5;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-gap: 10px;
+        }
+
+        .picture_box {
+            height: 260px;
+            background-image: url(https://res.cloudinary.com/geolytix/image/upload/v1557337040/gla/signs.png);
+            background-size: cover;
+        }
+
+        .pink_box {
+            background-color: #f06;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .pink_box>.title {
+            font-size: 25px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="mayor_header">MAYOR OF LONDON</div>
+    <div id="app_body">
+
+        <div style="grid-column: 1; grid-row: 1;" class="picture_box"></div>
+
+        <div style="grid-column: 1; grid-row: 2;" class="pink_box">
+            <p class="title">Search for an advice centre near you</p>
+            <p>Either search for a specific location, or click on a point on the map to see details of advice centres
+                near you</p>
+        </div>
+
+        <div style="grid-column: 1; grid-row: 3; background-color: #fff;">filter</div>
+
+        <div style="grid-column: 1; grid-row: 4; background-color: #fff;">location</div>
+
+        <div id="Map" style="grid-column: 2; grid-row: 1/3;"></div>
+
+        <div style="grid-column: 2; grid-row: 3;" class="pink_box">
+            <p class="title">List of advice centres</p>
+            <p>Click on an advice centre in the list below to see contact details and opening hours</p>
+        </div>
+
+        <div id="List" style="grid-column: 2; grid-row: 4; background-color: #fff;"></div>
+
+    </div>
+
+    </div>
+
+
+
+    <!-- <div id="listviews" class="listviews"></div>
+    <div id="location" class="listviews">
+        <div class="btn-location-back" role="button">
+            <i class="material-icons">keyboard_backspace</i>
+        </div>
+    </div>
+
+    <div class="mapview">
+
+        <div id="Map" class="map"></div>
+
+    </div> -->
+
+</body>
+
+</html>
