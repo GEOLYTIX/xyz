@@ -1,4 +1,4 @@
-import _xyz_instance from '../_xyz.mjs';
+import _xyz_instance from './_xyz.mjs';
 
 import L from 'leaflet';
 
@@ -9,6 +9,8 @@ import * as utils from '../utils/_utils.mjs';
 import workspace from './workspace.mjs';
 
 import hooks from './hooks.mjs';
+
+import gazetteer from './gazetteer.mjs';
 
 import layers from './layers/_layers.mjs';
 
@@ -37,6 +39,8 @@ export default async (params) => {
   _xyz.workspace = workspace(_xyz);
 
   if (params.hooks) hooks(_xyz);
+
+  _xyz.gazetteer = gazetteer(_xyz);
 
   _xyz.host = params.host;
 

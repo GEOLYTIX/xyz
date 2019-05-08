@@ -1,6 +1,6 @@
 export default _xyz => {
 
-  const hooks = {
+  _xyz.hooks = {
 
     current: {
       layers: [],
@@ -17,16 +17,14 @@ export default _xyz => {
 
     filter: filter,
 
-  }; 
-
-  _xyz.hooks = hooks;
+  };
 
   // Take hooks from URL and store as current hooks.
   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-    if (hooks.current[key]) {
-      hooks.current[key] = decodeURI(value).split(',');
+    if (_xyz.hooks.current[key]) {
+      _xyz.hooks.current[key] = decodeURI(value).split(',');
     } else {
-      hooks.current[key] = value;
+      _xyz.hooks.current[key] = value;
     }
   });
 

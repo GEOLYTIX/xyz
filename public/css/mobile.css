@@ -2016,16 +2016,15 @@ button {
       .listview .drawer .dashboard .third.right {
         float: right; }
 
-#Gazetteer {
-  display: none;
+.gazetteer {
   background-color: #fff; }
-  #Gazetteer .clear {
+  .gazetteer .clear {
     position: absolute;
     top: 0;
     right: 0;
     font-size: 33px;
     color: #090; }
-  #Gazetteer .clear-mask {
+  .gazetteer .clear-mask {
     position: absolute;
     top: 0;
     right: 0;
@@ -2034,10 +2033,15 @@ button {
     text-align: right;
     line-height: 2;
     color: white; }
-  #Gazetteer input {
+  .gazetteer input {
     width: 100%;
-    font-size: 20px; }
-  #Gazetteer > ul {
+    font-size: 20px;
+    box-shadow: 0 3px 3px -3px #000; }
+  .gazetteer .bar {
+    position: relative;
+    display: block;
+    width: 100%; }
+  .gazetteer > ul {
     -webkit-padding-start: 0;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;

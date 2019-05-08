@@ -101,7 +101,7 @@ export default _xyz => layer => () => {
   
   function applyLayerStyle(feature){
 
-    let style = Object.assign({}, layer.style.default, layer.selected.includes(feature.properties.id) ? layer.style.selected : {});
+    let style = Object.assign({}, layer.style.default);
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return style;

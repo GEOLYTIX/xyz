@@ -6,8 +6,6 @@ import mobile from '../views/mobile.mjs';
 
 import desktop from '../views/desktop.mjs';
 
-import gazetteer from './gazetteer.mjs';
-
 _xyz({
   host: document.head.dataset.dir || new String(''),
   token: document.body.dataset.token,
@@ -41,7 +39,6 @@ function init(_xyz) {
     }
   });
 
-  _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
 
   // Set platform specific interface functions.
   if (document.body.dataset.viewmode === 'mobile') mobile(_xyz);
@@ -52,11 +49,6 @@ function init(_xyz) {
   if (btnWorkspace) btnWorkspace.onclick = () => {
     _xyz.workspace.admin();
   };
-
-
-  // Init gazetteer.
-  //gazetteer(_xyz);
-
 
   if (_xyz.log) console.log(_xyz);
 
@@ -95,6 +87,9 @@ function createMap (_xyz) {
 
   _xyz.locations.listview.init();
 
-  //_xyz.gazetteer.init();
+  _xyz.gazetteer.init({
+    target: document.getElementById('gazetteer'),
+    toggle: document.getElementById('btnGazetteer'),
+  });
 
 };
