@@ -93,6 +93,8 @@ export default _xyz => table => {
         columns: table.columns,
         autoResize: true,
         height: _xyz.tableview.height || '100%',
+        groupBy: table.groupBy || null,
+        initialSort: table.initialSort || null,
         dataSorting: sorters => {
 
           if (!sorters[0]) return;

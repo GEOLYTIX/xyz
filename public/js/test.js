@@ -1,5 +1,6 @@
 _xyz({
   host: document.head.dataset.dir || new String(''),
+  hooks: true,
   callback: _xyz => {
 
     _xyz.mapview.create({
@@ -13,12 +14,22 @@ _xyz({
     });
 
     //_xyz.layers.list['Advice Center'].show();
+    //console.log(_xyz.layers.list['Advice Center']);
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list['Advice Center'],
       target: document.getElementById('listviews'),
       key: 'gla',
-      visible: ['organisation']
+      visible: ['organisation'],
+      groupBy: 'borough',
+      initialSort: [
+          {
+            column: 'organisation', dir: 'asc'
+          },
+          {
+            column: 'borough', dir: 'asc'
+          }
+      ]
     });
 
   }

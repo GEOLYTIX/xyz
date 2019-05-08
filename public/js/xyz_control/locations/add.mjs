@@ -14,6 +14,8 @@ import expander from './controls/expander.mjs';
 
 export default _xyz => record => {
 
+  if(!_xyz.locations.listview.node) return;
+
   _xyz.locations.listview.node.parentElement.style.display = 'block';
 
   Object.values(_xyz.locations.listview.node.children).forEach(el => el.classList.remove('expanded'));
