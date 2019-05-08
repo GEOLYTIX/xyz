@@ -17,7 +17,8 @@ _xyz({
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list['Advice Center'],
       target: document.getElementById('listviews'),
-      key: 'gla'
+      key: 'gla',
+      visible: ['organisation']
     });
 
   }

@@ -25,6 +25,8 @@ export default _xyz => table => {
 
     if(col.type === 'datetime') col.formatter = _xyz.utils.formatDateTime;
 
+    if(table.visible && table.visible.length) col.visible = table.visible.includes(col.field) ?  true : false;
+
   });
 
   table.update = () => {
