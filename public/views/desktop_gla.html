@@ -107,13 +107,6 @@
             position: relative;
         }
 
-        /*.custom-select:after {
-            position: absolute;
-            content: "\00d7";
-            top: 14px;
-            right: 6px;
-        }*/
-
         .custom-select select {
             display: none;
         }
@@ -240,7 +233,20 @@
                 </div>
 
             </div>
-            <div class="btn light" style="grid-row: 4; grid-column: 1/3">Search by type of advice/support</div>
+            <div class="btn light" style="grid-row: 4; grid-column: 1/3">
+                <div class="custom-select">
+                    <select>
+                        <option value=0>Search by type of advice/support</option>
+                        <option value=1>Show all</option>
+                        <option value=2>Initial Advice</option>
+                        <option value=3>Written Advice</option>
+                        <option value=4>Form Filling</option>
+                        <option value=5>Casework</option>
+                        <option value=6>Representation</option>
+                        <option value=7>Tribunal Support</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div style="grid-column: 1;
