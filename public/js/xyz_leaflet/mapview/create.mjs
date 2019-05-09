@@ -49,7 +49,7 @@ export default _xyz => params => {
   _xyz.mapview.btn = assignBtn(_xyz, params);
     
   // Create attribution in map DOM.
-  _xyz.mapview.attribution.create();
+  if (params.attribution) _xyz.mapview.attribution.create();
         
   if(_xyz.workspace.locale.showScaleBar) {
     // Add scale bar to map
