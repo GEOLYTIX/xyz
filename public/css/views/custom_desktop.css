@@ -1402,7 +1402,9 @@ button {
   background-color: #fff;
   white-space: nowrap;
   overflow: visible;
-  color: #333; }
+  color: #333;
+  width: 100%;
+  /* full width on grid */ }
 
 .tabulator .tabulator-tableHolder .tabulator-table .tabulator-row.tabulator-calcs {
   font-weight: bold;
@@ -1747,9 +1749,9 @@ button {
 
 .tabulator-row.tabulator-group {
   box-sizing: border-box;
-  border-bottom: 1px solid #999;
-  border-left: 1px solid #ddd;
-  border-top: 1px solid #999;
+  /*border-bottom: 1px solid #f06;
+  border-left: 1px solid #f06;
+  border-top: 1px solid #f06;*/
   padding: 5px;
   padding-left: 10px;
   background: #fafafa;
