@@ -22,6 +22,7 @@
             line-height: 3.2;
             width: 100%;
             text-align: center;
+            min-width: 768px;
         }
 
         #app_body {
@@ -32,7 +33,7 @@
             background-color: #F5F5F5;
             padding: 10px;
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 2fr 3fr;
             grid-gap: 10px;
         }
 
@@ -52,6 +53,20 @@
             font-size: 25px;
             font-weight: bold;
         }
+
+        .btn {
+            padding: 10px;
+        }
+
+        .darkish {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .light {
+            color: #222;
+            border: 2px solid #222;
+        }
     </style>
 
 </head>
@@ -69,37 +84,33 @@
                 near you</p>
         </div>
 
-        <div style="grid-column: 1; grid-row: 3; background-color: #fff;">filter</div>
+        <div style="grid-column: 1; grid-row: 3;
+        background-color: #fff;
+        padding: 10px;
+        display: grid;
+        grid-gap: 10px;">
+            <div class="btn light" style="grid-row: 1; grid-column: 1/3">Enter your postcode</div>
+            <div class="btn darkish" style="grid-row: 2; grid-column: 1/2">Find me (GPS)</div>
+            <div class="btn darkish" style="grid-row: 2; grid-column: 2/3">Find this Postcode</div>
+            <div class="btn light" style="grid-row: 3; grid-column: 1/3">Search by the borough where you live or work
+            </div>
+            <div class="btn light" style="grid-row: 4; grid-column: 1/3">Search by type of advice/support</div>
+        </div>
 
         <div style="grid-column: 1; grid-row: 4; background-color: #fff;">location</div>
 
-        <div id="Map" style="grid-column: 2; grid-row: 1/3;"></div>
+        <div id="Map" style="grid-column: 2; grid-row: 1/4;"></div>
 
-        <div style="grid-column: 2; grid-row: 3;" class="pink_box">
+        <div style="grid-column: 2; grid-row: 4;" class="pink_box">
             <p class="title">List of advice centres</p>
             <p>Click on an advice centre in the list below to see contact details and opening hours</p>
         </div>
 
-        <div id="List" style="grid-column: 2; grid-row: 4; background-color: #fff;"></div>
+        <div id="List" style="grid-column: 2; grid-row: 5; background-color: #fff;"></div>
 
     </div>
 
     </div>
-
-
-
-    <!-- <div id="listviews" class="listviews"></div>
-    <div id="location" class="listviews">
-        <div class="btn-location-back" role="button">
-            <i class="material-icons">keyboard_backspace</i>
-        </div>
-    </div>
-
-    <div class="mapview">
-
-        <div id="Map" class="map"></div>
-
-    </div> -->
 
 </body>
 
