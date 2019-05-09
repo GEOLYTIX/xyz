@@ -24,15 +24,15 @@ _xyz({
       visible: ['organisation'],
       groupBy: 'borough',
       initialSort: [
-          {
-            column: 'organisation', dir: 'asc'
-          },
-          {
-            column: 'borough', dir: 'asc'
-          }
+        {
+          column: 'organisation', dir: 'asc'
+        },
+        {
+          column: 'borough', dir: 'asc'
+        }
       ],
       groupStartOpen: false,
-      groupToggleElement: "header",
+      groupToggleElement: 'header',
       rowClick: (e, row) => {
         const rowData = row.getData();
 

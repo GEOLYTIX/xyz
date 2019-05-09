@@ -18,16 +18,17 @@ export default _xyz => {
     // Reset groups.
     _xyz.layers.listview.groups = {};
 
+    Object.values(_xyz.layers.list).forEach(layer => {
+
+      // Set layer display from hook.
+      if (Object.keys(_xyz.hooks.current.layers).length) layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
+    });
+
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
 
       // Create the layer view.
       layer.view();
-
-      const displayOrg = layer.display;
-
-      // Set layer display from hook.
-      if (Object.keys(_xyz.hooks.current.layers).length) layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
 
       if (layer.group) {
 
@@ -55,17 +56,12 @@ export default _xyz => {
         _xyz.layers.listview.node.appendChild(layer.view.drawer);
       }
              
-      // Push the layer into the layers hook array.
-      if (layer.display) _xyz.hooks.push('layers', layer.key);
-
-      if (!layer.display) layer.remove();
-
-      if (!displayOrg && layer.display) {
+      if (layer.display) {
         layer.show();
+      }
 
-      } else {
-
-        // This updates whether the layer can be shown at current zoom.
+      if (!layer.display) {
+        layer.remove();
         layer.tableCurrent();
       }
 

@@ -61,6 +61,7 @@ function createMap (_xyz) {
   // Create mapview control.
   _xyz.mapview.create({
     target: document.getElementById('Map'),
+    attribution: true,
     view: {
       lat: _xyz.hooks.current.lat,
       lng: _xyz.hooks.current.lng,
