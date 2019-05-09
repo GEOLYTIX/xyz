@@ -15,7 +15,11 @@ _xyz({
 
     //_xyz.layers.list['Advice Center'].show();
     //console.log(_xyz.layers.list['Advice Center']);
+
+
     customDropdown(_xyz);
+
+    searchPostcode();
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list['Advice Center'],
@@ -146,4 +150,20 @@ function customDropdown(_xyz) {
     /*if the user clicks anywhere outside the select box,
     then close all select boxes:*/
     document.addEventListener("click", closeAllSelect);
+}
+
+function searchPostcode(){
+  document.querySelector('#postcode-search input').addEventListener('focus', e => {
+    console.log('this is focus');
+    document.getElementById('postcode-find').classList.remove('darkish');
+    document.getElementById('postcode-find').classList.add('pink-bg');
+    e.target.parentNode.classList.add('pink-br');
+  });
+
+  document.querySelector('#postcode-search input').addEventListener('blur', e => {
+    console.log('this is blur');
+    document.getElementById('postcode-find').classList.add('darkish');
+    document.getElementById('postcode-find').classList.remove('pink-bg');
+    e.target.parentNode.classList.remove('pink-br');
+  });
 }
