@@ -95,6 +95,7 @@ export default _xyz => table => {
         height: _xyz.tableview.height || '100%',
         groupBy: table.groupBy || null,
         initialSort: table.initialSort || null,
+        groupStartOpen: typeof(table.groupStartOpen) === undefined ? true : table.groupStartOpen,
         dataSorting: sorters => {
 
           if (!sorters[0]) return;
@@ -114,20 +115,6 @@ export default _xyz => table => {
         dataSorted: (sorters, rows) => {
           stopHammertime = true;
         },
-        /*rowClick: (e, row) => {
-
-          const rowData = row.getData();
-
-          if (!rowData.qid) return;
-
-          _xyz.locations.select({
-            locale: _xyz.workspace.locale.key,
-            layer: table.layer.key,
-            table: table.from,
-            id: rowData.qid,
-          });
-
-        }*/
         rowClick: table.rowClick || rowClick
       });
 
