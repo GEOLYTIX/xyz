@@ -96,6 +96,7 @@ export default _xyz => table => {
         groupBy: table.groupBy || null,
         initialSort: table.initialSort || null,
         groupStartOpen: typeof(table.groupStartOpen) === undefined ? true : table.groupStartOpen,
+        groupToggleElement: typeof(table.groupToggleElement) === undefined ? "arrow" : table.groupToggleElement,
         dataSorting: sorters => {
 
           if (!sorters[0]) return;
@@ -115,7 +116,8 @@ export default _xyz => table => {
         dataSorted: (sorters, rows) => {
           stopHammertime = true;
         },
-        rowClick: table.rowClick || rowClick
+        rowClick: table.rowClick || rowClick,
+        groupClick: table.groupClick || null
       });
 
     table.update();

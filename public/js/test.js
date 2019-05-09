@@ -16,10 +16,10 @@ _xyz({
     //_xyz.layers.list['Advice Center'].show();
     //console.log(_xyz.layers.list['Advice Center']);
 
-    document.querySelector('#location .btn-location-back').addEventListener('click', e => {
+    /*document.querySelector('#location .btn-location-back').addEventListener('click', e => {
       e.stopPropagation();
       document.querySelector('#location').style.left = '-100%';
-    });
+    });*/
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list['Advice Center'],
@@ -51,6 +51,11 @@ _xyz({
         document.querySelector('#location').style.left = 0;
         //document.querySelector('#location').classList.add('reveal');
 
+      },
+      groupClick: (e, group) => {
+        console.log('this is a click');
+        //group.
+        console.log(group);
       }
     });
 
