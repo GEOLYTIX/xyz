@@ -175,8 +175,8 @@ export default _xyz => {
   function search(term) {
 
   // Show loader while waiting for results from XHR.
-    _xyz.gazetteer.loader.style.display = 'block';
-    _xyz.gazetteer.result.innerHTML = '';
+    if(_xyz.gazetteer.loader) _xyz.gazetteer.loader.style.display = 'block';
+    if(_xyz.gazetteer.result) _xyz.gazetteer.result.innerHTML = '';
 
     // Create abortable xhr.
     _xyz.gazetteer.xhr = new XMLHttpRequest();
@@ -194,13 +194,15 @@ export default _xyz => {
     _xyz.gazetteer.xhr.onload = e => {
 
     // Hide loader.
-      _xyz.gazetteer.loader.style.display = 'none';
+      if(_xyz.gazetteer.loader) _xyz.gazetteer.loader.style.display = 'none';
 
       // List results or show that no results were found
       if (e.target.status !== 200) return;
       
       // Parse the response as JSON and check for results length.
       const json = e.target.response;
+
+      console.log(json);
 
       if (json.length === 0) {
         _xyz.utils.createElement({

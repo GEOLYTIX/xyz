@@ -19,7 +19,7 @@ _xyz({
 
     customDropdown(_xyz);
 
-    searchPostcode();
+    searchPostcode(_xyz);
 
     _xyz.tableview.layerTable({
       layer: _xyz.layers.list['Advice Center'],
@@ -103,28 +103,16 @@ function customDropdown(_xyz) {
         }
 
         x[i].appendChild(b);
-        console.log(b);
+
         a.addEventListener("click", e => {
             /*when the select box is clicked, close any other select boxes,
             and open/close the current select box:*/
             e.stopPropagation();
-
-            /*d = _xyz.utils.createElement({
-              tag: 'i',
-              options: {
-                classList: "material-icons",
-                textContent: 'clear'
-              },
-              style: {
-                fontSize: '14px'
-              },
-              appendTo: e.target.parentNode
-            });*/
             
             closeAllSelect(e.target);
             e.target.nextSibling.classList.toggle("select-hide");
             e.target.classList.toggle("select-arrow-active");
-            console.log(e.target);
+
         });
     }
 
@@ -152,18 +140,33 @@ function customDropdown(_xyz) {
     document.addEventListener("click", closeAllSelect);
 }
 
-function searchPostcode(){
-  document.querySelector('#postcode-search input').addEventListener('focus', e => {
-    console.log('this is focus');
+function searchPostcode(_xyz){
+
+  let input = document.querySelector('#postcode-search input'),
+      find = document.querySelector('#postcode-find');
+  
+  input.addEventListener('focus', e => {
     document.getElementById('postcode-find').classList.remove('darkish');
     document.getElementById('postcode-find').classList.add('pink-bg');
     e.target.parentNode.classList.add('pink-br');
   });
 
-  document.querySelector('#postcode-search input').addEventListener('blur', e => {
-    console.log('this is blur');
+  input.addEventListener('blur', e => {
     document.getElementById('postcode-find').classList.add('darkish');
     document.getElementById('postcode-find').classList.remove('pink-bg');
     e.target.parentNode.classList.remove('pink-br');
   });
+
+  input.addEventListener('keyup', e => {
+    if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
+    _xyz.gazetteer.search(e.target.value);
+  });
+
+  find.addEventListener('click', e => {
+    console.log('find postcode');
+  });
+
+
+
+
 }
