@@ -157,16 +157,15 @@ function searchPostcode(_xyz){
     e.target.parentNode.classList.remove('pink-br');
   });
 
-  input.addEventListener('keyup', e => {
+  find.addEventListener('click', e => {
+    console.log('find postcode');
     if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
     _xyz.gazetteer.search(e.target.value);
   });
 
-  find.addEventListener('click', e => {
-    console.log('find postcode');
-  });
 
+}
 
-
-
+function createFeature(_xyz, json){
+  
 }
