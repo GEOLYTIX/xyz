@@ -158,14 +158,44 @@ function searchPostcode(_xyz){
   });
 
   find.addEventListener('click', e => {
-    console.log('find postcode');
+    // Create abortable xhr.
+    _xyz.gazetteer.xhr = new XMLHttpRequest();
     if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
-    _xyz.gazetteer.search(e.target.value);
+
+    // Send gazetteer query to backend.
+    _xyz.gazetteer.xhr.open('GET', _xyz.host + '/api/gazetteer/autocomplete?' + _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      q: encodeURIComponent(input.value),
+      token: _xyz.token
+    }));
+
+    _xyz.gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
+    _xyz.gazetteer.xhr.responseType = 'json';
+
+    _xyz.gazetteer.xhr.onload = e => {
+       // List results or show that no results were found
+      if (e.target.status !== 200) return;
+
+      // Parse the response as JSON and check for results length.
+      const json = e.target.response;
+
+      if (json.length === 0) {
+        alert('No results for this search.');
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('GET', _xyz.host + `/api/gazetteer/googleplaces?id=${json[0].id}&token=${_xyz.token}`);
+      xhr.responseType = 'json';
+
+      xhr.onload = e => {
+        if (e.target.status === 200) _xyz.gazetteer.createFeature(e.target.response);
+      };
+      xhr.send();
+    }
+
+    _xyz.gazetteer.xhr.send();
+
   });
-
-
-}
-
-function createFeature(_xyz, json){
-  
 }

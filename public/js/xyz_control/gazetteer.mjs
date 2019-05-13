@@ -9,6 +9,9 @@ export default _xyz => {
     select: select,
 
     createFeature: createFeature,
+
+    icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}})
+
     
   };
 
@@ -29,7 +32,7 @@ export default _xyz => {
     Object.assign(
       _xyz.gazetteer,
       {
-        icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}}),
+        //icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}}),
         style: {
           stroke: true,
           color: '#090',
@@ -201,8 +204,6 @@ export default _xyz => {
       
       // Parse the response as JSON and check for results length.
       const json = e.target.response;
-
-      console.log(json);
 
       if (json.length === 0) {
         _xyz.utils.createElement({
