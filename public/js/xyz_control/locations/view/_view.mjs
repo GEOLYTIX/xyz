@@ -20,13 +20,13 @@ import update from './update.mjs';
 
 import boolean from './boolean.mjs';
 
-export default function(_xyz) {
+export default _xyz => location => {
 
-  return {
+  location.view = {
 
-    location: this,
+    location: location,
   
-    update: update(_xyz, this),
+    update: update(_xyz, location),
 
     streetview: streetview(_xyz),
 
@@ -49,5 +49,7 @@ export default function(_xyz) {
     valChange: valChange,
 
   };
+
+  location.view.update();
 
 };

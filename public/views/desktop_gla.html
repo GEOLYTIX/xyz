@@ -96,6 +96,17 @@
             color: #f06;
         }
 
+        .location .title {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .location .grid {
+            display: grid;
+            grid-gap: 5px;
+        }
+
         #map_attribution {
             z-index: 999;
             position: absolute;
@@ -271,16 +282,18 @@
             </div>
         </div>
 
-        <div style="grid-column: 1;
+        <div id="locationView" style="grid-column: 1;
         grid-row: 5;
         background-color: #fff;
         padding: 10px;">
-            <div class="location light">
-                <div style="font-size: 25px;
-            font-weight: bold;
-            text-align: center;">Barking Citizen Advice</div>
-                <div style="display: grid; grid-gap: 5px;">
+            <!-- <div class="location light">
+
+                <div class="title">Barking Citizen Advice</div>
+
+                <div class="grid">
+
                     <div style="grid-column: 1; grid-row: 1;"><i class="material-icons">room</i></div>
+
                     <div style="grid-column: 2; grid-row: 1;">
                         <div>Barking Learning Centre</div>
                         <div>2 Town Square</div>
@@ -289,25 +302,24 @@
                     </div>
 
                     <div style="grid-column: 3; grid-row: 1;">
-                        <div class="align-flex" style="margin-bottom: 5px;"><i
-                                class="material-icons">launch</i><a style="margin-left: 5px;"
-                                href="http://localhost:3000/dev/view">Website</a></div>
-                        <div class="align-flex" style="margin-bottom: 5px;"><i
-                                class="material-icons">call</i><span style="margin-left: 5px;">020 8507 5969</span>
+                        <div class="align-flex" style="margin-bottom: 5px;">
+                            <i class="material-icons">launch</i>
+                            <a style="margin-left: 5px;" href="http://localhost:3000/dev/view">Website</a>
                         </div>
-                        <div class="align-flex" style="margin-bottom: 5px;"><i
-                                class="material-icons">email</i><a style="margin-left: 5px;"
-                                href="http://localhost:3000/dev/view">Email</a></div>
+                        <div class="align-flex" style="margin-bottom: 5px;">
+                            <i class="material-icons">call</i>
+                            <span style="margin-left: 5px;">020 8507 5969</span>
+                        </div>
+                        <div class="align-flex" style="margin-bottom: 5px;">
+                            <i class="material-icons">email</i>
+                            <a style="margin-left: 5px;" href="http://localhost:3000/dev/view">Email</a>
+                        </div>
                     </div>
 
                 </div>
-                <div style="display: grid; grid-gap: 5px;">
-                    <div style="
-                grid-column: 1/4;
-                grid-row: 1;
-                font-weight: bold;
-                line-height: 2;
-                font-size: 16px;">Opening Hours:</div>
+
+                <div class="grid">
+                    <div style="grid-column: 1/4; grid-row: 1; font-weight: bold; line-height: 2; font-size: 16px;">Opening Hours:</div>
                     <div style="grid-column: 2; grid-row: 2; text-align: center; font-weight: bold;">Telephone</div>
                     <div style="grid-column: 3; grid-row: 2; text-align: center; font-weight: bold;">Face-to-face</div>
                     <div style="grid-column: 1; grid-row: 3; font-weight: bold;">Sunday</div>
@@ -332,25 +344,45 @@
                     <div style="grid-column: 2; grid-row: 9; text-align: center;">Closed</div>
                     <div style="grid-column: 3; grid-row: 9; text-align: center;">Closed</div>
                 </div>
-                <div style="display: grid; grid-gap: 5px;">
+
+                <div class="grid">
+
                     <div style="grid-column: 1;">
-                        <div class="align-flex"><i class="material-icons">check_box</i>Initial
-                            Advice</div>
-                        <div class="align-flex"><i class="material-icons">check_box</i>Written
-                            Advice</div>
-                        <div class="align-flex"><i class="material-icons">check_box</i>Form
-                            filling</div>
-                        <div class="align-flex"><i class="material-icons">check_box_outline_blank</i>Casework</div>
-                        <div class="align-flex"><i class="material-icons">check_box_outline_blank</i>Representation</div>
-                        <div class="align-flex"><i class="material-icons">check_box_outline_blank</i>Tribunal support</div>
+                        <div class="align-flex">
+                            <i class="material-icons">check_box</i>
+                            Initial Advice
+                        </div>
+                        <div class="align-flex">
+                            <i class="material-icons">check_box</i>
+                            Written Advice
+                        </div>
+                        <div class="align-flex">
+                            <i class="material-icons">check_box</i>
+                            Form filling
+                        </div>
+                        <div class="align-flex">
+                            <i class="material-icons">check_box_outline_blank</i>
+                            Casework
+                        </div>
+                        <div class="align-flex">
+                            <i class="material-icons">check_box_outline_blank</i>
+                            Representation
+                        </div>
+                        <div class="align-flex">
+                            <i class="material-icons">check_box_outline_blank</i>
+                            Tribunal support
+                        </div>
                     </div>
+
                     <div style="grid-column: 2; text-align: center;">
                         <div><i style="font-size: 50px;" class="material-icons">person_pin</i></div>
                         <div style="font-weight: bold;">Areas served</div>
                         <div>Anyone who lives or works in Barking & Dagenham</div>
                     </div>
+
                 </div>
-                <div style="display: grid; grid-gap: 5px; grid-template-columns: 1fr 1fr 1fr;">
+
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                     <div style="grid-column: 1; grid-row: 1; text-align: center;">
                         <div style="font-size: 30px;">£</div>
                         <div style="font-weight: bold">Cost</div>
@@ -367,7 +399,8 @@
                         <div>Wheelchair accessible</div>
                     </div>
                 </div>
-            </div>
+
+            </div> -->
         </div>
 
         <div id="Map" style="grid-column: 2; grid-row: 1/3;">

@@ -28,13 +28,9 @@ function init(_xyz) {
     val: 'loc',
     selected: _xyz.workspace.locale.key,
     onchange: e => {
-    
       _xyz.hooks.removeAll();
-    
       _xyz.hooks.set({locale : e.target.value});
-  
       _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
-  
       createMap(_xyz);
     }
   });
@@ -84,9 +80,14 @@ function createMap (_xyz) {
     }
   });
 
-  _xyz.layers.listview.init(document.getElementById('layers'));
+  _xyz.layers.listview.init({
+    target: document.getElementById('layers')
+  });
 
-  _xyz.locations.listview.init();
+  _xyz.locations.listview.init({
+    target: document.getElementById('locations'),
+    clear: document.getElementById('clear_locations'),
+  });
 
   _xyz.gazetteer.init({
     target: document.getElementById('gazetteer'),

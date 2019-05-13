@@ -1,133 +1,53 @@
-// export default _xyz => (location, callback) => {
+export default _xyz => (location, callback) => {
 
-//   if (!location) return;
+  if (!location) return;
 
-//   if (_xyz.locations.current) _xyz.locations.current.remove();
+  // Remove current location if it exists.
+  if (_xyz.locations.current) _xyz.locations.current.remove();
 
-//   Object.assign(location, _xyz.locations.location());
+  // Deselect location; Remove record from listview.
+  if (
+    _xyz.locations.listview && 
+    _xyz.locations.listview.records && 
+    _xyz.locations.listview.removeRecord(location)) return;
 
-//   _xyz.locations.current = location;
 
-//   if (callback) return location.get(callback);
-
-//   location.get(location => {
-//     location.draw();
-
-//     if(!_xyz.mapview.popup || !location.marker) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
-  
-//     _xyz.mapview.popup({
-//       latlng: [location.marker[1], location.marker[0]],
-//       content: location.view.node
-//     });
-//   });
-
-// };
-
-export default _xyz => (location, flyTo) => {
-
-  const existingRecord = getRecord(location);
-
-  if (existingRecord) return existingRecord.clear();
-
-  const record = _xyz.locations.listview.getFreeRecord();
-  
-  if (!record) return;
-
+  // Assign prototype to location.
   Object.assign(location, _xyz.locations.location());
 
-  location.style = Object.assign(
-    {},
-    _xyz.layers.list[location.layer].style,
-    {
-      color: record.color,
-      fillColor: record.color,
-      letter: record.letter,
-      stroke: true,
-      fill: true,
-      fillOpacity: 0.2,
-      icon: {
-        url: _xyz.utils.svg_symbols({
-          type: 'circle',
-          style: {
-            color: '#090',
-            opacity: '0'
-          }
-        }),
-        size: 40
-      }
-    });
 
-  record.location = location;
+  // Get location data from backend and continue with callback.
+  if (callback) return location.get(callback);
 
-  location.get(()=>{
 
-    if(!location.infoj) {
+  // Get location data from backend and add location record to listview.
+  if (_xyz.locations.listview.records) return location.get(_xyz.locations.listview.addRecord);
 
-      // Push the hook for the location.
-      _xyz.hooks.filter(
-        'locations',
-        `${record.location.layer}!${record.location.table}!${record.location.id}`
-      );
 
-      return;
-    }
+  // Default callback for location.get().
+  location.get(location => {
 
-    // Set marker coordinates from point geometry.
-    if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
-       
-    // Draw the location to the map.
+    // Make the location current.
+    // To be removed when a new location is selected.
+    _xyz.locations.current = location;
+
+    // Get location marker from pointOnFeature is not already defined in location object.
+    location.marker = location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+
+    // Create location view.
+    _xyz.locations.view(location);
+
+    // Draw location to map.
     location.draw();
 
-    // Draw letter marker.
-    location.Marker = _xyz.mapview.draw.geoJSON({
-      json: {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
-        }
-      },
-      pane: 'select_marker',
-      style: {
-        icon: {
-          url: _xyz.utils.svg_symbols({
-            type: 'markerLetter',
-            style: {
-              letter: record.letter,
-              color: record.color,
-            }
-          }),
-          size: 40,
-          anchor: [20, 40]
-        }
-      }
-    });
-    
-    // Add record to listview;
-    _xyz.locations.listview.add(record);
-
-    // Push the hook for the location.
-    _xyz.hooks.push(
-      'locations',
-      `${record.location.layer}!${record.location.table}!${record.location.id}`
-    );
-
-    if (flyTo) record.location.flyTo();
-
-  });
-
-  function getRecord(location) {
-
-    // Find free records in locations array.
-    const records = _xyz.locations.listview.list.filter(record => record.location);
-
-    const record = records.filter(record => record.location.id === location.id && record.location.layer === location.layer);
-
-    // Return from selection if no free record is available.
-    if (record.length === 0) return null;
+    // Create an alert with the locations infoj if mapview popup is not defined or the location does not have marker.
+    if(!_xyz.mapview.popup) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
   
-    // Return the matching record.
-    return record[0];
-  };
+    // Create mapview popup with the locations view node.
+    _xyz.mapview.popup({
+      latlng: [location.marker[1], location.marker[0]],
+      content: location.view.node
+    });
+  });
 
 };

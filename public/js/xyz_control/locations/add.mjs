@@ -77,7 +77,7 @@ export default _xyz => record => {
   expander(_xyz, record);
 
   // Find free space and insert record.
-  let idx = _xyz.locations.listview.list.indexOf(record);
+  let idx = _xyz.locations.listview.records.indexOf(record);
   
   _xyz.locations.listview.node.insertBefore(record.drawer, _xyz.locations.listview.node.children[idx]);
 

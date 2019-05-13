@@ -57,6 +57,51 @@ data-token={{:token}}>
 
     <div class="mapview">
 
+        <div class="btn_column lv1 noselect desktop">
+                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
+                        <i class="material-icons">search</i>
+                    </button>
+        
+                    <button id="btnLocate" title="Current location" style="display: none;">
+                        <i class="material-icons">gps_not_fixed</i>
+                    </button>
+        
+                    <button id="btnZoomIn">
+                        <i class="material-icons">add</i>
+                    </button>
+        
+                    <button id="btnZoomOut">
+                        <i class="material-icons">remove</i>
+                    </button>
+        
+                    <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+                        <a href="{{:hrefDocumentation}}" target="_blank">
+                            <i class="material-icons">school</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
+                        <a href="{{:dir}}{{:btnLogin_path}}">
+                            <i class="material-icons">{{:btnLogin_style}}</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
+                        <a href="{{:dir}}/user/admin" target="_blank">
+                            <i class="material-icons">supervisor_account</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
+                        <i class="material-icons">settings</i>
+                    </div>            
+        
+                    <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
+                        <i class="material-icons">bug_report</i>
+                    </div>
+        
+        </div>
+
         <div id="Map" class="map" >
             <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
                 <defs>
@@ -70,51 +115,6 @@ data-token={{:token}}>
                     </filter>
                 </defs>
             </svg>
-        </div>
-
-        <div class="btn_column lv1 noselect desktop">
-            <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
-                <i class="material-icons">search</i>
-            </button>
-
-            <button id="btnLocate" title="Current location" style="display: none;">
-                <i class="material-icons">gps_not_fixed</i>
-            </button>
-
-            <button id="btnZoomIn">
-                <i class="material-icons">add</i>
-            </button>
-
-            <button id="btnZoomOut">
-                <i class="material-icons">remove</i>
-            </button>
-
-            <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                <a href="{{:hrefDocumentation}}" target="_blank">
-                    <i class="material-icons">school</i>
-                </a>
-            </div>
-
-            <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-                <a href="{{:dir}}{{:btnLogin_path}}">
-                    <i class="material-icons">{{:btnLogin_style}}</i>
-                </a>
-            </div>
-
-            <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
-                <a href="{{:dir}}/user/admin" target="_blank">
-                    <i class="material-icons">supervisor_account</i>
-                </a>
-            </div>
-
-            <div id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
-                <i class="material-icons">settings</i>
-            </div>            
-
-            <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
-                <i class="material-icons">bug_report</i>
-            </div>
-
         </div>
 
     </div>

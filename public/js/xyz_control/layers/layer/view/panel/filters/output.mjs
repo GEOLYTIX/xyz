@@ -55,10 +55,12 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
           fill: false
         };
     
-        location.view = location.view(_xyz);
+
+        // location.view = location.view(_xyz);
+        // location.view.update();
+        _xyz.locations.view(location);
     
-        location.view.update();
-    
+        
         // Draw the location to the map.
         location.draw();
 

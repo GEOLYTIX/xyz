@@ -1,16 +1,12 @@
-import view from './view/_view.mjs';
-
 export default _xyz => () => {
 
   return {
 
-    get: get,
-  
     remove: remove,
 
     draw: draw,
 
-    view: view,
+    get: get,
 
     flyTo: flyTo,
 
@@ -36,52 +32,6 @@ export default _xyz => () => {
       }
     }
   
-  };
-
-  function get(callback) {
-
-    const location = this;
-
-    const xhr = new XMLHttpRequest();
-
-    xhr.open(
-      'GET',
-      _xyz.host +
-      '/api/location/select/id?' +
-      _xyz.utils.paramString({
-        locale: _xyz.workspace.locale.key,
-        layer: location.layer,
-        table: location.table,
-        id: location.id,
-        token: _xyz.token
-      }));
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.responseType = 'json';
-
-    xhr.onload = e => {
-
-      if (e.target.status !== 200) {
-        if (callback) callback(location);
-        return;
-      }
-
-      location.infoj = e.target.response.infoj;
-
-      location.geometry = e.target.response.geomj;
-
-      location.marker = location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
-
-      location.view = location.view(_xyz);
-
-      location.view.update();
-
-      if (callback) callback(location);
-
-    };
-
-    xhr.send();
- 
   };
 
   function update(callback) {
@@ -188,6 +138,51 @@ export default _xyz => () => {
     _xyz.map.flyToBounds(_xyz.L.featureGroup(allLayer).getBounds(),{
       padding: [25, 25]
     });
+
+  }
+
+  function get(callback){
+
+    const location = this;
+
+    if(!callback) return;
+    
+    const xhr = new XMLHttpRequest();
+    
+    xhr.open(
+      'GET',
+      _xyz.host +
+        '/api/location/select/id?' +
+        _xyz.utils.paramString({
+          locale: _xyz.workspace.locale.key,
+          layer: location.layer,
+          table: location.table,
+          id: location.id,
+          token: _xyz.token
+        }));
+    
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.responseType = 'json';
+    
+    xhr.onload = e => {
+    
+      if (e.target.status !== 200) return;
+
+      // Push the hook for the location.
+      if (_xyz.hooks) _xyz.hooks.push(
+        'locations',
+        `${location.layer}!${location.table}!${location.id}`
+      );
+  
+      location.infoj = e.target.response.infoj;
+    
+      location.geometry = e.target.response.geomj;
+  
+      callback(location);
+        
+    };
+    
+    xhr.send();
 
   }
 
