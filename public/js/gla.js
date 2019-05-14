@@ -23,11 +23,7 @@ _xyz({
     let layer = _xyz.layers.list['Advice Center'];
     layer.filter.current = {};
 
-    customDropdown(_xyz, layer);
-
-    searchPostcode(_xyz);
-
-    _xyz.tableview.layerTable({
+    var tableShow = () => _xyz.tableview.layerTable({
       layer: layer,
       target: document.getElementById('List'),
       key: 'gla',
@@ -54,16 +50,18 @@ _xyz({
           table: layer.table,
           id: rowData.qid,
         });
-
       }
     });
 
+    tableShow();
+
+    customDropdown(_xyz, layer, tableShow);
+
+    searchPostcode(_xyz);
   }
 });
 
-
-
-function customDropdown(_xyz, layer) {
+function customDropdown(_xyz, layer, callback) {
   
   var x, i, j, selElmnt, a, b, c, d;
 
@@ -147,8 +145,10 @@ function customDropdown(_xyz, layer) {
     }
 
   }
+
   /*if the user clicks anywhere outside the select box,
     then close all select boxes:*/
+
   document.addEventListener('click', e => {
     e.stopPropagation();
 
@@ -158,11 +158,13 @@ function customDropdown(_xyz, layer) {
       if(e.target.textContent === 'Show all boroughs') {
         layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
         layer.show();
+        if(typeof(callback) === 'function') callback();
         return;
       }
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
       layer.show();
+      if(typeof(callback) === 'function') callback();
     }
 
     if(e.target.parentNode.previousSibling.dataset.field === 'advice'){
@@ -171,18 +173,20 @@ function customDropdown(_xyz, layer) {
       Object.keys(layer.filter.current).map(key => {
         if(layer.filter.current[key]){
           delete layer.filter.current[key];
+          if(typeof(callback) === 'function') callback();
         }
       });
 
       if(e.target.textContent === 'Show all'){
         layer.filter.current[e.target.dataset.col] = {};
         layer.show();
+        if(typeof(callback) === 'function') callback();
         return;
       }
       layer.filter.current[e.target.dataset.col] = {};
       layer.filter.current[e.target.dataset.col]['boolean'] = true;
       layer.show();
-
+      if(typeof(callback) === 'function') callback();
     }
 
     closeAllSelect(e);
@@ -206,7 +210,14 @@ function searchPostcode(_xyz){
     e.target.parentNode.classList.remove('pink-br');
   });
 
-  find.addEventListener('click', e => {
+  find.addEventListener('click', () => search());
+
+  input.addEventListener('keydown', e => {
+    let key = e.keyCode || e.charCode;
+    if(key === 13) search();
+  });
+
+  function search(){
     // Create abortable xhr.
     _xyz.gazetteer.xhr = new XMLHttpRequest();
     if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
@@ -245,6 +256,5 @@ function searchPostcode(_xyz){
     };
 
     _xyz.gazetteer.xhr.send();
-
-  });
+  }
 }
