@@ -508,7 +508,11 @@ function customDropdown(_xyz, layer) {
     if(!e.target.parentNode.previousSibling.dataset) return;
 
     if(e.target.parentNode.previousSibling.dataset.field === 'borough'){
-
+      if(e.target.textContent === 'Show all boroughs') {
+        layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
+        layer.show();
+        return;
+      }
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
       console.log(layer.filter);
