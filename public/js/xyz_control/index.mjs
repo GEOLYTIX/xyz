@@ -16,7 +16,7 @@ import layers from './layers/_layers.mjs';
 
 import locations from './locations/_locations.mjs';
 
-import mapview from '../xyz_leaflet/mapview/_mapview.mjs';
+import mapview from '../xyz_leaflet/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
 

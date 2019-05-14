@@ -12,8 +12,9 @@
     <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
     <script src="{{:dir}}/js/gla_select.js" defer></script>
     <script src="{{:dir}}/js/gla.js" defer></script>
+    <!-- <script type="application/javascript" src="https://raw.githubusercontent.com/GEOLYTIX/gla/master/select.js" defer></script>
+    <script type="application/javascript" src="https://raw.githubusercontent.com/GEOLYTIX/gla/master/desktop.js" defer></script> -->
     <style>
-
         #mayor_header {
             background-color: #353d42;
             color: #FFF;
@@ -58,6 +59,14 @@
 
         .btn {
             padding: 10px;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+        }
+
+        .btn.active {
+            background-color: #f06;
         }
 
         .align-flex {
@@ -200,7 +209,6 @@
         input:focus {
             outline: none;
         }
-
     </style>
 
 </head>
@@ -208,6 +216,7 @@
 <body>
 
     <div id="mayor_header">MAYOR OF LONDON</div>
+
     <div id="app_body">
 
         <div style="grid-column: 1; grid-row: 1;" class="picture_box"></div>
@@ -223,8 +232,9 @@
         padding: 10px;
         display: grid;
         grid-gap: 10px;">
-            <div id="postcode-search" class="btn light" style="grid-row: 1; grid-column: 1/3"><input placeholder="Enter your postcode"/></div>
-            <div class="btn darkish" style="grid-row: 2; grid-column: 1/2">Find me (GPS)</div>
+            <div id="postcode-search" class="btn light" style="grid-row: 1; grid-column: 1/3"><input
+                    placeholder="Enter your postcode or address" /></div>
+            <div id="btnLocate" class="btn darkish" style="grid-row: 2; grid-column: 1/2">Current Location</div>
             <div id="postcode-find" class="btn darkish" style="grid-row: 2; grid-column: 2/3">Find this Postcode</div>
             <div class="btn light" style="grid-row: 3; grid-column: 1/3">
 

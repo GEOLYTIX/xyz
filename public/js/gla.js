@@ -10,6 +10,9 @@ _xyz({
         lat: 51.52,
         lng: 0.24,
         z: 6,
+      },
+      btn: {
+        Locate: document.getElementById('btnLocate'),
       }
     });
 
