@@ -248,7 +248,7 @@ export default _xyz => {
         table: record['data-table'],
         id: record['data-id'],
         marker: record['data-marker'].split(',')
-      }, true);
+      });
 
       return;
     }

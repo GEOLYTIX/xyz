@@ -2177,15 +2177,15 @@ body {
       .listviews .tab_bar .active .swipe_icon {
         display: inline-block; }
 
-#Gazetteer {
+.gazetteer {
   position: fixed;
   left: 0;
   box-shadow: 0 3px 3px -3px #000; }
-  #Gazetteer input {
+  .gazetteer input {
     padding: 5px 0 5px 70px; }
-  #Gazetteer > ul {
+  .gazetteer > ul {
     padding-left: 70px; }
-    #Gazetteer > ul li {
+    .gazetteer > ul li {
       font-size: 20px;
       color: #090;
       list-style: none;

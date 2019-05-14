@@ -2144,18 +2144,18 @@ input[type=number] {
   .listviews .listview {
     padding: 10px 0; }
 
-#Gazetteer {
+.gazetteer {
   padding-top: 5px; }
-  #Gazetteer > ul li {
+  .gazetteer > ul li {
     list-style: none;
     line-height: 1.2em;
     white-space: nowrap; }
-    #Gazetteer > ul li:hover {
+    .gazetteer > ul li:hover {
       cursor: pointer;
       background-color: #cf9; }
-    #Gazetteer > ul li:focus {
+    .gazetteer > ul li:focus {
       background-color: #cf9; }
-    #Gazetteer > ul li.active {
+    .gazetteer > ul li.active {
       background-color: #cf9; }
 
 #desktop_mask {
