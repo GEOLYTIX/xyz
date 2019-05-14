@@ -67,8 +67,8 @@ function gla_locationView(_xyz, infoj) {
   
   const view = _xyz.utils.hyperHTML.wire()`<div class="location light">`;
   
-  if (fields.organisation) view.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div class="title">${fields.organisation}`
+  if (fields.organisation_short) view.appendChild(
+    _xyz.utils.hyperHTML.wire()`<div class="title">${fields.organisation_short}`
   );
   
   
