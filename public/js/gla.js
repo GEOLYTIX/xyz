@@ -58,8 +58,6 @@ _xyz({
     customDropdown(_xyz, layer, tableShow);
 
     searchPostcode(_xyz);
-
-
   }
 });
 
@@ -212,7 +210,14 @@ function searchPostcode(_xyz){
     e.target.parentNode.classList.remove('pink-br');
   });
 
-  find.addEventListener('click', e => {
+  find.addEventListener('click', () => search());
+
+  input.addEventListener('keydown', e => {
+    let key = e.keyCode || e.charCode;
+    if(key === 13) search();
+  });
+
+  function search(){
     // Create abortable xhr.
     _xyz.gazetteer.xhr = new XMLHttpRequest();
     if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
@@ -251,6 +256,5 @@ function searchPostcode(_xyz){
     };
 
     _xyz.gazetteer.xhr.send();
-
-  });
+  }
 }
