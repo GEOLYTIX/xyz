@@ -157,13 +157,13 @@ function customDropdown(_xyz, layer, callback) {
     if(e.target.parentNode.previousSibling.dataset.field === 'borough'){
       if(e.target.textContent === 'Show all boroughs') {
         layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
-        layer.show();
+        toLayerExtent(_xyz, layer);
         if(typeof(callback) === 'function') callback();
         return;
       }
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
-      layer.show();
+      toLayerExtent(_xyz, layer);
       if(typeof(callback) === 'function') callback();
     }
 
@@ -173,19 +173,20 @@ function customDropdown(_xyz, layer, callback) {
       Object.keys(layer.filter.current).map(key => {
         if(layer.filter.current[key]){
           delete layer.filter.current[key];
+          toLayerExtent(_xyz, layer);
           if(typeof(callback) === 'function') callback();
         }
       });
 
       if(e.target.textContent === 'Show all'){
         layer.filter.current[e.target.dataset.col] = {};
-        layer.show();
+        toLayerExtent(_xyz, layer);
         if(typeof(callback) === 'function') callback();
         return;
       }
       layer.filter.current[e.target.dataset.col] = {};
       layer.filter.current[e.target.dataset.col]['boolean'] = true;
-      layer.show();
+      toLayerExtent(_xyz, layer);
       if(typeof(callback) === 'function') callback();
     }
 
@@ -257,4 +258,43 @@ function searchPostcode(_xyz){
 
     _xyz.gazetteer.xhr.send();
   }
+}
+
+function toLayerExtent(_xyz, layer){
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.open('GET', _xyz.host + '/api/layer/extent?' + _xyz.utils.paramString({
+    locale: _xyz.workspace.locale.key,
+    layer: layer.key,
+    filter: JSON.stringify(layer.filter.current),
+    token: _xyz.token
+  }));
+
+  xhr.onload = e => {
+    if (e.target.status !== 200) return;
+
+    // Show the layer on map.
+    layer.show();
+
+    // Split the bounds from response.
+    const bounds = e.target.responseText.split(',');
+
+    const fGroup = [_xyz.L.polygon([
+      [bounds[1], bounds[0]],
+      [bounds[1], bounds[2]],
+      [bounds[3], bounds[2]],
+      [bounds[3], bounds[0]],
+    ])];
+
+    //if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) fGroup.push(_xyz.mapview.locate.L);
+
+    // Fly to the bounds.
+    _xyz.map.flyToBounds(_xyz.L.featureGroup(fGroup).getBounds(),{
+      padding: [25, 25]
+    });
+    
+  };
+
+  xhr.send();
 }
