@@ -35,6 +35,8 @@ export default (_xyz, layer) => {
   // Return if tableview has no table definition.
   if(!layer.tableview.tables) return;
 
+  if(!_xyz.tableview.node) return;
+
   // Iterate through tables entries.
   Object.keys(layer.tableview.tables).forEach(key => {
 
