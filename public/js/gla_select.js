@@ -279,7 +279,8 @@ function gla_locationView(_xyz, infoj) {
   
   if (fields.hours_notes) {
     var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1/4;">${fields.hours_notes}`;
+      <div style="grid-column: 1/4;">`;
+    el.textContent = fields.hours_notes;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
     gridRow++;

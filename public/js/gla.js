@@ -167,7 +167,7 @@ function customDropdown(_xyz, layer) {
 
     if(e.target.parentNode.previousSibling.dataset.field === 'advice'){
 
-     // Reset previous boolean filters
+      // Reset previous boolean filters
       Object.keys(layer.filter.current).map(key => {
         if(layer.filter.current[key]){
           delete layer.filter.current[key];
@@ -180,7 +180,7 @@ function customDropdown(_xyz, layer) {
         return;
       }
       layer.filter.current[e.target.dataset.col] = {};
-      layer.filter.current[e.target.dataset.col]["boolean"] = true;
+      layer.filter.current[e.target.dataset.col]['boolean'] = true;
       layer.show();
 
     }
@@ -248,8 +248,3 @@ function searchPostcode(_xyz){
 
   });
 }
-
-
-
-
-
