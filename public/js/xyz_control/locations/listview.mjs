@@ -19,6 +19,11 @@ export default _xyz => {
   // Init sequence to be called on locale init;
   function init(params) {
 
+    if (_xyz.mobile) {
+      _xyz.mobile.tabLocations.classList.add('displaynone');
+      _xyz.mobile.activateLayersTab();
+    }
+
     // Clear locations button to remove hooks and reset location listview.
     if (params.clear){
 
