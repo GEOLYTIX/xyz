@@ -27,11 +27,11 @@ _xyz({
       layer: layer,
       target: document.getElementById('List'),
       key: 'gla',
-      visible: ['organisation'],
+      visible: ['organisation_short'],
       groupBy: 'borough',
       initialSort: [
         {
-          column: 'organisation', dir: 'asc'
+          column: 'organisation_short', dir: 'asc'
         },
         {
           column: 'borough', dir: 'asc'
