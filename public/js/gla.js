@@ -443,6 +443,8 @@ function customDropdown(_xyz, layer) {
 
       c = document.createElement('DIV');
       c.innerHTML = selElmnt.options[j].innerHTML;
+      //console.log(selElmnt);
+      c.dataset.col = selElmnt.options[j].value;
       c.addEventListener('click', e => {
         /*when an item is clicked, update the original select box,
                 and the selected item:*/
@@ -515,11 +517,28 @@ function customDropdown(_xyz, layer) {
       }
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
       layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
-      console.log(layer.filter);
       layer.show();
     }
 
-    if(e.target.parentNode.previousSibling.dataset.field === 'advice'){}
+    if(e.target.parentNode.previousSibling.dataset.field === 'advice'){
+
+     // Reset previous boolean filters
+      Object.keys(layer.filter.current).map(key => {
+        if(layer.filter.current[key]){
+          delete layer.filter.current[key];
+        }
+      });
+
+      if(e.target.textContent === 'Show all'){
+        layer.filter.current[e.target.dataset.col] = {};
+        layer.show();
+        return;
+      }
+      layer.filter.current[e.target.dataset.col] = {};
+      layer.filter.current[e.target.dataset.col]["boolean"] = true;
+      layer.show();
+
+    }
 
     closeAllSelect(e);
   });
