@@ -32,7 +32,7 @@ function gla_select (_xyz, location) {
           url: _xyz.utils.svg_symbols({
             type: 'markerColor',
             style: {
-              colorMarker: '#f06',
+              colorMarker: '#ff0066',
               colorDot: '#9c27b0',
             }
           }),
