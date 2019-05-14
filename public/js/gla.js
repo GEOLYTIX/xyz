@@ -13,8 +13,6 @@ _xyz({
       }
     });
 
-
-
     _xyz.locations.select = location => {
   
       // Remove current location if it exists.
@@ -71,21 +69,17 @@ _xyz({
     
     };
 
-
-
-
-
-
     //_xyz.layers.list['Advice Center'].show();
     //console.log(_xyz.layers.list['Advice Center']);
+    let layer = _xyz.layers.list['Advice Center'];
+    layer.filter.current = {};
 
-
-    customDropdown(_xyz);
+    customDropdown(_xyz, layer);
 
     searchPostcode(_xyz);
 
     _xyz.tableview.layerTable({
-      layer: _xyz.layers.list['Advice Center'],
+      layer: layer,
       target: document.getElementById('List'),
       key: 'gla',
       visible: ['organisation'],
@@ -107,8 +101,8 @@ _xyz({
 
         _xyz.locations.select({
           locale: _xyz.workspace.locale.key,
-          layer: _xyz.layers.list['Advice Center'].key,
-          table: _xyz.layers.list['Advice Center'].table,
+          layer: layer.key,
+          table: layer.table,
           id: rowData.qid,
         });
 
@@ -422,11 +416,9 @@ function customLocationView(_xyz, infoj) {
   view.appendChild(viewGrid);
 
   return view;
-
 }
 
-
-function customDropdown(_xyz) {
+function customDropdown(_xyz, layer) {
   
   var x, i, j, selElmnt, a, b, c, d;
 
@@ -438,6 +430,8 @@ function customDropdown(_xyz) {
     /*for each element, create a new DIV that will act as the selected item:*/
     a = document.createElement('DIV');
     a.setAttribute('class', 'select-selected');
+    //a.classList.add(selElmnt.classList);
+    a.dataset.field = selElmnt.dataset.field;
     a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
     x[i].appendChild(a);
 
@@ -504,10 +498,27 @@ function customDropdown(_xyz) {
         x[i].classList.add('select-hide');
       }
     }
+
   }
   /*if the user clicks anywhere outside the select box,
     then close all select boxes:*/
-  document.addEventListener('click', closeAllSelect);
+  document.addEventListener('click', e => {
+    e.stopPropagation();
+
+    if(!e.target.parentNode.previousSibling.dataset) return;
+
+    if(e.target.parentNode.previousSibling.dataset.field === 'borough'){
+
+      layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
+      layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
+      console.log(layer.filter);
+      layer.show();
+    }
+
+    if(e.target.parentNode.previousSibling.dataset.field === 'advice'){}
+
+    closeAllSelect(e);
+  });
 }
 
 function searchPostcode(_xyz){
@@ -569,3 +580,8 @@ function searchPostcode(_xyz){
 
   });
 }
+
+
+
+
+
