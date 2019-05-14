@@ -11,23 +11,22 @@ module.exports = async (req, locale) => {
 
     req.params.token.roles = req.params.token.roles || [];
 
+    // Parse filter from query string.
+    const filter = {};
+
     if (layer.roles) {
 
       if (!(layer.roles && Object.keys(layer.roles).some(
         role => req.params.token.roles.includes(role)
       ))) return [];
 
+      // Apply role filter
+      req.params.token.roles.filter(
+        role => layer.roles[role]).forEach(
+        role => Object.assign(filter, layer.roles[role])
+      );
+
     }
-
-
-    // Parse filter from query string.
-    const filter = {};
-
-    // Apply role filter
-    req.params.token.roles.filter(
-      role => layer.roles[role]).forEach(
-      role => Object.assign(filter, layer.roles[role])
-    );
 
     const filter_sql = filter && await require('../pg/sql_filter')(filter) || '';
 
