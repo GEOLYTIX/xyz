@@ -90,7 +90,8 @@
   .locationview .val {
     font-family: 'PT Mono', monospace;
     font-weight: 400;
-    font-size: 12px; }
+    font-size: 12px;
+    white-space: pre-wrap; }
     .locationview .val a {
       color: #090; }
   .locationview .img_streetview {

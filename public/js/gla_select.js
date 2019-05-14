@@ -141,137 +141,59 @@ function gla_locationView(_xyz, infoj) {
   viewGrid.appendChild(el);
   
   gridRow++;
-  
-  var el = _xyz.utils.hyperHTML.wire()`
+
+  if (
+    fields.phone_sunday ||
+    fields.phone_monday ||
+    fields.phone_tuesday ||
+    fields.phone_wednesday ||
+    fields.phone_thursday ||
+    fields.phone_friday ||
+    fields.phone_saturday) {
+
+    var el = _xyz.utils.hyperHTML.wire()`
     <div style="grid-column: 2; text-align: center; font-weight: bold;">Telephone`;
-  el.style.gridRow = gridRow;
-  viewGrid.appendChild(el);
-  
-  var el = _xyz.utils.hyperHTML.wire()`
+    el.style.gridRow = gridRow;
+    viewGrid.appendChild(el);
+
+  }
+
+  if (
+    fields.hours_sunday ||
+    fields.hours_monday ||
+    fields.hours_tuesday ||
+    fields.hours_wednesday ||
+    fields.hours_thursday ||
+    fields.hours_friday ||
+    fields.hours_saturday) {
+
+    var el = _xyz.utils.hyperHTML.wire()`
     <div style="grid-column: 3; text-align: center; font-weight: bold;">Face-to-face`;
-  el.style.gridRow = gridRow;
-  viewGrid.appendChild(el);
+    el.style.gridRow = gridRow;
+    viewGrid.appendChild(el);
+
+  }
   
   gridRow++;
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Sunday', fields.hours_sunday, fields.phone_sunday);
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Monday', fields.hours_monday, fields.phone_monday);
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Tuesday', fields.hours_tuesday, fields.phone_tuesday);
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Wednesday', fields.hours_wednesday, fields.phone_wednesday);
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Thursday', fields.hours_thursday, fields.phone_thursday);
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Friday', fields.hours_friday, fields.phone_friday);
+
+  gridRow = hours(_xyz, viewGrid, gridRow, 'Saturday', fields.hours_saturday, fields.phone_saturday);
   
-  if (fields.hours_monday || fields.phone_monday) {
-    var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1; font-weight: bold;">Monday`;
-    el.style.gridRow = gridRow;
-    viewGrid.appendChild(el);
-  
-    if (fields.hours_monday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 3; text-align: center;">${fields.hours_monday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    if (fields.phone_monday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 2; text-align: center;">${fields.phone_monday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    gridRow++;
-  }
-  
-  if (fields.hours_tuesday || fields.phone_tuesday) {
-    var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1; font-weight: bold;">Tuesday`;
-    el.style.gridRow = gridRow;
-    viewGrid.appendChild(el);
-  
-    if (fields.hours_tuesday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 3; text-align: center;">${fields.hours_tuesday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    if (fields.phone_tuesday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 2; text-align: center;">${fields.phone_tuesday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    gridRow++;
-  }
-  
-  if (fields.hours_wednesday || fields.phone_wednesday) {
-    var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1; font-weight: bold;">Wednesday`;
-    el.style.gridRow = gridRow;
-    viewGrid.appendChild(el);
-  
-    if (fields.hours_wednesday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 3; text-align: center;">${fields.hours_wednesday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    if (fields.phone_wednesday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 2; text-align: center;">${fields.phone_wednesday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    gridRow++;
-  }
-  
-  if (fields.hours_thursday || fields.phone_thursday) {
-    var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1; font-weight: bold;">Thursday`;
-    el.style.gridRow = gridRow;
-    viewGrid.appendChild(el);
-  
-    if (fields.hours_thursday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 3; text-align: center;">${fields.hours_thursday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    if (fields.phone_thursday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 2; text-align: center;">${fields.phone_thursday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    gridRow++;
-  }
-  
-  if (fields.hours_friday || fields.phone_friday) {
-    var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1; font-weight: bold;">Friday`;
-    el.style.gridRow = gridRow;
-    viewGrid.appendChild(el);
-  
-    if (fields.hours_friday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 3; text-align: center;">${fields.hours_friday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    if (fields.phone_friday) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 2; text-align: center;">${fields.phone_friday}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    gridRow++;
-  }
-  
+ 
   if (fields.phone_notes) {
     var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1/4;">${fields.phone_notes}`;
+      <div style="grid-column: 1/4; white-space: pre-wrap;">${fields.phone_notes}`;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
     gridRow++;
@@ -279,8 +201,7 @@ function gla_locationView(_xyz, infoj) {
   
   if (fields.hours_notes) {
     var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1/4;">`;
-    el.textContent = fields.hours_notes;
+      <div style="grid-column: 1/4; white-space: pre-wrap;">${fields.hours_notes}`;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
     gridRow++;
@@ -327,37 +248,66 @@ function gla_locationView(_xyz, infoj) {
       <div style="grid-column: 2; text-align: center;">
         <div><i style="font-size: 50px;" class="material-icons">person_pin</i></div>
         <div style="font-weight: bold;">Areas served</div>
-        <div>${fields.coverage}</div>
+        <div style="white-space: pre-wrap;">${fields.coverage}</div>
       </div>`);
   }
   
   view.appendChild(viewGrid);
   
   
-  var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">`;
+  var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid">`;
   
-  viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  if (fields.cost) viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
     <div style="grid-column: 1; grid-row: 1; text-align: center;">
       <div style="font-size: 30px;">£</div>
       <div style="font-weight: bold">Cost</div>
-      <div>Free</div>
+      <div style="white-space: pre-wrap;">${fields.cost}</div>
     </div>`);
   
-  viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  if (fields.translation_notes) viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
     <div style="grid-column: 2; grid-row: 1; text-align: center;">
       <div><i style="font-size: 30px;" class="material-icons">translate</i></div>
       <div style="font-weight: bold">Translation</div>
-      <div>Call to find out</div>
+      <div style="white-space: pre-wrap;">${fields.translation_notes}</div>
     </div>`);
   
-  viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  if (fields.access) viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
     <div style="grid-column: 3; grid-row: 1; text-align: center;">
       <div><i style="font-size: 30px;" class="material-icons">accessible_forward</i></div>
       <div style="font-weight: bold">Access</div>
-      <div>Wheelchair accessible</div>
+      <div style="white-space: pre-wrap;">${fields.access}</div>
     </div>`);
   
   view.appendChild(viewGrid);
   
   return view;
+}
+
+function hours(_xyz, viewGrid, gridRow, day, hours, phone) {
+  if (hours || phone) {
+    var el = _xyz.utils.hyperHTML.wire()`
+      <div style="grid-column: 1; font-weight: bold;">${day}`;
+    el.style.gridRow = gridRow;
+    viewGrid.appendChild(el);
+  
+    if (hours) {
+      var el = _xyz.utils.hyperHTML.wire()`
+        <div style="grid-column: 3; text-align: center;">${hours}`;
+      el.style.gridRow = gridRow;
+      viewGrid.appendChild(el);
+    }
+  
+    if (phone) {
+      var el = _xyz.utils.hyperHTML.wire()`
+        <div style="grid-column: 2; text-align: center;">${phone}`;
+      el.style.gridRow = gridRow;
+      viewGrid.appendChild(el);
+    }
+
+    gridRow++;
+  
+    return gridRow;
+  }
+
+  return gridRow;
 }
