@@ -51,7 +51,7 @@ export default _xyz => {
   function set(attribution) {
 
     Object.entries(attribution).forEach(entry => {
-
+      if(!_xyz.mapview.attribution.layer) return;
       // Create new attribution for layer if the same attribution does not exist yet.
       if (!_xyz.mapview.attribution.layer[entry[0]]) {
 
