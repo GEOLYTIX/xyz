@@ -75,6 +75,8 @@ function customDropdown(_xyz, layer, callback) {
     /*for each element, create a new DIV that will contain the option list:*/
     b = document.createElement('DIV');
     b.setAttribute('class', 'select-items select-hide');
+    b.style.maxHeight = '300px';
+    b.style.overflow = 'scroll';
     for (j = 1; j < selElmnt.length; j++) {
       /*for each option in the original select element, create a new DIV that will act as an option item:*/
 
