@@ -8,7 +8,7 @@ _xyz({
       scrollWheelZoom: true,
       view: {
         lat: 51.52,
-        lng: 0.24,
+        lng: -0.1,
         z: 6,
       },
       btn: {

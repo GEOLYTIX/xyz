@@ -56,6 +56,11 @@ export default _xyz => {
     // Create locale object with key.
     _xyz.workspace.locale = { key: locale };
 
+    if (params.view && (
+      !params.view.z || 
+      !params.view.lat || 
+      !params.view.lng)) delete params.view;
+
     // Assigne workspace locales from locales list and input params.
     Object.assign(_xyz.workspace.locale, _xyz.workspace.locales[locale], params);
 
