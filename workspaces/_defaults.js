@@ -6,10 +6,6 @@ module.exports = {
     },
   },
   locale: {
-    attribution: {
-      'XYZ #v1.5.1': 'https://github.com/GEOLYTIX/xyz/releases/tag/v1.5.1',
-      Leaflet: 'https://leafletjs.com',
-    },
     minZoom: 0,
     maxZoom: 20,
     bounds: {

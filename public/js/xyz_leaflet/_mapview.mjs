@@ -4,6 +4,12 @@ import attribution from './attribution.mjs';
 
 import locate from './locate.mjs';
 
+import popup from './popup.mjs';
+
+import btn from './btn.mjs';
+
+import panes from './panes.mjs';
+
 import draw from './draw/_draw.mjs';
 
 export default _xyz => ({
@@ -14,8 +20,12 @@ export default _xyz => ({
 
   locate: locate(_xyz),
 
-  draw: draw(_xyz),
+  popup: popup(_xyz),
 
-  state: 'select',
+  btn: btn(_xyz),
+
+  panes: panes(_xyz),
+
+  draw: draw(_xyz),
 
 });

@@ -54,10 +54,14 @@ function init(_xyz) {
 
 function createMap (_xyz) {
 
+  const attribution = {};
+  attribution[_xyz.version] = _xyz.release;
+  attribution['Leaflet'] = 'https://leafletjs.com';
+
   // Create mapview control.
   _xyz.mapview.create({
     target: document.getElementById('Map'),
-    attribution: true,
+    attribution: attribution,
     view: {
       lat: _xyz.hooks.current.lat,
       lng: _xyz.hooks.current.lng,

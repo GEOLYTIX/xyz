@@ -15,9 +15,7 @@ function gla_select (_xyz, location) {
   
     // Get location marker from pointOnFeature is not already defined in location object.
     location.marker = location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
-  
-      
- 
+
     location.Marker = _xyz.mapview.draw.geoJSON({
       json: {
         type: 'Feature',
@@ -47,8 +45,6 @@ function gla_select (_xyz, location) {
     locationView.innerHTML = '';
 
     locationView.appendChild(gla_locationView(_xyz, location.infoj));
-
-    //alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
     
   });
   
@@ -102,6 +98,7 @@ function gla_locationView(_xyz, infoj) {
   
   viewGrid.appendChild(viewAddress);
   
+
   
   var viewLinks = _xyz.utils.hyperHTML.wire()`<div style="grid-column: 3; grid-row: 1;">`;
   
@@ -129,10 +126,9 @@ function gla_locationView(_xyz, infoj) {
   viewGrid.appendChild(viewLinks);
   
   view.appendChild(viewGrid);
-  
-  
-  
+    
   var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid">`;
+
   var gridRow = 1;
   
   var el = _xyz.utils.hyperHTML.wire()`
@@ -176,21 +172,50 @@ function gla_locationView(_xyz, infoj) {
   
   gridRow++;
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Sunday', fields.hours_sunday, fields.phone_sunday);
+  gridRow = hours(gridRow, 'Sunday', fields.hours_sunday, fields.phone_sunday);
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Monday', fields.hours_monday, fields.phone_monday);
+  gridRow = hours(gridRow, 'Monday', fields.hours_monday, fields.phone_monday);
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Tuesday', fields.hours_tuesday, fields.phone_tuesday);
+  gridRow = hours(gridRow, 'Tuesday', fields.hours_tuesday, fields.phone_tuesday);
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Wednesday', fields.hours_wednesday, fields.phone_wednesday);
+  gridRow = hours(gridRow, 'Wednesday', fields.hours_wednesday, fields.phone_wednesday);
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Thursday', fields.hours_thursday, fields.phone_thursday);
+  gridRow = hours(gridRow, 'Thursday', fields.hours_thursday, fields.phone_thursday);
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Friday', fields.hours_friday, fields.phone_friday);
+  gridRow = hours(gridRow, 'Friday', fields.hours_friday, fields.phone_friday);
 
-  gridRow = hours(_xyz, viewGrid, gridRow, 'Saturday', fields.hours_saturday, fields.phone_saturday);
+  gridRow = hours(gridRow, 'Saturday', fields.hours_saturday, fields.phone_saturday);
+   
+  function hours(gridRow, day, hours, phone) {
+    if (hours || phone) {
+      var el = _xyz.utils.hyperHTML.wire()`
+        <div style="grid-column: 1; font-weight: bold;">${day}`;
+      el.style.gridRow = gridRow;
+      viewGrid.appendChild(el);
+    
+      if (hours) {
+        var el = _xyz.utils.hyperHTML.wire()`
+          <div style="grid-column: 3; text-align: center;">${hours}`;
+        el.style.gridRow = gridRow;
+        viewGrid.appendChild(el);
+      }
+    
+      if (phone) {
+        var el = _xyz.utils.hyperHTML.wire()`
+          <div style="grid-column: 2; text-align: center;">${phone}`;
+        el.style.gridRow = gridRow;
+        viewGrid.appendChild(el);
+      }
   
- 
+      gridRow++;
+    
+      return gridRow;
+    }
+  
+    return gridRow;
+  }
+
+
   if (fields.phone_notes) {
     var el = _xyz.utils.hyperHTML.wire()`
       <div style="grid-column: 1/4; white-space: pre-wrap;">${fields.phone_notes}`;
@@ -281,33 +306,5 @@ function gla_locationView(_xyz, infoj) {
   view.appendChild(viewGrid);
   
   return view;
-}
 
-function hours(_xyz, viewGrid, gridRow, day, hours, phone) {
-  if (hours || phone) {
-    var el = _xyz.utils.hyperHTML.wire()`
-      <div style="grid-column: 1; font-weight: bold;">${day}`;
-    el.style.gridRow = gridRow;
-    viewGrid.appendChild(el);
-  
-    if (hours) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 3; text-align: center;">${hours}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-  
-    if (phone) {
-      var el = _xyz.utils.hyperHTML.wire()`
-        <div style="grid-column: 2; text-align: center;">${phone}`;
-      el.style.gridRow = gridRow;
-      viewGrid.appendChild(el);
-    }
-
-    gridRow++;
-  
-    return gridRow;
-  }
-
-  return gridRow;
 }

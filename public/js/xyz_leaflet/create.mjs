@@ -1,23 +1,15 @@
-import assignBtn from './assignBtn.mjs';
-
 export default _xyz => params => {
 
   // Remove existing Leaflet map object.
   if (_xyz.map) _xyz.map.remove();
-    
-  if (!params.target) return console.log('No target for mapview!');
 
-  // Set XYZ map DOM.
-  _xyz.mapview.node = params.target;  
-    
   // Load locale if defined in params or if no locale is yet loaded.
   if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
+    
+  // Return if no target has been defined for the leaflet map control.
+  if (!params.target) return console.log('No target for mapview!');
 
-  if (params.view && (!params.view.z || !params.view.lat || !params.view.lng)) delete params.view;
-                
-  // Assign params to locale.
-  // This makes it possible to override client side workspace entries.
-  Object.assign(_xyz.workspace.locale, params);
+  _xyz.mapview.node = params.target; 
     
   // Create Leaflet map object.
   _xyz.map = _xyz.L.map(_xyz.mapview.node, {
@@ -26,85 +18,64 @@ export default _xyz => params => {
     zoomControl: false,
     attributionControl: false
   });
-    
-  _xyz.mapview.changeEnd = () => {
-           
-    // Set view hooks when method is available.
-    if (_xyz.hooks) {
-      const center = _xyz.map.getCenter();
 
-      _xyz.hooks.set({
-        lat: center.lat,
-        lng: center.lng,
-        z: _xyz.map.getZoom()
-      });
-    }
-          
-    // Reload layers.
-    // layer.get() will return if reload is not required.
-    Object.values(_xyz.layers.list).forEach(layer => layer.get());
-          
-  };
-   
-  _xyz.mapview.btn = assignBtn(_xyz, params);
-    
+  // Set the default state.
+  _xyz.mapview.state = 'select';
+
   // Create attribution in map DOM.
-  if (params.attribution) _xyz.mapview.attribution.create();
-        
-  if(_xyz.workspace.locale.showScaleBar) {
-    // Add scale bar to map
-    L.control.scale().addTo(_xyz.map);
-  }
-        
-  if(_xyz.workspace.locale.maskBounds) {
+  _xyz.mapview.attribution.create(params.attribution);
+
+  if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) L.control.scale().addTo(_xyz.map);
+
+  if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
+
     // Grey out area outside bbox
     const world = [[90,180], [90,-180], [-90,-180], [-90,180]];
+
     const bbox = [
       [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.east],
       [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.west],
       [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.west],
       [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.east]
     ];
+
     const greyoutOptions = {
-      pane: 'markerPane',  // polygon would be hidden under basemap (and thus pointless) if added to any lower pane
+      pane: 'markerPane',
       stroke: false,
       fill: true,
-      fillColor: '#ccc',  // grey
-      fillOpacity: 0.8  // slightly transparent
+      fillColor: '#ccc',
+      fillOpacity: 0.8
     };
-    _xyz.L.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);  // Add polygon that covers the world but has a hole where bbox is
+
+    _xyz.L.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
   }
-        
-  // Set min, max zoom and bounds.
+
+  // Set z (min, max) and bounds.
   _xyz.map.setMinZoom(_xyz.workspace.locale.minZoom);
   _xyz.map.setMaxZoom(_xyz.workspace.locale.maxZoom);
   _xyz.map.setMaxBounds([[
-    _xyz.workspace.locale.bounds.south,
-    _xyz.workspace.locale.bounds.west
+    (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
+    (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west
   ], [
-    _xyz.workspace.locale.bounds.north,
-    _xyz.workspace.locale.bounds.east
+    (params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north,
+    (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east
   ]]);
 
   const z = _xyz.workspace.locale.view.z || 5;
           
   // Set view if defined in workspace.
-  _xyz.map.setView([
-    _xyz.workspace.locale.view.lat || 0,
-    _xyz.workspace.locale.view.lng || 0], z);
+  _xyz.map.setView(
+    [
+      (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
+      (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0
+    ],
+    (params.view && params.view.z) || z
+  );
 
-  // Check zoomBtn
-  if (_xyz.mapview.btn 
-    && _xyz.mapview.btn.ZoomIn) _xyz.mapview.btn.ZoomIn.disabled = !(z < _xyz.workspace.locale.maxZoom);
-
-  if (_xyz.mapview.btn 
-    && _xyz.mapview.btn.ZoomOut) _xyz.mapview.btn.ZoomOut.disabled = !(z > _xyz.workspace.locale.minZoom);
-          
+  // Event binding.
   // Fire viewChangeEnd after map move and zoomend
   _xyz.map.on('moveend', () => viewChangeEndTimer());
   _xyz.map.on('zoomend', () => viewChangeEndTimer());
-
-
           
   // Use timeout to prevent the viewChangeEvent to be executed multiple times.
   let timer;
@@ -113,47 +84,17 @@ export default _xyz => params => {
     timer = setTimeout(_xyz.mapview.changeEnd, 500);
   }
 
-  _xyz.mapview.popup = params => {
+  // Wire buttons to params targets.
+  if (params.btn) {
 
-    if (!params || !params.latlng || !params.content) return;
+    if (params.btn.ZoomIn) _xyz.mapview.btn._ZoomIn(params.btn.ZoomIn, z);
+  
+    if (params.btn.ZoomOut) _xyz.mapview.btn._ZoomOut(params.btn.ZoomOut, z);
+  
+    if (params.btn.Locate) _xyz.mapview.btn._Locate(params.btn.Locate);
+  }
 
-    _xyz.L.popup({ closeButton: false })
-      .setLatLng(params.latlng)
-      .setContent(params.content)
-      .openOn(_xyz.map);
-
-  };
-         
-  const panes = {
-    next: 500,
-    list: []
-  };
-    
-  Object.values(_xyz.layers.list).forEach(layer => {
-    
-    panes.list.push(_xyz.map.createPane(layer.key));
-    _xyz.map.getPane(layer.key).style.zIndex = panes.next++;
-    layer.loaded = false;
-    layer.get();
-      
-  });
-        
-  panes.list.push(_xyz.map.createPane('gazetteer'));
-  _xyz.map.getPane('gazetteer').style.zIndex = panes.next++;
-       
-  panes.list.push(_xyz.map.createPane('select'));
-  _xyz.map.getPane('select').style.zIndex = panes.next++;
-    
-  panes.list.push(_xyz.map.createPane('select_marker'));
-  _xyz.map.getPane('select_marker').style.zIndex = panes.next++;
-    
-  panes.list.push(_xyz.map.createPane('select_circle'));
-  _xyz.map.getPane('select_circle').style.zIndex = panes.next++;
-    
-  panes.list.push(_xyz.map.createPane('drawing'));
-  _xyz.map.getPane('drawing').style.zIndex = panes.next++;
-    
-  panes.list.push(_xyz.map.createPane('default'));
-  _xyz.map.getPane('default').style.zIndex = panes.next++;
+  // Create leaflet panes.
+  _xyz.mapview.panes.create();
     
 };

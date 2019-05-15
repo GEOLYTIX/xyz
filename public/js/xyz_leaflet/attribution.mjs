@@ -1,83 +1,95 @@
 export default _xyz => {
 
-  return {
+  const attribution = {
+
     create: create,
+
     check: check,
+
     set: set,
-    remove: remove
+
+    remove: remove,
+
+    layer: {},
+
+    links: _xyz.utils.hyperHTML.wire()`<div></div>`
+
   };
 
-  function create() {
+  return attribution;
 
-    if (_xyz.mapview.attribution.container) _xyz.mapview.attribution.container.remove();
+  function create(mapAttribution) {
+
+    if (!mapAttribution) return;
+
+    if (attribution.container) attribution.container.remove();
    
-    _xyz.mapview.attribution.container = _xyz.utils.hyperHTML.wire()`<div class="attribution"></div>`;
+    attribution.container = _xyz.utils.hyperHTML.wire()`<div class="attribution"></div>`;
 
-    _xyz.mapview.node.appendChild(_xyz.mapview.attribution.container);
+    _xyz.mapview.node.appendChild(attribution.container);
 
-    _xyz.mapview.attribution.container.appendChild(
+    attribution.container.appendChild(
       _xyz.utils.hyperHTML.wire()`
-        <a class="logo" target="_blank" href="https://geolytix.co.uk">GEOLYTIX</a>`);
+      <a class="logo" target="_blank" href="https://geolytix.co.uk">GEOLYTIX</a>`);
 
-    _xyz.mapview.attribution.links = _xyz.utils.hyperHTML.wire()`<div></div>`;
-    _xyz.mapview.attribution.container.appendChild(_xyz.mapview.attribution.links);
+    attribution.container.appendChild(attribution.links);
+
+    attribution.links.innerHTML = '';
+
+    if (typeof mapAttribution === 'object') {
+      Object.entries(mapAttribution).forEach(entry => {
+        attribution.links.appendChild(_xyz.utils.hyperHTML.wire()`
+        <a target="_blank" href="${entry[1]}">${entry[0]}</a>`);
+      });
+    }
 
     if (_xyz.workspace.locale.attribution) {
-
       Object.entries(_xyz.workspace.locale.attribution).forEach(entry => {
-
-        _xyz.mapview.attribution.links.appendChild(
-          _xyz.utils.hyperHTML.wire()`
-            <a target="_blank" href="${entry[1]}">${entry[0]}</a>`);
-  
+        attribution.links.appendChild(_xyz.utils.hyperHTML.wire()`
+        <a target="_blank" href="${entry[1]}">${entry[0]}</a>`);
       });
-
     };
     
-    _xyz.mapview.attribution.layer = {};
+    attribution.layer = {};
   
-    _xyz.mapview.attribution.check();
-
+    check();
   };
 
   function check() {
 
     Object.values(_xyz.layers.list).forEach(layer => {
-      if (layer.display && layer.attribution) _xyz.mapview.attribution.set(layer.attribution);
+      if (layer.display && layer.attribution) set(layer.attribution);
     });
-
   };
 
-  function set(attribution) {
+  function set(attribution_entries) {
 
-    Object.entries(attribution).forEach(entry => {
-      if(!_xyz.mapview.attribution.layer) return;
+    Object.entries(attribution_entries).forEach(entry => {
+
       // Create new attribution for layer if the same attribution does not exist yet.
-      if (!_xyz.mapview.attribution.layer[entry[0]]) {
+      if (!attribution.layer[entry[0]]) {
 
-        _xyz.mapview.attribution.layer[entry[0]] = _xyz.utils.hyperHTML.wire()`
+        attribution.layer[entry[0]] = _xyz.utils.hyperHTML.wire()`
         <a target="_blank" href="${entry[1]}">${entry[0]}</a>`;
 
-        _xyz.mapview.attribution.links.appendChild(_xyz.mapview.attribution.layer[entry[0]]);
+        attribution.links.appendChild(attribution.layer[entry[0]]);
 
       }
 
     });
-
   };
 
   function remove(attribution) {
 
     Object.entries(attribution).forEach(entry => {
 
-    // Create new attribution for layer if the same attribution does not exist yet.
-      if (_xyz.mapview.attribution.layer[entry[0]]) {
-        _xyz.mapview.attribution.layer[entry[0]].remove();
-        delete _xyz.mapview.attribution.layer[entry[0]];
+      // Create new attribution for layer if the same attribution does not exist yet.
+      if (attribution.layer[entry[0]]) {
+        attribution.layer[entry[0]].remove();
+        delete attribution.layer[entry[0]];
       }
 
     });
-
   };
 
 };

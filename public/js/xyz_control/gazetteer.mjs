@@ -12,7 +12,6 @@ export default _xyz => {
 
     icon: _xyz.utils.svg_symbols({type: 'markerColor', style: {colorMarker: '#64dd17', colorDot: '#33691e'}})
 
-    
   };
 
   // Create gazetteer object.
@@ -146,6 +145,7 @@ export default _xyz => {
     });
 
 
+    // Assign toggle method to a target button.
     if (params.toggle) {
       _xyz.gazetteer.toggle = params.toggle;
       _xyz.gazetteer.toggle.style.display = 'block';
@@ -283,7 +283,7 @@ export default _xyz => {
   // Create a feature from geojson.
   function createFeature(geom) {
 
-  // Parse json if geom is string
+    // Parse json if geom is string
     geom = typeof (geom) === 'string' ? JSON.parse(geom) : geom;
 
     // Remove existing layer.
