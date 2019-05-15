@@ -79,9 +79,9 @@ export default _xyz => {
     });
   };
 
-  function remove(attribution) {
+  function remove(attribution_entries) {
 
-    Object.entries(attribution).forEach(entry => {
+    Object.entries(attribution_entries).forEach(entry => {
 
       // Create new attribution for layer if the same attribution does not exist yet.
       if (attribution.layer[entry[0]]) {
