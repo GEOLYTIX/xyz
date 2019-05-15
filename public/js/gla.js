@@ -171,7 +171,7 @@ function customDropdown(_xyz, layer, callback) {
 
       // Reset previous boolean filters
       Object.keys(layer.filter.current).map(key => {
-        if(layer.filter.current[key]){
+        if(layer.filter.current[key].boolean){
           delete layer.filter.current[key];
           toLayerExtent(_xyz, layer);
           if(typeof(callback) === 'function') callback();
