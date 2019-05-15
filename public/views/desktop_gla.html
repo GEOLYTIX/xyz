@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="{{:dir}}/css/views/custom_desktop.css" />
+    <link rel="stylesheet" href="{{:dir}}/css/control.css" />
 
     <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
     <script src="{{:dir}}/js/gla_select.js" defer></script>
@@ -132,6 +132,47 @@
             background-color: ghostwhite;
         }
 
+        /* Tabulator styles */
+        .tabulator {
+            border: none;
+        }
+
+        .tabulator .tabulator-header {
+            display: none;
+        }
+
+        .tabulator .tabulator-tableHolder .tabulator-table {
+            width: 100%;
+        }
+
+        .tabulator-row {
+            min-height: 0px;
+        }
+
+        .tabulator-row.tabulator-selectable:hover {
+            background-color: rgba(0, 153, 0, 0.2);
+        }
+
+        .tabulator-row .tabulator-responsive-collapse {
+            border: none;
+        }
+
+        .tabulator-row .tabulator-cell {
+            border-left: none;
+        }
+
+        .tabulator-row .tabulator-cell div div {
+            display: block !important;
+            vertical-align: middle;
+        }
+
+        .tabulator-row.tabulator-group {
+            border-bottom: none;
+            border-left: none;
+            border-top: none;
+        }
+
+        
 
         /* Begin styling select element */
         .custom-select {
@@ -296,7 +337,10 @@
         <div id="locationView" style="grid-column: 1; grid-row: 5; background-color: #fff; padding: 10px;"></div>
 
         <div id="Map" style="grid-column: 2; grid-row: 1/3;">
-            <div id="map_attribution"><a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a>; <a target="_blank" href="https://leafletjs.com/">Leaflet</a>; <a target="_blank" href="https://www.mapbox.com">© Mapbox</a>; <a target="_blank" href="https://www.openstreetmap.org/copyright">© Open Streetmap</a></div>
+            <div id="map_attribution"><a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a>; <a
+                    target="_blank" href="https://leafletjs.com/">Leaflet</a>; <a target="_blank"
+                    href="https://www.mapbox.com">© Mapbox</a>; <a target="_blank"
+                    href="https://www.openstreetmap.org/copyright">© Open Streetmap</a></div>
         </div>
 
         <div style="grid-column: 2; grid-row: 3;" class="pink_box">
