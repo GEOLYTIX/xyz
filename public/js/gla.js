@@ -1,16 +1,11 @@
 _xyz({
-  host: document.head.dataset.dir || new String(''),
+  host: document.head.dataset.dir,
   //hooks: true,
   callback: _xyz => {
 
     _xyz.mapview.create({
       target: document.getElementById('Map'),
       scrollWheelZoom: true,
-      view: {
-        lat: 51.52,
-        lng: 0.24,
-        z: 6,
-      },
       btn: {
         Locate: document.getElementById('btnLocate'),
       }
@@ -18,9 +13,8 @@ _xyz({
 
     _xyz.locations.select = location => gla_select(_xyz, location);
 
-    //_xyz.layers.list['Advice Center'].show();
-    //console.log(_xyz.layers.list['Advice Center']);
     let layer = _xyz.layers.list['Advice Center'];
+
     layer.filter.current = {};
 
     var tableShow = () => _xyz.tableview.layerTable({
@@ -198,7 +192,8 @@ function customDropdown(_xyz, layer, callback) {
 
 function searchPostcode(_xyz){
 
-  let input = document.querySelector('#postcode-search input'),
+  let
+    input = document.querySelector('#postcode-search input'),
     find = document.querySelector('#postcode-find');
   
   input.addEventListener('focus', e => {
@@ -221,13 +216,16 @@ function searchPostcode(_xyz){
   });
 
   function search(){
+
     // Create abortable xhr.
     _xyz.gazetteer.xhr = new XMLHttpRequest();
+
     if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
 
     // Send gazetteer query to backend.
     _xyz.gazetteer.xhr.open('GET', _xyz.host + '/api/gazetteer/autocomplete?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
+      source: 'GOOGLE',
       q: encodeURIComponent(input.value),
       token: _xyz.token
     }));

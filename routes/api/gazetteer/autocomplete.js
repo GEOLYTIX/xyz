@@ -19,6 +19,7 @@ module.exports = fastify => {
         properties: {
           locale: { type: 'string' },
           q: { type: 'string' },
+          source: { type: 'string' },
         },
         required: ['locale', 'q']
       }
@@ -36,6 +37,21 @@ module.exports = fastify => {
 
       // Create an empty results object to be populated with the results from the different gazetteer methods.
       let results = [];
+
+      if (req.query.source) {
+
+        if (req.query.source === 'GOOGLE') {
+
+          results = await gaz_google(req.query.q, locale.gazetteer);
+
+          // Return error message _err if an error occured.
+          if (results._err) return res.code(500).send(results._err);
+
+          // Return results to client.
+          return res.code(200).send(results);
+        }
+
+      }
 
       // Locale gazetteer which can query datasources in the same locale.
       if (locale.gazetteer.datasets) {
