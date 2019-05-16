@@ -37,8 +37,7 @@
                             "table1": {
                                 "title": "Population / GDP",
                                 "from": "dev.natural_earth_countries",
-                                "columns": [
-                                    {
+                                "columns": [{
                                         "field": "name",
                                         "type": "text"
                                     },
@@ -56,8 +55,7 @@
                             "GDP / Population": {
                                 "display": true,
                                 "from": "dev.natural_earth_countries",
-                                "columns": [
-                                    {
+                                "columns": [{
                                         "field": "name",
                                         "type": "text"
                                     },
@@ -79,8 +77,7 @@
                     "hover": {
                         "field": "pop_est"
                     },
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -123,8 +120,7 @@
                             "title": "Table 1",
                             "field": "table1",
                             "type": "table",
-                            "columns": [
-                                {
+                            "columns": [{
                                     "title": "rows",
                                     "field": "rows",
                                     "rows": {
@@ -462,8 +458,7 @@
                         "field": "address"
                     },
                     "qID": "id",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -500,13 +495,11 @@
                 "provider": "GOOGLE",
                 "code": "GB",
                 "placeholder": "e.g. London",
-                "datasets": [
-                    {
-                        "layer": "retail_points",
-                        "table": "dev.retailpoints",
-                        "label": "store"
-                    }
-                ]
+                "datasets": [{
+                    "layer": "retail_points",
+                    "table": "dev.retailpoints",
+                    "label": "store"
+                }]
             },
             "layers": {
                 "OSM": {
@@ -538,8 +531,7 @@
                         "delete": true
                     },
                     "qID": "id",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -604,8 +596,7 @@
                         "isoline_here": true,
                         "delete": true
                     },
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -705,8 +696,7 @@
                         }
                     },
                     "qID": "id",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -747,8 +737,7 @@
                         "tables": {
                             "Retail Places": {
                                 "from": "dev.retailplaces",
-                                "columns": [
-                                    {
+                                "columns": [{
                                         "title": "ID",
                                         "field": "id",
                                         "type": "text"
@@ -902,18 +891,15 @@
                     },
                     "qID": "tid",
                     "filter": {
-                        "infoj": [
-                            {
-                                "label": "ID count",
-                                "field": "id_count",
-                                "type": "integer",
-                                "inline": true,
-                                "fieldfx": "count(id)"
-                            }
-                        ]
+                        "infoj": [{
+                            "label": "ID count",
+                            "field": "id_count",
+                            "type": "integer",
+                            "inline": true,
+                            "fieldfx": "count(id)"
+                        }]
                     },
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -1040,8 +1026,7 @@
                             "Retail Points": {
                                 "display": true,
                                 "from": "dev.retailpoints",
-                                "columns": [
-                                    {
+                                "columns": [{
                                         "title": "ID",
                                         "field": "retailpoint_id",
                                         "type": "text"
@@ -1061,15 +1046,13 @@
                         }
                     },
                     "filter": {
-                        "infoj": [
-                            {
-                                "label": "ID count",
-                                "field": "id_count",
-                                "type": "integer",
-                                "inline": true,
-                                "fieldfx": "count(retailpoint_id)"
-                            }
-                        ]
+                        "infoj": [{
+                            "label": "ID count",
+                            "field": "id_count",
+                            "type": "integer",
+                            "inline": true,
+                            "fieldfx": "count(retailpoint_id)"
+                        }]
                     },
                     "style": {
                         "themes": {
@@ -1190,8 +1173,7 @@
                             }
                         }
                     },
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "streetview"
                         },
                         {
@@ -1297,8 +1279,7 @@
                     "qID": "id",
                     "table": "mapp.sites",
                     "cluster_label": "pub_name",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "report",
                             "report": {
                                 "template": "shneame",
@@ -1385,8 +1366,7 @@
                             "type": "tableDefinition",
                             "title": "Population Summary",
                             "target_id": "xyz_table1",
-                            "columns": [
-                                {
+                            "columns": [{
                                     "type": "integer",
                                     "title": "0-5 mins",
                                     "field": "min5",
@@ -1420,8 +1400,7 @@
                                     }
                                 }
                             ],
-                            "rows": [
-                                {
+                            "rows": [{
                                     "field": "pop__17",
                                     "fieldfx": "SUM(b.pop__17)",
                                     "title": "Current Population"
@@ -1483,21 +1462,18 @@
                             "title": "Worker Summary",
                             "display": true,
                             "target_id": "xyz_table8",
-                            "columns": [
-                                {
-                                    "type": "integer",
-                                    "title": "Total Workers",
-                                    "field": "workers",
-                                    "lookup": {
-                                        "table_a": "mapp.sites",
-                                        "table_b": "gb_hx_1k",
-                                        "geom_a": "isoline_15min",
-                                        "geom_b": "geomcntr"
-                                    }
+                            "columns": [{
+                                "type": "integer",
+                                "title": "Total Workers",
+                                "field": "workers",
+                                "lookup": {
+                                    "table_a": "mapp.sites",
+                                    "table_b": "gb_hx_1k",
+                                    "geom_a": "isoline_15min",
+                                    "geom_b": "geomcntr"
                                 }
-                            ],
-                            "rows": [
-                                {
+                            }],
+                            "rows": [{
                                     "field": "workers_250",
                                     "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geomcntr,27700))<=250 then b.workers else 0 end)",
                                     "title": "Workers 250m"
@@ -1514,8 +1490,7 @@
                             "title": "OAC Profile",
                             "target_id": "xyz_table3",
                             "display": true,
-                            "columns": [
-                                {
+                            "columns": [{
                                     "type": "integer",
                                     "title": "0-5 mins",
                                     "field": "min5",
@@ -1554,8 +1529,7 @@
                                     "aspatial": "oac_1a_se_lon, oac_1b_se_lon, oac_1c_se_lon, oac_2a_se_lon,oac_2b_se_lon, oac_2c_se_lon, oac_2d_se_lon, oac_3a_se_lon, oac_3b_se_lon, oac_3c_se_lon, oac_3d_se_lon, oac_4a_se_lon, oac_4b_se_lon, oac_4c_se_lon, oac_5a_se_lon, oac_5b_se_lon, oac_6a_se_lon, oac_6b_se_lon, oac_7a_se_lon, oac_7b_se_lon, oac_7c_se_lon, oac_7d_se_lon, oac_8a_se_lon, oac_8b_se_lon, oac_8c_se_lon, oac_8d_se_lon, oac_total_se_lon FROM shepherd_neame.report_summary"
                                 }
                             ],
-                            "rows": [
-                                {
+                            "rows": [{
                                     "field": "oac_1a",
                                     "fieldfx": "round(SUM(CASE WHEN oac_group=1 THEN pop__17 ELSE 0 END))",
                                     "title": "1a - Farming communities"
@@ -1811,8 +1785,7 @@
                                 "active": true,
                                 "field": "age_index"
                             },
-                            "columns": [
-                                {
+                            "columns": [{
                                     "type": "integer",
                                     "title": "0-5 mins",
                                     "field": "min5",
@@ -1851,8 +1824,7 @@
                                     "aspatial": "age_under_18_se_lon, age_18to24_se_lon, age_25to29_se_lon, age_30to44_se_lon, age_45to59_se_lon, age_60plus_se_lon, age_total_se_lon FROM shepherd_neame.report_summary"
                                 }
                             ],
-                            "rows": [
-                                {
+                            "rows": [{
                                     "field": "age_under_18",
                                     "title": "< 18",
                                     "fieldfx": "round(SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus))"
@@ -1959,8 +1931,7 @@
                                     "#78909c"
                                 ]
                             },
-                            "columns": [
-                                {
+                            "columns": [{
                                     "type": "integer",
                                     "title": "0-5 mins",
                                     "field": "min5",
@@ -1999,8 +1970,7 @@
                                     "aspatial": "social_grade_ab_se_lon, social_grade_c1_se_lon, social_grade_c2_se_lon, social_grade_de_se_lon, social_grade_total_se_lon FROM shepherd_neame.report_summary"
                                 }
                             ],
-                            "rows": [
-                                {
+                            "rows": [{
                                     "field": "sg_ab",
                                     "fieldfx": "round(SUM(ski_ab__11))",
                                     "title": "AB"
@@ -2080,8 +2050,7 @@
                             "table": "shepherd_neame.food_beverage",
                             "target_id": "xyz_table5",
                             "geom": "geom",
-                            "columns": [
-                                {
+                            "columns": [{
                                     "title": "Competitor name",
                                     "field": "fascia"
                                 },
@@ -2166,6 +2135,1521 @@
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "pubs":
+                {
+                    "display": true,
+                    "name": "Test Pubs",
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "mb.mb_pub_jan_2019",
+                    "geom": "geom_4326",
+                    "cluster_label": "brand",
+                    "cluster_kmeans": 0.2,
+                    "cluster_dbscan": 0.012,
+                    "tableview":
+                    {
+                        "tables":
+                        {
+                            "mb_pubs":
+                            {
+                                "title": "Pubs",
+                                "from": "mb.mb_pub_jan_2019",
+                                "columns": [
+                                {
+                                    "field": "bun_code",
+                                    "title": "Bun Code"
+                                },
+                                {
+                                    "field": "name",
+                                    "title": "Name"
+                                },
+                                {
+                                    "field": "address",
+                                    "title": "Address"
+                                },
+                                {
+                                    "field": "post_code",
+                                    "title": "Post Code"
+                                },
+                                {
+                                    "field": "current_group_name",
+                                    "title": "Current Group Name"
+                                },
+                                {
+                                    "field": "current_area_name",
+                                    "title": "Current Area Name"
+                                },
+                                {
+                                    "field": "current_branch_name",
+                                    "title": "Current Branch Name"
+                                },
+                                {
+                                    "field": "location_type",
+                                    "title": "Location Type"
+                                }]
+                            }
+                        }
+                    },
+                    "edit":
+                    {
+                        "properties": true
+                    },
+                    "qID": "id",
+                    "infoj": [
+                    {
+                        "field": "bun_code",
+                        "label": "Bun Code"
+                    },
+                    {
+                        "field": "name",
+                        "label": "Name"
+                    },
+                    {
+                        "field": "brand",
+                        "label": "Brand"
+                    },
+                    {
+                        "field": "address",
+                        "label": "Address"
+                    },
+                    {
+                        "field": "post_code",
+                        "label": "Post Code"
+                    },
+                    {
+                        "field": "comments",
+                        "label": "Comments",
+                        "type": "textarea",
+                        "edit": true
+                    },
+                    {
+                        "type": "group",
+                        "label": "Premise Details"
+                    },
+                    {
+                        "field": "current_group_name",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Current Group Name"
+                    },
+                    {
+                        "field": "current_area_name",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Current Area Name"
+                    },
+                    {
+                        "field": "current_branch_name",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Current Branch Name"
+                    },
+                    {
+                        "field": "location_type",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Location Type"
+                    },
+                    {
+                        "field": "rp_proximity",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "RLP (General Park) Proximity"
+                    },
+                    {
+                        "field": "rp_type",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "RLP (General Park) Type"
+                    },
+                    {
+                        "field": "seafront",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Seafront"
+                    },
+                    {
+                        "field": "building_desc",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Building Description"
+                    },
+                    {
+                        "field": "inkeepers_lodge",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Inkeepers Lodge"
+                    },
+                    {
+                        "field": "ikl_number_of_rooms_oct_2018",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "IKL Number of Rooms (Oct 2018)"
+                    },
+                    {
+                        "field": "playbarn",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Playbarn Current Trading Flag"
+                    },
+                    {
+                        "field": "car_park_spaces",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Car Park Spaces"
+                    },
+                    {
+                        "field": "disabled_car_park_spaces",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Car Park Spaces (Disabled)"
+                    },
+                    {
+                        "field": "external_eda",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "External EDA"
+                    },
+                    {
+                        "field": "external_number_of_covers",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "External Number of Covers"
+                    },
+                    {
+                        "field": "internal_eda",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Internal EDA"
+                    },
+                    {
+                        "field": "kitchen_position",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Kitchen Positiion"
+                    },
+                    {
+                        "field": "baby_changing",
+                        "group": "Premise Details",
+                        "inline": true,
+                        "label": "Baby Changing"
+                    },
+                    {
+                        "label": "Financial Details",
+                        "type": "group"
+                    },
+                    {
+                        "label": "Drivetimes",
+                        "type": "label"
+                    },
+                    {
+                        "name": "HERE Catchment 5min",
+                        "field": "isoline_5min",
+                        "fieldfx": "ST_asGeoJson(isoline_5min)",
+                        "type": "geometry",
+                        "edit":
+                        {
+                            "isoline_here":
+                            {
+                                "minutes": 5
+                            }
+                        },
+                        "style":
+                        {
+                            "stroke": true,
+                            "color": "#BB0A21",
+                            "fillColor": "#BB0A21",
+                            "weight": 2,
+                            "fill": true,
+                            "fillOpacity": 0.2
+                        }
+                    },
+                    {
+                        "label": "Population within 5min",
+                        "type": "group",
+                        "chart":
+                        {
+                            "active": true,
+                            "type": "bar",
+                            "unit": "k",
+                            "backgroundColor": [
+                                "#E6A5AE",
+                                "#E08F9A",
+                                "#D97985",
+                                "#D36371",
+                                "#CD4C5D",
+                                "#C73649",
+                                "#C12035",
+                                "#BB0A21"
+                            ],
+                            "borderColor": [
+                                "#E6A5AE",
+                                "#E08F9A",
+                                "#D97985",
+                                "#D36371",
+                                "#CD4C5D",
+                                "#C73649",
+                                "#C12035",
+                                "#BB0A21"
+                            ]
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2011",
+                        "field": "_pop__11_5min",
+                        "fieldfx": "SUM(b.pop__11)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2012",
+                        "field": "_pop__12_5min",
+                        "fieldfx": "SUM(b.pop__12)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2013",
+                        "field": "_pop__13_5min",
+                        "fieldfx": "SUM(b.pop__13)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2014",
+                        "field": "_pop__14_5min",
+                        "fieldfx": "SUM(b.pop__14)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2015",
+                        "field": "_pop__15_5min",
+                        "fieldfx": "SUM(b.pop__15)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2016",
+                        "field": "_pop__16_5min",
+                        "fieldfx": "SUM(b.pop__16)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 5min",
+                        "label": "2017",
+                        "field": "_pop__17_5min",
+                        "fieldfx": "SUM(b.pop__17)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_5min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "name": "HERE Catchment 10min",
+                        "field": "isoline_10min",
+                        "fieldfx": "ST_asGeoJson(isoline_10min)",
+                        "type": "geometry",
+                        "edit":
+                        {
+                            "isoline_here":
+                            {
+                                "minutes": 10
+                            }
+                        },
+                        "style":
+                        {
+                            "stroke": true,
+                            "color": "#F49D37",
+                            "fillColor": "#F49D37",
+                            "weight": 2,
+                            "fill": true
+                        }
+                    },
+                    {
+                        "label": "Population within 10min",
+                        "type": "group",
+                        "chart":
+                        {
+                            "active": true,
+                            "type": "bar",
+                            "unit": "k",
+                            "backgroundColor": [
+                                "#FBDBB6",
+                                "#FAD2A4",
+                                "#F9C991",
+                                "#F8C07F",
+                                "#F7B76D",
+                                "#F6AE5B",
+                                "#F5A549",
+                                "#F49D37"
+                            ],
+                            "borderColor": [
+                                "#FBDBB6",
+                                "#FAD2A4",
+                                "#F9C991",
+                                "#F8C07F",
+                                "#F7B76D",
+                                "#F6AE5B",
+                                "#F5A549",
+                                "#F49D37"
+                            ]
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2011",
+                        "field": "_pop__11_10min",
+                        "fieldfx": "SUM(b.pop__11)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2012",
+                        "field": "_pop__12_10min",
+                        "fieldfx": "SUM(b.pop__12)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2013",
+                        "field": "_pop__13_10min",
+                        "fieldfx": "SUM(b.pop__13)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2014",
+                        "field": "_pop__14_10min",
+                        "fieldfx": "SUM(b.pop__14)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2015",
+                        "field": "_pop__15_10min",
+                        "fieldfx": "SUM(b.pop__15)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2016",
+                        "field": "_pop__16_10min",
+                        "fieldfx": "SUM(b.pop__16)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 10min",
+                        "label": "2017",
+                        "field": "_pop__17_10min",
+                        "fieldfx": "SUM(b.pop__17)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_10min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "name": "HERE Catchment 15min",
+                        "field": "isoline_15min",
+                        "fieldfx": "ST_asGeoJson(isoline_15min)",
+                        "type": "geometry",
+                        "edit":
+                        {
+                            "isoline_here":
+                            {
+                                "minutes": 15
+                            }
+                        },
+                        "style":
+                        {
+                            "stroke": true,
+                            "color": "#FFF05A",
+                            "fillColor": "#FFF05A",
+                            "weight": 2,
+                            "fill": true,
+                            "fillOpacity": 0.2
+                        }
+                    },
+                    {
+                        "label": "Population within 15min",
+                        "type": "group",
+                        "chart":
+                        {
+                            "active": true,
+                            "type": "bar",
+                            "unit": "k",
+                            "backgroundColor": [
+                                "#FFF9C3",
+                                "#FFF8B4",
+                                "#FFF6A5",
+                                "#FFF596",
+                                "#FFF487",
+                                "#FFF278",
+                                "#FFF169",
+                                "#FFF05A"
+                            ],
+                            "borderColor": [
+                                "#FFF9C3",
+                                "#FFF8B4",
+                                "#FFF6A5",
+                                "#FFF596",
+                                "#FFF487",
+                                "#FFF278",
+                                "#FFF169",
+                                "#FFF05A"
+                            ]
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2011",
+                        "field": "_pop__11_15min",
+                        "fieldfx": "SUM(b.pop__11)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2012",
+                        "field": "_pop__12_15min",
+                        "fieldfx": "SUM(b.pop__12)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2013",
+                        "field": "_pop__13_15min",
+                        "fieldfx": "SUM(b.pop__13)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2014",
+                        "field": "_pop__14_15min",
+                        "fieldfx": "SUM(b.pop__14)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2015",
+                        "field": "_pop__15_15min",
+                        "fieldfx": "SUM(b.pop__15)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2016",
+                        "field": "_pop__16_15min",
+                        "fieldfx": "SUM(b.pop__16)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "group": "Population within 15min",
+                        "label": "2017",
+                        "field": "_pop__17_15min",
+                        "fieldfx": "SUM(b.pop__17)",
+                        "level": 1,
+                        "type": "integer",
+                        "lookup":
+                        {
+                            "table_a": "mb.mb_pub_jan_2019",
+                            "table_b": "geodata.uk_glx_geodata_hex_1k",
+                            "geom_a": "isoline_15min",
+                            "geom_b": "geom_p_4326"
+                        }
+                    },
+                    {
+                        "label": "Propensity Bar Chart",
+                        "type": "group",
+                        "chart":
+                        {
+                            "type": "horizontalBar",
+                            "active": true,
+                            "height": 300,
+                            "backgroundColor": [
+                                "#ffb300",
+                                "#d81b60",
+                                "#8e24aa",
+                                "#5e35b1",
+                                "#3949ab",
+                                "#1e88e5",
+                                "#039be5",
+                                "#00acc1",
+                                "#00897b",
+                                "#E02323",
+                                "#E0AA23",
+                                "#82E023",
+                                "#23E051",
+                                "#23E0D2",
+                                "#2382E0",
+                                "#B523E0"
+                            ],
+                            "borderColor": [
+                                "#ffb300",
+                                "#d81b60",
+                                "#8e24aa",
+                                "#5e35b1",
+                                "#3949ab",
+                                "#1e88e5",
+                                "#039be5",
+                                "#00acc1",
+                                "#00897b",
+                                "#E02323",
+                                "#E0AA23",
+                                "#82E023",
+                                "#23E051",
+                                "#23E0D2",
+                                "#2382E0",
+                                "#B523E0"
+                            ]
+                        }
+                    },
+                    {
+                        "field": "all_bar_one",
+                        "group": "Propensity Bar Chart",
+                        "type": "text",
+                        "level": 2,
+                        "inline": true,
+                        "label": "All Bar One"
+                    },
+                    {
+                        "field": "browns",
+                        "group": "Propensity Bar Chart",
+                        "type": "text",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Browns"
+                    },
+                    {
+                        "field": "castle",
+                        "group": "Propensity Bar Chart",
+                        "type": "text",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Castle"
+                    },
+                    {
+                        "field": "ember",
+                        "group": "Propensity Bar Chart",
+                        "type": "text",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Ember"
+                    },
+                    {
+                        "field": "harvester",
+                        "group": "Propensity Bar Chart",
+                        "type": "text",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Harvester"
+                    },
+                    {
+                        "field": "milner_and_carter",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Miller and Carter"
+                    },
+                    {
+                        "field": "nicholsons",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Nicholsons"
+                    },
+                    {
+                        "field": "oak_tree_high_street",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Oak Tree High Street"
+                    },
+                    {
+                        "field": "oak_tree_suburban",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Oak Tree Suburban"
+                    },
+                    {
+                        "field": "oneils",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "O'Neills"
+                    },
+                    {
+                        "field": "pcdg",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "PCDG"
+                    },
+                    {
+                        "field": "sizzling_pubs",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Sizzling Pubs"
+                    },
+                    {
+                        "field": "stonehouse_pizza_and_cavery",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Stonehouse"
+                    },
+                    {
+                        "field": "toby_carvery",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Toby Carvery"
+                    },
+                    {
+                        "field": "vintage_inns",
+                        "type": "text",
+                        "group": "Propensity Bar Chart",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Vintage Inns"
+                    },
+                    {
+                        "field": "dry_perc",
+                        "type": "text",
+                        "group": "Financial Details",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Dry %"
+                    },
+                    {
+                        "field": "wet_perc",
+                        "type": "text",
+                        "group": "Financial Details",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Wet %"
+                    },
+                    {
+                        "field": "aws_18",
+                        "type": "text",
+                        "group": "Financial Details",
+                        "level": 2,
+                        "inline": true,
+                        "label": "Average Weekly Sales 2018"
+                    },
+                    {
+                        "label": "Total Sales Figures",
+                        "type": "group",
+                        "chart":
+                        {
+                            "x": "Days of the Week",
+                            "y": "%",
+                            "active": "true",
+                            "height": 300
+                        }
+                    },
+                    {
+                        "field": "monday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "M"
+                    },
+                    {
+                        "field": "tuesday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "T"
+                    },
+                    {
+                        "field": "wednesday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "W"
+                    },
+                    {
+                        "field": "thursday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "T"
+                    },
+                    {
+                        "field": "friday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "F"
+                    },
+                    {
+                        "field": "saturday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "S"
+                    },
+                    {
+                        "field": "sunday_perc",
+                        "type": "numeric",
+                        "group": "Total Sales Figures",
+                        "level": 2,
+                        "inline": true,
+                        "postfix": " %",
+                        "label": "SU"
+                    },
+                    {
+                        "label": "Available tableviews",
+                        "type": "label",
+                        "hideInReport": true
+                    },
+                    {
+                        "type": "tableDefinition",
+                        "title": "Population Summary",
+                        "display": true,
+                        "target_id": "xyz_table1",
+                        "columns": [
+                        {
+                            "type": "integer",
+                            "title": "0-5 mins",
+                            "field": "min5",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_5min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "integer",
+                            "title": "0-10 mins",
+                            "field": "min10",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_10min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "integer",
+                            "title": "0-15 mins",
+                            "field": "min15",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_15min",
+                                "geom_b": "geom_4326"
+                            }
+                        }],
+                        "rows": [
+                        {
+                            "field": "pop__17",
+                            "fieldfx": "SUM(b.pop__17)",
+                            "title": "Current Population"
+                        },
+                        {
+                            "field": "pop__11",
+                            "fieldfx": "SUM(b.pop__11)",
+                            "title": "Population 2011"
+                        },
+                        {
+                            "field": "pop_growth",
+                            "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
+                            "title": "Population Growth"
+                        },
+                        {
+                            "field": "students",
+                            "fieldfx": "SUM(eac_student__11) + SUM(ein_student__11)",
+                            "title": "Students"
+                        },
+                        {
+                            "field": "non_white",
+                            "fieldfx": "100*(SUM(pop__11) - SUM(ret_white_tot__11))/SUM(pop__11)",
+                            "title": "% Non-White"
+                        },
+                        {
+                            "field": "own_home",
+                            "fieldfx": "100*SUM(own)/SUM(own+rent+social)",
+                            "title": "Own Home"
+                        },
+                        {
+                            "field": "private_rented",
+                            "fieldfx": "100*SUM(rent)/SUM(own+rent+social)",
+                            "title": "Private Rented"
+                        },
+                        {
+                            "field": "social_rented",
+                            "fieldfx": "100*SUM(social)/SUM(own+rent+social)",
+                            "title": "Social Rented"
+                        },
+                        {
+                            "field": "single_hhds",
+                            "fieldfx": "100*SUM(pers1hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                            "title": "Single Hhds"
+                        },
+                        {
+                            "field": "hhds_two_ppl",
+                            "fieldfx": "100*SUM(pers2hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                            "title": "2 Person Hhds"
+                        },
+                        {
+                            "field": "hhds_3plus",
+                            "fieldfx": "100*SUM(pers2plushhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                            "title": "3+ Hhds"
+                        }]
+                    },
+                    {
+                        "type": "tableDefinition",
+                        "title": "Worker Summary",
+                        "display": true,
+                        "target_id": "xyz_table8",
+                        "columns": [
+                        {
+                            "type": "integer",
+                            "title": "Total Workers",
+                            "field": "workers",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_15min",
+                                "geom_b": "geom_4326"
+                            }
+                        }],
+                        "rows": [
+                        {
+                            "field": "workers_250",
+                            "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=250 then b.workers else 0 end)",
+                            "title": "Workers 250m"
+                        },
+                        {
+                            "field": "workers_500",
+                            "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=500 then b.workers else 0 end)",
+                            "title": "Workers 500m"
+                        }]
+                    },
+                    {
+                        "type": "tableDefinition",
+                        "title": "Age Profile",
+                        "display": true,
+                        "target_id": "xyz_table2",
+                        "columns": [
+                        {
+                            "type": "integer",
+                            "title": "0-5 mins",
+                            "field": "min5",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_5min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "integer",
+                            "title": "0-10 mins",
+                            "field": "min10",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_10min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "numeric",
+                            "title": "0-15 mins",
+                            "field": "min15",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_15min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "numeric",
+                            "field": "uk",
+                            "aspatial": "age_under_18_uk, age_18to24_uk, age_25to29_uk, age_30to44_uk, age_45to59_uk, age_60plus_uk, age_total_uk FROM mb.report_summary"
+                        }],
+                        "rows": [
+                        {
+                            "field": "age_under_18",
+                            "title": "< 18",
+                            "fieldfx": "round(SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus))"
+                        },
+                        {
+                            "field": "age_18to24",
+                            "fieldfx": "round(SUM(age_18to19__11 + age_20to24__11))",
+                            "title": "18 to 24"
+                        },
+                        {
+                            "field": "age_25to29",
+                            "fieldfx": "round(SUM(age_25to29__11))",
+                            "title": "25 to 29"
+                        },
+                        {
+                            "field": "age_30to44",
+                            "fieldfx": "round(SUM(age_30to44__11))",
+                            "title": "30 to 44"
+                        },
+                        {
+                            "field": "age_45to59",
+                            "fieldfx": "round(SUM(age_45to59__11))",
+                            "title": "45 to 59"
+                        },
+                        {
+                            "field": "age_60plus",
+                            "fieldfx": "round(SUM(age60plus))",
+                            "title": "60+"
+                        },
+                        {
+                            "field": "age_profile_total",
+                            "fieldfx": "round(SUM(pop__11))",
+                            "title": "Total"
+                        }],
+                        "agg":
+                        {
+                            "share15":
+                            {
+                                "title": "% with 15 min",
+                                "type": "integer",
+                                "rows": [
+                                    "100*min15.age_under_18/min15.age_profile_total",
+                                    "100*min15.age_18to24/min15.age_profile_total",
+                                    "100*min15.age_25to29/min15.age_profile_total",
+                                    "100*min15.age_30to44/min15.age_profile_total",
+                                    "100*min15.age_45to59/min15.age_profile_total",
+                                    "100*min15.age_60plus/min15.age_profile_total",
+                                    "100*min15.age_profile_total/min15.age_profile_total"
+                                ]
+                            },
+                            "age_uk_total":
+                            {
+                                "title": "UK %",
+                                "type": "integer",
+                                "rows": [
+                                    "uk.age_under_18_uk*100/uk.age_total_uk",
+                                    "uk.age_18to24_uk*100/uk.age_total_uk",
+                                    "uk.age_25to29_uk*100/uk.age_total_uk",
+                                    "uk.age_30to44_uk*100/uk.age_total_uk",
+                                    "uk.age_45to59_uk*100/uk.age_total_uk",
+                                    "uk.age_60plus_uk*100/uk.age_total_uk",
+                                    "uk.age_total_uk*100/uk.age_total_uk"
+                                ]
+                            },
+                            "age_index":
+                            {
+                                "title": "Age Profile Index",
+                                "type": "integer",
+                                "formatter": "progress",
+                                "formatterParams":
+                                {
+                                    "color": [
+                                        "#2196f3", "orange", "red"
+                                    ],
+                                    "max": 250
+                                },
+                                "width": 200,
+                                "sorter": "number",
+                                "rows": [
+                                    "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
+                                    "uk.age_total_uk*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_uk",
+                                    "uk.age_total_uk*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_uk",
+                                    "uk.age_total_uk*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_uk",
+                                    "uk.age_total_uk*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_uk",
+                                    "uk.age_total_uk*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_uk",
+                                    "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "type": "tableDefinition",
+                        "title": "Social Grade",
+                        "display": true,
+                        "target_id": "xyz_table4",
+                        "columns": [
+                        {
+                            "type": "integer",
+                            "title": "0-5 mins",
+                            "field": "min5",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_5min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "integer",
+                            "title": "0-10 mins",
+                            "field": "min10",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_10min",
+                                "geom_b": "geom_4326"
+                            }
+                        },
+                        {
+                            "type": "numeric",
+                            "title": "0-15 mins",
+                            "field": "min15",
+                            "lookup":
+                            {
+                                "table_a": "mb.mb_pub_jan_2019",
+                                "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                "geom_a": "isoline_15min",
+                                "geom_b": "geom_p_4326"
+                            }
+                        },
+                        {
+                            "type": "numeric",
+                            "field": "uk",
+                            "aspatial": "social_grade_ab_uk, social_grade_c1_uk, social_grade_c2_uk, social_grade_de_uk, social_grade_total_uk FROM mb.report_summary"
+                        }],
+                        "rows": [
+                        {
+                            "field": "sg_ab",
+                            "fieldfx": "round(SUM(ski_ab__11))",
+                            "title": "AB"
+                        },
+                        {
+                            "field": "sg_c1",
+                            "fieldfx": "round(SUM(ski_c1__11))",
+                            "title": "C1"
+                        },
+                        {
+                            "field": "sg_c2",
+                            "fieldfx": "round(SUM(ski_c2__11))",
+                            "title": "C2"
+                        },
+                        {
+                            "field": "sg_de",
+                            "fieldfx": "round(SUM(ski_de__11))",
+                            "title": "DE"
+                        },
+                        {
+                            "field": "sg_total",
+                            "fieldfx": "round(SUM(ski_hrp_base__11))",
+                            "title": "Total"
+                        }],
+                        "agg":
+                        {
+                            "share15":
+                            {
+                                "title": "% with 15 min",
+                                "type": "integer",
+                                "rows": [
+                                    "100*min15.sg_ab/min15.sg_total",
+                                    "100*min15.sg_c1/min15.sg_total",
+                                    "100*min15.sg_c2/min15.sg_total",
+                                    "100*min15.sg_de/min15.sg_total",
+                                    "100*min15.sg_total/min15.sg_total"
+                                ]
+                            },
+                            "sg_uk_total":
+                            {
+                                "title": "UK %",
+                                "type": "integer",
+                                "rows": [
+                                    "uk.social_grade_ab_uk*100/uk.social_grade_total_uk",
+                                    "uk.social_grade_c1_uk*100/uk.social_grade_total_uk",
+                                    "uk.social_grade_c2_uk*100/uk.social_grade_total_uk",
+                                    "uk.social_grade_de_uk*100/uk.social_grade_total_uk",
+                                    "uk.social_grade_total_uk*100/uk.social_grade_total_uk"
+                                ]
+                            },
+                            "sg_index":
+                            {
+                                "title": "Social Grade Index",
+                                "type": "integer",
+                                "formatter": "progress",
+                                "formatterParams":
+                                {
+                                    "color": [
+                                        "#2196f3", "orange", "red"
+                                    ],
+                                    "max": 250
+                                },
+                                "width": 200,
+                                "sorter": "number",
+                                "rows": [
+                                    "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
+                                    "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
+                                    "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
+                                    "uk.social_grade_total_uk*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_uk",
+                                    "uk.social_grade_total_uk*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_uk"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "type": "streetview"
+                    },
+                    {
+                        "field": "images",
+                        "type": "images",
+                        "edit": true
+                    },
+                    {
+                        "type": "orderedList",
+                        "title": "Nearest competitors",
+                        "display": true,
+                        "table": "mb.cga_address_geocoded",
+                        "geom": "geom",
+                        "columns": [
+                        {
+                            "field": "dpname",
+                            "title": "Competitor name"
+                        },
+                        {
+                            "field": "dpownergro",
+                            "title": "Owner group"
+                        },
+                        {
+                            "field": "licname",
+                            "title": "Licence"
+                        },
+                        {
+                            "field": "centrotype",
+                            "title": "Type"
+                        },
+                        {
+                            "field": "postcode",
+                            "title": "Postcode"
+                        },
+                        {
+                            "type": "integer",
+                            "geography": true,
+                            "title": "Distance (m)",
+                            "fx": "ST_DISTANCE",
+                            "field": "dist",
+                            "orderby": true
+                        }],
+                        "limit": 20
+                    },
+                    {
+                        "type": "orderedList",
+                        "title": "Nearest MB Pubs",
+                        "display": true,
+                        "table": "mb.mb_pub_jan_2019",
+                        "geom": "geom_4326",
+                        "columns": [
+                        {
+                            "field": "name",
+                            "title": "Name"
+                        },
+                        {
+                            "field": "brand",
+                            "title": "Brand"
+                        },
+                        {
+                            "field": "post_code",
+                            "title": "Post Code"
+                        },
+                        {
+                            "field": "location_type",
+                            "title": "Location Type"
+                        },
+                        {
+                            "type": "integer",
+                            "geography": true,
+                            "title": "Distance (m)",
+                            "fx": "ST_DISTANCE",
+                            "field": "dist",
+                            "orderby": true
+                        }],
+                        "limit": 20
+                    }],
+                    "style":
+                    {
+                        "marker":
+                        {
+                            "type": "target",
+                            "fillColor": "#BFC9CA"
+                        },
+                        "markerMulti":
+                        {
+                            "type": "target",
+                            "fillColor": "#d51b42"
+                        },
+                        "markerMin": 40,
+                        "markerMax": 60,
+                        "anchor": [20, 40],
+                        "themes":
+                        {
+                            "Brand":
+                            {
+                                "label": "Brand",
+                                "type": "categorized",
+                                "field": "brand",
+                                "other": true,
+                                "cat":
+                                {
+                                    "All Bar One":
+                                    {
+                                        "label": "All Bar One",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/all_bar_one.svg?sanitize=true"
+                                    },
+                                    "Browns":
+                                    {
+                                        "label": "Browns",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/browns.svg?sanitize=true"
+                                    },
+                                    "Castle":
+                                    {
+                                        "label": "Castle",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/castle.svg?sanitize=true"
+                                    },
+                                    "Ember":
+                                    {
+                                        "label": "Ember",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/ember.svg?sanitize=true"
+                                    },
+                                    "Harvester":
+                                    {
+                                        "label": "Harvester",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/harvester.svg?sanitize=true"
+                                    },
+                                    "Miller and Carter":
+                                    {
+                                        "label": "Miller & Carter",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/miller_carter.svg?sanitize=true"
+                                    },
+                                    "Nicholsons":
+                                    {
+                                        "label": "Nicholsons",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/nicholsons.svg?sanitize=true"
+                                    },
+                                    "Oak Tree":
+                                    {
+                                        "label": "Oak Tree",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/oaktree.svg?sanitize=true"
+                                    },
+                                    "ONeills":
+                                    {
+                                        "label": "O'Neill's",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/oneills.svg?sanitize=true"
+                                    },
+                                    "PCDG":
+                                    {
+                                        "label": "PCDG",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/premium_country.svg?sanitize=true"
+                                    },
+                                    "Sizzling Pubs":
+                                    {
+                                        "label": "Sizzling Pubs",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/sizzling.svg?sanitize=true"
+                                    },
+                                    "Toby Carvery":
+                                    {
+                                        "label": "Toby Carvery",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/toby.svg?sanitize=true"
+                                    },
+                                    "Vintage Inns":
+                                    {
+                                        "label": "Vintage Inns",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/vintage.svg?sanitize=true"
+                                    },
+                                    "Stonehouse Pizza and Carvery":
+                                    {
+                                        "label": "Stonehouse Pizza & Carvery",
+                                        "svg": "https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pubs/stonehouse.svg?sanitize=true"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -24,6 +24,8 @@ export {slider} from './slider.mjs';
 
 export {dropdown} from './dropdown.mjs';
 
+export {dropdownCustom} from './dropdownCustom.mjs';
+
 export {hexToRGBA} from './hexToRGBA.mjs';
 
 export {dataURLtoBlob} from './dataURLtoBlob.mjs';
