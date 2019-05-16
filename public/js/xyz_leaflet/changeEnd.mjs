@@ -9,7 +9,7 @@ export default _xyz => () => {
   if (_xyz.mapview.btn.ZoomOut && !(z > _xyz.workspace.locale.minZoom)) {
     _xyz.mapview.btn.ZoomOut.disabled = true;
   }
-           
+
   // Set view hooks when method is available.
   if (_xyz.hooks) {
     const center = _xyz.map.getCenter();
@@ -20,11 +20,9 @@ export default _xyz => () => {
       z: z
     });
   }
-          
+
   // Reload layers.
-  // layer.get() will return if reload is not required.
   Object.values(_xyz.layers.list).forEach(layer => layer.get());
 
-  //_xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update();
-  _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
+  _xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update();
 };

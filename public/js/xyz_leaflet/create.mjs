@@ -76,13 +76,29 @@ export default _xyz => params => {
   // Fire viewChangeEnd after map move and zoomend
   _xyz.map.on('moveend', () => viewChangeEndTimer());
   _xyz.map.on('zoomend', () => viewChangeEndTimer());
-          
+         
   // Use timeout to prevent the viewChangeEvent to be executed multiple times.
   let timer;
   function viewChangeEndTimer() {
     clearTimeout(timer);
-    timer = setTimeout(_xyz.mapview.changeEnd, 500);
+    timer = setTimeout(_xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent), 500);
   }
+
+  // Reload layers on change event.
+  Object.values(_xyz.layers.list).forEach(layer => {
+    _xyz.mapview.node.addEventListener('changeEnd', layer.get);
+  });
+  
+  // Set hooks on changeevent.
+  if (_xyz.hooks) _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+    const center = _xyz.map.getCenter();
+  
+    _xyz.hooks.set({
+      lat: center.lat,
+      lng: center.lng,
+      z: _xyz.map.getZoom()
+    });
+  });
 
   // Wire buttons to params targets.
   if (params.btn) {
