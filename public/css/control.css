@@ -353,6 +353,50 @@ input[type=range]::-moz-range-thumb {
   .md_drop .ul--show {
     display: block; }
 
+.xyz-custom-select {
+  position: relative;
+  /* style the arrow inside the select element */
+  /* point the arrow upwards when the select box is open (active) */
+  /* style the items (options), including the selected item */
+  /* style items (options) */
+  /* hide the items when the select box is closed */ }
+  .xyz-custom-select select {
+    display: none; }
+  .xyz-custom-select .select-selected {
+    background-color: white; }
+  .xyz-custom-select .select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #000 transparent transparent transparent; }
+  .xyz-custom-select .select-selected.select-arrow-active:after {
+    border-color: transparent transparent #000 transparent;
+    top: 7px; }
+  .xyz-custom-select .select-items div,
+  .xyz-custom-select .select-selected {
+    color: #000;
+    padding: 5px 5px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none; }
+  .xyz-custom-select .select-items {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2); }
+  .xyz-custom-select .select-hide {
+    display: none; }
+  .xyz-custom-select .select-items div:hover, .xyz-custom-select .same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1); }
+
 /*#layers */
 .qs-datepicker {
   position: fixed;

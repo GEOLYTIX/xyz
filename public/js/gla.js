@@ -49,146 +49,102 @@ _xyz({
 
     tableShow();
 
-    customDropdown(_xyz, layer, tableShow);
+      _xyz.utils.dropdownCustom({
+        appendTo: document.getElementById('select-borough'),
+        placeholder: 'Search by the borough where you live or work',
+        field: 'borough',
+        entries: [
+          "Show all boroughs",
+          "Barking and Dagenham",
+          "Barnet",
+          "Bexley",
+          "Brent",
+          "Bromley",
+          "Camden",
+          "City of London",
+          "Croydon",
+          "Ealing",
+          "Enfield",
+          "Greenwich",
+          "Hackney",
+          "Hammersmith and Fulham",
+          "Haringey",
+          "Harrow",
+          "Havering",
+          "Hillingdon",
+          "Hounslow",
+          "Islington",
+          "Kensington and Chelsea",
+          "Kingston upon Thames",
+          "Lambeth",
+          "Lewisham",
+          "Merton",
+          "Newham",
+          "Redbridge",
+          "Richmond-upon-Thames",
+          "Southwark",
+          "Sutton",
+          "Tower Hamlets",
+          "Wandsworth",
+          "Westminster"
+          ],
+        callback: e => {
+          e.stopPropagation();
+          if(e.target.textContent === 'Show all boroughs') {
+             delete layer.filter.current[e.target.parentNode.previousSibling.dataset.field];
+            toLayerExtent(_xyz, layer);
+            tableShow();
+            return;
+          }
+          layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
+          layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
+          toLayerExtent(_xyz, layer);
+          tableShow();
+        }
+      });
+
+      _xyz.utils.dropdownCustom({
+        appendTo: document.getElementById('select-advice'),
+        placeholder: "Search by type of advice/support",
+        field: "advice",
+        entries: [
+          { "all": "Show all" }, 
+          { "service_initial_advice": "Initial Advice" },
+          { "service_written_advice": "Written Advice" },
+          { "service_form_filling": "Form Filling" },
+          { "service_case_work": "Casework" },
+          { "service_representation": "Representation" }
+        ],
+        callback: (e) => {
+          e.stopPropagation();
+          // Reset previous boolean filters
+          Object.keys(layer.filter.current).map(key => {
+            if(layer.filter.current[key].boolean){
+              delete layer.filter.current[key];
+              toLayerExtent(_xyz, layer);
+              tableShow();
+            }
+          });
+
+          if(e.target.textContent === 'Show all'){
+            delete layer.filter.current[e.target.dataset.field];
+            toLayerExtent(_xyz, layer);
+            tableShow();
+            return;
+          }
+
+          layer.filter.current[e.target.dataset.field] = {};
+          layer.filter.current[e.target.dataset.field]['boolean'] = true;
+          toLayerExtent(_xyz, layer);
+          tableShow();
+        }
+      });
 
     searchPostcode(_xyz);
   }
 });
 
-function customDropdown(_xyz, layer, callback) {
-  
-  var x, i, j, selElmnt, a, b, c, d;
 
-  /*look for any elements with the class "custom-select":*/
-  x = document.getElementsByClassName('custom-select');
-
-  for (i = 0; i < x.length; i++) {
-    selElmnt = x[i].getElementsByTagName('select')[0];
-    /*for each element, create a new DIV that will act as the selected item:*/
-    a = document.createElement('DIV');
-    a.setAttribute('class', 'select-selected');
-    //a.classList.add(selElmnt.classList);
-    a.dataset.field = selElmnt.dataset.field;
-    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-    x[i].appendChild(a);
-
-    /*for each element, create a new DIV that will contain the option list:*/
-    b = document.createElement('DIV');
-    b.setAttribute('class', 'select-items select-hide');
-    b.style.maxHeight = '300px';
-    b.style.overflow = 'scroll';
-    for (j = 1; j < selElmnt.length; j++) {
-      /*for each option in the original select element, create a new DIV that will act as an option item:*/
-
-      c = document.createElement('DIV');
-      c.innerHTML = selElmnt.options[j].innerHTML;
-      //console.log(selElmnt);
-      c.dataset.col = selElmnt.options[j].value;
-      c.addEventListener('click', e => {
-        /*when an item is clicked, update the original select box,
-                and the selected item:*/
-        var y, i, k, s, h;
-        s = e.target.parentNode.parentNode.getElementsByTagName('select')[0];
-        h = e.target.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == e.target.innerHTML) {
-            s.selectedIndex = i;
-            h.innerHTML = e.target.innerHTML;
-            y = e.target.parentNode.getElementsByClassName('same-as-selected');
-            for (k = 0; k < y.length; k++) {
-              y[k].removeAttribute('class');
-            }
-            e.target.setAttribute('class', 'same-as-selected');
-            break;
-          }
-        }
-        h.click();
-      });
-      b.appendChild(c);
-    }
-
-    x[i].appendChild(b);
-
-    a.addEventListener('click', e => {
-      /*when the select box is clicked, close any other select boxes,
-            and open/close the current select box:*/
-      e.stopPropagation();
-            
-      closeAllSelect(e.target);
-      e.target.nextSibling.classList.toggle('select-hide');
-      e.target.classList.toggle('select-arrow-active');
-
-    });
-  }
-
-  function closeAllSelect(elmnt) {
-    /*a function that will close all select boxes in the document,
-        except the current select box:*/
-    var x, y, i, arrNo = [];
-    x = document.getElementsByClassName('select-items');
-    y = document.getElementsByClassName('select-selected');
-    for (i = 0; i < y.length; i++) {
-      if (elmnt == y[i]) {
-        arrNo.push(i);
-      } else {
-        y[i].classList.remove('select-arrow-active');
-      }
-    }
-    for (i = 0; i < x.length; i++) {
-      if (arrNo.indexOf(i)) {
-        x[i].classList.add('select-hide');
-      }
-    }
-
-  }
-
-  /*if the user clicks anywhere outside the select box,
-    then close all select boxes:*/
-
-  document.addEventListener('click', e => {
-    e.stopPropagation();
-
-    if(!e.target.parentNode.previousSibling.dataset) return;
-
-    if(e.target.parentNode.previousSibling.dataset.field === 'borough'){
-      if(e.target.textContent === 'Show all boroughs') {
-        layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
-        toLayerExtent(_xyz, layer);
-        if(typeof(callback) === 'function') callback();
-        return;
-      }
-      layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
-      layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
-      toLayerExtent(_xyz, layer);
-      if(typeof(callback) === 'function') callback();
-    }
-
-    if(e.target.parentNode.previousSibling.dataset.field === 'advice'){
-
-      // Reset previous boolean filters
-      Object.keys(layer.filter.current).map(key => {
-        if(layer.filter.current[key].boolean){
-          delete layer.filter.current[key];
-          toLayerExtent(_xyz, layer);
-          if(typeof(callback) === 'function') callback();
-        }
-      });
-
-      if(e.target.textContent === 'Show all'){
-        layer.filter.current[e.target.dataset.col] = {};
-        toLayerExtent(_xyz, layer);
-        if(typeof(callback) === 'function') callback();
-        return;
-      }
-      layer.filter.current[e.target.dataset.col] = {};
-      layer.filter.current[e.target.dataset.col]['boolean'] = true;
-      toLayerExtent(_xyz, layer);
-      if(typeof(callback) === 'function') callback();
-    }
-
-    closeAllSelect(e);
-  });
-}
 
 function searchPostcode(_xyz){
 
@@ -261,6 +217,8 @@ function searchPostcode(_xyz){
 }
 
 function toLayerExtent(_xyz, layer){
+
+  console.log(layer.filter);
 
   const xhr = new XMLHttpRequest();
 
