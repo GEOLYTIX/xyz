@@ -14,26 +14,36 @@ export default _xyz => {
 
     _xyz.mapview.btn.ZoomIn = target;
 
-    target.disabled = !(z < _xyz.workspace.locale.maxZoom);
+    target.disabled = (z >= _xyz.workspace.locale.maxZoom);
 
     target.onclick = () => {
       let z = _xyz.map.getZoom() + 1;
       _xyz.map.setZoom(z);
-      target.disabled = !(z < _xyz.workspace.locale.maxZoom);
+      target.disabled = (z >= _xyz.workspace.locale.maxZoom);
     };
+
+    _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+      if (_xyz.map.getZoom() >= _xyz.workspace.locale.maxZoom) return target.disabled = true;
+      target.disabled = false;
+    });
   }
 
   function ZoomOut(target, z) {
 
     _xyz.mapview.btn.ZoomOut = target;
 
-    target.disabled = !(z > _xyz.workspace.locale.minZoom);
+    target.disabled = (z <= _xyz.workspace.locale.minZoom);
 
     target.onclick = () => {
       let z = _xyz.map.getZoom() - 1;
       _xyz.map.setZoom(z);
-      target.disabled = !(z > _xyz.workspace.locale.minZoom);
+      target.disabled = (z <= _xyz.workspace.locale.minZoom);
     };
+
+    _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+      if (_xyz.map.getZoom() <= _xyz.workspace.locale.minZoom) return target.disabled = true;
+      target.disabled = false;
+    });
   }
 
   function Locate(target) {
