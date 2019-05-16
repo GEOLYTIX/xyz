@@ -20,6 +20,8 @@ export default _xyz => ({
 
   changeEnd: changeEnd(_xyz),
 
+  changeEndEvent: new CustomEvent('changeEnd'),
+
   attribution: attribution(_xyz),
 
   locate: locate(_xyz),

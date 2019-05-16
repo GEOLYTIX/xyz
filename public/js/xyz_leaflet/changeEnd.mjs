@@ -20,10 +20,11 @@ export default _xyz => () => {
       z: z
     });
   }
-
-  _xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update();
           
   // Reload layers.
   // layer.get() will return if reload is not required.
   Object.values(_xyz.layers.list).forEach(layer => layer.get());
+
+  //_xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update();
+  _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
 };

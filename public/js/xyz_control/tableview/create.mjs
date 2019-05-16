@@ -55,6 +55,17 @@ export default _xyz => params => {
 
   _xyz.tableview.btn = assignBtn(_xyz, params);
 
+  
+  if (_xyz.mapview.node) {
+
+    _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+      _xyz.tableview.current_table &&
+      _xyz.tableview.current_table.viewport &&
+      _xyz.tableview.current_table.update();
+    });
+
+  }
+
   // Augment viewChangeEnd method to update table.
   // _xyz.mapview.changeEnd = _xyz.utils.compose(
   //   _xyz.mapview.changeEnd,
