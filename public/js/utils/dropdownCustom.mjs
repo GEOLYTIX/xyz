@@ -37,6 +37,16 @@ export function dropdownCustom(param){
 				closeAllSelect(e.target);
 				e.target.nextSibling.classList.toggle('select-hide');
 				e.target.classList.toggle('select-arrow-active');
+
+				// Hide dropdown when clicked outside
+				document.body.addEventListener('click', e => {
+					let items = document.querySelectorAll('.xyz-custom-select .select-items');
+					for (let i = 0; i < items.length; i++) {
+						items[i].classList.add('select-hide');
+					}
+					e.stopPropagation();
+					return false;
+				});
 			}
 		},
 		appendTo: div
@@ -44,7 +54,7 @@ export function dropdownCustom(param){
 
 	a.dataset.field = param.field;
 
-	// create a new div that will contain the option list
+	// create a new div that will contain the option list d d d
 	let b = createElement({
 		tag: 'div',
 		options: {
@@ -74,7 +84,7 @@ export function dropdownCustom(param){
 						if (s.options[i].textContent == e.target.textContent) {
 							s.selectedIndex = i;
 							h.textContent = e.target.textContent;
-							let y = e.target.parentNode.getElementsByClassName('same-as-selected');
+							let y = e.target.parentNode.querySelectorAll('.same-as-selected');
 							for (let k = 0; k < y.length; k++) {
 								y[k].removeAttribute('class');
 							}
@@ -97,18 +107,20 @@ function closeAllSelect(el){
 	//a function that will close all select boxes in the document except the current select box:
     let arrNo = [],
         i,
-        x = document.getElementsByClassName('xyz-custom-select select-items'),
-        y = document.getElementsByClassName('xyz-custom-select select-selected');
+        x = document.querySelectorAll('.xyz-custom-select .select-items'),
+        y = document.querySelectorAll('.xyz-custom-select .select-selected');
+    
     for (i = 0; i < y.length; i++) {
-      if (el == y[i]) {
-        arrNo.push(i);
-      } else {
-        y[i].classList.remove('xyz-custom-select select-arrow-active');
-      }
+    	if (el == y[i]) {
+    		arrNo.push(i);
+    	} else {
+    		y[i].classList.remove('select-arrow-active');
+    	}
     }
+
     for (i = 0; i < x.length; i++) {
       if (arrNo.indexOf(i)) {
-        x[i].classList.add('xyz-custom-select select-hide');
+        x[i].classList.add('select-hide');
       }
     }
 }

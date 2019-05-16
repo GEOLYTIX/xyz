@@ -218,8 +218,6 @@ function searchPostcode(_xyz){
 
 function toLayerExtent(_xyz, layer){
 
-  console.log(layer.filter);
-
   const xhr = new XMLHttpRequest();
 
   xhr.open('GET', _xyz.host + '/api/layer/extent?' + _xyz.utils.paramString({
