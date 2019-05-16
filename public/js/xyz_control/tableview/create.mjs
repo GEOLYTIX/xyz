@@ -56,10 +56,10 @@ export default _xyz => params => {
   _xyz.tableview.btn = assignBtn(_xyz, params);
 
   // Augment viewChangeEnd method to update table.
-  _xyz.mapview.changeEnd = _xyz.utils.compose(
-    _xyz.mapview.changeEnd,
-    () => _xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update(),
-  );
+  // _xyz.mapview.changeEnd = _xyz.utils.compose(
+  //   _xyz.mapview.changeEnd,
+  //   () => _xyz.tableview.current_table && _xyz.tableview.current_table.viewport && _xyz.tableview.current_table.update(),
+  // );
 
   // Resize the tableview container
   function resize(e) {

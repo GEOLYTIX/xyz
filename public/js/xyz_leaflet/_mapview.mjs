@@ -1,5 +1,7 @@
 import create from './create.mjs';
 
+import changeEnd from './changeEnd.mjs';
+
 import attribution from './attribution.mjs';
 
 import locate from './locate.mjs';
@@ -15,6 +17,8 @@ import draw from './draw/_draw.mjs';
 export default _xyz => ({
 
   create: create(_xyz),
+
+  changeEnd: changeEnd(_xyz),
 
   attribution: attribution(_xyz),
 
