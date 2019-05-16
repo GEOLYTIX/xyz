@@ -10,7 +10,7 @@ import workspace from './workspace.mjs';
 
 import hooks from './hooks.mjs';
 
-import gazetteer from './gazetteer.mjs';
+import gazetteer from './gazetteer/_gazetteer.mjs';
 
 import layers from './layers/_layers.mjs';
 

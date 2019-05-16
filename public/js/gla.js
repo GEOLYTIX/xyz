@@ -164,60 +164,25 @@ function searchPostcode(_xyz){
     e.target.parentNode.classList.remove('pink-br');
   });
 
-  find.addEventListener('click', () => search());
+  find.addEventListener('click', () => {
+    _xyz.gazetteer.search(input.value, {
+      source: 'GOOGLE',
+      callback: json => {
+        if (json.length === 0) return alert('No results for this search.');
+        _xyz.gazetteer.select(json[0]);
+      }
+    });
+  });
 
   input.addEventListener('keydown', e => {
     let key = e.keyCode || e.charCode;
-    if(key === 13) search();
+    if(key === 13) _xyz.gazetteer.search(input.value, {
+      source: 'GOOGLE',
+      callback: json => {
+        if (json.length === 0) return alert('No results for this search.');
+        _xyz.gazetteer.select(json[0]);
+      }
+    });
   });
 
-  function search(){
-
-    // Create abortable xhr.
-    _xyz.gazetteer.xhr = new XMLHttpRequest();
-
-    if (_xyz.gazetteer.xhr) _xyz.gazetteer.xhr.abort();
-
-    // Send gazetteer query to backend.
-    _xyz.gazetteer.xhr.open('GET',
-      _xyz.host +
-      '/api/gazetteer/autocomplete?' +
-      _xyz.utils.paramString({
-        locale: _xyz.workspace.locale.key,
-        source: 'GOOGLE',
-        q: encodeURIComponent(input.value)
-      }));
-
-    _xyz.gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
-
-    _xyz.gazetteer.xhr.responseType = 'json';
-
-    _xyz.gazetteer.xhr.onload = e => {
-
-      // List results or show that no results were found
-      if (e.target.status !== 200) return;
-
-      // Parse the response as JSON and check for results length.
-      const json = e.target.response;
-
-      if (json.length === 0) {
-        alert('No results for this search.');
-        return;
-      }
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.open('GET', _xyz.host + `/api/gazetteer/googleplaces?id=${json[0].id}`);
-
-      xhr.responseType = 'json';
-
-      xhr.onload = e => {
-        if (e.target.status === 200) _xyz.gazetteer.createFeature(e.target.response);
-      };
-
-      xhr.send();
-    };
-
-    _xyz.gazetteer.xhr.send();
-  }
 }
