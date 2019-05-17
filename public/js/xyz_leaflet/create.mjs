@@ -9,24 +9,49 @@ export default _xyz => params => {
   // Return if no target has been defined for the leaflet map control.
   if (!params.target) return console.log('No target for mapview!');
 
-  _xyz.mapview.node = params.target; 
+  _xyz.mapview.node = params.target;
+
+  const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
     
   // Create Leaflet map object.
   _xyz.map = _xyz.L.map(_xyz.mapview.node, {
     renderer: _xyz.L.svg(),
     scrollWheelZoom: params.scrollWheelZoom || false,
     zoomControl: false,
-    attributionControl: false
+    attributionControl: false,
+    zoom: z,
+    minZoom: _xyz.workspace.locale.minZoom,
+    maxZoom: _xyz.workspace.locale.maxZoom,
+    center: [
+      (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
+      (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0
+    ],
+    maxBounds: [[
+      (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
+      (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west
+    ], [
+      (params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north,
+      (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east
+    ]]
+  });
+
+  // Create leaflet panes.
+  _xyz.mapview.panes.create();
+
+  // Create attribution in map DOM.
+  _xyz.mapview.attribution.create(params.attribution);
+
+  // Reload layers on change event.
+  Object.values(_xyz.layers.list).forEach(layer => {
+    _xyz.mapview.node.addEventListener('changeEnd', layer.get);
   });
 
   // Set the default state.
   _xyz.mapview.state = 'select';
 
-  // Create attribution in map DOM.
-  _xyz.mapview.attribution.create(params.attribution);
 
   if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) L.control.scale().addTo(_xyz.map);
-
+  
   if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
 
     // Grey out area outside bbox
@@ -50,28 +75,6 @@ export default _xyz => params => {
     _xyz.L.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
   }
 
-  // Set z (min, max) and bounds.
-  _xyz.map.setMinZoom(_xyz.workspace.locale.minZoom);
-  _xyz.map.setMaxZoom(_xyz.workspace.locale.maxZoom);
-  _xyz.map.setMaxBounds([[
-    (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
-    (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west
-  ], [
-    (params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north,
-    (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east
-  ]]);
-
-  const z = _xyz.workspace.locale.view.z || 5;
-          
-  // Set view if defined in workspace.
-  _xyz.map.setView(
-    [
-      (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
-      (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0
-    ],
-    (params.view && params.view.z) || z
-  );
-
   // Event binding.
   // Fire viewChangeEnd after map move and zoomend
   _xyz.map.on('moveend', () => viewChangeEndTimer());
@@ -83,11 +86,6 @@ export default _xyz => params => {
     clearTimeout(timer);
     timer = setTimeout(_xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent), 500);
   }
-
-  // Reload layers on change event.
-  Object.values(_xyz.layers.list).forEach(layer => {
-    _xyz.mapview.node.addEventListener('changeEnd', layer.get);
-  });
   
   // Set hooks on changeevent.
   if (_xyz.hooks) _xyz.mapview.node.addEventListener('changeEnd', ()=>{
@@ -109,8 +107,5 @@ export default _xyz => params => {
   
     if (params.btn.Locate) _xyz.mapview.btn._Locate(params.btn.Locate);
   }
-
-  // Create leaflet panes.
-  _xyz.mapview.panes.create();
     
 };
