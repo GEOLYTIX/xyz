@@ -236,6 +236,9 @@ export default _xyz => {
         }
       }
     });
+
+
+    if (location._flyTo) location.flyTo();
     
     // Add record to listview;
     _xyz.locations.listview.add(record);

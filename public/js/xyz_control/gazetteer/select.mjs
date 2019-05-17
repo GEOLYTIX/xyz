@@ -12,7 +12,8 @@ export default _xyz => function(record){
       layer: record.layer,
       table: record.table,
       id: record.id,
-      marker: record.marker.split(',')
+      marker: record.marker.split(','),
+      _flyTo: true
     });
 
     return;
