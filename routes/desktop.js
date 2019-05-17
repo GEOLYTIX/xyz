@@ -1,8 +1,5 @@
 const env = require('../mod/env');
 
-// Create constructor for mobile detect module.
-const Md = require('mobile-detect');
-
 // Set jsrender module for server-side templates.
 const jsr = require('jsrender');
 
@@ -14,7 +11,7 @@ function route(fastify) {
 
   fastify.route({
     method: 'GET',
-    url: '/view',
+    url: '/desktop',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
         public: true
@@ -27,12 +24,7 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  // Check whether request comes from a mobile platform and set template.
-  const md = new Md(req.headers['user-agent']);
-
-  const _tmpl = (md.mobile() === null || md.tablet() !== null) ?
-    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop_gla.html`) :
-    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
+  const _tmpl = await fetch(env.desktop || `${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop.html`);
 
   const tmpl = jsr.templates('tmpl', await _tmpl.text());
 

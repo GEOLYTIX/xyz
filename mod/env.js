@@ -11,6 +11,9 @@ module.exports = {
   // If set the alias will override the host header in notifications.
   alias: process.env.ALIAS ? process.env.ALIAS : null,
 
+  desktop: process.env.DESKTOP_TEMPLATE ? process.env.DESKTOP_TEMPLATE : null,
+  mobile: process.env.MOBILE_TEMPLATE ? process.env.MOBILE_TEMPLATE : null,
+
   // Assign Google Captcha site_key[0] and secret_key[1].
   captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|'),
 

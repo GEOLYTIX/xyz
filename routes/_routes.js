@@ -2,7 +2,9 @@ module.exports = fastify => {
 
   require('./root').route(fastify);
 
-  require('./view').route(fastify);
+  require('./desktop').route(fastify);
+
+  require('./mobile').route(fastify);
 
   fastify.login.route(fastify);
   
@@ -11,6 +13,8 @@ module.exports = fastify => {
   require('./token').route(fastify);
 
   require('./proxy_request')(fastify);
+
+  require('./proxy_cdn')(fastify);
 
   require('./report').route(fastify);
 
