@@ -140,6 +140,9 @@ export default (_xyz, location) => () => {
     // Create geometry control.
     if (entry.type === 'geometry') return location.view.geometry(entry);
 
+    // Create metadata entry
+    if (entry.type === 'meta') return location.view.meta(entry);
+
     // Create boolean control.
     if (entry.type === 'boolean') return location.view.boolean(entry);    
 

@@ -58,6 +58,7 @@ export default _xyz => entry => {
   if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
 
   if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
+  
 
   entry.ctrl.hideGeom = () => {
 
@@ -112,5 +113,23 @@ export default _xyz => entry => {
     },
     appendTo: td
   });
+
+
+  if(entry.edit && entry.edit.isoline_here && entry.edit.isoline_here.slider) {
+
+    let container = _xyz.utils.createElement({
+      tag: 'div',
+      style: {
+        padding: '4px'
+      },
+      appendTo: td
+    });
+
+    _xyz.geom.isoline_here_control({
+      entry: entry,
+      container: container
+    });
+
+  }
 
 };

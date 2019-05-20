@@ -6,6 +6,8 @@ import images from './images/_images.mjs';
 
 import geometry from './geometry/_geometry.mjs';
 
+import meta from './meta.mjs';
+
 import edit from './edit/_edit.mjs';
 
 import valChange from './edit/valChange.mjs';
@@ -35,6 +37,8 @@ export default _xyz => location => {
     group: group(_xyz),
 
     geometry: geometry(_xyz),
+
+    meta: meta(_xyz),
 
     edit: edit(_xyz),
 

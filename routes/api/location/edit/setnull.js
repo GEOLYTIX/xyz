@@ -21,6 +21,7 @@ module.exports = fastify => {
           table: { type: 'string' },
           id: { type: 'string' },
           field: { type: 'string' },
+          meta: { type: 'string' }
         },
         required: ['locale', 'layer', 'table', 'id', 'field']
       }
@@ -31,7 +32,7 @@ module.exports = fastify => {
       fastify.evalParam.layer,
       fastify.evalParam.roles,
       (req, res, next) => {
-        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+        fastify.evalParam.layerValues(req, res, next, ['table', 'field', 'meta']);
       },
     ],
     handler: async (req, res) => {
@@ -43,7 +44,9 @@ module.exports = fastify => {
         id = req.query.id,
         field = req.query.field;
   
-      var q = `UPDATE ${table} SET ${field} = null WHERE ${qID} = $1;`;
+      var q = `UPDATE ${table} SET ${field} = null 
+      ${req.query.meta ? `, ${req.query.meta} = null` : ``}
+      WHERE ${qID} = $1;`;
   
       var rows = await env.dbs[layer.dbs](q, [id]);
   

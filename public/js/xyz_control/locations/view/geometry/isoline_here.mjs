@@ -23,6 +23,7 @@ export default _xyz => entry => {
       rangetype: entry.edit.isoline_here.rangetype,
       minutes: entry.edit.isoline_here.minutes,
       distance: entry.edit.isoline_here.distance,
+      meta: entry.edit.isoline_here.meta || null,
       token: _xyz.token
     })
   );

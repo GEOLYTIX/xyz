@@ -2,6 +2,8 @@ export default _xyz => entry => {
 
   const xhr = new XMLHttpRequest();
 
+  let meta = (entry.edit && entry.edit.isoline_here && entry.edit.isoline_here.meta) ?  entry.edit.isoline_here.meta : null;
+
   xhr.open(
     'GET',
     _xyz.host + '/api/location/edit/field/setnull?' +
@@ -11,6 +13,7 @@ export default _xyz => entry => {
       table: entry.location.table,
       id: entry.location.id,
       field: entry.field,
+      meta: meta,
       token: _xyz.token
     })
   );
