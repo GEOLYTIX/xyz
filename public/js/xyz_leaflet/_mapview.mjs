@@ -10,8 +10,6 @@ import btn from './btn.mjs';
 
 import panes from './panes.mjs';
 
-import draw from './draw/_draw.mjs';
-
 export default _xyz => ({
 
   create: create(_xyz),
@@ -27,7 +25,5 @@ export default _xyz => ({
   btn: btn(_xyz),
 
   panes: panes(_xyz),
-
-  draw: draw(_xyz),
 
 });

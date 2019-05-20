@@ -16,6 +16,8 @@ import layers from './layers/_layers.mjs';
 
 import locations from './locations/_locations.mjs';
 
+import geom from './geom/_geom.mjs';
+
 import mapview from '../xyz_leaflet/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
@@ -31,6 +33,8 @@ export default async (params) => {
   _xyz.layers = layers(_xyz);
 
   _xyz.locations = locations(_xyz);
+
+  _xyz.geom = geom(_xyz);
 
   _xyz.mapview = mapview(_xyz);
 

@@ -41,8 +41,8 @@ export default (_xyz, layer) => {
     text: 'Point',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.mapview.draw.point,
-    finish: _xyz.mapview.draw.finish
+    activate: _xyz.geom.point,
+    finish: _xyz.geom.finish
   });
 
   
@@ -50,8 +50,8 @@ export default (_xyz, layer) => {
     text: 'Polygon',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.mapview.draw.polygon,
-    finish: _xyz.mapview.draw.finish
+    activate: _xyz.geom.polygon,
+    finish: _xyz.geom.finish
   });
 
   
@@ -59,8 +59,8 @@ export default (_xyz, layer) => {
     text: 'Rectangle',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.mapview.draw.rectangle,
-    finish: _xyz.mapview.draw.finish
+    activate: _xyz.geom.rectangle,
+    finish: _xyz.geom.finish
   });
 
 
@@ -68,8 +68,8 @@ export default (_xyz, layer) => {
     text: 'Circle',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.mapview.draw.circle,
-    finish: _xyz.mapview.draw.finish
+    activate: _xyz.geom.circle,
+    finish: _xyz.geom.finish
   });
 
 
@@ -77,8 +77,8 @@ export default (_xyz, layer) => {
     text: 'Linestring',
     appendTo: layer.edit.panel,
     layer: layer,
-    activate: _xyz.mapview.draw.line,
-    finish: _xyz.mapview.draw.finish
+    activate: _xyz.geom.line,
+    finish: _xyz.geom.finish
   });
 
   
@@ -141,8 +141,8 @@ export default (_xyz, layer) => {
       text: 'Isoline Mapbox',
       appendTo: layer.edit.panel,
       layer: layer,
-      activate: _xyz.mapview.draw.isoline_mapbox,
-      finish: _xyz.mapview.draw.finish
+      activate: _xyz.geom.isoline_mapbox,
+      finish: _xyz.geom.finish
     });
 
   }
@@ -279,8 +279,8 @@ export default (_xyz, layer) => {
       text: 'Isoline Here',
       appendTo: layer.edit.panel,
       layer: layer,
-      activate: _xyz.mapview.draw.isoline_here,
-      finish: _xyz.mapview.draw.finish
+      activate: _xyz.geom.isoline_here,
+      finish: _xyz.geom.finish
     });
   
   }

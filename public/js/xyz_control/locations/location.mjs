@@ -112,7 +112,7 @@ export default _xyz => () => {
 
     const location = this;
 
-    location.Layer = _xyz.mapview.draw.geoJSON({
+    location.Layer = _xyz.geom.geoJSON({
       json: {
         type: 'Feature',
         geometry: location.geometry,

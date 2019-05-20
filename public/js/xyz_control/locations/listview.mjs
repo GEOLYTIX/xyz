@@ -213,7 +213,7 @@ export default _xyz => {
     location.draw();
 
     // Draw letter marker.
-    location.Marker = _xyz.mapview.draw.geoJSON({
+    location.Marker = _xyz.geom.geoJSON({
       json: {
         type: 'Feature',
         geometry: {
