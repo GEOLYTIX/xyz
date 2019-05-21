@@ -114,38 +114,65 @@ export default _xyz => entry => {
     appendTo: td
   });
 
+  if(entry.edit){
 
-  if(entry.edit && entry.edit.isoline_here && entry.edit.isoline_here.slider) {
-
-    let container = _xyz.utils.createElement({
+    entry.edit.container = _xyz.utils.createElement({
       tag: 'div',
       style: {
         padding: '4px'
       },
-      appendTo: td
+      options: {
+        classList: 'table-section expandable'
+      }//,
+      //appendTo: td
     });
 
-    _xyz.geom.isoline_here_control({
-      entry: entry,
-      container: container
-    });
-
-  }
-
-    if(entry.edit && entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider) {
-
-    let container = _xyz.utils.createElement({
+    _xyz.utils.createElement({
       tag: 'div',
-      style: {
-        padding: '4px'
+      options: {
+        classList: 'btn_subtext cursor noselect',
+        textContent: 'Isoline settings'
       },
-      appendTo: td
+      style: {
+        textAlign: 'left',
+        fontStyle: 'italic',
+        fontSize: 'small'
+      },
+      appendTo: entry.edit.container,
+      eventListener: {
+        event: 'click',
+        funct: e => {
+          if(e) e.stopPropagation();
+          _xyz.utils.toggleExpanderParent({
+            expandable: entry.edit.container,
+            accordeon: true,
+            scrolly: _xyz.desktop && _xyz.desktop.listviews
+          });
+        }
+      }
     });
 
-    _xyz.geom.isoline_mapbox_control({
-      entry: entry,
-      container: container
-    });
+
+    if(entry.edit.isoline_here && entry.edit.isoline_here.slider){
+
+      td.appendChild(entry.edit.container);
+
+      _xyz.geom.isoline_here_control({
+        entry: entry,
+        container: entry.edit.container
+      });
+    }
+
+    if(entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider){
+
+      td.appendChild(entry.edit.container);
+
+      _xyz.geom.isoline_mapbox_control({
+        entry: entry,
+        container: entry.edit.container
+      });
+    }
+
 
   }
 
