@@ -616,6 +616,35 @@
                             "title": "Recent isoline",
                             "field": "isoline_here_custom_meta",
                             "type": "meta"
+                        },
+                        {
+                            "label": "Custom Mapbox Catchment",
+                            "type": "label"
+                        },
+                        {
+                            "name": "Create / Delete",
+                            "field": "isoline_mapbox_custom",
+                            "fieldfx": "ST_asGeoJSON(isoline_mapbox_custom)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline_mapbox": {
+                                    "slider": true,
+                                    "meta": "isoline_mapbox_custom_meta"
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#455a64",
+                                "weight": 2,
+                                "fill": true,
+                                "fillColor": "#455a64",
+                                "fillOpacity": 0.2
+                            }
+                        },
+                        {
+                            "title": "Recent isoline",
+                            "field": "isoline_mapbox_custom_meta",
+                            "type": "meta"
                         }
                     ]
                 },

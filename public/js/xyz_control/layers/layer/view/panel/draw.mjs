@@ -94,47 +94,9 @@ export default (_xyz, layer) => {
       appendTo: layer.edit.panel
     });
 
-    layer.edit.isoline_mapbox.profile = layer.edit.isoline_mapbox.profile || 'driving';
-
-    _xyz.utils.dropdown({
-      title: 'Mode',
-      label: 'label',
-      val: 'val',
-      selected: layer.edit.isoline_mapbox.profile,
-      entries: [
-        {
-          label: 'Driving',
-          val: 'driving'
-        },
-        {
-          label: 'Walking',
-          val: 'walking'
-        },
-        {
-          label: 'Cycling',
-          val: 'cycling'
-        }
-      ],
-      onchange: e => {
-        layer.edit.isoline_mapbox.profile = e.target.value;
-      },
-      appendTo: block
-    });
-
-
-    layer.edit.isoline_mapbox.minutes = layer.edit.isoline_mapbox.minutes || 10;
-
-    _xyz.utils.slider({
-      title: 'Travel time in minutes: ',
-      default: layer.edit.isoline_mapbox.minutes,
-      min: 5,
-      max: 60,
-      value: layer.edit.isoline_mapbox.minutes,
-      appendTo: block,
-      oninput: e => {
-        layer.edit.isoline_mapbox.minutes = parseInt(e.target.value);
-        e.target.parentNode.previousSibling.textContent = layer.edit.isoline_mapbox.minutes;
-      }
+    _xyz.geom.isoline_mapbox_control({
+      entry: layer,
+      container: block
     });
 
     _xyz.utils.createStateButton(_xyz, {

@@ -132,4 +132,21 @@ export default _xyz => entry => {
 
   }
 
+    if(entry.edit && entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider) {
+
+    let container = _xyz.utils.createElement({
+      tag: 'div',
+      style: {
+        padding: '4px'
+      },
+      appendTo: td
+    });
+
+    _xyz.geom.isoline_mapbox_control({
+      entry: entry,
+      container: container
+    });
+
+  }
+
 };

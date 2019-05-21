@@ -26,6 +26,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
+          meta: { type: 'string' },
           coordinates: { type: 'string' },
         },
         required: ['locale', 'layer', 'table', 'coordinates']
@@ -85,7 +86,7 @@ module.exports = fastify => {
       var meta_json;
 
       if(req.query.meta) meta_json = {
-        "Recent isoline": "",
+        "Recent isoline": "Here",
         "Mode": params.mode,
         "Range type": params.rangetype,
         "Range": req.query.minutes ||req.query.distance,

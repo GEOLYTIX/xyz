@@ -6,6 +6,8 @@ const mvt_cache = require('../../../../mod/mvt_cache');
 
 const sql_fields = require('../../../../mod/pg/sql_fields');
 
+const date = require('../../../../mod/date.js');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -24,6 +26,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
+          meta: { type: 'string' },
           coordinates: { type: 'string' },
         },
         required: ['locale', 'layer', 'table', 'coordinates']
@@ -60,11 +63,21 @@ module.exports = fastify => {
 
       const geojson = JSON.stringify(mapbox_isolines.features[0].geometry);
 
+      var meta_json;
+
+      if(req.query.meta) meta_json = {
+          "Recent isoline": "Mapbox",
+          "Mode": params.profile,
+          "Minutes": params.minutes,
+          "Created": date()
+        };
+
       if (req.query.id) {
 
         var q = `
         UPDATE ${table}
         SET ${req.query.field} = ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)
+        ${req.query.meta ? `, ${req.query.meta} = '${JSON.stringify(meta_json)}'` : ``}
         WHERE ${layer.qID} = $1;`;
 
         var rows = await env.dbs[layer.dbs](q, [req.query.id]);

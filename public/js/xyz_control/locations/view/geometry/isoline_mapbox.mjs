@@ -17,6 +17,7 @@ export default _xyz => entry => {
       profile: entry.edit.isoline_mapbox.profile,
       id: entry.location.id,
       field: entry.field,
+      meta: entry.edit.isoline_mapbox.meta || null,
       token: _xyz.token
     }));
 
