@@ -1,8 +1,6 @@
-import layer from './layer/_layer.mjs';
+import layer from './layer.mjs';
 
 import listview from './listview.mjs';
-
-import format from './format/_format.mjs';
 
 export default _xyz => ({
 
@@ -11,7 +9,5 @@ export default _xyz => ({
   list: {},
 
   listview: listview(_xyz),
-
-  format: format(_xyz),
 
 });

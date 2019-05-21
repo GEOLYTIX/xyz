@@ -8,16 +8,24 @@ import tiles from './tiles.mjs';
 
 import grid from './grid.mjs';
 
-export default _xyz => ({
+export default (_xyz, layer) => {
 
-  mvt: mvt(_xyz),
+  if (!layer.format) return;
 
-  geojson: geojson(_xyz),
+  const formats = {
 
-  cluster: cluster(_xyz),
+    mvt: mvt(_xyz),
 
-  tiles: tiles(_xyz),
+    geojson: geojson(_xyz),
+  
+    cluster: cluster(_xyz),
+  
+    tiles: tiles(_xyz),
+  
+    grid: grid(_xyz),
 
-  grid: grid(_xyz),
+  };
 
-});
+  return formats[layer.format](layer);
+
+};

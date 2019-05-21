@@ -38,26 +38,21 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
         if (!record) return;
     
         const json = JSON.parse(e.target.response);
-    
-        const location = {
+       
+        const location = _xyz.locations.location({
           geometry: JSON.parse(json.geomj),
           infoj: json.infoj,
-          layer: layer.key
-        };
-    
-        Object.assign(location, _xyz.locations.location());
-    
-        location.style = {
-          color: record.color,
-          fillColor: record.color,
-          letter: record.letter,
-          stroke: true,
-          fill: false
-        };
-    
-
-        // location.view = location.view(_xyz);
-        // location.view.update();
+          layer: layer.key,
+          style: {
+            color: record.color,
+            fillColor: record.color,
+            letter: record.letter,
+            stroke: true,
+            fill: false
+          }
+        });
+       
+        
         _xyz.locations.view(location);
     
         

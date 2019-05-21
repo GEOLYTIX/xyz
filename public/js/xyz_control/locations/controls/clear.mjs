@@ -1,29 +1,19 @@
 export default (_xyz, record) => {
 
-  _xyz.utils.createElement({
-    tag: 'i',
-    options: {
-      textContent: 'clear',
-      className: 'material-icons cursor noselect btn_header',
-      title: 'Remove feature from selection'
-    },
-    style: {
-      color: record.color
-    },
-    appendTo: record.header,
-    eventListener: {
-      event: 'click',
-      funct: e => {
+  record.header.appendChild(_xyz.utils.hyperHTML.wire()`
+  <i
+  style = "${'color: ' + record.color}"
+  title = "Remove feature from selection"
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${click}>clear`);
 
-        e.stopPropagation();
+  function click(e) {
+    e.stopPropagation();
+    record.clear();
+  }
+ 
 
-        record.clear();
-
-      }
-    }
-  });
-
-  record.clear = ()=>{
+  record.clear = () => {
 
     record.drawer.remove();
 
@@ -40,9 +30,11 @@ export default (_xyz, record) => {
 
     delete record.clear;
 
-    // Run locations init when all records are free.
-    const freeRecords = _xyz.locations.listview.records.filter(record => !record.location);
-    if (freeRecords.length === _xyz.locations.listview.records.length) _xyz.locations.listview.init();
+    // Run listview clear if defined;
+    if (_xyz.locations.listview.clear &&
+      !_xyz.locations.listview.records.some(record => record.location)) {
+      _xyz.locations.listview.clear.click();
+    }
 
   };
   
