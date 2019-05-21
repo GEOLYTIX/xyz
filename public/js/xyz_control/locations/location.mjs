@@ -6,7 +6,9 @@ import flyTo from './flyTo.mjs';
 
 import update from './update.mjs';
 
-export default _xyz => (location, callback) => {
+import view from './view/_view.mjs';
+
+export default _xyz => location => {
 
   location.remove = remove(_xyz);
 
@@ -15,6 +17,8 @@ export default _xyz => (location, callback) => {
   location.flyTo = flyTo(_xyz);
   
   location.update = update(_xyz);
+
+  location.view = view(_xyz);
     
   location.geometries = [];
   

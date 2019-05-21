@@ -19,8 +19,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
           
       xhr.open(
         'GET',
-        _xyz.host +
-        '/api/location/select/aggregate?' +
+        _xyz.host + '/api/location/select/aggregate?' +
         _xyz.utils.paramString({
           locale: _xyz.workspace.locale.key,
           layer: layer.key,
@@ -53,7 +52,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
         });
        
         
-        _xyz.locations.view(location);
+        location.view();
     
         
         // Draw the location to the map.

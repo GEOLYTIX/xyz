@@ -22,37 +22,39 @@ import update from './update.mjs';
 
 import boolean from './boolean.mjs';
 
-export default _xyz => location => {
+export default _xyz => function () {
 
-  location.view = {
+  const location = this;
 
-    location: location,
-  
+  const view = {
+
     update: update(_xyz, location),
 
     streetview: streetview(_xyz),
-
+  
     images: images(_xyz),
-
+  
     group: group(_xyz),
-
+  
     geometry: geometry(_xyz),
-
+  
     meta: meta(_xyz),
-
+  
     edit: edit(_xyz),
-
+  
     boolean: boolean(_xyz),
-
+  
     tableDefinition: tableDefinition(_xyz),
-
+  
     orderedList: orderedList(_xyz),
-
+  
     report: report(_xyz),
-
+  
     valChange: valChange,
 
   };
+
+  location.view = view;
 
   location.view.update();
 

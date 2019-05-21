@@ -84,7 +84,7 @@ export default _xyz => params => {
   let timer;
   function viewChangeEndTimer() {
     clearTimeout(timer);
-    timer = setTimeout(_xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent), 500);
+    timer = setTimeout(()=>_xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent), 500);
   }
   
   // Set hooks on changeevent.

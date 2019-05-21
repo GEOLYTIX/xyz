@@ -15,8 +15,6 @@ function check() {
     email.validity.valid &&
     password.validity.valid &&
     captcha_input.validity.valid);
-
-  console.log(btnLogin.disabled);
 }
 
 if (captcha_key) {

@@ -1,6 +1,6 @@
 import _xyz from './xyz_control/index.mjs';
 
-import logRocket from './logRocket.mjs';
+// import logRocket from './logRocket.mjs';
 
 import mobile from '../views/mobile.mjs';
 
@@ -48,7 +48,7 @@ function init(_xyz) {
 
   if (_xyz.log) console.log(_xyz);
 
-  logRocket(document.body.dataset.logrocket);
+  //logRocket(document.body.dataset.logrocket);
 
 }
 

@@ -13,7 +13,7 @@ export default _xyz => {
     || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
 
     // Create location view.
-    _xyz.locations.view(location);
+    location.view();
 
     // Draw location to map.
     location.draw();
@@ -29,9 +29,9 @@ export default _xyz => {
 
   };
   
-  return (_location, callback = defaultCallback) => {
+  return (location, callback = defaultCallback) => {
 
-    if (!_location) return;
+    if (!location) return;
 
     // Remove current location if it exists.
     if (_xyz.locations.current) _xyz.locations.current.remove();
@@ -40,19 +40,12 @@ export default _xyz => {
     if (
       _xyz.locations.listview && 
       _xyz.locations.listview.records && 
-      _xyz.locations.listview.removeRecord(_location)) return;
-
-
-    // Assign prototype to location.
-    const location = _xyz.locations.location(_location);
-
+      _xyz.locations.listview.removeRecord(location)) return;
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open(
-      'GET',
-      _xyz.host +
-      '/api/location/select/id?' +
+    xhr.open('GET',
+      _xyz.host + '/api/location/select/id?' +
       _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
         layer: location.layer,
@@ -77,7 +70,7 @@ export default _xyz => {
   
       location.geometry = e.target.response.geomj;
 
-      callback(location);
+      callback(_xyz.locations.location(location));
      
     };
   

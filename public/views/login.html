@@ -9,6 +9,8 @@
     
     <script src="https://www.google.com/recaptcha/api.js?render={{:captcha}}"></script>
 
+    <script src="{{:dir}}/views/login.js" async defer></script>
+
     <style>
         @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
@@ -184,8 +186,7 @@
             type="email"
             autocomplete="email"
             required 
-            maxlength="50"
-            autocomplete="on">
+            maxlength="50">
 
             <span class="bar"></span>
             <label for="auth_user_email">E-mail</label>
@@ -222,11 +223,9 @@
 
         <p>Your account must be verified by following a verification link sent to the email address and approved by
             an administrator before you are able to log in.</p>
-        <a class="switch" href="{{:dir}}/register">Register a new account or reset your password.</p>
+        <a class="switch" href="{{:dir}}/register">Register a new account or reset your password.</a>
     </form>
 
 </body>
-
-<script src="{{:dir}}/views/login.js"></script>
 
 </html>
