@@ -155,7 +155,7 @@ export default _xyz => entry => {
 
     if(entry.edit.isoline_here && entry.edit.isoline_here.slider){
 
-      td.appendChild(entry.edit.container);
+      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
 
       _xyz.geom.isoline_here_control({
         entry: entry,
