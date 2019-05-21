@@ -33,6 +33,7 @@ export default _xyz => layer => {
         //traffic: null,
         minutes: layer.edit.isoline_here.minutes,
         distance: layer.edit.isoline_here.distance,
+        meta: entry.edit.isoline_here.meta || null,
         token: _xyz.token
       }));
   

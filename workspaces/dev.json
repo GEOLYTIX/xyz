@@ -531,11 +531,15 @@
                         "delete": true
                     },
                     "qID": "id",
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "key"
                         },
                         {
                             "label": "Catchment Geometry",
+                            "type": "label"
+                        },
+                        {
                             "name": "Show / Hide",
                             "field": "catchment",
                             "fieldfx": "ST_asGeoJson(catchment)",
@@ -548,6 +552,9 @@
                         },
                         {
                             "label": "Catchment Here",
+                            "type": "label"
+                        },
+                        {
                             "name": "Create / Delete",
                             "field": "isoline_here",
                             "fieldfx": "ST_asGeoJson(isoline_here)",
@@ -560,6 +567,9 @@
                         },
                         {
                             "label": "Catchment Mapbox",
+                            "type": "label"
+                        },
+                        {
                             "name": "Create / Delete",
                             "field": "isoline_mapbox",
                             "fieldfx": "ST_asGeoJson(isoline_mapbox)",
@@ -577,6 +587,64 @@
                                 "fillColor": "#ffb300",
                                 "fillOpacity": 0.2
                             }
+                        },
+                        {
+                            "label": "Custom Here Catchment",
+                            "type": "label"
+                        },
+                        {
+                            "name": "Create / Delete",
+                            "field": "isoline_here_custom",
+                            "fieldfx": "ST_asGeoJson(isoline_here_custom)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline_here": {
+                                    "slider": true,
+                                    "meta": "isoline_here_custom_meta"
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#083D77",
+                                "weight": 2,
+                                "fill": true,
+                                "fillColor": "#083D77",
+                                "fillOpacity": 0.2
+                            }
+                        },
+                        {
+                            "title": "Recent isoline",
+                            "field": "isoline_here_custom_meta",
+                            "type": "meta"
+                        },
+                        {
+                            "label": "Custom Mapbox Catchment",
+                            "type": "label"
+                        },
+                        {
+                            "name": "Create / Delete",
+                            "field": "isoline_mapbox_custom",
+                            "fieldfx": "ST_asGeoJSON(isoline_mapbox_custom)",
+                            "type": "geometry",
+                            "edit": {
+                                "isoline_mapbox": {
+                                    "slider": true,
+                                    "meta": "isoline_mapbox_custom_meta"
+                                }
+                            },
+                            "style": {
+                                "stroke": true,
+                                "color": "#455a64",
+                                "weight": 2,
+                                "fill": true,
+                                "fillColor": "#455a64",
+                                "fillOpacity": 0.2
+                            }
+                        },
+                        {
+                            "title": "Recent isoline",
+                            "field": "isoline_mapbox_custom_meta",
+                            "type": "meta"
                         }
                     ]
                 },

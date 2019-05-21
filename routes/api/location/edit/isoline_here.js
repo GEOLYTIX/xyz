@@ -6,6 +6,8 @@ const mvt_cache = require('../../../../mod/mvt_cache');
 
 const sql_fields = require('../../../../mod/pg/sql_fields');
 
+const date = require('../../../../mod/date.js');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -24,6 +26,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
+          meta: { type: 'string' },
           coordinates: { type: 'string' },
         },
         required: ['locale', 'layer', 'table', 'coordinates']
@@ -61,7 +64,6 @@ module.exports = fastify => {
 
       var q = `https://isoline.route.api.here.com/routing/7.2/calculateisoline.json?${env.keys.HERE}&mode=${params.type};${params.mode};${params.traffic}&start=geo!${params.coordinates}&range=${params.range}&rangetype=${params.rangetype}`;
 
-
       // Fetch results from Google maps places API.
       const here_isolines = await fetch(q);
 
@@ -80,13 +82,23 @@ module.exports = fastify => {
           _geojson.coordinates[0].push(el.reverse());
         });
 
-      const geojson = JSON.stringify(_geojson);
+      const geojson = JSON.stringify(_geojson); 
+      var meta_json;
+
+      if(req.query.meta) meta_json = {
+        "Recent isoline": "Here",
+        "Mode": params.mode,
+        "Range type": params.rangetype,
+        "Range": req.query.minutes ||req.query.distance,
+        "Created": date()
+      };
 
       if (req.query.id) {
 
         var q = `
           UPDATE ${table}
           SET ${req.query.field} = ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)
+          ${req.query.meta ? `, ${req.query.meta} = '${JSON.stringify(meta_json)}'` : ``}
           WHERE ${layer.qID} = $1;`;
 
         var rows = await env.dbs[layer.dbs](q, [req.query.id]);
