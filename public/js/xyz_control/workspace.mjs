@@ -65,18 +65,8 @@ export default _xyz => {
     // Load layers.
     Object.keys(_xyz.workspace.locale.layers)
       .filter(key => key.indexOf('__') === -1)
-      .forEach(key => {
+      .forEach(key => _xyz.layers.list[key] = _xyz.layers.layer(_xyz.workspace.locale.layers[key]));
 
-        // Create layer from locale definition and layers.layer object.
-        const layer = Object.assign(
-          {},
-          _xyz.workspace.locale.layers[key],
-          _xyz.layers.layer());
-
-        // Load the layer (adds layer to list).
-        layer.load(key);
-
-      });
   };
 
   function admin(){

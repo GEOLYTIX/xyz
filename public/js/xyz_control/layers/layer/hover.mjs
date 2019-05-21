@@ -1,8 +1,18 @@
-export default _xyz => function() {
+export default (_xyz, layer) => {
 
-  const layer = this;
+  const hover = Object.assign({
 
-  //if (!layer.hover) return;
+    mousemove: mousemove,
+
+    mapout: mapout,
+
+    remove: remove,
+
+    add: add
+
+  }, layer.hover || {});
+
+  return hover;
 
   function mousemove(e) {
     layer.hover.tooltip.style.left = (e.clientX - (layer.hover.tooltip.offsetWidth / 2)) + 'px';
@@ -13,7 +23,7 @@ export default _xyz => function() {
     layer.hover.remove();
   }
 
-  layer.hover.remove = () => {
+  function remove() {
     _xyz.mapview.node.removeEventListener('mouseout', mapout);
     _xyz.mapview.node.removeEventListener('mousemove', mousemove);
     if (!layer.hover.tooltip) return;
@@ -21,7 +31,7 @@ export default _xyz => function() {
     delete layer.hover.tooltip;
   };
 
-  layer.hover.add = eOrg => {
+  function add(eOrg) {
 
     layer.hover.remove();
 

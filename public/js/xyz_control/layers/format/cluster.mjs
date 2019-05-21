@@ -267,7 +267,7 @@ export default _xyz => layer => () => {
       })
       .on('mouseout', e => {
 
-        if (layer.hover) layer.hover.remove();
+        if (layer.hover.field) layer.hover.remove();
 
       })
       .addTo(_xyz.map);

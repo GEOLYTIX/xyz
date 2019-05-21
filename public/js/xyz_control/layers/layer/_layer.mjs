@@ -10,30 +10,32 @@ import show from './show.mjs';
 
 import remove from './remove.mjs';
 
-//import hover from './hover.mjs';
+import hover from './hover.mjs';
 
 import view from './view/_view.mjs';
 
-import load from './load.mjs';
+export default _xyz => layer => {
 
-export default _xyz => () => ({
-  
-  tableCurrent: tableCurrent(_xyz),
+  layer.tableCurrent = tableCurrent(_xyz);
     
-  tableMin: tableMin(_xyz),
+  layer.tableMin = tableMin(_xyz);
   
-  tableMax: tableMax(_xyz),
+  layer.tableMax = tableMax(_xyz);
 
-  zoomToExtent: zoomToExtent(_xyz),
+  layer.zoomToExtent = zoomToExtent(_xyz);
   
-  show: show(_xyz),
+  layer.show = show(_xyz);
   
-  remove: remove(_xyz),
+  layer.remove = remove(_xyz);
 
-  view: view(_xyz),
+  layer.view = view(_xyz);
 
-  //hover: hover(_xyz),
+  layer.get = _xyz.layers.format[layer.format](layer);
 
-  load: load(_xyz),
+  layer.hover = hover(_xyz, layer);
 
-});
+  if (layer.style && layer.style.themes) layer.style.theme = layer.style.themes[Object.keys(layer.style.themes)[0]];
+
+  return layer;
+
+};

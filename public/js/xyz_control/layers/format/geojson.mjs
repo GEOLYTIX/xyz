@@ -76,7 +76,7 @@ export default _xyz => layer => () => {
 
         e.layer.setStyle && e.layer.setStyle(layer.style.highlight);
 
-        if (layer.hover) layer.hover.add({
+        if (layer.hover.field) layer.hover.add({
           id: e.layer.feature.properties.id,
           x: e.originalEvent.clientX,
           y: e.originalEvent.clientY,
@@ -86,7 +86,7 @@ export default _xyz => layer => () => {
       .on('mouseout', e => {
         e.layer.setStyle && e.layer.setStyle(applyLayerStyle(e.layer.feature));
 
-        if (layer.hover) layer.hover.remove();
+        if (layer.hover.field) layer.hover.remove();
 
       })
       .addTo(_xyz.map);
