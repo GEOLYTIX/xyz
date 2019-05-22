@@ -645,6 +645,12 @@
                             "title": "Recent isoline",
                             "field": "isoline_mapbox_custom_meta",
                             "type": "meta"
+                        },
+                        {
+                            "label": "Documents",
+                            "field": "documents",
+                            "type": "documents",
+                            "edit": true
                         }
                     ]
                 },
@@ -711,6 +717,7 @@
                 },
                 "oa": {
                     "name": "Output areas",
+                    "group": "Demography",
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
                     },
@@ -2171,6 +2178,7 @@
                     }
                 },
                 "grid": {
+                    "group": "Demography",
                     "name": "Grid",
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
