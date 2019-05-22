@@ -26,7 +26,7 @@ export default _xyz => entry => {
    	style: {
    		fontSize: 'small',
    		width: '85%',
-   		color: 'olive',
+   		color: '#666',
    		borderRadius: '4px',
    		backgroundColor: 'linen',
    		padding: '6px',

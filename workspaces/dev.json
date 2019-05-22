@@ -634,10 +634,10 @@
                             },
                             "style": {
                                 "stroke": true,
-                                "color": "#455a64",
+                                "color": "#43a047",
                                 "weight": 2,
                                 "fill": true,
-                                "fillColor": "#455a64",
+                                "fillColor": "#43a047",
                                 "fillOpacity": 0.2
                             }
                         },
