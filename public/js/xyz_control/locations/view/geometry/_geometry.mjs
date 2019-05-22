@@ -165,7 +165,7 @@ export default _xyz => entry => {
 
     if(entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider){
 
-      td.appendChild(entry.edit.container);
+      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
 
       _xyz.geom.isoline_mapbox_control({
         entry: entry,
