@@ -164,7 +164,7 @@ export default _xyz => {
     
       };
 
-      _xyz.utils.hyperHTML.bind(_xyz.desktop.mask)`<p class="msg">Updating Workspace</p>`;
+      _xyz.utils.bind(_xyz.desktop.mask)`<p class="msg">Updating Workspace</p>`;
     
       _xyz.desktop.mask.style.display = 'block';
        

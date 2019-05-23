@@ -1,18 +1,10 @@
 const env = require('../mod/env');
 
-const path = require('path');
-
-// Set jsrender module for server-side templates.
 const jsr = require('jsrender');
 
-// Nanoid is used to pass a unique id on the client view.
-const nanoid = require('nanoid');
+const nodefetch = require('node-fetch');
 
-const fetch = require('../mod/fetch');
-
-const fs = require('fs');
-
-module.exports = { route, view };
+module.exports = {route, view};
 
 function route(fastify) {
 
@@ -40,60 +32,30 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  let local_html;
+  let _tmpl;
 
-  try {
-    // try if template exists in repository
-    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}/${req.query.template}.html`, 'utf8');
+  if (req.query.source === 'GITHUB') {
 
-  } catch (err) {
-    // apply fallback default template
-    local_html = await fs.readFileSync(`${path.resolve(__dirname, '../public/views/report/')}/map_location.html`, 'utf8');
-  }
-
-  // send back local if no resource
-  if(!req.query.resource) sendBack(local_html);
-
-  if(req.query.resource === 'github') {
-
-    let github = process.env.GITHUB;
-
-    if (!github || !req.query.repo || !req.query.owner) sendBack(local_html);
-
-    const url = `https://api.github.com/repos/${req.query.owner}/${req.query.repo}/contents/${req.query.dir ? `${req.query.dir}/` : ''}${req.query.template}.html?access_token=${github}`;
-
-    try {
-      // Get file meta from Github
-      const fetched = await fetch(url);
-      // Process file content
-      let base64 = fetched.content,
-        buff = Buffer.from(base64, 'base64'),
-        html = buff.toString('utf8');
-      sendBack(html);
-    } catch (err) {
-      sendBack(local_html);
-    }
+    const response = await nodefetch(`${req.query.template}?access_token=${env.keys.GITHUB}`);
+    const b64 = await response.json();
+    const buff = await Buffer.from(b64.content, 'base64');
+    _tmpl = await buff.toString('utf8');
+    
 
   } else {
-    sendBack(local_html);
+
+    const response = await nodefetch(env.desktop || `${env.http || 'https'}://${req.headers.host}${env.path}${req.query.template}`);
+    if (response.status !== 200) return res.type('text/plain').send('Failed to retrieve report template');
+    _tmpl = await response.text();
+
   }
 
-  // Check whether request comes from a mobile platform and set template.
-  // const md = new Md(req.headers['user-agent']);
+  const tmpl = jsr.templates('tmpl', _tmpl);
 
-  function sendBack(html) {
-
-    const tmpl = jsr.templates('./public/views/report.html');
-
-    // Build the template with jsrender and send to client.
-    res.type('text/html').send(tmpl.render({
-      dir: env.path,
-      title: env.workspace.title || 'GEOLYTIX | XYZ',
-      nanoid: nanoid(6),
-      token: req.query.token || token.signed || '""',
-      template: html || null,
-      script_js: 'views/report.js'
-    }));
-  }
+  //Build the template with jsrender and send to client.
+  res.type('text/html').send(tmpl.render({
+    dir: env.path,
+    token: req.query.token || token.signed || '""'
+  }));
 
 };

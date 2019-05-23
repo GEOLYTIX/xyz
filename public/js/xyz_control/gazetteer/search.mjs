@@ -43,14 +43,14 @@ export default _xyz => function(term, params = {}){
 
     // No results
     if (json.length === 0) {
-      gazetteer.result.appendChild(_xyz.utils.hyperHTML.wire()`
+      gazetteer.result.appendChild(_xyz.utils.wire()`
       <li style="padding: 5px 0;">No results for this search.</li>`);
       return;
     }
 
     // Add results from JSON to gazetteer.
     Object.values(json).forEach(entry => {
-      const li = _xyz.utils.hyperHTML.wire()`<li>${entry.label}</li>`;
+      const li = _xyz.utils.wire()`<li>${entry.label}</li>`;
       Object.entries(entry).forEach(data => li['data-' + data[0]] = data[1]);
       gazetteer.result.appendChild(li);
     });

@@ -9,6 +9,9 @@
     .label {
         padding-top: 5px;
     }
+    a {
+        color: $glxgreen;
+    }
     textarea {
         resize: none;
         width: 100%;
@@ -39,9 +42,6 @@
         font-weight: 400;
         font-size: 12px;
         white-space: pre-wrap;
-        a {
-            color: $glxgreen;
-        }
     }
     .img_streetview {
         width: 100%;

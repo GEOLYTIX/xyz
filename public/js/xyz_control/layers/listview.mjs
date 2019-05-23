@@ -43,7 +43,7 @@ export default _xyz => {
 
         // Add group meta to group container.
         if (layer.groupmeta) {
-          const meta = _xyz.utils.hyperHTML.wire()`<div class="meta">`;
+          const meta = _xyz.utils.wire()`<div class="meta">`;
           meta.innerHTML = layer.groupmeta;
           _xyz.layers.listview.groups[layer.group].meta.appendChild(meta);
         }
@@ -81,13 +81,13 @@ export default _xyz => {
 
 
     // Create layer group container.
-    group.container = _xyz.utils.hyperHTML.wire()`<div class="drawer drawer-group expandable-group">`;
+    group.container = _xyz.utils.wire()`<div class="drawer drawer-group expandable-group">`;
 
     _xyz.layers.listview.node.appendChild(group.container);
 
 
     // Create layer group header.
-    group.header = _xyz.utils.hyperHTML.wire()`<div class="header-group">${layer.group}`;
+    group.header = _xyz.utils.wire()`<div class="header-group">${layer.group}`;
 
     group.container.appendChild(group.header);
 
@@ -104,7 +104,7 @@ export default _xyz => {
 
 
     // Create group meta container
-    group.meta = _xyz.utils.hyperHTML.wire()`<div>`;
+    group.meta = _xyz.utils.wire()`<div>`;
     group.container.appendChild(group.meta);
 
 
@@ -118,7 +118,7 @@ export default _xyz => {
 
 
     // Create hide all group layers button.
-    group.visible = _xyz.utils.hyperHTML.wire()`
+    group.visible = _xyz.utils.wire()`
     <i class="material-icons cursor noselect btn_header hide-group"
     title="Hide layers from group">
     visibility`;
@@ -136,7 +136,7 @@ export default _xyz => {
 
 
     // Create group expander button.
-    const expander = _xyz.utils.hyperHTML.wire()`
+    const expander = _xyz.utils.wire()`
     <i class="material-icons cursor noselect btn_header expander-group"
     title="Toggle group panel">`;
 

@@ -12,7 +12,7 @@ export default _xyz => {
 
     layer: {},
 
-    links: _xyz.utils.hyperHTML.wire()`<div></div>`
+    links: _xyz.utils.wire()`<div></div>`
 
   };
 
@@ -24,12 +24,12 @@ export default _xyz => {
 
     if (attribution.container) attribution.container.remove();
    
-    attribution.container = _xyz.utils.hyperHTML.wire()`<div class="attribution"></div>`;
+    attribution.container = _xyz.utils.wire()`<div class="attribution"></div>`;
 
     _xyz.mapview.node.appendChild(attribution.container);
 
     attribution.container.appendChild(
-      _xyz.utils.hyperHTML.wire()`
+      _xyz.utils.wire()`
       <a class="logo" target="_blank" href="https://geolytix.co.uk">GEOLYTIX</a>`);
 
     attribution.container.appendChild(attribution.links);
@@ -38,14 +38,14 @@ export default _xyz => {
 
     if (typeof mapAttribution === 'object') {
       Object.entries(mapAttribution).forEach(entry => {
-        attribution.links.appendChild(_xyz.utils.hyperHTML.wire()`
+        attribution.links.appendChild(_xyz.utils.wire()`
         <a target="_blank" href="${entry[1]}">${entry[0]}</a>`);
       });
     }
 
     if (_xyz.workspace.locale.attribution) {
       Object.entries(_xyz.workspace.locale.attribution).forEach(entry => {
-        attribution.links.appendChild(_xyz.utils.hyperHTML.wire()`
+        attribution.links.appendChild(_xyz.utils.wire()`
         <a target="_blank" href="${entry[1]}">${entry[0]}</a>`);
       });
     };
@@ -69,7 +69,7 @@ export default _xyz => {
       // Create new attribution for layer if the same attribution does not exist yet.
       if (!attribution.layer[entry[0]]) {
 
-        attribution.layer[entry[0]] = _xyz.utils.hyperHTML.wire()`
+        attribution.layer[entry[0]] = _xyz.utils.wire()`
         <a target="_blank" href="${entry[1]}">${entry[0]}</a>`;
 
         attribution.links.appendChild(attribution.layer[entry[0]]);

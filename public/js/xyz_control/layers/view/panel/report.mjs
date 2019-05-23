@@ -41,7 +41,7 @@ export default (_xyz, layer) => {
     let _r = {'name': entry[0], 'template': entry[1].template};
 
     layer.report[_r.name] = layer.report.panel.appendChild(
-      _xyz.utils.hyperHTML.wire(_r)`
+      _xyz.utils.wire(_r)`
 			<div style="padding: 10px 0;">
 			<a style="color: #090;cursor:pointer;"><i class="material-icons" style="vertical-align:bottom; font-size: 16px;">event_note</i>${_r.name}`
     );

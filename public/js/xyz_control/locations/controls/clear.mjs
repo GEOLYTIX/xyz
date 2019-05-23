@@ -1,6 +1,6 @@
 export default (_xyz, record) => {
 
-  record.header.appendChild(_xyz.utils.hyperHTML.wire()`
+  record.header.appendChild(_xyz.utils.wire()`
   <i
   style = "${'color: ' + record.color}"
   title = "Remove feature from selection"

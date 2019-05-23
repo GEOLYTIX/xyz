@@ -1,7 +1,5 @@
 const env = require('../mod/env');
 
-const request = require('request');
-
 const fetch = require('node-fetch');
 
 module.exports = fastify => {
@@ -15,11 +13,23 @@ module.exports = fastify => {
     ]),
     handler: async (req, res) => {
 
-      const response = await fetch(req.query.uri);
-      const file = await response.text();
+      if (req.query.source === 'GITHUB') {
 
-      // Decorate the URI with a provider key and send response object to client.
-      res.type(req.query.type).send(file);
+        const response = await fetch(`${req.query.uri}?access_token=${env.keys.GITHUB}`);
+        const b64 = await response.json();
+        const buff = await Buffer.from(b64.content, 'base64');
+        const file = await buff.toString('utf8');
+        return res.type(req.query.type).send(file);
+
+      }
+
+      if (!req.query.source) {
+
+        const response = await fetch(req.query.uri);
+        const file = await response.text();
+        return res.type(req.query.type).send(file);
+
+      }
 
     }
   });

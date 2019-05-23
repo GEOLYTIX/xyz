@@ -68,6 +68,8 @@
     color: #090; }
   .locationview .label {
     padding-top: 5px; }
+  .locationview a {
+    color: #090; }
   .locationview textarea {
     resize: none;
     width: 100%; }
@@ -92,8 +94,6 @@
     font-weight: 400;
     font-size: 12px;
     white-space: pre-wrap; }
-    .locationview .val a {
-      color: #090; }
   .locationview .img_streetview {
     width: 100%;
     padding: 6px; }

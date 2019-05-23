@@ -40,7 +40,11 @@ export {deepMerge} from './deepMerge.mjs';
 
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
-export {default as hyperHTML} from 'hyperhtml/esm';
+export {wire, bind} from 'hyperhtml/esm';
+
+export {default as chart} from './charts.mjs';
+
+export {default as Tabulator} from 'tabulator-tables';
 
 import pointOnFeature from '@turf/point-on-feature';
 
@@ -50,15 +54,9 @@ import meta from '@turf/meta';
 
 import helpers from '@turf/helpers';
 
-export {default as chart} from './charts.mjs';
-
 export const turf = {
   pointOnFeature: pointOnFeature,
   bbox: bbox,
   meta: meta,
   helpers: helpers,
 };
-
-import Tabulator from 'tabulator-tables';
-
-export {Tabulator};

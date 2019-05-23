@@ -1,18 +1,16 @@
 export default (_xyz, layer) => {
 
-  const header = _xyz.utils.hyperHTML.wire()`
-    <div
-    class="header">
-    ${layer.name || layer.key}`;
+  const header = _xyz.utils.wire()`
+    <div class="header"> ${layer.name || layer.key}`;
 
-  header.style.borderBottomColor = layer.style && layer.style.default && layer.style.default.fillColor ? layer.style.default.fillColor : `#333`;
+  header.style.borderBottomColor = layer.style && layer.style.default && layer.style.default.fillColor ? layer.style.default.fillColor : '#333';
 
   layer.view.header = header;
 
   layer.view.drawer.appendChild(header);
 
     
-  header.toggleDisplay = _xyz.utils.hyperHTML.wire()`
+  header.toggleDisplay = _xyz.utils.wire()`
     <i
     title="Toggle visibility"
     class="material-icons cursor noselect btn_header">
@@ -35,11 +33,11 @@ export default (_xyz, layer) => {
   };
 
 
-  header.zoomToExtent = _xyz.utils.hyperHTML.wire()`
-  <i
-  title="Toggle visibility"
-  class="material-icons cursor noselect btn_header">
-  fullscreen`;
+  header.zoomToExtent = _xyz.utils.wire()`
+    <i
+    title="Toggle visibility"
+    class="material-icons cursor noselect btn_header">
+    fullscreen`;
 
   header.appendChild(header.zoomToExtent);
 
@@ -52,12 +50,12 @@ export default (_xyz, layer) => {
   // Add symbol to layer header.
   if (layer.format === 'cluster' && layer.style.marker) {
   
-    header.appendChild(_xyz.utils.hyperHTML.wire()`
-    <img
-    style="float: right"
-    src="${_xyz.utils.svg_symbols(layer.style.marker)}"
-    width=20
-    height=20>`);
+    header.appendChild(_xyz.utils.wire()`
+      <img
+      style="float: right"
+      src="${_xyz.utils.svg_symbols(layer.style.marker)}"
+      width=20
+      height=20>`);
   }
   
 };

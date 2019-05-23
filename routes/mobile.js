@@ -29,6 +29,9 @@ async function view(req, res, token = { access: 'public' }) {
   const tmpl = jsr.templates('tmpl', await _tmpl.text());
 
   //Build the template with jsrender and send to client.
-  res.type('text/html').send(tmpl.render({dir: env.path}));
+  res.type('text/html').send(tmpl.render({
+    dir: env.path,
+    token: req.query.token || token.signed || '""',
+  }));
 
 };

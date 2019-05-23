@@ -37,7 +37,7 @@ export default (_xyz, layer) => {
 
     _xyz.mapview.node.addEventListener('mouseout', mapout);
 
-    layer.hover.tooltip = _xyz.utils.hyperHTML.wire()`<div class="hover-box">`;
+    layer.hover.tooltip = _xyz.utils.wire()`<div class="hover-box">`;
 
     const xhr = new XMLHttpRequest();
 

@@ -24,8 +24,6 @@ export default _xyz => entry => {
     entry.style
   );
 
-  entry.row.classList.add('tr_geometry');
-
   let td = _xyz.utils.createElement({
     tag: 'td',
     style: {

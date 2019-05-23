@@ -14,12 +14,12 @@ export default _xyz => function () {
 
     view.update = update;
 
-    view.drawer = _xyz.utils.hyperHTML.wire()`<div class="drawer">`;
+    view.drawer = _xyz.utils.wire()`<div class="drawer">`;
   
     header(_xyz, layer);
        
     // Create layer loader and append to drawer (after the header).
-    view.loader = _xyz.utils.hyperHTML.wire()`<div class="loader">`;
+    view.loader = _xyz.utils.wire()`<div class="loader">`;
     view.drawer.appendChild(view.loader);
 
     dashboard(_xyz, layer);

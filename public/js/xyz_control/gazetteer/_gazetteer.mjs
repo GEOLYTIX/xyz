@@ -59,12 +59,12 @@ export default _xyz => {
 
 
     // Group
-    gazetteer.group = _xyz.utils.hyperHTML.wire()`<div class="gazetteer input_group">`;
+    gazetteer.group = _xyz.utils.wire()`<div class="gazetteer input_group">`;
     gazetteer.target.appendChild(gazetteer.group);
 
 
     // Input
-    gazetteer.input = _xyz.utils.hyperHTML.wire()`<input type="text" required placeholder=${_xyz.workspace.locale.gazetteer.placeholder || ''}>`;
+    gazetteer.input = _xyz.utils.wire()`<input type="text" required placeholder=${_xyz.workspace.locale.gazetteer.placeholder || ''}>`;
 
     // Initiate search on keyup with input value
     gazetteer.input.addEventListener('keyup', e => {
@@ -147,16 +147,16 @@ export default _xyz => {
     });
     
     gazetteer.group.appendChild(gazetteer.input);
-    gazetteer.group.appendChild(_xyz.utils.hyperHTML.wire()`<span class="bar">`);
+    gazetteer.group.appendChild(_xyz.utils.wire()`<span class="bar">`);
 
 
     // Loader
-    gazetteer.loader = _xyz.utils.hyperHTML.wire()`<div class="loader" style="display: none;">`;
+    gazetteer.loader = _xyz.utils.wire()`<div class="loader" style="display: none;">`;
     gazetteer.group.appendChild(gazetteer.loader);
 
 
     // Results
-    gazetteer.result = _xyz.utils.hyperHTML.wire()`<ul></ul>`;
+    gazetteer.result = _xyz.utils.wire()`<ul></ul>`;
   
     gazetteer.result.addEventListener('click', e => {
       if (!e.target['data-source']) return;

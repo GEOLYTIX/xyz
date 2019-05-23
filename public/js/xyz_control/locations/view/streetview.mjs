@@ -9,8 +9,8 @@ export default _xyz => entry => {
   const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${entry.location.marker[1]},${entry.location.marker[0]}&size=300x230&provider=GOOGLE&token=${_xyz.token || ''}`;
 
   entry.location.view.node.appendChild(
-    _xyz.utils.hyperHTML.wire()`
-    <tr class="tr_streetview">
+    _xyz.utils.wire()`
+    <tr class="${entry.class || ''}">
       <td colspan=2>
         <a
         target="_blank" 

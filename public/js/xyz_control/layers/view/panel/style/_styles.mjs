@@ -42,7 +42,7 @@ export default (_xyz, layer) => {
   });
 
 
-  layer.style.legend = _xyz.utils.hyperHTML.wire()`<div class="legend">`;
+  layer.style.legend = _xyz.utils.wire()`<div class="legend">`;
 
 
   if (layer.style.themes) themeDropdown(layer);
