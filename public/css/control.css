@@ -656,6 +656,55 @@ input[type=range]::-moz-range-thumb {
 .qs-datepicker .qs-square:not(.qs-empty):not(.qs-disabled):not(.qs-day):not(.qs-active):hover {
   background: #090; }
 
+.doc-container {
+  overflow-x: scroll;
+  /*position: absolute;*/
+  bottom: 0;
+  width: 100%; }
+  .doc-container td, .doc-container div {
+    position: relative;
+    padding: 5px;
+    /* wrap long text without spaces */
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    /* Firefox */
+    white-space: -pre-wrap;
+    /* Opera <7 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* IE */
+    word-break: break-all; }
+    .doc-container td i, .doc-container div i {
+      color: #090;
+      font-size: 20px;
+      vertical-align: middle; }
+    .doc-container td button, .doc-container div button {
+      display: block;
+      background: none;
+      position: absolute;
+      border: none; }
+      .doc-container td button.btn_del, .doc-container div button.btn_del {
+        right: 6px;
+        top: 10px; }
+      .doc-container td button.btn_save, .doc-container div button.btn_save {
+        left: 5px;
+        bottom: 14px; }
+      .doc-container td button :hover, .doc-container div button :hover {
+        cursor: pointer; }
+      .doc-container td button i, .doc-container div button i {
+        padding: 1px;
+        width: 30px;
+        height: 30px;
+        font-size: 28px;
+        color: #090;
+        align-content: center;
+        border-radius: 5px;
+        background-color: #fff;
+        opacity: 0.9;
+        border: 1px solid #cf7;
+        box-shadow: 2px 2px 1px #cf7; }
+
 .bar {
   fill: #5AB664 !important;
   width: 10px; }
@@ -1948,27 +1997,33 @@ button {
     max-height: 2500px; }
     .listview .drawer.expanded .expander::before {
       content: "expand_less"; }
-  .listview .drawer.drawer-group div:not(:first-child) {
-    font-style: italic;
-    padding-left: 12px; }
-    .listview .drawer.drawer-group div:not(:first-child) .header {
+  .listview .drawer.drawer-group {
+    /*div:not(:first-child){*/
+    /*font-style: italic;
+    padding-left: 12px;*/
+    /*}*/ }
+    .listview .drawer.drawer-group .header {
+      font-style: italic;
+      margin-left: 12px;
       border-bottom: 1px solid #bbb; }
-  .listview .drawer.drawer-group .header-group {
-    font-family: ffmark_bold, sans-serif !important;
-    font-size: 15px !important;
-    line-height: 2; }
-    .listview .drawer.drawer-group .header-group:hover {
-      cursor: pointer; }
-  .listview .drawer.drawer-group.expandable-group {
-    max-height: 30px;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out; }
-    .listview .drawer.drawer-group.expandable-group .expander-group::before {
-      content: "expand_more"; }
-  .listview .drawer.drawer-group.expanded-group {
-    max-height: 2500px; }
-    .listview .drawer.drawer-group.expanded-group .expander-group::before {
-      content: "expand_less"; }
+    .listview .drawer.drawer-group .dashboard {
+      margin-left: 12px; }
+    .listview .drawer.drawer-group .header-group {
+      font-family: ffmark_bold, sans-serif !important;
+      font-size: 15px !important;
+      line-height: 2; }
+      .listview .drawer.drawer-group .header-group:hover {
+        cursor: pointer; }
+    .listview .drawer.drawer-group.expandable-group {
+      max-height: 30px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out; }
+      .listview .drawer.drawer-group.expandable-group .expander-group::before {
+        content: "expand_more"; }
+    .listview .drawer.drawer-group.expanded-group {
+      max-height: 2500px; }
+      .listview .drawer.drawer-group.expanded-group .expander-group::before {
+        content: "expand_less"; }
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;

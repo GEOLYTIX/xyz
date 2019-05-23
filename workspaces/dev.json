@@ -634,10 +634,10 @@
                             },
                             "style": {
                                 "stroke": true,
-                                "color": "#455a64",
+                                "color": "#43a047",
                                 "weight": 2,
                                 "fill": true,
-                                "fillColor": "#455a64",
+                                "fillColor": "#43a047",
                                 "fillOpacity": 0.2
                             }
                         },
@@ -645,6 +645,18 @@
                             "title": "Recent isoline",
                             "field": "isoline_mapbox_custom_meta",
                             "type": "meta"
+                        },
+                        {
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images",
+                            "edit": true
+                        },
+                        {
+                            "label": "Documents",
+                            "field": "documents",
+                            "type": "documents",
+                            "edit": true
                         }
                     ]
                 },
@@ -711,6 +723,7 @@
                 },
                 "oa": {
                     "name": "Output areas",
+                    "group": "Demography",
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
                     },
@@ -2171,6 +2184,7 @@
                     }
                 },
                 "grid": {
+                    "group": "Demography",
                     "name": "Grid",
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
