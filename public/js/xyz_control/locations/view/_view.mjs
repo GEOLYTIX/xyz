@@ -4,6 +4,8 @@ import streetview from './streetview.mjs';
 
 import images from './images/_images.mjs';
 
+import documents from './documents/_documents.mjs';
+
 import geometry from './geometry/_geometry.mjs';
 
 import meta from './meta.mjs';
@@ -33,6 +35,8 @@ export default _xyz => function () {
     streetview: streetview(_xyz),
   
     images: images(_xyz),
+
+    documents: documents(_xyz),
   
     group: group(_xyz),
   

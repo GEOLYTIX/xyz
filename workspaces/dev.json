@@ -647,6 +647,12 @@
                             "type": "meta"
                         },
                         {
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images",
+                            "edit": true
+                        },
+                        {
                             "label": "Documents",
                             "field": "documents",
                             "type": "documents",

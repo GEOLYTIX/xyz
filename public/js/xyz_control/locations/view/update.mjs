@@ -117,7 +117,8 @@ export default (_xyz, location) => () => {
           padding: '3px',
           backgroundColor: _xyz.utils.hexToRGBA(location.style.color, 0.3),
           borderRadius: '2px',
-          cursor: 'help'
+          cursor: 'help',
+          float: 'right'
         },
         appendTo: entry.td
       });
@@ -136,6 +137,9 @@ export default (_xyz, location) => () => {
 
     // If input is images create image control and return from object.map function.
     if (entry.type === 'images') return location.view.images(entry);
+
+    // If input is documents create document control and return from object.map function.
+    if (entry.type === 'documents') return location.view.documents(entry);
 
     // Create geometry control.
     if (entry.type === 'geometry') return location.view.geometry(entry);
