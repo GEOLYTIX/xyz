@@ -104,13 +104,15 @@ module.exports = fastify => {
   
       let
         count = rows[0].count,
-        //xExtent = rows[0].xextent,
         xEnvelope = rows[0].xenvelope;
+
+      if (count > 1000) {
+        kmeans *= 2;
+        kmeans_only = true;
+      }
   
       if (kmeans >= count) kmeans = count;
-  
-      //if ((xExtent / xEnvelope) <= dbscan) kmeans = 1;
-  
+   
       dbscan *= xEnvelope;
 
       const kmeans_sql = `
@@ -137,7 +139,7 @@ module.exports = fastify => {
         kmeans_cid,
         ST_ClusterDBSCAN(geom, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
       FROM (${kmeans_sql}) kmeans`;
-  
+ 
 
       if (!theme) var q = `
       SELECT
@@ -145,7 +147,7 @@ module.exports = fastify => {
         SUM(size) size,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;
 
 
       if (theme === 'categorized') var q = `
@@ -155,7 +157,7 @@ module.exports = fastify => {
         array_agg(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'};`;
   
 
       if (theme === 'graduated') var q = `
@@ -165,7 +167,7 @@ module.exports = fastify => {
         SUM(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid;`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;
 
 
       if (theme === 'competition') var q = `

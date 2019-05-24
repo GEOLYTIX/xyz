@@ -32,6 +32,7 @@ export default _xyz => layer => () => {
   if (layer.xhr) {
     layer.xhr.abort();
     layer.xhr.onload = null;
+    if (layer.L) _xyz.map.removeLayer(layer.L);
   }
 
   // Create XHR for fetching data from middleware.
