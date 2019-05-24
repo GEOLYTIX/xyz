@@ -14,8 +14,6 @@ export default _xyz => entry => {
 		delete_document: delete_document(_xyz)
 	}
 
-	console.log(entry);
-
 	const docs = entry.value ? entry.value.reverse() : [];
 
 	if (!docs.length && !entry.edit) return entry.row.remove();
@@ -67,15 +65,16 @@ export default _xyz => entry => {
 		});
 
 		let _doc = _xyz.utils.createElement({
-		    tag: 'a', // what tag?
+		    tag: 'a',
 	        options: {
-	   		    id: doc.replace(/.*\//, '').replace(/\.([\w-]{3})/, ''),
 	   		    href: doc,
 	   		    textContent: decodeURIComponent(decodeURIComponent(doc.split('/').pop())),
 	   		    target: '_blank'
 	   		},
 	   		appendTo: docCell
 	   	});
+
+	   	_doc.dataset.name = doc.replace(/^.*[\\\/]/, '');
 
 	   	// Add delete button if doc entry is editable.
 	   	if (entry.edit) _xyz.utils.createElement({
@@ -96,7 +95,7 @@ export default _xyz => entry => {
 
 	   				entry.ctrl.delete_document({
 	   					entry: entry,
-	   					doc_id: _doc
+	   					doc: _doc
 	   				});
 	   			}
 	   		}
