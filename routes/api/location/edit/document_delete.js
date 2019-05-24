@@ -54,7 +54,7 @@ module.exports = fastify => {
 		    request.post({
 		    	url: `https://api.cloudinary.com/v1_1/${env.cloudinary[2]}/raw/destroy`,
 		    	body: {
-		    		'api_key': cloudinary[0],
+		    		'api_key': env.cloudinary[0],
 		    		'public_id': req.query.doc_id,
 		    		'timestamp': ts,
 		    		'signature': sig

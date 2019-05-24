@@ -46,7 +46,6 @@ module.exports = fastify => {
             qID = layer.qID,
             id = req.query.id,
             field = req.query.field,
-            type = req.query.type,
             ts = Date.now(),
             
             public_id_arr = decodeURIComponent(req.query.public_id).split('.'),
@@ -83,9 +82,6 @@ module.exports = fastify => {
 
             		var q = `UPDATE ${table} SET ${field} = array_append(${field}, '${body.secure_url}')
                     WHERE ${qID} = $1;`;
-
-                    console.log(q);
-                    console.log(id);
 
                     await env.dbs[layer.dbs](q, [id]);
 
