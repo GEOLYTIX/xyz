@@ -9,7 +9,7 @@ export default marker => {
     circle: circle(marker.style),
     target: target(marker),
     triangle: triangle(marker),
-    rectangle: rectangle(marker),
+    square: square(marker),
     markerLetter: markerLetter(marker.style),
     markerColor: markerColor(marker.style),
     geo: geolocation()
@@ -155,7 +155,7 @@ function triangle(style){
   return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
 }
 
-function rectangle(style){
+function square(style){
 
   let v = 1000, a = 800, o = 10;
 
