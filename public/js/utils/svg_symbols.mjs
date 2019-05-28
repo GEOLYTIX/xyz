@@ -9,6 +9,7 @@ export default marker => {
     circle: circle(marker.style),
     target: target(marker),
     triangle: triangle(marker),
+    rectangle: rectangle(marker),
     markerLetter: markerLetter(marker.style),
     markerColor: markerColor(marker.style),
     geo: geolocation()
@@ -135,12 +136,12 @@ function triangle(style){
     .attr("d", t)
     .attr('fill', '#333')
     .attr('opacity', 0.4)
-    .attr("transform", "translate(" + (r+10) + " " + (1.2*r+5) +") rotate(180) scale("+scale+", "+scale+")");
+    .attr("transform", "translate(" + (r+10) + " " + (1.2*r+10) +") rotate(180) scale("+scale+", "+scale+")");
 
   svg.append("path")
     .attr("d", t)
     .attr("fill", style.fillColor)
-    .attr("transform", "translate(" + r + "," + 1.2*r +") rotate(180) scale("+scale+", "+scale+")");
+    .attr("transform", "translate(" + r + "," + (1.2*r) +") rotate(180) scale("+scale+", "+scale+")");
 
   if (!style.layers) return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
 
@@ -148,11 +149,51 @@ function triangle(style){
     svg.append("path")
     .attr("d", t)
     .attr("fill", layer[1])
-    .attr("transform", "translate(" + r + "," + 1.2*r +") rotate(180) scale("+layer[0]*scale+", "+layer[0]*scale+")");
+    .attr("transform", "translate(" + r + "," + (1.2*r) +") rotate(180) scale("+layer[0]*scale+", "+layer[0]*scale+")");
     });
 
   return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
+}
 
+function rectangle(style){
+
+  let v = 1000, a = 800, o = 10;
+
+    const svg = d3_selection
+    .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+    .attr('width', v)
+    .attr('height', v)
+    .attr('viewBox', '0 0 1000 1000')
+    .attr('xmlns', 'http://www.w3.org/2000/svg');
+
+   svg.append('rect')
+   .attr('width', a)
+   .attr('height', a)
+   .attr("fill", '#333')
+   .attr('opacity', 0.3)
+   .attr('x', (v-a)/2+o)
+   .attr('y', (v-a)/2+o);
+
+    svg.append('rect')
+   .attr('width', a)
+   .attr('height', a)
+   .attr("fill", style.fillColor)
+   .attr('x', (v-a)/2)
+   .attr('y', (v-a)/2);
+
+   if (!style.layers) return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
+
+    Object.entries(style.layers).map(layer => {
+       let a_ = layer[0]*a;
+        svg.append('rect')
+           .attr('width', a_)
+           .attr('height', a_)
+           .attr('fill', layer[1])
+           .attr('x', (v-a_)/2)
+           .attr('y', (v-a_)/2);
+       });
+
+    return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
 
 }
 

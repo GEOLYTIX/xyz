@@ -661,14 +661,12 @@
                     "style": {
                         "marker": {
                             "type": "triangle",
-                            "fillColor": "#93827F",
+                            "fillColor": "#1976d2",
                             "layers": {
-                                "0.875": "#fa6f08",
-                                "0.75": "#ef3c11",
-                                "0.5": "#02bee3"
+                                "0.5": "#FFF"
                             }
                         },
-                        "markerMin": 40
+                        "markerMin": 20
                     }
                 },
                 "Scratch": {
