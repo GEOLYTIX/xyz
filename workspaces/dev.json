@@ -657,7 +657,17 @@
                             "type": "documents",
                             "edit": true
                         }
-                    ]
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "triangle",
+                            "fillColor": "#1976d2",
+                            "layers": {
+                                "0.5": "#FFF"
+                            }
+                        },
+                        "markerMin": 20
+                    }
                 },
                 "Scratch": {
                     "format": "mvt",
