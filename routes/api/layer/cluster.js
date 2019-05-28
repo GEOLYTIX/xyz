@@ -164,7 +164,7 @@ module.exports = fastify => {
       SELECT
         count(1) count,
         SUM(size) size,
-        SUM(cat) cat,
+        ${req.query.aggregate || 'sum'}(cat) cat,
         ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
       FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;

@@ -1386,6 +1386,60 @@
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "PPD": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "website.london_glx_geodata_hpp_20180517",
+                    "geom": "geom_p_4326",
+                    "cluster_kmeans": 0.0075,
+                    "qID": "id",
+                    "infoj": [
+                        {
+                            "field": "trans_date_bigint",
+                            "type": "date",
+                            "filter": "date"
+                        }
+                    ],
+                    "style": {
+                        "themes": {
+                            "PPD": {
+                                "type": "graduated",
+                                "field": "price_paid",
+                                "aggregate": "avg",
+                                "cat": {
+                                    "0": {
+                                        "label": "0",
+                                        "fillColor": "#15773f"
+                                    },
+                                    "250000": {
+                                        "label": "250000",
+                                        "fillColor": "#66bd63"
+                                    },
+                                    "500000": {
+                                        "label": "500000",
+                                        "fillColor": "#a6d96a"
+                                    },
+                                    "750000": {
+                                        "label": "750000",
+                                        "fillColor": "#d9ef8b"
+                                    },
+                                    "1000000": {
+                                        "label": "1000000",
+                                        "fillColor": "#fdae61"
+                                    },
+                                    "1500000": {
+                                        "label": "1500000",
+                                        "fillColor": "#f46d43"
+                                    },
+                                    "2000000": {
+                                        "label": "2000000",
+                                        "fillColor": "#d73027"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

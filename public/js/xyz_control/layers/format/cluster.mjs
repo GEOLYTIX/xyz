@@ -49,6 +49,7 @@ export default _xyz => layer => () => {
       table: layer.table,
       kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
       dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
+      aggregate: layer.style.theme && layer.style.theme.aggregate,
       theme: layer.style.theme && layer.style.theme.type,
       cat: layer.style.theme && layer.style.theme.field,
       size: layer.style.theme && layer.style.theme.size,
