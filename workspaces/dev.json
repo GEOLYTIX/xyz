@@ -114,84 +114,6 @@
                             "field": "area_",
                             "fieldfx": "ST_Area(geom_3857)",
                             "type": "integer"
-                        },
-                        {
-                            "label": "Table 1",
-                            "title": "Table 1",
-                            "field": "table1",
-                            "type": "table",
-                            "columns": [{
-                                    "title": "rows",
-                                    "field": "rows",
-                                    "rows": {
-                                        "age18_24": "'age18_24'",
-                                        "age25_44": "'age25_44'",
-                                        "total": "'total'"
-                                    }
-                                },
-                                {
-                                    "title": "min15",
-                                    "field": "min15",
-                                    "with": {
-                                        "select": {
-                                            "age18_24": "sum(b.age18_24)",
-                                            "age25_44": "sum(b.age25_44)",
-                                            "total": "sum(b.pop__17)"
-                                        },
-                                        "from": "shepherd_neame.sites a, gb_hx_1k b",
-                                        "where": "a.id = 38 AND ST_INTERSECTS(a.isoline_15min, b.geomcntr)"
-                                    },
-                                    "rows": {
-                                        "age18_24": "min15.age18_24",
-                                        "age25_44": "min15.age25_44",
-                                        "total": "min15.total"
-                                    }
-                                },
-                                {
-                                    "title": "uk",
-                                    "field": "uk",
-                                    "with": {
-                                        "select": {
-                                            "age18_24": "age_18to24_uk",
-                                            "age25_44": "age_25to29_uk + age_30to44_uk",
-                                            "total": "age_total_uk"
-                                        },
-                                        "from": "shepherd_neame.report_summary"
-                                    },
-                                    "rows": {
-                                        "age18_24": "uk.age18_24",
-                                        "age25_44": "uk.age25_44",
-                                        "total": "uk.total"
-                                    }
-                                },
-                                {
-                                    "title": "pct_15",
-                                    "field": "pct_15",
-                                    "rows": {
-                                        "age18_24": "min15.age18_24 / min15.total * 100",
-                                        "age25_44": "min15.age25_44 / min15.total * 100",
-                                        "total": "min15.total / min15.total * 100"
-                                    }
-                                },
-                                {
-                                    "title": "pct_uk",
-                                    "field": "pct_uk",
-                                    "rows": {
-                                        "age18_24": "uk.age18_24 / uk.total * 100",
-                                        "age25_44": "uk.age25_44 / uk.total * 100",
-                                        "total": "uk.total / uk.total * 100"
-                                    }
-                                },
-                                {
-                                    "title": "index",
-                                    "field": "index",
-                                    "rows": {
-                                        "age18_24": "(min15.age18_24 / min15.total) / (uk.age18_24 / uk.total) * 100",
-                                        "age25_44": "(min15.age25_44 / min15.total) / (uk.age25_44 / uk.total) * 100",
-                                        "total": "(min15.total / min15.total) / (uk.total / uk.total) * 100"
-                                    }
-                                }
-                            ]
                         }
                     ],
                     "mvt_fields": [
@@ -666,7 +588,7 @@
                                 "0.5": "#FFF"
                             }
                         },
-                        "markerMin": 20
+                        "markerMin": 40
                     }
                 },
                 "Scratch": {
@@ -1059,37 +981,37 @@
                         },
                         {
                             "group": "Population",
-                            "label": "Population '11",
+                            "label": "2011",
                             "field": "pop__11",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '12",
+                            "label": "2012",
                             "field": "pop__12",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '13",
+                            "label": "2013",
                             "field": "pop__13",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '14",
+                            "label": "2014",
                             "field": "pop__14",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '15",
+                            "label": "2015",
                             "field": "pop__15",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '16",
+                            "label": "2016",
                             "field": "pop__16",
                             "type": "integer"
                         },
@@ -1445,6 +1367,74 @@
                                     "2000000": {
                                         "label": "2000000",
                                         "fillColor": "#d73027"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "rail": {
+                    "group": "Transport",
+                    "name": "Railways",
+                    "meta": "The rail and light rail systems within the United Kingdom.",
+                    "attribution": {
+                        "Geolytix": "Public Transport. Geolytix License."
+                    },
+                    "format": "mvt",
+                    "mvt_fields": [
+                        "type_rail"
+                    ],
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "tables": {
+                        "7": null,
+                        "8": "dixonscpw.public_transport_lines"
+                    },
+                    "infoj": [
+                        {
+                            "type": "key"
+                        },
+                        {
+                            "field": "line_name",
+                            "label": "Name"
+                        },
+                        {
+                            "field": "type_rail",
+                            "label": "Type",
+                            "inline": true
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#3C7A89",
+                            "fill": true
+                        },
+                        "highlight": {
+                            "weight": 1,
+                            "color": "#3C7A89",
+                            "fill": true
+                        },
+                        "themes": {
+                            "Rail Type": {
+                                "field": "type_rail",
+                                "label": "Rail type",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "Rail": {
+                                        "label": "Rail",
+                                            "color": "#129490",
+                                            "opacity": 1,
+                                            "fill": true,
+                                            "weight": 2
+                                    },
+                                    "Light Rail": {
+                                        "label": "Light Rail",
+                                            "color": "#C1B098",
+                                            "opacity": 1,
+                                            "fill": true,
+                                            "weight": 2
                                     }
                                 }
                             }

@@ -54,8 +54,8 @@ export default (_xyz, layer) => {
       <img
       style="float: right"
       src="${_xyz.utils.svg_symbols(layer.style.marker)}"
-      width=20
-      height=20>`);
+      width=${layer.style.marker.type === 'triangle' ? 30 : 20}
+      height=${layer.style.marker.type === 'triangle' ? 30 : 20}>`);
   }
   
 };

@@ -194,7 +194,7 @@ export default _xyz => {
         letter: record.letter,
         stroke: true,
         fill: true,
-        fillOpacity: 0.2,
+        fillOpacity: (_xyz.layers.list[location.layer].style.default && _xyz.layers.list[location.layer].style.default.fillOpacity === undefined) ? 0 : 0.2,
         icon: {
           url: _xyz.utils.svg_symbols({
             type: 'circle',

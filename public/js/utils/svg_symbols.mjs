@@ -136,12 +136,12 @@ function triangle(style){
     .attr("d", t)
     .attr('fill', '#333')
     .attr('opacity', 0.4)
-    .attr("transform", "translate(" + (r+10) + " " + (1.2*r+10) +") rotate(180) scale("+scale+", "+scale+")");
+    .attr("transform", "translate(" + (r+40) + " " + (r+20) +") rotate(180) scale("+scale+", "+scale+")");
 
   svg.append("path")
     .attr("d", t)
     .attr("fill", style.fillColor)
-    .attr("transform", "translate(" + r + "," + (1.2*r) +") rotate(180) scale("+scale+", "+scale+")");
+    .attr("transform", "translate(" + r + "," + r +") rotate(180) scale("+scale+", "+scale+")");
 
   if (!style.layers) return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
 
@@ -149,7 +149,7 @@ function triangle(style){
     svg.append("path")
     .attr("d", t)
     .attr("fill", layer[1])
-    .attr("transform", "translate(" + r + "," + (1.2*r) +") rotate(180) scale("+layer[0]*scale+", "+layer[0]*scale+")");
+    .attr("transform", "translate(" + r + "," + r +") rotate(180) scale("+layer[0]*scale+", "+layer[0]*scale+")");
     });
 
   return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
