@@ -22,6 +22,7 @@
 </head>
 
 <body
+style="grid-template-columns: 333px 10px auto; grid-template-rows: 1fr 0;"
 data-viewmode="desktop"
 data-nanoid={{:nanoid}}
 data-log={{:log}}
@@ -56,6 +57,8 @@ data-token={{:token}}>
         </div>
 
     </div>
+
+    <div id="vertDivider"></div>
 
     <div class="mapview">
 
@@ -122,7 +125,11 @@ data-token={{:token}}>
 
     </div>
 
-    <div id="tableview" class="tableview" style="display: none">
+    
+
+    <div id="tableview" class="tableview">
+
+            <div id="hozDivider"></div>
 
         <div class="resize_bar"></div>
 
@@ -140,7 +147,7 @@ data-token={{:token}}>
 
         <div class="btn_column lv0 noselect desktop">
         
-            <div style="margin-top: -10px;">
+            <div style="margin-top: -10px; background: none;">
                 <i id="toggleTableview" class="material-icons">vertical_align_top</i>
             </div>
 

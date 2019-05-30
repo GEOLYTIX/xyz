@@ -7,8 +7,9 @@ export default _xyz => table => {
   if (!table.layer.tableview.tables[table.key]) return;
 
   if (_xyz.tableview.node) {
-    _xyz.tableview.node.style.display = 'block';
-    _xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    // _xyz.tableview.node.style.display = 'block';
+    // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
 
   Object.assign(table, table.layer.tableview.tables[table.key]);
@@ -96,7 +97,7 @@ export default _xyz => table => {
         groupBy: table.groupBy || null,
         initialSort: table.initialSort || null,
         groupStartOpen: typeof(table.groupStartOpen) === undefined ? true : table.groupStartOpen,
-        groupToggleElement: typeof(table.groupToggleElement) === undefined ? "arrow" : table.groupToggleElement,
+        groupToggleElement: typeof(table.groupToggleElement) === undefined ? 'arrow' : table.groupToggleElement,
         dataSorting: sorters => {
 
           if (!sorters[0]) return;

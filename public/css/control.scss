@@ -1,6 +1,7 @@
 $glxgreen: #090;
 $glxlightgreen: #cf9;
 $onyx: #383836;
+
 @font-face {
     font-family: ffmark_black;
     src: url(../fonts/MarkWeb-Black.woff) format("woff");
@@ -16,10 +17,14 @@ $onyx: #383836;
     src: url(../fonts/MarkWebPro-Bold.woff) format("woff");
 }
 
-/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+
+
 @import 'material_icons';
-/* @import url('https://fonts.googleapis.com/css?family=PT+Mono'); */
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+
 @import 'pt_mono';
+/* @import url('https://fonts.googleapis.com/css?family=PT+Mono'); */
+
 @import 'locationview';
 @import 'tableview';
 @import 'input';
@@ -40,6 +45,7 @@ $onyx: #383836;
 @import 'listview';
 @import 'gazetteer';
 @import 'workspace';
+
 *,
 *::after,
 *::before {
@@ -111,4 +117,3 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
-

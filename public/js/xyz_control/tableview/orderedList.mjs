@@ -3,8 +3,8 @@ export default _xyz => (table, callback) => {
   if (!table || !table.location) return;
 
   if (_xyz.tableview.node) {
-    _xyz.tableview.node.style.display = 'block';
-    _xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    // _xyz.tableview.node.style.display = 'block';
+    //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
   }
 
   if (!table.columns) {

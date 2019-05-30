@@ -24,15 +24,14 @@ export default _xyz => table => {
       .values(_xyz.tableview.nav_bar.children)
       .forEach(tab => tab.classList.remove('tab-current'));
       
-      let nodes = document.querySelectorAll('#tableview ul.nav_bar-nav li');
-      nodes[nodes.length-1].classList.add('tab-current');
-      return _xyz.tableview.tables[nodes.length-1].activate();
+    const nodes = document.querySelectorAll('#tableview ul.nav_bar-nav li');
+
+    nodes[nodes.length-1].classList.add('tab-current');
+
+    return _xyz.tableview.tables[nodes.length-1].activate();
 
   }
 
-  if (_xyz.tableview.node) {
-    _xyz.tableview.node.style.display = 'none';
-    _xyz.mapview.node.style.height = '100%';
-  }
+  document.body.style.gridTemplateRows = 'minmax(0, 1fr) 0';
 
 };

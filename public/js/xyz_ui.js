@@ -42,9 +42,7 @@ function init(_xyz) {
 
 
   const btnWorkspace = document.getElementById('btnWorkspace');
-  if (btnWorkspace) btnWorkspace.onclick = () => {
-    _xyz.workspace.admin();
-  };
+  if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
 
   if (_xyz.log) console.log(_xyz);
 
@@ -53,6 +51,8 @@ function init(_xyz) {
 }
 
 function createMap (_xyz) {
+
+  document.body.style.gridTemplateRows = 'minmax(0, 1fr) 0';
 
   const attribution = {};
   attribution[_xyz.version] = _xyz.release;

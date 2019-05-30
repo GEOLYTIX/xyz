@@ -59,6 +59,7 @@ module.exports = fastify => {
         theme = req.query.theme,
         filter = req.params.filter,
         kmeans = parseInt(1 / req.query.kmeans),
+        kmeans_only = false,
         dbscan = parseFloat(req.query.dbscan),
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),

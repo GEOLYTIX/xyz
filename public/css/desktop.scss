@@ -1,23 +1,15 @@
 @import 'control';
 
-.mapview {
-    position: fixed;
-    right: 0;
-    width: calc(100% - 330px);
-    height: 100%;
-}
-
-.leaflet-left .leaflet-control-scale {
-    margin-left: 63px;
+body {
+    display: grid;
+    min-width: 666px;
 }
 
 .listviews {
-    position: fixed;
-    height: 100%;
+    grid-column: 1;
+    grid-row: 1/4;
     padding: 0 20px;
-    width: 330px;
     background-color: #fff;
-    z-index: 999;
     box-shadow: 0 2px 2px #777;
     overflow: hidden;
     >.scrolly {
@@ -26,6 +18,56 @@
     .listview {
         padding: 10px 0;
     }
+
+}
+
+#vertDivider {
+
+    grid-column: 2;
+    grid-row: 1/4;
+    background: repeating-linear-gradient( 90deg, #ddd, #fff 3px);
+    
+
+    &:hover {
+        cursor: col-resize;
+    }
+
+}
+
+#hozDivider {
+
+    grid-column: 1/3;
+    grid-row: 1;
+    background: repeating-linear-gradient( 0deg, #ddd, #fff 3px);
+    box-shadow: inset 3px 0 4px -4px #777;
+    
+
+    &:hover {
+        cursor: row-resize;
+    }
+
+}
+
+.mapview {
+    grid-column: 3;
+    display: grid;
+    grid-template-columns: 55px;
+    overflow-y: hidden;
+
+    .map {
+        position: relative;
+        grid-row: 1;
+        grid-column: 1/3;
+    }
+
+    .btn_column {
+        grid-column: 1;
+        grid-row: 1;
+    }
+}
+
+.leaflet-left .leaflet-control-scale {
+    margin-left: 63px;
 }
 
 .gazetteer {
