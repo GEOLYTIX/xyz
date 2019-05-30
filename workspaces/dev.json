@@ -1059,37 +1059,37 @@
                         },
                         {
                             "group": "Population",
-                            "label": "Population '11",
+                            "label": "2011",
                             "field": "pop__11",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '12",
+                            "label": "2012",
                             "field": "pop__12",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '13",
+                            "label": "2013",
                             "field": "pop__13",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '14",
+                            "label": "2014",
                             "field": "pop__14",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '15",
+                            "label": "2015",
                             "field": "pop__15",
                             "type": "integer"
                         },
                         {
                             "group": "Population",
-                            "label": "Population '16",
+                            "label": "2016",
                             "field": "pop__16",
                             "type": "integer"
                         },
