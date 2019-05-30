@@ -41,8 +41,8 @@ export default _xyz => param => {
 				event: 'click',
 				funct: e => {
 					e.target.parentNode.remove();
-					entry.ctrl.delete_document({
-						entry: entry, doc: doc
+					param.entry.ctrl.delete_document({
+						entry: param.entry, doc: (param.doc.childNodes[0] || param.doc)
 					});
 				}
 			}
