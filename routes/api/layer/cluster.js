@@ -105,8 +105,7 @@ module.exports = fastify => {
   
       let
         count = rows[0].count,
-        xEnvelope = rows[0].xenvelope,
-        kmeans_only;
+        xEnvelope = rows[0].xenvelope;
 
       if (count > 1000) {
         kmeans *= 2;
