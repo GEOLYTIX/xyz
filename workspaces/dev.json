@@ -1450,6 +1450,74 @@
                             }
                         }
                     }
+                },
+                "rail": {
+                    "group": "Transport",
+                    "name": "Railways",
+                    "meta": "The rail and light rail systems within the United Kingdom.",
+                    "attribution": {
+                        "Geolytix": "Public Transport. Geolytix License."
+                    },
+                    "format": "mvt",
+                    "mvt_fields": [
+                        "type_rail"
+                    ],
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "tables": {
+                        "7": null,
+                        "8": "dixonscpw.public_transport_lines"
+                    },
+                    "infoj": [
+                        {
+                            "type": "key"
+                        },
+                        {
+                            "field": "line_name",
+                            "label": "Name"
+                        },
+                        {
+                            "field": "type_rail",
+                            "label": "Type",
+                            "inline": true
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "weight": 1,
+                            "color": "#3C7A89",
+                            "fill": true
+                        },
+                        "highlight": {
+                            "weight": 1,
+                            "color": "#3C7A89",
+                            "fill": true
+                        },
+                        "themes": {
+                            "Rail Type": {
+                                "field": "type_rail",
+                                "label": "Rail type",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "Rail": {
+                                        "label": "Rail",
+                                            "color": "#129490",
+                                            "opacity": 1,
+                                            "fill": true,
+                                            "weight": 2
+                                    },
+                                    "Light Rail": {
+                                        "label": "Light Rail",
+                                            "color": "#C1B098",
+                                            "opacity": 1,
+                                            "fill": true,
+                                            "weight": 2
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
