@@ -1,7 +1,5 @@
 export default _xyz => param => {
 
-	console.log(param);
-
 	const xhr = new XMLHttpRequest();
 
 	xhr.open('GET', _xyz.host + '/api/location/edit/documents/delete?' + _xyz.utils.paramString({

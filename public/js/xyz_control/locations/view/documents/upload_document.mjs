@@ -23,7 +23,6 @@ export default _xyz => param => {
 
 		let public_id = json.doc_id.split('/').pop();
 
-		param.doc.style.opacity = 1;
 		param.doc.childNodes[0].dataset.name = public_id;
 		param.doc.childNodes[0].textContent = public_id;
 		param.doc.childNodes[0].href = json.doc_url;
@@ -42,7 +41,7 @@ export default _xyz => param => {
 				funct: e => {
 					e.target.parentNode.remove();
 					param.entry.ctrl.delete_document({
-						entry: param.entry, doc: (param.doc.childNodes[0] || param.doc)
+						entry: param.entry, doc: param.doc.firstChild//(param.doc.childNodes[0] || param.doc)
 					});
 				}
 			}
