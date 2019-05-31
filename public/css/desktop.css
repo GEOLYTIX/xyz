@@ -2225,7 +2225,8 @@ input[type=number] {
   /* Firefox */ }
 
 body {
-  display: grid; }
+  display: grid;
+  min-width: 666px; }
 
 .listviews {
   grid-column: 1;
