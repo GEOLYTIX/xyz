@@ -24,7 +24,7 @@ export default (group) => {
 
   const labels = stacked_labels.length > 1 ? stacked_labels : group.fields.map(field => field.label);
 
-  const data = group.fields.map(field => field.value);
+  const data = group.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
 
   const displayValues = group.fields.map(field => field.displayValue);
 
