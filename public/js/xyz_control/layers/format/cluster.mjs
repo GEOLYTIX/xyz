@@ -221,7 +221,7 @@ export default _xyz => layer => () => {
       })
       .on('mouseover', e => {
 
-        if (!layer.hover) return;
+        if (!layer.hover.field) return;
 
         const count = e.layer.feature.properties.count;
 
