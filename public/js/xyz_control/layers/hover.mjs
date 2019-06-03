@@ -8,7 +8,7 @@ export default (_xyz, layer) => {
 
     remove: remove,
 
-    add: add,
+    add: add
 
   }, layer.hover || {});
 
@@ -33,7 +33,7 @@ export default (_xyz, layer) => {
 
   function add(eOrg) {
 
-    layer.hover.remove();
+    if(layer.hover && !layer.hover.permanent) layer.hover.remove();
 
     _xyz.mapview.node.addEventListener('mouseout', mapout);
 
@@ -76,5 +76,4 @@ export default (_xyz, layer) => {
     xhr.send();
 
   };
-
 };

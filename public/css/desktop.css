@@ -1945,7 +1945,8 @@ button {
   transition-duration: 0.3s;
   transition-delay: 0.2s;
   opacity: 0;
-  z-index: 9999; }
+  z-index: 998;
+  font-size: 13px; }
 
 .leaflet-interactive.wait-cursor-enabled {
   cursor: wait !important; }
@@ -2234,7 +2235,8 @@ body {
   padding: 0 20px;
   background-color: #fff;
   box-shadow: 0 2px 2px #777;
-  overflow: hidden; }
+  overflow: hidden;
+  z-index: 1000; }
   .listviews > .scrolly {
     width: calc(100% + 50px); }
   .listviews .listview {
@@ -2243,7 +2245,8 @@ body {
 #vertDivider {
   grid-column: 2;
   grid-row: 1/4;
-  background: repeating-linear-gradient(90deg, #ddd, #fff 3px); }
+  background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
+  z-index: 1000; }
   #vertDivider:hover {
     cursor: col-resize; }
 

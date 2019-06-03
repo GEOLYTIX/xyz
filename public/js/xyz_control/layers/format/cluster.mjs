@@ -134,7 +134,6 @@ export default _xyz => layer => () => {
           return marker(latlng, layer, point, param);
         }
 
-
         // Competition theme.
         if (layer.style.theme.type === 'competition') {
 
@@ -171,6 +170,59 @@ export default _xyz => layer => () => {
           return marker(latlng, layer, point, param);
         }
 
+      },
+      onEachFeature: (_feature, _layer) => {
+
+        // load permanent labels
+
+        if (!layer.hover || !layer.hover.field || !layer.hover.permanent) return;
+
+        if(_feature.properties.count > 1) return;
+
+        const count = _feature.properties.count;
+
+        const lnglat = _feature.geometry.coordinates;
+
+        const xhr = new XMLHttpRequest();
+
+        const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
+
+        xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
+          locale: _xyz.workspace.locale.key,
+          layer: layer.key,
+          table: layer.table,
+          filter: JSON.stringify(filter),
+          count: count > 99 ? 99 : count,
+          lnglat: lnglat,
+          token: _xyz.token
+        }));
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
+
+        xhr.onload = e => {
+
+          if (e.target.status !== 200) return;
+
+          const cluster = e.target.response;
+
+          if (cluster.length !== 1) return;
+
+          _layer.hover = {};
+
+          _layer.hover.tooltip = _xyz.utils.wire()`<div class="hover-box">`;
+          _layer.hover.tooltip.innerHTML = cluster[0].label;
+          _xyz.mapview.node.appendChild(_layer.hover.tooltip);
+          
+          let coords = _xyz.map.latLngToContainerPoint({lat: _feature.geometry.coordinates[1], lng: _feature.geometry.coordinates[0]});
+
+          _layer.hover.tooltip.style.left = `${parseInt(coords.x) - (_layer.hover.tooltip.offsetWidth / 2) + _xyz.layers.listview.node.clientWidth}px`;
+          _layer.hover.tooltip.style.top = `${parseInt(coords.y) - 15 - _layer.hover.tooltip.offsetHeight}px`;
+          _layer.hover.tooltip.style.opacity = 1;
+
+        };
+
+        xhr.send();
       }
     })
       .on('click', e => {
@@ -221,7 +273,7 @@ export default _xyz => layer => () => {
       })
       .on('mouseover', e => {
 
-        if (!layer.hover.field) return;
+        if (!layer.hover.field || layer.hover.permanent) return;
 
         const count = e.layer.feature.properties.count;
 
@@ -268,9 +320,7 @@ export default _xyz => layer => () => {
 
       })
       .on('mouseout', e => {
-
-        if (layer.hover.field) layer.hover.remove();
-
+        if (layer.hover.field && !layer.hover.permanent) layer.hover.remove();
       })
       .addTo(_xyz.map);
 
@@ -305,6 +355,16 @@ export default _xyz => layer => () => {
   };
 
   layer.xhr.send();
+
+
+  // remove static labels if any created
+  _xyz.map.on('movestart', e => {
+    document.querySelectorAll('#Map .hover-box').forEach(el => { el.remove(); });
+  });
+
+  _xyz.map.on('zoomstart', e => {
+    document.querySelectorAll('#Map .hover-box').forEach(el => { el.remove(); });
+  });
 
   function select(list, lnglat) {
 

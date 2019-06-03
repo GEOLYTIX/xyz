@@ -1031,7 +1031,8 @@
                     "qID": "id",
                     "table": "dev.retailpoints",
                     "hover": {
-                        "field": "store"
+                        "field": "store",
+                        "permanent": true
                     },
                     "tableview": {
                         "tables": {

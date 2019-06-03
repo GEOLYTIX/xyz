@@ -12,6 +12,7 @@ body {
     background-color: #fff;
     box-shadow: 0 2px 2px #777;
     overflow: hidden;
+    z-index: 1000;
     >.scrolly {
         width: calc(100% + 50px);
     }
@@ -26,6 +27,7 @@ body {
     grid-column: 2;
     grid-row: 1/4;
     background: repeating-linear-gradient( 90deg, #ddd, #fff 3px);
+    z-index: 1000;
     
 
     &:hover {
