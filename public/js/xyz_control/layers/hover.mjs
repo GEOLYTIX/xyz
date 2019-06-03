@@ -8,7 +8,9 @@ export default (_xyz, layer) => {
 
     remove: remove,
 
-    add: add
+    add: add,
+
+    toggle: toggle
 
   }, layer.hover || {});
 
@@ -76,4 +78,36 @@ export default (_xyz, layer) => {
     xhr.send();
 
   };
+
+  function toggle(param){
+    if(typeof(layer.hover.permanent) === undefined) return;
+    if(layer.hover.btn) layer.hover.btn.remove();
+  
+      layer.hover.btn = _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          classList: 'btn_small cursor noselect',
+          textContent: layer.hover.permanent ? 'Hide labels' : 'Show labels'
+        },
+        style: {
+          display: 'block',
+          float: 'right'
+        },
+        eventListener: {
+          event: 'click',
+          funct: e => {
+            e.stopPropagation();
+            layer.hover.permanent = !layer.hover.permanent;
+            _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
+            if(!layer.hover.permanent){
+              document.querySelectorAll('#Map > [data-layer]').forEach(el => {
+                if(el.dataset.layer === layer.key) el.remove();
+              });
+            }
+            layer.get();
+          }
+        },
+        appendTo: param.container
+      });
+    }
 };

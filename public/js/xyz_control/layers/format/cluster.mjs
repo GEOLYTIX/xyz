@@ -211,6 +211,7 @@ export default _xyz => layer => () => {
           _layer.hover = {};
 
           _layer.hover.tooltip = _xyz.utils.wire()`<div class="hover-box">`;
+          _layer.hover.tooltip.dataset["layer"] = layer.key;
           _layer.hover.tooltip.innerHTML = cluster[0].label;
           _xyz.mapview.node.appendChild(_layer.hover.tooltip);
           
@@ -323,6 +324,8 @@ export default _xyz => layer => () => {
         if (layer.hover.field && !layer.hover.permanent) layer.hover.remove();
       })
       .addTo(_xyz.map);
+
+    layer.hover.toggle({container: layer.style.legend.parentNode});
 
     function marker(latlng, layer, point, param) {
 
