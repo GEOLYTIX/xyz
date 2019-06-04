@@ -17,6 +17,7 @@ module.exports = fastify => {
           token: { type: 'string' },
           locale: { type: 'string' },
           layer: { type: 'string' },
+          table: { type: 'string' },
           tableDef: { type: 'string' },
           id: { type: 'string' },
           filter: { type: 'string' },
@@ -40,9 +41,15 @@ module.exports = fastify => {
         entry => entry.title === decodeURIComponent(req.query.tableDef)
       );
 
-      let orderBy = [], conditions = [];
+      let orderBy = [], 
+          conditions = [], 
+          lookup;
+
+      
+      if(tableDef.rel_id) lookup = ` AND a.${layer.qID} = b.${tableDef.rel_id}`;
 
       let fields = tableDef.columns.map(col => {
+        console.log(col);
         // get spatial expression if defined
         if(col.fx) col.fieldfx = `${col.fx}(a.${layer.geom}${col.geography ? '::geography' : ''}, b.${tableDef.geom}${col.geography ? '::geography' : ''})`;
         // get order by clause if defined
@@ -53,10 +60,12 @@ module.exports = fastify => {
       });
 
       let q = `SELECT ${fields.join(',')} 
-                FROM ${layer.table} a, ${tableDef.table} b 
+                FROM ${req.query.table || layer.table} a, ${tableDef.table} b 
                 WHERE a.${layer.qID} = $1 
-                ${conditions.length ? `AND ${conditions.join(',')}` : ''}
-                ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} LIMIT ${tableDef.limit || 100};`;
+                ${conditions.length ? ` AND ${conditions.join(',')}` : ''}
+                ${lookup || ''}
+                ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} NULLS LAST LIMIT ${tableDef.limit || 100};`;
+
 
       const rows = await env.dbs[layer.dbs](q, [req.query.id]);
 
