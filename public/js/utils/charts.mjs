@@ -55,12 +55,16 @@ export default (group) => {
     Object.values(tmp).map(val => datasets.push(val));
 
   } else {
+
+    if(group.chart.excludeNull) data.map(item => {if(!item) labels.splice(data.indexOf(item), 1) });
+
     datasets[0] = {
       label: group.label,
       backgroundColor: group.chart.backgroundColor || '#cf9',
       borderColor: group.chart.borderColor || '#079e00',
-      data: data
+      data: group.chart.excludeNull ? data.filter(item => {return item != null}) : data
     };
+
   };
 
   new Chart(canvas, {
@@ -70,6 +74,7 @@ export default (group) => {
       datasets: datasets
     },
     options: {
+      //spanGaps: true,
       title: {
         display: group.chart.title || true,
         position: 'bottom',
