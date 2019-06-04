@@ -49,7 +49,6 @@ module.exports = fastify => {
       if(tableDef.rel_id) lookup = ` AND a.${layer.qID} = b.${tableDef.rel_id}`;
 
       let fields = tableDef.columns.map(col => {
-        console.log(col);
         // get spatial expression if defined
         if(col.fx) col.fieldfx = `${col.fx}(a.${layer.geom}${col.geography ? '::geography' : ''}, b.${tableDef.geom}${col.geography ? '::geography' : ''})`;
         // get order by clause if defined
