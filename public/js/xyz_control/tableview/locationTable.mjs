@@ -82,6 +82,7 @@ export default _xyz => (table, callback) => {
         columns: columns,
         // autoResize: true,
         layout: 'fitDataFill',
+        height: 'auto'
         //height: _xyz.tableview.height || '100%'
       });
 

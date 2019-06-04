@@ -93,7 +93,7 @@ export default _xyz => table => {
       {
         columns: table.columns,
         autoResize: true,
-        height: _xyz.tableview.height || '100%',
+        height: _xyz.tableview.height || 'auto',
         groupBy: table.groupBy || null,
         initialSort: table.initialSort || null,
         groupStartOpen: typeof(table.groupStartOpen) === undefined ? true : table.groupStartOpen,
