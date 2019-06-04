@@ -100,8 +100,8 @@ export default (_xyz, layer) => {
             layer.hover.permanent = !layer.hover.permanent;
             _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
             if(!layer.hover.permanent){
-              document.querySelectorAll('#Map > [data-layer]').forEach(el => {
-                if(el.dataset.layer === layer.key) el.remove();
+              document.querySelectorAll('#Map > .hover-box').forEach(el => {
+                if(el.dataset && el.dataset.layer === layer.key) el.remove();
               });
             }
             layer.get();
