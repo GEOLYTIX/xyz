@@ -8,6 +8,7 @@ export default _xyz => function () {
   if (layer.attribution) _xyz.mapview.attribution.remove(layer.attribution);
   _xyz.mapview.attribution.check();
 
+  if(layer.hover && layer.hover.field) layer.hover.clear(); 
   
 
   // Set layer display to false, hide the loader element and change the toggle icon.

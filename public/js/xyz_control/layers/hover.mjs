@@ -10,7 +10,9 @@ export default (_xyz, layer) => {
 
     add: add,
 
-    toggle: toggle
+    toggle: toggle,
+
+    clear: clear
 
   }, layer.hover || {});
 
@@ -100,9 +102,10 @@ export default (_xyz, layer) => {
             layer.hover.permanent = !layer.hover.permanent;
             _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
             if(!layer.hover.permanent){
-              document.querySelectorAll('#Map > .hover-box').forEach(el => {
+              clear();
+              /*document.querySelectorAll('#Map > .hover-box').forEach(el => {
                 if(el.dataset && el.dataset.layer === layer.key) el.remove();
-              });
+              });*/
             }
             layer.get();
           }
@@ -110,4 +113,10 @@ export default (_xyz, layer) => {
         appendTo: param.container
       });
     }
+
+  function clear(){
+    document.querySelectorAll('#Map > .hover-box').forEach(el => {
+      if(el.dataset && el.dataset.layer === layer.key) el.remove();
+    });
+  }
 };
