@@ -17,8 +17,9 @@ export default () => ({
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',
+        fillOpacity: 0.7,
         weight: 1,
-        radius: 5
+        radius: 6
       },
       // trail left behind cursor
       trail: {

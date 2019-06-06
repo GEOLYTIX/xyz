@@ -5,7 +5,7 @@ export default _xyz => (e, layer) => {
 
 	if(!layer.edit || !layer.edit.polygon) return;
 
-	if(_xyz.mapview.contextmenu) _xyz.mapview.contextmenu.remove();
+	closeContextMenu();
 
 	_xyz.mapview.contextmenu = _xyz.utils.createElement({
 		tag: 'div',
@@ -55,6 +55,7 @@ export default _xyz => (e, layer) => {
         			_xyz.mapview.node.style.cursor = 'crosshair';
 
         			_xyz.mapview.state = 'edit';
+        			_xyz.map.doubleClickZoom.disable();
 
         			let geojson = _e.target.response.geomj;
 
@@ -79,21 +80,22 @@ export default _xyz => (e, layer) => {
         				);
         			});
 
-        			_xyz.map.on('click', ev => { // enable adding new vertex
-        			    ev.originalEvent.stopPropagation();
-        			    _xyz.map.doubleClickZoom.disable();
+        			_xyz.map.on('dblclick', map_ev => { // enable adding new vertex
+        			    map_ev.originalEvent.stopPropagation();
+        			    map_ev.originalEvent.preventDefault();
+        			    console.log('new vertex');
+        			    
         			    layer.edit.vertices.addLayer(
-        			    	attachEvents(_xyz.L.circleMarker(ev.latlng, _xyz.style.defaults.vertex))
+        			    	attachEvents(_xyz.L.circleMarker(map_ev.latlng, _xyz.style.defaults.vertex))
         			    );
-        			    _xyz.map.doubleClickZoom.enable();
         			});
 
 
-        			_xyz.map.on('contextmenu', ev => { // rememeber put back last point
+        			_xyz.map.once('contextmenu', ev => { // rememeber put back last point
         				_xyz.mapview.state = 'select';
         				console.log('save or cancel');
 
-        				if(_xyz.mapview.contextmenu) _xyz.mapview.contextmenu.remove();
+        				closeContextMenu();
 
         				_xyz.mapview.contextmenu = _xyz.utils.createElement({
         					tag: 'div',
@@ -117,7 +119,15 @@ export default _xyz => (e, layer) => {
         					options: {
         						textContent: 'Save me'
         					},
-        					appendTo: ul
+        					appendTo: ul,
+        					eventListener: {
+        						event: 'click',
+        						funct: ev => {
+        							ev.stopPropagation();
+        							console.log('Now save me');
+        							closeContextMenu();
+        						}
+        					}
         				});
 
         				_xyz.utils.createElement({
@@ -125,7 +135,18 @@ export default _xyz => (e, layer) => {
         					options: {
         						textContent: 'Cancel me'
         					},
-        					appendTo: ul
+        					appendTo: ul,
+        					eventListener: {
+        						event: 'click',
+        						funct: ev => {
+        							ev.stopPropagation();
+        							console.log('Cancel all');
+        							closeContextMenu();
+        							layer.edit.vertices.clearLayers();
+        							layer.edit.trail.clearLayers();
+        							layer.edit.path.clearLayers();
+        						}
+        					}
         				});
         			});
         		}
@@ -151,33 +172,46 @@ export default _xyz => (e, layer) => {
         appendTo: ul
       });
 
-    _xyz.map.once('click', e => {
-    	if(_xyz.mapview.contextmenu) _xyz.mapview.contextmenu.remove();
-    });
+    _xyz.map.once('click', e => closeContextMenu());
 
     function attachEvents(vertex){
     	vertex
     	.on('mousedown', ev => {
-    		ev.originalEvent.stopPropagation();
     		_xyz.map.dragging.disable();
+    		ev.originalEvent.stopPropagation();
+
     		_xyz.map.on('mousemove', _ev => {
+    			_ev.originalEvent.stopPropagation();
+    			_ev.originalEvent.preventDefault();
     			vertex.setLatLng(_ev.latlng);
+
+    			_xyz.map.once('mouseup', __ev => {
+    				__ev.originalEvent.stopPropagation();
+    				__ev.originalEvent.preventDefault();
+    				vertex.setLatLng(__ev.latlng);
+    				_xyz.map.off('mousemove');
+    				_xyz.map.dragging.enable();
+    			});
     		});
 
-    		_xyz.map.once('mouseup', _ev => {
-    			vertex.setLatLng(_ev.latlng);
-    			_xyz.map.off('mousemove');
-    			_xyz.map.dragging.enable();
-    		});
     	})
     	.on('mouseover', ev => {
     		_xyz.mapview.node.style.cursor = 'crosshair';
     	})
-    	.on('click', ev => {
-    		ev.originalEvent.stopPropagation();
-    		ev.originalEvent.preventDefault();
-    		ev.target.remove();
+    	.once('dblclick', ev => {
+    		_xyz.L.DomEvent.stopPropagation(ev);
+    		layer.edit.vertices.removeLayer(vertex);
     	});
     	return vertex;
+    }
+
+    function closeContextMenu(){ // close context menu if open
+    	_xyz.mapview.node.style.cursor = '';
+    	_xyz.map.doubleClickZoom.enable();
+    	_xyz.mapview.state = 'select';
+    	if(_xyz.mapview.contextmenu) {
+    		_xyz.mapview.contextmenu.remove();
+    		_xyz.mapview.contextmenu = null;
+    	}
     }
 }
