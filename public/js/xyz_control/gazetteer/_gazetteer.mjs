@@ -73,8 +73,7 @@ export default _xyz => {
     
       if (
         !keyset.has(e.keyCode || e.charCode) && 
-        e.target.value.length > 0 && 
-        isNaN(e.target.value)) gazetteer.search(e.target.value);
+        e.target.value.length > 0) gazetteer.search(e.target.value);
 
     });
     
