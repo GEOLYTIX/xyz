@@ -20,6 +20,8 @@ import polygon from './polygon.mjs';
 
 import finish from './finish.mjs';
 
+import contextmenu from './contextmenu.mjs';
+
 export default _xyz => ({
 
   geoJSON: geoJSON(_xyz),
@@ -44,4 +46,5 @@ export default _xyz => ({
 
   finish: finish(_xyz),
 
+  contextmenu: contextmenu(_xyz)
 });
