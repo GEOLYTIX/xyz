@@ -1,6 +1,6 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
-  if (!layer.display) return layer.remove();
+  if (!layer.display) return ;//layer.remove();
 
   // Return from layer get once added to map.
   if (layer.loaded) return;
@@ -22,7 +22,7 @@ export default (_xyz, layer) => () => {
   })
     .on('load', () => {
       
-      if (layer.loader)  layer.loader.style.display = 'none';
+      if (layer.view.loader)  layer.view.loader.style.display = 'none';
 
     })
     .addTo(_xyz.map);

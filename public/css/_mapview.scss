@@ -7,6 +7,20 @@
     }
 }
 
+.hover-box {
+    position: fixed;
+    margin: 0;
+    padding: 5px;
+    background: #eee;
+    box-shadow: 2px 2px 2px #666;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    transition-delay: 0.2s;
+    opacity: 0;
+    z-index: 998;
+    font-size: 13px;
+}
+
 .leaflet-interactive.wait-cursor-enabled {
     cursor: wait !important;
 }

@@ -1,10 +1,10 @@
-export default (_xyz, layer) => () => {
+export default _xyz => layer => () => {
 
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
   // Return if layer should not be displayed.
-  if (!layer.display) return layer.remove();
+  if (!layer.display) return ;//layer.remove();
 
   if (!table) {
 
@@ -56,25 +56,17 @@ export default (_xyz, layer) => () => {
     .on('error', err => console.error(err))
     .on('loading', () => {
       
-      if (layer.loader) layer.loader.style.display = 'block';
+      if (layer.view.loader) layer.view.loader.style.display = 'block';
 
     })
     .on('load', () => {
      
-      if (layer.loader)  layer.loader.style.display = 'none';
+      if (layer.view.loader)  layer.view.loader.style.display = 'none';
 
       layer.loaded = true;
 
     })
     .on('click', e => {
-
-      // let selectedIdx = layer.selected.indexOf(e.layer.properties.id);
-        
-      // selectedIdx >= 0 ?
-      //   layer.selected.splice(selectedIdx, 1) :
-      //   layer.selected.push(e.layer.properties.id);
-
-      // e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
 
       _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
@@ -88,16 +80,26 @@ export default (_xyz, layer) => () => {
     })
     .on('mouseover', e => {
       e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight);
+
+      if (layer.hover.field) layer.hover.add({
+        id: e.layer.properties.id,
+        x: e.originalEvent.clientX,
+        y: e.originalEvent.clientY,
+      });
+
     })
     .on('mouseout', e => {
       e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
+
+      if (layer.hover.field) layer.hover.remove();
+
     })
     .addTo(_xyz.map);
 
 
   function applyLayerStyle(properties) {
 
-    let style = Object.assign({}, layer.style.default, layer.selected.includes(properties.id) ? layer.style.selected : {});
+    let style = Object.assign({}, layer.style.default);
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return style;

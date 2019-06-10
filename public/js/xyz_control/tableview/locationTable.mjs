@@ -3,8 +3,9 @@ export default _xyz => (table, callback) => {
   if (!table || !table.location) return;
 
   if (_xyz.tableview.node) {
-    _xyz.tableview.node.style.display = 'block';
-    _xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    // _xyz.tableview.node.style.display = 'block';
+    //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
 
 
@@ -81,6 +82,7 @@ export default _xyz => (table, callback) => {
         columns: columns,
         // autoResize: true,
         layout: 'fitDataFill',
+        height: 'auto'
         //height: _xyz.tableview.height || '100%'
       });
 

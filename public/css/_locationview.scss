@@ -9,6 +9,9 @@
     .label {
         padding-top: 5px;
     }
+    a {
+        color: $glxgreen;
+    }
     textarea {
         resize: none;
         width: 100%;
@@ -38,9 +41,7 @@
         font-family: 'PT Mono', monospace; // padding-left: 10px;
         font-weight: 400;
         font-size: 12px;
-        a {
-            color: $glxgreen;
-        }
+        white-space: pre-wrap;
     }
     .img_streetview {
         width: 100%;

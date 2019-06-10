@@ -22,6 +22,24 @@
             }
         }
         &.drawer-group {
+            
+            /*div:not(:first-child){*/
+                /*font-style: italic;
+                padding-left: 12px;*/
+
+                .header {
+                    font-style: italic;
+                    margin-left: 12px;
+                    border-bottom: 1px solid #bbb;
+                }
+
+                .dashboard {
+                    margin-left: 12px;
+                }
+
+
+            /*}*/
+
             .header-group {
                 font-family: ffmark_bold, sans-serif !important;
                 font-size: 15px !important;
@@ -49,7 +67,7 @@
             font-size: 14px;
             line-height: 2;
             font-family: ffmark, sans-serif;
-            margin-bottom: 5px;
+            border-bottom: 2px solid #333;
             &:hover {
                 cursor: pointer;
             }

@@ -24,8 +24,6 @@ export default _xyz => entry => {
     entry.style
   );
 
-  entry.row.classList.add('tr_geometry');
-
   let td = _xyz.utils.createElement({
     tag: 'td',
     style: {
@@ -41,7 +39,7 @@ export default _xyz => entry => {
 
   function drawGeom() {
 
-    entry.ctrl.geometry = _xyz.mapview.draw.geoJSON({
+    entry.ctrl.geometry = _xyz.geom.geoJSON({
       json: {
         type: 'Feature',
         geometry: JSON.parse(entry.value)
@@ -58,6 +56,7 @@ export default _xyz => entry => {
   if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
 
   if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
+  
 
   entry.ctrl.hideGeom = () => {
 
@@ -112,5 +111,67 @@ export default _xyz => entry => {
     },
     appendTo: td
   });
+
+  if(entry.edit){
+
+    entry.edit.container = _xyz.utils.createElement({
+      tag: 'div',
+      style: {
+        padding: '4px'
+      },
+      options: {
+        classList: 'table-section expandable'
+      }//,
+      //appendTo: td
+    });
+
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'btn_subtext cursor noselect',
+        textContent: 'Isoline settings'
+      },
+      style: {
+        textAlign: 'left',
+        fontStyle: 'italic',
+        fontSize: 'small'
+      },
+      appendTo: entry.edit.container,
+      eventListener: {
+        event: 'click',
+        funct: e => {
+          if(e) e.stopPropagation();
+          _xyz.utils.toggleExpanderParent({
+            expandable: entry.edit.container,
+            accordeon: true,
+            scrolly: _xyz.desktop && _xyz.desktop.listviews
+          });
+        }
+      }
+    });
+
+
+    if(entry.edit.isoline_here && entry.edit.isoline_here.slider){
+
+      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
+
+      _xyz.geom.isoline_here_control({
+        entry: entry,
+        container: entry.edit.container
+      });
+    }
+
+    if(entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider){
+
+      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
+
+      _xyz.geom.isoline_mapbox_control({
+        entry: entry,
+        container: entry.edit.container
+      });
+    }
+
+
+  }
 
 };

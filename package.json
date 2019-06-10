@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -25,7 +25,8 @@
     "@turf/turf": "^5.1.6",
     "bcrypt-nodejs": "0.0.3",
     "chart.js": "^2.7.3",
-    "d3": "^5.7.0",
+    "d3": "^5.9.2",
+    "dotenv": "^8.0.0",
     "fastify": "^2.0.0",
     "fastify-auth": "^0.4.0",
     "fastify-cors": "^2.1.2",
@@ -34,12 +35,13 @@
     "fastify-jwt": "^0.9.3",
     "fastify-static": "^2.3.4",
     "fastify-swagger": "^2.3.2",
-    "hyperhtml": "^2.25.4",
+    "hyperhtml": "^2.25.5",
     "js-datepicker": "^4.0.6",
     "jsrender": "^0.9.91",
+    "jwt-decode": "^2.2.0",
     "leaflet": "^1.4.0",
     "leaflet.vectorgrid": "^1.3.0",
-    "logrocket": "^0.6.19",
+    "logrocket": "^0.6.21",
     "mobile-detect": "^1.4.3",
     "nanoid": "^1.2.3",
     "node-fetch": "^2.2.1",

@@ -26,13 +26,13 @@ export default _xyz => (entry) => {
 
   if (entry.chart) {
 
-    const tr = _xyz.utils.hyperHTML.wire()`<tr class="table-chart">`;
+    const tr = _xyz.utils.wire()`<tr class="${'table-chart ' + (entry.class || '')}">`;
     
-    const td = _xyz.utils.hyperHTML.wire()`<td colspan=2>`;
+    const td = _xyz.utils.wire()`<td colspan=2>`;
 
     tr.appendChild(td);
 
-    entry.chart.node = _xyz.utils.hyperHTML.wire()`<div class="table-section">`;
+    entry.chart.node = _xyz.utils.wire()`<div class="table-section">`;
 
     td.appendChild(entry.chart.node);
 

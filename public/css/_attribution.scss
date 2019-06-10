@@ -14,8 +14,7 @@
     }
     a {
         margin-left: 10px;
-    }
-    a:hover {
-        border-bottom: 4px solid $glxlightgreen;
+        white-space: nowrap;
+        display: inline-block;
     }
 }

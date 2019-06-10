@@ -17,7 +17,7 @@ const req_res = m => {
 // Load environment from dotenv if available.
 const dotenv = req_res('dotenv');
 
-if (dotenv) dotenv.load();
+if (dotenv) dotenv.config();
 
 // Initiate environment module.
 const env = require('./mod/env');
@@ -58,7 +58,7 @@ fastify
         formAction: ['\'self\''],
         styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
         fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-        scriptSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com', '*.logrocket.io'],
+        scriptSrc: ['\'self\'', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com'],
         imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'data:']
       },
       setAllHeaders: true
@@ -78,7 +78,7 @@ fastify
   .register(require('fastify-auth'))
   .decorate('login', require('./routes/login')(fastify))
   .decorate('authToken', require('./mod/authToken')(fastify))
-  .decorate('evalParam', require('./mod/evalParam')(fastify))
+  .decorate('evalParam', require('./mod/evalParam'))
   .register(require('fastify-jwt'), {
     secret: env.secret
   })

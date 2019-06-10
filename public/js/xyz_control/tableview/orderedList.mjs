@@ -3,8 +3,10 @@ export default _xyz => (table, callback) => {
   if (!table || !table.location) return;
 
   if (_xyz.tableview.node) {
-    _xyz.tableview.node.style.display = 'block';
-    _xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    // _xyz.tableview.node.style.display = 'block';
+    //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
+    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
+
   }
 
   if (!table.columns) {
@@ -34,6 +36,7 @@ export default _xyz => (table, callback) => {
   	xhr.open('GET', _xyz.host + '/api/location/list?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: table.location.layer,
+      table: _xyz.workspace.locale.layers[table.location.layer].tables ? _xyz.workspace.locale.layers[table.location.layer].tableMax() : null,
       id: table.location.id,
       tableDef: table.title,
       token: _xyz.token
@@ -60,7 +63,8 @@ export default _xyz => (table, callback) => {
       table.target, {
         columns: columns,
         // autoResize: true,
-        layout: 'fitDataFill'
+        layout: 'fitDataFill',
+        height: 'auto'
       });
 
     table.update();

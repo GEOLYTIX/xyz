@@ -7,6 +7,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- <script src="https://cdn.logrocket.com/LogRocket.min.js"></script> -->
+
     <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
 
     <link rel="stylesheet" href="{{:dir}}/codemirror/codemirror.css">
@@ -20,6 +22,7 @@
 </head>
 
 <body
+style="grid-template-columns: 333px 10px auto; grid-template-rows: 1fr 0;"
 data-viewmode="desktop"
 data-nanoid={{:nanoid}}
 data-log={{:log}}
@@ -29,12 +32,7 @@ data-token={{:token}}>
 
     <div class="listviews">
 
-        <div id="Gazetteer" class="input_group" style="display: none">
-            <input class="pane_shadow" type="text" required>
-            <span class="bar"></span>
-            <div class="loader"></div>
-            <ul></ul>
-        </div>
+        <div id="gazetteer"></div>
 
         <div class="scrolly">
 
@@ -60,7 +58,55 @@ data-token={{:token}}>
 
     </div>
 
+    <div id="vertDivider"></div>
+
     <div class="mapview">
+
+        <div class="btn_column lv1 noselect desktop">
+
+                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
+                        <i class="material-icons">search</i>
+                    </button>
+        
+                    <button id="btnLocate" title="Current location" style="display: none;">
+                        <i class="material-icons">gps_not_fixed</i>
+                    </button>
+        
+                    <button id="btnZoomIn">
+                        <i class="material-icons">add</i>
+                    </button>
+        
+                    <button id="btnZoomOut">
+                        <i class="material-icons">remove</i>
+                    </button>
+        
+                    <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+                        <a href="{{:hrefDocumentation}}" target="_blank">
+                            <i class="material-icons">school</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
+                        <a href="{{:dir}}{{:btnLogin_path}}">
+                            <i class="material-icons">{{:btnLogin_style}}</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
+                        <a href="{{:dir}}/user/admin" target="_blank">
+                            <i class="material-icons">supervisor_account</i>
+                        </a>
+                    </div>
+        
+                    <button id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
+                        <i class="material-icons">settings</i>
+                    </button>            
+        
+                    <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
+                        <i class="material-icons">bug_report</i>
+                    </button>
+        
+        </div>
 
         <div id="Map" class="map" >
             <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
@@ -77,54 +123,13 @@ data-token={{:token}}>
             </svg>
         </div>
 
-        <div class="btn_column lv1 noselect desktop">
-            <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
-                <i class="material-icons">search</i>
-            </button>
-
-            <button id="btnLocate" title="Current location" style="display: none;">
-                <i class="material-icons">gps_not_fixed</i>
-            </button>
-
-            <button id="btnZoomIn">
-                <i class="material-icons">add</i>
-            </button>
-
-            <button id="btnZoomOut">
-                <i class="material-icons">remove</i>
-            </button>
-
-            <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                <a href="{{:hrefDocumentation}}" target="_blank">
-                    <i class="material-icons">school</i>
-                </a>
-            </div>
-
-            <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-                <a href="{{:dir}}{{:btnLogin_path}}">
-                    <i class="material-icons">{{:btnLogin_style}}</i>
-                </a>
-            </div>
-
-            <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
-                <a href="{{:dir}}/user/admin" target="_blank">
-                    <i class="material-icons">supervisor_account</i>
-                </a>
-            </div>
-
-            <div id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
-                <i class="material-icons">settings</i>
-            </div>            
-
-            <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
-                <i class="material-icons">bug_report</i>
-            </div>
-
-        </div>
-
     </div>
 
-    <div id="tableview" class="tableview" style="display: none">
+    
+
+    <div id="tableview" class="tableview">
+
+            <div id="hozDivider"></div>
 
         <div class="resize_bar"></div>
 
@@ -142,7 +147,7 @@ data-token={{:token}}>
 
         <div class="btn_column lv0 noselect desktop">
         
-            <div style="margin-top: -10px;">
+            <div style="margin-top: -10px; background: none;">
                 <i id="toggleTableview" class="material-icons">vertical_align_top</i>
             </div>
 

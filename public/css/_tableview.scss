@@ -1,32 +1,29 @@
 .tableview {
-    position: absolute;
     overflow: hidden;
-    bottom: 0;
-    right: 0;
-    width: calc(100% - 330px);
-    min-height: 40px;
-    max-height: 100%;
-    padding-left: 58px;
-    height: 40px;
-    z-index: 1001;
-    background-color: #fff;
-    box-shadow: 1px 0 1px #333;
-    .resize_bar {
-        height: 5px;
-        &:hover {
-            background-color: #f9fbe7;
-            cursor: row-resize;
-        }
+    grid-column: 3;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: 57px 1fr;
+    grid-template-rows: 6px 50px 1fr;
+    z-index:1000; /* to hide static labels outside map */
+    background-color: white; /* to hide static labels outside map*/
+
+    .btn_column {
+        grid-row: 2/4;
     }
+
     .nav_bar {
         height: 50px;
         font-size: 14px;
+        grid-row: 2;
+        grid-column: 2;
     }
+
     .table {
-        position: absolute;
-        width: calc(100% - 58px);
-        height: calc(100% - 55px);
+        grid-row: 3;
+        grid-column: 2;
     }
+    
     nav {
         text-align: center;
         ul.nav_bar-nav {

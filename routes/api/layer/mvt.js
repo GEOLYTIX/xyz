@@ -2,6 +2,8 @@ const env = require('../../../mod/env');
 
 const sql_filter = require('../../../mod/pg/sql_filter');
 
+//const evalParam = require('../../../mod/_evalParam');
+
 module.exports = fastify => {
 
   fastify.route({
@@ -32,6 +34,13 @@ module.exports = fastify => {
       fastify.evalParam.roles,
       fastify.evalParam.geomTable,
     ],
+    // preHandler: [
+    //   evalParam.token,
+    //   evalParam.locale,
+    //   evalParam.layer,
+    //   evalParam.roles,
+    //   evalParam.geomTable,
+    // ],
     handler: async (req, res) => {
 
       let
@@ -44,8 +53,7 @@ module.exports = fastify => {
         y = parseInt(req.params.y),
         z = parseInt(req.params.z),
         m = 20037508.34,
-        r = (m * 2) / (Math.pow(2, z));
-
+        r = (m * 2) / (Math.pow(2, z));   
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
