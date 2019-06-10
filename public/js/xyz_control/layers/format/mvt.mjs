@@ -84,8 +84,6 @@ export default _xyz => layer => () => {
     })
     .on('mouseover', e => {
 
-      console.log(_xyz.mapview.state);
-
       if(_xyz.mapview.state !== 'select') return;
 
       e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight);

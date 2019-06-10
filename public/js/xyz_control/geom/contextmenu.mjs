@@ -1,5 +1,6 @@
 import explode from '@turf/explode';
-import combine from '@turf/combine';
+
+import 'leaflet-draw';
 
 export default _xyz => (e, layer) => {
 
@@ -52,48 +53,15 @@ export default _xyz => (e, layer) => {
 
         			if (_e.target.status !== 200) return;
 
-        			_xyz.mapview.node.style.cursor = 'crosshair';
-
         			_xyz.mapview.state = 'edit';
-        			_xyz.map.doubleClickZoom.disable();
 
-        			let geojson = _e.target.response.geomj;
+        			layer.edit.trail = _xyz.L.featureGroup()
+        			.on('click', e => closeContextMenu())
+        			.addTo(_xyz.map);
 
-        			layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
-        			layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
-        			layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
+        			redrawTrail(_e.target.response.geomj);
 
-        			let points = explode(geojson).features;
-
-        			console.log(points.length);
-        			console.log(layer.edit.vertices.getLayers().length);
-
-        			// create feature group from feature
-        			points.map(point => {
-        				if(points.indexOf(point) === points.length-1) return;
-        				let latlng = {
-        					lat: point.geometry.coordinates[1],
-        					lng: point.geometry.coordinates[0]
-        				}
-        				layer.edit.vertices.addLayer( // enable dragging vertex
-        					attachEvents(_xyz.L.circleMarker(latlng, _xyz.style.defaults.vertex))
-        				);
-        			});
-
-        			_xyz.map.on('dblclick', map_ev => { // enable adding new vertex
-        			    map_ev.originalEvent.stopPropagation();
-        			    map_ev.originalEvent.preventDefault();
-        			    console.log('new vertex');
-        			    
-        			    layer.edit.vertices.addLayer(
-        			    	attachEvents(_xyz.L.circleMarker(map_ev.latlng, _xyz.style.defaults.vertex))
-        			    );
-        			});
-
-
-        			_xyz.map.once('contextmenu', ev => { // rememeber put back last point
-        				_xyz.mapview.state = 'select';
-        				console.log('save or cancel');
+        			_xyz.map.once('contextmenu', ev => {
 
         				closeContextMenu();
 
@@ -124,7 +92,29 @@ export default _xyz => (e, layer) => {
         						event: 'click',
         						funct: ev => {
         							ev.stopPropagation();
-        							console.log('Now save me');
+
+        							layer.edit.trail.eachLayer(l => l.editing.disable());
+
+        							let xhr = new XMLHttpRequest();
+
+        							xhr.open('POST', _xyz.host + '/api/location/edit/mvt?' + _xyz.utils.paramString({
+        								locale: _xyz.workspace.locale.key,
+        								layer: layer.key,
+        								table: layer.table,
+        								id: e.layer.properties.id,
+        								token: _xyz.token
+        							}));
+
+        							xhr.setRequestHeader('Content-Type', 'application/json');
+
+        							xhr.onload = e => {
+        								console.log(e.target.response);
+        								layer.edit.trail.clearLayers();
+        								layer.show();
+        							};
+
+        							xhr.send(JSON.stringify(layer.edit.trail.toGeoJSON().features[0].geometry));
+
         							closeContextMenu();
         						}
         					}
@@ -140,11 +130,14 @@ export default _xyz => (e, layer) => {
         						event: 'click',
         						funct: ev => {
         							ev.stopPropagation();
-        							console.log('Cancel all');
+
+        							layer.show();
+
         							closeContextMenu();
-        							layer.edit.vertices.clearLayers();
+        							
+        							layer.edit.trail.eachLayer(l => l.editing.disable());
+
         							layer.edit.trail.clearLayers();
-        							layer.edit.path.clearLayers();
         						}
         					}
         				});
@@ -174,44 +167,46 @@ export default _xyz => (e, layer) => {
 
     _xyz.map.once('click', e => closeContextMenu());
 
-    function attachEvents(vertex){
-    	vertex
-    	.on('mousedown', ev => {
-    		_xyz.map.dragging.disable();
-    		ev.originalEvent.stopPropagation();
-
-    		_xyz.map.on('mousemove', _ev => {
-    			_ev.originalEvent.stopPropagation();
-    			_ev.originalEvent.preventDefault();
-    			vertex.setLatLng(_ev.latlng);
-
-    			_xyz.map.once('mouseup', __ev => {
-    				__ev.originalEvent.stopPropagation();
-    				__ev.originalEvent.preventDefault();
-    				vertex.setLatLng(__ev.latlng);
-    				_xyz.map.off('mousemove');
-    				_xyz.map.dragging.enable();
-    			});
-    		});
-
-    	})
-    	.on('mouseover', ev => {
-    		_xyz.mapview.node.style.cursor = 'crosshair';
-    	})
-    	.once('dblclick', ev => {
-    		_xyz.L.DomEvent.stopPropagation(ev);
-    		layer.edit.vertices.removeLayer(vertex);
-    	});
-    	return vertex;
-    }
-
     function closeContextMenu(){ // close context menu if open
     	_xyz.mapview.node.style.cursor = '';
-    	_xyz.map.doubleClickZoom.enable();
     	_xyz.mapview.state = 'select';
     	if(_xyz.mapview.contextmenu) {
     		_xyz.mapview.contextmenu.remove();
     		_xyz.mapview.contextmenu = null;
     	}
     }
+
+    function redrawTrail(geojson){
+    	let _points = explode(geojson).features, points = [];
+
+    	_points.map(feature => {
+    		points.push([feature.geometry.coordinates[1], feature.geometry.coordinates[0]]);
+        });
+    	
+    	layer.edit.trail.clearLayers();
+
+    	let poly = {
+    		poly: {
+    			allowIntersection: (layer.edit.polygon && typeof(layer.edit.polygon.allowIntersection) !== undefined ) ? layer.edit.polygon.allowIntersection : true
+    		}
+    	},
+
+    	style = Object.assign({}, poly, _xyz.style.defaults.trail);
+
+    	layer.edit.trail.addLayer(_xyz.L.polygon([points], style));
+
+    	layer.edit.trail.eachLayer(l => {
+
+    		l.editing.enable();
+
+    		_xyz.map.on('draw:editvertex ', e => {
+
+    			e.poly.intersects() ? e.poly.setStyle({color: '#DE3C4B'}) : e.poly.setStyle(style);
+
+    		});
+
+    	});
+
+    }
+
 }

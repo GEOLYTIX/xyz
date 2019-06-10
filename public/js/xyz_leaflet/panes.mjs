@@ -32,6 +32,12 @@ export default _xyz => {
             
     panes.list.push(_xyz.map.createPane('drawing'));
     _xyz.map.getPane('drawing').style.zIndex = panes.next++;
+
+    panes.list.push(_xyz.map.createPane('drawing_trail'));
+    _xyz.map.getPane('drawing_trail').style.zIndex = panes.next++;
+
+    panes.list.push(_xyz.map.createPane('drawing_vertex'));
+    _xyz.map.getPane('drawing_vertex').style.zIndex = panes.next++;
             
     panes.list.push(_xyz.map.createPane('default'));
     _xyz.map.getPane('default').style.zIndex = panes.next++;

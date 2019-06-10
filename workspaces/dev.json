@@ -598,7 +598,9 @@
                     "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
                     "edit": {
-                        "polygon": true,
+                        "polygon": {
+                            "allowIntersection": false
+                        },
                         "circle": true,
                         "rectangle": true,
                         "line": true,
@@ -1024,7 +1026,7 @@
                     ]
                 },
                 "Retail Points": {
-                    "display": true,
+                    "display": false,
                     "format": "cluster",
                     "cluster_label": "store",
                     "dbs": "XYZ",

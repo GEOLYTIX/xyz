@@ -13,17 +13,17 @@ export default () => ({
     defaults: {
       // drawn feature vertex
       vertex: {
-        pane: 'drawing',
+        pane: 'drawing_vertex',
         stroke: true,
         color: 'darkgrey',
         fillColor: 'steelblue',
-        fillOpacity: 0.7,
+        fillOpacity: 0.9,
         weight: 1,
         radius: 6
       },
       // trail left behind cursor
       trail: {
-        pane: 'drawing',
+        pane: 'drawing_trail',
         stroke: true,
         color: '#666',
         dashArray: '5 5',
@@ -36,7 +36,7 @@ export default () => ({
         color: '#666',
         fill: true,
         fillColor: '#cf9',
-        weight: 2
+        weight: 1
       },
       // actual drawn feature
       path_line: { 
