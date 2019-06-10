@@ -211,7 +211,7 @@ export default _xyz => layer => () => {
           _layer.hover = {};
 
           _layer.hover.tooltip = _xyz.utils.wire()`<div class="hover-box">`;
-          _layer.hover.tooltip.dataset["layer"] = layer.key;
+          _layer.hover.tooltip.dataset.layer = layer.key;
           _layer.hover.tooltip.innerHTML = cluster[0].label;
           _xyz.mapview.node.appendChild(_layer.hover.tooltip);
           
