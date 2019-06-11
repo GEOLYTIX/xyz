@@ -54,9 +54,12 @@ import meta from '@turf/meta';
 
 import helpers from '@turf/helpers';
 
+import explode from '@turf/explode';
+
 export const turf = {
   pointOnFeature: pointOnFeature,
   bbox: bbox,
   meta: meta,
   helpers: helpers,
+  explode: explode
 };

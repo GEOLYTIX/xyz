@@ -68,7 +68,7 @@ export default _xyz => layer => () => {
     })
     .on('click', e => {
 
-      if(_xyz.mapview.contextmenu) _xyz.mapview.contextmenu.remove();
+      _xyz.geom.contextmenu.close();
 
       if(_xyz.mapview.state !== 'select') return;
 
@@ -103,7 +103,7 @@ export default _xyz => layer => () => {
     })
     .on('contextmenu', e => {
 
-      _xyz.geom.contextmenu(e, layer);
+      _xyz.geom.polygon_edit(e, layer);
 
     })
     .addTo(_xyz.map);

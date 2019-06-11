@@ -60,7 +60,7 @@ module.exports = fastify => {
       // delete new geometry from cache
       if (layer.mvt_cache) await mvt_cache(layer, table, id);
       
-      res.code(200).send('updated');
+      res.code(200).send();
 
     }
 
