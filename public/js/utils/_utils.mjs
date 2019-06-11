@@ -56,10 +56,16 @@ import helpers from '@turf/helpers';
 
 import explode from '@turf/explode';
 
+import area from '@turf/area';
+
+import length from '@turf/length';
+
 export const turf = {
   pointOnFeature: pointOnFeature,
   bbox: bbox,
   meta: meta,
   helpers: helpers,
-  explode: explode
+  explode: explode,
+  area: area,
+  length: length
 };
