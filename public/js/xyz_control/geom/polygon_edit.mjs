@@ -91,6 +91,7 @@ export default _xyz => (e, layer) => {
 	}
 
     function redrawTrail(geojson){
+        
     	let _points = _xyz.utils.turf.explode(geojson).features, points = [];
 
     	_points.map(feature => {
@@ -106,7 +107,13 @@ export default _xyz => (e, layer) => {
     	},
     	style = Object.assign({}, poly, _xyz.style.defaults.trail);
 
-    	layer.edit.trail.addLayer(_xyz.L.polygon([points], style));
+        if(geojson.type === 'Polygon'){
+            layer.edit.trail.addLayer(_xyz.L.polygon([points], style));
+        } 
+
+        if(geojson.type === 'LineString'){
+            layer.edit.trail.addLayer(_xyz.L.polyline([points], style));
+        }
 
     	layer.edit.trail.eachLayer(l => {
 
