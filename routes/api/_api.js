@@ -50,7 +50,7 @@ module.exports = fastify => {
 
   require('./location/edit/draw')(fastify);
 
-  require('./location/edit/mvt')(fastify);
+  require('./location/edit/geom_update')(fastify);
 
   require('./location/edit/update')(fastify);
 

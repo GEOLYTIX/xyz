@@ -8,6 +8,8 @@ import line from './line.mjs';
 
 import point from './point.mjs';
 
+import point_edit from './point_edit.mjs';
+
 import isoline_mapbox from './isoline_mapbox.mjs';
 
 import isoline_mapbox_control from './isoline_mapbox_control.mjs';
@@ -35,6 +37,8 @@ export default _xyz => ({
   line: line(_xyz),
 
   point: point(_xyz),
+
+  point_edit: point_edit(_xyz),
 
   polygon: polygon(_xyz),
 

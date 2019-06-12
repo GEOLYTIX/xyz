@@ -1,5 +1,3 @@
-import 'leaflet-draw';
-
 export default _xyz => (e, layer) => {
 
 	if(!layer.edit || !layer.edit.polygon) return;
@@ -13,34 +11,21 @@ export default _xyz => (e, layer) => {
 		},
 		{
 			label: 'Area',
-			onlick: () => {}
+			onclick: area
 		},
 		{
 			label: 'Perimeter',
-			onclick: () => {}
+			onclick: perimeter
 		}]
 	});
 
+    _xyz.map.once('click', e => _xyz.geom.contextmenu.close());
 
 	function editHandler(){
-		let xhr = new XMLHttpRequest();
 
-		xhr.open('GET', 
-        	_xyz.host + '/api/location/select/id?' + // this returns infoj which is not needed
-        	_xyz.utils.paramString({
-        		locale: _xyz.workspace.locale.key,
-        		layer: layer.key,
-        		table: layer.table,
-        		id: e.layer.properties.id,
-        		token: _xyz.token
-        }));
-
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType = 'json';
-
-        xhr.onload = _e => {
-
-        	if (_e.target.status !== 200) return;
+        requestGeoJSON(makeEdits);
+        
+        function makeEdits(_e){
 
         	_xyz.mapview.state = 'edit';
 
@@ -63,9 +48,9 @@ export default _xyz => (e, layer) => {
 
         					layer.edit.trail.eachLayer(l => l.editing.disable());
 
-        				    xhr = new XMLHttpRequest();
+        				    let xhr = new XMLHttpRequest();
 
-        					xhr.open('POST', _xyz.host + '/api/location/edit/mvt?' + _xyz.utils.paramString({
+        					xhr.open('POST', _xyz.host + '/api/location/edit/geom/update?' + _xyz.utils.paramString({
         						locale: _xyz.workspace.locale.key,
         						layer: layer.key,
         						table: layer.table,
@@ -101,13 +86,10 @@ export default _xyz => (e, layer) => {
         	});
 
         }
-
-        xhr.send();
 	}
 
-    _xyz.map.once('click', e => _xyz.geom.contextmenu.close());
-
     function redrawTrail(geojson){
+        
     	let _points = _xyz.utils.turf.explode(geojson).features, points = [];
 
     	_points.map(feature => {
@@ -121,22 +103,73 @@ export default _xyz => (e, layer) => {
     			allowIntersection: (layer.edit.polygon && typeof(layer.edit.polygon.allowIntersection) !== undefined ) ? layer.edit.polygon.allowIntersection : true
     		}
     	},
-
     	style = Object.assign({}, poly, _xyz.style.defaults.trail);
 
-    	layer.edit.trail.addLayer(_xyz.L.polygon([points], style));
+        if(geojson.type === 'Polygon'){
+            layer.edit.trail.addLayer(_xyz.L.polygon([points], style));
+        } 
+
+        if(geojson.type === 'LineString'){
+            layer.edit.trail.addLayer(_xyz.L.polyline([points], style));
+        }
 
     	layer.edit.trail.eachLayer(l => {
 
     		l.editing.enable();
 
-    		_xyz.map.on('draw:editvertex ', e => {
-
-    			e.poly.intersects() ? e.poly.setStyle({color: '#DE3C4B'}) : e.poly.setStyle(style);
-
-    		});
+    		_xyz.map.on('draw:editvertex ', e => e.poly.intersects() ? e.poly.setStyle({color: '#DE3C4B'}) : e.poly.setStyle(style));
 
     	});
-
     }
+
+    function area(){
+
+        requestGeoJSON(getArea);
+
+        function getArea(_e){
+            alert(`Feature area: \n ${parseInt(_xyz.utils.turf.area(_e.target.response.geomj))} sqm \n ${(_xyz.utils.turf.area(_e.target.response.geomj)/(100*100)).toFixed(2)} sqkm`);
+
+            console.log('area:');
+            console.log(`${parseInt(_xyz.utils.turf.area(_e.target.response.geomj))} sqm`);
+            console.log(`${(_xyz.utils.turf.area(_e.target.response.geomj)/(100*100)).toFixed(2)} sqkm`);
+        }
+    }
+
+    function perimeter(){
+
+        requestGeoJSON(getPerimeter);
+
+        function getPerimeter(_e){
+            alert(`Feature perimeter: \n ${_xyz.utils.turf.length(_e.target.response.geomj).toFixed(2)} km \n ${parseInt(1000*_xyz.utils.turf.length(_e.target.response.geomj))} m`);
+
+            console.log('perimeter:');
+            console.log(`${_xyz.utils.turf.length(_e.target.response.geomj).toFixed(2)} km`);
+            console.log(`${parseInt(1000*_xyz.utils.turf.length(_e.target.response.geomj))} m`);
+        }
+    }
+
+    function requestGeoJSON(callback){
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('GET', 
+            _xyz.host + '/api/location/select/id?' + // this returns infoj which is not needed
+            _xyz.utils.paramString({
+                locale: _xyz.workspace.locale.key,
+                layer: layer.key,
+                table: layer.table,
+                id: e.layer.properties.id,
+                token: _xyz.token
+        }));
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
+
+        xhr.onload = _e => {
+            if (_e.target.status !== 200) return;
+            callback(_e);
+        }
+
+        xhr.send();
+    }
+
 }
