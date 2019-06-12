@@ -83,7 +83,7 @@ export default (_xyz, layer) => {
 
   function toggle(param){
 
-    if(!layer.hover) return;
+    if(!layer.hover || !layer.hover.field) return;
 
     if(typeof(layer.hover.permanent) === undefined) return;
     if(layer.hover.btn) layer.hover.btn.remove();
