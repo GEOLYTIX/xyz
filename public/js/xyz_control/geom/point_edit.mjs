@@ -73,10 +73,7 @@ export default _xyz => (e, layer) => {
 
                 layer.edit.vertices.addLayer(_xyz.L.circleMarker([__e.target.response.geomj.coordinates[1], __e.target.response.geomj.coordinates[0]], _xyz.style.defaults.vertex));
 
-                layer.edit.vertices.eachLayer(l => {
-                    l.editing.enable();
-                    console.log(l);
-                });
+                layer.edit.vertices.eachLayer(l => l.editing.enable());
 
                 _xyz.mapview.state = 'edit';
 
