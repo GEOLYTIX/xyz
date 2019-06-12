@@ -332,7 +332,7 @@ export default _xyz => layer => () => {
       })
       .addTo(_xyz.map);
 
-    layer.hover.toggle({container: layer.style.legend.parentNode});
+    if(layer.style.legend) layer.hover.toggle({container: layer.style.legend.parentNode});
 
     function marker(latlng, layer, point, param) {
 
