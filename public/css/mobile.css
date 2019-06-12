@@ -1252,7 +1252,7 @@ button {
 
 /* div icon */
 .leaflet-div-icon {
-  background: #fff;
+  /*background: #fff;*/
   border: 1px solid #666; }
 
 .attribution {
