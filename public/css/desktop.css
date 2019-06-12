@@ -189,13 +189,15 @@
           border-bottom: 3px solid #090;
           box-shadow: 0 6px 8px -6px #444; }
     .tableview nav .tab-dropdown-container {
+      position: relative;
       width: 20px;
       display: inline-flex; }
       .tableview nav .tab-dropdown-container button.tab-dropdown {
         width: 30px;
         font-size: 14px;
         display: none;
-        color: #090; }
+        color: #090;
+        background-color: white; }
       .tableview nav .tab-dropdown-container .tab-dropdown-content {
         display: none;
         position: absolute;
@@ -2176,7 +2178,7 @@ button {
       }*/ }
       .contextmenu ul li:hover {
         background-color: #9CC5A1;
-        border-bottom: 1px solid transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
         cursor: pointer; }
 
 *,
