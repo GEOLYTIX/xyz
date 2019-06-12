@@ -1,6 +1,6 @@
 # xyz
 
-## v1.6.0
+## v1.6.1
 
 A Node.js framework to develop applications and APIs for spatial data.
 

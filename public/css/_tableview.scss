@@ -45,6 +45,7 @@
             }
         }
         .tab-dropdown-container {
+            position: relative;
             width: 20px;
             display: inline-flex;
 
@@ -53,6 +54,7 @@
                 font-size: 14px;
                 display: none;
                 color: $glxgreen;
+                background-color: white;
             }
 
             .tab-dropdown-content {
