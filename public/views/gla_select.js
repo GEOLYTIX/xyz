@@ -1,22 +1,106 @@
+const locationsArray = [
+  {
+    color: '#00AEEF',
+    colorDark: '#007BBC'
+  },
+  {
+    color: '#008D48',
+    colorDark: '#005A15'
+  },
+  {
+    color: '#E85713',
+    colorDark: '#CF3E00'
+  }
+];
+
+let countr = -1;
+
 function gla_select(_xyz, location) {
 
-  // Remove current location if it exists.
-  if (_xyz.locations.current) _xyz.locations.current.remove();
+  let same = false;
 
-  // Assign prototype to location.
-  Object.assign(location, _xyz.locations.location());
+  locationsArray.forEach(loc => {
 
-  // Default callback for location.get().
-  location.get(location => {
+    if (loc.location && loc.location.id === location.id) {
 
-    // Make the location current.
-    // To be removed when a new location is selected.
+      loc.location.remove();
+      loc.location = null;
+      loc.view.remove();
+      same = true;
+
+    }
+
+  });
+
+  if (same) return;
+
+  document.getElementById('titleImg').style.display = 'none';
+
+  countr++;
+
+  countr = countr > 2 ? 0 : countr;
+
+  if (locationsArray[countr].location) {
+    locationsArray[countr].location.remove();
+    locationsArray[countr].view.remove();
+  }
+
+  locationsArray.forEach(loc => {
+
+    if (!loc.view) return;
+
+    const grids = loc.view.querySelectorAll('.grid');   
+
+    grids.forEach(grid => {
+
+      grid.style.display = 'none';
+
+    });
+
+  });
+
+  locationsArray[countr].location = location;
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.open('GET',
+    _xyz.host + '/api/location/select/id?' +
+    _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: location.layer,
+      table: location.table,
+      id: location.id,
+      token: _xyz.token
+    }));
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.responseType = 'json';
+
+  xhr.onload = e => {
+
+    if (e.target.status !== 200) return;
+
+    location.infoj = e.target.response.infoj;
+
+    location.geometry = e.target.response.geomj;
+
+    location = _xyz.locations.location(location);
+
+    // callback(_xyz.locations.location(location));
     _xyz.locations.current = location;
 
     // Get location marker from pointOnFeature is not already defined in location object.
-    location.marker = location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+    location.marker = location.marker
+    || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
 
-    location.Marker = _xyz.mapview.draw.geoJSON({
+
+    const locationView = document.getElementById('locationView');
+
+    locationsArray[countr].view = gla_locationView(_xyz, location.infoj, locationsArray[countr].color);
+
+    locationView.appendChild(locationsArray[countr].view);
+
+    location.Marker = _xyz.geom.geoJSON({
       json: {
         type: 'Feature',
         geometry: {
@@ -30,8 +114,8 @@ function gla_select(_xyz, location) {
           url: _xyz.utils.svg_symbols({
             type: 'markerColor',
             style: {
-              colorMarker: '#ff0066',
-              colorDot: '#9c27b0',
+              colorMarker: locationsArray[countr].color,
+              colorDot: locationsArray[countr].colorDark,
             }
           }),
           size: 40,
@@ -39,21 +123,15 @@ function gla_select(_xyz, location) {
         }
       }
     });
+   
+  };
 
-    const locationView = document.getElementById('locationView');
-
-    locationView.innerHTML = '';
-
-    locationView.appendChild(gla_locationView(_xyz, location.infoj));
-
-    setTimeout(function () { _xyz.map.invalidateSize(); }, 400);
-
-  });
+  xhr.send();
 
 };
 
 
-function gla_locationView(_xyz, infoj) {
+function gla_locationView(_xyz, infoj, color) {
 
   const fields = {};
 
@@ -63,63 +141,76 @@ function gla_locationView(_xyz, infoj) {
 
   });
 
-  const view = _xyz.utils.hyperHTML.wire()`<div class="location light">`;
+  const view = _xyz.utils.wire()`<div class="location" style="${'margin-top: 10px; border: 3px solid ' + color}">`;
 
-  if (fields.organisation_short) view.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div class="title">${fields.organisation_short}`
-  );
+  if (fields.organisation_short) {
+    const title = _xyz.utils.wire()`<div class="title">${fields.organisation_short}`;
+    view.appendChild(title);
+
+    title.onclick = function() {
+
+      const grids = view.querySelectorAll('.grid');   
+
+      grids.forEach(grid => {
+  
+        grid.style.display = grid.style.display === 'none' ? 'block' : 'none';
+  
+      });
+
+    };
+
+  }
 
 
-
-  var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
 
   viewGrid.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div style="grid-column: 1; grid-row: 1;"><i class="material-icons">room`);
+    _xyz.utils.wire()`<div style="grid-column: 1; grid-row: 1;"><i class="material-icons">room`);
 
-  var viewAddress = _xyz.utils.hyperHTML.wire()`<div style="grid-column: 2; grid-row: 1;">`;
+  var viewAddress = _xyz.utils.wire()`<div style="grid-column: 2; grid-row: 1;">`;
 
   if (fields.address1) viewAddress.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div>${fields.address1}`
+    _xyz.utils.wire()`<div>${fields.address1}`
   );
 
   if (fields.address2) viewAddress.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div>${fields.address2}`
+    _xyz.utils.wire()`<div>${fields.address2}`
   );
 
   if (fields.address3) viewAddress.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div>${fields.address3}`
+    _xyz.utils.wire()`<div>${fields.address3}`
   );
 
   if (fields.address4) viewAddress.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div>${fields.address4}`
+    _xyz.utils.wire()`<div>${fields.address4}`
   );
 
   if (fields.postcode) viewAddress.appendChild(
-    _xyz.utils.hyperHTML.wire()`<div>${fields.postcode}`
+    _xyz.utils.wire()`<div>${fields.postcode}`
   );
 
   viewGrid.appendChild(viewAddress);
 
 
 
-  var viewLinks = _xyz.utils.hyperHTML.wire()`<div style="grid-column: 3; grid-row: 1;">`;
+  var viewLinks = _xyz.utils.wire()`<div style="grid-column: 3; grid-row: 1;">`;
 
   if (fields.website) viewLinks.appendChild(
-    _xyz.utils.hyperHTML.wire()`
+    _xyz.utils.wire()`
         <div class="align-flex" style="margin-bottom: 5px;">
         <i class="material-icons">launch</i>
         <a style="margin-left: 5px;" href="${fields.website}">Website</a>`
   );
 
   if (fields.phone) viewLinks.appendChild(
-    _xyz.utils.hyperHTML.wire()`
+    _xyz.utils.wire()`
         <div class="align-flex" style="margin-bottom: 5px;">
         <i class="material-icons">call</i>
         <div style="margin-left: 5px;">${fields.phone}`
   );
 
   if (fields.email) viewLinks.appendChild(
-    _xyz.utils.hyperHTML.wire()`
+    _xyz.utils.wire()`
         <div class="align-flex" style="margin-bottom: 5px;">
         <i class="material-icons">email</i>
         <a style="margin-left: 5px;" href="${'mailto:' + fields.email}">Email</a>`
@@ -129,11 +220,11 @@ function gla_locationView(_xyz, infoj) {
 
   view.appendChild(viewGrid);
 
-  var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
 
   var gridRow = 1;
 
-  var el = _xyz.utils.hyperHTML.wire()`
+  var el = _xyz.utils.wire()`
       <div style="grid-column: 1/4; font-weight: bold; line-height: 2; font-size: 16px;">Opening Hours:`;
   el.style.gridRow = gridRow;
   viewGrid.appendChild(el);
@@ -149,7 +240,7 @@ function gla_locationView(_xyz, infoj) {
         fields.phone_friday ||
         fields.phone_saturday) {
 
-    var el = _xyz.utils.hyperHTML.wire()`
+    var el = _xyz.utils.wire()`
       <div style="grid-column: 2; text-align: center; font-weight: bold;">Telephone`;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
@@ -165,7 +256,7 @@ function gla_locationView(_xyz, infoj) {
         fields.hours_friday ||
         fields.hours_saturday) {
 
-    var el = _xyz.utils.hyperHTML.wire()`
+    var el = _xyz.utils.wire()`
       <div style="grid-column: 3; text-align: center; font-weight: bold;">Face-to-face`;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
@@ -190,20 +281,20 @@ function gla_locationView(_xyz, infoj) {
 
   function hours(gridRow, day, hours, phone) {
     if (hours || phone) {
-      var el = _xyz.utils.hyperHTML.wire()`
+      var el = _xyz.utils.wire()`
           <div style="grid-column: 1; font-weight: bold;">${day}`;
       el.style.gridRow = gridRow;
       viewGrid.appendChild(el);
 
       if (hours) {
-        var el = _xyz.utils.hyperHTML.wire()`
+        var el = _xyz.utils.wire()`
             <div style="grid-column: 3; text-align: center;">${hours}`;
         el.style.gridRow = gridRow;
         viewGrid.appendChild(el);
       }
 
       if (phone) {
-        var el = _xyz.utils.hyperHTML.wire()`
+        var el = _xyz.utils.wire()`
             <div style="grid-column: 2; text-align: center;">${phone}`;
         el.style.gridRow = gridRow;
         viewGrid.appendChild(el);
@@ -219,7 +310,7 @@ function gla_locationView(_xyz, infoj) {
 
 
   if (fields.phone_notes) {
-    var el = _xyz.utils.hyperHTML.wire()`
+    var el = _xyz.utils.wire()`
         <div style="grid-column: 1/4; white-space: pre-wrap;">${fields.phone_notes}`;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
@@ -227,7 +318,7 @@ function gla_locationView(_xyz, infoj) {
   }
 
   if (fields.hours_notes) {
-    var el = _xyz.utils.hyperHTML.wire()`
+    var el = _xyz.utils.wire()`
         <div style="grid-column: 1/4; white-space: pre-wrap;">${fields.hours_notes}`;
     el.style.gridRow = gridRow;
     viewGrid.appendChild(el);
@@ -238,31 +329,31 @@ function gla_locationView(_xyz, infoj) {
 
 
 
-  var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
 
-  var servicesGrid = _xyz.utils.hyperHTML.wire()`<div style="grid-column: 1;">`;
+  var servicesGrid = _xyz.utils.wire()`<div style="grid-column: 1;">`;
 
-  servicesGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  servicesGrid.appendChild(_xyz.utils.wire()`
       <div class="align-flex">
       <i class="material-icons">${fields.service_initial_advice ? 'check_box' : 'check_box_outline_blank'}</i>
       Initial Advice`);
 
-  servicesGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  servicesGrid.appendChild(_xyz.utils.wire()`
       <div class="align-flex">
       <i class="material-icons">${fields.service_written_advice ? 'check_box' : 'check_box_outline_blank'}</i>
       Written Advice`);
 
-  servicesGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  servicesGrid.appendChild(_xyz.utils.wire()`
       <div class="align-flex">
       <i class="material-icons">${fields.service_form_filling ? 'check_box' : 'check_box_outline_blank'}</i>
       Form Filling`);
 
-  servicesGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  servicesGrid.appendChild(_xyz.utils.wire()`
       <div class="align-flex">
       <i class="material-icons">${fields.service_case_work ? 'check_box' : 'check_box_outline_blank'}</i>
       Casework`);
 
-  servicesGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  servicesGrid.appendChild(_xyz.utils.wire()`
       <div class="align-flex">
       <i class="material-icons">${fields.service_representation ? 'check_box' : 'check_box_outline_blank'}</i>
       Representation`);
@@ -271,7 +362,7 @@ function gla_locationView(_xyz, infoj) {
 
   if (fields.coverage) {
 
-    viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+    viewGrid.appendChild(_xyz.utils.wire()`
         <div style="grid-column: 2; text-align: center;">
           <div><i style="font-size: 50px;" class="material-icons">person_pin</i></div>
           <div style="font-weight: bold;">Areas served</div>
@@ -282,23 +373,23 @@ function gla_locationView(_xyz, infoj) {
   view.appendChild(viewGrid);
 
 
-  var viewGrid = _xyz.utils.hyperHTML.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
 
-  if (fields.cost) viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  if (fields.cost) viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 1; grid-row: 1; text-align: center;">
         <div style="font-size: 30px;">£</div>
         <div style="font-weight: bold">Cost</div>
         <div style="white-space: pre-wrap;">${fields.cost}</div>
       </div>`);
 
-  if (fields.translation_notes) viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  if (fields.translation_notes) viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 2; grid-row: 1; text-align: center;">
         <div><i style="font-size: 30px;" class="material-icons">translate</i></div>
         <div style="font-weight: bold">Translation</div>
         <div style="white-space: pre-wrap;">${fields.translation_notes}</div>
       </div>`);
 
-  if (fields.access) viewGrid.appendChild(_xyz.utils.hyperHTML.wire()`
+  if (fields.access) viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 3; grid-row: 1; text-align: center;">
         <div><i style="font-size: 30px;" class="material-icons">accessible_forward</i></div>
         <div style="font-weight: bold">Access</div>

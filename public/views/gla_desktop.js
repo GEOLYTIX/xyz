@@ -6,6 +6,7 @@ _xyz({
     _xyz.mapview.create({
       target: document.getElementById('Map'),
       scrollWheelZoom: true,
+      zoomControl: true,
       btn: {
         Locate: document.getElementById('btnLocate'),
       }
@@ -126,7 +127,7 @@ _xyz({
           }
         });
   
-        if(e.target.textContent === 'Show all'){
+        if(e.target.textContent === 'Show all services'){
           delete layer.filter.current[e.target.dataset.field];
           layer.zoomToExtent();
           tableShow();
