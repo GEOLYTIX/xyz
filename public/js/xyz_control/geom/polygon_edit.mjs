@@ -1,5 +1,3 @@
-import 'leaflet-draw';
-
 export default _xyz => (e, layer) => {
 
 	if(!layer.edit || !layer.edit.polygon) return;
@@ -52,7 +50,7 @@ export default _xyz => (e, layer) => {
 
         				    let xhr = new XMLHttpRequest();
 
-        					xhr.open('POST', _xyz.host + '/api/location/edit/mvt?' + _xyz.utils.paramString({
+        					xhr.open('POST', _xyz.host + '/api/location/edit/geom/update?' + _xyz.utils.paramString({
         						locale: _xyz.workspace.locale.key,
         						layer: layer.key,
         						table: layer.table,

@@ -230,6 +230,8 @@ export default _xyz => layer => () => {
 
         if (document.body.dataset.viewmode === 'report') return;
 
+        if(_xyz.mapview.state !== 'select') return; 
+
         let
           count = e.layer.feature.properties.count,
           lnglat = e.layer.feature.geometry.coordinates;
@@ -322,6 +324,11 @@ export default _xyz => layer => () => {
       })
       .on('mouseout', e => {
         if (layer.hover.field && !layer.hover.permanent) layer.hover.remove();
+      })
+      .on('contextmenu', e => {
+
+        _xyz.geom.point_edit(e, layer);
+      
       })
       .addTo(_xyz.map);
 

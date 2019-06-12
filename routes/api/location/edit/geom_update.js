@@ -6,7 +6,7 @@ module.exports = fastify => {
 
   fastify.route({
     method: 'POST',
-    url: '/api/location/edit/mvt',
+    url: '/api/location/edit/geom/update',
     preValidation: fastify.auth([
       (req, res, next) => fastify.authToken(req, res, next, {
         public: true

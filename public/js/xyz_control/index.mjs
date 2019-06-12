@@ -4,6 +4,8 @@ import L from 'leaflet';
 
 import 'leaflet.vectorgrid';
 
+import 'leaflet-draw';
+
 import * as utils from '../utils/_utils.mjs';
 
 import workspace from './workspace.mjs';
