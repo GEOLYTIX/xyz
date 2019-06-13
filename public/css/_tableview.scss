@@ -19,11 +19,17 @@
         grid-column: 2;
     }
 
-    .table {
+    .tab-content {
         grid-row: 3;
         grid-column: 2;
+        overflow: auto;
     }
-    
+
+    /*.table {
+        grid-row: 3;
+        grid-column: 2;
+    }*/
+
     nav {
         text-align: center;
         ul.nav_bar-nav {

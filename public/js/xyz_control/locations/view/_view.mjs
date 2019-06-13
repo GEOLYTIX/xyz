@@ -18,6 +18,8 @@ import tableDefinition from './tableDefinition.mjs';
 
 import orderedList from './orderedList.mjs';
 
+import dashboard from './dashboard.mjs';
+
 import report from './report.mjs';
 
 import update from './update.mjs';
@@ -51,6 +53,8 @@ export default _xyz => function () {
     tableDefinition: tableDefinition(_xyz),
   
     orderedList: orderedList(_xyz),
+
+    dashboard: dashboard(_xyz),
   
     report: report(_xyz),
   

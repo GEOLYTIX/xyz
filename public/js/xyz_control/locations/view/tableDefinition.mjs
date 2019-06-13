@@ -1,4 +1,4 @@
-export default _xyz => (entry) => {
+export default _xyz => entry => {
 
   let td = _xyz.utils.createElement({
     tag: 'td',
@@ -43,6 +43,16 @@ export default _xyz => (entry) => {
   if (entry.display) showTab();
 
   function showTab() {
+
+    if(_xyz.tableview.node && !_xyz.tableview.node.querySelector('.table')) {
+      _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          classList: 'table'
+        },
+        appendTo: _xyz.tableview.node.querySelector('.tab-content')
+      });
+    }
 
     entry.location.tables.push(entry);
 

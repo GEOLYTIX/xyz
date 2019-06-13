@@ -8,6 +8,8 @@ import locationTable from './locationTable.mjs';
 
 import orderedList from './orderedList.mjs';
 
+import dashboard from './dashboard.mjs';
+
 import layerTable from './layerTable.mjs';
 
 import resizeObserve from './resizeObserve.mjs';
@@ -27,6 +29,8 @@ export default _xyz => {
     locationTable: locationTable(_xyz),
 
     orderedList: orderedList(_xyz),
+
+    dashboard: dashboard(_xyz),
 
     layerTable: layerTable(_xyz),
 
