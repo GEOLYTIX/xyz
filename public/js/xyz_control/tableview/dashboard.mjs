@@ -9,7 +9,7 @@ export default _xyz => (table, callback) => {
 
   }
 
-  if (!table.columns) {
+  /*if (!table.columns) {
 
     const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
 
@@ -23,7 +23,7 @@ export default _xyz => (table, callback) => {
 
   table.columns.forEach(col => {
     columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-  });
+  });*/
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
 
@@ -31,7 +31,8 @@ export default _xyz => (table, callback) => {
 
   table.update = () => {
 
-  	const xhr = new XMLHttpRequest();
+    console.log('update dashboard');
+  	/*const xhr = new XMLHttpRequest();
 
   	xhr.open('GET', _xyz.host + '/api/location/list?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
@@ -53,21 +54,24 @@ export default _xyz => (table, callback) => {
       if (callback) callback(e.target.response);
     };
 
-    xhr.send();
+    xhr.send();*/
+    table.target.textContent = 'Hi I am a dashboard';
 
   };
 
   table.activate = () => {
 
-    table.target = _xyz.tableview.tableContainer();
+    console.log('activate dashboard');
 
-    table.Tabulator = new _xyz.utils.Tabulator(
+    //table.target.textContent = 'Hi I am a dashboard';
+
+    /*table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
         columns: columns,
         // autoResize: true,
         layout: 'fitDataFill',
         height: 'auto'
-      });
+      });*/
 
     table.update();
 

@@ -49,6 +49,7 @@ export default _xyz => table => {
           _xyz.tableview.nav_bar.appendChild(e.target);
         } 
           e.target.classList.add('tab-current');
+
           table.activate();
 
         // set tab to current

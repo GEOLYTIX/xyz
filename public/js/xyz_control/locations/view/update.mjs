@@ -137,7 +137,12 @@ export default (_xyz, location) => () => {
 
     if (entry.type === 'tableDefinition') return location.view.tableDefinition(entry);
 
-    if (entry.type === 'orderedList') return location.view.orderedList(entry);    
+    if (entry.type === 'orderedList') return location.view.orderedList(entry);  
+
+    if (entry.type === 'dashboard') {
+      //console.log(entry);
+      return location.view.dashboard(entry);   
+    } 
 
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();

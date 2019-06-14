@@ -160,7 +160,11 @@
   z-index: 1000;
   /* to hide static labels outside map */
   background-color: white;
-  /* to hide static labels outside map*/ }
+  /* to hide static labels outside map*/
+  /*.table {
+      grid-row: 3;
+      grid-column: 2;
+  }*/ }
   .tableview .btn_column {
     grid-row: 2/4; }
   .tableview .nav_bar {
@@ -168,9 +172,10 @@
     font-size: 14px;
     grid-row: 2;
     grid-column: 2; }
-  .tableview .table {
+  .tableview .tab-content {
     grid-row: 3;
-    grid-column: 2; }
+    grid-column: 2;
+    overflow: auto; }
   .tableview nav {
     text-align: center; }
     .tableview nav ul.nav_bar-nav {
@@ -2421,7 +2426,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       }*/ }
       .contextmenu ul li:hover {
         background-color: #9CC5A1;
-        border-bottom: 1px solid transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
         cursor: pointer; }
 
 *,

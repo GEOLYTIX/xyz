@@ -77,6 +77,8 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
+    table.target = _xyz.tableview.tableContainer();
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
         columns: columns,
