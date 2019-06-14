@@ -201,7 +201,7 @@ function drawMethod(btn, geometry) {
 
 }
 
-const btnDelete = document.getElementById('btnDelete')
+const btnDelete = document.getElementById('btnDelete');
 
 btnDelete.onclick = function () {
 
