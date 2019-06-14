@@ -595,7 +595,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.scratch",
-                    
+                    "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
                     "edit": {
                         "polygon": {

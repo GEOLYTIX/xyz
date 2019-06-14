@@ -38,15 +38,18 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         id = req.query.id,
+        srid = req.query.srid,
         geom = layer.geom,
         geom_3857 = layer.geom_3857,
         geometry = req.body;
 
-      let _geom = `ST_GeomFromGeoJSON('${JSON.stringify(geometry)}')`;
+      let _geom;
 
-      if(geom) _geom = `ST_SetSRID(${_geom}, 4326)`;
+      if(geom) _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'), 4326)`;
 
-      if(geom_3857) _geom = `ST_Transform(ST_SetSRID(${_geom}, 4326), 3857)`;
+      if(geom_3857) _geom = `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'), 4326), 3857)`;
+
+      if (srid === '3857') _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'), 3857)`;
     
       var q = `UPDATE ${table} SET ${geom || geom_3857} = ${_geom} WHERE ${layer.qID} = ${id};`;
 

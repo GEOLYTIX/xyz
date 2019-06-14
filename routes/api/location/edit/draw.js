@@ -53,8 +53,6 @@ module.exports = fastify => {
 
       if (srid === '3857') _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 3857)`;
 
-      //if (geom_3857) 
-
       var q = `
       INSERT INTO ${table} (${geom || geom_3857})
       SELECT ${_geom}

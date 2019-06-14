@@ -8,7 +8,8 @@
 
     <!-- <link rel="stylesheet" href="{{:dir}}/css/control.css" /> -->
 
-    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
+        type="text/css">
 
     <!-- <link rel="stylesheet" href="{{:dir}}/css/ol.css" /> -->
 
@@ -19,6 +20,8 @@
     <!-- <link rel="stylesheet" href="{{:dir}}/css/control.css" /> -->
 
     <script src="{{:dir}}/views/ol.js" defer></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <style>
         html,
@@ -34,6 +37,27 @@
             height: 100%;
             width: 100%;
         }
+
+        .btns {
+            position: absolute;
+            top: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-left: 10px;
+            background-color: #EE266D;
+            border-radius: 100%;
+            border: none;
+            width: 50px;
+            height: 50px;
+            color: #fff;
+            box-shadow: 2px 2px #aaa
+        }
+
+        .btn.active {
+            background-color: #0d47a1 !important;
+        }
     </style>
 
 </head>
@@ -41,6 +65,21 @@
 <body>
 
     <div id="map" class="map"></div>
+
+    <div class="btns">
+        <button id="btnPoint" class="btn">
+            <i class="material-icons">add_location</i>
+        </button>
+        <button id="btnLine" class="btn">
+            <i class="material-icons">timeline</i>
+        </button>
+        <button id="btnPoly" class="btn">
+            <i class="material-icons">signal_cellular_null</i>
+        </button>
+        <button id="btnDelete" class="btn">
+            <i class="material-icons">delete</i>
+        </button>
+    </div>
 
 </body>
 
