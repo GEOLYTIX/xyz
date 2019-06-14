@@ -47,6 +47,8 @@ export default (_xyz, layer) => {
     table.title = table.title || key;
     table.target = _xyz.tableview.node.querySelector('.table');
 
+    if(!table.target) table.target = _xyz.tableview.tableContainer();
+
     table.show = ()=>_xyz.tableview.layerTable(table);
     table.remove = ()=>_xyz.tableview.removeTab(table);
 

@@ -12,6 +12,8 @@ import dashboard from './dashboard.mjs';
 
 import layerTable from './layerTable.mjs';
 
+import tableContainer from './tableContainer.mjs';
+
 import resizeObserve from './resizeObserve.mjs';
 
 export default _xyz => {
@@ -33,6 +35,8 @@ export default _xyz => {
     dashboard: dashboard(_xyz),
 
     layerTable: layerTable(_xyz),
+
+    tableContainer: tableContainer(_xyz),
 
     resizeObserve: resizeObserve(_xyz)
 

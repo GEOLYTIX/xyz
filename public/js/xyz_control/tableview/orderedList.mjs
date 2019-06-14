@@ -59,17 +59,7 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
-
-    if(_xyz.tableview.node && !_xyz.tableview.node.querySelector('.table')){
-      table.target = _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          classList: 'table'
-        },
-        appendTo: _xyz.tableview.node.querySelector('.tab-content')
-      });
-    }
+    table.target = _xyz.tableview.tableContainer();
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
