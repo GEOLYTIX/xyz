@@ -53,7 +53,7 @@ module.exports = fastify => {
         y = parseInt(req.params.y),
         z = parseInt(req.params.z),
         m = 20037508.34,
-        r = (m * 2) / (Math.pow(2, z));   
+        r = (m * 2) / (Math.pow(2, z));
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
@@ -124,7 +124,7 @@ module.exports = fastify => {
               3857
             ),
             ${geom_3857},
-            0
+            ${r/4}
           )
 
           ${filter_sql}
