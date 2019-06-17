@@ -2,6 +2,8 @@ import Chart from 'chart.js';
 import {createElement} from './createElement.mjs';
 
 export default (group) => {
+  
+  //console.log(group);
 
   const graph = createElement({
     tag: 'div',
@@ -9,6 +11,8 @@ export default (group) => {
       position: 'relative'
     }
   });
+
+  console.log(group.chart.height);
 
   const canvas = createElement({
     tag: 'canvas',
@@ -123,6 +127,8 @@ export default (group) => {
       }
     }
   });
+
+  console.log(graph);
 
   return graph;
 

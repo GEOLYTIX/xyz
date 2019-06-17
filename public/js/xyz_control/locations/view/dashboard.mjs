@@ -34,7 +34,7 @@ export default _xyz => entry => {
       //console.log(entry.target);
     	if (entry.target) _xyz.tableview.dashboard(entry);
 
-      console.log(entry.location);
+      //console.log(entry.location);
   }
 
   function removeTab() {

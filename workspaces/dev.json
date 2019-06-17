@@ -1507,6 +1507,7 @@
                         {
                             "label": "Population within 5min",
                             "type": "group",
+                            "dashboard": "Dashboard 1",
                             "chart": {
                                 "active": true,
                                 "type": "bar",
@@ -2641,12 +2642,12 @@
                           },
                           {
                             "type": "dashboard",
-                            "title": "Dashboard 1"
+                            "title": "Dashboard 1",
+                            "display": true
                           },
                           {
                             "type": "dashboard",
-                            "title": "Dashboard 2",
-                            "display": true
+                            "title": "Dashboard 2"
                           },
                           {
                             "type": "streetview",

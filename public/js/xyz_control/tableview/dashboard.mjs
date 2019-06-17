@@ -1,6 +1,8 @@
-export default _xyz => (table, callback) => {
+export default _xyz => (entry, callback) => {
 
-  if (!table || !table.location) return;
+  console.log(entry);
+
+  if (!entry || !entry.location) return;
 
   if (_xyz.tableview.node) {
     // _xyz.tableview.node.style.display = 'block';
@@ -9,50 +11,67 @@ export default _xyz => (table, callback) => {
 
   }
 
-  /*if (!table.columns) {
+  if (_xyz.tableview.tables.indexOf(entry) < 0) _xyz.tableview.tables.push(entry);
 
-    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(entry);
 
-    const infoj_table = Object.values(infoj).find(v => v.title === table.title);
+  entry.update = () => {
 
-    Object.assign(table, infoj_table);
-
-  }
-
-  const columns = [];
-
-  table.columns.forEach(col => {
-    columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-  });*/
-
-  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
-
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
-
-  table.update = () => {
-
-    table.target.innerHTML = '';
+    entry.target.innerHTML = '';
 
     //console.log('update dashboard');
     let flex_container = _xyz.utils.createElement({
       tag: 'div',
       style: {
         display: 'flex',
-        flexWrap: 'wrap'/*,
+        flexWrap: 'wrap',
+        position: 'relative'/*,
         backgroundColor: 'steelblue' */
       },
-      appendTo: table.target
+      appendTo: entry.target
+    });
+
+    Object.values(entry.location.infoj).map(val => {
+
+      if(val.type === 'group' && val.chart && val.dashboard){
+
+        entry.group = Object.assign({}, val);
+
+        let container = _xyz.utils.createElement({
+          tag: 'div',
+          style: {
+          backgroundColor: 'white',
+          /*width: '48%',
+          margin: '1%',*/
+          width: '450px',
+          height: '300px',
+          margin: '10px'/*,
+          border: 'dashed 1px red',*/
+          },
+          appendTo: flex_container
+        });
+
+        //console.log(val);
+        entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
+
+        //flex_container.appendChild(val.chartElem);
+        let chartElem = _xyz.utils.chart(entry.group);
+        //console.log(entry.group);
+
+        container.appendChild(chartElem);
+
+      }
     });
 
 
-    for(let i = 1; i < 18; i++){
+    /*for(let i = 1; i < 18; i++){
       _xyz.utils.createElement({
         tag: 'div',
         style: {
           backgroundColor: 'white',
           /*width: '48%',
           margin: '1%',*/
-          width: '450px',
+          /*width: '450px',
           margin: '10px',
           border: 'dashed 1px red',
           textAlign: 'center',
@@ -64,7 +83,8 @@ export default _xyz => (table, callback) => {
         },
         appendTo: flex_container
       });
-    }
+    }*/
+
   	/*const xhr = new XMLHttpRequest();
 
   	xhr.open('GET', _xyz.host + '/api/location/list?' + _xyz.utils.paramString({
@@ -92,7 +112,7 @@ export default _xyz => (table, callback) => {
 
   };
 
-  table.activate = () => {
+  entry.activate = () => {
 
     console.log('activate dashboard');
 
@@ -106,13 +126,13 @@ export default _xyz => (table, callback) => {
         height: 'auto'
       });*/
 
-    table.update();
+    entry.update();
 
-    _xyz.tableview.current_table = table;
+    _xyz.tableview.current_table = entry;
 
   };
 
   // active only if displayed in the navbar 
-  if(!table.tab || !table.tab.classList.contains('folded')) table.activate();
+  if(!entry.tab || !entry.tab.classList.contains('folded')) entry.activate();
 
 };
