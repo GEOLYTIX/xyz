@@ -2360,7 +2360,7 @@
                           {
                             "type": "tableDefinition",
                             "title": "Age Profile",
-                            "display": true,
+                            "display": false,
                             "target_id": "xyz_table2",
                             "columns": [
                               {
@@ -2645,7 +2645,8 @@
                           },
                           {
                             "type": "dashboard",
-                            "title": "Dashboard 2"
+                            "title": "Dashboard 2",
+                            "display": true
                           },
                           {
                             "type": "streetview",

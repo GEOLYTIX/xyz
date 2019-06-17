@@ -69,8 +69,10 @@ export default _xyz => () => {
     if(_xyz.tableview.nav_bar.children.length < _xyz.tableview.max_tabs){
       let d = _xyz.tableview.max_tabs - _xyz.tableview.nav_bar.children.length;
       for(let i = 0; i < d; i++){
-        _xyz.tableview.nav_dropdown.children[i].classList.remove('folded');
-        _xyz.tableview.nav_bar.appendChild(_xyz.tableview.nav_dropdown.children[i]);
+        if(_xyz.tableview.nav_dropdown.children[i]) {
+          _xyz.tableview.nav_dropdown.children[i].classList.remove('folded');
+          _xyz.tableview.nav_bar.appendChild(_xyz.tableview.nav_dropdown.children[i]);
+        }
       }
       activateTab();
     }

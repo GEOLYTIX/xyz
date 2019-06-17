@@ -31,7 +31,40 @@ export default _xyz => (table, callback) => {
 
   table.update = () => {
 
-    console.log('update dashboard');
+    table.target.innerHTML = '';
+
+    //console.log('update dashboard');
+    let flex_container = _xyz.utils.createElement({
+      tag: 'div',
+      style: {
+        display: 'flex',
+        flexWrap: 'wrap'/*,
+        backgroundColor: 'steelblue' */
+      },
+      appendTo: table.target
+    });
+
+
+    for(let i = 1; i < 18; i++){
+      _xyz.utils.createElement({
+        tag: 'div',
+        style: {
+          backgroundColor: 'white',
+          /*width: '48%',
+          margin: '1%',*/
+          width: '450px',
+          margin: '10px',
+          border: 'dashed 1px red',
+          textAlign: 'center',
+          lineHeight: '75px',
+          fontSize: '30px'
+        },
+        options: {
+          textContent: i
+        },
+        appendTo: flex_container
+      });
+    }
   	/*const xhr = new XMLHttpRequest();
 
   	xhr.open('GET', _xyz.host + '/api/location/list?' + _xyz.utils.paramString({
@@ -55,7 +88,7 @@ export default _xyz => (table, callback) => {
     };
 
     xhr.send();*/
-    table.target.textContent = 'Hi I am a dashboard';
+    //table.target.textContent = 'Hi I am a dashboard';
 
   };
 
