@@ -1,18 +1,17 @@
 export default _xyz => table => {
 
-  //if (!table || !table.target || !table.layer || !table.key) return;
-
   if (!table) return;
 
-  if (!table.layer.tableview.tables[table.key]) return;
+  if (table.key) {
+    if (!table.layer.tableview.tables[table.key]) return;
+    Object.assign(table, table.layer.tableview.tables[table.key]);
+  }
 
   if (_xyz.tableview.node) {
     // _xyz.tableview.node.style.display = 'block';
     // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
-
-  Object.assign(table, table.layer.tableview.tables[table.key]);
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
 

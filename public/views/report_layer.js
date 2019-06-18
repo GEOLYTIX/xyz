@@ -31,4 +31,10 @@ function init(_xyz) {
 
   }
 
+  // _xyz.tableview.layerTable({
+  //   layer: _xyz.layers.list.COUNTRIES,
+  //   target: document.getElementById('report_table'),
+  //   key: 'table1'
+  // });
+
 }
