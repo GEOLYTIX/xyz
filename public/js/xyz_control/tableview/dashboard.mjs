@@ -56,7 +56,9 @@ export default _xyz => (entry, callback) => {
         entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
         //flex_container.appendChild(val.chartElem);
-        let chartElem = _xyz.utils.chart(entry.group);
+
+        //let chartElem = _xyz.utils.chart(entry.group);
+        let chartElem = _xyz.charts.create(entry.group);
         chartElem.style.width = '450px';
         chartElem.style.height = '300px';
         //console.log(entry.group);
@@ -66,8 +68,8 @@ export default _xyz => (entry, callback) => {
       }
     });
 
-    _xyz.charts.bubble(entry.group);
-    _xyz.charts.create(entry.group);
+    //_xyz.charts.bubble(entry.group);
+    //_xyz.charts.create(entry.group);
 
 
     /*for(let i = 1; i < 18; i++){

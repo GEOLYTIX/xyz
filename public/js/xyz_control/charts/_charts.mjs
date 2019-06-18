@@ -25,34 +25,29 @@ export default _xyz => {
 
         simple: simpleChart(_xyz),
 
-        stackedBar: stackedBarChart(_xyz),
-
+        stackedBar: stackedBarChart(_xyz)
     }
 
     function create(entry) {
 
-    	console.log('hey I am a create chart!');
-    	console.log(entry);
-    	return;
-
         if (!entry.chart.type) {
             entry.chart.type = 'line';
-            charts.simple(entry);
+            return charts.simple(entry);
         }
 
-        if (entry.chart.type === 'line' || entry.chart.type === 'bar' || entry.chart.type === 'horizontalBar') charts.simple(entry);
+        if (entry.chart.type === 'line' || entry.chart.type === 'bar' || entry.chart.type === 'horizontalBar') return charts.simple(entry);
 
-        if (entry.chart.type === 'pie' || entry.chart.type === 'doughnut') charts.cake(entry);
+        if (entry.chart.type === 'pie' || entry.chart.type === 'doughnut') return charts.cake(entry);
 
-        if (entry.chart.type === 'mixed') charts.mixed(entry);
+        if (entry.chart.type === 'mixed') return charts.mixed(entry);
 
-        if (entry.chart.type === 'polarArea') chart.polarArea(entry);
+        if (entry.chart.type === 'polarArea') return chart.polarArea(entry);
 
-        if (entry.chart.type === 'radar') chart.radar(entry);
+        if (entry.chart.type === 'radar') return chart.radar(entry);
 
-        if (entry.chart.type === 'scatter') chart.scatter(entry);
+        if (entry.chart.type === 'scatter') return chart.scatter(entry);
 
-        if (entry.chart.type === 'stackedBar') chart.stackedBar(entry)
+        if (entry.chart.type === 'stackedBar') return chart.stackedBar(entry)
 
     }
 
@@ -85,11 +80,29 @@ export default _xyz => {
     }
 
     function stackedBar(entry) {
-        charts.stackedBar(entry);
+       charts.stackedBar(entry);
+    }
+
+    function scale(entry){
+    	let _scale;
+    	switch(entry.chart.unit){
+    		case 'k': _scale = '1k = 1 000'; break;
+    		case 'M': _scale = '1M = 1 000 000'; break;
+    	}
+    	return _scale;
+    }
+
+    function units(entry, label){
+    	let _label;
+
+    	switch(entry.chart.unit){
+    		case 'k': _label = label/1000 + 'k'; break;
+    		case 'M': _label = label/1000000 + 'M'; break;
+    	}
+    	return _label;
     }
 
     return {
-
         create: create,
         bubble: bubble,
         cake: cake,
@@ -98,10 +111,8 @@ export default _xyz => {
         radar: radar,
         scatter: scatter,
         simple: simple,
-        stackedBar: stackedBar
-
+        stackedBar: stackedBar,
+        scale: scale,
+        units: units
     }
-
-
-
 };

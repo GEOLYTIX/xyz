@@ -81,7 +81,6 @@ export default group => {
         display: group.chart.title || true,
         position: 'bottom',
         text: group.label
-
       },
       responsive: true,
       legend: {

@@ -24,6 +24,8 @@ import mapview from '../xyz_leaflet/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
 
+import Chart from 'chart.js';
+
 import charts from './charts/_charts.mjs';
 
 export default async (params) => {
@@ -31,6 +33,8 @@ export default async (params) => {
   const _xyz = _xyz_instance();
 
   _xyz.L = L;
+
+  _xyz.Chart = Chart;
 
   _xyz.utils = utils;
 
@@ -70,8 +74,6 @@ export default async (params) => {
   await _xyz.workspace.fetchWS();
 
   if (params.locale) _xyz.workspace.loadLocale(params);
-
-  console.log(_xyz.charts);
 
   return _xyz;
 
