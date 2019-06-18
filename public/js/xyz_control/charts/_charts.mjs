@@ -31,6 +31,10 @@ export default _xyz => {
 
     function create(entry) {
 
+    	console.log('hey I am a create chart!');
+    	console.log(entry);
+    	return;
+
         if (!entry.chart.type) {
             entry.chart.type = 'line';
             charts.simple(entry);

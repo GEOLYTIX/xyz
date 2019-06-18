@@ -32,8 +32,6 @@ export default _xyz => (entry, callback) => {
       appendTo: entry.target
     });
 
-    _xyz.charts.bubbleChart(entry);
-
     Object.values(entry.location.infoj).map(val => {
 
       if(val.type === 'group' && val.chart && val.dashboard && entry.title === val.dashboard){
@@ -67,6 +65,9 @@ export default _xyz => (entry, callback) => {
 
       }
     });
+
+    _xyz.charts.bubble(entry.group);
+    _xyz.charts.create(entry.group);
 
 
     /*for(let i = 1; i < 18; i++){
