@@ -25,40 +25,45 @@ export default _xyz => (entry, callback) => {
       style: {
         display: 'flex',
         flexWrap: 'wrap',
-        position: 'relative'/*,
+        position: 'relative',
+        padding: '20px'/*,
         backgroundColor: 'steelblue' */
       },
       appendTo: entry.target
     });
 
+    _xyz.charts.bubbleChart(entry);
+
     Object.values(entry.location.infoj).map(val => {
 
-      if(val.type === 'group' && val.chart && val.dashboard){
+      if(val.type === 'group' && val.chart && val.dashboard && entry.title === val.dashboard){
 
         entry.group = Object.assign({}, val);
 
-        let container = _xyz.utils.createElement({
+        /*let container = _xyz.utils.createElement({
           tag: 'div',
           style: {
           backgroundColor: 'white',
           /*width: '48%',
           margin: '1%',*/
-          width: '450px',
+         /* width: '450px',
           height: '300px',
           margin: '10px'/*,
           border: 'dashed 1px red',*/
-          },
+         /* },
           appendTo: flex_container
-        });
+        });*/
 
         //console.log(val);
         entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
         //flex_container.appendChild(val.chartElem);
         let chartElem = _xyz.utils.chart(entry.group);
+        chartElem.style.width = '450px';
+        chartElem.style.height = '300px';
         //console.log(entry.group);
 
-        container.appendChild(chartElem);
+        flex_container.appendChild(chartElem);
 
       }
     });

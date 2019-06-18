@@ -24,6 +24,8 @@ import mapview from '../xyz_leaflet/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
 
+import charts from './charts/_charts.mjs';
+
 export default async (params) => {
     
   const _xyz = _xyz_instance();
@@ -37,6 +39,8 @@ export default async (params) => {
   _xyz.locations = locations(_xyz);
 
   _xyz.geom = geom(_xyz);
+
+  _xyz.charts = charts(_xyz);
 
   _xyz.mapview = mapview(_xyz);
 
@@ -66,6 +70,8 @@ export default async (params) => {
   await _xyz.workspace.fetchWS();
 
   if (params.locale) _xyz.workspace.loadLocale(params);
+
+  console.log(_xyz.charts);
 
   return _xyz;
 

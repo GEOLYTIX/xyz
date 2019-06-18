@@ -1,9 +1,7 @@
 import Chart from 'chart.js';
 import {createElement} from './createElement.mjs';
 
-export default (group) => {
-  
-  //console.log(group);
+export default group => {
 
   const graph = createElement({
     tag: 'div',
@@ -11,8 +9,6 @@ export default (group) => {
       position: 'relative'
     }
   });
-
-  console.log(group.chart.height);
 
   const canvas = createElement({
     tag: 'canvas',
@@ -33,6 +29,8 @@ export default (group) => {
   const displayValues = group.fields.map(field => field.displayValue);
 
   let datasets = [];
+
+  //if(group.chart.type === 'bubble'){}
 
   if(stacked_labels.length > 1){
 
@@ -127,8 +125,6 @@ export default (group) => {
       }
     }
   });
-
-  console.log(graph);
 
   return graph;
 

@@ -86,6 +86,8 @@ export default _xyz => group => {
 
   // If chart option specified
   if (group.chart) {
+
+    if(group.dashboard) return;
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
