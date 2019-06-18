@@ -1986,6 +1986,7 @@
                             "level": 2,
                             "chart": {
                                 "type": "doughnut",
+                                "cutoutPercentage": 70,
                                 "backgroundColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"],
                                 "borderColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"]
                             }

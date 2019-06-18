@@ -39,6 +39,7 @@ export default _xyz => entry => {
     		datasets: datasets  		
     	},
     	options: {
+    		cutoutPercentage: entry.chart.cutoutPercentage || 50,
     		title: {
     			display: entry.chart.title || true,
     			position: 'bottom',
