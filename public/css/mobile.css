@@ -1493,8 +1493,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   border-right-color: #fff; }
 
 .attribution {
-  bottom: 5px;
-  right: 5px;
+  bottom: 0;
+  right: 0;
+  padding: 0 5px 5px 0;
   margin-left: 150px;
   position: absolute;
   z-index: 999;
@@ -2426,7 +2427,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       }*/ }
       .contextmenu ul li:hover {
         background-color: #9CC5A1;
-        border-bottom: 1px solid rgba(0, 0, 0, 0);
+        border-bottom: 1px solid transparent;
         cursor: pointer; }
 
 *,

@@ -30,6 +30,7 @@
                     },
                     "format": "mvt",
                     "dbs": "XYZ",
+                    "mvt_cache": "dev.natural_earth_countries__mvts",
                     "table": "dev.natural_earth_countries",
                     "tableview": {
                         "tables": {
