@@ -18,7 +18,7 @@ export default (_xyz, layer, filter_entry) => {
         layer.filter.current[filter_entry.field] = {};
         layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
 
-        layer.filter.check_count();
+        layer.filter.check_count(filter_entry.filterZoom);
 
         layer.show();
 
