@@ -105,7 +105,12 @@ export default _xyz => entry => {
       //   appendTo: header
       // });
 
-      entry.chart.node.appendChild(_xyz.utils.chart({
+      /*entry.chart.node.appendChild(_xyz.utils.chart({
+        label: entry.title,
+        fields: fields,
+        chart: entry.chart
+      }));*/
+      entry.chart.node.appendChild(_xyz.charts.create({
         label: entry.title,
         fields: fields,
         chart: entry.chart

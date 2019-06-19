@@ -17,8 +17,6 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
-	console.log(entry);
-
 	let series = entry.fields.map(field => field.dataset); // get all series
 
     // remove duplicates
@@ -32,8 +30,6 @@ export default _xyz => entry => {
 		return labels.indexOf(item) >= idx;
 	});
 
-	//console.log(labels);
-
 	let datasets = [];
 	let tmp = {};
 
@@ -43,31 +39,29 @@ export default _xyz => entry => {
 
 		let idx = series.indexOf(serie);
 
+		// set dataset colours
+
 		tmp[serie].backgroundColor = entry.chart.backgroundColor[idx] ||  null;
 		tmp[serie].borderColor = entry.chart.borderColor[idx] ||  null;
 
-		if(entry.chart.fillOpacity){
-			if(tmp[serie].backgroundColor) tmp[serie].backgroundColor = _xyz.utils.hexToRGBA(tmp[serie].backgroundColor, entry.chart.fillOpacity); 
+		tmp[serie].pointBackgroundColor = entry.chart.backgroundColor[idx] ||  null;
+		tmp[serie].pointBorderColor = entry.chart.borderColor[idx] ||  null;
+
+		tmp[serie].lineTension = 0.5;
+
+		if(entry.chart.fillOpacity){ // set fill opacity
+			if(tmp[serie].backgroundColor) tmp[serie].backgroundColor = _xyz.utils.hexToRGBA(tmp[serie].backgroundColor, entry.chart.fillOpacity);
+			if(tmp[serie].pointBackgroundColor) tmp[serie].pointBackgroundColor = _xyz.utils.hexToRGBA(tmp[serie].pointBackgroundColor, entry.chart.fillOpacity);
 		}
 
 	});
-
-	//console.log(tmp);
 
 	Object.values(entry.fields).map(field => {
 		tmp[field.dataset].data.push(Number(field.value));
 	});
 
-	//console.log(labels);
-	//console.log(tmp);
-
 	Object.values(tmp).forEach(val => datasets.push(val));
 
-	//console.log(datasets);
-
-	/*Object.values(entry.fields).map(entr => {
-
-	});*/
 	new _xyz.Chart(canvas, {
 		type: 'radar',
 		data: {
@@ -83,6 +77,9 @@ export default _xyz => entry => {
 			responsive: true,
 			legend: {
 				display: entry.chart.legend
+			},
+			tooltips: {
+				enabled: true
 			}
 		}
 	});

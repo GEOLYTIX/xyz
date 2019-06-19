@@ -2107,7 +2107,7 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "chart": {
-                                "height": 500,
+                                "height": 300,
                                 "type": "radar",
                                 "backgroundColor": ["#e91e63", "#03a9f4"],
                                 "fillOpacity": 0.3,
