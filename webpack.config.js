@@ -3,11 +3,12 @@ const path = require('path');
 module.exports = {
   entry: {
     xyz_ui: ['./public/js/xyz_ui.js'],
-    xyz_control: ['./public/js/xyz_control/lib.js']
+    xyz_openlayers: ['./public/js/xyz_openlayers/lib.js'],
+    xyz_leaflet: ['./public/js/xyz_leaflet/lib.js']
   },
   output: {
     path: path.resolve(__dirname, 'public/js/build'),
-    filename: '[name]_bundle.js'
+    filename: '[name].js'
   },
   devtool: 'source-map',
   module: {

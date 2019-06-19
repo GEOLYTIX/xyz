@@ -17,9 +17,17 @@
 // import * as geom from 'ol/geom';
 
 // import {Map, View} from 'ol';
+
 import layerTile from 'ol/layer/Tile';
 import sourceOSM from 'ol/source/OSM';
-import sourceXYZ from 'ol/source/XYZ';
+
+import formatMVT from 'ol/format/MVT';
+import layerVectorTile from 'ol/layer/VectorTile';
+import sourceVectorTile from 'ol/source/VectorTile';
+
+import {Feature} from 'ol';
+
+
 
 import create from './create.mjs';
 
@@ -37,46 +45,25 @@ export default _xyz => {
 
   _xyz.mapview = {};
 
-  _xyz.mapview.lib = {};
-
-
-  _xyz.mapview.lib.tileLayer = uri => {
-    return new layerTile({
-      source: new sourceOSM({
-        url: uri
-      })
-    });
+  _xyz.mapview.lib = {
+    Feature: Feature
   };
 
 
-  // _xyz.mapview.lib = {
-  //   Map: Map,
-  //   View: View,
-  //   layerTile: layerTile,
-  //   sourceOSM: sourceOSM,
-  // };
+  _xyz.mapview.lib.format = {
+    MVT: formatMVT
+  };
 
-  // _xyz.mapview.Map = Map;
-  // _xyz.mapview.View = View;
+  _xyz.mapview.lib.source = {
+    OSM: sourceOSM,
+    VectorTile: sourceVectorTile
+  };
 
-  // _xyz.ol = {};
-  // _xyz.ol.Map = Map;
-  // _xyz.ol.View = View;
-  // _xyz.ol.Overlay = Overlay;
-  // _xyz.ol.TileLayer = TileLayer;
-  // _xyz.ol.XYZ = XYZ;
-  // _xyz.ol.interactionDefaults = defaults;
-  // _xyz.ol.proj = proj;
-  // _xyz.ol.ScaleLine = ScaleLine;
-  // _xyz.ol.Feature = Feature;
-  // _xyz.ol.Polygon = Polygon;
-  // _xyz.ol.source = source;
-  // _xyz.ol.style = style;
-  // _xyz.ol.format = format;
-  // _xyz.ol.layer = layer;
-  // _xyz.ol.interaction = interaction;
-  // _xyz.ol.condition = condition;
-  // _xyz.ol.geom = geom;
+  _xyz.mapview.lib.layer = {
+    Tile: layerTile,
+    VectorTile: layerVectorTile
+  };
+
 
   _xyz.mapview.create = create(_xyz);
 
@@ -84,7 +71,7 @@ export default _xyz => {
 
   _xyz.mapview.attribution = attribution(_xyz);
 
-  //_xyz.mapview.locate = locate(_xyz);
+  _xyz.mapview.locate = locate(_xyz);
 
   _xyz.mapview.popup = popup(_xyz);
 

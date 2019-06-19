@@ -1,4 +1,4 @@
-import _xyz from './xyz_control/index.mjs';
+// import _xyz from './xyz_control/index.mjs';
 
 // import logRocket from './logRocket.mjs';
 
@@ -42,6 +42,7 @@ function init(_xyz) {
 
 
   const btnWorkspace = document.getElementById('btnWorkspace');
+
   if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
 
   if (_xyz.log) console.log(_xyz);

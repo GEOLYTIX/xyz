@@ -14,8 +14,6 @@ import hover from './hover.mjs';
 
 import view from './view/_view.mjs';
 
-import format from './format/_format.mjs';
-
 export default _xyz => layer => {
 
   layer.tableCurrent = tableCurrent(_xyz);
@@ -32,7 +30,7 @@ export default _xyz => layer => {
 
   layer.view = view(_xyz);
 
-  layer.get = format(_xyz, layer);
+  layer.get = _xyz.layers.format(layer);
 
   layer.hover = hover(_xyz, layer);
 

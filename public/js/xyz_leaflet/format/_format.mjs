@@ -8,9 +8,7 @@ import tiles from './tiles.mjs';
 
 import grid from './grid.mjs';
 
-export default (_xyz, layer) => {
-
-  if (!layer.format) return;
+export default _xyz => {
 
   const formats = {
 
@@ -26,6 +24,6 @@ export default (_xyz, layer) => {
 
   };
 
-  return formats[layer.format](layer);
+  return layer => formats[layer.format](layer);
 
 };

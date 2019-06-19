@@ -66,6 +66,7 @@ async function view(req, res, token = { access: 'public' }) {
     btnEditor: token.admin_workspace ? '' : 'style="display: none;"',
     logrocket: env.logrocket || '""',
     btnLogRocket: env.logrocket ? '' : 'style="display: none;"',
+    engine: req.query.engine === 'leaflet' ? 'leaflet' : 'openlayers'
   }));
 
 };

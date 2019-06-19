@@ -1,22 +1,24 @@
-import _xyz_instance from './_xyz.mjs';
+import _xyz_instance from '../xyz_control/_xyz.mjs';
 
 import * as utils from '../utils/_utils.mjs';
 
-import workspace from './workspace.mjs';
+import workspace from '../xyz_control/workspace.mjs';
 
-import hooks from './hooks.mjs';
+import hooks from '../xyz_control/hooks.mjs';
 
-import gazetteer from './gazetteer/_gazetteer.mjs';
+import gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
 
-import layers from './layers/_layers.mjs';
+import layers from '../xyz_control/layers/_layers.mjs';
 
-import locations from './locations/_locations.mjs';
+import locations from '../xyz_control/locations/_locations.mjs';
 
-import geom from './geom/_geom.mjs';
+import geom from '../xyz_control/geom/_geom.mjs';
 
-import mapview from '../xyz_openlayers/_mapview.mjs';
+import mapview from './_mapview.mjs';
 
-import tableview from './tableview/_tableview.mjs';
+import format from './format/_format.mjs';
+
+import tableview from '../xyz_control/tableview/_tableview.mjs';
 
 export default async (params) => {
     
@@ -27,6 +29,8 @@ export default async (params) => {
   mapview(_xyz);
 
   _xyz.layers = layers(_xyz);
+
+  _xyz.layers.format = format(_xyz);
 
   _xyz.locations = locations(_xyz);
 

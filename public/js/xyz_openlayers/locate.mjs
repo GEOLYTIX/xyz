@@ -6,10 +6,10 @@ export default _xyz => {
 
     active: false,
 
-    icon: _xyz.mapview.lib.icon({
-      iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
-      iconSize: 30
-    })
+    // icon: _xyz.mapview.lib.icon({
+    //   iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
+    //   iconSize: 30
+    // })
 
   };
 
@@ -35,6 +35,7 @@ export default _xyz => {
     
     // Add the geolocation marker if the latitude is not 0.
     if (locate.L.getLatLng().lat !== 0) {
+
       locate.L.addTo(_xyz.map);
 
       // Fly to marker location and set flyto to false to prevent map tracking.

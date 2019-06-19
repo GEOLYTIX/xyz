@@ -15,22 +15,15 @@ export default _xyz => layer => () => {
     }) :
     layer.URI;
 
-    // Assign the tile layer to the layer L object and add to map.
-  // layer.L = L.tileLayer(decodeURIComponent(uri), {
-  //   updateWhenIdle: true,
-  //   pane: layer.key
-  // })
-  //   .on('load', () => {
-      
-  //     if (layer.view.loader)  layer.view.loader.style.display = 'none';
+    
+  layer.L = new _xyz.mapview.lib.layer.Tile({
+    source: new _xyz.mapview.lib.source.OSM({
+      url: 'https://cartodb-basemaps-{a-d}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png'
+    })
+  });
 
-  //   })
-  //   .addTo(_xyz.map);
-
-
-  layer.L = _xyz.mapview.lib.tileLayer('https://cartodb-basemaps-{a-d}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png');
   _xyz.map.addLayer(layer.L);
-  
+ 
   // _xyz.map.on('rendercomplete', () => {
   //   if (layer.loader)  layer.loader.style.display = 'none';
   // });
