@@ -116,7 +116,7 @@ export default (_xyz, layer, filter_entry) => {
       layer.filter.current[filter_entry.field].gt = _xyz.utils.meltDateStr(input_min.value) || null;
       layer.filter.current[filter_entry.field].lt = _xyz.utils.meltDateStr(input_max.value) || null;
 
-      layer.filter.check_count();
+      layer.filter.check_count(filter_entry.filterZoom);
 
       layer.show();
 
