@@ -1986,7 +1986,7 @@
                             "level": 2,
                             "chart": {
                                 "type": "doughnut",
-                                "cutoutPercentage": 70,
+                                "cutoutPercentage": 36,
                                 "backgroundColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"],
                                 "borderColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"]
                             }
@@ -2025,6 +2025,164 @@
                             "field": "bubble_random5",
                             "fieldfx": "random5",
                             "type": "integer"
+                        },
+                        {
+                            "label": "Stacked Chart",
+                            "type": "group",
+                            "dashboard": "Dashboard 1",
+                            "chart": {
+                                "type": "stackedBar",
+                                "backgroundColor": [
+                                    "#FFA630",
+                                    "#C6DEA6",
+                                    "#0B9800",
+                                    "#EC8394"
+                                ],
+                                "borderColor": [
+                                    "#FFA630",
+                                    "#C6DEA6",
+                                    "#0B9800",
+                                    "#EC8394"
+                                ]
+                            }
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 1",
+                            "field": "actual_sales_activity1",
+                            "type": "integer",
+                            "stack": "Actual sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 2",
+                            "field": "actual_sales_activity2",
+                            "type": "integer",
+                            "stack": "Actual sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 3",
+                            "field": "actual_sales_activity3",
+                            "type": "integer",
+                            "stack": "Actual sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 4",
+                            "field": "actual_sales_activity4",
+                            "type": "integer",
+                            "stack": "Actual sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 1",
+                            "field": "model_sales_activity1",
+                            "type": "integer",
+                            "stack": "Model sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 2",
+                            "field": "model_sales_activity2",
+                            "type": "integer",
+                            "stack": "Model sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 3",
+                            "field": "model_sales_activity3",
+                            "type": "integer",
+                            "stack": "Model sales"
+                        },
+                        {
+                            "group": "Stacked Chart",
+                            "label": "Activity 4",
+                            "field": "model_sales_activity4",
+                            "type": "integer",
+                            "stack": "Model sales"
+                        },
+                        {
+                            "label": "Radar Chart",
+                            "type": "group",
+                            "dashboard": "Dashboard 1",
+                            "chart": {
+                                "height": 500,
+                                "type": "radar",
+                                "backgroundColor": ["#e91e63", "#03a9f4"],
+                                "fillOpacity": 0.3,
+                                "borderColor": ["#e91e63", "#03a9f4"]
+                            }
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "actual_sales_activity1_radar",
+                            "fieldfx": "actual_sales_activity1", 
+                            "label": "Activity 1",
+                            "dataset": "Actual"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "actual_sales_activity2_radar",
+                            "fieldfx": "actual_sales_activity2",
+                            "label": "Activity 2",
+                            "dataset": "Actual"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "actual_sales_activity3_radar",
+                            "fieldfx": "actual_sales_activity3",
+                            "label": "Activity 3",
+                            "dataset": "Actual"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "actual_sales_activity4_radar",
+                            "fieldfx": "actual_sales_activity4",
+                            "label": "Activity 4",
+                            "dataset": "Actual"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "actual_sales_activity5_radar",
+                            "fieldfx": "actual_sales_activity5",
+                            "label": "Activity 5",
+                            "dataset": "Actual"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "model_sales_activity1_radar",
+                            "fieldfx": "model_sales_activity1",
+                            "label": "Activity 1",
+                            "dataset": "Model"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "model_sales_activity2_radar",
+                            "fieldfx": "model_sales_activity2",
+                            "label": "Activity 2",
+                            "dataset": "Model"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "model_sales_activity3_radar",
+                            "fieldfx": "model_sales_activity3",
+                            "label": "Activity 3",
+                            "dataset": "Model"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "model_sales_activity4_radar",
+                            "fieldfx": "model_sales_activity4",
+                            "label": "Activity 4",
+                            "dataset": "Model"
+                        },
+                        {
+                            "group": "Radar Chart",
+                            "field": "model_sales_activity5_radar",
+                            "fieldfx": "model_sales_activity5",
+                            "label": "Activity 5",
+                            "dataset": "Model"
                         },
                         {
                             "type": "dashboard",

@@ -37,17 +37,19 @@ export default _xyz => {
 
         if (entry.chart.type === 'line' || entry.chart.type === 'bar' || entry.chart.type === 'horizontalBar') return charts.simple(entry);
 
+        if(entry.chart.type === 'bubble') return charts.bubble(entry);
+
         if (entry.chart.type === 'pie' || entry.chart.type === 'doughnut') return charts.cake(entry);
 
         if (entry.chart.type === 'mixed') return charts.mixed(entry);
 
-        if (entry.chart.type === 'polarArea') return chart.polarArea(entry);
+        if (entry.chart.type === 'polarArea') return charts.polarArea(entry);
 
-        if (entry.chart.type === 'radar') return chart.radar(entry);
+        if (entry.chart.type === 'radar') return charts.radar(entry);
 
-        if (entry.chart.type === 'scatter') return chart.scatter(entry);
+        if (entry.chart.type === 'scatter') return charts.scatter(entry);
 
-        if (entry.chart.type === 'stackedBar') return chart.stackedBar(entry)
+        if (entry.chart.type === 'stackedBar') return charts.stackedBar(entry)
 
     }
 

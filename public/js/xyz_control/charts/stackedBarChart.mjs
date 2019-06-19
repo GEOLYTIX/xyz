@@ -1,6 +1,6 @@
 export default _xyz => entry => {
 
-	console.log('hi I am a stacked bar chart chart');
+	//console.log('hi I am a stacked bar chart chart');
 
 	const graph = _xyz.utils.createElement({
 		tag: 'div',
@@ -25,7 +25,7 @@ export default _xyz => entry => {
 
 	const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
 
-	const displayValues = group.fields.map(field => field.displayValue);
+	const displayValues = entry.fields.map(field => field.displayValue);
 
 	let datasets = [];
 

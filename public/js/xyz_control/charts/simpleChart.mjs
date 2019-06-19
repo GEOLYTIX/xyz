@@ -1,7 +1,7 @@
 // that will be line/bar
 export default _xyz => entry => {
 
-	console.log('hi I am a simple chart: line, bar, horizontal bar');
+	//console.log('hi I am a simple chart: line, bar, horizontal bar');
 
 	const graph = _xyz.utils.createElement({
 		tag: 'div',

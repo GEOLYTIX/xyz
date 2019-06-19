@@ -1,6 +1,6 @@
 export default _xyz => (entry, callback) => {
 
-  console.log(entry);
+  //console.log(entry);
 
   if (!entry || !entry.location) return;
 
@@ -56,14 +56,19 @@ export default _xyz => (entry, callback) => {
         entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
         //flex_container.appendChild(val.chartElem);
-
         //let chartElem = _xyz.utils.chart(entry.group);
         let chartElem = _xyz.charts.create(entry.group);
-        chartElem.style.width = '450px';
-        chartElem.style.height = '300px';
+        
+        if(chartElem && chartElem.style){
+          // temporary check for development
+          chartElem.style.width = '450px';
+          chartElem.style.height = '300px';
+          flex_container.appendChild(chartElem);
+        }
+
         //console.log(entry.group);
 
-        flex_container.appendChild(chartElem);
+        //flex_container.appendChild(chartElem);
 
       }
     });

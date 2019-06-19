@@ -91,8 +91,8 @@ export default _xyz => group => {
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
-    group.chartElem = _xyz.utils.chart(group);
-    //group.chartElem = _xyz.charts.create(group); // does this work
+    //group.chartElem = _xyz.utils.chart(group); // old style
+    group.chartElem = _xyz.charts.create(group);
     // Add chart
     group.div.appendChild(group.chartElem);
 
@@ -160,6 +160,9 @@ function chartIcon(group) {
   case 'bubble': return 'bubble_chart';
   case 'scatter': return 'scatter_plot';
   case 'radar': return 'multiline_chart';
+  case 'polarArea': return 'multiline_chart';
+  case 'mixed': return 'multiline_chart';
+  case 'stackedBar': return 'insert_chart_outlined';
   default: return 'show_chart';
   }
 }
