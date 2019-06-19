@@ -29,7 +29,7 @@ export default _xyz => (e, layer) => {
 
         	_xyz.mapview.state = 'edit';
 
-        	layer.edit.trail = _xyz.L.featureGroup()
+        	layer.edit.trail = _xyz.mapview.lib.featureGroup()
         	.on('click', e => _xyz.geom.contextmenu.close())
         	.addTo(_xyz.map);
 
@@ -106,11 +106,11 @@ export default _xyz => (e, layer) => {
     	style = Object.assign({}, poly, _xyz.style.defaults.trail);
 
     if(geojson.type === 'Polygon'){
-      layer.edit.trail.addLayer(_xyz.L.polygon([points], style));
+      layer.edit.trail.addLayer(_xyz.mapview.lib.polygon([points], style));
     } 
 
     if(geojson.type === 'LineString'){
-      layer.edit.trail.addLayer(_xyz.L.polyline([points], style));
+      layer.edit.trail.addLayer(_xyz.mapview.lib.polyline([points], style));
     }
 
     	layer.edit.trail.eachLayer(l => {

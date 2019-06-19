@@ -14,8 +14,8 @@ export default _xyz => params => {
   const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
     
   // Create Leaflet map object.
-  _xyz.map = _xyz.L.map(_xyz.mapview.node, {
-    renderer: _xyz.L.svg(),
+  _xyz.map = _xyz.mapview.lib.map(_xyz.mapview.node, {
+    renderer: _xyz.mapview.lib.svg(),
     scrollWheelZoom: params.scrollWheelZoom || false,
     zoomControl: params.zoomControl || false,
     attributionControl: false,
@@ -72,7 +72,7 @@ export default _xyz => params => {
       fillOpacity: 0.8
     };
 
-    _xyz.L.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
+    _xyz.mapview.lib.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
   }
 
   // Event binding.

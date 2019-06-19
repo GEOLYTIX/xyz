@@ -90,7 +90,7 @@ export default _xyz => layer => () => {
     }
 
     // Add cluster as point layer to Leaflet.
-    layer.L = _xyz.L.geoJson(cluster, {
+    layer.L = _xyz.mapview.lib.geoJson(cluster, {
       pointToLayer: (point, latlng) => {
 
         param.marker = layer.style.marker;
@@ -349,11 +349,11 @@ export default _xyz => layer => () => {
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / param.max_size * point.properties.size;
 
-      return _xyz.L.marker(latlng, {
+      return _xyz.mapview.lib.marker(latlng, {
         pane: layer.key,
         // offset base on size draws bigger cluster first.
         zIndexOffset: parseInt(1000 - 1000 / param.max_size * point.properties.size),
-        icon: _xyz.L.icon({
+        icon: _xyz.mapview.lib.icon({
           iconUrl: param.icon,
           iconSize: iconSize,
           iconAnchor: param.anchor

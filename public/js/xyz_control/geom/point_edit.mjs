@@ -65,13 +65,13 @@ export default _xyz => (e, layer) => {
 
         if (__e.target.status !== 200) return;
 
-        layer.edit.vertices = _xyz.L.featureGroup()
+        layer.edit.vertices = _xyz.mapview.lib.featureGroup()
           .on('click', e => _xyz.geom.contextmenu.close())
           .addTo(_xyz.map);
 
         layer.edit.vertices.clearLayers();
 
-        layer.edit.vertices.addLayer(_xyz.L.circleMarker([__e.target.response.geomj.coordinates[1], __e.target.response.geomj.coordinates[0]], _xyz.style.defaults.vertex));
+        layer.edit.vertices.addLayer(_xyz.mapview.lib.circleMarker([__e.target.response.geomj.coordinates[1], __e.target.response.geomj.coordinates[0]], _xyz.style.defaults.vertex));
 
         layer.edit.vertices.eachLayer(l => l.editing.enable());
 

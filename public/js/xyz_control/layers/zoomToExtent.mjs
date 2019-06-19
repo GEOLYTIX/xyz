@@ -24,7 +24,7 @@ export default _xyz => function () {
     // Split the bounds from response.
     const bounds = e.target.responseText.split(',');
 
-    const fGroup = [_xyz.L.polygon([
+    const fGroup = [_xyz.mapview.lib.polygon([
       [bounds[1], bounds[0]],
       [bounds[1], bounds[2]],
       [bounds[3], bounds[2]],
@@ -34,7 +34,7 @@ export default _xyz => function () {
     if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) fGroup.push(_xyz.mapview.locate.L);
 
     // Fly to the bounds.
-    _xyz.map.flyToBounds(_xyz.L.featureGroup(fGroup).getBounds(),{
+    _xyz.map.flyToBounds(_xyz.mapview.lib.featureGroup(fGroup).getBounds(),{
       padding: [25, 25]
     });
     

@@ -5,14 +5,14 @@ export default _xyz => layer => {
   layer.view.header.classList.add('edited');
   _xyz.mapview.node.style.cursor = 'crosshair';
 
-  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
-  layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
+  layer.edit.trail = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
+  layer.edit.path = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
 
   _xyz.map.on('click', e => {
 
     // Add vertice from click.
-    layer.edit.vertices.addLayer(_xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex));
+    layer.edit.vertices.addLayer(_xyz.mapview.lib.circleMarker(e.latlng, _xyz.style.defaults.vertex));
       
     // Return trail on mousemove with first vertice.
     if (layer.edit.vertices.getLayers().length === 1) return _xyz.map.on('mousemove', e => {
@@ -28,7 +28,7 @@ export default _xyz => layer => {
       coords.push([e.latlng.lat, e.latlng.lng]);
       
       layer.edit.trail.addLayer(
-        _xyz.L.polyline(coords, _xyz.style.defaults.trail)
+        _xyz.mapview.lib.polyline(coords, _xyz.style.defaults.trail)
       );
       
     });
@@ -46,7 +46,7 @@ export default _xyz => layer => {
     });
 
     layer.edit.path.addLayer(
-      _xyz.L.polyline(coords, _xyz.style.defaults.path_line)
+      _xyz.mapview.lib.polyline(coords, _xyz.style.defaults.path_line)
     );
 
     // Use right click context menu to upload polygon.

@@ -1,11 +1,5 @@
 import _xyz_instance from './_xyz.mjs';
 
-import L from 'leaflet';
-
-import 'leaflet.vectorgrid';
-
-import 'leaflet-draw';
-
 import * as utils from '../utils/_utils.mjs';
 
 import workspace from './workspace.mjs';
@@ -20,7 +14,7 @@ import locations from './locations/_locations.mjs';
 
 import geom from './geom/_geom.mjs';
 
-import mapview from '../xyz_leaflet/_mapview.mjs';
+import mapview from '../xyz_openlayers/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
 
@@ -28,17 +22,15 @@ export default async (params) => {
     
   const _xyz = _xyz_instance();
 
-  _xyz.L = L;
-
   _xyz.utils = utils;
+
+  mapview(_xyz);
 
   _xyz.layers = layers(_xyz);
 
   _xyz.locations = locations(_xyz);
 
   _xyz.geom = geom(_xyz);
-
-  _xyz.mapview = mapview(_xyz);
 
   _xyz.tableview = tableview(_xyz);
 

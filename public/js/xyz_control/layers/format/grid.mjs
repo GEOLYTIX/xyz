@@ -65,7 +65,7 @@ export default _xyz => layer => () => {
     if (e.target.status !== 200 || !layer.display) return;
 
     // Add geoJSON feature collection to the map.
-    layer.L = _xyz.L.geoJson(processGrid(e.target.response), {
+    layer.L = _xyz.mapview.lib.geoJson(processGrid(e.target.response), {
       pointToLayer: function (feature, latlng) {
 
         // Distribute size between min, avg and max.
@@ -97,7 +97,7 @@ export default _xyz => layer => () => {
         return L.marker(
           latlng,
           {
-            icon: _xyz.L.icon({
+            icon: _xyz.mapview.lib.icon({
               iconSize: size,
               iconUrl: _xyz.utils.svg_symbols({
                 type: 'dot',

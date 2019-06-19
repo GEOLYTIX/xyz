@@ -5,9 +5,9 @@ export default _xyz => layer => {
   layer.view.header.classList.add('edited');
   _xyz.mapview.node.style.cursor = 'crosshair';
     
-  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = _xyz.L.featureGroup().addTo(_xyz.map);
-  layer.edit.path = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
+  layer.edit.trail = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
+  layer.edit.path = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
 
   // Define origin outside click event.
   let origin_lnglat;
@@ -22,7 +22,7 @@ export default _xyz => layer => {
 
       // Add circle marker to vertices layer.       
       layer.edit.vertices.addLayer(
-        _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+        _xyz.mapview.lib.circleMarker(e.latlng, _xyz.style.defaults.vertex)
       );
 
       // Set mousemove event to show trail.
@@ -32,7 +32,7 @@ export default _xyz => layer => {
         layer.edit.trail.clearLayers();
 
         layer.edit.trail.addLayer(
-          _xyz.L.rectangle(
+          _xyz.mapview.lib.rectangle(
             [[origin_lnglat[1], origin_lnglat[0]], [e.latlng.lat, e.latlng.lng]],
             _xyz.style.defaults.trail
           )

@@ -5,7 +5,7 @@ export default _xyz => layer => {
   layer.view.header.classList.add('edited');
   _xyz.mapview.node.style.cursor = 'crosshair';
     
-  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
     
   _xyz.map.on('click', e => {
 
@@ -15,7 +15,7 @@ export default _xyz => layer => {
 
     // Add vertice from click.
     layer.edit.vertices.addLayer(
-      _xyz.L.circleMarker(e.latlng, _xyz.style.defaults.vertex)
+      _xyz.mapview.lib.circleMarker(e.latlng, _xyz.style.defaults.vertex)
     );
     // .bindPopup(stage(_xyz, layer, marker), {
     //   closeButton: false

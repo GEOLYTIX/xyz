@@ -3,7 +3,7 @@ export default _xyz => layer => {
   layer.view.header.classList.add('edited');
   _xyz.mapview.node.style.cursor = 'crosshair';
 
-  layer.edit.vertices = _xyz.L.featureGroup().addTo(_xyz.map);
+  layer.edit.vertices = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
 
   _xyz.map.once('click', e => {
 
