@@ -1,7 +1,5 @@
 export default _xyz => entry => {
 
-	//console.log('hi I am a stacked bar chart chart');
-
 	const graph = _xyz.utils.createElement({
 		tag: 'div',
 		style: {
@@ -27,9 +25,9 @@ export default _xyz => entry => {
 
 	const displayValues = entry.fields.map(field => field.displayValue);
 
-	let datasets = [];
+	const datasets = [];
 
-	let tmp = {};
+	const tmp = {};
 
     Object.values(entry.fields).map(field => {
       tmp[field.label] = {};
@@ -58,7 +56,7 @@ export default _xyz => entry => {
     	},
     	options: {
     		title: {
-    			display: entry.chart.title || true,
+    			display: entry.chart.title || false,
     			position: 'bottom',
     			text: entry.label
     		},
@@ -69,6 +67,7 @@ export default _xyz => entry => {
     		scales: {
     			yAxes: [{
     				ticks: {
+    					beginAtZero: entry.chart.beginAtZero || false,
     					callback: (label, index, labels) => {
     						return entry.chart.unit ? _xyz.charts.units(entry, label) : label;
     					}

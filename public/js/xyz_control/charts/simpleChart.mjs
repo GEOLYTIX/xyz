@@ -1,7 +1,4 @@
-// that will be line/bar
 export default _xyz => entry => {
-
-	//console.log('hi I am a simple chart: line, bar, horizontal bar');
 
 	const graph = _xyz.utils.createElement({
 		tag: 'div',
@@ -18,23 +15,50 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
-	const labels = entry.fields.map(field => field.label);
+	const datasets = [];
 
-	const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
+	let labels = entry.fields.map(field => field.label); // get labels
 
-	const displayValues = entry.fields.map(field => field.displayValue);
+	labels = labels.filter((item, idx) => { return labels.indexOf(item) >= idx; }); // remove duplicates
+    
+	let series = entry.fields.map(field => field.dataset); // get series if any
 
-	let datasets = [];
+    // strip off duplicates and nulls
+	series = series.filter((item, idx) => { return !!item && series.indexOf(item) >= idx; });
 
-	if(entry.chart.excludeNull) data.map(item => {if(!item) labels.splice(data.indexOf(item), 1) });
+	if(!series.length) { // process one dataset
 
-	// this supports only one series. How to support more than one?
-	datasets[0] = {
-      label: entry.label,
-      backgroundColor: entry.chart.backgroundColor || '#cf9',
-      borderColor: entry.chart.borderColor || '#079e00',
-      data: entry.chart.excludeNull ? data.filter(item => {return item != null}) : data
-    };
+		datasets[0] = {
+			label: entry.label,
+			backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+			borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+			spanGaps: true,
+			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value))
+		};
+	} 
+
+	else { // process multiple series
+
+		const tmp = {};
+
+		series.map(serie => {
+
+			tmp[serie] = {};
+			tmp[serie].data = [];
+
+			let idx = series.indexOf(serie);
+
+			tmp[serie].backgroundColor = typeof(entry.chart.backgroundColor) === 'object' ?  entry.chart.backgroundColor[idx] : (entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor);
+			tmp[serie].borderColor = typeof(entry.chart.borderColor) === 'object' ? entry.chart.borderColor[idx] : (entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor);
+			tmp[serie].spanGaps = true;
+		});
+
+		Object.values(entry.fields).map(field => {
+			tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.value);
+		});
+
+		Object.values(tmp).forEach(val => datasets.push(val));
+	}
 
     new _xyz.Chart(canvas, {
     	type: entry.chart.type,
@@ -44,7 +68,7 @@ export default _xyz => entry => {
     	},
     	options: {
     		title: {
-    			display: entry.chart.title || true,
+    			display: entry.chart.title || false,
     			position: 'bottom',
     			text: entry.label
     		},
@@ -55,6 +79,7 @@ export default _xyz => entry => {
     		scales: {
     			yAxes: [{
     				ticks: {
+    					beginAtZero: entry.chart.beginAtZero || false,
     					callback: (label, index, labels) => {
     						return entry.chart.unit ? _xyz.charts.units(entry, label) : label;
     					}

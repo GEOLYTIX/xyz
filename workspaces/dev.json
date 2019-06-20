@@ -978,7 +978,8 @@
                             "chart": {
                                 "x": "label x",
                                 "y": "label y",
-                                "active": true
+                                "active": true,
+                                "title": true
                             },
                             "expanded": true
                         },
@@ -1522,7 +1523,8 @@
                             "dashboard": "Dashboard 1",
                             "level": 2,
                             "chart": {
-                                "active": true,
+                                "active": false,
+                                "title": true,
                                 "type": "bar",
                                 "unit": "k",
                                 "backgroundColor": [
@@ -1670,7 +1672,8 @@
                             "dashboard": "Dashboard 1",
                             "level": 2,
                             "chart": {
-                                "active": true,
+                                "active": false,
+                                "title": true,
                                 "type": "bar",
                                 "unit": "k",
                                 "backgroundColor": [
@@ -1819,7 +1822,8 @@
                             "level": 2,
                             "dashboard": "Dashboard 1",
                             "chart": {
-                                "active": true,
+                                "title": true,
+                                "active": false,
                                 "type": "bar",
                                 "unit": "k",
                                 "backgroundColor": [
@@ -1947,37 +1951,86 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "level": 2,
-                            "chart": {}
+                            "chart": {
+                                "title": true,
+                                "backgroundColor": ["rgba(192, 117, 205, 0.3)", "rgba(255, 167, 38, 0.3)"],
+                                "borderColor": ["#4a148c", "#e65100"]
+                            }
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 1",
                             "field": "random1",
-                            "type": "integer"
+                            "type": "integer",
+                            "dataset": "Serie 1"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 2",
                             "field": "random2",
-                            "type": "integer"
+                            "type": "integer",
+                            "dataset": "Serie 1"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 3",
                             "field": "random3",
-                            "type": "integer"
+                            "type": "integer",
+                            "dataset": "Serie 1"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 4",
                             "field": "random4",
-                            "type": "integer"
+                            "type": "integer",
+                            "dataset": "Serie 1"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 5",
                             "field": "random5",
-                            "type": "integer"
+                            "type": "integer",
+                            "dataset": "Serie 1"
+                        },
+                        {
+                            "group": "Random data series",
+                            "label": "Random 1",
+                            "field": "rev_random1",
+                            "fieldfx": "random5",
+                            "type": "integer",
+                            "dataset": "Serie 2"
+                        },
+                        {
+                            "group": "Random data series",
+                            "label": "Random 2",
+                            "field": "rev_random2",
+                            "fieldfx": "random4",
+                            "type": "integer",
+                            "dataset": "Serie 2"
+                        },
+                        {
+                            "group": "Random data series",
+                            "label": "Random 3",
+                            "field": "rev_random3",
+                            "fieldfx": "random3",
+                            "type": "integer",
+                            "dataset": "Serie 2"
+                        },
+                        {
+                            "group": "Random data series",
+                            "label": "Random 4",
+                            "field": "rev_random4",
+                            "fieldfx": "random2",
+                            "type": "integer",
+                            "dataset": "Serie 2"
+                        },
+                        {
+                            "group": "Random data series",
+                            "label": "Random 5",
+                            "field": "rev_random5",
+                            "fieldfx": "random1",
+                            "type": "integer",
+                            "dataset": "Serie 2"
                         },
                         {
                             "label": "Doughnut Chart",
@@ -1985,6 +2038,7 @@
                             "dashboard": "Dashboard 1",
                             "level": 2,
                             "chart": {
+                                "title": true,
                                 "type": "doughnut",
                                 "cutoutPercentage": 36,
                                 "backgroundColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"],
@@ -2032,6 +2086,7 @@
                             "dashboard": "Dashboard 1",
                             "chart": {
                                 "type": "stackedBar",
+                                "title": true,
                                 "backgroundColor": [
                                     "#FFA630",
                                     "#C6DEA6",
@@ -2107,11 +2162,12 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "chart": {
+                                "title": true,
                                 "height": 300,
                                 "type": "radar",
-                                "backgroundColor": ["#e91e63", "#03a9f4"],
+                                "backgroundColor": ["rgba(233, 30, 99, 0.3)", "rgba(3, 169, 244, 0.3)"],
                                 "fillOpacity": 0.3,
-                                "borderColor": ["#e91e63", "#03a9f4"]
+                                "borderColor": ["rgba(233, 30, 99, 0.7)", "rgba(3, 169, 244, 0.7)"]
                             }
                         },
                         {

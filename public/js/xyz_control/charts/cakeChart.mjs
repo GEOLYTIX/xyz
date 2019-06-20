@@ -23,13 +23,12 @@ export default _xyz => entry => {
 
 	let datasets = [];
 
-	if(entry.chart.excludeNull) data.map(item => {if(!item) labels.splice(data.indexOf(item), 1) });
-
 	datasets[0] = {
       label: entry.label,
-      backgroundColor: entry.chart.backgroundColor || '#cf9',
-      borderColor: entry.chart.borderColor || '#079e00',
-      data: entry.chart.excludeNull ? data.filter(item => {return item != null}) : data
+      backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+      borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+      data: data,
+      spanGaps: true
     };
 
     new _xyz.Chart(canvas, {
@@ -41,7 +40,7 @@ export default _xyz => entry => {
     	options: {
     		cutoutPercentage: entry.chart.cutoutPercentage || 50,
     		title: {
-    			display: entry.chart.title || true,
+    			display: entry.chart.title || false,
     			position: 'bottom',
     			text: entry.label
     		},

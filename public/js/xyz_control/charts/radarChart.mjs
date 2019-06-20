@@ -1,6 +1,4 @@
 export default _xyz => entry => {
-	
-	console.log('hi I am a radar chart');
 
 	const graph = _xyz.utils.createElement({
 		tag: 'div',
@@ -17,50 +15,58 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
-	let series = entry.fields.map(field => field.dataset); // get all series
-
-    // remove duplicates
-	series = series.filter((item, idx) => {
-		return series.indexOf(item) >= idx;
-	});
+	const datasets = [];
 
 	let labels = entry.fields.map(field => field.label);
 
-	labels = labels.filter((item, idx) => {
-		return labels.indexOf(item) >= idx;
-	});
+	labels = labels.filter((item, idx) => { return labels.indexOf(item) >= idx; }); // remove duplicates
 
-	let datasets = [];
-	let tmp = {};
+	let series = entry.fields.map(field => field.dataset); // get all series
 
-	series.map(serie => { 
-		tmp[serie] = {}; 
-		tmp[serie].data = [];
+	series = series.filter((item, idx) => { return !!item && series.indexOf(item) >= idx; }); // strip off duplicates and nulls
 
-		let idx = series.indexOf(serie);
 
-		// set dataset colours
+	if(!series.length) { // process one dataset
 
-		tmp[serie].backgroundColor = entry.chart.backgroundColor[idx] ||  null;
-		tmp[serie].borderColor = entry.chart.borderColor[idx] ||  null;
+		datasets[0] = {
+			label: entry.label,
+			backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+			borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+			pointBackgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+			pointBorderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+			lineTension: 0.5,
+			spanGaps: true,
+			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value))
+		};
+	}
 
-		tmp[serie].pointBackgroundColor = entry.chart.backgroundColor[idx] ||  null;
-		tmp[serie].pointBorderColor = entry.chart.borderColor[idx] ||  null;
+	else { // process multiple series
+	    
+	    const tmp = {};
 
-		tmp[serie].lineTension = 0.5;
+	    series.map(serie => { 
+	    	
+	    	tmp[serie] = {};
+	    	tmp[serie].data = [];
 
-		if(entry.chart.fillOpacity){ // set fill opacity
-			if(tmp[serie].backgroundColor) tmp[serie].backgroundColor = _xyz.utils.hexToRGBA(tmp[serie].backgroundColor, entry.chart.fillOpacity);
-			if(tmp[serie].pointBackgroundColor) tmp[serie].pointBackgroundColor = _xyz.utils.hexToRGBA(tmp[serie].pointBackgroundColor, entry.chart.fillOpacity);
-		}
+	    	let idx = series.indexOf(serie);
 
-	});
+	    	// set dataset colours
+	    	tmp[serie].backgroundColor = entry.chart.backgroundColor[idx] ||  null;
+	    	tmp[serie].borderColor = entry.chart.borderColor[idx] ||  null;
 
-	Object.values(entry.fields).map(field => {
-		tmp[field.dataset].data.push(Number(field.value));
-	});
+	    	tmp[serie].pointBackgroundColor = entry.chart.backgroundColor[idx] ||  null;
+	    	tmp[serie].pointBorderColor = entry.chart.borderColor[idx] ||  null;
+	    	tmp[serie].lineTension = 0.5;
 
-	Object.values(tmp).forEach(val => datasets.push(val));
+	    });
+
+	    Object.values(entry.fields).map(field => {
+	    	tmp[field.dataset].data.push(Number(field.displayValue || Number(field.value)));
+	    });
+
+	    Object.values(tmp).forEach(val => datasets.push(val));
+	}
 
 	new _xyz.Chart(canvas, {
 		type: 'radar',
@@ -70,7 +76,7 @@ export default _xyz => entry => {
 		},
 		options: {
 			title: {
-				display: entry.chart.title || true,
+				display: entry.chart.title || false,
 				position: 'bottom',
 				text: entry.label
 			},
@@ -83,7 +89,5 @@ export default _xyz => entry => {
 			}
 		}
 	});
-
 	return graph;
-
 }

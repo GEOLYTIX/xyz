@@ -115,6 +115,10 @@ export default _xyz => {
         simple: simple,
         stackedBar: stackedBar,
         scale: scale,
-        units: units
+        units: units,
+        fallbackStyle: {
+        	borderColor: '#079e00',
+        	backgroundColor: '#cf9'
+        }
     }
 };
