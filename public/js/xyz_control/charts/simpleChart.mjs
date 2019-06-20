@@ -77,7 +77,9 @@ export default _xyz => entry => {
     		legend: {
     			display: entry.chart.legend,
     			position: entry.chart.legendPosition || 'left',
-    			boxWidth: 30
+    			labels: {
+    				boxWidth: 30
+    			}
     		},
     		scales: {
     			yAxes: [{

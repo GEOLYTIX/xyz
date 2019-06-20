@@ -84,7 +84,10 @@ export default _xyz => entry => {
 			responsive: true,
 			legend: {
 				display: entry.chart.legend,
-				position: entry.chart.legendPosition
+				position: entry.chart.legendPosition || 'left',
+				labels: {
+    				boxWidth: 30
+    			}
 			},
 			tooltips: {
 				enabled: true
