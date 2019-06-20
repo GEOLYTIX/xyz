@@ -21,7 +21,7 @@ export default _xyz => entry => {
 
 	const displayValues = entry.fields.map(field => field.displayValue);
 
-	let datasets = [];
+	const datasets = [];
 
 	datasets[0] = {
       label: entry.label,
@@ -46,7 +46,9 @@ export default _xyz => entry => {
     		},
     		responsive: true,
     		legend: {
-    			display: entry.chart.legend
+    			display: entry.chart.legend || false,
+                position: entry.chart.legendPosition || 'left',
+                boxWidth: 30
     		},
     		scales: {
     			yAxes: [],

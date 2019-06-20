@@ -45,6 +45,7 @@ export default _xyz => entry => {
 
 			tmp[serie] = {};
 			tmp[serie].data = [];
+			tmp[serie].label = serie;
 
 			let idx = series.indexOf(serie);
 
@@ -74,7 +75,9 @@ export default _xyz => entry => {
     		},
     		responsive: true,
     		legend: {
-    			display: entry.chart.legend
+    			display: entry.chart.legend,
+    			position: entry.chart.legendPosition || 'left',
+    			boxWidth: 30
     		},
     		scales: {
     			yAxes: [{

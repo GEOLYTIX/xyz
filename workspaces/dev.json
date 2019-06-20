@@ -1824,6 +1824,8 @@
                             "chart": {
                                 "title": true,
                                 "active": false,
+                                "legend": true,
+                                "legendPosition": "bottom",
                                 "type": "bar",
                                 "unit": "k",
                                 "backgroundColor": [
@@ -1953,6 +1955,8 @@
                             "level": 2,
                             "chart": {
                                 "title": true,
+                                "legend": true,
+                                "legendPosition": "bottom",
                                 "backgroundColor": ["rgba(192, 117, 205, 0.3)", "rgba(255, 167, 38, 0.3)"],
                                 "borderColor": ["#4a148c", "#e65100"]
                             }
@@ -2039,10 +2043,11 @@
                             "level": 2,
                             "chart": {
                                 "title": false,
+                                "legend": true,
                                 "type": "doughnut",
                                 "cutoutPercentage": 36,
-                                "backgroundColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"],
-                                "borderColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"]
+                                "backgroundColor": ["rgba(229, 99 , 153, 0.4)", "rgba(0, 167, 225, 0.4)", "rgba(237, 222, 164, 0.4)", "rgba(247, 160 ,114, 0.4)", "rgba(255, 155, 66, 0.4)"],
+                                "borderColor": "#C0B4A7"
                             }
                         },
                         {
@@ -2087,6 +2092,8 @@
                             "chart": {
                                 "type": "stackedBar",
                                 "title": true,
+                                "legend": true,
+                                "legendPosition": "right",
                                 "backgroundColor": [
                                     "#FFA630",
                                     "#C6DEA6",
@@ -2163,6 +2170,8 @@
                             "dashboard": "Dashboard 1",
                             "chart": {
                                 "title": true,
+                                "legend": true,
+                                "legendPosition": "bottom",
                                 "height": 300,
                                 "type": "radar",
                                 "backgroundColor": ["rgba(233, 30, 99, 0.3)", "rgba(3, 169, 244, 0.3)"],
@@ -2239,6 +2248,54 @@
                             "fieldfx": "model_sales_activity5",
                             "label": "Activity 5",
                             "dataset": "Model"
+                        },
+                        {
+                            "label": "Polar Area Chart",
+                            "type": "group",
+                            "dashboard": "Dashboard 1",
+                            "level": 2,
+                            "chart": {
+                                "title": false,
+                                "legend": true,
+                                "type": "polarArea",
+                                "backgroundColor": ["rgba(229, 99, 153, 0.3)", "rgba(0, 167, 225, 0.3)", "rgba(237, 222, 164, 0.3)", "rgba(247, 160, 114, 0.3)", "rgba(255, 155, 66, 0.3)"],
+                                "borderColor": ["rgba(229, 99, 153, 0.3)", "rgba(0, 167, 225, 0.3)", "rgba(237, 222, 164, 0.3)", "rgba(247, 160, 114, 0.3)", "rgba(255, 155, 66, 0.3)"]
+                            }
+                        },
+                        {
+                            "group": "Polar Area Chart",
+                            "label": "Random 1",
+                            "field": "polar_random1",
+                            "fieldfx": "random1",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Polar Area Chart",
+                            "label": "Random 2",
+                            "field": "polar_random2",
+                            "fieldfx": "random2",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Polar Area Chart",
+                            "label": "Random 3",
+                            "field": "polar_random3",
+                            "fieldfx": "random3",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Polar Area Chart",
+                            "label": "Random 4",
+                            "field": "polar_random4",
+                            "fieldfx": "random4",
+                            "type": "integer"
+                        },
+                        {
+                            "group": "Polar Area Chart",
+                            "label": "Random 5",
+                            "field": "polar_random5",
+                            "fieldfx": "random5",
+                            "type": "integer"
                         },
                         {
                             "type": "dashboard",

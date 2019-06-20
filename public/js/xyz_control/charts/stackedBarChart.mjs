@@ -40,8 +40,8 @@ export default _xyz => entry => {
           let idx = Object.keys(tmp).indexOf(key);
           tmp[key].data.push(Number(field.value));
           tmp[key].label = field.label;
-          tmp[key].backgroundColor = (entry.chart.backgroundColor[idx] || '#cf9');
-          tmp[key].borderColor = (entry.chart.borderColor[idx] || '#079e00');
+          tmp[key].backgroundColor = (entry.chart.backgroundColor[idx] || _xyz.charts.fallbackStyle.backgroundColor);
+          tmp[key].borderColor = (entry.chart.borderColor[idx] || _xyz.charts.fallbackStyle.borderColor);
         }
       });
     });
@@ -62,7 +62,9 @@ export default _xyz => entry => {
     		},
     		responsive: true,
     		legend: {
-    			display: entry.chart.legend
+    			display: entry.chart.legend,
+    			position: entry.chart.legendPosition || 'left',
+    			boxWidth: 30
     		},
     		scales: {
     			yAxes: [{
