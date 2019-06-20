@@ -10,6 +10,8 @@ import orderedList from './orderedList.mjs';
 
 import dashboard from './dashboard.mjs';
 
+import layerDashboard from './layerDashboard.mjs';
+
 import layerTable from './layerTable.mjs';
 
 import tableContainer from './tableContainer.mjs';
@@ -33,6 +35,8 @@ export default _xyz => {
     orderedList: orderedList(_xyz),
 
     dashboard: dashboard(_xyz),
+
+    layerDashboard: layerDashboard(_xyz),
 
     layerTable: layerTable(_xyz),
 

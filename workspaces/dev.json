@@ -1041,7 +1041,7 @@
                     "tableview": {
                         "tables": {
                             "Retail Points": {
-                                "display": true,
+                                "display": false,
                                 "from": "dev.retailpoints",
                                 "columns": [{
                                         "title": "ID",
@@ -1059,6 +1059,14 @@
                                         "type": "text"
                                     }
                                 ]
+                            }
+                        }
+                    },
+                    "dashboard": {
+                        "charts": {
+                            "Some bubbles": {
+                                "display": true,
+                                "type": "bubble"
                             }
                         }
                     },

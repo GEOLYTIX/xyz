@@ -26,7 +26,7 @@ export default (_xyz, layer) => {
         _xyz.utils.toggleExpanderParent({
           expandable: layer.tableview.panel,
           accordeon: true,
-          scrolly: _xyz.desktop && _xyz.desktop.listviews,
+          scrolly: _xyz.desktop && _xyz.desktop.listviews
         });
       }
     }

@@ -8,6 +8,8 @@ import cluster from './panel/cluster.mjs';
 
 import table from './panel/table.mjs';
 
+import layerDashboard from './panel/layerDashboard.mjs';
+
 import report from './panel/report.mjs';
 
 export default (_xyz, layer) => {
@@ -32,6 +34,8 @@ export default (_xyz, layer) => {
   draw(_xyz, layer);
     
   table(_xyz, layer);
+
+  layerDashboard(_xyz, layer);
     
   cluster(_xyz, layer);
    
