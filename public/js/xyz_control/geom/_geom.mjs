@@ -1,5 +1,3 @@
-import geoJSON from './geoJSON.mjs';
-
 import rectangle from './rectangle.mjs';
 
 import circle from './circle.mjs';
@@ -27,8 +25,6 @@ import finish from './finish.mjs';
 import contextmenu from './contextmenu.mjs';
 
 export default _xyz => ({
-
-  geoJSON: geoJSON(_xyz),
 
   rectangle: rectangle(_xyz),
 

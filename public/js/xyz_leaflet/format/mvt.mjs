@@ -34,7 +34,7 @@ export default _xyz => layer => () => {
   });
 
   let options = {
-    rendererFactory: _xyz.mapview.lib.svg.tile,
+    rendererFactory: _xyz.mapview.lib.L.svg.tile,
     interactive: (layer.qID) || false,
     pane: layer.key,
     getFeatureId: f => f.properties.id,

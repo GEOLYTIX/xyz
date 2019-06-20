@@ -63,7 +63,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
           return;
         }
     
-        location.Marker = _xyz.geom.geoJSON({
+        location.Marker = _xyz.mapview.lib.geoJSON({
           json: {
             type: 'Feature',
             geometry: {

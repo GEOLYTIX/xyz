@@ -16,8 +16,8 @@ export default _xyz => layer => () => {
     layer.URI;
 
     
-  layer.L = new _xyz.mapview.lib.layer.Tile({
-    source: new _xyz.mapview.lib.source.OSM({
+  layer.L = new _xyz.mapview.lib.ol.layer.Tile({
+    source: new _xyz.mapview.lib.ol.source.OSM({
       url: 'https://cartodb-basemaps-{a-d}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png'
     })
   });

@@ -1,31 +1,19 @@
-// import Map from 'ol/Map';
-// import View from 'ol/View';
-// import Overlay from 'ol/Overlay';
-// import TileLayer from 'ol/layer/Tile';
-// import XYZ from 'ol/source/XYZ';
-// import {defaults} from 'ol/interaction';
-// import * as proj from 'ol/proj';
-// import {ScaleLine} from 'ol/control.js';
-// import {Feature} from 'ol';
-// import {Polygon} from 'ol/geom';
-// import * as source from 'ol/source';
-// import * as style from 'ol/style';
-// import * as format from 'ol/format';
-// import * as layer from 'ol/layer';
-// import * as interaction from 'ol/interaction';
-// import * as condition from 'ol/events/condition';
-// import * as geom from 'ol/geom';
+import formatMVT from 'ol/format/MVT';
+import formatGeoJSON from 'ol/format/GeoJSON';
 
-// import {Map, View} from 'ol';
+import sourceOSM from 'ol/source/OSM';
+import sourceVectorTile from 'ol/source/VectorTile';
+import sourceVector from 'ol/source/Vector';
 
 import layerTile from 'ol/layer/Tile';
-import sourceOSM from 'ol/source/OSM';
-
-import formatMVT from 'ol/format/MVT';
 import layerVectorTile from 'ol/layer/VectorTile';
-import sourceVectorTile from 'ol/source/VectorTile';
+import layerVector from 'ol/layer/Vector';
 
-import {Feature} from 'ol';
+import {Circle, Fill, Stroke, Icon, Style} from 'ol/style';
+
+import {transform} from 'ol/proj';
+
+import {Map, View, Feature} from 'ol';
 
 
 
@@ -46,23 +34,130 @@ export default _xyz => {
   _xyz.mapview = {};
 
   _xyz.mapview.lib = {
-    Feature: Feature
+
+    ol: {
+
+      Map: Map,
+
+      View: View,
+
+      Feature: Feature,
+
+      proj: {
+        transform: transform,
+      },
+
+      format: {
+        MVT: formatMVT,
+        GeoJSON: formatGeoJSON,
+      },
+  
+      source: {
+        OSM: sourceOSM,
+        VectorTile: sourceVectorTile,
+        Vector: sourceVector,
+      },
+  
+      layer: {
+        Tile: layerTile,
+        VectorTile: layerVectorTile,
+        Vector: layerVector,
+      },
+  
+      style: {
+        Style: Style,
+        Fill: Fill,
+        Stroke: Stroke,
+        Circle: Circle,
+        Icon: Icon,
+      },
+  
+    },
+
+    geoJSON: geoJSON,
+
+    icon: icon,
+  };
+
+  function icon(icon) {
+   
+    const svgHeight = icon.url.match(/height%3D%22(\d+)%22/);
+    const iconHeight = svgHeight != null && Array.isArray(svgHeight) && svgHeight.length == 2 ? svgHeight[1] : 1000;
+    const scale = (icon.iconSize || 40) / iconHeight;
+
+    return new _xyz.mapview.lib.ol.style.Icon({
+      src: icon.url,
+      scale: scale,
+      anchor: [0.5, 1],
+    });
+  }
+
+  function geoJSON(params){
+
+    const geoJSON = new _xyz.mapview.lib.ol.format.GeoJSON();
+
+    const sourceVector = new _xyz.mapview.lib.ol.source.Vector();
+
+    const layerVector = new _xyz.mapview.lib.ol.layer.Vector({
+      source: sourceVector,
+      style: [
+        new _xyz.mapview.lib.ol.style.Style({
+          stroke: new _xyz.mapview.lib.ol.style.Stroke({
+            color: 'rgba(255, 255, 255, 0.2)',
+            width: 8
+          }),
+        }),
+        new _xyz.mapview.lib.ol.style.Style({
+          stroke: new _xyz.mapview.lib.ol.style.Stroke({
+            color: 'rgba(255, 255, 255, 0.2)',
+            width: 6
+          }),
+        }),
+        new _xyz.mapview.lib.ol.style.Style({
+          stroke: new _xyz.mapview.lib.ol.style.Stroke({
+            color: 'rgba(255, 255, 255, 0.2)',
+            width: 4
+          }),
+        }),
+        new _xyz.mapview.lib.ol.style.Style({
+          stroke: new _xyz.mapview.lib.ol.style.Stroke({
+            color: params.style.color,
+            width: 2
+          }),
+          fill: new _xyz.mapview.lib.ol.style.Fill({
+            color: _xyz.utils.hexToRGBA(params.style.color, params.style.fillOpacity || 1, true)
+          }),
+          image: _xyz.mapview.lib.icon(params.style.icon),
+        // image: new _xyz.mapview.lib.ol.style.Circle({
+        //   radius: 7,
+        //   fill: new _xyz.mapview.lib.ol.style.Fill({
+        //     color: 'rgba(0, 0, 0, 0.01)'
+        //   }),
+        //   stroke: new _xyz.mapview.lib.ol.style.Stroke({
+        //     color: '#EE266D',
+        //     width: 2
+        //   })
+        // })
+        })]
+    });
+   
+
+    const feature = geoJSON.readFeature({
+      type: 'Feature',
+      geometry: params.json.geometry
+    });
+
+    feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+    sourceVector.addFeature(feature);
+
+    _xyz.map.addLayer(layerVector);
+
+    return layerVector;
+
   };
 
 
-  _xyz.mapview.lib.format = {
-    MVT: formatMVT
-  };
-
-  _xyz.mapview.lib.source = {
-    OSM: sourceOSM,
-    VectorTile: sourceVectorTile
-  };
-
-  _xyz.mapview.lib.layer = {
-    Tile: layerTile,
-    VectorTile: layerVectorTile
-  };
 
 
   _xyz.mapview.create = create(_xyz);

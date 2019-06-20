@@ -41,7 +41,7 @@ export default _xyz => layer => () => {
     if (layer.style.theme) layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat);
   
     // Add geoJSON feature collection to the map.
-    layer.L = _xyz.mapview.lib.geoJSON(features, {
+    layer.L = _xyz.mapview.lib.L.geoJSON(features, {
       style: applyLayerStyle,
       pane: layer.key,
       interactive: layer.infoj? true: false,
@@ -49,9 +49,9 @@ export default _xyz => layer => () => {
           
         let style = applyLayerStyle(point);
           
-        return _xyz.mapview.lib.marker(latlng, {
+        return _xyz.mapview.lib.L.marker(latlng, {
           pane: layer.key,
-          icon: _xyz.mapview.lib.icon({
+          icon: _xyz.mapview.lib.L.icon({
             iconUrl: _xyz.utils.svg_symbols(style.marker),
             iconSize: style.marker.iconSize || 40,
             iconAnchor: style.marker.iconAnchor || [20,20]

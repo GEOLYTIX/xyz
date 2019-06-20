@@ -4,7 +4,7 @@ export default _xyz => function (style) {
 
   const location = this;
 
-  location.Layer = _xyz.geom.geoJSON({
+  location.Layer = _xyz.mapview.lib.geoJSON({
     json: {
       type: 'Feature',
       geometry: location.geometry,

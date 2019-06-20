@@ -20,7 +20,7 @@ import format from './format/_format.mjs';
 
 import tableview from '../xyz_control/tableview/_tableview.mjs';
 
-export default async (params) => {
+async function _xyz(params) {
     
   const _xyz = _xyz_instance();
 
@@ -66,3 +66,7 @@ export default async (params) => {
   return _xyz;
 
 };
+
+window._xyz = _xyz;
+
+export default _xyz;

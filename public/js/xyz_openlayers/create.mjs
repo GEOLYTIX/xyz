@@ -1,5 +1,3 @@
-import {Map, View} from 'ol';
-
 export default _xyz => params => {
 
   // Remove existing Leaflet map object.
@@ -15,30 +13,24 @@ export default _xyz => params => {
 
   const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
 
-
-  _xyz.mapview.lib.Map = Map;
-
-  _xyz.mapview.lib.View = View;
-
-
     
   // Create Leaflet map object.
-  _xyz.map = new _xyz.mapview.lib.Map({
+  _xyz.map = new _xyz.mapview.lib.ol.Map({
     target: 'Map',//_xyz.mapview.node,
-    // interactions: _xyz.mapview.lib.interactionDefaults({ 
+    // interactions: _xyz.mapview.lib.ol.interactionDefaults({ 
     //   mouseWheelZoom: params.scrollWheelZoom || false 
     // }),
     controls: [],
-    view: new _xyz.mapview.lib.View({
+    view: new _xyz.mapview.lib.ol.View({
       zoom: z,
       minZoom: _xyz.workspace.locale.minZoom,
       maxZoom: _xyz.workspace.locale.maxZoom,
       center: [0,50],
-      // center: _xyz.mapview.lib.proj.fromLonLat([
+      // center: _xyz.mapview.lib.ol.proj.fromLonLat([
       //   (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0
       //   (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
       // ]),
-    //   extent: _xyz.mapview.lib.proj.transformExtent(
+    //   extent: _xyz.mapview.lib.ol.proj.transformExtent(
     //     [
     //       (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west,
     //       (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,

@@ -6,7 +6,7 @@ export default _xyz => {
 
     active: false,
 
-    icon: _xyz.mapview.lib.icon({
+    icon: _xyz.mapview.lib.L.icon({
       iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
       iconSize: 30
     })
@@ -23,7 +23,7 @@ export default _xyz => {
 
     // Create the geolocation marker if it doesn't exist yet.
     if (!locate.L) {
-      locate.L = _xyz.mapview.lib.marker([0, 0], {
+      locate.L = _xyz.mapview.lib.L.marker([0, 0], {
         interactive: false,
         icon: locate.icon
       });
