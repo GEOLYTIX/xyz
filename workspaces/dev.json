@@ -2038,7 +2038,7 @@
                             "dashboard": "Dashboard 1",
                             "level": 2,
                             "chart": {
-                                "title": true,
+                                "title": false,
                                 "type": "doughnut",
                                 "cutoutPercentage": 36,
                                 "backgroundColor": ["#E56399", "#00A7E1", "#EDDEA4", "#F7A072", "#FF9B42"],
