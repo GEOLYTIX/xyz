@@ -9,6 +9,8 @@
 
     <!-- <script src="https://cdn.logrocket.com/LogRocket.min.js"></script> -->
 
+
+    <link rel="stylesheet" href="{{:dir}}/css/{{:engine}}.css" />
     <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
 
     <link rel="stylesheet" href="{{:dir}}/codemirror/codemirror.css">
@@ -109,20 +111,7 @@ data-token={{:token}}>
         
         </div>
 
-        <div id="Map" class="map" >
-            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
-                <defs>
-                    <filter id='dropshadow'>
-                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                        <feOffset dx='1' dy='1' result='offsetblur' />
-                        <feMerge>
-                            <feMergeNode />
-                            <feMergeNode in='SourceGraphic' />
-                        </feMerge>
-                    </filter>
-                </defs>
-            </svg>
-        </div>
+        <div id="Map" class="map" ></div>
 
     </div>
 

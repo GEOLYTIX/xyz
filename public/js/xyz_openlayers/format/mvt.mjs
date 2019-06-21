@@ -59,6 +59,7 @@ export default _xyz => layer => () => {
         fill: new _xyz.mapview.lib.ol.style.Fill({
           color: _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity || 1, true)
         }),
+        zIndex: style.zIndex,
       // image: _xyz.mapview.lib.icon(params.style.icon),
       // image: new _xyz.mapview.lib.ol.style.Circle({
       //   radius: 7,
@@ -109,7 +110,6 @@ export default _xyz => layer => () => {
       layer: layer.key,
       table: layer.table,
       id: features[0].get('id'),
-      //marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
       marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
       edit: layer.edit
     });
@@ -121,18 +121,35 @@ export default _xyz => layer => () => {
   _xyz.map.on('click', layer.eventhandlers.mapClick);
 
 
-  layer.eventhandlers.mapPointermove = event => {
+  layer.eventhandlers.mapPointermove = e => {
+
     const previous = layer.highlighted;
-    const features = _xyz.map.getFeaturesAtPixel(event.pixel, {layerFilter: candidate => candidate == layer.L});
-    const toBeHighlighted = features != null && event.originalEvent.target.tagName == 'CANVAS';  // any features detected and directly under cursor?
+    const features = _xyz.map.getFeaturesAtPixel(e.pixel, {
+      layerFilter: candidate => candidate == layer.L
+    });
+
+    if (!features) return;
+    
+    const toBeHighlighted = features != null && e.originalEvent.target.tagName == 'CANVAS';
 
     layer.highlighted = (toBeHighlighted ? features[0].get('id') : null);
-    _xyz.map.getTargetElement().style.cursor = (toBeHighlighted ? 'pointer' : '');
+
+    //_xyz.map.getTargetElement().style.cursor = (toBeHighlighted ? 'pointer' : '');
     
     if(layer.highlighted !== previous) {
       // force redraw of layer style
       layer.L.setStyle(layer.L.getStyle());
     }
+
+    if (layer.hover.field) {
+
+      layer.hover.add({
+        id: features[0].get('id'),
+        x: e.originalEvent.clientX,
+        y: e.originalEvent.clientY,
+      });
+    }
+
   };
 
   _xyz.map.on('pointermove', layer.eventhandlers.mapPointermove);
@@ -140,7 +157,17 @@ export default _xyz => layer => () => {
 
   function applyLayerStyle(properties) {
 
-    let style = Object.assign({}, layer.style.default);
+    const highlighted = layer.highlighted === properties.get('id');
+    //const selected = layer.selected.has(properties.get('id'));
+
+    let style = Object.assign(
+      {},
+      layer.style.default,
+    );
+
+    style.zIndex = (highlighted ? 30 : 10);
+
+    // let style = Object.assign({}, layer.style.default);
 
     // Return default style if no theme is set on layer.
     if (!layer.style.theme) return style;
@@ -150,7 +177,12 @@ export default _xyz => layer => () => {
     // Categorized theme.
     if (theme.type === 'categorized') {
 
-      return Object.assign({}, style, theme.cat[properties.get(theme.field)] || {});
+      return Object.assign(
+        {},
+        style,
+        theme.cat[properties.get(theme.field)] || {},
+        highlighted ? layer.style.highlight : {},
+      );
 
     }
 
@@ -176,7 +208,12 @@ export default _xyz => layer => () => {
       }
 
       // Assign style from base & cat_style.
-      return Object.assign({}, style, theme.cat_style);
+      return Object.assign(
+        {},
+        style,
+        theme.cat_style,
+        highlighted ? layer.style.highlight : {},
+      );
 
     }
 

@@ -12,7 +12,21 @@ export default _xyz => params => {
   _xyz.mapview.node = params.target;
 
   const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
-    
+
+  _xyz.utils.bind(_xyz.mapview.node)`
+  <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+    <defs>
+        <filter id='dropshadow'>
+            <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+            <feOffset dx='1' dy='1' result='offsetblur' />
+            <feMerge>
+                <feMergeNode />
+                <feMergeNode in='SourceGraphic' />
+            </feMerge>
+        </filter>
+    </defs>
+  </svg>`;
+
   // Create Leaflet map object.
   _xyz.map = _xyz.mapview.lib.L.map(_xyz.mapview.node, {
     renderer: _xyz.mapview.lib.L.svg(),
@@ -23,8 +37,8 @@ export default _xyz => params => {
     minZoom: _xyz.workspace.locale.minZoom,
     maxZoom: _xyz.workspace.locale.maxZoom,
     center: [
+      (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0,
       (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
-      (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0
     ],
     maxBounds: [[
       (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,

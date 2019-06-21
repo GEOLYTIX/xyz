@@ -4,6 +4,8 @@ export default _xyz => function (style) {
 
   const location = this;
 
+  location.style.zIndex = 20;
+
   location.Layer = _xyz.mapview.lib.geoJSON({
     json: {
       type: 'Feature',

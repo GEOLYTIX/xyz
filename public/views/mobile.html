@@ -7,6 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="stylesheet" href="{{:dir}}/css/{{:engine}}.css" />
     <link rel="stylesheet" href="{{:dir}}/css/mobile.css" />
 
     <script src="{{:dir}}/js/build/xyz_{{:engine}}.js" defer></script>
@@ -21,29 +22,8 @@ data-user={{:user}}
 data-logrocket={{:logrocket}}
 data-token={{:token}}>
 
-    <div id="Map" class="mapview map" style="margin-top: 0;">
-        <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
-            <defs>
-                <filter id='dropshadow'>
-                    <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
-                    <feOffset dx='1' dy='1' result='offsetblur' />
-                    <feMerge>
-                        <feMergeNode />
-                        <feMergeNode in='SourceGraphic' />
-                    </feMerge>
-                </filter>
-            </defs>
-        </svg>
-    </div>
+    <div id="Map" class="mapview map" style="margin-top: 0;"></div>
 
-    <!-- <div id="Gazetteer" class="input_group gazetteer">
-        <input type="text" required>
-        <div class="clear-mask">|</div>
-        <i class="material-icons cursor clear">cancel</i>
-        <span class="bar"></span>
-        <div class="loader"></div>
-        <ul></ul>
-    </div> -->
     <div id="gazetteer" class="gazetteer"></div>
 
     <div class="btn_column noselect mobile">

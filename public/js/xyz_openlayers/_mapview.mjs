@@ -11,7 +11,9 @@ import layerVector from 'ol/layer/Vector';
 
 import {Circle, Fill, Stroke, Icon, Style} from 'ol/style';
 
-import {transform} from 'ol/proj';
+import {transform, transformExtent, fromLonLat} from 'ol/proj';
+
+import {defaults, Pointer} from 'ol/interaction.js';
 
 import {Map, View, Feature} from 'ol';
 
@@ -43,8 +45,15 @@ export default _xyz => {
 
       Feature: Feature,
 
+      interaction: {
+        defaults: defaults,
+        Pointer: Pointer,
+      },
+
       proj: {
         transform: transform,
+        transformExtent: transformExtent,
+        fromLonLat: fromLonLat,
       },
 
       format: {
@@ -100,6 +109,7 @@ export default _xyz => {
 
     const layerVector = new _xyz.mapview.lib.ol.layer.Vector({
       source: sourceVector,
+      zIndex: 20,
       style: [
         new _xyz.mapview.lib.ol.style.Style({
           stroke: new _xyz.mapview.lib.ol.style.Stroke({
@@ -171,7 +181,5 @@ export default _xyz => {
   _xyz.mapview.popup = popup(_xyz);
 
   _xyz.mapview.btn = btn(_xyz);
-
-  _xyz.mapview.panes = panes(_xyz);
 
 };

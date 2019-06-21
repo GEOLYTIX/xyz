@@ -13,40 +13,37 @@ export default _xyz => params => {
 
   const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
 
-    
+  const center = _xyz.mapview.lib.ol.proj.fromLonLat([
+    parseFloat((params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0),
+    parseFloat((params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0),
+  ]);
+     
   // Create Leaflet map object.
   _xyz.map = new _xyz.mapview.lib.ol.Map({
-    target: 'Map',//_xyz.mapview.node,
-    // interactions: _xyz.mapview.lib.ol.interactionDefaults({ 
-    //   mouseWheelZoom: params.scrollWheelZoom || false 
-    // }),
+    target: _xyz.mapview.node,
+    interactions: _xyz.mapview.lib.ol.interaction.defaults({ 
+      mouseWheelZoom: params.scrollWheelZoom || false 
+    }),
     controls: [],
     view: new _xyz.mapview.lib.ol.View({
       zoom: z,
       minZoom: _xyz.workspace.locale.minZoom,
       maxZoom: _xyz.workspace.locale.maxZoom,
-      center: [0,50],
-      // center: _xyz.mapview.lib.ol.proj.fromLonLat([
-      //   (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0
-      //   (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
-      // ]),
-    //   extent: _xyz.mapview.lib.ol.proj.transformExtent(
-    //     [
-    //       (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west,
-    //       (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
-    //       (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east,
-    //       (params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north
-    //     ],
-    //     'EPSG:4326',
-    //     'EPSG:3857')
+      center: center,
+      extent: _xyz.mapview.lib.ol.proj.transformExtent(
+        [
+          (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west,
+          (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
+          (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east,
+          (params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north,
+        ],
+        'EPSG:4326',
+        'EPSG:3857'),
     })
   });
 
-  // Create leaflet panes.
-  //_xyz.mapview.panes.create();
-
   // Create attribution in map DOM.
-  //_xyz.mapview.attribution.create(params.attribution);
+  _xyz.mapview.attribution.create(params.attribution);
 
   // Reload layers on change event.
   Object.values(_xyz.layers.list).forEach(layer => {
@@ -82,28 +79,29 @@ export default _xyz => params => {
   //   _xyz.mapview.lib.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
   // }
 
-  // // Event binding.
-  // // Fire viewChangeEnd after map move and zoomend
-  // _xyz.map.on('moveend', () => viewChangeEndTimer());
-  // _xyz.map.on('zoomend', () => viewChangeEndTimer());
+  // Event binding.
+  // Fire viewChangeEnd after map move and zoomend
+  _xyz.map.on('moveend', () => viewChangeEndTimer());
+  //_xyz.map.on('zoomend', () => viewChangeEndTimer());
          
-  // // Use timeout to prevent the viewChangeEvent to be executed multiple times.
-  // let timer;
-  // function viewChangeEndTimer() {
-  //   clearTimeout(timer);
-  //   timer = setTimeout(()=>_xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent), 500);
-  // }
+  // Use timeout to prevent the viewChangeEvent to be executed multiple times.
+  let timer;
+  function viewChangeEndTimer() {
+    clearTimeout(timer);
+    timer = setTimeout(()=>_xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent), 500);
+  }
   
-  // // Set hooks on changeevent.
-  // if (_xyz.hooks) _xyz.mapview.node.addEventListener('changeEnd', ()=>{
-  //   const center = _xyz.map.getCenter();
+  // Set hooks on changeevent.
+  if (_xyz.hooks) _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+
+    const center = _xyz.mapview.lib.ol.proj.transform(_xyz.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
   
-  //   _xyz.hooks.set({
-  //     lat: center.lat,
-  //     lng: center.lng,
-  //     z: _xyz.map.getZoom()
-  //   });
-  // });
+    _xyz.hooks.set({
+      lat: center[1],
+      lng: center[0],
+      z: _xyz.map.getView().getZoom()
+    });
+  });
 
   // // Wire buttons to params targets.
   // if (params.btn) {
