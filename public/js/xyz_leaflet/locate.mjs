@@ -6,11 +6,6 @@ export default _xyz => {
 
     active: false,
 
-    icon: _xyz.mapview.lib.L.icon({
-      iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
-      iconSize: 30
-    })
-
   };
 
   return locate;
@@ -25,7 +20,10 @@ export default _xyz => {
     if (!locate.L) {
       locate.L = _xyz.mapview.lib.L.marker([0, 0], {
         interactive: false,
-        icon: locate.icon
+        icon: _xyz.mapview.lib.L.icon({
+          iconUrl: _xyz.utils.svg_symbols({type: 'geo'}),
+          iconSize: 30
+        })
       });
     }
 

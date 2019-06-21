@@ -2,6 +2,7 @@
     "title": "XYZ dev",
     "locales": {
         "NE": {
+            "locate": {},
             "showScaleBar": true,
             "minZoom": 3,
             "maxZoom": 11,

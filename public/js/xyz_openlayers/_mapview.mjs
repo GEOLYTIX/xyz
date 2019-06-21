@@ -17,6 +17,8 @@ import {defaults, Pointer} from 'ol/interaction.js';
 
 import {Map, View, Feature} from 'ol';
 
+import {Point} from 'ol/geom';
+
 import {ScaleLine} from 'ol/control';
 
 
@@ -58,6 +60,10 @@ export default _xyz => {
         transform: transform,
         transformExtent: transformExtent,
         fromLonLat: fromLonLat,
+      },
+
+      geom: {
+        Point: Point,
       },
 
       format: {

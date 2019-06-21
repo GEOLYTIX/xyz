@@ -11,7 +11,7 @@
 }
 
 .ol-scale-line {
-    background: rgba(0, 60, 136, .3);
+    /* background: rgba(0, 60, 136, .3); */
     border-radius: 4px;
     bottom: 8px;
     left: 68px;
@@ -20,9 +20,9 @@
 }
 
 .ol-scale-line-inner {
-    border: 1px solid #eee;
+    border: 2px solid #222;
     border-top: none;
-    color: #eee;
+    color: #222;
     font-size: 10px;
     text-align: center;
     margin: 1px;
