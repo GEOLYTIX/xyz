@@ -17,6 +17,8 @@ import {defaults, Pointer} from 'ol/interaction.js';
 
 import {Map, View, Feature} from 'ol';
 
+import {ScaleLine} from 'ol/control';
+
 
 
 import create from './create.mjs';
@@ -28,8 +30,6 @@ import locate from './locate.mjs';
 import popup from './popup.mjs';
 
 import btn from './btn.mjs';
-
-import panes from './panes.mjs';
 
 export default _xyz => {
 
@@ -44,6 +44,10 @@ export default _xyz => {
       View: View,
 
       Feature: Feature,
+
+      control: {
+        ScaleLine: ScaleLine,
+      },
 
       interaction: {
         defaults: defaults,

@@ -42,6 +42,10 @@ export default _xyz => params => {
     })
   });
 
+  if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
+    _xyz.map.addControl(new _xyz.mapview.lib.ol.control.ScaleLine());
+  }
+
   // Create attribution in map DOM.
   _xyz.mapview.attribution.create(params.attribution);
 
@@ -53,9 +57,6 @@ export default _xyz => params => {
   // Set the default state.
   _xyz.mapview.state = 'select';
 
-
-  // if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) L.control.scale().addTo(_xyz.map);
-  
   // if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
 
   //   // Grey out area outside bbox
@@ -80,7 +81,6 @@ export default _xyz => params => {
   // }
 
   // Event binding.
-  // Fire viewChangeEnd after map move and zoomend
   _xyz.map.on('moveend', () => viewChangeEndTimer());
   //_xyz.map.on('zoomend', () => viewChangeEndTimer());
          
@@ -104,13 +104,13 @@ export default _xyz => params => {
   });
 
   // // Wire buttons to params targets.
-  // if (params.btn) {
+  if (params.btn) {
 
-  //   if (params.btn.ZoomIn) _xyz.mapview.btn._ZoomIn(params.btn.ZoomIn, z);
+    if (params.btn.ZoomIn) _xyz.mapview.btn._ZoomIn(params.btn.ZoomIn, z);
   
-  //   if (params.btn.ZoomOut) _xyz.mapview.btn._ZoomOut(params.btn.ZoomOut, z);
+    if (params.btn.ZoomOut) _xyz.mapview.btn._ZoomOut(params.btn.ZoomOut, z);
   
-  //   if (params.btn.Locate) _xyz.mapview.btn._Locate(params.btn.Locate);
-  // }
+    if (params.btn.Locate) _xyz.mapview.btn._Locate(params.btn.Locate);
+  }
     
 };

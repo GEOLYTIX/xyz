@@ -17,13 +17,13 @@ export default _xyz => {
     target.disabled = (z >= _xyz.workspace.locale.maxZoom);
 
     target.onclick = () => {
-      let z = _xyz.map.getZoom() + 1;
-      _xyz.map.setZoom(z);
+      let z = parseInt(_xyz.map.getView().getZoom() + 1);
+      _xyz.map.getView().setZoom(z);
       target.disabled = (z >= _xyz.workspace.locale.maxZoom);
     };
 
     _xyz.mapview.node.addEventListener('changeEnd', ()=>{
-      if (_xyz.map.getZoom() >= _xyz.workspace.locale.maxZoom) return target.disabled = true;
+      if (_xyz.map.getView().getZoom() >= _xyz.workspace.locale.maxZoom) return target.disabled = true;
       target.disabled = false;
     });
   }
@@ -35,13 +35,13 @@ export default _xyz => {
     target.disabled = (z <= _xyz.workspace.locale.minZoom);
 
     target.onclick = () => {
-      let z = _xyz.map.getZoom() - 1;
-      _xyz.map.setZoom(z);
+      let z = parseInt(_xyz.map.getView().getZoom() - 1);
+      _xyz.map.getView().setZoom(z);
       target.disabled = (z <= _xyz.workspace.locale.minZoom);
     };
 
     _xyz.mapview.node.addEventListener('changeEnd', ()=>{
-      if (_xyz.map.getZoom() <= _xyz.workspace.locale.minZoom) return target.disabled = true;
+      if (_xyz.map.getView().getZoom() <= _xyz.workspace.locale.minZoom) return target.disabled = true;
       target.disabled = false;
     });
   }
