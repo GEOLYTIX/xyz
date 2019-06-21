@@ -1,14 +1,12 @@
 export default _xyz => chart => {
 
-  console.log('add dashboard tab');
-
-  console.log(chart);
-
   if (!chart) return;
 
   if (chart.key) {
-    if (!chart.layer.tableview.tables[chart.key]) return;
-    Object.assign(chart, chart.layer.tableview.tables[chart.key]);
+    //if (!chart.layer.tableview.tables[chart.title]) return;
+    //if (chart.layer.tableview.tables[chart.key]){
+    //Object.assign(chart, chart.layer.tableview.tables[chart.key]); 
+    //}
   }
 
   if (_xyz.tableview.node) {
@@ -21,9 +19,10 @@ export default _xyz => chart => {
 
   if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(chart);
 
-
   chart.update = () => {
 
+    _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+    _xyz.tableview.node.querySelector('.tab-content').textContent = chart.key;
     console.log('update charts');
 
   };
@@ -33,7 +32,7 @@ export default _xyz => chart => {
 
     if (_xyz.tableview && _xyz.tableview.btn && _xyz.tableview.btn.tableViewport) {
 
-      if (table.viewport) {
+      if (chart.viewport) {
         _xyz.tableview.btn.tableViewport.classList.add('active');
 
       } else {

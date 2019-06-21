@@ -49,9 +49,7 @@ export default (_xyz, layer) => {
 
     if(!chart.target) chart.target = _xyz.tableview.tableContainer();
 
-    chart.show = () => { 
-      console.log('add dashboard tab');
-      //console.log(_xyz.tableview);
+    chart.show = () => {
       _xyz.tableview.layerDashboard(chart); 
     }
     chart.remove = ()=> {
@@ -71,6 +69,7 @@ export default (_xyz, layer) => {
         if (!chart.display) return chart.remove();
 
         layer.show();
+        chart.show();
           
       }
     });
