@@ -65,7 +65,7 @@ export default _xyz => entry => {
       1
     );
 
-    _xyz.map.removeLayer(entry.ctrl.geometry);
+    if(_xyz.map.hasLayer(entry.ctrl.geometry)) _xyz.map.removeLayer(entry.ctrl.geometry);
   };
 
   if (entry.edit) {
@@ -85,7 +85,8 @@ export default _xyz => entry => {
   });
 
   if (entry.value && !entry.edit) {
-    entry.ctrl.toggle.checked = true;
+    //entry.ctrl.toggle.checked = true;
+    entry.ctrl.toggle.checked = entry.display || false;
     entry.ctrl.toggle.onchange();
   }
 
