@@ -7,16 +7,8 @@
             "minZoom": 3,
             "maxZoom": 11,
             "layers": {
-                "OSM": {
-                    "display": true,
-                    "group": "Base Layer",
-                    "format": "tiles",
-                    "attribution": {
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                },
                 "Mapbox Base": {
+                    "display": true,
                     "group": "Base Layer",
                     "attribution": {
                         "© Mapbox": "https://www.mapbox.com/about/maps",

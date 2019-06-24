@@ -7,6 +7,8 @@ export default _xyz => layer => () => {
 
   layer.loaded = true;
 
+  if (layer.L) return;
+
   // Augment request with token if proxied through backend.
   // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
   const uri = layer.URI.indexOf('provider') > 0 ?

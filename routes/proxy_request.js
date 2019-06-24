@@ -19,6 +19,13 @@ module.exports = fastify => {
         .split('&token=').shift()
         .split('&provider=').shift();
 
+      // console.log(`${uri}&${env.keys[req.query.provider]}`);
+
+      // let test = request(decodeURIComponent(`${uri}&${env.keys[req.query.provider]}`));
+
+      // console.log(test);
+
+
       // Decorate the URI with a provider key and send response object to client.
       res.send(request(`${uri}&${env.keys[req.query.provider]}`));
 

@@ -39,13 +39,16 @@ export default _xyz => layer => () => {
   }
 
   // Remove layer.
-  if (layer.L) _xyz.map.removeLayer(layer.L);
+  //if (layer.L) _xyz.map.removeLayer(layer.L);
+
+  if (layer.L) return;
 
   layer.L = new _xyz.mapview.lib.ol.layer.VectorTile({
     source: new _xyz.mapview.lib.ol.source.VectorTile({
       format: new _xyz.mapview.lib.ol.format.MVT({
         //featureClass: _xyz.mapview.lib.ol.Feature
       }),
+      transition: 0,
       url: url
     }),
     style: feature => {
@@ -76,6 +79,8 @@ export default _xyz => layer => () => {
   });
 
   _xyz.map.addLayer(layer.L);
+
+  console.log('2 - ' + layer.key);
 
 
   // if layer isn't selectable, we don't need hover and click events

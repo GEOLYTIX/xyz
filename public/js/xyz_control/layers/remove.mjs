@@ -1,10 +1,13 @@
 export default _xyz => function () {
 
   const layer = this;
-    
+
   layer.display = false;
   layer.loaded = false;
-  if (layer.L) _xyz.map.removeLayer(layer.L);
+  if (layer.L) {
+    _xyz.map.removeLayer(layer.L);
+    layer.L = null;
+  };
   if (layer.attribution) _xyz.mapview.attribution.remove(layer.attribution);
   _xyz.mapview.attribution.check();
 
