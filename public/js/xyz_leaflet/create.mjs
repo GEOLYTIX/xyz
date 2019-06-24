@@ -11,8 +11,6 @@ export default _xyz => params => {
 
   _xyz.mapview.node = params.target;
 
-  const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
-
   _xyz.utils.bind(_xyz.mapview.node)`
   <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
     <defs>
@@ -27,6 +25,13 @@ export default _xyz => params => {
     </defs>
   </svg>`;
 
+  const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
+
+  const center = [
+    parseFloat((params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0),
+    parseFloat((params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0),
+  ];
+
   // Create Leaflet map object.
   _xyz.map = _xyz.mapview.lib.L.map(_xyz.mapview.node, {
     renderer: _xyz.mapview.lib.L.svg(),
@@ -36,10 +41,7 @@ export default _xyz => params => {
     zoom: z,
     minZoom: _xyz.workspace.locale.minZoom,
     maxZoom: _xyz.workspace.locale.maxZoom,
-    center: [
-      (params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0,
-      (params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0,
-    ],
+    center: center,
     maxBounds: [[
       (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
       (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west
@@ -48,6 +50,9 @@ export default _xyz => params => {
       (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east
     ]]
   });
+
+  // added for OL compatibility.
+  _xyz.map.updateSize = () => {};
 
   // Create leaflet panes.
   _xyz.mapview.panes.create();

@@ -74,6 +74,8 @@ export default _xyz => {
     
   // Remove eventListener after resize event.
   function stopResize_x() {
+
+    _xyz.map.updateSize();
     
     document.body.style.cursor = 'auto';
     window.removeEventListener('mousemove', resize_x);
@@ -82,6 +84,8 @@ export default _xyz => {
   
   // Remove eventListener after resize event.
   function stopResizeTouch_x() {
+
+    _xyz.map.updateSize();
     
     window.removeEventListener('touchmove', resize_x);
     window.removeEventListener('touchend', stopResizeTouch_x);
@@ -142,6 +146,8 @@ export default _xyz => {
     
   // Remove eventListener after resize event.
   function stopResize_y() {
+
+    _xyz.map.updateSize();
     
     document.body.style.cursor = 'auto';
     window.removeEventListener('mousemove', resize_y);
@@ -152,6 +158,8 @@ export default _xyz => {
   
   // Remove eventListener after resize event.
   function stopResizeTouch_y() {
+
+    _xyz.map.updateSize();
     
     window.removeEventListener('touchmove', resize_y);
     window.removeEventListener('touchend', stopResizeTouch_y);

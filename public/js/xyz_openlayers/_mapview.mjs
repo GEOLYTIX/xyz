@@ -96,6 +96,9 @@ export default _xyz => {
     geoJSON: geoJSON,
 
     icon: icon,
+
+    getBounds: getBounds,
+
   };
 
   function icon(icon) {
@@ -159,8 +162,7 @@ export default _xyz => {
         //   })
         // })
         })]
-    });
-   
+    }); 
 
     const feature = geoJSON.readFeature({
       type: 'Feature',
@@ -177,8 +179,20 @@ export default _xyz => {
 
   };
 
+  function getBounds(){
 
+    const extent_3857 = _xyz.map.getView().calculateExtent();
 
+    const extent_4326 = _xyz.mapview.lib.ol.proj.transformExtent(extent_3857,'EPSG:3857','EPSG:4326');
+
+    return {
+      south: extent_4326[1],
+      west: extent_4326[0],
+      north: extent_4326[3],
+      east: extent_4326[2],
+    };
+
+  }
 
   _xyz.mapview.create = create(_xyz);
 

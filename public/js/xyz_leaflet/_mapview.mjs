@@ -31,6 +31,7 @@ export default _xyz => {
     polygon: L.polygon,
     rectangle: L.rectangle,
     geoJSON: geoJSON,
+    getBounds: getBounds,
   };
 
   function geoJSON(params){
@@ -49,6 +50,19 @@ export default _xyz => {
       }),
       style: params.style || {}
     }).addTo(_xyz.map);
+
+  }
+
+  function getBounds(){
+
+    const bounds = _xyz.map.getBounds();
+
+    return {
+      south: bounds.getSouth(),
+      west: bounds.getWest(),
+      north: bounds.getNorth(),
+      east: bounds.getEast(),
+    };
 
   }
 

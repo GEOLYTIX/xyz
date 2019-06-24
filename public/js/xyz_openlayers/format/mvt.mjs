@@ -4,7 +4,7 @@ export default _xyz => layer => () => {
   const table = layer.tableCurrent();
 
   // Return if layer should not be displayed.
-  if (!layer.display) return ;//layer.remove();
+  if (!layer.display) return ;
 
   if (!table) {
 
@@ -79,8 +79,6 @@ export default _xyz => layer => () => {
   });
 
   _xyz.map.addLayer(layer.L);
-
-  console.log('2 - ' + layer.key);
 
 
   // if layer isn't selectable, we don't need hover and click events

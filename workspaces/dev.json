@@ -229,6 +229,47 @@
                                 }
                             }
                         }
+                    },
+                    "tableview": {
+                        "tables": {
+                            "table1": {
+                                "title": "Population / GDP",
+                                "from": "dev.natural_earth_countries",
+                                "columns": [{
+                                        "field": "name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "title": "Population Est",
+                                        "field": "pop_est",
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "field": "gdp_md_est",
+                                        "type": "integer"
+                                    }
+                                ]
+                            },
+                            "GDP / Population": {
+                                "display": true,
+                                "from": "dev.natural_earth_countries",
+                                "columns": [{
+                                        "field": "name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "field": "gdp_md_est",
+                                        "type": "integer",
+                                        "postfix": " dollars"
+                                    },
+                                    {
+                                        "title": "Population Est",
+                                        "field": "pop_est",
+                                        "type": "integer"
+                                    }
+                                ]
+                            }
+                        }
                     }
                 },
                 "TILES": {

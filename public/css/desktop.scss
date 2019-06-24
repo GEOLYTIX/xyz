@@ -52,19 +52,22 @@ body {
 
 .mapview {
     grid-column: 3;
-    display: grid;
-    grid-template-columns: 55px;
-    overflow-y: hidden;
+    // display: grid;
+    // grid-template-columns: 55px;
+    // overflow-y: hidden;
+    position: relative;
 
-    .map {
-        position: relative;
-        grid-row: 1;
-        grid-column: 1/3;
-    }
+    // .map {
+    //     grid-row: 1;
+    //     grid-column: 1/3;
+    // }
 
     .btn_column {
-        grid-column: 1;
-        grid-row: 1;
+        // grid-column: 1;
+        // grid-row: 1;
+        left: 0;
+        position: absolute;
+        height: 100%;
     }
 }
 

@@ -33,7 +33,7 @@ export default _xyz => table => {
 
     const xhr = new XMLHttpRequest();
 
-    const bounds = _xyz.map && _xyz.map.getBounds();
+    const bounds = _xyz.map && _xyz.mapview.lib.getBounds();
 
     // Create filter from legend and current filter.
     const filter = table.layer.filter && Object.assign({}, table.layer.filter.legend, table.layer.filter.current);
@@ -46,10 +46,10 @@ export default _xyz => table => {
       orderby: table.orderby,
       order: table.order,
       filter: JSON.stringify(filter),
-      west: bounds && bounds.getWest(),
-      south: bounds && bounds.getSouth(),
-      east: bounds && bounds.getEast(),
-      north: bounds && bounds.getNorth(),
+      south: bounds && bounds.south,
+      west: bounds && bounds.west,
+      north: bounds && bounds.north,
+      east: bounds && bounds.east,
       token: _xyz.token
     }));
   
