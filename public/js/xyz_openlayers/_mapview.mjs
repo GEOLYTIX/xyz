@@ -99,6 +99,8 @@ export default _xyz => {
 
     getBounds: getBounds,
 
+    flyToBounds: flyToBounds,
+
   };
 
   function icon(icon) {
@@ -175,7 +177,7 @@ export default _xyz => {
 
     _xyz.map.addLayer(layerVector);
 
-    return layerVector;
+    return feature;
 
   };
 
@@ -191,6 +193,12 @@ export default _xyz => {
       north: extent_4326[3],
       east: extent_4326[2],
     };
+
+  }
+
+  function flyToBounds(layers){
+
+    _xyz.map.getView().fit(layers[0].getGeometry(), { duration: 1000 });
 
   }
 

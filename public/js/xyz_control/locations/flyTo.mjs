@@ -8,10 +8,12 @@ export default _xyz => function () {
 
   location.geometries.forEach(layer => allLayer.push(layer));
 
-  if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) allLayer.push(_xyz.mapview.locate.L);
+  allLayer.push(_xyz.mapview.locate.L);
 
-  _xyz.map.flyToBounds(_xyz.mapview.lib.featureGroup(allLayer).getBounds(),{
-    padding: [25, 25]
-  });
+  _xyz.mapview.lib.flyToBounds(allLayer);
+
+  // _xyz.map.flyToBounds(_xyz.mapview.lib.featureGroup(allLayer).getBounds(),{
+  //   padding: [25, 25]
+  // });
 
 };

@@ -23,15 +23,27 @@ export default _xyz => {
   _xyz.mapview = {};
 
   _xyz.mapview.lib = {
+
     L: L,
+
     featureGroup: L.featureGroup,
+
     circleMarker: L.circleMarker,
+
     circle: L.circle,
+
     polyline: L.polyline,
+
     polygon: L.polygon,
+
     rectangle: L.rectangle,
+
     geoJSON: geoJSON,
+
     getBounds: getBounds,
+
+    flyToBounds: flyToBounds,
+
   };
 
   function geoJSON(params){
@@ -63,6 +75,20 @@ export default _xyz => {
       north: bounds.getNorth(),
       east: bounds.getEast(),
     };
+
+  }
+
+  function flyToBounds(layers){
+
+    const bounds = layers[0].getBounds();
+
+    _xyz.map.flyToBounds(bounds, {
+      padding: [25, 25]
+    });
+
+    // _xyz.map.flyToBounds(_xyz.mapview.lib.L.featureGroup(layers[0]).getBounds(),{
+    //   padding: [25, 25]
+    // });
 
   }
 

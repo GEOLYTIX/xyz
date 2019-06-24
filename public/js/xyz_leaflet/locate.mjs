@@ -18,6 +18,7 @@ export default _xyz => {
 
     // Create the geolocation marker if it doesn't exist yet.
     if (!locate.L) {
+
       locate.L = _xyz.mapview.lib.L.marker([0, 0], {
         interactive: false,
         icon: _xyz.mapview.lib.L.icon({
@@ -25,6 +26,7 @@ export default _xyz => {
           iconSize: 30
         })
       });
+
     }
 
     // Remove the geolocation marker if locate is not active.
@@ -57,6 +59,7 @@ export default _xyz => {
 
           // Fly to pos_ll and set flyTo to false to prevent map tracking.
           if (flyTo) _xyz.map.flyTo(pos_ll, _xyz.workspace.locale.maxZoom);
+          
           flyTo = false;
         }
       },

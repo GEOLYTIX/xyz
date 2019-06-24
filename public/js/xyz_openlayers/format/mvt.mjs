@@ -116,9 +116,7 @@ export default _xyz => layer => () => {
       marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
       edit: layer.edit
     });
-       
-    // force redraw of layer style
-    //layer.L.setStyle(layer.L.getStyle());
+
   };
   
   _xyz.map.on('click', layer.eventhandlers.mapClick);
@@ -131,7 +129,10 @@ export default _xyz => layer => () => {
       layerFilter: candidate => candidate == layer.L
     });
 
-    if (!features) return;
+    if (!features) {
+      layer.highlighted = null;
+      return layer.L.setStyle(layer.L.getStyle());
+    }
     
     const toBeHighlighted = features != null && e.originalEvent.target.tagName == 'CANVAS';
 
