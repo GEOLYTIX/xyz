@@ -12,8 +12,4 @@ export default _xyz => function () {
 
   _xyz.mapview.lib.flyToBounds(allLayer);
 
-  // _xyz.map.flyToBounds(_xyz.mapview.lib.featureGroup(allLayer).getBounds(),{
-  //   padding: [25, 25]
-  // });
-
 };
