@@ -58,8 +58,7 @@ module.exports =  fastify => {
         ${label} AS label,
         array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
       FROM ${table}
-      WHERE true 
-        ${filter_sql} 
+      WHERE true ${filter_sql} 
       ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
   
       var rows = await env.dbs[layer.dbs](q);

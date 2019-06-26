@@ -56,6 +56,8 @@ import helpers from '@turf/helpers';
 
 import explode from '@turf/explode';
 
+import envelope from '@turf/envelope';
+
 import area from '@turf/area';
 
 import length from '@turf/length';
@@ -66,6 +68,7 @@ export const turf = {
   meta: meta,
   helpers: helpers,
   explode: explode,
+  envelope: envelope,
   area: area,
   length: length
 };

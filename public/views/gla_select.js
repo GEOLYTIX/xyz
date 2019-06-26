@@ -1,55 +1,56 @@
-const locationsArray = [
+const records = [
   {
     color: '#00AEEF',
-    colorDark: '#007BBC'
+    colorDark: '#007BBC',
+    stamp: parseInt(Date.now()),
   },
   {
     color: '#008D48',
-    colorDark: '#005A15'
+    colorDark: '#005A15',
+    stamp: parseInt(Date.now()),
   },
   {
     color: '#E85713',
-    colorDark: '#CF3E00'
+    colorDark: '#CF3E00',
+    stamp: parseInt(Date.now()),
   }
 ];
 
-let countr = -1;
+
+let record = records[0];
 
 function gla_select(_xyz, location) {
 
-  let same = false;
-
-  locationsArray.forEach(loc => {
-
-    if (loc.location && loc.location.id === location.id) {
-
-      loc.location.remove();
-      loc.location = null;
-      loc.view.remove();
-      same = true;
-
-    }
-
-  });
-
-  if (same) return;
-
+  // Image should only be displayed prior to the first select;
   document.getElementById('titleImg').style.display = 'none';
+  
+  // Find the oldest (first) entry and remove exsiting location;
+  if (records.some(rec => {
 
-  countr++;
+    if (rec.stamp <= record.stamp) record = rec;
 
-  countr = countr > 2 ? 0 : countr;
+    if (rec.location && rec.location.id === location.id) {
+      rec.location.remove();
+      rec.location = null;
+      rec.view.remove();
+      rec.stamp = 0;
+      return true;
+    };
 
-  if (locationsArray[countr].location) {
-    locationsArray[countr].location.remove();
-    locationsArray[countr].view.remove();
+  })) return;
+
+  // Remove existing location.
+  if (record.location) {
+    record.location.remove();
+    record.view.remove();
   }
 
-  locationsArray.forEach(loc => {
+  // Hide location details in all records.
+  records.forEach(rec => {
 
-    if (!loc.view) return;
+    if (!rec.view) return;
 
-    const grids = loc.view.querySelectorAll('.grid');   
+    const grids = rec.view.querySelectorAll('.grid');   
 
     grids.forEach(grid => {
 
@@ -57,9 +58,20 @@ function gla_select(_xyz, location) {
 
     });
 
+    const expander = rec.view.querySelectorAll('.expander');   
+
+    expander.forEach(expander => {
+  
+      expander.textContent = 'expand_more';
+  
+    });
+
   });
 
-  locationsArray[countr].location = location;
+  // Assign location to current record.
+  record.location = location;
+
+  record.stamp = parseInt(Date.now());
 
   const xhr = new XMLHttpRequest();
 
@@ -86,20 +98,18 @@ function gla_select(_xyz, location) {
 
     location = _xyz.locations.location(location);
 
-    // callback(_xyz.locations.location(location));
     _xyz.locations.current = location;
 
-    // Get location marker from pointOnFeature is not already defined in location object.
-    location.marker = location.marker
-    || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
 
 
-    const locationView = document.getElementById('locationView');
+    record.view = gla_locationView(_xyz, record);
 
-    locationsArray[countr].view = gla_locationView(_xyz, location.infoj, locationsArray[countr].color);
 
-    locationView.appendChild(locationsArray[countr].view);
 
+    document.getElementById('locationView').appendChild(record.view);
+
+
+    
     location.Marker = _xyz.geom.geoJSON({
       json: {
         type: 'Feature',
@@ -114,8 +124,8 @@ function gla_select(_xyz, location) {
           url: _xyz.utils.svg_symbols({
             type: 'markerColor',
             style: {
-              colorMarker: locationsArray[countr].color,
-              colorDot: locationsArray[countr].colorDark,
+              colorMarker: record.color,
+              colorDot: record.colorDark,
             }
           }),
           size: 40,
@@ -123,6 +133,8 @@ function gla_select(_xyz, location) {
         }
       }
     });
+
+    if(location._flyTo) location.flyTo();
    
   };
 
@@ -131,38 +143,58 @@ function gla_select(_xyz, location) {
 };
 
 
-function gla_locationView(_xyz, infoj, color) {
+function gla_locationView(_xyz, record) {
 
   const fields = {};
 
-  infoj.forEach(el => {
+  record.location.infoj.forEach(el => {
 
     if (el.value) fields[el.field] = el.value;
 
   });
 
-  const view = _xyz.utils.wire()`<div class="location" style="${'margin-top: 10px; border: 3px solid ' + color}">`;
+  const view = _xyz.utils.wire()`<div class="location" style="${'margin-top: 10px; border: 3px solid ' + record.color}">`;
 
-  if (fields.organisation_short) {
-    const title = _xyz.utils.wire()`<div class="title">${fields.organisation_short}`;
-    view.appendChild(title);
 
-    title.onclick = function() {
+  const header = _xyz.utils.wire()`<div style="display: grid; grid-gap: 5px; grid-template-columns: 30px auto 30px;">`;
 
-      const grids = view.querySelectorAll('.grid');   
+  view.appendChild(header);
 
-      grids.forEach(grid => {
+  const title_expand = _xyz.utils.wire()`<i style="grid-column: 1;" class="material-icons title-btn expander">expand_less</i>`;
+
+  header.appendChild(title_expand);
+
+  header.appendChild(_xyz.utils.wire()`<div style="grid-column: 2" class="title">${fields.organisation_short}`);
+
+  const title_close = _xyz.utils.wire()`<i style="grid-column: 3;" class="material-icons title-btn">close</i>`;
+
+  header.appendChild(title_close);
+
+
+  title_expand.onclick = function() {
+
+    title_expand.textContent = title_expand.textContent === 'expand_less' ? 'expand_more' : 'expand_less';
+
+    const grids = view.querySelectorAll('.grid');   
+
+    grids.forEach(grid => {
   
-        grid.style.display = grid.style.display === 'none' ? 'block' : 'none';
+      grid.style.display = grid.style.display === 'none' ? 'block' : 'none';
   
-      });
+    });
 
-    };
+  };
 
-  }
+  title_close.onclick = function() {
+    record.location.remove();
+    record.location = null;
+    record.view.remove();
+    record.stamp = 0;
+  };
 
 
-  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
+
+  var viewGrid = _xyz.utils.wire()`<div class="grid" style="grid-template-columns: 30px;">`;
 
   viewGrid.appendChild(
     _xyz.utils.wire()`<div style="grid-column: 1; grid-row: 1;"><i class="material-icons">room`);
@@ -191,32 +223,32 @@ function gla_locationView(_xyz, infoj, color) {
 
   viewGrid.appendChild(viewAddress);
 
+  if (fields.website) {
+    viewGrid.appendChild(
+      _xyz.utils.wire()`
+        <i style="grid-column: 1; grid-row: 2;" class="material-icons">launch</i>`);
+    viewGrid.appendChild(
+      _xyz.utils.wire()`
+        <a style="grid-column: 2; grid-row: 2; line-height: 1.5;" href="${fields.website}">Website</a>`);
+  }
 
+  if (fields.phone) {
+    viewGrid.appendChild(
+      _xyz.utils.wire()`
+        <i style="grid-column: 1; grid-row: 3;" class="material-icons">call</i>`);
+    viewGrid.appendChild(
+      _xyz.utils.wire()`
+        <div style="grid-column: 2; grid-row: 3; line-height: 1.5;">${fields.phone}`);
+  }    
 
-  var viewLinks = _xyz.utils.wire()`<div style="grid-column: 3; grid-row: 1;">`;
-
-  if (fields.website) viewLinks.appendChild(
-    _xyz.utils.wire()`
-        <div class="align-flex" style="margin-bottom: 5px;">
-        <i class="material-icons">launch</i>
-        <a style="margin-left: 5px;" href="${fields.website}">Website</a>`
-  );
-
-  if (fields.phone) viewLinks.appendChild(
-    _xyz.utils.wire()`
-        <div class="align-flex" style="margin-bottom: 5px;">
-        <i class="material-icons">call</i>
-        <div style="margin-left: 5px;">${fields.phone}`
-  );
-
-  if (fields.email) viewLinks.appendChild(
-    _xyz.utils.wire()`
-        <div class="align-flex" style="margin-bottom: 5px;">
-        <i class="material-icons">email</i>
-        <a style="margin-left: 5px;" href="${'mailto:' + fields.email}">Email</a>`
-  );
-
-  viewGrid.appendChild(viewLinks);
+  if (fields.email) {
+    viewGrid.appendChild(
+      _xyz.utils.wire()`
+        <i style="grid-column: 1; grid-row: 4;" class="material-icons">email</i>`);
+    viewGrid.appendChild(
+      _xyz.utils.wire()`
+        <a style="grid-column: 2; grid-row: 4; line-height: 1.5;" href="${'mailto:' + fields.email}">Email</a>`);    
+  }
 
   view.appendChild(viewGrid);
 
@@ -400,4 +432,4 @@ function gla_locationView(_xyz, infoj, color) {
 
   return view;
 
-}
+};

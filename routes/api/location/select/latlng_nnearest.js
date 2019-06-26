@@ -2,6 +2,8 @@ const env = require('../../../../mod/env');
 
 const sql_fields = require('../../../../mod/pg/sql_fields');
 
+const sql_filter = require('../../../../mod/pg/sql_filter');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -41,12 +43,18 @@ module.exports = fastify => {
         table = req.query.table,
         lat = req.query.lat,
         lng = req.query.lng,
+        filter = req.params.filter,
         nnearest = parseInt(req.query.nnearest || 3),
         infoj = JSON.parse(JSON.stringify(layer.infoj)),
         geom = req.query.geom || layer.geom;
       
       // Return 406 if table does not have EPSG:4326 geometry field.
       if (!geom) return res.code(400).send(new Error('Missing geom (SRID 4326) field on layer.'));
+
+      // SQL filter
+      const filter_sql = filter && await sql_filter(filter) || '';
+
+      console.log(filter_sql);
 
   
       // The fields array stores all fields to be queried for the location info.
@@ -58,6 +66,7 @@ module.exports = fastify => {
       var q = `
         SELECT ${fields.join()}
         FROM ${table}
+        WHERE true ${filter_sql} 
         ORDER BY ST_SetSRID(ST_Point(${lng}, ${lat}), 4326) <#> ${geom}
         LIMIT ${nnearest};`;
   
