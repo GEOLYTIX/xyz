@@ -1,7 +1,10 @@
 export default _xyz => params => {
 
   // Remove existing Leaflet map object.
-  if (_xyz.map) _xyz.map.remove();
+  if (_xyz.map) {
+    _xyz.map.setTarget(null);
+    _xyz.map = null;
+  }
 
   // Load locale if defined in params or if no locale is yet loaded.
   if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
@@ -32,10 +35,10 @@ export default _xyz => params => {
       center: center,
       extent: _xyz.mapview.lib.ol.proj.transformExtent(
         [
-          (params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west,
-          (params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south,
-          (params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east,
-          (params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north,
+          parseFloat((params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west),
+          parseFloat((params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south),
+          parseFloat((params.bounds && params.bounds.east) || _xyz.workspace.locale.bounds.east),
+          parseFloat((params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north),
         ],
         'EPSG:4326',
         'EPSG:3857'),

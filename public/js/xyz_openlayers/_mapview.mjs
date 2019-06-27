@@ -101,6 +101,8 @@ export default _xyz => {
 
     flyToBounds: flyToBounds,
 
+    getZoom: getZoom,
+
   };
 
   function icon(icon) {
@@ -194,6 +196,10 @@ export default _xyz => {
       east: extent_4326[2],
     };
 
+  }
+
+  function getZoom(){
+    return _xyz.map.getView().getZoom();
   }
 
   function flyToBounds(layers){

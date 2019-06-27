@@ -44,6 +44,8 @@ export default _xyz => {
 
     flyToBounds: flyToBounds,
 
+    getZoom: getZoom,
+
   };
 
   function geoJSON(params){
@@ -86,10 +88,10 @@ export default _xyz => {
       padding: [25, 25]
     });
 
-    // _xyz.map.flyToBounds(_xyz.mapview.lib.L.featureGroup(layers[0]).getBounds(),{
-    //   padding: [25, 25]
-    // });
+  }
 
+  function getZoom(){
+    return _xyz.map.getZoom();
   }
 
   _xyz.mapview.create = create(_xyz);

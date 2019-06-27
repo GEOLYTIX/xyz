@@ -6,7 +6,7 @@ export default _xyz => function () {
 
   let
     table,
-    zoom = _xyz.map.getZoom(),
+    zoom = _xyz.mapview.lib.getZoom(),
     zoomKeys = Object.keys(layer.tables),
     minZoomKey = parseInt(zoomKeys[0]),
     maxZoomKey = parseInt(zoomKeys[zoomKeys.length - 1]);
