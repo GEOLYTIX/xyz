@@ -4,7 +4,11 @@ export default _xyz => function () {
 
   const location = this;
 
-  const allLayer = [location.Layer];
+  const allLayer = [];
+
+  if (location.Layer) allLayer.push(location.Layer);
+
+  if (location.Marker) allLayer.push(location.Marker);
 
   location.geometries.forEach(layer => allLayer.push(layer));
 

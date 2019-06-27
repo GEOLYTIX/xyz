@@ -1,19 +1,16 @@
 import {createElement} from './createElement.mjs';
+
 import {dropdown} from './dropdown.mjs';
+
+import {wire} from 'hyperhtml/esm';
 
 export function dropdownCustom(param){
 
-  let entries = [{'placeholder': param.placeholder || 'Select from list'}];
+  const entries = [{'placeholder': param.placeholder || 'Select from list'}].concat(param.entries);
 
-  param.entries.map(item => entries.push(item));
+  const div = wire()`<div class="xyz-custom-select">`;
 
-  let div = createElement({
-    tag: 'div',
-    options: {
-      classList: 'xyz-custom-select'
-    },
-    appendTo: param.appendTo
-  });
+  param.appendTo.appendChild(div);
 
   let x = dropdown({
     appendTo: div,
@@ -68,6 +65,7 @@ export function dropdownCustom(param){
   });
 
   for(let j = 1; j < x.options.length; j++){
+
     let c = createElement({
       tag: 'div',
       options: {
@@ -104,6 +102,7 @@ export function dropdownCustom(param){
 }
 
 function closeAllSelect(el){
+
   //a function that will close all select boxes in the document except the current select box:
   let arrNo = [],
     i,
@@ -123,8 +122,5 @@ function closeAllSelect(el){
       x[i].classList.add('select-hide');
     }
   }
+
 }
-
-
-
-
