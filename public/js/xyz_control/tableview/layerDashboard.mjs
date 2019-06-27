@@ -2,12 +2,12 @@ export default _xyz => chart => {
 
   if (!chart) return;
 
-  if (chart.key) {
+  //if (chart.key) {
     //if (!chart.layer.tableview.tables[chart.title]) return;
     //if (chart.layer.tableview.tables[chart.key]){
     //Object.assign(chart, chart.layer.tableview.tables[chart.key]); 
     //}
-  }
+  //}
 
   if (_xyz.tableview.node) {
     // _xyz.tableview.node.style.display = 'block';

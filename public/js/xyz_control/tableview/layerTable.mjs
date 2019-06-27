@@ -87,6 +87,8 @@ export default _xyz => table => {
       _xyz.tableview.btn.tableViewport.style.display = 'block';
     }
 
+    table.target = _xyz.tableview.tableContainer();
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
       {
