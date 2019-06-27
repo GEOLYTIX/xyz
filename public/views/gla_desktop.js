@@ -173,8 +173,7 @@ _xyz({
               const xhr = new XMLHttpRequest();
 
               xhr.open('GET',
-                //_xyz.host + '/api/location/select/id?' +
-                'http://localhost:3000/gla/api/location/select/latlng/nnearest?' +
+                _xyz.host + '/api/location/select/latlng/nnearest?' +
                 _xyz.utils.paramString({
                   locale: _xyz.workspace.locale.key,
                   layer: 'Advice Center',
@@ -191,9 +190,7 @@ _xyz({
               xhr.onload = e => {
             
                 if (e.target.status !== 200) return;
-
-                console.log(e.target.response);
-                       
+                      
                 const features = [_xyz.utils.turf.helpers.point(res.coordinates)];
             
                 e.target.response.forEach(f => features.push(_xyz.utils.turf.helpers.point(JSON.parse(f.geomj).coordinates)));
