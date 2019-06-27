@@ -21,9 +21,41 @@ export default _xyz => chart => {
 
   chart.update = () => {
 
-    _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
-    _xyz.tableview.node.querySelector('.tab-content').textContent = chart.key;
-    console.log('update charts');
+    const xhr = new XMLHttpRequest();
+
+    const bounds = _xyz.map && _xyz.map.getBounds();
+
+    // Create filter from legend and current filter.
+    const filter = chart.layer.filter && Object.assign({}, chart.layer.filter.legend, chart.layer.filter.current);
+
+    xhr.open('GET', _xyz.host + '/api/layer/chart?' + _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: chart.layer.key,
+      chart: chart.key,
+      viewport: chart.viewport,
+      orderby: chart.orderby,
+      order: chart.order,
+      filter: JSON.stringify(filter),
+      west: bounds && bounds.getWest(),
+      south: bounds && bounds.getSouth(),
+      east: bounds && bounds.getEast(),
+      north: bounds && bounds.getNorth(),
+      token: _xyz.token
+    }));
+
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.responseType = 'json';
+
+    xhr.onload = e => {
+      console.log(e.target.response);
+      console.log(JSON.stringify(e.target.response));
+      _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+      _xyz.tableview.node.querySelector('.tab-content').textContent = chart.key;
+      //let chartElem = _xyz.charts.create(param);
+      console.log('create and update charts');
+    };
+
+    xhr.send();
 
   };
 

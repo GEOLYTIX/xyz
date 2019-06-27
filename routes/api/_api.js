@@ -22,6 +22,8 @@ module.exports = fastify => {
 
   require('./layer/table')(fastify);
 
+  require('./layer/chart')(fastify);
+
   // location
 
   require('./location/field_range')(fastify);

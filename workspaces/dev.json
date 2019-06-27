@@ -767,6 +767,34 @@
                                     }
                                 ]
                             }
+                        },
+                        "charts": {
+                            "Retail strength": {
+                                "display": true,
+                                "type": "bubble",
+                                "from": "dev.retailplaces",
+                                "columns": [
+                                    {
+                                        "title": "Name",
+                                        "field": "rp_name"
+                                    },
+                                    {
+                                        "title": "Units",
+                                        "field": "est_units",
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "title": "Brands",
+                                        "field": "est_brands",
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "title": "Strength",
+                                        "field": "comp_strgh",
+                                        "fieldfx": "(comp_strgh/1000000)",
+                                        "type": "integer"
+                                    }]
+                            }
                         }
                     },
                     "mvt_cache": "dev.retailplaces__mvts",

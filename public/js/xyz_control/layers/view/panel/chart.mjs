@@ -41,8 +41,6 @@ export default (_xyz, layer) => {
   if(layer.tableview.tables){
     Object.keys(layer.tableview.tables).forEach(key => {
 
-      console.log(key);
-
       const table = layer.tableview.tables[key];
 
       table.key = key;
@@ -73,8 +71,6 @@ export default (_xyz, layer) => {
 
     if(layer.tableview.charts){
       Object.keys(layer.tableview.charts).forEach(key => {
-
-        console.log(key);
 
       const table = layer.tableview.charts[key];
 
