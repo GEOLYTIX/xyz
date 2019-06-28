@@ -43,7 +43,11 @@ export default _xyz => layer => {
 
       layer.show();
         
-      if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
+      if (e.target.status !== 200) {
+        console.log(e.target.response);
+        return alert('No route found. Try alternative set up.');
+      }
+
                                     
       _xyz.locations.select({
         layer: layer.key,
