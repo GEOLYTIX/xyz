@@ -36,6 +36,7 @@ export default _xyz => entry => {
     }
       
     if (e.target.status !== 200) {
+      console.log(e.target.response);
       entry.location.view.update();
       return alert('No route found. Try alternative set up.');
     }
