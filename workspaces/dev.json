@@ -797,6 +797,27 @@
                                         "field": "rp_name"
                                     }
                                 ]
+                            },
+                            "Services share": {
+                                "display": true,
+                                "chart": {
+                                    "type": "scatter",
+                                    "pointStyle": "triangle",
+                                    "radius": 10
+                                },
+                                "from": "dev.retailplaces",
+                                "columns": [
+                                    {
+                                        "field": "fbl",
+                                        "title": "Food / Beverage / Leaisure",
+                                        "type": "numeric"
+                                    },
+                                    {
+                                        "field": "services",
+                                        "title": "Services",
+                                        "type": "numeric"
+                                    }
+                                ]
                             }
                         }
                     },

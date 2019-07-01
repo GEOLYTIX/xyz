@@ -44,7 +44,7 @@ export default _xyz => entry => {
 		type: 'bubble',
 		options: {
 			legend: {
-				display: false,
+				display: entry.chart.legend || false,
 				position: 'bottom'
 			},
 			tooltips: {
