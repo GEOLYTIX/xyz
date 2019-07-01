@@ -45,97 +45,101 @@ _xyz({
       }
     });
 
+
+    layer.filter.current['borough'] = { in: [] };
  
-    _xyz.utils.dropdownCustom({
-      appendTo: document.getElementById('select-borough'),
-      placeholder: 'Filter by borough',
-      field: 'borough',
-      entries: [
-        'Show all boroughs',
-        'Barking and Dagenham',
-        'Barnet',
-        'Bexley',
-        'Brent',
-        'Bromley',
-        'Camden',
-        'City of London',
-        'Croydon',
-        'Ealing',
-        'Enfield',
-        'Greenwich',
-        'Hackney',
-        'Hammersmith and Fulham',
-        'Haringey',
-        'Harrow',
-        'Havering',
-        'Hillingdon',
-        'Hounslow',
-        'Islington',
-        'Kensington and Chelsea',
-        'Kingston upon Thames',
-        'Lambeth',
-        'Lewisham',
-        'Merton',
-        'Newham',
-        'Redbridge',
-        'Richmond-upon-Thames',
-        'Southwark',
-        'Sutton',
-        'Tower Hamlets',
-        'Wandsworth',
-        'Westminster'
-      ],
-      callback: e => {
-        e.stopPropagation();
+    document.getElementById('select-borough').appendChild(
+      _xyz.utils.dropdownCustom({
+        placeholder: 'Filter by borough',
+        entries: [
+          'Barking and Dagenham',
+          'Barnet',
+          'Bexley',
+          'Brent',
+          'Bromley',
+          'Camden',
+          'City of London',
+          'Croydon',
+          'Ealing',
+          'Enfield',
+          'Greenwich',
+          'Hackney',
+          'Hammersmith and Fulham',
+          'Haringey',
+          'Harrow',
+          'Havering',
+          'Hillingdon',
+          'Hounslow',
+          'Islington',
+          'Kensington and Chelsea',
+          'Kingston upon Thames',
+          'Lambeth',
+          'Lewisham',
+          'Merton',
+          'Newham',
+          'Redbridge',
+          'Richmond-upon-Thames',
+          'Southwark',
+          'Sutton',
+          'Tower Hamlets',
+          'Wandsworth',
+          'Westminster'
+        ],
+        callback: e => {
+          e.stopPropagation();
+                
+          if (e.target.classList.contains('selected')) {
 
-        if(e.target.textContent === 'Show all boroughs') {
-          delete layer.filter.current[e.target.parentNode.previousSibling.dataset.field];
-          layer.zoomToExtent();        
-          return table.update();
-        }
+          // Add value to filter array.
+            layer.filter.current['borough'].in.push(e.target.dataset.field);
+                
+          } else {
 
-        layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
-        layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
-        layer.zoomToExtent();
-        table.update();
-      }
-    });
-  
-    _xyz.utils.dropdownCustom({
-      appendTo: document.getElementById('select-advice'),
-      placeholder: 'Filter by service',
-      field: 'advice',
-      entries: [
-        { 'all': 'Show all services' }, 
-        { 'service_initial_advice': 'Initial Advice' },
-        { 'service_written_advice': 'Written Advice' },
-        { 'service_form_filling': 'Form Filling' },
-        { 'service_case_work': 'Casework' },
-        { 'service_representation': 'Representation' }
-      ],
-      callback: (e) => {
-        e.stopPropagation();
-        // Reset previous boolean filters
-        Object.keys(layer.filter.current).map(key => {
-          if(layer.filter.current[key].boolean){
-            delete layer.filter.current[key];
-            layer.zoomToExtent();
-            table.update();
+          // Get index of value in filter array.
+            let idx = layer.filter.current['borough']['in'].indexOf(e.target.dataset.field);
+
+            // Splice filter array on idx.
+            layer.filter.current['borough'].in.splice(idx, 1);
+
           }
-        });
   
-        if(e.target.textContent === 'Show all services'){
-          delete layer.filter.current[e.target.dataset.field];
           layer.zoomToExtent();
-          return table.update();
+          table.update();
         }
+      })
+    );
+
+
+    document.getElementById('select-advice').appendChild(
+      _xyz.utils.dropdownCustom({
+        placeholder: 'Filter by service',
+        entries: [
+          { 'service_initial_advice': 'Initial Advice' },
+          { 'service_written_advice': 'Written Advice' },
+          { 'service_form_filling': 'Form Filling' },
+          { 'service_case_work': 'Casework' },
+          { 'service_representation': 'Representation' }
+        ],
+        callback: (e) => {
+
+          e.stopPropagation();
+                
+          if (e.target.classList.contains('selected')) {
+
+            layer.filter.current[e.target.dataset.field] = {};
+            layer.filter.current[e.target.dataset.field]['boolean'] = true;
+                
+          } else {
+
+            delete layer.filter.current[e.target.dataset.field];
+          }
   
-        layer.filter.current[e.target.dataset.field] = {};
-        layer.filter.current[e.target.dataset.field]['boolean'] = true;
-        layer.zoomToExtent();
-        table.update();
-      }
-    });
+          layer.zoomToExtent();
+          table.update();
+        }
+      })
+    );
+
   
 
     // Gazetteer
@@ -169,8 +173,7 @@ _xyz({
               const xhr = new XMLHttpRequest();
 
               xhr.open('GET',
-                //_xyz.host + '/api/location/select/id?' +
-                'http://localhost:3000/gla/api/location/select/latlng/nnearest?' +
+                _xyz.host + '/api/location/select/latlng/nnearest?' +
                 _xyz.utils.paramString({
                   locale: _xyz.workspace.locale.key,
                   layer: 'Advice Center',
@@ -187,9 +190,7 @@ _xyz({
               xhr.onload = e => {
             
                 if (e.target.status !== 200) return;
-
-                console.log(e.target.response);
-                       
+                      
                 const features = [_xyz.utils.turf.helpers.point(res.coordinates)];
             
                 e.target.response.forEach(f => features.push(_xyz.utils.turf.helpers.point(JSON.parse(f.geomj).coordinates)));
