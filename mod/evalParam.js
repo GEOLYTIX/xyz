@@ -122,7 +122,7 @@ function _layerChart(req, res, next) {
 
   if (!req.params.chart) {
     res.code(400);
-    return next(new Error('Missing layer table.'));
+    return next(new Error('Missing chart table.'));
   }
 
   next();

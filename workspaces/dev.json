@@ -771,13 +771,11 @@
                         "charts": {
                             "Retail strength": {
                                 "display": true,
-                                "type": "bubble",
+                                "chart": {
+                                    "type": "bubble"
+                                },
                                 "from": "dev.retailplaces",
                                 "columns": [
-                                    {
-                                        "title": "Name",
-                                        "field": "rp_name"
-                                    },
                                     {
                                         "title": "Units",
                                         "field": "est_units",
@@ -793,7 +791,12 @@
                                         "field": "comp_strgh",
                                         "fieldfx": "(comp_strgh/1000000)",
                                         "type": "integer"
-                                    }]
+                                    },
+                                    {
+                                        "title": "Name",
+                                        "field": "rp_name"
+                                    }
+                                ]
                             }
                         }
                     },
@@ -1087,12 +1090,6 @@
                                         "type": "text"
                                     }
                                 ]
-                            }
-                        },
-                        "charts": {
-                            "Some bubbles": {
-                                "display": true,
-                                "type": "bubble"
                             }
                         }
                     },

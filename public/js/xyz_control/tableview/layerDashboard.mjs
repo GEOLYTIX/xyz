@@ -47,12 +47,22 @@ export default _xyz => chart => {
     xhr.responseType = 'json';
 
     xhr.onload = e => {
-      console.log(e.target.response);
-      console.log(JSON.stringify(e.target.response));
+      //console.log(e.target.response);
+      //console.log(JSON.stringify(e.target.response));
       _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
-      _xyz.tableview.node.querySelector('.tab-content').textContent = chart.key;
+      //_xyz.tableview.node.querySelector('.tab-content').textContent = chart.key;
       //let chartElem = _xyz.charts.create(param);
-      console.log('create and update charts');
+      //console.log('create and update charts');
+      //console.log(chart);
+      let chartElem = _xyz.charts.create({
+        'label': chart.key, 
+        'columns': chart.columns,
+        'fields': e.target.response, 
+        'chart': chart.chart
+      });
+
+      _xyz.tableview.node.querySelector('.tab-content').appendChild(chartElem);
+
     };
 
     xhr.send();

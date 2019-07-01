@@ -89,7 +89,7 @@ module.exports = fastify => {
         FETCH FIRST 99 ROW ONLY;`;
 
       // OFFSET ${offset} ROWS
-      console.log(q);
+      //console.log(q);
 
       var rows = await env.dbs[layer.dbs](q);
 
