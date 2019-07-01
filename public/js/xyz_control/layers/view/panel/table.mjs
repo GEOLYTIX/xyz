@@ -1,18 +1,19 @@
 export default (_xyz, layer) => {
 
-    if (_xyz.mobile || !layer.tableview || !layer.tableview.tables || !layer.tableview.charts) return;
+    if (_xyz.mobile || !layer.tableview) return;
 
-    // Create cluster panel and add to layer dashboard.
-    layer.tableview.panel = _xyz.utils.createElement({
+    if(layer.tableview.tables || layer.tableview.charts) { // Create cluster panel and add to layer dashboard.
+      
+      layer.tableview.panel = _xyz.utils.createElement({
         tag: 'div',
         options: {
             classList: 'panel expandable'
         },
         appendTo: layer.view.dashboard
-    });
+      });
 
-    // Panel title / expander.
-    _xyz.utils.createElement({
+      // Panel title / expander.
+      _xyz.utils.createElement({
         tag: 'div',
         options: {
             className: 'btn_text cursor noselect',
@@ -28,10 +29,10 @@ export default (_xyz, layer) => {
                     accordeon: true,
                     scrolly: _xyz.desktop && _xyz.desktop.listviews
                 });
+              }
             }
-        }
-    });
-
+          });
+    }
     // Return if tableview has no table definition.
     //if(!layer.tableview.tables) return;
 
@@ -65,12 +66,9 @@ export default (_xyz, layer) => {
                     if (!table.display) return table.remove();
 
                     layer.show();
-
                 }
             });
-
             if (table.display && layer.display) table.show();
-
         });
     }
 
@@ -100,10 +98,7 @@ export default (_xyz, layer) => {
                     layer.show();
                 }
             });
-
             if (chart.display && layer.display) chart.show();
-            
         });
     }
-
 };
