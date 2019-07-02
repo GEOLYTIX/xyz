@@ -67,8 +67,7 @@ export default _xyz => group => {
   //     funct: toggleExpandedState
   //   }
   // });
-  if(group.chart && group.chart.type === 'radar') console.log(group);
-
+  
   // Add table
   group.table = _xyz.utils.createElement({
     tag: 'table',
