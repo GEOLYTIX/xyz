@@ -60,32 +60,48 @@ export default _xyz => params => {
   // Set the default state.
   _xyz.mapview.state = 'select';
 
-  // if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
+  if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
 
-  //   // Grey out area outside bbox
-  //   const world = [[90,180], [90,-180], [-90,-180], [-90,180]];
+    // Grey out area outside bbox
+    const world = [
+      _xyz.mapview.lib.ol.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([180, -90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([-180, -90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([-180, 90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
+    ];
 
-  //   const bbox = [
-  //     [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.east],
-  //     [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.west],
-  //     [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.west],
-  //     [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.east]
-  //   ];
+    const bounds = [
+      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+    ];
 
-  //   const greyoutOptions = {
-  //     pane: 'markerPane',
-  //     stroke: false,
-  //     fill: true,
-  //     fillColor: '#ccc',
-  //     fillOpacity: 0.8
-  //   };
+    var maskFeature = new _xyz.mapview.lib.ol.Feature({
+      geometry: new _xyz.mapview.lib.ol.geom.Polygon([world, bounds])
+    });
+  
+    var maskLayer = new _xyz.mapview.lib.ol.layer.Vector({
+      source: new _xyz.mapview.lib.ol.source.Vector({
+        features: [maskFeature]
+      }),
+      style: new _xyz.mapview.lib.ol.style.Style({
+        fill: new _xyz.mapview.lib.ol.style.Fill({
+          color: _xyz.utils.hexToRGBA('#000000', 0.2, true)
+        })
+      }),
+      zIndex: 999
+    });
 
-  //   _xyz.mapview.lib.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
-  // }
+
+    _xyz.map.addLayer(maskLayer);
+  }
 
   // Event binding.
   _xyz.map.on('moveend', () => viewChangeEndTimer());
-  //_xyz.map.on('zoomend', () => viewChangeEndTimer());
+
          
   // Use timeout to prevent the viewChangeEvent to be executed multiple times.
   let timer;

@@ -405,7 +405,7 @@
         "GB": {
             "showScaleBar": true,
             "locate": {},
-            "minZoom": 6,
+            "minZoom": 5,
             "maxZoom": 17,
             "view": {
                 "lat": 55.45,
@@ -1039,8 +1039,7 @@
                     "qID": "id",
                     "table": "dev.retailpoints",
                     "hover": {
-                        "field": "store",
-                        "permanent": true
+                        "field": "store"
                     },
                     "tableview": {
                         "tables": {
