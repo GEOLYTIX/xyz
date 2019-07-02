@@ -67,6 +67,7 @@ export default _xyz => group => {
   //     funct: toggleExpandedState
   //   }
   // });
+  if(group.chart && group.chart.type === 'radar') console.log(group);
 
   // Add table
   group.table = _xyz.utils.createElement({
@@ -84,10 +85,12 @@ export default _xyz => group => {
     appendTo: group.div
   });
 
+  //console.log(group.table);
+
   // If chart option specified
   if (group.chart) {
 
-    //if(group.dashboard) return;
+    if(group.dashboard) return;
     
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);

@@ -816,6 +816,10 @@
                                         "field": "services",
                                         "title": "Services",
                                         "type": "numeric"
+                                    },
+                                    {
+                                        "title": "Name",
+                                        "field": "rp_name"
                                     }
                                 ]
                             }
@@ -2006,6 +2010,7 @@
                             "dashboard": "Dashboard 1",
                             "level": 2,
                             "chart": {
+                                "type": "mixed",
                                 "title": true,
                                 "legend": true,
                                 "legendPosition": "bottom",
@@ -2018,35 +2023,40 @@
                             "label": "Random 1",
                             "field": "random1",
                             "type": "integer",
-                            "dataset": "Serie 1"
+                            "dataset": "Serie 1",
+                            "chartType": "line"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 2",
                             "field": "random2",
                             "type": "integer",
-                            "dataset": "Serie 1"
+                            "dataset": "Serie 1",
+                            "chartType": "line"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 3",
                             "field": "random3",
                             "type": "integer",
-                            "dataset": "Serie 1"
+                            "dataset": "Serie 1",
+                            "chartType": "line"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 4",
                             "field": "random4",
                             "type": "integer",
-                            "dataset": "Serie 1"
+                            "dataset": "Serie 1",
+                            "chartType": "line"
                         },
                         {
                             "group": "Random data series",
                             "label": "Random 5",
                             "field": "random5",
                             "type": "integer",
-                            "dataset": "Serie 1"
+                            "dataset": "Serie 1",
+                            "chartType": "line"
                         },
                         {
                             "group": "Random data series",
@@ -2234,7 +2244,8 @@
                         {
                             "group": "Radar Chart",
                             "field": "actual_sales_activity1_radar",
-                            "fieldfx": "actual_sales_activity1", 
+                            "fieldfx": "actual_sales_activity1",
+                            "type": "integer", 
                             "label": "Activity 1",
                             "dataset": "Actual"
                         },
@@ -2242,6 +2253,7 @@
                             "group": "Radar Chart",
                             "field": "actual_sales_activity2_radar",
                             "fieldfx": "actual_sales_activity2",
+                            "type": "integer",
                             "label": "Activity 2",
                             "dataset": "Actual"
                         },
@@ -2249,6 +2261,7 @@
                             "group": "Radar Chart",
                             "field": "actual_sales_activity3_radar",
                             "fieldfx": "actual_sales_activity3",
+                            "type": "integer",
                             "label": "Activity 3",
                             "dataset": "Actual"
                         },
@@ -2256,6 +2269,7 @@
                             "group": "Radar Chart",
                             "field": "actual_sales_activity4_radar",
                             "fieldfx": "actual_sales_activity4",
+                            "type": "integer",
                             "label": "Activity 4",
                             "dataset": "Actual"
                         },
@@ -2263,6 +2277,7 @@
                             "group": "Radar Chart",
                             "field": "actual_sales_activity5_radar",
                             "fieldfx": "actual_sales_activity5",
+                            "type": "integer",
                             "label": "Activity 5",
                             "dataset": "Actual"
                         },
@@ -2270,6 +2285,7 @@
                             "group": "Radar Chart",
                             "field": "model_sales_activity1_radar",
                             "fieldfx": "model_sales_activity1",
+                            "type": "integer",
                             "label": "Activity 1",
                             "dataset": "Model"
                         },
@@ -2277,6 +2293,7 @@
                             "group": "Radar Chart",
                             "field": "model_sales_activity2_radar",
                             "fieldfx": "model_sales_activity2",
+                            "type": "integer",
                             "label": "Activity 2",
                             "dataset": "Model"
                         },
@@ -2284,6 +2301,7 @@
                             "group": "Radar Chart",
                             "field": "model_sales_activity3_radar",
                             "fieldfx": "model_sales_activity3",
+                            "type": "integer",
                             "label": "Activity 3",
                             "dataset": "Model"
                         },
@@ -2291,6 +2309,7 @@
                             "group": "Radar Chart",
                             "field": "model_sales_activity4_radar",
                             "fieldfx": "model_sales_activity4",
+                            "type": "integer",
                             "label": "Activity 4",
                             "dataset": "Model"
                         },
@@ -2298,6 +2317,7 @@
                             "group": "Radar Chart",
                             "field": "model_sales_activity5_radar",
                             "fieldfx": "model_sales_activity5",
+                            "type": "integer",
                             "label": "Activity 5",
                             "dataset": "Model"
                         },

@@ -1,6 +1,5 @@
 import bubbleChart from './bubbleChart.mjs';
 import cakeChart from './cakeChart.mjs';
-import mixedChart from './mixedChart.mjs';
 import radarChart from './radarChart.mjs';
 import polarChart from './polarChart.mjs';
 import scatterplot from './scatterplot.mjs';
@@ -14,8 +13,6 @@ export default _xyz => {
         bubble: bubbleChart(_xyz),
 
         cake: cakeChart(_xyz),
-
-        mixed: mixedChart(_xyz),
 
         polarArea: polarChart(_xyz),
 
@@ -35,13 +32,13 @@ export default _xyz => {
             return charts.simple(entry);
         }
 
+        if(entry.chart.type === 'mixed') entry.chart.type = 'bar';
+
         if (entry.chart.type === 'line' || entry.chart.type === 'bar' || entry.chart.type === 'horizontalBar') return charts.simple(entry);
 
         if(entry.chart.type === 'bubble') return charts.bubble(entry);
 
         if (entry.chart.type === 'pie' || entry.chart.type === 'doughnut') return charts.cake(entry);
-
-        if (entry.chart.type === 'mixed') return charts.mixed(entry);
 
         if (entry.chart.type === 'polarArea') return charts.polarArea(entry);
 
@@ -59,10 +56,6 @@ export default _xyz => {
 
     function cake(entry) {
         charts.cake(entry);
-    }
-
-    function mixed(entry) {
-        charts.mixed(entry);
     }
 
     function polarArea(entry) {
@@ -108,7 +101,6 @@ export default _xyz => {
         create: create,
         bubble: bubble,
         cake: cake,
-        mixed: mixed,
         polarArea: polarArea,
         radar: radar,
         scatter: scatter,

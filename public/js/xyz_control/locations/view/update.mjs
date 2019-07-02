@@ -43,6 +43,7 @@ export default (_xyz, location) => () => {
   });
 
     
+  let dataset; // watch for group/chart data series and stacks
   // Iterate through info fields and add to info table.
   Object.values(location.infoj).forEach(entry => {
 
@@ -55,7 +56,31 @@ export default (_xyz, location) => () => {
     if (entry.type === 'group') return location.view.group(entry);
 
     // Create entry.row inside previously created group.
-    if (entry.group && location.view.groups[entry.group]) location.view.groups[entry.group].table.appendChild(entry.row);
+    if (entry.group && location.view.groups[entry.group]){ 
+
+      if(entry.dataset || entry.stack){
+
+        let dataset_row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`,
+            dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777; font-size: small;">`;
+
+        if(entry.dataset && entry.dataset !== dataset){
+          dataset_label.textContent = entry.dataset;
+          dataset_row.appendChild(dataset_label);
+          location.view.groups[entry.group].table.appendChild(dataset_row);
+          dataset = entry.dataset;
+        }
+
+        if(entry.stack && entry.stack !== dataset){
+          dataset_label.textContent = entry.stack;
+          dataset_row.appendChild(dataset_label);
+          location.view.groups[entry.group].table.appendChild(dataset_row);
+          dataset = entry.stack;
+        }
+
+      }
+      
+      location.view.groups[entry.group].table.appendChild(entry.row); 
+    }
     
 
     // Create new table cell for the entry label and append to table.

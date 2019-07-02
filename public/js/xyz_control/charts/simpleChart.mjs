@@ -47,6 +47,7 @@ export default _xyz => entry => {
 			tmp[serie].data = [];
 			tmp[serie].label = serie;
 
+
 			let idx = series.indexOf(serie);
 
 			tmp[serie].backgroundColor = typeof(entry.chart.backgroundColor) === 'object' ?  entry.chart.backgroundColor[idx] : (entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor);
@@ -56,6 +57,7 @@ export default _xyz => entry => {
 
 		Object.values(entry.fields).map(field => {
 			tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.value);
+            tmp[(field.dataset)].type = field.chartType || (entry.chart.type || 'line');
 		});
 
 		Object.values(tmp).forEach(val => datasets.push(val));

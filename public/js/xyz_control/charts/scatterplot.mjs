@@ -29,8 +29,8 @@ export default _xyz => entry => {
 		data.push({
 			label: d[_label] || d.qid,
 			id: d.qid,
-			backgroundColor: entry.chart.backgroundColor || 'rgba(167, 29, 49, 0.3)',
-			borderColor: entry.chart.borderColor || 'rgba(167, 29, 49, 0.3)',
+			backgroundColor: entry.chart.backgroundColor || 'rgba(70, 99, 98, 0.3)',
+			borderColor: entry.chart.borderColor || 'rgba(70, 99, 98, 0.3)',
 			pointStyle: entry.chart.pointStyle,
 			radius: entry.chart.radius,
 			pointHoverRadius: entry.chart.pointHoverRadius ? entry.chart.pointHoverRadius : entry.chart.radius ? parseInt(entry.chart.radius)+2 : null,
@@ -41,8 +41,6 @@ export default _xyz => entry => {
 		});
 
 	});
-
-	//console.log(data);
 
 	let chart = new _xyz.Chart(canvas, {
 		type: 'scatter',
