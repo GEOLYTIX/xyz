@@ -44,6 +44,7 @@ export default _xyz => layer => () => {
       south: bounds.south,
       east: bounds.east,
       north: bounds.north,
+      z: _xyz.mapview.lib.getZoom(),
       token: _xyz.token
     }));
 
@@ -73,8 +74,7 @@ export default _xyz => layer => () => {
     }
 
     const features = cluster.map(f => new _xyz.mapview.lib.ol.Feature({
-      geometry: new _xyz.mapview.lib.ol.geom.Point(
-        _xyz.mapview.lib.ol.proj.fromLonLat([f.geometry.coordinates[0], f.geometry.coordinates[1]], 'EPSG:3857')),
+      geometry: new _xyz.mapview.lib.ol.geom.Point([f.geometry.x, f.geometry.y]),
       properties: f.properties
     }));
 

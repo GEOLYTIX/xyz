@@ -58,26 +58,70 @@ module.exports = fastify => {
         size = req.query.size || 1,
         theme = req.query.theme,
         filter = req.params.filter,
+        kmeans = parseInt(1 / req.query.kmeans),
+        kmeans_only = false,
+        dbscan = parseFloat(req.query.dbscan),
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north),
-        z = parseInt(req.query.z),
-        m = 20037508.34,
-        r = parseInt((m * 2) / (Math.pow(2, z)) / 10);
+        north = parseFloat(req.query.north);
           
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || ''; 
 
-      const agg_sql = `
+      // Query the feature count from lat/lng bounding box.
+      var q = `
+      SELECT
+        count(1)::integer,
+        ST_Distance(
+          ST_Point(
+            ST_XMin(ST_Envelope(ST_Extent(${geom}))),
+            ST_YMin(ST_Envelope(ST_Extent(${geom})))
+          ),
+          ST_Point(
+            ST_XMax(ST_Envelope(ST_Extent(${geom}))),
+            ST_Ymin(ST_Envelope(ST_Extent(${geom})))
+          )
+        ) AS xExtent,
+        ST_Distance(
+          ST_Point(${west}, ${south}),
+          ST_Point(${east}, ${north})
+        ) AS xEnvelope
+      FROM ${table}
+      WHERE
+        ST_DWithin(
+          ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+            ${geom},
+            0.00001)
+        ${filter_sql};`;
+  
+      var rows = await env.dbs[layer.dbs](q);
+  
+      if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+  
+      // return 202 if no locations found within the envelope.
+      if (parseInt(rows[0].count) === 0) return res.code(200).send([]);
+  
+      let
+        count = rows[0].count,
+        xEnvelope = rows[0].xenvelope;
+
+      if (count > 1000) {
+        kmeans *= 2;
+        kmeans_only = true;
+      }
+  
+      if (kmeans >= count) kmeans = count;
+   
+      dbscan *= xEnvelope;
+
+      const kmeans_sql = `
       SELECT
         ${cat} AS cat,
         ${size} AS size,
-        x_3857,
-        y_3857,
-        round(x_3857 / ${r}) * ${r} x_round,
-        round(y_3857 / ${r}) * ${r} y_round
+        ${geom} AS geom,
+        ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid
         
       FROM ${table}
       WHERE
@@ -88,18 +132,23 @@ module.exports = fastify => {
         )
         ${filter_sql}`;
 
+      const dbscan_sql = `
+      SELECT
+        cat,
+        size,
+        geom,
+        kmeans_cid,
+        ST_ClusterDBSCAN(geom, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      FROM (${kmeans_sql}) kmeans`;
  
 
       if (!theme) var q = `
       SELECT
         count(1) count,
         SUM(size) size,
-        percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
-        percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y,
-        x_round,
-        y_round
+        ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-      FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;
 
 
       if (theme === 'categorized') var q = `
@@ -107,12 +156,9 @@ module.exports = fastify => {
         count(1) count,
         SUM(size) size,
         array_agg(cat) cat,
-        avg(x_3857) x,
-        avg(y_3857) y,
-        x_round,
-        y_round
+        ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-        FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'};`;
   
 
       if (theme === 'graduated') var q = `
@@ -120,12 +166,9 @@ module.exports = fastify => {
         count(1) count,
         SUM(size) size,
         ${req.query.aggregate || 'sum'}(cat) cat,
-        avg(x_3857) x,
-        avg(y_3857) y,
-        x_round,
-        y_round
+        ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
 
-        FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
+      FROM (${kmeans_only ? kmeans_sql : dbscan_sql}) dbscan GROUP BY kmeans_cid ${kmeans_only ? ';': ', dbscan_cid;'}`;
 
 
       if (theme === 'competition') var q = `
@@ -155,10 +198,7 @@ module.exports = fastify => {
 
       if (!theme) return res.code(200).send(rows.map(row => ({
         type: 'Feature',
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
+        geometry: JSON.parse(row.geomj),
         properties: {
           count: parseInt(row.count),
           size: parseInt(row.size)
@@ -167,10 +207,7 @@ module.exports = fastify => {
 
       if (theme === 'categorized') return res.code(200).send(rows.map(row => ({
         type: 'Feature',
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
+        geometry: JSON.parse(row.geomj),
         properties: {
           count: parseInt(row.count),
           size: parseInt(row.size),
@@ -180,10 +217,7 @@ module.exports = fastify => {
 
       if (theme === 'graduated') return res.code(200).send(rows.map(row => ({
         type: 'Feature',
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
+        geometry: JSON.parse(row.geomj),
         properties: {
           count: parseInt(row.count),
           size: parseInt(row.size),
@@ -193,10 +227,7 @@ module.exports = fastify => {
 
       if (theme === 'competition') return res.code(200).send(rows.map(row => ({
         type: 'Feature',
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
+        geometry: JSON.parse(row.geomj),
         properties: {
           count: parseInt(row.count),
           size: parseInt(row.size),

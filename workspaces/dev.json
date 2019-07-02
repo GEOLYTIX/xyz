@@ -1330,7 +1330,7 @@
                 "PPD": {
                     "format": "cluster",
                     "dbs": "XYZ",
-                    "table": "website.london_glx_geodata_hpp_20180517",
+                    "table": "dev.london_hpp",
                     "geom": "geom_p_4326",
                     "cluster_kmeans": 0.0075,
                     "qID": "id",
