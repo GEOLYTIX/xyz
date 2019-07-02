@@ -76,22 +76,20 @@ export default _xyz => params => {
     // Grey out area outside bbox
     const world = [[90,180], [90,-180], [-90,-180], [-90,180]];
 
-    const bbox = [
+    const bounds = [
       [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.east],
       [_xyz.workspace.locale.bounds.north, _xyz.workspace.locale.bounds.west],
       [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.west],
       [_xyz.workspace.locale.bounds.south, _xyz.workspace.locale.bounds.east]
     ];
 
-    const greyoutOptions = {
+    _xyz.mapview.lib.L.polygon([world, bounds], {
       pane: 'markerPane',
       stroke: false,
       fill: true,
       fillColor: '#ccc',
       fillOpacity: 0.8
-    };
-
-    _xyz.mapview.lib.L.polygon([world, bbox], greyoutOptions).addTo(_xyz.map);
+    }).addTo(_xyz.map);
   }
 
   // Event binding.
