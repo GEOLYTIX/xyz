@@ -70,6 +70,7 @@ export default (_xyz, layer) => {
       });
     };
 
+    // make panel expanded if one only.
     if(dashboard.children.length === 1){
       if(!dashboard.children[0].classList.contains('expanded')) dashboard.children[0].classList.add('expanded');
     }
