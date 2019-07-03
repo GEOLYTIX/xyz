@@ -69,6 +69,10 @@ export default (_xyz, layer) => {
         scrolly: _xyz.desktop && _xyz.desktop.listviews,
       });
     };
+
+    if(dashboard.children.length === 1){
+      if(!dashboard.children[0].classList.contains('expanded')) dashboard.children[0].classList.add('expanded');
+    }
     
   }
   
