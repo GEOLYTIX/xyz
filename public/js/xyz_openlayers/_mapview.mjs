@@ -184,17 +184,24 @@ export default _xyz => {
 
   };
 
-  function getBounds(){
+  function getBounds(epsg){
 
-    const extent_3857 = _xyz.map.getView().calculateExtent();
+    const extent = _xyz.map.getView().calculateExtent();
 
-    const extent_4326 = _xyz.mapview.lib.ol.proj.transformExtent(extent_3857,'EPSG:3857','EPSG:4326');
+    if (!epsg) return {
+      south: extent[1],
+      west: extent[0],
+      north: extent[3],
+      east: extent[2],
+    };
+
+    const extent_transformed = _xyz.mapview.lib.ol.proj.transformExtent(extent,'EPSG:3857','EPSG:'+epsg);
 
     return {
-      south: extent_4326[1],
-      west: extent_4326[0],
-      north: extent_4326[3],
-      east: extent_4326[2],
+      south: extent_transformed[1],
+      west: extent_transformed[0],
+      north: extent_transformed[3],
+      east: extent_transformed[2],
     };
 
   }

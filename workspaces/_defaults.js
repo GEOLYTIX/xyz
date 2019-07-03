@@ -71,8 +71,6 @@ module.exports = {
     cluster: {
       filter: {},
       geom: 'geom',
-      cluster_kmeans: 0.05,
-      cluster_dbscan: 0.01,
       style: {
         markerMin: 20,
         markerMax: 40,

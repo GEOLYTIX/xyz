@@ -1331,8 +1331,9 @@
                     "format": "cluster",
                     "dbs": "XYZ",
                     "table": "dev.london_hpp",
-                    "geom": "geom_p_4326",
-                    "cluster_kmeans": 0.0075,
+                    "geom": "geom_3857",
+                    "srid": "3857",
+                    "cluster_resolution": 0.1,
                     "qID": "id",
                     "infoj": [
                         {

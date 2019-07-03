@@ -64,7 +64,7 @@ module.exports = fastify => {
         north = parseFloat(req.query.north),
         z = parseInt(req.query.z),
         m = 20037508.34,
-        r = parseInt((m * 2) / (Math.pow(2, z)) / 10);
+        r = parseInt((m * 2) / (Math.pow(2, z)) * parseFloat(req.query.resolution));
           
 
       // SQL filter
@@ -74,15 +74,15 @@ module.exports = fastify => {
       SELECT
         ${cat} AS cat,
         ${size} AS size,
-        x_3857,
-        y_3857,
-        round(x_3857 / ${r}) * ${r} x_round,
-        round(y_3857 / ${r}) * ${r} y_round
+        ST_X(${geom}) AS x_3857,
+        ST_Y(${geom}) AS y_3857,
+        round(ST_X(${geom}) / ${r}) * ${r} x_round,
+        round(ST_Y(${geom}) / ${r}) * ${r} y_round
         
       FROM ${table}
       WHERE
         ST_DWithin(
-          ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+          ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 3857),
           ${geom},
           0.00001
         )
@@ -107,8 +107,8 @@ module.exports = fastify => {
         count(1) count,
         SUM(size) size,
         array_agg(cat) cat,
-        avg(x_3857) x,
-        avg(y_3857) y,
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y,
         x_round,
         y_round
 
@@ -120,8 +120,8 @@ module.exports = fastify => {
         count(1) count,
         SUM(size) size,
         ${req.query.aggregate || 'sum'}(cat) cat,
-        avg(x_3857) x,
-        avg(y_3857) y,
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y,
         x_round,
         y_round
 
@@ -133,15 +133,17 @@ module.exports = fastify => {
         SUM(size) count,
         SUM(size) size,
         JSON_Agg(JSON_Build_Object(cat, size)) cat,
-        ST_AsGeoJson(ST_PointOnSurface(ST_Union(geom))) geomj
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y
 
       FROM (
         SELECT
           SUM(size) size,
           cat,
-          ST_Union(geom) geom,
           kmeans_cid,
-          dbscan_cid
+          dbscan_cid,
+          
+
 
         FROM (${dbscan_sql}) dbscan GROUP BY kmeans_cid, dbscan_cid, cat
 
