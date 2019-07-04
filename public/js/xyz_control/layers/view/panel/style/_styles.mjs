@@ -41,7 +41,6 @@ export default (_xyz, layer) => {
     }
   });
 
-
   layer.style.legend = _xyz.utils.wire()`<div class="legend">`;
 
 
