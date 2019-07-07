@@ -40,16 +40,25 @@ export default _xyz => entry => {
           let idx = Object.keys(tmp).indexOf(key);
           tmp[key].data.push(Number(field.value));
           tmp[key].label = field.label;
-          tmp[key].backgroundColor = (entry.chart.backgroundColor[idx] || _xyz.charts.fallbackStyle.backgroundColor);
           tmp[key].borderColor = (entry.chart.borderColor[idx] || _xyz.charts.fallbackStyle.borderColor);
+
+          (entry.chart.type === 'stackedLine' && !entry.chart.fill) ? tmp[key].backgroundColor = null : tmp[key].backgroundColor = (entry.chart.backgroundColor[idx] || _xyz.charts.fallbackStyle.backgroundColor);
+
         }
       });
     });
 
     Object.values(tmp).map(val => datasets.push(val));
 
+    let chartType;
+
+    if(entry.chart.type === 'stackedBar') chartType = 'bar';
+    if(entry.chart.type === 'stackedHorizontalBar') chartType = 'horizontalBar';
+    if(entry.chart.type === 'stackedLine') chartType = 'line';
+
+
     new _xyz.Chart(canvas, {
-    	type: 'bar',
+    	type: chartType,
     	data: {
     		labels: stacked_labels,
     		datasets: datasets

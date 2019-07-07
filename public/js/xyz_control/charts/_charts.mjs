@@ -4,7 +4,7 @@ import radarChart from './radarChart.mjs';
 import polarChart from './polarChart.mjs';
 import scatterplot from './scatterplot.mjs';
 import simpleChart from './simpleChart.mjs';
-import stackedBarChart from './stackedBarChart.mjs';
+import stackedChart from './stackedChart.mjs';
 
 export default _xyz => {
 
@@ -22,7 +22,7 @@ export default _xyz => {
 
         simple: simpleChart(_xyz),
 
-        stackedBar: stackedBarChart(_xyz)
+        stackedChart: stackedChart(_xyz)
     }
 
     function create(entry) {
@@ -32,11 +32,11 @@ export default _xyz => {
             return charts.simple(entry);
         }
 
-        if(entry.chart.type === 'mixed') entry.chart.type = 'bar';
+        if (entry.chart.type === 'mixed') entry.chart.type = 'bar';
 
         if (entry.chart.type === 'line' || entry.chart.type === 'bar' || entry.chart.type === 'horizontalBar') return charts.simple(entry);
 
-        if(entry.chart.type === 'bubble') return charts.bubble(entry);
+        if (entry.chart.type === 'bubble') return charts.bubble(entry);
 
         if (entry.chart.type === 'pie' || entry.chart.type === 'doughnut') return charts.cake(entry);
 
@@ -46,7 +46,7 @@ export default _xyz => {
 
         if (entry.chart.type === 'scatter') return charts.scatter(entry);
 
-        if (entry.chart.type === 'stackedBar') return charts.stackedBar(entry)
+        if (entry.chart.type === 'stackedBar' || entry.chart.type === 'stackedHorizontalBar' || entry.chart.type === 'stackedLine') return charts.stackedChart(entry);
 
     }
 

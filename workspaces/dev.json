@@ -2151,10 +2151,11 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "chart": {
-                                "type": "stackedBar",
+                                "type": "stackedHorizontalBar",
                                 "title": true,
                                 "legend": true,
                                 "legendPosition": "right",
+                                "fill": true,
                                 "backgroundColor": [
                                     "#FFA630",
                                     "#C6DEA6",
