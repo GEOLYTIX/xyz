@@ -9,13 +9,15 @@ import layerTile from 'ol/layer/Tile';
 import layerVectorTile from 'ol/layer/VectorTile';
 import layerVector from 'ol/layer/Vector';
 
-import {Circle, Fill, Stroke, Icon, Style} from 'ol/style';
+import {Circle, Fill, Stroke, Icon, Style, Text} from 'ol/style';
 
 import {transform, transformExtent, fromLonLat} from 'ol/proj';
 
-import {defaults, Pointer} from 'ol/interaction.js';
+import {defaults, Pointer, Select} from 'ol/interaction.js';
 
-import {Map, View, Feature} from 'ol';
+import {click, pointerMove, altKeyOnly} from 'ol/events/condition.js';
+
+import {Map, View, Feature, Overlay} from 'ol';
 
 import {Point, Polygon} from 'ol/geom';
 
@@ -47,6 +49,8 @@ export default _xyz => {
 
       Feature: Feature,
 
+      Overlay: Overlay,
+
       control: {
         ScaleLine: ScaleLine,
       },
@@ -54,6 +58,11 @@ export default _xyz => {
       interaction: {
         defaults: defaults,
         Pointer: Pointer,
+        Select: Select,
+      },
+
+      events: {
+        click: click,
       },
 
       proj: {
@@ -90,6 +99,7 @@ export default _xyz => {
         Stroke: Stroke,
         Circle: Circle,
         Icon: Icon,
+        Text: Text,
       },
   
     },
@@ -104,6 +114,8 @@ export default _xyz => {
 
     getZoom: getZoom,
 
+    popup: popup,
+
   };
 
   function icon(icon) {
@@ -115,7 +127,7 @@ export default _xyz => {
     return new _xyz.mapview.lib.ol.style.Icon({
       src: icon.url,
       scale: scale,
-      anchor: [0.5, 1],
+      //anchor: [0.5, 1],
     });
   }
 
@@ -180,15 +192,35 @@ export default _xyz => {
 
     _xyz.map.addLayer(layerVector);
 
-    return feature;
+    return layerVector;
 
   };
+
+  function popup(params) {
+
+    const element = _xyz.utils.wire()`<div class="ol-popup">`;
+
+    element.appendChild(params.content);
+
+    const popup = new _xyz.mapview.lib.ol.Overlay({
+      element: element,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+
+    popup.setPosition(params.coords);
+
+    _xyz.map.addOverlay(popup);
+
+  }
 
   function getBounds(epsg){
 
     const extent = _xyz.map.getView().calculateExtent();
 
-    if (!epsg) return {
+    if (!epsg || epsg === '3857') return {
       south: extent[1],
       west: extent[0],
       north: extent[3],
@@ -223,8 +255,6 @@ export default _xyz => {
   _xyz.mapview.attribution = attribution(_xyz);
 
   _xyz.mapview.locate = locate(_xyz);
-
-  _xyz.mapview.popup = popup(_xyz);
 
   _xyz.mapview.btn = btn(_xyz);
 

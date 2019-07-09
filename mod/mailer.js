@@ -5,6 +5,7 @@ module.exports = mail => {
 
   let _mail = {
     from: `<${env.transport.split(':')[1]}>`,
+    sender: `<${env.transport.split(':')[1]}>`,
     subject: mail.subject.replace(/”/g,''),
     text: mail.text.replace(/”/g,'')
   };

@@ -1,5 +1,9 @@
 export default _xyz => layer => () => {
 
+  layer.highlight = new Set();
+
+  if (!layer.select) layer.select = select;
+
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
@@ -81,88 +85,16 @@ export default _xyz => layer => () => {
   _xyz.map.addLayer(layer.L);
 
 
-  // if layer isn't selectable, we don't need hover and click events
-  if(layer.qID == undefined) {
-    return;
-  }
-  
-  // if event handlers are already defined, we shouldn't do that again
-  if(layer.eventhandlers) {
-    return;
-  }
-  
-  // init object
-  layer.eventhandlers = {};
-    
-  // MVT layers don't support the normal "select" interaction, so we have to use a workaround: get the features at the clicked pixel
-  layer.eventhandlers.mapClick = e => {
-
-    _xyz.geom.contextmenu.close();
-
-    if(_xyz.mapview.state !== 'select') return;
-  
-    // layerFilter makes sure we only search within layer.L and not any overlapping layers
-    const features = _xyz.map.getFeaturesAtPixel(e.pixel, {
-      layerFilter: candidate => candidate == layer.L
-    });
-      
-    if (!features) return;
-      
-    _xyz.locations.select({
-      locale: _xyz.workspace.locale.key,
-      layer: layer.key,
-      table: layer.table,
-      id: features[0].get('id'),
-      marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
-      edit: layer.edit
-    });
-
-  };
-  
-  _xyz.map.on('click', layer.eventhandlers.mapClick);
-
-
-  layer.eventhandlers.mapPointermove = e => {
-
-    const previous = layer.highlighted;
-    const features = _xyz.map.getFeaturesAtPixel(e.pixel, {
-      layerFilter: candidate => candidate == layer.L
-    });
-
-    if (!features) {
-      layer.highlighted = null;
-      return layer.L.setStyle(layer.L.getStyle());
-    }
-    
-    const toBeHighlighted = features != null && e.originalEvent.target.tagName == 'CANVAS';
-
-    layer.highlighted = (toBeHighlighted ? features[0].get('id') : null);
-
-    //_xyz.map.getTargetElement().style.cursor = (toBeHighlighted ? 'pointer' : '');
-    
-    if(layer.highlighted !== previous) {
-      // force redraw of layer style
-      layer.L.setStyle(layer.L.getStyle());
-    }
-
-    if (layer.hover.field) {
-
-      layer.hover.add({
-        id: features[0].get('id'),
-        x: e.originalEvent.clientX,
-        y: e.originalEvent.clientY,
-      });
-    }
-
-  };
-
-  _xyz.map.on('pointermove', layer.eventhandlers.mapPointermove);
-
-
   function applyLayerStyle(properties) {
 
-    const highlighted = layer.highlighted === properties.get('id');
+    const highlighted = layer.highlight.has(properties.get('id'));
+    
+    //layer.highlighted === properties.get('id');
     //const selected = layer.selected.has(properties.get('id'));
+
+    //if (highlighted) console.log(layer.highlight);
+
+
 
     let style = Object.assign(
       {},
@@ -220,6 +152,19 @@ export default _xyz => layer => () => {
       );
 
     }
+
+  }
+
+  function select(e, feature){
+
+    _xyz.locations.select({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      id: feature.get('id'),
+      marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
+      edit: layer.edit
+    });
 
   }
 

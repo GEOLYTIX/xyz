@@ -1,12 +1,20 @@
 export default _xyz => layer => () => {
 
+  layer.highlight = new Set();
+
+  if (!layer.select) layer.select = _select;
+
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
   // Return if layer should not be displayed.
   if (!layer.display) return;
 
-  if (!table && layer.L) return _xyz.map.removeLayer(layer.L);
+  if (!table && layer.L) {
+    if (layer.label) _xyz.map.removeLayer(layer.label);
+     
+    return _xyz.map.removeLayer(layer.L);
+  }
 
   // Set layer table to be table from tables array.
   layer.table = table;
@@ -15,12 +23,13 @@ export default _xyz => layer => () => {
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
   // Get bounds for request.
-  const bounds = _xyz.mapview.lib.getBounds();
+  const bounds = _xyz.mapview.lib.getBounds(layer.srid);
 
   if (layer.xhr) {
     layer.xhr.abort();
     layer.xhr.onload = null;
     if (layer.L) _xyz.map.removeLayer(layer.L);
+    if (layer.label) _xyz.map.removeLayer(layer.label);
   }
 
   // Create XHR for fetching data from middleware.
@@ -42,6 +51,7 @@ export default _xyz => layer => () => {
       size: layer.style.theme && layer.style.theme.size,
       label: layer.style.label && layer.style.label.field,
       filter: JSON.stringify(filter),
+      srid: layer.srid,
       west: bounds.west,
       south: bounds.south,
       east: bounds.east,
@@ -62,6 +72,7 @@ export default _xyz => layer => () => {
 
     // Check for existing layer and remove from map.
     if (layer.L) _xyz.map.removeLayer(layer.L);
+    if (layer.label) _xyz.map.removeLayer(layer.label);
 
     // Data is returned and the layer is still current.
     if (e.target.status !== 200 || !layer.display) return;
@@ -75,10 +86,25 @@ export default _xyz => layer => () => {
       layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
     }
 
+    let id = 0;
+
     const features = cluster.map(f => new _xyz.mapview.lib.ol.Feature({
-      geometry: new _xyz.mapview.lib.ol.geom.Point([f.geometry.x, f.geometry.y]),
+      id: id++,
+      geometry: geometry(f.geometry),
       properties: f.properties
     }));
+
+    function geometry(geom) {
+      if (geom.lon && geom.lat) {
+        return new _xyz.mapview.lib.ol.geom.Point(
+          _xyz.mapview.lib.ol.proj.fromLonLat([geom.lon, geom.lat])
+        );
+      }
+
+      if (geom.x && geom.y) {
+        return new _xyz.mapview.lib.ol.geom.Point([geom.x, geom.y]);
+      }
+    }
 
     const sourceVector = new _xyz.mapview.lib.ol.source.Vector({features: features});
 
@@ -88,7 +114,7 @@ export default _xyz => layer => () => {
 
         const properties = feature.getProperties().properties;
  
-        const marker = style(properties);
+        const marker = style(feature);
         
         const iconSize = layer.cluster_logscale ?
           properties.count === 1 ?
@@ -100,18 +126,58 @@ export default _xyz => layer => () => {
 
   
         return new _xyz.mapview.lib.ol.style.Style({
-          // zIndex: style.zIndex,
+          zIndex: parseInt(max_size - properties.size),
           image: _xyz.mapview.lib.icon({
             url: _xyz.utils.svg_symbols(marker),
             iconSize: iconSize
           })
+          // image: new _xyz.mapview.lib.ol.style.Circle({
+          //   radius: 7,
+          //   fill: new _xyz.mapview.lib.ol.style.Fill({
+          //     color: '#cf9'
+          //   }),
+          //   stroke: new _xyz.mapview.lib.ol.style.Stroke({
+          //     color: '#EE266D',
+          //     width: 2
+          //   })
+          // })
         });
 
       }
     });
 
+    _xyz.map.addLayer(layer.L);
 
-    function style(properties) {
+    // layer.label = new _xyz.mapview.lib.ol.layer.Vector({
+    //   source: sourceVector,
+    //   declutter: true,
+    //   //zIndex: 99,
+    //   style: feature => {
+
+    //     const properties = feature.getProperties().properties;
+     
+    //     return new _xyz.mapview.lib.ol.style.Style({
+          
+    //       text: new _xyz.mapview.lib.ol.style.Text({
+    //         text: properties.label,
+    //         size: '12px',
+    //         stroke: new _xyz.mapview.lib.ol.style.Stroke({
+    //           color: '#fff',
+    //           width: 3
+    //         }),
+    //       })
+    //     });
+
+    //   }
+    // });
+
+    // _xyz.map.addLayer(layer.label);
+
+    function style(feature) {
+
+      const properties = feature.getProperties().properties;
+
+      const highlighted = layer.highlight.has(feature.get('id'));
 
       let marker = layer.style.marker;
 
@@ -126,7 +192,8 @@ export default _xyz => layer => () => {
         return Object.assign(
           {},
           marker,
-          layer.style.theme.cat[properties.cat] || {});
+          layer.style.theme.cat[properties.cat] || {},
+          highlighted ? layer.style.highlight : {});
       }
 
       // Graduated theme.
@@ -147,265 +214,137 @@ export default _xyz => layer => () => {
         return Object.assign({}, marker, cat_style);
       }
 
-      // // Competition theme.
-      // if (layer.style.theme.type === 'competition') {
+      // Competition theme.
+      if (layer.style.theme.type === 'competition') {
 
-      //   // Set counter for point to 0.
-      //   let size = point.properties.size;
+        // Set counter for point to 0.
+        let size = point.properties.size;
 
-      //   // Create a new cat_style with an empty layers object to store the competition layers.
-      //   param.cat_style = {
-      //     layers: {}
-      //   };
+        // Create a new cat_style with an empty layers object to store the competition layers.
+        let cat_style = {
+          layers: {}
+        };
 
-      //   // Iterate through cats in competition theme.
-      //   //Object.keys(point.properties.cat).forEach(comp => {
-      //   Object.entries(point.properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
+        // Iterate through cats in competition theme.
+        //Object.keys(point.properties.cat).forEach(comp => {
+        Object.entries(point.properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
 
-      //     // Check for the competition cat in point properties.
-      //     if (layer.style.theme.cat[comp[0]]) {
+          // Check for the competition cat in point properties.
+          if (layer.style.theme.cat[comp[0]]) {
 
-      //       // Add a cat layer to the marker obkject.
-      //       // Calculate the size of the competition layer.
-      //       // Competition layer added first must be largest.
-      //       param.cat_style.layers[size / point.properties.size] = layer.style.theme.cat[comp[0]].fillColor;
+            // Add a cat layer to the marker obkject.
+            // Calculate the size of the competition layer.
+            // Competition layer added first must be largest.
+            cat_style.layers[size / point.properties.size] = layer.style.theme.cat[comp[0]].fillColor;
 
-      //     }
+          }
 
-      //     // Reduce the current size by the size of layer just added to marker.
-      //     size -= comp[1];
+          // Reduce the current size by the size of layer just added to marker.
+          size -= comp[1];
 
-      //   });
+        });
 
-      //   // Assign marker from base & cat_style.
-      //   param.marker = Object.assign({}, param.marker, param.cat_style);
-
-      //   return marker(latlng, layer, point, param);
-      // }
+        return Object.assign({}, marker, cat_style);
+      }
 
     }
-
-
-    _xyz.map.addLayer(layer.L);
-
-
-
-
-    //   onEachFeature: (_feature, _layer) => {
-
-    //     // load permanent labels
-
-    //     if (!layer.hover || !layer.hover.field || !layer.hover.permanent) return;
-
-    //     if(_feature.properties.count > 1) return;
-
-    //     const count = _feature.properties.count;
-
-    //     const lnglat = _feature.geometry.coordinates;
-
-    //     const xhr = new XMLHttpRequest();
-
-    //     const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
-
-    //     xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-    //       locale: _xyz.workspace.locale.key,
-    //       layer: layer.key,
-    //       table: layer.table,
-    //       filter: JSON.stringify(filter),
-    //       count: count > 99 ? 99 : count,
-    //       lnglat: lnglat,
-    //       token: _xyz.token
-    //     }));
-
-    //     xhr.setRequestHeader('Content-Type', 'application/json');
-    //     xhr.responseType = 'json';
-
-    //     xhr.onload = e => {
-
-    //       if (e.target.status !== 200) return;
-
-    //       const cluster = e.target.response;
-
-    //       if (cluster.length !== 1) return;
-
-    //       _layer.hover = {};
-
-    //       _layer.hover.tooltip = _xyz.utils.wire()`<div class="hover-box">`;
-    //       _layer.hover.tooltip.dataset.layer = layer.key;
-    //       _layer.hover.tooltip.innerHTML = cluster[0].label;
-    //       _xyz.mapview.node.appendChild(_layer.hover.tooltip);
-          
-    //       let coords = _xyz.map.latLngToContainerPoint({lat: _feature.geometry.coordinates[1], lng: _feature.geometry.coordinates[0]});
-
-    //       _layer.hover.tooltip.style.left = `${parseInt(coords.x) - (_layer.hover.tooltip.offsetWidth / 2) + _xyz.layers.listview.node.clientWidth}px`;
-    //       _layer.hover.tooltip.style.top = `${parseInt(coords.y) - 15 - _layer.hover.tooltip.offsetHeight}px`;
-    //       _layer.hover.tooltip.style.opacity = 1;
-
-    //     };
-
-    //     xhr.send();
-    //   }
-    // })
-    //   .on('click', e => {
-
-    //     if (document.body.dataset.viewmode === 'report') return;
-
-    //     if(_xyz.mapview.state !== 'select') return; 
-
-    //     let
-    //       count = e.layer.feature.properties.count,
-    //       lnglat = e.layer.feature.geometry.coordinates;
-
-    //     const xhr = new XMLHttpRequest();
-
-    //     const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
-
-    //     xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-    //       locale: _xyz.workspace.locale.key,
-    //       layer: layer.key,
-    //       table: layer.table,
-    //       filter: JSON.stringify(filter),
-    //       count: count > 99 ? 99 : count,
-    //       lnglat: lnglat,
-    //       token: _xyz.token
-    //     }));
-
-    //     xhr.setRequestHeader('Content-Type', 'application/json');
-    //     xhr.responseType = 'json';
-
-    //     xhr.onload = e => {
-
-    //       if (e.target.status !== 200) return;
-
-    //       let cluster = e.target.response;
-
-    //       if (cluster.length > 1) return select(cluster, lnglat);
-
-    //       if (cluster.length === 1) return _xyz.locations.select({
-    //         locale: _xyz.workspace.locale.key,
-    //         layer: layer.key,
-    //         table: layer.table,
-    //         id: cluster[0].id,
-    //         marker: cluster[0].lnglat,
-    //         edit: layer.edit
-    //       });
-
-    //     };
-
-    //     xhr.send();
-    //   })
-    //   .on('mouseover', e => {
-
-    //     if (!layer.hover.field || layer.hover.permanent) return;
-
-    //     const count = e.layer.feature.properties.count;
-
-    //     const lnglat = e.layer.feature.geometry.coordinates;
-
-    //     const clientX = e.originalEvent.clientX;
-
-    //     const clientY = e.originalEvent.clientY;
-
-    //     const xhr = new XMLHttpRequest();
-
-    //     const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
-
-    //     xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-    //       locale: _xyz.workspace.locale.key,
-    //       layer: layer.key,
-    //       table: layer.table,
-    //       filter: JSON.stringify(filter),
-    //       count: count > 99 ? 99 : count,
-    //       lnglat: lnglat,
-    //       token: _xyz.token
-    //     }));
-
-    //     xhr.setRequestHeader('Content-Type', 'application/json');
-    //     xhr.responseType = 'json';
-
-    //     xhr.onload = e => {
-
-    //       if (e.target.status !== 200) return;
-
-    //       const cluster = e.target.response;
-
-    //       if (cluster.length !== 1) return;
-
-    //       layer.hover.add({
-    //         id: cluster[0].id,
-    //         x: clientX,
-    //         y: clientY,
-    //       });
-
-    //     };
-
-    //     xhr.send();
-
-    //   })
-    //   .on('mouseout', e => {
-    //     if (layer.hover.field && !layer.hover.permanent) layer.hover.remove();
-    //   })
-    //   .on('contextmenu', e => {
-
-    //     _xyz.geom.point_edit(e, layer);
-      
-    //   })
-    //   .addTo(_xyz.map);
-
-    //if(layer.style.legend) layer.hover.toggle({container: layer.style.legend.parentNode});
 
   };
 
   layer.xhr.send();
 
+  function _select(e, feature) {
 
-  // // remove static labels if any created
-  // _xyz.map.on('movestart', e => {
-  //   document.querySelectorAll('#Map .hover-box').forEach(el => { el.remove(); });
-  // });
+    let
+      count = feature.get('count'),
+      geom = feature.getGeometry(),
+      coords = geom.getCoordinates(),
+      lnglat = _xyz.mapview.lib.ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
 
-  // _xyz.map.on('zoomstart', e => {
-  //   document.querySelectorAll('#Map .hover-box').forEach(el => { el.remove(); });
-  // });
+    const xhr = new XMLHttpRequest();
 
-  // function select(list, lnglat) {
+    const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
-  //   const ul = document.createElement('ul');
+    xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      filter: JSON.stringify(filter),
+      count: count > 99 ? 99 : count,
+      lnglat: lnglat,
+      token: _xyz.token
+    }));
 
-  //   for (let i = 0; i < list.length; i++) {
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.responseType = 'json';
 
-  //     _xyz.utils.createElement({
-  //       tag: 'li',
-  //       options: {
-  //         textContent: list[i].label,
-  //         'data-id': list[i].id,
-  //         'data-marker': list[i].lnglat
-  //       },
-  //       appendTo: ul,
-  //       eventListener: {
-  //         event: 'click',
-  //         funct: e => {
+    xhr.onload = e => {
 
-  //           _xyz.locations.select({
-  //             locale: _xyz.workspace.locale.key,
-  //             layer: layer.key,
-  //             table: layer.table,
-  //             id: e.target['data-id'],
-  //             marker: e.target['data-marker'],
-  //             edit: layer.edit
-  //           });
+      if (e.target.status !== 200) return;
 
-  //         }
-  //       }
-  //     });
+      let cluster = e.target.response;
 
-  //   }
+      if (cluster.length > 1) return select(cluster, coords);
 
-  //   _xyz.mapview.popup({
-  //     latlng: [lnglat[1], lnglat[0]],
-  //     content: ul
-  //   });
+      if (cluster.length === 1) return _xyz.locations.select({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: layer.table,
+        id: cluster[0].id,
+        marker: cluster[0].lnglat,
+        edit: layer.edit
+      });
 
-  // };
+    };
+
+    xhr.send();
+  };
+
+  function select(list, coords) {
+
+    const ul = document.createElement('ul');
+
+    for (let i = 0; i < list.length; i++) {
+
+      _xyz.utils.createElement({
+        tag: 'li',
+        options: {
+          textContent: list[i].label,
+          'data-id': list[i].id,
+          'data-marker': list[i].lnglat
+        },
+        appendTo: ul,
+        eventListener: {
+          event: 'click',
+          funct: e => {
+
+            _xyz.locations.select({
+              locale: _xyz.workspace.locale.key,
+              layer: layer.key,
+              table: layer.table,
+              id: e.target['data-id'],
+              marker: e.target['data-marker'],
+              edit: layer.edit
+            });
+
+          }
+        }
+      });
+
+    }
+
+    // _xyz.mapview.popup({
+    //   latlng: [lnglat[1], lnglat[0]],
+    //   content: ul
+    // });
+
+
+    _xyz.mapview.lib.popup({
+      coords: coords,
+      content: ul
+    });
+
+
+  };
 
 };

@@ -20,6 +20,7 @@ export default _xyz => params => {
     parseFloat((params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0),
     parseFloat((params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0),
   ]);
+
      
   // Create Leaflet map object.
   _xyz.map = new _xyz.mapview.lib.ol.Map({
@@ -44,6 +45,80 @@ export default _xyz => params => {
         'EPSG:3857'),
     })
   });
+
+
+  function clickHandler(e){
+
+    _xyz.map.forEachFeatureAtPixel(e.pixel,
+      (feature, layer) => {
+
+        Object.values(_xyz.layers.list).forEach(l => {
+          if (l.L === layer) {
+
+            l.select(e, feature);
+
+          }
+        });
+        
+      },{
+        // layerFilter: candidate => {
+        //   return Object.values(_xyz.layers.list).some(layer => {
+        //     return layer.L === candidate;
+        //   });
+        // },
+        hitTolerance: 0,
+      });
+  };
+  
+  _xyz.map.on('click', clickHandler);
+
+  function pointermove(e){
+
+    Object.values(_xyz.layers.list).forEach(l=>{
+      if (l.highlight && l.highlight.size > 0) {
+        l.highlight.clear();
+        l.clearHighlight = true;
+      }
+    });
+  
+    _xyz.map.forEachFeatureAtPixel(e.pixel,
+      (feature, layer) => {
+
+        Object.values(_xyz.layers.list).filter(l => {
+          if (l.L === layer) {
+            l.highlight.add(feature.get('id'));
+            delete l.clearHighlight;
+            return true;
+          }
+        });
+        
+      },{
+        // layerFilter: candidate => {
+        //   return Object.values(_xyz.layers.list).some(layer => {
+        //     return layer.L === candidate;
+        //   });
+        // },
+        hitTolerance: 0,
+      });
+
+    Object.values(_xyz.layers.list).forEach(l=>{
+
+      if (l.highlight && l.highlight.size > 0) {
+        l.L.setStyle(l.L.getStyle());
+      }
+
+      if (l.clearHighlight) {
+        l.L.setStyle(l.L.getStyle());
+        delete l.clearHighlight;
+      }
+    });
+  };
+
+  _xyz.map.on('pointermove', pointermove);
+
+
+
+
 
   if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
     _xyz.map.addControl(new _xyz.mapview.lib.ol.control.ScaleLine());

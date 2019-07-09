@@ -57,7 +57,8 @@ function createMap (_xyz) {
 
   const attribution = {};
   attribution[_xyz.version] = _xyz.release;
-  attribution['Leaflet'] = 'https://leafletjs.com';
+  attribution['Openlayers'] = 'https://openlayers.org';
+  ///attribution['Leaflet'] = 'https://leafletjs.com';
 
   // Create mapview control.
   _xyz.mapview.create({
