@@ -1,34 +1,5 @@
 export default _xyz => {
 
-  const defaultCallback = location => {
-
-    if (_xyz.locations.listview.records) return _xyz.locations.listview.addRecord(location);
-
-    // Make the location current.
-    // To be removed when a new location is selected.
-    _xyz.locations.current = location;
-
-    // Get location marker from pointOnFeature is not already defined in location object.
-    location.marker = location.marker
-    || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
-
-    // Create location view.
-    location.view();
-
-    // Draw location to map.
-    location.draw();
-
-    // Create an alert with the locations infoj if mapview popup is not defined or the location does not have marker.
-    if(!_xyz.mapview.popup) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
-  
-    // Create mapview popup with the locations view node.
-    _xyz.mapview.popup({
-      latlng: [location.marker[1], location.marker[0]],
-      content: location.view.node
-    });
-
-  };
-  
   return (location, callback = defaultCallback) => {
 
     if (!location) return;
@@ -75,6 +46,35 @@ export default _xyz => {
     };
   
     xhr.send();
+
+  };
+
+  function defaultCallback(location) {
+
+    if (_xyz.locations.listview.records) return _xyz.locations.listview.addRecord(location);
+
+    // Make the location current.
+    // To be removed when a new location is selected.
+    _xyz.locations.current = location;
+
+    // Get location marker from pointOnFeature is not already defined in location object.
+    location.marker = location.marker
+    || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+
+    // Create location view.
+    location.view();
+
+    // Draw location to map.
+    location.draw();
+
+    // Create an alert with the locations infoj if mapview popup is not defined or the location does not have marker.
+    if(!_xyz.mapview.popup) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
+  
+    // Create mapview popup with the locations view node.
+    _xyz.mapview.popup({
+      latlng: [location.marker[1], location.marker[0]],
+      content: location.view.node
+    });
 
   };
 

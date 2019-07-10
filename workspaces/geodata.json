@@ -116,7 +116,7 @@
                 },
                 "Retail Points": {
                     "group": "Retail Points",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths, Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose, Wholefoods.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1VQFcL1ysZDrHY7gLPjjoJ3b9nLE3nVub\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1B8M7m86rQg2sx2TsHhFa2d-x-dZ1DbSy\" target=\"_blank\">Open Data - download for free</a></b></p></div>",
+                    "groupmeta": "<p>Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths, Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose, Wholefoods.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1VQFcL1ysZDrHY7gLPjjoJ3b9nLE3nVub\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1B8M7m86rQg2sx2TsHhFa2d-x-dZ1DbSy\" target=\"_blank\">Open Data - download for free</a></b></p>",
                     "format": "cluster",
                     "dbs": "XYZ",
                     "table": "geodata.uk_glx_open_retail_points_ed",
@@ -335,7 +335,7 @@
                 },
                 "Census": {
                     "group": "Census",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p></div>",
+                    "groupmeta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>",
                     "format": "grid",
                     "dbs": "XYZ",
                     "tables": {
@@ -363,7 +363,7 @@
                 },
                 "LAD": {
                     "group": "Admin Boundaries",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>The UK’s administrative boundaries in a consistent package. The geographics include hybrid zone, output area, lower super output area, local authority district, county, region, country. The core framework which all national statistics are published within.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0Bxv47xHgfuJ4ZVpmYmFYd1JRTms\"target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Admin' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>The UK’s administrative boundaries in a consistent package. The geographics include hybrid zone, output area, lower super output area, local authority district, county, region, country. The core framework which all national statistics are published within.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0Bxv47xHgfuJ4ZVpmYmFYd1JRTms\"target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Admin' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_admin_lad_5m__mvts",
@@ -441,7 +441,7 @@
                 },
                 "Education": {
                     "group": "Education",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Spatial dataset of all early year locations, schools, colleges and further education establishments. All primary and secondary schools both private and state. Includes school roll data, ofsted results and pupil demographics.</p><p>All University buildings (academic, service, residential and campus boundary) & entrances digitised and attributed, with student counts.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1eibdMzjuQoydXeSgXJsJTG6FqRROs-G7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Education' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>Spatial dataset of all early year locations, schools, colleges and further education establishments. All primary and secondary schools both private and state. Includes school roll data, ofsted results and pupil demographics.</p><p>All University buildings (academic, service, residential and campus boundary) & entrances digitised and attributed, with student counts.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1eibdMzjuQoydXeSgXJsJTG6FqRROs-G7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Education' target='_top'>Contact Us</a></p>",
                     "format": "cluster",
                     "dbs": "XYZ",
                     "table": "website.vw_london_glx_geodata_education",
@@ -664,7 +664,7 @@
                 },
                 "Grocery Demand": {
                     "group": "Grocery Demand",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Weekly spend on grocery at output area. Also split into main, convenience, kiosk and online. This can help identify how consumers spend within the grocery retail in an area and support retailers with the driving business in each of these channels.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1w1A8Dp8V3YU2bBshCdA5XF51_PU1Nq-z\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £5,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Grocery Demand' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>Weekly spend on grocery at output area. Also split into main, convenience, kiosk and online. This can help identify how consumers spend within the grocery retail in an area and support retailers with the driving business in each of these channels.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1w1A8Dp8V3YU2bBshCdA5XF51_PU1Nq-z\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £5,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Grocery Demand' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_demand_grocery_oa__mvts",
@@ -757,7 +757,7 @@
                 },
                 "Points of Interest": {
                     "group": "Points of Interest",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>A collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, stadia, cinemas and service areas. Displays key features in an area, popularly used on property portals, allocating and routing of healthcare resources to vital locations and analysing law and order provisions.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1Nc_eNWdpsWNSJBP0m6huNF2BApnu67ol\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - POI' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>A collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, stadia, cinemas and service areas. Displays key features in an area, popularly used on property portals, allocating and routing of healthcare resources to vital locations and analysing law and order provisions.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1Nc_eNWdpsWNSJBP0m6huNF2BApnu67ol\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - POI' target='_top'>Contact Us</a></p>",
                     "format": "cluster",
                     "dbs": "XYZ",
                     "table": "website.vw_london_glx_geodata_poi",
@@ -856,7 +856,7 @@
                 },
                 "Postal Sector": {
                     "group": "Postal",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Open data</b></p></div>",
+                    "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Open data</b></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_postal_sector__mvts",
@@ -990,7 +990,7 @@
                 },
                 "Rail Lines": {
                     "group": "Public Transport",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>100% Transport locations including airports, bus stops, rail, underground, light rail stations and lines plus passenger counts where available. Perfect for accessibility studies and modelling on-street pedestrian volume.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1nzcRiMsuPAKClAlz2VOxgywKQfMzfZxt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - Transport' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>100% Transport locations including airports, bus stops, rail, underground, light rail stations and lines plus passenger counts where available. Perfect for accessibility studies and modelling on-street pedestrian volume.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1nzcRiMsuPAKClAlz2VOxgywKQfMzfZxt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - Transport' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_transport_line__mvts",
@@ -1151,7 +1151,7 @@
                 },
                 "Residential": {
                     "group": "Residential",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Data relating to residential and population, current and forecasted figures. Disposable income and housing costs. Demographics can be used to understand areas and their residents providing local area insight. Forecasted population figures to aid planning future developments.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1QIOJq2XmbhgWheT3cSfYX0CEAvTZY6aS\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>Data relating to residential and population, current and forecasted figures. Disposable income and housing costs. Demographics can be used to understand areas and their residents providing local area insight. Forecasted population figures to aid planning future developments.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1QIOJq2XmbhgWheT3cSfYX0CEAvTZY6aS\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
                     "format": "grid",
                     "dbs": "XYZ",
                     "table": "geodata.uk_glx_geodata_hex_1k",
@@ -1174,7 +1174,7 @@
                 },
                 "Retail Places": {
                     "group": "Retail Places",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>More than 20k scored, profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.</p><p>Additionally Retail Pitch can be purchased along side this pack which identifies hotspots across 2,000 Retail Places which can aid in portfolio rationalisation.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1ajWjVh9H5_70Mdzfxul5vlb_KQJeqvG_\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £5,500</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Retail Places' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>More than 20k scored, profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.</p><p>Additionally Retail Pitch can be purchased along side this pack which identifies hotspots across 2,000 Retail Places which can aid in portfolio rationalisation.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1ajWjVh9H5_70Mdzfxul5vlb_KQJeqvG_\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £5,500</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Retail Places' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "website.vw_london_glx_geodata_retail_place",
@@ -1404,7 +1404,7 @@
                 },
                 "Road Network": {
                     "group": "Road Network",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Routable Link/Node data with link-level mid-afternoon speeds based on Highways agency probe data and sophisticated speed model; painlessly integrates into multiple routing software tools. Traffic counts, road accidents and road poi.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1xGg0-tVjIB-KS21ageTb9k4yloWgPXQL\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Road Network' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>Routable Link/Node data with link-level mid-afternoon speeds based on Highways agency probe data and sophisticated speed model; painlessly integrates into multiple routing software tools. Traffic counts, road accidents and road poi.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1xGg0-tVjIB-KS21ageTb9k4yloWgPXQL\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Road Network' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_road_detail_test__mvts",
@@ -1462,7 +1462,7 @@
                 },
                 "Seamless towns and suburbs": {
                     "group": "Seamless towns and suburbs",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=12t6Zan0dy5Bv3GWGJvj5A7w-3uFk-3v7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=12t6Zan0dy5Bv3GWGJvj5A7w-3uFk-3v7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_seamless_combined__mvts",
@@ -1499,7 +1499,7 @@
                 },
                 "Town and suburb": {
                     "group": "Town and suburb",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>A precise and intuitive set of 30,000 named ‘places’ across the UK richly attributed with data. Ideal base for UK wide profiling and benchmarking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1aJ1Q9HBAxnW8V98mmED-GLjsINEPz6ih\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Town and Suburb' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>A precise and intuitive set of 30,000 named ‘places’ across the UK richly attributed with data. Ideal base for UK wide profiling and benchmarking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1aJ1Q9HBAxnW8V98mmED-GLjsINEPz6ih\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Town and Suburb' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_townsuburb_combined__mvts",
@@ -1592,7 +1592,7 @@
                 },
                 "Urbanity": {
                     "group": "Urbanity",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Output areas assigned with an urbanity (1-9), ranging from major centre to ultra rural. Helpful to know how urban/rural somewhere is which will affect how people shop and influence the type of retail offer (convenience vs supermarket) that should be favoured.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1KNfHDRbkEGkWuSj_mRHOIeiS5oKsBnpO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Urbanity' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>Output areas assigned with an urbanity (1-9), ranging from major centre to ultra rural. Helpful to know how urban/rural somewhere is which will affect how people shop and influence the type of retail offer (convenience vs supermarket) that should be favoured.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1KNfHDRbkEGkWuSj_mRHOIeiS5oKsBnpO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Urbanity' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_urbanity_oa__mvts",
@@ -1674,7 +1674,7 @@
                 },
                 "Workers": {
                     "group": "Workers",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_workers_hybrid_zone__mvts",
@@ -1870,7 +1870,7 @@
                 },
                 "Retail Places": {
                     "group": "Retail Places",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>To be added<BR><BR><a href='mailto:info@geolytix.com?Subject=Geodata - China Retail Places' target='_top'>Contact Us</a></p></div>",
+                    "groupmeta": "<p>To be added<BR><BR><a href='mailto:info@geolytix.com?Subject=Geodata - China Retail Places' target='_top'>Contact Us</a></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "website.vw_shanghai_glx_geodata_retail_place",
@@ -2445,7 +2445,7 @@
                 },
                 "Census": {
                     "group": "Census",
-                    "groupmeta": "<div style='padding:10px;font-size:95%;'><p>Our processed 2011 European Census - available across 10 countries.</p><p>All the variables have consistent naming, meta data, attribution and formats. The data relates to the smallest geographical units each country uses for demographic reporting and comes with cleaned boundaries.</p><br><p style='font-size:90%;text-align:right;'><a href='mailto:open_census_europe@geolytix.com?Subject=Geodata - European Census' target='_top'>Contact Us for a download link for the data</a></p><br><p style='font-size:90%;'><b><a class=\"docu_link\" href=\"https://blog.geolytix.net/2018/11/13/open-eu-2011-census-data-pack\" target=\"_blank\">Read about the Open EU 2011 Census Data Pack on our blog</a></b></p></div>",
+                    "groupmeta": "<p>Our processed 2011 European Census - available across 10 countries.</p><p>All the variables have consistent naming, meta data, attribution and formats. The data relates to the smallest geographical units each country uses for demographic reporting and comes with cleaned boundaries.</p><br><p style='font-size:90%;text-align:right;'><a href='mailto:open_census_europe@geolytix.com?Subject=Geodata - European Census' target='_top'>Contact Us for a download link for the data</a></p><br><p style='font-size:90%;'><b><a class=\"docu_link\" href=\"https://blog.geolytix.net/2018/11/13/open-eu-2011-census-data-pack\" target=\"_blank\">Read about the Open EU 2011 Census Data Pack on our blog</a></b></p>",
                     "format": "grid",
                     "dbs": "XYZ",
                     "tables": {

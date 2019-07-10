@@ -22,6 +22,8 @@ module.exports = fastify => {
 
   require('./layer/table')(fastify);
 
+  require('./layer/chart')(fastify);
+
   // location
 
   require('./location/field_range')(fastify);
@@ -49,6 +51,8 @@ module.exports = fastify => {
   require('./location/edit/isoline_here')(fastify);
 
   require('./location/edit/draw')(fastify);
+
+  require('./location/edit/geom_update')(fastify);
 
   require('./location/edit/update')(fastify);
 

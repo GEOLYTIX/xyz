@@ -1,53 +1,40 @@
-import { createElement } from './createElement.mjs';
+import {wire} from 'hyperhtml/esm';
 
 // Dropdown factory.
 export function dropdown(param) {
 
-  if (param.title) createElement({
-    tag: 'div',
-    options: {
-      textContent: param.title
-    },
-    appendTo: param.appendTo
-  });
+  if (param.title) param.appendTo.appendChild(wire()`<div>${param.title}`);
+    
+  const _select = wire()`<select style=${param.style || ''}>`;
 
-  const _select = createElement({
-    tag: 'select',
-    style: param.style ? param.style : null,
-    appendTo: param.appendTo
-  });
+  param.appendTo.appendChild(_select);
+
 
   if (param.entries.length) {
 
     // Create select options from entries Array.
     param.entries.forEach(entry => {
-      createElement({
-        tag: 'option',
-        options: {
 
-          // Assign first value as text if entry is object.
-          textContent: typeof (entry) == 'object' ? entry[param.label] || Object.values(entry)[0] : entry,
-          
-          // Assign first key as value if entry is object.
-          value: typeof (entry) == 'object' ? entry[param.val] || Object.keys(entry)[0] : entry
-        },
-        appendTo: _select
-      });
+      const v = typeof (entry) == 'object' ? entry[param.val] || Object.keys(entry)[0] : entry;
+      
+      const h = typeof (entry) == 'object' ? entry[param.label] || Object.values(entry)[0] : entry;
+
+      _select.appendChild(wire()`<option value=${v} textContent=${h}>`);
+
     });
 
   } else {
 
     // Create select options from Object if length is undefined.
     Object.keys(param.entries).forEach(entry => {
-      createElement({
-        tag: 'option',
-        options: {
-          textContent: param.label ? param.entries[entry][param.label] || entry : entry,
-          value: param.val ? param.entries[entry][param.val] || entry : entry
-        },
-        appendTo: _select
-      });
+
+      _select.appendChild(wire()`
+      <option
+        value=${param.val ? param.entries[entry][param.val] || entry : entry}
+        textContent=${param.label ? param.entries[entry][param.label] || entry : entry}>`);
+
     });
+
   }
 
   _select.disabled = (_select.childElementCount === 1);

@@ -14,7 +14,7 @@ export default (_xyz, layer) => {
   const panel = _xyz.utils.createElement({
     tag: 'div',
     options: {
-      classList: 'panel expandable'
+      classList: `panel expandable ${layer.style.theme ? `expanded`: ``}`
     },
     appendTo: layer.view.dashboard
   });
@@ -40,7 +40,6 @@ export default (_xyz, layer) => {
       }
     }
   });
-
 
   layer.style.legend = _xyz.utils.wire()`<div class="legend">`;
 

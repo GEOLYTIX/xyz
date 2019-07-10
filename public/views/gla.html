@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>Greater London Authority - Employment Rights Advice</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{:dir}}/css/control.css" />
+
+    <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
+
+    <script src="{{:dir}}/views/gla_select.js" defer></script>
+    <script src="{{:dir}}/views/gla_desktop.js" defer></script>
+
+    <!-- <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/gla/master/select.js&type=application/javascript" defer></script>
+    <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/gla/master/desktop.js&type=application/javascript" defer></script> -->
+
+    <style>
+        #pink {
+            background-color: #EE266D;
+        }
+
+        #cyan {
+            background-color: #00AEEF;
+        }
+
+        #green {
+            background-color: #008D48;
+        }
+
+        #orange {
+            background-color: #E85713;
+        }
+
+        .pink-box {
+            background-color: #EE266D;
+            color: #fff;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .text-box {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+        }
+
+        .btn.active {
+            background-color: #EE266D;
+        }
+
+        .darkish {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .light {
+            color: #222;
+            border: 3px solid #222;
+        }
+
+        .pink-bg {
+            color: #fff;
+            background-color: #EE266D;
+        }
+
+        .pink-br {
+            border: 3px solid #EE266D;
+        }
+
+        #postcode-search input {
+            width: 100%;
+            height: 30px;
+            font-family: inherit;
+            font-size: 16px;
+            border: none;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .location {
+            display: grid;
+            grid-gap: 10px;
+            padding: 10px;
+        }
+
+        .location a {
+            color: #EE266D;
+        }
+
+        .location .title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .location .title-btn {
+            font-size: 30px;
+            color: #EE266D;
+            font-weight: bold;
+        }
+
+        .location .title-btn:hover {
+            cursor: pointer;
+        }
+
+        .location .grid {
+            display: grid;
+            grid-gap: 5px;
+        }
+
+        .align-flex {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        /* MAP */
+        #Map {
+            height: 400px;
+        }
+
+        #Map>._attribution {
+            z-index: 999;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align: left;
+            white-space: nowrap;
+            background-color: #fff;
+            opacity: 0.9;
+            padding: 5px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .ul-drop {
+            color: #fff;
+            background-color: #222;
+        }
+
+        .ul-drop>.head:after {
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .ul-drop.active>.head:after {
+            border-color: transparent transparent #fff transparent;
+        }
+
+        .ul-drop>ul {
+            background-color: #222;
+        }
+
+        .ul-drop>ul>li:hover {
+            background-color: #00AEEF;
+        }
+
+        .ul-drop>ul>li.selected {
+            background-color: #008D48;
+        }
+
+        .ul-drop>ul>li.selected:hover {
+            background-color: #E85713;
+        }
+
+        /* LIST */
+        .tabulator {
+            border: none;
+        }
+
+        .tabulator-row.tabulator-group {
+            background: #fff;
+        }
+
+        .tabulator .tabulator-header {
+            display: none;
+        }
+
+        .tabulator .tabulator-tableHolder .tabulator-table {
+            width: 100%;
+        }
+
+        .tabulator-row {
+            min-height: 0px;
+        }
+
+        .tabulator-row.tabulator-selectable:hover {
+            background-color: rgba(0, 153, 0, 0.2);
+        }
+
+        .tabulator-row .tabulator-responsive-collapse {
+            border: none;
+        }
+
+        .tabulator-row .tabulator-cell {
+            border-left: none;
+        }
+
+        .tabulator-row .tabulator-cell div div {
+            display: block !important;
+            vertical-align: middle;
+        }
+
+        .tabulator-row.tabulator-group {
+            border-bottom: none;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div style="
+        min-width: 768px;
+        color: #FFF;
+        background-color: #353D42;
+        font-size: 20px;
+        font-weight: bold;
+        white-space: nowrap;
+        line-height: 3;
+        text-align: center;">
+        MAYOR OF LONDON
+    </div>
+
+    <div style="
+        min-width: 768px;
+        max-width: 1024px;
+        margin: auto;
+        background-color: #F5F5F5;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        grid-gap: 10px;">
+
+        <div style="grid-column: 1;">
+
+            <div class="pink-box">
+                Employment rights advice near you
+            </div>
+
+            <div class="text-box">
+                Search for a location or click on a point on the map to see details of employment rights advice centres
+                near you.
+            </div>
+
+            <div style="
+                background-color: #fff;
+                padding: 10px;
+                display: grid;
+                grid-gap: 10px;">
+
+                <div id="postcode-search" class="btn light" style="grid-row: 1; grid-column: 1/3">
+                    <input placeholder="Enter your postcode or address" />
+                </div>
+
+                <div id="btnLocate" class="btn darkish" style="grid-row: 2; grid-column: 1/2">
+                    Current Location
+                </div>
+
+                <div id="postcode-find" class="btn darkish" style="grid-row: 2; grid-column: 2/3">
+                    Find this Postcode
+                </div>
+
+            </div>
+
+            <div id="locationView" style="background-color: #fff; padding: 10px;">
+                <div id="titleImg" style="
+                    height: 300px;
+                    background-image: url(https://res.cloudinary.com/geolytix/image/upload/v1557337040/gla/signs.png);
+                    background-size: cover;">
+                </div>
+            </div>
+
+        </div>
+
+        <div style="grid-column: 2;">
+
+            <div id="Map">
+                <div class="_attribution">
+                    <a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a>;
+                    <a target="_blank" href="https://leafletjs.com/">Leaflet</a>;
+                    <a target="_blank" href="https://www.mapbox.com">© Mapbox</a>;
+                    <a target="_blank" href="https://www.openstreetmap.org/copyright">© Open Streetmap</a>
+                </div>
+            </div>
+
+            <div class="pink-box">
+                Browse advice centres in London
+            </div>
+
+            <div class="text-box">
+                Click on a borough in the list below or use the filters to see all the centres in the area that give
+                advice on employment rights, then click on the name of a centre to see the details.
+            </div>
+
+            <div style="
+                display: grid;
+                grid-gap: 10px;
+                grid-template-columns: 1fr 1fr;
+                padding: 10px;
+                background-color: #fff;">
+
+                <div id="select-borough" style="grid-column: 1"></div>
+
+                <div id="select-advice" style="grid-column: 2"></div>
+
+            </div>
+
+            <div id="List" style="background-color: #fff;"></div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

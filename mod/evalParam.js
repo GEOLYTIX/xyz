@@ -9,6 +9,7 @@ module.exports = {
   roles: _roles,
   lnglat: _lnglat,
   layerTable: _layerTable,
+  layerChart: _layerChart,
   geomTable: _geomTable,
   layerValues: _layerValues,
   tableDef: _tableDef,
@@ -109,6 +110,19 @@ function _layerTable(req, res, next) {
   if (!req.params.table) {
     res.code(400);
     return next(new Error('Missing layer table.'));
+  }
+
+  next();
+
+};
+
+function _layerChart(req, res, next) {
+
+  req.params.chart = req.params.layer.tableview.charts[req.query.chart];
+
+  if (!req.params.chart) {
+    res.code(400);
+    return next(new Error('Missing chart table.'));
   }
 
   next();

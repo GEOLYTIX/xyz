@@ -4,6 +4,8 @@ import L from 'leaflet';
 
 import 'leaflet.vectorgrid';
 
+import 'leaflet-draw';
+
 import * as utils from '../utils/_utils.mjs';
 
 import workspace from './workspace.mjs';
@@ -22,11 +24,17 @@ import mapview from '../xyz_leaflet/_mapview.mjs';
 
 import tableview from './tableview/_tableview.mjs';
 
+import Chart from 'chart.js';
+
+import charts from './charts/_charts.mjs';
+
 export default async (params) => {
     
   const _xyz = _xyz_instance();
 
   _xyz.L = L;
+
+  _xyz.Chart = Chart;
 
   _xyz.utils = utils;
 
@@ -35,6 +43,8 @@ export default async (params) => {
   _xyz.locations = locations(_xyz);
 
   _xyz.geom = geom(_xyz);
+
+  _xyz.charts = charts(_xyz);
 
   _xyz.mapview = mapview(_xyz);
 

@@ -17,7 +17,7 @@ export default _xyz => params => {
   _xyz.map = _xyz.L.map(_xyz.mapview.node, {
     renderer: _xyz.L.svg(),
     scrollWheelZoom: params.scrollWheelZoom || false,
-    zoomControl: false,
+    zoomControl: params.zoomControl || false,
     attributionControl: false,
     zoom: z,
     minZoom: _xyz.workspace.locale.minZoom,

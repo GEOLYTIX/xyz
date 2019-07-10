@@ -147,7 +147,7 @@ export default _xyz => {
     window.removeEventListener('mousemove', resize_y);
     window.removeEventListener('mouseup', stopResize_y);
      
-    _xyz.tableview.current_table.Tabulator.redraw(true);
+    if(_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
   }
   
   // Remove eventListener after resize event.
@@ -156,6 +156,6 @@ export default _xyz => {
     window.removeEventListener('touchmove', resize_y);
     window.removeEventListener('touchend', stopResizeTouch_y);
        
-    _xyz.tableview.current_table.Tabulator.redraw(true);
+    if(_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
   }
 };

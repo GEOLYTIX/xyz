@@ -56,9 +56,9 @@ fastify
         workerSrc: ['\'self\'', 'blob:'],
         frameSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com'],
         formAction: ['\'self\''],
-        styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
+        styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.rawgit.com', 'code.getmdl.io'],
         fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-        scriptSrc: ['\'self\'', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com'],
+        scriptSrc: ['\'self\'', 'cdn.rawgit.com', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'code.getmdl.io'],
         imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'data:']
       },
       setAllHeaders: true

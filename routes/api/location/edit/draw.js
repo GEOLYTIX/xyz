@@ -20,6 +20,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
+          srid: { type: 'string' }
         },
         required: ['locale', 'layer', 'table']
       }
@@ -36,6 +37,7 @@ module.exports = fastify => {
       let
         layer = req.params.layer,
         table = req.query.table,
+        srid = req.query.srid,
         geom = layer.geom,
         geom_3857 = layer.geom_3857,
         geometry = JSON.stringify(req.body.geometry);
@@ -48,6 +50,8 @@ module.exports = fastify => {
       if (geom) _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326)`;
       
       if (geom_3857) _geom = `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 4326), 3857)`;
+
+      if (srid === '3857') _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), 3857)`;
 
       var q = `
       INSERT INTO ${table} (${geom || geom_3857})

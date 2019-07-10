@@ -59,6 +59,8 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
+    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer();
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
         columns: columns,

@@ -1,61 +1,54 @@
-.xyz-custom-select {
+.ul-drop {
     position: relative;
+    cursor: pointer;
 
-    select {
-        display: none;
+    >.head {
+        padding: 10px;
     }
 
-    .select-selected {
-        background-color: white;
-    }
-
-    /* style the arrow inside the select element */
-    .select-selected:after {
+    >.head:after {
         position: absolute;
         content: "";
-        top: 14px;
         right: 10px;
-        width: 0;
-        height: 0;
-        border: 6px solid transparent;
+        border: 8px solid transparent;
         border-color: #000 transparent transparent transparent;
     }
 
-    /* point the arrow upwards when the select box is open (active) */
-    .select-selected.select-arrow-active:after {
+    &.active>.head:after {
         border-color: transparent transparent #000 transparent;
-        top: 7px;
     }
 
-    /* style the items (options), including the selected item */
-    .select-items div,
-    .select-selected {
-        color: #000;
-        padding: 5px 5px;
-        border: 1px solid transparent;
-        border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    /* style items (options) */
-    .select-items {
+    >ul {
+        display: none;
         position: absolute;
-        background-color: white;
-        top: 100%;
         left: 0;
         right: 0;
-        z-index: 99;
-        box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        z-index: 1;
+        box-shadow: 1px 1px 2px 0 #aaa;
+        max-height: 300px;
+        overflow-y: auto;
+
+        >li {
+            padding: 10px;
+        }
+
+        >li:hover {
+            background-color: #ebe;
+        }
+
+        >li.selected {
+            background-color: #cf9;
+        }
+
+        >li.selected:hover {
+            background-color: #f90;
+        }
+
     }
 
-    /* hide the items when the select box is closed */
-    .select-hide {
-        display: none;
-    }
-
-    .select-items div:hover, .same-as-selected {
-        background-color: rgba(0, 0, 0, 0.1);
+    &.active>ul {
+        display: block;
     }
 
 }

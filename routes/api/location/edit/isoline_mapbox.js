@@ -59,7 +59,12 @@ module.exports = fastify => {
       // Fetch results from Google maps places API.
       const mapbox_isolines = await fetch(q);
   
-      if(!mapbox_isolines.features) return res.code(202).send('No catchment found within this time frame.');
+      if(!mapbox_isolines.features) {
+        return res.code(202).send({
+          msg: 'No catchment found within this time frame.',
+          res: mapbox_isolines
+        });
+      }
 
       const geojson = JSON.stringify(mapbox_isolines.features[0].geometry);
 

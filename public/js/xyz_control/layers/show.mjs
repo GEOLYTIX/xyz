@@ -16,12 +16,19 @@ export default _xyz => function () {
   // Check whether other group layers are visible.
   if (layer.group && _xyz.layers.listview.groups && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
 
-  // Iterate through tables to check whether table should be shown.
-  if (layer.tableview && _xyz.tableview.node) Object.keys(layer.tableview.tables).forEach(
-    key => {
+  // Iterate through tables and charts to check whether table should be shown.
+  if (layer.tableview && _xyz.tableview.node){
+
+    Object.keys(layer.tableview.tables).forEach(key => {
       const table = layer.tableview.tables[key];
       if (table.display) table.show();
-    }
-  );
+    });
+
+    if(layer.tableview.charts) Object.keys(layer.tableview.charts).forEach(key => {
+      const chart = layer.tableview.charts[key];
+      if (chart.display) chart.show();
+    });
+  
+  }
 
 };

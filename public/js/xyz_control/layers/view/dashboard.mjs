@@ -66,9 +66,17 @@ export default (_xyz, layer) => {
       e.stopPropagation();
       _xyz.utils.toggleExpanderParent({
         expandable: layer.view.drawer,
-        scrolly: _xyz.desktop && _xyz.desktop.listviews,
+        scrolly: _xyz.desktop && _xyz.desktop.listviews
       });
     };
+
+    let panels = dashboard.querySelectorAll('.panel');
+    if(panels.length === 1) {
+      // disabled expandable if only one panel created.
+      panels[0].classList.remove('expandable');
+      // make panel non-expandable if only one added
+      if(!panels[0].classList.contains('expanded')) panels[0].classList.add('expanded');
+    }
     
   }
   

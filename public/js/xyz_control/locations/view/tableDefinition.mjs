@@ -1,4 +1,4 @@
-export default _xyz => (entry) => {
+export default _xyz => entry => {
 
   let td = _xyz.utils.createElement({
     tag: 'td',
@@ -43,6 +43,16 @@ export default _xyz => (entry) => {
   if (entry.display) showTab();
 
   function showTab() {
+
+    if(_xyz.tableview.node && !_xyz.tableview.node.querySelector('.table')) {
+      _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          classList: 'table'
+        },
+        appendTo: _xyz.tableview.node.querySelector('.tab-content')
+      });
+    }
 
     entry.location.tables.push(entry);
 
@@ -95,7 +105,12 @@ export default _xyz => (entry) => {
       //   appendTo: header
       // });
 
-      entry.chart.node.appendChild(_xyz.utils.chart({
+      /*entry.chart.node.appendChild(_xyz.utils.chart({
+        label: entry.title,
+        fields: fields,
+        chart: entry.chart
+      }));*/
+      entry.chart.node.appendChild(_xyz.charts.create({
         label: entry.title,
         fields: fields,
         chart: entry.chart

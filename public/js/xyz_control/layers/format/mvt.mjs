@@ -68,6 +68,10 @@ export default _xyz => layer => () => {
     })
     .on('click', e => {
 
+      _xyz.geom.contextmenu.close();
+
+      if(_xyz.mapview.state !== 'select') return;
+
       _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
         layer: layer.key,
@@ -79,6 +83,9 @@ export default _xyz => layer => () => {
 
     })
     .on('mouseover', e => {
+
+      if(_xyz.mapview.state !== 'select') return;
+
       e.target.setFeatureStyle(e.layer.properties.id, layer.style.highlight);
 
       if (layer.hover.field) layer.hover.add({
@@ -92,6 +99,11 @@ export default _xyz => layer => () => {
       e.target.setFeatureStyle(e.layer.properties.id, applyLayerStyle);
 
       if (layer.hover.field) layer.hover.remove();
+
+    })
+    .on('contextmenu', e => {
+
+      _xyz.geom.polygon_edit(e, layer);
 
     })
     .addTo(_xyz.map);

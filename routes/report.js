@@ -44,7 +44,7 @@ async function view(req, res, token = { access: 'public' }) {
 
   } else {
 
-    const response = await nodefetch(env.desktop || `${env.http || 'https'}://${req.headers.host}${env.path}${req.query.template}`);
+    const response = await nodefetch(`${env.http || 'https'}://${req.headers.host}${env.path}${req.query.template}`);
     if (response.status !== 200) return res.type('text/plain').send('Failed to retrieve report template');
     _tmpl = await response.text();
 

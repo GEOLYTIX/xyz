@@ -82,37 +82,41 @@ export default (_xyz, layer) => {
   };
 
   function toggle(param){
+
+    if(!layer.hover || !layer.hover.field) return;
+
     if(typeof(layer.hover.permanent) === undefined) return;
+
     if(layer.hover.btn) layer.hover.btn.remove();
   
-      layer.hover.btn = _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          classList: 'btn_small cursor noselect',
-          textContent: layer.hover.permanent ? 'Hide labels' : 'Show labels'
-        },
-        style: {
-          display: 'block',
-          float: 'right'
-        },
-        eventListener: {
-          event: 'click',
-          funct: e => {
-            e.stopPropagation();
-            layer.hover.permanent = !layer.hover.permanent;
-            _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
-            if(!layer.hover.permanent){
-              clear();
-              /*document.querySelectorAll('#Map > .hover-box').forEach(el => {
+    layer.hover.btn = _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'btn_small cursor noselect',
+        textContent: layer.hover.permanent ? 'Hide labels' : 'Show labels'
+      },
+      style: {
+        display: 'block',
+        float: 'right'
+      },
+      eventListener: {
+        event: 'click',
+        funct: e => {
+          e.stopPropagation();
+          layer.hover.permanent = !layer.hover.permanent;
+          _xyz.mapview.node.dispatchEvent(_xyz.mapview.changeEndEvent);
+          if(!layer.hover.permanent){
+            clear();
+            /*document.querySelectorAll('#Map > .hover-box').forEach(el => {
                 if(el.dataset && el.dataset.layer === layer.key) el.remove();
               });*/
-            }
-            layer.get();
           }
-        },
-        appendTo: param.container
-      });
-    }
+          layer.get();
+        }
+      },
+      appendTo: param.container
+    });
+  }
 
   function clear(){
     document.querySelectorAll('#Map > .hover-box').forEach(el => {

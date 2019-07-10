@@ -50,16 +50,19 @@ export default _xyz => layer => {
       .style('cursor', 'pointer')
       .text(cat[1].label || cat[0])
       .on('click', function () {
-        if (this.style.opacity == 0.5) {
-          this.style.opacity = 1;
-          this.style.fillOpacity = 1;
+        //if (this.style.opacity == 0.5) {
+          if(this.style.textDecoration === 'line-through') {
+            this.style.textDecoration = 'none';
+          //this.style.opacity = 1;
+          //this.style.fillOpacity = 1;
 
           // Splice value out of the NI (not in) legend filter.
           layer.filter.legend[layer.style.theme.field].ni.splice(layer.filter.legend[layer.style.theme.field].ni.indexOf(cat[0]), 1);
 
         } else {
-          this.style.opacity = 0.5;
-          this.style.fillOpacity = 0.5;
+          //this.style.opacity = 0.5;
+          //this.style.fillOpacity = 0.5;
+          this.style.textDecoration = 'line-through';
           
           // Push value into the NI (not in) legend filter.
           layer.filter.legend[layer.style.theme.field].ni.push(cat[0]);
@@ -110,14 +113,17 @@ export default _xyz => layer => {
       .style('cursor', 'pointer')
       .text('other')
       .on('click', function () {
-        if (this.style.opacity == 0.5) {
-          this.style.opacity = 1;
+        if (this.style.textDecoration === 'line-through') {
+        //if (this.style.opacity == 0.5) {
+          //this.style.opacity = 1;
+          this.style.textDecoration = 'none';
 
           // Empty IN values filter array.
           layer.filter.legend[layer.style.theme.field].in = [];
           
         } else {
-          this.style.opacity = 0.5;
+          //this.style.opacity = 0.5;
+          this.style.textDecoration = 'line-through';
           
           // Assign all cat keys to IN filter.
           layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
