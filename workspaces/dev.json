@@ -2231,10 +2231,11 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "chart": {
+                                "width": 500,
+                                "height": 300,
                                 "title": true,
                                 "legend": true,
                                 "legendPosition": "bottom",
-                                "height": 300,
                                 "type": "radar",
                                 "backgroundColor": ["rgba(233, 30, 99, 0.3)", "rgba(3, 169, 244, 0.3)"],
                                 "fillOpacity": 0.3,
@@ -2328,6 +2329,8 @@
                             "level": 2,
                             "chart": {
                                 "title": false,
+                                "width": 500,
+                                "height": 300,
                                 "legend": true,
                                 "type": "polarArea",
                                 "backgroundColor": ["rgba(229, 99, 153, 0.3)", "rgba(0, 167, 225, 0.3)", "rgba(237, 222, 164, 0.3)", "rgba(247, 160, 114, 0.3)", "rgba(255, 155, 66, 0.3)"],
