@@ -37,13 +37,15 @@ export default _xyz => (entry, callback) => {
         entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
         let chartElem = _xyz.charts.create(entry.group);
+
+        if(!chartElem || !chartElem.style) return;
+
+        chartElem.style.minWidth = '450px';
+        chartElem.style.minHeight = '300px';
+        chartElem.style.maxWidth = '450px';
+        chartElem.style.maxHeight = '450px';
         
-        if(chartElem && chartElem.style){
-          // temporary check for development
-          chartElem.style.width = '450px';
-          chartElem.style.height = '300px';
-          flex_container.appendChild(chartElem);
-        }
+        flex_container.appendChild(chartElem);
 
       }
     });
