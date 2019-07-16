@@ -33,9 +33,19 @@ export default _xyz => {
       if (e.target.status !== 200) return;
 
       // Push the hook for the location.
-      if (_xyz.hooks) _xyz.hooks.push(
-        'locations', `${location.layer}!${location.table}!${location.id}`
-      );
+      if (_xyz.hooks) {
+
+        if (_xyz.locations.listview.records) {
+          _xyz.hooks.push(
+            'locations', `${location.layer}!${location.table}!${location.id}`
+          );
+        } else {
+          _xyz.hooks.set({
+            locations: `${location.layer}!${location.table}!${location.id}`
+          });
+        }
+
+      }
 
       location.infoj = e.target.response.infoj;
   

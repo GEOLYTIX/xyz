@@ -60,8 +60,9 @@ export default (_xyz, location) => () => {
 
       if(entry.dataset || entry.stack){
 
-        let dataset_row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`,
-            dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777; font-size: small;">`;
+        let
+          dataset_row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`,
+          dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777; font-size: small;">`;
 
         if(entry.dataset && entry.dataset !== dataset){
           dataset_label.textContent = entry.dataset;
