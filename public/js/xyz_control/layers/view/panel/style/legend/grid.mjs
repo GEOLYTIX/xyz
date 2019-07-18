@@ -136,15 +136,15 @@ export default _xyz => layer => {
     }
   });
   
-  // Create grid_ratio checkbox.
-  _xyz.utils.createCheckbox({
-    label: 'Display colour values as a ratio to the size value.',
-    checked: layer.grid_ratio,
-    appendTo: layer.style.legend,
-    onChange: e => {
-      layer.grid_ratio = e.target.checked;
-      layer.get();
-    }
-  });
+  layer.style.legend.appendChild(_xyz.utils.wire()`
+  <td style="paddingTop: 5px;" colSpan=2>
+  <label class="checkbox">Display colour values as a ratio to the size value.
+  <input type="checkbox"
+    checked=${layer.grid_ratio}
+    onchange=${e => {
+    layer.grid_ratio = e.target.checked;
+    layer.get();
+  }}>
+  <div class="checkbox_i">`);
 
 };

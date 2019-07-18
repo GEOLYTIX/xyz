@@ -24,18 +24,11 @@ export default _xyz => entry => {
     entry.style
   );
 
-  let td = _xyz.utils.createElement({
-    tag: 'td',
-    style: {
-      paddingTop: '5px',
-      position: 'relative'
-    },
-    options: {
-      colSpan: '2'
-    },
-    appendTo: entry.row
-  });
+  let td = _xyz.utils.wire()`
+  <td style="paddingTop: 5px; position: relative;" colSpan=2>`;
 
+  entry.row.appendChild(td);
+  
 
   function drawGeom() {
 
@@ -51,7 +44,7 @@ export default _xyz => entry => {
   
   }
 
-  entry.ctrl.showGeom = () => drawGeom();
+  entry.ctrl.showGeom = drawGeom;
 
   if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
 
@@ -71,28 +64,25 @@ export default _xyz => entry => {
   if (entry.edit) {
     entry.ctrl.hideGeom = entry.ctrl.delete_geom;
   }
+ 
 
-  entry.ctrl.toggle = _xyz.utils.createCheckbox({
-    label: entry.name || 'Additional geometries',
-    appendTo: td,
-    onChange: () => {
+  td.appendChild(_xyz.utils.wire()`
+  <td style="paddingTop: 5px;" colSpan=2>
+  <label class="checkbox">${entry.name || 'Additional geometries'}
+  <input type="checkbox"
+    checked=${!!entry.display}
+    onchange=${e => {
+    entry.display = e.target.checked;
+    entry.display ?
+      entry.ctrl.showGeom(entry) :
+      entry.ctrl.hideGeom(entry);
+  }}>
+  <div class="checkbox_i">`);
 
-      entry.ctrl.toggle.checked ?
-        entry.ctrl.showGeom(entry) :
-        entry.ctrl.hideGeom(entry);
 
-    }
-  });
-
-  if (entry.value && !entry.edit) {
-    entry.ctrl.toggle.checked = true;
-    entry.ctrl.toggle.onchange();
-  }
-
-  if (entry.value && entry.edit) {
-    entry.ctrl.toggle.checked = true;
-
-    drawGeom();
+  if (entry.value) {
+    entry.display = true;
+    entry.ctrl.showGeom(entry);
   }
 
   _xyz.utils.createElement({
@@ -114,16 +104,9 @@ export default _xyz => entry => {
 
   if(entry.edit){
 
-    entry.edit.container = _xyz.utils.createElement({
-      tag: 'div',
-      style: {
-        padding: '4px'
-      },
-      options: {
-        classList: 'table-section expandable'
-      }//,
-      //appendTo: td
-    });
+    entry.edit.container = _xyz.utils.wire()`
+    <div style="padding: 4px;" class="table-section expandable">`;
+    
 
     _xyz.utils.createElement({
       tag: 'div',
@@ -153,7 +136,7 @@ export default _xyz => entry => {
 
     if(entry.edit.isoline_here && entry.edit.isoline_here.slider){
 
-      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
+      if(!entry.display) td.appendChild(entry.edit.container);
 
       _xyz.geom.isoline_here_control({
         entry: entry,
@@ -163,14 +146,13 @@ export default _xyz => entry => {
 
     if(entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider){
 
-      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
+      if(!entry.display) td.appendChild(entry.edit.container);
 
       _xyz.geom.isoline_mapbox_control({
         entry: entry,
         container: entry.edit.container
       });
     }
-
 
   }
 

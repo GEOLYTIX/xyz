@@ -114,8 +114,6 @@ export default _xyz => {
 
     getZoom: getZoom,
 
-    popup: popup,
-
   };
 
   function icon(icon) {
@@ -196,26 +194,6 @@ export default _xyz => {
 
   };
 
-  function popup(params) {
-
-    const element = _xyz.utils.wire()`<div class="ol-popup">`;
-
-    element.appendChild(params.content);
-
-    const popup = new _xyz.mapview.lib.ol.Overlay({
-      element: element,
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250
-      }
-    });
-
-    popup.setPosition(params.coords);
-
-    _xyz.map.addOverlay(popup);
-
-  }
-
   function getBounds(epsg){
 
     const extent = _xyz.map.getView().calculateExtent();
@@ -256,6 +234,8 @@ export default _xyz => {
 
   _xyz.mapview.locate = locate(_xyz);
 
+  _xyz.mapview.popup = { create: popup(_xyz) };
+
   _xyz.mapview.btn = btn(_xyz);
 
-};
+}; 

@@ -1,10 +1,20 @@
 export default _xyz => params => {
 
-  if (!params || !params.latlng || !params.content) return;
+  const element = _xyz.utils.wire()`<div class="popup">`;
 
-  _xyz.mapview.lib.popup({ closeButton: false })
-    .setLatLng(params.latlng)
-    .setContent(params.content)
-    .openOn(_xyz.map);
+  element.appendChild(params.content);
+
+  _xyz.mapview.popup.overlay = new _xyz.mapview.lib.ol.Overlay({
+    element: element,
+    positioning: 'bottom-center',
+    autoPan: true,
+    autoPanAnimation: {
+      duration: 250
+    }
+  });
+
+  _xyz.map.addOverlay(_xyz.mapview.popup.overlay);
+
+  _xyz.mapview.popup.overlay.setPosition(params.coords);
 
 };

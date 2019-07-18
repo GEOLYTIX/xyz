@@ -4,21 +4,9 @@ export default _xyz => layer => () => {
   const table = layer.tableCurrent();
 
   // Return if layer should not be displayed.
-  if (!layer.display) return ;//layer.remove();
+  if (!layer.display) return;
 
-  if (!table) {
-
-    // Remove layer from map if currently drawn.
-    if (layer.L) _xyz.map.removeLayer(layer.L);
-
-    layer.loaded = false;
-
-    return;
-
-  }
-
-  // Return from layer.get() if table is the same as layer table.
-  if (layer.table === table && layer.loaded) return;
+  if (!table && layer.L) return _xyz.map.removeLayer(layer.L);
 
   // Set layer table to be table from tables array.
   layer.table = table;
@@ -47,17 +35,21 @@ export default _xyz => layer => () => {
       locale: _xyz.workspace.locale.key,
       layer: layer.key,
       table: layer.table,
+      resolution: layer.cluster_resolution,
       kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
       dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
       aggregate: layer.style.theme && layer.style.theme.aggregate,
       theme: layer.style.theme && layer.style.theme.type,
       cat: layer.style.theme && layer.style.theme.field,
       size: layer.style.theme && layer.style.theme.size,
+      label: layer.style.label && layer.style.label.field,
       filter: JSON.stringify(filter),
+      srid: layer.srid || '4326',
       west: bounds.getWest(),
       south: bounds.getSouth(),
       east: bounds.getEast(),
       north: bounds.getNorth(),
+      z: _xyz.mapview.lib.getZoom(),
       token: _xyz.token
     }));
 
@@ -77,7 +69,7 @@ export default _xyz => layer => () => {
     // Data is returned and the layer is still current.
     if (e.target.status !== 200 || !layer.display) return;
 
-    const cluster = e.target.response;
+    let cluster = e.target.response;
 
     const param = {
       max_size:
@@ -88,6 +80,15 @@ export default _xyz => layer => () => {
     if (layer.style.theme && layer.style.theme.type === 'graduated') {
       layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
     }
+
+    cluster = cluster.map(c => ({
+      type: 'Feature',
+      properties: c.properties,
+      geometry: {
+        type: 'Point',
+        coordinates: [c.geometry.lon, c.geometry.lat]
+      }
+    }));
 
     // Add cluster as point layer to Leaflet.
     layer.L = _xyz.mapview.lib.L.geoJson(cluster, {
@@ -146,7 +147,6 @@ export default _xyz => layer => () => {
           };
 
           // Iterate through cats in competition theme.
-          //Object.keys(point.properties.cat).forEach(comp => {
           Object.entries(point.properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
 
             // Check for the competition cat in point properties.
@@ -173,170 +173,127 @@ export default _xyz => layer => () => {
       },
       onEachFeature: (_feature, _layer) => {
 
-        // load permanent labels
+        if (!_feature.properties.label) return;
 
-        if (!layer.hover || !layer.hover.field || !layer.hover.permanent) return;
+        _layer.bindTooltip(_feature.properties.label, {permanent: true});
 
-        if(_feature.properties.count > 1) return;
-
-        const count = _feature.properties.count;
-
-        const lnglat = _feature.geometry.coordinates;
-
-        const xhr = new XMLHttpRequest();
-
-        const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
-
-        xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-          locale: _xyz.workspace.locale.key,
-          layer: layer.key,
-          table: layer.table,
-          filter: JSON.stringify(filter),
-          count: count > 99 ? 99 : count,
-          lnglat: lnglat,
-          token: _xyz.token
-        }));
-
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType = 'json';
-
-        xhr.onload = e => {
-
-          if (e.target.status !== 200) return;
-
-          const cluster = e.target.response;
-
-          if (cluster.length !== 1) return;
-
-          _layer.hover = {};
-
-          _layer.hover.tooltip = _xyz.utils.wire()`<div class="hover-box">`;
-          _layer.hover.tooltip.dataset.layer = layer.key;
-          _layer.hover.tooltip.innerHTML = cluster[0].label;
-          _xyz.mapview.node.appendChild(_layer.hover.tooltip);
-          
-          let coords = _xyz.map.latLngToContainerPoint({lat: _feature.geometry.coordinates[1], lng: _feature.geometry.coordinates[0]});
-
-          _layer.hover.tooltip.style.left = `${parseInt(coords.x) - (_layer.hover.tooltip.offsetWidth / 2) + _xyz.layers.listview.node.clientWidth}px`;
-          _layer.hover.tooltip.style.top = `${parseInt(coords.y) - 15 - _layer.hover.tooltip.offsetHeight}px`;
-          _layer.hover.tooltip.style.opacity = 1;
-
-        };
-
-        xhr.send();
       }
-    })
-      .on('click', e => {
+    });
 
-        if (document.body.dataset.viewmode === 'report') return;
+    
+    layer.L.on('click', e => {
 
-        if(_xyz.mapview.state !== 'select') return; 
+      if (document.body.dataset.viewmode === 'report') return;
 
-        let
-          count = e.layer.feature.properties.count,
-          lnglat = e.layer.feature.geometry.coordinates;
+      if(_xyz.mapview.state !== 'select') return; 
 
-        const xhr = new XMLHttpRequest();
+      let
+        count = e.layer.feature.properties.count,
+        lnglat = e.layer.feature.geometry.coordinates;
 
-        const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
+      const xhr = new XMLHttpRequest();
 
-        xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
+      const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
+
+      xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: layer.table,
+        filter: JSON.stringify(filter),
+        count: count > 99 ? 99 : count,
+        lnglat: lnglat,
+        token: _xyz.token
+      }));
+
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
+
+      xhr.onload = e => {
+
+        if (e.target.status !== 200) return;
+
+        let cluster = e.target.response;
+
+        if (cluster.length > 1) return select(cluster, lnglat);
+
+        if (cluster.length === 1) return _xyz.locations.select({
           locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: layer.table,
-          filter: JSON.stringify(filter),
-          count: count > 99 ? 99 : count,
-          lnglat: lnglat,
-          token: _xyz.token
-        }));
+          id: cluster[0].id,
+          marker: cluster[0].lnglat,
+          edit: layer.edit
+        });
 
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType = 'json';
+      };
 
-        xhr.onload = e => {
+      xhr.send();
+    });
+    
+    layer.L.on('mouseover', e => {
 
-          if (e.target.status !== 200) return;
+      if (!layer.hover.field || layer.hover.permanent) return;
 
-          let cluster = e.target.response;
+      const count = e.layer.feature.properties.count;
 
-          if (cluster.length > 1) return select(cluster, lnglat);
+      const lnglat = e.layer.feature.geometry.coordinates;
 
-          if (cluster.length === 1) return _xyz.locations.select({
-            locale: _xyz.workspace.locale.key,
-            layer: layer.key,
-            table: layer.table,
-            id: cluster[0].id,
-            marker: cluster[0].lnglat,
-            edit: layer.edit
-          });
+      const clientX = e.originalEvent.clientX;
 
-        };
+      const clientY = e.originalEvent.clientY;
 
-        xhr.send();
-      })
-      .on('mouseover', e => {
+      const xhr = new XMLHttpRequest();
 
-        if (!layer.hover.field || layer.hover.permanent) return;
+      const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
-        const count = e.layer.feature.properties.count;
+      xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: layer.table,
+        filter: JSON.stringify(filter),
+        count: count > 99 ? 99 : count,
+        lnglat: lnglat,
+        token: _xyz.token
+      }));
 
-        const lnglat = e.layer.feature.geometry.coordinates;
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
 
-        const clientX = e.originalEvent.clientX;
+      xhr.onload = e => {
 
-        const clientY = e.originalEvent.clientY;
+        if (e.target.status !== 200) return;
 
-        const xhr = new XMLHttpRequest();
+        const cluster = e.target.response;
 
-        const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
+        if (cluster.length !== 1) return;
 
-        xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
-          locale: _xyz.workspace.locale.key,
-          layer: layer.key,
-          table: layer.table,
-          filter: JSON.stringify(filter),
-          count: count > 99 ? 99 : count,
-          lnglat: lnglat,
-          token: _xyz.token
-        }));
+        layer.hover.add({
+          id: cluster[0].id,
+          x: clientX,
+          y: clientY,
+        });
 
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType = 'json';
+      };
 
-        xhr.onload = e => {
+      xhr.send();
 
-          if (e.target.status !== 200) return;
+    });
+    
+    layer.L.on('mouseout', e => {
+      if (layer.hover.field && !layer.hover.permanent) layer.hover.remove();
+    });
 
-          const cluster = e.target.response;
+    layer.L.on('contextmenu', e => {
+      _xyz.geom.point_edit(e, layer);
+    });
 
-          if (cluster.length !== 1) return;
+    layer.L.addTo(_xyz.map);
 
-          layer.hover.add({
-            id: cluster[0].id,
-            x: clientX,
-            y: clientY,
-          });
-
-        };
-
-        xhr.send();
-
-      })
-      .on('mouseout', e => {
-        if (layer.hover.field && !layer.hover.permanent) layer.hover.remove();
-      })
-      .on('contextmenu', e => {
-
-        _xyz.geom.point_edit(e, layer);
-      
-      })
-      .addTo(_xyz.map);
-
-    if(layer.style.legend) layer.hover.toggle({container: layer.style.legend.parentNode});
 
     function marker(latlng, layer, point, param) {
 
       param.icon = _xyz.utils.svg_symbols(param.marker);
+      
       // allow icon anchor set on individual category marker
       if (!param.anchor) param.anchor = layer.style ? (layer.style.anchor || null) : null;
 
@@ -367,18 +324,9 @@ export default _xyz => layer => () => {
   layer.xhr.send();
 
 
-  // remove static labels if any created
-  _xyz.map.on('movestart', e => {
-    document.querySelectorAll('#Map .hover-box').forEach(el => { el.remove(); });
-  });
-
-  _xyz.map.on('zoomstart', e => {
-    document.querySelectorAll('#Map .hover-box').forEach(el => { el.remove(); });
-  });
-
   function select(list, lnglat) {
 
-    const ul = document.createElement('ul');
+    const ul = _xyz.utils.wire()`<ul class="scroll-list">`;
 
     for (let i = 0; i < list.length; i++) {
 

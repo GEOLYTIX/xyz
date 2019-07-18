@@ -10,50 +10,45 @@ export default (_xyz, layer) => {
 
   if (!layer.style) return;
 
+
   // Add style panel to layer dashboard.
-  const panel = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'panel expandable'
-    },
-    appendTo: layer.view.dashboard
-  });
+  const panel = _xyz.utils.wire()`<div class="panel expandable">`;
 
-  // Style panel title / expander.
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'btn_text cursor noselect',
-      textContent: 'Style'
-    },
-    appendTo: panel,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        e.stopPropagation();
+  layer.view.dashboard.appendChild(panel);
 
-        _xyz.utils.toggleExpanderParent({
-          expandable: panel,
-          accordeon: true,
-          scrolly: _xyz.desktop && _xyz.desktop.listviews,
-        });
-      }
-    }
-  });
+
+  // Style panel header.
+  const header = _xyz.utils.wire()`
+  <div onclick=${e => {
+    e.stopPropagation();
+
+    _xyz.utils.toggleExpanderParent({
+      expandable: panel,
+      accordeon: true,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+  }}
+  class="btn_text cursor noselect">Style`;
+
+  panel.appendChild(header);
+
+
+  if (layer.style.label) {
+    panel.appendChild(_xyz.utils.wire()`
+    <label class="checkbox" style="margin-bottom: 10px;">Display Labels.
+    <input type="checkbox"
+    checked=${!!layer.style.label.display}
+    onchange=${e => {
+    layer.style.label.display = e.target.checked;
+    layer.show();}}>
+    <div class="checkbox_i">`);
+  }
 
 
   layer.style.legend = _xyz.utils.wire()`<div class="legend">`;
 
 
-  if (layer.style.themes) themeDropdown(layer);
-   
-
-  panel.appendChild(layer.style.legend);
-
-  if (layer.format === 'grid') legends.grid(layer);
-
-  
-  function themeDropdown(layer) {
+  if (layer.style.themes) {
 
     // Assign 'Basic' style entry to themes object.
     const themes = Object.assign({},{ 'Basic': null }, layer.style.themes);
@@ -65,22 +60,29 @@ export default (_xyz, layer) => {
       entries: themes,
       selected: Object.keys(layer.style.themes)[0],
       onchange: e => {
-
-      // Set layer theme from themes object.
+    
+        // Set layer theme from themes object.
         layer.style.theme = themes[e.target.value];
-
+    
         layer.loaded = false;
-
+    
         applyTheme(layer);
-
+    
         layer.get();
-      
+          
       }
     });
-
+    
     // Apply the current theme.
     applyTheme(layer);
+    
   }
+   
+
+  panel.appendChild(layer.style.legend);
+
+  if (layer.format === 'grid') legends.grid(layer);
+
 
   function applyTheme(layer) {
 

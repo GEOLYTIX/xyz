@@ -16,8 +16,6 @@ export {copyToClipboard} from './copyToClipboard.mjs';
 
 export {createElement} from './createElement.mjs';
 
-export {createCheckbox} from './createCheckbox.mjs';
-
 export {createStateButton} from './createStateButton.mjs';
 
 export {slider} from './slider.mjs';

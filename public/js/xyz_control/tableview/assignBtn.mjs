@@ -34,6 +34,7 @@ export default (_xyz, params) => {
   
         params.btn.toggleTableview.textContent = 'vertical_align_top';
         document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
+        _xyz.map.updateSize();
         return;
   
       }
@@ -43,6 +44,8 @@ export default (_xyz, params) => {
       document.body.style.gridTemplateRows = `minmax(0, 1fr) ${window.innerHeight}px`;
 
       _xyz.tableview.current_table.Tabulator.redraw(true);
+
+      _xyz.map.updateSize();
 
     };
 

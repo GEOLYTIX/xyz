@@ -16,18 +16,17 @@ export default _xyz => entry => {
     appendTo: entry.row
   });
 
-  const boolean_checkbox = _xyz.utils.createCheckbox({
-    label: entry.name || entry.field,
-    appendTo: entry.val,
-    checked: !!entry.value
-  });
-
-  if (!entry.edit) return boolean_checkbox.disabled = true;
-
-  boolean_checkbox.onchange = e => entry.location.view.valChange({
+  entry.val.appendChild(_xyz.utils.wire()`
+  <td style="paddingTop: 5px;" colSpan=2>
+  <label class="checkbox">${entry.name || entry.field}
+  <input type="checkbox"
+    disabled=${!entry.edit}
+    checked=${!!entry.value}
+    onchange=${e => entry.location.view.valChange({
     input: e.target,
     entry: entry,
     value: e.target.checked
-  });
+  })}>
+  <div class="checkbox_i">`);
 
 };

@@ -11,6 +11,7 @@ export default _xyz => table => {
     // _xyz.tableview.node.style.display = 'block';
     // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
+    _xyz.map.updateSize();
   }
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);

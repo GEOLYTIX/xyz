@@ -1,28 +1,18 @@
 export default _xyz => entry => {
 
-  let td = _xyz.utils.createElement({
-    tag: 'td',
-    style: { paddingTop: '5px' },
-    options: { colSpan: '2' },
-    appendTo: entry.row
-  });
+  entry.row.appendChild(_xyz.utils.wire()`
+  <td style="paddingTop: 5px;" colSpan=2>
+  <label class="checkbox">${entry.title || 'Show table'}
+  <input type="checkbox"
+    checked=${!!entry.display}
+    onchange=${e => {
+    entry.display = e.target.checked;
+    entry.display ? 
+      showTab() :
+      removeTab();
+  }}>
+  <div class="checkbox_i">`);
 
-  entry.checkbox = _xyz.utils.createCheckbox({
-    label: entry.title || 'Show table',
-    appendTo: td,
-    checked: !!entry.display,
-    onChange: e => {
-
-      entry.display = e.target.checked;
-
-      if (entry.display) {
-        showTab();
-      } else {
-        removeTab();
-      }
-
-    }
-  });
 
   if (entry.chart) {
 
@@ -37,7 +27,6 @@ export default _xyz => entry => {
     td.appendChild(entry.chart.node);
 
     entry.location.view.node.appendChild(tr);
-
   }
 
   if (entry.display) showTab();

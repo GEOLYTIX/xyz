@@ -4,8 +4,6 @@ import 'leaflet.vectorgrid';
 
 import 'leaflet-draw';
 
-
-
 import create from './create.mjs';
 
 import attribution from './attribution.mjs';

@@ -12,7 +12,6 @@ export default _xyz => layer => () => {
 
   if (!table && layer.L) {
     if (layer.label) _xyz.map.removeLayer(layer.label);
-     
     return _xyz.map.removeLayer(layer.L);
   }
 
@@ -51,7 +50,7 @@ export default _xyz => layer => () => {
       size: layer.style.theme && layer.style.theme.size,
       label: layer.style.label && layer.style.label.field,
       filter: JSON.stringify(filter),
-      srid: layer.srid,
+      srid: layer.srid || '4326',
       west: bounds.west,
       south: bounds.south,
       east: bounds.east,
@@ -131,16 +130,6 @@ export default _xyz => layer => () => {
             url: _xyz.utils.svg_symbols(marker),
             iconSize: iconSize
           })
-          // image: new _xyz.mapview.lib.ol.style.Circle({
-          //   radius: 7,
-          //   fill: new _xyz.mapview.lib.ol.style.Fill({
-          //     color: '#cf9'
-          //   }),
-          //   stroke: new _xyz.mapview.lib.ol.style.Stroke({
-          //     color: '#EE266D',
-          //     width: 2
-          //   })
-          // })
         });
 
       }
@@ -148,30 +137,34 @@ export default _xyz => layer => () => {
 
     _xyz.map.addLayer(layer.L);
 
-    // layer.label = new _xyz.mapview.lib.ol.layer.Vector({
-    //   source: sourceVector,
-    //   declutter: true,
-    //   //zIndex: 99,
-    //   style: feature => {
+    if (layer.style.label.display) {
 
-    //     const properties = feature.getProperties().properties;
-     
-    //     return new _xyz.mapview.lib.ol.style.Style({
-          
-    //       text: new _xyz.mapview.lib.ol.style.Text({
-    //         text: properties.label,
-    //         size: '12px',
-    //         stroke: new _xyz.mapview.lib.ol.style.Stroke({
-    //           color: '#fff',
-    //           width: 3
-    //         }),
-    //       })
-    //     });
+      layer.label = new _xyz.mapview.lib.ol.layer.Vector({
+        source: sourceVector,
+        declutter: true,
+        //zIndex: 99,
+        style: feature => {
+  
+          const properties = feature.getProperties().properties;
+       
+          return new _xyz.mapview.lib.ol.style.Style({
+            
+            text: new _xyz.mapview.lib.ol.style.Text({
+              text: properties.label,
+              size: '12px',
+              stroke: new _xyz.mapview.lib.ol.style.Stroke({
+                color: '#fff',
+                width: 3
+              }),
+            })
+          });
+  
+        }
+      });
+  
+      _xyz.map.addLayer(layer.label);
 
-    //   }
-    // });
-
-    // _xyz.map.addLayer(layer.label);
+    }
 
     function style(feature) {
 
@@ -256,7 +249,7 @@ export default _xyz => layer => () => {
   function _select(e, feature) {
 
     let
-      count = feature.get('count'),
+      count = feature.get('properties').count,
       geom = feature.getGeometry(),
       coords = geom.getCoordinates(),
       lnglat = _xyz.mapview.lib.ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
@@ -284,7 +277,30 @@ export default _xyz => layer => () => {
 
       let cluster = e.target.response;
 
-      if (cluster.length > 1) return select(cluster, coords);
+      if (cluster.length > 1) {
+
+        const ul = _xyz.utils.wire()`<ul class="scroll-list">`;
+
+        cluster.forEach(li => {
+    
+          ul.appendChild(_xyz.utils.wire()`<li onclick=${()=>_xyz.locations.select({
+            locale: _xyz.workspace.locale.key,
+            layer: layer.key,
+            table: layer.table,
+            id: li.id,
+            marker: li.lnglat,
+            edit: layer.edit})}>${li.label}`);
+    
+        });
+    
+        _xyz.mapview.popup.create({
+          coords: coords,
+          content: ul
+        });
+        
+        return;
+
+      }
 
       if (cluster.length === 1) return _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
@@ -298,53 +314,6 @@ export default _xyz => layer => () => {
     };
 
     xhr.send();
-  };
-
-  function select(list, coords) {
-
-    const ul = document.createElement('ul');
-
-    for (let i = 0; i < list.length; i++) {
-
-      _xyz.utils.createElement({
-        tag: 'li',
-        options: {
-          textContent: list[i].label,
-          'data-id': list[i].id,
-          'data-marker': list[i].lnglat
-        },
-        appendTo: ul,
-        eventListener: {
-          event: 'click',
-          funct: e => {
-
-            _xyz.locations.select({
-              locale: _xyz.workspace.locale.key,
-              layer: layer.key,
-              table: layer.table,
-              id: e.target['data-id'],
-              marker: e.target['data-marker'],
-              edit: layer.edit
-            });
-
-          }
-        }
-      });
-
-    }
-
-    // _xyz.mapview.popup({
-    //   latlng: [lnglat[1], lnglat[0]],
-    //   content: ul
-    // });
-
-
-    _xyz.mapview.lib.popup({
-      coords: coords,
-      content: ul
-    });
-
-
   };
 
 };

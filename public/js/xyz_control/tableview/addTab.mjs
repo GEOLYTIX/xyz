@@ -20,9 +20,10 @@ export default _xyz => table => {
 
   _xyz.tableview.max_tabs = 6; // max tabs displayed in the panel
   
-  let count1 = _xyz.tableview.nav_bar.children.length || 0,
-      count2 = _xyz.tableview.nav_dropdown.children.length || 0,
-      total_count = count1 + count2;
+  let
+    count1 = _xyz.tableview.nav_bar.children.length || 0,
+    count2 = _xyz.tableview.nav_dropdown.children.length || 0,
+    total_count = count1 + count2;
 
   table.tab = _xyz.utils.createElement({
     tag: 'li',
@@ -48,9 +49,9 @@ export default _xyz => table => {
           e.target.classList.remove('folded');
           _xyz.tableview.nav_bar.appendChild(e.target);
         } 
-          e.target.classList.add('tab-current');
+        e.target.classList.add('tab-current');
 
-          table.activate();
+        table.activate();
 
         // set tab to current
         if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
@@ -63,7 +64,9 @@ export default _xyz => table => {
   });
 
   // assign the parent for tab based on count
-  (total_count < _xyz.tableview.max_tabs) ? _xyz.tableview.nav_bar.appendChild(table.tab) : (table.tab.classList.add('folded'), _xyz.tableview.nav_dropdown.appendChild(table.tab));
+  (total_count < _xyz.tableview.max_tabs) ?
+    _xyz.tableview.nav_bar.appendChild(table.tab) :
+    (table.tab.classList.add('folded'), _xyz.tableview.nav_dropdown.appendChild(table.tab));
 
   count1 = _xyz.tableview.nav_bar.children.length || 0;
   count2 = _xyz.tableview.nav_dropdown.children.length || 0;  

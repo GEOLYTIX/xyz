@@ -995,8 +995,10 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.retailpoints",
+                    "geom": "geom",
                     "srid": "4326",
                     "cluster_kmeans": 0.01,
+                    "cluster_dbscan": 0.01,
                     "hover": {
                         "field": "store"
                     },
@@ -1035,7 +1037,8 @@
                     },
                     "style": {
                         "label": {
-                            "field": "store"
+                            "field": "store",
+                            "display": true
                         },
                         "markerMulti": {
                             "type": "target",

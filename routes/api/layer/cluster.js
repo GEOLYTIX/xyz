@@ -81,7 +81,7 @@ module.exports = fastify => {
       ) ${filter_sql}`;
 
       // Get cross distance and count required for kmeans or dbscan clustering.
-      if (kmeans || dbscan) {
+      if (kmeans) {
 
         var q = `
         SELECT
@@ -100,22 +100,34 @@ module.exports = fastify => {
         if (parseInt(rows[0].count) === 0) return res.code(200).send([]);
           
         if (kmeans >= rows[0].count) kmeans = rows[0].count;
-        
-        var xdistance = rows[0].xdistance;
-      }
+      
+        if (dbscan) dbscan *= rows[0].xdistance;
 
-
-      if (kmeans) {
-        var kmeans_sql = `
-        SELECT
+        var cluster_sql = `
+        (SELECT
           ${cat} AS cat,
           ${size} AS size,
           ${geom} AS geom,
-          ${label} AS label,
+          ${label ? label + ' AS label,' : ''}
           ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid
           
-        FROM ${table} ${where_sql}`;
+        FROM ${table} ${where_sql}) kmeans`;
+
+
+        if (dbscan) {
+          cluster_sql = `
+          (SELECT
+            cat,
+            size,
+            geom,
+            ${label ? 'label,' : ''}
+            kmeans_cid,
+            ST_ClusterDBSCAN(geom, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+          FROM ${cluster_sql}) dbscan`;
+        }
+
       }
+
 
       if (resolution) {
 
@@ -177,16 +189,52 @@ module.exports = fastify => {
           count(1) AS count,
           SUM(size) AS size,
           array_agg(cat) cat,
-          (array_agg(label))[1] AS label,
+          ${label ? '(array_agg(label))[1] AS label,' : ''}
           ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
           ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
   
-        FROM (${kmeans_sql}) dbscan GROUP BY kmeans_cid;`;        
+        FROM ${cluster_sql}
+        GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
+
+
+        if (theme === 'graduated') var q = `
+        SELECT
+          count(1) count,
+          SUM(size) size,
+          ${req.query.aggregate || 'sum'}(cat) cat,
+          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
+          ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
+  
+        FROM ${cluster_sql}
+        GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
+
+
+        if (theme === 'competition') var q = `
+        SELECT
+          SUM(size) count,
+          SUM(size) size,
+          JSON_Agg(JSON_Build_Object(cat, size)) cat,
+          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
+          ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
+  
+        FROM (
+          SELECT
+            SUM(size) size,
+            cat,
+            ${label ? '(array_agg(label))[1] AS label,' : ''}
+            ST_Union(geom) geom,
+            kmeans_cid,
+            dbscan_cid
+  
+          FROM ${cluster_sql}
+          GROUP BY cat, kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}
+  
+        ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
+
       }
  
-
-
-  
       
       var rows = await env.dbs[layer.dbs](q);
         
@@ -194,7 +242,6 @@ module.exports = fastify => {
   
 
       if (!theme) return res.code(200).send(rows.map(row => ({
-        type: 'Feature',
         geometry: {
           [srid === '4326' ? 'lon' : 'x']: row.x,
           [srid === '4326' ? 'lat' : 'y']: row.y,
@@ -206,7 +253,6 @@ module.exports = fastify => {
       })));
 
       if (theme === 'categorized') return res.code(200).send(rows.map(row => ({
-        type: 'Feature',
         geometry: {
           [srid === '4326' ? 'lon' : 'x']: row.x,
           [srid === '4326' ? 'lat' : 'y']: row.y,
@@ -220,7 +266,6 @@ module.exports = fastify => {
       })));
 
       if (theme === 'graduated') return res.code(200).send(rows.map(row => ({
-        type: 'Feature',
         geometry: {
           [srid === '4326' ? 'lon' : 'x']: row.x,
           [srid === '4326' ? 'lat' : 'y']: row.y,
@@ -228,7 +273,21 @@ module.exports = fastify => {
         properties: {
           count: parseInt(row.count),
           size: parseInt(row.size),
-          cat: parseFloat(row.cat)
+          cat: parseFloat(row.cat),
+          label: row.label,
+        }
+      })));
+
+      if (theme === 'competition') return res.code(200).send(rows.map(row => ({
+        geometry: {
+          [srid === '4326' ? 'lon' : 'x']: row.x,
+          [srid === '4326' ? 'lat' : 'y']: row.y,
+        },
+        properties: {
+          count: parseInt(row.count),
+          size: parseInt(row.size),
+          cat: Object.assign({}, ...row.cat),
+          label: row.label,
         }
       })));
 

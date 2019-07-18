@@ -1602,25 +1602,37 @@ button {
   z-index: 998;
   font-size: 13px; }
 
-.leaflet-interactive.wait-cursor-enabled {
-  cursor: wait !important; }
+.popup {
+  position: absolute;
+  background-color: white;
+  width: 300px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+  bottom: 12px;
+  left: -150px; }
+  .popup:after, .popup:before {
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    pointer-events: none; }
+  .popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 150px;
+    margin-left: -10px; }
 
-.leaflet-popup-content {
-  width: 320px !important;
-  overflow-x: hidden; }
-  .leaflet-popup-content > ul {
-    max-height: 300px;
-    list-style-type: none;
-    text-align: left;
-    font-family: 'PT Mono', monospace; }
-    .leaflet-popup-content > ul li {
-      padding-left: 15px;
-      white-space: nowrap; }
-    .leaflet-popup-content > ul li:hover {
-      background-color: #cf9;
-      cursor: pointer; }
-  .leaflet-popup-content .locationview {
-    padding: 10px; }
+.scroll-list {
+  max-height: 300px;
+  list-style-type: none;
+  text-align: left;
+  overflow-x: hidden;
+  font-family: 'PT Mono', monospace; }
+  .scroll-list > li {
+    padding-left: 15px;
+    white-space: nowrap;
+    line-height: 1.5; }
+  .scroll-list > li:hover {
+    background-color: #cf9;
+    cursor: pointer; }
 
 .listview .title {
   font-family: ffmark_bold, sans-serif;

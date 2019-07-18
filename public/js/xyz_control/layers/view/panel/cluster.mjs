@@ -168,17 +168,17 @@ export default (_xyz, layer) => {
     }
   });
 
-
   //Create cluster_logscale checkbox.
   layer.cluster_logscale = layer.cluster_logscale || false;
-  _xyz.utils.createCheckbox({
-    label: 'Log scale cluster size.',
-    appendTo: panel,
-    onChange: e => {
 
-      // Set the tin construction flag to the checked status.
-      layer.cluster_logscale = e.target.checked;
-      layer.get();
-    }
-  });
+  panel.appendChild(_xyz.utils.wire()`
+  <label class="checkbox">Log scale cluster size.
+  <input type="checkbox"
+    checked=${layer.cluster_logscale ? true : false} 
+    onchange=${e => {
+    layer.cluster_logscale = e.target.checked;
+    layer.get();
+  }}>
+  <div class="checkbox_i">`);
+
 };
