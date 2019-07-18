@@ -88,6 +88,10 @@ export default _xyz => params => {
 
         Object.values(_xyz.layers.list).filter(l => {
           if (l.L === layer) {
+
+            //hover
+            if (l.hover) l.hover.show(feature);
+            
             l.highlight.add(feature.get('id'));
             delete l.clearHighlight;
             return true;

@@ -232,7 +232,7 @@ export default _xyz => layer => () => {
     
     layer.L.on('mouseover', e => {
 
-      if (!layer.hover.field || layer.hover.permanent) return;
+      if (!layer.hover.field) return;
 
       const count = e.layer.feature.properties.count;
 
@@ -293,7 +293,7 @@ export default _xyz => layer => () => {
     function marker(latlng, layer, point, param) {
 
       param.icon = _xyz.utils.svg_symbols(param.marker);
-      
+
       // allow icon anchor set on individual category marker
       if (!param.anchor) param.anchor = layer.style ? (layer.style.anchor || null) : null;
 
