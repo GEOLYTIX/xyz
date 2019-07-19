@@ -26,8 +26,7 @@ module.exports = {
   layers: {
     tiles: {},
     geojson: {
-      filter: {},
-      geom: 'geom',
+      srid: '4326',
       style: {
         default: {
           weight: 1,
@@ -46,10 +45,10 @@ module.exports = {
         },
         themes: {},
       },
+      filter: {},
     },
     mvt: {
-      filter: {},
-      geom_3857: 'geom_3857',
+      srid: '3857',
       style: {
         default: {
           weight: 1,
@@ -67,10 +66,10 @@ module.exports = {
         },
         themes: {},
       },
+      filter: {},
     },
     cluster: {
-      filter: {},
-      geom: 'geom',
+      srid: '4326',
       style: {
         markerMin: 20,
         markerMax: 40,
@@ -85,9 +84,10 @@ module.exports = {
         },
         themes: {},
       },
+      filter: {},
     },
     grid: {
-      geom: 'geom',
+      srid: '4326',
       style: {
         range: [
           '#15773f',

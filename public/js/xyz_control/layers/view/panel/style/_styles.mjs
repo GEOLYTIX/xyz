@@ -40,6 +40,7 @@ export default (_xyz, layer) => {
     checked=${!!layer.style.label.display}
     onchange=${e => {
     layer.style.label.display = e.target.checked;
+    layer.loaded = false;
     layer.show();}}>
     <div class="checkbox_i">`);
   }

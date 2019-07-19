@@ -46,7 +46,7 @@ module.exports = fastify => {
       let
         layer = req.params.layer,
         table = req.query.table,
-        geom_3857 = layer.geom_3857,
+        geom = layer.geom,
         filter = req.query.filter && JSON.parse(req.query.filter),
         id = layer.qID || null,
         x = parseInt(req.params.x),
@@ -99,7 +99,7 @@ module.exports = fastify => {
           ${id} id,
           ${layer.mvt_fields ? layer.mvt_fields.toString() + ',' : ''}
           ST_AsMVTGeom(
-            ${geom_3857},
+            ${geom},
             ST_MakeEnvelope(
               ${-m + (x * r)},
               ${ m - (y * r)},
@@ -123,7 +123,7 @@ module.exports = fastify => {
               ${ m - (y * r) - r},
               3857
             ),
-            ${geom_3857},
+            ${geom},
             ${r/4}
           )
 

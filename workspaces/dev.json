@@ -32,6 +32,7 @@
                     "dbs": "XYZ",
                     "mvt_cache": "dev.natural_earth_countries__mvts",
                     "table": "dev.natural_earth_countries",
+                    "geom": "geom_3857",
                     "tableview": {
                         "tables": {
                             "table1": {
@@ -74,9 +75,7 @@
                         }
                     },
                     "qID": "id",
-                    "hover": {
-                        "field": "pop_est"
-                    },
+
                     "infoj": [
                         {
                             "type": "key"
@@ -118,6 +117,7 @@
                         }
                     ],
                     "mvt_fields": [
+                        "name",
                         "pop_est",
                         "pop_est_edit",
                         "gdp_md_est",
@@ -125,6 +125,9 @@
                         "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
                     ],
                     "style": {
+                        "label": {
+                            "field": "name"
+                        },
                         "default": {
                             "weight": 1,
                             "color": "#333333",
@@ -283,7 +286,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.natural_earth_countries__mvts",
-                    "geom_3857": "tile",
+                    "geom": "tile",
                     "style": {
                         "default": {
                             "weight": 1,
@@ -305,6 +308,7 @@
                     "format": "geojson",
                     "dbs": "XYZ",
                     "table": "glx_offices",
+                    "geom": "geom",
                     "style": {
                         "default": {
                             "marker": {
@@ -407,9 +411,9 @@
                 },
                 "Cluster Catchments": {
                     "format": "cluster",
-                    "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/file/d/0B1GCK8cPXzg-TGdzNzA4VUY4TGs\" target=\"_blank\"><i class=\"icon-file-pdf\"></i> Documentation</a></p>",
                     "dbs": "XYZ",
                     "table": "dev.cluster_catchments",
+                    "geom": "geom",
                     "edit": {
                         "point": true,
                         "delete": true
@@ -558,6 +562,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.scratch",
+                    "geom": "geom_3857",
                     "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
                     "edit": {
@@ -629,6 +634,7 @@
                         "12": "dev.oa",
                         "13": "dev.oa"
                     },
+                    "geom": "geom_3857",
                     "mvt_cache": "dev.oa__mvts",
                     "mvt_fields": [
                         "pop_11"
@@ -699,6 +705,7 @@
                         "8": null,
                         "9": "dev.retailplaces"
                     },
+                    "geom": "geom_3857",
                     "report": {
                         "templates": {
                             "Report 1": {

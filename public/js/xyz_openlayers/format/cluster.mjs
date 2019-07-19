@@ -54,7 +54,7 @@ export default _xyz => layer => () => {
       size: layer.style.theme && layer.style.theme.size,
       label: layer.style.label && layer.style.label.field,
       filter: JSON.stringify(filter),
-      srid: layer.srid || '4326',
+      srid: layer.srid,
       west: bounds.west,
       south: bounds.south,
       east: bounds.east,
@@ -141,7 +141,7 @@ export default _xyz => layer => () => {
 
     _xyz.map.addLayer(layer.L);
 
-    if (layer.style.label.display) {
+    if (layer.style.label && layer.style.label.display) {
 
       layer.label = new _xyz.mapview.lib.ol.layer.Vector({
         source: sourceVector,
@@ -215,7 +215,7 @@ export default _xyz => layer => () => {
       if (layer.style.theme.type === 'competition') {
 
         // Set counter for point to 0.
-        let size = point.properties.size;
+        let size = properties.size;
 
         // Create a new cat_style with an empty layers object to store the competition layers.
         let cat_style = {
@@ -224,7 +224,7 @@ export default _xyz => layer => () => {
 
         // Iterate through cats in competition theme.
         //Object.keys(point.properties.cat).forEach(comp => {
-        Object.entries(point.properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
+        Object.entries(properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
 
           // Check for the competition cat in point properties.
           if (layer.style.theme.cat[comp[0]]) {
@@ -232,7 +232,7 @@ export default _xyz => layer => () => {
             // Add a cat layer to the marker obkject.
             // Calculate the size of the competition layer.
             // Competition layer added first must be largest.
-            cat_style.layers[size / point.properties.size] = layer.style.theme.cat[comp[0]].fillColor;
+            cat_style.layers[size / properties.size] = layer.style.theme.cat[comp[0]].fillColor;
 
           }
 

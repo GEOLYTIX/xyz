@@ -84,6 +84,41 @@ export default _xyz => layer => () => {
 
   _xyz.map.addLayer(layer.L);
 
+  // if (layer.style.label && layer.style.label.display) {
+
+  //   if (layer.label) _xyz.map.removeLayer(layer.label);
+
+  //   layer.label = new _xyz.mapview.lib.ol.layer.VectorTile({
+  //     source: new _xyz.mapview.lib.ol.source.VectorTile({
+  //       format: new _xyz.mapview.lib.ol.format.MVT({
+  //         //featureClass: _xyz.mapview.lib.ol.Feature
+  //       }),
+  //       transition: 0,
+  //       url: url
+  //     }),
+  //     style: feature => {
+
+  //       const label = feature.get(layer.style.label.field);
+       
+  //       return new _xyz.mapview.lib.ol.style.Style({
+          
+  //         text: new _xyz.mapview.lib.ol.style.Text({
+  //           text: label,
+  //           size: '12px',
+  //           stroke: new _xyz.mapview.lib.ol.style.Stroke({
+  //             color: '#fff',
+  //             width: 3
+  //           }),
+  //         })
+  //       });
+
+  //     }
+  //   });
+
+  //   _xyz.map.addLayer(layer.label);
+
+  // }
+
 
   function applyLayerStyle(properties) {
 

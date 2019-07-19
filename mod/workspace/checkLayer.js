@@ -95,19 +95,19 @@ async function chkLayerGeom(layer, layers) {
 
     // Invalidate layer if no dbs has been defined.
     if (!layer.dbs || !env.dbs[layer.dbs]) {
-      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
+      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom} (${layer.format}) => Missing or invalid DBS connection`);
       return;
     }
 
-    // Check whether table has layer geom or geom_3857 field.
-    let rows = await env.dbs[layer.dbs](`SELECT ${layer.geom_3857 || layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
+    // Check whether table has layer geom field.
+    let rows = await env.dbs[layer.dbs](`SELECT ${layer.geom} FROM ${table} LIMIT 1`, null, 'no_log');
 
     if (rows.err) {
-      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => ${rows.err.message}`);
+      log(`!!! ${layer.locale}.${layer.key} | ${table}.${layer.geom} (${layer.format}) => ${rows.err.message}`);
       return;
     }
 
-    log(`${layer.locale}.${layer.key} | ${table}.${layer.geom_3857 || layer.geom} (${layer.format}) => 'A-ok'`);
+    log(`${layer.locale}.${layer.key} | ${table}.${layer.geom} (${layer.format}) => 'A-ok'`);
 
     // Check whether the defined qID is returned.
     if (layer.qID) await chkLayerSelect(layer);

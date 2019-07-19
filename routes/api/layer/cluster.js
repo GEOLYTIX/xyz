@@ -229,7 +229,7 @@ module.exports = fastify => {
             dbscan_cid
   
           FROM ${cluster_sql}
-          GROUP BY cat, kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}
+          GROUP BY cat, kmeans_cid ${dbscan ? ', dbscan_cid': ''}
   
         ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
 

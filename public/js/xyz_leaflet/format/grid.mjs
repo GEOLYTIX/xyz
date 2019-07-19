@@ -44,6 +44,7 @@ export default _xyz => layer => () => {
     table: layer.table,
     size: layer.grid_size,
     color: layer.grid_color,
+    srid: layer.srid,
     west: bounds.getWest(),
     south: bounds.getSouth(),
     east: bounds.getEast(),
@@ -181,7 +182,6 @@ export default _xyz => layer => () => {
       }
       
     }
-
 
     if (layer.style.legend.size_min) layer.style.legend.size_min.textContent = layer.sizeMin.toLocaleString('en-GB', {maximumFractionDigits: 0});
     if (layer.style.legend.size_avg) layer.style.legend.size_avg.textContent = layer.sizeAvg.toLocaleString('en-GB', {maximumFractionDigits: 0});

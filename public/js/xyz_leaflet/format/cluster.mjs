@@ -175,7 +175,7 @@ export default _xyz => layer => () => {
 
         if (!_feature.properties.label) return;
 
-        _layer.bindTooltip(_feature.properties.label, {permanent: true});
+        if (layer.style.label && layer.style.label.display) _layer.bindTooltip(_feature.properties.label, {permanent: true});
 
       }
     });

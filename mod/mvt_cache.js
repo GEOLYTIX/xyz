@@ -7,7 +7,7 @@ module.exports = async (layer, table, id) => {
   WHERE
     ST_Intersects(
       tile, 
-      (SELECT ${layer.geom_3857} FROM ${table} WHERE ${layer.qID} = $1)
+      (SELECT ${layer.geom} FROM ${table} WHERE ${layer.qID} = $1)
     );`;
 
   await env.dbs[layer.dbs](q, [id]);

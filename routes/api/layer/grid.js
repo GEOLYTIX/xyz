@@ -39,6 +39,7 @@ module.exports = fastify => {
         geom = layer.geom,
         size = req.query.size,
         color = req.query.color,
+        srid = req.query.srid,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
@@ -47,14 +48,14 @@ module.exports = fastify => {
       
       var q = `
       SELECT
-          ST_X(${layer.geom}) lon,
-          ST_Y(${layer.geom}) lat,
+          ST_X(ST_Transform(${layer.geom},${srid})) x,
+          ST_Y(ST_Transform(${layer.geom},${srid})) y,
           ${size} size,
           ${color} color
       FROM ${table}
       WHERE
           ST_DWithin(
-              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${srid}),
               ${geom}, 0.000001)
           AND ${size} >= 1 LIMIT 10000;`;
 
