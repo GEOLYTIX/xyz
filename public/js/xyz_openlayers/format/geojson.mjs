@@ -1,7 +1,13 @@
 export default _xyz => layer => () => {
 
+  if (!layer.select) layer.select = _select;
+
+  if (layer.hover) {
+    if (!layer.hover.show) layer.hover.show = _hover;
+  }
+
   // Return if layer should not be displayed.
-  if (!layer.display) return ;//layer.remove();
+  if (!layer.display) return;
 
   if (layer.loaded) return;
 
@@ -32,65 +38,86 @@ export default _xyz => layer => () => {
   
     if (e.target.status !== 200 || !layer.display) return;
         
-    // Create feature collection for vector features.
-    const features = e.target.response;
-
     layer.loaded = true;
 
     // Create cat array for graduated theme.
     if (layer.style.theme) layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat);
+
+    const geoJSON = new _xyz.mapview.lib.ol.format.GeoJSON();
+
+    const features = e.target.response.map(f => geoJSON.readFeature({
+      id: f.properties.id,
+      type: 'Feature',
+      geometry: f.geometry
+    },{ 
+      dataProjection: `EPSG:${layer.srid}`,
+      featureProjection:'EPSG:3857'
+    }));
   
-    // Add geoJSON feature collection to the map.
-    layer.L = _xyz.mapview.lib.geoJSON(features, {
-      style: applyLayerStyle,
-      pane: layer.key,
-      interactive: layer.infoj? true: false,
-      pointToLayer: (point, latlng) => {
+    const sourceVector = new _xyz.mapview.lib.ol.source.Vector({features: features});
+
+    layer.L = new _xyz.mapview.lib.ol.layer.Vector({
+      source: sourceVector,
+      zIndex: layer.style.zIndex || 1,
+      style: feature => {
+
+        const properties = feature.getProperties().properties;
+
+        let style = Object.assign({}, layer.style.default);
+
+        // Return default style if no theme is set on layer.
+        if (!layer.style.theme) {
+
+          let _style = new _xyz.mapview.lib.ol.style.Style({
+            // stroke: new _xyz.mapview.lib.ol.style.Stroke({
+            //   color: style.color,
+            //   width: style.weight
+            // }),
+            // fill: new _xyz.mapview.lib.ol.style.Fill({
+            //   color: _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity || 1, true)
+            // }),
+            image: _xyz.mapview.lib.icon({url: _xyz.utils.svg_symbols(style.marker)})
+          });
           
-        let style = applyLayerStyle(point);
-          
-        return _xyz.mapview.lib.marker(latlng, {
-          pane: layer.key,
-          icon: _xyz.mapview.lib.icon({
-            iconUrl: _xyz.utils.svg_symbols(style.marker),
-            iconSize: style.marker.iconSize || 40,
-            iconAnchor: style.marker.iconAnchor || [20,20]
-          }),
-          interactive: (layer.qID) ? true : false
-        });
-          
+          return _style;
+
+        };
+    
+        //const theme = layer.style.theme;
+    
+        // // Categorized theme.
+        // if (theme.type === 'categorized') {
+    
+        //   return Object.assign({}, style, theme.cat[feature.properties.cat] || {});
+        
+        // }
+    
+        // // Graduated theme.
+        // if (theme.type === 'graduated') {
+    
+        //   theme.cat_style = {};
+        
+        //   // Iterate through cat array.
+        //   for (let i = 0; i < theme.cat_arr.length; i++) {
+        
+        //     // Break iteration is cat value is below current cat array value.
+        //     if (parseFloat(feature.properties.cat) < parseFloat(theme.cat_arr[i][0])) break;
+        
+        //     // Set cat_style to current cat style after value check.
+        //     theme.cat_style = theme.cat_arr[i][1];
+        
+        //   }
+        
+        //   // Assign style from base & cat_style.
+        //   return Object.assign({}, style, theme.cat_style);
+        
+        // }
+
       }
-    })
-      .on('click', e => {
+    });
 
-        _xyz.locations.select({
-          layer: layer.key,
-          table: layer.table,
-          id: e.layer.feature.properties.id,
-          marker: [e.latlng.lng.toFixed(5), e.latlng.lat.toFixed(5)],
-          edit: layer.edit
-        });
-          
-      })
-      .on('mouseover', e => {
-
-        e.layer.setStyle && e.layer.setStyle(layer.style.highlight);
-
-        if (layer.hover.field) layer.hover.add({
-          id: e.layer.feature.properties.id,
-          x: e.originalEvent.clientX,
-          y: e.originalEvent.clientY,
-        });
-
-      })
-      .on('mouseout', e => {
-        e.layer.setStyle && e.layer.setStyle(applyLayerStyle(e.layer.feature));
-
-        if (layer.hover.field) layer.hover.remove();
-
-      })
-      .addTo(_xyz.map);
-         
+    _xyz.map.addLayer(layer.L);
+           
     // Check whether layer.display has been set to false during the drawing process and remove layer from map if necessary.
     if (!layer.display) _xyz.map.removeLayer(layer.L);
     
@@ -98,44 +125,29 @@ export default _xyz => layer => () => {
       
   layer.xhr.send();
 
-  
-  function applyLayerStyle(feature){
+  function _select(e, feature) {
 
-    let style = Object.assign({}, layer.style.default);
+    _xyz.locations.select({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      id: feature.getId(),
+      marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
+      edit: layer.edit
+    });
 
-    // Return default style if no theme is set on layer.
-    if (!layer.style.theme) return style;
+  }
 
-    const theme = layer.style.theme;
+  function _hover(e, feature) {
 
-    // Categorized theme.
-    if (theme.type === 'categorized') {
+    console.log(feature);
 
-      return Object.assign({}, style, theme.cat[feature.properties.cat] || {});
-    
-    }
+    if (layer.hover.field) layer.hover.add({
+      id: feature.getId(),
+      x: e.originalEvent.clientX,
+      y: e.originalEvent.clientY,
+    });
 
-    // Graduated theme.
-    if (theme.type === 'graduated') {
-
-      theme.cat_style = {};
-    
-      // Iterate through cat array.
-      for (let i = 0; i < theme.cat_arr.length; i++) {
-    
-        // Break iteration is cat value is below current cat array value.
-        if (parseFloat(feature.properties.cat) < parseFloat(theme.cat_arr[i][0])) break;
-    
-        // Set cat_style to current cat style after value check.
-        theme.cat_style = theme.cat_arr[i][1];
-    
-      }
-    
-      // Assign style from base & cat_style.
-      return Object.assign({}, style, theme.cat_style);
-    
-    }
-    
   }
 
 };

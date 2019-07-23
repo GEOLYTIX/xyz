@@ -39,7 +39,7 @@ module.exports = fastify => {
         geom = layer.geom,
         size = req.query.size,
         color = req.query.color,
-        srid = req.query.srid,
+        srid = layer.srid,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),

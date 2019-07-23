@@ -47,7 +47,7 @@ export default _xyz => params => {
   });
 
 
-  function clickHandler(e){
+  function click(e){
 
     if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
 
@@ -72,54 +72,78 @@ export default _xyz => params => {
       });
   };
   
-  _xyz.map.on('click', clickHandler);
+  _xyz.map.on('click', click);
+
+  _xyz.mapview.highlight = {
+    feature: null,
+    layer: null,
+  };
 
   function pointermove(e){
 
-    Object.values(_xyz.layers.list).forEach(l=>{
-      if (l.highlight && l.highlight.size > 0) {
-        l.highlight.clear();
-        l.clearHighlight = true;
-      }
-    });
-  
-    _xyz.map.forEachFeatureAtPixel(e.pixel,
-      (feature, layer) => {
-
-        Object.values(_xyz.layers.list).filter(l => {
-          if (l.L === layer) {
-
-            if (l.hover.field) l.hover.show(feature);
-
-            if (l.highlight) {
-              l.highlight.add(feature.get('id'));
-              delete l.clearHighlight;
-              return true;
-            }
-            
-          }
+    // Get features from layers which have a highlight style.
+    const featureArray = _xyz.map.getFeaturesAtPixel(e.pixel,{
+      // Filter for layers which have a highlight style.
+      layerFilter: featureLayer => {
+        return Object.values(_xyz.layers.list).some(layer => {
+          return layer.style && layer.style.highlight && layer.L === featureLayer;
         });
-        
-      },{
-        // layerFilter: candidate => {
-        //   return Object.values(_xyz.layers.list).some(layer => {
-        //     return layer.L === candidate;
-        //   });
-        // },
-        hitTolerance: 0,
-      });
-
-    Object.values(_xyz.layers.list).forEach(l=>{
-
-      if (l.highlight && l.highlight.size > 0) {
-        l.L.setStyle(l.L.getStyle());
-      }
-
-      if (l.clearHighlight) {
-        l.L.setStyle(l.L.getStyle());
-        delete l.clearHighlight;
-      }
+      },
+      hitTolerance: 0,
     });
+
+    // Return if no features are found.
+    if (!featureArray) return;
+    
+    // The first feature in the array will be the feature with the highest zIndex.
+    const topFeature = featureArray[0];
+
+    // Return is feature is already highlighted.
+    if (_xyz.mapview.highlight.feature === topFeature) return;
+
+    // Redraw layer with previous highlighted feature.
+    if (_xyz.mapview.highlight.layer) {
+
+      _xyz.mapview.highlight.layer.highlight = true;
+                
+      _xyz.mapview.highlight.layer.L.setStyle(_xyz.mapview.highlight.layer.L.getStyle());
+    }
+ 
+    // Iterate through all features (with layer) at pixel
+    _xyz.map.forEachFeatureAtPixel(e.pixel, (feature, featureLayer) => {
+
+      if (feature === topFeature) {
+
+        // Iterate through layers list.
+        Object.values(_xyz.layers.list).some(layer => {
+
+          // Return false to continue the arrays some method if the featureLayer does not match the current layers Openlayers object layer.L
+          if (layer.L !== featureLayer) return false;
+
+          // Assign feature id to the layer object.
+          layer.highlight = feature.get('id');
+
+          // Store layer and feature reference on the mapview object.
+          _xyz.mapview.highlight.feature = feature;
+          _xyz.mapview.highlight.layer = layer;
+
+          // Redraw layer to style highlight.
+          return layer.L.setStyle(layer.L.getStyle());
+
+        });
+
+      }
+        
+    },{
+      layerFilter: featureLayer => {
+        // Filter for layers which have a highlight style.
+        return Object.values(_xyz.layers.list).some(layer => {
+          return layer.style && layer.style.highlight && layer.L === featureLayer;
+        });
+      },
+      hitTolerance: 0,
+    });
+ 
   };
 
   _xyz.map.on('pointermove', pointermove);

@@ -1,6 +1,6 @@
 export default _xyz => layer => () => {
 
-  layer.highlight = new Set();
+  layer.highlight = true;
 
   if (!layer.select) layer.select = select;
 
@@ -55,6 +55,7 @@ export default _xyz => layer => () => {
       transition: 0,
       url: url
     }),
+    zIndex: layer.style.zIndex || 1,
     style: feature => {
       const style = applyLayerStyle(feature);
 
@@ -83,6 +84,8 @@ export default _xyz => layer => () => {
   });
 
   _xyz.map.addLayer(layer.L);
+
+  console.log(layer.L);
 
   // if (layer.style.label && layer.style.label.display) {
 
@@ -122,7 +125,7 @@ export default _xyz => layer => () => {
 
   function applyLayerStyle(properties) {
 
-    const highlighted = layer.highlight.has(properties.get('id'));
+    const highlighted = layer.highlight === properties.get('id');
     
     //layer.highlighted === properties.get('id');
     //const selected = layer.selected.has(properties.get('id'));
@@ -134,6 +137,7 @@ export default _xyz => layer => () => {
     let style = Object.assign(
       {},
       layer.style.default,
+      highlighted ? layer.style.highlight : {},
     );
 
     style.zIndex = (highlighted ? 30 : 10);

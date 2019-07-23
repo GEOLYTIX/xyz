@@ -47,6 +47,7 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         geom = layer.geom,
+        srid = layer.srid,
         filter = req.query.filter && JSON.parse(req.query.filter),
         id = layer.qID || null,
         x = parseInt(req.params.x),

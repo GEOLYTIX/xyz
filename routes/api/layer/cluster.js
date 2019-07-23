@@ -62,7 +62,7 @@ module.exports = fastify => {
         kmeans = parseInt(1 / req.query.kmeans),
         dbscan = parseFloat(req.query.dbscan),
         resolution = parseFloat(req.query.resolution),
-        srid = req.query.srid,
+        srid = layer.srid,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),

@@ -38,6 +38,7 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         geom = layer.geom,
+        srid = layer.srid,
         id = layer.qID || null,
         cat = req.query.cat || null,
         filter = req.params.filter;     

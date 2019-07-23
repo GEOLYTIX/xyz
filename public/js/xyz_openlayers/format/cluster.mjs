@@ -54,7 +54,6 @@ export default _xyz => layer => () => {
       size: layer.style.theme && layer.style.theme.size,
       label: layer.style.label && layer.style.label.field,
       filter: JSON.stringify(filter),
-      srid: layer.srid,
       west: bounds.west,
       south: bounds.south,
       east: bounds.east,
@@ -146,7 +145,7 @@ export default _xyz => layer => () => {
       layer.label = new _xyz.mapview.lib.ol.layer.Vector({
         source: sourceVector,
         declutter: true,
-        //zIndex: 99,
+        zIndex: layer.style.zIndex || 1,
         style: feature => {
   
           const properties = feature.getProperties().properties;

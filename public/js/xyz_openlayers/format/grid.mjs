@@ -44,7 +44,6 @@ export default _xyz => layer => () => {
     table: layer.table,
     size: layer.grid_size,
     color: layer.grid_color,
-    srid: layer.srid,
     west: bounds.west,
     south: bounds.south,
     east: bounds.east,
@@ -149,6 +148,7 @@ export default _xyz => layer => () => {
 
     layer.L = new _xyz.mapview.lib.ol.layer.Vector({
       source: sourceVector,
+      zIndex: layer.style.zIndex || 1,
       style: feature => {
 
         const properties = feature.getProperties().properties;
