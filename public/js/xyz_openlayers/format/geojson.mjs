@@ -46,9 +46,11 @@ export default _xyz => layer => () => {
     const geoJSON = new _xyz.mapview.lib.ol.format.GeoJSON();
 
     const features = e.target.response.map(f => geoJSON.readFeature({
-      id: f.properties.id,
       type: 'Feature',
-      geometry: f.geometry
+      geometry: f.geometry,
+      properties: {
+        id: f.properties.id
+      }
     },{ 
       dataProjection: `EPSG:${layer.srid}`,
       featureProjection:'EPSG:3857'
@@ -63,7 +65,12 @@ export default _xyz => layer => () => {
 
         const properties = feature.getProperties().properties;
 
-        let style = Object.assign({}, layer.style.default);
+        const highlighted = layer.highlight === feature.get('id');
+
+        let style = Object.assign(
+          {},
+          layer.style.default,
+          highlighted ? layer.style.highlight : {});
 
         // Return default style if no theme is set on layer.
         if (!layer.style.theme) {
@@ -117,6 +124,8 @@ export default _xyz => layer => () => {
     });
 
     _xyz.map.addLayer(layer.L);
+
+    layer.L.set('layer',layer,true);
            
     // Check whether layer.display has been set to false during the drawing process and remove layer from map if necessary.
     if (!layer.display) _xyz.map.removeLayer(layer.L);
@@ -131,7 +140,7 @@ export default _xyz => layer => () => {
       locale: _xyz.workspace.locale.key,
       layer: layer.key,
       table: layer.table,
-      id: feature.getId(),
+      id: feature.get('id'),
       marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
       edit: layer.edit
     });

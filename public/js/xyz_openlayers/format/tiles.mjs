@@ -3,11 +3,7 @@ export default _xyz => layer => () => {
   if (!layer.display) return ;//layer.remove();
 
   // Return from layer get once added to map.
-  if (layer.loaded) return;
-
-  layer.loaded = true;
-
-  if (layer.L) return;
+  if (layer.L && layer.loaded) return;
 
   // Augment request with token if proxied through backend.
   // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
@@ -27,6 +23,8 @@ export default _xyz => layer => () => {
   });
 
   _xyz.map.addLayer(layer.L);
+
+  layer.loaded = true;
  
   _xyz.map.on('rendercomplete', () => {
     if (layer.view.loader)  layer.view.loader.style.display = 'none';

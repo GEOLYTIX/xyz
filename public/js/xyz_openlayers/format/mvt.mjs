@@ -45,16 +45,32 @@ export default _xyz => layer => () => {
   // Remove layer.
   //if (layer.L) _xyz.map.removeLayer(layer.L);
 
-  if (layer.L) return;
+  if (layer.L && layer.loaded) return;
+
+  layer.loaded = true;
+
+  const source = new _xyz.mapview.lib.ol.source.VectorTile({
+    format: new _xyz.mapview.lib.ol.format.MVT({
+      //featureClass: _xyz.mapview.lib.ol.Feature
+    }),
+    transition: 0,
+    url: url
+  });
+
+  layer.tilesLoaded = 0;
+
+  source.on('tileloadstart', () => {
+    layer.tilesLoaded++;
+    if (layer.view.loader) layer.view.loader.style.display = 'block';
+  });
+
+  source.on('tileloadend', () => {
+    layer.tilesLoaded--;
+    if (layer.view.loader && layer.tilesLoaded === 0) layer.view.loader.style.display = 'none';
+  });
 
   layer.L = new _xyz.mapview.lib.ol.layer.VectorTile({
-    source: new _xyz.mapview.lib.ol.source.VectorTile({
-      format: new _xyz.mapview.lib.ol.format.MVT({
-        //featureClass: _xyz.mapview.lib.ol.Feature
-      }),
-      transition: 0,
-      url: url
-    }),
+    source: source,
     zIndex: layer.style.zIndex || 1,
     style: feature => {
       const style = applyLayerStyle(feature);
@@ -85,7 +101,8 @@ export default _xyz => layer => () => {
 
   _xyz.map.addLayer(layer.L);
 
-  console.log(layer.L);
+  layer.L.set('layer',layer,true);
+
 
   // if (layer.style.label && layer.style.label.display) {
 

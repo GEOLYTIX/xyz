@@ -49,7 +49,7 @@ module.exports = fastify => {
         geom = layer.geom,
         srid = layer.srid,
         filter = req.query.filter && JSON.parse(req.query.filter),
-        id = layer.qID || null,
+        id = layer.qID || null, //'row_number() over()',
         x = parseInt(req.params.x),
         y = parseInt(req.params.y),
         z = parseInt(req.params.z),
@@ -97,7 +97,7 @@ module.exports = fastify => {
       FROM (
 
         SELECT
-          ${id} id,
+          ${id} as id,
           ${layer.mvt_fields ? layer.mvt_fields.toString() + ',' : ''}
           ST_AsMVTGeom(
             ${geom},

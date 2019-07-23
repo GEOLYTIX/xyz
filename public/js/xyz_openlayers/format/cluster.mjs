@@ -112,6 +112,7 @@ export default _xyz => layer => () => {
 
     layer.L = new _xyz.mapview.lib.ol.layer.Vector({
       source: sourceVector,
+      zIndex: layer.style.zIndex || 1,
       style: feature => {
 
         const properties = feature.getProperties().properties;
@@ -139,6 +140,8 @@ export default _xyz => layer => () => {
     });
 
     _xyz.map.addLayer(layer.L);
+
+    layer.L.set('layer',layer,true);
 
     if (layer.style.label && layer.style.label.display) {
 
@@ -173,7 +176,7 @@ export default _xyz => layer => () => {
 
       const properties = feature.getProperties().properties;
 
-      const highlighted = layer.highlight.has(feature.get('id'));
+      const highlighted = layer.highlight === feature.get('id');
 
       let marker = layer.style.marker;
 

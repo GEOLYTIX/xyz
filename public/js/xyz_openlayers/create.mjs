@@ -74,10 +74,7 @@ export default _xyz => params => {
   
   _xyz.map.on('click', click);
 
-  _xyz.mapview.highlight = {
-    feature: null,
-    layer: null,
-  };
+  _xyz.mapview.highlight = {};
 
   function pointermove(e){
 
@@ -86,14 +83,26 @@ export default _xyz => params => {
       // Filter for layers which have a highlight style.
       layerFilter: featureLayer => {
         return Object.values(_xyz.layers.list).some(layer => {
-          return layer.style && layer.style.highlight && layer.L === featureLayer;
+          return layer.qID && layer.style && layer.style.highlight && layer.L === featureLayer;
         });
       },
       hitTolerance: 0,
     });
 
     // Return if no features are found.
-    if (!featureArray) return;
+    if (!featureArray) {
+      if (_xyz.mapview.highlight.layer && _xyz.mapview.highlight.layer.L) {
+
+        _xyz.mapview.highlight.layer.highlight = true;
+                  
+        _xyz.mapview.highlight.layer.L.setStyle(_xyz.mapview.highlight.layer.L.getStyle());
+  
+        _xyz.mapview.highlight = {};
+      }
+      return;
+    }
+
+    console.log(featureArray);
     
     // The first feature in the array will be the feature with the highest zIndex.
     const topFeature = featureArray[0];
@@ -102,11 +111,13 @@ export default _xyz => params => {
     if (_xyz.mapview.highlight.feature === topFeature) return;
 
     // Redraw layer with previous highlighted feature.
-    if (_xyz.mapview.highlight.layer) {
+    if (_xyz.mapview.highlight.layer && _xyz.mapview.highlight.layer.L) {
 
       _xyz.mapview.highlight.layer.highlight = true;
                 
       _xyz.mapview.highlight.layer.L.setStyle(_xyz.mapview.highlight.layer.L.getStyle());
+
+      _xyz.mapview.highlight = {};
     }
  
     // Iterate through all features (with layer) at pixel
@@ -114,23 +125,17 @@ export default _xyz => params => {
 
       if (feature === topFeature) {
 
-        // Iterate through layers list.
-        Object.values(_xyz.layers.list).some(layer => {
+        // Set highlight layer / feature.
+        _xyz.mapview.highlight.layer = featureLayer.get('layer');
+        _xyz.mapview.highlight.feature = feature;
 
-          // Return false to continue the arrays some method if the featureLayer does not match the current layers Openlayers object layer.L
-          if (layer.L !== featureLayer) return false;
+        // Assign feature id to the layer object.
+        _xyz.mapview.highlight.layer.highlight = feature.get('id');
 
-          // Assign feature id to the layer object.
-          layer.highlight = feature.get('id');
-
-          // Store layer and feature reference on the mapview object.
-          _xyz.mapview.highlight.feature = feature;
-          _xyz.mapview.highlight.layer = layer;
-
-          // Redraw layer to style highlight.
-          return layer.L.setStyle(layer.L.getStyle());
-
-        });
+        // Redraw layer to style highlight.
+        return _xyz.mapview.highlight.layer.L.setStyle(
+          _xyz.mapview.highlight.layer.L.getStyle()
+        );
 
       }
         
@@ -138,7 +143,7 @@ export default _xyz => params => {
       layerFilter: featureLayer => {
         // Filter for layers which have a highlight style.
         return Object.values(_xyz.layers.list).some(layer => {
-          return layer.style && layer.style.highlight && layer.L === featureLayer;
+          return layer.qID && layer.style && layer.style.highlight && layer.L === featureLayer;
         });
       },
       hitTolerance: 0,
