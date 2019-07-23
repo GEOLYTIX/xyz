@@ -43,10 +43,19 @@ module.exports = fastify => {
 
       let orderBy = [], 
           conditions = [], 
-          lookup;
+          lookup,
+          intersects;
 
       
       if(tableDef.rel_id) lookup = ` AND a.${layer.qID} = b.${tableDef.rel_id}`;
+
+      if(tableDef.lookup) intersects = `AND
+          ${tableDef.lookup.condition || 'ST_INTERSECTS'}(
+            a.${tableDef.lookup.geom_a},
+            b.${tableDef.lookup.geom_b}
+          )`;
+
+
 
       let fields = tableDef.columns.map(col => {
         // get spatial expression if defined
@@ -58,13 +67,15 @@ module.exports = fastify => {
         return `(${col.fx ? '' : 'b.'}${col.fieldfx || col.field})::${col.type || 'text'} AS ${col.field}`;
       });
 
+      if(!orderBy[0]) orderBy[0] = `(${tableDef.columns[0].fx ? '' : 'b.'}${tableDef.columns[0].fieldfx || tableDef.columns[0].field})::${tableDef.columns[0].type || 'text'}`;
+
       let q = `SELECT ${fields.join(',')} 
                 FROM ${req.query.table || layer.table} a, ${tableDef.table} b 
                 WHERE a.${layer.qID} = $1 
                 ${conditions.length ? ` AND ${conditions.join(',')}` : ''}
                 ${lookup || ''}
+                ${intersects || ''}
                 ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} NULLS LAST LIMIT ${tableDef.limit || 100};`;
-
 
       const rows = await env.dbs[layer.dbs](q, [req.query.id]);
 
