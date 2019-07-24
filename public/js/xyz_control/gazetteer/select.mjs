@@ -6,7 +6,7 @@ export default _xyz => function(record, callback){
   if (gazetteer.input) gazetteer.input.value = record.label;
 
   const sources = {
-    gla: glx,
+    glx: glx,
     mapbox: mapbox,
     google: google,
   };
