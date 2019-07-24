@@ -4,10 +4,6 @@ export default _xyz => layer => () => {
 
   if (!layer.select) layer.select = _select;
 
-  if (layer.hover) {
-    if (!layer.hover.show) layer.hover.show = _hover;
-  }
-
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
 
@@ -321,11 +317,5 @@ export default _xyz => layer => () => {
 
     xhr.send();
   };
-
-  function _hover(feature) {
-
-    console.log(feature);
-
-  }
 
 };

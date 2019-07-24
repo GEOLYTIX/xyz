@@ -46,117 +46,22 @@ export default _xyz => params => {
     })
   });
 
-
-  function click(e){
-
-    if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
-
-    _xyz.map.forEachFeatureAtPixel(e.pixel,
-      (feature, layer) => {
-
-        Object.values(_xyz.layers.list).forEach(l => {
-          if (l.L === layer) {
-
-            l.select(e, feature);
-
-          }
-        });
-        
-      },{
-        // layerFilter: candidate => {
-        //   return Object.values(_xyz.layers.list).some(layer => {
-        //     return layer.L === candidate;
-        //   });
-        // },
-        hitTolerance: 0,
-      });
-  };
+  // Set the default state.
+  _xyz.mapview.state = 'select';
   
-  _xyz.map.on('click', click);
+  _xyz.map.on('click', _xyz.mapview.select);
 
-  _xyz.mapview.highlight = {};
+  _xyz.map.on('pointermove', _xyz.mapview.pointerMove);
 
-  function pointermove(e){
+  _xyz.mapview.node.addEventListener('mouseout', ()=>{
+    _xyz.mapview.pointerLocation = {
+      x: null,
+      y: null
+    };
+    _xyz.mapview.clearHighlight();
+  }, true);
 
-    // Get features from layers which have a highlight style.
-    const featureArray = _xyz.map.getFeaturesAtPixel(e.pixel,{
-      // Filter for layers which have a highlight style.
-      layerFilter: featureLayer => {
-        return Object.values(_xyz.layers.list).some(layer => {
-          return layer.qID && layer.style && layer.style.highlight && layer.L === featureLayer;
-        });
-      },
-      hitTolerance: 0,
-    });
-
-    // Return if no features are found.
-    if (!featureArray) {
-      if (_xyz.mapview.highlight.layer && _xyz.mapview.highlight.layer.L) {
-
-        _xyz.mapview.highlight.layer.highlight = true;
-                  
-        _xyz.mapview.highlight.layer.L.setStyle(_xyz.mapview.highlight.layer.L.getStyle());
-  
-        _xyz.mapview.highlight = {};
-      }
-      return;
-    }
-
-    console.log(featureArray);
-    
-    // The first feature in the array will be the feature with the highest zIndex.
-    const topFeature = featureArray[0];
-
-    // Return is feature is already highlighted.
-    if (_xyz.mapview.highlight.feature === topFeature) return;
-
-    // Redraw layer with previous highlighted feature.
-    if (_xyz.mapview.highlight.layer && _xyz.mapview.highlight.layer.L) {
-
-      _xyz.mapview.highlight.layer.highlight = true;
-                
-      _xyz.mapview.highlight.layer.L.setStyle(_xyz.mapview.highlight.layer.L.getStyle());
-
-      _xyz.mapview.highlight = {};
-    }
- 
-    // Iterate through all features (with layer) at pixel
-    _xyz.map.forEachFeatureAtPixel(e.pixel, (feature, featureLayer) => {
-
-      if (feature === topFeature) {
-
-        // Set highlight layer / feature.
-        _xyz.mapview.highlight.layer = featureLayer.get('layer');
-        _xyz.mapview.highlight.feature = feature;
-
-        // Assign feature id to the layer object.
-        _xyz.mapview.highlight.layer.highlight = feature.get('id');
-
-        // Redraw layer to style highlight.
-        return _xyz.mapview.highlight.layer.L.setStyle(
-          _xyz.mapview.highlight.layer.L.getStyle()
-        );
-
-      }
-        
-    },{
-      layerFilter: featureLayer => {
-        // Filter for layers which have a highlight style.
-        return Object.values(_xyz.layers.list).some(layer => {
-          return layer.qID && layer.style && layer.style.highlight && layer.L === featureLayer;
-        });
-      },
-      hitTolerance: 0,
-    });
- 
-  };
-
-  _xyz.map.on('pointermove', pointermove);
-
-
-
-
-
+  // Add scalebar.
   if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
     _xyz.map.addControl(new _xyz.mapview.lib.ol.control.ScaleLine());
   }
@@ -169,8 +74,6 @@ export default _xyz => params => {
     _xyz.mapview.node.addEventListener('changeEnd', layer.get);
   });
 
-  // Set the default state.
-  _xyz.mapview.state = 'select';
 
   if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
 
@@ -234,7 +137,7 @@ export default _xyz => params => {
     });
   });
 
-  // // Wire buttons to params targets.
+  // Wire buttons to params targets.
   if (params.btn) {
 
     if (params.btn.ZoomIn) _xyz.mapview.btn._ZoomIn(params.btn.ZoomIn, z);

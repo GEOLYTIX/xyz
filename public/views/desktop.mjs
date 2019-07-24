@@ -37,13 +37,10 @@ export default _xyz => {
   
   // Resize tableview while holding mousedown on resize_bar.
   vertDivider.addEventListener('touchstart', e => {
-  
-    // Prevent text selection.
-    e.preventDefault();
-      
+        
     window.addEventListener('touchmove', resize_x);
     window.addEventListener('touchend', stopResizeTouch_x);
-  });
+  },{passive:true});
 
   // Resize the tableview container
   function resize_x(e) {
@@ -107,13 +104,10 @@ export default _xyz => {
   
   // Resize tableview while holding mousedown on resize_bar.
   hozDivider.addEventListener('touchstart', e => {
-  
-    // Prevent text selection.
-    e.preventDefault();
-      
+        
     window.addEventListener('touchmove', resize_y);
     window.addEventListener('touchend', stopResizeTouch_y);
-  });
+  },{passive:true});
 
   // Resize the tableview container
   function resize_y(e) {

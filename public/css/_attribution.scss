@@ -9,6 +9,10 @@
     font-family: ffmark_bold, sans-serif;
     font-size: 18px;
     text-shadow: 1px 1px 1px $glxlightgreen;
+    pointer-events: none;
+    * {
+        pointer-events: auto;
+    }
     .logo {
         font-family: ffmark_black, sans-serif;
         font-size: 40px;

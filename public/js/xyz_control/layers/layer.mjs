@@ -10,8 +10,6 @@ import show from './show.mjs';
 
 import remove from './remove.mjs';
 
-import hover from './hover.mjs';
-
 import view from './view/_view.mjs';
 
 export default _xyz => layer => {
@@ -31,8 +29,6 @@ export default _xyz => layer => {
   layer.view = view(_xyz);
 
   layer.get = _xyz.layers.format(layer);
-
-  layer.hover = hover(_xyz, layer);
 
   if (layer.style && layer.style.themes) layer.style.theme = layer.style.themes[Object.keys(layer.style.themes)[0]];
 

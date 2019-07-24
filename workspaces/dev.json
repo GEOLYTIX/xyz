@@ -75,7 +75,9 @@
                         }
                     },
                     "qID": "id",
-
+                    "hover": {
+                        "field": "name"
+                    },
                     "infoj": [
                         {
                             "type": "key"
