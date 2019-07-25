@@ -6,12 +6,9 @@ export default _xyz => layer => {
 
   let y = 10;
 
-  // Create ordered array for the categories.
-  const cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
-     
-  cat_arr.forEach(cat => {
+  layer.style.theme.cat_arr.forEach(cat => {
            
-    let cat_style = Object.assign({}, layer.style.default, cat[1]);
+    let cat_style = Object.assign({}, layer.style.default, cat.style);
 
     legend.append('rect')
       .attr('x', 4)
@@ -27,7 +24,7 @@ export default _xyz => layer => {
       .attr('y', y + 11)
       .style('font-size', '12px')
       .style('alignment-baseline', 'central')
-      .text(cat[1].label || cat[0]);
+      .text(cat.label || cat.value);
       
     y += 20;
   });

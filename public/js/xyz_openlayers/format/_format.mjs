@@ -8,7 +8,9 @@ import tiles from './tiles.mjs';
 
 import grid from './grid.mjs';
 
-export default (_xyz, layer) => {
+import select from './select.mjs';
+
+export default _xyz => layer => {
 
   const formats = {
 
@@ -23,7 +25,17 @@ export default (_xyz, layer) => {
     grid: grid(_xyz),
 
   };
-  
-  return layer => formats[layer.format](layer);
+
+  if (layer.format === 'mvt') {
+    layer.highlight = true;
+    layer.select = select(_xyz);
+  }
+
+  if (layer.format === 'geojson') {
+    layer.highlight = true;
+    layer.select = select(_xyz);
+  }
+
+  layer.get = formats[layer.format](layer);
 
 };

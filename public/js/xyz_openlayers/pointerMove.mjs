@@ -45,7 +45,7 @@ export default _xyz => function(e) {
 
       _xyz.mapview.node.style.cursor = 'pointer';
 
-      if (_xyz.mapview.highlight.layer.hover.field) {
+      if (_xyz.mapview.highlight.layer.hover && _xyz.mapview.highlight.layer.hover.field) {
 
         const xhr = new XMLHttpRequest();
 

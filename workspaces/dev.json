@@ -38,7 +38,8 @@
                             "table1": {
                                 "title": "Population / GDP",
                                 "from": "dev.natural_earth_countries",
-                                "columns": [{
+                                "columns": [
+                                    {
                                         "field": "name",
                                         "type": "text"
                                     },
@@ -56,7 +57,8 @@
                             "GDP / Population": {
                                 "display": true,
                                 "from": "dev.natural_earth_countries",
-                                "columns": [{
+                                "columns": [
+                                    {
                                         "field": "name",
                                         "type": "text"
                                     },
@@ -148,138 +150,202 @@
                             "Population": {
                                 "type": "graduated",
                                 "field": "pop_est_edit",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0 to 10000",
-                                        "fillColor": "#15773f"
+                                        "style": {
+                                            "fillColor": "#15773f"
+                                        }
                                     },
-                                    "1000000": {
+                                    {
+                                        "value": 1000000,
                                         "label": "1+ million",
-                                        "fillColor": "#66bd63"
+                                        "style": {
+                                            "fillColor": "#66bd63"
+                                        }
                                     },
-                                    "10000000": {
+                                    {
+                                        "value": 10000000,
                                         "label": "10+ million",
-                                        "fillColor": "#a6d96a"
+                                        "style": {
+                                            "fillColor": "#a6d96a"
+                                        }
                                     },
-                                    "25000000": {
+                                    {
+                                        "value": 25000000,
                                         "label": "25+ million",
-                                        "fillColor": "#d9ef8b"
+                                        "style": {
+                                            "fillColor": "#d9ef8b"
+                                        }
                                     },
-                                    "50000000": {
+                                    {
+                                        "value": 50000000,
                                         "label": "50+ million",
-                                        "fillColor": "#fdae61"
+                                        "style": {
+                                            "fillColor": "#fdae61"
+                                        }
                                     },
-                                    "100000000": {
+                                    {
+                                        "value": 100000000,
                                         "label": "100+ million",
-                                        "fillColor": "#f46d43"
+                                        "style": {
+                                            "fillColor": "#f46d43"
+                                        }
                                     },
-                                    "1000000000": {
+                                    {
+                                        "value": 1000000000,
                                         "label": "1+ billion",
-                                        "fillColor": "#d73027"
+                                        "style": {
+                                            "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             },
                             "GDP": {
                                 "type": "graduated",
                                 "field": "gdp_md_est",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "5000": {
+                                        }
+                                    },{
+                                        "value": 5000,
                                         "label": "5000",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "25000": {
+                                        }
+                                    },{
+                                        "value": 25000,
                                         "label": "25000",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "75000": {
+                                        }
+                                    },{
+                                        "value": 75000,
                                         "label": "75000",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "250000": {
+                                        }
+                                    },{
+                                        "value": 250000,
                                         "label": "250000",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "500000": {
+                                        }
+                                    },{
+                                        "value": 500000,
                                         "label": "500000",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "1000000": {
+                                        }
+                                    },{
+                                        "value": 1000000,
                                         "label": "1000000",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             },
                             "GDP / Population": {
                                 "type": "graduated",
                                 "field": "gdp_pp",
-                                "cat": {
-                                    "1": {
+                                "cat_arr": [
+                                    {
+                                        "value": 1,
                                         "label": "1",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "2.5": {
+                                        }
+                                    },{
+                                        "value": 2.5,
                                         "label": "2.5",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "5": {
+                                        }
+                                    },{
+                                        "value": 5,
                                         "label": "5",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "10": {
+                                        }
+                                    },{
+                                        "value": 10,
                                         "label": "10",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "25": {
+                                        }
+                                    },{
+                                        "value": 25,
                                         "label": "25",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "50": {
+                                        }
+                                    },{
+                                        "value": 50,
                                         "label": "50",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "100": {
+                                        }
+                                    },{
+                                        "value": 100,
                                         "label": "100",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             },
                             "Population Density": {
                                 "type": "graduated",
                                 "field": "pop_dens",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "0.01": {
+                                        }
+                                    },{
+                                        "value": 0.01,
                                         "label": "0.01",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "0.025": {
+                                        }
+                                    },{
+                                        "value": 0.025,
                                         "label": "0.025",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "0.05": {
+                                        }
+                                    },{
+                                        "value": 0.05,
                                         "label": "0.05",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "0.1": {
+                                        }
+                                    },{
+                                        "value": 0.1,
                                         "label": "0.1",
                                         "fillColor": "#fdae61"
-                                    },
-                                    "0.5": {
+                                    },{
+                                        "value": 0.5,
                                         "label": "0.5",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "1": {
+                                        }
+                                    },{
+                                        "value": 1,
                                         "label": "1",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             }
                         }
                     }
@@ -366,7 +432,7 @@
                             "type": "html"
                         }
                     ]
-                },                
+                },
                 "Mapbox Label": {
                     "group": "Base Layer",
                     "format": "tiles",
@@ -399,11 +465,13 @@
                 "provider": "GOOGLE",
                 "code": "GB",
                 "placeholder": "e.g. London",
-                "datasets": [{
-                    "layer": "Retail Points",
-                    "table": "dev.retailpoints",
-                    "label": "store"
-                }]
+                "datasets": [
+                    {
+                        "layer": "Retail Points",
+                        "table": "dev.retailpoints",
+                        "label": "store"
+                    }
+                ]
             },
             "layers": {
                 "OSM": {
@@ -659,36 +727,51 @@
                             "Population '11": {
                                 "type": "graduated",
                                 "field": "pop_11",
-                                "cat": {
-                                    "0": {
-                                        "label": "0 to 10000",
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
+                                        "label": "0 to 100",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "100": {
-                                        "label": "10000 to 25000",
+                                        }
+                                    },{
+                                        "value": 100,
+                                        "label": "100 to 200",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "200": {
-                                        "label": "25000 to 50000",
+                                        }
+                                    },{
+                                        "value": 200,
+                                        "label": "200 to 300",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "300": {
-                                        "label": "50000 to 100000",
+                                        }
+                                    },{
+                                        "value": 300,
+                                        "label": "300 to 400",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "400": {
-                                        "label": "100000 to 250000",
+                                        }
+                                    },{
+                                        "value": 400,
+                                        "label": "400 to 500",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "500": {
-                                        "label": "250000 to 500000",
+                                        }
+                                    },{
+                                        "value": 500,
+                                        "label": "500 to 600",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "600": {
-                                        "label": "500000 or more",
+                                        }
+                                    },{
+                                        "value": 600,
+                                        "label": "600 or more",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             }
                         }
                     },
@@ -736,7 +819,8 @@
                         "tables": {
                             "Retail Places": {
                                 "from": "dev.retailplaces",
-                                "columns": [{
+                                "columns": [
+                                    {
                                         "title": "ID",
                                         "field": "id",
                                         "type": "text"
@@ -767,136 +851,187 @@
                                 "cat": {
                                     "Major City Centre": {
                                         "label": "Major City Centre",
+                                        "style": {
                                         "color": "#EF271B",
                                         "fillColor": "#EF271B"
+                                        }
                                     },
                                     "City Centre": {
                                         "label": "City Centre",
+                                        "style": {
                                         "color": "#BA2D0B",
                                         "fillColor": "#BA2D0B"
+                                        }
                                     },
                                     "Large Town Centre": {
                                         "label": "Large Town Centre",
+                                        "style": {
                                         "color": "#FE4E00",
                                         "fillColor": "#FE4E00"
+                                        }
                                     },
                                     "Major Urban Centre": {
                                         "label": "Major Urban Centre",
+                                        "style": {
                                         "color": "#E2711D",
                                         "fillColor": "#E2711D"
+                                        }
                                     },
                                     "Town Centre": {
                                         "label": "Town Centre",
+                                        "style": {
                                         "color": "#F3A712",
                                         "fillColor": "#F3A712"
+                                        }
                                     },
                                     "Urban Centre": {
                                         "label": "Urban Centre",
+                                        "style": {
                                         "color": "#FADF63",
                                         "fillColor": "#FADF63"
+                                        }
                                     },
                                     "Small Town Centre": {
                                         "label": "Small Town Centre",
+                                        "style": {
                                         "color": "#FFE74C",
                                         "fillColor": "#FFE74C"
+                                        }
                                     },
                                     "Village Centre": {
                                         "label": "Village Centre",
+                                        "style": {
                                         "color": "#DBFE87",
                                         "fillColor": "#DBFE87"
+                                        }
                                     },
                                     "Regional SC": {
                                         "label": "Regional SC",
+                                        "style": {
                                         "color": "#8ED081",
                                         "fillColor": "#8ED081"
+                                        }
                                     },
                                     "Outlet Centre": {
                                         "label": "Outlet Centre",
+                                        "style": {
                                         "color": "#7DDF64",
                                         "fillColor": "#7DDF64"
+                                        }
                                     },
                                     "Shopping Park": {
                                         "label": "Shopping Park",
+                                        "style": {
                                         "color": "#074F57",
                                         "fillColor": "#074F57"
+                                        }
                                     },
                                     "Retail Park": {
                                         "label": "Retail Park",
+                                        "style": {
                                         "color": "#32746D",
                                         "fillColor": "#32746D"
+                                        }
                                     },
                                     "Leisure Park": {
                                         "label": "Leisure Park",
+                                        "style": {
                                         "color": "#41D3BD",
                                         "fillColor": "#41D3BD"
+                                        }
                                     },
                                     "Local Hub": {
                                         "label": "Local Hub",
+                                        "style": {
                                         "color": "#08B2E3",
                                         "fillColor": "#08B2E3"
+                                        }
                                     },
                                     "Large Parade": {
                                         "label": "Large Parade",
+                                        "style": {
                                         "color": "#1F487E",
                                         "fillColor": "#1F487E"
+                                        }
                                     },
                                     "Parade": {
                                         "label": "Parade",
+                                        "style": {
                                         "color": "#541388",
                                         "fillColor": "#541388"
+                                        }
                                     },
                                     "Weak Parade": {
                                         "label": "Weak Parade",
+                                        "style": {
                                         "color": "#D90368",
                                         "fillColor": "#D90368"
+                                        }
                                     }
                                 }
                             },
                             "Population '11": {
                                 "type": "graduated",
                                 "field": "pop__11",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0 to 10000",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "10000": {
+                                        }
+                                    },{
+                                        "value": 10000,
                                         "label": "10000 to 25000",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "25000": {
+                                        }
+                                    },{
+                                        "value": 25000,
                                         "label": "25000 to 50000",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "50000": {
+                                        }
+                                    },{
+                                        "value": 50000,
                                         "label": "50000 to 100000",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "100000": {
+                                        }
+                                    },{
+                                        "value": 100000,
                                         "label": "100000 to 250000",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "250000": {
+                                        }
+                                    },{
+                                        "value": 250000,
                                         "label": "250000 to 500000",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "500000": {
+                                        }
+                                    },{
+                                        "value": 500000,
                                         "label": "500000 or more",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             }
                         }
                     },
                     "qID": "tid",
                     "filter": {
-                        "infoj": [{
-                            "label": "ID count",
-                            "field": "id_count",
-                            "type": "integer",
-                            "inline": true,
-                            "fieldfx": "count(id)"
-                        }]
+                        "infoj": [
+                            {
+                                "label": "ID count",
+                                "field": "id_count",
+                                "type": "integer",
+                                "inline": true,
+                                "fieldfx": "count(id)"
+                            }
+                        ]
                     },
                     "infoj": [
                         {
@@ -1029,7 +1164,8 @@
                             "Retail Points": {
                                 "display": true,
                                 "from": "dev.retailpoints",
-                                "columns": [{
+                                "columns": [
+                                    {
                                         "title": "ID",
                                         "field": "retailpoint_id",
                                         "type": "text"
@@ -1049,13 +1185,15 @@
                         }
                     },
                     "filter": {
-                        "infoj": [{
-                            "label": "ID count",
-                            "field": "id_count",
-                            "type": "integer",
-                            "inline": true,
-                            "fieldfx": "count(retailpoint_id)"
-                        }]
+                        "infoj": [
+                            {
+                                "label": "ID count",
+                                "field": "id_count",
+                                "type": "integer",
+                                "inline": true,
+                                "fieldfx": "count(retailpoint_id)"
+                            }
+                        ]
                     },
                     "style": {
                         "label": {
@@ -1065,7 +1203,7 @@
                         "markerMulti": {
                             "type": "target",
                             "fillColor": "#eeeeee"
-                          },
+                        },
                         "highlight": {
                             "type": "target",
                             "fillColor": "#ccff99"
@@ -1078,98 +1216,134 @@
                                 "cat": {
                                     "Tesco": {
                                         "label": "Tesco",
+                                        "style": {
                                         "fillColor": "#0055a8",
                                         "layers": {
                                             "0.75": "#ffffff",
                                             "0.35": "#f02f26"
                                         }
+                                    }
                                     },
                                     "Sainsburys": {
                                         "label": "Sainsbury's",
+                                        "style": {
                                         "fillColor": "#ee8a00",
                                         "layers": {
                                             "0.5": "#ffffff",
                                             "0.35": "#ee8a00"
                                         }
+                                    }
                                     },
                                     "Marks and Spencer": {
                                         "label": "Marks & Spencer",
+                                        "style": {
                                         "fillColor": "#0a0d10",
                                         "layers": {
                                             "0.5": "#def036",
                                             "0.25": "#0a0d10"
                                         }
                                     }
+                                    }
                                 }
                             },
                             "Households": {
                                 "type": "graduated",
                                 "field": "hhdooc_11",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0 to 100",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "100": {
+                                        }
+                                    },{
+                                        "value": 100,
                                         "label": "100 to 200",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "200": {
+                                        }
+                                    },{
+                                        "value": 200,
                                         "label": "200 to 400",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "400": {
+                                        }
+                                    },{
+                                        "value": 400,
                                         "label": "400 to 600",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "600": {
+                                        }
+                                    },{
+                                        "value": 600,
                                         "label": "600 to 800",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "800": {
+                                        }
+                                    },{
+                                        "value": 800,
                                         "label": "800 to 1000",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "1000": {
+                                        }
+                                    },{
+                                        "value": 1000,
                                         "label": "1000 or more",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             },
                             "Households Sized": {
                                 "type": "graduated",
                                 "field": "hhdooc_11",
                                 "size": "hhdooc_11",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0 to 100",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "100": {
+                                        }
+                                    },{
+                                        "value": 100,
                                         "label": "100 to 200",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "200": {
+                                        }
+                                    },{
+                                        "value": 200,
                                         "label": "200 to 400",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "400": {
+                                        }
+                                    },{
+                                        "value": 400,
                                         "label": "400 to 600",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "600": {
+                                        }
+                                    },{
+                                        "value": 600,
                                         "label": "600 to 800",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "800": {
+                                        }
+                                    },{
+                                        "value": 800,
                                         "label": "800 to 1000",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "1000": {
+                                        }
+                                    },{
+                                        "value": 1000,
                                         "label": "1000 or more",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             },
                             "Tesco/Sainsbury's": {
                                 "type": "competition",
@@ -1178,11 +1352,15 @@
                                 "cat": {
                                     "Tesco": {
                                         "label": "Tesco",
+                                        "style": {
                                         "fillColor": "#0055a8"
+                                        }
                                     },
                                     "Sainsburys": {
                                         "label": "Sainsbury's",
+                                        "style": {
                                         "fillColor": "#ee8a00"
+                                        }
                                     }
                                 }
                             }
@@ -1343,36 +1521,51 @@
                                 "type": "graduated",
                                 "field": "price_paid",
                                 "aggregate": "avg",
-                                "cat": {
-                                    "0": {
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
                                         "label": "0",
+                                        "style": {
                                         "fillColor": "#15773f"
-                                    },
-                                    "250000": {
+                                        }
+                                    },{
+                                        "value": 250000,
                                         "label": "250000",
+                                        "style": {
                                         "fillColor": "#66bd63"
-                                    },
-                                    "500000": {
+                                        }
+                                    },{
+                                        "value": 500000,
                                         "label": "500000",
+                                        "style": {
                                         "fillColor": "#a6d96a"
-                                    },
-                                    "750000": {
+                                        }
+                                    },{
+                                        "value": 750000,
                                         "label": "750000",
+                                        "style": {
                                         "fillColor": "#d9ef8b"
-                                    },
-                                    "1000000": {
+                                        }
+                                    },{
+                                        "value": 1000000,
                                         "label": "1000000",
+                                        "style": {
                                         "fillColor": "#fdae61"
-                                    },
-                                    "1500000": {
+                                        }
+                                    },{
+                                        "value": 1500000,
                                         "label": "1500000",
+                                        "style": {
                                         "fillColor": "#f46d43"
-                                    },
-                                    "2000000": {
+                                        }
+                                    },{
+                                        "value": 2000000,
                                         "label": "2000000",
+                                        "style": {
                                         "fillColor": "#d73027"
+                                        }
                                     }
-                                }
+                                ]
                             }
                         }
                     }

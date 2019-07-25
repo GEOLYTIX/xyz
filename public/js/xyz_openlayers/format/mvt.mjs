@@ -1,76 +1,112 @@
 export default _xyz => layer => () => {
 
-  layer.highlight = true;
-
-  if (!layer.select) layer.select = select;
-
-  // Get table for the current zoom level.
-  const table = layer.tableCurrent();
-
   // Return if layer should not be displayed.
   if (!layer.display) return;
 
-  if (!table) {
+  // Get table for the current zoom level.
+  const tableZ = layer.tableCurrent();
+
+  if (!tableZ) {
 
     // Remove existing layer from map.
     if (layer.L) _xyz.map.removeLayer(layer.L);  
 
-    return layer.loaded = false;
+    return;
   }
 
   // Return from layer.get() if table is the same as layer table
-  // AND the layer is already loaded.
-  if (layer.table === table && layer.loaded) return;
+  if (layer.table === tableZ && layer.L) return;
 
   // Set table to layer.table.
-  layer.table = table;
+  layer.table = tableZ;
 
-  // Create filter from legend and current filter.
-  const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
-
-  const url = _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
-    locale: _xyz.workspace.locale.key,
-    layer: layer.key,
-    table: layer.table,
-    properties: layer.properties,
-    filter: JSON.stringify(filter),
-    token: _xyz.token
-  });
-
-  // Create cat array for graduated theme.
-  if (layer.style.theme && layer.style.theme.type === 'graduated') {
-    layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
-  }
-
-  if (layer.L && layer.loaded) return;
-
-  layer.loaded = true;
-
+  // Define source for mvt layer.
   const source = new _xyz.mapview.lib.source.VectorTile({
     format: new _xyz.mapview.lib.format.MVT({
       //featureClass: _xyz.mapview.lib.Feature
     }),
     transition: 0,
-    url: url
+    url: _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      properties: layer.properties,
+      filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
+      token: _xyz.token
+    })
   });
 
-  layer.tilesLoaded = 0;
+  // Number of tiles currently loading.
+  let tilesLoading = 0;
 
+  // Increase the number of tiles loading at load start event.
+  // Display loading indicator if it exists.
   source.on('tileloadstart', () => {
-    layer.tilesLoaded++;
+    tilesLoading++;
     if (layer.view.loader) layer.view.loader.style.display = 'block';
   });
-
+  
+  // Decrease the number of tiles loading at load end event.
+  // Hide loading indicator if it exists.
   source.on('tileloadend', () => {
-    layer.tilesLoaded--;
-    if (layer.view.loader && layer.tilesLoaded === 0) layer.view.loader.style.display = 'none';
+    tilesLoading--;
+    if (layer.view.loader && tilesLoading === 0) layer.view.loader.style.display = 'none';
   });
 
   layer.L = new _xyz.mapview.lib.layer.VectorTile({
     source: source,
     zIndex: layer.style.zIndex || 1,
     style: feature => {
-      const style = applyLayerStyle(feature);
+
+      const style = Object.assign(
+        {},
+        layer.style.default
+      );
+    
+      const theme = layer.style.theme;
+  
+      // Categorized theme.
+      if (theme && theme.type === 'categorized') {
+  
+        Object.assign(
+          style,
+          theme.cat[feature.get(theme.field)].style || {}
+        );
+  
+      }
+  
+      // Graduated theme.
+      if (theme && theme.type === 'graduated' && theme.cat_arr) {
+   
+        const value = parseFloat(feature.get(theme.field));
+  
+        if (value) {
+
+          // Iterate through cat array.
+          for (let i = 0; i < theme.cat_arr.length; i++) {
+  
+          // Break iteration is cat value is below current cat array value.
+            if (value < theme.cat_arr[i].value) break;
+  
+            // Set cat_style to current cat style after value check.
+            var cat_style = theme.cat_arr[i].style;
+          }
+  
+          // Assign style from base & cat_style.
+          Object.assign(
+            style,
+            cat_style
+          );
+
+        }
+    
+      }
+
+      Object.assign(
+        style,
+        layer.highlight === feature.get('id') ? layer.style.highlight : {},
+        layer.highlight === feature.get('id') ? {zIndex : 30} : {zIndex : 10},
+      );
 
       return new _xyz.mapview.lib.style.Style({
         stroke: new _xyz.mapview.lib.style.Stroke({
@@ -81,102 +117,13 @@ export default _xyz => layer => () => {
           color: _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity || 1, true)
         }),
         zIndex: style.zIndex,
-      // image: _xyz.mapview.icon(params.style.icon),
-      // image: new _xyz.mapview.lib.style.Circle({
-      //   radius: 7,
-      //   fill: new _xyz.mapview.lib.style.Fill({
-      //     color: 'rgba(0, 0, 0, 0.01)'
-      //   }),
-      //   stroke: new _xyz.mapview.lib.style.Stroke({
-      //     color: '#EE266D',
-      //     width: 2
-      //   })
-      // })
+        image: style.marker && _xyz.mapview.icon({url: _xyz.utils.svg_symbols(style.marker)})
       });
     }
   });
 
   _xyz.map.addLayer(layer.L);
 
-  layer.L.set('layer',layer,true);
-
-
-  function applyLayerStyle(properties) {
-
-    const highlighted = layer.highlight === properties.get('id');
-
-
-    let style = Object.assign(
-      {},
-      layer.style.default,
-      highlighted ? layer.style.highlight : {},
-    );
-
-    style.zIndex = (highlighted ? 30 : 10);
-
-    // let style = Object.assign({}, layer.style.default);
-
-    // Return default style if no theme is set on layer.
-    if (!layer.style.theme) return style;
-
-    const theme = layer.style.theme;
-
-    // Categorized theme.
-    if (theme.type === 'categorized') {
-
-      return Object.assign(
-        {},
-        style,
-        theme.cat[properties.get(theme.field)] || {},
-        highlighted ? layer.style.highlight : {},
-      );
-
-    }
-
-    // Graduated theme.
-    if (theme.type === 'graduated') {
-
-      theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
-  
-
-      theme.cat_style = {};
-
-      // Iterate through cat array.
-      for (let i = 0; i < theme.cat_arr.length; i++) {
-
-        if (!properties.get(theme.field)) return style;
-
-        // Break iteration is cat value is below current cat array value.
-        if (parseFloat(properties.get(theme.field)) < parseFloat(theme.cat_arr[i][0])) break;
-
-        // Set cat_style to current cat style after value check.
-        theme.cat_style = theme.cat_arr[i][1];
-
-      }
-
-      // Assign style from base & cat_style.
-      return Object.assign(
-        {},
-        style,
-        theme.cat_style,
-        highlighted ? layer.style.highlight : {},
-      );
-
-    }
-
-  }
-
-  function select(e, feature){
-
-    _xyz.locations.select({
-      locale: _xyz.workspace.locale.key,
-      layer: layer.key,
-      table: layer.table,
-      id: feature.get('id'),
-      marker: _xyz.mapview.lib.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
-      edit: layer.edit
-    });
-
-  }
+  layer.L.set('layer', layer, true);
 
 };

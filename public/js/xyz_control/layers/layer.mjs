@@ -28,8 +28,10 @@ export default _xyz => layer => {
 
   layer.view = view(_xyz);
 
-  layer.get = _xyz.layers.format(layer);
+  // Set get and select methods.
+  _xyz.layers.format(layer);
 
+  // Set the first theme from themes array.
   if (layer.style && layer.style.themes) layer.style.theme = layer.style.themes[Object.keys(layer.style.themes)[0]];
 
   return layer;

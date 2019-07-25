@@ -97,6 +97,16 @@ export default _xyz => layer => () => {
       }
     });
 
+      // Apply maths function to a column in a two dimensional array of numbers.
+    function getMath(arr, idx, type) {
+
+      // Filter numbers from array column idx.
+      const numbers = arr.filter(n => isFinite(n[idx]));
+
+      // Apply math function to the filtered numbers array.
+      return Math[type].apply(null, numbers.map(val => val[idx]));
+    }
+
     layer.sizeMin = getMath(data, 2, 'min');
     layer.sizeAvg /= dots.length;
     layer.sizeMax = getMath(data, 2, 'max');
@@ -197,16 +207,5 @@ export default _xyz => layer => () => {
   };
 
   layer.xhr.send();
-
-
-  // Apply maths function to a column in a two dimensional array of numbers.
-  function getMath(arr, idx, type) {
-
-    // Filter numbers from array column idx.
-    let numbers = arr.filter(n => isFinite(n[idx]));
-
-    // Apply math function to the filtered numbers array.
-    return Math[type].apply(null, numbers.map(val => val[idx]));
-  }
 
 };

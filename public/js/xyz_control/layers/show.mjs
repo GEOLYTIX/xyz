@@ -7,7 +7,6 @@ export default _xyz => function () {
   layer.get();
   _xyz.mapview.attribution.check();
 
-  if (layer.view.loader) layer.view.loader.style.display = 'block';
   if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers';
 
   // Push the layer into the layers hook array.

@@ -12,13 +12,13 @@ export default _xyz => layer => () => {
     }) :
     layer.URI;
 
-  // Number of tiles currently loading.
-  let tilesLoading = 0;
-
   const source = new _xyz.mapview.lib.source.OSM({
     url: decodeURIComponent(url),
     transition: 0,
   });
+
+  // Number of tiles currently loading.
+  let tilesLoading = 0;
 
   // Increase the number of tiles loading at load start event.
   // Display loading indicator if it exists.
@@ -37,5 +37,7 @@ export default _xyz => layer => () => {
   layer.L = new _xyz.mapview.lib.layer.Tile({source: source});
 
   _xyz.map.addLayer(layer.L);
+
+  layer.L.set('layer', layer, true);
 
 };

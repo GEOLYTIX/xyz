@@ -21,7 +21,7 @@ export default _xyz => layer => {
       .attr('y', y)
       .attr('width', 20)
       .attr('height', 20)
-      .attr('xlink:href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1])));
+      .attr('xlink:href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style)));
       
     legend.append('text')
       .attr('x', 25)
