@@ -2,8 +2,12 @@ export default _xyz => entry => {
 
   let td = _xyz.utils.createElement({
     tag: 'td',
-    style: { paddingTop: '5px' },
-    options: { colSpan: '2' },
+    style: { 
+      paddingTop: '5px',
+      display: entry.target_id ? 'none': 'block' 
+    },
+    options: { 
+      colSpan: '2'    },
     appendTo: entry.row
   });
 

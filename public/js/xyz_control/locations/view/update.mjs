@@ -102,6 +102,9 @@ export default (_xyz, location) => () => {
 
       entry.row = _xyz.utils.createElement({
         tag: 'tr',
+        options: {
+          classList: entry.class || ''
+        },
         appendTo: location.view.node
       });
 
@@ -179,7 +182,9 @@ export default (_xyz, location) => () => {
       if(entry.label_td) entry.label_td.colSpan = '2';
 
       // Create new row and append to table.
-      entry.row = _xyz.utils.wire()`<tr>`;
+      //entry.row = _xyz.utils.wire()`<tr>`;
+      entry.row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`;
+
 
       location.view.node.appendChild(entry.row);
       
