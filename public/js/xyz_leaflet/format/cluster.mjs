@@ -49,7 +49,7 @@ export default _xyz => layer => () => {
       south: bounds.getSouth(),
       east: bounds.getEast(),
       north: bounds.getNorth(),
-      z: _xyz.mapview.lib.getZoom(),
+      z: _xyz.mapview.getZoom(),
       token: _xyz.token
     }));
 

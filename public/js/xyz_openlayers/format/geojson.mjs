@@ -43,7 +43,7 @@ export default _xyz => layer => () => {
     // Create cat array for graduated theme.
     if (layer.style.theme) layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat);
 
-    const geoJSON = new _xyz.mapview.lib.ol.format.GeoJSON();
+    const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
 
     const features = e.target.response.map(f => geoJSON.readFeature({
       type: 'Feature',
@@ -56,9 +56,9 @@ export default _xyz => layer => () => {
       featureProjection:'EPSG:3857'
     }));
   
-    const sourceVector = new _xyz.mapview.lib.ol.source.Vector({features: features});
+    const sourceVector = new _xyz.mapview.lib.source.Vector({features: features});
 
-    layer.L = new _xyz.mapview.lib.ol.layer.Vector({
+    layer.L = new _xyz.mapview.lib.layer.Vector({
       source: sourceVector,
       zIndex: layer.style.zIndex || 1,
       style: feature => {
@@ -75,15 +75,15 @@ export default _xyz => layer => () => {
         // Return default style if no theme is set on layer.
         if (!layer.style.theme) {
 
-          let _style = new _xyz.mapview.lib.ol.style.Style({
-            // stroke: new _xyz.mapview.lib.ol.style.Stroke({
+          let _style = new _xyz.mapview.lib.style.Style({
+            // stroke: new _xyz.mapview.lib.style.Stroke({
             //   color: style.color,
             //   width: style.weight
             // }),
-            // fill: new _xyz.mapview.lib.ol.style.Fill({
+            // fill: new _xyz.mapview.lib.style.Fill({
             //   color: _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity || 1, true)
             // }),
-            image: _xyz.mapview.lib.icon({url: _xyz.utils.svg_symbols(style.marker)})
+            image: _xyz.mapview.icon({url: _xyz.utils.svg_symbols(style.marker)})
           });
           
           return _style;
@@ -141,7 +141,7 @@ export default _xyz => layer => () => {
       layer: layer.key,
       table: layer.table,
       id: feature.get('id'),
-      marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
+      marker: _xyz.mapview.lib.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
       edit: layer.edit
     });
 

@@ -37,6 +37,10 @@ import _pointerMove from './pointerMove.mjs';
 
 import select from './select.mjs';
 
+import getBounds from './getBounds.mjs';
+
+import icon from './icon.mjs';
+
 import clearHighlight from './clearHighlight.mjs';
 
 import infotip from './infotip.mjs';
@@ -47,78 +51,64 @@ export default _xyz => {
 
   const lib = {
 
-    ol: {
+    Map: Map,
 
-      Map: Map,
+    View: View,
 
-      View: View,
+    Feature: Feature,
 
-      Feature: Feature,
+    Overlay: Overlay,
 
-      Overlay: Overlay,
-
-      control: {
-        ScaleLine: ScaleLine,
-      },
-
-      interaction: {
-        defaults: defaults,
-        Pointer: Pointer,
-        Select: Select,
-      },
-
-      events: {
-        click: click,
-      },
-
-      proj: {
-        transform: transform,
-        transformExtent: transformExtent,
-        fromLonLat: fromLonLat,
-      },
-
-      geom: {
-        Point: Point,
-        Polygon: Polygon,
-      },
-
-      format: {
-        MVT: formatMVT,
-        GeoJSON: formatGeoJSON,
-      },
-  
-      source: {
-        OSM: sourceOSM,
-        VectorTile: sourceVectorTile,
-        Vector: sourceVector,
-      },
-  
-      layer: {
-        Tile: layerTile,
-        VectorTile: layerVectorTile,
-        Vector: layerVector,
-      },
-  
-      style: {
-        Style: Style,
-        Fill: Fill,
-        Stroke: Stroke,
-        Circle: Circle,
-        Icon: Icon,
-        Text: Text,
-      },
-  
+    control: {
+      ScaleLine: ScaleLine,
     },
 
-    geoJSON: geoJSON,
+    interaction: {
+      defaults: defaults,
+      Pointer: Pointer,
+      Select: Select,
+    },
 
-    icon: icon,
+    events: {
+      click: click,
+    },
 
-    getBounds: getBounds,
+    proj: {
+      transform: transform,
+      transformExtent: transformExtent,
+      fromLonLat: fromLonLat,
+    },
 
-    flyToBounds: flyToBounds,
+    geom: {
+      Point: Point,
+      Polygon: Polygon,
+    },
 
-    getZoom: getZoom,
+    format: {
+      MVT: formatMVT,
+      GeoJSON: formatGeoJSON,
+    },
+  
+    source: {
+      OSM: sourceOSM,
+      VectorTile: sourceVectorTile,
+      Vector: sourceVector,
+    },
+  
+    layer: {
+      Tile: layerTile,
+      VectorTile: layerVectorTile,
+      Vector: layerVector,
+    },
+  
+    style: {
+      Style: Style,
+      Fill: Fill,
+      Stroke: Stroke,
+      Circle: Circle,
+      Icon: Icon,
+      Text: Text,
+    },
 
   };
 
@@ -150,63 +140,22 @@ export default _xyz => {
   
     infotip: infotip(_xyz),
 
-    geoJSON: geoJSON,
+    geoJSON: geoJSON(_xyz),
 
-    icon: icon,
+    icon: icon(_xyz),
 
-    getBounds: getBounds,
+    getBounds: getBounds(_xyz),
 
-    flyToBounds: flyToBounds,
+    flyToBounds: layers => {
+      _xyz.map.getView().fit(layers[0].getGeometry(), { duration: 1000 });
+    },
 
-    getZoom: getZoom,
+    getZoom: () => {
+      return _xyz.map.getView().getZoom();
+    },
   
     btn: btn(_xyz),
 
   });
-
-  function icon(icon) {
-   
-    const svgHeight = icon.url.match(/height%3D%22(\d+)%22/);
-    const iconHeight = svgHeight != null && Array.isArray(svgHeight) && svgHeight.length == 2 ? svgHeight[1] : 1000;
-    const scale = (icon.iconSize || 40) / iconHeight;
-
-    return new _xyz.mapview.lib.ol.style.Icon({
-      src: icon.url,
-      scale: scale,
-      //anchor: [0.5, 1],
-    });
-  }
-
-  function getBounds(epsg){
-
-    const extent = _xyz.map.getView().calculateExtent();
-
-    if (!epsg || epsg === '3857') return {
-      south: extent[1],
-      west: extent[0],
-      north: extent[3],
-      east: extent[2],
-    };
-
-    const extent_transformed = _xyz.mapview.lib.ol.proj.transformExtent(extent,'EPSG:3857','EPSG:'+epsg);
-
-    return {
-      south: extent_transformed[1],
-      west: extent_transformed[0],
-      north: extent_transformed[3],
-      east: extent_transformed[2],
-    };
-
-  }
-
-  function getZoom(){
-    return _xyz.map.getView().getZoom();
-  }
-
-  function flyToBounds(layers){
-
-    _xyz.map.getView().fit(layers[0].getGeometry(), { duration: 1000 });
-
-  }
 
 };

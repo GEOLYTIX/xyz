@@ -2,7 +2,7 @@ export default _xyz => () => {
 
   const xhr = new XMLHttpRequest();
 
-  const bounds = _xyz.map && _xyz.mapview.lib.getBounds();
+  const bounds = _xyz.map && _xyz.mapview.getBounds();
       
   xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,

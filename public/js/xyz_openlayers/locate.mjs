@@ -6,8 +6,8 @@ export default _xyz => {
 
     active: false,
 
-    marker: new _xyz.mapview.lib.ol.Feature({
-      geometry: new _xyz.mapview.lib.ol.geom.Point([0, 0])
+    marker: new _xyz.mapview.lib.Feature({
+      geometry: new _xyz.mapview.lib.geom.Point([0, 0])
     })
 
   };
@@ -23,13 +23,13 @@ export default _xyz => {
     // Create the geolocation marker if it doesn't exist yet.
     if (!locate.L) {
 
-      locate.L = new _xyz.mapview.lib.ol.layer.Vector({
-        source: new _xyz.mapview.lib.ol.source.Vector({
+      locate.L = new _xyz.mapview.lib.layer.Vector({
+        source: new _xyz.mapview.lib.source.Vector({
           features: [locate.marker]
         }),
         zIndex: 40,
-        style: new _xyz.mapview.lib.ol.style.Style({
-          image: _xyz.mapview.lib.icon({
+        style: new _xyz.mapview.lib.style.Style({
+          image: _xyz.mapview.icon({
             url: _xyz.utils.svg_symbols({type: 'geo'}),
             iconSize: 30
           })
@@ -55,7 +55,7 @@ export default _xyz => {
         // Reposition marker if locate is active
         if (locate.active) {
 
-          const coords = _xyz.mapview.lib.ol.proj.fromLonLat([
+          const coords = _xyz.mapview.lib.proj.fromLonLat([
             parseFloat(pos.coords.longitude),
             parseFloat(pos.coords.latitude)
           ]);

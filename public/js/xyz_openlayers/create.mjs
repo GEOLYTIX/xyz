@@ -16,25 +16,25 @@ export default _xyz => params => {
 
   const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
 
-  const center = _xyz.mapview.lib.ol.proj.fromLonLat([
+  const center = _xyz.mapview.lib.proj.fromLonLat([
     parseFloat((params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0),
     parseFloat((params.view && params.view.lat) || _xyz.workspace.locale.view.lat || 0),
   ]);
 
      
   // Create Leaflet map object.
-  _xyz.map = new _xyz.mapview.lib.ol.Map({
+  _xyz.map = new _xyz.mapview.lib.Map({
     target: _xyz.mapview.node,
-    interactions: _xyz.mapview.lib.ol.interaction.defaults({ 
+    interactions: _xyz.mapview.lib.interaction.defaults({ 
       mouseWheelZoom: params.scrollWheelZoom || false 
     }),
     controls: [],
-    view: new _xyz.mapview.lib.ol.View({
+    view: new _xyz.mapview.lib.View({
       zoom: z,
       minZoom: _xyz.workspace.locale.minZoom,
       maxZoom: _xyz.workspace.locale.maxZoom,
       center: center,
-      extent: _xyz.mapview.lib.ol.proj.transformExtent(
+      extent: _xyz.mapview.lib.proj.transformExtent(
         [
           parseFloat((params.bounds && params.bounds.west) || _xyz.workspace.locale.bounds.west),
           parseFloat((params.bounds && params.bounds.south) || _xyz.workspace.locale.bounds.south),
@@ -63,7 +63,7 @@ export default _xyz => params => {
 
   // Add scalebar.
   if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
-    _xyz.map.addControl(new _xyz.mapview.lib.ol.control.ScaleLine());
+    _xyz.map.addControl(new _xyz.mapview.lib.control.ScaleLine());
   }
 
   // Create attribution in map DOM.
@@ -79,31 +79,31 @@ export default _xyz => params => {
 
     // Grey out area outside bbox
     const world = [
-      _xyz.mapview.lib.ol.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([180, -90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([-180, -90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([-180, 90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([180, -90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([-180, -90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([-180, 90], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
     ];
 
     const bounds = [
-      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.ol.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
     ];
 
-    var maskFeature = new _xyz.mapview.lib.ol.Feature({
-      geometry: new _xyz.mapview.lib.ol.geom.Polygon([world, bounds])
+    var maskFeature = new _xyz.mapview.lib.Feature({
+      geometry: new _xyz.mapview.lib.geom.Polygon([world, bounds])
     });
   
-    var maskLayer = new _xyz.mapview.lib.ol.layer.Vector({
-      source: new _xyz.mapview.lib.ol.source.Vector({
+    var maskLayer = new _xyz.mapview.lib.layer.Vector({
+      source: new _xyz.mapview.lib.source.Vector({
         features: [maskFeature]
       }),
-      style: new _xyz.mapview.lib.ol.style.Style({
-        fill: new _xyz.mapview.lib.ol.style.Fill({
+      style: new _xyz.mapview.lib.style.Style({
+        fill: new _xyz.mapview.lib.style.Fill({
           color: _xyz.utils.hexToRGBA('#000000', 0.2, true)
         })
       }),
@@ -128,7 +128,7 @@ export default _xyz => params => {
   // Set hooks on changeevent.
   if (_xyz.hooks) _xyz.mapview.node.addEventListener('changeEnd', ()=>{
 
-    const center = _xyz.mapview.lib.ol.proj.transform(_xyz.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
+    const center = _xyz.mapview.lib.proj.transform(_xyz.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
   
     _xyz.hooks.set({
       lat: center[1],

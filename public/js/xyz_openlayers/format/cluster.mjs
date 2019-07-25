@@ -2,7 +2,7 @@ export default _xyz => layer => () => {
 
   layer.highlight = new Set();
 
-  if (!layer.select) layer.select = _select;
+  if (!layer.select) layer.select = select;
 
   // Get table for the current zoom level.
   const table = layer.tableCurrent();
@@ -22,7 +22,7 @@ export default _xyz => layer => () => {
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
   // Get bounds for request.
-  const bounds = _xyz.mapview.lib.getBounds(layer.srid);
+  const bounds = _xyz.mapview.getBounds(layer.srid);
 
   if (layer.xhr) {
     layer.xhr.abort();
@@ -54,7 +54,7 @@ export default _xyz => layer => () => {
       south: bounds.south,
       east: bounds.east,
       north: bounds.north,
-      z: _xyz.mapview.lib.getZoom(),
+      z: _xyz.mapview.getZoom(),
       token: _xyz.token
     }));
 
@@ -86,7 +86,7 @@ export default _xyz => layer => () => {
 
     let id = 0;
 
-    const features = cluster.map(f => new _xyz.mapview.lib.ol.Feature({
+    const features = cluster.map(f => new _xyz.mapview.lib.Feature({
       id: id++,
       geometry: geometry(f.geometry),
       properties: f.properties
@@ -94,19 +94,19 @@ export default _xyz => layer => () => {
 
     function geometry(geom) {
       if (geom.lon && geom.lat) {
-        return new _xyz.mapview.lib.ol.geom.Point(
-          _xyz.mapview.lib.ol.proj.fromLonLat([geom.lon, geom.lat])
+        return new _xyz.mapview.lib.geom.Point(
+          _xyz.mapview.lib.proj.fromLonLat([geom.lon, geom.lat])
         );
       }
 
       if (geom.x && geom.y) {
-        return new _xyz.mapview.lib.ol.geom.Point([geom.x, geom.y]);
+        return new _xyz.mapview.lib.geom.Point([geom.x, geom.y]);
       }
     }
 
-    const sourceVector = new _xyz.mapview.lib.ol.source.Vector({features: features});
+    const sourceVector = new _xyz.mapview.lib.source.Vector({features: features});
 
-    layer.L = new _xyz.mapview.lib.ol.layer.Vector({
+    layer.L = new _xyz.mapview.lib.layer.Vector({
       source: sourceVector,
       zIndex: layer.style.zIndex || 1,
       style: feature => {
@@ -124,9 +124,9 @@ export default _xyz => layer => () => {
             layer.style.markerMin + layer.style.markerMax / max_size * properties.size;
 
   
-        return new _xyz.mapview.lib.ol.style.Style({
+        return new _xyz.mapview.lib.style.Style({
           zIndex: parseInt(max_size - properties.size),
-          image: _xyz.mapview.lib.icon({
+          image: _xyz.mapview.icon({
             url: _xyz.utils.svg_symbols(marker),
             iconSize: iconSize
           })
@@ -141,7 +141,7 @@ export default _xyz => layer => () => {
 
     if (layer.style.label && layer.style.label.display) {
 
-      layer.label = new _xyz.mapview.lib.ol.layer.Vector({
+      layer.label = new _xyz.mapview.lib.layer.Vector({
         source: sourceVector,
         declutter: true,
         zIndex: layer.style.zIndex || 1,
@@ -149,12 +149,12 @@ export default _xyz => layer => () => {
   
           const properties = feature.getProperties().properties;
        
-          return new _xyz.mapview.lib.ol.style.Style({
+          return new _xyz.mapview.lib.style.Style({
             
-            text: new _xyz.mapview.lib.ol.style.Text({
+            text: new _xyz.mapview.lib.style.Text({
               text: properties.label,
               size: '12px',
-              stroke: new _xyz.mapview.lib.ol.style.Stroke({
+              stroke: new _xyz.mapview.lib.style.Stroke({
                 color: '#fff',
                 width: 3
               }),
@@ -248,13 +248,13 @@ export default _xyz => layer => () => {
 
   layer.xhr.send();
 
-  function _select(e, feature) {
+  function select(e, feature) {
 
     let
       count = feature.get('properties').count,
       geom = feature.getGeometry(),
       coords = geom.getCoordinates(),
-      lnglat = _xyz.mapview.lib.ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+      lnglat = _xyz.mapview.lib.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
 
     const xhr = new XMLHttpRequest();
 

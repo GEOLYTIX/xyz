@@ -10,6 +10,6 @@ export default _xyz => function () {
 
   allLayer.push(_xyz.mapview.locate.L);
 
-  _xyz.mapview.lib.flyToBounds(allLayer);
+  _xyz.mapview.flyToBounds(allLayer);
 
 };

@@ -26,7 +26,7 @@ export default _xyz => layer => () => {
   layer.table = table;
 
   // Get bounds for request.
-  const bounds = _xyz.mapview.lib.getBounds(layer.srid);
+  const bounds = _xyz.mapview.getBounds(layer.srid);
 
   if (layer.xhr) {
     layer.xhr.abort();
@@ -85,9 +85,9 @@ export default _xyz => layer => () => {
         layer.sizeAvg += parseFloat(record[2]);
         layer.colorAvg += isNaN(record[3]) ? 0 : parseFloat(record[3]);
 
-        return new _xyz.mapview.lib.ol.Feature({
-          geometry: new _xyz.mapview.lib.ol.geom.Point(
-            _xyz.mapview.lib.ol.proj.fromLonLat([record[0], record[1]])),
+        return new _xyz.mapview.lib.Feature({
+          geometry: new _xyz.mapview.lib.geom.Point(
+            _xyz.mapview.lib.proj.fromLonLat([record[0], record[1]])),
           properties: {
             size: parseFloat(record[2]),
             color: isNaN(record[3]) ? record[3] : parseFloat(record[3])
@@ -144,9 +144,9 @@ export default _xyz => layer => () => {
     }
 
 
-    const sourceVector = new _xyz.mapview.lib.ol.source.Vector({ features: dots });
+    const sourceVector = new _xyz.mapview.lib.source.Vector({ features: dots });
 
-    layer.L = new _xyz.mapview.lib.ol.layer.Vector({
+    layer.L = new _xyz.mapview.lib.layer.Vector({
       source: sourceVector,
       zIndex: layer.style.zIndex || 1,
       style: feature => {
@@ -177,8 +177,8 @@ export default _xyz => layer => () => {
 
         }
 
-        return new _xyz.mapview.lib.ol.style.Style({
-          image: _xyz.mapview.lib.icon({
+        return new _xyz.mapview.lib.style.Style({
+          image: _xyz.mapview.icon({
             url: _xyz.utils.svg_symbols({
               type: 'dot',
               style: {

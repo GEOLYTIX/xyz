@@ -34,7 +34,7 @@ export default _xyz => table => {
 
     const xhr = new XMLHttpRequest();
 
-    const bounds = _xyz.map && _xyz.mapview.lib.getBounds();
+    const bounds = _xyz.map && _xyz.mapview.getBounds();
 
     // Create filter from legend and current filter.
     const filter = table.layer.filter && Object.assign({}, table.layer.filter.legend, table.layer.filter.current);

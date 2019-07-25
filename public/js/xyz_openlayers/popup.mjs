@@ -4,7 +4,7 @@ export default _xyz => params => {
 
   element.appendChild(params.content);
 
-  _xyz.mapview.popup.overlay = new _xyz.mapview.lib.ol.Overlay({
+  _xyz.mapview.popup.overlay = new _xyz.mapview.lib.Overlay({
     element: element,
     positioning: 'bottom-center',
     autoPan: true,

@@ -8,7 +8,7 @@ export default _xyz => function(geom){
   // Remove existing layer.
   if (gazetteer.layer) _xyz.map.removeLayer(gazetteer.layer);
   
-  gazetteer.layer = _xyz.mapview.lib.geoJSON({
+  gazetteer.layer = _xyz.mapview.geoJSON({
     json: geom,
     pane: 'gazetteer',
     style: {

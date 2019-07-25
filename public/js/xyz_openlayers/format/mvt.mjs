@@ -42,16 +42,13 @@ export default _xyz => layer => () => {
     layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
   }
 
-  // Remove layer.
-  //if (layer.L) _xyz.map.removeLayer(layer.L);
-
   if (layer.L && layer.loaded) return;
 
   layer.loaded = true;
 
-  const source = new _xyz.mapview.lib.ol.source.VectorTile({
-    format: new _xyz.mapview.lib.ol.format.MVT({
-      //featureClass: _xyz.mapview.lib.ol.Feature
+  const source = new _xyz.mapview.lib.source.VectorTile({
+    format: new _xyz.mapview.lib.format.MVT({
+      //featureClass: _xyz.mapview.lib.Feature
     }),
     transition: 0,
     url: url
@@ -69,28 +66,28 @@ export default _xyz => layer => () => {
     if (layer.view.loader && layer.tilesLoaded === 0) layer.view.loader.style.display = 'none';
   });
 
-  layer.L = new _xyz.mapview.lib.ol.layer.VectorTile({
+  layer.L = new _xyz.mapview.lib.layer.VectorTile({
     source: source,
     zIndex: layer.style.zIndex || 1,
     style: feature => {
       const style = applyLayerStyle(feature);
 
-      return new _xyz.mapview.lib.ol.style.Style({
-        stroke: new _xyz.mapview.lib.ol.style.Stroke({
+      return new _xyz.mapview.lib.style.Style({
+        stroke: new _xyz.mapview.lib.style.Stroke({
           color: style.color,
           width: style.weight
         }),
-        fill: new _xyz.mapview.lib.ol.style.Fill({
+        fill: new _xyz.mapview.lib.style.Fill({
           color: _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity || 1, true)
         }),
         zIndex: style.zIndex,
-      // image: _xyz.mapview.lib.icon(params.style.icon),
-      // image: new _xyz.mapview.lib.ol.style.Circle({
+      // image: _xyz.mapview.icon(params.style.icon),
+      // image: new _xyz.mapview.lib.style.Circle({
       //   radius: 7,
-      //   fill: new _xyz.mapview.lib.ol.style.Fill({
+      //   fill: new _xyz.mapview.lib.style.Fill({
       //     color: 'rgba(0, 0, 0, 0.01)'
       //   }),
-      //   stroke: new _xyz.mapview.lib.ol.style.Stroke({
+      //   stroke: new _xyz.mapview.lib.style.Stroke({
       //     color: '#EE266D',
       //     width: 2
       //   })
@@ -104,51 +101,9 @@ export default _xyz => layer => () => {
   layer.L.set('layer',layer,true);
 
 
-  // if (layer.style.label && layer.style.label.display) {
-
-  //   if (layer.label) _xyz.map.removeLayer(layer.label);
-
-  //   layer.label = new _xyz.mapview.lib.ol.layer.VectorTile({
-  //     source: new _xyz.mapview.lib.ol.source.VectorTile({
-  //       format: new _xyz.mapview.lib.ol.format.MVT({
-  //         //featureClass: _xyz.mapview.lib.ol.Feature
-  //       }),
-  //       transition: 0,
-  //       url: url
-  //     }),
-  //     style: feature => {
-
-  //       const label = feature.get(layer.style.label.field);
-       
-  //       return new _xyz.mapview.lib.ol.style.Style({
-          
-  //         text: new _xyz.mapview.lib.ol.style.Text({
-  //           text: label,
-  //           size: '12px',
-  //           stroke: new _xyz.mapview.lib.ol.style.Stroke({
-  //             color: '#fff',
-  //             width: 3
-  //           }),
-  //         })
-  //       });
-
-  //     }
-  //   });
-
-  //   _xyz.map.addLayer(layer.label);
-
-  // }
-
-
   function applyLayerStyle(properties) {
 
     const highlighted = layer.highlight === properties.get('id');
-    
-    //layer.highlighted === properties.get('id');
-    //const selected = layer.selected.has(properties.get('id'));
-
-    //if (highlighted) console.log(layer.highlight);
-
 
 
     let style = Object.assign(
@@ -218,7 +173,7 @@ export default _xyz => layer => () => {
       layer: layer.key,
       table: layer.table,
       id: feature.get('id'),
-      marker: _xyz.mapview.lib.ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
+      marker: _xyz.mapview.lib.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
       edit: layer.edit
     });
 
