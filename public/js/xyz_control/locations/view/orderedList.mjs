@@ -3,10 +3,12 @@ export default _xyz => entry => {
   let td = _xyz.utils.createElement({
     tag: 'td',
     style: { 
-      paddingTop: '5px' 
+      paddingTop: '5px'
     },
     options: { 
-      colSpan: '2'    },
+      colSpan: '2',
+      classList: entry.class || ''    
+    },
     appendTo: entry.row
   });
 

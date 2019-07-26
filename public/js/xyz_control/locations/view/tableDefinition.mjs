@@ -6,7 +6,8 @@ export default _xyz => entry => {
       paddingTop: '5px'
     },
     options: { 
-      colSpan: '2'
+      colSpan: '2',
+      classList: entry.class || ''   
     },
     appendTo: entry.row
   });

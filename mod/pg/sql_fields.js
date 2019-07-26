@@ -7,6 +7,33 @@ module.exports = async (fields, infoj, qID) => {
 
     if (entry.withSelect) return;
 
+    if (entry.clusterArea) {
+
+      if (!qID
+        || !entry.field
+        || !entry.clusterArea.area
+        || !entry.clusterArea.cluster
+        || !entry.clusterArea.area_geom
+        || !entry.clusterArea.cluster_geom) return;
+
+      let q = `
+      (
+        SELECT b.${entry.fieldfx || entry.field}
+        FROM
+          ${entry.clusterArea.cluster} a,
+          ${entry.clusterArea.area} b
+        WHERE
+          a.${qID} = $1
+          AND
+          ${entry.clusterArea.condition || 'ST_INTERSECTS'}(
+            b.${entry.clusterArea.area_geom},
+            a.${entry.clusterArea.cluster_geom}
+          ) LIMIT 1
+      ) AS ${entry.field}`;
+        
+      return fields.push(q);
+    }
+
     if (entry.lookup) {
     
       if (!qID

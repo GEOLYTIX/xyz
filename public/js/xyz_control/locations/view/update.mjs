@@ -173,6 +173,9 @@ export default (_xyz, location) => () => {
       return location.view.dashboard(entry);   
     } 
 
+    // prevent clusterArea from firing if layer is not cluster
+    if(entry.clusterArea && _xyz.layers.list[location.layer].format !== 'cluster') return;
+
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();
 
