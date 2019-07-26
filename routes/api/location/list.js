@@ -44,12 +44,12 @@ module.exports = fastify => {
       let orderBy = [], 
           conditions = [], 
           lookup,
-          intersects;
+          id_lookup;
 
       
-      if(tableDef.rel_id) lookup = ` AND a.${layer.qID} = b.${tableDef.rel_id}`;
+      if(tableDef.rel_id) id_lookup = ` AND a.${layer.qID} = b.${tableDef.rel_id}`;
 
-      if(tableDef.lookup) intersects = `AND
+      if(tableDef.lookup) lookup = `AND
           ${tableDef.lookup.condition || 'ST_INTERSECTS'}(
             a.${tableDef.lookup.geom_a},
             b.${tableDef.lookup.geom_b}
@@ -73,8 +73,8 @@ module.exports = fastify => {
                 FROM ${req.query.table || layer.table} a, ${tableDef.table} b 
                 WHERE a.${layer.qID} = $1 
                 ${conditions.length ? ` AND ${conditions.join(',')}` : ''}
+                ${id_lookup || ''}
                 ${lookup || ''}
-                ${intersects || ''}
                 ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} NULLS LAST LIMIT ${tableDef.limit || 100};`;
 
       const rows = await env.dbs[layer.dbs](q, [req.query.id]);

@@ -3,8 +3,7 @@ export default _xyz => entry => {
   let td = _xyz.utils.createElement({
     tag: 'td',
     style: { 
-      paddingTop: '5px',
-      display: entry.target_id ? 'none': 'block' 
+      paddingTop: '5px' 
     },
     options: { 
       colSpan: '2'    },
