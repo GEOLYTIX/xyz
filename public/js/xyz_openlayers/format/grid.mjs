@@ -141,9 +141,9 @@ export default _xyz => layer => () => {
         layer.xhr.send();
   
       },
-      //strategy: _xyz.mapview.lib.loadingstrategy.bbox
       strategy: function(extent, resolution) {
   
+        // Required to fire the load event.
         if(this.resolution && this.resolution != resolution){
           this.loadedExtentsRtree_.clear();
         }
@@ -197,6 +197,6 @@ export default _xyz => layer => () => {
 
   _xyz.map.addLayer(layer.L);
 
-  layer.L.set('layer',layer,true);
+  layer.L.set('layer', layer, true);
   
 };

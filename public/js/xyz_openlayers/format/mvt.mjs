@@ -1,7 +1,7 @@
 export default _xyz => layer => () => {
 
   // Return if layer should not be displayed.
-  if (!layer.display) return;
+  if (!layer.display || layer.L) return;
 
   // Get table for the current zoom level.
   const tableZ = layer.tableCurrent();

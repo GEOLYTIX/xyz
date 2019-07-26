@@ -42,6 +42,11 @@ export default _xyz => layer => {
     layer.grid_ratio = layer.grid_ratio || false;
   }
 
+  if (layer.format === 'cluster') {
+    layer.highlight = true;
+    //layer.select = select(_xyz);
+  }
+
   layer.get = formats[layer.format](layer);
 
 };

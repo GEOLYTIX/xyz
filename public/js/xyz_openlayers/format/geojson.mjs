@@ -134,7 +134,7 @@ export default _xyz => layer => () => {
 
     _xyz.map.addLayer(layer.L);
 
-    layer.L.set('layer',layer,true);
+    layer.L.set('layer', layer, true);
            
     // Check whether layer.display has been set to false during the drawing process and remove layer from map if necessary.
     if (!layer.display) _xyz.map.removeLayer(layer.L);
