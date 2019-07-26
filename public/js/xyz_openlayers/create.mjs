@@ -71,7 +71,12 @@ export default _xyz => params => {
 
   // Reload layers on change event.
   Object.values(_xyz.layers.list).forEach(layer => {
-    if (layer.format === 'cluster' || layer.format === 'grid') _xyz.mapview.node.addEventListener('changeEnd', layer.get);
+    if (layer.format === 'cluster') _xyz.mapview.node.addEventListener('changeEnd', layer.get);
+    //if (layer.format === 'grid') _xyz.mapview.node.addEventListener('changeEnd', ()=>layer.L.getSource().refresh());
+    // if (layer.format === 'grid') _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+    //   layer.tableCurrent();
+    //   layer.L.getSource().refresh();
+    // });
   });
 
 

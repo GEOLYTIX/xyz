@@ -36,6 +36,12 @@ export default _xyz => layer => {
     layer.select = select(_xyz);
   }
 
+  if (layer.format === 'grid') {
+    layer.grid_size = layer.grid_size || Object.values(layer.grid_fields)[0];
+    layer.grid_color = layer.grid_color || Object.values(layer.grid_fields)[0];
+    layer.grid_ratio = layer.grid_ratio || false;
+  }
+
   layer.get = formats[layer.format](layer);
 
 };

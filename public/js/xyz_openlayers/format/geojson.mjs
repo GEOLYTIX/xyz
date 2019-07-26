@@ -39,6 +39,9 @@ export default _xyz => layer => () => {
   
   xhr.onload = e => {
 
+    // Hide loader.
+    if (layer.view.loader) layer.view.loader.style.display = 'none';
+
     // Remove layer from map if currently drawn.
     if (layer.L) _xyz.map.removeLayer(layer.L);
   
@@ -132,9 +135,6 @@ export default _xyz => layer => () => {
     _xyz.map.addLayer(layer.L);
 
     layer.L.set('layer',layer,true);
-
-    // Hide loader.
-    if (layer.view.loader) layer.view.loader.style.display = 'none';
            
     // Check whether layer.display has been set to false during the drawing process and remove layer from map if necessary.
     if (!layer.display) _xyz.map.removeLayer(layer.L);

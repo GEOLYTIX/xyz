@@ -5,6 +5,8 @@ import sourceOSM from 'ol/source/OSM';
 import sourceVectorTile from 'ol/source/VectorTile';
 import sourceVector from 'ol/source/Vector';
 
+import {bbox} from 'ol/loadingstrategy';
+
 import layerTile from 'ol/layer/Tile';
 import layerVectorTile from 'ol/layer/VectorTile';
 import layerVector from 'ol/layer/Vector';
@@ -93,6 +95,10 @@ export default _xyz => {
       OSM: sourceOSM,
       VectorTile: sourceVectorTile,
       Vector: sourceVector,
+    },
+
+    loadingstrategy: {
+      bbox: bbox
     },
   
     layer: {
