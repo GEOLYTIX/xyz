@@ -19,8 +19,8 @@ export default _xyz => function () {
     header(_xyz, layer);
        
     // Create layer loader and append to drawer (after the header).
-    view.loader = _xyz.utils.wire()`<div class="loader">`;
-    view.drawer.appendChild(view.loader);
+    //view.loader = _xyz.utils.wire()`<div class="loader">`;
+    view.drawer.appendChild(layer.loader);
 
     dashboard(_xyz, layer);
     

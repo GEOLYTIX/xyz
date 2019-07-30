@@ -8,13 +8,14 @@ export default _xyz => function () {
 
   if (layer.L) {
     _xyz.map.removeLayer(layer.L);
-    layer.L = null;
+    // layer.L.setVisible(false);
+    //layer.L = null;
   };
 
-  if (layer.label) {
-    _xyz.map.removeLayer(layer.label);
-    layer.label = null;
-  };
+  // if (layer.label) {
+  //   _xyz.map.removeLayer(layer.label);
+  //   layer.label = null;
+  // };
 
   if (layer.attribution) _xyz.mapview.attribution.remove(layer.attribution);
   

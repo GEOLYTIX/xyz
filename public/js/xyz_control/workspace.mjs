@@ -53,11 +53,8 @@ export default _xyz => {
     || (_xyz.hooks && _xyz.hooks.current.locale)
     || Object.keys(_xyz.workspace.locales)[0];
 
-    // Create locale object with key.
-    _xyz.workspace.locale = { key: locale };
-
     // Assigne workspace locales from locales list and input params.
-    Object.assign(_xyz.workspace.locale, _xyz.workspace.locales[locale]);
+    _xyz.workspace.locale = Object.assign({ key: locale }, _xyz.workspace.locales[locale]);
 
     // Create layers list.
     _xyz.layers.list = {};
@@ -65,7 +62,9 @@ export default _xyz => {
     // Load layers.
     Object.keys(_xyz.workspace.locale.layers)
       .filter(key => key.indexOf('__') === -1)
-      .forEach(key => _xyz.layers.list[key] = _xyz.layers.layer(_xyz.workspace.locale.layers[key]));
+      .forEach(key => {
+        _xyz.layers.list[key] = Object.assign({},_xyz.layers.layer(_xyz.workspace.locale.layers[key]));
+      });
 
   };
 

@@ -28,6 +28,8 @@ export default _xyz => layer => {
 
   layer.view = view(_xyz);
 
+  layer.loader = _xyz.utils.wire()`<div class="loader">`;
+
   // Set get and select methods.
   _xyz.layers.format(layer);
 

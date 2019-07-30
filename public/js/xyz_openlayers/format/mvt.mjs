@@ -1,24 +1,24 @@
-export default _xyz => layer => () => {
+export default _xyz => layer => {
 
-  // Return if layer should not be displayed.
-  if (!layer.display || layer.L) return;
+  // // Return if layer should not be displayed.
+  // if (!layer.display || layer.L) return;
 
-  // Get table for the current zoom level.
-  const tableZ = layer.tableCurrent();
+  // // Get table for the current zoom level.
+  // const tableZ = layer.tableCurrent();
 
-  if (!tableZ) {
+  // if (!tableZ) {
 
-    // Remove existing layer from map.
-    if (layer.L) _xyz.map.removeLayer(layer.L);  
+  //   // Remove existing layer from map.
+  //   if (layer.L) _xyz.map.removeLayer(layer.L);  
 
-    return;
-  }
+  //   return;
+  // }
 
-  // Return from layer.get() if table is the same as layer table
-  if (layer.table === tableZ && layer.L) return;
+  // // Return from layer.get() if table is the same as layer table
+  // if (layer.table === tableZ && layer.L) return;
 
-  // Set table to layer.table.
-  layer.table = tableZ;
+  // // Set table to layer.table.
+  // layer.table = tableZ;
 
   // Define source for mvt layer.
   const source = new _xyz.mapview.lib.source.VectorTile({
@@ -26,14 +26,36 @@ export default _xyz => layer => () => {
       //featureClass: _xyz.mapview.lib.Feature
     }),
     transition: 0,
-    url: _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
-      locale: _xyz.workspace.locale.key,
-      layer: layer.key,
-      table: layer.table,
-      properties: layer.properties,
-      filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
-      token: _xyz.token
-    })
+    tileUrlFunction: tileCoord => {
+
+      console.log(tileCoord);
+
+      const tableZ = layer.tableCurrent();
+
+      if (!tableZ) return;
+
+      const url = _xyz.host + '/api/layer/mvt/'+tileCoord[0]+'/'+tileCoord[1]+'/'+ String(-tileCoord[2] - 1) +'?' + _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: tableZ,
+        properties: layer.properties,
+        filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
+        token: _xyz.token
+      });
+
+      return url;
+
+
+
+    },
+    // url: _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
+    //   locale: _xyz.workspace.locale.key,
+    //   layer: layer.key,
+    //   table: layer.table,
+    //   properties: layer.properties,
+    //   filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
+    //   token: _xyz.token
+    // })
   });
 
   // Number of tiles currently loading.
@@ -43,14 +65,14 @@ export default _xyz => layer => () => {
   // Display loading indicator if it exists.
   source.on('tileloadstart', () => {
     tilesLoading++;
-    if (layer.view.loader) layer.view.loader.style.display = 'block';
+    if (layer.loader) layer.loader.style.display = 'block';
   });
   
   // Decrease the number of tiles loading at load end event.
   // Hide loading indicator if it exists.
   source.on('tileloadend', () => {
     tilesLoading--;
-    if (layer.view.loader && tilesLoading === 0) layer.view.loader.style.display = 'none';
+    if (layer.loader && tilesLoading === 0) layer.loader.style.display = 'none';
   });
 
   layer.L = new _xyz.mapview.lib.layer.VectorTile({
@@ -122,7 +144,7 @@ export default _xyz => layer => () => {
     }
   });
 
-  _xyz.map.addLayer(layer.L);
+  // _xyz.map.addLayer(layer.L);
 
   layer.L.set('layer', layer, true);
 

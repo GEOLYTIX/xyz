@@ -1,7 +1,7 @@
 export default _xyz => layer => () => {
 
   // Return if layer should not be displayed.
-  if (!layer.display) return;
+  // if (!layer.display) return;
 
   // Get table for the current zoom level.
   const tableZ = layer.tableCurrent();
@@ -132,12 +132,12 @@ export default _xyz => layer => () => {
       }
     });
 
-    _xyz.map.addLayer(layer.L);
+    // _xyz.map.addLayer(layer.L);
 
     layer.L.set('layer', layer, true);
            
     // Check whether layer.display has been set to false during the drawing process and remove layer from map if necessary.
-    if (!layer.display) _xyz.map.removeLayer(layer.L);
+    // if (!layer.display) _xyz.map.removeLayer(layer.L);
     
   };
       

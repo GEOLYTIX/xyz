@@ -1,7 +1,9 @@
 export default _xyz => layer => () => {
 
   // Return if layer should not be displayed.
-  if (!layer.display || layer.L) return;
+  // if (!layer.display) return;
+
+  //if (layer.L)  _xyz.map.removeLayer(layer.L);
 
   layer.L = new _xyz.mapview.lib.layer.Vector({
     source: new _xyz.mapview.lib.source.Vector({ 
@@ -195,7 +197,7 @@ export default _xyz => layer => () => {
     }
   });
 
-  _xyz.map.addLayer(layer.L);
+  //_xyz.map.addLayer(layer.L);
 
   layer.L.set('layer', layer, true);
   

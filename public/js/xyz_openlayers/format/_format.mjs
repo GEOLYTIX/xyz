@@ -10,6 +10,8 @@ import grid from './grid.mjs';
 
 import select from './select.mjs';
 
+import selectCluster from './selectCluster.mjs';
+
 export default _xyz => layer => {
 
   const formats = {
@@ -44,9 +46,10 @@ export default _xyz => layer => {
 
   if (layer.format === 'cluster') {
     layer.highlight = true;
-    //layer.select = select(_xyz);
+    layer.select = selectCluster(_xyz);
   }
 
-  layer.get = formats[layer.format](layer);
+  //layer.get = formats[layer.format](layer);
+  formats[layer.format](layer);
 
 };
