@@ -1,8 +1,5 @@
 export default _xyz => layer => {
 
-  // Return if layer exist or should not be displayed.
-  //if (!layer.display) return;
-
   // Augment request with token if proxied through backend.
   // Otherwise requests will be sent directly to the URI and may not pass through the XYZ backend.  
   const url = layer.URI.indexOf('provider') > 0 ?
@@ -36,8 +33,6 @@ export default _xyz => layer => {
   });
 
   layer.L = new _xyz.mapview.lib.layer.Tile({source: source});
-
-  //_xyz.map.addLayer(layer.L);
 
   layer.L.set('layer', layer, true);
 

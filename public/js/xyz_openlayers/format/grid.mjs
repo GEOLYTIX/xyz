@@ -1,9 +1,4 @@
-export default _xyz => layer => () => {
-
-  // Return if layer should not be displayed.
-  // if (!layer.display) return;
-
-  //if (layer.L)  _xyz.map.removeLayer(layer.L);
+export default _xyz => layer => {
 
   layer.L = new _xyz.mapview.lib.layer.Vector({
     source: new _xyz.mapview.lib.source.Vector({ 
@@ -15,9 +10,9 @@ export default _xyz => layer => () => {
   
         layer.L.getSource().clear();
   
-        layer.table = layer.tableCurrent();
-  
-        if (!layer.table) return;
+        const tableZ = layer.tableCurrent();
+
+        if (!tableZ) return;
   
         // Show loader.
         if (layer.view.loader) layer.view.loader.style.display = 'block';
@@ -27,7 +22,7 @@ export default _xyz => layer => () => {
         layer.xhr.open('GET', _xyz.host + '/api/layer/grid?' + _xyz.utils.paramString({
           locale: _xyz.workspace.locale.key,
           layer: layer.key,
-          table: layer.table,
+          table: tableZ,
           size: layer.grid_size,
           color: layer.grid_color,
           west: extent[0],
@@ -196,8 +191,6 @@ export default _xyz => layer => () => {
 
     }
   });
-
-  //_xyz.map.addLayer(layer.L);
 
   layer.L.set('layer', layer, true);
   

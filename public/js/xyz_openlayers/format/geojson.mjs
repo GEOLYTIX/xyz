@@ -1,4 +1,4 @@
-export default _xyz => layer => () => {
+export default _xyz => layer => {
 
   // Return if layer should not be displayed.
   // if (!layer.display) return;

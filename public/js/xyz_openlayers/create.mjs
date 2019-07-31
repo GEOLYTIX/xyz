@@ -145,13 +145,9 @@ export default _xyz => params => {
 
   Object.values(_xyz.layers.list).forEach(layer => {
 
-    // if (layer.display && layer.L) {
-    //   _xyz.map.addLayer(layer.L);
-    // }
+    //if (layer.display) _xyz.map.addLayer(layer.L);
 
-    if (layer.format === 'mvt') _xyz.mapview.node.addEventListener('changeEnd', () => layer.tableCurrent());
-
-    //console.log(layer);
+    if (layer.tables) _xyz.mapview.node.addEventListener('changeEnd', () => layer.tableCurrent());
 
   });
     

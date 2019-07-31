@@ -4,18 +4,12 @@ export default _xyz => function () {
 
   layer.display = true;
   layer.loaded = false;
-  //layer.get();
-
-
-  //console.log(layer.L.getVisible());
 
   _xyz.map.addLayer(layer.L);
 
-  // if (layer.L && !layer.L.getVisible()) {
-  //   _xyz.map.addLayer(layer.L);
-  //   layer.L.setVisible(true);
-  // }
-
+  if (layer.style && layer.style.label && layer.style.label.display) {
+    _xyz.map.addLayer(layer.label);
+  }
 
   _xyz.mapview.attribution.check();
 

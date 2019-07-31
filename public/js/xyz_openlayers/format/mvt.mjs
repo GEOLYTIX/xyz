@@ -1,25 +1,5 @@
 export default _xyz => layer => {
 
-  // // Return if layer should not be displayed.
-  // if (!layer.display || layer.L) return;
-
-  // // Get table for the current zoom level.
-  // const tableZ = layer.tableCurrent();
-
-  // if (!tableZ) {
-
-  //   // Remove existing layer from map.
-  //   if (layer.L) _xyz.map.removeLayer(layer.L);  
-
-  //   return;
-  // }
-
-  // // Return from layer.get() if table is the same as layer table
-  // if (layer.table === tableZ && layer.L) return;
-
-  // // Set table to layer.table.
-  // layer.table = tableZ;
-
   // Define source for mvt layer.
   const source = new _xyz.mapview.lib.source.VectorTile({
     format: new _xyz.mapview.lib.format.MVT({
@@ -27,8 +7,6 @@ export default _xyz => layer => {
     }),
     transition: 0,
     tileUrlFunction: tileCoord => {
-
-      console.log(tileCoord);
 
       const tableZ = layer.tableCurrent();
 
@@ -45,17 +23,7 @@ export default _xyz => layer => {
 
       return url;
 
-
-
-    },
-    // url: _xyz.host + '/api/layer/mvt/{z}/{x}/{y}?' + _xyz.utils.paramString({
-    //   locale: _xyz.workspace.locale.key,
-    //   layer: layer.key,
-    //   table: layer.table,
-    //   properties: layer.properties,
-    //   filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
-    //   token: _xyz.token
-    // })
+    }
   });
 
   // Number of tiles currently loading.
@@ -143,8 +111,6 @@ export default _xyz => layer => {
       });
     }
   });
-
-  // _xyz.map.addLayer(layer.L);
 
   layer.L.set('layer', layer, true);
 

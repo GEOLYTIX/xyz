@@ -1,7 +1,4 @@
-export default _xyz => layer => () => {
-
-  // Return if layer should not be displayed.
-  // if (!layer.display || layer.L) return;
+export default _xyz => layer => {
 
   layer.L = new _xyz.mapview.lib.layer.Vector({
     source: new _xyz.mapview.lib.source.Vector({
@@ -13,9 +10,9 @@ export default _xyz => layer => () => {
     
         layer.L.getSource().clear();
     
-        layer.table = layer.tableCurrent();
-    
-        if (!layer.table) return;
+        const tableZ = layer.tableCurrent();
+
+        if (!tableZ) return;
     
         // Show loader.
         if (layer.view.loader) layer.view.loader.style.display = 'block';
@@ -27,7 +24,7 @@ export default _xyz => layer => () => {
             _xyz.utils.paramString({
               locale: _xyz.workspace.locale.key,
               layer: layer.key,
-              table: layer.table,
+              table: tableZ,
               resolution: layer.cluster_resolution,
               kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
               dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
@@ -112,7 +109,7 @@ export default _xyz => layer => () => {
   
         Object.assign(
           marker,
-          theme.cat[properties.cat] || {}
+          theme.cat[properties.cat] ? theme.cat[properties.cat].style : {}
         );
       }
   
@@ -202,38 +199,29 @@ export default _xyz => layer => () => {
     }
   });
 
-  //_xyz.map.addLayer(layer.L);
-
   layer.L.set('layer', layer, true);
 
-  // if (layer.style.label && layer.style.label.display) {
-
-  //   layer.label = new _xyz.mapview.lib.layer.Vector({
-  //     source: sourceVector,
-  //     declutter: true,
-  //     zIndex: layer.style.zIndex || 1,
-  //     style: feature => {
+  layer.label = new _xyz.mapview.lib.layer.Vector({
+    source: layer.L.getSource(),
+    declutter: true,
+    zIndex: layer.style.zIndex || 1,
+    style: feature => {
   
-  //       const properties = feature.getProperties().properties;
+      const properties = feature.getProperties().properties;
        
-  //       return new _xyz.mapview.lib.style.Style({
+      return new _xyz.mapview.lib.style.Style({
             
-  //         text: new _xyz.mapview.lib.style.Text({
-  //           text: properties.label,
-  //           size: '12px',
-  //           stroke: new _xyz.mapview.lib.style.Stroke({
-  //             color: '#fff',
-  //             width: 3
-  //           }),
-  //         })
-  //       });
+        text: new _xyz.mapview.lib.style.Text({
+          text: properties.label,
+          size: '12px',
+          stroke: new _xyz.mapview.lib.style.Stroke({
+            color: '#fff',
+            width: 3
+          }),
+        })
+      });
   
-  //     }
-  //   });
-  
-  //   _xyz.map.addLayer(layer.label);
-
-  // }
-
+    }
+  });
 
 };
