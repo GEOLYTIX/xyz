@@ -55,7 +55,7 @@ async function view(req, res, token = { access: 'public' }) {
   //Build the template with jsrender and send to client.
   res.type('text/html').send(tmpl.render({
     dir: env.path,
-    host: `${env.http || 'https'}://${req.headers.host}${env.path || ''}`,
+    host: `${env.http || 'https'}://${req.req.hostname}${env.path || ''}`,
     token: req.query.token || token.signed || '""'
   }));
 
