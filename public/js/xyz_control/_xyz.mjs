@@ -1,5 +1,5 @@
 export default () => ({
-  version: 'XYZ v1.6.1',
+  version: 'XYZ v1.6.2',
   release: 'https://github.com/GEOLYTIX/xyz/releases/tag/v1.6.1',
   gazetteer: {},
   host: null,
