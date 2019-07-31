@@ -19,7 +19,7 @@ module.exports = fastify => {
           layer: { type: 'string' },
           tableDef: { type: 'string' },
           id: { type: 'string' },
-          filter: { type: 'string' },
+          filter: { type: 'string' }
         },
         required: ['locale', 'layer', 'tableDef', 'id']
       }
@@ -29,7 +29,7 @@ module.exports = fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
-      fastify.evalParam.tableDef,
+      fastify.evalParam.tableDef
     ],
     handler: async (req, res) => {
 
