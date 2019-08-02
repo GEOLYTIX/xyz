@@ -76,8 +76,6 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
           )
           ${typeof filter_sql !== 'undefined' ? filter_sql : ''}
       ) AS ${entry.field}`;
-
-      console.log(q);
        
       return fields.push(q);
     

@@ -76,12 +76,22 @@ module.exports = fastify => {
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
 
-      const fields = await sql_fields([], table.columns);
+      //const fields = await sql_fields([], table.columns);
+
+      const fields = [];
+
+      await table.columns.forEach(async col => {
+
+        if (col.lookup) return;
+
+        if (col.field) return fields.push(`${col.fieldfx || col.field} AS ${col.field}`);
+
+      });
       
       var q = `
         SELECT
           ${layer.qID} AS qID,
-          ${fields}
+          ${fields.join()}
         FROM ${table.from}
         ${viewport_sql}
         ${filter_sql}
