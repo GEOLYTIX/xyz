@@ -34,7 +34,7 @@ module.exports = fastify => {
 
   require('./location/list')(fastify);
 
-  require('./location/pgfunction')(fastify);
+  require('./location/pgFunction')(fastify);
 
   // location/edit
 
