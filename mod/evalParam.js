@@ -14,6 +14,7 @@ module.exports = {
   layerValues: _layerValues,
   tableDef: _tableDef,
   userSchemaField: _userSchemaField,
+  pgFunction: _pgFunction
 };
 
 function _token(req, res, next) {
@@ -164,6 +165,21 @@ function _tableDef(req, res, next) {
   if (!req.params.tableDef) {
     res.code(400);
     return next(new Error('Missing table definition.'));
+  }
+
+  next();
+
+};
+
+function _pgFunction(req, res, next) {
+
+  req.params.pgFunction = req.params.layer.infoj.find(
+    entry => entry.pgFunction === decodeURIComponent(req.query.pgFunction)
+  );
+
+  if (!req.params.pgFunction) {
+    res.code(400);
+    return next(new Error('Missing pgFunction definition.'));
   }
 
   next();

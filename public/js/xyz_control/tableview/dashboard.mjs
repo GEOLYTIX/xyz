@@ -40,16 +40,24 @@ export default _xyz => (entry, callback) => {
 
         if(!chartElem || !chartElem.style) return;
 
-        chartElem.style.minWidth = '450px';
-        chartElem.style.minHeight = '300px';
-        chartElem.style.maxWidth = '450px';
-        chartElem.style.maxHeight = '450px';
+        chartElem.style.minWidth = entry.group.chart.width ? `${entry.group.chart.width}px` : '450px';
+        chartElem.style.minHeight = entry.group.chart.height ? `${entry.group.chart.height}px` : '300px';
+        chartElem.style.maxWidth = entry.group.chart.width ? `${entry.group.chart.width}px` : '450px';
+        chartElem.style.maxHeight = entry.group.chart.height ? `${entry.group.chart.height}px` : '300px';
         
         flex_container.appendChild(chartElem);
 
       }
-    });
 
+      if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
+
+        _xyz.tableview.pgFunction({
+          entry: val, 
+          container: document.getElementById(val.target_id) || flex_container
+        });
+      
+      }
+    });
   };
 
   entry.activate = () => {
