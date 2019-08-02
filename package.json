@@ -25,6 +25,7 @@
     "@turf/turf": "^5.1.6",
     "bcrypt-nodejs": "0.0.3",
     "chart.js": "^2.7.3",
+    "chartjs-plugin-datalabels": "^0.6.0",
     "d3": "^5.9.2",
     "dotenv": "^8.0.0",
     "fastify": "^2.0.0",

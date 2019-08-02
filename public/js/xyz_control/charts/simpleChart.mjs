@@ -10,14 +10,14 @@ export default _xyz => entry => {
 	const canvas = _xyz.utils.createElement({
 		tag: 'canvas',
 		options: {
-			height: entry.chart.height || undefined
+			height: `${entry.chart.height}px` || undefined
 		},
 		appendTo: graph
 	});
 
 	const datasets = [];
 
-	let labels = entry.fields.map(field => field.label); // get labels
+	let labels = entry.fields.map(field => { return entry.chart.x ? String(field[entry.chart.x]) : field.label; }); // get labels
 
 	labels = labels.filter((item, idx) => { return labels.indexOf(item) >= idx; }); // remove duplicates
     
@@ -26,18 +26,53 @@ export default _xyz => entry => {
     // strip off duplicates and nulls
 	series = series.filter((item, idx) => { return !!item && series.indexOf(item) >= idx; });
 
+
 	if(!series.length) { // process one dataset
 
 		datasets[0] = {
-			label: entry.label,
+			label: entry.label || entry.dashboard,
 			backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
 			borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
 			spanGaps: true,
-			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value))
+			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : entry.chart.y ? field[entry.chart.y] : field.value))
 		};
+
+        // sets offset
+        if(entry.chart.offsetX) {
+
+            entry.chart.raw_data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : entry.chart.y ? field[entry.chart.y] : field.value));
+
+            datasets[0].data = entry.chart.raw_data.map(d => { return d + entry.chart.offsetX });
+        }
+
+        // sets negative color
+        if(entry.chart.negativeBackgroundColor || entry.chart.negativeBorderColor){
+            let bgColors = [], bdColors = [];
+            datasets[0].data.map(d => {
+                d > 0 ? bgColors.push(entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor) : bgColors.push(entry.chart.negativeBackgroundColor || _xyz.charts.fallbackStyle.borderColor);
+                d > 0 ? bdColors.push(entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor) : bdColors.push(entry.chart.negativeBackgroundColor || _xyz.charts.fallbackStyle.borderColor);
+            });
+
+            datasets[0].backgroundColor = bgColors;
+            datasets[0].borderColor = bdColors;
+        }
+
+        // sets datalabels and applies offset back
+        if(entry.chart.datalabels){
+            datasets[0].datalabels = {
+                align: "right",
+                anchor: "end",
+                formatter: (item, data) => { // uses raw data in labelling
+                    if(!entry.chart.raw_data) return;
+                    let idx = data.dataIndex;
+                    return entry.chart.raw_data[idx];
+                }
+            };
+        }
+
 	} 
 
-	else { // process multiple series
+	else { 
 
 		const tmp = {};
 
@@ -56,12 +91,19 @@ export default _xyz => entry => {
 		});
 
 		Object.values(entry.fields).map(field => {
-			tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.value);
+			//tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.value);
+            tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.y ? field[entry.chart.y] : field.value);
             tmp[(field.dataset)].type = field.chartType || (entry.chart.type || 'line');
 		});
 
 		Object.values(tmp).forEach(val => datasets.push(val));
 	}
+
+    const title = {
+        display: entry.chart.title || false,
+        position: 'bottom',
+        text: entry.label
+    };
 
     new _xyz.Chart(canvas, {
     	type: entry.chart.type,
@@ -70,11 +112,8 @@ export default _xyz => entry => {
     		datasets: datasets
     	},
     	options: {
-    		title: {
-    			display: entry.chart.title || false,
-    			position: 'bottom',
-    			text: entry.label
-    		},
+            layout: entry.chart.layout ? entry.chart.layout : null,
+    		title: (entry.chart.title && typeof(entry.chart.title) === 'object' ? entry.chart.title : title),
     		responsive: true,
     		legend: {
     			display: entry.chart.legend,
@@ -85,6 +124,9 @@ export default _xyz => entry => {
     		},
     		scales: {
     			yAxes: [{
+                    gridlines: {
+                        display: true
+                    },
     				ticks: {
     					beginAtZero: entry.chart.beginAtZero || false,
     					callback: (label, index, labels) => {
@@ -95,18 +137,28 @@ export default _xyz => entry => {
     					display: (entry.chart.unit ? true : false),
     					labelString: (entry.chart.unit ? _xyz.charts.scale(entry) : false)
     				}
-    			}]
+    			}],
+                xAxes: [{
+                    ticks: {
+                        display: entry.chart.hideTicksX ? false : null
+                    }
+                }]
     		},
     		tooltips: {
     			mode: 'index',
     			xAlign: entry.chart.xAlign || null,
     			yAlign: entry.chart.yAlign || null,
     			callbacks: {
-    				title: () => ''
+    				title: () => '',
+                    label: item => {
+                        if(!entry.chart.offsetX) return;
+                        return `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}`;
+                    }
     			}
     		}
     	}
     });
+
 
     return graph;
 
