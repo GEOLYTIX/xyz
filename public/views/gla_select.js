@@ -21,9 +21,7 @@ let record = records[0];
 
 function gla_select(_xyz, location) {
 
-  // Image should only be displayed prior to the first select;
-  document.getElementById('titleImg').style.display = 'none';
-  
+ 
   // Find the oldest (first) entry and remove exsiting location;
   if (records.some(rec => {
 

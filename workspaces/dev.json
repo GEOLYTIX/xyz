@@ -301,32 +301,6 @@
                         }
                     }
                 },
-                "Jack Wolfskin": {
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "dev.jack_wolfskin",
-                    "cluster_label": "city",
-                    "qID": "id",
-                    "infoj": [
-                        {
-                            "label": "City",
-                            "field": "city",
-                            "type": "text"
-                        },
-                        {
-                            "label": "Store",
-                            "field": "store",
-                            "fieldfx": "store ->> 'name'",
-                            "type": "text"
-                        },
-                        {
-                            "label": "JSON",
-                            "field": "store_json",
-                            "fieldfx": "store::text",
-                            "type": "text"
-                        }
-                    ]
-                },
                 "Mapbox Label": {
                     "group": "Base Layer",
                     "format": "tiles",

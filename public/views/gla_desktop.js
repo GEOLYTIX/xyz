@@ -12,24 +12,26 @@ _xyz({
       }
     });
   
-    _xyz.locations.select = location => gla_select(_xyz, location);
+    _xyz.locations.select = location => {
+
+      for (const filter of filters) {
+        filter.classList.remove('expanded');
+        filter.querySelector('i').textContent = 'expand_more';
+      }
+
+      gla_select(_xyz, location);
+    };
   
     const layer = _xyz.layers.list['Advice Center'];
-  
-    layer.filter.current = {};
-  
+   
     const table = _xyz.tableview.layerTable({
       layer: layer,
       target: document.getElementById('List'),
       key: 'gla',
       visible: ['organisation_short'],
-      groupBy: 'borough',
       initialSort: [
         {
           column: 'organisation_short', dir: 'asc'
-        },
-        {
-          column: 'borough', dir: 'asc'
         }
       ],
       groupStartOpen: false,
@@ -45,101 +47,166 @@ _xyz({
       }
     });
 
+    setBoroughFilter();
 
-    layer.filter.current['borough'] = { in: [] };
- 
-    document.getElementById('select-borough').appendChild(
-      _xyz.utils.dropdownCustom({
-        placeholder: 'Filter by borough',
-        entries: [
-          'Barking and Dagenham',
-          'Barnet',
-          'Bexley',
-          'Brent',
-          'Bromley',
-          'Camden',
-          'City of London',
-          'Croydon',
-          'Ealing',
-          'Enfield',
-          'Greenwich',
-          'Hackney',
-          'Hammersmith and Fulham',
-          'Haringey',
-          'Harrow',
-          'Havering',
-          'Hillingdon',
-          'Hounslow',
-          'Islington',
-          'Kensington and Chelsea',
-          'Kingston upon Thames',
-          'Lambeth',
-          'Lewisham',
-          'Merton',
-          'Newham',
-          'Redbridge',
-          'Richmond-upon-Thames',
-          'Southwark',
-          'Sutton',
-          'Tower Hamlets',
-          'Wandsworth',
-          'Westminster'
-        ],
-        callback: e => {
-          e.stopPropagation();
-                
-          if (e.target.classList.contains('selected')) {
+    layer.filter.current = { borough : { in: [] } };
 
-          // Add value to filter array.
-            layer.filter.current['borough'].in.push(e.target.dataset.field);
-                
-          } else {
+    function setBoroughFilter() {
 
-          // Get index of value in filter array.
-            let idx = layer.filter.current['borough']['in'].indexOf(e.target.dataset.field);
+      document.getElementById('filterBorough').innerHTML = '';
 
-            // Splice filter array on idx.
-            layer.filter.current['borough'].in.splice(idx, 1);
-
-          }
+      const boroughs = [
+        'Barking and Dagenham',
+        'Barnet',
+        'Bexley',
+        'Brent',
+        'Bromley',
+        'Camden',
+        'City of London',
+        'Croydon',
+        'Ealing',
+        'Enfield',
+        'Greenwich',
+        'Hackney',
+        'Hammersmith and Fulham',
+        'Haringey',
+        'Harrow',
+        'Havering',
+        'Hillingdon',
+        'Hounslow',
+        'Islington',
+        'Kensington and Chelsea',
+        'Kingston upon Thames',
+        'Lambeth',
+        'Lewisham',
+        'Merton',
+        'Newham',
+        'Redbridge',
+        'Richmond-upon-Thames',
+        'Southwark',
+        'Sutton',
+        'Tower Hamlets',
+        'Wandsworth',
+        'Westminster'
+      ];
   
-          layer.zoomToExtent();
-          table.update();
-        }
-      })
-    );
-
-
-    document.getElementById('select-advice').appendChild(
-      _xyz.utils.dropdownCustom({
-        placeholder: 'Filter by service',
-        entries: [
-          { 'service_initial_advice': 'Initial Advice' },
-          { 'service_written_advice': 'Written Advice' },
-          { 'service_form_filling': 'Form Filling' },
-          { 'service_case_work': 'Casework' },
-          { 'service_representation': 'Representation' }
-        ],
-        callback: (e) => {
-
-          e.stopPropagation();
-                
-          if (e.target.classList.contains('selected')) {
-
-            layer.filter.current[e.target.dataset.field] = {};
-            layer.filter.current[e.target.dataset.field]['boolean'] = true;
-                
-          } else {
-
-            delete layer.filter.current[e.target.dataset.field];
-          }
+      boroughs.forEach(borough => {
   
-          layer.zoomToExtent();
-          table.update();
-        }
-      })
-    );
+        document.getElementById('filterBorough').appendChild(_xyz.utils.wire()`
+        <label class="checkbox">${borough}
+        <input type="checkbox"
+          onchange=${e => {
+  
+    e.stopPropagation();
+                  
+    if (e.target.checked) {
+  
+      // Add value to filter array.
+      layer.filter.current['borough'].in.push(borough);
+                  
+    } else {
+  
+      // Get index of value in filter array.
+      let idx = layer.filter.current['borough']['in'].indexOf(borough);
+  
+      // Splice filter array on idx.
+      layer.filter.current['borough'].in.splice(idx, 1);
+  
+    }
+    
+    layer.zoomToExtent();
+    table.update();
+  
+  
+  }}>
+        <div class="checkbox_i">`);
+      });
+  
+    }
 
+    setServiceFilter();
+
+    function setServiceFilter() {
+
+      document.getElementById('filterServices').innerHTML = '';
+
+      const services = [
+        ['service_initial_advice', 'Initial Advice' ],
+        ['service_written_advice', 'Written Advice' ],
+        ['service_form_filling', 'Form Filling' ],
+        ['service_case_work', 'Casework' ],
+        ['service_representation', 'Representation' ]
+      ];
+  
+      services.forEach(service => {
+  
+        document.getElementById('filterServices').appendChild(_xyz.utils.wire()`
+        <label class="checkbox">${service[1]}
+        <input type="checkbox"
+          onchange=${e => {
+  
+    e.stopPropagation();
+                  
+    if (e.target.checked) {
+  
+      layer.filter.current[service[0]] = {};
+      layer.filter.current[service[0]]['boolean'] = true;
+                  
+    } else {
+  
+      delete layer.filter.current[service[0]];
+  
+    }
+    
+    layer.zoomToExtent();
+    table.update();
+  
+  
+  }}>
+        <div class="checkbox_i">`);
+      });
+
+    }
+
+
+    const filters = document.querySelectorAll('.filter');
+    for (const filter of filters) {
+      filter.onclick = function(){
+
+        if (this.classList.contains('expanded')) {
+
+          this.classList.remove('expanded');
+          this.querySelector('i').textContent = 'expand_more';
+
+        } else {
+
+          this.classList.add('expanded');
+          this.querySelector('i').textContent = 'expand_less';
+
+        }
+
+      };
+    }
+
+
+
+    document.getElementById('resetFilter').onclick = function(){
+
+      layer.filter.current = { borough : { in: [] } };
+
+      for (const filter of filters) {
+        filter.classList.remove('expanded');
+        filter.querySelector('i').textContent = 'expand_more';
+      }
+
+      setBoroughFilter();
+
+      setServiceFilter();
+
+      layer.zoomToExtent();
+      table.update();
+
+    };
   
 
     // Gazetteer

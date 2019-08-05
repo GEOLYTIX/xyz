@@ -18,8 +18,16 @@
     <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/gla/master/desktop.js&type=application/javascript" defer></script> -->
 
     <style>
+        * {
+            font-family: arial;
+        }
+        
         #pink {
             background-color: #EE266D;
+        }
+
+        #burgundy {
+            background-color: #9E0059;
         }
 
         #cyan {
@@ -35,15 +43,17 @@
         }
 
         .pink-box {
-            background-color: #EE266D;
-            color: #fff;
+            background-color: #fff;
+            color: #9E0059;
             padding: 10px;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
         }
 
         .text-box {
+            background-color: #fff;
             padding: 10px;
+            font-size: 18px;
             font-weight: bold;
         }
 
@@ -56,7 +66,7 @@
         }
 
         .btn.active {
-            background-color: #EE266D;
+            background-color: #9E0059;
         }
 
         .darkish {
@@ -71,11 +81,11 @@
 
         .pink-bg {
             color: #fff;
-            background-color: #EE266D;
+            background-color: #9E0059;
         }
 
         .pink-br {
-            border: 3px solid #EE266D;
+            border: 3px solid #9E0059;
         }
 
         #postcode-search input {
@@ -97,18 +107,19 @@
         }
 
         .location a {
-            color: #EE266D;
+            color: #9E0059;
         }
 
         .location .title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             text-align: center;
+            color: #9E0059;
         }
 
         .location .title-btn {
             font-size: 30px;
-            color: #EE266D;
+            color: #9E0059;
             font-weight: bold;
         }
 
@@ -151,34 +162,49 @@
             font-weight: bold;
         }
 
-        .ul-drop {
-            color: #fff;
-            background-color: #222;
+
+
+
+        .filterHead {
+            position: relative;
+            color: #9E0059;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+            padding: 5px 0;
+            font-weight: bold;
         }
 
-        .ul-drop>.head:after {
-            border-color: #fff transparent transparent transparent;
+        .filterHead:hover {
+            cursor: pointer;
         }
 
-        .ul-drop.active>.head:after {
-            border-color: transparent transparent #fff transparent;
+        .filterHead > i {
+            position: absolute;
+            right: 0;
         }
 
-        .ul-drop>ul {
-            background-color: #222;
+        .expanded .filterList {
+            height: auto !important;
         }
 
-        .ul-drop>ul>li:hover {
-            background-color: #00AEEF;
+        .expanded .filterList {
+            height: auto !important;
         }
 
-        .ul-drop>ul>li.selected {
-            background-color: #008D48;
+        .filterList > div {
+            color: #333;
+            font-weight: 400;
         }
 
-        .ul-drop>ul>li.selected:hover {
-            background-color: #E85713;
+        .filterList .checkbox_i {
+            color: #333;
         }
+
+        .filterList .checkbox {
+            padding: 1px 0 5px 25px;
+        }
+
+
 
         /* LIST */
         .tabulator {
@@ -195,14 +221,17 @@
 
         .tabulator .tabulator-tableHolder .tabulator-table {
             width: 100%;
+            padding: 0 10px;
         }
 
         .tabulator-row {
             min-height: 0px;
+            color: rgb(158, 0, 89);
+            font-size: 18px;
         }
 
         .tabulator-row.tabulator-selectable:hover {
-            background-color: rgba(0, 153, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.1);
         }
 
         .tabulator-row .tabulator-responsive-collapse {
@@ -233,12 +262,25 @@
         min-width: 768px;
         color: #FFF;
         background-color: #353D42;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: bold;
         white-space: nowrap;
         line-height: 3;
         text-align: center;">
         MAYOR OF LONDON
+    </div>
+
+    <div
+    style="
+        min-width: 768px;
+        max-width: 1024px;
+        margin: auto;
+        color: #9E0059;
+        padding: 10px;
+        font-size: 32px;
+        font-weight: bold;
+        background-color: #F5F5F5;">
+            Employment rights advice near you
     </div>
 
     <div style="
@@ -254,7 +296,7 @@
         <div style="grid-column: 1;">
 
             <div class="pink-box">
-                Employment rights advice near you
+                Find
             </div>
 
             <div class="text-box">
@@ -282,12 +324,36 @@
 
             </div>
 
+            <div class="pink-box">
+                    Filter
+            </div>
+
+            <div style="
+            background-color: #fff;
+            padding: 10px;">
+
+            <div class="filter">
+                <div class="filterHead">Borough<i class="material-icons">expand_more</i></div>
+                <div class="filterList" id="filterBorough" style="height: 0; overflow: hidden;"></div>
+            </div>
+            <div class="filter">
+                <div class="filterHead">Service Offered <i class="material-icons">expand_more</i></div>
+                <div class="filterList" id="filterServices" style="height: 0; overflow: hidden;"></div>
+            </div>
+            <div id="resetFilter"
+            class="btn"
+            style="
+            margin-top: 10px;
+            display: inline-block;
+            background-color: #9E0059;
+            color: #fff;
+            margin-top: 10px;">
+                Reset
+            </div>
+
+            </div>
+
             <div id="locationView" style="background-color: #fff; padding: 10px;">
-                <div id="titleImg" style="
-                    height: 300px;
-                    background-image: url(https://res.cloudinary.com/geolytix/image/upload/v1557337040/gla/signs.png);
-                    background-size: cover;">
-                </div>
             </div>
 
         </div>
@@ -299,7 +365,7 @@
                     <a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a>;
                     <a target="_blank" href="https://leafletjs.com/">Leaflet</a>;
                     <a target="_blank" href="https://www.mapbox.com">© Mapbox</a>;
-                    <a target="_blank" href="https://www.openstreetmap.org/copyright">© Open Streetmap</a>
+                    <a target="_blank" href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a>
                 </div>
             </div>
 
@@ -308,21 +374,7 @@
             </div>
 
             <div class="text-box">
-                Click on a borough in the list below or use the filters to see all the centres in the area that give
-                advice on employment rights, then click on the name of a centre to see the details.
-            </div>
-
-            <div style="
-                display: grid;
-                grid-gap: 10px;
-                grid-template-columns: 1fr 1fr;
-                padding: 10px;
-                background-color: #fff;">
-
-                <div id="select-borough" style="grid-column: 1"></div>
-
-                <div id="select-advice" style="grid-column: 2"></div>
-
+                Click on an advice centre in the last below to see details like when it opens and how to get in touch with them.
             </div>
 
             <div id="List" style="background-color: #fff;"></div>
