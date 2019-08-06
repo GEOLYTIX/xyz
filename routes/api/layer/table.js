@@ -76,13 +76,24 @@ module.exports = fastify => {
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
 
-      //const fields = await sql_fields([], table.columns);
-
       const fields = [];
+
+      const laterals = [];
 
       await table.columns.forEach(async col => {
 
-        if (col.lookup) return;
+        if (col.lateral) {
+
+          fields.push(`${col.field}.${col.field} AS ${col.field}`);
+
+          laterals.push(`
+          LEFT JOIN LATERAL (
+            SELECT ${col.lateral.select} AS ${col.field}
+            FROM ${col.lateral.from}
+            WHERE ${col.lateral.where}) ${col.field} ON true`);
+
+          return;
+        }
 
         if (col.field) return fields.push(`${col.fieldfx || col.field} AS ${col.field}`);
 
@@ -92,7 +103,10 @@ module.exports = fastify => {
         SELECT
           ${layer.qID} AS qID,
           ${fields.join()}
-        FROM ${table.from}
+        FROM
+          ${table.from}
+          ${laterals.join(' ')}
+
         ${viewport_sql}
         ${filter_sql}
         ORDER BY ${orderby} ${order}
