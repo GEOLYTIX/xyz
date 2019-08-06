@@ -14,11 +14,12 @@ import locations from '../xyz_control/locations/_locations.mjs';
 
 import geom from '../xyz_control/geom/_geom.mjs';
 
+import tableview from '../xyz_control/tableview/_tableview.mjs';
+
 import mapview from './_mapview.mjs';
 
-import format from './format/_format.mjs';
+import format from './layer/_format.mjs';
 
-import tableview from '../xyz_control/tableview/_tableview.mjs';
 
 async function _xyz(params) {
     
@@ -30,7 +31,7 @@ async function _xyz(params) {
 
   _xyz.layers = layers(_xyz);
 
-  _xyz.layers.format = format(_xyz);
+  Object.assign(_xyz.layers, {format: format(_xyz)});
 
   _xyz.locations = locations(_xyz);
 

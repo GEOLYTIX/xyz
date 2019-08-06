@@ -20,7 +20,9 @@ export default _xyz => {
   function position() {
 
     this.node.style.opacity = 1;
+
     this.node.style.left = (_xyz.mapview.pointerLocation.x - (this.node.offsetWidth / 2)) + 'px';
+    
     this.node.style.top = (_xyz.mapview.pointerLocation.y - 15 - this.node.offsetHeight) + 'px';
   }
 

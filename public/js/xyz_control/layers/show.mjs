@@ -3,7 +3,6 @@ export default _xyz => function () {
   const layer = this;
 
   layer.display = true;
-  layer.loaded = false;
 
   _xyz.map.addLayer(layer.L);
 

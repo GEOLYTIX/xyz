@@ -37,7 +37,6 @@ export default (_xyz, record) => {
 
           _xyz.map.removeLayer(layer.L);
 
-          layer.loaded = false;
           layer.get();
 
           record.drawer.remove();

@@ -45,7 +45,6 @@ export default _xyz => layer => {
     
         if (e.target.status !== 200) return;
                   
-        layer.loaded = false;
         layer.get();
                   
         // Select polygon when post request returned 200.

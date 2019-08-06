@@ -51,75 +51,75 @@ import btn from './btn.mjs';
 
 export default _xyz => {
 
-  const lib = {
-
-    Map: Map,
-
-    View: View,
-
-    Feature: Feature,
-
-    Overlay: Overlay,
-
-    control: {
-      ScaleLine: ScaleLine,
-    },
-
-    interaction: {
-      defaults: defaults,
-      Pointer: Pointer,
-      Select: Select,
-    },
-
-    events: {
-      click: click,
-    },
-
-    proj: {
-      transform: transform,
-      transformExtent: transformExtent,
-      fromLonLat: fromLonLat,
-    },
-
-    geom: {
-      Point: Point,
-      Polygon: Polygon,
-    },
-
-    format: {
-      MVT: formatMVT,
-      GeoJSON: formatGeoJSON,
-    },
-  
-    source: {
-      OSM: sourceOSM,
-      VectorTile: sourceVectorTile,
-      Vector: sourceVector,
-    },
-
-    loadingstrategy: {
-      bbox: bbox
-    },
-  
-    layer: {
-      Tile: layerTile,
-      VectorTile: layerVectorTile,
-      Vector: layerVector,
-    },
-  
-    style: {
-      Style: Style,
-      Fill: Fill,
-      Stroke: Stroke,
-      Circle: Circle,
-      Icon: Icon,
-      Text: Text,
-    },
-
-  };
-
   _xyz.mapview = {
-    lib: lib
+
+    lib: {
+
+      Map: Map,
+  
+      View: View,
+  
+      Feature: Feature,
+  
+      Overlay: Overlay,
+  
+      control: {
+        ScaleLine: ScaleLine,
+      },
+  
+      interaction: {
+        defaults: defaults,
+        Pointer: Pointer,
+        Select: Select,
+      },
+  
+      events: {
+        click: click,
+      },
+  
+      proj: {
+        transform: transform,
+        transformExtent: transformExtent,
+        fromLonLat: fromLonLat,
+      },
+  
+      geom: {
+        Point: Point,
+        Polygon: Polygon,
+      },
+  
+      format: {
+        MVT: formatMVT,
+        GeoJSON: formatGeoJSON,
+      },
+    
+      source: {
+        OSM: sourceOSM,
+        VectorTile: sourceVectorTile,
+        Vector: sourceVector,
+      },
+  
+      loadingstrategy: {
+        bbox: bbox
+      },
+    
+      layer: {
+        Tile: layerTile,
+        VectorTile: layerVectorTile,
+        Vector: layerVector,
+      },
+    
+      style: {
+        Style: Style,
+        Fill: Fill,
+        Stroke: Stroke,
+        Circle: Circle,
+        Icon: Icon,
+        Text: Text,
+      },
+  
+    }
+
   };
 
   Object.assign(_xyz.mapview, {
@@ -140,9 +140,7 @@ export default _xyz => {
   
     clearHighlight: clearHighlight(_xyz),
   
-    popup: {
-      create: popup(_xyz)
-    },
+    popup: popup(_xyz),
   
     infotip: infotip(_xyz),
 
@@ -160,7 +158,7 @@ export default _xyz => {
       return _xyz.map.getView().getZoom();
     },
   
-    btn: btn(_xyz),
+    btn: btn(_xyz)
 
   });
 

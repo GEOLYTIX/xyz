@@ -3,8 +3,6 @@ export default _xyz => layer => () => {
   // Return if layer should not be displayed.
   if (!layer.display) return ;//layer.remove();
 
-  if (layer.loaded) return;
-
   layer.xhr = new XMLHttpRequest();   
   
   // Create filter from legend and current filter.
@@ -34,8 +32,6 @@ export default _xyz => layer => () => {
         
     // Create feature collection for vector features.
     const features = e.target.response;
-
-    layer.loaded = true;
 
     // Create cat array for graduated theme.
     if (layer.style.theme) layer.style.theme.cat_arr = Object.entries(layer.style.theme.cat);

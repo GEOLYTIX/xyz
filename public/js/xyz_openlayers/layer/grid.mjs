@@ -1,5 +1,13 @@
 export default _xyz => layer => {
 
+  layer.grid_size = layer.grid_size || Object.values(layer.grid_fields)[0];
+
+  layer.grid_color = layer.grid_color || Object.values(layer.grid_fields)[0];
+
+  layer.grid_ratio = layer.grid_ratio || false;
+
+
+
   layer.L = new _xyz.mapview.lib.layer.Vector({
     source: new _xyz.mapview.lib.source.Vector({ 
       loader: function (extent, resolution, projection) {

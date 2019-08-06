@@ -40,7 +40,6 @@ export default (_xyz, layer) => {
     checked=${!!layer.style.label.display}
     onchange=${e => {
     layer.style.label.display = e.target.checked;
-    layer.loaded = false;
     layer.show();}}>
     <div class="checkbox_i">`);
   }
@@ -64,9 +63,7 @@ export default (_xyz, layer) => {
     
         // Set layer theme from themes object.
         layer.style.theme = themes[e.target.value];
-    
-        layer.loaded = false;
-    
+      
         applyTheme(layer);
     
         layer.get();

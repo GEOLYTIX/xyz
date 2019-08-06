@@ -14,7 +14,6 @@ export default _xyz => {
         
       panes.list.push(_xyz.map.createPane(layer.key));
       _xyz.map.getPane(layer.key).style.zIndex = panes.next++;
-      layer.loaded = false;
       layer.get();
     });
                 

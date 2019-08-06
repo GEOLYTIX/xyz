@@ -1,5 +1,17 @@
+import select from './select.mjs';
+
+import infotip from './infotip.mjs';
+
 export default _xyz => layer => {
+
+  layer.highlight = true;
+
+  layer.select = select(_xyz);
+
+  layer.infotip = infotip(_xyz);
+
  
+  
   layer.L = new _xyz.mapview.lib.layer.Vector({
     source: new _xyz.mapview.lib.source.Vector({
       loader: function() {

@@ -46,7 +46,6 @@ export default _xyz => layer => {
           layer.filter.legend[layer.style.theme.field].ni.push(cat[0]);
         }
       
-        layer.loaded = false;
         layer.get();
       });
       
@@ -84,7 +83,6 @@ export default _xyz => layer => {
           layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
         }
       
-        layer.loaded = false;
         layer.get();
       });
       

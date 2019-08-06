@@ -2,10 +2,6 @@ export default _xyz => layer => () => {
 
   if (!layer.display) return;//layer.remove();
 
-  // Return from layer get once added to map.
-  if (layer.loaded) return;
-
-  layer.loaded = true;
 
   if (layer.L) return;
 

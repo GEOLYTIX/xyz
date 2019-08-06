@@ -1,6 +1,21 @@
+import select from './selectCluster.mjs';
+
+import infotip from './infotip.mjs';
+
+import label from './clusterLabel.mjs';
+
 export default _xyz => layer => {
 
+  layer.highlight = true;
+
+  layer.select = select(_xyz);
+
+  layer.infotip = infotip(_xyz);
+
+  
+  
   layer.L = new _xyz.mapview.lib.layer.Vector({
+    layer: layer,
     source: new _xyz.mapview.lib.source.Vector({
       loader: function (extent, resolution, projection) {
   
@@ -199,29 +214,6 @@ export default _xyz => layer => {
     }
   });
 
-  layer.L.set('layer', layer, true);
-
-  layer.label = new _xyz.mapview.lib.layer.Vector({
-    source: layer.L.getSource(),
-    declutter: true,
-    zIndex: layer.style.zIndex || 1,
-    style: feature => {
-  
-      const properties = feature.getProperties().properties;
-       
-      return new _xyz.mapview.lib.style.Style({
-            
-        text: new _xyz.mapview.lib.style.Text({
-          text: properties.label,
-          size: '12px',
-          stroke: new _xyz.mapview.lib.style.Stroke({
-            color: '#fff',
-            width: 3
-          }),
-        })
-      });
-  
-    }
-  });
+  layer.label = label(_xyz, layer);
 
 };

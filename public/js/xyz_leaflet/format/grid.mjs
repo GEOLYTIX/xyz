@@ -16,11 +16,9 @@ export default _xyz => layer => () => {
   // Return if layer should not be displayed.
   if (!layer.display) return ;//layer.remove();
 
-  if (!table) return layer.loaded = false;
-
   // Return from layer.get() if table is the same as layer table
   // AND the layer is already loaded.
-  if (layer.table === table && layer.loaded) return;
+  if (layer.table === table) return;
 
   // Set table to layer.table.
   layer.table = table;

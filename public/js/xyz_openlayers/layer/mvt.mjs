@@ -1,4 +1,16 @@
+import select from './select.mjs';
+
+import infotip from './infotip.mjs';
+
 export default _xyz => layer => {
+
+  layer.highlight = true;
+
+  layer.select = select(_xyz);
+
+  layer.infotip = infotip(_xyz);
+
+
 
   // Define source for mvt layer.
   const source = new _xyz.mapview.lib.source.VectorTile({

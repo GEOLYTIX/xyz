@@ -63,7 +63,6 @@ export default _xyz => layer => {
                 
     xhr.onload = e => {
 
-      layer.loaded = false;
       layer.get();
                 
       if (e.target.status !== 200) return;

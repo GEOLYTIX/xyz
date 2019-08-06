@@ -11,12 +11,12 @@ export default _xyz => layer => () => {
     // Remove existing layer from map.
     if (layer.L) _xyz.map.removeLayer(layer.L);  
 
-    return layer.loaded = false;
+    return;
   }
 
   // Return from layer.get() if table is the same as layer table
   // AND the layer is already loaded.
-  if (layer.table === table && layer.loaded) return;
+  if (layer.table === table) return;
 
   // Set table to layer.table.
   layer.table = table;
@@ -62,8 +62,6 @@ export default _xyz => layer => () => {
     .on('load', () => {
      
       if (layer.view.loader)  layer.view.loader.style.display = 'none';
-
-      layer.loaded = true;
 
     })
     .on('click', e => {

@@ -1,5 +1,7 @@
 export default _xyz => function (e, feature) {
 
+  const layer = this;
+  
   let
     count = feature.get('properties').count,
     geom = feature.getGeometry(),

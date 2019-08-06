@@ -1,12 +1,15 @@
 export default _xyz => function(e) {
 
+  const pixel = _xyz.map.getEventPixel(e);
+
   _xyz.mapview.pointerLocation = {
-    x: e.originalEvent.clientX,
-    y: e.originalEvent.clientY
+    x: e.clientX,
+    y: e.clientY
   };
 
   // Get features from layers which have a highlight style.
-  const featureArray = _xyz.map.getFeaturesAtPixel(e.pixel,{
+  const featureArray = _xyz.map.getFeaturesAtPixel(pixel,{
+
     // Filter for layers which have a highlight style.
     layerFilter: featureLayer => {
       return Object.values(_xyz.layers.list).some(layer => {
@@ -32,7 +35,7 @@ export default _xyz => function(e) {
   _xyz.mapview.clearHighlight();
 
   // Iterate through all features (with layer) at pixel
-  _xyz.map.forEachFeatureAtPixel(e.pixel, (feature, featureLayer) => {
+  _xyz.map.forEachFeatureAtPixel(pixel, (feature, featureLayer) => {
 
     if (feature === featureArray[0]) {
 
@@ -47,33 +50,7 @@ export default _xyz => function(e) {
 
       if (_xyz.mapview.highlight.layer.hover && _xyz.mapview.highlight.layer.hover.field) {
 
-        const xhr = new XMLHttpRequest();
-
-        xhr.open(
-          'GET',
-          _xyz.host +
-              '/api/location/field?' +
-              _xyz.utils.paramString({
-                locale: _xyz.workspace.locale.key,
-                layer: _xyz.mapview.highlight.layer.key,
-                table: _xyz.mapview.highlight.layer.table,
-                id: _xyz.mapview.highlight.layer.highlight,
-                field: _xyz.mapview.highlight.layer.hover.field,
-                token: _xyz.token
-              }));
-        
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType = 'json';
-        
-        xhr.onload = e => {
-
-          if (e.target.status !== 200) return;
-        
-          _xyz.mapview.infotip.create(e.target.response.field);
-        
-        };
-        
-        xhr.send();
+        _xyz.mapview.highlight.layer.infotip();
 
       }
 

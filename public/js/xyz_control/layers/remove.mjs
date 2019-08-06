@@ -4,8 +4,6 @@ export default _xyz => function () {
 
   layer.display = false;
 
-  layer.loaded = false;
-
   if (layer.L) {
     _xyz.map.removeLayer(layer.L);
     // layer.L.setVisible(false);

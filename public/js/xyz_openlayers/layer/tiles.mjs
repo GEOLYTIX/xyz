@@ -32,8 +32,9 @@ export default _xyz => layer => {
     if (layer.view.loader && tilesLoading === 0) layer.view.loader.style.display = 'none';
   });
 
-  layer.L = new _xyz.mapview.lib.layer.Tile({source: source});
-
-  layer.L.set('layer', layer, true);
+  layer.L = new _xyz.mapview.lib.layer.Tile({
+    source: source,
+    layer: layer
+  });
 
 };
