@@ -2,6 +2,8 @@ export default _xyz => (e, layer) => {
 
   if(!layer.edit || !layer.edit.polygon) return;
 
+  if(_xyz.mapview.state !== 'select') return;
+
   _xyz.geom.contextmenu.close();
 
   _xyz.geom.contextmenu.create(e, {
@@ -26,8 +28,6 @@ export default _xyz => (e, layer) => {
     requestGeoJSON(makeEdits);
         
     function makeEdits(_e){
-
-          if(_xyz.state !== 'select') return;
 
         	_xyz.mapview.state = 'edit';
 
