@@ -735,7 +735,7 @@ input[type=range]::-moz-range-thumb {
   position: relative;
   cursor: pointer;
   display: block;
-  width: 90%; }
+  /*width: 90%;*/ }
   .checkbox input[type=checkbox] {
     position: absolute;
     opacity: 0;

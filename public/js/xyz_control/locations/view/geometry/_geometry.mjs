@@ -25,7 +25,7 @@ export default _xyz => entry => {
   );
 
   let td = _xyz.utils.wire()`
-  <td style="paddingTop: 5px; position: relative;" colSpan=2>`;
+  <td style="padding-top: 5px; position: relative;" colSpan=2>`;
 
   entry.row.appendChild(td);
 
@@ -63,7 +63,7 @@ export default _xyz => entry => {
 
 
   td.appendChild(_xyz.utils.wire()`
-  <td style="paddingTop: 5px;" colSpan=2>
+  <td style="padding-top: 5px;" colSpan=2>
   <label class="checkbox">${entry.name || 'Additional geometries'}
   <input type="checkbox"
     disabled=${(entry.display && entry.edit)}
