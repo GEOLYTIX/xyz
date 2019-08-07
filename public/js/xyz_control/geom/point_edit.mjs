@@ -78,6 +78,9 @@ export default _xyz => (e, layer) => {
         _xyz.mapview.state = 'edit';
 
         _xyz.map.once('contextmenu', ev => {
+
+          if(_xyz.state !== 'select') return;
+
           _xyz.geom.contextmenu.close();
 
           _xyz.geom.contextmenu.create(ev, {
