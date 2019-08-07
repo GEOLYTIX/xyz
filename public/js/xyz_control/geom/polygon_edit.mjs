@@ -27,6 +27,8 @@ export default _xyz => (e, layer) => {
         
     function makeEdits(_e){
 
+          if(_xyz.state !== 'select') return;
+
         	_xyz.mapview.state = 'edit';
 
         	layer.edit.trail = _xyz.L.featureGroup()
