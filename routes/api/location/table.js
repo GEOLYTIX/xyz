@@ -116,9 +116,6 @@ module.exports = fastify => {
         SELECT ${lines.join(',')}
         FROM ${col_alias.join(',')};`;
 
-        console.log(q);
-        console.log(req.query.id);
-
       const rows = await env.dbs[layer.dbs](q, [req.query.id]);
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
       res.code(200).send(rows);
