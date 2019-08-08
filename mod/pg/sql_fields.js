@@ -2,7 +2,7 @@ const sql_filter = require('./sql_filter');
 
 module.exports = async (fields, infoj, qID, roles, locale) => {
 
-  // Iterate through infoj and push individual entries into fields array.
+  // Iterate through infoj and push individual entries into fields array
   await infoj.forEach(async entry => {
 
     if (entry.columns) return;
@@ -46,6 +46,8 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
         || !entry.lookup.geom_b) return;
 
       let filter = {};
+
+      if(!roles) return;
 
       await roles.forEach(async role => {
 
