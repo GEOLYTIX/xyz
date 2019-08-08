@@ -2,7 +2,7 @@ export default _xyz => {
 
   const defaultCallback = location => {
 
-    if (_xyz.locations.listview.records) return _xyz.locations.listview.addRecord(location);
+    //if (_xyz.locations.listview.records) return _xyz.locations.listview.addRecord(location);
 
     // Make the location current.
     // To be removed when a new location is selected.
@@ -22,8 +22,8 @@ export default _xyz => {
     if(!_xyz.mapview.popup) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
   
     // Create mapview popup with the locations view node.
-    _xyz.mapview.popup({
-      latlng: [location.marker[1], location.marker[0]],
+    _xyz.mapview.popup.create({
+      xy: location.marker, //_xyz.mapview.lib.proj.transform(location.marker, 'EPSG:4326', 'EPSG:3857'),
       content: location.view.node
     });
 

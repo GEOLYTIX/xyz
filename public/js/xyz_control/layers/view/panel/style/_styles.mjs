@@ -97,9 +97,9 @@ export default (_xyz, layer) => {
   
       if (layer.style.markerMulti) clusterStyle(_xyz, layer, layer.style.markerMulti, 'Marker (multi)');
   
-      if (layer.style.default) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
+      if (layer.style.default && !layer.style.default.marker) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
   
-      if (layer.style.highlight) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
+      if (layer.style.highlight && !layer.style.highlight.marker) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
 
       return;
     }

@@ -47,6 +47,25 @@ function init(_xyz) {
 
   if (_xyz.log) console.log(_xyz);
 
+  // const getCircularReplacer = () => {
+  //   const seen = new WeakSet();
+  //   return (key, value) => {
+  //     if (typeof value === 'object' && value !== null) {
+  //       if (seen.has(value)) {
+  //         return;
+  //       }
+  //       seen.add(value);
+  //     }
+  //     return value;
+  //   };
+  // };
+  
+  // const noncircular = JSON.stringify(_xyz, getCircularReplacer());
+
+  // const noncircularJSON =   JSON.parse(noncircular);
+
+  // console.log(noncircularJSON);
+
   //logRocket(document.body.dataset.logrocket);
 
 }

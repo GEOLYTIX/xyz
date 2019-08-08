@@ -52,7 +52,7 @@ export default _xyz => params => {
   _xyz.map.on('click', _xyz.mapview.select);
 
   //_xyz.map.on('pointermove', _xyz.mapview.pointerMove);
-  _xyz.mapview.node.onmousemove = _xyz.mapview.pointerMove;
+  _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.pointerMove);
   
 
   _xyz.mapview.node.addEventListener('mouseout', ()=>{
@@ -101,7 +101,7 @@ export default _xyz => params => {
       }),
       style: new _xyz.mapview.lib.style.Style({
         fill: new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.hexToRGBA('#000000', 0.2, true)
+          color: _xyz.utils.chroma('#000').alpha(0.2).rgba()
         })
       }),
       zIndex: 999

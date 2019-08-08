@@ -10,15 +10,18 @@ import gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
 
 import layers from '../xyz_control/layers/_layers.mjs';
 
+import format from './layer/_format.mjs';
+
 import locations from '../xyz_control/locations/_locations.mjs';
 
 import geom from '../xyz_control/geom/_geom.mjs';
 
 import tableview from '../xyz_control/tableview/_tableview.mjs';
 
-import mapview from './_mapview.mjs';
+import lib from './lib.mjs';
 
-import format from './layer/_format.mjs';
+import mapview from './mapview.mjs';
+
 
 
 async function _xyz(params) {
@@ -27,11 +30,11 @@ async function _xyz(params) {
 
   _xyz.utils = utils;
 
-  mapview(_xyz);
+  _xyz.mapview = { lib: lib() };
 
-  _xyz.layers = layers(_xyz);
+  Object.assign(_xyz.mapview, mapview(_xyz));
 
-  Object.assign(_xyz.layers, {format: format(_xyz)});
+  _xyz.layers = Object.assign({}, layers(_xyz), {format: format(_xyz)});
 
   _xyz.locations = locations(_xyz);
 

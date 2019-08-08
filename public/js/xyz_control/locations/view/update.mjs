@@ -100,7 +100,7 @@ export default (_xyz, location) => () => {
         style: {
           fontSize: '12px',
           padding: '3px',
-          backgroundColor: _xyz.utils.hexToRGBA(location.style.color, 0.3),
+          backgroundColor: _xyz.utils.chroma(location.style.color).alpha(0.3).rgba(),
           borderRadius: '2px',
           cursor: 'help',
           float: 'right'

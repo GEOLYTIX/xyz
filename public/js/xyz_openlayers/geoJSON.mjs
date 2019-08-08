@@ -32,7 +32,7 @@ export default _xyz => function (params){
           width: 2
         }),
         fill: new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.hexToRGBA(params.style.color, params.style.fillOpacity || 1, true)
+          color: _xyz.utils.chroma(params.style.color).alpha(params.style.fillOpacity === 0 ? 0 : parseFloat(params.style.fillOpacity) || 1).rgba()
         }),
         image: _xyz.mapview.icon(params.style.icon),
         // image: new _xyz.mapview.lib.style.Circle({
@@ -51,9 +51,12 @@ export default _xyz => function (params){
   const feature = geoJSON.readFeature({
     type: 'Feature',
     geometry: params.json.geometry
+  },{ 
+    dataProjection: `EPSG:${params.dataProjection}`,
+    featureProjection:`EPSG:${params.featureProjection}`
   });
 
-  feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+  //feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
   sourceVector.addFeature(feature);
 

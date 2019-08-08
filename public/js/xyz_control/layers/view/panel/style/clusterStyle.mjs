@@ -53,7 +53,7 @@ export default (_xyz, layer, style, title) => {
       classList: 'sample-circle'
     },
     style: {
-      'backgroundColor': _xyz.utils.hexToRGBA(style.fillColor, 1)
+      'backgroundColor': _xyz.utils.chroma(style.fillColor).alpha(1).rgba()
     },
     appendTo: block._
   });
@@ -94,7 +94,7 @@ export default (_xyz, layer, style, title) => {
 
           style[block.colorSelect] = colour.hex;
 
-          block.sample.style.backgroundColor = _xyz.utils.hexToRGBA(style.fillColor, 1);
+          block.sample.style.backgroundColor = _xyz.utils.chroma(style.fillColor).alpha(1).rgba();
 
           block.colour_swatch.style.display = 'none';
 

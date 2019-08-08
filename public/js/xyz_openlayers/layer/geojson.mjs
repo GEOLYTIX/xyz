@@ -137,7 +137,7 @@ export default _xyz => layer => {
           width: style.weight
         }),
         fill: new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity || 1, true)
+          color: _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba()
         }),
         zIndex: style.zIndex,
         image: style.marker && _xyz.mapview.icon({url: _xyz.utils.svg_symbols(style.marker)})

@@ -31,7 +31,6 @@ export default _xyz => layer => {
   layer.loader = _xyz.utils.wire()`<div class="loader">`;
 
   _xyz.layers.format[layer.format](layer);
-
   
   // Set the first theme from themes array.
   if (layer.style && layer.style.themes) layer.style.theme = layer.style.themes[Object.keys(layer.style.themes)[0]];

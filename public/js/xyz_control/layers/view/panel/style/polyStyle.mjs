@@ -85,7 +85,7 @@ export default (_xyz, layer, style, title) => {
       classList: 'sample-poly'
     },
     style: {
-      'backgroundColor': _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity),
+      'backgroundColor': _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba(),
       'border': style.weight + 'px solid ' + style.color
     },
     appendTo: block._
@@ -122,7 +122,7 @@ export default (_xyz, layer, style, title) => {
 
           style[block.colorSelect] = colour.hex;
 
-          block.sample_poly.style.backgroundColor = _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity);
+          block.sample_poly.style.backgroundColor = _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba();
 
           block.sample_poly.style.border = style.weight + 'px solid ' + style.color;
 
@@ -193,7 +193,7 @@ export default (_xyz, layer, style, title) => {
       style.fillOpacity = e.target.value;
 
       // Set input value and apply filter.
-      block.sample_poly.style.backgroundColor = _xyz.utils.hexToRGBA(style.fillColor, style.fillOpacity);
+      block.sample_poly.style.backgroundColor = _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba();
 
       clearTimeout(timeout);
       timeout = setTimeout(() => {

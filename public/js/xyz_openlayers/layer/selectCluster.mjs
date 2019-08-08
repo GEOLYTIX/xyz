@@ -49,7 +49,7 @@ export default _xyz => function (e, feature) {
       });
 
       _xyz.mapview.popup.create({
-        coords: coords,
+        xy: coords,
         content: ul
       });
 

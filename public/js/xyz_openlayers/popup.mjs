@@ -8,8 +8,8 @@ export default _xyz => {
 
     this.node = _xyz.utils.wire()`<div class="popup">`;
   
-    this.node.onmousemove = e => e.stopPropagation();
-    
+    this.node.addEventListener('mousemove', e => e.stopPropagation());
+        
     this.node.appendChild(params.content);
   
     this.overlay = new _xyz.mapview.lib.Overlay({
@@ -24,7 +24,7 @@ export default _xyz => {
   
     _xyz.map.addOverlay(this.overlay);
   
-    this.overlay.setPosition(params.coords);
+    this.overlay.setPosition(params.xy);
   };
 
 };

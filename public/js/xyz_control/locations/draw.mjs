@@ -13,6 +13,10 @@ export default _xyz => function (style) {
     },
     pane: (style && style.pane) || 'select',
     style: style || location.style,
+    dataProjection: _xyz.layers.list[location.layer].srid,
+    featureProjection: '3857'
   });
+
+  //_xyz.map.addLayer(location.Layer);
 
 };

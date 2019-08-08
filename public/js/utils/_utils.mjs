@@ -6,8 +6,6 @@ export {debounce} from './debounce.mjs';
 
 export {paramString} from './paramString.mjs';
 
-export {rgbToHex} from './rgbToHex.mjs';
-
 export {toggleExpanderParent} from './toggleExpanderParent.mjs';
 
 export {scrolly} from './scrolly.mjs';
@@ -23,8 +21,6 @@ export {slider} from './slider.mjs';
 export {dropdown} from './dropdown.mjs';
 
 export {dropdownCustom} from './dropdownCustom.mjs';
-
-export {hexToRGBA} from './hexToRGBA.mjs';
 
 export {dataURLtoBlob} from './dataURLtoBlob.mjs';
 
@@ -57,6 +53,8 @@ import explode from '@turf/explode';
 import area from '@turf/area';
 
 import length from '@turf/length';
+
+export {default as chroma} from 'chroma-js';
 
 export const turf = {
   pointOnFeature: pointOnFeature,
