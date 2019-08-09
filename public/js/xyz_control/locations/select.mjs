@@ -11,10 +11,9 @@ export default _xyz => location => {
     if (_record.stamp <= record.stamp) record = _record;
 
     // Remove the location from record if it matches the current location.
-    if (_record.loc && _record.loc.hook === location.hook) {
+    if (_record.location && _record.location.hook === location.hook) {
 
-      _record.loc.remove();
-      _record.loc = null;
+      _record.location.remove();
       _record.stamp = 0;
 
       // Return from select by returning true to some array method.
@@ -24,17 +23,18 @@ export default _xyz => location => {
   })) return;
 
   // Remove an existing location from record.
-  if (record.loc) {
+  if (record.location) {
 
-    record.loc.remove();
-    record.loc = null;
+    record.location.remove();
   }
 
   // Set record style to location.
   location.style = record.style;
 
   // Assign location to record.
-  record.loc = location;
+  record.location = location;
+
+  record.location.record = record;
 
   // Set new stamp on record.
   record.stamp = parseInt(Date.now());
@@ -83,6 +83,8 @@ export default _xyz => location => {
 
     // Create an alert with the locations infoj if mapview popup is not defined.
     if (!_xyz.mapview.popup) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
+
+    if (_xyz.locations.listview.node) return _xyz.locations.listview.add(location);
 
     // Create mapview popup with the locations view node.
     _xyz.mapview.popup.create({

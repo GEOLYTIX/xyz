@@ -45,6 +45,22 @@ function init(_xyz) {
 
   if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
 
+
+  // Select locations from hooks.
+  if (_xyz.hooks) _xyz.hooks.current.locations.forEach(_hook => {
+  
+    let hook = _hook.split('!');
+    
+    _xyz.locations.select({
+      locale: _xyz.workspace.locale.key,
+      layer: decodeURIComponent(hook[0]),
+      table: hook[1],
+      id: hook[2]
+    });
+          
+  });
+
+
   if (_xyz.log) console.log(_xyz);
 
   // const getCircularReplacer = () => {

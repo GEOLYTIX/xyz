@@ -32,13 +32,10 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
   
         if (e.target.status !== 200) return;
     
-        const record = _xyz.locations.listview.getFreeRecord();
-    
-        if (!record) return;
-    
+   
         const json = JSON.parse(e.target.response);
        
-        const location = _xyz.locations.location({
+        const location = _xyz.locations.decorate({
           geometry: JSON.parse(json.geomj),
           infoj: json.infoj,
           layer: layer.key,

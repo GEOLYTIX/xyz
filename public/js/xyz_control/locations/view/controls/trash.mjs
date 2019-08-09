@@ -46,7 +46,9 @@ export default (_xyz, record) => {
             `${record.location.layer}!${record.location.table}!${record.location.id}`
           );
 
-          record.location.remove();
+          location.remove();
+
+          location = null;
 
           delete record.location;
 

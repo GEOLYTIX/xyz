@@ -1,8 +1,17 @@
-export default _xyz => function () {
+export default _xyz => function() {
 
   const location = this;
 
   if (_xyz.hooks) _xyz.hooks.filter('locations', location.hook);
+
+
+  if (location.view.drawer) location.view.drawer.remove();
+
+
+  if (_xyz.locations.listview.node
+    && _xyz.locations.listview.node.childElementCount === 0) {
+    _xyz.locations.listview.node.parentElement.style.display = 'none';
+  }
 
 
   // Clear geometries and delete location to free up record.
@@ -17,5 +26,9 @@ export default _xyz => function () {
   // location.tables.forEach(
   //   table => _xyz.tableview.removeTab(table)
   // );
+
+  //location = null;
+
+  location.record.location = null;
     
 };

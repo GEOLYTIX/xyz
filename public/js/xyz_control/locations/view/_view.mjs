@@ -26,6 +26,9 @@ import update from './update.mjs';
 
 import boolean from './boolean.mjs';
 
+
+
+
 export default _xyz => function () {
 
   const location = this;
@@ -65,5 +68,67 @@ export default _xyz => function () {
   location.view = view;
 
   location.view.update();
+
+  // Create drawer element to contain the header with controls and the infoj table with inputs.
+  location.view.drawer = _xyz.utils.wire()`<div class="drawer expandable expanded">`;
+  
+
+  // Create the header element to contain the control elements
+  location.view.header = _xyz.utils.createElement({
+    tag: 'div',
+    options: {
+      textContent: 'foo', //record.letter,
+      className: 'header pane_shadow'
+    },
+    style: {
+      borderBottom: '2px solid ' + location.style.color //record.color
+    },
+    appendTo: location.view.drawer,
+    eventListener: {
+      event: 'click',
+      funct: () => {
+        _xyz.utils.toggleExpanderParent({
+          expandable: location.view.drawer,
+          accordeon: true,
+          scrolly: _xyz.desktop && _xyz.desktop.listviews,
+        });
+      }
+    }
+  });
+
+  location.view.header.appendChild(_xyz.utils.wire()`
+  <i
+  style = "${'color: ' + location.style.color}"
+  title = "Remove feature from selection"
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${e => {
+    e.stopPropagation();
+    location.remove();
+  }}>clear`);
+  
+  // Create copy to clipboard element
+  //clipboard(_xyz, location);
+  
+  // Create the zoom control element which zoom the map to the bounds of the feature.
+  //zoom(_xyz, location);
+  
+  // Create control to toggle marker.
+  //marker(_xyz, location);
+  
+  // Create control to update editable items.
+  // Update button will be invisible unless info has changed.
+  //update(_xyz, location);
+  
+  // Create control to trash editable items.
+  //trash(_xyz, location);
+  
+  // Create the expand control element which controls whether the data table is displayed for the feature.
+  //expander(_xyz, location);
+
+  // Add location view to drawer.
+  location.view.drawer.appendChild(location.view.node);
+
+
+
 
 };
