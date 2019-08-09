@@ -1,4 +1,4 @@
-import location from './location.mjs';
+import decorate from './decorate.mjs';
 
 import select from './select.mjs';
 
@@ -8,7 +8,16 @@ export default _xyz => ({
 
   select: select(_xyz),
 
-  location: location(_xyz),
+  decorate: decorate(_xyz),
+
+  list: [
+    {
+      style: {
+        color: _xyz.utils.chroma('hotpink')
+      },
+      stamp: parseInt(Date.now()),
+    }
+  ],
 
   listview: listview(_xyz),
 
