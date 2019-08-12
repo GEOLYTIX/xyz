@@ -85,7 +85,7 @@ export default (_xyz, layer, style, title) => {
       classList: 'sample-poly'
     },
     style: {
-      'backgroundColor': _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba(),
+      'backgroundColor': _xyz.utils.chroma(style.fillColor || '#fff').alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba(),
       'border': style.weight + 'px solid ' + style.color
     },
     appendTo: block._

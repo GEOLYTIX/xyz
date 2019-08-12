@@ -43,7 +43,6 @@ export default _xyz => function (e, feature) {
           table: layer.table,
           id: li.id,
           marker: li.lnglat,
-          edit: layer.edit
         })}>${li.label}`);
 
       });
@@ -63,7 +62,6 @@ export default _xyz => function (e, feature) {
       table: layer.table,
       id: cluster[0].id,
       marker: cluster[0].lnglat,
-      edit: layer.edit
     });
 
   };

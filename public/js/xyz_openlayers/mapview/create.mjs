@@ -123,16 +123,36 @@ export default _xyz => params => {
   }
   
   // Set hooks on changeevent.
-  if (_xyz.hooks) _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+  if (_xyz.hooks) {
 
-    const center = _xyz.mapview.lib.proj.transform(_xyz.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
-  
-    _xyz.hooks.set({
-      lat: center[1],
-      lng: center[0],
-      z: _xyz.map.getView().getZoom()
+    if (_xyz.hooks.current.layers.length > 0) Object.values(_xyz.layers.list).forEach(layer => {
+
+      layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
+
     });
-  });
+
+    _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+
+      const center = _xyz.mapview.lib.proj.transform(_xyz.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
+  
+      _xyz.hooks.set({
+        lat: center[1],
+        lng: center[0],
+        z: _xyz.map.getView().getZoom()
+      });
+    });
+
+  } else {
+
+    Object.values(_xyz.layers.list).forEach(layer => {
+
+      if (layer.display) layer.show();
+
+    //if (layer.tables) _xyz.mapview.node.addEventListener('changeEnd', () => layer.tableCurrent());
+
+    });
+  
+  }
 
   // Wire buttons to params targets.
   if (params.btn) {
@@ -143,14 +163,5 @@ export default _xyz => params => {
   
     if (params.btn.Locate) _xyz.mapview.btn._Locate(params.btn.Locate);
   }
-
-
-  Object.values(_xyz.layers.list).forEach(layer => {
-
-    //if (layer.display) _xyz.map.addLayer(layer.L);
-
-    if (layer.tables) _xyz.mapview.node.addEventListener('changeEnd', () => layer.tableCurrent());
-
-  });
     
 };

@@ -10,74 +10,81 @@ export default _xyz => layer => {
 
   layer.infotip = infotip(_xyz);
 
+  layer.reload = () => {
+
+    source.refresh();
+
+  };
+
  
+  const source = new _xyz.mapview.lib.source.Vector({
+    loader: function() {
+
+      if (layer.xhr) layer.xhr.abort();
+      
+      source.clear();
+  
+      const tableZ = layer.tableCurrent();
+
+      if (!tableZ) return;
+  
+      // Show loader.
+      if (layer.view.loader) layer.view.loader.style.display = 'block';
+  
+      layer.xhr = new XMLHttpRequest();   
+      
+      layer.xhr.open('GET', _xyz.host + '/api/layer/geojson?' + _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: tableZ,
+        cat: layer.style.theme && layer.style.theme.field,
+        filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
+        token: _xyz.token
+      }));
+
+      layer.xhr.setRequestHeader('Content-Type', 'application/json');
+      layer.xhr.responseType = 'json';
+
+      layer.xhr.onload = e => {
+
+        // Hide loader.
+        if (layer.view.loader) layer.view.loader.style.display = 'none';
+
+        if (e.target.status !== 200) return;
+
+        const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
+
+        const features = e.target.response.map(f => geoJSON.readFeature({
+          type: 'Feature',
+          geometry: f.geometry,
+          properties: {
+            id: f.properties.id
+          }
+        },{ 
+          dataProjection: `EPSG:${layer.srid}`,
+          featureProjection:'EPSG:3857'
+        }));
+
+        source.addFeatures(features);
+
+      };
+
+      layer.xhr.send();
+
+    },
+    strategy: function(extent, resolution) {
+
+      // Required to fire the load event.
+      if(this.resolution && this.resolution != resolution){
+        this.loadedExtentsRtree_.clear();
+      }
+  
+      return [_xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+layer.srid)];
+    }
+  });
   
   layer.L = new _xyz.mapview.lib.layer.Vector({
-    source: new _xyz.mapview.lib.source.Vector({
-      loader: function() {
-
-        if (layer.xhr) layer.xhr.abort();
-        
-        layer.L.getSource().clear();
-    
-        const tableZ = layer.tableCurrent();
-
-        if (!tableZ) return;
-    
-        // Show loader.
-        if (layer.view.loader) layer.view.loader.style.display = 'block';
-    
-        layer.xhr = new XMLHttpRequest();   
-        
-        layer.xhr.open('GET', _xyz.host + '/api/layer/geojson?' + _xyz.utils.paramString({
-          locale: _xyz.workspace.locale.key,
-          layer: layer.key,
-          table: tableZ,
-          cat: layer.style.theme && layer.style.theme.field,
-          filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
-          token: _xyz.token
-        }));
-  
-        layer.xhr.setRequestHeader('Content-Type', 'application/json');
-        layer.xhr.responseType = 'json';
-  
-        layer.xhr.onload = e => {
-
-          // Hide loader.
-          if (layer.view.loader) layer.view.loader.style.display = 'none';
-  
-          if (e.target.status !== 200) return;
-
-          const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
-
-          const features = e.target.response.map(f => geoJSON.readFeature({
-            type: 'Feature',
-            geometry: f.geometry,
-            properties: {
-              id: f.properties.id
-            }
-          },{ 
-            dataProjection: `EPSG:${layer.srid}`,
-            featureProjection:'EPSG:3857'
-          }));
-
-          layer.L.getSource().addFeatures(features);
-
-        };
-
-        layer.xhr.send();
-
-      },
-      strategy: function(extent, resolution) {
-  
-        // Required to fire the load event.
-        if(this.resolution && this.resolution != resolution){
-          this.loadedExtentsRtree_.clear();
-        }
-    
-        return [_xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+layer.srid)];
-      }
-    }),
+    source: source,
     zIndex: layer.style.zIndex || 1,
     style: feature => {
 

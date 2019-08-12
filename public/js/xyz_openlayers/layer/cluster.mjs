@@ -12,102 +12,110 @@ export default _xyz => layer => {
 
   layer.infotip = infotip(_xyz);
 
+  layer.reload = () => {
+
+    source.refresh();
+
+  };
+
+
+  const source = new _xyz.mapview.lib.source.Vector({
+    loader: function (extent, resolution, projection) {
+
+      if (layer.xhr) layer.xhr.abort();
+  
+      this.resolution = resolution;
+  
+      source.clear();
+  
+      const tableZ = layer.tableCurrent();
+
+      if (!tableZ) return;
+  
+      // Show loader.
+      if (layer.view.loader) layer.view.loader.style.display = 'block';
+  
+      layer.xhr = new XMLHttpRequest();   
+  
+      layer.xhr.open(
+        'GET', _xyz.host + '/api/layer/cluster?' +
+          _xyz.utils.paramString({
+            locale: _xyz.workspace.locale.key,
+            layer: layer.key,
+            table: tableZ,
+            resolution: layer.cluster_resolution,
+            kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
+            dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
+            aggregate: layer.style.theme && layer.style.theme.aggregate,
+            theme: layer.style.theme && layer.style.theme.type,
+            cat: layer.style.theme && layer.style.theme.field,
+            size: layer.style.theme && layer.style.theme.size,
+            label: layer.style.label && layer.style.label.field,
+            filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
+            west: extent[0],
+            south: extent[1],
+            east: extent[2],
+            north: extent[3],
+            z: _xyz.mapview.getZoom(),
+            token: _xyz.token
+          }));
+  
+      layer.xhr.setRequestHeader('Content-Type', 'application/json');
+      layer.xhr.responseType = 'json';
+  
+      // Draw layer on load event.
+      layer.xhr.onload = e => {
+  
+        if (layer.view.loader) layer.view.loader.style.display = 'none';
+  
+        if (e.target.status !== 200) return;
+
+        const cluster = e.target.response;
+
+        layer.max_size = cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0);
+      
+        let id = 0;
+      
+        const features = cluster.map(f => new _xyz.mapview.lib.Feature({
+          id: id++,
+          geometry: geometry(f.geometry),
+          properties: f.properties
+        }));
+      
+        function geometry(geom) {
+          if (geom.lon && geom.lat) {
+            return new _xyz.mapview.lib.geom.Point(
+              _xyz.mapview.lib.proj.fromLonLat([geom.lon, geom.lat])
+            );
+          }
+      
+          if (geom.x && geom.y) {
+            return new _xyz.mapview.lib.geom.Point([geom.x, geom.y]);
+          }
+        }
+  
+        source.addFeatures(features);
+      
+      };
+  
+      layer.xhr.send();
+  
+    },
+    strategy: function(extent, resolution) {
+
+      // Required to fire the load event.
+      if(this.resolution && this.resolution != resolution){
+        this.loadedExtentsRtree_.clear();
+      }
+  
+      return [_xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+layer.srid)];
+    }
+  });
   
   
   layer.L = new _xyz.mapview.lib.layer.Vector({
     layer: layer,
-    source: new _xyz.mapview.lib.source.Vector({
-      loader: function (extent, resolution, projection) {
-  
-        if (layer.xhr) layer.xhr.abort();
-    
-        this.resolution = resolution;
-    
-        layer.L.getSource().clear();
-    
-        const tableZ = layer.tableCurrent();
-
-        if (!tableZ) return;
-    
-        // Show loader.
-        if (layer.view.loader) layer.view.loader.style.display = 'block';
-    
-        layer.xhr = new XMLHttpRequest();   
-    
-        layer.xhr.open(
-          'GET', _xyz.host + '/api/layer/cluster?' +
-            _xyz.utils.paramString({
-              locale: _xyz.workspace.locale.key,
-              layer: layer.key,
-              table: tableZ,
-              resolution: layer.cluster_resolution,
-              kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
-              dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
-              aggregate: layer.style.theme && layer.style.theme.aggregate,
-              theme: layer.style.theme && layer.style.theme.type,
-              cat: layer.style.theme && layer.style.theme.field,
-              size: layer.style.theme && layer.style.theme.size,
-              label: layer.style.label && layer.style.label.field,
-              filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
-              west: extent[0],
-              south: extent[1],
-              east: extent[2],
-              north: extent[3],
-              z: _xyz.mapview.getZoom(),
-              token: _xyz.token
-            }));
-    
-        layer.xhr.setRequestHeader('Content-Type', 'application/json');
-        layer.xhr.responseType = 'json';
-    
-        // Draw layer on load event.
-        layer.xhr.onload = e => {
-    
-          if (layer.view.loader) layer.view.loader.style.display = 'none';
-    
-          if (e.target.status !== 200) return;
-
-          const cluster = e.target.response;
-
-          layer.max_size = cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0);
-        
-          let id = 0;
-        
-          const features = cluster.map(f => new _xyz.mapview.lib.Feature({
-            id: id++,
-            geometry: geometry(f.geometry),
-            properties: f.properties
-          }));
-        
-          function geometry(geom) {
-            if (geom.lon && geom.lat) {
-              return new _xyz.mapview.lib.geom.Point(
-                _xyz.mapview.lib.proj.fromLonLat([geom.lon, geom.lat])
-              );
-            }
-        
-            if (geom.x && geom.y) {
-              return new _xyz.mapview.lib.geom.Point([geom.x, geom.y]);
-            }
-          }
-    
-          layer.L.getSource().addFeatures(features);
-        
-        };
-    
-        layer.xhr.send();
-    
-      },
-      strategy: function(extent, resolution) {
-  
-        // Required to fire the load event.
-        if(this.resolution && this.resolution != resolution){
-          this.loadedExtentsRtree_.clear();
-        }
-    
-        return [_xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+layer.srid)];
-      }
-    }),
+    source: source,
     zIndex: layer.style.zIndex || 1,
     style: feature => {
 

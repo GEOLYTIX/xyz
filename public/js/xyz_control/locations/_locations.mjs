@@ -1,5 +1,7 @@
 import select from './select.mjs';
 
+import selectCallback from './selectCallback.mjs';
+
 import listview from './listview.mjs';
 
 import remove from './remove.mjs';
@@ -15,6 +17,8 @@ import view from './view/_view.mjs';
 export default _xyz => ({
 
   select: select(_xyz),
+
+  selectCallback: selectCallback(_xyz),
 
   list: [
     {

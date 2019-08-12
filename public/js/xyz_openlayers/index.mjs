@@ -1,26 +1,26 @@
 import _xyz_instance from '../xyz_control/_xyz.mjs';
 
-import * as utils from '../utils/_utils.mjs';
+import * as _utils from '../utils/_utils.mjs';
 
 import workspace from '../xyz_control/workspace.mjs';
 
 import hooks from '../xyz_control/hooks.mjs';
 
-import gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
+import _gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
 
-import layers from '../xyz_control/layers/_layers.mjs';
+import _layers from '../xyz_control/layers/_layers.mjs';
 
-import format from './layer/_format.mjs';
+import _format from './layer/_format.mjs';
 
-import locations from '../xyz_control/locations/_locations.mjs';
+import _locations from '../xyz_control/locations/_locations.mjs';
 
-import geom from '../xyz_control/geom/_geom.mjs';
+import _geom from '../xyz_control/geom/_geom.mjs';
 
-import tableview from '../xyz_control/tableview/_tableview.mjs';
+import _tableview from '../xyz_control/tableview/_tableview.mjs';
 
 import lib from './lib.mjs';
 
-import mapview from './mapview.mjs';
+import _mapview from './mapview/_mapview.mjs';
 
 
 
@@ -28,25 +28,25 @@ async function _xyz(params) {
     
   const _xyz = _xyz_instance();
 
-  _xyz.utils = utils;
+  _xyz.utils = _utils;
 
   _xyz.mapview = { lib: lib() };
 
-  Object.assign(_xyz.mapview, mapview(_xyz));
+  Object.assign(_xyz.mapview, _mapview(_xyz));
 
-  _xyz.layers = Object.assign({}, layers(_xyz), {format: format(_xyz)});
+  _xyz.layers = Object.assign({}, _layers(_xyz), {format: _format(_xyz)});
 
-  _xyz.locations = locations(_xyz);
+  _xyz.locations = _locations(_xyz);
 
-  _xyz.geom = geom(_xyz);
+  _xyz.geom = _geom(_xyz);
 
-  _xyz.tableview = tableview(_xyz);
+  _xyz.tableview = _tableview(_xyz);
 
   _xyz.workspace = workspace(_xyz);
 
   if (params.hooks) hooks(_xyz);
 
-  _xyz.gazetteer = gazetteer(_xyz);
+  _xyz.gazetteer = _gazetteer(_xyz);
 
   _xyz.host = params.host;
 

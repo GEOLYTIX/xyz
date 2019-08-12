@@ -8,7 +8,6 @@ export default _xyz => function(e, feature) {
     table: layer.table,
     id: feature.get('id'),
     marker: e.coordinate, //_xyz.mapview.lib.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326'),
-    edit: layer.edit
   });
 
 };

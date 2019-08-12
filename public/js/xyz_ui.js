@@ -112,27 +112,33 @@ function createMap (_xyz) {
     }
   });
 
-  // Create tableview control.
-  _xyz.tableview.create({
-    target: document.getElementById('tableview'),
-    btn: {
-      toggleTableview: document.getElementById('toggleTableview'),
-      tableViewport: document.getElementById('btnTableViewport')
-    }
-  });
+  // _xyz.tableview.create({
+  //   target: document.getElementById('tableview'),
+  //   btn: {
+  //     toggleTableview: document.getElementById('toggleTableview'),
+  //     tableViewport: document.getElementById('btnTableViewport')
+  //   }
+  // });
 
   _xyz.layers.listview.init({
     target: document.getElementById('layers')
   });
 
   _xyz.locations.listview.init({
-    target: document.getElementById('locations'),
-    clear: document.getElementById('clear_locations'),
+    target: document.getElementById('locations')
   });
 
-  _xyz.gazetteer.init({
-    target: document.getElementById('gazetteer'),
-    toggle: document.getElementById('btnGazetteer'),
-  });
+  document.getElementById('clear_locations').onclick = () => {
+    _xyz.hooks.remove('locations');
+
+    _xyz.locations.listview.init({
+      target: document.getElementById('locations')
+    });
+  };
+
+  // _xyz.gazetteer.init({
+  //   target: document.getElementById('gazetteer'),
+  //   toggle: document.getElementById('btnGazetteer'),
+  // });
 
 };

@@ -15,22 +15,6 @@ export default _xyz => {
       _xyz.mobile.tabLocations.classList.add('displaynone');
       _xyz.mobile.activateLayersTab();
     }
-
-    // Clear locations button to remove hooks and reset location listview.
-    if (params.clear){
-
-      _xyz.locations.listview.clear = params.clear;
-    
-      _xyz.locations.listview.clear.onclick = () => {
-        _xyz.hooks.remove('locations');
-
-        _xyz.locations.list.forEach(record => {
-
-          if (record.location) record.location.remove(); //_xyz.locations.remove(record.location);
-
-        });
-      };
-    }
     
     _xyz.locations.listview.node = params.target;
 
@@ -39,6 +23,10 @@ export default _xyz => {
     
     // Empty the locations list.
     _xyz.locations.listview.node.innerHTML = '';
+
+    _xyz.locations.list
+      .filter(record => !!record.location)
+      .forEach(record => record.location.remove());
       
     _xyz.locations.list = [
       {

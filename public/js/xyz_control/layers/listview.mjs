@@ -16,15 +16,6 @@ export default _xyz => {
     // Reset groups.
     _xyz.layers.listview.groups = {};
 
-
-    // Set layer display from hook.
-    if (_xyz.hooks && _xyz.hooks.current && _xyz.hooks.current.layers.length > 0) {
-      Object.values(_xyz.layers.list).forEach(layer => {
-        layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
-      });
-    }
-
-
     // Loop through the layers and add to layers list.
     Object.values(_xyz.layers.list).forEach(layer => {
 
@@ -43,28 +34,20 @@ export default _xyz => {
 
         // Add group meta to group container.
         if (layer.groupmeta) {
-          const meta = _xyz.utils.wire()`<div class="meta">`;
-          meta.innerHTML = layer.groupmeta;
-          _xyz.layers.listview.groups[layer.group].meta.appendChild(meta);
+          _xyz.layers.listview.groups[layer.group].meta.appendChild(_xyz.utils.wire()`<div class="meta">${layer.groupmeta}`);
         }
 
-        // Append the layer drawer to group.
+        // Append the layer to the listview group.
         _xyz.layers.listview.groups[layer.group].container.appendChild(layer.view.drawer);
 
       } else {
 
-        // Append the layer drawer to listview.
+        // Append the layer to the listview root.
         _xyz.layers.listview.node.appendChild(layer.view.drawer);
       }
 
-      if (layer.display) {
-        layer.show();
-      }
-
-      if (!layer.display) {
-        layer.remove();
-        layer.tableCurrent();
-      }
+      // Show layer, if display is true.
+      if (layer.display) layer.show();
 
     });
 
@@ -88,9 +71,7 @@ export default _xyz => {
 
     // Create layer group header.
     group.header = _xyz.utils.wire()`<div class="header-group">${layer.group}`;
-
-    group.container.appendChild(group.header);
-
+    
     group.header.onclick = e => {
       e.stopPropagation();
       _xyz.utils.toggleExpanderParent({
@@ -102,6 +83,8 @@ export default _xyz => {
       });
     };
 
+    group.container.appendChild(group.header);
+
 
     // Create group meta container
     group.meta = _xyz.utils.wire()`<div>`;
@@ -110,8 +93,8 @@ export default _xyz => {
 
     // Check whether some layers group are visible and toggle visible button display accordingly.
     group.chkVisibleLayer = () => {
-      let someVisible = Object.values(_xyz.layers.list)
-        .some(_layer => (_layer.group === layer.group && _layer.display));
+
+      let someVisible = Object.values(_xyz.layers.list).some(_layer => (_layer.display && _layer.group === layer.group));
 
       group.visible.style.display = someVisible ? 'block' : 'none';
     };
@@ -120,11 +103,8 @@ export default _xyz => {
     // Create hide all group layers button.
     group.visible = _xyz.utils.wire()`
     <i class="material-icons cursor noselect btn_header hide-group"
-    title="Hide layers from group">
-    visibility`;
-
-    group.header.appendChild(group.visible);
-
+    title="Hide layers from group">visibility`;
+   
     group.visible.onclick = e => {
       e.stopPropagation();
 
@@ -134,13 +114,13 @@ export default _xyz => {
       });
     };
 
+    group.header.appendChild(group.visible);
+
 
     // Create group expander button.
     const expander = _xyz.utils.wire()`
     <i class="material-icons cursor noselect btn_header expander-group"
     title="Toggle group panel">`;
-
-    group.header.appendChild(expander);
 
     expander.onclick = e => {
       e.stopPropagation();
@@ -151,6 +131,8 @@ export default _xyz => {
         scrolly: _xyz.desktop && _xyz.desktop.listviews,
       });
     };
+
+    group.header.appendChild(expander);
   }
 
 };

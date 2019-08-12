@@ -10,6 +10,12 @@ export default _xyz => layer => {
 
   layer.infotip = infotip(_xyz);
 
+  layer.reload = () => {
+
+    source.refresh();
+
+  };
+
 
 
   // Define source for mvt layer.

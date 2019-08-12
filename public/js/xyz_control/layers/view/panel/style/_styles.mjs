@@ -66,7 +66,7 @@ export default (_xyz, layer) => {
       
         applyTheme(layer);
     
-        layer.get();
+        layer.reload();
           
       }
     });
