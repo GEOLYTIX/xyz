@@ -148,8 +148,6 @@ export default _xyz => params => {
 
       if (layer.display) layer.show();
 
-    //if (layer.tables) _xyz.mapview.node.addEventListener('changeEnd', () => layer.tableCurrent());
-
     });
   
   }

@@ -1661,7 +1661,7 @@ button {
     .listview .drawer.drawer-group .header {
       font-style: italic;
       margin-left: 12px;
-      border-bottom: 1px solid #bbb; }
+      border-bottom: 2px solid #bbb; }
     .listview .drawer.drawer-group .dashboard {
       margin-left: 12px; }
     .listview .drawer.drawer-group .header-group {

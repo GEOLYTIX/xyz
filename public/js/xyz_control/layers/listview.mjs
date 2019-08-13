@@ -20,7 +20,8 @@ export default _xyz => {
     Object.values(_xyz.layers.list).forEach(layer => {
 
       // Create the layer view.
-      layer.view();
+      //layer.view = _xyz.layers.view(layer);
+      _xyz.layers.view(layer);
 
       if (layer.group) {
 

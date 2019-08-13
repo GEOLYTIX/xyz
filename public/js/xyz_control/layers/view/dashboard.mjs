@@ -12,8 +12,7 @@ import report from './panel/report.mjs';
 
 export default (_xyz, layer) => {
 
-  const dashboard = _xyz.utils.wire()`
-    <div class="dashboard">`;
+  const dashboard = _xyz.utils.wire()`<div class="dashboard">`;
 
   layer.view.dashboard = dashboard;
 
@@ -21,8 +20,7 @@ export default (_xyz, layer) => {
 
   // Create layer meta.
   if (layer.meta) {
-    const meta = _xyz.utils.wire()`
-            <p class="meta">`;
+    const meta = _xyz.utils.wire()`<p class="meta">`;
     meta.innerHTML = layer.meta;
     dashboard.appendChild(meta);
   }

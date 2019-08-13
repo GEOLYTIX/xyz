@@ -10,7 +10,7 @@ import show from './show.mjs';
 
 import remove from './remove.mjs';
 
-import view from './view/_view.mjs';
+//import __view from './view/__view.mjs';
 
 export default _xyz => layer => {
 
@@ -26,9 +26,13 @@ export default _xyz => layer => {
   
   layer.remove = remove(_xyz);
 
-  layer.view = view(_xyz);
+  layer.view = {
 
-  layer.loader = _xyz.utils.wire()`<div class="loader">`;
+    loader: _xyz.utils.wire()`<div class="loader" style="display: none">`
+
+  };
+
+  //layer.view = __view(_xyz); 
 
   _xyz.layers.format[layer.format](layer);
   

@@ -3,8 +3,6 @@ export default (_xyz, layer) => {
   const header = _xyz.utils.wire()`
     <div class="header"> ${layer.name || layer.key}`;
 
-  header.style.borderBottomColor = layer.style && layer.style.default && layer.style.default.fillColor ? layer.style.default.fillColor : '#333';
-
   layer.view.header = header;
 
   layer.view.drawer.appendChild(header);
@@ -35,7 +33,7 @@ export default (_xyz, layer) => {
 
   header.zoomToExtent = _xyz.utils.wire()`
     <i
-    title="Toggle visibility"
+    title="Zoom to filtered layer extent"
     class="material-icons cursor noselect btn_header">
     fullscreen`;
 
@@ -53,9 +51,7 @@ export default (_xyz, layer) => {
     header.appendChild(_xyz.utils.wire()`
       <img
       style="float: right"
-      src="${_xyz.utils.svg_symbols(layer.style.marker)}"
-      width=${layer.style.marker.type === 'triangle' ? 30 : 20}
-      height=${layer.style.marker.type === 'triangle' ? 30 : 20}>`);
+      src="${_xyz.utils.svg_symbols(layer.style.marker)}">`);
   }
   
 };

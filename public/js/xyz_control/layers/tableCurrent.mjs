@@ -17,10 +17,6 @@ export default _xyz => function () {
 
   table = zoom > maxZoomKey ? layer.tables[maxZoomKey] : table;
 
-  if (layer.view.drawer) layer.view.drawer.style.opacity = !table ? 0.4 : 1;
-
-  if (layer.view.loader && !table) layer.view.loader.style.display = 'none';
-
   return table;
-      
+
 };

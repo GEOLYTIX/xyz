@@ -51,14 +51,14 @@ export default _xyz => layer => {
   // Display loading indicator if it exists.
   source.on('tileloadstart', () => {
     tilesLoading++;
-    if (layer.loader) layer.loader.style.display = 'block';
+    if (layer.view.loader) layer.view.loader.style.display = 'block';
   });
   
   // Decrease the number of tiles loading at load end event.
   // Hide loading indicator if it exists.
   source.on('tileloadend', () => {
     tilesLoading--;
-    if (layer.loader && tilesLoading === 0) layer.loader.style.display = 'none';
+    if (layer.view.loader && tilesLoading === 0) layer.view.loader.style.display = 'none';
   });
 
   layer.L = new _xyz.mapview.lib.layer.VectorTile({

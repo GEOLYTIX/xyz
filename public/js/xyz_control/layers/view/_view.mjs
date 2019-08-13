@@ -2,28 +2,19 @@ import header from './header.mjs';
 
 import dashboard from './dashboard.mjs';
 
-export default _xyz => function () {
+export default _xyz => layer => {
 
-  const layer = this;
-
-  (function update(){
-
-    const view = {};
-
-    layer.view = view;
-
-    view.update = update;
-
-    view.drawer = _xyz.utils.wire()`<div class="drawer">`;
+  layer.view.drawer = _xyz.utils.wire()`<div class="drawer">`;
   
-    header(_xyz, layer);
+  header(_xyz, layer);
        
-    // Create layer loader and append to drawer (after the header).
-    //view.loader = _xyz.utils.wire()`<div class="loader">`;
-    view.drawer.appendChild(layer.loader);
+  //layer.view.loader = _xyz.utils.wire()`<div class="loader">`;
+  layer.view.drawer.appendChild(layer.view.loader);
 
-    dashboard(_xyz, layer);
+  dashboard(_xyz, layer);
+
+  if (layer.tables) _xyz.mapview.node.addEventListener('changeEnd', () => {
+    layer.view.drawer.style.opacity = !layer.tableCurrent() ? 0.4 : 1;
+  });
     
-  })();
-
 };
