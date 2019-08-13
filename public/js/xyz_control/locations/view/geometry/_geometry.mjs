@@ -92,7 +92,7 @@ export default _xyz => entry => {
     },
     style: {
       backgroundColor: _xyz.utils.chroma(entry.style.fillColor).alpha(entry.style.fillOpacity === 0 ? 0 : parseFloat(entry.style.fillOpacity) || 1).rgba(),
-      borderColor: _xyz.utils.chroma(style.color).alpha(1).rgba(),
+      borderColor: _xyz.utils.chroma(entry.style.color).alpha(1).rgba(),
       borderStyle: 'solid',
       borderWidth: _xyz.utils.setStrokeWeight(entry),
       position: 'absolute',

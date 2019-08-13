@@ -25,7 +25,6 @@ export default _xyz => ({
       style: {
         color: _xyz.utils.chroma('hotpink')
       },
-      stamp: parseInt(Date.now()),
     }
   ],
 

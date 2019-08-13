@@ -823,7 +823,6 @@ button {
 .btn_header {
   font-size: 25px;
   margin-left: 5px;
-  float: right;
   color: #090; }
   .btn_header.active {
     text-shadow: 2px 2px 2px #cf9; }
@@ -1684,7 +1683,12 @@ button {
     font-size: 14px;
     line-height: 2;
     font-family: ffmark, sans-serif;
-    border-bottom: 2px solid #333; }
+    border-bottom: 2px solid #333;
+    display: flex; }
+    .listview .drawer .header > i:nth-child(1) {
+      margin-left: auto; }
+    .listview .drawer .header img {
+      max-width: 20px; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {

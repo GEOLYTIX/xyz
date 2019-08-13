@@ -68,6 +68,16 @@
             line-height: 2;
             font-family: ffmark, sans-serif;
             border-bottom: 2px solid #333;
+            display: flex;
+
+            >i:nth-child(1){
+                margin-left: auto;
+            }
+            
+            img {
+                max-width: 20px;
+                margin-left: 5px;
+            }
             &:hover {
                 cursor: pointer;
             }

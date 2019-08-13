@@ -10,7 +10,6 @@ import show from './show.mjs';
 
 import remove from './remove.mjs';
 
-//import __view from './view/__view.mjs';
 
 export default _xyz => layer => {
 
@@ -32,12 +31,10 @@ export default _xyz => layer => {
 
   };
 
-  //layer.view = __view(_xyz); 
-
-  _xyz.layers.format[layer.format](layer);
-  
   // Set the first theme from themes array.
   if (layer.style && layer.style.themes) layer.style.theme = layer.style.themes[Object.keys(layer.style.themes)[0]];
+
+  _xyz.layers.format[layer.format](layer);
 
   return layer;
 

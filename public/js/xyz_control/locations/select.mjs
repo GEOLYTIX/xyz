@@ -7,8 +7,11 @@ export default _xyz => location => {
   // Iterate through records in locations list
   if (_xyz.locations.list.some(_record => {
 
-    // Assign list record to current record if the timestamp of current record is older.
-    if (_record.stamp <= record.stamp) record = _record;
+    if (!_record.location) {
+      record = _record;
+    } else if (_record.stamp < record.stamp) {
+      record = _record;
+    }
 
     // Remove the location from record if it matches the current location.
     if (_record.location && _record.location.hook === location.hook) {

@@ -71,30 +71,24 @@ export default _xyz => function () {
 
   // Create drawer element to contain the header with controls and the infoj table with inputs.
   location.view.drawer = _xyz.utils.wire()`<div class="drawer expandable expanded">`;
-  
+
 
   // Create the header element to contain the control elements
-  location.view.header = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: 'foo', //record.letter,
-      className: 'header pane_shadow'
-    },
-    style: {
-      borderBottom: '2px solid ' + location.style.color //record.color
-    },
-    appendTo: location.view.drawer,
-    eventListener: {
-      event: 'click',
-      funct: () => {
-        _xyz.utils.toggleExpanderParent({
-          expandable: location.view.drawer,
-          accordeon: true,
-          scrolly: _xyz.desktop && _xyz.desktop.listviews,
-        });
-      }
-    }
-  });
+  location.view.header = _xyz.utils.wire()`
+  <div
+  style = "${'borderBottom: 2px solid ' + location.style.color}"
+  class = "header">
+  ${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
+  
+  location.view.header.onclick = () => {
+    _xyz.utils.toggleExpanderParent({
+      expandable: location.view.drawer,
+      accordeon: true,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+  };
+
+  location.view.drawer.appendChild(location.view.header);
 
   location.view.header.appendChild(_xyz.utils.wire()`
   <i

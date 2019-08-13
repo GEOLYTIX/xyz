@@ -2,12 +2,7 @@ export default (_xyz, layer) => {
 
   const header = _xyz.utils.wire()`
     <div class="header"> ${layer.name || layer.key}`;
-
-  layer.view.header = header;
-
-  layer.view.drawer.appendChild(header);
-
-    
+   
   header.toggleDisplay = _xyz.utils.wire()`
     <i
     title="Toggle visibility"
@@ -53,5 +48,7 @@ export default (_xyz, layer) => {
       style="float: right"
       src="${_xyz.utils.svg_symbols(layer.style.marker)}">`);
   }
+
+  return header;
   
 };

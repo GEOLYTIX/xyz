@@ -24,4 +24,5 @@ export default (_xyz, layer) => {
     );
 
   });
+  
 };

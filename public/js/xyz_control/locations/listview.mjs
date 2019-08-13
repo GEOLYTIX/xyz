@@ -30,111 +30,83 @@ export default _xyz => {
       
     _xyz.locations.list = [
       {
-        letter: 'A',
         style: {
           color: '#9c27b0'
-        },
-        stamp: parseInt(Date.now()),
+        }
       },
       {
-        letter: 'B',
         style: {
           color: '#2196f3'
-        },
-        stamp: parseInt(Date.now()),
+        }
       },
       {
-        letter: 'C',
         style: {
           color: '#009688'
-        },
-        stamp: parseInt(Date.now()),
+        }
       },
       {
-        letter: 'D',
         style: {
           color: '#cddc39'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'E',
         style: {
           color: '#ff9800'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'F',
         style: {
           color: '#673ab7'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'G',
         style: {
           color: '#03a9f4'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'H',
         style: {
           color: '#4caf50'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'I',
         style: {
           color: '#ffeb3b'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'J',
         style: {
           color: '#ff5722'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'K',
         style: {
           color: '#0d47a1'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'L',
         style: {
           color: '#00bcd4'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'M',
         style: {
           color: '#8bc34a'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'N',
         style: {
           color: '#ffc107'
         },
-        stamp: parseInt(Date.now()),
       },
       {
-        letter: 'O',
         style: {
           color: '#d32f2f'
         },
-        stamp: parseInt(Date.now()),
       }
     ];
+
+    _xyz.locations.list.reverse() ;
          
   };
 
