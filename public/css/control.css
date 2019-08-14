@@ -1685,10 +1685,15 @@ button {
     font-family: ffmark, sans-serif;
     border-bottom: 2px solid #333;
     display: flex; }
-    .listview .drawer .header > i:nth-child(1) {
+    .listview .drawer .header > :nth-child(1) {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis; }
+    .listview .drawer .header > :nth-child(2) {
       margin-left: auto; }
     .listview .drawer .header img {
-      max-width: 20px; }
+      max-width: 20px;
+      margin-left: 5px; }
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {

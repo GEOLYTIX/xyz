@@ -6,7 +6,9 @@ export default _xyz => entry => {
     entry.row.remove();
   }
 
-  const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${entry.location.marker[1]},${entry.location.marker[0]}&size=300x230&provider=GOOGLE&token=${_xyz.token || ''}`;
+  const lnglat = _xyz.mapview.lib.proj.transform(entry.location.marker, 'EPSG:3857', 'EPSG:4326');
+
+  const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${lnglat[1]},${lnglat[0]}&size=300x230&provider=GOOGLE&token=${_xyz.token || ''}`;
 
   entry.location.view.node.appendChild(
     _xyz.utils.wire()`
@@ -14,7 +16,7 @@ export default _xyz => entry => {
       <td colspan=2>
         <a
         target="_blank" 
-        href="${'https://www.google.com/maps?cbll=' + entry.location.marker[1] + ',' + entry.location.marker[0] + '&layer=c'}">
+        href="${'https://www.google.com/maps?cbll=' + lnglat[1] + ',' + lnglat[0] + '&layer=c'}">
           <img
           class="img_streetview"
           src="${src}">`

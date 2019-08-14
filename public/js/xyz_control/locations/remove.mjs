@@ -21,7 +21,7 @@ export default _xyz => function() {
 
   if (location.Layer) _xyz.map.removeLayer(location.Layer);
 
-  // if (location.Marker) _xyz.map.removeLayer(location.Marker);
+  if (location.Marker) _xyz.map.removeLayer(location.Marker);
 
   // location.tables.forEach(
   //   table => _xyz.tableview.removeTab(table)

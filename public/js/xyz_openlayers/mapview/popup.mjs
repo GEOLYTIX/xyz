@@ -28,7 +28,7 @@ export default _xyz => {
   
     _xyz.map.addOverlay(this.overlay);
   
-    this.overlay.setPosition(params.xy);
+    this.overlay.setPosition(params.coords);
   };
 
 };

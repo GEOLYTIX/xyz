@@ -7,6 +7,6 @@ export default _xyz => function(icon) {
   return new _xyz.mapview.lib.style.Icon({
     src: icon.url,
     scale: scale,
-    //anchor: [0.5, 1],
+    anchor: icon.anchor || [0.5, 0.5],
   });
 };

@@ -48,7 +48,7 @@ export default _xyz => function (e, feature) {
       });
 
       _xyz.mapview.popup.create({
-        xy: coords,
+        coords: coords,
         content: ul
       });
 
@@ -61,7 +61,8 @@ export default _xyz => function (e, feature) {
       layer: layer.key,
       table: layer.table,
       id: cluster[0].id,
-      marker: cluster[0].lnglat,
+      //marker: cluster[0].lnglat,
+      marker: _xyz.mapview.lib.proj.transform(cluster[0].lnglat, 'EPSG:4326', 'EPSG:3857')
     });
 
   };

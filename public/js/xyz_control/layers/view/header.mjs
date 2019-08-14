@@ -1,7 +1,7 @@
 export default (_xyz, layer) => {
 
   const header = _xyz.utils.wire()`
-    <div class="header"> ${layer.name || layer.key}`;
+    <div class="header"><div>${layer.name || layer.key}`;
    
   header.toggleDisplay = _xyz.utils.wire()`
     <i

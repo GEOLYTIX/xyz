@@ -73,7 +73,14 @@ export default _xyz => location => {
       });
 
     // Get location marker from pointOnFeature is not already defined in location object.
-    location.marker = location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+    if (!location.marker) {
+
+      const coords = _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+      const srid = ('EPSG:' + _xyz.layers.list[location.layer].srid) || 'EPSG:4326';
+      location.marker = _xyz.mapview.lib.proj.transform(coords, srid, 'EPSG:3857');
+
+    }
+
 
     // Return location callback if defined on location.
     if (typeof location.callback === 'function') return location.callback(location);

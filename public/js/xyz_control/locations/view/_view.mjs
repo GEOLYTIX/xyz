@@ -78,6 +78,7 @@ export default _xyz => function () {
   <div
   style = "${'borderBottom: 2px solid ' + location.style.color}"
   class = "header">
+  <div>
   ${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
   
   location.view.header.onclick = () => {
