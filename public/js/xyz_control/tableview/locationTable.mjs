@@ -8,46 +8,19 @@ export default _xyz => (table, callback) => {
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
 
-
   if (!table.columns) {
 
     const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
-
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
 
     Object.assign(table, infoj_table);
 
   }
 
-  const columns = [{ field: 'rows', title: table.title, headerSort: false }];
-
-  table.columns.forEach(col => {
-    if (!col.aspatial) columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-    if(col.formatter){
-      columns.push({
-        field: col.field, 
-        title: col.title || col.field, 
-        headerSort: false,
-        formatter: col.formatter,
-        formatterParams: col.formatterParams || null,
-        sorter: col.sorter || null
-      });
-    }
-  });
+  table.columns.unshift({ field: 'rows', title: table.title, headerSort: false, align: 'left'});
 
   Object.keys(table.agg || {}).forEach(key => {
-    columns.push({ field: key, title: table.agg[key].title || key, headerSort: false });
-    if(table.agg[key].formatter) {
-    	columns.push({ 
-    		field: key, 
-    		title: table.agg[key].title || key, 
-    		headerSort: false, 
-    		formatter:  table.agg[key].formatter,
-    		formatterParams: table.agg[key].formatterParams || null,
-    		//width: table.agg[key].width || null,
-    		sorter: table.agg[key].sorter || null
-    	});
-    }
+    table.columns.push(Object.assign({}, {field: key}, table.agg[key]));
   });
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
@@ -112,7 +85,7 @@ export default _xyz => (table, callback) => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
-        columns: columns,
+        columns: table.columns.filter(col => { return !col.aspatial }),
         // autoResize: true,
         layout: 'fitDataFill',
         height: 'auto'
