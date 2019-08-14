@@ -16,7 +16,7 @@ export default _xyz => param => {
   xhr.responseType = 'json';
 
   xhr.onprogress = e => {
-    // put a spinner here or something 
+    // put a spinner here or something?
   }
 
   xhr.onload = e => {
@@ -24,17 +24,26 @@ export default _xyz => param => {
     if (e.target.status !== 200) return;
 
     param.entry.fields = e.target.response;
+  
+    if(param.entry.chart){
 
-    let chartElem = _xyz.charts.create(param.entry);
+      let chartElem = _xyz.charts.create(param.entry);
 
-    if(!chartElem || !chartElem.style) return;
+      if(!chartElem || !chartElem.style) return;
 
-    chartElem.style.minWidth = param.entry.chart.width ? `${param.entry.chart.width}px` : '450px';
-    chartElem.style.minHeight = param.entry.chart.height ? `${param.entry.chart.height}px` : '300px';
-    chartElem.style.maxWidth = param.entry.chart.width ? `${param.entry.chart.width}px` : '450px';
-    chartElem.style.maxHeight = param.entry.chart.height ? `${param.entry.chart.height}px` : '300px';
-          
-    param.container.appendChild(chartElem);
+      chartElem.style.minWidth = param.entry.chart.width ? `${param.entry.chart.width}px` : '450px';
+      chartElem.style.minHeight = param.entry.chart.height ? `${param.entry.chart.height}px` : '300px';
+      chartElem.style.maxWidth = param.entry.chart.width ? `${param.entry.chart.width}px` : '450px';
+      chartElem.style.maxHeight = param.entry.chart.height ? `${param.entry.chart.height}px` : '300px';
+
+      param.container.appendChild(chartElem);
+    
+    } else {
+
+      console.log("Content not displayed in DOM");
+      console.log(param.entry);
+    }
+  
   }
 
   xhr.send();

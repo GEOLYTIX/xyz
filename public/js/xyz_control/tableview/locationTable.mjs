@@ -23,6 +23,16 @@ export default _xyz => (table, callback) => {
 
   table.columns.forEach(col => {
     if (!col.aspatial) columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
+    if(col.formatter){
+      columns.push({
+        field: col.field, 
+        title: col.title || col.field, 
+        headerSort: false,
+        formatter: col.formatter,
+        formatterParams: col.formatterParams || null,
+        sorter: col.sorter || null
+      });
+    }
   });
 
   Object.keys(table.agg || {}).forEach(key => {
@@ -34,7 +44,7 @@ export default _xyz => (table, callback) => {
     		headerSort: false, 
     		formatter:  table.agg[key].formatter,
     		formatterParams: table.agg[key].formatterParams || null,
-    		width: table.agg[key].width || null,
+    		//width: table.agg[key].width || null,
     		sorter: table.agg[key].sorter || null
     	});
     }
@@ -48,30 +58,51 @@ export default _xyz => (table, callback) => {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
-      locale: _xyz.workspace.locale.key,
-      layer: table.location.layer,
-      id: table.location.id,
-      tableDef: table.title,
-      token: _xyz.token
-    }));
+    if(table.pgFunction){
 
-    xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.open('GET', _xyz.host + '/api/location/pgfunction?' + _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: table.location.layer,
+        id: table.location.id,
+        pgFunction: table.pgFunction,
+        token: _xyz.token
+      }));
 
-    xhr.responseType = 'json';
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
 
-    xhr.onload = e => {
+      xhr.onload = e => {
 
-      if (e.target.status !== 200) return;
+        if (e.target.status !== 200) return;
 
-      table.Tabulator.setData(e.target.response);
+        table.Tabulator.setData(e.target.response);
+        table.Tabulator.redraw(true);
+        if (callback) callback(e.target.response);
+      }
 
-      table.Tabulator.redraw(true);
+    } else {
 
-      if (callback) callback(e.target.response);
+      xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: table.location.layer,
+        id: table.location.id,
+        tableDef: table.title,
+        token: _xyz.token
+      }));
 
-    };
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
 
+      xhr.onload = e => {
+
+        if (e.target.status !== 200) return;
+
+        table.Tabulator.setData(e.target.response);
+        table.Tabulator.redraw(true);
+        if (callback) callback(e.target.response);
+      };
+      
+    }
     xhr.send();
   };
 
