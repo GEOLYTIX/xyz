@@ -61,6 +61,9 @@ export default _xyz => (table, callback) => {
 
     table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer();
 
+    // disable header sorting by default
+    table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false});
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
         columns: table.columns,
