@@ -134,7 +134,6 @@ export default _xyz => group => {
 
     // Functions for toggeling between table view and chart view
     group.showChart = () => {
-      console.log(group.chartElem);
       group.table.style.display = 'none';
       group.chartElem.style.display = 'block';
       group.viewToggler.textContent = 'view_list';
