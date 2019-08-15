@@ -83,8 +83,8 @@ module.exports = fastify => {
       mailer({
         to: user.email,
         subject: `A failed login attempt was made on ${env.alias || req.headers.host}${env.path}`,
-        text: `${user.verified ? 'The account is verified. \n \n' : 'The account is NOT verified. \n \n'}`
-            + `${user.approved ? 'The account is approved. \n \n' : 'The account is NOT approved. \n \n'}`
+        text: `${user.verified ? 'The account has been verified. \n \n' : 'The account has NOT been verified. \n \n'}`
+            + `${user.approved ? 'The account has been approved. \n \n' : 'Please wait for account approval confirmation email. \n \n'}`
             + `The failed attempt occured from this remote address ${req.req.connection.remoteAddress} \n \n`
             + 'This wasn\'t you? Please let your manager know. \n \n'
       });
