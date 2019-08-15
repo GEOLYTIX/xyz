@@ -10,7 +10,7 @@ export default _xyz => entry => {
 	const canvas = _xyz.utils.createElement({
 		tag: 'canvas',
 		options: {
-			height: entry.chart.height || undefined
+			height: entry.chart.height || 150
 		},
 		appendTo: graph
 	});

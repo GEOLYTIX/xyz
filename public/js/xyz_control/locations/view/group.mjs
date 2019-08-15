@@ -89,15 +89,23 @@ export default _xyz => group => {
   // If chart option specified
   if (group.chart) {
 
+    //console.log(group.chart);
+
     if(group.dashboard || group.chart.class) return;
+
+    //console.log('hi chart');
     
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
     //group.chartElem = _xyz.utils.chart(group); // old style
     group.chartElem = _xyz.charts.create(group);
+    //console.log(group.chartElem);
+    //console.log(group.div);
     // Add chart
     group.div.appendChild(group.chartElem);
+
+    //console.log(group.div);
 
     // Add chart control to group header for toggling
     group.viewToggler = _xyz.utils.createElement({
@@ -126,6 +134,7 @@ export default _xyz => group => {
 
     // Functions for toggeling between table view and chart view
     group.showChart = () => {
+      console.log(group.chartElem);
       group.table.style.display = 'none';
       group.chartElem.style.display = 'block';
       group.viewToggler.textContent = 'view_list';

@@ -2231,8 +2231,8 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "chart": {
-                                "width": 500,
-                                "height": 300,
+                                "width": 400,
+                                "height": 400,
                                 "title": true,
                                 "legend": true,
                                 "legendPosition": "bottom",
@@ -2329,8 +2329,8 @@
                             "level": 2,
                             "chart": {
                                 "title": false,
-                                "width": 500,
-                                "height": 300,
+                                "width": 400,
+                                "height": 400,
                                 "legend": true,
                                 "type": "polarArea",
                                 "backgroundColor": ["rgba(229, 99, 153, 0.3)", "rgba(0, 167, 225, 0.3)", "rgba(237, 222, 164, 0.3)", "rgba(247, 160, 114, 0.3)", "rgba(255, 155, 66, 0.3)"],
