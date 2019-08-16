@@ -10,6 +10,10 @@ import flyTo from './flyTo.mjs';
 
 import update from './update.mjs';
 
+import trash from './trash.mjs';
+
+import clipboard from './clipboard.mjs';
+
 import view from './view/_view.mjs';
 
 export default _xyz => ({
@@ -36,6 +40,8 @@ export default _xyz => ({
         flyTo: flyTo(_xyz),
         
         update: update(_xyz),
+
+        clipboard: clipboard(_xyz),
       
         view: view(_xyz),
           

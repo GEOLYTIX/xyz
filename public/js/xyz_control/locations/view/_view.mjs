@@ -27,8 +27,6 @@ import update from './update.mjs';
 import boolean from './boolean.mjs';
 
 
-
-
 export default _xyz => function () {
 
   const location = this;
@@ -92,6 +90,100 @@ export default _xyz => function () {
 
   location.view.drawer.appendChild(location.view.header);
 
+
+  // Expander icon.
+  location.view.header.appendChild(_xyz.utils.wire()`
+  <i
+  style = "${'color: ' + location.style.color}"
+  title = "Toggle location view drawer."
+  class = "material-icons cursor noselect btn_header expander"
+  onclick = ${e => {
+    e.stopPropagation();
+    
+    _xyz.utils.toggleExpanderParent({
+      expandable: location.view.drawer,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews
+    });
+  }}>`);
+
+
+  // Update icon.
+  location.view.upload = _xyz.utils.wire()`
+  <i
+  style = "${'display: none; color: ' + location.style.color}"
+  title = "Save changes to cloud."
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${e => {
+    e.stopPropagation();
+    
+    location.update();
+
+  }}>cloud_upload`;
+
+  location.view.header.appendChild(location.view.upload);
+
+
+  // Trash icon.
+  location.view.trash = _xyz.utils.wire()`
+  <i
+  style = "${'color: ' + location.style.color}"
+  title = "Delete location."
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${e => {
+    e.stopPropagation();
+    location.trash();
+  }}>delete`;
+
+  location.view.header.appendChild(location.view.trash);
+
+
+  // Copy to clipboard.
+  location.view.header.appendChild(_xyz.utils.wire()`
+  <i
+  style = "${'color: ' + location.style.color}"
+  title = "Copy to clipboard"
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${e => {
+    e.stopPropagation();
+    location.clipboard();
+  }}>file_copy`);
+
+
+  // Zoom to location bounds.
+  location.view.header.appendChild(_xyz.utils.wire()`
+  <i
+  style = "${'color: ' + location.style.color}"
+  title = "Zoom map to feature bounds"
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${e => {
+    e.stopPropagation();
+    location.flyTo();
+  }}>search`);
+
+
+  // Toggle marker.
+  location.view.header.appendChild(_xyz.utils.wire()`
+  <i
+  style = "${'color: ' + location.style.color}"
+  title = "Hide marker"
+  class = "material-icons cursor noselect btn_header"
+  onclick = ${e => {
+    e.stopPropagation();
+
+    if (e.target.textContent === 'location_off') {
+      _xyz.map.removeLayer(location.Marker);
+      e.target.textContent = 'location_on';
+      e.target.title = 'Show marker';
+
+    } else {
+      _xyz.map.addLayer(location.Marker);
+      e.target.textContent = 'location_off';
+      e.target.title = 'Hide marker';
+    }
+  }}>location_off`);
+  
+
+  // Clear selection.
   location.view.header.appendChild(_xyz.utils.wire()`
   <i
   style = "${'color: ' + location.style.color}"
@@ -102,29 +194,9 @@ export default _xyz => function () {
     location.remove();
   }}>clear`);
   
-  // Create copy to clipboard element
-  //clipboard(_xyz, location);
-  
-  // Create the zoom control element which zoom the map to the bounds of the feature.
-  //zoom(_xyz, location);
-  
-  // Create control to toggle marker.
-  //marker(_xyz, location);
-  
-  // Create control to update editable items.
-  // Update button will be invisible unless info has changed.
-  //update(_xyz, location);
-  
-  // Create control to trash editable items.
-  //trash(_xyz, location);
-  
-  // Create the expand control element which controls whether the data table is displayed for the feature.
-  //expander(_xyz, location);
 
   // Add location view to drawer.
   location.view.drawer.appendChild(location.view.node);
-
-
 
 
 };

@@ -570,6 +570,7 @@
                     "dbs": "XYZ",
                     "table": "dev.cluster_catchments",
                     "geom": "geom",
+                    "cluster_kmeans": 0.01,
                     "edit": {
                         "point": true,
                         "delete": true
@@ -702,17 +703,7 @@
                             "type": "documents",
                             "edit": true
                         }
-                    ],
-                    "style": {
-                        "marker": {
-                            "type": "triangle",
-                            "fillColor": "#1976d2",
-                            "layers": {
-                                "0.5": "#FFF"
-                            }
-                        },
-                        "markerMin": 40
-                    }
+                    ]
                 },
                 "Scratch": {
                     "format": "mvt",

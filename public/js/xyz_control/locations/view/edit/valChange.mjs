@@ -25,11 +25,20 @@ export default (param) => {
     } else {
       delete param.entry.newValue;
 
-    // Change styling of input.
-    param.input.classList.remove('changed');
+      // Change styling of input.
+      param.input.classList.remove('changed');
+    }
   }
-}
 
-if (param.entry.location.showUpload) param.entry.location.showUpload();
+  if (param.entry.location.view.upload) {
 
-}
+    // Hide upload button if no other field in the infoj has a newValue.
+    if (!param.entry.location.infoj.some(field => field.newValue)) {
+      param.entry.location.view.upload.style.display = 'none';
+    } else {
+      param.entry.location.view.upload.style.display = 'block';
+    }
+
+  }
+
+};
