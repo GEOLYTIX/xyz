@@ -76,11 +76,12 @@ export default _xyz => function () {
   // Create the header element to contain the control elements
   location.view.header = _xyz.utils.wire()`
   <div
-  style = "${'borderBottom: 2px solid ' + location.style.color}"
+  style = "${'border-bottom: 2px solid ' + location.style.color}"
   class = "header">
   <div>
   ${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
   
+
   location.view.header.onclick = () => {
     _xyz.utils.toggleExpanderParent({
       expandable: location.view.drawer,

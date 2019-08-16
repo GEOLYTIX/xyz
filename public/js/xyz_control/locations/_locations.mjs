@@ -6,8 +6,6 @@ import listview from './listview.mjs';
 
 import remove from './remove.mjs';
 
-import draw from './draw.mjs';
-
 import flyTo from './flyTo.mjs';
 
 import update from './update.mjs';
@@ -34,8 +32,6 @@ export default _xyz => ({
       location,
       {
         remove: remove(_xyz),
-  
-        draw: draw(_xyz),
         
         flyTo: flyTo(_xyz),
         
@@ -52,15 +48,15 @@ export default _xyz => ({
           stroke: true,
           fill: true,
           fillOpacity: 0,
-          icon: {
-            url: _xyz.utils.svg_symbols({
-              type: 'circle',
-              style: {
-                color: '#090'
-              }
-            }),
-            size: 40
-          }
+          // icon: {
+          //   url: _xyz.utils.svg_symbols({
+          //     type: 'circle',
+          //     style: {
+          //       color: '#090'
+          //     }
+          //   }),
+          //   size: 40
+          // }
         }, location.style || {})
       },
       assign);

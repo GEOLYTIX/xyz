@@ -27,86 +27,29 @@ export default _xyz => {
     _xyz.locations.list
       .filter(record => !!record.location)
       .forEach(record => record.location.remove());
-      
-    _xyz.locations.list = [
-      {
-        style: {
-          color: '#9c27b0'
-        }
-      },
-      {
-        style: {
-          color: '#2196f3'
-        }
-      },
-      {
-        style: {
-          color: '#009688'
-        }
-      },
-      {
-        style: {
-          color: '#cddc39'
-        },
-      },
-      {
-        style: {
-          color: '#ff9800'
-        },
-      },
-      {
-        style: {
-          color: '#673ab7'
-        },
-      },
-      {
-        style: {
-          color: '#03a9f4'
-        },
-      },
-      {
-        style: {
-          color: '#4caf50'
-        },
-      },
-      {
-        style: {
-          color: '#ffeb3b'
-        },
-      },
-      {
-        style: {
-          color: '#ff5722'
-        },
-      },
-      {
-        style: {
-          color: '#0d47a1'
-        },
-      },
-      {
-        style: {
-          color: '#00bcd4'
-        },
-      },
-      {
-        style: {
-          color: '#8bc34a'
-        },
-      },
-      {
-        style: {
-          color: '#ffc107'
-        },
-      },
-      {
-        style: {
-          color: '#d32f2f'
-        },
-      }
-    ];
 
-    _xyz.locations.list.reverse() ;
+
+    _xyz.locations.list = [
+      '#9c27b0',
+      '#2196f3',
+      '#009688',
+      '#cddc39',
+      '#ff9800',
+      '#673ab7',
+      '#03a9f4',
+      '#4caf50',
+      '#ffeb3b',
+      '#ff5722',
+      '#0d47a1',
+      '#00bcd4',
+      '#8bc34a',
+      '#ffc107',
+      '#d32f2f'
+    ].map(color => ({
+      style: {
+        color: color
+      }
+    }));
          
   };
 
@@ -118,67 +61,7 @@ export default _xyz => {
     _xyz.locations.listview.node.parentElement.style.display = 'block';
   
     Object.values(_xyz.locations.listview.node.children).forEach(el => el.classList.remove('expanded'));
-  
-
-
-    // location.style = Object.assign(
-    //   {},
-    //   _xyz.layers.list[location.layer].style,
-    //   {
-    //     color: record.color,
-    //     fillColor: record.color,
-    //     letter: record.letter,
-    //     stroke: true,
-    //     fill: true,
-    //     fillOpacity: (_xyz.layers.list[location.layer].style.default && _xyz.layers.list[location.layer].style.default.fillOpacity === undefined) ? 0 : 0.2,
-    //     icon: {
-    //       url: _xyz.utils.svg_symbols({
-    //         type: 'circle',
-    //         style: {
-    //           color: '#090',
-    //           opacity: '0'
-    //         }
-    //       }),
-    //       size: 40
-    //     }
-    //   }
-    // );
-
-    // // Set marker coordinates from point geometry.
-    // if (location.geometry.type === 'Point') location.marker = location.geometry.coordinates;
-
-
-    // // Draw letter marker.
-    // location.Marker = _xyz.mapview.geoJSON({
-    //   json: {
-    //     type: 'Feature',
-    //     geometry: {
-    //       type: 'Point',
-    //       coordinates: location.marker || _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
-    //     }
-    //   },
-    //   pane: 'select_marker',
-    //   style: {
-    //     icon: {
-    //       url: _xyz.utils.svg_symbols({
-    //         type: 'markerLetter',
-    //         style: {
-    //           letter: record.letter,
-    //           color: record.color,
-    //         }
-    //       }),
-    //       size: 40,
-    //       anchor: [20, 40]
-    //     }
-    //   }
-    // });
-
-
-    // if (location._flyTo) location.flyTo();
-  
-
-  
-    
+     
     _xyz.locations.listview.node.insertBefore(location.view.drawer, _xyz.locations.listview.node.firstChild);
   
     if (_xyz.desktop) setTimeout(() => {

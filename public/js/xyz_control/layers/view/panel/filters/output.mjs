@@ -53,7 +53,7 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
     
         
         // Draw the location to the map.
-        location.draw();
+        //location.draw();
 
         if(!location.geometry.coordinates.length){
           alert('Not enough features found to calculate aggregate data. Try zooming to layer extent.');
@@ -61,12 +61,9 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
         }
     
         location.Marker = _xyz.mapview.geoJSON({
-          json: {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
-            }
+          geometry: {
+            type: 'Point',
+            coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates
           },
           pane: 'select_marker',
           style: {

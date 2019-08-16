@@ -33,10 +33,7 @@ export default _xyz => entry => {
   function drawGeom() {
 
     entry.ctrl.geometry = _xyz.mapview.geoJSON({
-      json: {
-        type: 'Feature',
-        geometry: JSON.parse(entry.value)
-      },
+      geometry: JSON.parse(entry.value),
       pane: entry.location.layer,
       style: entry.style
     });

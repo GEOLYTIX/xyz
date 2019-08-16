@@ -9,7 +9,7 @@ export default _xyz => function(geom){
   if (gazetteer.layer) _xyz.map.removeLayer(gazetteer.layer);
   
   gazetteer.layer = _xyz.mapview.geoJSON({
-    json: geom,
+    geometry: geom.geometry,
     pane: 'gazetteer',
     style: {
       icon: {
