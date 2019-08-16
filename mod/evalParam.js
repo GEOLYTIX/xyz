@@ -8,6 +8,7 @@ module.exports = {
   layer: _layer,
   roles: _roles,
   lnglat: _lnglat,
+  coords: _coords,
   layerTable: _layerTable,
   geomTable: _geomTable,
   layerValues: _layerValues,
@@ -96,6 +97,20 @@ function _lnglat(req, res, next) {
   if (!req.params.lnglat) {
     res.code(400);
     return next(new Error('Missing lnglat.'));
+  }
+
+  next();
+
+};
+
+function _coords(req, res, next) {
+
+  req.params.coords = req.query.coords.split(',').map(xy => parseFloat(xy));
+
+  // Return 406 if lnglat is not defined as query parameter.
+  if (!req.params.coords) {
+    res.code(400);
+    return next(new Error('Missing coords.'));
   }
 
   next();

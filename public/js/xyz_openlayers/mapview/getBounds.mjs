@@ -1,15 +1,18 @@
-export default _xyz => function(epsg){
+export default _xyz => function(srid){
 
   const extent = _xyz.map.getView().calculateExtent();
 
-  if (!epsg || epsg === '3857') return {
+  if (!srid) return {
     south: extent[1],
     west: extent[0],
     north: extent[3],
     east: extent[2],
   };
 
-  const extent_transformed = _xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+epsg);
+  const extent_transformed = _xyz.mapview.lib.proj.transformExtent(
+    extent,
+    'EPSG:' + _xyz.mapview.srid,
+    'EPSG:' + srid);
 
   return {
     south: extent_transformed[1],

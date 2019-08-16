@@ -73,7 +73,7 @@ module.exports = fastify => {
       const filter_sql = filter && await sql_filter(filter) || '';
 
 
-      const where_sql = `
+      const where_sql =  `
       WHERE ST_DWithin(
         ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${srid}),
         ${geom},
@@ -183,6 +183,17 @@ module.exports = fastify => {
      
 
       } else {
+
+        if (!theme) var q = `
+        SELECT
+          count(1) count,
+          SUM(size) size,
+          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
+          ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
+  
+          FROM ${cluster_sql}
+          GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
 
         if (theme === 'categorized') var q = `
         SELECT

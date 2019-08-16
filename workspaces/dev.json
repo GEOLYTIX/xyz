@@ -372,6 +372,74 @@
                         }
                     }
                 },
+                "lulu": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "dev.lulu",
+                    "geom": "geom",
+                    "srid": "4326",
+                    "cluster_kmeans": 0.01,
+                    "cluster_dbscan": 0.01,
+                    "cluster_label": "store",
+                    "qID": "id",
+                    "infoj": [
+                        {
+                            "label": "Store",
+                            "field": "store",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Address",
+                            "field": "address",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Type",
+                            "field": "type",
+                            "type": "text"
+                        }
+                    ],
+                    "style": {
+                        "label": {
+                            "field": "store",
+                            "display": true
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#eeeeee"
+                        },
+                        "highlight": {
+                            "type": "target",
+                            "fillColor": "#ccff99"
+                        },
+                        "themes": {
+                            "type": {
+                                "type": "categorized",
+                                "field": "type",
+                                "cat": {
+                                    "store": {
+                                        "label": "Store",
+                                        "style": {
+                                        "fillColor": "#f44336"
+                                    }
+                                    },
+                                    "showroom": {
+                                        "label": "Showroom",
+                                        "style": {
+                                        "fillColor": "#64b5f6"
+                                    }
+                                    },
+                                    "outlet": {
+                                        "label": "Outlet",
+                                        "style": {
+                                        "fillColor": "#cddc39"
+                                    }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "Offices": {
                     "format": "geojson",
                     "dbs": "XYZ",
@@ -481,6 +549,11 @@
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "URI": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                "OS": {
+                    "group": "Base Layer",
+                    "format": "tiles",
+                    "URI": "https://api.ordnancesurvey.co.uk/mapping_api/v1/service/zxy/EPSG%3A3857/Light%203857/{z}/{x}/{y}.png?&provider=OS"
                 },
                 "Mapbox Base": {
                     "group": "Base Layer",

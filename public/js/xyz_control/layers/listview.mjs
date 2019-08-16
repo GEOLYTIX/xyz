@@ -71,7 +71,7 @@ export default _xyz => {
 
 
     // Create layer group header.
-    group.header = _xyz.utils.wire()`<div class="header-group">${layer.group}`;
+    group.header = _xyz.utils.wire()`<div class="header-group"><div>${layer.group}`;
     
     group.header.onclick = e => {
       e.stopPropagation();

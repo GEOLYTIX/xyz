@@ -5,8 +5,11 @@ export default _xyz => function (e, feature) {
   let
     count = feature.get('properties').count,
     geom = feature.getGeometry(),
-    coords = geom.getCoordinates(),
-    lnglat = _xyz.mapview.lib.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+    _coords = geom.getCoordinates(),
+    coords = _xyz.mapview.lib.proj.transform(
+      _coords,
+      'EPSG:' + _xyz.mapview.srid,
+      'EPSG:' + layer.srid);
 
   const xhr = new XMLHttpRequest();
 
@@ -18,7 +21,7 @@ export default _xyz => function (e, feature) {
     table: layer.table,
     filter: JSON.stringify(filter),
     count: count > 99 ? 99 : count,
-    lnglat: lnglat,
+    coords: coords,
     token: _xyz.token
   }));
 
@@ -42,13 +45,16 @@ export default _xyz => function (e, feature) {
           layer: layer.key,
           table: layer.table,
           id: li.id,
-          marker: li.lnglat,
+          marker: li.coords,
         })}>${li.label}`);
 
       });
 
       _xyz.mapview.popup.create({
-        coords: coords,
+        coords: _xyz.mapview.lib.proj.transform(
+          coords,
+          'EPSG:' + layer.srid,
+          'EPSG:' + _xyz.mapview.srid),
         content: ul
       });
 
@@ -61,8 +67,10 @@ export default _xyz => function (e, feature) {
       layer: layer.key,
       table: layer.table,
       id: cluster[0].id,
-      //marker: cluster[0].lnglat,
-      marker: _xyz.mapview.lib.proj.transform(cluster[0].lnglat, 'EPSG:4326', 'EPSG:3857')
+      marker: _xyz.mapview.lib.proj.transform(
+        cluster[0].coords,
+        'EPSG:' + layer.srid,
+        'EPSG:' + _xyz.mapview.srid)
     });
 
   };

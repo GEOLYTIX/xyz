@@ -6,7 +6,10 @@ export default _xyz => entry => {
     entry.row.remove();
   }
 
-  const lnglat = _xyz.mapview.lib.proj.transform(entry.location.marker, 'EPSG:3857', 'EPSG:4326');
+  const lnglat = _xyz.mapview.lib.proj.transform(
+    entry.location.marker, 
+    'EPSG:' + _xyz.mapview.srid,
+    'EPSG:4326');
 
   const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${lnglat[1]},${lnglat[0]}&size=300x230&provider=GOOGLE&token=${_xyz.token || ''}`;
 

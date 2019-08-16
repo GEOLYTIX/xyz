@@ -14,6 +14,8 @@ export default _xyz => params => {
 
   _xyz.mapview.node = params.target;
 
+  _xyz.mapview.srid = params.srid || '3857';
+
   const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
 
   const center = _xyz.mapview.lib.proj.fromLonLat([
@@ -30,6 +32,7 @@ export default _xyz => params => {
     }),
     controls: [],
     view: new _xyz.mapview.lib.View({
+      projection: 'EPSG:'+_xyz.mapview.srid,
       zoom: z,
       minZoom: _xyz.workspace.locale.minZoom,
       maxZoom: _xyz.workspace.locale.maxZoom,
@@ -42,7 +45,7 @@ export default _xyz => params => {
           parseFloat((params.bounds && params.bounds.north) || _xyz.workspace.locale.bounds.north),
         ],
         'EPSG:4326',
-        'EPSG:3857'),
+        'EPSG:' + _xyz.mapview.srid),
     })
   });
 
@@ -74,25 +77,20 @@ export default _xyz => params => {
 
   if(params.maskBounds || _xyz.workspace.locale.maskBounds) {
 
-    // Grey out area outside bbox
-    const world = [
-      _xyz.mapview.lib.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([180, -90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([-180, -90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([-180, 90], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([180, 90], 'EPSG:4326', 'EPSG:3857'),
-    ];
+    const world = [[180, 90], [180, -90], [-180, -90], [-180, 90], [180, 90]];
 
     const bounds = [
-      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.south], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
-      _xyz.mapview.lib.proj.transform([_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north], 'EPSG:4326', 'EPSG:3857'),
+      [_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north],
+      [_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.south],
+      [_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.south],
+      [_xyz.workspace.locale.bounds.west, _xyz.workspace.locale.bounds.north],
+      [_xyz.workspace.locale.bounds.east, _xyz.workspace.locale.bounds.north],
     ];
 
     var maskFeature = new _xyz.mapview.lib.Feature({
-      geometry: new _xyz.mapview.lib.geom.Polygon([world, bounds])
+      geometry: new _xyz.mapview.lib.geom
+        .Polygon([world, bounds])
+        .transform('EPSG:4326', 'EPSG:'+_xyz.mapview.srid)
     });
   
     var maskLayer = new _xyz.mapview.lib.layer.Vector({
@@ -133,7 +131,10 @@ export default _xyz => params => {
 
     _xyz.mapview.node.addEventListener('changeEnd', ()=>{
 
-      const center = _xyz.mapview.lib.proj.transform(_xyz.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
+      const center = _xyz.mapview.lib.proj.transform(
+        _xyz.map.getView().getCenter(),
+        'EPSG:' + _xyz.mapview.srid,
+        'EPSG:4326');
   
       _xyz.hooks.set({
         lat: center[1],

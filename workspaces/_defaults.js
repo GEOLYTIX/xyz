@@ -82,6 +82,10 @@ module.exports = {
           type: 'target',
           fillColor: '#333333',
         },
+        highlight: {
+          type: 'target',
+          fillColor: '#ccff99'
+        },
         themes: {},
       },
       filter: {},

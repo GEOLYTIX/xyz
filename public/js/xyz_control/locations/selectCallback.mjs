@@ -50,7 +50,7 @@ export default _xyz => location => {
     
   // Create mapview popup with the locations view node.
   _xyz.mapview.popup.create({
-    coords: location.marker, //_xyz.mapview.lib.proj.transform(location.marker, 'EPSG:4326', 'EPSG:3857'),
+    coords: location.marker,
     content: location.view.node
   });
 

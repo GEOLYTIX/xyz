@@ -44,6 +44,18 @@
                 font-family: ffmark_bold, sans-serif !important;
                 font-size: 15px !important;
                 line-height: 2;
+                display: flex;
+
+                >:nth-child(1){
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+    
+                >:nth-child(2){
+                    margin-left: auto;
+                }
+                
                 &:hover {
                     cursor: pointer;
                 }

@@ -59,7 +59,7 @@ fastify
         styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.rawgit.com', 'code.getmdl.io'],
         fontSrc: ['\'self\'', 'fonts.gstatic.com'],
         scriptSrc: ['\'self\'', 'cdn.rawgit.com', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'code.getmdl.io'],
-        imgSrc: ['\'self\'', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', '*.global.ssl.fastly.net', 'data:']
+        imgSrc: ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', '*.global.ssl.fastly.net', 'data:']
       },
       setAllHeaders: true
     },

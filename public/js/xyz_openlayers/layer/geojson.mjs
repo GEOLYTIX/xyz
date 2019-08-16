@@ -61,8 +61,8 @@ export default _xyz => layer => {
             id: f.properties.id
           }
         },{ 
-          dataProjection: `EPSG:${layer.srid}`,
-          featureProjection:'EPSG:3857'
+          dataProjection: 'EPSG:' + layer.srid,
+          featureProjection: 'EPSG:' + _xyz.mapview.srid
         }));
 
         source.addFeatures(features);
@@ -79,7 +79,10 @@ export default _xyz => layer => {
         this.loadedExtentsRtree_.clear();
       }
   
-      return [_xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+layer.srid)];
+      return [_xyz.mapview.lib.proj.transformExtent(
+        extent,
+        'EPSG:' + _xyz.mapview.srid,
+        'EPSG:' + layer.srid)];
     }
   });
   

@@ -1666,7 +1666,14 @@ button {
     .listview .drawer.drawer-group .header-group {
       font-family: ffmark_bold, sans-serif !important;
       font-size: 15px !important;
-      line-height: 2; }
+      line-height: 2;
+      display: flex; }
+      .listview .drawer.drawer-group .header-group > :nth-child(1) {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis; }
+      .listview .drawer.drawer-group .header-group > :nth-child(2) {
+        margin-left: auto; }
       .listview .drawer.drawer-group .header-group:hover {
         cursor: pointer; }
     .listview .drawer.drawer-group.expandable-group {

@@ -108,7 +108,10 @@ export default _xyz => layer => {
         this.loadedExtentsRtree_.clear();
       }
   
-      return [_xyz.mapview.lib.proj.transformExtent(extent,'EPSG:3857','EPSG:'+layer.srid)];
+      return [_xyz.mapview.lib.proj.transformExtent(
+        extent,
+        'EPSG:' + _xyz.mapview.srid,
+        'EPSG:' + layer.srid)];
     }
   });
   

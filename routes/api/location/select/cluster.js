@@ -21,10 +21,10 @@ module.exports =  fastify => {
           layer: { type: 'string' },
           table: { type: 'string' },
           filter: { type: 'string' },
-          lnglat: { type: 'string' },
+          coords: { type: 'string' },
           count: { type: 'integer' },
         },
-        required: ['locale', 'layer', 'table', 'lnglat']
+        required: ['locale', 'layer', 'table', 'coords']
       }
     },
     preHandler: [
@@ -32,7 +32,7 @@ module.exports =  fastify => {
       fastify.evalParam.locale,
       fastify.evalParam.layer,
       fastify.evalParam.roles,
-      fastify.evalParam.lnglat,
+      fastify.evalParam.coords,
       fastify.evalParam.geomTable,
     ],
     handler: async (req, res) => {
@@ -42,7 +42,7 @@ module.exports =  fastify => {
         table = req.query.table,
         geom = layer.geom,
         qID = layer.qID,
-        lnglat = req.params.lnglat,
+        coords = req.params.coords,
         filter = req.params.filter,
         label = layer.cluster_label ? layer.cluster_label : qID,
         count = parseInt(req.query.count) || 99;
@@ -56,11 +56,11 @@ module.exports =  fastify => {
       SELECT
         ${qID} AS ID,
         ${label} AS label,
-        array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS lnglat
+        array[st_x(st_centroid(${geom})), st_y(st_centroid(${geom}))] AS coords
       FROM ${table}
       WHERE true 
         ${filter_sql} 
-      ORDER BY ST_Point(${lnglat}) <#> ${geom} LIMIT ${count};`;
+      ORDER BY ST_Point(${coords}) <#> ${geom} LIMIT ${count};`;
   
       var rows = await env.dbs[layer.dbs](q);
   
@@ -69,7 +69,7 @@ module.exports =  fastify => {
       res.code(200).send(Object.keys(rows).map(record => ({
         id: rows[record].id,
         label: rows[record].label,
-        lnglat: rows[record].lnglat
+        coords: rows[record].coords
       })));
     
     }
