@@ -40,11 +40,6 @@ export default _xyz => (entry, callback) => {
 
         if(!chartElem || !chartElem.style) return;
 
-        chartElem.style.minWidth = entry.group.chart.width ? `${entry.group.chart.width}px` : '450px';
-        chartElem.style.minHeight = entry.group.chart.height ? `${entry.group.chart.height}px` : '300px';
-        chartElem.style.maxWidth = entry.group.chart.width ? `${entry.group.chart.width}px` : '450px';
-        chartElem.style.maxHeight = entry.group.chart.height ? `${entry.group.chart.height}px` : '300px';
-        
         flex_container.appendChild(chartElem);
 
       }

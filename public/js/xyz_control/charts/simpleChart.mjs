@@ -10,8 +10,13 @@ export default _xyz => entry => {
 	const canvas = _xyz.utils.createElement({
 		tag: 'canvas',
 		options: {
-            height: entry.chart.height || 150
+            height: entry.chart.height || 150,
+            width: entry.chart.width || 350
 		},
+        style: {
+            height: `${entry.chart.height}px` || `150px`,
+            width: `${entry.chart.width}px` || '350px'
+        },
 		appendTo: graph
 	});
 
@@ -25,7 +30,6 @@ export default _xyz => entry => {
 
     // strip off duplicates and nulls
 	series = series.filter((item, idx) => { return !!item && series.indexOf(item) >= idx; });
-
 
 	if(!series.length) { // process one dataset
 

@@ -31,11 +31,6 @@ export default _xyz => param => {
 
       if(!chartElem || !chartElem.style) return;
 
-      chartElem.style.minWidth = param.entry.chart.width ? `${param.entry.chart.width}px` : '450px';
-      chartElem.style.minHeight = param.entry.chart.height ? `${param.entry.chart.height}px` : '300px';
-      chartElem.style.maxWidth = param.entry.chart.width ? `${param.entry.chart.width}px` : '450px';
-      chartElem.style.maxHeight = param.entry.chart.height ? `${param.entry.chart.height}px` : '300px';
-
       param.container.appendChild(chartElem);
     
     } else {
