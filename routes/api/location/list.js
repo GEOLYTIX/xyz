@@ -59,7 +59,7 @@ module.exports = fastify => {
 
       let fields = tableDef.columns.map(col => {
         // get spatial expression if defined
-        if(col.fx) col.fieldfx = `${col.fx}(a.${layer.geom}${col.geography ? '::geography' : ''}, b.${tableDef.geom}${col.geography ? '::geography' : ''})`;
+        if(col.fx) col.fieldfx = `(${col.fx}(a.${layer.geom}${col.geography ? '::geography' : ''}, b.${tableDef.geom}${col.geography ? '::geography' : ''})${col.geography === 'km' ? `/1000` : ``})`;
         // get order by clause if defined
         if(col.orderby) orderBy.push(`(${col.fx ? '' : 'b.'}${col.fieldfx || col.field})::${col.type || 'text'}`);
         // get where clause if defined
@@ -76,6 +76,8 @@ module.exports = fastify => {
                 ${id_lookup || ''}
                 ${lookup || ''}
                 ORDER BY ${orderBy.join(',')} ${tableDef.order || 'ASC'} NULLS LAST LIMIT ${tableDef.limit || 100};`;
+
+      console.log(q);
 
       const rows = await env.dbs[layer.dbs](q, [req.query.id]);
 
