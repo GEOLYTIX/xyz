@@ -155,8 +155,9 @@ export default _xyz => entry => {
     			callbacks: {
     				title: () => '',
                     label: item => {
-                        if(!entry.chart.offsetX) return;
-                        return `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}`;
+                        return entry.chart.offsetX ? `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}` : `${item.yLabel}: ${item.xLabel}`;
+                        //if(!entry.chart.offsetX) return `${item.yLabel}: ${item.xLabel}`;
+                        //return `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}`;
                     }
     			}
     		}
