@@ -20,6 +20,10 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
+    if(!entry.chart.datalabels) {
+        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+    }
+
 	const datasets = [];
 
 	let labels = entry.fields.map(field => { return entry.chart.x ? String(field[entry.chart.x]) : field.label; }); // get labels
@@ -63,6 +67,9 @@ export default _xyz => entry => {
 
         // sets datalabels and applies offset back
         if(entry.chart.datalabels){
+
+            _xyz.Chart.defaults.global.plugins.datalabels.display = true;
+
             datasets[0].datalabels = {
                 align: "right",
                 anchor: "end",
@@ -156,8 +163,6 @@ export default _xyz => entry => {
     				title: () => '',
                     label: item => {
                         return entry.chart.offsetX ? `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}` : `${item.yLabel}: ${item.xLabel}`;
-                        //if(!entry.chart.offsetX) return `${item.yLabel}: ${item.xLabel}`;
-                        //return `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}`;
                     }
     			}
     		}
