@@ -27,9 +27,12 @@ export default _xyz => function (callback) {
     // Update the record.
     location.view.update();
 
+
+    if (location.view.upload) location.view.upload.style.display = 'none';
+
+
     // Reload layer.
-    _xyz.layers.list[location.layer].loaded = false;
-    _xyz.layers.list[location.layer].get();
+    _xyz.layers.list[location.layer].reload();
 
     if (callback) callback();
 

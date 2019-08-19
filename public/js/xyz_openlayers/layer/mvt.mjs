@@ -12,7 +12,13 @@ export default _xyz => layer => {
 
   layer.reload = () => {
 
-    source.refresh();
+    //source.tileCache.expireCache();
+    //source.tileCache.clear();
+
+    source.clear();
+    source.refresh({force: true});
+    
+    layer.L.redraw();
 
   };
 
