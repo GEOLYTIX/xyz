@@ -15,7 +15,6 @@
                 },
                 "Mapbox Base": {
                     "group": "Base Layer",
-                    "display": true,
                     "attribution": {
                         "© Mapbox": "https://www.mapbox.com/about/maps",
                         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
