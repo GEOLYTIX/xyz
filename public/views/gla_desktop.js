@@ -16,7 +16,6 @@ _xyz({
 
       for (const filter of filters) {
         filter.classList.remove('expanded');
-        filter.querySelector('i').textContent = 'expand_more';
       }
 
       gla_select(_xyz, location);
@@ -176,12 +175,10 @@ _xyz({
         if (this.classList.contains('expanded')) {
 
           this.classList.remove('expanded');
-          this.querySelector('i').textContent = 'expand_more';
 
         } else {
 
           this.classList.add('expanded');
-          this.querySelector('i').textContent = 'expand_less';
 
         }
 
@@ -196,7 +193,6 @@ _xyz({
 
       for (const filter of filters) {
         filter.classList.remove('expanded');
-        filter.querySelector('i').textContent = 'expand_more';
       }
 
       setBoroughFilter();
@@ -225,7 +221,15 @@ _xyz({
       document.getElementById('postcode-find').classList.remove('pink-bg');
       e.target.parentNode.classList.remove('pink-br');
     });
-    
+
+    _xyz.mapview.locate.icon = _xyz.L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_locate.svg?sanitize=true',
+      iconSize: 30
+    });
+
+    _xyz.gazetteer.icon = 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_gazetteer.svg?sanitize=true';
+
+   
     find.addEventListener('click', () => {
       _xyz.gazetteer.search(input.value,
         {

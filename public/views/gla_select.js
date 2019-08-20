@@ -1,15 +1,18 @@
 const records = [
   {
+    url: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_blue.svg?sanitize=true',
     color: '#00AEEF',
     colorDark: '#007BBC',
     stamp: parseInt(Date.now()),
   },
   {
+    url: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_green.svg?sanitize=true',
     color: '#008D48',
     colorDark: '#005A15',
     stamp: parseInt(Date.now()),
   },
   {
+    url: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_orange.svg?sanitize=true',
     color: '#E85713',
     colorDark: '#CF3E00',
     stamp: parseInt(Date.now()),
@@ -48,21 +51,7 @@ function gla_select(_xyz, location) {
 
     if (!rec.view) return;
 
-    const grids = rec.view.querySelectorAll('.grid');   
-
-    grids.forEach(grid => {
-
-      grid.style.display = 'none';
-
-    });
-
-    const expander = rec.view.querySelectorAll('.expander');   
-
-    expander.forEach(expander => {
-  
-      expander.textContent = 'expand_more';
-  
-    });
+    rec.view.classList.add('collapsed');
 
   });
 
@@ -119,13 +108,14 @@ function gla_select(_xyz, location) {
       pane: 'select_marker',
       style: {
         icon: {
-          url: _xyz.utils.svg_symbols({
-            type: 'markerColor',
-            style: {
-              colorMarker: record.color,
-              colorDot: record.colorDark,
-            }
-          }),
+          url: record.url,
+          // _xyz.utils.svg_symbols({
+          //   type: 'markerColor',
+          //   style: {
+          //     colorMarker: record.color,
+          //     colorDot: record.colorDark,
+          //   }
+          // }),
           size: 40,
           anchor: [20, 40]
         }
@@ -158,28 +148,22 @@ function gla_locationView(_xyz, record) {
 
   view.appendChild(header);
 
-  const title_expand = _xyz.utils.wire()`<i style="grid-column: 1;" class="material-icons title-btn expander">expand_less</i>`;
+  const title_expand = _xyz.utils.wire()`<div style="grid-column: 1;" class="title-btn expander">`;
 
   header.appendChild(title_expand);
 
   header.appendChild(_xyz.utils.wire()`<div style="grid-column: 2" class="title">${fields.organisation_short}`);
 
-  const title_close = _xyz.utils.wire()`<i style="grid-column: 3;" class="material-icons title-btn">close</i>`;
+  const title_close = _xyz.utils.wire()`<div style="grid-column: 3;" class="title-btn exit">`;
 
   header.appendChild(title_close);
 
 
-  title_expand.onclick = function() {
+  title_expand.onclick = function(e) {
 
-    title_expand.textContent = title_expand.textContent === 'expand_less' ? 'expand_more' : 'expand_less';
+    const loc = e.target.parentNode.parentNode;
 
-    const grids = view.querySelectorAll('.grid');   
-
-    grids.forEach(grid => {
-  
-      grid.style.display = grid.style.display === 'none' ? 'block' : 'none';
-  
-    });
+    loc.classList.toggle('collapsed');
 
   };
 
@@ -192,10 +176,10 @@ function gla_locationView(_xyz, record) {
 
 
 
-  var viewGrid = _xyz.utils.wire()`<div class="grid" style="grid-template-columns: 30px;">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid _grid" style="grid-template-columns: 30px;">`;
 
   viewGrid.appendChild(
-    _xyz.utils.wire()`<div style="grid-column: 1; grid-row: 1;"><i class="material-icons">room`);
+    _xyz.utils.wire()`<div style="grid-column: 1; grid-row: 1;"><div style="background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_location.svg?sanitize=true);" class="location_icon">`);
 
   var viewAddress = _xyz.utils.wire()`<div style="grid-column: 2; grid-row: 1;">`;
 
@@ -233,7 +217,7 @@ function gla_locationView(_xyz, record) {
   if (fields.phone) {
     viewGrid.appendChild(
       _xyz.utils.wire()`
-        <i style="grid-column: 1; grid-row: 3;" class="material-icons">call</i>`);
+        <div style="grid-column: 1; grid-row: 3; background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_phone.svg?sanitize=true);" class="location_icon">`);
     viewGrid.appendChild(
       _xyz.utils.wire()`
         <div style="grid-column: 2; grid-row: 3; line-height: 1.5;">${fields.phone}`);
@@ -242,7 +226,7 @@ function gla_locationView(_xyz, record) {
   if (fields.email) {
     viewGrid.appendChild(
       _xyz.utils.wire()`
-        <i style="grid-column: 1; grid-row: 4;" class="material-icons">email</i>`);
+        <div style="grid-column: 1; grid-row: 4; background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_email.svg?sanitize=true);" class="location_icon">`);
     viewGrid.appendChild(
       _xyz.utils.wire()`
         <a style="grid-column: 2; grid-row: 4; line-height: 1.5;" href="${'mailto:' + fields.email}">Email</a>`);    
@@ -250,7 +234,7 @@ function gla_locationView(_xyz, record) {
 
   view.appendChild(viewGrid);
 
-  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid _grid">`;
 
   var gridRow = 1;
 
@@ -359,7 +343,7 @@ function gla_locationView(_xyz, record) {
 
 
 
-  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid _grid">`;
 
   var servicesGrid = _xyz.utils.wire()`<div style="grid-column: 1;">`;
 
@@ -403,7 +387,7 @@ function gla_locationView(_xyz, record) {
   view.appendChild(viewGrid);
 
 
-  var viewGrid = _xyz.utils.wire()`<div class="grid">`;
+  var viewGrid = _xyz.utils.wire()`<div class="grid _grid">`;
 
   if (fields.cost) viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 1; grid-row: 1; text-align: center;">
