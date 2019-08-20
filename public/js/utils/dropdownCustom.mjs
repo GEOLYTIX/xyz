@@ -30,11 +30,23 @@ export function dropdownCustom(param) {
         ${typeof (entry) == 'object' ? Object.values(entry)[0] : entry}`);
 
     function selectOption(e) {
+
+      if(param.singleSelect){
+        for(let i =0; i < menu.children.length; i++){
+          menu.children[i].classList.remove('selected');
+        }
+      }
       e.target.classList.toggle('selected');
+      node.classList.toggle('active');
       if (param.callback) param.callback(e);
     }
 
   });
+
+  if(!isNaN(param.selectedIndex)){
+    node.querySelector('.head').textContent = menu.children[param.selectedIndex].textContent;
+    menu.children[param.selectedIndex].classList.add('selected');
+  }
 
   return node;
 }
