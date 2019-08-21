@@ -11,7 +11,6 @@ export function dropdownCustom(param) {
       ${param.placeholder || 'Select...'}`);
 
   function toggleMenu(e) {
-    console.log(param.singleSelect);
     e.stopPropagation();
     node.classList.toggle('active');
     if (!param.singleSelect && node.classList.contains('active')) return document.body.addEventListener('click', toggleMenu);
