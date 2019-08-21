@@ -2,13 +2,14 @@ export default (_xyz, layer) => {
 
   if (_xyz.mobile || !layer.tableview || !layer.tableview.tables) return;
 
-  // Create cluster panel and add to layer dashboard.
+
+  // Create table panel and add to layer dashboard.
   layer.tableview.panel = _xyz.utils.wire()`<div class="panel expandable">`;
 
   layer.view.dashboard.appendChild(layer.tableview.panel);
 
 
-  // Style panel header.
+  // Table panel header.
   const header = _xyz.utils.wire()`
   <div onclick=${e => {
     e.stopPropagation();
@@ -22,6 +23,7 @@ export default (_xyz, layer) => {
   
   layer.tableview.panel.appendChild(header);
 
+  
   // Return if tableview has no table definition.
   if (!layer.tableview.tables) return;
 

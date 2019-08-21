@@ -54,7 +54,6 @@ export default _xyz => params => {
   
   _xyz.map.on('click', _xyz.mapview.select);
 
-  //_xyz.map.on('pointermove', _xyz.mapview.pointerMove);
   _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.pointerMove);
   
 

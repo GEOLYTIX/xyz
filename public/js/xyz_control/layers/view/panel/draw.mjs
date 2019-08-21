@@ -6,80 +6,82 @@ export default (_xyz, layer) => {
 
   if(layer.edit.properties && layer.edit.delete && Object.keys(layer.edit).length === 2) return;
 
+
   // Create cluster panel and add to layer dashboard.
-  layer.edit.panel = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'panel expandable'
-    },
-    appendTo: layer.view.dashboard
-  });
+  layer.edit.panel = _xyz.utils.wire()`<div class="panel expandable">`;
 
-  // Panel title / expander.
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'btn_text cursor noselect',
-      textContent: 'Editing'
-    },
-    appendTo: layer.edit.panel,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        e.stopPropagation();
-        _xyz.utils.toggleExpanderParent({
-          expandable: layer.edit.panel,
-          accordeon: true,
-          scrolly: _xyz.desktop && _xyz.desktop.listviews
-        });
-      }
-    }
-  });
+  layer.view.dashboard.appendChild(layer.edit.panel);
+    
+
+  // Drawing panel header.
+  const header = _xyz.utils.wire()`
+    <div onclick=${e => {
+    e.stopPropagation();
+    _xyz.utils.toggleExpanderParent({
+      expandable: layer.edit.panel,
+      accordeon: true,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+  }}
+    class="btn_text cursor noselect">Editing`;
+    
+  layer.edit.panel.appendChild(header);
 
 
-  if(layer.edit.point) _xyz.utils.createStateButton(_xyz, {
-    text: 'Point',
-    appendTo: layer.edit.panel,
-    layer: layer,
-    activate: _xyz.geom.point,
-    finish: _xyz.geom.finish
-  });
+
+  // if(layer.edit.point) _xyz.utils.createStateButton(_xyz, {
+  //   text: 'Point',
+  //   appendTo: layer.edit.panel,
+  //   layer: layer,
+  //   activate: _xyz.geom.point,
+  //   finish: _xyz.geom.finish
+  // });
+
+  if(layer.edit.point) layer.edit.panel.appendChild(_xyz.utils.wire()`
+  <div onclick=${e => {
+
+    e.stopPropagation();
+    _xyz.geom.point(layer);
+
+  }}
+  class="btn_state btn_wide cursor noselect">Point`);
+  
+  
+  
+  // if(layer.edit.polygon) _xyz.utils.createStateButton(_xyz, {
+  //   text: 'Polygon',
+  //   appendTo: layer.edit.panel,
+  //   layer: layer,
+  //   activate: _xyz.geom.polygon,
+  //   finish: _xyz.geom.finish
+  // });
 
   
-  if(layer.edit.polygon) _xyz.utils.createStateButton(_xyz, {
-    text: 'Polygon',
-    appendTo: layer.edit.panel,
-    layer: layer,
-    activate: _xyz.geom.polygon,
-    finish: _xyz.geom.finish
-  });
-
-  
-  if(layer.edit.rectangle) _xyz.utils.createStateButton(_xyz, {
-    text: 'Rectangle',
-    appendTo: layer.edit.panel,
-    layer: layer,
-    activate: _xyz.geom.rectangle,
-    finish: _xyz.geom.finish
-  });
+  // if(layer.edit.rectangle) _xyz.utils.createStateButton(_xyz, {
+  //   text: 'Rectangle',
+  //   appendTo: layer.edit.panel,
+  //   layer: layer,
+  //   activate: _xyz.geom.rectangle,
+  //   finish: _xyz.geom.finish
+  // });
 
 
-  if(layer.edit.circle) _xyz.utils.createStateButton(_xyz, {
-    text: 'Circle',
-    appendTo: layer.edit.panel,
-    layer: layer,
-    activate: _xyz.geom.circle,
-    finish: _xyz.geom.finish
-  });
+  // if(layer.edit.circle) _xyz.utils.createStateButton(_xyz, {
+  //   text: 'Circle',
+  //   appendTo: layer.edit.panel,
+  //   layer: layer,
+  //   activate: _xyz.geom.circle,
+  //   finish: _xyz.geom.finish
+  // });
 
 
-  if(layer.edit.line) _xyz.utils.createStateButton(_xyz, {
-    text: 'Linestring',
-    appendTo: layer.edit.panel,
-    layer: layer,
-    activate: _xyz.geom.line,
-    finish: _xyz.geom.finish
-  });
+  // if(layer.edit.line) _xyz.utils.createStateButton(_xyz, {
+  //   text: 'Linestring',
+  //   appendTo: layer.edit.panel,
+  //   layer: layer,
+  //   activate: _xyz.geom.line,
+  //   finish: _xyz.geom.finish
+  // });
 
   
   if(layer.edit.isoline_mapbox){

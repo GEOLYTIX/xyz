@@ -15,9 +15,9 @@ import {Circle, Fill, Stroke, Icon, Style, Text} from 'ol/style';
 
 import {transform, transformExtent, fromLonLat} from 'ol/proj';
 
-import {defaults, Pointer, Select} from 'ol/interaction.js';
+import {defaults, Draw} from 'ol/interaction.js';
 
-import {click, pointerMove, altKeyOnly} from 'ol/events/condition.js';
+import {click} from 'ol/events/condition.js';
 
 import {Map, View, Feature, Overlay} from 'ol';
 
@@ -41,8 +41,7 @@ export default () => ({
   
   interaction: {
     defaults: defaults,
-    Pointer: Pointer,
-    Select: Select,
+    Draw: Draw,
   },
   
   events: {
