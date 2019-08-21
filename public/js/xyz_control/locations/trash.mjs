@@ -16,8 +16,8 @@ export default _xyz => function() {
 
     if (e.target.status !== 200) return;
 
-    //reload layer.
-    //_xyz.layers.list[location.layer];
+    // Reload layer.
+    _xyz.layers.list[location.layer].reload();
 
     location.remove();
 

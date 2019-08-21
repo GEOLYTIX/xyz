@@ -17,8 +17,6 @@ export default _xyz => layer => {
 
     source.clear();
     source.refresh({force: true});
-    
-    layer.L.redraw();
 
   };
 

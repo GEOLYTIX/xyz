@@ -9,7 +9,7 @@ export default _xyz => location => {
 
     if (!_record.location) {
       record = _record;
-    } else if (_record.stamp < record.stamp) {
+    } else if (record.location && _record.stamp < record.stamp) {
       record = _record;
     }
 

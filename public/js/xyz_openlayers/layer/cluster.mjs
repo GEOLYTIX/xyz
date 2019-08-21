@@ -14,8 +14,9 @@ export default _xyz => layer => {
 
   layer.reload = () => {
 
-    source.refresh();
-
+    source.clear();
+    source.refresh({force: true});
+  
   };
 
 

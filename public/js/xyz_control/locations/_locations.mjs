@@ -41,6 +41,8 @@ export default _xyz => ({
         
         update: update(_xyz),
 
+        trash: trash(_xyz),
+
         clipboard: clipboard(_xyz),
       
         view: view(_xyz),
