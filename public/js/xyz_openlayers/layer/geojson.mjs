@@ -142,6 +142,7 @@ export default _xyz => layer => {
       );
   
       return new _xyz.mapview.lib.style.Style({
+        zIndex: style.zIndex,
         stroke: new _xyz.mapview.lib.style.Stroke({
           color: style.color,
           width: style.weight
@@ -149,8 +150,7 @@ export default _xyz => layer => {
         fill: new _xyz.mapview.lib.style.Fill({
           color: _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba()
         }),
-        zIndex: style.zIndex,
-        image: style.marker && _xyz.mapview.icon({url: _xyz.utils.svg_symbols(style.marker)})
+        image: style.marker && _xyz.mapview.icon(style.marker)
       });
 
     }

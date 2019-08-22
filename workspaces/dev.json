@@ -763,8 +763,8 @@
                             "fillColor": "#083D77",
                             "fillOpacity": 0.3,
                             "marker": {
-                                "type": "target",
-                                "fillColor": "#999999"
+                                "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin.svg?sanitize=true",
+                                "anchor": [0.5, 1]
                             }
                         },
                         "highlight": {
@@ -773,7 +773,8 @@
                             "fillOpacity": 0.2,
                             "marker": {
                                 "type": "target",
-                                "fillColor": "#F78764"
+                                "fillColor": "#F78764",
+                                "scale": 0.05
                             }
                         }
                     }

@@ -34,17 +34,7 @@ export default _xyz => location => {
         fill: new _xyz.mapview.lib.style.Fill({
           color: _xyz.utils.chroma(location.style.color).alpha(location.style.fillOpacity === 0 ? 0 : parseFloat(location.style.fillOpacity) || 1).rgba()
         }),
-        // image: _xyz.mapview.icon(location.style.icon),
-        // image: new _xyz.mapview.lib.style.Circle({
-        //   radius: 7,
-        //   fill: new _xyz.mapview.lib.style.Fill({
-        //     color: 'rgba(0, 0, 0, 0.01)'
-        //   }),
-        //   stroke: new _xyz.mapview.lib.style.Stroke({
-        //     color: '#EE266D',
-        //     width: 2
-        //   })
-        // })
+        // The default callback does not assign an image style for selected point locations.
       })
     ],
     dataProjection: _xyz.layers.list[location.layer].srid,
@@ -59,29 +49,13 @@ export default _xyz => location => {
     },
     style: new _xyz.mapview.lib.style.Style({
       image: _xyz.mapview.icon({
-        url: _xyz.utils.svg_symbols({
-          type: 'markerLetter',
-          style: {
-            letter: String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record)),
-            color: location.style.color
-          }
-        }),
-        iconSize: 40,
+        type: 'markerLetter',
+        letter: String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record)),
+        color: location.style.color,
+        size: 40,
         anchor: [0.5, 1],
       })
-    }),
-    // style: new _xyz.mapview.lib.style.Style({
-    //   image: new _xyz.mapview.lib.style.Circle({
-    //     radius: 20,
-    //     fill: new _xyz.mapview.lib.style.Fill({
-    //       color: 'rgba(0, 0, 0, 0.01)'
-    //     }),
-    //     stroke: new _xyz.mapview.lib.style.Stroke({
-    //       color: '#EE266D',
-    //       width: 2
-    //     })
-    //   })
-    // }),
+    })
   });
 
   // if (location._flyTo) location.flyTo();

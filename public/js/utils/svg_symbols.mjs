@@ -5,12 +5,12 @@ export default marker => {
   if (marker.svg) return marker.svg;
 
   const markers = {
-    dot: dot(marker.style),
+    dot: dot(marker),
     circle: circle(marker.style),
     target: target(marker),
     triangle: triangle(marker),
     square: square(marker),
-    markerLetter: markerLetter(marker.style),
+    markerLetter: markerLetter(marker),
     markerColor: markerColor(marker.style),
     geo: geolocation()
   };

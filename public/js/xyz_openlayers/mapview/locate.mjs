@@ -30,8 +30,8 @@ export default _xyz => {
         zIndex: 40,
         style: new _xyz.mapview.lib.style.Style({
           image: _xyz.mapview.icon({
-            url: _xyz.utils.svg_symbols({type: 'geo'}),
-            iconSize: 30
+            type: 'geo',
+            scale: 0.05
           })
         })
       });

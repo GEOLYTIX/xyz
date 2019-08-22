@@ -206,7 +206,7 @@ export default _xyz => layer => {
       );
 
         
-      const iconSize = layer.cluster_logscale ?
+      const size = layer.cluster_logscale ?
         properties.count === 1 ?
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / Math.log(layer.max_size) * Math.log(properties.size) :
@@ -217,10 +217,11 @@ export default _xyz => layer => {
   
       return new _xyz.mapview.lib.style.Style({
         zIndex: parseInt(layer.max_size - properties.size),
-        image: _xyz.mapview.icon({
-          url: _xyz.utils.svg_symbols(_marker),
-          iconSize: iconSize
-        })
+        image: _xyz.mapview.icon(Object.assign(
+          _marker,
+          {
+            size: size
+          }))
       });
 
     }

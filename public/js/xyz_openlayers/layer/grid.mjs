@@ -199,13 +199,9 @@ export default _xyz => layer => {
 
       return new _xyz.mapview.lib.style.Style({
         image: _xyz.mapview.icon({
-          url: _xyz.utils.svg_symbols({
-            type: 'dot',
-            style: {
-              color: properties.hxcolor
-            }
-          }),
-          iconSize: size
+          type: 'dot',
+          color: properties.hxcolor,
+          size: size
         })
       });
 

@@ -17,25 +17,7 @@ export default _xyz => layer => {
 
   const layerVector = new _xyz.mapview.lib.layer.Vector({
     source: sourceVector,
-    // style: new ol.style.Style({
-    //   stroke: new ol.style.Stroke({
-    //     color: '#EE266D',
-    //     width: 2
-    //   }),
-    //   fill: new ol.style.Fill({
-    //     color: 'rgba(0, 0, 0, 0.01)'
-    //   }),
-    //   image: new ol.style.Circle({
-    //     radius: 7,
-    //     fill: new ol.style.Fill({
-    //       color: 'rgba(0, 0, 0, 0.01)'
-    //     }),
-    //     stroke: new ol.style.Stroke({
-    //       color: '#EE266D',
-    //       width: 2
-    //     })
-    //   })
-    // })
+    // style: new ol.style.Style({})
   });
 
   _xyz.map.addLayer(layerVector);
