@@ -14,8 +14,8 @@ export default _xyz => entry => {
             width: entry.chart.width || 350
 		},
         style: {
-            height: `${entry.chart.height}px` || `150px`,
-            width: `${entry.chart.width}px` || '350px'
+            height: `${entry.chart.height ? entry.chart.height : 150}px`,
+            width: `${entry.chart.width ? entry.chart.width : 350}px`
         },
 		appendTo: graph
 	});

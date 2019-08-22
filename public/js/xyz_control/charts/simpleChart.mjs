@@ -7,6 +7,7 @@ export default _xyz => entry => {
 		}
 	});
 
+
 	const canvas = _xyz.utils.createElement({
 		tag: 'canvas',
 		options: {
@@ -14,8 +15,8 @@ export default _xyz => entry => {
             width: entry.chart.width || 350
 		},
         style: {
-            height: `${entry.chart.height}px` || `150px`,
-            width: `${entry.chart.width}px` || '350px'
+            height: `${entry.chart.height ? entry.chart.height : 150}px`,
+            width: `${entry.chart.width ? entry.chart.width : 350}px`
         },
 		appendTo: graph
 	});
@@ -115,6 +116,8 @@ export default _xyz => entry => {
         position: 'bottom',
         text: entry.label
     };
+
+    console.log(datasets);
 
     new _xyz.Chart(canvas, {
     	type: entry.chart.type,
