@@ -16,7 +16,7 @@ export default _xyz => table => {
 
   if(idx <= _xyz.tableview.max_tabs && _xyz.tableview.nav_dropdown.firstChild) _xyz.tableview.nav_bar.appendChild(_xyz.tableview.nav_dropdown.firstChild);
 
-  if(!_xyz.tableview.nav_dropdown.firstChild) _xyz.tableview.nav_dropdown_btn.style.display = 'none';
+  if (_xyz.tableview.nav_dropdown && !_xyz.tableview.nav_dropdown.firstChild) _xyz.tableview.nav_dropdown_btn.style.display = 'none';
 
   if (_xyz.tableview.node && _xyz.tableview.tables.length > 0) {
 

@@ -27,7 +27,7 @@ export default _xyz => entry => {
 
 	const datasets = [];
 
-	let labels = entry.fields.map(field => { return entry.chart.x ? String(field[entry.chart.x]) : field.label; }); // get labels
+	let labels = entry.fields.map(field => { return entry.chart.x ? String(field[entry.chart.x] ? field[entry.chart.x] : field.label) : field.label; }); // get labels
 
 	labels = labels.filter((item, idx) => { return labels.indexOf(item) >= idx; }); // remove duplicates
     
@@ -43,7 +43,7 @@ export default _xyz => entry => {
 			backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
 			borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
 			spanGaps: true,
-			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : entry.chart.y ? field[entry.chart.y] : field.value))
+			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : entry.chart.y ? (field[entry.chart.y] ? field[entry.chart.y] : field.value) : field.value))
 		};
 
         // sets offset
@@ -116,8 +116,6 @@ export default _xyz => entry => {
         position: 'bottom',
         text: entry.label
     };
-
-    console.log(datasets);
 
     new _xyz.Chart(canvas, {
     	type: entry.chart.type,
