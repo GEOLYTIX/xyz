@@ -26,6 +26,8 @@ import tableview from './tableview/_tableview.mjs';
 
 import Chart from 'chart.js';
 
+import 'chartjs-plugin-datalabels';
+
 import charts from './charts/_charts.mjs';
 
 export default async (params) => {

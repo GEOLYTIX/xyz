@@ -2,8 +2,13 @@ export default _xyz => entry => {
 
   let td = _xyz.utils.createElement({
     tag: 'td',
-    style: { paddingTop: '5px' },
-    options: { colSpan: '2' },
+    style: { 
+      paddingTop: '5px'
+    },
+    options: { 
+      colSpan: '2',
+      classList: entry.class || ''    
+    },
     appendTo: entry.row
   });
 
@@ -22,6 +27,16 @@ export default _xyz => entry => {
 
     
   function showTab() {
+
+    if(_xyz.tableview.node && !_xyz.tableview.node.querySelector('.table')) {
+      _xyz.utils.createElement({
+        tag: 'div',
+        options: {
+          classList: 'table'
+        },
+        appendTo: _xyz.tableview.node.querySelector('.tab-content')
+      });
+    }
 
     entry.location.tables.push(entry);
 

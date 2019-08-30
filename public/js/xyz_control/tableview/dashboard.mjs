@@ -37,17 +37,22 @@ export default _xyz => (entry, callback) => {
         entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
         let chartElem = _xyz.charts.create(entry.group);
-        
-        if(chartElem && chartElem.style){
-          // temporary check for development
-          chartElem.style.width = '450px';
-          chartElem.style.height = '300px';
-          flex_container.appendChild(chartElem);
-        }
+
+        if(!chartElem || !chartElem.style) return;
+
+        flex_container.appendChild(chartElem);
 
       }
-    });
 
+      if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
+
+        _xyz.tableview.pgFunction({
+          entry: val, 
+          container: document.getElementById(val.target_id) || flex_container
+        });
+      
+      }
+    });
   };
 
   entry.activate = () => {

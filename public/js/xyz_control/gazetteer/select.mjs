@@ -6,7 +6,7 @@ export default _xyz => function(record, callback){
   if (gazetteer.input) gazetteer.input.value = record.label;
 
   const sources = {
-    gla: glx,
+    glx: glx,
     mapbox: mapbox,
     google: google,
   };
@@ -21,7 +21,8 @@ export default _xyz => function(record, callback){
       table: record.table,
       id: record.id,
       marker: record.marker.split(','),
-      _flyTo: true
+      _flyTo: true,
+      style: _xyz.gazetteer.style || undefined
     });
 
     if (callback) callback();

@@ -12,6 +12,8 @@ export default _xyz => {
 
 	function create(e, param){
 
+		//console.log(e);
+
 		_xyz.mapview.contextmenu = _xyz.utils.createElement({
 			tag: 'div',
 			options: {

@@ -20,7 +20,7 @@ export default (_xyz, layer) => {
     tag: 'div',
     options: {
       className: 'btn_text cursor noselect',
-      textContent: 'Editing'
+      textContent: 'Add new features'
     },
     appendTo: layer.edit.panel,
     eventListener: {

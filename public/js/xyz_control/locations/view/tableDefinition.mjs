@@ -2,8 +2,13 @@ export default _xyz => entry => {
 
   let td = _xyz.utils.createElement({
     tag: 'td',
-    style: { paddingTop: '5px' },
-    options: { colSpan: '2' },
+    style: { 
+      paddingTop: '5px'
+    },
+    options: { 
+      colSpan: '2',
+      classList: entry.class || ''   
+    },
     appendTo: entry.row
   });
 
@@ -26,7 +31,7 @@ export default _xyz => entry => {
 
   if (entry.chart) {
 
-    const tr = _xyz.utils.wire()`<tr class="${'table-chart ' + (entry.class || '')}">`;
+    const tr = _xyz.utils.wire()`<tr class="${'table-chart ' + (entry.chart.class || '')}">`;
     
     const td = _xyz.utils.wire()`<td colspan=2>`;
 

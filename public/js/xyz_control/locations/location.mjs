@@ -28,16 +28,7 @@ export default _xyz => location => {
     color: '#090',
     stroke: true,
     fill: true,
-    fillOpacity: 0,
-    icon: {
-      url: _xyz.utils.svg_symbols({
-        type: 'circle',
-        style: {
-          color: '#090'
-        }
-      }),
-      size: 40
-    }
+    fillOpacity: 0
   }, location.style || {});
 
   return location;

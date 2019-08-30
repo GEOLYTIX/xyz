@@ -51,7 +51,7 @@ module.exports =  fastify => {
         `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
 
       // The fields array stores all fields to be queried for the location info.
-      const fields = await sql_fields([], infoj, qID);
+      const fields = await sql_fields([], infoj, qID, req.params.token.roles || [], req.params.locale);
 
       // Push JSON geometry field into fields array.
       fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
@@ -60,9 +60,11 @@ module.exports =  fastify => {
 
       await infoj.forEach(entry => {
 
-        if (entry.withSelect) {
-          fields_with.push(`${entry.fieldfx} as ${entry.field}`);
-        } else if (entry.field && !entry.columns) {
+        // if (entry.withSelect) {
+        //   fields_with.push(`${entry.fieldfx} as ${entry.field}`);
+        // } else
+        
+        if (entry.field && !entry.columns) {
           fields_with.push(entry.field);
         }
 

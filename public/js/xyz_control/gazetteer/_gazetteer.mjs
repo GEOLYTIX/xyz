@@ -94,7 +94,7 @@ export default _xyz => {
       // Move down through results with down key
       if (key === 40) {
         let i = _xyz.utils.indexInParent(gazetteer.result.querySelector('.active'));
-        if (i < results.length - 1) [results[i], results[i + 1]].forEach(el => el.classList.toggle('active'));
+        if (i < results.length - 1) [results[i], results[i + 1]].forEach(el => { if(el) el.classList.toggle('active') });
         return;
       }
     
@@ -126,14 +126,14 @@ export default _xyz => {
     
         if (!activeRecord && results.length > 0) activeRecord = results[0];
     
-        if (activeRecord['data-id']) gazetteer.select({
+        if (activeRecord && activeRecord['data-id']) gazetteer.select({
           label: activeRecord.innerText,
           id: activeRecord['data-id'],
           source: activeRecord['data-source'],
           layer: activeRecord['data-layer'],
           table: activeRecord['data-table'],
           marker: activeRecord['data-marker']
-        });
+        }, params.callback || null);
     
         return;
       }
@@ -167,7 +167,7 @@ export default _xyz => {
         layer: e.target['data-layer'],
         table: e.target['data-table'],
         marker: e.target['data-marker']
-      });
+      }, params.callback || null);
 
     });
 

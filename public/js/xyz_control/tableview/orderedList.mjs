@@ -21,9 +21,9 @@ export default _xyz => (table, callback) => {
 
   const columns = [];
 
-  table.columns.forEach(col => {
+  /*table.columns.forEach(col => {
     columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-  });
+  });*/
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
 
@@ -61,9 +61,12 @@ export default _xyz => (table, callback) => {
 
     table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer();
 
+    // disable header sorting by default
+    table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false});
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
-        columns: columns,
+        columns: table.columns,
         // autoResize: true,
         layout: 'fitDataFill',
         height: 'auto'

@@ -12,7 +12,7 @@ export default _xyz => entry => {
 
     isoline_mapbox: isoline_mapbox(_xyz),
 
-    delete_geom: delete_geom(_xyz),
+    deleteGeom: delete_geom(_xyz),
 
   };
 
@@ -24,21 +24,13 @@ export default _xyz => entry => {
     entry.style
   );
 
-  let td = _xyz.utils.createElement({
-    tag: 'td',
-    style: {
-      paddingTop: '5px',
-      position: 'relative'
-    },
-    options: {
-      colSpan: '2'
-    },
-    appendTo: entry.row
-  });
+  let td = _xyz.utils.wire()`
+  <td style="padding-top: 5px; position: relative;" colSpan=2>`;
+
+  entry.row.appendChild(td);
 
 
-  function drawGeom() {
-
+  entry.ctrl.showGeom = () => {
     entry.ctrl.geometry = _xyz.geom.geoJSON({
       json: {
         type: 'Feature',
@@ -48,14 +40,11 @@ export default _xyz => entry => {
       style: entry.style
     });
     entry.location.geometries.push(entry.ctrl.geometry);
-  
-  }
+  };
 
-  entry.ctrl.showGeom = () => drawGeom();
+  if (entry.edit && entry.edit.isoline_here) entry.ctrl.drawGeom = entry.ctrl.isoline_here;
 
-  if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
-
-  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
+  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.drawGeom = entry.ctrl.isoline_mapbox;
   
 
   entry.ctrl.hideGeom = () => {
@@ -68,33 +57,27 @@ export default _xyz => entry => {
     if(_xyz.map.hasLayer(entry.ctrl.geometry)) _xyz.map.removeLayer(entry.ctrl.geometry);
   };
 
-  if (entry.edit) {
-    entry.ctrl.hideGeom = entry.ctrl.delete_geom;
-  }
+  if ((entry.display || entry.edit) && entry.value) entry.ctrl.showGeom(entry);
 
-  entry.ctrl.toggle = _xyz.utils.createCheckbox({
-    label: entry.name || 'Additional geometries',
-    appendTo: td,
-    onChange: () => {
+  if (entry.display && entry.edit && !entry.value) entry.ctrl.drawGeom(entry);
 
-      entry.ctrl.toggle.checked ?
-        entry.ctrl.showGeom(entry) :
-        entry.ctrl.hideGeom(entry);
 
-    }
-  });
+  td.appendChild(_xyz.utils.wire()`
+  <td style="padding-top: 5px;" colSpan=2>
+  <label class="checkbox">${entry.name || 'Additional geometries'}
+  <input type="checkbox"
+    disabled=${(entry.display && entry.edit)}
+    checked=${((entry.display || entry.edit) && entry.value)}
+    onchange=${e => {
+    entry.display = e.target.checked;
+    if (entry.display && entry.edit) entry.ctrl.drawGeom(entry);
+    if (entry.display && !entry.edit) entry.ctrl.showGeom(entry);
+    if (!entry.display && entry.edit) entry.ctrl.deleteGeom(entry);
+    if (!entry.display && !entry.edit) entry.ctrl.hideGeom(entry);
+  }}>
+  <div class="checkbox_i">`);
 
-  if (entry.value && !entry.edit) {
-    //entry.ctrl.toggle.checked = true;
-    entry.ctrl.toggle.checked = entry.display || false;
-    entry.ctrl.toggle.onchange();
-  }
 
-  if (entry.value && entry.edit) {
-    entry.ctrl.toggle.checked = true;
-
-    drawGeom();
-  }
 
   _xyz.utils.createElement({
     tag: 'div',
@@ -115,17 +98,9 @@ export default _xyz => entry => {
 
   if(entry.edit){
 
-    entry.edit.container = _xyz.utils.createElement({
-      tag: 'div',
-      style: {
-        padding: '4px'
-      },
-      options: {
-        classList: 'table-section expandable'
-      }//,
-      //appendTo: td
-    });
-
+    entry.edit.container = _xyz.utils.wire()`
+    <div style="padding: 4px;" class="table-section expandable">`;
+    
     _xyz.utils.createElement({
       tag: 'div',
       options: {
@@ -154,7 +129,7 @@ export default _xyz => entry => {
 
     if(entry.edit.isoline_here && entry.edit.isoline_here.slider){
 
-      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
+      if(!entry.display) td.appendChild(entry.edit.container);
 
       _xyz.geom.isoline_here_control({
         entry: entry,
@@ -164,14 +139,13 @@ export default _xyz => entry => {
 
     if(entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.slider){
 
-      if(!entry.ctrl.toggle.checked) td.appendChild(entry.edit.container);
+      if(!entry.display) td.appendChild(entry.edit.container);
 
       _xyz.geom.isoline_mapbox_control({
         entry: entry,
         container: entry.edit.container
       });
     }
-
 
   }
 

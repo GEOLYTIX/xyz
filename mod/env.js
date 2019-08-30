@@ -2,8 +2,8 @@ module.exports = {
 
   port: process.env.PORT || 3000,
 
-  acl_connection: (process.env.PUBLIC || process.env.PRIVATE) ?
-    (process.env.PUBLIC || process.env.PRIVATE).split('|') : null,
+  acl_connection: (process.env.PRIVATE || process.env.PUBLIC) ?
+    process.env.PRIVATE || process.env.PUBLIC : null,
 
   // Global dir expands the domain to create the root path for the application.
   path: process.env.DIR || '',

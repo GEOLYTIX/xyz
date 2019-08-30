@@ -1,5 +1,7 @@
 export default _xyz => (e, layer) => {
 
+  if(_xyz.mapview.state !== 'select') return;
+
   if(!layer.edit || !layer.edit.point) return;
 
   _xyz.geom.contextmenu.close();
@@ -14,6 +16,8 @@ export default _xyz => (e, layer) => {
   _xyz.map.once('click', e => _xyz.geom.contextmenu.close());
 
   function editHandler(){
+
+    //if(_xyz.mapview.state !== 'select') return;
 
     let
       count = e.layer.feature.properties.count,
@@ -78,6 +82,7 @@ export default _xyz => (e, layer) => {
         _xyz.mapview.state = 'edit';
 
         _xyz.map.once('contextmenu', ev => {
+
           _xyz.geom.contextmenu.close();
 
           _xyz.geom.contextmenu.create(ev, {

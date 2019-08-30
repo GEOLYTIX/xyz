@@ -60,8 +60,9 @@ export default (_xyz, location) => () => {
 
       if(entry.dataset || entry.stack){
 
-        let dataset_row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`,
-            dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777; font-size: small;">`;
+        let
+          dataset_row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`,
+          dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777; font-size: small;">`;
 
         if(entry.dataset && entry.dataset !== dataset){
           dataset_label.textContent = entry.dataset;
@@ -101,6 +102,9 @@ export default (_xyz, location) => () => {
 
       entry.row = _xyz.utils.createElement({
         tag: 'tr',
+        options: {
+          classList: entry.class || ''
+        },
         appendTo: location.view.node
       });
 
@@ -169,6 +173,9 @@ export default (_xyz, location) => () => {
       return location.view.dashboard(entry);   
     } 
 
+    // prevent clusterArea from firing if layer is not cluster
+    if(entry.clusterArea && _xyz.layers.list[location.layer].format !== 'cluster') return;
+
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();
 
@@ -178,7 +185,9 @@ export default (_xyz, location) => () => {
       if(entry.label_td) entry.label_td.colSpan = '2';
 
       // Create new row and append to table.
-      entry.row = _xyz.utils.wire()`<tr>`;
+      //entry.row = _xyz.utils.wire()`<tr>`;
+      entry.row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`;
+
 
       location.view.node.appendChild(entry.row);
       

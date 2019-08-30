@@ -15,7 +15,10 @@ export default _xyz => layer => () => {
     }) :
     layer.URI;
 
-    // Assign the tile layer to the layer L object and add to map.
+  
+  if (layer.L) return;
+
+  // Assign the tile layer to the layer L object and add to map.
   layer.L = L.tileLayer(decodeURIComponent(uri), {
     updateWhenIdle: true,
     pane: layer.key

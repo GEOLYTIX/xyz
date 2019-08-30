@@ -2,6 +2,8 @@ export default _xyz => (e, layer) => {
 
   if(!layer.edit || !layer.edit.polygon) return;
 
+  if(_xyz.mapview.state !== 'select') return;
+
   _xyz.geom.contextmenu.close();
 
   _xyz.geom.contextmenu.create(e, {

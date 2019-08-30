@@ -42,9 +42,19 @@ async function view(req, res, token = { access: 'public' }) {
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
 
-  const _tmpl = (md.mobile() === null || md.tablet() !== null) ?
+  let _tmpl;
+
+  try {
+    _tmpl = (md.mobile() === null || md.tablet() !== null) ?
     await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop.html`) :
     await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
+
+  } catch (err) {
+    _tmpl = (md.mobile() === null || md.tablet() !== null) ?
+      await fetch(`http://${req.headers.host}${env.path}/views/desktop.html`) :
+      await fetch(`http://${req.headers.host}${env.path}/views/mobile.html`);
+  }
+
 
   const tmpl = jsr.templates('tmpl', await _tmpl.text());
 
