@@ -91,7 +91,7 @@ function semiCircle(style){
     .attr('viewBox', '0 0 1000 1000')
     .attr('xmlns', 'http://www.w3.org/2000/svg');
 
-    makeArc(r, style.fillColor);
+    makeArc(r, style.fillColor, true);
 
     if(style.layers){
       Object.entries(style.layers).map(layer => {
@@ -101,16 +101,22 @@ function semiCircle(style){
     }
 
 
-    function makeArc(outerRadius, fillColor){
+    function makeArc(outerRadius, fillColor, shade){
 
       let options = {
         startAngle: 0,
         endAngle: Math.PI
       };
 
+      if(shade){
+        let arc_shade = d3_shape.arc().innerRadius(0).outerRadius(outerRadius);
+        svg.append("path").attr("d", arc_shade(options)).attr("fill", '#777').attr("transform", "translate(500, 760) rotate(-90)");
+      }
+
+
       let arc = d3_shape.arc().innerRadius(0).outerRadius(outerRadius);
 
-      svg.append("path").attr("d", arc(options)).attr("fill", fillColor).attr("transform", "translate(500, 750) rotate(-90)");
+      svg.append("path").attr("d", arc(options)).attr("fill", fillColor).attr("transform", "translate(480, 750) rotate(-90)");
     }
 
     return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
