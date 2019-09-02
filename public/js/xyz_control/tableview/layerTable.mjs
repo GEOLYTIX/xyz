@@ -93,6 +93,7 @@ export default _xyz => table => {
       table.target,
       {
         //layout: 'fitColumns',
+        placeholder: "No Data Available",
         columns: table.columns,
         autoResize: true,
         height: _xyz.tableview.height || 'auto',

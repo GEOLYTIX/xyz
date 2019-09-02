@@ -89,6 +89,7 @@ export default _xyz => (table, callback) => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
+        placeholder: "No Data Available",
         columns: table.columns.filter(col => { return !col.aspatial }),
         // autoResize: true,
         layout: 'fitDataFill',

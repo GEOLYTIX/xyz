@@ -66,6 +66,7 @@ export default _xyz => (table, callback) => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
+        placeholder: "No Data Available",
         tooltipsHeader: true,
         columnVertAlign: "center",
         columns: _xyz.tableview.groupColumns(table),
