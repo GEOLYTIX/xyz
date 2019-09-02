@@ -1530,7 +1530,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
   border-right: 1px solid #ddd;
-  margin-bottom: 30px; }
+  margin-bottom: 30px;
+  margin-right: 10px; }
 
 .tabulator[tabulator-layout="fitDataFill"] .tabulator-tableHolder .tabulator-table {
   min-width: 100%; }
