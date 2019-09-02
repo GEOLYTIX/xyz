@@ -19,7 +19,7 @@ export default _xyz => (table, callback) => {
 
   }
 
-  const columns = [];
+  //const columns = [];
 
   /*table.columns.forEach(col => {
     columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
@@ -62,13 +62,15 @@ export default _xyz => (table, callback) => {
     table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer();
 
     // disable header sorting by default
-    table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false});
+    table.columns.map(col => col.headerSort = col.headerSort ? col.headerSort : false );
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
-        columns: table.columns,
-        // autoResize: true,
-        layout: 'fitDataFill',
+        tooltipsHeader: true,
+        columnVertAlign: "center",
+        columns: _xyz.tableview.groupColumns(table),
+        //autoResize: false,
+        layout: table.layout || 'fitDataFill',
         height: 'auto'
       });
 

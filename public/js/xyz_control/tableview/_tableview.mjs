@@ -20,6 +20,8 @@ import resizeObserve from './resizeObserve.mjs';
 
 import pgFunction from './pgFunction.mjs';
 
+import groupColumns from './groupColumns.mjs';
+
 export default _xyz => {
 
   return {
@@ -46,7 +48,9 @@ export default _xyz => {
 
     resizeObserve: resizeObserve(_xyz),
 
-    pgFunction: pgFunction(_xyz)
+    pgFunction: pgFunction(_xyz),
+
+    groupColumns: groupColumns(_xyz)
 
   };
     
