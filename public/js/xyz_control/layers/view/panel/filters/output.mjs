@@ -70,10 +70,8 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
             icon: {
               url: _xyz.utils.svg_symbols({
                 type: 'markerLetter',
-                style: {
-                  letter: record.letter,
-                  color: record.color,
-                }
+                letter: record.letter,
+                color: record.color,
               }),
               size: 40,
               anchor: [20, 40]

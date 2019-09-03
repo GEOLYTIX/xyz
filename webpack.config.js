@@ -19,6 +19,7 @@ module.exports = {
   optimization: {
     concatenateModules: true
   },
+  //stats: 'verbose'
   // stats: {
   //   optimizationBailout: true,
   //   maxModules: Infinity

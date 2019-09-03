@@ -133,18 +133,12 @@
                             "field": "name"
                         },
                         "default": {
-                            "weight": 1,
-                            "color": "#333333",
-                            "fill": true,
-                            "fillColor": "#ffffff",
-                            "fillOpacity": 1
+                            "strokeColor": "#333333",
+                            "fillColor": "#ffffff"
                         },
                         "highlight": {
-                            "weight": 2,
-                            "color": "#f50057",
-                            "fill": true,
-                            "fillColor": "#fce4ec",
-                            "fillOpacity": 1
+                            "strokeColor": "#f50057",
+                            "fillColor": "#fce4ec"
                         },
                         "themes": {
                             "Population": {
@@ -357,18 +351,9 @@
                     "geom": "tile",
                     "style": {
                         "default": {
-                            "weight": 1,
-                            "color": "#333333",
-                            "fill": true,
+                            "strokeColor": "#333333",
                             "fillColor": "#ffffff",
                             "fillOpacity": 0.1
-                        },
-                        "highlight": {
-                            "weight": 2,
-                            "color": "#f50057",
-                            "fill": true,
-                            "fillColor": "#fce4ec",
-                            "fillOpacity": 1
                         }
                     }
                 },
@@ -381,40 +366,28 @@
                         "default": {
                             "marker": {
                                 "type": "markerColor",
-                                "style": {
-                                    "colorMarker": "#999999",
-                                    "colorDot": "#333333"
-                                },
-                                "iconAnchor": [
-                                    20,
-                                    40
-                                ]
+                                "colorMarker": "#999999",
+                                "colorDot": "#333333",
+                                "anchor": [0.5, 1],
+                                "scale": 0.05
                             }
                         },
                         "highlight": {
                             "marker": {
                                 "type": "markerColor",
-                                "style": {
-                                    "colorMarker": "#64dd17",
-                                    "colorDot": "#33691e"
-                                },
-                                "iconAnchor": [
-                                    20,
-                                    40
-                                ]
+                                "colorMarker": "#64dd17",
+                                "colorDot": "#33691e",
+                                "anchor": [0.5, 1],
+                                "scale": 0.05
                             }
                         },
                         "selected": {
                             "marker": {
                                 "type": "markerColor",
-                                "style": {
-                                    "colorMarker": "#64dd17",
-                                    "colorDot": "#33691e"
-                                },
-                                "iconAnchor": [
-                                    20,
-                                    40
-                                ]
+                                "colorMarker": "#64dd17",
+                                "colorDot": "#33691e",
+                                "anchor": [0.5, 1],
+                                "scale": 0.05
                             }
                         }
                     },
@@ -690,20 +663,16 @@
                     ],
                     "style": {
                         "default": {
-                            "weight": 1,
-                            "color": "#083D77",
-                            "fill": true,
+                            "strokeColor": "#083D77",
                             "fillColor": "#083D77",
                             "fillOpacity": 0.3,
                             "marker": {
                                 "type": "circle",
                                 "radius": 20,
-
                                 "strokeColor": "#083D77",
                                 "strokeWidth": 3
                             },
                             "_marker": {
-                                "type": "svg",
                                 "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin.svg?sanitize=true",
                                 "anchor": [0.5, 1]
                             }
@@ -713,7 +682,7 @@
                             "fill": true,
                             "fillOpacity": 0.2,
                             "marker": {
-                                "type": "target",
+                                "type": "dot",
                                 "fillColor": "#F78764",
                                 "scale": 0.05
                             }
@@ -866,119 +835,119 @@
                                     "Major City Centre": {
                                         "label": "Major City Centre",
                                         "style": {
-                                        "color": "#EF271B",
+                                        "strokeColor": "#EF271B",
                                         "fillColor": "#EF271B"
                                         }
                                     },
                                     "City Centre": {
                                         "label": "City Centre",
                                         "style": {
-                                        "color": "#BA2D0B",
+                                        "strokeColor": "#BA2D0B",
                                         "fillColor": "#BA2D0B"
                                         }
                                     },
                                     "Large Town Centre": {
                                         "label": "Large Town Centre",
                                         "style": {
-                                        "color": "#FE4E00",
+                                        "strokeColor": "#FE4E00",
                                         "fillColor": "#FE4E00"
                                         }
                                     },
                                     "Major Urban Centre": {
                                         "label": "Major Urban Centre",
                                         "style": {
-                                        "color": "#E2711D",
+                                        "strokeColor": "#E2711D",
                                         "fillColor": "#E2711D"
                                         }
                                     },
                                     "Town Centre": {
                                         "label": "Town Centre",
                                         "style": {
-                                        "color": "#F3A712",
+                                        "strokeColor": "#F3A712",
                                         "fillColor": "#F3A712"
                                         }
                                     },
                                     "Urban Centre": {
                                         "label": "Urban Centre",
                                         "style": {
-                                        "color": "#FADF63",
+                                        "strokeColor": "#FADF63",
                                         "fillColor": "#FADF63"
                                         }
                                     },
                                     "Small Town Centre": {
                                         "label": "Small Town Centre",
                                         "style": {
-                                        "color": "#FFE74C",
+                                        "strokeColor": "#FFE74C",
                                         "fillColor": "#FFE74C"
                                         }
                                     },
                                     "Village Centre": {
                                         "label": "Village Centre",
                                         "style": {
-                                        "color": "#DBFE87",
+                                        "strokeColor": "#DBFE87",
                                         "fillColor": "#DBFE87"
                                         }
                                     },
                                     "Regional SC": {
                                         "label": "Regional SC",
                                         "style": {
-                                        "color": "#8ED081",
+                                        "strokeColor": "#8ED081",
                                         "fillColor": "#8ED081"
                                         }
                                     },
                                     "Outlet Centre": {
                                         "label": "Outlet Centre",
                                         "style": {
-                                        "color": "#7DDF64",
+                                        "strokeColor": "#7DDF64",
                                         "fillColor": "#7DDF64"
                                         }
                                     },
                                     "Shopping Park": {
                                         "label": "Shopping Park",
                                         "style": {
-                                        "color": "#074F57",
+                                        "strokeColor": "#074F57",
                                         "fillColor": "#074F57"
                                         }
                                     },
                                     "Retail Park": {
                                         "label": "Retail Park",
                                         "style": {
-                                        "color": "#32746D",
+                                        "strokeColor": "#32746D",
                                         "fillColor": "#32746D"
                                         }
                                     },
                                     "Leisure Park": {
                                         "label": "Leisure Park",
                                         "style": {
-                                        "color": "#41D3BD",
+                                        "strokeColor": "#41D3BD",
                                         "fillColor": "#41D3BD"
                                         }
                                     },
                                     "Local Hub": {
                                         "label": "Local Hub",
                                         "style": {
-                                        "color": "#08B2E3",
+                                        "strokeColor": "#08B2E3",
                                         "fillColor": "#08B2E3"
                                         }
                                     },
                                     "Large Parade": {
                                         "label": "Large Parade",
                                         "style": {
-                                        "color": "#1F487E",
+                                        "strokeColor": "#1F487E",
                                         "fillColor": "#1F487E"
                                         }
                                     },
                                     "Parade": {
                                         "label": "Parade",
                                         "style": {
-                                        "color": "#541388",
+                                        "strokeColor": "#541388",
                                         "fillColor": "#541388"
                                         }
                                     },
                                     "Weak Parade": {
                                         "label": "Weak Parade",
                                         "style": {
-                                        "color": "#D90368",
+                                        "strokeColor": "#D90368",
                                         "fillColor": "#D90368"
                                         }
                                     }
@@ -992,43 +961,43 @@
                                         "value": 0,
                                         "label": "0 to 10000",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
                                     },{
                                         "value": 10000,
                                         "label": "10000 to 25000",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
                                     },{
                                         "value": 25000,
                                         "label": "25000 to 50000",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
                                     },{
                                         "value": 50000,
                                         "label": "50000 to 100000",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
                                     },{
                                         "value": 100000,
                                         "label": "100000 to 250000",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
                                     },{
                                         "value": 250000,
                                         "label": "250000 to 500000",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
                                     },{
                                         "value": 500000,
                                         "label": "500000 or more",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -1471,11 +1440,9 @@
                                 }
                             },
                             "style": {
-                                "stroke": true,
-                                "color": "#ffca28",
+                                "strokeColor": "#ffca28",
                                 "fillColor": "#ffca28",
-                                "weight": 2,
-                                "fill": true,
+                                "strokeWidth": 2,
                                 "fillOpacity": 0.2
                             }
                         }

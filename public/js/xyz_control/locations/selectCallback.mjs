@@ -52,7 +52,7 @@ export default _xyz => location => {
         type: 'markerLetter',
         letter: String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record)),
         color: location.style.color,
-        size: 40,
+        scale: 0.05,
         anchor: [0.5, 1],
       })
     })

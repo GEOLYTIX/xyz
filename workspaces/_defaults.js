@@ -29,19 +29,16 @@ module.exports = {
       srid: '4326',
       style: {
         default: {
-          weight: 1,
-          color: '#333333',
-          fill: true,
+          strokeWidth: 1,
+          strokeColor: '#333333',
           fillColor: '#333333',
           fillOpacity: 0.1,
         },
         highlight: {
-          stroke: true,
-          color: '#009900',
-          weight: 2,
+          strokeColor: '#009900',
+          strokeWidth: 2,
           fillColor: '#ccff99',
           fillOpacity: 0.2,
-          fill: true,
         },
         themes: {},
       },
@@ -51,16 +48,13 @@ module.exports = {
       srid: '3857',
       style: {
         default: {
-          weight: 1,
-          color: '#333333',
-          fill: true,
+          strokeColor: '#333333',
           fillColor: '#333333',
           fillOpacity: 0.1,
         },
         highlight: {
-          weight: 2,
-          color: '#009900',
-          fill: true,
+          strokeWidth: 2,
+          strokeColor: '#009900',
           fillColor: '#ccff99',
           fillOpacity: 0.2,
         },

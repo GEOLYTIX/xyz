@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "1.6.1",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -40,9 +40,6 @@
     "js-datepicker": "^4.0.6",
     "jsrender": "^0.9.91",
     "jwt-decode": "^2.2.0",
-    "leaflet": "^1.4.0",
-    "leaflet-draw": "^1.0.4",
-    "leaflet.vectorgrid": "^1.3.0",
     "logrocket": "^0.6.21",
     "mobile-detect": "^1.4.3",
     "nanoid": "^1.2.3",
@@ -58,7 +55,7 @@
     "eslint": "^4.19.1",
     "husky": "^1.1.3",
     "lint-staged": "^8.0.4",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1"
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   }
 }
