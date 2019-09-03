@@ -3092,6 +3092,7 @@
                             "display": false,
                             "target_id": "xyz_table5",
                             "toolbars": {},
+                            "layout": "fitColumns",
                             "table": "geodata.uk_glx_open_retail_points_ed",
                             "geom": "geom_p_4326",
                             "columns": [
@@ -3105,11 +3106,26 @@
                               },
                               {
                                 "type": "integer",
+                                "geography": "km",
+                                "title": "Distance (km)",
+                                "fx": "ST_DISTANCE",
+                                "field": "dist",
+                                "orderby": true,
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 1
+                                }
+                              },
+                              {
+                                "type": "integer",
                                 "geography": true,
                                 "title": "Distance (m)",
                                 "fx": "ST_DISTANCE",
-                                "field": "dist",
-                                "orderby": true
+                                "field": "dist_m",
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                }
                               }
                             ],
                             "order": "ASC",
