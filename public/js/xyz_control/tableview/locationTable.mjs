@@ -87,14 +87,19 @@ export default _xyz => (table, callback) => {
     // disable header sorting by default
     table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false});
 
+    // group columns if grouped defined
+    let columns = _xyz.tableview.groupColumns(table);
+    // filtered out helper columns
+    columns = columns.filter(col => { return !col.aspatial });
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
         placeholder: "No Data Available",
-        columns: table.columns.filter(col => { return !col.aspatial }),
-        // autoResize: true,
-        layout: 'fitDataFill',
+        tooltipsHeader: true,
+        columnVertAlign: "center",
+        columns: columns,
+        layout: table.layout || 'fitDataFill',
         height: 'auto'
-        //height: _xyz.tableview.height || '100%'
       });
 
     table.update();
