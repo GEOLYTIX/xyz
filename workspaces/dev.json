@@ -2419,6 +2419,7 @@
                             "title": "Population Summary",
                             "display": true,
                             "target_id": "xyz_table1",
+                            "toolbars": {},
                             "columns": [
                               {
                                 "type": "integer",
@@ -3090,6 +3091,7 @@
                             "title": "Nearest competitors", 
                             "display": false,
                             "target_id": "xyz_table5",
+                            "toolbars": {},
                             "table": "geodata.uk_glx_open_retail_points_ed",
                             "geom": "geom_p_4326",
                             "columns": [
