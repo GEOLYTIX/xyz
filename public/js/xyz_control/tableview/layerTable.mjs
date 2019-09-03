@@ -87,7 +87,7 @@ export default _xyz => table => {
       _xyz.tableview.btn.tableViewport.style.display = 'block';
     }
 
-    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer();
+    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
