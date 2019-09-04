@@ -17,8 +17,7 @@ export default _xyz => (table, callback) => {
 
   }
 
-  //table.columns.unshift({ field: 'rows', title: table.title, headerSort: false, align: 'left'});
-  table.columns.splice(0, 0, { field: 'rows', title: table.title, headerSort: false, align: 'left'});
+  table.columns.unshift({ field: 'rows', title: table.title, headerSort: false, align: 'left'});
 
   Object.keys(table.agg || {}).forEach(key => {
     table.columns.push(Object.assign({}, {field: key}, table.agg[key]));
