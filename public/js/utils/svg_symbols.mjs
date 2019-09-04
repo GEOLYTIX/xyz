@@ -32,34 +32,31 @@ function dot(style) {
 
     const svg = wire()
     `<svg
-  width=866
-  height=1000
-  viewBox='0 0 866 1000'
-  xmlns='http://www.w3.org/2000/svg'
-  >`;
+    width=866
+    height=1000
+    viewBox='0 0 866 1000'
+    xmlns='http://www.w3.org/2000/svg'
+    >`;
 
     svg.appendChild(
-        wire(null, 'svg')
-        `
-    <circle
-    cx=466
-    cy=532
-    r=395
-    fill=${chroma(style.fillColor || '#fff').darken()}>`
+      wire(null, 'svg')
+      `<circle
+      cx=466
+      cy=532
+      r=395
+      fill=${chroma(style.fillColor || '#fff').darken()}>`
     );
 
     svg.appendChild(
-        wire(null, 'svg')
-        `
-    <circle
-    cx=400
-    cy=468
-    r=395
-    fill=${style.fillColor || '#fff'}>`
+      wire(null, 'svg')
+      `<circle
+      cx=400
+      cy=468
+      r=395
+      fill=${style.fillColor || '#fff'}>`
     );
 
     return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
-
 }
 
 function target(style) {
@@ -68,11 +65,11 @@ function target(style) {
 
     const svg = wire()
     `<svg 
-  width=1000
-  height=1000
-  viewBox='0 0 1000 1000'
-  xmlns='http://www.w3.org/2000/svg'
-  >`;
+    width=1000
+    height=1000
+    viewBox='0 0 1000 1000'
+    xmlns='http://www.w3.org/2000/svg'
+    >`;
 
     let shade = wire(null, 'svg')
     `
@@ -116,7 +113,6 @@ function target(style) {
 
     return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 }
-
 
 function triangle(style) {
 
@@ -179,41 +175,59 @@ function square(style) {
         a = 800,
         o = 10;
 
-    const svg = d3_selection
-        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-        .attr('width', v)
-        .attr('height', v)
-        .attr('viewBox', '0 0 1000 1000')
-        .attr('xmlns', 'http://www.w3.org/2000/svg');
+    const svg = wire()
+    `<svg 
+    width=1000
+    height=1000
+    viewBox='0 0 1000 1000'
+    xmlns='http://www.w3.org/2000/svg'
+    >`;
 
-    svg.append('rect')
-        .attr('width', a)
-        .attr('height', a)
-        .attr('fill', '#333')
-        .attr('opacity', 0.3)
-        .attr('x', (v - a) / 2 + o)
-        .attr('y', (v - a) / 2 + o);
+    let shade = wire(null, 'svg')
+    `<rect
+    fill='#333'
+    opacity=0.3
+    >`;
 
-    svg.append('rect')
-        .attr('width', a)
-        .attr('height', a)
-        .attr('fill', style.fillColor)
-        .attr('x', (v - a) / 2)
-        .attr('y', (v - a) / 2);
+    shade.setAttribute('width', a);
+    shade.setAttribute('height', a);
+    shade.setAttribute('x', (v - a) / 2 + o);
+    shade.setAttribute('y', (v - a) / 2 + o);
 
-    if (!style.layers) return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
+    svg.appendChild(shade);
+
+    let path = wire(null, 'svg')
+    `<rect
+    fill=${style.fillColor || '#FFF'}
+    >`;
+
+    path.setAttribute('width', a);
+    path.setAttribute('height', a);
+    path.setAttribute('x', (v - a) / 2);
+    path.setAttribute('y', (v - a) / 2);
+
+    svg.appendChild(path);
+
+    if (!style.layers) return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 
     Object.entries(style.layers).map(layer => {
         let a_ = layer[0] * a;
-        svg.append('rect')
-            .attr('width', a_)
-            .attr('height', a_)
-            .attr('fill', layer[1])
-            .attr('x', (v - a_) / 2)
-            .attr('y', (v - a_) / 2);
+
+        let _layer = wire(null, 'svg')
+        `<rect
+        fill=${layer[1]}
+        >`;
+
+        _layer.setAttribute('width', a_);
+        _layer.setAttribute('height', a_);
+        _layer.setAttribute('x', (v - a_) / 2);
+        _layer.setAttribute('y', (v - a_) / 2);
+        
+        svg.appendChild(_layer);
+
     });
 
-    return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
+    return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 
 }
 

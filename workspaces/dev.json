@@ -614,7 +614,7 @@
                     ],
                     "style": {
                         "marker": {
-                            "type": "triangle",
+                            "type": "square",
                             "fillColor": "#03a9f4",
                             "layers": {
                                 "0.7": "#FFF",
@@ -622,7 +622,7 @@
                             }
                         },
                         "markerMulti": {
-                            "type": "triangle",
+                            "type": "square",
                             "fillColor": "#03a9f4",
                             "layers": {
                                 "0.7": "#FFF",
