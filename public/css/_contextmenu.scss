@@ -31,3 +31,15 @@
 		}
 	}
 }
+
+.context {
+	list-style-type: none;
+	li {
+		white-space: nowrap;
+		padding: 5px;
+		&:hover {
+			background-color: ghostwhite;
+			cursor: pointer;
+		}
+	}
+}

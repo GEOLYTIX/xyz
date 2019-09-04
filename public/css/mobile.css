@@ -821,7 +821,7 @@ button {
       cursor: pointer; }
 
 .btn_header {
-  font-size: 25px;
+  font-size: 28px;
   margin-left: 5px;
   color: #090; }
   .btn_header.active {
@@ -857,7 +857,9 @@ button {
 .btn_state {
   color: #090; }
   .btn_state.active {
-    color: #383836; }
+    color: #000;
+    box-shadow: none;
+    border: 1px solid #ddd; }
 
 .btn_inline {
   display: inline-block;
@@ -1607,10 +1609,9 @@ button {
 .popup {
   position: absolute;
   background-color: white;
-  width: 300px;
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
   bottom: 12px;
-  left: -150px; }
+  transform: translate(-50%, 0); }
   .popup:after, .popup:before {
     border: solid transparent;
     content: " ";
@@ -1619,7 +1620,7 @@ button {
   .popup:after {
     border-top-color: white;
     border-width: 10px;
-    left: 150px;
+    left: 50%;
     margin-left: -10px; }
 
 .scroll-list {
@@ -1643,7 +1644,7 @@ button {
 .listview .drawer {
   margin-top: 10px; }
   .listview .drawer.expandable {
-    max-height: 35px;
+    max-height: 40px;
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.expandable .expander::before {
@@ -1691,7 +1692,8 @@ button {
     line-height: 2;
     font-family: ffmark, sans-serif;
     border-bottom: 2px solid #333;
-    display: flex; }
+    display: flex;
+    padding: 4px 0; }
     .listview .drawer .header > :nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
@@ -1704,7 +1706,8 @@ button {
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {
-      background-image: linear-gradient(white, #cf9); }
+      background-color: #cf9;
+      font-weight: bold; }
   .listview .drawer .meta {
     margin-top: 5px; }
     .listview .drawer .meta a {
@@ -1872,6 +1875,15 @@ button {
         background-color: #9CC5A1;
         border-bottom: 1px solid transparent;
         cursor: pointer; }
+
+.context {
+  list-style-type: none; }
+  .context li {
+    white-space: nowrap;
+    padding: 5px; }
+    .context li:hover {
+      background-color: ghostwhite;
+      cursor: pointer; }
 
 *,
 *::after,

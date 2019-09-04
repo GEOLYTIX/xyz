@@ -6,7 +6,7 @@ export default _xyz => {
 
   function create(params){
 
-    if (this.node) this.node.remove();
+    this.node && this.node.remove();
 
     this.node = _xyz.utils.wire()`<div class="popup">`;
   

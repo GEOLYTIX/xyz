@@ -83,7 +83,7 @@ button {
 }
 
 .btn_header {
-    font-size: 25px;
+    font-size: 28px;
     margin-left: 5px;
     // float: right;
     color: $glxgreen;
@@ -127,7 +127,9 @@ button {
 .btn_state {
     color: $glxgreen;
     &.active {
-        color: #383836;
+        color: #000;
+        box-shadow: none;
+        border: 1px solid #ddd;
     }
 }
 

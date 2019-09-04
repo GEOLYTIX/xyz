@@ -1,103 +1,161 @@
 export default _xyz => layer => {
 
-  if(!layer.display) layer.show();
+  if (!layer.display) layer.show();
 
   layer.view.header.classList.add('edited');
+
   _xyz.mapview.node.style.cursor = 'crosshair';
 
-  layer.edit.vertices = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
-  layer.edit.trail = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
-  layer.edit.path = _xyz.mapview.lib.featureGroup().addTo(_xyz.map);
+  _xyz.map.un('click', _xyz.mapview.select);
 
-  _xyz.map.on('click', e => {
+  _xyz.mapview.node.removeEventListener('mousemove', _xyz.mapview.pointerMove);
 
-    // Add vertice from click.
-    layer.edit.vertices.addLayer(
-      _xyz.mapview.lib.circleMarker(e.latlng, _xyz.style.defaults.vertex)
-    );
+  _xyz.mapview.lastCLick = null;
 
-    // Return trail on mousemove with first vertice.
-    if (layer.edit.vertices.getLayers().length === 1) return _xyz.map.on('mousemove', e => {
+  const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
 
-      layer.edit.trail.clearLayers();
+  const sourceVector = new _xyz.mapview.lib.source.Vector();
 
-      let coords = [[e.latlng.lat, e.latlng.lng]];
-        
-      layer.edit.vertices.eachLayer(layer => {
-        coords.push([layer.getLatLng().lat, layer.getLatLng().lng]);
-      });
-  
-      layer.edit.trail.addLayer(
-        _xyz.mapview.lib.polygon(coords, _xyz.style.defaults.trail)
-      );
-  
-    });
-
-    if (layer.edit.vertices.getLayers().length < 3) return;
-
-    // Create path polygon with 3 or more vertices.
-                       
-    layer.edit.path.clearLayers();
-
-    let coords = [];
-      
-    layer.edit.vertices.eachLayer(layer => {
-      coords.push([layer.getLatLng().lat, layer.getLatLng().lng]);
-    });
-
-    layer.edit.path.addLayer(
-      _xyz.mapview.lib.polygon(coords, _xyz.style.defaults.trail)
-    );
-
-    // Use right click context menu to upload polygon.
-    _xyz.map.on('contextmenu', () => {
-                
-      let
-        center = layer.edit.vertices.getBounds().getCenter(),
-        marker = [center.lng.toFixed(5), center.lat.toFixed(5)];
-      
-      const xhr = new XMLHttpRequest();
-      
-      xhr.open(
-        'POST', 
-        _xyz.host + 
-        '/api/location/edit/draw?' +
-        _xyz.utils.paramString({
-          locale: _xyz.workspace.locale.key,
-          layer: layer.key,
-          table: layer.table,
-          token: _xyz.token
-        }));
-
-      xhr.setRequestHeader('Content-Type', 'application/json');
-    
-      xhr.onload = e => {
-
-        if (e.target.status !== 200) return;
-
-        layer.get();
-              
-        // Select polygon when post request returned 200.
-        _xyz.locations.select({
-          locale: _xyz.workspace.locale.key,
-          layer: layer.key,
-          table: layer.table,
-          id: e.target.response,
-          marker: marker,
-          edit: layer.edit
-        });
-
-      };
-      
-      // Send path geometry to endpoint.
-      xhr.send(JSON.stringify({
-        geometry: layer.edit.path.toGeoJSON().features[0].geometry
-      }));
-
-      _xyz.mapview.state.finish();
-
-    }); 
-
+  const layerVector = new _xyz.mapview.lib.layer.Vector({
+    source: sourceVector,
   });
 
+  _xyz.map.addLayer(layerVector);
+
+  const drawInteraction = new _xyz.mapview.lib.interaction.Draw({
+    source: sourceVector,
+    //geometryFunction: _xyz.mapview.lib.draw.createBox,
+    type: 'Polygon',
+    condition: e => {
+      if (e.pointerEvent.buttons === 1) {
+        _xyz.mapview.lastCLick = e.coordinate;
+        if (_xyz.mapview.popup.node) _xyz.mapview.popup.node.remove();
+        return true;
+      }
+    }
+  });
+
+  drawInteraction.on('drawstart', () => sourceVector.clear());
+
+  drawInteraction.on('drawend', e => console.log(e));
+
+  _xyz.map.addInteraction(drawInteraction);
+
+
+  function update() {
+
+    _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
+
+    const features = sourceVector.getFeatures();
+
+    sourceVector.clear();
+
+    _xyz.map.removeLayer(layerVector);
+
+    layer.view.header.classList.remove('edited');
+
+    _xyz.mapview.node.style.cursor = 'auto';
+
+    _xyz.mapview.node.removeEventListener('contextmenu', contextmenu);
+
+    _xyz.map.removeInteraction(drawInteraction);
+
+    _xyz.map.on('click', _xyz.mapview.select);
+
+    _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.pointerMove);
+
+    const feature = JSON.parse(
+      geoJSON.writeFeature(
+        features[0],
+        { 
+          dataProjection: 'EPSG:' + layer.srid,
+          featureProjection: 'EPSG:' + _xyz.mapview.srid
+        })
+    );
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open(
+      'POST', 
+      _xyz.host + 
+          '/api/location/edit/draw?' +
+          _xyz.utils.paramString({
+            locale: _xyz.workspace.locale.key,
+            layer: layer.key,
+            table: layer.table,
+            token: _xyz.token
+          }));
+  
+    xhr.setRequestHeader('Content-Type', 'application/json');
+          
+    xhr.onload = e => {
+      
+      if (e.target.status !== 200) return;
+                    
+      layer.reload();
+                    
+      // Select polygon when post request returned 200.
+      _xyz.locations.select({
+        layer: layer.key,
+        table: layer.table,
+        id: e.target.response,
+      });
+      
+    };
+            
+    // Send path geometry to endpoint.
+    xhr.send(JSON.stringify({
+      geometry: feature.geometry
+    }));
+      
+    //_xyz.mapview.state.finish();
+
+  }
+
+
+  function remove() {
+
+    _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
+
+    sourceVector.clear();
+
+    _xyz.map.removeLayer(layerVector);
+
+    layer.view.header.classList.remove('edited');
+
+    _xyz.mapview.node.style.cursor = 'auto';
+
+    _xyz.mapview.node.removeEventListener('contextmenu', contextmenu);
+
+    _xyz.map.removeInteraction(drawInteraction);
+
+    _xyz.map.on('click', _xyz.mapview.select);
+
+    _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.pointerMove);
+
+  }
+
+
+  function contextmenu(e) {
+
+    if (!_xyz.mapview.lastCLick) return;
+
+    e.preventDefault();
+
+    _xyz.mapview.popup.create({
+      coords: _xyz.mapview.lastCLick,
+      content: _xyz.utils.wire()`
+        <ul class="context">
+        <li onclick=${update}>Save</li>
+        <li onclick=${e=> {
+          drawInteraction.removeLastPoint();
+        }}>Remove last vertice</li>
+        <li onclick=${remove}>Cancel</li>`
+    });
+
+  }
+
+  // Use right click context menu to upload polygon.
+  _xyz.mapview.node.addEventListener('contextmenu', contextmenu);
+  
 };

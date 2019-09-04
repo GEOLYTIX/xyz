@@ -14,8 +14,6 @@ export {copyToClipboard} from './copyToClipboard.mjs';
 
 export {createElement} from './createElement.mjs';
 
-export {createStateButton} from './createStateButton.mjs';
-
 export {slider} from './slider.mjs';
 
 export {dropdown} from './dropdown.mjs';
@@ -27,8 +25,6 @@ export {dataURLtoBlob} from './dataURLtoBlob.mjs';
 export {getCircularReplacer} from './getCircularReplacer.mjs';
 
 export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
-
-export {setStrokeWeight} from './setStrokeWeight.mjs';
 
 export {deepMerge} from './deepMerge.mjs';
 

@@ -54,6 +54,14 @@ export default _xyz => params => {
   
   _xyz.map.on('click', _xyz.mapview.select);
 
+  _xyz.mapview.node.addEventListener('mousemove', e=> {
+    _xyz.mapview.pointerLocation = {
+      x: e.clientX,
+      y: e.clientY
+    };
+    if (_xyz.mapview.infotip.node) _xyz.mapview.infotip.position();
+  });
+
   _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.pointerMove);
   
 

@@ -668,9 +668,7 @@
                             "fillOpacity": 0.3,
                             "marker": {
                                 "type": "circle",
-                                "radius": 20,
-                                "strokeColor": "#083D77",
-                                "strokeWidth": 3
+                                "strokeColor": "#083D77"
                             },
                             "_marker": {
                                 "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin.svg?sanitize=true",

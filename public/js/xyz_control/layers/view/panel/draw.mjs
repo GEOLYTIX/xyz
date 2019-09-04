@@ -29,32 +29,27 @@ export default (_xyz, layer) => {
 
 
 
-  // if(layer.edit.point) _xyz.utils.createStateButton(_xyz, {
-  //   text: 'Point',
-  //   appendTo: layer.edit.panel,
-  //   layer: layer,
-  //   activate: _xyz.geom.point,
-  //   finish: _xyz.geom.finish
-  // });
-
-  if(layer.edit.point) layer.edit.panel.appendChild(_xyz.utils.wire()`
+  layer.edit.point && layer.edit.panel.appendChild(_xyz.utils.wire()`
   <div onclick=${e => {
 
     e.stopPropagation();
+    e.target.classList.add('active');
     _xyz.geom.point(layer);
 
   }}
   class="btn_state btn_wide cursor noselect">Point`);
   
+
+  layer.edit.polygon && layer.edit.panel.appendChild(_xyz.utils.wire()`
+  <div onclick=${e => {
+
+    e.stopPropagation();
+    e.target.classList.add('active');
+    _xyz.geom.polygon(layer);
+
+  }}
+  class="btn_state btn_wide cursor noselect">Polygon`);
   
-  
-  // if(layer.edit.polygon) _xyz.utils.createStateButton(_xyz, {
-  //   text: 'Polygon',
-  //   appendTo: layer.edit.panel,
-  //   layer: layer,
-  //   activate: _xyz.geom.polygon,
-  //   finish: _xyz.geom.finish
-  // });
 
   
   // if(layer.edit.rectangle) _xyz.utils.createStateButton(_xyz, {
@@ -84,56 +79,56 @@ export default (_xyz, layer) => {
   // });
 
   
-  if(layer.edit.isoline_mapbox){
+  // if(layer.edit.isoline_mapbox){
 
-    if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   
+  //   if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   
 
-    let block = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        classList: 'block'
-      },
-      appendTo: layer.edit.panel
-    });
+  //   let block = _xyz.utils.createElement({
+  //     tag: 'div',
+  //     options: {
+  //       classList: 'block'
+  //     },
+  //     appendTo: layer.edit.panel
+  //   });
 
-    _xyz.geom.isoline_mapbox_control({
-      entry: layer,
-      container: block
-    });
+  //   _xyz.geom.isoline_mapbox_control({
+  //     entry: layer,
+  //     container: block
+  //   });
 
-    _xyz.utils.createStateButton(_xyz, {
-      text: 'Isoline Mapbox',
-      appendTo: layer.edit.panel,
-      layer: layer,
-      activate: _xyz.geom.isoline_mapbox,
-      finish: _xyz.geom.finish
-    });
+  //   _xyz.utils.createStateButton(_xyz, {
+  //     text: 'Isoline Mapbox',
+  //     appendTo: layer.edit.panel,
+  //     layer: layer,
+  //     activate: _xyz.geom.isoline_mapbox,
+  //     finish: _xyz.geom.finish
+  //   });
 
-  }
+  // }
 
 
-  if(layer.edit.isoline_here) {
+  // if(layer.edit.isoline_here) {
     
-    if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};
+  //   if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};
 
-    let block = _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        classList: 'block'
-      },
-      appendTo: layer.edit.panel
-    });
+  //   let block = _xyz.utils.createElement({
+  //     tag: 'div',
+  //     options: {
+  //       classList: 'block'
+  //     },
+  //     appendTo: layer.edit.panel
+  //   });
 
-    _xyz.geom.isoline_here_control({entry: layer, container: block});
+  //   _xyz.geom.isoline_here_control({entry: layer, container: block});
 
-    _xyz.utils.createStateButton(_xyz, {
-      text: 'Isoline Here',
-      appendTo: layer.edit.panel,
-      layer: layer,
-      activate: _xyz.geom.isoline_here,
-      finish: _xyz.geom.finish
-    });
+  //   _xyz.utils.createStateButton(_xyz, {
+  //     text: 'Isoline Here',
+  //     appendTo: layer.edit.panel,
+  //     layer: layer,
+  //     activate: _xyz.geom.isoline_here,
+  //     finish: _xyz.geom.finish
+  //   });
   
-  }
+  // }
 
 };

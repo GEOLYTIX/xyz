@@ -5,7 +5,6 @@ export default _xyz => {
     position: position,
   };
   
-  
   function create(info) {
 
     if (this.node) this.node.remove();

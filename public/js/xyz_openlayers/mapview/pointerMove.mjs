@@ -2,11 +2,6 @@ export default _xyz => function(e) {
 
   const pixel = _xyz.map.getEventPixel(e);
 
-  _xyz.mapview.pointerLocation = {
-    x: e.clientX,
-    y: e.clientY
-  };
-
   // Get features from layers which have a highlight style.
   const featureArray = _xyz.map.getFeaturesAtPixel(pixel,{
 
@@ -24,13 +19,9 @@ export default _xyz => function(e) {
     
   // Return is feature is already highlighted.
   // The first feature in the array will be the feature with the highest zIndex.
-  if (_xyz.mapview.highlight.feature === featureArray[0]) {
+  if (_xyz.mapview.highlight.feature === featureArray[0]) return;
 
-    if (_xyz.mapview.infotip.node) _xyz.mapview.infotip.position();
-
-    return;
-  }
-
+  
   // Redraw layer with previous highlighted feature.
   _xyz.mapview.clearHighlight();
 

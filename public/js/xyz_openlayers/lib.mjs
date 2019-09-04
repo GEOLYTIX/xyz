@@ -17,6 +17,8 @@ import {transform, transformExtent, fromLonLat} from 'ol/proj';
 
 import {defaults, Draw} from 'ol/interaction.js';
 
+import {createBox} from 'ol/interaction/Draw.js';
+
 import {click} from 'ol/events/condition.js';
 
 import {Map, View, Feature, Overlay} from 'ol';
@@ -42,6 +44,10 @@ export default () => ({
   interaction: {
     defaults: defaults,
     Draw: Draw,
+  },
+
+  draw: {
+    createBox: createBox,
   },
   
   events: {

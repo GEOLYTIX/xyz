@@ -220,7 +220,7 @@ export default _xyz => layer => {
         image: _xyz.mapview.icon(Object.assign(
           _marker,
           {
-            size: size
+            scale: size / 40 * 0.05
           }))
       });
 

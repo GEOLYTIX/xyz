@@ -8,7 +8,7 @@
     .drawer {
         margin-top: 10px;
         &.expandable {
-            max-height: 35px;
+            max-height: 40px;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .expander::before {
@@ -81,6 +81,7 @@
             font-family: ffmark, sans-serif;
             border-bottom: 2px solid #333;
             display: flex;
+            padding: 4px 0;
 
             >:nth-child(1){
                 overflow: hidden;
@@ -100,7 +101,9 @@
                 cursor: pointer;
             }
             &.edited {
-                background-image: linear-gradient(white, #cf9);
+                // background-image: linear-gradient(white, #cf9);
+                background-color: #cf9;
+                font-weight: bold;
             }
         }
         .meta {

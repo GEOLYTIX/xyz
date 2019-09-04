@@ -22,13 +22,12 @@
 }
 
 .popup {
-
     position: absolute;
     background-color: white;
-    width: 300px;
+    // width: 300px;
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
     bottom: 12px;
-    left: -150px;
+    transform: translate(-50%, 0);
 
     &:after, &:before {
         border: solid transparent;
@@ -40,10 +39,9 @@
     &:after {
         border-top-color: white;
         border-width: 10px;
-        left: 150px;
+        left: 50%;
         margin-left: -10px;
     }
-
 }
 
 .scroll-list {
