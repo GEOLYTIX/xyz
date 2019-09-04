@@ -611,7 +611,25 @@
                             "type": "documents",
                             "edit": true
                         }
-                    ]
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "square",
+                            "fillColor": "#03a9f4",
+                            "layers": {
+                                "0.7": "#FFF",
+                                "0.5": "#512da8"
+                            }
+                        },
+                        "markerMulti": {
+                            "type": "square",
+                            "fillColor": "#03a9f4",
+                            "layers": {
+                                "0.7": "#FFF",
+                                "0.5": "#512da8"
+                            }
+                        }
+                    }
                 },
                 "Scratch": {
                     "format": "mvt",
