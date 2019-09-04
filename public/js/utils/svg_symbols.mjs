@@ -123,36 +123,54 @@ function triangle(style) {
     let r = 500,
         scale = -20;
 
-    const svg = d3_selection
-        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-        .attr('width', 1000)
-        .attr('height', 1000)
-        .attr('viewBox', '0 0 1000 1000')
-        .attr('xmlns', 'http://www.w3.org/2000/svg');
+    const svg = wire()
+    `<svg 
+    width=1000
+    height=1000
+    viewBox='0 0 1000 1000'
+    xmlns='http://www.w3.org/2000/svg'
+    >`;
 
-    let t = d3_shape.symbol().type(d3_shape.symbolTriangle).size(r);
+    // triangle path
+    let t = "M0,-19.618873042551414L16.990442448471224,9.809436521275707L-16.990442448471224,9.809436521275707Z";
 
-    svg.append('path')
-        .attr('d', t)
-        .attr('fill', '#333')
-        .attr('opacity', 0.4)
-        .attr('transform', 'translate(' + (r + 40) + ' ' + (r + 20) + ') rotate(180) scale(' + scale + ', ' + scale + ')');
+    let shade = wire(null, 'svg')
+      `<path 
+      fill='#333'
+      opacity=0.4
+      >`;
 
-    svg.append('path')
-        .attr('d', t)
-        .attr('fill', style.fillColor)
-        .attr('transform', 'translate(' + r + ',' + r + ') rotate(180) scale(' + scale + ', ' + scale + ')');
+    shade.setAttribute("d", t);
+    shade.setAttribute("transform", `translate(${r + 40} ${r + 20}) rotate(180) scale(${scale}, ${scale})`);
 
-    if (!style.layers) return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
+    svg.appendChild(shade);
+
+    let path = wire(null, 'svg')
+    `<path
+    fill=${style.fillColor || '#FFF'}
+    >`;
+
+    path.setAttribute("d", t);
+    path.setAttribute("transform", `translate(${r} ${r}) rotate(180) scale(${scale}, ${scale})`);
+    svg.appendChild(path);
+  
+    if(!style.layers) return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 
     Object.entries(style.layers).map(layer => {
-        svg.append('path')
-            .attr('d', t)
-            .attr('fill', layer[1])
-            .attr('transform', 'translate(' + r + ',' + r + ') rotate(180) scale(' + layer[0] * scale + ', ' + layer[0] * scale + ')');
+
+      let _layer = wire(null, 'svg')
+      `<path
+      fill=${layer[1]}
+      >`;
+
+      _layer.setAttribute("d", t);
+      _layer.setAttribute("transform", `translate(${r} ${r}) rotate(180) scale(${layer[0]*scale}, ${layer[0]*scale})`);
+      
+      svg.appendChild(_layer);
+
     });
 
-    return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
+    return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 }
 
 function square(style) {
