@@ -9,6 +9,7 @@ export default marker => {
       target: target(marker),
       triangle: triangle(marker),
       square: square(marker),
+      semiCircle: semiCircle(marker),
       markerLetter: markerLetter(marker),
       markerColor: markerColor(marker),
       geo: geolocation()
@@ -224,6 +225,55 @@ function square(style) {
     });
 
     return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
+}
+
+function semiCircle(style){
+
+  const r = 400;
+
+  const svg = wire()
+    `<svg 
+    width=1000
+    height=1000
+    viewBox='0 0 1000 1000'
+    xmlns='http://www.w3.org/2000/svg'>
+    <defs>
+    <clipPath id="cut-off-shade">
+    <rect x="0" y="0" width="1000" height="710"/>
+    </clipPath>
+    <clipPath id="cut-off">
+    <rect x="0" y="0" width="1000" height="700"/>
+    </clipPath>
+    </defs>
+    <circle cx="510" cy="710" r="400" fill="#333" opacity="0.3" clip-path="url(#cut-off-shade)"/>
+    </svg>`;
+
+    svg.appendChild(wire(null, 'svg')
+    `<circle
+    cx=500
+    cy=700
+    r=400
+    fill=${style.fillColor}
+    clip-path='url(#cut-off)'
+    >`);
+
+    if(style.layers){
+      Object.entries(style.layers).map(layer => {
+        let _r = parseInt(parseFloat(layer[0])*r), _fillColor = layer[1],
+            _arc = wire(null, 'svg')
+            `<circle
+            cx=500
+            cy=700
+            fill=${_fillColor}
+            clip-path='url(#cut-off)'
+            >`;
+
+        _arc.setAttribute("r", _r);
+        svg.appendChild(_arc);
+      });
+    }
+
+    return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 
 }
 
@@ -276,7 +326,6 @@ function markerLetter(style) {
     );
 
     return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
-
 }
 
 function markerColor(style) {
@@ -376,5 +425,4 @@ function geolocation() {
     svg.appendChild(p);
 
     return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
-
 }
