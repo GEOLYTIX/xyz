@@ -28,13 +28,22 @@ export default (_xyz, layer) => {
   layer.edit.panel.appendChild(header);
 
 
-
   layer.edit.point && layer.edit.panel.appendChild(_xyz.utils.wire()`
   <div onclick=${e => {
 
     e.stopPropagation();
-    e.target.classList.add('active');
-    _xyz.geom.point(layer);
+    const btn = e.target;
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+    
+    _xyz.mapview.draw.begin({
+      layer: layer,
+      type: 'Point',
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
 
   }}
   class="btn_state btn_wide cursor noselect">Point`);
@@ -44,41 +53,87 @@ export default (_xyz, layer) => {
   <div onclick=${e => {
 
     e.stopPropagation();
-    e.target.classList.add('active');
-    _xyz.geom.polygon(layer);
+    const btn = e.target;
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.draw({
+      layer: layer,
+      type: 'Polygon',
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
 
   }}
   class="btn_state btn_wide cursor noselect">Polygon`);
   
 
+  layer.edit.rectangle && layer.edit.panel.appendChild(_xyz.utils.wire()`
+  <div onclick=${e => {
+
+    e.stopPropagation();
+    const btn = e.target;
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.draw({
+      layer: layer,
+      type: 'Circle',
+      geometryFunction: _xyz.mapview.lib.draw.createBox(),
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
+
+  }}
+  class="btn_state btn_wide cursor noselect">Rectangle`);
   
-  // if(layer.edit.rectangle) _xyz.utils.createStateButton(_xyz, {
-  //   text: 'Rectangle',
-  //   appendTo: layer.edit.panel,
-  //   layer: layer,
-  //   activate: _xyz.geom.rectangle,
-  //   finish: _xyz.geom.finish
-  // });
+
+  layer.edit.circle && layer.edit.panel.appendChild(_xyz.utils.wire()`
+  <div onclick=${e => {
+
+    e.stopPropagation();
+    const btn = e.target;
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.draw({
+      layer: layer,
+      type: 'Circle',
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
+
+  }}
+  class="btn_state btn_wide cursor noselect">Circle`);
 
 
-  // if(layer.edit.circle) _xyz.utils.createStateButton(_xyz, {
-  //   text: 'Circle',
-  //   appendTo: layer.edit.panel,
-  //   layer: layer,
-  //   activate: _xyz.geom.circle,
-  //   finish: _xyz.geom.finish
-  // });
+  layer.edit.line && layer.edit.panel.appendChild(_xyz.utils.wire()`
+  <div onclick=${e => {
 
+    e.stopPropagation();
+    const btn = e.target;
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
 
-  // if(layer.edit.line) _xyz.utils.createStateButton(_xyz, {
-  //   text: 'Linestring',
-  //   appendTo: layer.edit.panel,
-  //   layer: layer,
-  //   activate: _xyz.geom.line,
-  //   finish: _xyz.geom.finish
-  // });
+    _xyz.mapview.draw({
+      layer: layer,
+      type: 'LineString',
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
 
-  
+  }}
+  class="btn_state btn_wide cursor noselect">Line`);
+
+ 
   // if(layer.edit.isoline_mapbox){
 
   //   if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   

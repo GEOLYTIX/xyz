@@ -12,6 +12,8 @@ import pointerMove from './pointerMove.mjs';
 
 import select from './select.mjs';
 
+import draw from './draw.mjs';
+
 import getBounds from './getBounds.mjs';
 
 import icon from './icon.mjs';
@@ -45,6 +47,8 @@ export default _xyz => ({
   infotip: infotip(_xyz),
 
   geoJSON: geoJSON(_xyz),
+
+  draw: draw(_xyz),
 
   icon: icon(_xyz),
 
