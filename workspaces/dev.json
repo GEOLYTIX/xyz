@@ -437,14 +437,7 @@
             "gazetteer": {
                 "provider": "GOOGLE",
                 "code": "GB",
-                "placeholder": "e.g. London",
-                "datasets": [
-                    {
-                        "layer": "Retail Points",
-                        "table": "dev.retailpoints",
-                        "label": "store"
-                    }
-                ]
+                "placeholder": "e.g. London"
             },
             "layers": {
                 "OSM": {
@@ -1198,6 +1191,9 @@
                         "label": {
                             "field": "store",
                             "display": true
+                        },
+                        "marker": {
+                            "type": "geo"
                         },
                         "markerMulti": {
                             "type": "target",
