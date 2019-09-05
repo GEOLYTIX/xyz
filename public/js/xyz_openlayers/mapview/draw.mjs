@@ -12,6 +12,8 @@ export default _xyz => {
 
     _xyz.mapview.draw.callback && _xyz.mapview.draw.callback();
 
+    finish();
+
     _xyz.mapview.draw.callback = params.callback;
 
     _xyz.mapview.draw.layer = params.layer;
@@ -28,7 +30,9 @@ export default _xyz => {
   
     _xyz.mapview.draw.sourceVector = new _xyz.mapview.lib.source.Vector();
   
-    _xyz.mapview.draw.layerVector = new _xyz.mapview.lib.layer.Vector({source: sourceVector});
+    _xyz.mapview.draw.layerVector = new _xyz.mapview.lib.layer.Vector({
+      source: _xyz.mapview.draw.sourceVector
+    });
   
     _xyz.map.addLayer(_xyz.mapview.draw.layerVector);
   
@@ -90,7 +94,7 @@ export default _xyz => {
         
       if (e.target.status !== 200) return;
                       
-      layer.reload();
+      _xyz.mapview.draw.layer.reload();
                       
       // Select polygon when post request returned 200.
       _xyz.locations.select({
@@ -114,15 +118,15 @@ export default _xyz => {
   
     _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
   
-    _xyz.mapview.draw.sourceVector.clear();
+    _xyz.mapview.draw.sourceVector && _xyz.mapview.draw.sourceVector.clear();
   
-    _xyz.map.removeLayer(_xyz.mapview.draw.layerVector);
+    _xyz.mapview.draw.layerVector && _xyz.map.removeLayer(_xyz.mapview.draw.layerVector);
     
     _xyz.mapview.node.style.cursor = 'auto';
   
     _xyz.mapview.node.removeEventListener('contextmenu', contextmenu);
   
-    _xyz.map.removeInteraction(_xyz.mapview.draw.interaction);
+    _xyz.mapview.draw.interaction && _xyz.map.removeInteraction(_xyz.mapview.draw.interaction);
   
     _xyz.map.on('click', _xyz.mapview.select);
   
@@ -135,7 +139,7 @@ export default _xyz => {
   function removeLastPoint(){
 
     _xyz.mapview.draw.interaction.removeLastPoint();
-    _xyz.mapview.lastCLick.pop();
+    _xyz.mapview.draw.vertices.pop();
     _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
 
   }
@@ -148,7 +152,7 @@ export default _xyz => {
 
     const menu = _xyz.utils.wire()`<ul class="context">`;
 
-    const features = sourceVector.getFeatures();
+    const features = _xyz.mapview.draw.sourceVector.getFeatures();
 
     if (features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Save</li>`);
 

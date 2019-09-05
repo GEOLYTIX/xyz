@@ -10,10 +10,6 @@ import isoline_here_control from './isoline_here_control.mjs';
 
 import polygon_edit from './polygon_edit.mjs';
 
-import finish from './finish.mjs';
-
-import contextmenu from './contextmenu.mjs';
-
 export default _xyz => ({
 
   point_edit: point_edit(_xyz),
@@ -28,7 +24,4 @@ export default _xyz => ({
 
   isoline_here_control: isoline_here_control(_xyz),
 
-  finish: finish(_xyz),
-
-  contextmenu: contextmenu(_xyz)
 });

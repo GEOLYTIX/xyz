@@ -33,6 +33,9 @@ export default (_xyz, layer) => {
 
     e.stopPropagation();
     const btn = e.target;
+
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+
     btn.classList.add('active');
     layer.view.header.classList.add('edited');
     
@@ -54,10 +57,13 @@ export default (_xyz, layer) => {
 
     e.stopPropagation();
     const btn = e.target;
+
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+
     btn.classList.add('active');
     layer.view.header.classList.add('edited');
 
-    _xyz.mapview.draw({
+    _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Polygon',
       callback: () => {
@@ -75,10 +81,13 @@ export default (_xyz, layer) => {
 
     e.stopPropagation();
     const btn = e.target;
+
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+
     btn.classList.add('active');
     layer.view.header.classList.add('edited');
 
-    _xyz.mapview.draw({
+    _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Circle',
       geometryFunction: _xyz.mapview.lib.draw.createBox(),
@@ -97,10 +106,13 @@ export default (_xyz, layer) => {
 
     e.stopPropagation();
     const btn = e.target;
+
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+
     btn.classList.add('active');
     layer.view.header.classList.add('edited');
 
-    _xyz.mapview.draw({
+    _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Circle',
       callback: () => {
@@ -118,10 +130,13 @@ export default (_xyz, layer) => {
 
     e.stopPropagation();
     const btn = e.target;
+
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+
     btn.classList.add('active');
     layer.view.header.classList.add('edited');
 
-    _xyz.mapview.draw({
+    _xyz.mapview.draw.begin({
       layer: layer,
       type: 'LineString',
       callback: () => {
@@ -134,56 +149,46 @@ export default (_xyz, layer) => {
   class="btn_state btn_wide cursor noselect">Line`);
 
  
-  // if(layer.edit.isoline_mapbox){
+  if(layer.edit.isoline_mapbox){
 
-  //   if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   
+    if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   
 
-  //   let block = _xyz.utils.createElement({
-  //     tag: 'div',
-  //     options: {
-  //       classList: 'block'
-  //     },
-  //     appendTo: layer.edit.panel
-  //   });
+    let block = _xyz.utils.wire()`<div class="block">`;
 
-  //   _xyz.geom.isoline_mapbox_control({
-  //     entry: layer,
-  //     container: block
-  //   });
+    layer.edit.panel.appendChild(block);
 
-  //   _xyz.utils.createStateButton(_xyz, {
-  //     text: 'Isoline Mapbox',
-  //     appendTo: layer.edit.panel,
-  //     layer: layer,
-  //     activate: _xyz.geom.isoline_mapbox,
-  //     finish: _xyz.geom.finish
-  //   });
+    _xyz.geom.isoline_mapbox_control({
+      entry: layer,
+      container: block
+    });
 
-  // }
-
-
-  // if(layer.edit.isoline_here) {
-    
-  //   if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};
-
-  //   let block = _xyz.utils.createElement({
-  //     tag: 'div',
-  //     options: {
-  //       classList: 'block'
-  //     },
-  //     appendTo: layer.edit.panel
-  //   });
-
-  //   _xyz.geom.isoline_here_control({entry: layer, container: block});
-
-  //   _xyz.utils.createStateButton(_xyz, {
-  //     text: 'Isoline Here',
-  //     appendTo: layer.edit.panel,
-  //     layer: layer,
-  //     activate: _xyz.geom.isoline_here,
-  //     finish: _xyz.geom.finish
-  //   });
+    layer.edit.panel.appendChild(_xyz.utils.wire()`
+    <div onclick=${e => {
   
-  // }
+    e.stopPropagation();
+    const btn = e.target;
+  
+    //if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+  
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+  
+    // _xyz.mapview.draw.begin({
+    //   layer: layer,
+    //   type: 'LineString',
+    //   callback: () => {
+    //     layer.view.header.classList.remove('edited');
+    //     btn.classList.remove('active');
+    //   }
+    // });
+  
+  }}
+    class="btn_state btn_wide cursor noselect">Isoline Mapbox`);
+
+  }
+
+
+  // if(layer.edit.isoline_here) {}
+    
 
 };
