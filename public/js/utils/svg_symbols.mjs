@@ -22,10 +22,6 @@ export default marker => {
 import { wire } from 'hyperhtml/esm';
 import chroma from 'chroma-js';
 
-import d3_selection from 'd3-selection';
-import d3_path from 'd3-path';
-import d3_shape from 'd3-shape';
-
 const xmlSerializer = new XMLSerializer();
 
 function dot(style) {
@@ -337,51 +333,48 @@ function markerColor(style) {
 }
 
 function geolocation() {
-    let svg = d3_selection
-        .select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-        .attr('width', 1000)
-        .attr('height', 1000)
-        .attr('viewBox', '0 0 1000 1000')
-        .attr('xmlns', 'http://www.w3.org/2000/svg');
 
-    svg
-        .append('circle')
-        .attr('cx', 500)
-        .attr('cy', 500)
-        .attr('r', 350)
-        .style('stroke', '#090')
-        .style('opacity', 0.8)
-        .style('stroke-width', 75)
-        .style('fill', 'none');
+  const svg = wire()
+  `<svg
+  width=1000
+  height=1000
+  viewBox='0 0 1000 1000'
+  xmlns='http://www.w3.org/2000/svg'
+  >`;
 
-    svg
-        .append('circle')
-        .attr('cx', 500)
-        .attr('cy', 500)
-        .attr('r', 200)
-        .style('fill', '#090')
-        .style('opacity', 0.8);
+  const d = "M500,150L500,0M500,850L500,1000M0,500L150,500M850,500L1000,500";
 
-    let p = d3_path.path();
+  svg.appendChild(wire(null, 'svg')
+    `<circle
+    cx=500
+    cy=500
+    r=350
+    stroke='#090'
+    opacity=0.8
+    stroke-width=75
+    fill=none
+    >`);
 
-    p.moveTo(500, 150);
-    p.lineTo(500, 0);
+    svg.appendChild(wire(null, 'svg')
+      `<circle
+      cx=500
+      cy=500
+      r=200
+      fill='#090'
+      opacity=0.8
+      >`);
 
-    p.moveTo(500, 850);
-    p.lineTo(500, 1000);
+    let p = wire(null, 'svg')
+    `<path
+    stroke='#090'
+    opacity=0.8
+    stroke-width=75
+    >`;
 
-    p.moveTo(0, 500);
-    p.lineTo(150, 500);
+    p.setAttribute('d', d);
 
-    p.moveTo(850, 500);
-    p.lineTo(1000, 500);
+    svg.appendChild(p);
 
-    svg
-        .append('path')
-        .style('stroke', '#090')
-        .style('opacity', 0.8)
-        .style('stroke-width', 75)
-        .attr('d', p.toString());
+    return 'data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg));
 
-    return ('data:image/svg+xml,' + encodeURIComponent(xmlSerializer.serializeToString(svg.node())));
 }
