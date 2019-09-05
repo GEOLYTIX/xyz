@@ -1328,7 +1328,8 @@
                             "field": "postcode",
                             "type": "text",
                             "level": 1,
-                            "filter": "like"
+                            "filter": "like",
+                            "filterZoom": true
                         },
                         {
                             "label": "Households",
