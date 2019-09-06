@@ -1,6 +1,6 @@
 export default _xyz => layer => {
 
-  const _legend = layer.style.legend.appendChild(_xyz.utils.wire()
+  const legend = layer.style.legend.appendChild(_xyz.utils.wire()
     `<svg 
     xmlns='http://www.w3.org/2000/svg'
     >`);
@@ -17,28 +17,28 @@ export default _xyz => layer => {
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
 
-    let _image = _xyz.utils.wire(null, 'svg')
+    let image = _xyz.utils.wire(null, 'svg')
     `<image
       x=0
       width=20
       height=20
     >`;
 
-    _image.setAttribute('y', y);
-    _image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style)));
+    image.setAttribute('y', y);
+    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style)));
 
-    _legend.appendChild(_image);
+    legend.appendChild(image);
 
-    let _text = _xyz.utils.wire(null, 'svg')
+    let text = _xyz.utils.wire(null, 'svg')
     `<text
     x=25
     style='font-size:12px; alignment-baseline:central; cursor:pointer;'
     >${cat[1].label || cat[0]}
     </text>`;
 
-    _text.setAttribute('y', y + 13);
+    text.setAttribute('y', y + 13);
 
-    _text.addEventListener('click', e => {
+    text.addEventListener('click', e => {
       
       if(e.target.style.textDecoration === 'line-through'){
         e.target.style.textDecoration = 'none';
@@ -61,7 +61,7 @@ export default _xyz => layer => {
     
     });
 
-    _legend.appendChild(_text);
+    legend.appendChild(text);
 
     y += 23;
   });
@@ -69,28 +69,28 @@ export default _xyz => layer => {
   // Attach box for other/default categories.
   if (layer.style.theme.other) {
 
-    let _image = _xyz.utils.wire(null, 'svg')
+    let image = _xyz.utils.wire(null, 'svg')
     `<image
       x=0
       width=20
       height=20
       />`;
 
-    _image.setAttribute("y", y);
-    _image.setAttribute('href', _xyz.utils.svg_symbols(layer.style.marker));
+    image.setAttribute("y", y);
+    image.setAttribute('href', _xyz.utils.svg_symbols(layer.style.marker));
 
-    _legend.appendChild(_image);
+    legend.appendChild(image);
 
-    let _text = _xyz.utils.wire(null, 'svg')
+    let text = _xyz.utils.wire(null, 'svg')
     `<text
     x=25
     style='font-size:12px; alignment-baseline:central; cursor:pointer;'
     >other
     </text>`;
 
-    _text.setAttribute('y', y + 13);
+    text.setAttribute('y', y + 13);
 
-    _text.addEventListener('click', e => {
+    text.addEventListener('click', e => {
 
       if(e.target.style.textDecoration === 'line-through'){
 
@@ -116,32 +116,32 @@ export default _xyz => layer => {
 
     y += 20;
 
-    _legend.appendChild(_text);
+    legend.appendChild(text);
 
   }
 
-  let _imageMulti = _xyz.utils.wire(null, 'svg')
+  let imageMulti = _xyz.utils.wire(null, 'svg')
   `<image
   x=0
   width=40
   height=40
   />`;
 
-  _imageMulti.setAttribute('y', y + 5);
-  _imageMulti.setAttribute('href', _xyz.utils.svg_symbols(layer.style.markerMulti));
+  imageMulti.setAttribute('y', y + 5);
+  imageMulti.setAttribute('href', _xyz.utils.svg_symbols(layer.style.markerMulti));
 
-  _legend.appendChild(_imageMulti);
+  legend.appendChild(imageMulti);
 
-  let _textMulti = _xyz.utils.wire(null, 'svg')
+  let textMulti = _xyz.utils.wire(null, 'svg')
     `<text
     x=44
     style='font-size:12px; alignment-baseline:central; cursor:pointer;'
     >Multiple Locations
     </text>`;
 
-  _textMulti.setAttribute('y', y + 27);
-  _legend.appendChild(_textMulti);
+  textMulti.setAttribute('y', y + 27);
+  legend.appendChild(textMulti);
       
-  _legend.style.height = `${y + 50}px`;
+  legend.style.height = `${y + 50}px`;
 
 }
