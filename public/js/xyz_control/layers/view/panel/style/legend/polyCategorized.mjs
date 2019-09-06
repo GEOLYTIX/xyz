@@ -1,8 +1,9 @@
-import d3_selection from 'd3-selection';
-
 export default _xyz => layer => {
 
-  const legend = d3_selection.select(layer.style.legend).append('svg');
+  const legend = layer.style.legend.appendChild(_xyz.utils.wire()
+  `<svg 
+  xmlns='http://www.w3.org/2000/svg'
+  >`);
   
   let y = 10;
 
@@ -20,115 +21,143 @@ export default _xyz => layer => {
 
     if(cat_style.fillOpacity === undefined) {
 
-      legend.append('line')
-        .attr('x1', 4)
-        .attr('y1', y + 10)
-        .attr('x2', 18)
-        .attr('y2', y + 10)
-        .style('stroke', cat_style.color)
-        .style('stroke-width', cat_style.weight || 1); 
+      let line = _xyz.utils.wire(null, 'svg')
+      `<line
+      x1=4
+      x2=18
+      stroke=${cat_style.color}
+      stroke-width=${cat_style.weight || 1}
+      >`;
+
+      line.setAttribute("y1", y + 10);
+      line.setAttribute("y2", y + 10);
+
+      legend.appendChild(line);
   
     } else {
 
-      legend.append('rect')
-        .attr('x', 4)
-        .attr('y', y + 3)
-        .attr('width', 14)
-        .attr('height', 14)
-        .style('fill', cat_style.fillColor || '#FFF')
-        .style('fill-opacity', cat_style.fillOpacity)
-        .style('stroke', cat_style.color)
-        .style('stroke-width', cat_style.weight || 1);      
+      let rect = _xyz.utils.wire(null, 'svg')
+      `<rect
+      x=4
+      width=14
+      height=14
+      fill=${cat_style.fillColor || '#FFF'}
+      fill-opacity=${cat_style.fillOpacity}
+      stroke=${cat_style.strokeColor}
+      stroke-width=${cat_style.weight || 1}
+      >`;
+
+      rect.setAttribute("y", y + 3);
+
+      legend.appendChild(rect);
       
     } 
 
-    legend.append('text')
-      .attr('x', 25)
-      .attr('y', y + 11)
-      .style('font-size', '12px')
-      .style('alignment-baseline', 'central')
-      .style('cursor', 'pointer')
-      .text(cat[1].label || cat[0])
-      .on('click', function () {
-        if (this.style.opacity == 0.5) {
-          this.style.opacity = 1;
-          this.style.fillOpacity = 1;
+    let text = _xyz.utils.wire(null, 'svg')
+    `<text
+    x=25
+    style='font-size:12px; alignment-baseline:central; cursor:pointer;'
+    >${cat[1].label || cat[0]}
+    </text>`;
+
+    text.setAttribute("y", y + 11);
+
+    text.addEventListener('click', e => {
+      if (e.target.style.textDecoration === 'line-through') {
+          e.target.style.textDecoration = 'none';
+          e.target.style.opacity = 1;
+          e.target.style.fillOpacity = 1;
 
           // Splice value out of the NI (not in) legend filter.
           layer.filter.legend[layer.style.theme.field].ni.splice(layer.filter.legend[layer.style.theme.field].ni.indexOf(cat[0]), 1);
 
         } else {
-          this.style.opacity = 0.5;
-          this.style.fillOpacity = 0.5;
+          e.target.style.textDecoration = 'line-through';
+          e.target.style.opacity = 0.8;
+          e.target.style.fillOpacity = 0.8;
           
           // Push value into the NI (not in) legend filter.
           layer.filter.legend[layer.style.theme.field].ni.push(cat[0]);
         }
-      
-        layer.get();
-      });
+        layer.reload();
+    });
+
+    legend.appendChild(text);
       
     y += 20;
   });
-
-
       
   // Attach box for other/default categories.
   if (layer.style.theme.other) {
 
     if(layer.style.default.fillOpacity === undefined) {
 
-      legend.append('line')
-        .attr('x1', 4)
-        .attr('y1', y + 10)
-        .attr('x2', 18)
-        .attr('y2', y + 10)
-        .style('stroke', layer.style.default.color)
-        .style('stroke-width', layer.style.default.weight || 1); 
+      let line = _xyz.utils.wire(null, 'svg')
+      `<line
+      x1=4
+      x2=18
+      stroke=${layer.style.default.color}
+      stroke-width=${layer.style.default.weight || 1}
+      >`;
+
+      line.setAttribute("y1", y + 10);
+      line.setAttribute("y2", y + 10);
+      legend.appendChild(line);
   
     } else {
 
-      legend.append('rect')
-        .attr('x', 4)
-        .attr('y', y + 3)
-        .attr('width', 14)
-        .attr('height', 14)
-        .style('fill', layer.style.default.fillColor || '#FFF')
-        .style('fill-opacity', layer.style.default.fillOpacity)
-        .style('stroke', layer.style.default.color)
-        .style('stroke-width', layer.style.default.weight || 1);   
+      let rect = _xyz.utils.wire(null, 'svg')
+      `<rect
+      x=4
+      width=14
+      height=14
+      fill=${layer.style.default.fillColor || '#FFF'}
+      fill-opacity=${layer.style.default.fillOpacity}
+      stroke=${layer.style.default.strokeColor}
+      stroke-width=${layer.style.default.weight || 1}
+      >`;
 
-    }    
-      
+      rect.setAttribute("y", y + 3);
+      legend.appendChild(rect);
+    }
+
     // Attach text with filter on click for the other/default category.
-    legend.append('text')
-      .attr('x', 25)
-      .attr('y', y + 11)
-      .style('font-size', '12px')
-      .style('alignment-baseline', 'central')
-      .style('cursor', 'pointer')
-      .text('other')
-      .on('click', function () {
-        if (this.style.opacity == 0.5) {
-          this.style.opacity = 1;
+    let text = _xyz.utils.wire(null, 'svg')
+    `<text
+    x=25
+    style='font-size:12px; alignment-baseline:central; cursor:pointer;'
+    >other
+    </text>`;
 
-          // Empty IN values filter array.
-          layer.filter.legend[layer.style.theme.field].in = [];
-          
-        } else {
-          this.style.opacity = 0.5;
-          
-          // Assign all cat keys to IN filter.
-          layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
-        }
-      
-        layer.get();
-      });
+    text.setAttribute("y", y + 11);
+
+    text.addEventListener('click', e => {
+      if (e.target.style.textDecoration === 'line-through') {
+        e.target.style.textDecoration = 'none';
+        e.target.style.opacity = 1;
+        e.target.style.fillOpacity = 1;
+
+        // Empty IN values filter array.
+        layer.filter.legend[layer.style.theme.field].in = [];
+
+      } else {
+        e.target.style.textDecoration = 'line-through';
+        e.target.style.opacity = 0.8;
+        e.target.style.fillOpacity = 0.8;
+        // Assign all cat keys to IN filter.
+        layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
+      }
+
+      layer.reload();
+
+    });
+
+    legend.appendChild(text);
       
     y += 20;
   }
 
   // Set height of the svg element.
-  legend.attr('height', y);
+  legend.style.height = `${y}px`;
       
 };
