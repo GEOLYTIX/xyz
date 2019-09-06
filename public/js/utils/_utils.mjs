@@ -14,8 +14,6 @@ export {copyToClipboard} from './copyToClipboard.mjs';
 
 export {createElement} from './createElement.mjs';
 
-export {slider} from './slider.mjs';
-
 export {dropdown} from './dropdown.mjs';
 
 export {dropdownCustom} from './dropdownCustom.mjs';

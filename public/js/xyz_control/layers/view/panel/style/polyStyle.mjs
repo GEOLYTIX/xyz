@@ -1,211 +1,130 @@
 export default (_xyz, layer, style, title) => {
 
-  if (title) {
-
-    _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        textContent: title,
-        classList: 'block-title'
-      },
-      appendTo: layer.style.legend
-    });
-    
-  }
+  title && layer.style.legend.appendChild(_xyz.utils.wire()`
+  <div class="block-title">${title}`);
 
   const block = {};
 
-  block._ = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'block'
-    },
-    appendTo: layer.style.legend
-  });
+  block._ = _xyz.utils.wire()`<div class="block">`;
 
-  block.stroke_colour = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: 'Stroke Colour: ',
-      classList: 'title'
-    },
-    appendTo: block._
-  });
+  layer.style.legend.appendChild(block._);
 
-  block.color = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: style.color,
-      classList: 'cursor colour-label'
-    },
-    appendTo: block.stroke_colour,
-    eventListener: {
-      event: 'click',
-      funct: () => {
 
-        block.colorSelect = 'color';
-        
-        block.colour_swatch.style.display = 'table';
-        
-      }
-    }
-  });
+  block.stroke_color = _xyz.utils.wire()`<div class="title">Stroke Colour: `;
 
-  block.fill_colour = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: 'Fill Colour: ',
-      classList: 'title'
-    },
-    appendTo: block._
-  });
+  block._.appendChild(block.stroke_color);
 
-  block.fillColor = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: style.fillColor,
-      classList: 'cursor colour-label'
-    },
-    appendTo: block.fill_colour,
-    eventListener: {
-      event: 'click',
-      funct: () => {
+  block.strokeColor = _xyz.utils.wire()`
+  <span class="cursor colour-label"
+  onclick=${e=>{
+    block.colorSelect = 'strokeColor';  
+    block.colour_swatch.style.display = 'table';
+  }}>${style.strokeColor}`;
 
-        block.colorSelect = 'fillColor';
+  block.stroke_color.appendChild(block.strokeColor);
+  
+  
+  block.fill_colour = _xyz.utils.wire()`<div class="title">Fill Colour: `;
 
-        block.colour_swatch.style.display = 'table';
-        
-      }
-    }
-  });
+  block._.appendChild(block.fill_colour);
 
-  block.sample_poly = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'sample-poly'
-    },
-    style: {
-      'backgroundColor': _xyz.utils.chroma(style.fillColor || '#fff').alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba(),
-      'border': style.weight + 'px solid ' + style.color
-    },
-    appendTo: block._
-  });
+  block.fillColor = _xyz.utils.wire()`
+  <span class="cursor colour-label"
+  onclick=${e=>{
+    block.colorSelect = 'fillColor';  
+    block.colour_swatch.style.display = 'table';
+  }}>${style.fillColor}`;
 
-  block.colour_swatch = _xyz.utils.createElement({
-    tag: 'tr',
-    options: {
-      classList: 'colour-swatch'
-    },
-    style: {
-      display: 'none'
-    },
-    appendTo: block._
-  });
+  block.fill_colour.appendChild(block.fillColor);
 
+
+  block.sample_poly = _xyz.utils.wire()`
+  <div class="sample-poly"
+  style="${'background-colour:' + (style.fillColor || '#fff') + '; border:' + (style.strokeWidth || 1) + 'px solid ' + style.strokeColor}">`;
+
+  block._.appendChild(block.sample_poly);
+  
+
+
+  block.colour_swatch = _xyz.utils.wire()`<tr class="colour-swatch" style="display: none">`;
+
+  block._.appendChild(block.colour_swatch);
+  
   _xyz.style.defaults.colours.forEach(colour => {
 
-    _xyz.utils.createElement({
-      tag: 'td',
-      options: {
-        classList: 'colour-td',
-        title: colour.name
-      },
-      style: {
-        'backgroundColor': colour.hex
-      },
-      appendTo: block.colour_swatch,
-      eventListener: {
-        event: 'click',
-        funct: () => {
+    block.colour_swatch.appendChild(_xyz.utils.wire()`
+    <td class="colour-td" title=${colour.name} style="${'background-color:'+colour.hex}"
+    onclick=${e=>{
+    block[block.colorSelect].textContent = colour.hex;
 
-          block[block.colorSelect].textContent = colour.hex;
+    style[block.colorSelect] = colour.hex;
 
-          style[block.colorSelect] = colour.hex;
+    block.sample_poly.style.backgroundColor = style.fillColor;
 
-          block.sample_poly.style.backgroundColor = _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba();
+    block.sample_poly.style.border = (style.strokeWidth || 1) + 'px solid ' + style.strokeColor;
 
-          block.sample_poly.style.border = style.weight + 'px solid ' + style.color;
+    block.colour_swatch.style.display = 'none';
 
-          block.colour_swatch.style.display = 'none';
+    layer.reload();
 
-          layer.get();
-          
-        }
-      }
-    });
+  }}>`);
     
-  });
-
-
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: 'Stroke Weight:',
-      classList: 'title'
-    },
-    appendTo: block._
   });
 
 
   let timeout;
 
-  block.stroke_slider = _xyz.utils.slider({
-    min: 1,
-    max: 5,
-    appendTo: block._,
-    oninput: e => {
+  block._.appendChild(_xyz.utils.wire()`<div class="title">Stroke Weight:`);
 
-      style.weight = e.target.value;
+  block._.appendChild(_xyz.utils.wire()`
+  <div class="range">
+  <input
+    type="range"
+    min=1
+    value=${style.strokeWidth || 1}
+    max=5
+    oninput=${e=>{
 
-      // Set input value and apply filter.
-      block.sample_poly.style.border = style.weight + 'px solid ' + style.color;
+    style.strokeWidth = parseInt(e.target.value);
 
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        timeout = null;
+    // Set input value and apply filter.
+    block.sample_poly.style.border = style.strokeWidth + 'px solid ' + style.strokeColor;
 
-        // Reload layer.
-        layer.get();
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
 
-      }, 500);
+      // Reload layer.
+      layer.reload();
 
-    }
-  });
-  block.stroke_slider.value = style.weight;
+    }, 500);
+
+  }}>`);
 
 
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: 'Fill Opacity:',
-      classList: 'title'
-    },
-    appendTo: block._
-  });
+  block._.appendChild(_xyz.utils.wire()`<div class="title">Fill Opacity:`);
 
-  block.opacity_slider = _xyz.utils.slider({
-    min: 0,
-    max: 1,
-    step: 0.1,
-    appendTo: block._,
-    oninput: e => {
+  block._.appendChild(_xyz.utils.wire()`
+  <div class="range">
+  <input
+    type="range"
+    min=0.1
+    value=${style.fillOpacity || 1}
+    max=1
+    step=0.1
+    oninput=${e=>{
 
-      style.fillOpacity = e.target.value;
+    style.fillOpacity = e.target.value;
 
-      // Set input value and apply filter.
-      block.sample_poly.style.backgroundColor = _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba();
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
 
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        timeout = null;
+      // Reload layer.
+      layer.reload();
 
-        // Reload layer.
-        layer.get();
+    }, 500);
 
-      }, 500);
-
-    }
-  });
-  block.opacity_slider.value = style.fillOpacity;
+  }}>`);
 
 };

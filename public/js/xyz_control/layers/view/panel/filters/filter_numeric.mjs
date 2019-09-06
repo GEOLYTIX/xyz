@@ -20,103 +20,81 @@ export default (_xyz, layer, filter_entry) => {
     const field_range = JSON.parse(e.target.response);
 
     const block = create_block(_xyz, layer, filter_entry);
-  
-    // Label for min / greater then control.
-    _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        classList: 'range-label',
-        textContent: 'Greater or equal',
-      },
-      appendTo: block
-    });
 
     const step = setStep(filter_entry);
+
+
   
-    const input_min = _xyz.utils.createElement({
-      tag: 'input',
-      options: {
-        classList: 'range-input',
-        type: 'number',
-        min: field_range.min,
-        max: field_range.max,
-        value: field_range.min,
-        step: step
-      },
-      appendTo: block,
-      eventListener: {
-        event: 'keyup',
-        funct: e => {
-    
-          // Set slider value and apply filter.
-          slider_min.value = e.target.value;
-          applyFilter();
-        }
-      }
-    });
+    // Label for min / greater then control.   
+    block.appendChild(_xyz.utils.wire()`<div class="range-label">Greater or equal`);
+
+    const input_min = _xyz.utils.wire()`
+    <input
+      class="range-input"
+      type="number"
+      min=${field_range.min}
+      value=${field_range.min}
+      max=${field_range.max}
+      step=${step}
+      onkeyup=${e=>{
+    slider_min.value = e.target.value;
+    applyFilter();
+  }}>`;
+
+    block.appendChild(input_min);
+
+    var div = _xyz.utils.wire()`<div class="range">`;
+    block.appendChild(div);
+
+    const slider_min = _xyz.utils.wire()`
+    <input
+      type="range"
+      min=${field_range.min}
+      value=${field_range.min}
+      max=${field_range.max}
+      step=${step}
+      oninput=${e=>{
+    input_min.value = e.target.value;
+    applyFilter();
+  }}>`;
+
+    block.appendChild(slider_min);
   
-    const slider_min = _xyz.utils.slider({
-      min: field_range.min,
-      max: field_range.max,
-      value: field_range.min,
-      step: step,
-      appendTo: block,
-      oninput: e => {
-  
-        // Set input value and apply filter.
-        input_min.value = e.target.value;
-        applyFilter();
-      }
-    });
-  
+
     // Label for max / smaller then control.
-    _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        classList: 'range-label',
-        textContent: 'Smaller or equal'
-      },
-      appendTo: block
-    });
-  
-    const input_max = _xyz.utils.createElement({
-      tag: 'input',
-      options: {
-        classList: 'range-input',
-        type: 'number',
-        min: field_range.min,
-        max: field_range.max,
-        value: field_range.max,
-        step: step
-      },
-      appendTo: block,
-      eventListener: {
-        event: 'keyup',
-        funct: e => {
+    block.appendChild(_xyz.utils.wire()`<div class="range-label">Smaller or equal`);
 
-          // Set slider value and apply filter.
-          slider_max.value = e.target.value;
-          applyFilter();
-        }
-      }
-    });
-  
-    const slider_max = _xyz.utils.slider({
-      min: field_range.min,
-      max: field_range.max,
-      value: field_range.max,
-      appendTo: block,
-      step: step,
-      oninput: e => {
-  
-        // Set input value and apply filter.
-        input_max.value = e.target.value;
-        applyFilter();
-      }
-    });
+    const input_max = _xyz.utils.wire()`
+    <input
+      class="range-input"
+      type="number"
+      min=${field_range.min}
+      value=${field_range.max}
+      max=${field_range.max}
+      step=${step}
+      onkeyup=${e=>{
+    slider_max.value = e.target.value;
+    applyFilter();
+  }}>`;
 
-    // Apply max value after the slider has been created.
-    slider_max.value = field_range.max;
+    block.appendChild(input_max);
+
+    var div = _xyz.utils.wire()`<div class="range">`;
+    block.appendChild(div);
+
+    const slider_max = _xyz.utils.wire()`
+    <input
+      type="range"
+      min=${field_range.min}
+      value=${field_range.max}
+      max=${field_range.max}
+      step=${step}
+      oninput=${e=>{
+    input_max.value = e.target.value;
+    applyFilter();
+  }}>`;
+
+    block.appendChild(slider_max);
 
 
     // Use timeout to debounce applyFilter from multiple and slider inputs.

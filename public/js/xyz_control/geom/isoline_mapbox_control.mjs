@@ -49,25 +49,20 @@ export default _xyz => param => {
     appendTo: mode_container
   });
 
-  const slider_mapbox_minutes = _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      marginTop: '12px'
-    },
-    appendTo: param.container
-  });
-
-  _xyz.utils.slider({
-    title: 'Travel time in minutes: ',
-    default: param.entry.edit.isoline_mapbox.minutes,
-    min: 5,
-    max: 60,
-    value: param.entry.edit.isoline_mapbox.minutes,
-    appendTo: slider_mapbox_minutes,
-    oninput: e => {
-      param.entry.edit.isoline_mapbox.minutes = parseInt(e.target.value);
-      e.target.parentNode.previousSibling.textContent = param.entry.edit.isoline_mapbox.minutes;
-    }
-  });
+  param.container.appendChild(_xyz.utils.wire()`
+  <div style="margin-top: 12px;">
+  <span>Travel time in minutes: </span>
+  <span class="bold">${param.entry.edit.isoline_mapbox.minutes}</span>
+  <div class="range">
+  <input
+    type="range"
+    min=5
+    value=${param.entry.edit.isoline_mapbox.minutes}
+    max=60
+    step=1
+    oninput=${e=>{
+    param.entry.edit.isoline_mapbox.minutes = parseInt(e.target.value);
+    e.target.parentNode.previousElementSibling.textContent = param.entry.edit.isoline_mapbox.minutes;
+  }}>`);
 
 };

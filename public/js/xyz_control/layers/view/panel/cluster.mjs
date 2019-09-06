@@ -38,135 +38,52 @@ export default (_xyz, layer) => {
   let timeout;
 
   // KMeans
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Minimum number of cluster (KMeans): '
-    },
-    appendTo: panel
-  });
-
-  let lblKMeans = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: layer.cluster_kmeans,
-      className: 'bold'
-    },
-    appendTo: panel
-  });
-
-  _xyz.utils.slider({
-    min: 1,
-    max: 50,
-    value: parseInt(layer.cluster_kmeans * 100),
-    appendTo: panel,
-    oninput: e => {
-      lblKMeans.innerHTML = e.target.value / 100;
-      layer.cluster_kmeans = e.target.value / 100;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        timeout = null;
-        layer.get();
-      }, 500);
-    }
-  });
+  panel.appendChild(_xyz.utils.wire()`
+  <div>
+  <span>Minimum number of cluster (KMeans): </span>
+  <span class="bold">${layer.cluster_kmeans}</span>
+  <div class="range">
+  <input
+    type="range"
+    min=1
+    value=${parseInt(layer.cluster_kmeans * 100)}
+    max=50
+    step=1
+    oninput=${e=>{
+    layer.cluster_kmeans = parseInt(e.target.value) / 100;
+    e.target.parentNode.previousElementSibling.textContent = e.target.value / 100;
+    
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
+      layer.reload();
+    }, 500);
+  }}>`);
 
 
   // DBScan
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Maximum distance between locations in cluster (DBScan): '
-    },
-    appendTo: panel
-  });
+  panel.appendChild(_xyz.utils.wire()`
+  <div>
+  <span>Maximum distance between locations in cluster (DBScan): </span>
+  <span class="bold">${layer.cluster_dbscan}</span>
+  <div class="range">
+  <input
+    type="range"
+    min=1
+    value=${parseInt(layer.cluster_dbscan * 100)}
+    max=50
+    step=1
+    oninput=${e=>{
+    layer.cluster_dbscan = parseInt(e.target.value) / 100;
+    e.target.parentNode.previousElementSibling.textContent = e.target.value / 100;
+    
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
+      layer.reload();
+    }, 500);
+  }}>`);
 
-  let lblDBScan = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: layer.cluster_dbscan,
-      className: 'bold'
-    },
-    appendTo: panel
-  });
-
-  _xyz.utils.slider({
-    min: 1,
-    max: 50,
-    value: parseInt(layer.cluster_dbscan * 100),
-    appendTo: panel,
-    oninput: e => {
-      lblDBScan.innerHTML = e.target.value / 100;
-      layer.cluster_dbscan = e.target.value / 100;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        timeout = null;
-        layer.get();
-      }, 500);
-    }
-  });
-
-
-  // markerMin
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Marker Min: '
-    },
-    appendTo: panel
-  });
-
-  let lblMarkerMin = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: layer.style.markerMin,
-      className: 'bold'
-    },
-    appendTo: panel
-  });
-
-  _xyz.utils.slider({
-    min: parseInt(layer.style.markerMin * 0.3),
-    max: parseInt(layer.style.markerMin * 3),
-    value: parseInt(layer.style.markerMin),
-    appendTo: panel,
-    oninput: e => {
-      lblMarkerMin.innerHTML = e.target.value;
-      layer.style.markerMin = parseInt(e.target.value);
-      layer.get();
-    }
-  });
-
-
-  // markerMax
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Marker Max: '
-    },
-    appendTo: panel
-  });
-
-  let lblMarkerMax = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: layer.style.markerMax,
-      className: 'bold'
-    },
-    appendTo: panel
-  });
-
-  _xyz.utils.slider({
-    min: parseInt(layer.style.markerMax * 0.3),
-    max: parseInt(layer.style.markerMax * 3),
-    value: parseInt(layer.style.markerMax),
-    appendTo: panel,
-    oninput: e => {
-      lblMarkerMax.innerHTML = e.target.value;
-      layer.style.markerMax = parseInt(e.target.value);
-      layer.get();
-    }
-  });
 
   //Create cluster_logscale checkbox.
   layer.cluster_logscale = layer.cluster_logscale || false;
