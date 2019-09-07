@@ -6,13 +6,17 @@ export default _xyz => {
 
     finish: finish,
 
+    update: update,
+
   };
 
   function begin(params) {
 
-    _xyz.mapview.draw.callback && _xyz.mapview.draw.callback();
+    _xyz.mapview.draw.drawend = params.drawend;
 
     finish();
+
+    params.begin && params.begin();
 
     _xyz.mapview.draw.callback = params.callback;
 
@@ -51,7 +55,7 @@ export default _xyz => {
   
     _xyz.mapview.draw.interaction.on('drawstart', () => _xyz.mapview.draw.sourceVector.clear());
   
-    _xyz.mapview.draw.interaction.on('drawend', e => console.log(e));
+    _xyz.mapview.draw.drawend && _xyz.mapview.draw.interaction.on('drawend', _xyz.mapview.draw.drawend);
   
     _xyz.map.addInteraction(_xyz.mapview.draw.interaction);
 
@@ -156,7 +160,11 @@ export default _xyz => {
 
     if (features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Save</li>`);
 
-    if (!features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${removeLastPoint}>Remove last vertice</li>`);
+    if (!features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${e=>{
+      _xyz.mapview.draw.interaction.removeLastPoint();
+      _xyz.mapview.draw.vertices.pop();
+      _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
+    }}>Remove last vertice</li>`);
 
     menu.appendChild(_xyz.utils.wire()`<li onclick=${finish}>Cancel</li>`);
 

@@ -3,21 +3,11 @@ export default _xyz => param => {
   param.entry.edit.isoline_mapbox.profile = param.entry.edit.isoline_mapbox.profile || 'driving';
   param.entry.edit.isoline_mapbox.minutes = param.entry.edit.isoline_mapbox.minutes || 10;
 
-  let mode_container = _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      marginTop: '8px'
-    },
-    appendTo: param.container
-  });
+  const mode_container = _xyz.utils.wire()`<div style="margin-top: 8px">`;
 
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Mode'
-    },
-    appendTo: mode_container
-  });
+  param.container.appendChild(mode_container);
+
+  mode_container.appendChild(_xyz.utils.wire()`<span>Mode`);
 
   _xyz.utils.dropdown({
     //title: 'Mode',

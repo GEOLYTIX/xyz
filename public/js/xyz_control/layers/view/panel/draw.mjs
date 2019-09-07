@@ -35,13 +35,14 @@ export default (_xyz, layer) => {
     const btn = e.target;
 
     if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
-
-    btn.classList.add('active');
-    layer.view.header.classList.add('edited');
-    
+   
     _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Point',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -60,12 +61,13 @@ export default (_xyz, layer) => {
 
     if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
 
-    btn.classList.add('active');
-    layer.view.header.classList.add('edited');
-
     _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Polygon',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -84,12 +86,13 @@ export default (_xyz, layer) => {
 
     if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
 
-    btn.classList.add('active');
-    layer.view.header.classList.add('edited');
-
     _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Circle',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
       geometryFunction: _xyz.mapview.lib.draw.createBox(),
       callback: () => {
         layer.view.header.classList.remove('edited');
@@ -109,12 +112,13 @@ export default (_xyz, layer) => {
 
     if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
 
-    btn.classList.add('active');
-    layer.view.header.classList.add('edited');
-
     _xyz.mapview.draw.begin({
       layer: layer,
       type: 'Circle',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -133,12 +137,13 @@ export default (_xyz, layer) => {
 
     if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
 
-    btn.classList.add('active');
-    layer.view.header.classList.add('edited');
-
     _xyz.mapview.draw.begin({
       layer: layer,
       type: 'LineString',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -157,7 +162,7 @@ export default (_xyz, layer) => {
 
     layer.edit.panel.appendChild(block);
 
-    _xyz.geom.isoline_mapbox_control({
+    _xyz.ctrl.isoline_mapbox({
       entry: layer,
       container: block
     });
@@ -168,19 +173,76 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
   
-    //if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
   
-    btn.classList.add('active');
-    layer.view.header.classList.add('edited');
+    _xyz.mapview.draw.begin({
+      layer: layer,
+      type: 'Point',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
+      // drawend: e=> {},
+      geometryFunction: function(coordinates, geometry) {
+
+        geometry = new _xyz.mapview.lib.geom.Circle(coordinates, layer.edit.isoline_mapbox.minutes * 1000);
+        
+        var feature = new _xyz.mapview.lib.Feature({
+          geometry: geometry
+        });
+
+        console.log(feature);
+
+        const origin = _xyz.mapview.lib.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+
+        const xhr = new XMLHttpRequest();
   
-    // _xyz.mapview.draw.begin({
-    //   layer: layer,
-    //   type: 'LineString',
-    //   callback: () => {
-    //     layer.view.header.classList.remove('edited');
-    //     btn.classList.remove('active');
-    //   }
-    // });
+        xhr.open(
+          'GET',
+          _xyz.host +
+          '/api/location/edit/isoline/mapbox?' +
+          _xyz.utils.paramString({
+            locale: _xyz.workspace.locale.key,
+            // layer: layer.key,
+            // table: layer.table,
+            coordinates: origin.join(','),
+            minutes: layer.edit.isoline_mapbox.minutes,
+            profile: layer.edit.isoline_mapbox.profile,
+            token: _xyz.token
+          }));
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
+    
+        xhr.onload = e => {
+        
+          if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
+
+          const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
+
+          const feature = geoJSON.readFeature({
+            type: 'Feature',
+            geometry: e.target.response
+          },{ 
+            dataProjection: 'EPSG:4326',
+            featureProjection:'EPSG:' + _xyz.mapview.srid
+          });
+
+          _xyz.mapview.draw.sourceVector.clear();
+
+          _xyz.mapview.draw.sourceVector.addFeature(feature);
+                                    
+        };
+    
+        xhr.send();
+
+        return geometry;
+      },
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
   
   }}
     class="btn_state btn_wide cursor noselect">Isoline Mapbox`);
@@ -188,7 +250,102 @@ export default (_xyz, layer) => {
   }
 
 
-  // if(layer.edit.isoline_here) {}
+  if(layer.edit.isoline_here){
+
+    if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};   
+
+    let block = _xyz.utils.wire()`<div class="block">`;
+
+    layer.edit.panel.appendChild(block);
+
+    _xyz.ctrl.isoline_here({
+      entry: layer,
+      container: block
+    });
+
+    layer.edit.panel.appendChild(_xyz.utils.wire()`
+    <div onclick=${e => {
+  
+    e.stopPropagation();
+    const btn = e.target;
+  
+    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+  
+    _xyz.mapview.draw.begin({
+      layer: layer,
+      type: 'Point',
+      begin: ()=>{
+        btn.classList.add('active');
+        layer.view.header.classList.add('edited');
+      },
+      // drawend: e=> {},
+      geometryFunction: function(coordinates, geometry) {
+
+        geometry = new _xyz.mapview.lib.geom.Circle(coordinates, layer.edit.isoline_mapbox.minutes * 1000);
+        
+        var feature = new _xyz.mapview.lib.Feature({
+          geometry: geometry
+        });
+
+        const origin = _xyz.mapview.lib.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+
+        const xhr = new XMLHttpRequest();
+  
+        xhr.open(
+          'GET',
+          _xyz.host +
+          '/api/location/edit/isoline/mapbox?' +
+          _xyz.utils.paramString({
+            locale: _xyz.workspace.locale.key,
+            // layer: layer.key,
+            // table: layer.table,
+            coordinates: origin.join(','),
+            mode: layer.edit.isoline_here.mode,
+            type: layer.edit.isoline_here.type,
+            rangetype: layer.edit.isoline_here.rangetype,
+            //traffic: null,
+            minutes: layer.edit.isoline_here.minutes,
+            distance: layer.edit.isoline_here.distance,
+            // meta: entry.edit.isoline_here.meta || null,
+            token: _xyz.token
+          }));
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
     
+        xhr.onload = e => {
+        
+          if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
+
+          const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
+
+          const feature = geoJSON.readFeature({
+            type: 'Feature',
+            geometry: e.target.response
+          },{ 
+            dataProjection: 'EPSG:4326',
+            featureProjection:'EPSG:' + _xyz.mapview.srid
+          });
+
+          _xyz.mapview.draw.sourceVector.clear();
+
+          _xyz.mapview.draw.sourceVector.addFeature(feature);
+                                    
+        };
+    
+        xhr.send();
+
+        return geometry;
+      },
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
+  
+  }}
+    class="btn_state btn_wide cursor noselect">Isoline Here`);
+
+  }
 
 };

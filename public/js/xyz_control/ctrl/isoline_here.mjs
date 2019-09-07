@@ -1,20 +1,10 @@
 export default _xyz => param => {
 
-  let mode_container = _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      marginTop: '8px'
-    },
-    appendTo: param.container
-  });
+  const mode_container = _xyz.utils.wire()`<div style="margin-top: 8px">`;
 
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Mode'
-    },
-    appendTo: mode_container
-  });
+  param.container.appendChild(mode_container);
+
+  mode_container.appendChild(_xyz.utils.wire()`<span>Mode`);
 
   _xyz.utils.dropdown({
     label: 'label',

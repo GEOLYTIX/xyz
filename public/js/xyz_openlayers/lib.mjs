@@ -23,7 +23,7 @@ import {click} from 'ol/events/condition.js';
 
 import {Map, View, Feature, Overlay} from 'ol';
 
-import {Point, Polygon} from 'ol/geom';
+import * as geom from 'ol/geom';
 
 import {ScaleLine} from 'ol/control';
 
@@ -60,10 +60,7 @@ export default () => ({
     fromLonLat: fromLonLat,
   },
   
-  geom: {
-    Point: Point,
-    Polygon: Polygon,
-  },
+  geom: geom,
   
   format: {
     MVT: formatMVT,

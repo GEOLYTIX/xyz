@@ -29,24 +29,20 @@ module.exports = fastify => {
           meta: { type: 'string' },
           coordinates: { type: 'string' },
         },
-        required: ['locale', 'layer', 'table', 'coordinates']
+        required: ['coordinates']
       }
     },
     preHandler: [
       fastify.evalParam.token,
-      fastify.evalParam.locale,
-      fastify.evalParam.layer,
-      fastify.evalParam.roles,
-      (req, res, next) => {
-        fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
-      },
+      // fastify.evalParam.locale,
+      // fastify.evalParam.layer,
+      // fastify.evalParam.roles,
+      // (req, res, next) => {
+      //   fastify.evalParam.layerValues(req, res, next, ['table', 'field']);
+      // },
     ],
     handler: async(req, res) => {
       
-      let
-        layer = req.params.layer,
-        table = req.query.table;
-
       const params = {
         coordinates: req.query.coordinates,
         minutes: req.query.minutes || 10,
@@ -55,7 +51,6 @@ module.exports = fastify => {
          
       var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${env.keys.MAPBOX}`;
       
-
       // Fetch results from Google maps places API.
       const mapbox_isolines = await fetch(q);
   
@@ -66,18 +61,25 @@ module.exports = fastify => {
       var meta_json;
 
       if(req.query.meta) meta_json = {
-          "Recent isoline": "Mapbox",
-          "Mode": params.profile,
-          "Minutes": params.minutes,
-          "Created": date()
-        };
+        'Recent isoline': 'Mapbox',
+        'Mode': params.profile,
+        'Minutes': params.minutes,
+        'Created': date()
+      };
 
+      let
+        layer = req.params.layer,
+        table = req.query.table;
+
+      if (!layer || !table) return res.code(200).send(geojson); 
+
+      // Overwrite existing geometry.
       if (req.query.id) {
 
         var q = `
         UPDATE ${table}
         SET ${req.query.field} = ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)
-        ${req.query.meta ? `, ${req.query.meta} = '${JSON.stringify(meta_json)}'` : ``}
+        ${req.query.meta ? `, ${req.query.meta} = '${JSON.stringify(meta_json)}'` : ''}
         WHERE ${layer.qID} = $1;`;
 
         var rows = await env.dbs[layer.dbs](q, [req.query.id]);
@@ -91,9 +93,9 @@ module.exports = fastify => {
         fields = await sql_fields([], infoj, layer.qID);
   
         var q = `
-        SELECT ${fields.join()}
-        FROM ${table}
-        WHERE ${layer.qID} = $1;`;
+          SELECT ${fields.join()}
+          FROM ${table}
+          WHERE ${layer.qID} = $1;`;
   
         var rows = await env.dbs[layer.dbs](q, [req.query.id]);
   
@@ -109,13 +111,9 @@ module.exports = fastify => {
 
       }
 
-      const geom = layer.geom ?
-        `ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)` :
-        `ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326), 3857)`;
-
       var q = `
-      INSERT INTO ${table} (${layer.geom || layer.geom_3857})
-      SELECT ${geom}
+      INSERT INTO ${table} (${layer.geom})
+      SELECT ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326), ${layer.srid})
       RETURNING ${layer.qID} AS id;`;
       
       var rows = await env.dbs[layer.dbs](q);
