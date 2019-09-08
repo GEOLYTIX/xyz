@@ -1,5 +1,3 @@
-import d3_selection from 'd3-selection';
-
 export default _xyz => layer => {
 
   // Create grid_size dropdown.
@@ -13,7 +11,10 @@ export default _xyz => layer => {
     }
   });
 
-  const legend = d3_selection.select(layer.style.legend).append('svg');
+  const legend = layer.style.legend.appendChild(_xyz.utils.wire()
+  `<svg 
+  xmlns='http://www.w3.org/2000/svg'
+  >`);
     
   // Create SVG grid legend
   let
@@ -27,48 +28,70 @@ export default _xyz => layer => {
       r = (i + 2) * 10 / n,
       x = i * w;
 
-    legend.append('circle')
-      .attr('cx', x + w / 2 + 1 + '%')
-      .attr('cy', yTrack + 1)
-      .attr('r', r)
-      .style('fill', '#333');
+    let circle1 = _xyz.utils.wire(null, 'svg')
+    `<circle
+    fill='#333'
+    >`; 
 
-    legend.append('circle')
-      .attr('cx', x + w / 2 + '%')
-      .attr('cy', yTrack)
-      .attr('r', r)
-      .style('fill', '#999');
+    circle1.setAttribute('cx', x + w / 2 + 1 + '%');
+    circle1.setAttribute('cy', yTrack + 1);
+    circle1.setAttribute('r', r);
+
+    legend.appendChild(circle1);
+
+    let circle2 = _xyz.utils.wire(null, 'svg')
+    `<circle
+    fill='#999'
+    >`;
+
+    circle2.setAttribute('cx', x + w / 2 + '%');
+    circle2.setAttribute('cy', yTrack);
+    circle2.setAttribute('r', r);
+
+    legend.appendChild(circle2);
 
     if (i === 0) {
-      layer.style.legend.size_min = legend.append('text').attr('x', x  + '%')
-        .attr('y', yTrack - 20)
-        .style('font-size', 13)
-        .attr('text-anchor', 'start')
-        .style('font-family', '"PT Mono", monospace')
-        .text('min')
-        ._groups[0][0];
+
+      layer.style.legend.size_min = _xyz.utils.wire(null, 'svg')
+      `<text
+      style='font-size:13px; text-anchor: start; font-family: "PT Mono", monospace;'
+      >min
+      </text>`;
+
+      layer.style.legend.size_min.setAttribute("x", x  + '%');
+      layer.style.legend.size_min.setAttribute("y", yTrack - 20);
+
+      legend.appendChild(layer.style.legend.size_min);
     }
 
     if (i === (n / 2 % 1 != 0 && Math.round(n / 2) - 1)) {
-      layer.style.legend.size_avg = legend.append('text')
-        .attr('x', x + w / 2 + '%')
-        .attr('y', yTrack - 20)
-        .style('font-size', 13)
-        .attr('text-anchor', 'middle')
-        .style('font-family', '"PT Mono", monospace')
-        .text('avg')
-        ._groups[0][0];
+
+      layer.style.legend.size_avg = _xyz.utils.wire(null, 'svg')
+      `<text
+      style='font-size:13px; text-anchor: middle; font-family: "PT Mono", monospace;'
+      >avg
+      </text>`;
+
+      layer.style.legend.size_avg.setAttribute("x", x + w / 2 + '%');
+      layer.style.legend.size_avg.setAttribute("y", yTrack - 20);
+
+      legend.appendChild(layer.style.legend.size_avg);
+
     }
 
     if (i === n - 1) {
-      layer.style.legend.size_max = legend.append('text')
-        .attr('x', x + w + '%')
-        .attr('y', yTrack - 20)
-        .style('font-size', 13)
-        .attr('text-anchor', 'end')
-        .style('font-family', '"PT Mono", monospace')
-        .text('max')
-        ._groups[0][0];
+
+      layer.style.legend.size_max = _xyz.utils.wire(null, 'svg')
+      `<text
+      style='font-size:13px; text-anchor: end; font-family: "PT Mono", monospace;'
+      >max
+      </text>`;
+
+      layer.style.legend.size_max.setAttribute("x", x + w + '%');
+      layer.style.legend.size_max.setAttribute("y", yTrack - 20);
+
+      legend.appendChild(layer.style.legend.size_max);
+
     }
 
   }
@@ -79,51 +102,63 @@ export default _xyz => layer => {
 
     let x = i * w;
 
-    legend.append('rect')
-      .attr('x', x  + '%')
-      .attr('y', yTrack)
-      .attr('width', w + '%')
-      .attr('height', 20)
-      .style('fill', layer.style.range[i]);
+    let rect = _xyz.utils.wire(null, 'svg')
+    `<rect
+    height=20
+    fill=${layer.style.range[i]}
+    >`;
+
+    rect.setAttribute("x", x  + '%');
+    rect.setAttribute("y", yTrack);
+    rect.setAttribute("width",  w + '%');
+
+    legend.appendChild(rect);
 
     if (i === 0) {
-      layer.style.legend.color_min = legend.append('text')
-        .attr('x', x  + '%')
-        .attr('y', yTrack + 40)
-        .style('font-size', 13)
-        .attr('text-anchor', 'start')
-        .style('font-family', '"PT Mono", monospace')
-        .text('min')
-        ._groups[0][0];
+
+      layer.style.legend.color_min = _xyz.utils.wire(null, 'svg')
+      `<text
+      style='font-size:13px; text-anchor: start; font-family: "PT Mono", monospace;'
+      >min
+      </text>`;
+
+      layer.style.legend.color_min.setAttribute("x", x  + '%');
+      layer.style.legend.color_min.setAttribute("y", yTrack + 40);
+
+      legend.appendChild(layer.style.legend.color_min);
     }
 
     if (i === (n / 2 % 1 != 0 && Math.round(n / 2) - 1)) {
-      layer.style.legend.color_avg = legend.append('text')
-        .attr('x', x + w / 2 + '%')
-        .attr('y', yTrack + 40)
-        .style('font-size', 13)
-        .attr('text-anchor', 'middle')
-        .style('font-family', '"PT Mono", monospace')
-        .attr('id', 'grid_legend_color__avg')
-        .text('avg')
-        ._groups[0][0];
+
+      layer.style.legend.color_avg = _xyz.utils.wire(null, 'svg')
+      `<text id="grid_legend_color__avg"
+      style='font-size:13px; text-anchor: middle; font-family: "PT Mono", monospace;'
+      >avg
+      </text>`;
+
+      layer.style.legend.color_avg.setAttribute("x", x + w / 2 + '%');
+      layer.style.legend.color_avg.setAttribute("y", yTrack + 40);
+
+      legend.appendChild(layer.style.legend.color_avg);
     }
 
     if (i === n - 1) {
-      layer.style.legend.color_max = legend.append('text')
-        .attr('x', x + w + '%')
-        .attr('y', yTrack + 40)
-        .style('font-size', 13)
-        .attr('text-anchor', 'end')
-        .style('font-family', '"PT Mono", monospace')
-        .attr('id', 'grid_legend_color__max')
-        .text('max')
-        ._groups[0][0];
+
+      layer.style.legend.color_max = _xyz.utils.wire(null, 'svg')
+      `<text id="grid_legend_color__max"
+      style='font-size:13px; text-anchor: end; font-family: "PT Mono", monospace;'
+      >max
+      </text>`;
+
+      layer.style.legend.color_max.setAttribute("x", x + w + '%')
+      layer.style.legend.color_max.setAttribute("y", yTrack + 40);
+
+      legend.appendChild(layer.style.legend.color_max);
     }
 
   }
 
-  legend.attr('height', yTrack + 43);
+  legend.style.height = `${yTrack + 43}px`;
 
   // Create grid_color dropdown.
   _xyz.utils.dropdown({
@@ -137,7 +172,7 @@ export default _xyz => layer => {
   });
   
   layer.style.legend.appendChild(_xyz.utils.wire()`
-  <td style="paddingTop: 5px;" colSpan=2>
+  <td style="padding-top: 5px;" colSpan=2>
   <label class="checkbox">Display colour values as a ratio to the size value.
   <input type="checkbox"
     checked=${layer.grid_ratio}
