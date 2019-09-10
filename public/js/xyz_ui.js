@@ -112,13 +112,13 @@ function createMap (_xyz) {
     }
   });
 
-  // _xyz.tableview.create({
-  //   target: document.getElementById('tableview'),
-  //   btn: {
-  //     toggleTableview: document.getElementById('toggleTableview'),
-  //     tableViewport: document.getElementById('btnTableViewport')
-  //   }
-  // });
+  _xyz.tableview.create({
+    target: document.getElementById('tableview'),
+    btn: {
+      toggleTableview: document.getElementById('toggleTableview'),
+      tableViewport: document.getElementById('btnTableViewport')
+    }
+  });
 
   _xyz.layers.listview.init({
     target: document.getElementById('layers')
@@ -136,9 +136,9 @@ function createMap (_xyz) {
     });
   };
 
-  // _xyz.gazetteer.init({
-  //   target: document.getElementById('gazetteer'),
-  //   toggle: document.getElementById('btnGazetteer'),
-  // });
+  _xyz.gazetteer.init({
+    target: document.getElementById('gazetteer'),
+    toggle: document.getElementById('btnGazetteer'),
+  });
 
 };

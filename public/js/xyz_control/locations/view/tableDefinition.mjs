@@ -34,13 +34,9 @@ export default _xyz => entry => {
   function showTab() {
 
     if(_xyz.tableview.node && !_xyz.tableview.node.querySelector('.table')) {
-      _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          classList: 'table'
-        },
-        appendTo: _xyz.tableview.node.querySelector('.tab-content')
-      });
+
+      _xyz.tableview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`<div class="table">`);
+
     }
 
     entry.location.tables.push(entry);
@@ -80,19 +76,11 @@ export default _xyz => entry => {
     }));
 
     if (fields.length && fields.some(field => field.displayValue)) {
-       
-      // const header = _xyz.utils.createElement({
-      //   tag: 'div',
-      //   options: { classList: 'btn_subtext cursor noselect' },
-      //   style: { textAlign: 'left', fontStyle: 'italic' },
-      //   appendTo: entry.chart.node
-      // });
 
-      // _xyz.utils.createElement({
-      //   tag: 'span',
-      //   options: { textContent: entry.title },
-      //   appendTo: header
-      // });
+      // entry.chart.node.appendChild(_xyz.utils.wire()`<div
+      //   class="btn_subtext cursor noselect"
+      //   style="text-align: left; font-style: italic;">
+      //   <span>${entry.title}`);
 
       entry.chart.node.appendChild(_xyz.utils.chart({
         label: entry.title,

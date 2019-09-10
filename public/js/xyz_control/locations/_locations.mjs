@@ -30,6 +30,8 @@ export default _xyz => ({
     }
   ],
 
+  listview: listview(_xyz),
+
   decorate: (location, assign = {}) => {
 
     return Object.assign(
@@ -52,10 +54,7 @@ export default _xyz => ({
         tables: [],
         
         style: Object.assign({
-          color: '#090',
-          stroke: true,
-          fill: true,
-          fillOpacity: 0,
+          strokeColor: '#090',
           // icon: {
           //   url: _xyz.utils.svg_symbols({
           //     type: 'circle',
@@ -70,7 +69,5 @@ export default _xyz => ({
       assign);
 
   },
-
-  listview: listview(_xyz),
 
 });

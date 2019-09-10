@@ -47,7 +47,7 @@ export default _xyz => {
       '#d32f2f'
     ].map(color => ({
       style: {
-        color: color
+        strokeColor: color
       }
     }));
          

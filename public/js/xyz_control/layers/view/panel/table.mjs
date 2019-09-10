@@ -27,7 +27,7 @@ export default (_xyz, layer) => {
   // Return if tableview has no table definition.
   if (!layer.tableview.tables) return;
 
-  if (!_xyz.tableview.node) return;
+  //if (!_xyz.tableview.node) return;
 
   // Iterate through tables entries.
   Object.keys(layer.tableview.tables).forEach(key => {
@@ -39,7 +39,13 @@ export default (_xyz, layer) => {
     table.title = table.title || key;
     table.target = _xyz.tableview.node.querySelector('.table');
 
-    if (!table.target) table.target = _xyz.tableview.tableContainer();
+    if (!table.target) {
+      _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+
+      table.target = _xyz.utils.wire()`<div class="table">`;
+  
+      _xyz.tableview.node.querySelector('.tab-content').appendChild(table.target);
+    }
 
     table.show = () => _xyz.tableview.layerTable(table);
     table.remove = () => _xyz.tableview.removeTab(table);

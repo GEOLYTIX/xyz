@@ -60,56 +60,20 @@ export default (_xyz, location) => () => {
 
     // Create new table cell for the entry label and append to table.
     if (entry.label) {
-      entry.label_td = _xyz.utils.createElement({
-        tag: 'td',
-        options: {
-          className: 'label lv-' + (entry.level || 0),
-          textContent: entry.label,
-          title: entry.title || null
-        },
-        appendTo: entry.row
-      });
-    }
+      entry.label_td = _xyz.utils.wire()`
+      <td class="${'label lv-' + (entry.level || 0)}"
+      title="${entry.title || null}">${entry.label}`;
 
+      entry.row.appendChild(entry.label_td);
+    }
+    
     // display layer name in location view
-    if(entry.type === 'key') { 
-
-      entry.row = _xyz.utils.createElement({
-        tag: 'tr',
-        appendTo: location.view.node
-      });
-
-      entry.td = _xyz.utils.createElement({
-        tag: 'td',
-        options: {
-          className: 'label lv-0',
-          colSpan: 2
-        },
-        style: {
-          padding: '10px 0'
-        },
-        appendTo: entry.row
-      });
-
-      _xyz.utils.createElement({
-        tag: 'span',
-        options: {
-          textContent: _xyz.layers.list[location.layer].name,
-          title: 'Source layer'
-        },
-        style: {
-          fontSize: '12px',
-          padding: '3px',
-          backgroundColor: _xyz.utils.chroma(location.style.color).alpha(0.3).rgba(),
-          borderRadius: '2px',
-          cursor: 'help',
-          float: 'right'
-        },
-        appendTo: entry.td
-      });
-
-      return;
-    }
+    if(entry.type === 'key') return location.view.node.appendChild(_xyz.utils.wire()`
+      <tr>
+      <td class="label lv-0" colspan=2 style="padding: 10px 0">
+      <span title="Source layer"
+      style="float: right"
+      >${_xyz.layers.list[location.layer].name}`);
 
     // Finish entry creation if entry has not type.
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
@@ -127,9 +91,7 @@ export default (_xyz, location) => () => {
     if (entry.type === 'documents') return location.view.documents(entry);
 
     // Create geometry control.
-    //if (entry.type === 'geometry') return location.view.geometry(entry);
-
-    if (entry.type === 'geometry') return;
+    if (entry.type === 'geometry') return location.view.geometry(entry);
 
     // Create metadata entry
     if (entry.type === 'meta') return location.view.meta(entry);

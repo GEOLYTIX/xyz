@@ -74,7 +74,7 @@ export default _xyz => function () {
   // Create the header element to contain the control elements
   location.view.header = _xyz.utils.wire()`
   <div
-  style = "${'border-bottom: 2px solid ' + location.style.color}"
+  style = "${'border-bottom: 2px solid ' + location.style.strokeColor}"
   class = "header">
   <div>
   ${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
@@ -94,7 +94,7 @@ export default _xyz => function () {
   // Expander icon.
   location.view.header.appendChild(_xyz.utils.wire()`
   <i
-  style = "${'color: ' + location.style.color}"
+  style = "${'color: ' + location.style.strokeColor}"
   title = "Toggle location view drawer."
   class = "material-icons cursor noselect btn_header expander"
   onclick = ${e => {
@@ -110,7 +110,7 @@ export default _xyz => function () {
   // Update icon.
   location.view.upload = _xyz.utils.wire()`
   <i
-  style = "${'display: none; color: ' + location.style.color}"
+  style = "${'display: none; color: ' + location.style.strokeColor}"
   title = "Save changes to cloud."
   class = "material-icons cursor noselect btn_header"
   onclick = ${e => {
@@ -126,7 +126,7 @@ export default _xyz => function () {
   // Trash icon.
   location.view.trash = _xyz.utils.wire()`
   <i
-  style = "${'color: ' + location.style.color}"
+  style = "${'color: ' + location.style.strokeColor}"
   title = "Delete location."
   class = "material-icons cursor noselect btn_header"
   onclick = ${e => {
@@ -140,7 +140,7 @@ export default _xyz => function () {
   // Copy to clipboard.
   location.view.header.appendChild(_xyz.utils.wire()`
   <i
-  style = "${'color: ' + location.style.color}"
+  style = "${'color: ' + location.style.strokeColor}"
   title = "Copy to clipboard"
   class = "material-icons cursor noselect btn_header"
   onclick = ${e => {
@@ -152,7 +152,7 @@ export default _xyz => function () {
   // Zoom to location bounds.
   location.view.header.appendChild(_xyz.utils.wire()`
   <i
-  style = "${'color: ' + location.style.color}"
+  style = "${'color: ' + location.style.strokeColor}"
   title = "Zoom map to feature bounds"
   class = "material-icons cursor noselect btn_header"
   onclick = ${e => {
@@ -164,7 +164,7 @@ export default _xyz => function () {
   // Toggle marker.
   location.view.header.appendChild(_xyz.utils.wire()`
   <i
-  style = "${'color: ' + location.style.color}"
+  style = "${'color: ' + location.style.strokeColor}"
   title = "Hide marker"
   class = "material-icons cursor noselect btn_header"
   onclick = ${e => {
@@ -186,7 +186,7 @@ export default _xyz => function () {
   // Clear selection.
   location.view.header.appendChild(_xyz.utils.wire()`
   <i
-  style = "${'color: ' + location.style.color}"
+  style = "${'color: ' + location.style.strokeColor}"
   title = "Remove feature from selection"
   class = "material-icons cursor noselect btn_header"
   onclick = ${e => {
@@ -197,6 +197,5 @@ export default _xyz => function () {
 
   // Add location view to drawer.
   location.view.drawer.appendChild(location.view.node);
-
 
 };

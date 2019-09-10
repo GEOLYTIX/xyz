@@ -7,7 +7,10 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'public/js/build'),
-    filename: '[name].js'
+    filename: '[name].js',
+    // library: 'xyz',
+    // libraryTarget: 'amd-require'
+
   },
   devtool: 'source-map',
   module: {

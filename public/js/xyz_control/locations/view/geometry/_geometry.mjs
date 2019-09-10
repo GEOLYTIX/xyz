@@ -88,8 +88,8 @@ export default _xyz => entry => {
       classList: 'sample-circle'
     },
     style: {
-      backgroundColor: _xyz.utils.chroma(entry.style.fillColor).alpha(entry.style.fillOpacity === 0 ? 0 : parseFloat(entry.style.fillOpacity) || 1).rgba(),
-      borderColor: _xyz.utils.chroma(entry.style.color).alpha(1).rgba(),
+      //backgroundColor: _xyz.utils.chroma(entry.style.fillColor).alpha(entry.style.fillOpacity === 0 ? 0 : parseFloat(entry.style.fillOpacity) || 1).rgba(),
+      //borderColor: _xyz.utils.chroma(entry.style.color).alpha(1).rgba(),
       borderStyle: 'solid',
       //borderWidth: _xyz.utils.setStrokeWeight(entry),
       position: 'absolute',
@@ -135,7 +135,7 @@ export default _xyz => entry => {
 
       if(!entry.display) td.appendChild(entry.edit.container);
 
-      _xyz.geom.isoline_here_control({
+      _xyz.ctrl.isoline_here({
         entry: entry,
         container: entry.edit.container
       });
@@ -145,7 +145,7 @@ export default _xyz => entry => {
 
       if(!entry.display) td.appendChild(entry.edit.container);
 
-      _xyz.geom.isoline_mapbox_control({
+      _xyz.ctrl.isoline_mapbox({
         entry: entry,
         container: entry.edit.container
       });

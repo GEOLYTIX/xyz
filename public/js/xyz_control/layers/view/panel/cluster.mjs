@@ -4,35 +4,24 @@ export default (_xyz, layer) => {
 
   if (!layer.cluster_panel) return;
 
-  // Create cluster panel and add to layer dashboard.
-  const panel = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'panel expandable'
-    },
-    appendTo: layer.view.dashboard
-  });
+  const panel = _xyz.utils.wire()`<div class="panel expandable">`;
 
-  // Panel title / expander.
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'btn_text cursor noselect',
-      textContent: 'Cluster'
-    },
-    appendTo: panel,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        e.stopPropagation();
-        _xyz.utils.toggleExpanderParent({
-          expandable: panel,
-          accordeon: true,
-          scrolly: _xyz.desktop && _xyz.desktop.listviews,
-        });
-      }
-    }
-  });
+  layer.view.dashboard.appendChild(panel);
+
+
+  // Table panel header.
+  const header = _xyz.utils.wire()`
+  <div onclick=${e => {
+    e.stopPropagation();
+    _xyz.utils.toggleExpanderParent({
+      expandable: layer.tableview.panel,
+      accordeon: true,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+  }}
+  class="btn_text cursor noselect">Cluster`;
+  
+  layer.tableview.panel.appendChild(header);
 
   // Set timeout to debounce layer get on range input event.
   let timeout;

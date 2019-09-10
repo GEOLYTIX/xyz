@@ -39,21 +39,9 @@ export default _xyz => param => {
     appendTo: mode_container
   });
 
-  let range_container = _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      marginTop: '8px'
-    },
-    appendTo: param.container
-  });
+  let range_container = _xyz.utils.wire()`<div style="margin-top: 8px;"><span>Range`;
 
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: 'Range'
-    },
-    appendTo: range_container
-  });
+  param.container.appendChild(range_container);
 
   _xyz.utils.dropdown({
     label: 'label',

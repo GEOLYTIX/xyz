@@ -27,12 +27,12 @@ export default _xyz => location => {
         }),
       }),
       new _xyz.mapview.lib.style.Style({
-        stroke: new _xyz.mapview.lib.style.Stroke({
-          color: location.style.color,
-          width: 2
+        stroke: location.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
+          color: location.style.strokeColor,
+          width: location.style.strokeWidth || 1
         }),
-        fill: new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.chroma(location.style.color).alpha(location.style.fillOpacity === 0 ? 0 : parseFloat(location.style.fillOpacity) || 1).rgba()
+        fill: location.style.fillColor && new _xyz.mapview.lib.style.Fill({
+          color: _xyz.utils.chroma(location.style.fillColor).alpha(location.style.fillOpacity === 0 ? 0 : parseFloat(location.style.fillOpacity) || 1).rgba()
         }),
         // The default callback does not assign an image style for selected point locations.
       })
@@ -51,7 +51,7 @@ export default _xyz => location => {
       image: _xyz.mapview.icon({
         type: 'markerLetter',
         letter: String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record)),
-        color: location.style.color,
+        color: location.style.strokeColor,
         scale: 0.05,
         anchor: [0.5, 1],
       })

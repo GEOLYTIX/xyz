@@ -59,7 +59,11 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    table.target = _xyz.tableview.tableContainer();
+    _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+
+    table.target = _xyz.utils.wire()`<div class="table">`;
+
+    _xyz.tableview.node.querySelector('.tab-content').appendChild(table.target);
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {

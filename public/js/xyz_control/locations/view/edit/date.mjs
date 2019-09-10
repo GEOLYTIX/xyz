@@ -4,15 +4,10 @@ export default _xyz => entry => {
     _xyz.utils.formatDateTime(entry.value):
     _xyz.utils.formatDate(entry.value);
 
-  const input = _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      value: entry.value || '',
-      type: 'text'
-    },
-    appendTo: entry.val,
-  });
+  const input = _xyz.utils.wire()`<input type="text">${entry.value || ''}`;
 
+  entry.val.appendChild(input);
+  
   _xyz.utils.datePicker({
     element: input,
     position: 'c',

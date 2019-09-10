@@ -18,25 +18,9 @@ export default _xyz => function () {
   xhr.onload = e => {
     if (e.target.status !== 200) return;
 
-    // Show the layer on map.
-    layer.show();
+    var extent = e.target.response.split(',');
 
-    // Split the bounds from response.
-    const bounds = e.target.responseText.split(',');
-
-    const fGroup = [_xyz.mapview.lib.polygon([
-      [bounds[1], bounds[0]],
-      [bounds[1], bounds[2]],
-      [bounds[3], bounds[2]],
-      [bounds[3], bounds[0]],
-    ])];
-
-    if (_xyz.mapview && _xyz.mapview.locate && _xyz.mapview.locate.active) fGroup.push(_xyz.mapview.locate.L);
-
-    // Fly to the bounds.
-    _xyz.map.flyToBounds(_xyz.mapview.lib.featureGroup(fGroup).getBounds(),{
-      padding: [25, 25]
-    });
+    _xyz.map.getView().fit(extent, { duration: 1000 });
     
   };
 

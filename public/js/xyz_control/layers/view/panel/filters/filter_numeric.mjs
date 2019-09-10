@@ -113,7 +113,7 @@ export default (_xyz, layer, filter_entry) => {
 
         layer.filter.check_count();
 
-        layer.show();
+        layer.reload();
 
       }, 500);
     }

@@ -25,43 +25,33 @@ export default _xyz => table => {
     count2 = _xyz.tableview.nav_dropdown.children.length || 0,
     total_count = count1 + count2;
 
-  table.tab = _xyz.utils.createElement({
-    tag: 'li',
-    options: {
-      textContent: table.title,
-      classList: 'Tab cursor noselect'
-    },
-    style: style,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        
-        Object
-          .values(_xyz.tableview.nav_bar.children)
-          .forEach(tab => tab.classList.remove('tab-current'));
+  table.tab = _xyz.utils.wire()`<li
+  class="Tab cursor noselect"
+  style="${style}"
+  onclick=${e => {
+    Object
+      .values(_xyz.tableview.nav_bar.children)
+      .forEach(tab => tab.classList.remove('tab-current'));
 
-        if(e.target.classList.contains('folded')){
-          // put last tab in the dropdown
-          _xyz.tableview.nav_bar.lastChild.classList.add('folded');
-          _xyz.tableview.nav_dropdown.appendChild(_xyz.tableview.nav_bar.lastChild);
+    if(e.target.classList.contains('folded')){
+    // put last tab in the dropdown
+      _xyz.tableview.nav_bar.lastChild.classList.add('folded');
+      _xyz.tableview.nav_dropdown.appendChild(_xyz.tableview.nav_bar.lastChild);
 
-          // put new tab in the nav bar
-          e.target.classList.remove('folded');
-          _xyz.tableview.nav_bar.appendChild(e.target);
-        } 
-        e.target.classList.add('tab-current');
+      // put new tab in the nav bar
+      e.target.classList.remove('folded');
+      _xyz.tableview.nav_bar.appendChild(e.target);
+    } 
+    e.target.classList.add('tab-current');
 
-        table.activate();
+    table.activate();
 
-        // set tab to current
-        if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
+    // set tab to current
+    if (_xyz.tableview.btn.tableViewport) _xyz.tableview.btn.tableViewport.style.display = 'none';
 
-        // hide dropdown if visible
-        _xyz.tableview.nav_dropdown_content.classList.remove('show');
-        
-      }
-    }
-  });
+    // hide dropdown if visible
+    _xyz.tableview.nav_dropdown_content.classList.remove('show');
+  }}>${table.title}`;
 
   // assign the parent for tab based on count
   (total_count < _xyz.tableview.max_tabs) ?

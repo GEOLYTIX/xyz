@@ -140,14 +140,7 @@ export default _xyz => {
 
   }
 
-  function removeLastPoint(){
-
-    _xyz.mapview.draw.interaction.removeLastPoint();
-    _xyz.mapview.draw.vertices.pop();
-    _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
-
-  }
-  
+ 
   function contextmenu(e) {
   
     if (_xyz.mapview.draw.vertices.length === 0) return;
