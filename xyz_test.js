@@ -1,4 +1,4 @@
-module.export = export default {
+module.exports = export default {
 f: () => alert('foo'),
 text: 'foo',
 }
