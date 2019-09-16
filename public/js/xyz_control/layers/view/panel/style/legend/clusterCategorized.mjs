@@ -5,7 +5,7 @@ export default _xyz => layer => {
     xmlns='http://www.w3.org/2000/svg'
     >`);
        
-  let y = 10;
+    let y = 10;
 
     // Create / empty legend filter when theme is applied.
     layer.filter.legend = {};
