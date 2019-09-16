@@ -89,6 +89,8 @@ export default (_xyz, location) => () => {
       entry.label_td = _xyz.utils.wire()`
       <td class="${'label lv-' + (entry.level || 0)}"
       title="${entry.title || null}">${entry.label}`;
+
+      entry.row.appendChild(entry.label_td);
     }
     
     // display layer name in location view
@@ -121,7 +123,9 @@ export default (_xyz, location) => () => {
     if (entry.type === 'documents') return location.view.documents(entry);
 
     // Create geometry control.
-    if (entry.type === 'geometry') return ;//location.view.geometry(entry);
+    if (entry.type === 'geometry') {
+      return; //location.view.geometry(entry);
+    }
 
     // Create metadata entry
     if (entry.type === 'meta') return location.view.meta(entry);
