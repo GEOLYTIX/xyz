@@ -1,14 +1,12 @@
 export default _xyz => layer => {
 
   const legend = layer.style.legend.appendChild(_xyz.utils.wire()
-    `<svg 
-    xmlns='http://www.w3.org/2000/svg'
-    >`);
+  `<svg xmlns='http://www.w3.org/2000/svg'>`);
        
-    let y = 10;
+  let y = 10;
 
-    // Create / empty legend filter when theme is applied.
-    layer.filter.legend = {};
+  // Create / empty legend filter when theme is applied.
+  layer.filter.legend = {};
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
 
@@ -25,11 +23,7 @@ export default _xyz => layer => {
     legend.appendChild(image);
 
     let text = _xyz.utils.wire(null, 'svg')
-    `<text
-    x=25
-    style='font-size:12px; alignment-baseline:central; cursor:pointer;'
-    >${cat[1].label || cat[0]}
-    </text>`;
+    `<text x=25 style='font-size:12px; alignment-baseline:central; cursor:pointer;'>${cat[1].label || cat[0]}`;
 
     text.setAttribute('y', y + 13);
 
@@ -71,7 +65,7 @@ export default _xyz => layer => {
       height=20
       />`;
 
-    image.setAttribute("y", y);
+    image.setAttribute('y', y);
     image.setAttribute('href', _xyz.utils.svg_symbols(layer.style.marker));
 
     legend.appendChild(image);
@@ -128,7 +122,7 @@ export default _xyz => layer => {
   legend.appendChild(imageMulti);
 
   let textMulti = _xyz.utils.wire(null, 'svg')
-    `<text
+  `<text
     x=44
     style='font-size:12px; alignment-baseline:central; cursor:pointer;'
     >Multiple Locations
@@ -139,4 +133,4 @@ export default _xyz => layer => {
       
   legend.style.height = `${y + 50}px`;
 
-}
+};

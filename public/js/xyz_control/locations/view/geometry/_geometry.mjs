@@ -28,7 +28,14 @@ export default _xyz => entry => {
   <td style="padding-top: 5px; position: relative;" colSpan=2>`;
 
   entry.row.appendChild(td);
+  
+  entry.ctrl.geometry = _xyz.mapview.geoJSON({
+    geometry: JSON.parse(entry.value),
+    pane: entry.location.layer,
+    style: entry.style
+  });
 
+  entry.location.geometries.push(entry.ctrl.geometry);
 
 
   entry.ctrl.geometry = _xyz.mapview.geoJSON({
