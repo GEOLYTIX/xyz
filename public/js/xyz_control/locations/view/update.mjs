@@ -92,10 +92,7 @@ export default (_xyz, location) => () => {
     }
     
     // display layer name in location view
-    if(entry.type === 'key') {
-
-      console.log(_xyz.utils.chroma(location.style.strokeColor).alpha(0.3).rgba());
-      
+    if(entry.type === 'key') {      
       
       return location.view.node.appendChild(_xyz.utils.wire()`
       <tr>

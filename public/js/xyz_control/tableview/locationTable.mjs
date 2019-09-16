@@ -81,11 +81,15 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
+    
+    // disable header sorting by default
+    table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false});
 
-    table.target = _xyz.utils.wire()`<div class="table">`;
-
-    _xyz.tableview.node.querySelector('.tab-content').appendChild(table.target);
+    // group columns if grouped defined
+    let columns = _xyz.tableview.groupColumns(table);
+    // filtered out helper columns
+    columns = columns.filter(col => { return !col.aspatial });
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
