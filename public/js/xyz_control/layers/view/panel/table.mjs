@@ -31,6 +31,7 @@ export default (_xyz, layer) => {
 
   // Iterate through tables entries.
   if (layer.tableview.tables) {
+
     Object.keys(layer.tableview.tables).forEach(key => {
 
       const table = layer.tableview.tables[key];
@@ -40,19 +41,19 @@ export default (_xyz, layer) => {
       table.title = table.title || key;
       table.target = _xyz.tableview.node.querySelector('.table');
 
-    if (!table.target) {
-      _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+      if (!table.target) {
+        _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
 
-      table.target = _xyz.utils.wire()`<div class="table">`;
+        table.target = _xyz.utils.wire()`<div class="table">`;
   
-      _xyz.tableview.node.querySelector('.tab-content').appendChild(table.target);
-    }
+        _xyz.tableview.node.querySelector('.tab-content').appendChild(table.target);
+      }
 
-    table.show = () => _xyz.tableview.layerTable(table);
-    table.remove = () => _xyz.tableview.removeTab(table);
+      table.show = () => _xyz.tableview.layerTable(table);
+      table.remove = () => _xyz.tableview.removeTab(table);
 
-    // Create checkbox to toggle whether table is in tabs list.
-    layer.tableview.panel.appendChild(_xyz.utils.wire()`
+      // Create checkbox to toggle whether table is in tabs list.
+      layer.tableview.panel.appendChild(_xyz.utils.wire()`
     <label class="checkbox">${table.title}
     <input type="checkbox"
     checked=${table.display}
@@ -64,8 +65,9 @@ export default (_xyz, layer) => {
       table.remove();}}>
     <div class="checkbox_i">`);
 
-    if (table.display && layer.display) table.show();
+      if (table.display && layer.display) table.show();
 
+      return;
       const chart = layer.tableview.charts[key];
 
       chart.key = key;
