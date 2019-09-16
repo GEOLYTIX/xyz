@@ -88,10 +88,16 @@ export default _xyz => table => {
       _xyz.tableview.btn.tableViewport.style.display = 'block';
     }
 
+    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
+
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
       {
-        columns: table.columns,
+        placeholder: "No Data Available",
+        tooltipsHeader: true,
+        columnVertAlign: "center",
+        columns: _xyz.tableview.groupColumns(table),//table.columns,
+        layout: table.layout || 'fitDataFill',
         autoResize: true,
         height: _xyz.tableview.height || 'auto',
         groupBy: table.groupBy || null,
@@ -142,5 +148,7 @@ export default _xyz => table => {
 
   // active only if displayed in the navbar 
   if(!table.tab || !table.tab.classList.contains('folded')) table.activate();
+
+  return table;
 
 };

@@ -30,8 +30,6 @@ export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
 export {wire, bind} from 'hyperhtml/esm';
 
-export {default as chart} from './charts.mjs';
-
 export {default as Tabulator} from 'tabulator-tables';
 
 import pointOnFeature from '@turf/point-on-feature';
@@ -43,6 +41,8 @@ import meta from '@turf/meta';
 import helpers from '@turf/helpers';
 
 import explode from '@turf/explode';
+
+import envelope from '@turf/envelope';
 
 import area from '@turf/area';
 
@@ -56,6 +56,7 @@ export const turf = {
   meta: meta,
   helpers: helpers,
   explode: explode,
+  envelope: envelope,
   area: area,
   length: length
 };

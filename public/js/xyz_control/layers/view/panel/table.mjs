@@ -30,14 +30,15 @@ export default (_xyz, layer) => {
   //if (!_xyz.tableview.node) return;
 
   // Iterate through tables entries.
-  Object.keys(layer.tableview.tables).forEach(key => {
+  if (layer.tableview.tables) {
+    Object.keys(layer.tableview.tables).forEach(key => {
 
-    const table = layer.tableview.tables[key];
+      const table = layer.tableview.tables[key];
 
-    table.key = key;
-    table.layer = layer;
-    table.title = table.title || key;
-    table.target = _xyz.tableview.node.querySelector('.table');
+      table.key = key;
+      table.layer = layer;
+      table.title = table.title || key;
+      table.target = _xyz.tableview.node.querySelector('.table');
 
     if (!table.target) {
       _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
@@ -65,6 +66,30 @@ export default (_xyz, layer) => {
 
     if (table.display && layer.display) table.show();
 
-  });
+      const chart = layer.tableview.charts[key];
 
+      chart.key = key;
+      chart.layer = layer;
+      chart.title = chart.title || key;
+      chart.target = _xyz.tableview.node.querySelector('.table');
+
+      if (!chart.target) chart.target = _xyz.tableview.tableContainer();
+
+      chart.show = () => _xyz.tableview.layerDashboard(chart);
+      chart.remove = () => _xyz.tableview.removeTab(chart);
+
+      // Create checkbox to toggle whether table is in tabs list.
+      _xyz.utils.createCheckbox({
+        label: chart.title,
+        appendTo: layer.tableview.panel,
+        checked: !!chart.display,
+        onChange: e => {
+          chart.display = e.target.checked;
+          if (!chart.display) return chart.remove();
+          layer.show();
+        }
+      });
+      if (chart.display && layer.display) chart.show();
+    });
+  }
 };

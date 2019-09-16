@@ -19,11 +19,11 @@ export default _xyz => (table, callback) => {
 
   }
 
-  const columns = [];
+  //const columns = [];
 
-  table.columns.forEach(col => {
+  /*table.columns.forEach(col => {
     columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-  });
+  });*/
 
   if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
 
@@ -67,9 +67,12 @@ export default _xyz => (table, callback) => {
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
-        columns: columns,
-        // autoResize: true,
-        layout: 'fitDataFill',
+        placeholder: "No Data Available",
+        tooltipsHeader: true,
+        columnVertAlign: "center",
+        columns: _xyz.tableview.groupColumns(table),
+        //autoResize: false,
+        layout: table.layout || 'fitDataFill',
         height: 'auto'
       });
 

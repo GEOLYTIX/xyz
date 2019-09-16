@@ -37,7 +37,7 @@ module.exports = fastify => {
         // check whether the object has an access key matching the current level.
         if (Object.entries(o).some(
           e => e[0] === 'roles' && !Object.keys(e[1]).some(
-            role=> req.params.token.roles.includes(role)
+            role=> req.params.token.roles && req.params.token.roles.includes(role)
           )
         )) {
       

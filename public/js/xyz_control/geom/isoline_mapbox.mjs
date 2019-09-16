@@ -34,7 +34,10 @@ export default _xyz => layer => {
 
       layer.show();
 
-      if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
+      if (e.target.status !== 200) {
+        console.log(e.target.response);
+        return alert('No route found. Try a longer travel time');
+      }
                                 
       _xyz.locations.select({
         layer: layer.key,

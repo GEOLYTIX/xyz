@@ -46,14 +46,15 @@ async function view(req, res, token = { access: 'public' }) {
 
   try {
     _tmpl = (md.mobile() === null || md.tablet() !== null) ?
-      await fetch(`https://${req.headers.host}${env.path}/views/desktop.html`) :
-      await fetch(`https://${req.headers.host}${env.path}/views/mobile.html`);
+    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop.html`) :
+    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
 
   } catch (err) {
     _tmpl = (md.mobile() === null || md.tablet() !== null) ?
       await fetch(`http://${req.headers.host}${env.path}/views/desktop.html`) :
       await fetch(`http://${req.headers.host}${env.path}/views/mobile.html`);
   }
+
 
   const tmpl = jsr.templates('tmpl', await _tmpl.text());
 

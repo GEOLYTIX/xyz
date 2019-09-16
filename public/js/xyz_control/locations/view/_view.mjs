@@ -59,7 +59,7 @@ export default _xyz => function () {
   
     report: report(_xyz),
   
-    valChange: valChange,
+    valChange: valChange
 
   };
 

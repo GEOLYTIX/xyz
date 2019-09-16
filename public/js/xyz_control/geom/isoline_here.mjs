@@ -33,7 +33,6 @@ export default _xyz => layer => {
         //traffic: null,
         minutes: layer.edit.isoline_here.minutes,
         distance: layer.edit.isoline_here.distance,
-        meta: entry.edit.isoline_here.meta || null,
         token: _xyz.token
       }));
   
@@ -43,7 +42,11 @@ export default _xyz => layer => {
 
       layer.show();
         
-      if (e.target.status !== 200) return alert('No route found. Try alternative set up.');
+      if (e.target.status !== 200) {
+        console.log(e.target.response);
+        return alert('No route found. Try alternative set up.');
+      }
+
                                     
       _xyz.locations.select({
         layer: layer.key,

@@ -12,7 +12,7 @@ export default _xyz => entry => {
 
     isoline_mapbox: isoline_mapbox(_xyz),
 
-    delete_geom: delete_geom(_xyz),
+    deleteGeom: delete_geom(_xyz),
 
   };
 
@@ -30,7 +30,6 @@ export default _xyz => entry => {
   entry.row.appendChild(td);
   
 
-  function drawGeom() {
 
     entry.ctrl.geometry = _xyz.mapview.geoJSON({
       geometry: JSON.parse(entry.value),
@@ -38,14 +37,11 @@ export default _xyz => entry => {
       style: entry.style
     });
     entry.location.geometries.push(entry.ctrl.geometry);
-  
-  }
+  };
 
   entry.ctrl.showGeom = drawGeom;
 
-  if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
-
-  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
+  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.drawGeom = entry.ctrl.isoline_mapbox;
   
 
   entry.ctrl.hideGeom = () => {
@@ -55,7 +51,7 @@ export default _xyz => entry => {
       1
     );
 
-    _xyz.map.removeLayer(entry.ctrl.geometry);
+    if(_xyz.map.hasLayer(entry.ctrl.geometry)) _xyz.map.removeLayer(entry.ctrl.geometry);
   };
 
   if (entry.edit) {

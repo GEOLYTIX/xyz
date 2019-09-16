@@ -7,13 +7,10 @@ export default _xyz => layer => {
        
   let y = 10;
 
-  // Create / empty legend filter when theme is applied.
-  layer.filter.legend = {};
+    let y = 10;
 
-  // Create array for NI (not in) value filter.
-  layer.filter.legend[layer.style.theme.field] = {
-    ni: []
-  };
+    // Create / empty legend filter when theme is applied.
+    layer.filter.legend = {};
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
 

@@ -16,7 +16,7 @@ export default _xyz => entry => {
 
   if (entry.chart) {
 
-    const tr = _xyz.utils.wire()`<tr class="${'table-chart ' + (entry.class || '')}">`;
+    const tr = _xyz.utils.wire()`<tr class="${'table-chart ' + (entry.chart.class || '')}">`;
     
     const td = _xyz.utils.wire()`<td colspan=2>`;
 
@@ -82,7 +82,12 @@ export default _xyz => entry => {
       //   style="text-align: left; font-style: italic;">
       //   <span>${entry.title}`);
 
-      entry.chart.node.appendChild(_xyz.utils.chart({
+      /*entry.chart.node.appendChild(_xyz.utils.chart({
+        label: entry.title,
+        fields: fields,
+        chart: entry.chart
+      }));*/
+      entry.chart.node.appendChild(_xyz.charts.create({
         label: entry.title,
         fields: fields,
         chart: entry.chart

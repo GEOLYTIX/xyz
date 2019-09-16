@@ -1,5 +1,15 @@
 // Catch unhandled errors on the process.
-process.on('unhandledRejection', err => console.error(err));
+process.on('unhandledRejection', err => {
+  console.error({err})
+  if(err === 666) {
+    console.log("Please check the ACL!")
+    process.exit();
+  }
+});
+
+process.on('uncaughtException', err => {
+  console.error({err})
+});
 
 // Function to check whether a required module is available.
 const req_res = m => {

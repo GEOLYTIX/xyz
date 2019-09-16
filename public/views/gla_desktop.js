@@ -12,50 +12,49 @@ _xyz({
       }
     });
   
-    _xyz.locations.select = location => gla_select(_xyz, location);
+    _xyz.locations.select = location => {
+
+      for (const filter of filters) {
+        filter.classList.remove('expanded');
+      }
+
+      gla_select(_xyz, location);
+    };
   
     const layer = _xyz.layers.list['Advice Center'];
-  
-    layer.filter.current = {};
-  
-    const tableShow = () => _xyz.tableview.layerTable({
+   
+    const table = _xyz.tableview.layerTable({
       layer: layer,
       target: document.getElementById('List'),
       key: 'gla',
       visible: ['organisation_short'],
-      groupBy: 'borough',
       initialSort: [
         {
           column: 'organisation_short', dir: 'asc'
-        },
-        {
-          column: 'borough', dir: 'asc'
         }
       ],
       groupStartOpen: false,
       groupToggleElement: 'header',
-      rowClick: (e, row) => {
-        const rowData = row.getData();
-  
-        if (!rowData.qid) return;
-  
+      rowClick: (e, row) => { 
         _xyz.locations.select({
           locale: _xyz.workspace.locale.key,
           layer: layer.key,
           table: layer.table,
-          id: rowData.qid,
+          id: row.getData().qid,
+          _flyTo: true,
         });
       }
     });
-  
-    tableShow();
-  
-    _xyz.utils.dropdownCustom({
-      appendTo: document.getElementById('select-borough'),
-      placeholder: 'Filter by borough',
-      field: 'borough',
-      entries: [
-        'Show all boroughs',
+
+    setBoroughFilter();
+
+    layer.filter.current = { borough : { in: [] } };
+
+    function setBoroughFilter() {
+
+      document.getElementById('filterBorough').innerHTML = '';
+
+      const boroughs = [
         'Barking and Dagenham',
         'Barnet',
         'Bexley',
@@ -88,102 +87,203 @@ _xyz({
         'Tower Hamlets',
         'Wandsworth',
         'Westminster'
-      ],
-      callback: e => {
-        e.stopPropagation();
-        if(e.target.textContent === 'Show all boroughs') {
-          delete layer.filter.current[e.target.parentNode.previousSibling.dataset.field];
-          layer.zoomToExtent();
-          tableShow();
-          return;
-        }
-        layer.filter.current[e.target.parentNode.previousSibling.dataset.field] = {};
-        layer.filter.current[e.target.parentNode.previousSibling.dataset.field].match = e.target.textContent;
-        layer.zoomToExtent();
-        tableShow();
-      }
-    });
+      ];
   
-    _xyz.utils.dropdownCustom({
-      appendTo: document.getElementById('select-advice'),
-      placeholder: 'Filter by service',
-      field: 'advice',
-      entries: [
-        { 'all': 'Show all services' }, 
-        { 'service_initial_advice': 'Initial Advice' },
-        { 'service_written_advice': 'Written Advice' },
-        { 'service_form_filling': 'Form Filling' },
-        { 'service_case_work': 'Casework' },
-        { 'service_representation': 'Representation' }
-      ],
-      callback: (e) => {
-        e.stopPropagation();
-        // Reset previous boolean filters
-        Object.keys(layer.filter.current).map(key => {
-          if(layer.filter.current[key].boolean){
-            delete layer.filter.current[key];
-            layer.zoomToExtent();
-            tableShow();
+      boroughs.forEach(borough => {
+  
+        document.getElementById('filterBorough').appendChild(_xyz.utils.wire()`
+        <label class="checkbox">${borough}
+        <input type="checkbox"
+          onchange=${e => {
+  
+    e.stopPropagation();
+                  
+    if (e.target.checked) {
+  
+      // Add value to filter array.
+      layer.filter.current['borough'].in.push(borough);
+                  
+    } else {
+  
+      // Get index of value in filter array.
+      let idx = layer.filter.current['borough']['in'].indexOf(borough);
+  
+      // Splice filter array on idx.
+      layer.filter.current['borough'].in.splice(idx, 1);
+  
+    }
+    
+    layer.zoomToExtent();
+    table.update();
+  
+  
+  }}>
+        <div class="checkbox_i">`);
+      });
+  
+    }
+
+    setServiceFilter();
+
+    function setServiceFilter() {
+
+      document.getElementById('filterServices').innerHTML = '';
+
+      const services = [
+        ['service_initial_advice', 'Initial Advice' ],
+        ['service_written_advice', 'Written Advice' ],
+        ['service_form_filling', 'Form Filling' ],
+        ['service_case_work', 'Casework' ],
+        ['service_representation', 'Representation' ]
+      ];
+  
+      services.forEach(service => {
+  
+        document.getElementById('filterServices').appendChild(_xyz.utils.wire()`
+        <label class="checkbox">${service[1]}
+        <input type="checkbox"
+          onchange=${e => {
+  
+    e.stopPropagation();
+                  
+    if (e.target.checked) {
+  
+      layer.filter.current[service[0]] = {};
+      layer.filter.current[service[0]]['boolean'] = true;
+                  
+    } else {
+  
+      delete layer.filter.current[service[0]];
+  
+    }
+    
+    layer.zoomToExtent();
+    table.update();
+  
+  
+  }}>
+        <div class="checkbox_i">`);
+      });
+
+    }
+
+
+    const filters = document.querySelectorAll('.filter');
+    for (const filter of filters) {
+      filter.onclick = function(){
+
+        if (this.classList.contains('expanded')) {
+
+          this.classList.remove('expanded');
+
+        } else {
+
+          this.classList.add('expanded');
+
+        }
+
+      };
+    }
+
+
+
+    document.getElementById('resetFilter').onclick = function(){
+
+      layer.filter.current = { borough : { in: [] } };
+
+      for (const filter of filters) {
+        filter.classList.remove('expanded');
+      }
+
+      setBoroughFilter();
+
+      setServiceFilter();
+
+      layer.zoomToExtent();
+      table.update();
+
+    };
+  
+
+    // Gazetteer
+    const input = document.querySelector('#postcode-search input');
+  
+    const find = document.querySelector('#postcode-find');
+      
+    input.addEventListener('focus', e => {
+      document.getElementById('postcode-find').classList.remove('darkish');
+      document.getElementById('postcode-find').classList.add('pink-bg');
+      e.target.parentNode.classList.add('pink-br');
+    });
+    
+    input.addEventListener('blur', e => {
+      document.getElementById('postcode-find').classList.add('darkish');
+      document.getElementById('postcode-find').classList.remove('pink-bg');
+      e.target.parentNode.classList.remove('pink-br');
+    });
+
+    _xyz.mapview.locate.icon = _xyz.L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_locate.svg?sanitize=true',
+      iconSize: 30
+    });
+
+    _xyz.gazetteer.icon = 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_gazetteer.svg?sanitize=true';
+
+   
+    find.addEventListener('click', () => {
+      _xyz.gazetteer.search(input.value,
+        {
+          source: 'GOOGLE',
+          callback: json => {
+
+            if (json.length === 0) return alert('No results for this search.');
+
+            // Zoom to extent of nearest 3 centre in callback.
+            _xyz.gazetteer.select(json[0], res => {
+
+              const xhr = new XMLHttpRequest();
+
+              xhr.open('GET',
+                _xyz.host + '/api/location/select/latlng/nnearest?' +
+                _xyz.utils.paramString({
+                  locale: _xyz.workspace.locale.key,
+                  layer: 'Advice Center',
+                  table: 'gla.gla',
+                  nnearest: 3,
+                  lng: res.coordinates[0],
+                  lat: res.coordinates[1],
+                  filter: JSON.stringify(layer.filter.current),
+                }));
+            
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.responseType = 'json';
+            
+              xhr.onload = e => {
+            
+                if (e.target.status !== 200) return;
+                      
+                const features = [_xyz.utils.turf.helpers.point(res.coordinates)];
+            
+                e.target.response.forEach(f => features.push(_xyz.utils.turf.helpers.point(JSON.parse(f.geomj).coordinates)));
+                            
+                const bbox = _xyz.utils.turf.bbox({
+                  type: 'FeatureCollection',
+                  features: features
+                });
+            
+                _xyz.map.flyToBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
+                  padding: [5, 5]
+                });
+                        
+              };
+            
+              xhr.send();
+
+            });
           }
-        });
-  
-        if(e.target.textContent === 'Show all services'){
-          delete layer.filter.current[e.target.dataset.field];
-          layer.zoomToExtent();
-          tableShow();
-          return;
         }
-  
-        layer.filter.current[e.target.dataset.field] = {};
-        layer.filter.current[e.target.dataset.field]['boolean'] = true;
-        layer.zoomToExtent();
-        tableShow();
-      }
+      );
     });
-  
-    searchPostcode(_xyz);
+
   }
 });
-  
-  
-  
-function searchPostcode(_xyz){
-  
-  const input = document.querySelector('#postcode-search input');
-  
-  const find = document.querySelector('#postcode-find');
-    
-  input.addEventListener('focus', e => {
-    document.getElementById('postcode-find').classList.remove('darkish');
-    document.getElementById('postcode-find').classList.add('pink-bg');
-    e.target.parentNode.classList.add('pink-br');
-  });
-  
-  input.addEventListener('blur', e => {
-    document.getElementById('postcode-find').classList.add('darkish');
-    document.getElementById('postcode-find').classList.remove('pink-bg');
-    e.target.parentNode.classList.remove('pink-br');
-  });
-  
-  find.addEventListener('click', () => {
-    _xyz.gazetteer.search(input.value, {
-      source: 'GOOGLE',
-      callback: json => {
-        if (json.length === 0) return alert('No results for this search.');
-        _xyz.gazetteer.select(json[0]);
-      }
-    });
-  });
-  
-  input.addEventListener('keydown', e => {
-    let key = e.keyCode || e.charCode;
-    if(key === 13) _xyz.gazetteer.search(input.value, {
-      source: 'GOOGLE',
-      callback: json => {
-        if (json.length === 0) return alert('No results for this search.');
-        _xyz.gazetteer.select(json[0]);
-      }
-    });
-  });
-  
-}

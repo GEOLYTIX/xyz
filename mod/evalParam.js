@@ -10,10 +10,12 @@ module.exports = {
   lnglat: _lnglat,
   coords: _coords,
   layerTable: _layerTable,
+  layerChart: _layerChart,
   geomTable: _geomTable,
   layerValues: _layerValues,
   tableDef: _tableDef,
   userSchemaField: _userSchemaField,
+  pgFunction: _pgFunction
 };
 
 function _token(req, res, next) {
@@ -130,6 +132,19 @@ function _layerTable(req, res, next) {
 
 };
 
+function _layerChart(req, res, next) {
+
+  req.params.chart = req.params.layer.tableview.charts[req.query.chart];
+
+  if (!req.params.chart) {
+    res.code(400);
+    return next(new Error('Missing chart table.'));
+  }
+
+  next();
+
+};
+
 function _geomTable(req, res, next) {
 
   if (req.query.table === req.params.layer.table) return next();
@@ -165,6 +180,21 @@ function _tableDef(req, res, next) {
   if (!req.params.tableDef) {
     res.code(400);
     return next(new Error('Missing table definition.'));
+  }
+
+  next();
+
+};
+
+function _pgFunction(req, res, next) {
+
+  req.params.pgFunction = req.params.layer.infoj.find(
+    entry => entry.pgFunction === decodeURIComponent(req.query.pgFunction)
+  );
+
+  if (!req.params.pgFunction) {
+    res.code(400);
+    return next(new Error('Missing pgFunction definition.'));
   }
 
   next();

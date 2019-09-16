@@ -43,7 +43,7 @@ export default (_xyz, params) => {
 
       document.body.style.gridTemplateRows = `minmax(0, 1fr) ${window.innerHeight}px`;
 
-      _xyz.tableview.current_table.Tabulator.redraw(true);
+      if(_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
 
       _xyz.map.updateSize();
 

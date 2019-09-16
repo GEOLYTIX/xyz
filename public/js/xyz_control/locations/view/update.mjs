@@ -43,6 +43,7 @@ export default (_xyz, location) => () => {
   });
 
     
+  let dataset; // watch for group/chart data series and stacks
   // Iterate through info fields and add to info table.
   Object.values(location.infoj).forEach(entry => {
 
@@ -55,7 +56,32 @@ export default (_xyz, location) => () => {
     if (entry.type === 'group') return location.view.group(entry);
 
     // Create entry.row inside previously created group.
-    if (entry.group && location.view.groups[entry.group]) location.view.groups[entry.group].table.appendChild(entry.row);
+    if (entry.group && location.view.groups[entry.group]){ 
+
+      if(entry.dataset || entry.stack){
+
+        let
+          dataset_row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`,
+          dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777; font-size: small;">`;
+
+        if(entry.dataset && entry.dataset !== dataset){
+          dataset_label.textContent = entry.dataset;
+          dataset_row.appendChild(dataset_label);
+          location.view.groups[entry.group].table.appendChild(dataset_row);
+          dataset = entry.dataset;
+        }
+
+        if(entry.stack && entry.stack !== dataset){
+          dataset_label.textContent = entry.stack;
+          dataset_row.appendChild(dataset_label);
+          location.view.groups[entry.group].table.appendChild(dataset_row);
+          dataset = entry.stack;
+        }
+
+      }
+      
+      location.view.groups[entry.group].table.appendChild(entry.row); 
+    }
     
 
     // Create new table cell for the entry label and append to table.
@@ -63,16 +89,14 @@ export default (_xyz, location) => () => {
       entry.label_td = _xyz.utils.wire()`
       <td class="${'label lv-' + (entry.level || 0)}"
       title="${entry.title || null}">${entry.label}`;
-
-      entry.row.appendChild(entry.label_td);
     }
     
     // display layer name in location view
     if(entry.type === 'key') return location.view.node.appendChild(_xyz.utils.wire()`
       <tr>
-      <td class="label lv-0" colspan=2 style="padding: 10px 0">
+      <td class="label lv-0 ${entry.class || ''}" colspan=2 style="padding: 10px 0;">
       <span title="Source layer"
-      style="float: right"
+      style="float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ${_xyz.utils.chroma(location.style.color).alpha(0.3).rgba()};"
       >${_xyz.layers.list[location.layer].name}`);
 
     // Finish entry creation if entry has not type.
@@ -108,6 +132,9 @@ export default (_xyz, location) => () => {
       return location.view.dashboard(entry);   
     } 
 
+    // prevent clusterArea from firing if layer is not cluster
+    if(entry.clusterArea && _xyz.layers.list[location.layer].format !== 'cluster') return;
+
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();
 
@@ -117,7 +144,9 @@ export default (_xyz, location) => () => {
       if(entry.label_td) entry.label_td.colSpan = '2';
 
       // Create new row and append to table.
-      entry.row = _xyz.utils.wire()`<tr>`;
+      //entry.row = _xyz.utils.wire()`<tr>`;
+      entry.row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`;
+
 
       location.view.node.appendChild(entry.row);
       

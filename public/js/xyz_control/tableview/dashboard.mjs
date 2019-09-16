@@ -1,6 +1,6 @@
-export default _xyz => (table, callback) => {
+export default _xyz => (entry, callback) => {
 
-  if (!table || !table.location) return;
+  if (!entry || !entry.location) return;
 
   if (_xyz.tableview.node) {
     // _xyz.tableview.node.style.display = 'block';
@@ -9,77 +9,63 @@ export default _xyz => (table, callback) => {
 
   }
 
-  /*if (!table.columns) {
+  if (_xyz.tableview.tables.indexOf(entry) < 0) _xyz.tableview.tables.push(entry);
 
-    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(entry);
 
-    const infoj_table = Object.values(infoj).find(v => v.title === table.title);
+  entry.update = () => {
 
-    Object.assign(table, infoj_table);
+    entry.target.innerHTML = '';
 
-  }
+    let flex_container = _xyz.utils.createElement({
+      tag: 'div',
+      style: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        position: 'relative',
+        padding: '20px'
+      },
+      appendTo: entry.target
+    });
 
-  const columns = [];
+    Object.values(entry.location.infoj).map(val => {
 
-  table.columns.forEach(col => {
-    columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-  });*/
+      if(val.type === 'group' && val.chart && val.dashboard && entry.title === val.dashboard){
 
-  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
+        entry.group = Object.assign({}, val);
 
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
+        entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
-  table.update = () => {
+        let chartElem = _xyz.charts.create(entry.group);
 
-    console.log('update dashboard');
-  	/*const xhr = new XMLHttpRequest();
+        if(!chartElem || !chartElem.style) return;
 
-  	xhr.open('GET', _xyz.host + '/api/location/list?' + _xyz.utils.paramString({
-      locale: _xyz.workspace.locale.key,
-      layer: table.location.layer,
-      table: _xyz.workspace.locale.layers[table.location.layer].tables ? _xyz.workspace.locale.layers[table.location.layer].tableMax() : null,
-      id: table.location.id,
-      tableDef: table.title,
-      token: _xyz.token
-    }));
+        flex_container.appendChild(chartElem);
 
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.responseType = 'json';
+      }
 
-    xhr.onload = e => {
-      if (e.target.status !== 200) return;
+      if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
 
-      table.Tabulator.setData(e.target.response);
-      table.Tabulator.redraw(true);
-      if (callback) callback(e.target.response);
-    };
-
-    xhr.send();*/
-    table.target.textContent = 'Hi I am a dashboard';
-
+        _xyz.tableview.pgFunction({
+          entry: val, 
+          container: document.getElementById(val.target_id) || flex_container
+        });
+      
+      }
+    });
   };
 
-  table.activate = () => {
+  entry.activate = () => {
 
     console.log('activate dashboard');
 
-    //table.target.textContent = 'Hi I am a dashboard';
+    entry.update();
 
-    /*table.Tabulator = new _xyz.utils.Tabulator(
-      table.target, {
-        columns: columns,
-        // autoResize: true,
-        layout: 'fitDataFill',
-        height: 'auto'
-      });*/
-
-    table.update();
-
-    _xyz.tableview.current_table = table;
+    _xyz.tableview.current_table = entry;
 
   };
 
   // active only if displayed in the navbar 
-  if(!table.tab || !table.tab.classList.contains('folded')) table.activate();
+  if(!entry.tab || !entry.tab.classList.contains('folded')) entry.activate();
 
 };
