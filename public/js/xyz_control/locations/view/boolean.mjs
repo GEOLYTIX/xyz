@@ -17,7 +17,7 @@ export default _xyz => entry => {
   });
 
   entry.val.appendChild(_xyz.utils.wire()`
-  <td style="paddingTop: 5px;" colSpan=2>
+  <td style="padding-top: 5px;" colSpan=2>
   <label class="checkbox">${entry.name || entry.field}
   <input type="checkbox"
     disabled=${!entry.edit}

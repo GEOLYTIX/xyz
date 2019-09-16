@@ -1,7 +1,7 @@
 export default _xyz => entry => {
 
   entry.row.appendChild(_xyz.utils.wire()`
-  <td style="paddingTop: 5px;" colSpan=2>
+  <td style="padding-top: 5px;" colSpan=2>
   <label class="checkbox">${entry.title || 'Show table'}
   <input type="checkbox"
     checked=${!!entry.display}
