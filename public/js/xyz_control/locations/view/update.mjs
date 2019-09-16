@@ -93,14 +93,10 @@ export default (_xyz, location) => () => {
     
     // display layer name in location view
     if(entry.type === 'key') {
-
-      console.log(_xyz.utils.chroma(location.style.strokeColor).alpha(0.3).rgba());
-      
-      
+     
       return location.view.node.appendChild(_xyz.utils.wire()`
       <tr>
       <td class="${'label lv-0 ' + (entry.class || '')}" colspan=2 style="padding: 10px 0;">
-
       <span title="Source layer"
       style="${'float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ' + _xyz.utils.chroma(location.style.strokeColor).alpha(0.3).rgba()}"
       >${_xyz.layers.list[location.layer].name}`);
@@ -124,7 +120,7 @@ export default (_xyz, location) => () => {
     if (entry.type === 'documents') return location.view.documents(entry);
 
     // Create geometry control.
-    if (entry.type === 'geometry') return ;//location.view.geometry(entry);
+    if (entry.type === 'geometry') location.view.geometry(entry);
 
     // Create metadata entry
     if (entry.type === 'meta') return location.view.meta(entry);

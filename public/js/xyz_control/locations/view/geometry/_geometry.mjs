@@ -18,6 +18,7 @@ export default _xyz => entry => {
 
   if (!entry.value && !entry.edit) return;
 
+  // Merge location style with entry style.
   entry.style = Object.assign(
     {},
     entry.location.style,
@@ -29,23 +30,16 @@ export default _xyz => entry => {
 
   entry.row.appendChild(td);
   
-  entry.ctrl.geometry = _xyz.mapview.geoJSON({
+  entry.ctrl.geometry = entry.value && _xyz.mapview.geoJSON({
     geometry: JSON.parse(entry.value),
-    pane: entry.location.layer,
+    //pane: entry.location.layer,
     style: entry.style
   });
 
-  entry.location.geometries.push(entry.ctrl.geometry);
+  //entry.location.geometries.push(entry.ctrl.geometry);
 
 
-  entry.ctrl.geometry = _xyz.mapview.geoJSON({
-    geometry: JSON.parse(entry.value),
-    pane: entry.location.layer,
-    style: entry.style
-  });
-  entry.location.geometries.push(entry.ctrl.geometry);
-
-  entry.ctrl.showGeom = drawGeom;
+  //entry.ctrl.showGeom = drawGeom;
 
   if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.drawGeom = entry.ctrl.isoline_mapbox;
 
@@ -58,6 +52,7 @@ export default _xyz => entry => {
     );
 
     if (_xyz.map.hasLayer(entry.ctrl.geometry)) _xyz.map.removeLayer(entry.ctrl.geometry);
+
   };
 
   if (entry.edit) {

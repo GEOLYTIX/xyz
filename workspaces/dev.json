@@ -1711,8 +1711,7 @@
                     "dbs": "XYZ",
                     "qID": "id",
                     "table": "dev.uk_glx_sites",
-                    "cluster_resolution": 0.1,
-                    
+                    "cluster_kmeans": 0.1,
                     "cluster_label": "site_name",
                     "infoj": [
                         {
