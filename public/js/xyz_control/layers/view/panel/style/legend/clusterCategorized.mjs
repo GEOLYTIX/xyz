@@ -7,8 +7,6 @@ export default _xyz => layer => {
        
   let y = 10;
 
-    let y = 10;
-
     // Create / empty legend filter when theme is applied.
     layer.filter.legend = {};
 
