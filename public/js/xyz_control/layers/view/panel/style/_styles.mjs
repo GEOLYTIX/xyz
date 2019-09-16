@@ -10,9 +10,8 @@ export default (_xyz, layer) => {
 
   if (!layer.style) return;
 
-
   // Add style panel to layer dashboard.
-  const panel = _xyz.utils.wire()`<div class="panel expandable">`;
+  const panel = _xyz.utils.wire()`<div class="${'panel expandable ' + (layer.style.theme ? 'expanded': '')}">`;
 
   layer.view.dashboard.appendChild(panel);
 
