@@ -66,9 +66,9 @@ module.exports = fastify => {
       if (!here_isolines.response
         || !here_isolines.response.isoline
         || !here_isolines.response.isoline[0].component) return res.code(202).send({
-          "msg": 'No isoline found within this range.',
-          "res": here_isolines
-        });
+        'msg': 'No isoline found within this range.',
+        'res': here_isolines
+      });
 
       const _geojson = {
         'type': 'Polygon',

@@ -29,15 +29,14 @@ export default _xyz => entry => {
 
   entry.row.appendChild(td);
   
+  entry.ctrl.geometry = _xyz.mapview.geoJSON({
+    geometry: JSON.parse(entry.value),
+    pane: entry.location.layer,
+    style: entry.style
+  });
 
+  entry.location.geometries.push(entry.ctrl.geometry);
 
-    entry.ctrl.geometry = _xyz.mapview.geoJSON({
-      geometry: JSON.parse(entry.value),
-      pane: entry.location.layer,
-      style: entry.style
-    });
-    entry.location.geometries.push(entry.ctrl.geometry);
-  };
 
   entry.ctrl.showGeom = drawGeom;
 
