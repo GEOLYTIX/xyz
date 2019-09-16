@@ -1268,7 +1268,8 @@
                             "display": true
                         },
                         "marker": {
-                            "type": "geo"
+                            "type": "target",
+                            "fillColor": "#eeeeee"
                         },
                         "markerMulti": {
                             "type": "target",

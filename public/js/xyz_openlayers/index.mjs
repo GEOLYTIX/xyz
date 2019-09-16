@@ -2,6 +2,12 @@ import _xyz_instance from '../xyz_control/_xyz.mjs';
 
 import * as _utils from '../utils/_utils.mjs';
 
+import Chart from 'chart.js';
+
+import 'chartjs-plugin-datalabels';
+
+import _charts from '../xyz_control/charts/_charts.mjs';
+
 import workspace from '../xyz_control/workspace.mjs';
 
 import hooks from '../xyz_control/hooks.mjs';
@@ -31,6 +37,10 @@ async function _xyz(params) {
   const _xyz = _xyz_instance();
 
   _xyz.utils = _utils;
+
+  _xyz.Chart = Chart;
+
+  _xyz.charts = _charts(_xyz);
 
   _xyz.mapview = { lib: lib() };
 

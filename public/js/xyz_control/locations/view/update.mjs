@@ -89,6 +89,8 @@ export default (_xyz, location) => () => {
       entry.label_td = _xyz.utils.wire()`
       <td class="${'label lv-' + (entry.level || 0)}"
       title="${entry.title || null}">${entry.label}`;
+
+      entry.row.appendChild(entry.label_td);
     }
     
     // display layer name in location view
@@ -98,9 +100,8 @@ export default (_xyz, location) => () => {
       <tr>
       <td class="${'label lv-0 ' + (entry.class || '')}" colspan=2 style="padding: 10px 0;">
       <span title="Source layer"
-      style="${'float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ' + _xyz.utils.chroma(location.style.strokeColor).alpha(0.3).rgba()}"
+      style="${'float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
       >${_xyz.layers.list[location.layer].name}`);
-
 
     }
 

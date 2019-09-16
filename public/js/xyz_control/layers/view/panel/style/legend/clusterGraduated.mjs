@@ -1,5 +1,7 @@
 export default _xyz => layer => {
 
+  if(!layer.style.theme.cat_arr) return;
+
   const legend = layer.style.legend.appendChild(_xyz.utils.wire()
     `<svg 
     xmlns='http://www.w3.org/2000/svg'
