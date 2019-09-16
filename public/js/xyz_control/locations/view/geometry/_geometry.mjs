@@ -41,7 +41,7 @@ export default _xyz => entry => {
 
   //entry.ctrl.showGeom = drawGeom;
 
-  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.drawGeom = entry.ctrl.isoline_mapbox;
+  if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
 
 
   entry.ctrl.hideGeom = () => {

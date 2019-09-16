@@ -4,7 +4,9 @@ export default _xyz => entry => {
     _xyz.utils.formatDateTime(entry.value):
     _xyz.utils.formatDate(entry.value);
 
-  const input = _xyz.utils.wire()`<input type="text">${entry.value || ''}`;
+  const _input = _xyz.utils.wire()`<input type="text">${entry.value || ''}`;
+
+  const input = _input.childNodes[0];
 
   entry.val.appendChild(input);
   
