@@ -1,4 +1,4 @@
-export default _xyz => function (e, feature) {
+export default _xyz => function (feature) {
 
   const layer = this;
   
@@ -67,10 +67,6 @@ export default _xyz => function (e, feature) {
       layer: layer.key,
       table: layer.table,
       id: cluster[0].id,
-      marker: _xyz.mapview.lib.proj.transform(
-        cluster[0].coords,
-        'EPSG:' + layer.srid,
-        'EPSG:' + _xyz.mapview.srid)
     });
 
   };

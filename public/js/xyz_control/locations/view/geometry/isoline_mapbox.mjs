@@ -7,7 +7,7 @@ export default _xyz => entry => {
   xhr.open(
     'GET',
     _xyz.host +
-    '/api/location/edit/isoline/mapbox?' +
+    '/api/location/edit/isoline/mapbox/info?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: entry.location.layer,

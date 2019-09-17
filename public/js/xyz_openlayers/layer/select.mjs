@@ -1,4 +1,4 @@
-export default _xyz => function(e, feature) {
+export default _xyz => function(feature) {
 
   const layer = this;
 
@@ -7,7 +7,6 @@ export default _xyz => function(e, feature) {
     layer: layer.key,
     table: layer.tableCurrent(),
     id: feature.get('id'),
-    marker: e.coordinate,
   });
 
 };
