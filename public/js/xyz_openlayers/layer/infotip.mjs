@@ -12,7 +12,7 @@ export default _xyz => function() {
             locale: _xyz.workspace.locale.key,
             layer: layer.key,
             table: layer.table,
-            id: layer.highlight,
+            id: layer.highlight, /*** aga: problematic cluster id instead of location id, pulls wrong content ***/
             field: layer.hover.field,
             token: _xyz.token
           }));
