@@ -122,6 +122,34 @@ export default _xyz => function () {
 
   location.view.header.appendChild(location.view.upload);
 
+  if (_xyz.layers.list[location.layer].edit) {
+
+    location.view.edit = _xyz.utils.wire()`
+    <i
+    style = "${'color: ' + location.style.strokeColor}"
+    title = "Edit the locations geometry."
+    class = "material-icons cursor noselect btn_header"
+    onclick = ${e => {
+    e.stopPropagation();
+      
+    _xyz.mapview.edit.begin({
+      location: location,
+      type: 'LineString',
+      begin: ()=>{
+        console.log('begin');
+      },
+      callback: () => {
+        console.log('cb');
+      }
+    });
+
+  }}>build`;
+
+    location.view.header.appendChild(location.view.edit);
+    
+  }
+ 
+
 
   // Trash icon.
   location.view.trash = _xyz.utils.wire()`

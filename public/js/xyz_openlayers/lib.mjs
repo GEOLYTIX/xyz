@@ -15,7 +15,7 @@ import {Circle, Fill, Stroke, Icon, Style, Text} from 'ol/style';
 
 import {transform, transformExtent, fromLonLat} from 'ol/proj';
 
-import {defaults, Draw} from 'ol/interaction.js';
+import {defaults, Draw, Modify} from 'ol/interaction.js';
 
 import {createBox} from 'ol/interaction/Draw.js';
 
@@ -44,6 +44,7 @@ export default () => ({
   interaction: {
     defaults: defaults,
     Draw: Draw,
+    Modify: Modify,
   },
 
   draw: {
