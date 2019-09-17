@@ -10,8 +10,19 @@ export default _xyz => function () {
 
   _xyz.map.addLayer(layer.L);
 
-  if (layer.style && layer.style.label && layer.style.label.display) {
-    _xyz.map.addLayer(layer.label);
+  if(layer.style && layer.style.label){
+
+    if(layer.style.label.display) {
+      
+      _xyz.map.addLayer(layer.label);
+    
+    } else {
+
+      _xyz.map.getLayers().forEach(l => {
+        if(l === layer.label) _xyz.map.removeLayer(layer.label);
+      });
+   }
+    
   }
 
   _xyz.mapview.attribution.check();
