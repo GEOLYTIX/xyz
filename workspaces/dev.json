@@ -64,7 +64,7 @@
                                     {
                                         "field": "gdp_md_est",
                                         "type": "integer",
-                                        "postfix": " dollars"
+                                        "suffix": " dollars"
                                     },
                                     {
                                         "title": "Population Est",
@@ -104,7 +104,7 @@
                             "label": "GDP",
                             "field": "gdp_md_est",
                             "type": "integer",
-                            "postfix": " dollars"
+                            "suffix": " dollars"
                         },
                         {
                             "label": "GDP edit",
@@ -1713,6 +1713,7 @@
                     "qID": "id",
                     "table": "dev.uk_glx_sites",
                     "cluster_kmeans": 0.1,
+                    "cluster_resolution": 0.1,
                     "cluster_label": "site_name",
                     "infoj": [
                         {
