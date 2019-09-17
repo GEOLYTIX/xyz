@@ -38,12 +38,12 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         id = req.query.id,
-        srid = req.query.srid,
+        srid = layer.srid,//req.query.srid,
         geom = layer.geom,
-        geom_3857 = layer.geom_3857,
+        //geom_3857 = layer.geom_3857,
         geometry = req.body;
 
-      let _geom;
+      /*let _geom;
 
       if(geom) _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'), 4326)`;
 
@@ -51,7 +51,9 @@ module.exports = fastify => {
 
       if (srid === '3857') _geom = `ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'), 3857)`;
     
-      var q = `UPDATE ${table} SET ${geom || geom_3857} = ${_geom} WHERE ${layer.qID} = ${id};`;
+      var q = `UPDATE ${table} SET ${geom || geom_3857} = ${_geom} WHERE ${layer.qID} = ${id};`;*/
+
+      var q = `UPDATE ${table} SET ${geom} = ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(geometry)}', ${srid})} WHERE ${layer.qID} = ${id};`;
 
       // delete old geometry from cache
       if (layer.mvt_cache) await mvt_cache(layer, table, id);
