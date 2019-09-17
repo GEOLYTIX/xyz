@@ -1,4 +1,4 @@
-export default _xyz => function (feature) {
+export default _xyz => function(feature) {
 
   const layer = this;
   

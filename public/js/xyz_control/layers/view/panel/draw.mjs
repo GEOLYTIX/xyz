@@ -203,8 +203,6 @@ export default (_xyz, layer) => {
           '/api/location/edit/isoline/mapbox?' +
           _xyz.utils.paramString({
             locale: _xyz.workspace.locale.key,
-            // layer: layer.key,
-            // table: layer.table,
             coordinates: origin.join(','),
             minutes: layer.edit.isoline_mapbox.minutes,
             profile: layer.edit.isoline_mapbox.profile,
@@ -297,16 +295,12 @@ export default (_xyz, layer) => {
           '/api/location/edit/isoline/mapbox?' +
           _xyz.utils.paramString({
             locale: _xyz.workspace.locale.key,
-            // layer: layer.key,
-            // table: layer.table,
             coordinates: origin.join(','),
             mode: layer.edit.isoline_here.mode,
             type: layer.edit.isoline_here.type,
             rangetype: layer.edit.isoline_here.rangetype,
-            //traffic: null,
             minutes: layer.edit.isoline_here.minutes,
             distance: layer.edit.isoline_here.distance,
-            // meta: entry.edit.isoline_here.meta || null,
             token: _xyz.token
           }));
 

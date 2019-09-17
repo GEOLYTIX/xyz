@@ -121,7 +121,7 @@ export default (_xyz, location) => () => {
     if (entry.type === 'documents') return location.view.documents(entry);
 
     // Create geometry control.
-    if (entry.type === 'geometry') location.view.geometry(entry);
+    if (entry.type === 'geometry') return location.view.geometry(entry);
 
     // Create metadata entry
     if (entry.type === 'meta') return location.view.meta(entry);

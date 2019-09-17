@@ -25,15 +25,27 @@ export default _xyz => entry => {
     entry.style
   );
 
-  let td = _xyz.utils.wire()`
-  <td style="padding-top: 5px; position: relative;" colSpan=2>`;
+  let td = _xyz.utils.wire()`<td style="padding-top: 5px; position: relative;" colSpan=2>`;
 
   entry.row.appendChild(td);
+
+  const sourceVector = new _xyz.mapview.lib.source.Vector();
+
+  const layerVector = new _xyz.mapview.lib.layer.Vector({
+    source: sourceVector,
+    zIndex: 20,
+    //style: entry.style,
+  }); 
+
+  _xyz.map.addLayer(layerVector);
   
-  entry.ctrl.geometry = entry.value && _xyz.mapview.geoJSON({
+  //entry.ctrl.geometry = 
+  entry.value && _xyz.mapview.geoJSON({
     geometry: JSON.parse(entry.value),
+    dataProjection: '4326',
     //pane: entry.location.layer,
-    style: entry.style
+    //style: entry.style,
+    layer: layerVector,
   });
 
   //entry.location.geometries.push(entry.ctrl.geometry);
@@ -76,7 +88,7 @@ export default _xyz => entry => {
 
   if (entry.value) {
     entry.display = true;
-    entry.ctrl.showGeom(entry);
+    //entry.ctrl.showGeom(entry);
   }
 
   _xyz.utils.createElement({

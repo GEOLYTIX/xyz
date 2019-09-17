@@ -1,4 +1,4 @@
-export default _xyz => function(e) {
+export default _xyz => () => {
 
   if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
 
