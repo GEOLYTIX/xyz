@@ -37,9 +37,9 @@ export default (_xyz, location) => () => {
             entry.type === 'datetime' ? _xyz.utils.formatDateTime(entry.value) :
               entry.value;
     
-    // Add pre- or postfix if specified
+    // Add pre- or suffix if specified
     if(entry.prefix)  entry.displayValue = entry.prefix + entry.displayValue;
-    if(entry.postfix) entry.displayValue = entry.displayValue + entry.postfix;
+    if(entry.suffix) entry.displayValue = entry.displayValue + entry.suffix;
   });
 
     

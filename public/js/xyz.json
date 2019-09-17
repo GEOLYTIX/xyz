@@ -1293,7 +1293,7 @@
                                             "label": "GDP",
                                             "field": "gdp_md_est",
                                             "type": "integer",
-                                            "postfix": " dollars"
+                                            "suffix": " dollars"
                                           },
                                           {
                                             "label": "GDP edit",
@@ -1344,7 +1344,7 @@
                                         {
                                           "field": "gdp_md_est",
                                           "type": "integer",
-                                          "postfix": " dollars",
+                                          "suffix": " dollars",
                                           "title": "gdp_md_est"
                                         },
                                         {
