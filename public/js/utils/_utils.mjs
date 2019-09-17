@@ -34,29 +34,8 @@ export {default as Tabulator} from 'tabulator-tables';
 
 import pointOnFeature from '@turf/point-on-feature';
 
-import bbox from '@turf/bbox';
-
-import meta from '@turf/meta';
-
-import helpers from '@turf/helpers';
-
-import explode from '@turf/explode';
-
-import envelope from '@turf/envelope';
-
-import area from '@turf/area';
-
-import length from '@turf/length';
-
 export {default as chroma} from 'chroma-js';
 
 export const turf = {
   pointOnFeature: pointOnFeature,
-  bbox: bbox,
-  meta: meta,
-  helpers: helpers,
-  explode: explode,
-  envelope: envelope,
-  area: area,
-  length: length
 };
