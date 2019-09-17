@@ -39,17 +39,14 @@
                                 "from": "dev.natural_earth_countries",
                                 "columns": [
                                     {
-                                        "field": "name",
-                                        "type": "text"
+                                        "field": "name"
                                     },
                                     {
                                         "title": "Population Est",
-                                        "field": "pop_est",
-                                        "type": "integer"
+                                        "field": "pop_est"
                                     },
                                     {
-                                        "field": "gdp_md_est",
-                                        "type": "integer"
+                                        "field": "gdp_md_est"
                                     }
                                 ]
                             },
@@ -58,18 +55,25 @@
                                 "from": "dev.natural_earth_countries",
                                 "columns": [
                                     {
-                                        "field": "name",
-                                        "type": "text"
+                                        "field": "name"
                                     },
                                     {
                                         "field": "gdp_md_est",
-                                        "type": "integer",
-                                        "suffix": " dollars"
+                                        "formatter": "money",
+                                        "formatterParams": {
+                                            "symbol": " dollars",
+                                            "symbolAfter": true,
+                                            "precision": false 
+                                        }
                                     },
                                     {
                                         "title": "Population Est",
                                         "field": "pop_est",
-                                        "type": "integer"
+                                        "formatter": "money",
+                                        "align": "right",
+                                        "formatterParams": {
+                                            "precision": false 
+                                        }
                                     }
                                 ]
                             }
@@ -814,33 +818,27 @@
                                 "columns": [
                                     {
                                         "title": "ID",
-                                        "field": "id",
-                                        "type": "text"
+                                        "field": "id"
                                     },
                                     {
-                                        "field": "dev_date",
-                                        "type": "date"
+                                        "field": "dev_date"
                                     },
                                     {
-                                        "field": "rp_type",
-                                        "type": "text"
+                                        "field": "rp_type"
                                     },
                                     {
                                         "field": "comp_strgh",
-                                        "type": "integer",
                                         "title": "Competition strength",
                                         "group": "Characteristics"
                                     },
                                     {
                                         "field": "est_units",
                                         "title": "Estimate units",
-                                        "type": "integer",
                                         "group": "Characteristics"
                                     },
                                     {
                                         "field": "est_brands",
                                         "title": "Estimate brands",
-                                        "type": "integer",
                                         "group": "Characteristics"
                                     }
                                 ]
@@ -1234,18 +1232,15 @@
                                 "columns": [
                                     {
                                         "title": "ID",
-                                        "field": "retailpoint_id",
-                                        "type": "text"
+                                        "field": "retailpoint_id"
                                     },
                                     {
                                         "title": "Retailer",
-                                        "field": "retailer",
-                                        "type": "text"
+                                        "field": "retailer"
                                     },
                                     {
                                         "title": "Fascia",
-                                        "field": "fascia",
-                                        "type": "text"
+                                        "field": "fascia"
                                     }
                                 ]
                             }
