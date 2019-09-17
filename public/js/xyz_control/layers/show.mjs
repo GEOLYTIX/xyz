@@ -4,6 +4,10 @@ export default _xyz => function () {
 
   layer.display = true;
 
+  _xyz.map.getLayers().forEach(l => {
+    if(l === layer.L) _xyz.map.removeLayer(layer.L);
+  });
+
   _xyz.map.addLayer(layer.L);
 
   if (layer.style && layer.style.label && layer.style.label.display) {
