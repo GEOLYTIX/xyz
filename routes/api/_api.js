@@ -54,6 +54,8 @@ module.exports = fastify => {
 
   require('./location/edit/isoline_here')(fastify);
 
+  require('./location/edit/isoline_here_info')(fastify); 
+
   require('./location/edit/draw')(fastify);
 
   require('./location/edit/geom_update')(fastify);

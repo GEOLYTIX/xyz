@@ -292,7 +292,7 @@ export default (_xyz, layer) => {
         xhr.open(
           'GET',
           _xyz.host +
-          '/api/location/edit/isoline/mapbox?' +
+          '/api/location/edit/isoline/here?' +
           _xyz.utils.paramString({
             locale: _xyz.workspace.locale.key,
             coordinates: origin.join(','),

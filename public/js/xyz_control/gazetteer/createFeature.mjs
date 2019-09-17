@@ -11,6 +11,7 @@ export default _xyz => function(geom){
   gazetteer.layer = _xyz.mapview.geoJSON({
     geometry: geom.geometry,
     pane: 'gazetteer',
+    // dbauszus *** style needs to be OL object
     style: {
       icon: {
         url: gazetteer.icon,

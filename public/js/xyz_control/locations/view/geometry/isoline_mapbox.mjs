@@ -37,15 +37,12 @@ export default _xyz => entry => {
       return alert('No route found. Try a longer travel time.');
     }
 
-    // Reset location infoj with response.
-    //entry.location.infoj = JSON.parse(e.target.response);
-
     entry.location.infoj = e.target.response;
 
-    console.log(entry.location.infoj);
+    //console.log(entry.location.infoj);
 
     // Update the location view.
-    //entry.location.view.update();
+    entry.location.view.update();
 
     //entry.location.flyTo();
 

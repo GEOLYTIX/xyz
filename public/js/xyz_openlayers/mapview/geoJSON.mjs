@@ -10,26 +10,18 @@ export default _xyz => function (params){
     featureProjection:'EPSG:' + (params.featureProjection || _xyz.mapview.srid)
   });
 
-  if (!params.layer) {
-
-    const sourceVector = new _xyz.mapview.lib.source.Vector({
-      features: [feature]
-    });
+  const sourceVector = new _xyz.mapview.lib.source.Vector({
+    features: [feature]
+  });
   
-    const layerVector = new _xyz.mapview.lib.layer.Vector({
-      source: sourceVector,
-      zIndex: 20,
-      style: params.style,
-    }); 
+  const layerVector = new _xyz.mapview.lib.layer.Vector({
+    source: sourceVector,
+    zIndex: 20,
+    style: params.style,
+  }); 
   
-    _xyz.map.addLayer(layerVector);
+  _xyz.map.addLayer(layerVector);
   
-    return layerVector;
-
-  }
-
-  params.layer.getSource().addFeature(feature);
-
-  return feature;
+  return layerVector;
 
 };

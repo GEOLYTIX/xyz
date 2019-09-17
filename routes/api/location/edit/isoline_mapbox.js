@@ -43,8 +43,6 @@ module.exports = fastify => {
         res: mapbox_isolines
       });
 
-      //const geojson = JSON.stringify(mapbox_isolines.features[0].geometry);
-
       return res.code(200).send(mapbox_isolines.features[0].geometry);
 
     }

@@ -29,31 +29,28 @@ export default _xyz => entry => {
 
   entry.row.appendChild(td);
 
-  const sourceVector = new _xyz.mapview.lib.source.Vector();
-
-  const layerVector = new _xyz.mapview.lib.layer.Vector({
-    source: sourceVector,
-    zIndex: 20,
-    //style: entry.style,
-  }); 
-
-  _xyz.map.addLayer(layerVector);
-  
-  //entry.ctrl.geometry = 
-  entry.value && _xyz.mapview.geoJSON({
+ 
+  entry.ctrl.geometry = entry.value && _xyz.mapview.geoJSON({
     geometry: JSON.parse(entry.value),
     dataProjection: '4326',
-    //pane: entry.location.layer,
-    //style: entry.style,
-    layer: layerVector,
+    style: new _xyz.mapview.lib.style.Style({
+      stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
+        color: entry.style.strokeColor,
+        width: entry.style.strokeWidth || 1
+      }),
+      fill: entry.style.fillColor && new _xyz.mapview.lib.style.Fill({
+        color: _xyz.utils.chroma(entry.style.fillColor).alpha(entry.style.fillOpacity === 0 ? 0 : parseFloat(entry.style.fillOpacity) || 1).rgba()
+      })
+    })
   });
 
-  //entry.location.geometries.push(entry.ctrl.geometry);
+  entry.ctrl.geometry && entry.location.geometries.push(entry.ctrl.geometry);
 
 
-  //entry.ctrl.showGeom = drawGeom;
 
   if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
+
+  if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
 
 
   entry.ctrl.hideGeom = () => {
@@ -63,12 +60,17 @@ export default _xyz => entry => {
       1
     );
 
-    if (_xyz.map.hasLayer(entry.ctrl.geometry)) _xyz.map.removeLayer(entry.ctrl.geometry);
+    _xyz.map.removeLayer(entry.ctrl.geometry);
 
   };
 
-  if (entry.edit) {
-    entry.ctrl.hideGeom = entry.ctrl.delete_geom;
+  // if (entry.edit) {
+  //   entry.ctrl.hideGeom = entry.ctrl.delete_geom;
+  // }
+
+  if (entry.value) {
+    entry.display = true;
+    //entry.ctrl.showGeom(entry);
   }
 
 
@@ -85,11 +87,6 @@ export default _xyz => entry => {
   }}>
   <div class="checkbox_i">`);
 
-
-  if (entry.value) {
-    entry.display = true;
-    //entry.ctrl.showGeom(entry);
-  }
 
   _xyz.utils.createElement({
     tag: 'div',

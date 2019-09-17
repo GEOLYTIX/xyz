@@ -12,9 +12,9 @@ export default _xyz => function() {
   }
 
   // Clear geometries and delete location to free up record.
-  // location.geometries.forEach(
-  //   geom => _xyz.map.removeLayer(geom)
-  // );
+  location.geometries.forEach(
+    geom => _xyz.map.removeLayer(geom)
+  );
 
   if (location.Layer) _xyz.map.removeLayer(location.Layer);
 
