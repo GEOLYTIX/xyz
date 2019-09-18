@@ -44,15 +44,15 @@ require('./mod/workspace/init')();
 // Set fastify
 const fastify = require('fastify')({
   trustProxy: true,
-  // logger: {
-  //   level: env.logs || 'error',
-  //   prettifier: require('pino-pretty'),
-  //   prettyPrint: {
-  //     errorProps: 'hint, detail',
-  //     levelFirst: true,
-  //     crlf: true
-  //   }
-  // }
+  logger: {
+    level: env.logs || 'error',
+    prettifier: require('pino-pretty'),
+    prettyPrint: {
+      errorProps: 'hint, detail',
+      levelFirst: true,
+      crlf: true
+    }
+  }
 });
 
 // Register fastify modules and routes.
