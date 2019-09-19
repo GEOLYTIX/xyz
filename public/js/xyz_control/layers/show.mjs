@@ -13,6 +13,10 @@ export default _xyz => function () {
   if(layer.style && layer.style.label){
 
     if(layer.style.label.display) {
+
+      _xyz.map.getLayers().forEach(l => {
+        if(l === layer.label) _xyz.map.removeLayer(layer.label);
+      });
       
       _xyz.map.addLayer(layer.label);
     
