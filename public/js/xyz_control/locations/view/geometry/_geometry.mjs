@@ -46,8 +46,6 @@ export default _xyz => entry => {
 
   entry.ctrl.geometry && entry.location.geometries.push(entry.ctrl.geometry);
 
-
-
   if (entry.edit && entry.edit.isoline_mapbox) entry.ctrl.showGeom = entry.ctrl.isoline_mapbox;
 
   if (entry.edit && entry.edit.isoline_here) entry.ctrl.showGeom = entry.ctrl.isoline_here;
@@ -87,17 +85,16 @@ export default _xyz => entry => {
   }}>
   <div class="checkbox_i">`);
 
-
   _xyz.utils.createElement({
     tag: 'div',
     options: {
       classList: 'sample-circle'
     },
     style: {
-    //backgroundColor: _xyz.utils.chroma(entry.style.fillColor).alpha(entry.style.fillOpacity === 0 ? 0 : parseFloat(entry.style.fillOpacity) || 1).rgba(),
-    //borderColor: _xyz.utils.chroma(entry.style.color).alpha(1).rgba(),
+      backgroundColor: _xyz.utils.chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0),
+      borderColor: _xyz.utils.chroma(entry.style.color || entry.style.strokeColor).alpha(1),
       borderStyle: 'solid',
-      //borderWidth: _xyz.utils.setStrokeWeight(entry),
+      borderWidth: _xyz.utils.setStrokeWeight(entry),
       position: 'absolute',
       right: 0,
       top: '5px'
@@ -109,7 +106,6 @@ export default _xyz => entry => {
 
     entry.edit.container = _xyz.utils.wire()`
     <div style="padding: 4px;" class="table-section expandable">`;
-
 
     _xyz.utils.createElement({
       tag: 'div',

@@ -36,6 +36,8 @@ import pointOnFeature from '@turf/point-on-feature';
 
 export {default as chroma} from 'chroma-js';
 
+export {setStrokeWeight} from './setStrokeWeight.mjs';
+
 export const turf = {
   pointOnFeature: pointOnFeature,
 };
