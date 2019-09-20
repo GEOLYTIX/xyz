@@ -10,6 +10,7 @@ export default _xyz => function () {
 
   xhr.open('GET', _xyz.host + '/api/layer/extent?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
+    mapview_srid: _xyz.mapview.srid,
     layer: layer.key,
     filter: JSON.stringify(filter),
     token: _xyz.token
@@ -20,7 +21,9 @@ export default _xyz => function () {
 
     var extent = e.target.response.split(',');
 
-    _xyz.map.getView().fit(extent, { duration: 1000 });
+    let _extent = extent.map(each => parseFloat(each));
+
+    _xyz.map.getView().fit(_extent, { duration: 1000 });
     
   };
 

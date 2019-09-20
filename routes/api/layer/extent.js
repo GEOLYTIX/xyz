@@ -20,6 +20,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
+          mapview_srid: { type: 'integer' }
         },
         required: ['locale', 'layer']
       }
@@ -35,8 +36,7 @@ module.exports = fastify => {
       let
         layer = req.params.layer,
         filter = req.params.filter,
-        geom = layer.geom,
-        geom_3857 = layer.geom_3857;
+        mapview_srid = req.query.mapview_srid;
 
         
       // Get table entry from layer or min table in from tables array.
@@ -45,24 +45,17 @@ module.exports = fastify => {
         || Object.values(layer.tables)[1];
 
 
-      let _geom;
-
-      if (geom) _geom = `ST_Extent(${geom})`;
-      
-      if (geom_3857) _geom = `Box2D(ST_Transform(ST_SetSRID(ST_Extent(${geom_3857}), 3857), 4326))`;
-
+      var geom = `Box2D(ST_Transform(ST_SetSRID(ST_Extent(${layer.geom}), ${layer.srid}), ${mapview_srid}))`;
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
 
-    
       // Query the estimated extent for the layer geometry field from layer table.
-      rows = await env.dbs[layer.dbs](`
-        SELECT ${_geom}
+      var rows = await env.dbs[layer.dbs](`
+        SELECT ${geom}
         FROM ${table}
         WHERE true ${filter_sql};
       `);
-
       
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
