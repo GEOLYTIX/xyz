@@ -99,7 +99,7 @@ module.exports = fastify => {
       
       var q = `
           UPDATE ${table}
-          SET ${req.query.field} = ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326)
+          SET ${req.query.field} = ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON('${geojson}'), 4326), ${layer.srid})
           ${req.query.meta ? `, ${req.query.meta} = '${JSON.stringify(meta_json)}'` : ''}
           WHERE ${layer.qID} = $1;`;
 

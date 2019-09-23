@@ -78,7 +78,7 @@ module.exports = fastify => {
             	}, async (err, response, body) => {
 
             		if (err) return console.error(err);
-            		console.log(body);
+            		//console.log(body);
 
             		var q = `UPDATE ${table} SET ${field} = array_append(${field}, '${body.secure_url}')
                     WHERE ${qID} = $1;`;

@@ -191,9 +191,7 @@ export default (_xyz, layer) => {
           geometry: geometry
         });
 
-        console.log(feature);
-
-        const origin = _xyz.mapview.lib.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+        const origin = _xyz.mapview.lib.proj.transform(coordinates, `EPSG:${_xyz.mapview.srid}`, 'EPSG:4326');
 
         const xhr = new XMLHttpRequest();
   
@@ -214,7 +212,7 @@ export default (_xyz, layer) => {
     
         xhr.onload = e => {
         
-          if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
+          if (e.target.status !== 200) return alert('No route found. Try a longer travel time or alternative setup.');
 
           const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
 
@@ -285,7 +283,7 @@ export default (_xyz, layer) => {
           geometry: geometry
         });
 
-        const origin = _xyz.mapview.lib.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+        const origin = _xyz.mapview.lib.proj.transform(coordinates, `EPSG:${_xyz.mapview.srid}`, 'EPSG:4326');
 
         const xhr = new XMLHttpRequest();
   
@@ -295,7 +293,7 @@ export default (_xyz, layer) => {
           '/api/location/edit/isoline/here?' +
           _xyz.utils.paramString({
             locale: _xyz.workspace.locale.key,
-            coordinates: origin.join(','),
+            coordinates: origin.reverse().join(','),
             mode: layer.edit.isoline_here.mode,
             type: layer.edit.isoline_here.type,
             rangetype: layer.edit.isoline_here.rangetype,
@@ -309,7 +307,7 @@ export default (_xyz, layer) => {
     
         xhr.onload = e => {
         
-          if (e.target.status !== 200) return alert('No route found. Try a longer travel time');
+          if (e.target.status !== 200) return alert('No route found. Try a longer travel time or alternative setup.');
 
           const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
 

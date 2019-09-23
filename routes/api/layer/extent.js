@@ -29,7 +29,7 @@ module.exports = fastify => {
       fastify.evalParam.token,
       fastify.evalParam.locale,
       fastify.evalParam.layer,
-      fastify.evalParam.roles,
+      fastify.evalParam.roles
     ],
     handler: async (req, res) => {
 
