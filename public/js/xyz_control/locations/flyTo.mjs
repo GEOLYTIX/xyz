@@ -4,16 +4,14 @@ export default _xyz => function () {
 
   const location = this;
 
-  const allLayer = [];
+  const sourceVector = new _xyz.mapview.lib.source.Vector();
 
-  if (location.Layer) allLayer.push(location.Layer);
+  if (location.Layer) sourceVector.addFeatures(location.Layer.getSource().getFeatures());//features.push(location.Layer.getSource().getFeatures());
 
-  if (location.Marker) allLayer.push(location.Marker);
+  if (location.Marker) sourceVector.addFeatures(location.Marker.getSource().getFeatures());//features.push(location.Marker.getSource().getFeatures());
 
-  location.geometries.forEach(layer => allLayer.push(layer));
+  location.geometries.forEach(layer => sourceVector.addFeatures(layer.getSource().getFeatures()));
 
-  allLayer.push(_xyz.mapview.locate.L);
-
-  _xyz.mapview.flyToBounds(allLayer);
+  _xyz.mapview.flyToBounds(sourceVector.getExtent());
 
 };
