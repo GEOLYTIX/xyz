@@ -6,6 +6,7 @@ export default _xyz => () => {
       
   xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
+    mapview_srid: _xyz.mapview.srid,
     layer: _xyz.tableview.current_layer.key,
     table: _xyz.tableview.current_layer.tableMax(),
     viewport: bounds ? true : false,
