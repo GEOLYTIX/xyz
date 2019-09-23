@@ -165,8 +165,8 @@ export default _xyz => function () {
   location.view.header.appendChild(location.view.trash);
 
 
-  // Copy to clipboard.
-  location.view.header.appendChild(_xyz.utils.wire()`
+  // Copy to clipboard. *** aga: disabled as overrriden by report functionality
+  /*location.view.header.appendChild(_xyz.utils.wire()`
   <i
   style = "${'color: ' + location.style.strokeColor}"
   title = "Copy to clipboard"
@@ -174,7 +174,7 @@ export default _xyz => function () {
   onclick = ${e => {
     e.stopPropagation();
     location.clipboard();
-  }}>file_copy`);
+  }}>file_copy`);*/
 
 
   // Zoom to location bounds.
