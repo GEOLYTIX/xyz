@@ -20,8 +20,6 @@ export default _xyz => layer => {
 
   };
 
-
-
   // Define source for mvt layer.
   const source = new _xyz.mapview.lib.source.VectorTile({
     format: new _xyz.mapview.lib.format.MVT({
@@ -37,6 +35,7 @@ export default _xyz => layer => {
       //const url = _xyz.host + '/api/layer/mvt/'+tileCoord[0]+'/'+tileCoord[1]+'/'+ String(-tileCoord[2] - 1) +'?' + _xyz.utils.paramString({
       const url = _xyz.host + '/api/layer/mvt/'+tileCoord[0]+'/'+tileCoord[1]+'/'+ tileCoord[2] +'?' + _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
+        mapview_srid: _xyz.mapview.srid,
         layer: layer.key,
         table: tableZ,
         properties: layer.properties,
