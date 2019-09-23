@@ -72,6 +72,11 @@ export default _xyz => location => {
         geometry: e.target.response.geomj,
       });
 
+    // location.marker = _xyz.mapview.lib.proj.transform(
+    //   e.target.response.pointonsurface,
+    //   'EPSG:' + _xyz.layers.list[location.layer].srid,
+    //   'EPSG:' + _xyz.mapview.srid);
+
     location.marker = _xyz.mapview.lib.proj.transform(
       _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
       'EPSG:' + _xyz.layers.list[location.layer].srid,

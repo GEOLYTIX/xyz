@@ -54,7 +54,9 @@ module.exports =  fastify => {
       const fields = await sql_fields([], infoj, qID, req.params.token.roles || [], req.params.locale);
 
       // Push JSON geometry field into fields array.
-      fields.push(`\n   ST_asGeoJson(${geom}) AS geomj`);
+      fields.push(`\n   ST_asGeoJson(${geom},4) AS geomj`);
+
+      fields.push(`\n   ARRAY[ST_X(ST_PointOnSurface(${geom})), ST_Y(ST_PointOnSurface(${geom}))] AS PointOnSurface`);
 
       const fields_with = [];
 
@@ -76,7 +78,7 @@ module.exports =  fastify => {
         FROM ${table}
         WHERE ${qID} = $1
       )
-      select ${fields_with.join()}, geomj from q
+      select ${fields_with.join()}, geomj, PointOnSurface from q
       `;
 
       var rows = await env.dbs[layer.dbs](q, [id]);
@@ -94,6 +96,7 @@ module.exports =  fastify => {
       // Send the infoj object with values back to the client.
       res.code(200).send({
         geomj: JSON.parse(rows[0].geomj),
+        pointonsurface: rows[0].pointonsurface,
         infoj: infoj
       });
 
