@@ -2,10 +2,11 @@ export default _xyz => () => {
 
   const xhr = new XMLHttpRequest();
 
-  const bounds = _xyz.map && _xyz.mapview.getBounds();
+  const bounds = _xyz.mapview && _xyz.mapview.getBounds();
       
   xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
+    mapview_srid: _xyz.mapview.srid,
     layer: _xyz.tableview.current_layer.key,
     table: _xyz.tableview.current_layer.tableMax(),
     viewport: bounds ? true : false,

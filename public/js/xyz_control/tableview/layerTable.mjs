@@ -34,13 +34,14 @@ export default _xyz => table => {
 
     const xhr = new XMLHttpRequest();
 
-    const bounds = _xyz.map && _xyz.mapview.getBounds();
+    const bounds = _xyz.mapview && _xyz.mapview.getBounds();
 
     // Create filter from legend and current filter.
     const filter = table.layer.filter && Object.assign({}, table.layer.filter.legend, table.layer.filter.current);
       
     xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
+      mapview_srid: _xyz.mapview.srid,
       layer: table.layer.key,
       table: table.key,
       viewport: table.viewport,

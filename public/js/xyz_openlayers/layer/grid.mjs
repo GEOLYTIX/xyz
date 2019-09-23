@@ -164,8 +164,6 @@ export default _xyz => layer => {
     }
   });
 
-
-
   layer.L = new _xyz.mapview.lib.layer.Vector({
     source: source,
     zIndex: layer.style.zIndex || 1,
@@ -200,8 +198,8 @@ export default _xyz => layer => {
       return new _xyz.mapview.lib.style.Style({
         image: _xyz.mapview.icon({
           type: 'dot',
-          color: properties.hxcolor,
-          size: size
+          fillColor: properties.hxcolor,
+          scale: size / 40 * 0.05
         })
       });
 

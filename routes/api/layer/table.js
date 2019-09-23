@@ -23,6 +23,7 @@ module.exports = fastify => {
           layer: { type: 'string' },
           table: { type: 'string' },
           filter: { type: 'string' },
+          mapview_srid: { type: 'integer' }
         },
         required: ['locale', 'layer', 'table']
       }
@@ -38,37 +39,28 @@ module.exports = fastify => {
 
       let
         layer = req.params.layer,
+        srid = layer.srid,
+        mapview_srid = req.query.mapview_srid,
         table = req.params.table,
         viewport = req.query.viewport,
         filter = req.params.filter,
         orderby = req.query.orderby || layer.qID,
-        order = req.query.order || 'asc',
+        order = req.query.order || 'ASC',
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north),
         viewport_sql = 'WHERE true ';
 
-
       if (viewport && layer.geom) {
 
         viewport_sql = `
         WHERE
           ST_DWithin(
-            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
-            ${layer.geom},
-            0.00001)`;
-      }
-
-      if (viewport && layer.geom_3857) {
-
-        viewport_sql = `
-        WHERE
-          ST_DWithin(
             ST_Transform(
-              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
-              3857),
-            ${layer.geom_3857},
+              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${srid}),
+              ${mapview_srid}),
+            ${layer.geom},
             0.00001)`;
       }
              

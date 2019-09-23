@@ -22,6 +22,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
+          mapview_srid: { type: 'integer' },
           filter: { type: 'string' },
         },
         required: ['locale', 'layer', 'table']
@@ -48,6 +49,7 @@ module.exports = fastify => {
         table = req.query.table,
         geom = layer.geom,
         srid = layer.srid,
+        mapview_srid = req.query.mapview_srid,
         filter = req.query.filter && JSON.parse(req.query.filter),
         id = layer.qID || null, //'row_number() over()',
         x = parseInt(req.params.x),
@@ -91,7 +93,7 @@ module.exports = fastify => {
           ${ m - (y * r)},
           ${-m + (x * r) + r},
           ${ m - (y * r) - r},
-          3857
+          ${mapview_srid}
         ) tile
 
       FROM (
@@ -106,7 +108,7 @@ module.exports = fastify => {
               ${ m - (y * r)},
               ${-m + (x * r) + r},
               ${ m - (y * r) - r},
-              3857
+              ${mapview_srid}
             ),
             4096,
             256,
@@ -122,7 +124,7 @@ module.exports = fastify => {
               ${ m - (y * r)},
               ${-m + (x * r) + r},
               ${ m - (y * r) - r},
-              3857
+              ${mapview_srid}
             ),
             ${geom},
             ${r/4}
