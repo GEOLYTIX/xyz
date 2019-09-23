@@ -20,6 +20,10 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
+	if(!entry.chart.datalabels) {
+		_xyz.Chart.defaults.global.plugins.datalabels.display = false;
+    }
+
 	let data = [];
 
 	let labels = Object.values(entry.columns).map(column => column.title),

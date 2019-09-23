@@ -23,7 +23,7 @@ export default (_xyz, layer) => {
       scrolly: _xyz.desktop && _xyz.desktop.listviews,
     });
   }}
-    class="btn_text cursor noselect">Editing`;
+    class="btn_text cursor noselect">Add new features`;
     
   layer.edit.panel.appendChild(header);
 

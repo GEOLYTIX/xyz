@@ -23,6 +23,7 @@ module.exports = fastify => {
           layer: { type: 'string' },
           chart: { type: 'string' },
           filter: { type: 'string' },
+          mapview_srid: { type: 'integer' }
         },
         required: ['locale', 'layer', 'chart']
       }
@@ -42,36 +43,25 @@ module.exports = fastify => {
         viewport = req.query.viewport,
         filter = req.params.filter,
         orderby = req.query.orderby || layer.qID,
-        order = req.query.order || 'asc',
+        order = req.query.order || 'ASC',
+        mapview_srid = req.query.mapview_srid,
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north),
         viewport_sql = 'WHERE true ';
 
-
-      if (viewport && layer.geom) {
+      if(viewport){
 
         viewport_sql = `
         WHERE
           ST_DWithin(
-            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
+            ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${mapview_srid}),
             ${layer.geom},
-            0.00001)`;
-      }
-
-      if (viewport && layer.geom_3857) {
-
-        viewport_sql = `
-        WHERE
-          ST_DWithin(
-            ST_Transform(
-              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, 4326),
-              3857),
-            ${layer.geom_3857},
-            0.00001)`;
-      }
-             
+            0.00001)
+        `;
+      
+      }      
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
@@ -87,9 +77,6 @@ module.exports = fastify => {
         ${filter_sql}
         ORDER BY ${orderby} ${order}
         FETCH FIRST 99 ROW ONLY;`;
-
-      // OFFSET ${offset} ROWS
-      //console.log(q);
 
       var rows = await env.dbs[layer.dbs](q);
 

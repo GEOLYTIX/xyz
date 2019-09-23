@@ -94,4 +94,49 @@ export default (_xyz, layer) => {
       if (chart.display && layer.display) chart.show();
     });
   }
+
+  if(layer.tableview.charts){
+
+    Object.keys(layer.tableview.charts).forEach(key => {
+
+      const chart = layer.tableview.charts[key];
+
+      chart.key = key;
+      chart.layer = layer;
+      chart.title = chart.title || key;
+      chart.target = _xyz.tableview.node.querySelector('.table');
+
+      if (!chart.target) chart.target = _xyz.tableview.tableContainer();
+
+      chart.show = () => _xyz.tableview.layerDashboard(chart);
+      chart.remove = () => _xyz.tableview.removeTab(chart);
+
+      // Create checkbox to toggle whether table is in tabs list.
+      /*_xyz.utils.createCheckbox({
+        label: chart.title,
+        appendTo: layer.tableview.panel,
+        checked: !!chart.display,
+        onChange: e => {
+          chart.display = e.target.checked;
+          if (!chart.display) return chart.remove();
+          layer.show();
+        }
+      });*/
+
+      // Create checkbox to toggle whether table is in tabs list.
+      layer.tableview.panel.appendChild(_xyz.utils.wire()`
+        <label class="checkbox">${chart.title}
+        <input type="checkbox"
+        checked=${chart.display}
+        onchange=${e => {
+
+          chart.display = e.target.checked;
+          chart.display ? layer.show() : chart.remove();}
+        }>
+        <div class="checkbox_i">`);
+
+      if (chart.display && layer.display) chart.show();
+    
+    });
+  }
 };
