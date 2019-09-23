@@ -179,7 +179,7 @@ async function createMVTCache(layer){
       x integer not null,
       y integer not null,
       mvt bytea,
-      tile geometry(Polygon,3857),
+      tile geometry(Polygon, ${layer.srid}),
       constraint ${layer.mvt_cache.replace(/\./,'_')}_z_x_y_pk
         primary key (z, x, y)
     );
