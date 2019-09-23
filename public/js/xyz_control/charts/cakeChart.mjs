@@ -20,6 +20,10 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
+    if(!entry.chart.datalabels) {
+        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+    }
+
 	const labels = entry.fields.map(field => field.label);
 
 	const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));

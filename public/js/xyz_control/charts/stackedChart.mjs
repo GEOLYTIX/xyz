@@ -20,6 +20,10 @@ export default _xyz => entry => {
 		appendTo: graph
 	});
 
+    if(!entry.chart.datalabels) {
+        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+    }
+
 	let stacked_labels = entry.fields.map(field => field.stack);
 
 	if(!stacked_labels.length) return;
