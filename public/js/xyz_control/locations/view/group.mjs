@@ -116,7 +116,8 @@ export default _xyz => group => {
         textContent: chartIcon(group)
       },
       style: {
-        margin: '-6px 10px 0 0'
+        margin: '-6px 6px 0 0',
+        float: 'right'
       },
       appendTo: group.header,
       eventListener: {
