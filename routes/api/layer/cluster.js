@@ -20,7 +20,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
-          filter: { type: 'string' },
+      filter: { type: 'string' }
         },
         required: ['locale', 'layer', 'table']
       },
@@ -62,16 +62,14 @@ module.exports = fastify => {
         kmeans = parseInt(1 / req.query.kmeans),
         dbscan = parseFloat(req.query.dbscan),
         resolution = parseFloat(req.query.resolution),
-        srid = layer.srid,
+        srid = parseInt(layer.srid),
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north);
-         
+        north = parseFloat(req.query.north);         
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
-
 
       const where_sql =  `
       WHERE ST_DWithin(
@@ -245,8 +243,7 @@ module.exports = fastify => {
         ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
 
       }
- 
-      
+
       var rows = await env.dbs[layer.dbs](q);
         
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
@@ -254,8 +251,8 @@ module.exports = fastify => {
 
       if (!theme) return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === '4326' ? 'lon' : 'x']: row.x,
-          [srid === '4326' ? 'lat' : 'y']: row.y,
+          [srid === 4326 ? 'lon' : 'x']: row.x,
+          [srid === 4326 ? 'lat' : 'y']: row.y,
         },
         properties: {
           count: parseInt(row.count),
@@ -265,8 +262,8 @@ module.exports = fastify => {
 
       if (theme === 'categorized') return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === '4326' ? 'lon' : 'x']: row.x,
-          [srid === '4326' ? 'lat' : 'y']: row.y,
+          [srid === 4326 ? 'lon' : 'x']: row.x,
+          [srid === 4326 ? 'lat' : 'y']: row.y,
         },
         properties: {
           count: parseInt(row.count),
@@ -278,8 +275,8 @@ module.exports = fastify => {
 
       if (theme === 'graduated') return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === '4326' ? 'lon' : 'x']: row.x,
-          [srid === '4326' ? 'lat' : 'y']: row.y,
+          [srid === 4326 ? 'lon' : 'x']: row.x,
+          [srid === 4326 ? 'lat' : 'y']: row.y,
         },
         properties: {
           count: parseInt(row.count),
@@ -291,8 +288,8 @@ module.exports = fastify => {
 
       if (theme === 'competition') return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === '4326' ? 'lon' : 'x']: row.x,
-          [srid === '4326' ? 'lat' : 'y']: row.y,
+          [srid === 4326 ? 'lon' : 'x']: row.x,
+          [srid === 4326 ? 'lat' : 'y']: row.y,
         },
         properties: {
           count: parseInt(row.count),

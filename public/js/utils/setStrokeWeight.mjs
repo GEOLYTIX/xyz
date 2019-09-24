@@ -2,15 +2,15 @@ export function setStrokeWeight(param){
 
 	if(!param.style) return;
 
-	let width;
+	let weight;
 
-	switch(param.style.width){
+	switch(parseInt(param.style.weight)){
 
-		case '1': width = 'thin'; break;
-		case '2': width = 'medium'; break;
-		case parseInt(param.style.width) > 2: width = 'thick'; break;
+		case 1: weight = 'thin'; break;
+		case 2: weight = 'medium'; break;
+		case parseInt(param.style.weight) > 2: weight = 'thick'; break;
 
 	}
 
-	return width;
+	return weight;
 }

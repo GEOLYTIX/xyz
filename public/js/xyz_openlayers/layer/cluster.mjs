@@ -19,7 +19,6 @@ export default _xyz => layer => {
   
   };
 
-
   const source = new _xyz.mapview.lib.source.Vector({
     loader: function (extent, resolution, projection) {
 
@@ -84,6 +83,7 @@ export default _xyz => layer => {
         }));
       
         function geometry(geom) {
+
           if (geom.lon && geom.lat) {
             return new _xyz.mapview.lib.geom.Point(
               _xyz.mapview.lib.proj.fromLonLat([geom.lon, geom.lat])
@@ -116,7 +116,6 @@ export default _xyz => layer => {
     }
   });
   
-  
   layer.L = new _xyz.mapview.lib.layer.Vector({
     layer: layer,
     source: source,
@@ -125,11 +124,11 @@ export default _xyz => layer => {
 
       const properties = feature.getProperties().properties;
   
-      let marker = layer.style.marker;
+      let marker = Object.assign({}, layer.style.marker);
   
-      if (properties.size > 1) marker = layer.style.markerMulti;
+      if (properties.size > 1) marker = Object.assign({}, layer.style.markerMulti);
   
-      const theme = layer.style.theme;
+      const theme = Object.assign({}, layer.style.theme);
   
       // Categorized theme
       if (theme && theme.type === 'categorized') {
@@ -177,25 +176,23 @@ export default _xyz => layer => {
           layers: {}
         };
   
-          // Iterate through cats in competition theme.
-          //Object.keys(point.properties.cat).forEach(comp => {
+        // Iterate through cats in competition theme.
         Object.entries(properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
   
           // Check for the competition cat in point properties.
           if (theme.cat[comp[0]]) {
   
-            // Add a cat layer to the marker obkject.
+            // Add a cat layer to the marker object.
             // Calculate the size of the competition layer.
             // Competition layer added first must be largest.
-            cat_style.layers[size / properties.size] = theme.cat[comp[0]].fillColor;
+            cat_style.layers[size / properties.size] = theme.cat[comp[0]].style.fillColor;
   
           }
   
           // Reduce the current size by the size of layer just added to marker.
           size -= comp[1];
-  
         });
-  
+
         Object.assign(marker, cat_style);
       }
 
@@ -205,7 +202,6 @@ export default _xyz => layer => {
         layer.highlight === feature.get('id') ? layer.style.highlight : {}
       );
 
-        
       const size = layer.cluster_logscale ?
         properties.count === 1 ?
           layer.style.markerMin :
@@ -214,10 +210,9 @@ export default _xyz => layer => {
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / layer.max_size * properties.size;
 
-  
       return new _xyz.mapview.lib.style.Style({
         zIndex: parseInt(layer.max_size - properties.size),
-        image: _xyz.mapview.icon(Object.assign(
+        image: _xyz.mapview.icon(Object.assign({},
           _marker,
           {
             //size: size,

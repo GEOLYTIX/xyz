@@ -19,7 +19,7 @@ export default (_xyz, layer) => {
       scrolly: _xyz.desktop && _xyz.desktop.listviews,
     });
   }}
-  class="btn_text cursor noselect">Table`;
+  class="btn_text cursor noselect">Data View`;
   
   layer.tableview.panel.appendChild(header);
 

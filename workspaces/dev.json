@@ -32,6 +32,7 @@
                     "mvt_cache": "dev.natural_earth_countries__mvts",
                     "table": "dev.natural_earth_countries",
                     "geom": "geom_3857",
+                    "srid": 3857,
                     "tableview": {
                         "tables": {
                             "table1": {
@@ -364,6 +365,7 @@
                     "format": "geojson",
                     "dbs": "XYZ",
                     "table": "glx_offices",
+                    "srid": 4326,
                     "geom": "geom",
                     "style": {
                         "default": {
@@ -474,6 +476,7 @@
                     "dbs": "XYZ",
                     "table": "dev.cluster_catchments",
                     "geom": "geom",
+                    "srid": 4326,
                     "cluster_kmeans": 0.01,
                     "edit": {
                         "point": true,
@@ -631,6 +634,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.scratch",
+                    "srid": 3857,
                     "geom": "geom_3857",
                     "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
@@ -721,6 +725,7 @@
                         "12": "dev.oa",
                         "13": "dev.oa"
                     },
+                    "srid": 3857,
                     "geom": "geom_3857",
                     "mvt_cache": "dev.oa__mvts",
                     "mvt_fields": [
@@ -808,6 +813,7 @@
                         "9": "dev.retailplaces"
                     },
                     "geom": "geom_3857",
+                    "srid": 3857,
                     "report": {
                         "templates": {
                             "Report 1": {
@@ -822,6 +828,7 @@
                     "tableview": {
                         "tables": {
                             "Retail Places": {
+                                "viewport": true,
                                 "from": "dev.retailplaces",
                                 "layout": "fitColumns",
                                 "columns": [
@@ -1227,7 +1234,7 @@
                     "qID": "id",
                     "table": "dev.retailpoints",
                     "geom": "geom",
-                    "srid": "4326",
+                    "srid": 4326,
                     "cluster_kmeans": 0.01,
                     "cluster_dbscan": 0.01,
                     "hover": {
@@ -1277,7 +1284,7 @@
                         },
                         "markerMulti": {
                             "type": "target",
-                            "fillColor": "#eeeeee"
+                            "fillColor": "#534B62"
                         },
                         "highlight": {
                             "type": "target",
@@ -1545,6 +1552,7 @@
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
                     },
+                    "srid": 4326,
                     "format": "grid",
                     "dbs": "XYZ",
                     "geom": "geomcntr",
@@ -1570,7 +1578,7 @@
                     "dbs": "XYZ",
                     "table": "dev.london_hpp",
                     "geom": "geom_3857",
-                    "srid": "3857",
+                    "srid": 3857,
                     "cluster_resolution": 0.1,
                     "qID": "id",
                     "infoj": [
@@ -1712,6 +1720,7 @@
                     },
                     "name": "Sites",
                     "format": "cluster",
+                    "srid": 4326,
                     "geom": "geom_4326",
                     "dbs": "XYZ",
                     "qID": "id",
@@ -1923,6 +1932,7 @@
                                 "stroke": true,
                                 "color": "#F49D37",
                                 "fillColor": "#F49D37",
+                                "fillOpacity": 0.3,
                                 "weight": 2,
                                 "fill": true
                             }
@@ -2070,11 +2080,11 @@
                             },
                             "style": {
                                 "stroke": true,
-                                "color": "#FFF05A",
+                                "color": "#FCFC62",
                                 "fillColor": "#FFF05A",
                                 "weight": 2,
                                 "fill": true,
-                                "fillOpacity": 0.2
+                                "fillOpacity": 0.1
                             }
                         },
                         {

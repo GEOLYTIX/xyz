@@ -35,11 +35,11 @@ export default _xyz => entry => {
     dataProjection: '4326',
     style: new _xyz.mapview.lib.style.Style({
       stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-        color: entry.style.strokeColor,
+        color: _xyz.utils.chroma(entry.style.color || entry.style.strokeColor).alpha(1),
         width: entry.style.strokeWidth || 1
       }),
-      fill: entry.style.fillColor && new _xyz.mapview.lib.style.Fill({
-        color: _xyz.utils.chroma(entry.style.fillColor).alpha(entry.style.fillOpacity === 0 ? 0 : parseFloat(entry.style.fillOpacity) || 1).rgba()
+      fill: new _xyz.mapview.lib.style.Fill({
+        color: _xyz.utils.chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0).rgba()
       })
     })
   });
