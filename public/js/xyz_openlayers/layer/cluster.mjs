@@ -124,11 +124,11 @@ export default _xyz => layer => {
 
       const properties = feature.getProperties().properties;
   
-      let marker = layer.style.marker;
+      let marker = Object.assign({}, layer.style.marker);
   
-      if (properties.size > 1) marker = layer.style.markerMulti;
+      if (properties.size > 1) marker = Object.assign({}, layer.style.markerMulti);
   
-      const theme = layer.style.theme;
+      const theme = Object.assign({}, layer.style.theme);
   
       // Categorized theme
       if (theme && theme.type === 'categorized') {

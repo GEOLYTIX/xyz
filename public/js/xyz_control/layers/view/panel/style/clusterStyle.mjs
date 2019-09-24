@@ -53,7 +53,7 @@ export default (_xyz, layer, style, title) => {
       classList: 'sample-circle'
     },
     style: {
-      'backgroundColor': _xyz.utils.chroma(style.fillColor).alpha(1).rgba()
+      backgroundColor: _xyz.utils.chroma(style.fillColor).alpha(1).rgba()
     },
     appendTo: block._
   });
@@ -83,7 +83,7 @@ export default (_xyz, layer, style, title) => {
         title: colour.name
       },
       style: {
-        'backgroundColor': colour.hex
+        backgroundColor: colour.hex
       },
       appendTo: block.colour_swatch,
       eventListener: {
