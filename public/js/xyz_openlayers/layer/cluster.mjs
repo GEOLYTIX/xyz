@@ -191,9 +191,8 @@ export default _xyz => layer => {
   
           // Reduce the current size by the size of layer just added to marker.
           size -= comp[1];
-  
         });
-  
+
         Object.assign(marker, cat_style);
       }
 
@@ -213,7 +212,7 @@ export default _xyz => layer => {
 
       return new _xyz.mapview.lib.style.Style({
         zIndex: parseInt(layer.max_size - properties.size),
-        image: _xyz.mapview.icon(Object.assign(
+        image: _xyz.mapview.icon(Object.assign({},
           _marker,
           {
             //size: size,
