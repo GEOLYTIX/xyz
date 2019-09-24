@@ -74,7 +74,7 @@ export default (_xyz, layer, style, title) => {
     appendTo: block._
   });
 
-  _xyz.style.defaults.colours.forEach(colour => {
+  _xyz.defaults.colours.forEach(colour => {
 
     _xyz.utils.createElement({
       tag: 'td',

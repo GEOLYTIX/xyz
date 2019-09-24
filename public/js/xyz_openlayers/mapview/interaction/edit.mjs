@@ -156,7 +156,7 @@ export default _xyz => {
   }
 
 
-  function undo(e) {
+  function undo() {
 
     _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
 

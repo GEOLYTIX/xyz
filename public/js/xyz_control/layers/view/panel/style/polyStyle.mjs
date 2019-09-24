@@ -50,7 +50,7 @@ export default (_xyz, layer, style, title) => {
 
   block._.appendChild(block.colour_swatch);
   
-  _xyz.style.defaults.colours.forEach(colour => {
+  _xyz.defaults.colours.forEach(colour => {
 
     block.colour_swatch.appendChild(_xyz.utils.wire()`
     <td class="colour-td" title=${colour.name} style="${'background-color:'+colour.hex}"
