@@ -42,6 +42,11 @@ export default _xyz => layer => {
         e.target.style.opacity = 0.8;
         e.target.style.fillOpacity = 0.8;
 
+        if(!layer.filter.legend[layer.style.theme.field]) {
+          layer.filter.legend[layer.style.theme.field] = {};
+          layer.filter.legend[layer.style.theme.field].ni = [];
+        }
+        
         // Push value into the NI (not in) legend filter.
         layer.filter.legend[layer.style.theme.field].ni.push(cat[0]);
       }
@@ -94,6 +99,11 @@ export default _xyz => layer => {
         e.target.style.textDecoration = 'line-through';
         e.target.style.opacity = 0.8;
         e.target.style.fillOpacity = 0.8;
+
+        if(!layer.filter.legend[layer.style.theme.field]) {
+          layer.filter.legend[layer.style.theme.field] = {};
+          layer.filter.legend[layer.style.theme.field].ni = [];
+        }
 
         // Assign all cat keys to IN filter.
         layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
