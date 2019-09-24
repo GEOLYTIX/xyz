@@ -176,17 +176,16 @@ export default _xyz => layer => {
           layers: {}
         };
   
-          // Iterate through cats in competition theme.
-          //Object.keys(point.properties.cat).forEach(comp => {
+        // Iterate through cats in competition theme.
         Object.entries(properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
   
           // Check for the competition cat in point properties.
           if (theme.cat[comp[0]]) {
   
-            // Add a cat layer to the marker obkject.
+            // Add a cat layer to the marker object.
             // Calculate the size of the competition layer.
             // Competition layer added first must be largest.
-            cat_style.layers[size / properties.size] = theme.cat[comp[0]].fillColor;
+            cat_style.layers[size / properties.size] = theme.cat[comp[0]].style.fillColor;
   
           }
   

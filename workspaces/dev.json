@@ -364,6 +364,7 @@
                     "format": "geojson",
                     "dbs": "XYZ",
                     "table": "glx_offices",
+                    "srid": 4326,
                     "geom": "geom",
                     "style": {
                         "default": {
@@ -808,6 +809,7 @@
                         "9": "dev.retailplaces"
                     },
                     "geom": "geom_3857",
+                    "srid": 3857,
                     "report": {
                         "templates": {
                             "Report 1": {
@@ -822,6 +824,7 @@
                     "tableview": {
                         "tables": {
                             "Retail Places": {
+                                "viewport": true,
                                 "from": "dev.retailplaces",
                                 "layout": "fitColumns",
                                 "columns": [
@@ -1277,7 +1280,7 @@
                         },
                         "markerMulti": {
                             "type": "target",
-                            "fillColor": "#eeeeee"
+                            "fillColor": "#534B62"
                         },
                         "highlight": {
                             "type": "target",
@@ -1545,6 +1548,7 @@
                     "attribution": {
                         "© ONS": "https://www.ons.gov.uk"
                     },
+                    "srid": 4326,
                     "format": "grid",
                     "dbs": "XYZ",
                     "geom": "geomcntr",
@@ -1712,6 +1716,7 @@
                     },
                     "name": "Sites",
                     "format": "cluster",
+                    "srid": 4326,
                     "geom": "geom_4326",
                     "dbs": "XYZ",
                     "qID": "id",
