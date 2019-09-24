@@ -8,19 +8,11 @@ import geoJSON from './geoJSON.mjs';
 
 import popup from './popup.mjs';
 
-import pointerMove from './pointerMove.mjs';
-
-import select from './select.mjs';
-
-import draw from './draw.mjs';
-
-import edit from './edit.mjs';
+import interaction from './interaction/_interaction.mjs';
 
 import getBounds from './getBounds.mjs';
 
 import icon from './icon.mjs';
-
-import clearHighlight from './clearHighlight.mjs';
 
 import infotip from './infotip.mjs';
 
@@ -36,23 +28,13 @@ export default _xyz => ({
 
   locate: locate(_xyz),
 
-  select: select(_xyz),
-
-  pointerMove: pointerMove(_xyz),
-
-  highlight: {},
-
-  clearHighlight: clearHighlight(_xyz),
+  interaction: interaction(_xyz),
 
   popup: popup(_xyz),
 
   infotip: infotip(_xyz),
 
   geoJSON: geoJSON(_xyz),
-
-  draw: draw(_xyz),
-
-  edit: edit(_xyz),
 
   icon: icon(_xyz),
 

@@ -6,9 +6,9 @@ export default _xyz => function () {
 
   const sourceVector = new _xyz.mapview.lib.source.Vector();
 
-  if (location.Layer) sourceVector.addFeatures(location.Layer.getSource().getFeatures());//features.push(location.Layer.getSource().getFeatures());
+  if (location.Layer) sourceVector.addFeatures(location.Layer.getSource().getFeatures());
 
-  if (location.Marker) sourceVector.addFeatures(location.Marker.getSource().getFeatures());//features.push(location.Marker.getSource().getFeatures());
+  if (location.Marker) sourceVector.addFeatures(location.Marker.getSource().getFeatures());
 
   location.geometries.forEach(layer => sourceVector.addFeatures(layer.getSource().getFeatures()));
 

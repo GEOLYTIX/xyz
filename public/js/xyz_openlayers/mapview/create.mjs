@@ -49,29 +49,9 @@ export default _xyz => params => {
     })
   });
 
-  // Set the default state.
-  _xyz.mapview.state = 'select';
-  
-  _xyz.map.on('click', _xyz.mapview.select);
 
-  _xyz.mapview.node.addEventListener('mousemove', e=> {
-    _xyz.mapview.pointerLocation = {
-      x: e.clientX,
-      y: e.clientY
-    };
-    if (_xyz.mapview.infotip.node) _xyz.mapview.infotip.position();
-  });
+  _xyz.mapview.interaction.highlight.begin();
 
-  _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.pointerMove);
-  
-
-  _xyz.mapview.node.addEventListener('mouseout', ()=>{
-    _xyz.mapview.pointerLocation = {
-      x: null,
-      y: null
-    };
-    _xyz.mapview.clearHighlight();
-  }, true);
 
   // Add scalebar.
   if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) {

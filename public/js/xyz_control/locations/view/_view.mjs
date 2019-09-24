@@ -131,15 +131,16 @@ export default _xyz => function () {
     class = "material-icons cursor noselect btn_header"
     onclick = ${e => {
     e.stopPropagation();
-      
-    _xyz.mapview.edit.begin({
+
+    if (location.view.header.classList.contains('edited')) return _xyz.mapview.interaction.edit.finish();
+
+    location.view.header.classList.add('edited');
+
+    _xyz.mapview.interaction.edit.begin({
       location: location,
       type: 'LineString',
-      begin: ()=>{
-        console.log('begin');
-      },
       callback: () => {
-        console.log('cb');
+        location.view.header.classList.remove('edited');
       }
     });
 

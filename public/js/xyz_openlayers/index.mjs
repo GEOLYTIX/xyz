@@ -20,8 +20,6 @@ import _format from './layer/_format.mjs';
 
 import _locations from '../xyz_control/locations/_locations.mjs';
 
-import _geom from '../xyz_control/geom/_geom.mjs';
-
 import _ctrl from '../xyz_control/ctrl/_ctrl.mjs';
 
 import _tableview from '../xyz_control/tableview/_tableview.mjs';
@@ -49,8 +47,6 @@ async function _xyz(params) {
   _xyz.layers = Object.assign({}, _layers(_xyz), {format: _format(_xyz)});
 
   _xyz.locations = _locations(_xyz);
-
-  _xyz.geom = _geom(_xyz);
 
   _xyz.ctrl = _ctrl(_xyz);
 

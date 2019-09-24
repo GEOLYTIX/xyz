@@ -34,15 +34,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
 
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
+
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
    
-    _xyz.mapview.draw.begin({
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'Point',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -59,15 +58,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
 
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
 
-    _xyz.mapview.draw.begin({
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'Polygon',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -84,15 +82,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
 
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
 
-    _xyz.mapview.draw.begin({
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'Circle',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
       geometryFunction: _xyz.mapview.lib.draw.createBox(),
       callback: () => {
         layer.view.header.classList.remove('edited');
@@ -110,15 +107,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
 
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
 
-    _xyz.mapview.draw.begin({
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'Circle',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -135,15 +131,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
 
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
 
-    _xyz.mapview.draw.begin({
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'LineString',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
       callback: () => {
         layer.view.header.classList.remove('edited');
         btn.classList.remove('active');
@@ -173,16 +168,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
   
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
+
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
   
-    _xyz.mapview.draw.begin({
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'Point',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
-      // drawend: e=> {},
       geometryFunction: function(coordinates, geometry) {
 
         geometry = new _xyz.mapview.lib.geom.Circle(coordinates, layer.edit.isoline_mapbox.minutes * 1000);
@@ -224,9 +217,9 @@ export default (_xyz, layer) => {
             featureProjection:'EPSG:' + _xyz.mapview.srid
           });
 
-          _xyz.mapview.draw.sourceVector.clear();
+          _xyz.mapview.interaction.draw.sourceVector.clear();
 
-          _xyz.mapview.draw.sourceVector.addFeature(feature);
+          _xyz.mapview.interaction.draw.sourceVector.addFeature(feature);
                                     
         };
     
@@ -265,16 +258,14 @@ export default (_xyz, layer) => {
     e.stopPropagation();
     const btn = e.target;
   
-    if (btn.classList.contains('active')) return _xyz.mapview.draw.finish();
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
+
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
   
-    _xyz.mapview.draw.begin({
+    _xyz.mapview.interaction.draw.begin({
       layer: layer,
       type: 'Point',
-      begin: ()=>{
-        btn.classList.add('active');
-        layer.view.header.classList.add('edited');
-      },
-      // drawend: e=> {},
       geometryFunction: function(coordinates, geometry) {
 
         geometry = new _xyz.mapview.lib.geom.Circle(coordinates, layer.edit.isoline_mapbox.minutes * 1000);
@@ -319,9 +310,9 @@ export default (_xyz, layer) => {
             featureProjection:'EPSG:' + _xyz.mapview.srid
           });
 
-          _xyz.mapview.draw.sourceVector.clear();
+          _xyz.mapview.interaction.draw.sourceVector.clear();
 
-          _xyz.mapview.draw.sourceVector.addFeature(feature);
+          _xyz.mapview.interaction.draw.sourceVector.addFeature(feature);
                                     
         };
     

@@ -4,6 +4,8 @@ export default _xyz => function() {
 
   if (_xyz.hooks) _xyz.hooks.filter('locations', location.hook);
 
+  _xyz.mapview.interaction.edit.finish && _xyz.mapview.interaction.edit.finish();
+
   if (location.view.drawer) location.view.drawer.remove();
 
   if (_xyz.locations.listview.node
