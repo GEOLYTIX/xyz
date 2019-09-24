@@ -6,7 +6,7 @@ export default _xyz => (entry, img, dataURL) => {
 
   xhr.open('POST', _xyz.host + '/api/location/edit/images/upload?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
-    layer: entry.location.layer,
+    layer: entry.location.layer.key,
     table: entry.location.table,
     field: entry.field,
     id: entry.location.id,

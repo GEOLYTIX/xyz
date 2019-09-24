@@ -4,7 +4,7 @@ export default _xyz => {
 
     begin: begin,
 
-    finish: finish,
+    //finish: finish,
 
     update: update,
 

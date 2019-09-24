@@ -37,7 +37,7 @@ export default _xyz => location => {
         // The default callback does not assign an image style for selected point locations.
       })
     ],
-    dataProjection: _xyz.layers.list[location.layer].srid,
+    dataProjection: location.layer.srid,
     featureProjection: _xyz.mapview.srid
   });
 

@@ -4,7 +4,7 @@ export default _xyz => {
 
     begin: begin,
 
-    finish: finish,
+    //finish: finish,
 
     update: update,
 
@@ -28,6 +28,8 @@ export default _xyz => {
           const geometry = feature.getGeometry();
 
           if (geometry.getType() === 'Point') return new _xyz.mapview.lib.geom.Point(geometry.getCoordinates());
+
+          if (geometry.getType() === 'LineString') return new _xyz.mapview.lib.geom.MultiPoint(geometry.getCoordinates());
 
           // return the coordinates of the first ring of the polygon
           return new _xyz.mapview.lib.geom.MultiPoint(geometry.getCoordinates()[0]);
@@ -118,7 +120,7 @@ export default _xyz => {
       geoJSON.writeFeature(
         features[0],
         { 
-          dataProjection: 'EPSG:' + _xyz.layers.list[_xyz.mapview.interaction.edit.location.layer].srid,
+          dataProjection: 'EPSG:' + _xyz.mapview.interaction.edit.location.layer.srid,
           featureProjection: 'EPSG:' + _xyz.mapview.srid
         })
     );
@@ -130,8 +132,8 @@ export default _xyz => {
       _xyz.host + '/api/location/edit/geom/update?' +
       _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
-        layer: _xyz.mapview.interaction.edit.location.layer,
-        table: _xyz.layers.list[_xyz.mapview.interaction.edit.location.layer].table,
+        layer: _xyz.mapview.interaction.edit.location.layer.key,
+        table: _xyz.mapview.interaction.edit.location.table,
         id: _xyz.mapview.interaction.edit.location.id,
         token: _xyz.token
       }));
@@ -142,7 +144,7 @@ export default _xyz => {
 
       if (e.target.status !== 200) return;
 
-      _xyz.layers.list[_xyz.mapview.interaction.edit.location.layer].reload();
+      _xyz.mapview.interaction.edit.location.layer.reload();
 
       //_xyz.mapview.interaction.edit.location.update();
 

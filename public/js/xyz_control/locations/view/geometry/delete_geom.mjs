@@ -14,7 +14,7 @@ export default _xyz => entry => {
     _xyz.host + '/api/location/edit/field/setnull?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: entry.location.layer,
+      layer: entry.location.layer.key,
       table: entry.location.table,
       id: entry.location.id,
       field: entry.field,

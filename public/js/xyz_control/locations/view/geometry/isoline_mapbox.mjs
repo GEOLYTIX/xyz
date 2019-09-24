@@ -10,7 +10,7 @@ export default _xyz => entry => {
     '/api/location/edit/isoline/mapbox/info?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: entry.location.layer,
+      layer: entry.location.layer.key,
       table: entry.location.table,
       coordinates: origin.join(','),
       minutes: entry.edit.isoline_mapbox.minutes,

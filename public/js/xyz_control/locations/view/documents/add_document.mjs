@@ -15,7 +15,7 @@ export default _xyz => param => {
     param.documentControl.add_doc_label = _xyz.utils.createElement({
         tag: 'label',
         options: {
-            htmlFor: `addDoc_${param.entry.location.layer}_${param.entry.location.id}`
+            htmlFor: `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`
         },
         appendTo: param.documentControl.add_doc
     });
@@ -37,7 +37,7 @@ export default _xyz => param => {
     param.documentControl.add_doc_input = _xyz.utils.createElement({
         tag: 'input',
         options: {
-            id: `addDoc_${param.entry.location.layer}_${param.entry.location.id}`,
+            id: `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`,
             type: 'file',
             //multiple: true,
             accept: '.txt,.pdf,.doc,.docx,.xls,.xlsx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document;' // check this

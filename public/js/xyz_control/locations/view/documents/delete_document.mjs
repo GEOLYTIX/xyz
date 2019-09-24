@@ -4,7 +4,7 @@ export default _xyz => param => {
 
 	xhr.open('GET', _xyz.host + '/api/location/edit/documents/delete?' + _xyz.utils.paramString({
 		locale: _xyz.workspace.locale.key,
-		layer: param.entry.location.layer,
+		layer: param.entry.location.layer.key,
 		table: param.entry.location.table,
 		field: param.entry.field,
 		id: param.entry.location.id,

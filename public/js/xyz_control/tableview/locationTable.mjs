@@ -10,7 +10,7 @@ export default _xyz => (table, callback) => {
 
   if (!table.columns) {
 
-    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+    const infoj = table.location.layer.infoj;
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
 
     Object.assign(table, infoj_table);
@@ -35,7 +35,7 @@ export default _xyz => (table, callback) => {
 
       xhr.open('GET', _xyz.host + '/api/location/pgfunction?' + _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
-        layer: table.location.layer,
+        layer: table.location.layer.key,
         id: table.location.id,
         pgFunction: table.pgFunction,
         token: _xyz.token
@@ -57,7 +57,7 @@ export default _xyz => (table, callback) => {
 
       xhr.open('GET', _xyz.host + '/api/location/table?' + _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
-        layer: table.location.layer,
+        layer: table.location.layer.key,
         id: table.location.id,
         tableDef: table.title,
         token: _xyz.token

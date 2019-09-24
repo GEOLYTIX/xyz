@@ -1,6 +1,6 @@
 export default _xyz => location => {
 
-  location.hook = `${location.layer}!${location.table}!${location.id}`;
+  location.hook = `${location.layer.key}!${location.table}!${location.id}`;
 
   let record = {stamp: parseInt(Date.now())};
 
@@ -49,7 +49,7 @@ export default _xyz => location => {
     _xyz.host + '/api/location/select/id?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: location.layer,
+      layer: location.layer.key,
       table: location.table,
       id: location.id,
       token: _xyz.token
@@ -74,12 +74,12 @@ export default _xyz => location => {
 
     location.marker = _xyz.mapview.lib.proj.transform(
       e.target.response.pointonsurface,
-      'EPSG:' + _xyz.layers.list[location.layer].srid,
+      'EPSG:' + location.layer.srid,
       'EPSG:' + _xyz.mapview.srid);
 
     // location.marker = _xyz.mapview.lib.proj.transform(
     //   _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
-    //   'EPSG:' + _xyz.layers.list[location.layer].srid,
+    //   'EPSG:' + location.layer.srid,
     //   'EPSG:' + _xyz.mapview.srid);
 
     // Return location callback if defined on location.

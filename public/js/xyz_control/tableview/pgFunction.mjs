@@ -6,7 +6,7 @@ export default _xyz => param => {
 
   xhr.open('GET', _xyz.host + '/api/location/pgfunction?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
-    layer: param.entry.location.layer,
+    layer: param.entry.location.layer.key,
     id: param.entry.location.id,
     pgFunction: param.entry.pgFunction,
     token: _xyz.token

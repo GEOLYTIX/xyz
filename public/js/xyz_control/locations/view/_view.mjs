@@ -122,7 +122,7 @@ export default _xyz => function () {
 
   location.view.header.appendChild(location.view.upload);
 
-  if (_xyz.layers.list[location.layer].edit) {
+  if (location.layer.edit) {
 
     location.view.edit = _xyz.utils.wire()`
     <i

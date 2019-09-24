@@ -10,7 +10,7 @@ export default _xyz => function (callback) {
     '/api/location/update?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: location.layer,
+      layer: location.layer.key,
       table: location.table,
       id: location.id,
       token: _xyz.token
@@ -32,7 +32,7 @@ export default _xyz => function (callback) {
 
 
     // Reload layer.
-    _xyz.layers.list[location.layer].reload();
+    location.layer.reload();
 
     if (callback) callback();
 

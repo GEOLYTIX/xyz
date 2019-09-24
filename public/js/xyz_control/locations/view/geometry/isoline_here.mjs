@@ -13,7 +13,7 @@ export default _xyz => entry => {
     '/api/location/edit/isoline/here/info?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: entry.location.layer,
+      layer: entry.location.layer.key,
       table: entry.location.table,
       field: entry.field,
       id: entry.location.id,

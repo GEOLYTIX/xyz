@@ -53,7 +53,7 @@ function init(_xyz) {
     
     _xyz.locations.select({
       locale: _xyz.workspace.locale.key,
-      layer: decodeURIComponent(hook[0]),
+      layer: _xyz.layers.list[decodeURIComponent(hook[0])],
       table: hook[1],
       id: hook[2]
     });

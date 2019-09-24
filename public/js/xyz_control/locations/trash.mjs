@@ -6,7 +6,7 @@ export default _xyz => function() {
 
   xhr.open('GET', _xyz.host + '/api/location/edit/delete?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
-    layer: location.layer,
+    layer: location.layer.key,
     table: location.table,
     id: location.id,
     token: _xyz.token
@@ -17,7 +17,7 @@ export default _xyz => function() {
     if (e.target.status !== 200) return;
 
     // Reload layer.
-    _xyz.layers.list[location.layer].reload();
+    location.layer.reload();
 
     location.remove();
 

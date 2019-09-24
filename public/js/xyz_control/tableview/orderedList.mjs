@@ -11,7 +11,7 @@ export default _xyz => (table, callback) => {
 
   if (!table.columns) {
 
-    const infoj = _xyz.workspace.locale.layers[table.location.layer].infoj;
+    const infoj = table.location.layer.infoj;
 
     const infoj_table = Object.values(infoj).find(v => v.title === table.title);
 
@@ -35,8 +35,8 @@ export default _xyz => (table, callback) => {
 
   	xhr.open('GET', _xyz.host + '/api/location/list?' + _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
-      layer: table.location.layer,
-      table: _xyz.workspace.locale.layers[table.location.layer].tables ? _xyz.workspace.locale.layers[table.location.layer].tableMax() : null,
+      layer: table.location.layer.key,
+      table: table.location.layer.tables ? table.location.layer.tableMax() : null,
       id: table.location.id,
       tableDef: table.title,
       token: _xyz.token

@@ -7,7 +7,7 @@ export default _xyz => entry => {
       entry.report,
       {
         locale: _xyz.workspace.locale.key,
-        layer: entry.location.layer,
+        layer: entry.location.layer.key,
         table: entry.location.table,
         id: entry.location.id,
         token: _xyz.token

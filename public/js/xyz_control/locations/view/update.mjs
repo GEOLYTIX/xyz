@@ -101,7 +101,7 @@ export default (_xyz, location) => () => {
       <td class="${'label lv-0 ' + (entry.class || '')}" colspan=2 style="padding: 10px 0;">
       <span title="Source layer"
       style="${'float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
-      >${_xyz.layers.list[location.layer].name}`);
+      >${location.layer.name}`);
 
     }
 
@@ -139,7 +139,7 @@ export default (_xyz, location) => () => {
     } 
 
     // prevent clusterArea from firing if layer is not cluster
-    if(entry.clusterArea && _xyz.layers.list[location.layer].format !== 'cluster') return;
+    if(entry.clusterArea && location.layer.format !== 'cluster') return;
 
     // Remove empty row which is not editable.
     if (!entry.edit && !entry.value) return entry.row.remove();
