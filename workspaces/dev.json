@@ -2605,6 +2605,12 @@
                             "edit": true
                         },
                         {
+                            "label": "Documents",
+                            "field": "documents",
+                            "type": "documents",
+                            "edit": true
+                        },
+                        {
                             "label": "Available tableviews",
                             "type": "label"
                           },
