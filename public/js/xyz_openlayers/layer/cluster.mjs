@@ -19,7 +19,6 @@ export default _xyz => layer => {
   
   };
 
-
   const source = new _xyz.mapview.lib.source.Vector({
     loader: function (extent, resolution, projection) {
 
@@ -84,6 +83,7 @@ export default _xyz => layer => {
         }));
       
         function geometry(geom) {
+
           if (geom.lon && geom.lat) {
             return new _xyz.mapview.lib.geom.Point(
               _xyz.mapview.lib.proj.fromLonLat([geom.lon, geom.lat])
@@ -115,7 +115,6 @@ export default _xyz => layer => {
         'EPSG:' + layer.srid)];
     }
   });
-  
   
   layer.L = new _xyz.mapview.lib.layer.Vector({
     layer: layer,
@@ -205,7 +204,6 @@ export default _xyz => layer => {
         layer.highlight === feature.get('id') ? layer.style.highlight : {}
       );
 
-        
       const size = layer.cluster_logscale ?
         properties.count === 1 ?
           layer.style.markerMin :
@@ -214,7 +212,6 @@ export default _xyz => layer => {
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / layer.max_size * properties.size;
 
-  
       return new _xyz.mapview.lib.style.Style({
         zIndex: parseInt(layer.max_size - properties.size),
         image: _xyz.mapview.icon(Object.assign(
