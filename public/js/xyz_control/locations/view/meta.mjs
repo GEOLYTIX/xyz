@@ -25,7 +25,7 @@ export default _xyz => entry => {
    	tag: 'table',
    	style: {
    		fontSize: 'small',
-   		width: '85%',
+   		width: '100%',
    		color: '#666',
    		borderRadius: '4px',
    		backgroundColor: 'linen',
