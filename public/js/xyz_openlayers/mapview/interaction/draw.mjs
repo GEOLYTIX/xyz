@@ -151,11 +151,12 @@ export default _xyz => {
 
     if (features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Save</li>`);
 
-    // if (!features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${e=>{
-    //   _xyz.mapview.interaction.draw.interaction.removeLastPoint();
-    //   _xyz.mapview.interaction.draw.vertices.pop();
-    //   _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
-    // }}>Remove last vertice</li>`);
+    if (!features.length) menu.appendChild(_xyz.utils.wire()`<li onclick=${e=>{
+      e.preventDefault();
+      _xyz.mapview.interaction.draw.interaction.removeLastPoint();
+      _xyz.mapview.interaction.draw.vertices.pop();
+      _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
+    }}>Remove last vertice</li>`);
 
     menu.appendChild(_xyz.utils.wire()`<li onclick=${finish}>Cancel</li>`);
 
