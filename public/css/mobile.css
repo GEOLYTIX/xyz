@@ -891,6 +891,15 @@ button {
     font-size: 14px;
     vertical-align: text-bottom; }
 
+.pretty:after {
+  content: "";
+  display: block;
+  height: 1px;
+  bottom: 0;
+  background: linear-gradient(left, #999 0%, white 90%);
+  background: -webkit-linear-gradient(left, #999 0%, white 90%);
+  background: -moz-linear-gradient(left, #999 0%, white 90%); }
+
 .scrolly {
   overflow-y: scroll;
   overflow-x: hidden;

@@ -105,12 +105,12 @@ export default _xyz => entry => {
   if (entry.edit) {
 
     entry.edit.container = _xyz.utils.wire()`
-    <div style="padding: 4px;" class="table-section expandable">`;
+    <div class="table-section expandable">`;
 
     _xyz.utils.createElement({
       tag: 'div',
       options: {
-        classList: 'btn_subtext cursor noselect',
+        classList: 'btn_subtext cursor noselect pretty',
         textContent: 'Isoline settings'
       },
       style: {
