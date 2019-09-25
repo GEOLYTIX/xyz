@@ -146,7 +146,9 @@ export default _xyz => {
 
       _xyz.mapview.interaction.edit.location.layer.reload();
 
-      //_xyz.mapview.interaction.edit.location.update();
+      const locationFeature = _xyz.mapview.interaction.edit.location.Layer.getSource().getFeatures()[0];
+
+      locationFeature.setGeometry(features[0].getGeometry());
 
     };
 
