@@ -64,7 +64,7 @@ export default _xyz => function(feature) {
 
     if (cluster.length === 1) return _xyz.locations.select({
       locale: _xyz.workspace.locale.key,
-      layer: layer.key,
+      layer: layer,
       table: layer.table,
       id: cluster[0].id,
     });
