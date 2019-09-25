@@ -12,20 +12,32 @@ function init(_xyz) {
   createMap(_xyz);
 
   // Create locales dropdown if length of locales array is > 1.
-  if (Object.keys(_xyz.workspace.locales).length > 1) _xyz.utils.dropdown({
-    title: 'Show layers for the following locale:',
-    appendTo: document.getElementById('localeDropdown'),
-    entries: _xyz.workspace.locales,
-    label: 'name',
-    val: 'loc',
-    selected: _xyz.workspace.locale.key,
-    onchange: e => {
-      _xyz.hooks.removeAll();
-      _xyz.hooks.set({ locale: e.target.value });
-      _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
-      createMap(_xyz);
-    }
-  });
+  if (Object.keys(_xyz.workspace.locales).length > 1) {
+
+    let entries = [];
+
+    Object.values(_xyz.workspace.locales).map(locale => {
+      entries.push(locale.key);
+    });
+
+    document.getElementById('localeDropdown').appendChild(_xyz.utils.wire()`
+      <div class="pretty"><small>Show layers for the following locale
+      `);
+
+    document.getElementById('localeDropdown').appendChild(
+      _xyz.utils.dropdownCustom({
+        singleSelect: true,
+        entries: entries,
+        selectedIndex: entries.indexOf(_xyz.workspace.locale.key),
+        callback: e => {
+          _xyz.hooks.removeAll();
+          _xyz.hooks.set({ locale: e.target.dataset.field });
+          _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
+          document.getElementById('localeDropdown').querySelector('.head').textContent = e.target.dataset.field;//e.target.textContent;
+          createMap(_xyz);
+        }
+      }));
+  }
 
 
 
