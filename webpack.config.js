@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    xyz_ui: ['./public/js/xyz_ui.js'],
     xyz_openlayers: ['./public/js/xyz_openlayers/index.mjs']
   },
   output: {

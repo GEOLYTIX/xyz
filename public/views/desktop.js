@@ -1,4 +1,36 @@
-export default _xyz => {
+_xyz({
+  host: document.head.dataset.dir || new String(''),
+  token: document.body.dataset.token,
+  log: document.body.dataset.log,
+  nanoid: document.body.dataset.nanoid,
+  hooks: true,
+  callback: init,
+});
+
+function init(_xyz) {
+
+  createMap(_xyz);
+
+  // Create locales dropdown if length of locales array is > 1.
+  if (Object.keys(_xyz.workspace.locales).length > 1) _xyz.utils.dropdown({
+    title: 'Show layers for the following locale:',
+    appendTo: document.getElementById('localeDropdown'),
+    entries: _xyz.workspace.locales,
+    label: 'name',
+    val: 'loc',
+    selected: _xyz.workspace.locale.key,
+    onchange: e => {
+      _xyz.hooks.removeAll();
+      _xyz.hooks.set({ locale: e.target.value });
+      _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
+      createMap(_xyz);
+    }
+  });
+
+
+
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  // Set platform specific interface functions.
 
   _xyz.desktop = {};
 
@@ -29,61 +61,61 @@ export default _xyz => {
 
     // Prevent text selection.
     e.preventDefault();
-    
+
     document.body.style.cursor = 'grabbing';
     window.addEventListener('mousemove', resize_x);
     window.addEventListener('mouseup', stopResize_x);
   });
-  
+
   // Resize tableview while holding mousedown on resize_bar.
   vertDivider.addEventListener('touchstart', e => {
-        
+
     window.addEventListener('touchmove', resize_x);
     window.addEventListener('touchend', stopResizeTouch_x);
-  },{passive:true});
+  }, { passive: true });
 
   // Resize the tableview container
   function resize_x(e) {
 
     let width;
-  
+
     if (e.touches) {
 
       if (e.touches[0].pageX < 333) return;
-  
+
       // Get height from window height minus first finger touch position.
       width = e.touches[0].pageX;
-  
+
     } else {
 
       if (e.pageX < 333) return;
-  
+
       // Get height from window height minus cursor position.
       width = e.pageX;
     }
-       
+
     // Full width snap.
     if (width > (window.innerWidth / 2)) width = window.innerWidth / 2;
-    
+
     document.body.style.gridTemplateColumns = `${width}px 10px auto`;
-  
+
   }
-    
+
   // Remove eventListener after resize event.
   function stopResize_x() {
 
     _xyz.map.updateSize();
-    
+
     document.body.style.cursor = 'auto';
     window.removeEventListener('mousemove', resize_x);
     window.removeEventListener('mouseup', stopResize_x);
   }
-  
+
   // Remove eventListener after resize event.
   function stopResizeTouch_x() {
 
     _xyz.map.updateSize();
-    
+
     window.removeEventListener('touchmove', resize_x);
     window.removeEventListener('touchend', stopResizeTouch_x);
   }
@@ -96,18 +128,18 @@ export default _xyz => {
 
     // Prevent text selection.
     e.preventDefault();
-    
+
     document.body.style.cursor = 'grabbing';
     window.addEventListener('mousemove', resize_y);
     window.addEventListener('mouseup', stopResize_y);
   });
-  
+
   // Resize tableview while holding mousedown on resize_bar.
   hozDivider.addEventListener('touchstart', e => {
-        
+
     window.addEventListener('touchmove', resize_y);
     window.addEventListener('touchend', stopResizeTouch_y);
-  },{passive:true});
+  }, { passive: true });
 
   // Resize the tableview container
   function resize_y(e) {
@@ -128,36 +160,121 @@ export default _xyz => {
       // Get height from window height minus cursor position.
       height = window.innerHeight - e.pageY;
     }
-    
+
     // Min height snap.
     if (height < 40) return;
-    
+
     // Full height snap.
     if (height > (window.innerHeight - 10)) height = window.innerHeight;
-    
+
     document.body.style.gridTemplateRows = `minmax(0, 1fr) ${height}px`;
   }
-    
+
   // Remove eventListener after resize event.
   function stopResize_y() {
 
     _xyz.map.updateSize();
-    
+
     document.body.style.cursor = 'auto';
     window.removeEventListener('mousemove', resize_y);
     window.removeEventListener('mouseup', stopResize_y);
-     
-    if(_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
+
+    if (_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
   }
-  
+
   // Remove eventListener after resize event.
   function stopResizeTouch_y() {
 
     _xyz.map.updateSize();
-    
+
     window.removeEventListener('touchmove', resize_y);
     window.removeEventListener('touchend', stopResizeTouch_y);
-       
-    if(_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
+
+    if (_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
   }
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+  const btnWorkspace = document.getElementById('btnWorkspace');
+
+  if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
+
+
+  // Select locations from hooks.
+  if (_xyz.hooks) _xyz.hooks.current.locations.forEach(_hook => {
+
+    let hook = _hook.split('!');
+
+    _xyz.locations.select({
+      locale: _xyz.workspace.locale.key,
+      layer: _xyz.layers.list[decodeURIComponent(hook[0])],
+      table: hook[1],
+      id: hook[2]
+    });
+
+  });
+
+
+  if (_xyz.log) console.log(_xyz);
+
+}
+
+function createMap(_xyz) {
+
+  document.body.style.gridTemplateRows = 'minmax(0, 1fr) 0';
+
+  const attribution = {};
+
+  attribution[_xyz.version] = _xyz.release;
+
+  attribution['Openlayers'] = 'https://openlayers.org';
+
+  // Create mapview control.
+  _xyz.mapview.create({
+    target: document.getElementById('Map'),
+    attribution: attribution,
+    view: {
+      lat: _xyz.hooks.current.lat,
+      lng: _xyz.hooks.current.lng,
+      z: _xyz.hooks.current.z
+    },
+    scrollWheelZoom: true,
+    btn: {
+      ZoomIn: document.getElementById('btnZoomIn'),
+      ZoomOut: document.getElementById('btnZoomOut'),
+      Locate: document.getElementById('btnLocate'),
+    }
+  });
+
+  _xyz.tableview.create({
+    target: document.getElementById('tableview'),
+    btn: {
+      toggleTableview: document.getElementById('toggleTableview'),
+      tableViewport: document.getElementById('btnTableViewport')
+    }
+  });
+
+  _xyz.layers.listview.init({
+    target: document.getElementById('layers')
+  });
+
+  _xyz.locations.listview.init({
+    target: document.getElementById('locations')
+  });
+
+  document.getElementById('clear_locations').onclick = () => {
+    _xyz.hooks.remove('locations');
+
+    _xyz.locations.listview.init({
+      target: document.getElementById('locations')
+    });
+  };
+
+  _xyz.gazetteer.init({
+    target: document.getElementById('gazetteer'),
+    toggle: document.getElementById('btnGazetteer'),
+  });
+
 };
