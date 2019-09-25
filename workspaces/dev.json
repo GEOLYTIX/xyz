@@ -1735,7 +1735,7 @@
                         {
                             "type": "report",
                             "report": {
-                              "template": "mapp"
+                              "template": "/views/report_location.html"
                             }
                         },
                         {
@@ -3293,7 +3293,7 @@
                             "target_id": "xyz_table5",
                             "toolbars": {},
                             "layout": "fitColumns",
-                            "table": "geodata.uk_glx_open_retail_points_ed",
+                            "table": "geodata.uk_glx_open_retail_points",
                             "geom": "geom_p_4326",
                             "columns": [
                               {
