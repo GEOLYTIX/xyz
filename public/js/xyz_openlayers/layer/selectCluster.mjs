@@ -42,7 +42,7 @@ export default _xyz => function(feature) {
 
         ul.appendChild(_xyz.utils.wire()`<li onclick=${() => _xyz.locations.select({
           locale: _xyz.workspace.locale.key,
-          layer: layer.key,
+          layer: layer,
           table: layer.table,
           id: li.id,
           marker: li.coords,
