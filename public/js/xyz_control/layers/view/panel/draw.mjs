@@ -153,13 +153,43 @@ export default (_xyz, layer) => {
 
     if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   
 
-    let block = _xyz.utils.wire()`<div class="block">`;
+    //let block = _xyz.utils.wire()`<div class="block">`;
+    let _container = _xyz.utils.wire()`
+    <div class="drawer expandable">
+    <table><tr><td>
+    <div style="padding: 4px;" class="table-section">
+    `;
 
-    layer.edit.panel.appendChild(block);
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'btn_subtext cursor noselect pretty',
+        textContent: 'Mapbox Isoline settings'
+      },
+      style: {
+        textAlign: 'left',
+        fontStyle: 'italic',
+        fontSize: 'small'
+      },
+      appendTo: _container,
+      eventListener: {
+        event: 'click',
+        funct: e => {
+          if (e) e.stopPropagation();
+          _xyz.utils.toggleExpanderParent({
+            expandable: _container,
+            accordeon: true
+          });
+        }
+      }
+    });
+
+    //layer.edit.panel.appendChild(block);
+    layer.edit.panel.appendChild(_container);
 
     _xyz.ctrl.isoline_mapbox({
       entry: layer,
-      container: block
+      container: _container//block
     });
 
     layer.edit.panel.appendChild(_xyz.utils.wire()`
@@ -243,13 +273,44 @@ export default (_xyz, layer) => {
 
     if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};   
 
-    let block = _xyz.utils.wire()`<div class="block">`;
+    //let block = _xyz.utils.wire()`<div class="block">`;
 
-    layer.edit.panel.appendChild(block);
+    let _container = _xyz.utils.wire()`
+    <div class="drawer expandable">
+    <table><tr><td>
+    <div style="padding: 4px;" class="table-section">
+    `;
+
+    _xyz.utils.createElement({
+      tag: 'div',
+      options: {
+        classList: 'btn_subtext cursor noselect  pretty',
+        textContent: 'Here Isoline settings'
+      },
+      style: {
+        textAlign: 'left',
+        fontStyle: 'italic',
+        fontSize: 'small'
+      },
+      appendTo: _container,
+      eventListener: {
+        event: 'click',
+        funct: e => {
+          if (e) e.stopPropagation();
+          _xyz.utils.toggleExpanderParent({
+            expandable: _container,
+            accordeon: true
+          });
+        }
+      }
+    });
+
+    //layer.edit.panel.appendChild(block);
+    layer.edit.panel.appendChild(_container);
 
     _xyz.ctrl.isoline_here({
       entry: layer,
-      container: block
+      container: _container//block
     });
 
     layer.edit.panel.appendChild(_xyz.utils.wire()`

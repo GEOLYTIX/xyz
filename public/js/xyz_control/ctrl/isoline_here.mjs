@@ -1,5 +1,7 @@
 export default _xyz => param => {
 
+  console.log(param.container);
+
   const mode_container = _xyz.utils.wire()`<div style="margin-top: 8px">`;
 
   param.container.appendChild(mode_container);
