@@ -110,7 +110,7 @@ export default _xyz => {
         units: units,
         fallbackStyle: {
         	borderColor: '#079e00',
-        	backgroundColor: '#cf9'
+        	backgroundColor: '#DEF6CA'
         }
     }
 };

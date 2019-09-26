@@ -10,7 +10,7 @@ input[type=range] {
     appearance: none;
     height: 5px;
     border-radius: 5px;
-    background: #cf9;
+    background: $glxlightgreen;
     outline: none;
 }
 
@@ -20,7 +20,7 @@ input[type=range]::-webkit-slider-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #090;
+    background: $glxgreen;
     cursor: pointer;
 }
 
@@ -29,7 +29,7 @@ input[type=range]::-moz-range-thumb {
     height: 25px;
     border: 0;
     border-radius: 50%;
-    background: #090;
+    background: $glxgreen;
     cursor: pointer;
 }
 
