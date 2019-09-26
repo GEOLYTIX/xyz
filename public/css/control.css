@@ -775,13 +775,13 @@ button {
 
 .btn_text {
   font-family: ffmark_bold;
-  font-size: 14px;
+  font-size: 15px;
   color: #1F964D;
   height: 25px; }
 
 .btn_subtext {
   font-family: ffmark;
-  font-size: 13px;
+  font-size: 14px;
   color: #1F964D;
   padding: 8px 0px 8px 0px; }
 
@@ -892,7 +892,7 @@ button {
   margin: 6px 3px 12px 3px;
   cursor: pointer; }
   .btn_inline:active {
-    box-shadow: 2px 2px 3px #1F964D; }
+    box-shadow: 2px 2px 3px #090; }
   .btn_inline span {
     position: absolute;
     top: 0;
@@ -1802,7 +1802,7 @@ button {
         right: 2px;
         top: 0; }
       .listview .drawer .dashboard .block .colour-label {
-        color: #1F964D; }
+        color: #090; }
       .listview .drawer .dashboard .block .colour-swatch {
         width: 100%;
         margin-bottom: 10px; }
