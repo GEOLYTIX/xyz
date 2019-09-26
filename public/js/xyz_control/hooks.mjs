@@ -1,11 +1,24 @@
 export default _xyz => {
 
-  _xyz.hooks = {
+  if (!_xyz.hooks) return null;
 
-    current: {
-      layers: [],
-      locations: [],
-    },
+  const current = {
+    layers: [],
+    locations: [],
+  };
+
+  // Take hooks from URL and store as current hooks.
+  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+    if (current[key]) {
+      current[key] = decodeURI(value).split(',');
+    } else {
+      current[key] = value;
+    }
+  });
+
+  return {
+
+    current: current,
 
     set: set,
 
@@ -18,15 +31,6 @@ export default _xyz => {
     filter: filter,
 
   };
-
-  // Take hooks from URL and store as current hooks.
-  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-    if (_xyz.hooks.current[key]) {
-      _xyz.hooks.current[key] = decodeURI(value).split(',');
-    } else {
-      _xyz.hooks.current[key] = value;
-    }
-  });
 
   // Add kvp hook to _xyz.hooks.current and URI.
   function set(hooks) {

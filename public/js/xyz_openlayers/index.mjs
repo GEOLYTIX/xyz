@@ -78,7 +78,7 @@ async function _xyz(params) {
 
   _xyz.workspace = workspace(_xyz);
 
-  if (_xyz.hooks) hooks(_xyz);
+  _xyz.hooks = hooks(_xyz);
 
   _xyz.gazetteer = _gazetteer(_xyz);
 
