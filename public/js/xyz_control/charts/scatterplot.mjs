@@ -1,83 +1,83 @@
 export default _xyz => entry => {
 
-	const graph = _xyz.utils.createElement({
-		tag: 'div',
-		style: {
-			position: 'relative'
-		}
-	});
-
-	const canvas = _xyz.utils.createElement({
-		tag: 'canvas',
-		options: {
-            height: entry.chart.height || 150,
-            width: entry.chart.width || 350
-		},
-        style: {
-            height: `${entry.chart.height ? entry.chart.height : 150}px`,
-            width: `${entry.chart.width ? entry.chart.width : 350}px`
-        },
-		appendTo: graph
-	});
-
-	if(!entry.chart.datalabels) {
-		_xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  const graph = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      position: 'relative'
     }
+  });
 
-	let data = [];
+  const canvas = _xyz.utils.createElement({
+    tag: 'canvas',
+    options: {
+      height: entry.chart.height || 150,
+      width: entry.chart.width || 350
+    },
+    style: {
+      height: `${entry.chart.height ? entry.chart.height : 150}px`,
+      width: `${entry.chart.width ? entry.chart.width : 350}px`
+    },
+    appendTo: graph
+  });
 
-	let labels = Object.values(entry.columns).map(column => column.title),
+  if(!entry.chart.datalabels) {
+    _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  }
+
+  let data = [];
+
+  let labels = Object.values(entry.columns).map(column => column.title),
 	    columns = Object.values(entry.columns).map(column => column.field);
 
-	let _label = columns[2],
+  let _label = columns[2],
 	    _x = columns[0],
 	    _y = columns[1];
 
-	entry.fields.map(d => {
+  entry.fields.map(d => {
 
-		data.push({
-			label: d[_label] || d.qid,
-			id: d.qid,
-			backgroundColor: entry.chart.backgroundColor || 'rgba(70, 99, 98, 0.3)',
-			borderColor: entry.chart.borderColor || 'rgba(70, 99, 98, 0.3)',
-			pointStyle: entry.chart.pointStyle,
-			radius: entry.chart.radius,
-			pointHoverRadius: entry.chart.pointHoverRadius ? entry.chart.pointHoverRadius : entry.chart.radius ? parseInt(entry.chart.radius)+2 : null,
-			data: [{
-				x: d[_x],
-				y: d[_y]
-			}]
-		});
+    data.push({
+      label: d[_label] || d.qid,
+      id: d.qid,
+      backgroundColor: entry.chart.backgroundColor || 'rgba(70, 99, 98, 0.3)',
+      borderColor: entry.chart.borderColor || 'rgba(70, 99, 98, 0.3)',
+      pointStyle: entry.chart.pointStyle,
+      radius: entry.chart.radius,
+      pointHoverRadius: entry.chart.pointHoverRadius ? entry.chart.pointHoverRadius : entry.chart.radius ? parseInt(entry.chart.radius)+2 : null,
+      data: [{
+        x: d[_x],
+        y: d[_y]
+      }]
+    });
 
-	});
+  });
 
-	let chart = new _xyz.utils.Chart(canvas, {
-		type: 'scatter',
-		options: {
-			legend: {
-				display: entry.chart.legend || false,
-				position: entry.chart.legendPosition || 'bottom'
-			},
-			tooltips: {
-				callbacks: {
-					title: () => ''
-				} 
-			},
-			scales: {
-				xAxes: [{
+  let chart = new _xyz.utils.Chart(canvas, {
+    type: 'scatter',
+    options: {
+      legend: {
+        display: entry.chart.legend || false,
+        position: entry.chart.legendPosition || 'bottom'
+      },
+      tooltips: {
+        callbacks: {
+          title: () => ''
+        } 
+      },
+      scales: {
+        xAxes: [{
     				scaleLabel: {
     					display: true,
-                        labelString: labels[0]
-                    }
-                }],
-				yAxes: [{
+            labelString: labels[0]
+          }
+        }],
+        yAxes: [{
                 	scaleLabel: {
                 		display: true,
                 		labelString: labels[1]
                 	}
-                }]
-			},
-            onClick : (evt, item) => {
+        }]
+      },
+      onClick : (evt, item) => {
             	let element = chart.getElementAtEvent(evt)[0];
             	if(element){
             		let chartData = element['_chart'].config.data;
@@ -99,12 +99,12 @@ export default _xyz => entry => {
 
             		alert('Do something with data point \n ' + JSON.stringify(data_point));
             	}
-            }
-		},
-		data: {
-			datasets: data
-		}
-	});
+      }
+    },
+    data: {
+      datasets: data
+    }
+  });
 
-	return graph;
-}
+  return graph;
+};

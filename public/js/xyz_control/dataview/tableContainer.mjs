@@ -1,6 +1,6 @@
 export default _xyz => (show_toolbars) => {
 
-  if(_xyz.tableview.node) _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+  if(_xyz.dataview.node) _xyz.dataview.node.querySelector('.tab-content').innerHTML = '';
 
   if(show_toolbars){
   	
@@ -10,7 +10,7 @@ export default _xyz => (show_toolbars) => {
   			marginRight: '10px',
   			textAlign: 'right'
   		},
-  		appendTo: _xyz.tableview.node.querySelector('.tab-content')
+  		appendTo: _xyz.dataview.node.querySelector('.tab-content')
   	});
 
   	_xyz.utils.createElement({
@@ -28,7 +28,7 @@ export default _xyz => (show_toolbars) => {
   		eventListener: {
   			event: 'click',
   			funct: () => {
-  				_xyz.tableview.current_table.Tabulator.download('csv', `${_xyz.tableview.current_table.title}.csv`);
+  				_xyz.dataview.current_table.Tabulator.download('csv', `${_xyz.dataview.current_table.title}.csv`);
   			}
   		},
   		appendTo: toolbar
@@ -49,7 +49,7 @@ export default _xyz => (show_toolbars) => {
   		eventListener: {
   			event: 'click',
   			funct: () => {
-  				_xyz.tableview.current_table.Tabulator.download('json', `${_xyz.tableview.current_table.title}.json`);
+  				_xyz.dataview.current_table.Tabulator.download('json', `${_xyz.dataview.current_table.title}.json`);
   			}
   		},
   		appendTo: toolbar
@@ -62,7 +62,7 @@ export default _xyz => (show_toolbars) => {
     options: {
       classList: 'table'
     },
-    appendTo: _xyz.tableview.node.querySelector('.tab-content')
+    appendTo: _xyz.dataview.node.querySelector('.tab-content')
   });
 
 };

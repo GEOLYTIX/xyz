@@ -2,8 +2,8 @@ export default _xyz => (table, callback) => {
 
   if (!table || !table.location) return;
 
-  if (_xyz.tableview.node) {
-    // _xyz.tableview.node.style.display = 'block';
+  if (_xyz.dataview.node) {
+    // _xyz.dataview.node.style.display = 'block';
     //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
@@ -23,9 +23,9 @@ export default _xyz => (table, callback) => {
     table.columns.push(Object.assign({}, {field: key}, table.agg[key]));
   });
 
-  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
+  if (_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
 
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
+  if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(table);
 
   table.update = () => {
 
@@ -81,13 +81,13 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
+    table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);
     
     // disable header sorting by default
     table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false;});
 
     // group columns if grouped defined
-    let columns = _xyz.tableview.groupColumns(table);
+    let columns = _xyz.dataview.groupColumns(table);
     // filtered out helper columns
     columns = columns.filter(col => { return !col.aspatial; });
 
@@ -103,7 +103,7 @@ export default _xyz => (table, callback) => {
 
     table.update();
 
-    _xyz.tableview.current_table = table;
+    _xyz.dataview.current_table = table;
 
   };
   

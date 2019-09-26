@@ -1,63 +1,63 @@
 export default _xyz => entry => {
 
-	const graph = _xyz.utils.createElement({
-		tag: 'div',
-		style: {
-			position: 'relative'
-		}
-	});
-
-	const canvas = _xyz.utils.createElement({
-		tag: 'canvas',
-        options: {
-            height: entry.chart.height || 150,
-            width: entry.chart.width || 350
-        },
-        style: {
-            height: `${entry.chart.height ? entry.chart.height : 150}px`,
-            width: `${entry.chart.width ? entry.chart.width : 350}px`
-        },
-		appendTo: graph
-	});
-
-    if(!entry.chart.datalabels) {
-        _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  const graph = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      position: 'relative'
     }
+  });
 
-	let data = [];
+  const canvas = _xyz.utils.createElement({
+    tag: 'canvas',
+    options: {
+      height: entry.chart.height || 150,
+      width: entry.chart.width || 350
+    },
+    style: {
+      height: `${entry.chart.height ? entry.chart.height : 150}px`,
+      width: `${entry.chart.width ? entry.chart.width : 350}px`
+    },
+    appendTo: graph
+  });
 
-	let labels = Object.values(entry.columns).map(column => column.title),
+  if(!entry.chart.datalabels) {
+    _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  }
+
+  let data = [];
+
+  let labels = Object.values(entry.columns).map(column => column.title),
 	    columns = Object.values(entry.columns).map(column => column.field);
 
-	let _label = columns[3],
+  let _label = columns[3],
 	    _x = columns[0],
 	    _y = columns[1],
 	    _r = columns[2];
 
-	entry.fields.map(d => {
+  entry.fields.map(d => {
 
-		data.push({
-			label: d[_label] || d.qid,
-			id: d.qid,
-			backgroundColor: entry.chart.backgroundColor || random_rgba(),
-			data: [{
-				x: d[_x],
-				y: d[_y],
-				r: d[_r]
-			}]
-		});
+    data.push({
+      label: d[_label] || d.qid,
+      id: d.qid,
+      backgroundColor: entry.chart.backgroundColor || random_rgba(),
+      data: [{
+        x: d[_x],
+        y: d[_y],
+        r: d[_r]
+      }]
+    });
 
-	});
+  });
 
-	let chart = new _xyz.utils.Chart(canvas, { 
-		type: 'bubble',
-		options: {
-			legend: {
-				display: entry.chart.legend || false,
-				position: 'bottom'
-			},
-			tooltips: {
-                callbacks: {
+  let chart = new _xyz.utils.Chart(canvas, { 
+    type: 'bubble',
+    options: {
+      legend: {
+        display: entry.chart.legend || false,
+        position: 'bottom'
+      },
+      tooltips: {
+        callbacks: {
     				title: () => ''
     			}
     		},
@@ -65,17 +65,17 @@ export default _xyz => entry => {
     			xAxes: [{
     				scaleLabel: {
     					display: true,
-                        labelString: labels[0]
-                    }
-                }],
-                yAxes: [{
+            labelString: labels[0]
+          }
+        }],
+        yAxes: [{
                 	scaleLabel: {
                 		display: true,
                 		labelString: labels[1]
                 	}
-                }]
-            },
-            onClick : (evt, item) => {
+        }]
+      },
+      onClick : (evt, item) => {
             	let element = chart.getElementAtEvent(evt)[0];
             	if(element){
             		let chartData = element['_chart'].config.data;
@@ -97,18 +97,18 @@ export default _xyz => entry => {
 
             		alert('Do something with data point \n ' + JSON.stringify(data_point));
             	}
-            }
-        },
-        data: {
+      }
+    },
+    data: {
         	datasets: data
-        }
-    });
+    }
+  });
 
-    return graph;
-}
+  return graph;
+};
 
 function random_rgba() {
-    var o = Math.round, r = Math.random, s = 255;
-    //return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
-    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ', 0.3)';
+  var o = Math.round, r = Math.random, s = 255;
+  //return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+  return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ', 0.3)';
 }

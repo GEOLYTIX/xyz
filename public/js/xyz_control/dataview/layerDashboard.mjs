@@ -3,21 +3,21 @@ export default _xyz => chart => {
   if (!chart) return;
 
   //if (chart.key) {
-  //if (!chart.layer.tableview.tables[chart.title]) return;
-  //if (chart.layer.tableview.tables[chart.key]){
-  //Object.assign(chart, chart.layer.tableview.tables[chart.key]); 
+  //if (!chart.layer.dataview.tables[chart.title]) return;
+  //if (chart.layer.dataview.tables[chart.key]){
+  //Object.assign(chart, chart.layer.dataview.tables[chart.key]); 
   //}
   //}
 
-  if (_xyz.tableview.node) {
-    // _xyz.tableview.node.style.display = 'block';
+  if (_xyz.dataview.node) {
+    // _xyz.dataview.node.style.display = 'block';
     // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   }
 
-  if (_xyz.tableview.tables.indexOf(chart) < 0) _xyz.tableview.tables.push(chart);
+  if (_xyz.dataview.tables.indexOf(chart) < 0) _xyz.dataview.tables.push(chart);
 
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(chart);
+  if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(chart);
 
   chart.update = () => {
 
@@ -49,7 +49,7 @@ export default _xyz => chart => {
 
     xhr.onload = e => {
 
-      _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+      _xyz.dataview.node.querySelector('.tab-content').innerHTML = '';
 
       let chartElem = _xyz.charts.create({
         label: chart.key, 
@@ -58,7 +58,7 @@ export default _xyz => chart => {
         chart: chart.chart
       });
 
-      _xyz.tableview.node.querySelector('.tab-content').appendChild(chartElem);
+      _xyz.dataview.node.querySelector('.tab-content').appendChild(chartElem);
 
     };
 
@@ -69,21 +69,21 @@ export default _xyz => chart => {
 
   chart.activate = () => {
 
-    if (_xyz.tableview && _xyz.tableview.btn && _xyz.tableview.btn.tableViewport) {
+    if (_xyz.dataview && _xyz.dataview.btn && _xyz.dataview.btn.tableViewport) {
 
       if (chart.viewport) {
-        _xyz.tableview.btn.tableViewport.classList.add('active');
+        _xyz.dataview.btn.tableViewport.classList.add('active');
 
       } else {
-        _xyz.tableview.btn.tableViewport.classList.remove('active');
+        _xyz.dataview.btn.tableViewport.classList.remove('active');
       }
 
-      _xyz.tableview.btn.tableViewport.style.display = 'block';
+      _xyz.dataview.btn.tableViewport.style.display = 'block';
     }
 
     chart.update();
 
-    _xyz.tableview.current_table = chart;
+    _xyz.dataview.current_table = chart;
 
   };
 

@@ -25,7 +25,7 @@ export default _xyz => function () {
       _xyz.map.getLayers().forEach(l => {
         if(l === layer.label) _xyz.map.removeLayer(layer.label);
       });
-   }
+    }
     
   }
 
