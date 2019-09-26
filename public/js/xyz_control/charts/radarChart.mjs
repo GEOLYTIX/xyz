@@ -21,7 +21,7 @@ export default _xyz => entry => {
 	});
 
 	if(!entry.chart.datalabels) {
-        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+        _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
     }
 
 	const datasets = [];
@@ -78,7 +78,7 @@ export default _xyz => entry => {
 	    Object.values(tmp).forEach(val => datasets.push(val));
 	}
 
-	new _xyz.Chart(canvas, {
+	new _xyz.utils.Chart(canvas, {
 		type: 'radar',
 		data: {
 			labels: labels,

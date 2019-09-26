@@ -21,7 +21,7 @@ export default _xyz => entry => {
 	});
 
     if(!entry.chart.datalabels) {
-        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+        _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
     }
 
 	const labels = entry.fields.map(field => field.label);
@@ -40,7 +40,7 @@ export default _xyz => entry => {
       spanGaps: true
     };
 
-    new _xyz.Chart(canvas, {
+    new _xyz.utils.Chart(canvas, {
     	type: entry.chart.type,
     	data: {
     		labels: labels,

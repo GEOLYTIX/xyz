@@ -1947,6 +1947,11 @@
                                 "title": true,
                                 "type": "bar",
                                 "unit": "k",
+                                "datalabels": {
+                                    "align": "right",
+                                    "anchor": "middle"
+
+                                },
                                 "backgroundColor": [
                                     "#FBDBB6",
                                     "#FAD2A4",

@@ -1,8 +1,4 @@
-import * as _utils from '../utils/_utils.mjs';
-
-import Chart from 'chart.js';
-
-import 'chartjs-plugin-datalabels';
+import * as utils from '../utils/_utils.mjs';
 
 import _charts from '../xyz_control/charts/_charts.mjs';
 
@@ -58,9 +54,7 @@ async function _xyz(params) {
     }
   }, params);
 
-  _xyz.utils = _utils;
-
-  _xyz.Chart = Chart;
+  _xyz.utils = utils;
 
   _xyz.charts = _charts(_xyz);
 

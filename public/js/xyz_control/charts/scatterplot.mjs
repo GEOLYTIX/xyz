@@ -21,7 +21,7 @@ export default _xyz => entry => {
 	});
 
 	if(!entry.chart.datalabels) {
-		_xyz.Chart.defaults.global.plugins.datalabels.display = false;
+		_xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
     }
 
 	let data = [];
@@ -51,7 +51,7 @@ export default _xyz => entry => {
 
 	});
 
-	let chart = new _xyz.Chart(canvas, {
+	let chart = new _xyz.utils.Chart(canvas, {
 		type: 'scatter',
 		options: {
 			legend: {

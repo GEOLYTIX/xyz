@@ -21,7 +21,7 @@ export default _xyz => entry => {
 	});
 
     if(!entry.chart.datalabels) {
-        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+        _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
     }
 
 	let stacked_labels = entry.fields.map(field => field.stack);
@@ -66,7 +66,7 @@ export default _xyz => entry => {
     if(entry.chart.type === 'stackedLine') chartType = 'line';
 
 
-    new _xyz.Chart(canvas, {
+    new _xyz.utils.Chart(canvas, {
     	type: chartType,
     	data: {
     		labels: stacked_labels,
