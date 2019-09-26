@@ -47,7 +47,7 @@ async function _xyz(params) {
         { hex: '#009688', name: 'Dark Cyan' },
         { hex: '#4caf50', name: 'Middle Green' },
         { hex: '#8bc34a', name: 'Dollar Bill' },
-        { hex: '#cddc39', name: 'Pear' },
+        { hex: '#cddc39', name: 'Pear' }
         { hex: '#ffeb3b', name: 'Banana Yellow' },
         { hex: '#ffb300', name: 'UCLA Gold' },
         { hex: '#fb8c00', name: 'Dark Orange' },
