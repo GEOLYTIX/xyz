@@ -3,20 +3,20 @@ export default _xyz => table => {
   if (!table) return;
 
   if (table.key) {
-    if (!table.layer.tableview.tables[table.key]) return;
-    Object.assign(table, table.layer.tableview.tables[table.key]);
+    if (!table.layer.dataview.tables[table.key]) return;
+    Object.assign(table, table.layer.dataview.tables[table.key]);
   }
 
-  if (_xyz.tableview.node) {
-    // _xyz.tableview.node.style.display = 'block';
+  if (_xyz.dataview.node) {
+    // _xyz.dataview.node.style.display = 'block';
     // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
     _xyz.map.updateSize();
   }
 
-  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
+  if (_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
 
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
+  if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(table);
 
   table.columns.forEach(col => {
 
@@ -77,19 +77,19 @@ export default _xyz => table => {
 
   table.activate = () => {
 
-    if (_xyz.tableview && _xyz.tableview.btn && _xyz.tableview.btn.tableViewport) {
+    if (_xyz.dataview && _xyz.dataview.btn && _xyz.dataview.btn.tableViewport) {
 
       if (table.viewport) {
-        _xyz.tableview.btn.tableViewport.classList.add('active');
+        _xyz.dataview.btn.tableViewport.classList.add('active');
 
       } else {
-        _xyz.tableview.btn.tableViewport.classList.remove('active');
+        _xyz.dataview.btn.tableViewport.classList.remove('active');
       }
 
-      _xyz.tableview.btn.tableViewport.style.display = 'block';
+      _xyz.dataview.btn.tableViewport.style.display = 'block';
     }
 
-    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
+    table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
@@ -97,10 +97,10 @@ export default _xyz => table => {
         placeholder: 'No Data Available',
         tooltipsHeader: true,
         columnVertAlign: 'center',
-        columns: _xyz.tableview.groupColumns(table),//table.columns,
+        columns: _xyz.dataview.groupColumns(table),//table.columns,
         layout: table.layout || 'fitDataFill',
         autoResize: true,
-        height: _xyz.tableview.height || 'auto',
+        height: _xyz.dataview.height || 'auto',
         groupBy: table.groupBy || null,
         initialSort: table.initialSort || null,
         groupStartOpen: typeof(table.groupStartOpen) === undefined ? true : table.groupStartOpen,
@@ -130,7 +130,7 @@ export default _xyz => table => {
 
     table.update();
 
-    _xyz.tableview.current_table = table;
+    _xyz.dataview.current_table = table;
 
     function rowClick(e, row){
       const rowData = row.getData();

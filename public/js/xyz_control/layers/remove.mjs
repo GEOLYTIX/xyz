@@ -40,7 +40,7 @@ export default _xyz => function () {
       
     });
 
-      if (layer.tableview && layer.tableview.charts) Object.keys(layer.tableview.charts).forEach(
+  if (layer.tableview && layer.tableview.charts) Object.keys(layer.tableview.charts).forEach(
     key => {
   
       const chart = layer.tableview.charts[key];

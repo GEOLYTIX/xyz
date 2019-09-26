@@ -2,8 +2,8 @@ export default _xyz => (table, callback) => {
 
   if (!table || !table.location) return;
 
-  if (_xyz.tableview.node) {
-    // _xyz.tableview.node.style.display = 'block';
+  if (_xyz.dataview.node) {
+    // _xyz.dataview.node.style.display = 'block';
     //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
 
@@ -25,9 +25,9 @@ export default _xyz => (table, callback) => {
     columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
   });*/
 
-  if (_xyz.tableview.tables.indexOf(table) < 0) _xyz.tableview.tables.push(table);
+  if (_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
 
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(table);
+  if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(table);
 
   table.update = () => {
 
@@ -59,18 +59,18 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    _xyz.tableview.node.querySelector('.tab-content').innerHTML = '';
+    _xyz.dataview.node.querySelector('.tab-content').innerHTML = '';
 
     table.target = _xyz.utils.wire()`<div class="table">`;
 
-    _xyz.tableview.node.querySelector('.tab-content').appendChild(table.target);
+    _xyz.dataview.node.querySelector('.tab-content').appendChild(table.target);
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
         placeholder: 'No Data Available',
         tooltipsHeader: true,
         columnVertAlign: 'center',
-        columns: _xyz.tableview.groupColumns(table),
+        columns: _xyz.dataview.groupColumns(table),
         //autoResize: false,
         layout: table.layout || 'fitDataFill',
         height: 'auto'
@@ -78,7 +78,7 @@ export default _xyz => (table, callback) => {
 
     table.update();
 
-    _xyz.tableview.current_table = table;
+    _xyz.dataview.current_table = table;
 
   };
 

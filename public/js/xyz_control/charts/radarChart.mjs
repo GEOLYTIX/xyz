@@ -1,55 +1,55 @@
 export default _xyz => entry => {
 
-	const graph = _xyz.utils.createElement({
-		tag: 'div',
-		style: {
-			position: 'relative'
-		}
-	});
-
-	const canvas = _xyz.utils.createElement({
-		tag: 'canvas',
-		options: {
-            height: entry.chart.height || 150,
-            width: entry.chart.width || 350
-		},
-        style: {
-            height: `${entry.chart.height ? entry.chart.height : 150}px`,
-            width: `${entry.chart.width ? entry.chart.width : 350}px`
-        },
-		appendTo: graph
-	});
-
-	if(!entry.chart.datalabels) {
-        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+  const graph = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      position: 'relative'
     }
+  });
 
-	const datasets = [];
+  const canvas = _xyz.utils.createElement({
+    tag: 'canvas',
+    options: {
+      height: entry.chart.height || 150,
+      width: entry.chart.width || 350
+    },
+    style: {
+      height: `${entry.chart.height ? entry.chart.height : 150}px`,
+      width: `${entry.chart.width ? entry.chart.width : 350}px`
+    },
+    appendTo: graph
+  });
 
-	let labels = entry.fields.map(field => field.label);
+  if(!entry.chart.datalabels) {
+    _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  }
 
-	labels = labels.filter((item, idx) => { return labels.indexOf(item) >= idx; }); // remove duplicates
+  const datasets = [];
 
-	let series = entry.fields.map(field => field.dataset); // get all series
+  let labels = entry.fields.map(field => field.label);
 
-	series = series.filter((item, idx) => { return !!item && series.indexOf(item) >= idx; }); // strip off duplicates and nulls
+  labels = labels.filter((item, idx) => { return labels.indexOf(item) >= idx; }); // remove duplicates
+
+  let series = entry.fields.map(field => field.dataset); // get all series
+
+  series = series.filter((item, idx) => { return !!item && series.indexOf(item) >= idx; }); // strip off duplicates and nulls
 
 
-	if(!series.length) { // process one dataset
+  if(!series.length) { // process one dataset
 
-		datasets[0] = {
-			label: entry.label,
-			backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
-			borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
-			pointBackgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
-			pointBorderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
-			lineTension: 0.5,
-			spanGaps: true,
-			data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value))
-		};
-	}
+    datasets[0] = {
+      label: entry.label,
+      backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+      borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+      pointBackgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+      pointBorderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+      lineTension: 0.5,
+      spanGaps: true,
+      data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value))
+    };
+  }
 
-	else { // process multiple series
+  else { // process multiple series
 	    
 	    const tmp = {};
 
@@ -76,32 +76,32 @@ export default _xyz => entry => {
 	    });
 
 	    Object.values(tmp).forEach(val => datasets.push(val));
-	}
+  }
 
-	new _xyz.Chart(canvas, {
-		type: 'radar',
-		data: {
-			labels: labels,
-			datasets: datasets
-		},
-		options: {
-			title: {
-				display: entry.chart.title || false,
-				position: 'bottom',
-				text: entry.label
-			},
-			responsive: true,
-			legend: {
-				display: entry.chart.legend,
-				position: entry.chart.legendPosition || 'left',
-				labels: {
+  new _xyz.utils.Chart(canvas, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      title: {
+        display: entry.chart.title || false,
+        position: 'bottom',
+        text: entry.label
+      },
+      responsive: true,
+      legend: {
+        display: entry.chart.legend,
+        position: entry.chart.legendPosition || 'left',
+        labels: {
     				boxWidth: 30
     			}
-			},
-			tooltips: {
-				enabled: true
-			}
-		}
-	});
-	return graph;
-}
+      },
+      tooltips: {
+        enabled: true
+      }
+    }
+  });
+  return graph;
+};

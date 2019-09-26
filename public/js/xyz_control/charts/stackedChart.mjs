@@ -1,72 +1,72 @@
 export default _xyz => entry => {
 
-	const graph = _xyz.utils.createElement({
-		tag: 'div',
-		style: {
-			position: 'relative'
-		}
-	});
-
-	const canvas = _xyz.utils.createElement({
-		tag: 'canvas',
-        options: {
-            height: entry.chart.height || 150,
-            width: entry.chart.width || 350
-        },
-        style: {
-            height: `${entry.chart.height ? entry.chart.height : 150}px`,
-            width: `${entry.chart.width ? entry.chart.width : 350}px`
-        },
-		appendTo: graph
-	});
-
-    if(!entry.chart.datalabels) {
-        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+  const graph = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      position: 'relative'
     }
+  });
 
-	let stacked_labels = entry.fields.map(field => field.stack);
+  const canvas = _xyz.utils.createElement({
+    tag: 'canvas',
+    options: {
+      height: entry.chart.height || 150,
+      width: entry.chart.width || 350
+    },
+    style: {
+      height: `${entry.chart.height ? entry.chart.height : 150}px`,
+      width: `${entry.chart.width ? entry.chart.width : 350}px`
+    },
+    appendTo: graph
+  });
 
-	if(!stacked_labels.length) return;
+  if(!entry.chart.datalabels) {
+    _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  }
 
-	stacked_labels = stacked_labels.filter((item, idx) => {return stacked_labels.indexOf(item) >= idx;});
+  let stacked_labels = entry.fields.map(field => field.stack);
 
-	const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
+  if(!stacked_labels.length) return;
 
-	const displayValues = entry.fields.map(field => field.displayValue);
+  stacked_labels = stacked_labels.filter((item, idx) => {return stacked_labels.indexOf(item) >= idx;});
 
-	const datasets = [];
+  const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
 
-	const tmp = {};
+  const displayValues = entry.fields.map(field => field.displayValue);
 
-    Object.values(entry.fields).map(field => {
-      tmp[field.label] = {};
-      tmp[field.label].data = [];
+  const datasets = [];
+
+  const tmp = {};
+
+  Object.values(entry.fields).map(field => {
+    tmp[field.label] = {};
+    tmp[field.label].data = [];
+  });
+
+  Object.values(entry.fields).map(field => {
+    Object.keys(tmp).map(key => {
+      if(key === field.label){
+        let idx = Object.keys(tmp).indexOf(key);
+        tmp[key].data.push(Number(field.value));
+        tmp[key].label = field.label;
+        tmp[key].borderColor = (entry.chart.borderColor[idx] || _xyz.charts.fallbackStyle.borderColor);
+
+        (entry.chart.type === 'stackedLine' && !entry.chart.fill) ? tmp[key].backgroundColor = null : tmp[key].backgroundColor = (entry.chart.backgroundColor[idx] || _xyz.charts.fallbackStyle.backgroundColor);
+
+      }
     });
+  });
 
-    Object.values(entry.fields).map(field => {
-      Object.keys(tmp).map(key => {
-        if(key === field.label){
-          let idx = Object.keys(tmp).indexOf(key);
-          tmp[key].data.push(Number(field.value));
-          tmp[key].label = field.label;
-          tmp[key].borderColor = (entry.chart.borderColor[idx] || _xyz.charts.fallbackStyle.borderColor);
+  Object.values(tmp).map(val => datasets.push(val));
 
-          (entry.chart.type === 'stackedLine' && !entry.chart.fill) ? tmp[key].backgroundColor = null : tmp[key].backgroundColor = (entry.chart.backgroundColor[idx] || _xyz.charts.fallbackStyle.backgroundColor);
+  let chartType;
 
-        }
-      });
-    });
-
-    Object.values(tmp).map(val => datasets.push(val));
-
-    let chartType;
-
-    if(entry.chart.type === 'stackedBar') chartType = 'bar';
-    if(entry.chart.type === 'stackedHorizontalBar') chartType = 'horizontalBar';
-    if(entry.chart.type === 'stackedLine') chartType = 'line';
+  if(entry.chart.type === 'stackedBar') chartType = 'bar';
+  if(entry.chart.type === 'stackedHorizontalBar') chartType = 'horizontalBar';
+  if(entry.chart.type === 'stackedLine') chartType = 'line';
 
 
-    new _xyz.Chart(canvas, {
+  new _xyz.utils.Chart(canvas, {
     	type: chartType,
     	data: {
     		labels: stacked_labels,
@@ -114,7 +114,7 @@ export default _xyz => entry => {
     			}
     		}
     	}
-    });
+  });
 
-    return graph;
-}
+  return graph;
+};

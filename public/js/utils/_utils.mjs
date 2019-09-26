@@ -38,6 +38,10 @@ export {default as chroma} from 'chroma-js';
 
 export {setStrokeWeight} from './setStrokeWeight.mjs';
 
+export {default as Chart} from 'chart.js';
+
+import 'chartjs-plugin-datalabels';
+
 export const turf = {
   pointOnFeature: pointOnFeature,
 };

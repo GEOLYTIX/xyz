@@ -1,46 +1,46 @@
 export default _xyz => entry => {
 
-	const graph = _xyz.utils.createElement({
-		tag: 'div',
-		style: {
-			position: 'relative'
-		}
-	});
-
-	const canvas = _xyz.utils.createElement({
-		tag: 'canvas',
-        options: {
-            height: entry.chart.height || 150,
-            width: entry.chart.width || 350
-        },
-        style: {
-            height: `${entry.chart.height ? entry.chart.height : 150}px`,
-            width: `${entry.chart.width ? entry.chart.width : 350}px`
-        },
-		appendTo: graph
-	});
-
-    if(!entry.chart.datalabels) {
-        _xyz.Chart.defaults.global.plugins.datalabels.display = false;
+  const graph = _xyz.utils.createElement({
+    tag: 'div',
+    style: {
+      position: 'relative'
     }
+  });
 
-	const labels = entry.fields.map(field => field.label);
+  const canvas = _xyz.utils.createElement({
+    tag: 'canvas',
+    options: {
+      height: entry.chart.height || 150,
+      width: entry.chart.width || 350
+    },
+    style: {
+      height: `${entry.chart.height ? entry.chart.height : 150}px`,
+      width: `${entry.chart.width ? entry.chart.width : 350}px`
+    },
+    appendTo: graph
+  });
 
-	const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
+  if(!entry.chart.datalabels) {
+    _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
+  }
 
-	const displayValues = entry.fields.map(field => field.displayValue);
+  const labels = entry.fields.map(field => field.label);
 
-	const datasets = [];
+  const data = entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : field.value));
 
-	datasets[0] = {
-      label: entry.label,
-      backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
-      borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
-      data: data,
-      spanGaps: true
-    };
+  const displayValues = entry.fields.map(field => field.displayValue);
 
-    new _xyz.Chart(canvas, {
+  const datasets = [];
+
+  datasets[0] = {
+    label: entry.label,
+    backgroundColor: entry.chart.backgroundColor || _xyz.charts.fallbackStyle.backgroundColor,
+    borderColor: entry.chart.borderColor || _xyz.charts.fallbackStyle.borderColor,
+    data: data,
+    spanGaps: true
+  };
+
+  new _xyz.utils.Chart(canvas, {
     	type: 'polarArea',
     	data: {
     		labels: labels,
@@ -81,8 +81,8 @@ export default _xyz => entry => {
     			}
     		}
     	}
-    });
+  });
 
-    return graph;
+  return graph;
 
-}
+};

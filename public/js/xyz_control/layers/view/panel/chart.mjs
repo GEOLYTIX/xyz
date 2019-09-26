@@ -69,8 +69,8 @@ export default (_xyz, layer) => {
     });
   }
 
-    if(layer.tableview.charts){
-      Object.keys(layer.tableview.charts).forEach(key => {
+  if(layer.tableview.charts){
+    Object.keys(layer.tableview.charts).forEach(key => {
 
       const table = layer.tableview.charts[key];
 
