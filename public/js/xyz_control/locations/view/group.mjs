@@ -75,7 +75,7 @@ export default _xyz => group => {
       cellPadding: '0',
       cellSpacing: '0',
       width: '95%',
-      marginTop: '-5px',
+      marginTop: '-4px',
       marginBottom: '10px',
       paddingLeft: '20px',
       borderLeft: '2px solid #B4B4B4',

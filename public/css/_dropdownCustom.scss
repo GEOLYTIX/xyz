@@ -35,7 +35,7 @@
             padding: 10px;
         }
 
-        >li:hover:after {
+        >li:hover:after, li:focus:after {
             content: "";
             display: block;
             height: 1px;
@@ -46,7 +46,6 @@
         }
 
         >li.selected {
-            /*background-color: #C9DAEA;*/
             background-color: #DEF6CA;
         }
 

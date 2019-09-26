@@ -1,4 +1,3 @@
-/*#090;*/
 @font-face {
   font-family: ffmark_black;
   src: url(../fonts/MarkWeb-Black.woff) format("woff"); }
@@ -387,7 +386,7 @@ input[type=range]::-moz-range-thumb {
     overflow-y: auto; }
     .ul-drop > ul > li {
       padding: 10px; }
-    .ul-drop > ul > li:hover:after {
+    .ul-drop > ul > li:hover:after, .ul-drop > ul li:focus:after {
       content: "";
       display: block;
       height: 1px;
@@ -396,7 +395,6 @@ input[type=range]::-moz-range-thumb {
       background: -webkit-linear-gradient(left, #999 0%, white 90%);
       background: -moz-linear-gradient(left, #999 0%, white 90%); }
     .ul-drop > ul > li.selected {
-      /*background-color: #C9DAEA;*/
       background-color: #DEF6CA; }
     .ul-drop > ul > li.selected:hover {
       /*background-color: #DEF6CA;*/ }
