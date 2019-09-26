@@ -1,6 +1,7 @@
 .ul-drop {
     position: relative;
     cursor: pointer;
+    font-size: smaller;
 
     >.head {
         padding: 10px;
@@ -16,6 +17,7 @@
 
     &.active>.head:after {
         border-color: transparent transparent #000 transparent;
+        font-size: smaller;
     }
 
     >ul {
@@ -33,16 +35,22 @@
             padding: 10px;
         }
 
-        >li:hover {
-            background-color: #ebe;
+        >li:hover:after {
+            content: "";
+            display: block;
+            height: 1px;
+            bottom: 0;
+            background: linear-gradient(left, #999 0%, white 90%);
+            background: -webkit-linear-gradient(left, #999 0%, white 90%);
+            background: -moz-linear-gradient(left, #999 0%, white 90%);
         }
 
         >li.selected {
-            background-color: #cf9;
+            background-color: #C9DAEA;
         }
 
         >li.selected:hover {
-            background-color: #f90;
+            background-color: #DEF6CA;
         }
 
     }
