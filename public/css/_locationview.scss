@@ -4,7 +4,7 @@
     font-size: 12px;
     table-layout: fixed;
     .changed {
-        color: #090;
+        color: $glxgreen;
     }
     .label {
         padding-top: 5px;
@@ -82,7 +82,7 @@
         }
         .addImage {
             i {
-                color: #090;
+                color: $glxgreen;
                 font-size: 70px;
                 text-shadow: 2px 2px 2px #999;
             }
@@ -106,7 +106,7 @@
             text-align: right;
             top: 0;
             right: 0;
-            color: #090;
+            color: $glxgreen;
         }
     }
     .sample-circle {
