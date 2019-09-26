@@ -2,7 +2,7 @@ import { wire } from 'hyperhtml/esm';
 
 export function dropdownCustom(param) {
 
-  const node = wire()`<div class="ul-drop">`;
+  const node = wire()`<div class="ul-drop pretty">`;
 
   node.appendChild(wire()`
   <div
