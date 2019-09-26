@@ -100,7 +100,7 @@ export default (_xyz, location) => () => {
       <tr>
       <td class="${'label lv-0 ' + (entry.class || '')}" colspan=2 style="padding: 10px 0;">
       <span title="Source layer"
-      style="${'float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
+      style="${'float: right; padding: 3px; font-size: 12px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.Chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
       >${location.layer.name}`);
 
     }

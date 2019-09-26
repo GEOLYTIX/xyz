@@ -1,7 +1,5 @@
 export {default as svg_symbols} from './svg_symbols.mjs';
 
-export {indexInParent} from './indexInParent.mjs';
-
 export {debounce} from './debounce.mjs';
 
 export {paramString} from './paramString.mjs';
@@ -22,26 +20,26 @@ export {dataURLtoBlob} from './dataURLtoBlob.mjs';
 
 export {getCircularReplacer} from './getCircularReplacer.mjs';
 
-export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
-
 export {deepMerge} from './deepMerge.mjs';
 
+export {setStrokeWeight} from './setStrokeWeight.mjs';
+
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
+
+export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
 export {wire, bind} from 'hyperhtml/esm';
 
 export {default as Tabulator} from 'tabulator-tables';
 
-import pointOnFeature from '@turf/point-on-feature';
-
-export {default as chroma} from 'chroma-js';
-
-export {setStrokeWeight} from './setStrokeWeight.mjs';
+export {default as Chroma} from 'chroma-js';
 
 export {default as Chart} from 'chart.js';
 
 import 'chartjs-plugin-datalabels';
 
-export const turf = {
-  pointOnFeature: pointOnFeature,
-};
+// import pointOnFeature from '@turf/point-on-feature';
+
+// export const turf = {
+//   pointOnFeature: pointOnFeature,
+// };

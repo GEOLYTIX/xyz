@@ -86,7 +86,7 @@ export default _xyz => params => {
       }),
       style: new _xyz.mapview.lib.style.Style({
         fill: new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.chroma('#000').alpha(0.2).rgba()
+          color: _xyz.utils.Chroma('#000').alpha(0.2).rgba()
         })
       }),
       zIndex: 999

@@ -35,11 +35,11 @@ export default _xyz => entry => {
     dataProjection: '4326',
     style: new _xyz.mapview.lib.style.Style({
       stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-        color: _xyz.utils.chroma(entry.style.color || entry.style.strokeColor).alpha(1),
+        color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
         width: entry.style.strokeWidth || 1
       }),
       fill: new _xyz.mapview.lib.style.Fill({
-        color: _xyz.utils.chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0).rgba()
+        color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0).rgba()
       })
     })
   });
@@ -91,8 +91,8 @@ export default _xyz => entry => {
       classList: 'sample-circle'
     },
     style: {
-      backgroundColor: _xyz.utils.chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0),
-      borderColor: _xyz.utils.chroma(entry.style.color || entry.style.strokeColor).alpha(1),
+      backgroundColor: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0),
+      borderColor: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
       borderStyle: 'solid',
       borderWidth: _xyz.utils.setStrokeWeight(entry),
       position: 'absolute',

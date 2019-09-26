@@ -32,7 +32,7 @@ export default _xyz => location => {
           width: location.style.strokeWidth || 1
         }),
         fill: location.style.fillColor && new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.chroma(location.style.fillColor).alpha(location.style.fillOpacity === 0 ? 0 : parseFloat(location.style.fillOpacity) || 1).rgba()
+          color: _xyz.utils.Chroma(location.style.fillColor).alpha(location.style.fillOpacity === 0 ? 0 : parseFloat(location.style.fillOpacity) || 1).rgba()
         }),
         // The default callback does not assign an image style for selected point locations.
       })

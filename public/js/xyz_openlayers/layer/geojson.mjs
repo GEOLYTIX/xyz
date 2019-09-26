@@ -148,7 +148,7 @@ export default _xyz => layer => {
           width: parseInt(style.strokeWidth) || 1
         }),
         fill: style.fillColor && new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba()
+          color: _xyz.utils.Chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba()
         }),
         image: style.marker && _xyz.mapview.icon(style.marker)
       });

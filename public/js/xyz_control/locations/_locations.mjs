@@ -25,7 +25,7 @@ export default _xyz => ({
   list: [
     {
       style: {
-        color: _xyz.utils.chroma('hotpink')
+        color: _xyz.utils.Chroma('hotpink')
       },
     }
   ],

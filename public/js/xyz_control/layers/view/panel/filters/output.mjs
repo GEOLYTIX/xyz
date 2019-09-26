@@ -60,24 +60,24 @@ export default (_xyz, panel, layer) => _xyz.utils.createElement({
           return;
         }
     
-        location.Marker = _xyz.mapview.geoJSON({
-          geometry: {
-            type: 'Point',
-            coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates
-          },
-          pane: 'select_marker',
-          style: {
-            icon: {
-              url: _xyz.utils.svg_symbols({
-                type: 'markerLetter',
-                letter: record.letter,
-                color: record.color,
-              }),
-              size: 40,
-              anchor: [20, 40]
-            }
-          }
-        });
+        // location.Marker = _xyz.mapview.geoJSON({
+        //   geometry: {
+        //     type: 'Point',
+        //     coordinates: _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates
+        //   },
+        //   pane: 'select_marker',
+        //   style: {
+        //     icon: {
+        //       url: _xyz.utils.svg_symbols({
+        //         type: 'markerLetter',
+        //         letter: record.letter,
+        //         color: record.color,
+        //       }),
+        //       size: 40,
+        //       anchor: [20, 40]
+        //     }
+        //   }
+        // });
     
         location.flyTo();
     

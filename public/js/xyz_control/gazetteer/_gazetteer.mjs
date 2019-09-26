@@ -86,14 +86,14 @@ export default _xyz => {
     
       // Move up through results with up key
       if (key === 38) {
-        let i = _xyz.utils.indexInParent(gazetteer.result.querySelector('.active'));
+        let i = indexInParent(gazetteer.result.querySelector('.active'));
         if (i > 0) [results[i], results[i - 1]].forEach(el => el.classList.toggle('active'));
         return;
       }
     
       // Move down through results with down key
       if (key === 40) {
-        let i = _xyz.utils.indexInParent(gazetteer.result.querySelector('.active'));
+        let i = indexInParent(gazetteer.result.querySelector('.active'));
         if (i < results.length - 1) [results[i], results[i + 1]].forEach(el => { if(el) el.classList.toggle('active') });
         return;
       }
@@ -122,7 +122,7 @@ export default _xyz => {
         }
     
         // Select active results record
-        let activeRecord = results[_xyz.utils.indexInParent(gazetteer.result.querySelector('.active'))];
+        let activeRecord = results[indexInParent(gazetteer.result.querySelector('.active'))];
     
         if (!activeRecord && results.length > 0) activeRecord = results[0];
     
@@ -205,3 +205,17 @@ export default _xyz => {
   };
 
 };
+
+function indexInParent(node) {
+
+  if (!node) return -1;
+
+  let children = node.parentNode.childNodes,
+    num = 0;
+
+  for (let i = 0; i < children.length; i++) {
+    if (children[i] === node) return num;
+    if (children[i].nodeType === 1) num++;
+  }
+
+}
