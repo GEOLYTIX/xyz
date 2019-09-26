@@ -23,6 +23,7 @@ import lib from './lib.mjs';
 import _mapview from './mapview/_mapview.mjs';
 
 
+
 async function _xyz(params) {
 
   const _xyz = Object.assign({
@@ -56,6 +57,7 @@ async function _xyz(params) {
 
   _xyz.utils = utils;
 
+  
   _xyz.charts = _charts(_xyz);
 
   _xyz.mapview = { lib: lib() };
@@ -75,6 +77,8 @@ async function _xyz(params) {
   _xyz.hooks = hooks(_xyz);
 
   _xyz.gazetteer = _gazetteer(_xyz);
+
+
 
   if (!_xyz.host) return console.error('XYZ host not defined!');
 

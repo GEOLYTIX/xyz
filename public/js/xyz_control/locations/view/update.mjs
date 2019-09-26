@@ -171,8 +171,6 @@ export default (_xyz, location) => () => {
       entry.row.appendChild(entry.val);
     }
 
-    // Create controls for editable fields.
-    if (entry.edit && !entry.fieldfx) return location.view.edit(entry);
 
     if (entry.type === 'html') {
 
