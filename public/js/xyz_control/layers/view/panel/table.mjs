@@ -2,12 +2,10 @@ export default (_xyz, layer) => {
 
   if (!layer.tableview || !_xyz.tableview.node) return;
 
-
   // Create table panel and add to layer dashboard.
   layer.tableview.panel = _xyz.utils.wire()`<div class="panel expandable">`;
 
   layer.view.dashboard.appendChild(layer.tableview.panel);
-
 
   // Table panel header.
   const header = _xyz.utils.wire()`
@@ -22,12 +20,9 @@ export default (_xyz, layer) => {
   class="btn_text cursor noselect">Data View`;
   
   layer.tableview.panel.appendChild(header);
-
   
   // Return if tableview has no table definition.
   if (!layer.tableview.tables) return;
-
-  //if (!_xyz.tableview.node) return;
 
   // Iterate through tables entries.
   if (layer.tableview.tables) {
@@ -54,22 +49,29 @@ export default (_xyz, layer) => {
 
       // Create checkbox to toggle whether table is in tabs list.
       layer.tableview.panel.appendChild(_xyz.utils.wire()`
-    <label class="checkbox">${table.title}
-    <input type="checkbox"
-    checked=${table.display}
-    onchange=${e => {
+      <label class="checkbox">${table.title}
+      <input type="checkbox"
+      checked=${table.display}
+      onchange=${e => {
     table.display = e.target.checked;
 
     table.display ?
       layer.show() :
       table.remove();}}>
-    <div class="checkbox_i">`);
+      <div class="checkbox_i">`);
 
       if (table.display && layer.display) table.show();
 
-      return;
+
+      if (!layer.tableview.charts) return;
+
+
       const chart = layer.tableview.charts[key];
 
+
+      if (!chart) return;
+
+      
       chart.key = key;
       chart.layer = layer;
       chart.title = chart.title || key;
@@ -130,9 +132,9 @@ export default (_xyz, layer) => {
         checked=${chart.display}
         onchange=${e => {
 
-          chart.display = e.target.checked;
-          chart.display ? layer.show() : chart.remove();}
-        }>
+    chart.display = e.target.checked;
+    chart.display ? layer.show() : chart.remove();}
+}>
         <div class="checkbox_i">`);
 
       if (chart.display && layer.display) chart.show();

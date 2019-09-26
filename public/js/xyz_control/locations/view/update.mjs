@@ -133,10 +133,7 @@ export default (_xyz, location) => () => {
 
     if (entry.type === 'orderedList') return location.view.orderedList(entry);  
 
-    if (entry.type === 'dashboard') {
-      //console.log(entry);
-      return location.view.dashboard(entry);   
-    } 
+    if (entry.type === 'dashboard') return location.view.dashboard(entry);
 
     // prevent clusterArea from firing if layer is not cluster
     if(entry.clusterArea && location.layer.format !== 'cluster') return;
