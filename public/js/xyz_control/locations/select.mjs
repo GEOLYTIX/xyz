@@ -26,10 +26,7 @@ export default _xyz => location => {
   })) return;
 
   // Remove an existing location from record.
-  if (record.location) {
-
-    record.location.remove();
-  }
+  record.location && record.location.remove();
 
   // Set record style to location.
   location.style = record.style;

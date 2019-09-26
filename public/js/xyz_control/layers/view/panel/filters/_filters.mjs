@@ -27,35 +27,29 @@ export default (_xyz, layer) => {
   infoj.unshift('Select filter from list.');
 
   // Add filter panel to layer dashboard.
-  const panel = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'panel expandable'
-    },
-    appendTo: layer.view.dashboard
-  });
+  const panel = _xyz.utils.wire()`<div class="${'panel expandable ' + (layer.style.theme ? 'expanded': '')}">`;
 
-  // Filter panel title / expander.
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'btn_text cursor noselect',
-      textContent: 'Filter'
-    },
-    appendTo: panel,
-    eventListener: {
-      event: 'click',
-      funct: e => {
-        e.stopPropagation();
+  layer.view.dashboard.appendChild(panel);
 
-        _xyz.utils.toggleExpanderParent({
-          expandable: panel,
-          accordeon: true,
-          scrolly: _xyz.desktop && _xyz.desktop.listviews,
-        });
-      }
-    }
-  });
+
+  // Style panel header.
+  const header = _xyz.utils.wire()`
+    <div
+    class="btn_text cursor noselect"
+    onclick=${e => {
+    e.stopPropagation();
+  
+    _xyz.utils.toggleExpanderParent({
+      expandable: panel,
+      accordeon: true,
+      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+    });
+
+  }}>Filter`;
+  
+  panel.appendChild(header);
+
+
 
   // Create locales _xyz.utils.dropdown.
   layer.filter.select = _xyz.utils.dropdown({
@@ -89,41 +83,30 @@ export default (_xyz, layer) => {
     }
   });
 
-  layer.filter.clear_all = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'btn_small cursor noselect',
-      textContent: 'Clear all filters'
-    },
-    appendTo: panel,
-    eventListener: {
-      event: 'click',
-      funct: e => {
+  layer.filter.clear_all = _xyz.utils.wire()`
+  <div class="btn_small cursor noselect" onclick=${e=>clearall(e)}>Clear all filters`;
+  panel.appendChild(layer.filter.clear_all);
 
-        e.target.style.display = 'none';
+  function clearall(e) {
 
-        // Hide output button.
-        layer.filter.run_output.style.display = 'none';
+    e.target.style.display = 'none';
 
-        // Remove all filter blocks.
-        layer.filter.list.innerHTML = null;
+    // Remove all filter blocks.
+    layer.filter.list.innerHTML = null;
 
-        // Enable all options in _xyz.utils.dropdown.
-        Object.values(layer.filter.select.options).forEach(opt => opt.disabled = false);
+    // Enable all options in _xyz.utils.dropdown.
+    Object.values(layer.filter.select.options).forEach(opt => opt.disabled = false);
 
-        // Reset layer filter object.
-        layer.filter.current = {};
+    // Reset layer filter object.
+    layer.filter.current = {};
 
-        layer.show();
+    layer.show();
+  };
 
-      }
-    }
-  });
 
-  layer.filter.list = _xyz.utils.createElement({
-    tag: 'div',
-    appendTo: panel,
-  });
+  layer.filter.list = _xyz.utils.wire()`<div>`;
+  panel.appendChild(layer.filter.list);
+  
 
   layer.filter.run_output = output(_xyz, panel, layer);
 
@@ -131,6 +114,6 @@ export default (_xyz, layer) => {
 
   layer.filter.check_count = chkCount(_xyz, layer);
 
-  //layer.filter.check_count();
+  layer.filter.check_count();
 
 };

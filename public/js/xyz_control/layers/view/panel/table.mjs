@@ -21,9 +21,6 @@ export default (_xyz, layer) => {
   
   layer.tableview.panel.appendChild(header);
   
-  // Return if tableview has no table definition.
-  if (!layer.tableview.tables) return;
-
   // Iterate through tables entries.
   if (layer.tableview.tables) {
 
@@ -97,7 +94,7 @@ export default (_xyz, layer) => {
     });
   }
 
-  if(layer.tableview.charts){
+  if (layer.tableview.charts){
 
     Object.keys(layer.tableview.charts).forEach(key => {
 

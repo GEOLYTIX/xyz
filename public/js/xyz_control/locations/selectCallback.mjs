@@ -6,7 +6,6 @@ export default _xyz => location => {
   // Draw location to map. Point locations have no style and are invisible.
   location.Layer = _xyz.mapview.geoJSON({
     geometry: location.geometry,
-    pane: location.style.pane || 'select',
     style: [
       new _xyz.mapview.lib.style.Style({
         stroke: new _xyz.mapview.lib.style.Stroke({

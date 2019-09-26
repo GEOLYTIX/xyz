@@ -4,26 +4,16 @@ export default (_xyz, layer, filter_entry) => {
 
   const block = create_block(_xyz, layer, filter_entry);
 
-  _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      placeholder: 'Search.',
-    },
-    appendTo: block,
-    eventListener: {
-      event: 'keyup',
-      funct: e => {
+  block.appendChild(_xyz.utils.wire()`
+  <input placeholder="Search" onkeyup=${e=>{
 
-        // Create filter.
-        layer.filter.current[filter_entry.field] = {};
-        layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
+    layer.filter.current[filter_entry.field] = {};
+    layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
 
-        layer.filter.check_count(filter_entry.filterZoom);
+    layer.filter.check_count(filter_entry.filterZoom);
 
-        layer.show();
+    layer.show();
 
-      }
-    }
-  });
+  }}>`);
   
 };
