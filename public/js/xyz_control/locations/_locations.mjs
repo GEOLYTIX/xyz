@@ -54,7 +54,7 @@ export default _xyz => ({
         tables: [],
         
         style: Object.assign({
-          strokeColor: '#090',
+          strokeColor: '#1F964D',
           // icon: {
           //   url: _xyz.utils.svg_symbols({
           //     type: 'circle',

@@ -26,7 +26,7 @@ export default _xyz => {
 
     style: {
       stroke: true,
-      color: '#090',
+      color: '#1F964D',
       weight: 2,
       fillColor: '#DEF6CA',
       fillOpacity: 0.2,

@@ -1,4 +1,3 @@
-/*#090;*/
 @font-face {
   font-family: ffmark_black;
   src: url(../fonts/MarkWeb-Black.woff) format("woff"); }
@@ -891,7 +890,7 @@ button {
   margin: 6px 3px 12px 3px;
   cursor: pointer; }
   .btn_inline:active {
-    box-shadow: 2px 2px 3px #090; }
+    box-shadow: 2px 2px 3px #1F964D; }
   .btn_inline span {
     position: absolute;
     top: 0;
@@ -1801,7 +1800,7 @@ button {
         right: 2px;
         top: 0; }
       .listview .drawer .dashboard .block .colour-label {
-        color: #090; }
+        color: #1F964D; }
       .listview .drawer .dashboard .block .colour-swatch {
         width: 100%;
         margin-bottom: 10px; }

@@ -398,7 +398,7 @@ function geolocation() {
     cx=500
     cy=500
     r=350
-    stroke='#090'
+    stroke='#1F964D'
     opacity=0.8
     stroke-width=75
     fill=none
@@ -409,13 +409,13 @@ function geolocation() {
       cx=500
       cy=500
       r=200
-      fill='#090'
+      fill='#1F964D'
       opacity=0.8
       >`);
 
   let p = wire(null, 'svg')
   `<path
-    stroke='#090'
+    stroke='#1F964D'
     opacity=0.8
     stroke-width=75
     >`;

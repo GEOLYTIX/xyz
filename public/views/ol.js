@@ -21,7 +21,7 @@ const layerMVT = new ol.layer.VectorTile({
 
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
-        color: selected ? '#DEF6CA' : '#090',
+        color: selected ? '#DEF6CA' : '#1F964D',
         width: 2
       }),
       fill: new ol.style.Fill({
@@ -33,7 +33,7 @@ const layerMVT = new ol.layer.VectorTile({
           color: 'rgba(0, 0, 0, 0.01)'
         }),
         stroke: new ol.style.Stroke({
-          color: selected ? '#DEF6CA' : '#090',
+          color: selected ? '#DEF6CA' : '#1F964D',
           width: 2
         })
       })

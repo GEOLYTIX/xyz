@@ -147,7 +147,7 @@ button {
     margin: 6px 3px 12px 3px;
     cursor: pointer;
     &:active {
-        box-shadow: 2px 2px 3px #090;
+        box-shadow: 2px 2px 3px $glxgreen;
     }
     span {
         position: absolute;
