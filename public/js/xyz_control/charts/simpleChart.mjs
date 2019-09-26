@@ -152,7 +152,7 @@ export default _xyz => entry => {
     			}],
                 xAxes: [{
                     ticks: {
-                        min: typeof(entry.chart.min) !== undefined ?  entry.chart.min : null,
+                        min: typeof(entry.chart.minX) !== undefined ?  entry.chart.min : null,
                         display: entry.chart.hideTicksX ? false : null
                     }
                 }]
