@@ -1,5 +1,3 @@
-import _xyz_instance from '../xyz_control/_xyz.mjs';
-
 import * as _utils from '../utils/_utils.mjs';
 
 import Chart from 'chart.js';
@@ -29,10 +27,9 @@ import lib from './lib.mjs';
 import _mapview from './mapview/_mapview.mjs';
 
 
-
 async function _xyz(params) {
 
-  const _xyz = {
+  const _xyz = Object.assign({
     version: 'XYZ v2.0.x',
     defaults: {
       colours: [
@@ -59,7 +56,7 @@ async function _xyz(params) {
         { hex: '#78909c', name: 'Light Slate Gray' }
       ]
     }
-  };//_xyz_instance();
+  }, params);
 
   _xyz.utils = _utils;
 
@@ -81,28 +78,20 @@ async function _xyz(params) {
 
   _xyz.workspace = workspace(_xyz);
 
-  if (params.hooks) hooks(_xyz);
+  if (_xyz.hooks) hooks(_xyz);
 
   _xyz.gazetteer = _gazetteer(_xyz);
 
-  _xyz.host = params.host;
-
   if (!_xyz.host) return console.error('XYZ host not defined!');
-
-  _xyz.nanoid = params.nanoid;
-
-  _xyz.log = (params.log && params.log === 'true');
-  
-  if (params.token) _xyz.token = params.token;
 
   // Get workspace from XYZ host.
   // Proceed with init from callback.
-  if (params.callback) return _xyz.workspace.setWS(params);
+  if (_xyz.callback) return _xyz.workspace.setWS();
 
   // Fetch workspace if no callback is provided.
   await _xyz.workspace.fetchWS();
 
-  if (params.locale) _xyz.workspace.loadLocale(params);
+  if (_xyz.locale) _xyz.workspace.loadLocale();
 
   return _xyz;
 

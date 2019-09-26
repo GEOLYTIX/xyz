@@ -22,7 +22,7 @@ export default _xyz => {
     _xyz.workspace.locales = workspace.locales;
   };
 
-  function setWS(params) {
+  function setWS() {
 
     // XHR to retrieve workspace from host backend.
     const xhr = new XMLHttpRequest();
@@ -38,18 +38,18 @@ export default _xyz => {
 
       _xyz.workspace.locales = e.target.response.locales;
 
-      if (params.locale) loadLocale(params);
+      if (_xyz.locale) loadLocale();
 
-      if (params.callback) params.callback(_xyz);
+      if (_xyz.callback) _xyz.callback(_xyz);
     };
 
     xhr.send();
   };
 
-  function loadLocale(params = {}) {
+  function loadLocale() {
 
     // Assign key from params of first in locales list.
-    const locale = (_xyz.workspace.locales[params.locale] && params.locale)
+    const locale = (_xyz.workspace.locales[_xyz.locale] && _xyz.locale)
     || (_xyz.hooks && _xyz.hooks.current.locale)
     || Object.keys(_xyz.workspace.locales)[0];
 
