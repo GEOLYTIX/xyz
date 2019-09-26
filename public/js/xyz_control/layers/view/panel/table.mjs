@@ -1,6 +1,6 @@
 export default (_xyz, layer) => {
 
-  if (_xyz.mobile || !layer.tableview || !layer.tableview.tables) return;
+  if (!layer.tableview || !_xyz.tableview.node) return;
 
 
   // Create table panel and add to layer dashboard.

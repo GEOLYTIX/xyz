@@ -120,7 +120,7 @@ function createMap (_xyz) {
   const attribution = {};
   attribution[_xyz.version] = _xyz.release;
   attribution['Openlayers'] = 'https://openlayers.org';
-  ///attribution['Leaflet'] = 'https://leafletjs.com';
+
 
   // Create mapview control.
   _xyz.mapview.create({
@@ -139,13 +139,6 @@ function createMap (_xyz) {
     }
   });
 
-  _xyz.tableview.create({
-    target: document.getElementById('tableview'),
-    btn: {
-      toggleTableview: document.getElementById('toggleTableview'),
-      tableViewport: document.getElementById('btnTableViewport')
-    }
-  });
 
   _xyz.layers.listview.init({
     target: document.getElementById('layers')
