@@ -1,3 +1,4 @@
+/*#cf9;*/
 @font-face {
   font-family: ffmark_black;
   src: url(../fonts/MarkWeb-Black.woff) format("woff"); }
@@ -299,7 +300,7 @@ input[type=range] {
   appearance: none;
   height: 5px;
   border-radius: 5px;
-  background: #cf9;
+  background: #DEF6CA;
   outline: none; }
 
 input[type=range]::-webkit-slider-thumb {
@@ -354,7 +355,7 @@ input[type=range]::-moz-range-thumb {
       width: 100%;
       padding: 5px 0; }
       .md_drop ul li:hover {
-        background: #cf9;
+        background: #DEF6CA;
         cursor: pointer; }
   .md_drop .ul--show {
     display: block; }
@@ -395,9 +396,10 @@ input[type=range]::-moz-range-thumb {
       background: -webkit-linear-gradient(left, #999 0%, white 90%);
       background: -moz-linear-gradient(left, #999 0%, white 90%); }
     .ul-drop > ul > li.selected {
-      background-color: #C9DAEA; }
-    .ul-drop > ul > li.selected:hover {
+      /*background-color: #C9DAEA;*/
       background-color: #DEF6CA; }
+    .ul-drop > ul > li.selected:hover {
+      /*background-color: #DEF6CA;*/ }
   .ul-drop.active > ul {
     display: block; }
 
@@ -840,7 +842,7 @@ button {
   margin-left: 5px;
   color: #090; }
   .btn_header.active {
-    text-shadow: 2px 2px 2px #cf9; }
+    text-shadow: 2px 2px 2px #DEF6CA; }
 
 .btn_small {
   font-family: sans-serif;
@@ -939,7 +941,7 @@ button {
   text-align: right;
   font-family: ffmark_bold, sans-serif;
   font-size: 18px;
-  text-shadow: 1px 1px 1px #cf9;
+  text-shadow: 1px 1px 1px #DEF6CA;
   pointer-events: none; }
   .attribution * {
     pointer-events: auto; }
@@ -1664,7 +1666,7 @@ button {
     white-space: nowrap;
     line-height: 1.5; }
   .scroll-list > li:hover {
-    background-color: #cf9;
+    background-color: #DEF6CA;
     cursor: pointer; }
 
 .listview .title {
@@ -1731,7 +1733,7 @@ button {
     .listview .drawer .header:hover {
       cursor: pointer; }
     .listview .drawer .header.edited {
-      background-color: #cf9;
+      background-color: #DEF6CA;
       font-weight: bold; }
   .listview .drawer .meta {
     margin-top: 5px; }
