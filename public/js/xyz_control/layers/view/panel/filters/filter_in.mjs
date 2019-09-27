@@ -32,9 +32,15 @@ export default (_xyz, layer, filter_entry) => {
 
       }
 
-      layer.filter.check_count(filter_entry.filterZoom);
-
       layer.show();
+
+      layer.count(n => {
+
+        layer.filter.run_output.disabled = !(n > 1);
+    
+        if (filter_entry.filterZoom && n > 1) layer.zoomToExtent();
+    
+      })
     }
 
   });

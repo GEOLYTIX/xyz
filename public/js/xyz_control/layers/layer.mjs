@@ -10,6 +10,8 @@ import show from './show.mjs';
 
 import remove from './remove.mjs';
 
+import count from './count.mjs';
+
 
 export default _xyz => layer => {
 
@@ -24,6 +26,8 @@ export default _xyz => layer => {
   layer.show = show(_xyz);
   
   layer.remove = remove(_xyz);
+
+  layer.count = count(_xyz);
 
   layer.view = {
 

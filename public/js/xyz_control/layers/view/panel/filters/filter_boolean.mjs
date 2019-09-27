@@ -26,13 +26,25 @@ export default (_xyz, layer, filter_entry) => {
       layer.filter.current[filter_entry.field]['boolean'] = false;
     }
 
-    layer.filter.check_count();
     layer.show();
+
+    layer.count(n => {
+
+      layer.filter.run_output.disabled = !(n > 1);
+  
+      if (filter_entry.filterZoom && n > 1) layer.zoomToExtent();
+  
+    })
   }
 
-
-  // apply immediately
-  layer.filter.check_count();
   layer.show();
+
+  layer.count(n => {
+
+    layer.filter.run_output.disabled = !(n > 1);
+
+    if (filter_entry.filterZoom && n > 1) layer.zoomToExtent();
+
+  })
 
 };

@@ -111,9 +111,15 @@ export default (_xyz, layer, filter_entry) => {
         layer.filter.current[filter_entry.field].gte = parseFloat(input_min.value);
         layer.filter.current[filter_entry.field].lte = parseFloat(input_max.value);
 
-        layer.filter.check_count(filter_entry.filterZoom);
+        layer.show();
 
-        layer.reload();
+        layer.count(n => {
+
+          layer.filter.run_output.disabled = !(n > 1);
+      
+          if (filter_entry.filterZoom && n > 1) layer.zoomToExtent();
+      
+        })
 
       }, 500);
     }

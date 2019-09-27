@@ -1,4 +1,6 @@
-export default (_xyz, layer) => filterZoom => {
+export default _xyz => function (callback) {
+
+  const layer = this;
 
   const xhr = new XMLHttpRequest();
 
@@ -16,12 +18,10 @@ export default (_xyz, layer) => filterZoom => {
 
     if (e.target.status !== 200) return;
 
-    layer.filter.run_output.disabled = !(parseInt(e.target.response) > 1);
-
-    if (filterZoom && parseInt(e.target.response) > 1) layer.zoomToExtent();
+    callback && callback(parseInt(e.target.response));
 
   };
 
   xhr.send();
-    
+
 };

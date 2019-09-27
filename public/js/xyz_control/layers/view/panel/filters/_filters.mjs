@@ -6,8 +6,6 @@ import filter_in from './filter_in.mjs';
 
 import filter_date from './filter_date.mjs';
 
-import chkCount from './chkCount.mjs';
-
 import filter_boolean from './filter_boolean.mjs';
 
 export default (_xyz, layer) => {
@@ -29,27 +27,22 @@ export default (_xyz, layer) => {
 
   layer.view.dashboard.appendChild(panel);
 
-
   // Style panel header.
   const header = _xyz.utils.wire()`
     <div
     class="btn_text cursor noselect"
     onclick=${e => {
-    e.stopPropagation();
-  
-    _xyz.utils.toggleExpanderParent({
-      expandable: panel,
-      accordeon: true,
-      scrolly: _xyz.desktop && _xyz.desktop.listviews,
-    });
-
-  }}>Filter`;
+      e.stopPropagation();
+        _xyz.utils.toggleExpanderParent({
+        expandable: panel,
+        accordeon: true,
+        scrolly: _xyz.desktop && _xyz.desktop.listviews,
+      });
+    }}>Filter`;
   
   panel.appendChild(header);
 
 
-
-  // Create locales _xyz.utils.dropdown.
   layer.filter.select = _xyz.utils.dropdown({
     appendTo: panel,
     entries: infoj,
@@ -82,75 +75,80 @@ export default (_xyz, layer) => {
   });
 
   layer.filter.clear_all = _xyz.utils.wire()`
-  <div class="btn_small cursor noselect" onclick=${e=>clearall(e)}>Clear all filters`;
+  <div
+    class="btn_small cursor noselect"
+    onclick=${e=>{
+
+      e.target.style.display = 'none';
+
+      // Remove all filter blocks.
+      layer.filter.list.innerHTML = null;
+  
+      // Enable all options in _xyz.utils.dropdown.
+      Object.values(layer.filter.select.options).forEach(opt => opt.disabled = false);
+  
+      // Reset layer filter object.
+      layer.filter.current = {};
+  
+      layer.show();
+
+    }}>Clear all filters`;
+
   panel.appendChild(layer.filter.clear_all);
 
-  function clearall(e) {
 
-    e.target.style.display = 'none';
-
-    // Remove all filter blocks.
-    layer.filter.list.innerHTML = null;
-
-    // Enable all options in _xyz.utils.dropdown.
-    Object.values(layer.filter.select.options).forEach(opt => opt.disabled = false);
-
-    // Reset layer filter object.
-    layer.filter.current = {};
-
-    layer.show();
-  };
-
-
+  // Create filter list container to store individual filter blocks.
   layer.filter.list = _xyz.utils.wire()`<div>`;
   panel.appendChild(layer.filter.list);
-  
 
 
   layer.filter.run_output = _xyz.utils.wire()`
-  <button disabled class="btn_wide noselect" onclick=${e=>output(e)}>Run Output`;
+  <button disabled
+    class="btn_wide noselect"
+    onclick=${()=>{
+
+      const filter = Object.assign({}, layer.filter.legend, layer.filter.current);
+    
+      const xhr = new XMLHttpRequest();
+          
+      xhr.open(
+        'GET',
+        _xyz.host + '/api/location/select/aggregate?' +
+        _xyz.utils.paramString({
+          locale: _xyz.workspace.locale.key,
+          layer: layer.key,
+          table: layer.table,
+          filter: JSON.stringify(filter),
+          token: _xyz.token
+        }));
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
+      xhr.onload = e => {
+  
+        if (e.target.status !== 200) return;
+    
+        _xyz.locations.select({
+          _new: true,
+          geometry: JSON.parse(e.target.response.geomj),
+          infoj: e.target.response.infoj,
+          layer: layer,
+        });
+  
+      };
+      xhr.send();
+
+    }}>Run Output`;
 
   panel.appendChild(layer.filter.run_output);
 
-  function output(e){
-
-    if (e.target.disabled) return;
-
-    const filter = Object.assign({}, layer.filter.legend, layer.filter.current);
-  
-    const xhr = new XMLHttpRequest();
-        
-    xhr.open(
-      'GET',
-      _xyz.host + '/api/location/select/aggregate?' +
-      _xyz.utils.paramString({
-        locale: _xyz.workspace.locale.key,
-        layer: layer.key,
-        table: layer.table,
-        filter: JSON.stringify(filter),
-        token: _xyz.token
-      }));
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.responseType = 'json';
-    xhr.onload = e => {
-
-      if (e.target.status !== 200) return;
-  
-      _xyz.locations.select({
-        _new: true,
-        geometry: JSON.parse(e.target.response.geomj),
-        infoj: e.target.response.infoj,
-        layer: layer,
-      });
-
-    };
-    xhr.send();
-  }
-
   if (!layer.filter.infoj) layer.filter.run_output.style.display = 'none';
 
-  layer.filter.check_count = chkCount(_xyz, layer);
+  layer.count(n => {
 
-  layer.filter.check_count();
+    layer.filter.run_output.disabled = !(n > 1);
+
+    if (filterZoom && n > 1) layer.zoomToExtent();
+
+  })
 
 };

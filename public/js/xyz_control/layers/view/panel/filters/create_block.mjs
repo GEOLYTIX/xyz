@@ -16,7 +16,9 @@ export default (_xyz, layer, filter_entry) => {
     // Hide clear all filter.
     if (Object.keys(layer.filter.current).length < 1) {
       layer.filter.clear_all.style.display = 'none';
-      layer.filter.check_count();
+      layer.count(n => {
+        layer.filter.run_output.disabled = !(n > 1);     
+      })
     }
     
     // Enable filter in select dropdown.
