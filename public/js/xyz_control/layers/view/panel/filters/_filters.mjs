@@ -6,8 +6,6 @@ import filter_in from './filter_in.mjs';
 
 import filter_date from './filter_date.mjs';
 
-import output from './output.mjs';
-
 import chkCount from './chkCount.mjs';
 
 import filter_boolean from './filter_boolean.mjs';
@@ -108,7 +106,46 @@ export default (_xyz, layer) => {
   panel.appendChild(layer.filter.list);
   
 
-  layer.filter.run_output = output(_xyz, panel, layer);
+
+  layer.filter.run_output = _xyz.utils.wire()`
+  <button disabled class="btn_wide noselect" onclick=${e=>output(e)}>Run Output`;
+
+  panel.appendChild(layer.filter.run_output);
+
+  function output(e){
+
+    if (e.target.disabled) return;
+
+    const filter = Object.assign({}, layer.filter.legend, layer.filter.current);
+  
+    const xhr = new XMLHttpRequest();
+        
+    xhr.open(
+      'GET',
+      _xyz.host + '/api/location/select/aggregate?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: layer.key,
+        table: layer.table,
+        filter: JSON.stringify(filter),
+        token: _xyz.token
+      }));
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.responseType = 'json';
+    xhr.onload = e => {
+
+      if (e.target.status !== 200) return;
+  
+      _xyz.locations.select({
+        _new: true,
+        geometry: JSON.parse(e.target.response.geomj),
+        infoj: e.target.response.infoj,
+        layer: layer,
+      });
+
+    };
+    xhr.send();
+  }
 
   if (!layer.filter.infoj) layer.filter.run_output.style.display = 'none';
 
