@@ -16,8 +16,8 @@ module.exports = {
 	},
 	rules: {
 		"indent": [
-			{ "ignoredNodes": ["TemplateLiteral > *"] }
-		],
+            { "ignoredNodes": ["TemplateLiteral > *"] }
+        ],
         "linebreak-style": [
             "error",
             "unix"
