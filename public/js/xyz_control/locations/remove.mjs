@@ -10,7 +10,7 @@ export default _xyz => function() {
 
   if (_xyz.locations.listview.node
     && _xyz.locations.listview.node.childElementCount === 0) {
-    _xyz.locations.listview.node.parentElement.style.display = 'none';
+    _xyz.locations.listview.init()
   }
 
   // Clear geometries and delete location to free up record.

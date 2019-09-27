@@ -24,7 +24,7 @@ export default (_xyz, layer) => {
     _xyz.utils.toggleExpanderParent({
       expandable: panel,
       accordeon: true,
-      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+      //scrolly: _xyz.desktop && _xyz.desktop.listviews,
     });
   }}
   class="btn_text cursor noselect">Style`;

@@ -80,7 +80,7 @@ export default _xyz => {
         expandedTag: 'expanded-group',
         expandableTag: 'expandable-group',
         accordeon: true,
-        scrolly: _xyz.desktop && _xyz.desktop.listviews,
+        //scrolly: _xyz.desktop && _xyz.desktop.listviews,
       });
     };
 
@@ -129,7 +129,7 @@ export default _xyz => {
         expandable: group.container,
         expandedTag: 'expanded-group',
         expandableTag: 'expandable-group',
-        scrolly: _xyz.desktop && _xyz.desktop.listviews,
+        //scrolly: _xyz.desktop && _xyz.desktop.listviews,
       });
     };
 

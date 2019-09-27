@@ -84,7 +84,7 @@ export default _xyz => function () {
     _xyz.utils.toggleExpanderParent({
       expandable: location.view.drawer,
       accordeon: true,
-      scrolly: _xyz.desktop && _xyz.desktop.listviews,
+      //scrolly: _xyz.desktop && _xyz.desktop.listviews,
     });
   };
 
@@ -102,7 +102,7 @@ export default _xyz => function () {
     
     _xyz.utils.toggleExpanderParent({
       expandable: location.view.drawer,
-      scrolly: _xyz.desktop && _xyz.desktop.listviews
+      //scrolly: _xyz.desktop && _xyz.desktop.listviews
     });
   }}>`);
 

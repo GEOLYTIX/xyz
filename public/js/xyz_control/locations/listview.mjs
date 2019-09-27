@@ -11,23 +11,14 @@ export default _xyz => {
 
   function init(params) {
 
-    if (_xyz.mobile) {
-      _xyz.mobile.tabLocations.classList.add('displaynone');
-      _xyz.mobile.activateLayersTab();
-    }
-    
-    _xyz.locations.listview.node = params.target;
+    _xyz.locations.listview.callbackAdd = _xyz.locations.listview.callbackAdd || params.callbackAdd;
 
-    // Hide the Locations Module.
-    _xyz.locations.listview.node.parentElement.style.display = 'none';
-    
+    _xyz.locations.listview.callbackInit = _xyz.locations.listview.callbackInit || params.callbackInit;
+  
+    _xyz.locations.listview.node = _xyz.locations.listview.node || params.target;
+   
     // Empty the locations list.
     _xyz.locations.listview.node.innerHTML = '';
-
-    _xyz.locations.list
-      .filter(record => !!record.location)
-      .forEach(record => record.location.remove());
-
 
     _xyz.locations.list = [
       '#9c27b0',
@@ -50,6 +41,8 @@ export default _xyz => {
         strokeColor: color
       }
     }));
+
+    _xyz.locations.listview.callbackInit && _xyz.locations.listview.callbackInit();
          
   };
 
@@ -64,12 +57,7 @@ export default _xyz => {
      
     _xyz.locations.listview.node.insertBefore(location.view.drawer, _xyz.locations.listview.node.firstChild);
   
-    if (_xyz.desktop) setTimeout(() => {
-      _xyz.desktop.listviews.scrollTop = _xyz.desktop.listviews.clientHeight;
-    }, 500);
-  
-    // Make select tab active on mobile device.
-    if (_xyz.mobile) _xyz.mobile.activateLocationsTab();
+    _xyz.locations.listview.callbackAdd && _xyz.locations.listview.callbackAdd();
 
   }
 

@@ -28,8 +28,12 @@ export default _xyz => {
     _xyz.map.on('click', select);
 
     _xyz.mapview.node.addEventListener('mousemove', mouseMove);
+
+    _xyz.mapview.node.addEventListener('touchstart', mouseMove);
+
+    _xyz.mapview.node.addEventListener('touchmove', pointerMove);
   
-    _xyz.mapview.node.addEventListener('mousemove', _xyz.mapview.interaction.highlight.pointerMove);
+    _xyz.mapview.node.addEventListener('mousemove', pointerMove);
   
     _xyz.mapview.node.addEventListener('mouseout', mouseOut);
 
@@ -44,13 +48,11 @@ export default _xyz => {
   }
 
   function mouseMove(e) {
-
     _xyz.mapview.pointerLocation = {
       x: e.clientX,
       y: e.clientY
     };
     if (_xyz.mapview.infotip.node) _xyz.mapview.infotip.position();
-
   }
 
   function pointerMove(e) {
@@ -105,6 +107,10 @@ export default _xyz => {
   function finish() {
 
     _xyz.map.un('click', select);
+
+    _xyz.mapview.node.removeEventListener('touchmove', pointerMove);
+
+    _xyz.mapview.node.removeEventListener('touchstart', mouseMove);
 
     _xyz.mapview.node.removeEventListener('mousemove', pointerMove);
 

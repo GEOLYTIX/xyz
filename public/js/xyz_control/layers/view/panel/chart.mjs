@@ -1,6 +1,6 @@
 export default (_xyz, layer) => {
   
-  if(_xyz.mobile || !layer.dataview || !layer.dataview.tables || !layer.dataview.charts) return;
+  if(!layer.dataview || !layer.dataview.tables || !layer.dataview.charts) return;
 
   // Create cluster panel and add to layer dashboard.
   layer.dataview.panel = _xyz.utils.wire()`<div class="panel expandable">`;
@@ -15,7 +15,7 @@ export default (_xyz, layer) => {
       _xyz.utils.toggleExpanderParent({
         expandable: layer.dataview.panel,
         accordeon: true,
-        scrolly: _xyz.desktop && _xyz.desktop.listviews
+        //scrolly: _xyz.desktop && _xyz.desktop.listviews
       });
     }}
     >Table

@@ -116,7 +116,7 @@ export default _xyz => entry => {
           _xyz.utils.toggleExpanderParent({
             expandable: entry.edit.container,
             accordeon: true,
-            scrolly: _xyz.desktop && _xyz.desktop.listviews
+            //scrolly: _xyz.desktop && _xyz.desktop.listviews
           });
         }
       }
