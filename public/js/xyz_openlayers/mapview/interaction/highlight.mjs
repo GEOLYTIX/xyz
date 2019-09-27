@@ -26,12 +26,12 @@ export default _xyz => {
     _xyz.mapview.interaction.highlight.featureSet = new Set();
 
     _xyz.map.on('click', select);
-
-    _xyz.mapview.node.addEventListener('mousemove', mouseMove);
+  
+    _xyz.mapview.node.addEventListener('touchstart', pointerMove);
 
     _xyz.mapview.node.addEventListener('touchstart', mouseMove);
 
-    _xyz.mapview.node.addEventListener('touchmove', pointerMove);
+    _xyz.mapview.node.addEventListener('mousemove', mouseMove);
   
     _xyz.mapview.node.addEventListener('mousemove', pointerMove);
   
@@ -57,6 +57,8 @@ export default _xyz => {
 
   function pointerMove(e) {
 
+    console.log(e);
+
     const featureSet = new Set();
 
     // Iterate through all features (with layer) at pixel
@@ -75,12 +77,12 @@ export default _xyz => {
       _xyz.mapview.node.style.cursor = 'pointer';
 
       // Check for hover.
-      if (_xyz.mapview.interaction.highlight.layer.hover && _xyz.mapview.interaction.highlight.layer.hover.field) {
+      if (e.type !== 'touchstart' && _xyz.mapview.interaction.highlight.layer.hover && _xyz.mapview.interaction.highlight.layer.hover.field) {
         _xyz.mapview.interaction.highlight.layer.infotip();
       }
 
       // Redraw layer to style highlight.
-      _xyz.mapview.interaction.highlight.layer.L.setStyle(
+      if (e.type !== 'touchstart') _xyz.mapview.interaction.highlight.layer.L.setStyle(
         _xyz.mapview.interaction.highlight.layer.L.getStyle()
       );
 
@@ -108,7 +110,7 @@ export default _xyz => {
 
     _xyz.map.un('click', select);
 
-    _xyz.mapview.node.removeEventListener('touchmove', pointerMove);
+    _xyz.mapview.node.removeEventListener('touchstart', pointerMove);
 
     _xyz.mapview.node.removeEventListener('touchstart', mouseMove);
 
