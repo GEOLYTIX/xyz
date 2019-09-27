@@ -38,8 +38,8 @@ export {default as Chart} from 'chart.js';
 
 import 'chartjs-plugin-datalabels';
 
-// import pointOnFeature from '@turf/point-on-feature';
+import pointOnFeature from '@turf/point-on-feature';
 
-// export const turf = {
-//   pointOnFeature: pointOnFeature,
-// };
+export const turf = {
+  pointOnFeature: pointOnFeature,
+};

@@ -39,6 +39,22 @@ export default _xyz => location => {
   // Set new stamp on record.
   record.stamp = parseInt(Date.now());
 
+  if (location._new) {
+
+    _xyz.locations.decorate(location);
+
+    location.marker = _xyz.mapview.lib.proj.transform(
+      _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
+      'EPSG:' + location.layer.srid,
+      'EPSG:' + _xyz.mapview.srid);
+
+    // Return location callback if defined on location.
+    if (typeof location.callback === 'function') return location.callback(location);
+
+    // Use default locations select callback method.
+    return _xyz.locations.selectCallback(location);
+  }
+
   // Get location properties from XYZ host.
   const xhr = new XMLHttpRequest();
 
@@ -57,7 +73,11 @@ export default _xyz => location => {
 
   xhr.onload = e => {
 
-    if (e.target.status !== 200) return;
+    if (e.target.status !== 200) {
+      delete record.location;
+      delete record.stamp;
+      return console.error(e.target.statusText);
+    }
 
     // Push the hook for the location.
     if (_xyz.hooks) _xyz.hooks.push('locations', location.hook);
@@ -67,6 +87,7 @@ export default _xyz => location => {
       {
         infoj: e.target.response.infoj,
         geometry: e.target.response.geomj,
+        editable: (location.layer.edit)
       });
 
     location.marker = _xyz.mapview.lib.proj.transform(
@@ -74,14 +95,8 @@ export default _xyz => location => {
       'EPSG:' + location.layer.srid,
       'EPSG:' + _xyz.mapview.srid);
 
-    // location.marker = _xyz.mapview.lib.proj.transform(
-    //   _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates,
-    //   'EPSG:' + location.layer.srid,
-    //   'EPSG:' + _xyz.mapview.srid);
-
     // Return location callback if defined on location.
     if (typeof location.callback === 'function') return location.callback(location);
-
 
     // Use default locations select callback method.
     _xyz.locations.selectCallback(location);

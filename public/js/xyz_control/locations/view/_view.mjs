@@ -163,7 +163,7 @@ export default _xyz => function () {
     location.trash();
   }}>delete`;
 
-  location.view.header.appendChild(location.view.trash);
+  location.editable && location.view.header.appendChild(location.view.trash);
 
 
   // Copy to clipboard. *** aga: disabled as overrriden by report functionality
