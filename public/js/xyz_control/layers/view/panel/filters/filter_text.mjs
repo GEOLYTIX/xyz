@@ -1,8 +1,6 @@
-import create_block from './create_block.mjs';
-
 export default (_xyz, layer, filter_entry) => {
 
-  const block = create_block(_xyz, layer, filter_entry);
+  const block = layer.filter.block(filter_entry);
 
   block.appendChild(_xyz.utils.wire()`
   <input placeholder="Search" onkeyup=${e=>{
@@ -10,7 +8,7 @@ export default (_xyz, layer, filter_entry) => {
     layer.filter.current[filter_entry.field] = {};
     layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
 
-    layer.show();
+    layer.reload();
 
     layer.count(n => {
 

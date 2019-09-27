@@ -39,11 +39,7 @@ module.exports = fastify => {
         table = req.query.table,
         filter = req.params.filter;
 
-      const geom_extent = layer.geom ?
-        `ST_Extent(${layer.geom})` :
-        layer.geom_3857 ?
-          `ST_Transform(ST_SetSRID(ST_Extent(${layer.geom_3857}), 3857), 4326)`:
-          null;    
+      const geom_extent = `ST_Transform(ST_SetSRID(ST_Extent(${layer.geom}), ${layer.srid}), 4326)`
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';
@@ -92,7 +88,7 @@ module.exports = fastify => {
                 ),
                 3857
             ),
-            4326
+            ${layer.srid}
         )) AS geomj,
         ${fields.join()}
         FROM ${table}

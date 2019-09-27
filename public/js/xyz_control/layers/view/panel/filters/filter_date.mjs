@@ -1,8 +1,6 @@
-import create_block from './create_block.mjs';
-
 export default (_xyz, layer, filter_entry) => {
 
-  const block = create_block(_xyz, layer, filter_entry);
+  const block = layer.filter.block(filter_entry);
 
   // Label for min / greater then control.
   _xyz.utils.createElement({
@@ -70,11 +68,8 @@ export default (_xyz, layer, filter_entry) => {
       instance.calendar.style.top = '-10000px';
     },
     onShow: instance => {
-   
       const yPosition = instance.el.getBoundingClientRect().top;
-
       instance.calendar.style.top = (yPosition - 100) + 'px';
-
     }
   });
 
@@ -95,11 +90,8 @@ export default (_xyz, layer, filter_entry) => {
       instance.calendar.style.top = '-10000px';
     },
     onShow: instance => {
-   
       const yPosition = instance.el.getBoundingClientRect().top;
-
       instance.calendar.style.top = (yPosition - 100) + 'px';
-
     }
   });  
 
@@ -116,7 +108,7 @@ export default (_xyz, layer, filter_entry) => {
       layer.filter.current[filter_entry.field].gt = _xyz.utils.meltDateStr(input_min.value) || null;
       layer.filter.current[filter_entry.field].lt = _xyz.utils.meltDateStr(input_max.value) || null;
 
-      layer.show();
+      layer.reload();
 
       layer.count(n => {
 

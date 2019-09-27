@@ -9,7 +9,7 @@ export default _xyz => function (callback) {
   xhr.open('GET', _xyz.host + '/api/layer/count?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
     layer: layer.key,
-    table: layer.table,
+    table: layer.tableMin(),
     filter: JSON.stringify(filter),
     token: _xyz.token
   }));

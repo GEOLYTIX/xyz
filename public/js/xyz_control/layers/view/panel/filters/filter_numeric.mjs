@@ -1,5 +1,3 @@
-import create_block from './create_block.mjs';
-
 export default (_xyz, layer, filter_entry) => {
 
   const xhr = new XMLHttpRequest();
@@ -19,7 +17,7 @@ export default (_xyz, layer, filter_entry) => {
 
     const field_range = JSON.parse(e.target.response);
 
-    const block = create_block(_xyz, layer, filter_entry);
+    const block = layer.filter.block(filter_entry);
 
     const step = setStep(filter_entry);
 
@@ -111,7 +109,7 @@ export default (_xyz, layer, filter_entry) => {
         layer.filter.current[filter_entry.field].gte = parseFloat(input_min.value);
         layer.filter.current[filter_entry.field].lte = parseFloat(input_max.value);
 
-        layer.show();
+        layer.reload();
 
         layer.count(n => {
 

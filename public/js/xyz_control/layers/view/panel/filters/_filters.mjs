@@ -14,6 +14,41 @@ export default (_xyz, layer) => {
 
   if (!layer.infoj.some(entry => entry.filter)) return;
 
+  layer.filter.block = filter_entry => {
+
+    const block = _xyz.utils.wire()`
+    <div class="block">
+    <div class="title">${filter_entry.label}</div>
+    <i
+      class="material-icons cancel-btn"
+      onclick=${e=>{
+
+        e.target.parentNode.remove();
+  
+        delete layer.filter.current[filter_entry.field];
+        
+        // Hide clear all filter.
+        if (Object.keys(layer.filter.current).length < 1) {
+          layer.filter.clear_all.style.display = 'none';
+          layer.count(n => {
+            layer.filter.run_output.disabled = !(n > 1);     
+          })
+        }
+        
+        // Enable filter in select dropdown.
+        Object.values(layer.filter.select.options).forEach(opt => {
+          if (opt.value === filter_entry.field) opt.disabled = false;
+        });
+        
+        layer.reload();
+        
+      }}>clear`;
+  
+    layer.filter.list.appendChild(block);
+  
+    return block;
+  }
+
   // Create current filter object.
   layer.filter.current = {};
 
@@ -90,7 +125,13 @@ export default (_xyz, layer) => {
       // Reset layer filter object.
       layer.filter.current = {};
   
-      layer.show();
+      layer.reload();
+
+      layer.count(n => {
+
+        layer.filter.run_output.disabled = !(n > 1);
+    
+      })
 
     }}>Clear all filters`;
 
@@ -103,7 +144,7 @@ export default (_xyz, layer) => {
 
 
   layer.filter.run_output = _xyz.utils.wire()`
-  <button disabled
+  <button
     class="btn_wide noselect"
     onclick=${()=>{
 
@@ -117,7 +158,7 @@ export default (_xyz, layer) => {
         _xyz.utils.paramString({
           locale: _xyz.workspace.locale.key,
           layer: layer.key,
-          table: layer.table,
+          table: layer.tableMin(),
           filter: JSON.stringify(filter),
           token: _xyz.token
         }));
@@ -146,8 +187,6 @@ export default (_xyz, layer) => {
   layer.count(n => {
 
     layer.filter.run_output.disabled = !(n > 1);
-
-    if (filterZoom && n > 1) layer.zoomToExtent();
 
   })
 
