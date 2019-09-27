@@ -18,7 +18,7 @@ export default (_xyz, layer) => {
         //scrolly: _xyz.desktop && _xyz.desktop.listviews
       });
     }}
-    >Table
+    >Data View
   `);
 
   // Return if dataview has no table definition.

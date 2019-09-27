@@ -42,7 +42,7 @@ export default _xyz => function () {
   // Iterate through tables and charts to check whether table should be shown.
   if (layer.dataview && _xyz.dataview.node){
 
-    Object.keys(layer.dataview.tables).forEach(key => {
+    if(layer.dataview.tables) Object.keys(layer.dataview.tables).forEach(key => {
       const table = layer.dataview.tables[key];
       if (table.display) table.show();
     });
