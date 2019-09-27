@@ -33,18 +33,18 @@ export default _xyz => entry => {
 
   function showTab() {
 
-    if(_xyz.tableview.node && !_xyz.tableview.node.querySelector('.table')) {
+    if(_xyz.dataview.node && !_xyz.dataview.node.querySelector('.table')) {
 
-      _xyz.tableview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`<div class="table">`);
+      _xyz.dataview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`<div class="table">`);
 
     }
 
     entry.location.tables.push(entry);
 
-    entry.target = _xyz.tableview.node && _xyz.tableview.node.querySelector('.table') ||
+    entry.target = _xyz.dataview.node && _xyz.dataview.node.querySelector('.table') ||
       document.getElementById(entry.target_id);
 
-    if (entry.target) _xyz.tableview.locationTable(entry, tableChart);
+    if (entry.target) _xyz.dataview.locationTable(entry, tableChart);
 
   }
 
@@ -56,7 +56,7 @@ export default _xyz => entry => {
     
     entry.location.tables.splice(idx, 1);
 
-    _xyz.tableview.removeTab(entry);
+    _xyz.dataview.removeTab(entry);
 
     if (entry.chart) entry.chart.node.innerHTML = '';
 

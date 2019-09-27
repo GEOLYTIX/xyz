@@ -150,7 +150,7 @@
     float: right;
     margin-right: 10px; }
 
-.tableview {
+.dataview {
   overflow: hidden;
   grid-column: 3;
   grid-row: 2;
@@ -165,49 +165,49 @@
       grid-row: 3;
       grid-column: 2;
   }*/ }
-  .tableview .btn_column {
+  .dataview .btn_column {
     grid-row: 2/4; }
-  .tableview .nav_bar {
+  .dataview .nav_bar {
     height: 36px;
     font-size: 14px;
     grid-row: 2;
     grid-column: 2; }
-  .tableview .tab-content {
+  .dataview .tab-content {
     grid-row: 3;
     grid-column: 2;
     overflow: auto; }
-  .tableview nav {
+  .dataview nav {
     text-align: center;
     -webkit-box-shadow: 0px 5px 10px -2px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0px 5px 10px -2px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 5px 10px -2px rgba(0, 0, 0, 0.3);
     z-index: 1000; }
-    .tableview nav ul.nav_bar-nav {
+    .dataview nav ul.nav_bar-nav {
       display: inline-flex;
       list-style: none;
       flex-flow: row wrap;
       justify-content: center;
       width: calc(100% - 30px); }
-      .tableview nav ul.nav_bar-nav li {
+      .dataview nav ul.nav_bar-nav li {
         padding: 5px;
         -webkit-flex: 1;
         -moz-flex: 1;
         -ms-flex: 1;
         flex: 1; }
-        .tableview nav ul.nav_bar-nav li.tab-current {
+        .dataview nav ul.nav_bar-nav li.tab-current {
           border-bottom: 3px solid #1F964D;
           box-shadow: 0 6px 8px -6px #444; }
-    .tableview nav .tab-dropdown-container {
+    .dataview nav .tab-dropdown-container {
       position: relative;
       width: 20px;
       display: inline-flex; }
-      .tableview nav .tab-dropdown-container button.tab-dropdown {
+      .dataview nav .tab-dropdown-container button.tab-dropdown {
         width: 30px;
         font-size: 14px;
         display: none;
         color: #1F964D;
         background-color: white; }
-      .tableview nav .tab-dropdown-container .tab-dropdown-content {
+      .dataview nav .tab-dropdown-container .tab-dropdown-content {
         display: none;
         position: absolute;
         top: 30px;
@@ -218,9 +218,9 @@
         overflow: auto;
         box-shadow: 0px 8px 16px 2px rgba(0, 0, 0, 0.3);
         z-index: 1000; }
-        .tableview nav .tab-dropdown-container .tab-dropdown-content.show {
+        .dataview nav .tab-dropdown-container .tab-dropdown-content.show {
           display: block !important; }
-        .tableview nav .tab-dropdown-container .tab-dropdown-content li {
+        .dataview nav .tab-dropdown-container .tab-dropdown-content li {
           padding: 5px; }
 
 .input_group {

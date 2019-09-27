@@ -33,7 +33,7 @@
                     "table": "dev.natural_earth_countries",
                     "geom": "geom_3857",
                     "srid": 3857,
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "table1": {
                                 "title": "Population / GDP",
@@ -825,7 +825,7 @@
                             }
                         }
                     },
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "Retail Places": {
                                 "viewport": true,
@@ -1240,7 +1240,7 @@
                     "hover": {
                         "field": "store"
                     },
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "Retail Points": {
                                 "display": true,
@@ -2557,7 +2557,7 @@
                             "edit": true
                         },
                         {
-                            "label": "Available tableviews",
+                            "label": "Available dataviews",
                             "type": "label"
                           },
                           {

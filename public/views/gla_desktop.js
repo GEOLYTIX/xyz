@@ -23,7 +23,7 @@ _xyz({
   
     const layer = _xyz.layers.list['Advice Center'];
    
-    const table = _xyz.tableview.layerTable({
+    const table = _xyz.dataview.layerTable({
       layer: layer,
       target: document.getElementById('List'),
       key: 'gla',

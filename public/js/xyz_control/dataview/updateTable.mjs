@@ -7,8 +7,8 @@ export default _xyz => () => {
   xhr.open('GET', _xyz.host + '/api/layer/table?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
     mapview_srid: _xyz.mapview.srid,
-    layer: _xyz.tableview.current_layer.key,
-    table: _xyz.tableview.current_layer.tableMax(),
+    layer: _xyz.dataview.current_layer.key,
+    table: _xyz.dataview.current_layer.tableMax(),
     viewport: bounds ? true : false,
     west: bounds && bounds.west,
     south: bounds && bounds.south,
@@ -24,9 +24,9 @@ export default _xyz => () => {
   
     if (e.target.status !== 200) return;
     
-    _xyz.tableview.current_layer.tableview.table.setData(e.target.response);
+    _xyz.dataview.current_layer.dataview.table.setData(e.target.response);
 
-    _xyz.tableview.current_layer.tableview.table.redraw(true);
+    _xyz.dataview.current_layer.dataview.table.redraw(true);
 
   };
 

@@ -1,68 +1,39 @@
-export default _xyz => (show_toolbars) => {
+export default _xyz => show_toolbars => {
 
   if(_xyz.dataview.node) _xyz.dataview.node.querySelector('.tab-content').innerHTML = '';
 
   if(show_toolbars){
-  	
-  	let toolbar = _xyz.utils.createElement({
-  		tag: 'div',
-  		style: {
-  			marginRight: '10px',
-  			textAlign: 'right'
-  		},
-  		appendTo: _xyz.dataview.node.querySelector('.tab-content')
-  	});
 
-  	_xyz.utils.createElement({
-  		tag: 'div',
-  		options: {
-  			classList: 'btn_subtext',
-  			textContent: 'CSV',
-  			title: 'Download as CSV'
-  		},
-  		style: {
-  			cursor: 'pointer',
-  			display: 'inline-block',
-  			marginRight: '6px'
-  		},
-  		eventListener: {
-  			event: 'click',
-  			funct: () => {
-  				_xyz.dataview.current_table.Tabulator.download('csv', `${_xyz.dataview.current_table.title}.csv`);
-  			}
-  		},
-  		appendTo: toolbar
-  	});
+    let toolbar = _xyz.utils.wire()`
+      <div style="margin-right: 10px; text-align: right;">`;
 
-  	 _xyz.utils.createElement({
-  		tag: 'div',
-  		options: {
-  			classList: 'btn_subtext',
-  			textContent: 'JSON',
-  			title: 'Download as JSON'
-  		},
-  		style: {
-  			cursor: 'pointer',
-  			display: 'inline-block',
-  			marginRight: '6px'
-  		},
-  		eventListener: {
-  			event: 'click',
-  			funct: () => {
-  				_xyz.dataview.current_table.Tabulator.download('json', `${_xyz.dataview.current_table.title}.json`);
-  			}
-  		},
-  		appendTo: toolbar
-  	});
+    _xyz.dataview.node.querySelector('.tab-content').appendChild(toolbar);
+
+
+    toolbar.appendChild(_xyz.utils.wire()`
+      <div class="btn_subtext" title="Download as CSV"
+      style="cursor: pointer; display: inline-block; margin-right: 6px;"
+      onclick=${() => {
+        _xyz.dataview.current_table.Tabulator.download('csv', `${_xyz.dataview.current_table.title}.csv`);
+      }}
+      >CSV
+    `);
+
+    toolbar.appendChild(_xyz.utils.wire()`
+      <div class="btn_subtext" title="Download as JSON"
+      style="cursor: pointer; display: inline-block; margin-right: 6px;"
+      onclick=${() => {
+        _xyz.dataview.current_table.Tabulator.download('json', `${_xyz.dataview.current_table.title}.json`);
+      }}
+      >JSON
+    `);
 
   	}
 
-  return _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'table'
-    },
-    appendTo: _xyz.dataview.node.querySelector('.tab-content')
-  });
+  let _content = _xyz.utils.wire()`<div class="table">`;
+  
+  _xyz.dataview.node.querySelector('.tab-content').appendChild(_content);
+
+  return _content;
 
 };

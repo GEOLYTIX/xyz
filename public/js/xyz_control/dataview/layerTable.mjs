@@ -8,8 +8,6 @@ export default _xyz => table => {
   }
 
   if (_xyz.dataview.node) {
-    // _xyz.dataview.node.style.display = 'block';
-    // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
     document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
     _xyz.map.updateSize();
   }
@@ -77,16 +75,16 @@ export default _xyz => table => {
 
   table.activate = () => {
 
-    if (_xyz.dataview && _xyz.dataview.btn && _xyz.dataview.btn.tableViewport) {
+    if (_xyz.dataview && _xyz.dataview.btn && _xyz.dataview.btn.dataViewport) {
 
       if (table.viewport) {
-        _xyz.dataview.btn.tableViewport.classList.add('active');
+        _xyz.dataview.btn.dataViewport.classList.add('active');
 
       } else {
-        _xyz.dataview.btn.tableViewport.classList.remove('active');
+        _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.tableViewport.style.display = 'block';
+      _xyz.dataview.btn.dataViewport.style.display = 'block';
     }
 
     table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);

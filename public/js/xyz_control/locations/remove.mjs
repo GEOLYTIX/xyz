@@ -23,7 +23,7 @@ export default _xyz => function() {
   if (location.Marker) _xyz.map.removeLayer(location.Marker);
 
   location.tables.forEach(
-    table => _xyz.tableview.removeTab(table)
+    table => _xyz.dataview.removeTab(table)
   );
 
   location.record.location = null;

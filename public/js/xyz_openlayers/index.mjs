@@ -16,7 +16,7 @@ import _locations from '../xyz_control/locations/_locations.mjs';
 
 import _ctrl from '../xyz_control/ctrl/_ctrl.mjs';
 
-import _tableview from '../xyz_control/tableview/_tableview.mjs';
+import _dataview from '../xyz_control/dataview/_dataview.mjs';
 
 import lib from './lib.mjs';
 
@@ -70,7 +70,7 @@ async function _xyz(params) {
 
   _xyz.ctrl = _ctrl(_xyz);
 
-  _xyz.tableview = _tableview(_xyz);
+  _xyz.dataview = _dataview(_xyz);
 
   _xyz.workspace = workspace(_xyz);
 

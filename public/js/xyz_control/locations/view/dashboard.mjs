@@ -20,9 +20,9 @@ export default _xyz => entry => {
 
     entry.location.tables.push(entry);
 
-    entry.target = _xyz.tableview.node && _xyz.tableview.node.querySelector('.tab-content') || document.getElementById(entry.target_id);
+    entry.target = _xyz.dataview.node && _xyz.dataview.node.querySelector('.tab-content') || document.getElementById(entry.target_id);
 
-    if (entry.target) _xyz.tableview.dashboard(entry);
+    if (entry.target) _xyz.dataview.dashboard(entry);
 
   }
 
@@ -34,6 +34,6 @@ export default _xyz => entry => {
 
     entry.location.tables.splice(idx, 1);
 
-    _xyz.tableview.removeTab(entry);
+    _xyz.dataview.removeTab(entry);
   }
 };

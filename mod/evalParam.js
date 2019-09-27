@@ -121,7 +121,7 @@ function _coords(req, res, next) {
 
 function _layerTable(req, res, next) {
 
-  req.params.table = req.params.layer.tableview.tables[req.query.table];
+  req.params.table = req.params.layer.dataview.tables[req.query.table];
 
   if (!req.params.table) {
     res.code(400);
@@ -134,7 +134,7 @@ function _layerTable(req, res, next) {
 
 function _layerChart(req, res, next) {
 
-  req.params.chart = req.params.layer.tableview.charts[req.query.chart];
+  req.params.chart = req.params.layer.dataview.charts[req.query.chart];
 
   if (!req.params.chart) {
     res.code(400);

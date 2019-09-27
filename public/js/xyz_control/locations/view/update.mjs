@@ -4,7 +4,7 @@ export default (_xyz, location) => () => {
     
   location.geometries = [];
 
-  location.tables.forEach(table => _xyz.tableview.removeTab(table));
+  location.tables.forEach(table => _xyz.dataview.removeTab(table));
     
   location.tables = [];
 

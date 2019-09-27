@@ -2,18 +2,7 @@ export default _xyz => chart => {
 
   if (!chart) return;
 
-  //if (chart.key) {
-  //if (!chart.layer.dataview.tables[chart.title]) return;
-  //if (chart.layer.dataview.tables[chart.key]){
-  //Object.assign(chart, chart.layer.dataview.tables[chart.key]); 
-  //}
-  //}
-
-  if (_xyz.dataview.node) {
-    // _xyz.dataview.node.style.display = 'block';
-    // //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
-    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
-  }
+  if (_xyz.dataview.node)  document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
 
   if (_xyz.dataview.tables.indexOf(chart) < 0) _xyz.dataview.tables.push(chart);
 
@@ -69,16 +58,16 @@ export default _xyz => chart => {
 
   chart.activate = () => {
 
-    if (_xyz.dataview && _xyz.dataview.btn && _xyz.dataview.btn.tableViewport) {
+    if (_xyz.dataview && _xyz.dataview.btn && _xyz.dataview.btn.dataViewport) {
 
       if (chart.viewport) {
-        _xyz.dataview.btn.tableViewport.classList.add('active');
+        _xyz.dataview.btn.dataViewport.classList.add('active');
 
       } else {
-        _xyz.dataview.btn.tableViewport.classList.remove('active');
+        _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.tableViewport.style.display = 'block';
+      _xyz.dataview.btn.dataViewport.style.display = 'block';
     }
 
     chart.update();

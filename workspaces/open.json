@@ -66,7 +66,7 @@
                     "qID": "id",
                     "mvt_cache": true,
                     "table": "open.global_glx_open_citiesoftheworld",
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "World Cities": {
                                 "display": true,
@@ -240,7 +240,7 @@
                     "qID": "id",
                     "geom": "geom_4326",
                     "table": "open.global_glx_geodata_transport_airport",
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "airports": {
                                 "display": true,
@@ -356,7 +356,7 @@
                     "cluster_label": "office",
                     "cluster_kmeans": 0.05,
                     "cluster_dbscan": 0.01,
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "offices": {
                                 "title": "Geolytix Locations",
@@ -492,7 +492,7 @@
                         "5": null,
                         "6": "open.vw_glx_geodata_shoppertown"
                     },
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "Shopper Town": {
                                 "from": "open.vw_glx_geodata_shoppertown",
@@ -1022,7 +1022,7 @@
                         "10": null,
                         "11": "open.vw_jpn_chomoku_with_stats"
                     },
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "Chomoku": {
                                 "display": true,
@@ -1279,7 +1279,7 @@
                             }
                         }
                     },
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "Shopping Malls": {
                                 "display": true,

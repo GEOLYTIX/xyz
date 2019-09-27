@@ -2,12 +2,7 @@ export default _xyz => (table, callback) => {
 
   if (!table || !table.location) return;
 
-  if (_xyz.dataview.node) {
-    // _xyz.dataview.node.style.display = 'block';
-    //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
-    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
-
-  }
+  if (_xyz.dataview.node) document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
 
   if (!table.columns) {
 
@@ -18,12 +13,6 @@ export default _xyz => (table, callback) => {
     Object.assign(table, infoj_table);
 
   }
-
-  //const columns = [];
-
-  /*table.columns.forEach(col => {
-    columns.push({ field: col.field, title: col.title || col.field, headerSort: false });
-  });*/
 
   if (_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
 
@@ -71,7 +60,6 @@ export default _xyz => (table, callback) => {
         tooltipsHeader: true,
         columnVertAlign: 'center',
         columns: _xyz.dataview.groupColumns(table),
-        //autoResize: false,
         layout: table.layout || 'fitDataFill',
         height: 'auto'
       });
