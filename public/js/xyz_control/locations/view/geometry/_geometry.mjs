@@ -62,14 +62,9 @@ export default _xyz => entry => {
 
   };
 
-  // if (entry.edit) {
-  //   entry.ctrl.hideGeom = entry.ctrl.delete_geom;
-  // }
+  // if (entry.edit) entry.ctrl.hideGeom = entry.ctrl.delete_geom;
 
-  if (entry.value) {
-    entry.display = true;
-    //entry.ctrl.showGeom(entry);
-  }
+  if (entry.value) entry.display = true;
 
 
   td.appendChild(_xyz.utils.wire()`
