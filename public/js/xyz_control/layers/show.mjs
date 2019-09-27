@@ -40,15 +40,15 @@ export default _xyz => function () {
   if (layer.group && _xyz.layers.listview.groups && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
 
   // Iterate through tables and charts to check whether table should be shown.
-  if (layer.tableview && _xyz.tableview.node){
+  if (layer.dataview && _xyz.dataview.node){
 
-    Object.keys(layer.tableview.tables).forEach(key => {
-      const table = layer.tableview.tables[key];
+    Object.keys(layer.dataview.tables).forEach(key => {
+      const table = layer.dataview.tables[key];
       if (table.display) table.show();
     });
 
-    if(layer.tableview.charts) Object.keys(layer.tableview.charts).forEach(key => {
-      const chart = layer.tableview.charts[key];
+    if(layer.dataview.charts) Object.keys(layer.dataview.charts).forEach(key => {
+      const chart = layer.dataview.charts[key];
       if (chart.display) chart.show();
     });
   

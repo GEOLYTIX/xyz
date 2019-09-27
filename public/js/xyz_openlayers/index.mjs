@@ -20,7 +20,7 @@ import gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
 
 import charts from '../xyz_control/charts/_charts.mjs';
 
-import tableview from '../xyz_control/tableview/_tableview.mjs';
+import dataview from '../xyz_control/dataview/_dataview.mjs';
 
 async function _xyz(params) {
 
@@ -78,7 +78,7 @@ async function _xyz(params) {
 
   _xyz.charts = charts(_xyz);
 
-  _xyz.tableview = tableview(_xyz);
+  _xyz.dataview = dataview(_xyz);
 
 
   // Get workspace from XYZ host.

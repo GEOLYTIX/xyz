@@ -66,7 +66,7 @@ function init(_xyz) {
 
   const vertDivider = document.getElementById('vertDivider');
 
-  // Resize tableview while holding mousedown on resize_bar.
+  // Resize dataview while holding mousedown on resize_bar.
   vertDivider.addEventListener('mousedown', e => {
 
     // Prevent text selection.
@@ -77,14 +77,14 @@ function init(_xyz) {
     window.addEventListener('mouseup', stopResize_x);
   });
 
-  // Resize tableview while holding mousedown on resize_bar.
+  // Resize dataview while holding mousedown on resize_bar.
   vertDivider.addEventListener('touchstart', e => {
 
     window.addEventListener('touchmove', resize_x);
     window.addEventListener('touchend', stopResizeTouch_x);
   }, { passive: true });
 
-  // Resize the tableview container
+  // Resize the dataview container
   function resize_x(e) {
 
     let width;
@@ -133,7 +133,7 @@ function init(_xyz) {
 
   const hozDivider = document.getElementById('hozDivider');
 
-  // Resize tableview while holding mousedown on resize_bar.
+  // Resize dataview while holding mousedown on resize_bar.
   hozDivider.addEventListener('mousedown', e => {
 
     // Prevent text selection.
@@ -144,14 +144,14 @@ function init(_xyz) {
     window.addEventListener('mouseup', stopResize_y);
   });
 
-  // Resize tableview while holding mousedown on resize_bar.
+  // Resize dataview while holding mousedown on resize_bar.
   hozDivider.addEventListener('touchstart', e => {
 
     window.addEventListener('touchmove', resize_y);
     window.addEventListener('touchend', stopResizeTouch_y);
   }, { passive: true });
 
-  // Resize the tableview container
+  // Resize the dataview container
   function resize_y(e) {
 
     let height;
@@ -189,7 +189,7 @@ function init(_xyz) {
     window.removeEventListener('mousemove', resize_y);
     window.removeEventListener('mouseup', stopResize_y);
 
-    if (_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
+    if (_xyz.dataview.current_table.Tabulator) _xyz.dataview.current_table.Tabulator.redraw(true);
   }
 
   // Remove eventListener after resize event.
@@ -200,7 +200,7 @@ function init(_xyz) {
     window.removeEventListener('touchmove', resize_y);
     window.removeEventListener('touchend', stopResizeTouch_y);
 
-    if (_xyz.tableview.current_table.Tabulator) _xyz.tableview.current_table.Tabulator.redraw(true);
+    if (_xyz.dataview.current_table.Tabulator) _xyz.dataview.current_table.Tabulator.redraw(true);
   }
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -258,11 +258,11 @@ function createMap(_xyz) {
     }
   });
 
-  _xyz.tableview.create({
-    target: document.getElementById('tableview'),
+  _xyz.dataview.create({
+    target: document.getElementById('dataview'),
     btn: {
-      toggleTableview: document.getElementById('toggleTableview'),
-      tableViewport: document.getElementById('btnTableViewport')
+      toggleDataview: document.getElementById('toggleDataview'),
+      dataViewport: document.getElementById('btnDataViewport')
     }
   });
 

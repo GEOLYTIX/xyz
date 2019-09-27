@@ -31,19 +31,19 @@ export default _xyz => function () {
   if (layer.group && _xyz.layers.listview.groups && _xyz.layers.listview.groups[layer.group]) _xyz.layers.listview.groups[layer.group].chkVisibleLayer();
   
   // Iterate through tables to check whether table should be removed.
-  if (layer.tableview) Object.keys(layer.tableview.tables).forEach(
+  if (layer.dataview) Object.keys(layer.dataview.tables).forEach(
     key => {
   
-      const table = layer.tableview.tables[key];
+      const table = layer.dataview.tables[key];
       
       if (table.tab) table.remove();
       
     });
 
-  if (layer.tableview && layer.tableview.charts) Object.keys(layer.tableview.charts).forEach(
+  if (layer.dataview && layer.dataview.charts) Object.keys(layer.dataview.charts).forEach(
     key => {
   
-      const chart = layer.tableview.charts[key];
+      const chart = layer.dataview.charts[key];
       
       if (chart.tab) chart.remove();
       

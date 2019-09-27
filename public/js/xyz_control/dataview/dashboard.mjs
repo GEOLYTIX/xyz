@@ -2,16 +2,11 @@ export default _xyz => (entry, callback) => {
 
   if (!entry || !entry.location) return;
 
-  if (_xyz.tableview.node) {
-    // _xyz.tableview.node.style.display = 'block';
-    //_xyz.mapview.node.style.height = 'calc(100% - 40px)';
-    document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
+  if (_xyz.dataview.node) document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
 
-  }
+  if (_xyz.dataview.tables.indexOf(entry) < 0) _xyz.dataview.tables.push(entry);
 
-  if (_xyz.tableview.tables.indexOf(entry) < 0) _xyz.tableview.tables.push(entry);
-
-  if (_xyz.tableview.nav_bar) _xyz.tableview.addTab(entry);
+  if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(entry);
 
   entry.update = () => {
 
@@ -46,7 +41,7 @@ export default _xyz => (entry, callback) => {
 
       if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
 
-        _xyz.tableview.pgFunction({
+        _xyz.dataview.pgFunction({
           entry: val, 
           container: document.getElementById(val.target_id) || flex_container
         });
@@ -61,7 +56,7 @@ export default _xyz => (entry, callback) => {
 
     entry.update();
 
-    _xyz.tableview.current_table = entry;
+    _xyz.dataview.current_table = entry;
 
   };
 

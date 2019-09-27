@@ -8,20 +8,19 @@ export default (_xyz, layer) => {
 
   layer.view.dashboard.appendChild(panel);
 
-
   // Table panel header.
   const header = _xyz.utils.wire()`
   <div onclick=${e => {
     e.stopPropagation();
     _xyz.utils.toggleExpanderParent({
-      expandable: layer.tableview.panel,
+      expandable: layer.dataview.panel,
       accordeon: true,
       scrolly: _xyz.desktop && _xyz.desktop.listviews,
     });
   }}
   class="btn_text cursor noselect">Cluster`;
   
-  layer.tableview.panel.appendChild(header);
+  layer.dataview.panel.appendChild(header);
 
   // Set timeout to debounce layer get on range input event.
   let timeout;
@@ -83,7 +82,7 @@ export default (_xyz, layer) => {
     checked=${layer.cluster_logscale ? true : false} 
     onchange=${e => {
     layer.cluster_logscale = e.target.checked;
-    layer.get();
+    layer.reload();
   }}>
   <div class="checkbox_i">`);
 
