@@ -1,7 +1,5 @@
 export {default as svg_symbols} from './svg_symbols.mjs';
 
-export {debounce} from './debounce.mjs';
-
 export {paramString} from './paramString.mjs';
 
 export {toggleExpanderParent} from './toggleExpanderParent.mjs';
@@ -21,8 +19,6 @@ export {dataURLtoBlob} from './dataURLtoBlob.mjs';
 export {getCircularReplacer} from './getCircularReplacer.mjs';
 
 export {deepMerge} from './deepMerge.mjs';
-
-export {setStrokeWeight} from './setStrokeWeight.mjs';
 
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
 

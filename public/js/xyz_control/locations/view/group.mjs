@@ -10,6 +10,9 @@ export default _xyz => group => {
     appendTo: group.row
   });
 
+  _xyz.dataview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`
+   <div class="table">`);
+
   group.div = _xyz.utils.createElement({
     tag: 'div',
     options: {
@@ -53,20 +56,6 @@ export default _xyz => group => {
     },
     appendTo: group.header
   });
-
-  // // Add expander to group header.
-  // _xyz.utils.createElement({
-  //   tag: 'i',
-  //   options: {
-  //     className: 'material-icons cursor noselect btn_header t-expander',
-  //     title: 'Show section'
-  //   },
-  //   appendTo: group.header,
-  //   eventListener: {
-  //     event: 'click',
-  //     funct: toggleExpandedState
-  //   }
-  // });
   
   // Add table
   group.table = _xyz.utils.createElement({

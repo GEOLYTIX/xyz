@@ -85,22 +85,17 @@ export default _xyz => entry => {
   }}>
   <div class="checkbox_i">`);
 
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'sample-circle'
-    },
-    style: {
-      backgroundColor: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0),
-      borderColor: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
-      borderStyle: 'solid',
-      borderWidth: _xyz.utils.setStrokeWeight(entry),
-      position: 'absolute',
-      right: 0,
-      top: '5px'
-    },
-    appendTo: td
-  });
+  td.appendChild(_xyz.utils.wire()`
+  <div class="sample-circle"
+    style="${
+      'background-color:' + _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0) + ';' +
+      'border-color:' + _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1) + ';'+
+      'border-style: solid;' +
+      'border-width:' + (entry.style.strokeWidth || 1) + 'px;' +
+      'position: absolute;' +
+      'right:0;' +
+      'top:5px;'
+    }">`)
 
   if (entry.edit) {
 
