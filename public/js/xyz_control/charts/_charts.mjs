@@ -1,9 +1,15 @@
 import bubbleChart from './bubbleChart.mjs';
+
 import cakeChart from './cakeChart.mjs';
+
 import radarChart from './radarChart.mjs';
+
 import polarChart from './polarChart.mjs';
+
 import scatterplot from './scatterplot.mjs';
+
 import simpleChart from './simpleChart.mjs';
+
 import stackedChart from './stackedChart.mjs';
 
 export default _xyz => {
@@ -78,7 +84,7 @@ export default _xyz => {
        charts.stackedBar(entry);
     }
 
-    function scale(entry){
+    function scale(entry) {
     	let _scale;
     	switch(entry.chart.unit){
     		case 'k': _scale = '1k = 1 000'; break;
@@ -87,7 +93,7 @@ export default _xyz => {
     	return _scale;
     }
 
-    function units(entry, label){
+    function units(entry, label) {
     	let _label;
 
     	switch(entry.chart.unit){

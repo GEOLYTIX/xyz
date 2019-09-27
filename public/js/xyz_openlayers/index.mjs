@@ -1,28 +1,26 @@
 import * as utils from '../utils/_utils.mjs';
 
-import _charts from '../xyz_control/charts/_charts.mjs';
+import ctrl from '../xyz_control/ctrl/_ctrl.mjs';
 
 import workspace from '../xyz_control/workspace.mjs';
 
 import hooks from '../xyz_control/hooks.mjs';
 
-import _gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
-
-import _layers from '../xyz_control/layers/_layers.mjs';
-
-import _format from './layer/_format.mjs';
-
-import _locations from '../xyz_control/locations/_locations.mjs';
-
-import _ctrl from '../xyz_control/ctrl/_ctrl.mjs';
-
-import _dataview from '../xyz_control/dataview/_dataview.mjs';
-
 import lib from './lib.mjs';
 
-import _mapview from './mapview/_mapview.mjs';
+import mapview from './mapview/_mapview.mjs';
 
+import layers from '../xyz_control/layers/_layers.mjs';
 
+import format from './layer/_format.mjs';
+
+import locations from '../xyz_control/locations/_locations.mjs';
+
+import gazetteer from '../xyz_control/gazetteer/_gazetteer.mjs';
+
+import charts from '../xyz_control/charts/_charts.mjs';
+
+import dataview from '../xyz_control/dataview/_dataview.mjs';
 
 async function _xyz(params) {
 
@@ -55,32 +53,33 @@ async function _xyz(params) {
     }
   }, params);
 
+  if (!_xyz.host) return console.error('XYZ host not defined!');
+
   _xyz.utils = utils;
 
-  
-  _xyz.charts = _charts(_xyz);
-
-  _xyz.mapview = { lib: lib() };
-
-  Object.assign(_xyz.mapview, _mapview(_xyz));
-
-  _xyz.layers = Object.assign({}, _layers(_xyz), {format: _format(_xyz)});
-
-  _xyz.locations = _locations(_xyz);
-
-  _xyz.ctrl = _ctrl(_xyz);
-
-  _xyz.dataview = _dataview(_xyz);
+  _xyz.ctrl = ctrl(_xyz);
 
   _xyz.workspace = workspace(_xyz);
 
   _xyz.hooks = hooks(_xyz);
 
-  _xyz.gazetteer = _gazetteer(_xyz);
+  _xyz.mapview = { lib: lib() };
 
+  Object.assign(_xyz.mapview, mapview(_xyz));
 
+  _xyz.layers = Object.assign(
+    {},
+    layers(_xyz),
+    {format: format(_xyz)});
 
-  if (!_xyz.host) return console.error('XYZ host not defined!');
+  _xyz.locations = locations(_xyz);
+
+  _xyz.gazetteer = gazetteer(_xyz);
+
+  _xyz.charts = charts(_xyz);
+
+  _xyz.dataview = dataview(_xyz);
+
 
   // Get workspace from XYZ host.
   // Proceed with init from callback.
