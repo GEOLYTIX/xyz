@@ -3,65 +3,35 @@ export default (_xyz, layer, filter_entry) => {
   const block = layer.filter.block(filter_entry);
 
   // Label for min / greater then control.
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'range-label',
-      textContent: 'After ',
-    },
-    appendTo: block
-  });
+  block.appendChild(_xyz.utils.wire()`
+  <div class="range-label">After`);
 
-  const input_min = _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      classList: 'range-input',
-      type: 'text',
-      readonly: 'readonly'
-    },
-    appendTo: block
-  });
+  const input_min = _xyz.utils.wire()`
+  <input type="text" class="range-input" readonly>`
+  block.appendChild(input_min);
 
   // separator container
-  _xyz.utils.createElement({ 
-    tag: 'div',
-    appendTo: block,
-    style: {
-      width: '100%',
-      height: '10px'
-    }
-  });
+  block.appendChild(_xyz.utils.wire()`
+  <div style="width: 100%; height: 10px">`);
 
-  _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'range-label',
-      textContent: 'Before ',
-    },
-    appendTo: block
-  });
+  block.appendChild(_xyz.utils.wire()`
+  <div class="range-label">Before`);
 
-  const input_max = _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      classList: 'range-input',
-      type: 'text',
-      readonly: 'readonly'
-    },
-    appendTo: block
-  });
+  const input_max = _xyz.utils.wire()`
+  <input type="text" class="range-input" readonly>`
+  block.appendChild(input_max);
 
   _xyz.utils.datePicker({
     element: input_min,
     position: 'c',
     formatter: (input, date) => {
-          
+
       const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
 
-      input.value = filter_entry.type === 'datetime'?
-        _xyz.utils.formatDateTime(meltDateStr):
+      input.value = filter_entry.type === 'datetime' ?
+        _xyz.utils.formatDateTime(meltDateStr) :
         _xyz.utils.formatDate(meltDateStr);
-  
+
     },
     onSelect: (instance, date) => {
       applyFilter();
@@ -77,13 +47,13 @@ export default (_xyz, layer, filter_entry) => {
     element: input_max,
     position: 'c',
     formatter: (input, date) => {
-          
+
       const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
 
-      input.value = filter_entry.type === 'datetime'?
-        _xyz.utils.formatDateTime(meltDateStr):
+      input.value = filter_entry.type === 'datetime' ?
+        _xyz.utils.formatDateTime(meltDateStr) :
         _xyz.utils.formatDate(meltDateStr);
-  
+
     },
     onSelect: (instance, date) => {
       applyFilter();
@@ -93,11 +63,11 @@ export default (_xyz, layer, filter_entry) => {
       const yPosition = instance.el.getBoundingClientRect().top;
       instance.calendar.style.top = (yPosition - 100) + 'px';
     }
-  });  
+  });
 
   let timeout;
 
-  function applyFilter(){
+  function applyFilter() {
 
     clearTimeout(timeout);
     timeout = setTimeout(() => {
@@ -113,9 +83,9 @@ export default (_xyz, layer, filter_entry) => {
       layer.count(n => {
 
         layer.filter.run_output.disabled = !(n > 1);
-    
+
         if (filter_entry.filterZoom && n > 1) layer.zoomToExtent();
-    
+
       })
 
     }, 500);

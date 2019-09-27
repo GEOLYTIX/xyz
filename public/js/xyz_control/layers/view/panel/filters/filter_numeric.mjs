@@ -4,25 +4,28 @@ export default (_xyz, layer, filter_entry) => {
 
   const filter = layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current);
 
-  xhr.open('GET', _xyz.host + '/api/location/field/range?' + _xyz.utils.paramString({
-    locale: _xyz.workspace.locale.key,
-    layer: layer.key,
-    table: layer.table,
-    field: filter_entry.field,
-    filter: JSON.stringify(filter),
-    token: _xyz.token
-  }));
+  xhr.open(
+    'GET',
+    _xyz.host + '/api/location/field/range?' +
+    _xyz.utils.paramString({
+      locale: _xyz.workspace.locale.key,
+      layer: layer.key,
+      table: layer.table,
+      field: filter_entry.field,
+      filter: JSON.stringify(filter),
+      token: _xyz.token}));
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.responseType = 'json';
 
   xhr.onload = e => {
 
-    const field_range = JSON.parse(e.target.response);
+    const field_range = e.target.response;
 
     const block = layer.filter.block(filter_entry);
 
-    const step = setStep(filter_entry);
-
-
-  
+    const step = entry.type === 'integer' ? 1 : 0.01;
+     
     // Label for min / greater then control.   
     block.appendChild(_xyz.utils.wire()`<div class="range-label">Greater or equal`);
 
@@ -35,9 +38,8 @@ export default (_xyz, layer, filter_entry) => {
       max=${field_range.max}
       step=${step}
       onkeyup=${e=>{
-    slider_min.value = e.target.value;
-    applyFilter();
-  }}>`;
+        slider_min.value = e.target.value;
+        applyFilter();}}>`;
 
     block.appendChild(input_min);
 
@@ -52,13 +54,11 @@ export default (_xyz, layer, filter_entry) => {
       max=${field_range.max}
       step=${step}
       oninput=${e=>{
-    input_min.value = e.target.value;
-    applyFilter();
-  }}>`;
+        input_min.value = e.target.value;
+        applyFilter();}}>`;
 
     block.appendChild(slider_min);
   
-
     // Label for max / smaller then control.
     block.appendChild(_xyz.utils.wire()`<div class="range-label">Smaller or equal`);
 
@@ -71,9 +71,8 @@ export default (_xyz, layer, filter_entry) => {
       max=${field_range.max}
       step=${step}
       onkeyup=${e=>{
-    slider_max.value = e.target.value;
-    applyFilter();
-  }}>`;
+        slider_max.value = e.target.value;
+        applyFilter();}}>`;
 
     block.appendChild(input_max);
 
@@ -88,9 +87,8 @@ export default (_xyz, layer, filter_entry) => {
       max=${field_range.max}
       step=${step}
       oninput=${e=>{
-    input_max.value = e.target.value;
-    applyFilter();
-  }}>`;
+        input_max.value = e.target.value;
+        applyFilter();}}>`;
 
     block.appendChild(slider_max);
 
@@ -101,6 +99,7 @@ export default (_xyz, layer, filter_entry) => {
     function applyFilter(){
 
       clearTimeout(timeout);
+      
       timeout = setTimeout(() => {
         timeout = null;
 
@@ -120,15 +119,6 @@ export default (_xyz, layer, filter_entry) => {
         })
 
       }, 500);
-    }
-
-    function setStep(entry){
-      let step;
-      switch(entry.type){
-      case 'integer': step = 1; break;
-      case 'numeric': step = 0.01 ; break;
-      }
-      return step;
     }
 
   };
