@@ -4,9 +4,7 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 //move map up on document scroll
 document.addEventListener('scroll',
-  () => document.getElementById('Map')
-    .style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px'
-);
+  () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
 
 let
   listViews = document.querySelectorAll('.listview'),
@@ -48,7 +46,6 @@ function activateTab(target, mod) {
   listViews.forEach(m => m.classList.add('displaynone'));
   mod.classList.remove('displaynone');
   checkOverlap(mod);
-
 }
 
 
@@ -94,14 +91,8 @@ function init(_xyz) {
       }));
   }
 
-
-  const btnWorkspace = document.getElementById('btnWorkspace');
-
-  if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
-
-
   // Select locations from hooks.
-  if (_xyz.hooks) _xyz.hooks.current.locations.forEach(_hook => {
+  _xyz.hooks.current.locations.forEach(_hook => {
 
     let hook = _hook.split('!');
 
@@ -111,12 +102,9 @@ function init(_xyz) {
       table: hook[1],
       id: hook[2]
     });
-
   });
 
-
   if (_xyz.log) console.log(_xyz);
-
 }
 
 function createMap(_xyz) {

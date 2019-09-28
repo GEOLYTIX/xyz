@@ -1,4 +1,131 @@
-const desktop = {};
+const mapNode = document.getElementById('Map');
+
+const dataviewNode = document.getElementById('dataview');
+
+const listviews = document.querySelector('.listviews > .scrolly');
+
+// Reset scrolly height after window resize.
+window.addEventListener('resize',() => listviews.dispatchEvent(new CustomEvent('scrolly')));
+
+const vertDivider = document.getElementById('vertDivider');
+
+// Resize dataview while holding mousedown on resize_bar.
+vertDivider.addEventListener('mousedown', e => {
+  e.preventDefault();
+  document.body.style.cursor = 'grabbing';
+  window.addEventListener('mousemove', resize_x);
+  window.addEventListener('mouseup', stopResize_x);
+});
+
+// Resize dataview while holding mousedown on resize_bar.
+vertDivider.addEventListener('touchstart', () => {
+  window.addEventListener('touchmove', resize_x);
+  window.addEventListener('touchend', stopResizeTouch_x);
+}, { passive: true });
+
+// Resize the dataview container
+function resize_x(e) {
+
+  let width;
+
+  if (e.touches) {
+
+    if (e.touches[0].pageX < 333) return;
+
+    // Get height from window height minus first finger touch position.
+    width = e.touches[0].pageX;
+
+  } else {
+
+    if (e.pageX < 333) return;
+
+    // Get height from window height minus cursor position.
+    width = e.pageX;
+  }
+
+  // Full width snap.
+  if (width > (window.innerWidth / 2)) width = window.innerWidth / 2;
+
+  document.body.style.gridTemplateColumns = `${width}px 10px auto`;
+}
+
+// Remove eventListener after resize event.
+function stopResize_x() {
+  mapNode.dispatchEvent(new CustomEvent('updatesize'));
+  document.body.style.cursor = 'auto';
+  window.removeEventListener('mousemove', resize_x);
+  window.removeEventListener('mouseup', stopResize_x);
+}
+
+// Remove eventListener after resize event.
+function stopResizeTouch_x() {
+  mapNode.dispatchEvent(new CustomEvent('updatesize'));
+  window.removeEventListener('touchmove', resize_x);
+  window.removeEventListener('touchend', stopResizeTouch_x);
+}
+
+const hozDivider = document.getElementById('hozDivider');
+
+// Resize dataview while holding mousedown on resize_bar.
+hozDivider.addEventListener('mousedown', e => {
+  e.preventDefault();
+  document.body.style.cursor = 'grabbing';
+  window.addEventListener('mousemove', resize_y);
+  window.addEventListener('mouseup', stopResize_y);
+});
+
+// Resize dataview while holding mousedown on resize_bar.
+hozDivider.addEventListener('touchstart', e => {
+  window.addEventListener('touchmove', resize_y);
+  window.addEventListener('touchend', stopResizeTouch_y);
+}, { passive: true });
+
+// Resize the dataview container
+function resize_y(e) {
+
+  let height;
+
+  if (e.touches) {
+
+    if (e.touches[0].pageY < 0) return;
+
+    // Get height from window height minus first finger touch position.
+    height = window.innerHeight - e.touches[0].pageY;
+
+  } else {
+
+    if (e.pageY < 0) return;
+
+    // Get height from window height minus cursor position.
+    height = window.innerHeight - e.pageY;
+  }
+
+  // Min height snap.
+  if (height < 40) return;
+
+  // Full height snap.
+  if (height > (window.innerHeight - 10)) height = window.innerHeight;
+
+  document.body.style.gridTemplateRows = `minmax(0, 1fr) ${height}px`;
+}
+
+// Remove eventListener after resize event.
+function stopResize_y() {
+  mapNode.dispatchEvent(new CustomEvent('updatesize'));
+  document.body.style.cursor = 'auto';
+  window.removeEventListener('mousemove', resize_y);
+  window.removeEventListener('mouseup', stopResize_y);
+  dataviewNode.dispatchEvent(new CustomEvent('updatesize'));
+}
+
+// Remove eventListener after resize event.
+function stopResizeTouch_y() {
+  mapNode.dispatchEvent(new CustomEvent('updatesize'));
+  window.removeEventListener('touchmove', resize_y);
+  window.removeEventListener('touchend', stopResizeTouch_y);
+  dataviewNode.dispatchEvent(new CustomEvent('updatesize'));
+}
+
 
 
 _xyz({
@@ -11,156 +138,6 @@ _xyz({
 });
 
 function init(_xyz) {
-
-
-
-  desktop.listviews = document.querySelector('.listviews > .scrolly');
-
-  // reset scrollbar on control container after window resize.
-  window.addEventListener('resize', () => desktop.listviews.dispatchEvent(new CustomEvent('scrolly')));
-
-  const vertDivider = document.getElementById('vertDivider');
-
-  // Resize dataview while holding mousedown on resize_bar.
-  vertDivider.addEventListener('mousedown', e => {
-
-    // Prevent text selection.
-    e.preventDefault();
-
-    document.body.style.cursor = 'grabbing';
-    window.addEventListener('mousemove', resize_x);
-    window.addEventListener('mouseup', stopResize_x);
-  });
-
-  // Resize dataview while holding mousedown on resize_bar.
-  vertDivider.addEventListener('touchstart', e => {
-
-    window.addEventListener('touchmove', resize_x);
-    window.addEventListener('touchend', stopResizeTouch_x);
-  }, { passive: true });
-
-  // Resize the dataview container
-  function resize_x(e) {
-
-    let width;
-
-    if (e.touches) {
-
-      if (e.touches[0].pageX < 333) return;
-
-      // Get height from window height minus first finger touch position.
-      width = e.touches[0].pageX;
-
-    } else {
-
-      if (e.pageX < 333) return;
-
-      // Get height from window height minus cursor position.
-      width = e.pageX;
-    }
-
-    // Full width snap.
-    if (width > (window.innerWidth / 2)) width = window.innerWidth / 2;
-
-    document.body.style.gridTemplateColumns = `${width}px 10px auto`;
-
-  }
-
-  // Remove eventListener after resize event.
-  function stopResize_x() {
-
-    _xyz.map.updateSize();
-
-    document.body.style.cursor = 'auto';
-    window.removeEventListener('mousemove', resize_x);
-    window.removeEventListener('mouseup', stopResize_x);
-  }
-
-  // Remove eventListener after resize event.
-  function stopResizeTouch_x() {
-
-    _xyz.map.updateSize();
-
-    window.removeEventListener('touchmove', resize_x);
-    window.removeEventListener('touchend', stopResizeTouch_x);
-  }
-
-
-  const hozDivider = document.getElementById('hozDivider');
-
-  // Resize dataview while holding mousedown on resize_bar.
-  hozDivider.addEventListener('mousedown', e => {
-
-    // Prevent text selection.
-    e.preventDefault();
-
-    document.body.style.cursor = 'grabbing';
-    window.addEventListener('mousemove', resize_y);
-    window.addEventListener('mouseup', stopResize_y);
-  });
-
-  // Resize dataview while holding mousedown on resize_bar.
-  hozDivider.addEventListener('touchstart', e => {
-
-    window.addEventListener('touchmove', resize_y);
-    window.addEventListener('touchend', stopResizeTouch_y);
-  }, { passive: true });
-
-  // Resize the dataview container
-  function resize_y(e) {
-
-    let height;
-
-    if (e.touches) {
-
-      if (e.touches[0].pageY < 0) return;
-
-      // Get height from window height minus first finger touch position.
-      height = window.innerHeight - e.touches[0].pageY;
-
-    } else {
-
-      if (e.pageY < 0) return;
-
-      // Get height from window height minus cursor position.
-      height = window.innerHeight - e.pageY;
-    }
-
-    // Min height snap.
-    if (height < 40) return;
-
-    // Full height snap.
-    if (height > (window.innerHeight - 10)) height = window.innerHeight;
-
-    document.body.style.gridTemplateRows = `minmax(0, 1fr) ${height}px`;
-  }
-
-  // Remove eventListener after resize event.
-  function stopResize_y() {
-
-    _xyz.map.updateSize();
-
-    document.body.style.cursor = 'auto';
-    window.removeEventListener('mousemove', resize_y);
-    window.removeEventListener('mouseup', stopResize_y);
-
-    if (_xyz.dataview.current_table.Tabulator) _xyz.dataview.current_table.Tabulator.redraw(true);
-  }
-
-  // Remove eventListener after resize event.
-  function stopResizeTouch_y() {
-
-    _xyz.map.updateSize();
-
-    window.removeEventListener('touchmove', resize_y);
-    window.removeEventListener('touchend', stopResizeTouch_y);
-
-    if (_xyz.dataview.current_table.Tabulator) _xyz.dataview.current_table.Tabulator.redraw(true);
-  }
-
-
-
-
 
   createMap(_xyz);
 
@@ -192,14 +169,10 @@ function init(_xyz) {
       }));
   }
 
-
-  const btnWorkspace = document.getElementById('btnWorkspace');
-
-  if (btnWorkspace) btnWorkspace.onclick = () => _xyz.workspace.admin();
-
+  document.getElementById('btnWorkspace').onclick = () => _xyz.workspace.admin();
 
   // Select locations from hooks.
-  _xyz.hooks && _xyz.hooks.current.locations.forEach(_hook => {
+  _xyz.hooks.current.locations.forEach(_hook => {
 
     let hook = _hook.split('!');
 
@@ -212,9 +185,7 @@ function init(_xyz) {
 
   });
 
-
   if (_xyz.log) console.log(_xyz);
-
 }
 
 function createMap(_xyz) {
@@ -263,21 +234,15 @@ function createMap(_xyz) {
     },
     callbackAdd: () => {
       setTimeout(() => {
-        desktop.listviews.scrollTop = desktop.listviews.clientHeight;
+        listviews.scrollTop = listviews.clientHeight;
       }, 500);
     }
   });
 
-
-
   // add scrollbar on the left to control container.
-  _xyz.utils.scrolly(desktop.listviews);
-
-
+  _xyz.utils.scrolly(listviews);
 
   document.getElementById('clear_locations').onclick = () => {
-    //_xyz.hooks.remove('locations');
-
     _xyz.locations.list
       .filter(record => !!record.location)
       .forEach(record => record.location.remove());

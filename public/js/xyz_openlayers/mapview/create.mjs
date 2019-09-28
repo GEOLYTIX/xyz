@@ -49,6 +49,8 @@ export default _xyz => params => {
     })
   });
 
+  _xyz.mapview.node.addEventListener('updatesize', ()=>_xyz.map.updateSize());
+
 
   _xyz.mapview.interaction.highlight.begin();
 

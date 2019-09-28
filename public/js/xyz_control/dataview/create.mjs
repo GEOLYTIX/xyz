@@ -10,6 +10,11 @@ export default _xyz => params => {
   // Set dataview node.
   _xyz.dataview.node = params.target;
 
+  // Redraw current table
+  _xyz.mapview.node.addEventListener('updatesize', ()=>{
+    _xyz.dataview.current_table && _xyz.dataview.current_table.Tabulator.redraw(true);
+  });
+
    
   // Load locale if defined in params or if no locale is yet loaded.
   if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
