@@ -20,7 +20,6 @@ export default (_xyz, layer) => {
     _xyz.utils.toggleExpanderParent({
       expandable: layer.edit.panel,
       accordeon: true,
-      //scrolly: _xyz.desktop && _xyz.desktop.listviews,
     });
   }}
     class="btn_text cursor noselect">Add new features`;

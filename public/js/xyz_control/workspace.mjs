@@ -72,6 +72,8 @@ export default _xyz => {
 
     const workspace = document.getElementById('workspace');
 
+    const mask = document.getElementById('desktop_mask');
+
     workspace.style.display = 'block';
 
     const btnCloseWS = document.getElementById('btnCloseWS');
@@ -149,7 +151,7 @@ export default _xyz => {
     
                 _xyz.workspace.loadLocale({ locale: locale });
   
-                //_xyz.desktop.mask.style.display = 'none';
+                mask.style.display = 'none';
               }});
           };
 
@@ -157,15 +159,15 @@ export default _xyz => {
 
         } else {
 
-          //_xyz.desktop.mask.style.display = 'none';
+          mask.style.display = 'none';
 
         }
     
       };
 
-      //_xyz.utils.bind(_xyz.desktop.mask)`<p class="msg">Updating Workspace</p>`;
+      _xyz.utils.bind(mask)`<p class="msg">Updating Workspace</p>`;
     
-      //_xyz.desktop.mask.style.display = 'block';
+      mask.style.display = 'block';
        
       xhr.send(JSON.stringify({ settings: codeMirror.getValue() }));
       

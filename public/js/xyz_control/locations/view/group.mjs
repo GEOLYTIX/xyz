@@ -28,7 +28,6 @@ export default _xyz => group => {
     _xyz.utils.toggleExpanderParent({
       expandable: group.div,
       accordeon: true,
-      //scrolly: _xyz.desktop && _xyz.desktop.listviews
     });
   };
 

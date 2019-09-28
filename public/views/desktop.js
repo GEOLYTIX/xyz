@@ -14,21 +14,10 @@ function init(_xyz) {
 
 
 
-  // remove polyfill for IE11
-  if (!('remove' in Element.prototype)) {
-    Element.prototype.remove = function () {
-      if (this.parentNode) {
-        this.parentNode.removeChild(this);
-      }
-    };
-  }
-
-  desktop.mask = document.getElementById('desktop_mask');
-
   desktop.listviews = document.querySelector('.listviews > .scrolly');
 
   // reset scrollbar on control container after window resize.
-  window.addEventListener('resize', () => _xyz.utils.scrolly(desktop.listviews));
+  window.addEventListener('resize', () => desktop.listviews.dispatchEvent(new CustomEvent('scrolly')));
 
   const vertDivider = document.getElementById('vertDivider');
 

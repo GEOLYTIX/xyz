@@ -57,8 +57,6 @@ export default _xyz => {
 
   function pointerMove(e) {
 
-    console.log(e);
-
     const featureSet = new Set();
 
     // Iterate through all features (with layer) at pixel

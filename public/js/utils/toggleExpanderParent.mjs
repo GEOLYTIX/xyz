@@ -1,6 +1,12 @@
 // Function which expands the parent container of an expander element.
 export function toggleExpanderParent(params) {
 
+  setTimeout(
+    () => params.expandable
+      .closest('.scrolly')
+      .dispatchEvent(new CustomEvent('scrolly'))
+    , 500);
+
   if (!params.expandedTag) params.expandedTag = 'expanded';
   if (!params.expandableTag) params.expandableTag = 'expandable';
 
