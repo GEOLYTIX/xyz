@@ -99,7 +99,7 @@ export default _xyz => params => {
   }
 
   // Event binding.
-  _xyz.map.on('moveend', () => viewChangeEndTimer());
+  _xyz.mapview.node.addEventListener('moveend', viewChangeEndTimer);
 
          
   // Use timeout to prevent the viewChangeEvent to be executed multiple times.

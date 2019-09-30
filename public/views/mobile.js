@@ -1,49 +1,42 @@
-const mobile = {};
+const mobile = {
+  listviews: document.querySelectorAll('.listview'),
+  tabs: document.querySelector('.tab_bar'),
+  tabLayers: document.getElementById('tabLayers'),
+  tabLocations: document.getElementById('tabLocations'),
+  modLayers: document.getElementById('modLayers'),
+  modLocations: document.getElementById('modLocations'),
+};
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 //move map up on document scroll
 document.addEventListener('scroll',
   () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
+  
+mobile.modLayers.addEventListener('scroll', e => checkOverlap(e.target));
 
-let
-  listViews = document.querySelectorAll('.listview'),
-  tabs = document.querySelector('.tab_bar'),
-  tabLayers = document.getElementById('tabLayers'),
-  modLayers = document.getElementById('modLayers'),
-  modLocations = document.getElementById('modLocations');
+mobile.modLocations.addEventListener('scroll', e => checkOverlap(e.target));
 
-mobile.tabLocations = document.getElementById('tabLocations');
-
-modLayers.addEventListener('scroll', e => checkOverlap(e.target));
-modLocations.addEventListener('scroll', e => checkOverlap(e.target));
-
-function checkOverlap(mod) {
-  if (mod.scrollTop > 0) {
-    tabs.classList.add('pane_shadow');
-    return;
-  }
-  tabs.classList.remove('pane_shadow');
+function checkOverlap(target) {
+  if (target.scrollTop > 0) return mobile.tabs.classList.add('pane_shadow');
+  mobile.tabs.classList.remove('pane_shadow');
 }
 
-mobile.activateLayersTab = () => activateTab(tabLayers, modLayers);
+mobile.activateLayersTab = () => activateTab(mobile.tabLayers, mobile.modLayers);
 
 mobile.activateLocationsTab = () => {
   mobile.tabLocations.classList.remove('displaynone');
-  activateTab(mobile.tabLocations, modLocations);
+  activateTab(mobile.tabLocations, mobile.modLocations);
 };
 
-tabLayers.addEventListener('click', () => activateTab(tabLayers, modLayers));
+mobile.tabLayers.addEventListener('click', () => activateTab(mobile.tabLayers, mobile.modLayers));
 
-mobile.tabLocations.addEventListener('click', () => activateTab(mobile.tabLocations, modLocations));
+mobile.tabLocations.addEventListener('click', () => activateTab(mobile.tabLocations, mobile.modLocations));
 
 function activateTab(target, mod) {
-
-  Object.values(target.parentNode.children).forEach(el => {
-    el.classList.remove('active');
-  });
+  Object.values(target.parentNode.children).forEach(el => el.classList.remove('active'));
   target.classList.add('active');
-  listViews.forEach(m => m.classList.add('displaynone'));
+  mobile.listviews.forEach(m => m.classList.add('displaynone'));
   mod.classList.remove('displaynone');
   checkOverlap(mod);
 }
@@ -115,7 +108,6 @@ function createMap(_xyz) {
   attribution[_xyz.version] = _xyz.release;
   attribution['Openlayers'] = 'https://openlayers.org';
 
-
   // Create mapview control.
   _xyz.mapview.create({
     target: document.getElementById('Map'),
@@ -133,13 +125,8 @@ function createMap(_xyz) {
     }
   });
 
-
   _xyz.layers.listview.init({
     target: document.getElementById('layers'),
-    // callback: () => {
-    //   mobile.tabLocations.classList.add('displaynone');
-    //   mobile.activateLocationsTab();
-    // }
   });
 
   _xyz.locations.listview.init({
@@ -166,5 +153,4 @@ function createMap(_xyz) {
     target: document.getElementById('gazetteer'),
     toggle: document.getElementById('btnGazetteer'),
   });
-
 };

@@ -112,8 +112,7 @@ function init(_xyz) {
     });
 
     document.getElementById('localeDropdown').appendChild(_xyz.utils.wire()`
-      <div class="pretty"><small>Show layers for the following locale
-      `);
+      <div class="pretty"><small>Show layers for the following locale`);
 
     document.getElementById('localeDropdown').appendChild(
       _xyz.utils.dropdownCustom({
@@ -143,7 +142,6 @@ function init(_xyz) {
       table: hook[1],
       id: hook[2]
     });
-
   });
 
   if (_xyz.log) console.log(_xyz);

@@ -25,7 +25,7 @@ export default _xyz => {
 
     _xyz.mapview.interaction.highlight.featureSet = new Set();
 
-    _xyz.map.on('click', select);
+    _xyz.mapview.node.addEventListener('click', select);
   
     _xyz.mapview.node.addEventListener('touchstart', pointerMove);
 
@@ -56,6 +56,8 @@ export default _xyz => {
   }
 
   function pointerMove(e) {
+
+    //e.preventDefault();
 
     const featureSet = new Set();
 
@@ -106,7 +108,7 @@ export default _xyz => {
 
   function finish() {
 
-    _xyz.map.un('click', select);
+    _xyz.mapview.node.removeEventListener('click', select);
 
     _xyz.mapview.node.removeEventListener('touchstart', pointerMove);
 
@@ -121,7 +123,7 @@ export default _xyz => {
   }
 
 
-  function select() {
+  function select(e) {
 
     if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
 
