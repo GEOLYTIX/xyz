@@ -6,6 +6,9 @@ $qs_font-size: $qs_width * .05;
 $qs_arrow: 25px;
 
 .qs-datepicker {
+
+  white-space: normal;
+
   color: black;
 
   font-family: sans-serif;
@@ -102,6 +105,7 @@ $qs_arrow: 25px;
         color: gray;
         border-color: gray;
         cursor: not-allowed;
+        display: none;
       }
     }
 
@@ -193,7 +197,7 @@ $qs_arrow: 25px;
     border-bottom: 1px solid transparent;
     cursor: pointer;
 
-    white-space: normal;
+    /*white-space: normal;*/
     padding: 4px;
 
     text-align: center;

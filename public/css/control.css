@@ -402,6 +402,7 @@ input[type=range]::-moz-range-thumb {
     display: block; }
 
 .qs-datepicker {
+  white-space: normal;
   color: black;
   font-family: sans-serif;
   position: fixed;
@@ -476,7 +477,8 @@ input[type=range]::-moz-range-thumb {
       .qs-datepicker .qs-overlay .qs-submit.qs-disabled {
         color: gray;
         border-color: gray;
-        cursor: not-allowed; }
+        cursor: not-allowed;
+        display: none; }
     .qs-datepicker .qs-overlay .qs-overlay-month-container {
       display: flex;
       flex-wrap: wrap;
@@ -537,7 +539,7 @@ input[type=range]::-moz-range-thumb {
     transition: border .2s;
     border-bottom: 1px solid transparent;
     cursor: pointer;
-    white-space: normal;
+    /*white-space: normal;*/
     padding: 4px;
     text-align: center;
     height: 25px; }
