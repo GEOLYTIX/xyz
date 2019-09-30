@@ -26,10 +26,12 @@ export default _xyz => {
     _xyz.mapview.interaction.highlight.featureSet = new Set();
 
     _xyz.mapview.node.addEventListener('click', select);
-  
-    _xyz.mapview.node.addEventListener('touchstart', pointerMove);
 
-    _xyz.mapview.node.addEventListener('touchstart', mouseMove);
+    _xyz.mapview.node.addEventListener('touchstart', touchSelect);
+  
+    //_xyz.mapview.node.addEventListener('touchstart', pointerMove);
+
+    //_xyz.mapview.node.addEventListener('touchstart', mouseMove);
 
     _xyz.mapview.node.addEventListener('mousemove', mouseMove);
   
@@ -39,7 +41,10 @@ export default _xyz => {
 
   };
 
-  function mouseOut() {
+  function mouseOut(e) {
+
+    //console.log(e);;
+
     _xyz.mapview.pointerLocation = {
       x: null,
       y: null
@@ -48,6 +53,9 @@ export default _xyz => {
   }
 
   function mouseMove(e) {
+
+    //console.log(e);;
+
     _xyz.mapview.pointerLocation = {
       x: e.clientX,
       y: e.clientY
@@ -57,7 +65,7 @@ export default _xyz => {
 
   function pointerMove(e) {
 
-    //e.preventDefault();
+    //console.log(e);
 
     const featureSet = new Set();
 
@@ -77,12 +85,12 @@ export default _xyz => {
       _xyz.mapview.node.style.cursor = 'pointer';
 
       // Check for hover.
-      if (e.type !== 'touchstart' && _xyz.mapview.interaction.highlight.layer.hover && _xyz.mapview.interaction.highlight.layer.hover.field) {
+      if (_xyz.mapview.interaction.highlight.layer.hover && _xyz.mapview.interaction.highlight.layer.hover.field) {
         _xyz.mapview.interaction.highlight.layer.infotip();
       }
 
       // Redraw layer to style highlight.
-      if (e.type !== 'touchstart') _xyz.mapview.interaction.highlight.layer.L.setStyle(
+      _xyz.mapview.interaction.highlight.layer.L.setStyle(
         _xyz.mapview.interaction.highlight.layer.L.getStyle()
       );
 
@@ -105,25 +113,62 @@ export default _xyz => {
 
   }
 
+  function touchSelect(e) {
 
-  function finish() {
+    //console.log(e);
 
+    if (e.touches.length > 1) return;
+
+    //e.preventDefault();
     _xyz.mapview.node.removeEventListener('click', select);
+    
+    const featureSet = new Set();
 
-    _xyz.mapview.node.removeEventListener('touchstart', pointerMove);
+    // Iterate through all features (with layer) at pixel
+    _xyz.map.forEachFeatureAtPixel(_xyz.map.getEventPixel(e), (feature, featureLayer) => {
 
-    _xyz.mapview.node.removeEventListener('touchstart', mouseMove);
+      // Add feature to current set.
+      featureSet.add(feature);
 
-    _xyz.mapview.node.removeEventListener('mousemove', pointerMove);
+      if (_xyz.mapview.interaction.highlight.featureSet.has(feature)) return;
+  
+      // Set highlight layer / feature.
+      _xyz.mapview.interaction.highlight.feature = feature;
+      _xyz.mapview.interaction.highlight.layer = featureLayer.get('layer');
 
-    _xyz.mapview.node.removeEventListener('mousemove', mouseMove);
+    },{
+      layerFilter: featureLayer => {
 
-    _xyz.mapview.node.removeEventListener('mouseout', mouseOut);
+        // Filter for layers which have a highlight style.
+        return Object.values(_xyz.layers.list).some(layer => {
+          return layer.qID && layer.L === featureLayer;
+        });
+      },
+      hitTolerance: 0,
+    });
+
+    // Assign current set to highlight object.
+    _xyz.mapview.interaction.highlight.featureSet = featureSet;
+
+    featureSet.size && _xyz.mapview.interaction.highlight.feature && _xyz.mapview.interaction.highlight.layer.select(_xyz.mapview.interaction.highlight.feature);
 
   }
 
+  function finish() {
+    _xyz.mapview.node.removeEventListener('click', select);
+    _xyz.mapview.node.removeEventListener('touchstart', touchSelect);
+    // _xyz.mapview.node.removeEventListener('touchstart', pointerMove);
+    // _xyz.mapview.node.removeEventListener('touchstart', mouseMove);
+    _xyz.mapview.node.removeEventListener('mousemove', pointerMove);
+    _xyz.mapview.node.removeEventListener('mousemove', mouseMove);
+    _xyz.mapview.node.removeEventListener('mouseout', mouseOut);
+  }
 
   function select(e) {
+
+    //console.log(e);;
+
+    //if (e.mozInputSource === 5) return;
 
     if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
 
@@ -134,7 +179,6 @@ export default _xyz => {
     _xyz.mapview.interaction.highlight.layer.select(_xyz.mapview.interaction.highlight.feature);
   }
 
-
   function clear() {
 
     _xyz.mapview.interaction.highlight.featureSet = new Set();
@@ -144,13 +188,10 @@ export default _xyz => {
     if (!_xyz.mapview.interaction.highlight.layer) return;
   
     _xyz.mapview.interaction.highlight.layer.highlight = true;
-
     _xyz.mapview.node.style.cursor = 'auto';
-                
     _xyz.mapview.interaction.highlight.layer.L.setStyle(_xyz.mapview.interaction.highlight.layer.L.getStyle());
 
     delete _xyz.mapview.interaction.highlight.layer;
-
     delete _xyz.mapview.interaction.highlight.feature;
   }
 

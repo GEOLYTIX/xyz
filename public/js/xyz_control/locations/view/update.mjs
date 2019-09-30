@@ -117,6 +117,12 @@ export default (_xyz, location) => () => {
     // If input is images create image control and return from object.map function.
     if (entry.type === 'images') return location.view.images(entry);
 
+    // Custom methods
+    if (entry.custom) {
+      _xyz.locations.custom[entry.custom] && _xyz.locations.custom[entry.custom](entry);
+      return;
+    }
+
     // If input is documents create document control and return from object.map function.
     if (entry.type === 'documents') return location.view.documents(entry);
 

@@ -659,7 +659,10 @@
                         {
                             "label": "RP Count",
                             "field": "rp_count",
-                            "fieldfx": "(SELECT count(dev.retailpoints.geom) FROM dev.retailpoints, dev.scratch WHERE st_intersects(dev.retailpoints.geom, st_transform(dev.scratch.geom_3857, 4326)) AND dev.scratch.id = $1)"
+                            "fieldfx": "(SELECT sum(1) FROM dev.retailpoints, dev.scratch WHERE st_intersects(dev.retailpoints.geom, st_transform(dev.scratch.geom_3857, 4326)) AND dev.scratch.id = $1)"
+                        },
+                        {
+                            "custom": "foo"
                         },
                         {
                             "label": "Images",
@@ -1461,6 +1464,9 @@
                         },
                         {
                             "type": "key"
+                        },
+                        {
+                            "custom": "foo"
                         },
                         {
                             "label": "ID",

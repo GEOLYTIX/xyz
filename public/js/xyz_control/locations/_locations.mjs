@@ -32,6 +32,8 @@ export default _xyz => ({
 
   listview: listview(_xyz),
 
+  custom: {},
+
   decorate: (location, assign = {}) => {
 
     return Object.assign(
