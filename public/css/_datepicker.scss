@@ -2,10 +2,16 @@ $qs_width: 250px; // Regular: 250px
 $qs_border-width: 1px;
 $qs_radius: $qs_width * .016891; // 296px / 5px ratio.
 $qs_transition: .3s;
-$qs_font-size: $qs_width * .056;
+$qs_font-size: $qs_width * .05;
+$qs_arrow: 25px;
 
 .qs-datepicker {
+
+  white-space: normal;
+
   color: black;
+
+  font-family: sans-serif;
 
   position: fixed;
   left: 75px;
@@ -99,6 +105,7 @@ $qs_font-size: $qs_width * .056;
         color: gray;
         border-color: gray;
         cursor: not-allowed;
+        display: none;
       }
     }
 
@@ -134,13 +141,15 @@ $qs_font-size: $qs_width * .056;
     filter: blur(0px);
     transition: filter $qs_transition;
 
+    height: $qs_arrow;
+
     &.qs-blur {
       filter: blur(5px);
     }
   }
 
   .qs-arrow {
-    $qs_arrow: $qs_width / 10;
+    /*$qs_arrow: 25px; $qs_width / 10;*/
     $qs_offset: ($qs_arrow / 4) - (($qs_arrow / 4) / 4);
     height: $qs_arrow;
     width: $qs_arrow;
@@ -188,6 +197,12 @@ $qs_font-size: $qs_width * .056;
     border-bottom: 1px solid transparent;
     cursor: pointer;
 
+    /*white-space: normal;*/
+    padding: 4px;
+
+    text-align: center;
+    height: $qs_arrow;
+
     &:hover {
       border-bottom: 1px solid gray;
     }
@@ -199,11 +214,11 @@ $qs_font-size: $qs_width * .056;
   }
 
   .qs-month {
-    padding-right: .5ex;
+    /*padding-right: .5ex;*/
   }
 
   .qs-year {
-    padding-left: .5ex;
+    /*padding-left: .5ex;*/
   }
 
   .qs-squares {

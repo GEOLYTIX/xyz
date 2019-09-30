@@ -7,8 +7,31 @@ export function datePicker(params){
     {
       position: params.position,
       formatter: params.formatter,
-      onSelect: params.onSelect,
-      onShow: params.onShow
+      onSelect: instance => {
+        instance.calendar.style.top = '-10000px';
+        params.onSelect(instance);
+      
+      },
+      onShow: instance => {
+        let i = 0;
+        const yPosition = instance.el.getBoundingClientRect().top;
+        instance.calendar.style.top = (yPosition - 100) + 'px';
+
+        params.onShow(instance);
+
+        document.querySelector('.listviews').addEventListener('click', e => {
+
+          i++;
+          
+          let clickedInside = instance.calendar.contains(e.target);
+          
+          if(!clickedInside && i === 2 ) {
+            instance.calendar.style.top = '-10000px';
+          } else {
+            return false;
+          }
+        });
+      }
     });
 
 }
