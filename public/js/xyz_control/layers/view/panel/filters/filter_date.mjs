@@ -33,14 +33,8 @@ export default (_xyz, layer, filter_entry) => {
         _xyz.utils.formatDate(meltDateStr);
 
     },
-    onSelect: (instance, date) => {
-      applyFilter();
-      instance.calendar.style.top = '-10000px';
-    },
-    onShow: instance => {
-      const yPosition = instance.el.getBoundingClientRect().top;
-      instance.calendar.style.top = (yPosition - 100) + 'px';
-    }
+    onSelect: (instance, date) => applyFilter(),
+    onShow: instance => {}
   });
 
   _xyz.utils.datePicker({
@@ -55,14 +49,8 @@ export default (_xyz, layer, filter_entry) => {
         _xyz.utils.formatDate(meltDateStr);
 
     },
-    onSelect: (instance, date) => {
-      applyFilter();
-      instance.calendar.style.top = '-10000px';
-    },
-    onShow: instance => {
-      const yPosition = instance.el.getBoundingClientRect().top;
-      instance.calendar.style.top = (yPosition - 100) + 'px';
-    }
+    onSelect: (instance, date) => applyFilter(),
+    onShow: instance => {}
   });
 
   let timeout;

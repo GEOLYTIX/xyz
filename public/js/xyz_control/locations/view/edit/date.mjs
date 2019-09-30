@@ -29,13 +29,13 @@ export default _xyz => entry => {
         entry: entry,
         value: _xyz.utils.meltDateStr(new Date(input.value))});
 
-      instance.calendar.style.top = '-10000px';
+      //instance.calendar.style.top = '-10000px';
     },
     onShow: instance => {
    
-      const yPosition = instance.el.getBoundingClientRect().top;
+      //const yPosition = instance.el.getBoundingClientRect().top;
 
-      instance.calendar.style.top = (yPosition - 100) + 'px';
+      //instance.calendar.style.top = (yPosition - 100) + 'px';
 
     }
   });

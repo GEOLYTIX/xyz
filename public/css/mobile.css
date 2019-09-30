@@ -410,7 +410,7 @@ input[type=range]::-moz-range-thumb {
   width: 250px;
   display: flex;
   flex-direction: column;
-  font-size: 14px;
+  font-size: 12.5px;
   z-index: 9001;
   user-select: none;
   border: 1px solid gray;
@@ -451,7 +451,7 @@ input[type=range]::-moz-range-thumb {
       border-bottom: 1px solid white;
       border-radius: 0;
       color: white;
-      font-size: 14px;
+      font-size: 12.5px;
       padding: .25em 0;
       width: 80%;
       text-align: center;
