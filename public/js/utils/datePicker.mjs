@@ -8,7 +8,7 @@ export function datePicker(params){
       position: params.position,
       formatter: params.formatter,
       onSelect: params.onSelect,
-      onShow: params.onShow,
+      onShow: params.onShow
     });
 
 }

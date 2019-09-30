@@ -37,7 +37,7 @@
     "fastify-static": "^2.3.4",
     "fastify-swagger": "^2.3.2",
     "hyperhtml": "^2.25.5",
-    "js-datepicker": "^4.0.6",
+    "js-datepicker": "^4.6.6",
     "jsrender": "^0.9.91",
     "jwt-decode": "^2.2.0",
     "logrocket": "^0.6.21",
