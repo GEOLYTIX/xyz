@@ -76,21 +76,18 @@ export default (_xyz, layer) => {
   
   panel.appendChild(header);
 
+  let filter_entries = [];
 
-  layer.filter.select = _xyz.utils.dropdown({
-    appendTo: panel,
-    entries: infoj,
-    label: 'label',
-    val: 'field',
-    onchange: e => {
+  Object.values(infoj).map(el => {
+    if(el.field) filter_entries.push({[el.field]: (el.label || el.field)})
+  });
 
-      const entry = infoj.find(entry => entry.field === e.target.value);
+  layer.filter.select = _xyz.utils.dropdownCustom({
+    entries: filter_entries,
+    placeholder: 'Select filter from list.',
+    callback: e => {
 
-      // Disable the current filter in _xyz.utils.dropdown.
-      layer.filter.select.options[layer.filter.select.selectedIndex].disabled = true;
-
-      // Set selected index back to select text.
-      layer.filter.select.selectedIndex = 0;
+      const entry = infoj.find(entry => entry.field === e.target.dataset.field);
 
       // Display clear all button.
       layer.filter.clear_all.style.display = 'block';
@@ -105,12 +102,18 @@ export default (_xyz, layer) => {
 
       if (entry.filter === 'boolean') return filter_boolean(_xyz, layer, entry);
 
+
     }
   });
+
+  layer.filter.select.querySelector('ul').style.position = 'initial';
+
+  panel.appendChild(layer.filter.select);
 
   layer.filter.clear_all = _xyz.utils.wire()`
   <div
     class="btn_small cursor noselect"
+    style="margin: 4px;"
     onclick=${e=>{
 
       e.target.style.display = 'none';
@@ -119,7 +122,7 @@ export default (_xyz, layer) => {
       layer.filter.list.innerHTML = null;
   
       // Enable all options in _xyz.utils.dropdown.
-      Object.values(layer.filter.select.options).forEach(opt => opt.disabled = false);
+      layer.filter.select.querySelectorAll('ul li').forEach(li =>  li.classList.remove('selected'));
   
       // Reset layer filter object.
       layer.filter.current = {};
