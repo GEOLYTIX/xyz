@@ -58,7 +58,7 @@ export default (_xyz, layer) => {
   infoj.unshift('Select filter from list.');
 
   // Add filter panel to layer dashboard.
-  const panel = _xyz.utils.wire()`<div class="${'panel expandable ' + (layer.style.theme ? 'expanded': '')}">`;
+  const panel = _xyz.utils.wire()`<div class="${'panel expandable' + (layer.style.theme ? '': ' expanded')}">`;
 
   layer.view.dashboard.appendChild(panel);
 
