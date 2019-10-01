@@ -106,7 +106,7 @@ module.exports = fastify => {
           ${cat} AS cat,
           ${size} AS size,
           ${geom} AS geom,
-          ${label ? label + ' AS label,' : ''}
+          ${label && label !== 'count' ? label + ' AS label,' : ''}
           ST_ClusterKMeans(${geom}, ${kmeans}) OVER () kmeans_cid
           
         FROM ${table} ${where_sql}) kmeans`;
@@ -118,7 +118,7 @@ module.exports = fastify => {
             cat,
             size,
             geom,
-            ${label ? 'label,' : ''}
+            ${label && label !== 'count' ? 'label,' : ''}
             kmeans_cid,
             ST_ClusterDBSCAN(geom, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
           FROM ${cluster_sql}) dbscan`;
@@ -186,7 +186,7 @@ module.exports = fastify => {
         SELECT
           count(1) count,
           SUM(size) size,
-          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
           ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
           ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
   
@@ -198,7 +198,7 @@ module.exports = fastify => {
           count(1) AS count,
           SUM(size) AS size,
           array_agg(cat) cat,
-          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
           ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
           ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
   
@@ -211,7 +211,7 @@ module.exports = fastify => {
           count(1) count,
           SUM(size) size,
           ${req.query.aggregate || 'sum'}(cat) cat,
-          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
           ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
           ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
   
@@ -224,7 +224,7 @@ module.exports = fastify => {
           SUM(size) count,
           SUM(size) size,
           JSON_Agg(JSON_Build_Object(cat, size)) cat,
-          ${label ? '(array_agg(label))[1] AS label,' : ''}
+          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
           ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
           ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
   
@@ -232,7 +232,7 @@ module.exports = fastify => {
           SELECT
             SUM(size) size,
             cat,
-            ${label ? '(array_agg(label))[1] AS label,' : ''}
+            ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
             ST_Union(geom) geom,
             kmeans_cid,
             dbscan_cid
@@ -256,7 +256,8 @@ module.exports = fastify => {
         },
         properties: {
           count: parseInt(row.count),
-          size: parseInt(row.size)
+          size: parseInt(row.size),
+          label: label === 'count' ? parseInt(row.count) > 1 ? row.count : '' : row.label,
         }
       })));
 

@@ -5,16 +5,19 @@ export default (_xyz, layer) => new _xyz.mapview.lib.layer.Vector({
   style: feature => {
   
     const properties = feature.getProperties().properties;
-       
+
     return new _xyz.mapview.lib.style.Style({
             
       text: new _xyz.mapview.lib.style.Text({
+        font: layer.style.label.font || '12px sans-serif',
         text: properties.label,
-        size: '12px',
-        stroke: new _xyz.mapview.lib.style.Stroke({
-          color: '#fff',
-          width: 3
-        }),
+        // stroke: new _xyz.mapview.lib.style.Stroke({
+        //   color: '#fff',
+        //   width: 3
+        // }),
+        fill: new _xyz.mapview.lib.style.Fill({
+          color: layer.style.label.fillColor || '#000'
+        })
       })
     });
   
