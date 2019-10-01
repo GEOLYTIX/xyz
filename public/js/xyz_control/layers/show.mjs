@@ -31,7 +31,8 @@ export default _xyz => function () {
 
   _xyz.mapview.attribution.check();
 
-  if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers';
+  //if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers';
+  if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'toggle_on';
 
   // Push the layer into the layers hook array.
   if (_xyz.hooks) _xyz.hooks.push('layers', layer.key);
