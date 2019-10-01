@@ -1,15 +1,34 @@
 export default _xyz => layer => {
 
   // Create grid_size dropdown.
-  _xyz.utils.dropdown({
-    appendTo: layer.style.legend,
-    entries: layer.grid_fields,
-    selected: Object.keys(layer.grid_fields).find(key => layer.grid_fields[key] === layer.grid_size),
-    onchange: e => {
-      layer.grid_size = layer.grid_fields[e.target.value];
-      layer.get();
+  layer.style.legend.appendChild(_xyz.utils.wire()`<div style="margin-top: 5px;"><small>Select size variable.`);
+
+  layer.style.legend.appendChild(_xyz.utils.dropdownCustom({
+    entries: Object.keys(layer.grid_fields),
+    singleSelect: true,
+    selectedIndex: 0,
+    callback: e => {
+
+      e.target.parentNode.previousSibling.textContent = e.target.dataset.field;
+      layer.grid_size = layer.grid_fields[e.target.dataset.field];
+      layer.reload();
     }
-  });
+  }));
+
+  // Create grid_color dropdown.
+  layer.style.legend.appendChild(_xyz.utils.wire()`<div style="margin-top: 5px; margin-bottom: 8px;"><small>Select colour variable.`);
+
+  layer.style.legend.appendChild(_xyz.utils.dropdownCustom({
+    entries: Object.keys(layer.grid_fields),
+    singleSelect: true,
+    selectedIndex: 0,
+    callback: e => {
+
+      e.target.parentNode.previousSibling.textContent = e.target.dataset.field;
+      layer.grid_color = layer.grid_fields[e.target.value];
+      layer.reload();
+    }
+  }));
 
   const legend = layer.style.legend.appendChild(_xyz.utils.wire()
   `<svg 
@@ -30,7 +49,7 @@ export default _xyz => layer => {
 
     let circle1 = _xyz.utils.wire(null, 'svg')
     `<circle
-    fill='#333'
+    fill='#777'
     >`; 
 
     circle1.setAttribute('cx', x + w / 2 + 1 + '%');
@@ -54,7 +73,8 @@ export default _xyz => layer => {
 
       layer.style.legend.size_min = _xyz.utils.wire(null, 'svg')
       `<text
-      style='font-size:13px; text-anchor: start; font-family: "PT Mono", monospace;'
+      style='font-size:12px; text-anchor: start; 
+      font-family: "PT Mono", monospace;'
       >min
       </text>`;
 
@@ -68,7 +88,8 @@ export default _xyz => layer => {
 
       layer.style.legend.size_avg = _xyz.utils.wire(null, 'svg')
       `<text
-      style='font-size:13px; text-anchor: middle; font-family: "PT Mono", monospace;'
+      style='font-size:12px; text-anchor: middle; 
+      font-family: "PT Mono", monospace;'
       >avg
       </text>`;
 
@@ -83,7 +104,8 @@ export default _xyz => layer => {
 
       layer.style.legend.size_max = _xyz.utils.wire(null, 'svg')
       `<text
-      style='font-size:13px; text-anchor: end; font-family: "PT Mono", monospace;'
+      style='font-size:12px; text-anchor: end; 
+      font-family: "PT Mono", monospace;'
       >max
       </text>`;
 
@@ -118,7 +140,8 @@ export default _xyz => layer => {
 
       layer.style.legend.color_min = _xyz.utils.wire(null, 'svg')
       `<text
-      style='font-size:13px; text-anchor: start; font-family: "PT Mono", monospace;'
+      style='font-size:12px; text-anchor: start; 
+      font-family: "PT Mono", monospace;'
       >min
       </text>`;
 
@@ -132,7 +155,8 @@ export default _xyz => layer => {
 
       layer.style.legend.color_avg = _xyz.utils.wire(null, 'svg')
       `<text id="grid_legend_color__avg"
-      style='font-size:13px; text-anchor: middle; font-family: "PT Mono", monospace;'
+      style='font-size:12px; text-anchor: middle; 
+      font-family: "PT Mono", monospace;'
       >avg
       </text>`;
 
@@ -146,7 +170,8 @@ export default _xyz => layer => {
 
       layer.style.legend.color_max = _xyz.utils.wire(null, 'svg')
       `<text id="grid_legend_color__max"
-      style='font-size:13px; text-anchor: end; font-family: "PT Mono", monospace;'
+      style='font-size:12px; text-anchor: end; 
+      font-family: "PT Mono", monospace;'
       >max
       </text>`;
 
@@ -159,17 +184,6 @@ export default _xyz => layer => {
   }
 
   legend.style.height = `${yTrack + 43}px`;
-
-  // Create grid_color dropdown.
-  _xyz.utils.dropdown({
-    appendTo: layer.style.legend,
-    entries: layer.grid_fields,
-    selected:  Object.keys(layer.grid_fields).find(key => layer.grid_fields[key] === layer.grid_color),
-    onchange: e => {
-      layer.grid_color = layer.grid_fields[e.target.value];
-      layer.get();
-    }
-  });
   
   layer.style.legend.appendChild(_xyz.utils.wire()`
   <td style="padding-top: 5px;" colSpan=2>
@@ -178,7 +192,7 @@ export default _xyz => layer => {
     checked=${layer.grid_ratio}
     onchange=${e => {
     layer.grid_ratio = e.target.checked;
-    layer.get();
+    layer.reload();
   }}>
   <div class="checkbox_i">`);
 

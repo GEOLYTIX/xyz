@@ -32,7 +32,7 @@ export default (_xyz, layer) => {
           layer.filter.clear_all.style.display = 'none';
           layer.count(n => {
             layer.filter.run_output.disabled = !(n > 1);     
-          })
+          });
         }
         
         // Enable filter in select dropdown.
