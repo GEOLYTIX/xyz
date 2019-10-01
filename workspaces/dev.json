@@ -631,6 +631,7 @@
                     }
                 },
                 "Scratch": {
+                    "meta": "This is a test layer for editing and drawing geometries.",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.scratch",

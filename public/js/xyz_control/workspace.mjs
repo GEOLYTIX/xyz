@@ -173,7 +173,6 @@ export default _xyz => {
       
     };
     
-
     // Load workspace in codemirror.
     const xhr = new XMLHttpRequest();
     xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + document.body.dataset.token);
