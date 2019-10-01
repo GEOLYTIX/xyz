@@ -369,6 +369,9 @@
                             }
                         }
                     },
+                    "hover": {
+                        "field": "organisation_short"
+                    },
                     "style": {
                         "label": {
                             "field": "count",

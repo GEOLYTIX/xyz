@@ -19,6 +19,7 @@ module.exports = fastify => {
           layer: { type: 'string' },
           table: { type: 'string' },
           field: { type: 'string' },
+          //coords: { type: 'string' },
           id: { type: 'string' },
         },
         required: ['locale', 'layer', 'table', 'field', 'id']
@@ -36,16 +37,32 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         field = req.query.field,
+        coords = req.query.coords && req.query.coords.split(','),
         id = req.query.id,
         qID = layer.qID;
-           
-      var q = `
-      SELECT ${field}
-      FROM ${table}
-      WHERE ${qID} = $1;`;
-  
-      var rows = await env.dbs[layer.dbs](q, [id]);
 
+
+      if (coords) {
+
+        var q = `
+        SELECT ${field}
+        FROM ${table}
+        ORDER BY ST_Point(${coords}) <#> ${layer.geom} LIMIT 1;`;
+
+        var rows = await env.dbs[layer.dbs](q);
+
+      } else {
+
+        var q = `
+        SELECT ${field}
+        FROM ${table}
+        WHERE ${qID} = $1;`;
+
+        var rows = await env.dbs[layer.dbs](q, [id]);
+
+      }
+           
+      
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
       // return 204 if no record was returned from database.

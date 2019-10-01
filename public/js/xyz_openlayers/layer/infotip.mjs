@@ -12,7 +12,8 @@ export default _xyz => function() {
             locale: _xyz.workspace.locale.key,
             layer: layer.key,
             table: layer.table,
-            id: layer.highlight, /*** aga: problematic cluster id instead of location id, pulls wrong content ***/
+            id: layer.highlight,
+            coords: layer.format === 'cluster' && _xyz.mapview.lib.proj.transform(_xyz.mapview.interaction.highlight.feature.getGeometry().getCoordinates(),'EPSG:' + _xyz.mapview.srid,'EPSG:' + layer.srid),
             field: layer.hover.field,
             token: _xyz.token
           }));

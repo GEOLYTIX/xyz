@@ -215,7 +215,7 @@ export default _xyz => layer => {
         image: _xyz.mapview.icon(Object.assign({},
           marker,
           {
-            scale: (size / 40) * (marker.scale || 1)
+            scale: (size / 40) * (marker.scale || 0.05)
           }))
       });
 

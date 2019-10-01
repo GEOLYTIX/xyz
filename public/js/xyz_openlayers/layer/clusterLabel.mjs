@@ -11,10 +11,10 @@ export default (_xyz, layer) => new _xyz.mapview.lib.layer.Vector({
       text: new _xyz.mapview.lib.style.Text({
         font: layer.style.label.font || '12px sans-serif',
         text: properties.label,
-        // stroke: new _xyz.mapview.lib.style.Stroke({
-        //   color: '#fff',
-        //   width: 3
-        // }),
+        stroke: layer.style.label.strokeColor && new _xyz.mapview.lib.style.Stroke({
+          color: layer.style.label.strokeColor,
+          width: layer.style.label.strokeWidth || 1
+        }),
         fill: new _xyz.mapview.lib.style.Fill({
           color: layer.style.label.fillColor || '#000'
         })

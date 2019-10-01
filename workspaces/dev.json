@@ -1280,7 +1280,9 @@
                     "style": {
                         "label": {
                             "field": "store",
-                            "display": true
+                            "display": true,
+                            "strokeColor": "#fff",
+                            "strokeWidth": 3
                         },
                         "marker": {
                             "type": "target",
