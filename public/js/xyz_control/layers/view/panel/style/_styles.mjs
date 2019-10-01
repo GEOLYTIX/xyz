@@ -45,35 +45,34 @@ export default (_xyz, layer) => {
 
   layer.style.legend = _xyz.utils.wire()`<div class="legend">`;
 
-
-  if (layer.style.themes) {
+  if(layer.style.theme){
 
     // Assign 'Basic' style entry to themes object.
-    const themes = Object.assign({},{ 'Basic': null }, layer.style.themes);
+    const themes = Object.assign({"Basic": null}, layer.style.themes);
 
     // Create theme drop down
-    _xyz.utils.dropdown({
-      title: 'Select thematic style…',
-      appendTo: panel,
-      entries: themes,
-      selected: Object.keys(layer.style.themes)[0],
-      onchange: e => {
-    
-        // Set layer theme from themes object.
-        layer.style.theme = themes[e.target.value];
+    panel.appendChild(_xyz.utils.wire()`<div>Select thematic style.`);
+
+    panel.appendChild(_xyz.utils.dropdownCustom({
+      entries: Object.keys(themes),
+      singleSelect: true,
+      selectedIndex: Object.keys(themes).length > 1 ? 1 : 0,
+      callback: e => {
+        
+        e.target.parentNode.previousSibling.textContent = e.target.dataset.field;
+
+        layer.style.theme = themes[e.target.dataset.field];
       
         applyTheme(layer);
     
         layer.reload();
-          
       }
-    });
+
+    }));
     
     // Apply the current theme.
-    applyTheme(layer);
-    
-  }
-   
+    applyTheme(layer);   
+}
 
   panel.appendChild(layer.style.legend);
 
