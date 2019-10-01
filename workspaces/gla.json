@@ -1,0 +1,739 @@
+{
+    "title": "XYZ GLA",
+    "locales": {
+        "London": {
+            "locate": {},
+            "view": {
+                "lat": 51.5,
+                "lng": -0.1,
+                "z": 6
+            },
+            "bounds": {
+                "north": 51.9,
+                "east": 0.7,
+                "south": 51,
+                "west": -0.9
+            },
+            "minZoom": 10,
+            "maxZoom": 17,
+            "maskBounds": true,
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "code": "GB",
+                "placeholder": "e.g. N15 4SJ",
+                "bounds": "location=51.4,-0.1&radius=30000",
+                "datasets": [
+                    {
+                        "layer": "Advice Center",
+                        "table": "gla.gla",
+                        "label": "organisation",
+                        "leading_wildcard": true
+                    }
+                ]
+            },
+            "layers": {
+                "Mapbox Color": {
+					"name": "Mapbox Color",
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+					"format": "tiles",
+					"URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Zoomstack": {
+                    "display": true,
+                    "attribution": {
+                        "© Ordanance Survey": "https://ordnancesurvey.co.uk"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.ordnancesurvey.co.uk/mapping_api/v1/service/zxy/EPSG%3A3857/Light%203857/{z}/{x}/{y}.png?&provider=OS"
+                },
+                "Boroughs": {
+                    "display": true,
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "mvt_cache": "gla.boroughs__mvts",
+                    "table": "website.vw_london_glx_geodata_admin_lad_5m",
+                    "geom_3857": "geom_3857",
+                    "style": {
+                        "default": {
+                            "strokeWidth": 2,
+                            "strokeColor": "#353d42"
+                        }
+                    }
+                },
+                "Advice Center": {
+                    "display": true,
+                    "format": "cluster",
+                    "meta": "Employment advice centers",
+                    "dbs": "XYZ",
+                    "table": "gla.gla",
+                    "geom": "geom",
+                    "srid": 4326,
+                    "qID": "id",
+                    "cluster_label": "organisation_short",
+                    "cluster_kmeans": 0.3,
+                    "cluster_dbscan": 0.02,
+                    "infoj": [
+                        {
+                            "label": "Organisation",
+                            "field": "organisation_short",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Address",
+                            "type": "label"
+                        },
+                        {
+                            "field": "address1",
+                            "type": "text"
+                        },
+                        {
+                            "field": "address2",
+                            "type": "text"
+                        },
+                        {
+                            "field": "address3",
+                            "type": "text"
+                        },
+                        {
+                            "field": "address4",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Postcode",
+                            "field": "postcode",
+                            "type": "text",
+                            "filter": "like",
+                            "filterZoom": true
+                        },
+                        {
+                            "label": "Borough",
+                            "field": "borough",
+                            "type": "text",
+                            "filter": {
+                                "in": [
+                                    "Barking and Dagenham",
+                                    "Barnet",
+                                    "Bexley",
+                                    "Brent",
+                                    "Bromley",
+                                    "Camden",
+                                    "City of London",
+                                    "Croydon",
+                                    "Ealing",
+                                    "Enfield",
+                                    "Greenwich",
+                                    "Hackney",
+                                    "Hammersmith and Fulham",
+                                    "Haringey",
+                                    "Harrow",
+                                    "Havering",
+                                    "Hillingdon",
+                                    "Hounslow",
+                                    "Islington",
+                                    "Kensington and Chelsea",
+                                    "Kingston upon Thames",
+                                    "Lambeth",
+                                    "Lewisham",
+                                    "Merton",
+                                    "Newham",
+                                    "Redbridge",
+                                    "Richmond-upon-Thames",
+                                    "Southwark",
+                                    "Sutton",
+                                    "Tower Hamlets",
+                                    "Wandsworth",
+                                    "Westminster"
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Opening Hours",
+                            "type": "label"
+                        },
+                        {
+                            "label": "Sunday",
+                            "field": "hours_sunday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Monday",
+                            "field": "hours_monday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Tuesday",
+                            "field": "hours_tuesday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Wednesday",
+                            "field": "hours_wednesday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Thursday",
+                            "field": "hours_thursday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Friday",
+                            "field": "hours_friday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Saturday",
+                            "field": "hours_saturday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "hours_notes",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Phone",
+                            "field": "phone",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Sunday",
+                            "field": "phone_sunday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Monday",
+                            "field": "phone_monday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Tuesday",
+                            "field": "phone_tuesday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Wednesday",
+                            "field": "phone_wednesday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Thursday",
+                            "field": "phone_thursday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Friday",
+                            "field": "phone_friday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "label": "Saturday",
+                            "field": "phone_saturday",
+                            "type": "text",
+                            "inline": true
+                        },
+                        {
+                            "field": "phone_notes",
+                            "type": "text"
+                        },
+                        {
+                            "label": "EMail",
+                            "field": "email",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Website",
+                            "field": "website",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Areas of law",
+                            "field": "areas_of_law",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Services",
+                            "type": "label"
+                        },
+                        {
+                            "name": "Initial Advice",
+                            "field": "service_initial_advice",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Written Advice",
+                            "field": "service_written_advice",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Form Filling",
+                            "field": "service_form_filling",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Representation",
+                            "field": "service_representation",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Case Work",
+                            "field": "service_case_work",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Translation",
+                            "field": "service_translation",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "field": "translation_notes",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Disability Support",
+                            "type": "label"
+                        },
+                        {
+                            "name": "Access",
+                            "field": "access",
+                            "type": "text"
+                        },
+                        {
+                            "name": "Wheelchair Access",
+                            "field": "disabled_access",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Wheelchair Toilet",
+                            "field": "disabled_toilet",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Internet Advice",
+                            "field": "disabled_internet_advice",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "name": "Induction Loop",
+                            "field": "disabled_induction_loop",
+                            "type": "boolean",
+                            "filter": "boolean"
+                        },
+                        {
+                            "label": "Areas / People served",
+                            "field": "coverage",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images"
+                        }
+                    ],
+                    "tableview": {
+                        "tables": {
+                            "gla": {
+                                "display": true,
+                                "title": "Locations",
+                                "from": "gla.gla",
+                                "columns": [
+                                    {
+                                        "title": "Organisation",
+                                        "field": "organisation_short",
+                                        "type": "text"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "style": {
+                        "label": {
+                            "field": "count",
+                            "display": true,
+                            "fillColor": "#fff",
+                            "font": "bold 20px sans-serif"
+                        },
+                        "markerMin": 20,
+                        "markerMax": 25,
+                        "marker": {
+                            "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin.svg?sanitize=true",
+                            "anchor": [0.5, 1],
+                            "scale": 1
+                        },
+                        "markerMulti": {
+                            "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/marker_multi.svg?sanitize=true",
+                            "scale": 0.8
+                        },
+                        "highlight": {}
+                    }
+                },
+                "Advice Center edit": {
+                    "format": "cluster",
+                    "meta": "Employment advice centers - Editable by administrators",
+                    "dbs": "XYZ",
+                    "table": "gla.gla",
+                    "geom": "geom",
+                    "srid": 4326,
+                    "roles": {
+                        "edit": null
+                    },
+                    "edit": {
+                        "point": true,
+                        "delete": true
+                    },
+                    "qID": "id",
+                    "cluster_label": "organisation",
+                    "cluster_kmeans": 0.5,
+                    "cluster_dbscan": 0.015,
+                    "infoj": [
+                        {
+                            "label": "Organisation",
+                            "field": "organisation",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Organisation Short",
+                            "field": "organisation_short",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Address",
+                            "type": "label"
+                        },
+                        {
+                            "field": "address1",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "field": "address2",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "field": "address3",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "field": "address4",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Postcode",
+                            "field": "postcode",
+                            "type": "text",
+                            "filter": "like",
+                            "edit": true
+                        },
+                        {
+                            "label": "Borough",
+                            "field": "borough",
+                            "type": "text",
+                            "edit": true,
+                            "filter": {
+                                "in": [
+                                    "Barking and Dagenham",
+                                    "Barnet",
+                                    "Bexley",
+                                    "Brent",
+                                    "Bromley",
+                                    "Camden",
+                                    "City of London",
+                                    "Croydon",
+                                    "Ealing",
+                                    "Enfield",
+                                    "Greenwich",
+                                    "Hackney",
+                                    "Hammersmith and Fulham",
+                                    "Haringey",
+                                    "Harrow",
+                                    "Havering",
+                                    "Hillingdon",
+                                    "Hounslow",
+                                    "Islington",
+                                    "Kensington and Chelsea",
+                                    "Kingston upon Thames",
+                                    "Lambeth",
+                                    "Lewisham",
+                                    "Merton",
+                                    "Newham",
+                                    "Redbridge",
+                                    "Richmond-upon-Thames",
+                                    "Southwark",
+                                    "Sutton",
+                                    "Tower Hamlets",
+                                    "Wandsworth",
+                                    "Westminster"
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Opening Hours",
+                            "type": "label"
+                        },
+                        {
+                            "label": "Sunday",
+                            "field": "hours_sunday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Monday",
+                            "field": "hours_monday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Tuesday",
+                            "field": "hours_tuesday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Wednesday",
+                            "field": "hours_wednesday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Thursday",
+                            "field": "hours_thursday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Friday",
+                            "field": "hours_friday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Saturday",
+                            "field": "hours_saturday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "field": "hours_notes",
+                            "type": "textarea",
+                            "edit": true
+                        },
+                        {
+                            "label": "Phone",
+                            "field": "phone",
+                            "type": "textarea",
+                            "edit": true
+                        },
+                        {
+                            "label": "Sunday",
+                            "field": "phone_sunday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Monday",
+                            "field": "phone_monday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Tuesday",
+                            "field": "phone_tuesday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Wednesday",
+                            "field": "phone_wednesday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Thursday",
+                            "field": "phone_thursday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Friday",
+                            "field": "phone_friday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "label": "Saturday",
+                            "field": "phone_saturday",
+                            "type": "text",
+                            "inline": true,
+                            "edit": true
+                        },
+                        {
+                            "field": "phone_notes",
+                            "type": "textarea",
+                            "edit": true
+                        },
+                        {
+                            "label": "EMail",
+                            "field": "email",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Website",
+                            "field": "website",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Areas of law",
+                            "field": "areas_of_law",
+                            "type": "textarea",
+                            "edit": true
+                        },
+                        {
+                            "label": "Services",
+                            "type": "label"
+                        },
+                        {
+                            "name": "Initial Advice",
+                            "field": "service_initial_advice",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Written Advice",
+                            "field": "service_written_advice",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Form Filling",
+                            "field": "service_form_filling",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Representation",
+                            "field": "service_representation",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Case Work",
+                            "field": "service_case_work",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Translation",
+                            "field": "service_translation",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "field": "translation_notes",
+                            "type": "text",
+                            "edit": true
+                        },
+                        {
+                            "label": "Disability Support",
+                            "type": "label"
+                        },
+                        {
+                            "label": "Access",
+                            "field": "access",
+                            "type": "textarea",
+                            "edit": true
+                        },
+                        {
+                            "name": "Wheelchair Access",
+                            "field": "disabled_access",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Wheelchair Toilet",
+                            "field": "disabled_toilet",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Internet Advice",
+                            "field": "disabled_internet_advice",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "name": "Induction Loop",
+                            "field": "disabled_induction_loop",
+                            "type": "boolean",
+                            "filter": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "label": "Areas / People served",
+                            "field": "coverage",
+                            "type": "textarea",
+                            "edit": true
+                        },
+                        {
+                            "label": "Images",
+                            "field": "images",
+                            "type": "images",
+                            "edit": true
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

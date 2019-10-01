@@ -19,7 +19,7 @@ module.exports = {
       OSM: {
         display: true,
         format: 'tiles',
-        URI: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       },
     },
   },
