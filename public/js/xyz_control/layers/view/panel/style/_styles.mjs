@@ -48,7 +48,7 @@ export default (_xyz, layer) => {
   if(layer.style.theme){
 
     // Assign 'Basic' style entry to themes object.
-    const themes = Object.assign({"Basic": null}, layer.style.themes);
+    const themes = Object.assign({}, {"Basic": null}, layer.style.themes);
 
     // Create theme drop down
     panel.appendChild(_xyz.utils.wire()`<div>Select thematic style.`);
@@ -69,10 +69,9 @@ export default (_xyz, layer) => {
       }
 
     }));
-    
+  } 
     // Apply the current theme.
-    applyTheme(layer);   
-}
+  applyTheme(layer); 
 
   panel.appendChild(layer.style.legend);
 
@@ -83,7 +82,8 @@ export default (_xyz, layer) => {
 
     // Empty legend.
     layer.style.legend.innerHTML = '';
-  
+
+    if(!layer.filter) layer.filter = {};
     // Create / empty legend filter when theme is applied.
     layer.filter.legend = {};
   
@@ -94,9 +94,9 @@ export default (_xyz, layer) => {
   
       if (layer.style.markerMulti) clusterStyle(_xyz, layer, layer.style.markerMulti, 'Marker (multi)');
   
-      if (layer.style.default && !layer.style.default.marker) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
+      if (layer.style.default) polyStyle(_xyz, layer, layer.style.default, 'Polygon');
   
-      if (layer.style.highlight && !layer.style.highlight.marker) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
+      if (layer.style.highlight) polyStyle(_xyz, layer, layer.style.highlight, 'Highlight');
 
       return;
     }
