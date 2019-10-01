@@ -25,11 +25,17 @@ export default (_xyz, layer) => {
     layer.zoomToExtent();
   };
    
+  /*header.toggleDisplay = _xyz.utils.wire()`
+    <i
+    title="Toggle visibility"
+    class="material-icons cursor noselect btn_header">
+    ${layer.display ? 'layers' : 'layers_clear'}`;*/
+
   header.toggleDisplay = _xyz.utils.wire()`
     <i
     title="Toggle visibility"
     class="material-icons cursor noselect btn_header">
-    ${layer.display ? 'layers' : 'layers_clear'}`;
+    ${layer.display ? 'toggle_on' : 'toggle_off'}`;
 
   header.appendChild(header.toggleDisplay);
 
