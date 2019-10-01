@@ -1,108 +1,68 @@
 export default (_xyz, layer, style, title) => {
 
-  if (title) _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: title,
-      classList: 'block-title'
-    },
-    appendTo: layer.style.legend
-  });
+  if(title) layer.style.legend.appendChild(_xyz.utils.wire()`<div class="block-title">${title}`);
 
   const block = {};
 
-  block._ = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'block'
-    },
-    appendTo: layer.style.legend
-  });
+  block._ = _xyz.utils.wire()`<div class="block">`;
 
-  block.fill_colour = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      textContent: 'Fill Colour: ',
-      classList: 'title'
-    },
-    appendTo: block._
-  });
+  layer.style.legend.appendChild(block._);
 
-  block.fillColor = _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: style.fillColor,
-      classList: 'cursor colour-label'
-    },
-    appendTo: block.fill_colour,
-    eventListener: {
-      event: 'click',
-      funct: () => {
+  block.fill_colour = _xyz.utils.wire()`<div class="title">Fill Colour:`;
 
-        block.colorSelect = 'fillColor';
+  block._.appendChild(block.fill_colour);
 
-        block.colour_swatch.style.display = 'table';
-        
-      }
+  block.fillColor = _xyz.utils.wire()`
+  <span class="cursor colour-label"
+  onclick=${
+    e => {
+      block.colorSelect = 'fillColor';
+      block.colour_swatch.style.display = 'table';
     }
-  });
+  }
+  >${style.fillColor}`;
 
-  block.sample = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'sample-circle'
-    },
-    style: {
-      backgroundColor: style.fillColor && _xyz.utils.Chroma(style.fillColor).alpha(1).rgba()
-    },
-    appendTo: block._
-  });
+  block.fill_colour.appendChild(block.fillColor);
 
-  _xyz.utils.createElement({
-    tag: 'br',
-    appendTo: block._
-  });
+  block.sample = _xyz.utils.wire()`<div class="sample-circle">`;
 
-  block.colour_swatch = _xyz.utils.createElement({
-    tag: 'tr',
-    options: {
-      classList: 'colour-swatch'
-    },
-    style: {
-      display: 'none'
-    },
-    appendTo: block._
-  });
+  block.sample.style.backgroundColor = style.fillColor && _xyz.utils.Chroma(style.fillColor).alpha(1).hex();
+
+  block._.appendChild(block.sample);
+
+  block._.appendChild(_xyz.utils.wire()`<br>`);
+
+  block.colour_swatch = _xyz.utils.wire()`
+  <tr class="colour-swatch"
+  style="display: none;"
+  >`;
+
+  block._.appendChild(block.colour_swatch);
 
   _xyz.defaults.colours.forEach(colour => {
 
-    _xyz.utils.createElement({
-      tag: 'td',
-      options: {
-        classList: 'colour-td',
-        title: colour.name
-      },
-      style: {
-        backgroundColor: colour.hex
-      },
-      appendTo: block.colour_swatch,
-      eventListener: {
-        event: 'click',
-        funct: () => {
+    let _colour = _xyz.utils.wire()`
+      <td class="colour-td"
+      title="${colour.name};"
+      onclick=${
+        e => {
 
           block[block.colorSelect].textContent = colour.hex;
 
           style[block.colorSelect] = colour.hex;
 
-          block.sample.style.backgroundColor = _xyz.utils.Chroma(style.fillColor).alpha(1).rgba();
+          block.sample.style.backgroundColor = _xyz.utils.Chroma(style.fillColor).alpha(1).hex();
 
           block.colour_swatch.style.display = 'none';
 
-          layer.get();
-          
+          layer.reload();
         }
       }
-    });
+      >`;
+
+    _colour.style.backgroundColor = colour.hex;
+
+    block.colour_swatch.appendChild(_colour);
     
   });
 
