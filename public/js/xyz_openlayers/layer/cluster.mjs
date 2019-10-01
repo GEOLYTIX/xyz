@@ -124,9 +124,10 @@ export default _xyz => layer => {
 
       const properties = feature.getProperties().properties;
   
-      let marker = Object.assign({}, layer.style.marker);
-  
-      if (properties.size > 1) marker = Object.assign({}, layer.style.markerMulti);
+      const marker = properties.size > 1 ?
+        Object.assign({}, layer.style.markerMulti) :
+        Object.assign({}, layer.style.marker);
+
   
       const theme = Object.assign({}, layer.style.theme);
   
@@ -196,12 +197,6 @@ export default _xyz => layer => {
         Object.assign(marker, cat_style);
       }
 
-      const _marker = Object.assign(
-        {},
-        marker,
-        layer.highlight === feature.get('id') ? layer.style.highlight : {}
-      );
-
       const size = layer.cluster_logscale ?
         properties.count === 1 ?
           layer.style.markerMin :
@@ -210,13 +205,17 @@ export default _xyz => layer => {
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / layer.max_size * properties.size;
 
+      Object.assign(
+        marker,
+        layer.highlight === feature.get('id') ? layer.style.highlight : {}
+      );
+
       return new _xyz.mapview.lib.style.Style({
         zIndex: parseInt(layer.max_size - properties.size),
         image: _xyz.mapview.icon(Object.assign({},
-          _marker,
+          marker,
           {
-            //size: size,
-            scale: size / 40 * 0.05
+            scale: (size / 40) * (marker.scale || 1)
           }))
       });
 

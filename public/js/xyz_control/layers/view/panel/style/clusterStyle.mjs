@@ -53,7 +53,7 @@ export default (_xyz, layer, style, title) => {
       classList: 'sample-circle'
     },
     style: {
-      backgroundColor: _xyz.utils.Chroma(style.fillColor).alpha(1).rgba()
+      backgroundColor: style.fillColor && _xyz.utils.Chroma(style.fillColor).alpha(1).rgba()
     },
     appendTo: block._
   });

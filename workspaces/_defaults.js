@@ -72,14 +72,17 @@ module.exports = {
         marker: {
           type: 'target',
           fillColor: '#999999',
+          scale: 0.05,
         },
         markerMulti: {
           type: 'target',
           fillColor: '#333333',
+          scale: 0.05,
         },
         highlight: {
           type: 'target',
-          fillColor: '#ccff99'
+          fillColor: '#ccff99',
+          scale: 0.05,
         },
         themes: {},
       },
