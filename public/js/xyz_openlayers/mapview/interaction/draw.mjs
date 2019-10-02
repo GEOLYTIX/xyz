@@ -39,6 +39,7 @@ export default _xyz => {
     _xyz.mapview.interaction.draw.interaction = new _xyz.mapview.lib.interaction.Draw({
       source: _xyz.mapview.interaction.draw.Source,
       geometryFunction: params.geometryFunction,
+      freehand: params.freehand,
       type: params.type,
       condition: e => {
         if (e.pointerEvent.buttons === 1) {
@@ -49,11 +50,13 @@ export default _xyz => {
       }
     });
   
-    _xyz.mapview.interaction.draw.interaction.on('drawstart', () => {
+    _xyz.mapview.interaction.draw.interaction.on('drawstart', e => {
       _xyz.mapview.interaction.draw.Source.clear();
+      _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
     });
   
     _xyz.mapview.interaction.draw.interaction.on('drawend', e => {
+      params.freehand && _xyz.mapview.interaction.draw.vertices.push(e.target.sketchCoords_.pop());
       setTimeout(contextmenu, 400);
     });
   
@@ -122,7 +125,7 @@ export default _xyz => {
                       
       // Select polygon when post request returned 200.
       _xyz.locations.select({
-        layer: _xyz.mapview.interaction.draw.layer.key,
+        layer: _xyz.mapview.interaction.draw.layer,
         table: _xyz.mapview.interaction.draw.layer.table,
         id: e.target.response,
       });

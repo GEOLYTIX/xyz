@@ -147,6 +147,31 @@ export default (_xyz, layer) => {
   }}
   class="btn_state btn_wide cursor noselect">Line`);
 
+
+  layer.edit.freehand && layer.edit.panel.appendChild(_xyz.utils.wire()`
+  <div onclick=${e => {
+
+    e.stopPropagation();
+    const btn = e.target;
+
+    if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.finish();
+
+    btn.classList.add('active');
+    layer.view.header.classList.add('edited');
+
+    _xyz.mapview.interaction.draw.begin({
+      layer: layer,
+      type: 'LineString',
+      freehand: true,
+      callback: () => {
+        layer.view.header.classList.remove('edited');
+        btn.classList.remove('active');
+      }
+    });
+
+  }}
+  class="btn_state btn_wide cursor noselect">Freehand`);  
+
  
   if(layer.edit.isoline_mapbox){
 

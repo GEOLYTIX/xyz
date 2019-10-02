@@ -630,6 +630,30 @@
                         }
                     }
                 },
+                "Draw": {
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "table": "dev.draw",
+                    "srid": 3857,
+                    "geom": "geom",
+                    "qID": "id",
+                    "edit": {
+                        "polygon": true,
+                        "freehand": true,
+                        "circle": true,
+                        "rectangle": true,
+                        "line": true,
+                        "point": true,
+                        "isoline_mapbox": true,
+                        "isoline_here": true,
+                        "delete": true
+                    },
+                    "style": {
+                        "default": {
+                            "strokeColor": "#ff69b4"
+                        }
+                    }
+                },
                 "Scratch": {
                     "meta": "This is a test layer for editing and drawing geometries.",
                     "format": "mvt",
@@ -641,6 +665,7 @@
                     "qID": "id",
                     "edit": {
                         "polygon": true,
+                        "freehand": true,
                         "circle": true,
                         "rectangle": true,
                         "line": true,

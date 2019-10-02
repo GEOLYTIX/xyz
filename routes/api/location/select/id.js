@@ -42,25 +42,19 @@ module.exports =  fastify => {
         qID = layer.qID;
       
       // Clone the infoj from the memory workspace layer.
-      const infoj = JSON.parse(JSON.stringify(layer.infoj));
+      const infoj = layer.infoj && JSON.parse(JSON.stringify(layer.infoj));
 
-      // Get a EPSG:4326 geom field which is used to generate geojson for the client map.
-      // The geom field is also required for lookup fields.
-      const geom = layer.geom ?
-        `${table}.${layer.geom}` :
-        `(ST_Transform(ST_SetSRID(${table}.${layer.geom_3857}, 3857), 4326))`;
-
-      // The fields array stores all fields to be queried for the location info.
-      const fields = await sql_fields([], infoj, qID, req.params.token.roles || [], req.params.locale);
+      // The fields array stores all fields to be queried for the location info.    
+      const fields = (infoj && await sql_fields([], infoj, qID, req.params.token.roles || [], req.params.locale)) || [];
 
       // Push JSON geometry field into fields array.
-      fields.push(`\n   ST_asGeoJson(${geom},4) AS geomj`);
+      fields.push(`\n   ST_asGeoJson(${layer.geom},4) AS geomj`);
 
-      fields.push(`\n   ARRAY[ST_X(ST_PointOnSurface(${geom})), ST_Y(ST_PointOnSurface(${geom}))] AS PointOnSurface`);
+      fields.push(`\n   ARRAY[ST_X(ST_PointOnSurface(${layer.geom})), ST_Y(ST_PointOnSurface(${layer.geom}))] AS PointOnSurface`);
 
       const fields_with = [];
 
-      await infoj.forEach(entry => {
+      infoj && await infoj.forEach(entry => {
 
         // if (entry.withSelect) {
         //   fields_with.push(`${entry.fieldfx} as ${entry.field}`);
@@ -78,8 +72,7 @@ module.exports =  fastify => {
         FROM ${table}
         WHERE ${qID} = $1
       )
-      select ${fields_with.join()}, geomj, PointOnSurface from q
-      `;
+      select ${(infoj && fields_with.join() + ',') || ''} geomj, PointOnSurface from q`;
 
       var rows = await env.dbs[layer.dbs](q, [id]);
 
@@ -89,7 +82,7 @@ module.exports =  fastify => {
       if (rows.length === 0) return res.code(202).send('No rows returned from table.');
 
       // Iterate through infoj entries and assign values returned from query.
-      infoj.forEach(entry =>  {
+      infoj && infoj.forEach(entry =>  {
         if (rows[0][entry.field]) entry.value = rows[0][entry.field];
       });
     

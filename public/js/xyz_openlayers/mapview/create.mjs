@@ -56,7 +56,7 @@ export default _xyz => params => {
 
 
   // Add scalebar.
-  if(params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
+  if(params.showScaleBar !== 'never' && (params.showScaleBar || _xyz.workspace.locale.showScaleBar)) {
     _xyz.map.addControl(new _xyz.mapview.lib.control.ScaleLine());
   }
 

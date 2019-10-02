@@ -23,7 +23,7 @@ export default (_xyz, location) => () => {
 
   // Iterate through info fields to fill displayValue property
   // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
-  Object.values(location.infoj).forEach(entry => {
+  location.infoj && Object.values(location.infoj).forEach(entry => {
 
     if (document.body.dataset.viewmode === 'report') entry.edit = null;
 
@@ -41,11 +41,11 @@ export default (_xyz, location) => () => {
     if(entry.prefix)  entry.displayValue = entry.prefix + entry.displayValue;
     if(entry.suffix) entry.displayValue = entry.displayValue + entry.suffix;
   });
-
     
   let dataset; // watch for group/chart data series and stacks
+
   // Iterate through info fields and add to info table.
-  Object.values(location.infoj).forEach(entry => {
+  location.infoj && Object.values(location.infoj).forEach(entry => {
 
     entry.row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`;
 
@@ -191,7 +191,7 @@ export default (_xyz, location) => () => {
   });
 
   // Hide group if empty
-  Object.values(location.infoj).map(entry => {
+  location.infoj && Object.values(location.infoj).map(entry => {
 
     if(!entry.group) return;
       

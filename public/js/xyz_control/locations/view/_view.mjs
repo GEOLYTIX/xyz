@@ -91,7 +91,7 @@ export default _xyz => function () {
 
 
   // Expander icon.
-  location.view.header.appendChild(_xyz.utils.wire()`
+  location.infoj && location.view.header.appendChild(_xyz.utils.wire()`
   <i
   style = "${'color: ' + location.style.strokeColor}"
   title = "Toggle location view drawer."
@@ -103,6 +103,18 @@ export default _xyz => function () {
       expandable: location.view.drawer,
     });
   }}>`);
+
+
+  // Zoom to location bounds.
+  location.view.header.appendChild(_xyz.utils.wire()`
+    <i
+    style = "${'color: ' + location.style.strokeColor}"
+    title = "Zoom map to feature bounds"
+    class = "material-icons cursor noselect btn_header"
+    onclick = ${e => {
+      e.stopPropagation();
+      location.flyTo();
+    }}>search`);
 
 
   // Update icon.
@@ -174,18 +186,6 @@ export default _xyz => function () {
     e.stopPropagation();
     location.clipboard();
   }}>file_copy`);*/
-
-
-  // Zoom to location bounds.
-  location.view.header.appendChild(_xyz.utils.wire()`
-  <i
-  style = "${'color: ' + location.style.strokeColor}"
-  title = "Zoom map to feature bounds"
-  class = "material-icons cursor noselect btn_header"
-  onclick = ${e => {
-    e.stopPropagation();
-    location.flyTo();
-  }}>search`);
 
 
   // Toggle marker.
