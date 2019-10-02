@@ -1918,6 +1918,10 @@ body {
     width: calc(100% + 50px); }
   .listviews .listview {
     padding: 10px 0; }
+  .listviews #localeDropdown .ul-drop .head span {
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #DEF6CA; }
 
 #vertDivider {
   grid-column: 2;

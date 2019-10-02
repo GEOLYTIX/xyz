@@ -102,7 +102,6 @@ export default (_xyz, layer) => {
 
       if (entry.filter === 'boolean') return filter_boolean(_xyz, layer, entry);
 
-
     }
   });
 

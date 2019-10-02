@@ -7,7 +7,7 @@ export function dropdownCustom(param) {
   node.appendChild(wire()`
   <div
     class="head"
-    onclick=${toggleMenu}>
+    onclick=${toggleMenu}><span>
       ${param.placeholder || 'Select...'}`);
 
   function toggleMenu(e) {
@@ -44,7 +44,7 @@ export function dropdownCustom(param) {
   });
 
   if(!isNaN(param.selectedIndex)){
-    node.querySelector('.head').textContent = menu.children[param.selectedIndex].textContent;
+    node.querySelector('.head span').textContent = menu.children[param.selectedIndex].dataset.field;
     menu.children[param.selectedIndex].classList.add('selected');
   }
 

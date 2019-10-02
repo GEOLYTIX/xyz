@@ -59,7 +59,7 @@ export default (_xyz, layer) => {
       selectedIndex: Object.keys(themes).length > 1 ? 1 : 0,
       callback: e => {
         
-        e.target.parentNode.previousSibling.textContent = e.target.dataset.field;
+        e.target.parentNode.previousSibling.firstChild.textContent = e.target.dataset.field;
 
         layer.style.theme = themes[e.target.dataset.field];
       
