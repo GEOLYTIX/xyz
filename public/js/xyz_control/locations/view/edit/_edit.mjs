@@ -39,37 +39,28 @@ export default _xyz => entry => {
   if (entry.edit.options_field) return entry.ctrl.suboptions(entry);
 
   // Create a 3 line textarea for textarea type entry.
-  if (entry.type === 'textarea') return _xyz.utils.createElement({
-    tag: 'textarea',
-    options: {
-      value: entry.value || '',
-      rows: 3
-    },
-    appendTo: entry.val,
-    eventListener: {
-      event: 'keyup',
-      funct: e => {
-        //entry.location.view.valChange(e.target, entry);
+  if (entry.type === 'textarea') {
+    let textArea = _xyz.utils.wire()`
+    <textarea value=${entry.value || ''} rows=3
+    onkeyup=${
+      e => {
         entry.location.view.valChange({input: e.target, entry: entry});
       }
-    }
-  });
+    }>`;
+
+    entry.val.appendChild(textArea);
+
+    return textArea;
+  }
 
   // Create a text input if no other rule applies.
-  _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      value: entry.value || '',
-      type: 'text'
-    },
-    appendTo: entry.val,
-    eventListener: {
-      event: 'keyup',
-      funct: e => {
-        //entry.location.view.valChange(e.target, entry);
+  entry.val.appendChild(_xyz.utils.wire()`
+    <input type="text" value="${entry.value || ''}"
+    onkeyup=${
+      e => {
         entry.location.view.valChange({input: e.target, entry: entry});
       }
     }
-  });
+    >`);
 
 };
