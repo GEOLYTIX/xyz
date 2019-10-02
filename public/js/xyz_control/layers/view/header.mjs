@@ -37,6 +37,8 @@ export default (_xyz, layer) => {
     class="material-icons cursor noselect btn_header">
     ${layer.display ? 'toggle_on' : 'toggle_off'}`;
 
+  layer.display ? header.toggleDisplay.classList.remove('inactive') : header.toggleDisplay.classList.add('inactive');
+
   header.appendChild(header.toggleDisplay);
 
   header.toggleDisplay.onclick = e => {
@@ -45,6 +47,8 @@ export default (_xyz, layer) => {
   
     // Toggle layer display property.
     layer.display = !layer.display;
+
+    header.toggleDisplay.classList.toggle('inactive');
   
     // Show layer.
     if (layer.display) return layer.show();
