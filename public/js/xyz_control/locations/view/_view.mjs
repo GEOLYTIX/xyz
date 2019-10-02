@@ -134,7 +134,7 @@ export default _xyz => function () {
 
   if (location.layer.edit) {
 
-    location.view.edit = _xyz.utils.wire()`
+    location.view.editor = _xyz.utils.wire()`
     <i
     style = "${'color: ' + location.style.strokeColor}"
     title = "Edit the locations geometry."
@@ -156,7 +156,7 @@ export default _xyz => function () {
 
   }}>build`;
 
-    location.view.header.appendChild(location.view.edit);
+    location.view.header.appendChild(location.view.editor);
     
   }
  

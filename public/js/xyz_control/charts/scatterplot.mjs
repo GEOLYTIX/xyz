@@ -1,24 +1,16 @@
 export default _xyz => entry => {
 
-  const graph = _xyz.utils.createElement({
-    tag: 'div',
-    style: {
-      position: 'relative'
-    }
-  });
+  const graph = _xyz.utils.wire()`<div style="position: relative;">`;
 
-  const canvas = _xyz.utils.createElement({
-    tag: 'canvas',
-    options: {
-      height: entry.chart.height || 150,
-      width: entry.chart.width || 350
-    },
-    style: {
-      height: `${entry.chart.height ? entry.chart.height : 150}px`,
-      width: `${entry.chart.width ? entry.chart.width : 350}px`
-    },
-    appendTo: graph
-  });
+  const canvas = _xyz.utils.wire()`<canvas>`;
+
+  canvas.setAttribute("height", entry.chart.height || 150);
+  canvas.setAttribute("width", entry.chart.width || 350);
+
+  canvas.style.height = `${entry.chart.height ? entry.chart.height : 150}px`;
+  canvas.style.width = `${entry.chart.width ? entry.chart.width : 350}px`;
+
+  graph.appendChild(canvas);
 
   if(!entry.chart.datalabels) {
     _xyz.utils.Chart.defaults.global.plugins.datalabels.display = false;
