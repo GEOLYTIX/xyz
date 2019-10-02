@@ -12,7 +12,7 @@ export default _xyz => params => {
 
   // Redraw current table
   _xyz.mapview.node.addEventListener('updatesize', ()=>{
-    _xyz.dataview.current_table && _xyz.dataview.current_table.Tabulator.redraw(true);
+    _xyz.dataview.current_table && _xyz.dataview.current_table.Tabulator && _xyz.dataview.current_table.Tabulator.redraw(true);
   });
 
    
