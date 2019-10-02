@@ -1,16 +1,16 @@
 export default (_xyz, layer, style, title) => {
 
   title && layer.style.legend.appendChild(_xyz.utils.wire()`
-  <div class="block-title">${title}`);
+  <div class="title">${title}`);
 
   const block = {};
 
-  block._ = _xyz.utils.wire()`<div class="block">`;
+  block._ = _xyz.utils.wire()`<div class="block" style="font-size:13px;">`;
 
   layer.style.legend.appendChild(block._);
 
 
-  block.stroke_color = _xyz.utils.wire()`<div class="title">Stroke Colour: `;
+  block.stroke_color = _xyz.utils.wire()`<div style="padding-bottom: 10px;">Stroke Colour `;
 
   block._.appendChild(block.stroke_color);
 
@@ -19,12 +19,12 @@ export default (_xyz, layer, style, title) => {
   onclick=${e=>{
     block.colorSelect = 'strokeColor';  
     block.colour_swatch.style.display = 'table';
-  }}>${style.strokeColor}`;
+  }}>${style.strokeColor || '#ffffff'}`;
 
   block.stroke_color.appendChild(block.strokeColor);
   
   
-  block.fill_colour = _xyz.utils.wire()`<div class="title">Fill Colour: `;
+  block.fill_colour = _xyz.utils.wire()`<div style="padding-bottom: 10px;">Fill Colour `;
 
   block._.appendChild(block.fill_colour);
 
@@ -40,10 +40,11 @@ export default (_xyz, layer, style, title) => {
 
   block.sample_poly = _xyz.utils.wire()`
   <div class="sample-poly"
-  style="${'background-colour:' + (style.fillColor || '#fff') + '; border:' + (style.strokeWidth || 1) + 'px solid ' + style.strokeColor}">`;
+  style="${'border:' + (style.strokeWidth || 1) + 'px solid ' + (style.strokeColor || '#ffffff')}">`;
+
+  block.sample_poly.style.backgroundColor = style.fillColor;
 
   block._.appendChild(block.sample_poly);
-  
 
 
   block.colour_swatch = _xyz.utils.wire()`<tr class="colour-swatch" style="display: none">`;
@@ -74,7 +75,7 @@ export default (_xyz, layer, style, title) => {
 
   let timeout;
 
-  block._.appendChild(_xyz.utils.wire()`<div class="title">Stroke Weight:`);
+  block._.appendChild(_xyz.utils.wire()`<div>Stroke Weight`);
 
   block._.appendChild(_xyz.utils.wire()`
   <div class="range">
@@ -102,7 +103,7 @@ export default (_xyz, layer, style, title) => {
   }}>`);
 
 
-  block._.appendChild(_xyz.utils.wire()`<div class="title">Fill Opacity:`);
+  block._.appendChild(_xyz.utils.wire()`<div>Fill Opacity `);
 
   block._.appendChild(_xyz.utils.wire()`
   <div class="range">

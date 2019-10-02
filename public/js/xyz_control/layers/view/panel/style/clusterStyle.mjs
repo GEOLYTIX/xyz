@@ -1,14 +1,14 @@
 export default (_xyz, layer, style, title) => {
 
-  if(title) layer.style.legend.appendChild(_xyz.utils.wire()`<div class="block-title">${title}`);
+  if(title) layer.style.legend.appendChild(_xyz.utils.wire()`<div class="title">${title}`);
 
   const block = {};
 
-  block._ = _xyz.utils.wire()`<div class="block">`;
+  block._ = _xyz.utils.wire()`<div class="block" style="font-size:13px;">`;
 
   layer.style.legend.appendChild(block._);
 
-  block.fill_colour = _xyz.utils.wire()`<div class="title">Fill Colour:`;
+  block.fill_colour = _xyz.utils.wire()`<div style="padding-bottom: 10px;">Fill Colour `;
 
   block._.appendChild(block.fill_colour);
 
