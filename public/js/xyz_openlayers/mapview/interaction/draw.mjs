@@ -137,11 +137,11 @@ export default _xyz => {
       _xyz.locations.select({
         layer: _xyz.mapview.interaction.draw.layer,
         table: _xyz.mapview.interaction.draw.layer.table,
-        id: e.target.response,
+        id: e.target.response
       });
         
     };
-              
+
     // Send path geometry to endpoint.
     xhr.send(JSON.stringify({
       geometry: feature.geometry
