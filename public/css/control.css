@@ -1611,13 +1611,14 @@ button {
       content: "expand_less"; }
   .listview .drawer.drawer-group .header {
     font-style: italic;
+    font-size: 13px;
     margin-left: 12px;
     border-bottom: 1px solid #bbb; }
   .listview .drawer.drawer-group .dashboard {
     margin-left: 12px; }
   .listview .drawer.drawer-group .header-group {
     font-family: ffmark_bold, sans-serif !important;
-    font-size: 15px !important;
+    font-size: 14px;
     line-height: 2;
     display: flex; }
     .listview .drawer.drawer-group .header-group > :nth-child(1) {
@@ -1659,6 +1660,8 @@ button {
     .listview .drawer .header.edited {
       background-color: #DEF6CA;
       font-weight: bold; }
+    .listview .drawer .header i.inactive {
+      color: #849483; }
   .listview .drawer .meta {
     margin-top: 5px; }
     .listview .drawer .meta a {

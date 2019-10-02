@@ -25,6 +25,7 @@
 
                 .header {
                     font-style: italic;
+                    font-size: 13px;
                     margin-left: 12px;
                     border-bottom: 1px solid #bbb;
                 }
@@ -35,7 +36,7 @@
 
             .header-group {
                 font-family: ffmark_bold, sans-serif !important;
-                font-size: 15px !important;
+                font-size: 14px;
                 line-height: 2;
                 display: flex;
 
@@ -97,6 +98,10 @@
                 // background-image: linear-gradient(white, $glxlightgreen);
                 background-color: $glxlightgreen;
                 font-weight: bold;
+            }
+
+            i.inactive {
+                color: #849483
             }
         }
         .meta {
