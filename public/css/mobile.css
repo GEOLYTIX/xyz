@@ -1715,7 +1715,7 @@ button {
       .listview .drawer .dashboard .block .sample-poly {
         width: 30%;
         height: 32px;
-        border-radius: 5px;
+        border-radius: 2px;
         box-shadow: 2px 2px 2px #999;
         position: absolute;
         right: 2px;
@@ -1923,6 +1923,10 @@ body {
   height: 100%;
   box-shadow: 0 0 10px slategrey;
   z-index: 1000; }
+  .listviews #localeDropdown .ul-drop .head span {
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #DEF6CA; }
   .listviews .listview {
     padding: 20px;
     overflow-y: scroll;

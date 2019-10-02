@@ -9,7 +9,7 @@ export default _xyz => layer => {
     selectedIndex: 0,
     callback: e => {
 
-      e.target.parentNode.previousSibling.textContent = e.target.dataset.field;
+      e.target.parentNode.previousSibling.firstChild.textContent = e.target.dataset.field;
       layer.grid_size = layer.grid_fields[e.target.dataset.field];
       layer.reload();
     }
@@ -24,7 +24,7 @@ export default _xyz => layer => {
     selectedIndex: 0,
     callback: e => {
 
-      e.target.parentNode.previousSibling.textContent = e.target.dataset.field;
+      e.target.parentNode.previousSibling.firstChild.textContent = e.target.dataset.field;
       layer.grid_color = layer.grid_fields[e.target.value];
       layer.reload();
     }

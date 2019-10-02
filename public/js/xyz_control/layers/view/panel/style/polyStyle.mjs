@@ -33,7 +33,7 @@ export default (_xyz, layer, style, title) => {
   onclick=${e=>{
     block.colorSelect = 'fillColor';  
     block.colour_swatch.style.display = 'table';
-  }}>${style.fillColor}`;
+  }}>${style.fillColor || '#ffffff'}`;
 
   block.fill_colour.appendChild(block.fillColor);
 
@@ -75,10 +75,10 @@ export default (_xyz, layer, style, title) => {
 
   let timeout;
 
-  block._.appendChild(_xyz.utils.wire()`<div>Stroke Weight`);
+  block._.appendChild(_xyz.utils.wire()`<div style="display: inline-block; width: 35%;">Stroke Weight`);
 
   block._.appendChild(_xyz.utils.wire()`
-  <div class="range">
+  <div class="range" style="display: inline-block; width: 65%;">
   <input
     type="range"
     min=1
@@ -103,10 +103,10 @@ export default (_xyz, layer, style, title) => {
   }}>`);
 
 
-  block._.appendChild(_xyz.utils.wire()`<div>Fill Opacity `);
+  block._.appendChild(_xyz.utils.wire()`<div style="display: inline-block; width: 35%;">Fill Opacity `);
 
   block._.appendChild(_xyz.utils.wire()`
-  <div class="range">
+  <div class="range" style="display: inline-block; width: 65%;">
   <input
     type="range"
     min=0.1

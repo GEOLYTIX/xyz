@@ -78,7 +78,7 @@ function init(_xyz) {
           _xyz.hooks.removeAll();
           _xyz.hooks.set({ locale: e.target.dataset.field });
           _xyz.workspace.loadLocale({ locale: _xyz.hooks.current.locale });
-          document.getElementById('localeDropdown').querySelector('.head').textContent = e.target.dataset.field;
+          document.getElementById('localeDropdown').querySelector('.head span').textContent = e.target.dataset.field;
           createMap(_xyz);
         }
       }));

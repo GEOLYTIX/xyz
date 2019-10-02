@@ -1715,7 +1715,7 @@ button {
       .listview .drawer .dashboard .block .sample-poly {
         width: 30%;
         height: 32px;
-        border-radius: 5px;
+        border-radius: 2px;
         box-shadow: 2px 2px 2px #999;
         position: absolute;
         right: 2px;
@@ -1918,6 +1918,10 @@ body {
     width: calc(100% + 50px); }
   .listviews .listview {
     padding: 10px 0; }
+  .listviews #localeDropdown .ul-drop .head span {
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #DEF6CA; }
 
 #vertDivider {
   grid-column: 2;
