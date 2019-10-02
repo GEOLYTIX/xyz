@@ -37,11 +37,14 @@ module.exports = fastify => {
       let
         layer = req.params.layer,
         table = req.query.table,
-        geometry = JSON.stringify(req.body.geometry);
+        geometry = JSON.stringify(req.body.geometry),
+        properties = req.body.properties;
           
       var q = `
-      INSERT INTO ${table} (${layer.geom})
-      SELECT ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), ${layer.srid})
+      INSERT INTO ${table} (${layer.geom}${properties ? ',' + Object.keys(properties)[0] : ''})
+      SELECT
+        ST_SetSRID(ST_GeomFromGeoJSON('${geometry}'), ${layer.srid})
+        ${properties ? ',\'' + Object.values(properties)[0] + '\'' : ''}
       RETURNING ${layer.qID} AS id;`;
       
       var rows = await env.dbs[layer.dbs](q);

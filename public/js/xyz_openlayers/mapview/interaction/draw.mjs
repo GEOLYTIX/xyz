@@ -51,12 +51,22 @@ export default _xyz => {
     });
   
     _xyz.mapview.interaction.draw.interaction.on('drawstart', e => {
+
+      params.style && e.feature.setStyle(
+        new _xyz.mapview.lib.style.Style({
+        stroke: params.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
+          color: _xyz.utils.Chroma(params.style.strokeColor),
+          width: params.style.strokeWidth || 1
+        })
+      }));
+      
       _xyz.mapview.interaction.draw.Source.clear();
       _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
     });
   
     _xyz.mapview.interaction.draw.interaction.on('drawend', e => {
       params.freehand && _xyz.mapview.interaction.draw.vertices.push(e.target.sketchCoords_.pop());
+      if (params.drawend) return params.drawend(e);
       setTimeout(contextmenu, 400);
     });
   

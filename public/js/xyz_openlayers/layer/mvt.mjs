@@ -72,10 +72,14 @@ export default _xyz => layer => {
 
       const style = Object.assign(
         {},
-        layer.style.default
+        layer.style.default,
       );
     
       const theme = layer.style.theme;
+
+      feature.get('strokecolor') && (style.strokeColor = feature.get('strokecolor'));
+
+      // console.log(strokeColor);
   
       // Categorized theme.
       if (theme && theme.type === 'categorized') {

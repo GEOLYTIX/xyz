@@ -648,9 +648,12 @@
                         "isoline_here": true,
                         "delete": true
                     },
+                    "mvt_fields": ["strokeColor"],
+                    "mvt_cache": "dev.draw__mvts",
                     "style": {
                         "default": {
-                            "strokeColor": "#ff69b4"
+                            "strokeColor": "#ff69b4",
+                            "strokeWidth": 2
                         }
                     }
                 },
