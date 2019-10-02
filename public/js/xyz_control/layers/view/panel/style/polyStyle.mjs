@@ -33,7 +33,7 @@ export default (_xyz, layer, style, title) => {
   onclick=${e=>{
     block.colorSelect = 'fillColor';  
     block.colour_swatch.style.display = 'table';
-  }}>${style.fillColor}`;
+  }}>${style.fillColor || '#ffffff'}`;
 
   block.fill_colour.appendChild(block.fillColor);
 

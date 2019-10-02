@@ -1715,7 +1715,7 @@ button {
       .listview .drawer .dashboard .block .sample-poly {
         width: 30%;
         height: 32px;
-        border-radius: 5px;
+        border-radius: 2px;
         box-shadow: 2px 2px 2px #999;
         position: absolute;
         right: 2px;
