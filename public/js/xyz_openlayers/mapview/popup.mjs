@@ -11,8 +11,12 @@ export default _xyz => {
     this.node = _xyz.utils.wire()`<div class="popup">`;
   
     this.node.addEventListener('mousemove', e => e.stopPropagation());
+
+    const content = _xyz.utils.wire()`<div>`
+    
+    content.appendChild(params.content);
         
-    this.node.appendChild(params.content);
+    this.node.appendChild(content);
 
     if (this.overlay) _xyz.map.removeOverlay(this.overlay);
   

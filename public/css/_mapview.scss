@@ -23,26 +23,29 @@
 
 .popup {
     position: absolute;
-    background-color: white;
-    width: 400px;
-    max-height: 300px;
-    overflow-x: hidden;
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
     bottom: 12px;
     transform: translate(-50%, 0);
 
-    &:after, &:before {
+    &::after, &::before {
         border: solid transparent;
         content: " ";
         position: absolute;
         pointer-events: none;
     }
 
-    &:after {
+    &::after {
         border-top-color: white;
         border-width: 10px;
         left: 50%;
         margin-left: -10px;
+    }
+
+    >div {
+        background-color: white;
+        width: 400px;
+        max-height: 300px;
+        overflow-x: hidden;
     }
 }
 
