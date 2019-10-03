@@ -19,13 +19,9 @@ export default _xyz => entry => {
   function showTab() {
 
     if(_xyz.dataview.node && !_xyz.dataview.node.querySelector('.table')) {
-      _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-          classList: 'table'
-        },
-        appendTo: _xyz.dataview.node.querySelector('.tab-content')
-      });
+
+      _xyz.dataview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`<div class="table">`);
+
     }
 
     entry.location.tables.push(entry);
