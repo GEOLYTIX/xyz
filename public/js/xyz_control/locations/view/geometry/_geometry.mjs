@@ -12,7 +12,7 @@ export default _xyz => entry => {
 
     isoline_mapbox: isoline_mapbox(_xyz),
 
-    deleteGeom: delete_geom(_xyz),
+    deleteGeom: delete_geom(_xyz)
 
   };
 
@@ -28,7 +28,6 @@ export default _xyz => entry => {
   let td = _xyz.utils.wire()`<td style="padding-top: 5px; position: relative;" colSpan=2>`;
 
   entry.row.appendChild(td);
-
  
   entry.ctrl.geometry = entry.value && _xyz.mapview.geoJSON({
     geometry: JSON.parse(entry.value),
@@ -62,7 +61,7 @@ export default _xyz => entry => {
 
   };
 
-  // if (entry.edit) entry.ctrl.hideGeom = entry.ctrl.delete_geom;
+  if (entry.edit) entry.ctrl.hideGeom = entry.ctrl.deleteGeom;
 
   if (entry.value) entry.display = true;
 
