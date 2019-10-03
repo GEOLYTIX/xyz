@@ -57,7 +57,7 @@ export default _xyz => location => {
     })
   });
 
-  // if (location._flyTo) location.flyTo();
+  if (location._flyTo) location.flyTo();
     
   // Create an alert with the locations infoj if mapview popup is not defined.
   if (!_xyz.mapview.popup) return alert(JSON.stringify(location.infoj, _xyz.utils.getCircularReplacer(), ' '));
