@@ -12,7 +12,7 @@ export default _xyz => entry => {
 
     isoline_mapbox: isoline_mapbox(_xyz),
 
-    deleteGeom: delete_geom(_xyz),
+    deleteGeom: delete_geom(_xyz)
 
   };
 
@@ -28,7 +28,6 @@ export default _xyz => entry => {
   let td = _xyz.utils.wire()`<td style="padding-top: 5px; position: relative;" colSpan=2>`;
 
   entry.row.appendChild(td);
-
  
   entry.ctrl.geometry = entry.value && _xyz.mapview.geoJSON({
     geometry: JSON.parse(entry.value),
@@ -62,7 +61,7 @@ export default _xyz => entry => {
 
   };
 
-  // if (entry.edit) entry.ctrl.hideGeom = entry.ctrl.delete_geom;
+  if (entry.edit) entry.ctrl.hideGeom = entry.ctrl.deleteGeom;
 
   if (entry.value) entry.display = true;
 
@@ -97,21 +96,11 @@ export default _xyz => entry => {
     entry.edit.container = _xyz.utils.wire()`
     <div class="table-section expandable">`;
 
-    _xyz.utils.createElement({
-      tag: 'div',
-      options: {
-        classList: 'btn_subtext cursor noselect pretty',
-        textContent: 'Isoline settings'
-      },
-      style: {
-        textAlign: 'left',
-        fontStyle: 'italic',
-        fontSize: 'small'
-      },
-      appendTo: entry.edit.container,
-      eventListener: {
-        event: 'click',
-        funct: e => {
+    entry.edit.container.appendChild(_xyz.utils.wire()`
+      <div class="btn_subtext cursor noselect pretty"
+      style="text-align: left; font-style: italic; font-size: small;"
+      onclick=${
+        e => {
           if (e) e.stopPropagation();
           _xyz.utils.toggleExpanderParent({
             expandable: entry.edit.container,
@@ -119,7 +108,8 @@ export default _xyz => entry => {
           });
         }
       }
-    });
+      >Isoline settings
+    `);
 
 
     if (entry.edit.isoline_here && entry.edit.isoline_here.slider) {

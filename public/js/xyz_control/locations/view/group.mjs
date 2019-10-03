@@ -2,24 +2,14 @@ export default _xyz => group => {
 
   group.location.view.groups[group.label] = group;
 
-  group.td = _xyz.utils.createElement({
-    tag: 'td',
-    options: {
-      colSpan: '2'
-    },
-    appendTo: group.row
-  });
+  group.td = _xyz.utils.wire()`<td colSpan=2>`;
+  group.row.appendChild(group.td);
 
   _xyz.dataview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`
    <div class="table">`);
 
-  group.div = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      classList: 'table-section expandable'
-    },
-    appendTo: group.td
-  });
+  group.div = _xyz.utils.wire()`<div class="table-section expandable">`;
+  group.td.appendChild(group.div);
 
   function toggleExpandedState(e) {
     if (e) {
@@ -31,95 +21,55 @@ export default _xyz => group => {
     });
   };
 
-  group.header = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'btn_subtext cursor noselect'
-    },
-    style: {
-      textAlign: 'left',
-      fontStyle: 'italic'
-    },
-    appendTo: group.div,
-    eventListener: {
-      event: 'click',
-      funct: toggleExpandedState
-    }
-  });
+  group.header = _xyz.utils.wire()`
+  <div class="btn_subtext cursor noselect"
+  style="text-align: left; font-style: italic;"
+  onclick=${ e => toggleExpandedState(e) }>`;
+
+  group.div.appendChild(group.header);
 
   // Add label to group header.
-  _xyz.utils.createElement({
-    tag: 'span',
-    options: {
-      textContent: group.label
-    },
-    appendTo: group.header
-  });
+  group.header.appendChild(_xyz.utils.wire()`<span>${group.label}`);
   
   // Add table
-  group.table = _xyz.utils.createElement({
-    tag: 'table',
-    style: {
-      cellPadding: '0',
-      cellSpacing: '0',
-      width: '95%',
-      marginTop: '-4px',
-      marginBottom: '10px',
-      paddingLeft: '20px',
-      borderLeft: '2px solid #B4B4B4',
-      position: 'relative' // required for responsive chart
-    },
-    appendTo: group.div
-  });
+  group.table = _xyz.utils.wire()`
+  <table
+  style="position: relative; width: 95%; cell-padding: 0; cell-spacing: 0; 
+  margin-top: -4px; margin-bottom: 10px;
+  padding-left: 20px; border-left: 2px solid #B4B4B4;"
+  >`;
 
-  //console.log(group.table);
+  group.div.appendChild(group.table);
 
   // If chart option specified
   if (group.chart) {
 
-    //console.log(group.chart);
-
     if(group.dashboard || group.chart.class) return;
-
-    //console.log('hi chart');
     
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);
     // Create chart element
-    //group.chartElem = _xyz.utils.chart(group); // old style
     group.chartElem = _xyz.charts.create(group);
-    //console.log(group.chartElem);
-    //console.log(group.div);
+
     // Add chart
     group.div.appendChild(group.chartElem);
 
-    //console.log(group.div);
-
     // Add chart control to group header for toggling
-    group.viewToggler = _xyz.utils.createElement({
-      tag: 'i',
-      options: {
-        className: 'material-icons cursor noselect btn_header',
-        title: 'Show chart',
-        textContent: chartIcon(group)
-      },
-      style: {
-        margin: '-6px 6px 0 0',
-        float: 'right'
-      },
-      appendTo: group.header,
-      eventListener: {
-        event: 'click',
-        funct: e => {
-          e.stopPropagation();
-          if (group.viewToggler.textContent === chartIcon(group)) {
-            group.showChart();
-          } else {
-            group.showTable(e);
-          }
-        }
+    group.viewToggler = _xyz.utils.wire()`
+    <i class="material-icons cursor noselect btn_header"
+    title="Show chart"
+    style="margin: -6px 6px 0 0; float: right;"
+    onclick=${
+      e => {
+        e.stopPropagation();
+        group.viewToggler.textContent === chartIcon(group) ? group.showChart() : group.showTable(e);
       }
-    });
+    }
+    >`;
+
+    group.viewToggler.textContent = chartIcon(group);
+
+    group.header.appendChild(group.viewToggler);
 
     // Functions for toggeling between table view and chart view
     group.showChart = () => {

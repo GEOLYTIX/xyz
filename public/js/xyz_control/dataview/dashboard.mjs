@@ -12,16 +12,10 @@ export default _xyz => (entry, callback) => {
 
     entry.target.innerHTML = '';
 
-    let flex_container = _xyz.utils.createElement({
-      tag: 'div',
-      style: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        position: 'relative',
-        padding: '20px'
-      },
-      appendTo: entry.target
-    });
+    let flex_container = _xyz.utils.wire()`<div 
+    style="display: flex; flex-wrap: wrap; position: relative; padding: 20px;">`;
+
+    entry.target.appendChild(flex_container);
 
     Object.values(entry.location.infoj).map(val => {
 
