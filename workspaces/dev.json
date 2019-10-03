@@ -1309,6 +1309,7 @@
                         "label": {
                             "field": "store",
                             "display": true,
+                            "declutter": true,
                             "strokeColor": "#fff",
                             "strokeWidth": 3
                         },

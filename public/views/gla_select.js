@@ -19,7 +19,6 @@ const records = [
   }
 ];
 
-
 let record = records[0];
 
 function gla_select(_xyz, location) {
@@ -129,7 +128,6 @@ function gla_select(_xyz, location) {
   xhr.send();
 
 };
-
 
 function gla_locationView(_xyz, record) {
 

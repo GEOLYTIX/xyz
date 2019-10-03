@@ -32,15 +32,6 @@
                 ]
             },
             "layers": {
-                "Mapbox Color": {
-					"name": "Mapbox Color",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-					"format": "tiles",
-					"URI": "https://api.mapbox.com/styles/v1/horns/cjig1sv8t0cjc2qocht27ij5y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
-                },
                 "Zoomstack": {
                     "display": true,
                     "attribution": {
@@ -353,7 +344,7 @@
                             "type": "images"
                         }
                     ],
-                    "tableview": {
+                    "dataview": {
                         "tables": {
                             "gla": {
                                 "display": true,

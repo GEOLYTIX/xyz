@@ -1,6 +1,6 @@
 export default (_xyz, layer) => new _xyz.mapview.lib.layer.Vector({
   source: layer.L.getSource(),
-  declutter: true,
+  declutter: !!layer.style.label.declutter,
   zIndex: layer.style.zIndex || 1,
   style: feature => {
   

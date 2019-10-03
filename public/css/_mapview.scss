@@ -24,7 +24,9 @@
 .popup {
     position: absolute;
     background-color: white;
-    // width: 300px;
+    width: 400px;
+    max-height: 300px;
+    overflow-x: hidden;
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
     bottom: 12px;
     transform: translate(-50%, 0);
@@ -45,7 +47,6 @@
 }
 
 .scroll-list {
-    max-height: 300px;
     list-style-type: none;
     text-align: left;
     overflow-x: hidden;

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>{{:title}}</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{:dir}}/css/openlayers.css" />
+    <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
+
+    <script src="{{:dir}}/js/build/xyz_openlayers.js" defer></script>
+</head>
+
+<body
+data-viewmode="desktop"
+data-nanoid={{:nanoid}}
+data-log={{:log}}
+data-user={{:user}}
+data-logrocket={{:logrocket}}
+data-token={{:token}}>
+
+<div id="Map" class="map" ></div>
+
+</body>
+
+<script>
+
+    window.addEventListener('DOMContentLoaded', function () {
+        _xyz({
+            host: document.head.dataset.dir,
+            //hooks: true,
+            callback: _xyz => {
+
+                _xyz.mapview.create({
+                    target: document.getElementById('Map'),
+                    scrollWheelZoom: true,
+                    zoomControl: true,
+                });
+
+            }
+        });
+    });
+
+</script>
+
+</html>

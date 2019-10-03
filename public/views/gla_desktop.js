@@ -12,39 +12,39 @@ _xyz({
       }
     });
   
-    _xyz.locations.select = location => {
+    // _xyz.locations.select = location => {
 
-      for (const filter of filters) {
-        filter.classList.remove('expanded');
-      }
+    //   for (const filter of filters) {
+    //     filter.classList.remove('expanded');
+    //   }
 
-      gla_select(_xyz, location);
-    };
+    //   gla_select(_xyz, location);
+    // };
   
     const layer = _xyz.layers.list['Advice Center'];
    
-    const table = _xyz.dataview.layerTable({
-      layer: layer,
-      target: document.getElementById('List'),
-      key: 'gla',
-      visible: ['organisation_short'],
-      initialSort: [
-        {
-          column: 'organisation_short', dir: 'asc'
-        }
-      ],
-      groupStartOpen: false,
-      groupToggleElement: 'header',
-      rowClick: (e, row) => { 
-        _xyz.locations.select({
-          locale: _xyz.workspace.locale.key,
-          layer: layer.key,
-          table: layer.table,
-          id: row.getData().qid,
-          _flyTo: true,
-        });
-      }
-    });
+    // const table = _xyz.dataview.layerTable({
+    //   layer: layer,
+    //   target: document.getElementById('List'),
+    //   key: 'gla',
+    //   visible: ['organisation_short'],
+    //   initialSort: [
+    //     {
+    //       column: 'organisation_short', dir: 'asc'
+    //     }
+    //   ],
+    //   groupStartOpen: false,
+    //   groupToggleElement: 'header',
+    //   rowClick: (e, row) => { 
+    //     _xyz.locations.select({
+    //       locale: _xyz.workspace.locale.key,
+    //       layer: layer.key,
+    //       table: layer.table,
+    //       id: row.getData().qid,
+    //       _flyTo: true,
+    //     });
+    //   }
+    // });
 
     setBoroughFilter();
 
@@ -167,8 +167,8 @@ _xyz({
 
     }
 
-
     const filters = document.querySelectorAll('.filter');
+
     for (const filter of filters) {
       filter.onclick = function(){
 
@@ -184,8 +184,6 @@ _xyz({
 
       };
     }
-
-
 
     document.getElementById('resetFilter').onclick = function(){
 
@@ -222,10 +220,10 @@ _xyz({
       e.target.parentNode.classList.remove('pink-br');
     });
 
-    _xyz.mapview.locate.icon = _xyz.L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_locate.svg?sanitize=true',
-      iconSize: 30
-    });
+    // _xyz.mapview.locate.icon = _xyz.L.icon({
+    //   iconUrl: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_locate.svg?sanitize=true',
+    //   iconSize: 30
+    // });
 
     _xyz.gazetteer.icon = 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_gazetteer.svg?sanitize=true';
 
