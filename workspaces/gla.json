@@ -33,7 +33,7 @@
             },
             "layers": {
                 "Zoomstack": {
-                    "display": true,
+                    
                     "attribution": {
                         "© Ordanance Survey": "https://ordnancesurvey.co.uk"
                     },
@@ -41,7 +41,7 @@
                     "URI": "https://api.ordnancesurvey.co.uk/mapping_api/v1/service/zxy/EPSG%3A3857/Light%203857/{z}/{x}/{y}.png?&provider=OS"
                 },
                 "Boroughs": {
-                    "display": true,
+                    
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "gla.boroughs__mvts",

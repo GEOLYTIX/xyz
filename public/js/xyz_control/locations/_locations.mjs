@@ -23,11 +23,7 @@ export default _xyz => ({
   selectCallback: selectCallback(_xyz),
 
   list: [
-    {
-      style: {
-        color: _xyz.utils.Chroma('hotpink')
-      },
-    }
+    {style: {strokeColor: '#9c27b0'}}
   ],
 
   listview: listview(_xyz),

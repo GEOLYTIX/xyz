@@ -4,7 +4,7 @@ export default _xyz => {
 
     init: init,
 
-    add: add,
+    add: add
 
   };
 
