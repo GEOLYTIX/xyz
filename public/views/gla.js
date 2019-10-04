@@ -345,10 +345,10 @@ _xyz({
     };
   
     const layer = _xyz.layers.list['Advice Center'];
-   
+
     const table = _xyz.dataview.layerTable({
       layer: layer,
-      target: document.getElementById('List'),
+      target_id: 'List',
       key: 'gla',
       visible: ['organisation_short'],
       initialSort: [
