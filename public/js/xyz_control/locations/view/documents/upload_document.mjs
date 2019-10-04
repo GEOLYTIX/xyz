@@ -28,24 +28,18 @@ export default _xyz => param => {
     param.doc.childNodes[0].href = json.doc_url;
 
     // add delete control
-    _xyz.utils.createElement({
-      tag: 'span',
-      options: {
-        title: 'Delete document',
-        className: 'btn_del',
-        innerHTML: '<i class="material-icons">clear</i>'
-      },
-      appendTo: param.doc,
-      eventListener: {
-        event: 'click',
-        funct: e => {
+    param.doc.appendChild(_xyz.utils.wire()`
+      <span title="Delete document" class="btn_del"
+      onclick=${
+        e => {
           e.target.parentNode.remove();
           param.entry.ctrl.delete_document({
-            entry: param.entry, doc: param.doc.firstChild//(param.doc.childNodes[0] || param.doc)
+            entry: param.entry, doc: param.doc.firstChild
           });
         }
       }
-    });
+      ><i class="material-icons">clear`);
+
   };
 
   xhr.send(param.blob);

@@ -36,7 +36,7 @@ export default _xyz => param => {
     // add change event 
     param.documentControl.add_doc_input.addEventListener('change', e => {
 
-        let newDoc = _xyz.utils.createElement({ tag: 'div' });
+        let newDoc = _xyz.utils.wire()`<div>`;
 
         const reader = new FileReader();
 
