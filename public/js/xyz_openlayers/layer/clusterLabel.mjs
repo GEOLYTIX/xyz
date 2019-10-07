@@ -1,4 +1,4 @@
-export default (_xyz, layer) => new _xyz.mapview.lib.layer.Vector({
+export default (_xyz, layer) => layer.style.label && new _xyz.mapview.lib.layer.Vector({
   source: layer.L.getSource(),
   declutter: !!layer.style.label.declutter,
   zIndex: layer.style.zIndex || 1,

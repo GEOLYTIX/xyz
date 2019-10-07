@@ -50,7 +50,7 @@ module.exports = fastify => {
         geom = layer.geom,
         srid = layer.srid,
         mapview_srid = req.query.mapview_srid,
-        filter = req.query.filter && JSON.parse(req.query.filter),
+        filter = req.params.filter,// && JSON.parse(req.query.filter),
         id = layer.qID || null, //'row_number() over()',
         x = parseInt(req.params.x),
         y = parseInt(req.params.y),

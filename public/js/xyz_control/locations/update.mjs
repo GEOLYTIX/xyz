@@ -7,7 +7,7 @@ export default _xyz => function (callback) {
   xhr.open(
     'POST', 
     _xyz.host + 
-    '/api/location/update?' +
+    '/api/location/edit/update?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: location.layer.key,

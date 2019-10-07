@@ -53,7 +53,7 @@ async function _xyz(params) {
     }
   }, params);
 
-  if (!_xyz.host) return console.error('XYZ host not defined!');
+  //if (!_xyz.host) return console.error('XYZ host not defined!');
 
   _xyz.utils = utils;
 
