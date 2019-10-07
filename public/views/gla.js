@@ -361,7 +361,7 @@ _xyz({
       rowClick: (e, row) => { 
         _xyz.locations.select({
           locale: _xyz.workspace.locale.key,
-          layer: layer.key,
+          layer: layer,
           table: layer.table,
           id: row.getData().qid,
           _flyTo: true,
