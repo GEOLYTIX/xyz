@@ -1,39 +1,19 @@
 export default _xyz => (entry) => {
 
   // Add table cell for image upload input.
-  entry.ctrl.add_img_td = _xyz.utils.createElement({
-    tag: 'div',
-    options: {
-      className: 'addImage'
-    },
-    appendTo: entry.ctrl.container
-  });
+  entry.ctrl.add_img_td = _xyz.utils.wire()`<div class="addImage">`;
+  entry.ctrl.container.appendChild(entry.ctrl.add_img_td);
 
   // Add label for image upload icon.
-  entry.ctrl.add_img_label = _xyz.utils.createElement({
-    tag: 'label',
-    appendTo: entry.ctrl.add_img_td
-  });
+  entry.ctrl.add_img_label = _xyz.utils.wire()`<label>`;
+  entry.ctrl.add_img_td.appendChild(entry.ctrl.add_img_label);
 
   // Add image upload icon to label.
-  _xyz.utils.createElement({
-    tag: 'i',
-    options: {
-      className: 'material-icons cursor noselect',
-      textContent: 'add_a_photo'
-    },
-    appendTo: entry.ctrl.add_img_label
-  });
+  entry.ctrl.add_img_label.appendChild(_xyz.utils.wire()`<i class="material-icons cursor noselect">add_a_photo`);
 
   // Add image input.
-  entry.ctrl.add_img_input = _xyz.utils.createElement({
-    tag: 'input',
-    options: {
-      type: 'file',
-      accept: 'image/*;capture=camera'
-    },
-    appendTo: entry.ctrl.add_img_label
-  });
+  entry.ctrl.add_img_input = _xyz.utils.wire()`<input type="file" accept="image/*;capture=camera">`;
+  entry.ctrl.add_img_label.appendChild(entry.ctrl.add_img_input);
 
   // empty the file input value
   entry.ctrl.add_img_input.addEventListener('click', () => entry.ctrl.add_img_input.value);
@@ -41,7 +21,7 @@ export default _xyz => (entry) => {
   // add change event 
   entry.ctrl.add_img_input.addEventListener('change', () => {
 
-    const newImage = document.createElement('div');
+    const newImage = _xyz.utils.wire()`<div>`;
 
     const reader = new FileReader();
 
@@ -52,7 +32,7 @@ export default _xyz => (entry) => {
       img.onload = () => {
 
         let
-          canvas = document.createElement('canvas'),
+          canvas = _xyz.utils.wire()`<canvas>`,
           max_size = 1024,
           width = img.width,
           height = img.height;
@@ -74,12 +54,8 @@ export default _xyz => (entry) => {
 
         const dataURL = canvas.toDataURL('image/jpeg', 0.5);
 
-        const _img = _xyz.utils.createElement({
-          tag: 'img',
-          options: {
-            src: dataURL
-          }
-        });
+        const _img = _xyz.utils.wire()`<img>`;
+        _img.src = dataURL;
 
         entry.ctrl.upload_image(entry, _img, dataURL);
 

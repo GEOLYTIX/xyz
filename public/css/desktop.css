@@ -1979,7 +1979,7 @@ button {
       }*/ }
       .contextmenu ul li:hover {
         background-color: #9CC5A1;
-        border-bottom: 1px solid transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
         cursor: pointer; }
 
 .context {

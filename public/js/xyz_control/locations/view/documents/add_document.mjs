@@ -1,52 +1,32 @@
 export default _xyz => param => {
 
-    param.documentControl.add_doc = _xyz.utils.createElement({
-        tag: 'div',
-        options: {
-            classList: 'addDocCell'
-        },
-        style: {
-            display: 'block'
-        },
-        appendTo: param.documentControl.container
-    });
+    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block;">`;
+
+    param.documentControl.container.appendChild(param.documentControl.add_doc);
 
     // Add label for doc upload icon.
-    param.documentControl.add_doc_label = _xyz.utils.createElement({
-        tag: 'label',
-        options: {
-            htmlFor: `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`
-        },
-        appendTo: param.documentControl.add_doc
-    });
+    param.documentControl.add_doc_label = _xyz.utils.wire()`<label>`;
+
+    param.documentControl.add_doc_label.htmlFor = `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`;
+
+    param.documentControl.add_doc.appendChild(param.documentControl.add_doc_label);
 
     // Add doc upload icon to label.
-    _xyz.utils.createElement({
-        tag: 'i',
-        options: {
-            className: 'material-icons cursor noselect',
-            textContent: 'add_circle_outline'
-        },
-        style: {
-            cursor: 'pointer'
-        },
-        appendTo: param.documentControl.add_doc_label
-    });
+    param.documentControl.add_doc_label.appendChild(_xyz.utils.wire()`
+        <i class="material-icons cursor noselect"
+        style="cursor: pointer;"
+        >add_circle_outline`);
 
     // Add doc input.
-    param.documentControl.add_doc_input = _xyz.utils.createElement({
-        tag: 'input',
-        options: {
-            id: `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`,
-            type: 'file',
-            //multiple: true,
-            accept: '.txt,.pdf,.doc,.docx,.xls,.xlsx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document;' // check this
-        },
-        style: {
-            display: 'none'
-        },
-        appendTo: param.documentControl.add_doc
-    });
+    param.documentControl.add_doc_input = _xyz.utils.wire()`
+    <input type="file"
+    accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document;" 
+    style="display: none;"
+    >`;
+
+    param.documentControl.add_doc_input.id = `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`;
+
+    param.documentControl.add_doc.appendChild(param.documentControl.add_doc_input);
 
     // empty the file input value
     param.documentControl.add_doc_input.addEventListener('click', () => {
@@ -56,7 +36,7 @@ export default _xyz => param => {
     // add change event 
     param.documentControl.add_doc_input.addEventListener('change', e => {
 
-        let newDoc = _xyz.utils.createElement({ tag: 'div' });
+        let newDoc = _xyz.utils.wire()`<div>`;
 
         const reader = new FileReader();
 
@@ -72,62 +52,47 @@ export default _xyz => param => {
 
         reader.readAsDataURL(file);
 
-        let file_name = _xyz.utils.createElement({
-            tag: 'a',
-            options: {
-                textContent: file.name.split('/').pop(),
-                target: '_blank'
-            },
-            appendTo: newDoc
-        });
+        let file_name = _xyz.utils.wire()`
+        <a target="_blank"
+        >${file.name.split('/').pop()}`;
 
-        let btn_del = _xyz.utils.createElement({
-            tag: 'span',
-            options: {
-                title: 'Delete document',
-                className: 'btn_del',
-                innerHTML: '<i class="material-icons">clear</i>'
-            },
-            style: {
-                cursor: 'pointer'
-            },
-            appendTo: newDoc,
-            eventListener: {
-                event: 'click',
-                funct: () => {
-                    newDoc.remove();
-                }
+        newDoc.appendChild(file_name);
+
+        let btn_del = _xyz.utils.wire()`
+        <span
+        title="Delete document"
+        class="btn_del"
+        style="cursor: pointer;"
+        onclick=${
+            () => {
+                newDoc.remove();
             }
-        });
+        }
+        ><i class="material-icons">clear`; 
+
+        newDoc.appendChild(btn_del);
 
         // Add control to upload document
-        const btn_save = _xyz.utils.createElement({
-            tag: 'span',
-            options: {
-                title: 'Save document',
-                className: 'btn_save',
-                innerHTML: '<i class="material-icons">cloud_upload</i>'
-            },
-            style: {
-                cursor: 'pointer'
-            },
-            appendTo: newDoc,
-            eventListener: {
-                event: 'click',
-                funct: () => {
+        const btn_save = _xyz.utils.wire()`
+        <span class="btn_save"
+        title="Save document"
+        style="cursor: pointer;"
+        onclick=${
+            () => {
+                btn_del.remove();
+                btn_save.remove();
 
-                    btn_del.remove();
-                    btn_save.remove();
-
-                    param.entry.ctrl.upload_document({
-                        entry: param.entry,
-                        doc: newDoc,
-                        public_id: public_id,
-                        blob: param.documentControl.blob
-                    });
-                }
+                param.entry.ctrl.upload_document({
+                    entry: param.entry,
+                    doc: newDoc,
+                    public_id: public_id,
+                    blob: param.documentControl.blob
+                });
             }
-        });
+        }
+        ><i class="material-icons">cloud_upload`;
+
+        newDoc.appendChild(btn_save);
 
         // insert new doc before last doc
         param.documentControl.container.appendChild(newDoc);

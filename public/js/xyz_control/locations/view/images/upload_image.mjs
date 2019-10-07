@@ -25,22 +25,15 @@ export default _xyz => (entry, img, dataURL) => {
     img.id = json.image_id;
     img.src = json.image_url;
 
-    _xyz.utils.createElement({
-      tag: 'button',
-      options: {
-        title: 'Delete image',
-        className: 'cursor',
-        textContent: 'Delete'
-      },
-      appendTo: img.parentNode,
-      eventListener: {
-        event: 'click',
-        funct: e => {
+    img.parentNode.appendChild(_xyz.utils.wire()`
+      <button title="Delete image" class="cursor"
+      onclick=${
+        e => {
           e.target.remove();
           entry.ctrl.delete_image(entry, img);
         }
       }
-    });
+      >Delete`);
 
   };
 

@@ -42,14 +42,22 @@ export default _xyz => entry => {
     // Add suboptions if the select prime option is an object.
     if (typeof _options[_entry.select.value] === 'object') Object.values(_options[_entry.select.value]).forEach(option => {
 
-      entry.select.add(_xyz.utils.createElement({
+      let opt = _xyz.utils.wire()`<option>${option}`;
+
+      opt.value = option;
+
+      entry.select.appendChild(opt);
+
+      entry.select.add(opt);
+
+      /*entry.select.add(_xyz.utils.createElement({
         tag: 'option',
         options: {
           textContent: option,
           value: option
         },
         appendTo: entry.select
-      }));
+      }));*/
 
     });
 

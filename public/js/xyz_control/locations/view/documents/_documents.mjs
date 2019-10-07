@@ -26,30 +26,18 @@ export default _xyz => entry => {
 
 	const documentControl = {};
 
-	let _tr = _xyz.utils.createElement({
-		tag: 'tr',
-		options: {
-			colsSpan: '2'
-		},
-		appendTo: entry.location.view.node
-	});
+	let _tr = _xyz.utils.wire()`<tr colSpan=2>`;
 
-	let _td = _xyz.utils.createElement({
-		tag: 'td',
-		options: {
-			colSpan: "2"
-		},
-		appendTo: _tr
-	});
+	entry.location.view.node.appendChild(_tr);
+
+	let _td = _xyz.utils.wire()`<td colSpan=2>`;
+
+	_tr.appendChild(_td);
 
 	// Create a container for document control.
-	documentControl.container = _xyz.utils.createElement({
-		tag: 'div',
-		options: {
-			className: 'doc-container'
-		},
-		appendTo: _td
-	});
+	documentControl.container = _xyz.utils.wire()`<div class="doc-container">`;
+
+	_td.appendChild(documentControl.container);
 
 	if (entry.edit) entry.ctrl.add_document({
 		documentControl: documentControl,
@@ -59,38 +47,25 @@ export default _xyz => entry => {
 	// Add docs if any
 	for(let doc of docs){
 
-		let docCell = _xyz.utils.createElement({
-			tag: 'div',
-			appendTo: documentControl.container
-		});
+		let docCell = _xyz.utils.wire()`<div>`;
 
-		let _doc = _xyz.utils.createElement({
-		    tag: 'a',
-	        options: {
-	   		    href: doc,
-	   		    textContent: decodeURIComponent(decodeURIComponent(doc.split('/').pop())),
-	   		    target: '_blank'
-	   		},
-	   		appendTo: docCell
-	   	});
+		documentControl.container.appendChild(docCell);
+
+	   	let _doc = _xyz.utils.wire()`
+	   	<a href=${doc} target="_blank"
+	   	>${decodeURIComponent(decodeURIComponent(doc.split('/').pop()))}`;
+
+	   	docCell.appendChild(_doc);
 
 	   	_doc.dataset.name = doc.replace(/^.*[\\\/]/, '');
 
 	   	// Add delete button if doc entry is editable.
-	   	if (entry.edit) _xyz.utils.createElement({
-	   		tag: 'span',
-	   		options: {
-	   			title: 'Delete document',
-	   			className: 'btn_del',
-	   			innerHTML: '<i class="material-icons">clear</i>'
-	   		},
-	   		style: {
-	   			cursor: 'pointer'
-	   		},
-	   		appendTo: docCell,
-	   		eventListener: {
-	   			event: 'click',
-	   			funct: e => {
+	   	if(entry.edit) docCell.appendChild(_xyz.utils.wire()`
+	   		<span class="btn_del"
+	   		title="Delete document"
+	   		style="cursor: pointer;"
+	   		onclick=${
+	   			e => {
 	   				e.target.remove();
 
 	   				entry.ctrl.delete_document({
@@ -99,7 +74,7 @@ export default _xyz => entry => {
 	   				});
 	   			}
 	   		}
-	   	});
+	   		><i class="material-icons">clear`);
 	}
 
 }
