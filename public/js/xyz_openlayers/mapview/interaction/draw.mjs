@@ -12,6 +12,7 @@ export default _xyz => {
 
   function begin(params) {
 
+    // *** DBZ: Can an interaction be current without a finish method?
     _xyz.mapview.interaction.current.finish && _xyz.mapview.interaction.current.finish();
 
     _xyz.mapview.interaction.current = _xyz.mapview.interaction.draw;

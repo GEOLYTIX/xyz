@@ -198,7 +198,7 @@ function createMap(_xyz) {
   });
 
   // Initialise scrolly on listview element.
-  _xyz.utils.scrolly(desktop.listviews);
+  _xyz.utils.scrolly(desktop.listviews.querySelector('.scrolly'));
 
   document.getElementById('clear_locations').onclick = () => {
     _xyz.locations.list
