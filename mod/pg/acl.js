@@ -6,7 +6,7 @@ module.exports = async () => {
 
   env.acl_connection = env.acl_connection.split('|');
 
-  if(!env.acl_connection[1]) throw 666;
+  if(!env.acl_connection[1]) return;
 
   if (!env.secret) {
     console.log('No secret provided for JWT. Process will be killed now!');
