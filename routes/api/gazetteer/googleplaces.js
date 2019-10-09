@@ -11,6 +11,9 @@ module.exports = fastify => {
         public: true
       })
     ]),
+    preHandler: [
+      fastify.evalParam.token,
+    ],
     handler: async (req, res) => {
 
       const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${req.query.id}&${env.keys.GOOGLE}`;

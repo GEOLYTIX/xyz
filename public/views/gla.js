@@ -523,35 +523,41 @@ _xyz({
       table.update();
 
     };
-  
 
-    // Gazetteer
-    const input = document.querySelector('#postcode-search input');
-  
-    const find = document.querySelector('#postcode-find');
-      
-    input.addEventListener('focus', e => {
-      document.getElementById('postcode-find').classList.remove('darkish');
-      document.getElementById('postcode-find').classList.add('pink-bg');
-      e.target.parentNode.classList.add('pink-br');
-    });
-    
-    input.addEventListener('blur', e => {
-      document.getElementById('postcode-find').classList.add('darkish');
-      document.getElementById('postcode-find').classList.remove('pink-bg');
-      e.target.parentNode.classList.remove('pink-br');
-    });
 
+    // Locator
     _xyz.mapview.locate.icon = {
       url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_locate.svg",
       anchor: [0.5, 1],
       scale: 0.5
     }
+  
 
-    //_xyz.gazetteer.icon = 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_gazetteer.svg?sanitize=true';
+    // Gazetteer
+    const input = document.getElementById('postcode-search');
+  
+    const find = document.getElementById('postcode-find');
+      
+    input.addEventListener('focus', e => {
+      find.classList.remove('darkish');
+      find.classList.add('pink-bg');
+      e.target.parentNode.classList.add('pink-br');
+    });
+    
+    input.addEventListener('blur', e => {
+      find.classList.add('darkish');
+      find.classList.remove('pink-bg');
+      e.target.parentNode.classList.remove('pink-br');
+    });
 
+    _xyz.gazetteer.icon = {
+      url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_gazetteer.svg",
+      anchor: [0.5, 1],
+      scale: 0.5
+    }
    
     find.addEventListener('click', () => {
+
       _xyz.gazetteer.search(input.value,
         {
           source: 'GOOGLE',
@@ -582,25 +588,37 @@ _xyz({
               xhr.onload = e => {
             
                 if (e.target.status !== 200) return;
-                      
-                const features = [_xyz.utils.turf.helpers.point(res.coordinates)];
-            
-                e.target.response.forEach(f => features.push(_xyz.utils.turf.helpers.point(JSON.parse(f.geomj).coordinates)));
-                            
-                const bbox = _xyz.utils.turf.bbox({
-                  type: 'FeatureCollection',
-                  features: features
+
+                const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
+
+                const features = [];
+
+                e.target.response.forEach(f => {
+
+                  features.push(geoJSON.readFeature({
+                    type: 'Feature',
+                    geometry: JSON.parse(f.geomj)
+                  },{ 
+                    dataProjection: 'EPSG:4326',
+                    featureProjection:'EPSG:3857'
+                  }));
+
                 });
-            
-                _xyz.map.flyToBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
-                  padding: [5, 5]
-                });
-                        
+
+                const gazSource = _xyz.gazetteer.layer.getSource();
+
+                gazSource.addFeatures(features);
+
+                _xyz.mapview.flyToBounds(_xyz.gazetteer.layer.getSource().getExtent());
+
+                features.forEach(f => gazSource.removeFeature(f));
+    
               };
             
               xhr.send();
 
             });
+
           }
         }
       );

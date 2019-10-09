@@ -21,15 +21,7 @@
                 "provider": "GOOGLE",
                 "code": "GB",
                 "placeholder": "e.g. N15 4SJ",
-                "bounds": "location=51.4,-0.1&radius=30000",
-                "datasets": [
-                    {
-                        "layer": "Advice Center",
-                        "table": "gla.gla",
-                        "label": "organisation",
-                        "leading_wildcard": true
-                    }
-                ]
+                "bounds": "location=51.4,-0.1&radius=30000"
             },
             "layers": {
                 "Zoomstack": {

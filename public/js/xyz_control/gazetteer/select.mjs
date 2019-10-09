@@ -43,7 +43,14 @@ export default _xyz => function(record, callback){
     // Get the geometry from the gazetteer database.
     const xhr = new XMLHttpRequest();
   
-    xhr.open('GET', _xyz.host + '/api/gazetteer/googleplaces?id=' + record.id + '&token=' + _xyz.token);
+    xhr.open('GET',
+      _xyz.host + '/api/gazetteer/googleplaces?' +
+      _xyz.utils.paramString({
+        id: record.id,
+        token: _xyz.token
+      }));
+
+    xhr.setRequestHeader('Content-Type', 'application/json');
     
     xhr.responseType = 'json';
       
