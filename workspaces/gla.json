@@ -50,7 +50,7 @@
                     "style": {
                         "default": {
                             "strokeWidth": 2,
-                            "strokeColor": "#353d42"
+                            "strokeColor": "#9e0059"
                         }
                     }
                 },
@@ -373,12 +373,12 @@
                         "markerMin": 20,
                         "markerMax": 25,
                         "marker": {
-                            "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin.svg?sanitize=true",
+                            "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_slate.svg",
                             "anchor": [0.5, 1],
                             "scale": 1
                         },
                         "markerMulti": {
-                            "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/marker_multi.svg?sanitize=true",
+                            "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/marker_multi.svg",
                             "scale": 0.8
                         },
                         "highlight": {}

@@ -7,49 +7,48 @@ _xyz({
       target: document.getElementById('Map'),
       scrollWheelZoom: true,
       zoomControl: true,
-      btn: {
-        Locate: document.getElementById('btnLocate'),
-      }
     });
+
+    document.getElementById('btnLocate').onclick = e =>{
+      _xyz.mapview.locate.toggle();
+      e.target.classList.toggle('active');
+    };
 
     _xyz.locations.list = [
       {
         color: '#00AEEF',
         colorDark: '#007BBC',
         marker: {
-          url: "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_blue.svg?sanitize=true",
+          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_blue.svg",
           anchor: [0.5, 1],
-          scale: 1
+          scale: 0.5
         },
       },
       {
         color: '#008D48',
         colorDark: '#005A15',
         marker: {
-          url: "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_green.svg?sanitize=true",
+          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_green.svg",
           anchor: [0.5, 1],
-          scale: 1
+          scale: 0.5
         },
       },
       {
         color: '#E85713',
         colorDark: '#CF3E00',
         marker: {
-          url: "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_orange.svg?sanitize=true",
+          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_orange.svg",
           anchor: [0.5, 1],
-          scale: 1
+          scale: 0.5
         },
       }
     ];
-
   
     _xyz.locations.selectCallback = location => {
 
-      // for (const filter of filters) {
-      //   filter.classList.remove('expanded');
-      // }
-
-      //gla_select(_xyz, location);
+      for (const filter of filters) {
+        filter.classList.remove('expanded');
+      }
 
       // Draw location marker.
       location.Marker = _xyz.mapview.geoJSON({
@@ -543,12 +542,13 @@ _xyz({
       e.target.parentNode.classList.remove('pink-br');
     });
 
-    // _xyz.mapview.locate.icon = _xyz.L.icon({
-    //   iconUrl: 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_locate.svg?sanitize=true',
-    //   iconSize: 30
-    // });
+    _xyz.mapview.locate.icon = {
+      url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_locate.svg",
+      anchor: [0.5, 1],
+      scale: 0.5
+    }
 
-    _xyz.gazetteer.icon = 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_gazetteer.svg?sanitize=true';
+    //_xyz.gazetteer.icon = 'https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin_gazetteer.svg?sanitize=true';
 
    
     find.addEventListener('click', () => {

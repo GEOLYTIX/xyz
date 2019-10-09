@@ -6,6 +6,11 @@ export default _xyz => {
 
     active: false,
 
+    icon: {
+      type: 'geo',
+      scale: 0.05
+    },
+
     marker: new _xyz.mapview.lib.Feature({
       geometry: new _xyz.mapview.lib.geom.Point([0, 0])
     })
@@ -29,10 +34,7 @@ export default _xyz => {
         }),
         zIndex: 40,
         style: new _xyz.mapview.lib.style.Style({
-          image: _xyz.mapview.icon({
-            type: 'geo',
-            scale: 0.05
-          })
+          image: _xyz.mapview.icon(_xyz.mapview.locate.icon)
         })
       });
      

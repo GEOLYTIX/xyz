@@ -9,19 +9,13 @@ export default _xyz => function(geom){
   if (gazetteer.layer) _xyz.map.removeLayer(gazetteer.layer);
   
   gazetteer.layer = _xyz.mapview.geoJSON({
-    geometry: geom.geometry,
-    pane: 'gazetteer',
-    // dbauszus *** style needs to be OL object
-    style: {
-      icon: {
-        url: gazetteer.icon,
-        size: 40,
-        anchor: [20, 40]
-      }
-    }
+    geometry: geom,
+    dataProjection: '4326',
+    style: new _xyz.mapview.lib.style.Style({
+      image: _xyz.mapview.icon(gazetteer.icon)
+    })
   });
-  
-  // Zoom to the extent of the gazetteer layer
-  _xyz.map.fitBounds(gazetteer.layer.getBounds());
+
+  _xyz.mapview.flyToBounds(gazetteer.layer.getSource().getExtent());
 
 };

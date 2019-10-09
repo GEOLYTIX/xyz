@@ -16,28 +16,26 @@ export default _xyz => {
 
     createFeature: createFeature(_xyz),
 
-    icon: _xyz.utils.svg_symbols({
+    icon: {
       type: 'markerColor',
-      style: {
-        colorMarker: '#64dd17',
-        colorDot: '#33691e'
-      }
-    }),
+      colorMarker: '#64dd17',
+      colorDot: '#33691e',
+      anchor: [0.5, 1],
+      scale: 0.05,
+    },
 
     style: {
-      stroke: true,
-      color: '#1F964D',
-      weight: 2,
+      strokeColor: '#1F964D',
+      strokeWidth: 2,
       fillColor: '#DEF6CA',
       fillOpacity: 0.2,
-      fill: true
     }
 
   };
 
   return gazetteer;
 
-  function init (params) {
+  function init(params) {
 
     if (!params) return;
 
@@ -68,36 +66,36 @@ export default _xyz => {
 
     // Initiate search on keyup with input value
     gazetteer.input.addEventListener('keyup', e => {
-      
+
       const keyset = new Set([37, 38, 39, 40, 13]);
-    
+
       if (
-        !keyset.has(e.keyCode || e.charCode) && 
+        !keyset.has(e.keyCode || e.charCode) &&
         e.target.value.length > 0) gazetteer.search(e.target.value);
 
     });
-    
+
     // Keydown events
     gazetteer.input.addEventListener('keydown', e => {
-    
+
       const key = e.keyCode || e.charCode;
-        
+
       const results = gazetteer.result.querySelectorAll('li');
-    
+
       // Move up through results with up key
       if (key === 38) {
         let i = indexInParent(gazetteer.result.querySelector('.active'));
         if (i > 0) [results[i], results[i - 1]].forEach(el => el.classList.toggle('active'));
         return;
       }
-    
+
       // Move down through results with down key
       if (key === 40) {
         let i = indexInParent(gazetteer.result.querySelector('.active'));
-        if (i < results.length - 1) [results[i], results[i + 1]].forEach(el => { if(el) el.classList.toggle('active') });
+        if (i < results.length - 1) [results[i], results[i + 1]].forEach(el => { if (el) el.classList.toggle('active') });
         return;
       }
-    
+
       // Cancel search and set results to empty on backspace or delete keydown
       if (key === 46 || key === 8) {
         if (gazetteer.xhr) gazetteer.xhr.abort();
@@ -105,10 +103,10 @@ export default _xyz => {
         if (gazetteer.layer) _xyz.map.removeLayer(gazetteer.layer);
         return;
       }
-    
+
       // Select first result on enter keypress
       if (key === 13) {
-    
+
         // Get possible coordinates from input and draw location if valid
         let latlng = e.target.value.split(',').map(parseFloat);
         if ((latlng[1] > -90 && latlng[1] < 90) && (latlng[0] > -180 && latlng[0] < 180)) {
@@ -120,12 +118,12 @@ export default _xyz => {
             coordinates: [latlng[1], latlng[0]]
           });
         }
-    
+
         // Select active results record
         let activeRecord = results[indexInParent(gazetteer.result.querySelector('.active'))];
-    
+
         if (!activeRecord && results.length > 0) activeRecord = results[0];
-    
+
         if (activeRecord && activeRecord['data-id']) gazetteer.select({
           label: activeRecord.innerText,
           id: activeRecord['data-id'],
@@ -134,17 +132,17 @@ export default _xyz => {
           table: activeRecord['data-table'],
           marker: activeRecord['data-marker']
         }, params.callback || null);
-    
+
         return;
       }
     });
-    
+
     // Cancel search and empty results on input focusout
     gazetteer.input.addEventListener('focusout', () => {
       if (gazetteer.xhr) gazetteer.xhr.abort();
       setTimeout(() => gazetteer.result.innerHTML = '', 400);
     });
-    
+
     gazetteer.group.appendChild(gazetteer.input);
     gazetteer.group.appendChild(_xyz.utils.wire()`<span class="bar">`);
 
@@ -156,7 +154,7 @@ export default _xyz => {
 
     // Results
     gazetteer.result = _xyz.utils.wire()`<ul></ul>`;
-  
+
     gazetteer.result.addEventListener('click', e => {
       if (!e.target['data-source']) return;
 

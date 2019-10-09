@@ -2,9 +2,13 @@
 <html lang="en">
 
 <head data-dir="{{:dir}}">
+
     <title>Greater London Authority - Employment Rights Advice</title>
+
     <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="{{:dir}}/css/control.css" />
@@ -13,7 +17,7 @@
 
     <script src="{{:dir}}/views/gla.js" defer></script>
 
-    <!-- <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/gla/master/gla.js&type=application/javascript" defer></script>-->
+    <!-- <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://cdn.jsdelivr.net/gh/GEOLYTIX/public@master/gla.js&type=application/javascript" defer></script>-->
 
     <style>
         * {
@@ -38,6 +42,10 @@
 
         #orange {
             background-color: #E85713;
+        }
+
+        #slate {
+            background-color: #353d42;
         }
 
         .pink-box {
@@ -227,10 +235,6 @@
             top: -5px;
         }
 
-        .checkbox .checkbox_i {
-            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_unchecked.svg?sanitize=true);
-        }
-
         .expanded .expander {
             background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_up.svg?sanitize=true);
         }
@@ -372,7 +376,7 @@
                     <input placeholder="Enter your postcode or address" />
                 </div>
 
-                <div id="btnLocate" class="btn darkish" style="grid-row: 2; grid-column: 1/2">
+                <div id="btnLocate" class="btn darkish" style="grid-row: 2; grid-column: 1/2;">
                     Current Location
                 </div>
 
