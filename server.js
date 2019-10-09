@@ -60,16 +60,16 @@ fastify
   .register(require('fastify-helmet'), {
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ['\'self\'', '*.logrocket.io'],
-        baseURI: ['\'self\''],
-        objectSrc: ['\'self\''],
-        workerSrc: ['\'self\'', 'blob:'],
-        frameSrc: ['\'self\'', 'www.google.com', 'www.gstatic.com'],
-        formAction: ['\'self\''],
-        styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.rawgit.com', 'code.getmdl.io'],
-        fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-        scriptSrc: ['\'self\'', '\'unsafe-inline\'', 'cdn.rawgit.com', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'code.getmdl.io'],
-        imgSrc: ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', '*.global.ssl.fastly.net', 'data:']
+        defaultSrc: env.CSP.defaultSrc || ['\'self\'', '*.logrocket.io'],
+        baseURI: env.CSP.baseURI || ['\'self\''],
+        objectSrc: env.CSP.objectSrc || ['\'self\''],
+        workerSrc: env.CSP.workerSrc || ['\'self\'', 'blob:'],
+        frameSrc: env.CSP.frameSrc || ['\'self\'', 'www.google.com', 'www.gstatic.com'],
+        formAction: env.CSP.formAction || ['\'self\''],
+        styleSrc: env.CSP.styleSrc || ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.rawgit.com', 'code.getmdl.io', 'raw.githubusercontent.com', 'cdn.jsdelivr.net'],
+        fontSrc: env.CSP.fontSrc || ['\'self\'', 'fonts.gstatic.com'],
+        scriptSrc: env.CSP.scriptSrc || ['\'self\'', '\'unsafe-inline\'', 'cdn.rawgit.com', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'code.getmdl.io', 'raw.githubusercontent.com'],
+        imgSrc: env.CSP.imgSrc || ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', 'raw.githubusercontent.com', '*.global.ssl.fastly.net', 'data:']
       },
       setAllHeaders: true
     },

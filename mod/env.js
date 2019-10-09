@@ -41,6 +41,30 @@ module.exports = {
 
   workspace: {},
 
+  CSP: {
+
+    defaultSrc: process.env.CSP_defaultSrc && process.env.CSP_defaultSrc.split(','),
+
+    baseURI: process.env.CSP_baseURI && process.env.CSP_baseURI.split(','),
+
+    objectSrc: process.env.CSP_objectSrc && process.env.CSP_objectSrc.split(','),
+
+    workerSrc: process.env.CSP_workerSrc && process.env.CSP_workerSrc.split(','),
+
+    frameSrc: process.env.CSP_frameSrc && process.env.CSP_frameSrc.split(','),
+
+    formAction: process.env.CSP_formAction && process.env.CSP_formAction.split(','),
+
+    styleSrc: process.env.CSP_styleSrc && process.env.CSP_styleSrc.split(','),
+
+    fontSrc: process.env.CSP_fontSrc && process.env.CSP_fontSrc.split(','),
+
+    scriptSrc: process.env.CSP_scriptSrc && process.env.CSP_scriptSrc.split(','),
+
+    imgSrc: process.env.CSP_imgSrc && process.env.CSP_imgSrc.split(','),
+
+  },
+
   transport: process.env.TRANSPORT,
 
   http: process.env.HTTP,
