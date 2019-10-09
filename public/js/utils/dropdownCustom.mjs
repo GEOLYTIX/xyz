@@ -44,7 +44,7 @@ export function dropdownCustom(param) {
   });
 
   if(!isNaN(param.selectedIndex)){
-    node.querySelector('.head span').textContent = menu.children[param.selectedIndex].dataset.field;
+    node.querySelector('.head span').textContent = menu.children[param.selectedIndex].textContent;
     menu.children[param.selectedIndex].classList.add('selected');
   }
 

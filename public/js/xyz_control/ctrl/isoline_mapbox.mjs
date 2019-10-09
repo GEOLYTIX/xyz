@@ -7,37 +7,25 @@ export default _xyz => param => {
 
   param.container.appendChild(mode_container);
 
-  mode_container.appendChild(_xyz.utils.wire()`<span>Mode`);
+  mode_container.appendChild(_xyz.utils.wire()`<span style="display: inline-block; width: 20%;">Mode`);
 
-  _xyz.utils.dropdown({
-    //title: 'Mode',
-    label: 'label',
-    val: 'val',
-    selected: param.entry.edit.isoline_mapbox.profile,
-    style: {
-      width: '70%',
-      float: 'right',
-      margin: 0
-    },
-    entries: [
-      {
-        label: 'Driving',
-        val: 'driving'
-      },
-      {
-        label: 'Walking',
-        val: 'walking'
-      },
-      {
-        label: 'Cycling',
-        val: 'cycling'
-      }
-    ],
-    onchange: e => {
-      param.entry.edit.isoline_mapbox.profile = e.target.value;
-    },
-    appendTo: mode_container
-  });
+  const setting_container = _xyz.utils.wire()`<div style="display: inline-block; width: 80%;">`;
+
+  mode_container.appendChild(setting_container);
+
+  const entries = [ {"driving": "Driving"},
+    {"walking": "Walking"},
+    {"cycling": "Cycling" }];
+
+  setting_container.appendChild(_xyz.utils.dropdownCustom({
+    entries: entries,
+    singleSelect: true,
+    selectedIndex: 0,
+    callback: e => {
+      param.entry.edit.isoline_mapbox.profile = e.target.dataset.field;
+      e.target.parentNode.previousSibling.textContent = e.target.textContent;
+    }
+  }));
 
   param.container.appendChild(_xyz.utils.wire()`
   <div style="margin-top: 12px;">
