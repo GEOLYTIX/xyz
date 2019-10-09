@@ -20,16 +20,25 @@
         bottom: 0;
         width: 10px;
         background-color: #aaa;
+
         >.scrolly_bar {
             position: absolute;
             width: 10px;
             background: #666;
         }
+
         &:hover {
             cursor: ns-resize;
         }
     }
+
     .scrolly_spacer {
         height: 30px;
+    }
+
+
+    &.disable-hover,
+    &.disable-hover * {
+        pointer-events: none !important;
     }
 }
