@@ -7,10 +7,10 @@ _xyz({
 
 function init(_xyz) {
 
-  _xyz.locations.select = location => {
-    _xyz.locations.decorate(location);
-    location.trash();
-  };
+  // _xyz.locations.select = location => {
+  //   _xyz.locations.decorate(location);
+  //   location.trash();
+  // };
 
   _xyz.mapview.create({
     target: document.getElementById('Map'),

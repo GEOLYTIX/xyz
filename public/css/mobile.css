@@ -1002,6 +1002,8 @@ button {
       cursor: ns-resize; }
   .scrolly .scrolly_spacer {
     height: 30px; }
+  .scrolly.disable-hover, .scrolly.disable-hover * {
+    pointer-events: none !important; }
 
 .attribution {
   bottom: 0;
@@ -1979,7 +1981,7 @@ button {
       }*/ }
       .contextmenu ul li:hover {
         background-color: #9CC5A1;
-        border-bottom: 1px solid rgba(0, 0, 0, 0);
+        border-bottom: 1px solid transparent;
         cursor: pointer; }
 
 .context {
