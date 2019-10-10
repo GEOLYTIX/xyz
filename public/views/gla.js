@@ -415,31 +415,27 @@ _xyz({
   
         document.getElementById('filterBorough').appendChild(_xyz.utils.wire()`
         <label class="checkbox">${borough}
-        <input type="checkbox"
-          onchange=${e => {
-  
-    e.stopPropagation();
-                  
-    if (e.target.checked) {
-  
-      // Add value to filter array.
-      layer.filter.current['borough'].in.push(borough);
-                  
-    } else {
-  
-      // Get index of value in filter array.
-      let idx = layer.filter.current['borough']['in'].indexOf(borough);
-  
-      // Splice filter array on idx.
-      layer.filter.current['borough'].in.splice(idx, 1);
-  
-    }
-    
-    layer.zoomToExtent();
-    table.update();
-  
-  
-  }}>
+        <input type="checkbox" onchange=${e => {
+          e.stopPropagation();
+                        
+          if (e.target.checked) {
+        
+            // Add value to filter array.
+            layer.filter.current['borough'].in.push(borough);
+                        
+          } else {
+        
+            // Get index of value in filter array.
+            let idx = layer.filter.current['borough']['in'].indexOf(borough);
+        
+            // Splice filter array on idx.
+            layer.filter.current['borough'].in.splice(idx, 1);
+          }
+          
+          layer.zoomToExtent({padding: [100, 100, 100, 100]});
+          table.update();
+
+        }}>
         <div class="checkbox_i">`);
       });
   
@@ -463,27 +459,21 @@ _xyz({
   
         document.getElementById('filterServices').appendChild(_xyz.utils.wire()`
         <label class="checkbox">${service[1]}
-        <input type="checkbox"
-          onchange=${e => {
-  
-    e.stopPropagation();
-                  
-    if (e.target.checked) {
-  
-      layer.filter.current[service[0]] = {};
-      layer.filter.current[service[0]]['boolean'] = true;
-                  
-    } else {
-  
-      delete layer.filter.current[service[0]];
-  
-    }
-    
-    layer.zoomToExtent();
-    table.update();
-  
-  
-  }}>
+        <input type="checkbox" onchange=${e => {
+          e.stopPropagation();
+                        
+          if (e.target.checked) {
+            layer.filter.current[service[0]] = {};
+            layer.filter.current[service[0]]['boolean'] = true;
+                        
+          } else {
+        
+            delete layer.filter.current[service[0]];
+          }
+          
+          layer.zoomToExtent({padding: [100, 100, 100, 100]});
+          table.update();
+        }}>
         <div class="checkbox_i">`);
       });
 
@@ -519,7 +509,7 @@ _xyz({
 
       setServiceFilter();
 
-      layer.zoomToExtent();
+      layer.zoomToExtent({padding: [100, 100, 100, 100]});
       table.update();
 
     };

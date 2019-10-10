@@ -1,4 +1,4 @@
-export default _xyz => function () {
+export default _xyz => function (params) {
 
   const layer = this;
   
@@ -19,11 +19,7 @@ export default _xyz => function () {
   xhr.onload = e => {
     if (e.target.status !== 200) return;
 
-    var extent = e.target.response.split(',');
-
-    let _extent = extent.map(each => parseFloat(each));
-
-    _xyz.map.getView().fit(_extent, { duration: 1000 });
+    _xyz.mapview.flyToBounds(e.target.response.split(',').map(coords => parseFloat(coords)), params);
     
   };
 

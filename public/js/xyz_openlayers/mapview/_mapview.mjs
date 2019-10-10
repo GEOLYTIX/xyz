@@ -40,8 +40,16 @@ export default _xyz => ({
 
   getBounds: getBounds(_xyz),
 
-  flyToBounds: extent => {
-    _xyz.map.getView().fit(extent, { padding: [50, 50, 50, 50], duration: 1000 });
+  flyToBounds: (extent, params = {}) => {
+    _xyz.map.getView().fit(
+      extent,
+      Object.assign(
+        {
+          padding: [50, 50, 50, 50],
+          duration: 1000
+        },
+        params)
+    );
   },
 
   getZoom: () => {
