@@ -15,7 +15,7 @@ import {Circle, Fill, Stroke, Icon, Style, Text} from 'ol/style';
 
 import {transform, transformExtent, fromLonLat} from 'ol/proj';
 
-import {defaults, Draw, Modify} from 'ol/interaction.js';
+import {defaults as interactionDefaults, Draw, Modify} from 'ol/interaction.js';
 
 import {createBox} from 'ol/interaction/Draw.js';
 
@@ -25,7 +25,7 @@ import {Map, View, Feature, Overlay} from 'ol';
 
 import * as geom from 'ol/geom';
 
-import {ScaleLine} from 'ol/control';
+import {defaults as controlDefaults, Zoom, ScaleLine} from 'ol/control';
 
 export default () => ({
 
@@ -38,11 +38,13 @@ export default () => ({
   Overlay: Overlay,
   
   control: {
+    defaults: controlDefaults,
+    Zoom: Zoom,
     ScaleLine: ScaleLine,
   },
   
   interaction: {
-    defaults: defaults,
+    defaults: interactionDefaults,
     Draw: Draw,
     Modify: Modify,
   },
