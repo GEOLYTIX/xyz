@@ -25,7 +25,7 @@
         * {
             font-family: Arial, Helvetica, sans-serif;
         }
-        
+
         #pink {
             background-color: #EE266D;
         }
@@ -205,7 +205,7 @@
             font-weight: bold;
         }
 
-        ._attribution > a {
+        ._attribution>a {
             color: rgb(0, 120, 168);
         }
 
@@ -214,7 +214,7 @@
             padding-bottom: 16px;
             border-top: 1px solid #ddd;
         }
-        
+
         .filterHead {
             position: relative;
             color: #9E0059;
@@ -226,7 +226,7 @@
             cursor: pointer;
         }
 
-        .filterHead > .expander {
+        .filterHead>.expander {
             position: absolute;
             right: 0;
             background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_down.svg?sanitize=true);
@@ -246,17 +246,13 @@
             padding-top: 16px;
         }
 
-        .filterList > div {
+        .filterList>div {
             color: #333;
             font-weight: 400;
         }
 
-        .filterList .checkbox_i {
-            color: #333;
-        }
-
         .filterList .checkbox {
-            padding: 1px 0 5px 25px;
+            margin: 7px 0;
         }
 
 
@@ -328,8 +324,7 @@
         text-align: center;">
     </div>
 
-    <div
-    style="
+    <div style="
         min-width: 768px;
         max-width: 1024px;
         margin: auto;
@@ -338,7 +333,7 @@
         font-size: 32px;
         font-weight: bold;
         background-color: #F5F5F5;">
-            Employment rights advice near you
+        Employment rights advice near you
     </div>
 
     <div style="
@@ -368,8 +363,7 @@
                 display: grid;
                 grid-gap: 10px;">
 
-                <div 
-                style="
+                <div style="
                     border: 1px solid #222;
                     border-radius: 3px;
                     padding: 13px;
@@ -389,30 +383,30 @@
             </div>
 
             <div class="pink-box">
-                    Filter
+                Filter
             </div>
 
             <div style="
             background-color: #fff;
             padding: 10px;">
 
-            <div class="filter">
-                <div class="filterHead">Borough<div class="expander"></div></div>
-                <div class="filterList" id="filterBorough" style="height: 0; overflow: hidden;"></div>
-            </div>
-            <div class="filter" style="border-bottom: 1px solid #ddd;">
-                <div class="filterHead">Service Offered <div class="expander"></div></div>
-                <div class="filterList" id="filterServices" style="height: 0; overflow: hidden;"></div>
-            </div>
-            <div id="resetFilter"
-            class="btn"
-            style="
+                <div class="filter">
+                    <div class="filterHead">Borough<div class="expander"></div>
+                    </div>
+                    <div class="filterList" id="filterBorough" style="height: 0; overflow: hidden;"></div>
+                </div>
+                <div class="filter" style="border-bottom: 1px solid #ddd;">
+                    <div class="filterHead">Service Offered <div class="expander"></div>
+                    </div>
+                    <div class="filterList" id="filterServices" style="height: 0; overflow: hidden;"></div>
+                </div>
+                <div id="resetFilter" class="btn" style="
             display: inline-block;
             background-color: #9E0059;
             color: #fff;
             margin-top: 10px;">
-                Reset
-            </div>
+                    Reset
+                </div>
 
             </div>
 
@@ -425,18 +419,21 @@
 
             <div id="Map">
                 <div class="_attribution">
-                    <a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a> | 
-                    <a target="_blank" href="https://openlayers.org">Openlayers</a> | 
-                    <a target="_blank" href="https://www.ordnancesurvey.co.uk/business-government/products/open-zoomstack">Ordnance Survey Zoomstack</a>
+                    <a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a> |
+                    <a target="_blank" href="https://openlayers.org">Openlayers</a> |
+                    <a target="_blank"
+                        href="https://www.ordnancesurvey.co.uk/business-government/products/open-zoomstack">Ordnance
+                        Survey Zoomstack</a>
                 </div>
             </div>
-
+            
             <div class="pink-box">
                 Browse advice centres in London
             </div>
 
             <div class="text-box">
-                Click on an advice centre in the last below to see details like when it opens and how to get in touch with them.
+                Click on an advice centre in the last below to see details like when it opens and how to get in touch
+                with them.
             </div>
 
             <div id="List" style="background-color: #fff;"></div>

@@ -39,15 +39,14 @@ export default (_xyz, layer) => {
 
       // Create checkbox to toggle whether table is in tabs list.
       layer.dataview.panel.appendChild(_xyz.utils.wire()`
-        <label class="checkbox">${table.title}
+        <label class="checkbox">
         <input
           type="checkbox"
           checked=${!!table.display}
           onchange=${e => {
             table.display = e.target.checked;
             if (table.display) return layer.show();
-            table.remove();}}>
-        <div class="checkbox_i">`);
+            table.remove();}}></input><span>${table.title}`);
 
       if (table.display && layer.display) table.show();
     });
@@ -71,15 +70,14 @@ export default (_xyz, layer) => {
 
       // Create checkbox to toggle whether table is in tabs list.
       layer.dataview.panel.appendChild(_xyz.utils.wire()`
-        <label class="checkbox">${chart.title}
+        <label class="checkbox">
         <input
           type="checkbox"
           checked=${!!chart.display}
           onchange=${e => {
             chart.display = e.target.checked;
             if (chart.display) return layer.show();
-            chart.remove();}}>
-        <div class="checkbox_i">`);
+            chart.remove();}}></input><span>${chart.title}`);
 
       if (chart.display && layer.display) chart.show();
     });

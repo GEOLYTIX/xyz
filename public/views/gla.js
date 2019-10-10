@@ -1,6 +1,6 @@
 _xyz({
   host: document.head.dataset.dir,
-  //hooks: true,
+  hooks: true,
   callback: _xyz => {
   
     _xyz.mapview.create({
@@ -342,6 +342,18 @@ _xyz({
       location.view.drawer = view;
 
     };
+
+    _xyz.hooks.current.locations.forEach(_hook => {
+
+      let hook = _hook.split('!');
+  
+      _xyz.locations.select({
+        locale: _xyz.workspace.locale.key,
+        layer: _xyz.layers.list[decodeURIComponent(hook[0])],
+        table: hook[1],
+        id: hook[2]
+      });
+    });
   
     const layer = _xyz.layers.list['Advice Center'];
 
@@ -414,7 +426,7 @@ _xyz({
       boroughs.forEach(borough => {
   
         document.getElementById('filterBorough').appendChild(_xyz.utils.wire()`
-        <label class="checkbox">${borough}
+        <label class="checkbox">
         <input type="checkbox" onchange=${e => {
           e.stopPropagation();
                         
@@ -436,7 +448,7 @@ _xyz({
           table.update();
 
         }}>
-        <div class="checkbox_i">`);
+        </input><span>${borough}`);
       });
   
     }
@@ -458,7 +470,7 @@ _xyz({
       services.forEach(service => {
   
         document.getElementById('filterServices').appendChild(_xyz.utils.wire()`
-        <label class="checkbox">${service[1]}
+        <label class="checkbox">
         <input type="checkbox" onchange=${e => {
           e.stopPropagation();
                         
@@ -474,7 +486,7 @@ _xyz({
           layer.zoomToExtent({padding: [100, 100, 100, 100]});
           table.update();
         }}>
-        <div class="checkbox_i">`);
+        </input><span>${service[1]}`);
       });
 
     }

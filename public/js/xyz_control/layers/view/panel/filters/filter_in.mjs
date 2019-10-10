@@ -5,7 +5,7 @@ export default (_xyz, layer, filter_entry) => {
   filter_entry.filter.in.forEach(val => {
 
     block.appendChild(_xyz.utils.wire()`
-    <label class="checkbox">${val}
+    <label class="checkbox">
     <input
       type="checkbox"
       onchange=${e=>{
@@ -38,8 +38,7 @@ export default (_xyz, layer, filter_entry) => {
       
         })
 
-      }}>
-    <div class="checkbox_i">`);
+      }}></input><span>${val}`);
   
   });
   

@@ -345,8 +345,7 @@
                                 "columns": [
                                     {
                                         "title": "Organisation",
-                                        "field": "organisation_short",
-                                        "type": "text"
+                                        "field": "organisation_short"
                                     }
                                 ]
                             }

@@ -117,12 +117,21 @@ export default _xyz => params => {
   // Set hooks on changeevent.
   if (_xyz.hooks) {
 
-    if (_xyz.hooks.current.layers.length > 0) Object.values(_xyz.layers.list).forEach(layer => {
+    if (_xyz.hooks.current.layers.length > 0) {
 
-      layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
+      Object.values(_xyz.layers.list).forEach(layer => {
 
-    });
+        layer.display = !!~_xyz.hooks.current.layers.indexOf(layer.key);
+        layer.display && layer.show();
+  
+      });
 
+    } else {
+
+      Object.values(_xyz.layers.list).forEach(layer => layer.display && layer.show());
+
+    }
+    
     _xyz.mapview.node.addEventListener('changeEnd', ()=>{
 
       const center = _xyz.mapview.lib.proj.transform(

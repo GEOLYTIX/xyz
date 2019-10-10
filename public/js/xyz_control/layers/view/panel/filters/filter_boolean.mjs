@@ -10,7 +10,7 @@ export default (_xyz, layer, filter_entry) => {
   layer.filter.current[filter_entry.field]['boolean'] = true;
 
   block.appendChild(_xyz.utils.wire()`
-  <label class="checkbox">${filter_entry.name || 'True'}
+  <label class="checkbox">
   <input type="checkbox"
     checked=true 
     onchange=${e=>{
@@ -31,8 +31,7 @@ export default (_xyz, layer, filter_entry) => {
     
       })
 
-    }}>
-  <div class="checkbox_i">`);
+    }}></input><span>${filter_entry.name || 'True'}`);
 
   layer.reload();
 

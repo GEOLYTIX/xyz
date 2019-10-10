@@ -33,13 +33,12 @@ export default (_xyz, layer) => {
 
   if (layer.style.label) {
     panel.appendChild(_xyz.utils.wire()`
-    <label class="checkbox" style="margin-bottom: 10px;">Display Labels.
+    <label class="checkbox" style="margin-bottom: 10px;">
     <input type="checkbox"
     checked=${!!layer.style.label.display}
     onchange=${e => {
     layer.style.label.display = e.target.checked;
-    layer.show();}}>
-    <div class="checkbox_i">`);
+    layer.show();}}></input><span>Display Labels.`);
   }
 
 

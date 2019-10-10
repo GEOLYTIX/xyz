@@ -2,7 +2,7 @@ export default _xyz => entry => {
 
   entry.row.appendChild(_xyz.utils.wire()`
   <td style="padding-top: 5px;" colSpan=2>
-  <label class="checkbox">${entry.title || 'Show dashboard'}
+  <label class="checkbox">
   <input type="checkbox"
     checked=${!!entry.display}
     onchange=${e => {
@@ -10,8 +10,7 @@ export default _xyz => entry => {
     entry.display ?
       showTab() :
       removeTab();
-  }}>
-  <div class="checkbox_i">`);
+  }}></input><span>${entry.title || 'Show dashboard'}`);
 
   if (entry.display) showTab();
 

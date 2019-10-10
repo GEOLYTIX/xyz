@@ -187,13 +187,12 @@ export default _xyz => layer => {
   
   layer.style.legend.appendChild(_xyz.utils.wire()`
   <td style="padding-top: 5px;" colSpan=2>
-  <label class="checkbox">Display colour values as a ratio to the size value.
+  <label class="checkbox">
   <input type="checkbox"
     checked=${layer.grid_ratio}
     onchange=${e => {
     layer.grid_ratio = e.target.checked;
     layer.reload();
-  }}>
-  <div class="checkbox_i">`);
+  }}></input><span>Display colour values as a ratio to the size value.`);
 
 };

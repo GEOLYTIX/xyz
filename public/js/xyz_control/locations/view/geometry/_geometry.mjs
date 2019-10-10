@@ -68,7 +68,7 @@ export default _xyz => entry => {
 
   td.appendChild(_xyz.utils.wire()`
   <td style="padding-top: 5px;" colSpan=2>
-  <label class="checkbox">${entry.name || 'Additional geometries'}
+  <label class="checkbox">
   <input type="checkbox"
     checked=${!!entry.display}
     onchange=${e => {
@@ -76,8 +76,7 @@ export default _xyz => entry => {
     entry.display ?
       entry.ctrl.showGeom(entry) :
       entry.ctrl.hideGeom(entry);
-  }}>
-  <div class="checkbox_i">`);
+  }}></input><span>${entry.name || 'Additional geometries'}`);
 
   td.appendChild(_xyz.utils.wire()`
   <div class="sample-circle"
