@@ -323,7 +323,7 @@ _xyz({
       view.appendChild(viewGrid);
 
 
-      var viewGrid = _xyz.utils.wire()`<div class="grid _grid" style="grid-template-columns: 20px 1fr 20px 1fr;">`;
+      var viewGrid = _xyz.utils.wire()`<div class="grid _grid">`;
 
       // if (fields.cost) viewGrid.appendChild(_xyz.utils.wire()`
       //     <div style="grid-column: 1; grid-row: 1; text-align: center;">
