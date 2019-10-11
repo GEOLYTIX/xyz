@@ -66,9 +66,9 @@ fastify
         workerSrc: env.CSP.workerSrc || ['\'self\'', 'blob:'],
         frameSrc: env.CSP.frameSrc || ['\'self\'', 'www.google.com', 'www.gstatic.com'],
         formAction: env.CSP.formAction || ['\'self\''],
-        styleSrc: env.CSP.styleSrc || ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'code.getmdl.io', 'cdn.jsdelivr.net'],
+        styleSrc: env.CSP.styleSrc || ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
         fontSrc: env.CSP.fontSrc || ['\'self\'', 'fonts.gstatic.com'],
-        scriptSrc: env.CSP.scriptSrc || ['\'self\'', '\'unsafe-inline\'', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'code.getmdl.io', 'cdn.jsdelivr.net'],
+        scriptSrc: env.CSP.scriptSrc || ['\'self\'', '\'unsafe-inline\'', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'cdn.jsdelivr.net'],
         imgSrc: env.CSP.imgSrc || ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', '*.global.ssl.fastly.net', 'cdn.jsdelivr.net', 'data:']
       },
       setAllHeaders: true
