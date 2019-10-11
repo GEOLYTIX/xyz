@@ -19,7 +19,7 @@ _xyz({
         color: '#00AEEF',
         colorDark: '#007BBC',
         marker: {
-          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_blue.svg",
+          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-pin_blue.svg",
           anchor: [0.5, 1],
           scale: 0.5
         },
@@ -28,7 +28,7 @@ _xyz({
         color: '#008D48',
         colorDark: '#005A15',
         marker: {
-          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_green.svg",
+          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-pin_green.svg",
           anchor: [0.5, 1],
           scale: 0.5
         },
@@ -37,7 +37,7 @@ _xyz({
         color: '#E85713',
         colorDark: '#CF3E00',
         marker: {
-          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_orange.svg",
+          url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-pin_orange.svg",
           anchor: [0.5, 1],
           scale: 0.5
         },
@@ -69,7 +69,7 @@ _xyz({
 
       });
 
-      const view = _xyz.utils.wire()`<div class="location" style="${'font-size: 10.5px; margin-top: 10px; border: 3px solid ' + location.record.color}">`;
+      const view = _xyz.utils.wire()`<div class="location" style="${'font-size: 14px; margin-top: 10px; border: 3px solid ' + location.record.color}">`;
 
 
       const header = _xyz.utils.wire()`<div style="display: grid; grid-gap: 5px; grid-template-columns: 30px auto 30px;">`;
@@ -104,7 +104,7 @@ _xyz({
       var viewGrid = _xyz.utils.wire()`<div class="grid _grid" style="grid-template-columns: 20px 1fr 20px 1fr;">`;
 
       viewGrid.appendChild(
-        _xyz.utils.wire()`<div style="grid-column: 1; grid-row: 1;"><div style="background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon_location.svg);" class="location_drop">`);
+        _xyz.utils.wire()`<div style="grid-column: 1; grid-row: 1;"><div style="background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon_location.svg);" class="location_drop">`);
 
       var viewAddress = _xyz.utils.wire()`<div style="grid-column: 2; grid-row: 1/4;">`;
 
@@ -133,28 +133,29 @@ _xyz({
       if (fields.website) {
         viewGrid.appendChild(
           _xyz.utils.wire()`
-            <i style="grid-column: 3; grid-row: 1; font-size: 15px;" class="material-icons">launch</i>`);
+          <div style="grid-column: 3; grid-row: 1; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon_link.svg);" class="location_icon">`);
+
         viewGrid.appendChild(
           _xyz.utils.wire()`
-            <a style="grid-column: 4; grid-row: 1; line-height: 1.5;" href="${fields.website}">Website</a>`);
+            <a style="grid-column: 4; grid-row: 1;" href="${fields.website}">Website</a>`);
       }
 
       if (fields.phone) {
         viewGrid.appendChild(
           _xyz.utils.wire()`
-            <div style="grid-column: 3; grid-row: 2; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon_phone.svg);" class="location_icon">`);
+            <div style="grid-column: 3; grid-row: 2; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon_phone.svg);" class="location_icon">`);
         viewGrid.appendChild(
           _xyz.utils.wire()`
-            <div style="grid-column: 4; grid-row: 2; line-height: 1.5;">${fields.phone}`);
+            <div style="grid-column: 4; grid-row: 2;">${fields.phone}`);
       }
 
       if (fields.email) {
         viewGrid.appendChild(
           _xyz.utils.wire()`
-            <div style="grid-column: 3; grid-row: 3; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon_email.svg);" class="location_icon">`);
+            <div style="grid-column: 3; grid-row: 3; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon_email.svg);" class="location_icon">`);
         viewGrid.appendChild(
           _xyz.utils.wire()`
-            <a style="grid-column: 4; grid-row: 3; line-height: 1.5;" href="${'mailto:' + fields.email}">Email</a>`);
+            <a style="grid-column: 4; grid-row: 3;" href="${'mailto:' + fields.email}">Email</a>`);
       }
       if (fields.coverage) {
 
@@ -162,7 +163,7 @@ _xyz({
             <div style="
             grid-column: 1;
             grid-row: 5;
-            background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-catchment.svg);
+            background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-catchment.svg);
             height: 30px;
             background-size: contain;
             background-repeat: no-repeat;">`);
@@ -174,12 +175,12 @@ _xyz({
 
       view.appendChild(viewGrid);
 
-      var viewGrid = _xyz.utils.wire()`<div style="display: grid; grid-gap:0px;">`;
+      var viewGrid = _xyz.utils.wire()`<div style="display: grid; grid-gap:0px; grid-template-columns: 30px;">`;
 
       var gridRow = 1;
 
       var el = _xyz.utils.wire()`
-          <div style="grid-column: 1/4; font-weight: bold; line-height: 2; font-size: 10.5px;">Opening Hours:`;
+          <div style="grid-column: 1/4; font-weight: bold; line-height: 2; font-size: 14px;">Opening Hours:`;
       el.style.gridRow = gridRow;
       viewGrid.appendChild(el);
 
@@ -287,35 +288,35 @@ _xyz({
 
       var viewGrid = _xyz.utils.wire()`<div class="grid _grid" style="grid-template-columns: 20px">`;
 
-      viewGrid.appendChild(_xyz.utils.wire()`<div style="grid-column: 1/5; grid-row: 1; font-weight: bold; line-height: 2; font-size: 10.5px;">Services offered:`)
+      viewGrid.appendChild(_xyz.utils.wire()`<div style="grid-column: 1/5; grid-row: 1; font-weight: bold; line-height: 2; font-size: 14px;">Services offered:`)
 
 
       viewGrid.appendChild(_xyz.utils.wire()`
-      <div style="${'grid-column: 1; grid-row: 2; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/'+ (fields.service_initial_advice ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
+      <div style="${'grid-column: 1; grid-row: 2; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/'+ (fields.service_initial_advice ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 2; grid-row: 2;">One-off initial advice.`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
-      <div style="${'grid-column: 1; grid-row: 3; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/'+ (fields.service_written_advice ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
+      <div style="${'grid-column: 1; grid-row: 3; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/'+ (fields.service_written_advice ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 2; grid-row: 3;">Written advice.`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
-      <div style="${'grid-column: 1; grid-row: 4; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/'+ (fields.service_form_filling ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
+      <div style="${'grid-column: 1; grid-row: 4; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/'+ (fields.service_form_filling ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 2; grid-row: 4;">Help with filling in forms.`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
-      <div style="${'grid-column: 1; grid-row: 5; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/'+ (fields.service_case_work ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
+      <div style="${'grid-column: 1; grid-row: 5; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/'+ (fields.service_case_work ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 2; grid-row: 5;">Help with putting a case together for court.`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
-      <div style="${'grid-column: 1; grid-row: 6; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/'+ (fields.service_representation ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
+      <div style="${'grid-column: 1; grid-row: 6; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/'+ (fields.service_representation ? 'icon_checked' : 'icon_unchecked') +'.svg); height: 12px; background-size: contain; background-repeat: no-repeat;'}">`);
 
       viewGrid.appendChild(_xyz.utils.wire()`
       <div style="grid-column: 2; grid-row: 6;">Representation at court.`);
@@ -540,7 +541,7 @@ _xyz({
 
     // Locator
     _xyz.mapview.locate.icon = {
-      url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_locate.svg",
+      url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-pin_locate.svg",
       anchor: [0.5, 1],
       scale: 0.5
     }
@@ -564,7 +565,7 @@ _xyz({
     });
 
     _xyz.gazetteer.icon = {
-      url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin_gazetteer.svg",
+      url: "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-pin_gazetteer.svg",
       anchor: [0.5, 1],
       scale: 0.5
     }
