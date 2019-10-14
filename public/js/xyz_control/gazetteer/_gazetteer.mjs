@@ -181,7 +181,8 @@ export default _xyz => {
       // Toggle visibility of the gazetteer group
       gazetteer.toggle.onclick = () => {
 
-        gazetteer.toggle.classList.toggle('active');
+        gazetteer.toggle.classList.toggle('icons-search-toggle');
+
 
         if (gazetteer.group.style.display === 'block') {
           return gazetteer.group.style.display = 'none';

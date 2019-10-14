@@ -56,7 +56,7 @@ button {
         width: 50px;
         padding: 0;
         color: $glxgreen;
-        background: #fff;
+                                        // background: #fff;
         text-align: center;
         cursor: default;
         border: none;
@@ -67,10 +67,6 @@ button {
         i {
             font-size: 30px;
             line-height: 1.7;
-        }
-        &.active {
-            background: $glxgreen;
-            color: #fff;
         }
         &:disabled {
             opacity: 0.3;
