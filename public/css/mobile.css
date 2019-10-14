@@ -2440,6 +2440,13 @@ button {
   background-position: center;
 }
 
+.icons-lock-open {
+  background: url("../icons/icons-lock-open.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 *,
 *::after,
 *::before {
