@@ -1,3 +1,4 @@
+//Mapview icons//
 .icons-search {
     background: url("../icons/icons-search.svg");
     background-size: 32px 50px;    
@@ -42,6 +43,30 @@
 
 .icons-lock-open {
     background: url("../icons/icons-lock-open.svg");
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+
+//ID dataview icons//
+
+.icons-vertical-align-top {
+    background: url("../icons/icons-vertical-align-top.svg");
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.icons-vertical-align-bottom {
+    background: url("../icons/icons-vertical-align-bottom.svg");
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.icons-fullscreen {
+    background: url("../icons/icons-fullscreen.svg");
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center; 
