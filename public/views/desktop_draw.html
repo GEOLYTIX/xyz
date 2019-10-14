@@ -12,17 +12,11 @@
 
     <script src="{{:dir}}/js/build/xyz_openlayers.js" defer></script>
     <script src="{{:dir}}/views/desktop_draw.js" defer></script>
-    <!-- <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/public/master/desktop_draw.js&type=application/javascript" defer></script> -->
+    <!-- <script type="application/javascript" src="https://cdn.jsdelivr.net/gh/GEOLYTIX/public@master/desktop_draw.js" defer></script> -->
     
 </head>
 
-<body 
-data-viewmode="mobile" 
-data-nanoid={{:nanoid}} 
-data-log={{:log}} 
-data-user={{:user}} 
-data-logrocket={{:logrocket}}
-data-token={{:token}}>
+<body>
 
     <div id="Map" class="mapview map" style="height: 100%"></div>
 
@@ -38,7 +32,7 @@ data-token={{:token}}>
     background-size: 50px;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url(https://raw.githubusercontent.com/GEOLYTIX/public/master/wand.svg?sanitize=true);"></button>
+    background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/public@master/wand.svg);"></button>
 
 </body>
 

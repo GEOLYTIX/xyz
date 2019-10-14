@@ -730,7 +730,7 @@
                                 "strokeColor": "#083D77"
                             },
                             "_marker": {
-                                "url": "https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon-pin.svg?sanitize=true",
+                                "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin.svg",
                                 "anchor": [0.5, 1]
                             }
                         },

@@ -26,24 +26,47 @@ function init(_xyz) {
   _xyz.layers.list['Mapbox Base'].show();
   _xyz.layers.list['Draw'].show();
 
-  document.getElementById('Magic').onclick = e => {
+  const magicBtn = document.getElementById('Magic');
 
-    if (e.target.classList.contains('active')) {
+  const Hint = document.getElementById('Hint');
 
-      e.target.style.backgroundColor = '#FFFFFF';
+  function stopDrawing(){
 
-      _xyz.mapview.interaction.draw.finish();
+    magicBtn.classList.remove('active');
 
-      return e.target.classList.remove('active');
-    }
+    magicBtn.style.backgroundColor = '#FFFFFF';
+
+    _xyz.mapview.interaction.draw.finish();
+
+    _xyz.map.addInteraction(new _xyz.mapview.lib.interaction.DragPan());
+
+    _xyz.map.addInteraction(new _xyz.mapview.lib.interaction.PinchZoom());
+
+    _xyz.map.addInteraction(new _xyz.mapview.lib.interaction.PinchRotate());
+
+    Hint.style.display = 'block';
+
+  }
+
+  magicBtn.onclick = () => {
+
+    if (magicBtn.classList.contains('active')) return stopDrawing();
+
+    Hint.style.display = 'none';
+
+    _xyz.map.getInteractions().forEach(function (interaction) {
+      if (interaction instanceof _xyz.mapview.lib.interaction.DragPan || interaction instanceof _xyz.mapview.lib.interaction.PinchZoom || interaction instanceof _xyz.mapview.lib.interaction.PinchRotate) {
+        _xyz.map.removeInteraction(interaction);
+      }
+    }, this);
   
-    e.target.classList.add('active');
+    magicBtn.classList.add('active');
 
     const cArr = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f']
 
     const color = cArr[Math.floor(Math.random() * cArr.length)];
 
-    e.target.style.backgroundColor = color;
+    magicBtn.style.backgroundColor = color;
 
     _xyz.mapview.interaction.draw.begin({
       layer: _xyz.layers.list['Draw'],
@@ -96,11 +119,10 @@ function init(_xyz) {
             strokeColor: color
           }
         }));
+
+        stopDrawing();
+
       }
-      // callback: () => {
-      //   layer.view.header.classList.remove('edited');
-      //   btn.classList.remove('active');
-      // }
     });
 
   }
