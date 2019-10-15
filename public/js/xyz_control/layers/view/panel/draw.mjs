@@ -179,7 +179,7 @@ export default (_xyz, layer) => {
 
     //let block = _xyz.utils.wire()`<div class="block">`;
     let _container = _xyz.utils.wire()`
-    <div class="drawer expandable">
+    <div class="drawer expandable" style="overflow: visible; max-height: 2500px;">
     <table><tr><td>
     <div style="padding: 4px;" class="table-section">
     `;
@@ -288,7 +288,7 @@ export default (_xyz, layer) => {
     if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};   
 
     let _container = _xyz.utils.wire()`
-    <div class="drawer expandable">
+    <div class="drawer expandable" style="overflow: visible; max-height: 2500px;">
     <table><tr><td>
     <div style="padding: 4px;" class="table-section">
     `;

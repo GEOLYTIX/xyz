@@ -4,71 +4,47 @@ export default _xyz => param => {
 
   param.container.appendChild(mode_container);
 
-  mode_container.appendChild(_xyz.utils.wire()`<span>Mode`);
+  mode_container.appendChild(_xyz.utils.wire()`<span style="display: inline-block; width: 20%;">Mode`);
 
-  _xyz.utils.dropdown({
-    label: 'label',
-    val: 'val',
-    selected: param.entry.edit.isoline_here.mode || 'car',
-    style: {
-      width: '70%',
-      float: 'right',
-      margin: 0
-    },
+  const setting_container = _xyz.utils.wire()`<div style="display: inline-block; width: 80%;">`;
+
+  mode_container.appendChild(setting_container);
+
+  setting_container.appendChild(_xyz.utils.dropdownCustom({
     entries: [
-      {
-        label: 'Driving',
-        val: 'car'
-      },
-      {
-        label: 'Walking',
-        val: 'pedestrian'
-      },
-      {
-        label: 'Cargo',
-        val: 'truck'
-      },
-      {
-        label: 'HOV lane',
-        val: 'carHOV'
-      },
-    ],
-    onchange: e => {
-      param.entry.edit.isoline_here.mode = e.target.value;
-    },
-    appendTo: mode_container
-  });
+    { "car": "Driving"},
+    { "pedestrian": "Walking"},
+    { "truck": "Cargo"},
+    { "carHOV": "HOV lane"} ],
+    singleSelect: true,
+    selectedIndex: 0,
+    callback: e => {
+      param.entry.edit.isoline_here.mode = e.target.dataset.field;
+      e.target.parentNode.previousSibling.textContent = e.target.textContent;
+    }
+  }));
 
-  let range_container = _xyz.utils.wire()`<div style="margin-top: 8px;"><span>Range`;
+  let range_container = _xyz.utils.wire()`<div style="margin-top: 8px;">`;
 
   param.container.appendChild(range_container);
 
-  _xyz.utils.dropdown({
-    label: 'label',
-    val: 'val',
-    selected: param.entry.edit.isoline_here.rangetype || 'time',
-    style: {
-      width: '70%',
-      float: 'right',
-      margin: 0
-    },
-    entries: [
-      {
-        label: 'Time (min)',
-        val: 'time'
-      },
-      {
-        label: 'Distance (km)',
-        val: 'distance'
-      }
-    ],
-    onchange: e => {
+  range_container.appendChild(_xyz.utils.wire()`<span style="display: inline-block; width: 20%;">Range`);
 
-      param.entry.edit.isoline_here.rangetype = e.target.value;
+  const range_setting_container = _xyz.utils.wire()`<div style="display: inline-block; width: 80%;">`;
+
+  range_container.appendChild(range_setting_container);
+
+  range_setting_container.appendChild(_xyz.utils.dropdownCustom({
+    entries: [{time: "Time (min)"}, { distance: "Distance (km)"}],
+    singleSelect: true,
+    selectedIndex: 0,
+    callback: e => {
+      param.entry.edit.isoline_here.rangetype = e.target.dataset.field;
+      e.target.parentNode.previousSibling.textContent = e.target.textContent;
 
       const input = slider_here_range.querySelector('input');
 
-      if (e.target.value === 'time') {
+      if(param.entry.edit.isoline_here.rangetype === 'time') {
 
         slider_here_range.querySelector('span').textContent = 'Travel time in minutes: ';
 
@@ -76,12 +52,13 @@ export default _xyz => param => {
           param.entry.edit.isoline_here.minutes = parseInt(e.target.value);
           e.target.parentNode.previousElementSibling.textContent = param.entry.edit.isoline_here.minutes;
         };
+
         input.value = param.entry.edit.isoline_here.minutes;
         input.parentNode.previousElementSibling.textContent = param.entry.edit.isoline_here.minutes;
-
+      
       }
 
-      if (e.target.value === 'distance') {
+      if(param.entry.edit.isoline_here.rangetype === 'distance') {
 
         slider_here_range.querySelector('span').textContent = 'Travel distance in kilometer: ';
 
@@ -91,12 +68,10 @@ export default _xyz => param => {
         };
         input.value = param.entry.edit.isoline_here.distance;
         input.parentNode.previousElementSibling.textContent = param.entry.edit.isoline_here.distance;
-
       }
 
-    },
-    appendTo: range_container
-  });
+    }
+  }));
 
   param.entry.edit.isoline_here.minutes = param.entry.edit.isoline_here.minutes || 10;
 
