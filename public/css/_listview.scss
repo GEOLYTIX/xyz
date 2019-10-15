@@ -16,6 +16,7 @@
             }
         }
         &.expanded {
+            overflow: visible;
             max-height: 2500px;
             .expander::before {
                 content: "expand_less"

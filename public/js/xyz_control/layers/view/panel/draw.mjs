@@ -177,9 +177,8 @@ export default (_xyz, layer) => {
 
     if (typeof(layer.edit.isoline_mapbox) !== 'object') layer.edit.isoline_mapbox = {};   
 
-    //let block = _xyz.utils.wire()`<div class="block">`;
     let _container = _xyz.utils.wire()`
-    <div class="drawer expandable" style="overflow: visible; max-height: 2500px;">
+    <div class="drawer expandable">
     <table><tr><td>
     <div style="padding: 4px;" class="table-section">
     `;
@@ -198,12 +197,11 @@ export default (_xyz, layer) => {
       }
       >Mapbox Isoline settings`);
 
-    //layer.edit.panel.appendChild(block);
     layer.edit.panel.appendChild(_container);
 
     _xyz.ctrl.isoline_mapbox({
       entry: layer,
-      container: _container//block
+      container: _container
     });
 
     layer.edit.panel.appendChild(_xyz.utils.wire()`
@@ -288,7 +286,7 @@ export default (_xyz, layer) => {
     if (typeof(layer.edit.isoline_here) !== 'object') layer.edit.isoline_here = {};   
 
     let _container = _xyz.utils.wire()`
-    <div class="drawer expandable" style="overflow: visible; max-height: 2500px;">
+    <div class="drawer expandable">
     <table><tr><td>
     <div style="padding: 4px;" class="table-section">
     `;
