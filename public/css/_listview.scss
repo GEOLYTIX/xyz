@@ -136,6 +136,7 @@
                 }
                 &.expanded {
                     max-height: 2500px !important;
+                    overflow: visible;
                     .expander::before {
                         content: "expand_less"
                     }

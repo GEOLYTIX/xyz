@@ -24,21 +24,16 @@ export default (_xyz, layer) => {
       onclick=${e=>{
 
         e.target.parentNode.remove();
-  
-        delete layer.filter.current[filter_entry.field];
         
         // Hide clear all filter.
-        if (Object.keys(layer.filter.current).length < 1) {
-          layer.filter.clear_all.style.display = 'none';
-          layer.count(n => {
-            layer.filter.run_output.disabled = !(n > 1);     
-          });
-        }
-        
+        if(!layer.filter.list.children.length) layer.filter.clear_all.style.display = 'none';
+
         // Enable filter in select dropdown.
-        Object.values(layer.filter.select.options).forEach(opt => {
-          if (opt.value === filter_entry.field) opt.disabled = false;
+        layer.filter.select.querySelectorAll('ul li').forEach(li => {
+          if(li.dataset.field === e.target.parentNode.dataset.field) li.classList.remove('selected');
         });
+
+        delete layer.filter.current[filter_entry.field];
         
         layer.reload();
         
@@ -105,8 +100,6 @@ export default (_xyz, layer) => {
     }
   });
 
-  layer.filter.select.querySelector('ul').style.position = 'initial';
-
   panel.appendChild(layer.filter.select);
 
   layer.filter.clear_all = _xyz.utils.wire()`
@@ -140,7 +133,7 @@ export default (_xyz, layer) => {
 
 
   // Create filter list container to store individual filter blocks.
-  layer.filter.list = _xyz.utils.wire()`<div>`;
+  layer.filter.list = _xyz.utils.wire()`<div>`; // class="filter-list"
   panel.appendChild(layer.filter.list);
 
 

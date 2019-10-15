@@ -2211,6 +2211,7 @@ button {
 }
 .listview .drawer .dashboard .panel.expanded {
   max-height: 2500px !important;
+  overflow: visible;
 }
 .listview .drawer .dashboard .panel.expanded .expander::before {
   content: "expand_less";
