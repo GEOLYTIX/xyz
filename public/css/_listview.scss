@@ -6,9 +6,9 @@
         margin-bottom: 10px;
     }
     .drawer {
-        margin-top: 10px;
+        margin-top: 4px;
         &.expandable {
-            max-height: 40px;
+            max-height: 36px;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .expander::before {
@@ -24,6 +24,8 @@
         }
         &.drawer-group {
 
+            margin: 10px 0 16px 0;
+
                 .header {
                     font-style: italic;
                     font-size: 13px;
@@ -37,7 +39,7 @@
 
             .header-group {
                 font-family: ffmark_bold, sans-serif !important;
-                font-size: 14px;
+                font-size: 13px;
                 line-height: 2;
                 display: flex;
 
@@ -71,12 +73,12 @@
             }
         }
         .header {
-            font-size: 14px;
+            font-size: 13.5px;
             line-height: 2;
             font-family: ffmark, sans-serif;
             border-bottom: 1px solid #333;
             display: flex;
-            padding: 4px 0;
+            /*padding: 4px 0;*/
 
             >:nth-child(1){
                 overflow: hidden;
@@ -106,7 +108,7 @@
             }
         }
         .meta {
-            margin-top: 5px;
+            margin-top: 10px;
             a {
                 color: $glxgreen;
                 font-weight: 600;
@@ -114,7 +116,7 @@
         }
         .dashboard {
             border-bottom: 1px solid #333;
-            font-size: 14px;
+            font-size: 13px;
             .title {
                 font-family: ffmark_bold, sans-serif;
                 font-size: 14px;

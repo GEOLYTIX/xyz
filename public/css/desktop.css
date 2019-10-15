@@ -2091,10 +2091,10 @@ button {
   margin-bottom: 10px;
 }
 .listview .drawer {
-  margin-top: 10px;
+  margin-top: 4px;
 }
 .listview .drawer.expandable {
-  max-height: 40px;
+  max-height: 36px;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
 }
@@ -2108,6 +2108,9 @@ button {
 .listview .drawer.expanded .expander::before {
   content: "expand_less";
 }
+.listview .drawer.drawer-group {
+  margin: 10px 0 16px 0;
+}
 .listview .drawer.drawer-group .header {
   font-style: italic;
   font-size: 13px;
@@ -2119,7 +2122,7 @@ button {
 }
 .listview .drawer.drawer-group .header-group {
   font-family: ffmark_bold, sans-serif !important;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 2;
   display: flex;
 }
@@ -2149,12 +2152,12 @@ button {
   content: "expand_less";
 }
 .listview .drawer .header {
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 2;
   font-family: ffmark, sans-serif;
   border-bottom: 1px solid #333;
   display: flex;
-  padding: 4px 0;
+  /*padding: 4px 0;*/
 }
 .listview .drawer .header > :nth-child(1) {
   overflow: hidden;
@@ -2179,7 +2182,7 @@ button {
   color: #849483;
 }
 .listview .drawer .meta {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .listview .drawer .meta a {
   color: #1F964D;
@@ -2187,7 +2190,7 @@ button {
 }
 .listview .drawer .dashboard {
   border-bottom: 1px solid #333;
-  font-size: 14px;
+  font-size: 13px;
 }
 .listview .drawer .dashboard .title {
   font-family: ffmark_bold, sans-serif;
@@ -2576,7 +2579,7 @@ body {
 }
 .listviews #localeDropdown .ul-drop .head span {
   padding: 4px;
-  border-radius: 4px;
+  border-radius: 2px;
   background-color: #DEF6CA;
 }
 
