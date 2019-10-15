@@ -212,14 +212,14 @@ export default _xyz => function () {
 
   // Clear selection.
   location.view.header.appendChild(_xyz.utils.wire()`
-  <i
+  <div
   style = "${'color: ' + location.style.strokeColor}"
   title = "Remove feature from selection"
-  class = "material-icons cursor noselect btn_header"
+  class = "icons-fullscreen cursor noselect btn_header"
   onclick = ${e => {
     e.stopPropagation();
     location.remove();
-  }}>clear`);
+  }}>`);
   
 
   // Add location view to drawer.

@@ -32,7 +32,7 @@ export default (_xyz, layer) => {
     ${layer.display ? 'layers' : 'layers_clear'}`;*/
 
   header.toggleDisplay = _xyz.utils.wire()`
-    <i
+    <div
     title="Toggle visibility"
     class="material-icons cursor noselect btn_header">
     ${layer.display ? 'toggle_on' : 'toggle_off'}`;

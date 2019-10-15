@@ -2440,11 +2440,50 @@ button {
   background-position: center;
 }
 
+.icons-school {
+  background: url("../icons/icons-school.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  display: block;
+}
+
 .icons-lock-open {
   background: url("../icons/icons-lock-open.svg");
   background-size: 32px 50px;
   background-repeat: no-repeat;
   background-position: center;
+  width: 50px;
+  height: 50px;
+  display: block;
+}
+
+.icons-supervisor-account {
+  background: url("../icons/icons-supervisor-account.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  display: block;
+}
+
+.icons-settings {
+  background: url("../icons/icons-settings.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
+}
+
+.icons-bug-report {
+  background: url("../icons/icons-bug-report.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
 }
 
 .icons-vertical-align-top {
@@ -2466,6 +2505,30 @@ button {
   background-size: 32px 50px;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.icons-close {
+  background: url("../icons/icons-close.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #dddddd;
+}
+
+.icons-backup {
+  background: url("../icons/icons-backup.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #dddddd;
+}
+
+.icons-description {
+  background: url("../icons/icons-description.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #dddddd;
 }
 
 .icons-mobile-touch-app {
