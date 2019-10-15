@@ -2112,7 +2112,7 @@ button {
   margin: 10px 0 16px 0;
 }
 .listview .drawer.drawer-group .header {
-  font-style: italic;
+  /*font-style: italic;*/
   font-size: 13px;
   margin-left: 12px;
   border-bottom: 1px solid #bbb;
