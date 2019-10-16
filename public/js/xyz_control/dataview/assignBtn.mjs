@@ -25,17 +25,10 @@ export default (_xyz, params) => {
   };
 
   function toggleDataview(params) {
-    console.log('test0')
-
     if (!params.btn.toggleDataview) return;
-  
-    console.log('test1')
-
     params.btn.toggleDataview.onclick = () => {
   
       if (params.btn.toggleDataview.classList.contains('icons-vertical-align-bottom')) {
-        console.log('test2');
-
         params.btn.toggleDataview.className = 'icons-vertical-align-top';
         document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
         _xyz.map.updateSize();
@@ -43,16 +36,12 @@ export default (_xyz, params) => {
   
       }
   
-
       params.btn.toggleDataview.className = 'icons-vertical-align-bottom';
-      console.log('test3');
-
-
+    
       document.body.style.gridTemplateRows = `minmax(0, 1fr) ${window.innerHeight}px`;
 
       if(_xyz.dataview.current_table.Tabulator) _xyz.dataview.current_table.Tabulator.redraw(true);
-      console.log('test');
-
+  
 
       _xyz.map.updateSize();
 

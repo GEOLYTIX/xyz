@@ -12,14 +12,14 @@
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .expander::before {
-                content: "expand_more"
+                content: ""
             }
         }
         &.expanded {
             overflow: visible;
             max-height: 2500px;
             .expander::before {
-                content: "expand_less"
+                content: ""
             }
         }
         &.drawer-group {

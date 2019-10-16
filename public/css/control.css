@@ -1101,6 +1101,7 @@ button {
   font-size: 28px;
   margin-left: 5px;
   color: #1F964D;
+  width: 30px;
 }
 .btn_header.active {
   text-shadow: 2px 2px 2px #DEF6CA;
@@ -2099,14 +2100,14 @@ button {
   transition: max-height 0.3s ease-out;
 }
 .listview .drawer.expandable .expander::before {
-  content: "expand_more";
+  content: "";
 }
 .listview .drawer.expanded {
   overflow: visible;
   max-height: 2500px;
 }
 .listview .drawer.expanded .expander::before {
-  content: "expand_less";
+  content: "";
 }
 .listview .drawer.drawer-group .header {
   font-style: italic;
@@ -2532,8 +2533,35 @@ button {
   background-color: #dddddd;
 }
 
-.icons-mobile-touch-app {
-  background: url("../icons/icons-mobile-touch-app.svg");
+.icons-touch-app {
+  background: url("../icons/icons-touch-app.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icons-layers {
+  background: url("../icons/icons-layers.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icons-location {
+  background: url("../icons/icons-room.svg");
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.xyz-icon {
+  background-size: 32px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icons-keyboard-arrow-up {
+  background: url("../icons/icons-keyboard-arrow-up.svg");
   background-size: 32px 50px;
   background-repeat: no-repeat;
   background-position: center;

@@ -45,17 +45,19 @@ body {
         text-align: center;
         table-layout: fixed;
         height: 50px; // box-shadow: 0 3px 3px -3px #000;
-        .swipe_icon {
-            display: none;
-        }
-        .active {
-            color: white;
-            background-color: $glxgreen;
-            .tab_icon {
-                display: none;
+        .xyz-icon {
+            &.icon-layers {
+                background-image: url("../icons/icons-layers.svg");
+                filter: invert(54%) sepia(91%) saturate(6371%) hue-rotate(134deg) brightness(99%) contrast(76%);
             }
-            .swipe_icon {
-                display: inline-block;
+            &.icon-location {
+                background-image: url("../icons/icons-room.svg");
+                filter: invert(54%) sepia(91%) saturate(6371%) hue-rotate(134deg) brightness(99%) contrast(76%);
+            }
+            &.active {
+                background-image: url("../icons/icons-touch-app.svg");
+                background-color: $glxgreen;
+                filter: invert(100%) sepia(4%) saturate(7470%) hue-rotate(26deg) brightness(121%) contrast(104%); 
             }
         }
     }

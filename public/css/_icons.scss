@@ -138,8 +138,38 @@
 }
 //Mobile icons//
 
-.icons-mobile-touch-app {
-    background: url("../icons/icons-mobile-touch-app.svg");
+.icons-touch-app {
+    background: url("../icons/icons-touch-app.svg");
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+    // background-color: #1F964D;
+}
+
+.icons-layers {
+    background: url("../icons/icons-layers.svg");
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.icons-location {
+    background: url("../icons/icons-room.svg");
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.xyz-icon {
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center;                 
+}
+
+//Layers toolbar icons//
+
+.icons-keyboard-arrow-up {
+    background: url("../icons/icons-keyboard-arrow-up.svg");
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center; 
