@@ -3,22 +3,20 @@ export default _xyz => param => {
   param.entry.edit.isoline_mapbox.profile = param.entry.edit.isoline_mapbox.profile || 'driving';
   param.entry.edit.isoline_mapbox.minutes = param.entry.edit.isoline_mapbox.minutes || 10;
 
-  const mode_container = _xyz.utils.wire()`<div style="margin-top: 8px">`;
+  const mode_container = _xyz.utils.wire()`<div style="margin-top: 8px;">`;
 
   param.container.appendChild(mode_container);
 
-  mode_container.appendChild(_xyz.utils.wire()`<span style="display: inline-block; width: 20%;">Mode`);
+  mode_container.appendChild(_xyz.utils.wire()`<div style="display: inline-block; width: 20%;">Mode`);
 
   const setting_container = _xyz.utils.wire()`<div style="display: inline-block; width: 80%;">`;
 
   mode_container.appendChild(setting_container);
 
-  const entries = [ {"driving": "Driving"},
-    {"walking": "Walking"},
-    {"cycling": "Cycling" }];
-
   setting_container.appendChild(_xyz.utils.dropdownCustom({
-    entries: entries,
+    entries: [ {"driving": "Driving"},
+    {"walking": "Walking"},
+    {"cycling": "Cycling" }],
     singleSelect: true,
     selectedIndex: 0,
     callback: e => {
