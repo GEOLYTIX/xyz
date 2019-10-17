@@ -65,20 +65,16 @@ data-token={{:token}}>
 
         <div class="btn_column lv1 noselect desktop">
 
-                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
-                        <i class="material-icons">search</i>
+                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;" class="icons-search">    
                     </button>
         
-                    <button id="btnLocate" title="Current location" style="display: none;">
-                        <i class="material-icons">gps_not_fixed</i>
+                    <button id="btnLocate" title="Current location" style="display: none;" class="icons-gps-not-fixed">
                     </button>
         
-                    <button id="btnZoomIn">
-                        <i class="material-icons">add</i>
+                    <button id="btnZoomIn" class="icons-add">
                     </button>
         
-                    <button id="btnZoomOut">
-                        <i class="material-icons">remove</i>
+                    <button id="btnZoomOut" class="icons-remove">
                     </button>
         
                     <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
@@ -87,10 +83,8 @@ data-token={{:token}}>
                         </a>
                     </div>
         
-                    <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-                        <a href="{{:dir}}{{:btnLogin_path}}">
-                            <i class="material-icons">{{:btnLogin_style}}</i>
-                        </a>
+                    <div id="btnLogin" title="{{:btnLogin_text}}" class="icons-lock-open" {{:btnLogin}}>
+                        <a href="{{:dir}}{{:btnLogin_path}}">{{:btnLogin_style}}</a>
                     </div>
         
                     <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
@@ -133,12 +127,10 @@ data-token={{:token}}>
 
         <div class="btn_column lv0 noselect desktop">
         
-            <div style="margin-top: -10px; background: none;">
-                <i id="toggleDataview" class="material-icons">vertical_align_top</i>
+            <div style="margin-top: -10px;" id="toggleDataview" class="icons-vertical-align-top">
             </div>
 
-            <button id="btnDataViewport" style="display: none;">
-                <i class="material-icons">fullscreen</i>
+            <button id="btnDataViewport" style="display: none;" class="icons-fullscreen">
             </button>
                     
         </div>
