@@ -12,18 +12,18 @@ export function scrolly(el) {
 
   el.addEventListener('scrolly',setHeight);
 
-  let timer;
+  //let timer;
   el.addEventListener('scroll', () => {
     bar.style.height = track.clientHeight * el.clientHeight / el.scrollHeight + 'px';
     bar.style.top = track.clientHeight * el.scrollTop / el.scrollHeight + 'px';
 
-    clearTimeout(timer);
+    clearTimeout(el.dataset.timeout);
+
     !el.classList.contains('disable-hover') && el.classList.add('disable-hover');
 
-    timer = setTimeout(function() {
+    el.dataset.timeout = setTimeout(function() {
       el.classList.remove('disable-hover');
     }, 500);
-
   });
 
   bar.addEventListener('mousedown', e => {

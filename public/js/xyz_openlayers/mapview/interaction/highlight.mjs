@@ -53,8 +53,8 @@ export default _xyz => {
     };
     _xyz.mapview.infotip.node && _xyz.mapview.infotip.position();
 
-    clearTimeout(_xyz.mapview.interaction.debounce);
-    _xyz.mapview.interaction.debounce = setTimeout(()=>pointerMove(e), 100);
+    clearTimeout(_xyz.mapview.interaction.timeout);
+    _xyz.mapview.interaction.timeout = setTimeout(()=>pointerMove(e), 100);
   }
 
   function pointerMove(e) {
