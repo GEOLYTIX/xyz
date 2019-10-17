@@ -178,6 +178,74 @@ module.exports = fastify => {
           y_round
   
           FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
+
+
+        var _width = 2*r;
+        var _height = 2*r/Math.sqrt(3);
+        var q = `
+        WITH
+        dist as (
+          SELECT
+            id,
+
+            price_paid,
+
+            geom_3857,
+
+            geom_3857 <#> ST_Point(
+              round(ST_X(geom_3857) / ${_width}) * ${_width},
+              round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist0,
+
+            geom_3857 <#> ST_Point(
+              ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+              ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist1,
+
+            geom_3857 <#> ST_Point(
+              -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+              ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist2,
+
+            geom_3857 <#> ST_Point(
+              ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+              -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist3,
+
+            geom_3857 <#> ST_Point(
+              -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+              -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist4
+
+          FROM ${table} ${where_sql}
+        ),
+        middle as (
+          SELECT
+            id,
+            price_paid,
+            CASE
+              WHEN dist1 < dist0 THEN ST_SnapToGrid(ST_Point(
+                ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+                ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
+              WHEN dist2 < dist0 THEN ST_SnapToGrid(ST_Point(
+                -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+                ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
+              WHEN dist3 < dist0 THEN ST_SnapToGrid(ST_Point(
+                ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+                -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
+              WHEN dist4 < dist0 THEN ST_SnapToGrid(ST_Point(
+                -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
+                -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
+              ELSE ST_SnapToGrid(ST_Point(
+                round(ST_X(geom_3857) / ${_width}) * ${_width},
+                round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
+            END as point
+          FROM dist
+        )
+
+        SELECT
+          count(1) count,
+          count(price_paid) size,
+          avg(price_paid) cat,
+          st_x(point) x,
+          st_y(point) y
+        FROM middle
+        GROUP BY point;`;
      
 
       } else {
@@ -251,8 +319,8 @@ module.exports = fastify => {
 
       if (!theme) return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === 4326 ? 'lon' : 'x']: row.x,
-          [srid === 4326 ? 'lat' : 'y']: row.y,
+          x: row.x,
+          y: row.y,
         },
         properties: {
           count: parseInt(row.count),
@@ -263,8 +331,8 @@ module.exports = fastify => {
 
       if (theme === 'categorized') return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === 4326 ? 'lon' : 'x']: row.x,
-          [srid === 4326 ? 'lat' : 'y']: row.y,
+          x: row.x,
+          y: row.y,
         },
         properties: {
           count: parseInt(row.count),
@@ -276,8 +344,8 @@ module.exports = fastify => {
 
       if (theme === 'graduated') return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === 4326 ? 'lon' : 'x']: row.x,
-          [srid === 4326 ? 'lat' : 'y']: row.y,
+          x: row.x,
+          y: row.y,
         },
         properties: {
           count: parseInt(row.count),
@@ -289,8 +357,8 @@ module.exports = fastify => {
 
       if (theme === 'competition') return res.code(200).send(rows.map(row => ({
         geometry: {
-          [srid === 4326 ? 'lon' : 'x']: row.x,
-          [srid === 4326 ? 'lat' : 'y']: row.y,
+          x: row.x,
+          y: row.y,
         },
         properties: {
           count: parseInt(row.count),

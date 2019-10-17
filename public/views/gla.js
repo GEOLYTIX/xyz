@@ -324,28 +324,26 @@ _xyz({
       view.appendChild(viewGrid);
 
 
-      var viewGrid = _xyz.utils.wire()`<div class="grid _grid">`;
+      var viewGrid = _xyz.utils.wire()`<div class="grid _grid" style="grid-template-columns: 30px 1fr 30px 1fr;">`;
 
-      // if (fields.cost) viewGrid.appendChild(_xyz.utils.wire()`
-      //     <div style="grid-column: 1; grid-row: 1; text-align: center;">
-      //       <div style="font-size: 30px;">£</div>
-      //       <div style="font-weight: bold">Cost</div>
-      //       <div style="white-space: pre-wrap;">${fields.cost}</div>
-      //     </div>`);
 
-      if (fields.translation_notes) viewGrid.appendChild(_xyz.utils.wire()`
-          <div style="grid-column: 2; grid-row: 1; text-align: center;">
-            <div><i style="font-size: 30px;" class="material-icons">translate</i></div>
-            <div style="font-weight: bold">Translation</div>
-            <div style="white-space: pre-wrap;">${fields.translation_notes}</div>
-          </div>`);
-
-      if (fields.access) viewGrid.appendChild(_xyz.utils.wire()`
-          <div style="grid-column: 1; grid-row: 1; text-align: center;">
-            <div><i style="font-size: 30px;" class="material-icons">accessible_forward</i></div>
+      if (fields.translation_notes) {
+        viewGrid.appendChild(_xyz.utils.wire()`
+          <div style="grid-column: 1; grid-row: 1; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-access.svg); height: 25px; background-size: contain; background-repeat: no-repeat;"></div>`);
+        viewGrid.appendChild(_xyz.utils.wire()`
+          <div style="grid-column: 2; grid-row: 1;">
             <div style="font-weight: bold">Access</div>
-            <div style="white-space: pre-wrap;">${fields.access}</div>
-          </div>`);
+            <div style="white-space: pre-wrap;">${fields.access}</div>`);            
+      }
+
+      if (fields.access) {
+        viewGrid.appendChild(_xyz.utils.wire()`
+          <div style="grid-column: 3; grid-row: 1; background-image: url(https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@latest/icon-translate.svg); height: 25px; background-size: contain; background-repeat: no-repeat;"></div>`);
+        viewGrid.appendChild(_xyz.utils.wire()`
+          <div style="grid-column: 4; grid-row: 1;">
+            <div style="font-weight: bold">Translation</div>
+            <div style="white-space: pre-wrap;">${fields.translation_notes}</div>`);          
+      }
 
       view.appendChild(viewGrid);
 

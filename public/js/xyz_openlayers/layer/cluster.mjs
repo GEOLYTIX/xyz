@@ -78,22 +78,11 @@ export default _xyz => layer => {
       
         const features = cluster.map(f => new _xyz.mapview.lib.Feature({
           id: id++,
-          geometry: geometry(f.geometry),
+          geometry: new _xyz.mapview.lib.geom.Point(
+            layer.srid === '4326' && _xyz.mapview.lib.proj.fromLonLat([f.geometry.x, f.geometry.y]) || [f.geometry.x, f.geometry.y]
+          ),
           properties: f.properties
         }));
-      
-        function geometry(geom) {
-
-          if (geom.lon && geom.lat) {
-            return new _xyz.mapview.lib.geom.Point(
-              _xyz.mapview.lib.proj.fromLonLat([geom.lon, geom.lat])
-            );
-          }
-      
-          if (geom.x && geom.y) {
-            return new _xyz.mapview.lib.geom.Point([geom.x, geom.y]);
-          }
-        }
   
         source.addFeatures(features);
       
@@ -105,14 +94,9 @@ export default _xyz => layer => {
     strategy: function(extent, resolution) {
 
       // Required to fire the load event.
-      if(this.resolution && this.resolution != resolution){
-        this.loadedExtentsRtree_.clear();
-      }
+      this.resolution && this.resolution != resolution && this.loadedExtentsRtree_.clear();
   
-      return [_xyz.mapview.lib.proj.transformExtent(
-        extent,
-        'EPSG:' + _xyz.mapview.srid,
-        'EPSG:' + layer.srid)];
+      return [_xyz.mapview.lib.proj.transformExtent(extent, 'EPSG:' + _xyz.mapview.srid, 'EPSG:' + layer.srid)];
     }
   });
   
@@ -128,16 +112,12 @@ export default _xyz => layer => {
         Object.assign({}, layer.style.markerMulti) :
         Object.assign({}, layer.style.marker);
 
-  
       const theme = Object.assign({}, layer.style.theme);
   
       // Categorized theme
       if (theme && theme.type === 'categorized') {
   
-        Object.assign(
-          marker,
-          theme.cat[properties.cat] ? theme.cat[properties.cat].style : {}
-        );
+        Object.assign(marker, theme.cat[properties.cat] && theme.cat[properties.cat].style);
       }
   
       // Graduated theme.
@@ -157,13 +137,8 @@ export default _xyz => layer => {
             var cat_style = theme.cat_arr[i].style;
           }
   
-          Object.assign(
-            marker,
-            cat_style
-          );
-
+          Object.assign(marker, cat_style);
         }
-  
       }
   
       // Competition theme.
@@ -173,9 +148,7 @@ export default _xyz => layer => {
         let size = properties.size;
   
         // Create a new cat_style with an empty layers object to store the competition layers.
-        let cat_style = {
-          layers: {}
-        };
+        let cat_style = { layers: {} };
   
         // Iterate through cats in competition theme.
         Object.entries(properties.cat).sort((a, b) => a[1] - b[1]).forEach(comp => {
@@ -187,7 +160,6 @@ export default _xyz => layer => {
             // Calculate the size of the competition layer.
             // Competition layer added first must be largest.
             cat_style.layers[size / properties.size] = theme.cat[comp[0]].style.fillColor;
-  
           }
   
           // Reduce the current size by the size of layer just added to marker.
@@ -205,10 +177,7 @@ export default _xyz => layer => {
           layer.style.markerMin :
           layer.style.markerMin + layer.style.markerMax / layer.max_size * properties.size;
 
-      Object.assign(
-        marker,
-        layer.highlight === feature.get('id') ? layer.style.highlight : {}
-      );
+      Object.assign(marker, layer.highlight === feature.get('id') && layer.style.highlight);
 
       return new _xyz.mapview.lib.style.Style({
         zIndex: parseInt(layer.max_size - properties.size),
