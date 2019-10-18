@@ -101,7 +101,10 @@
 }
 
 .icons-cloud-upload {
-    background-image: url("../icons/icons-cloud-upload.svg");
+    background: url("../icons/icons-cloud-upload.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .icons-keyboard-arrow-up {
@@ -114,9 +117,46 @@
     background: url("../icons/icons-trash.svg");
 }
 
-.icons-edit-attribute{
-    background: url("../icons/icons-edit-attribute");
+.icons-edit-attribute {
+    background: url("../icons/icons-edit-attribute.svg");
 }
+
+.icons-clear {
+    background: url("../icons/icons-clear.svg");
+    width:20px;
+    height:20px;
+}
+
+.icons-event-note {
+    background: url("../icons/icons-event-note.svg");
+    background-repeat:no-repeat;
+    background-size:15px;
+}
+
+.icons-build {
+    background: url("../icons/icons-build.svg");
+}
+
+.icons-add-document {
+    background: url("../icons/icons-add-document.svg");
+}
+
+.icons-add-photo {
+    background: url("../icons/icons-add-photo.svg");
+    background-size:70px;
+    height:70px;
+    background-repeat:no-repeat;
+    background-position: center;                 
+}
+
+.icons-view-list {
+    background: url("../icons/icons-view-list.svg");
+}
+
+.icons-bar-chart {
+    background: url("../icons/icons-bar-chart.svg");
+}
+
 //Sizing CSS// 
 .xyz-icon {
     background-size: 32px 50px;    

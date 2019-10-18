@@ -19,8 +19,8 @@ export default (_xyz, layer) => {
     const block = _xyz.utils.wire()`
     <div class="block">
     <div class="title">${filter_entry.label}</div>
-    <i
-      class="material-icons cancel-btn"
+    <button
+      class="icons-clear cancel-btn filter"
       onclick=${e=>{
 
         e.target.parentNode.remove();
@@ -42,7 +42,7 @@ export default (_xyz, layer) => {
         
         layer.reload();
         
-      }}>clear`;
+      }}>`;
   
     layer.filter.list.appendChild(block);
   

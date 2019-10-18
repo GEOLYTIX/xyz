@@ -1771,12 +1771,12 @@ button {
     max-height: 30px;
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
-    .listview .drawer.drawer-group.expandable-group .expander-group::before {
-      content: "expand_more"; }
+    .listview .drawer.drawer-group.expandable-group .icon-expander {
+      background-image: url("../icons/icons-keyboard-arrow-up.svg"); }
   .listview .drawer.drawer-group.expanded-group {
     max-height: 2500px; }
-    .listview .drawer.drawer-group.expanded-group .expander-group::before {
-      content: "expand_less"; }
+    .listview .drawer.drawer-group.expanded-group .icon-expander {
+      background-image: url("../icons/icons-keyboard-arrow-down.svg"); }
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
@@ -1842,7 +1842,7 @@ button {
         color: #1F964D;
         font-size: 20px;
         top: 2px;
-        right: -4px;
+        right: 10px;
         position: absolute; }
       .listview .drawer .dashboard .block .range-label {
         display: inline;
@@ -2055,7 +2055,10 @@ button {
   background-image: url("../icons/icons-toggle-on.svg"); }
 
 .icons-cloud-upload {
-  background-image: url("../icons/icons-cloud-upload.svg"); }
+  background: url("../icons/icons-cloud-upload.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; }
 
 .icons-keyboard-arrow-up {
   background: url("../icons/icons-keyboard-arrow-up.svg"); }
@@ -2067,7 +2070,30 @@ button {
   background: url("../icons/icons-trash.svg"); }
 
 .icons-edit-attribute {
-  background: url("../icons/icons-edit-attribute"); }
+  background: url("../icons/icons-edit-attribute.svg"); }
+
+.icons-clear {
+  background: url("../icons/icons-clear.svg");
+  width: 20px;
+  height: 20px; }
+
+.icons-event-note {
+  background: url("../icons/icons-event-note.svg");
+  background-repeat: no-repeat;
+  background-size: 15px; }
+
+.icons-build {
+  background: url("../icons/icons-build.svg"); }
+
+.icons-add-document {
+  background: url("../icons/icons-add-document.svg"); }
+
+.icons-add-photo {
+  background: url("../icons/icons-add-photo.svg");
+  background-size: 70px;
+  height: 70px;
+  background-repeat: no-repeat;
+  background-position: center; }
 
 .xyz-icon {
   background-size: 32px 50px;

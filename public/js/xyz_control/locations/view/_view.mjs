@@ -134,10 +134,10 @@ export default _xyz => function () {
   if (location.layer.edit) {
 
     location.view.editor = _xyz.utils.wire()`
-    <i
+    <button
     style = "${'color: ' + location.style.strokeColor}"
     title = "Edit the locations geometry."
-    class = "material-icons cursor noselect btn_header"
+    class = "icons-build xyz-icon cursor noselect btn_header"
     onclick = ${e => {
     e.stopPropagation();
 
@@ -153,7 +153,7 @@ export default _xyz => function () {
       }
     });
 
-  }}>build`;
+  }}>`;
 
     location.view.header.appendChild(location.view.editor);
     

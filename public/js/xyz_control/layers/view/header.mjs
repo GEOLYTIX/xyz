@@ -25,12 +25,6 @@ export default (_xyz, layer) => {
     layer.zoomToExtent();
   };
    
-  /*header.toggleDisplay = _xyz.utils.wire()`
-    <i
-    title="Toggle visibility"
-    class="material-icons cursor noselect btn_header">
-    ${layer.display ? 'layers' : 'layers_clear'}`;*/
-
   header.toggleDisplay = _xyz.utils.wire()`
     <div
     title="Toggle visibility"
