@@ -173,7 +173,7 @@ async function chkMVTCache(layer) {
 async function createMVTCache(layer){
 
   let rows = await env.dbs[layer.dbs](`
-    create table ${layer.mvt_cache}
+    Create UNLOGGED table ${layer.mvt_cache}
     (
       z integer not null,
       x integer not null,
@@ -184,7 +184,7 @@ async function createMVTCache(layer){
         primary key (z, x, y)
     );
     
-    create index ${layer.mvt_cache.replace(/\./,'_')}_tile on ${layer.mvt_cache} (tile);`);
+    Create index ${layer.mvt_cache.replace(/\./,'_')}_tile on ${layer.mvt_cache} (tile);`);
 
   if (rows && rows.err) {
     log(`!!! ${layer.locale}.${layer.key} | ${layer.mvt_cache} (mvt cache) => Failed to create cache table`);

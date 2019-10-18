@@ -83,9 +83,13 @@ data-token={{:token}}>
                         </a>
                     </div>
         
-                    <div id="btnLogin" title="{{:btnLogin_text}}" class="icons-lock-open" {{:btnLogin}}>
-                        <a href="{{:dir}}{{:btnLogin_path}}">{{:btnLogin_style}}</a>
-                    </div>
+                    <a
+                        {{:btnLogin}}
+                        id="btnLogin"
+                        title="{{:btnLogin_text}}"
+                        class="icons-lock-open"
+                        href="{{:dir}}{{:btnLogin_path}}">
+                    </a>
         
                     <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
                         <a href="{{:dir}}/user/admin" target="_blank">
