@@ -1,90 +1,46 @@
-//Mapview icons//
+//Mapview left column icons//
 .icons-search {
     background: url("../icons/icons-search.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .icons-search-toggle {
     background: url("../icons/icons-search-toggle.svg");
     background-color: #1F964D;
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .icons-gps-not-fixed {
     background: url("../icons/icons-gps_not_fixed.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 
 .icons-gps-not-fixed-toggle {
     background: url("../icons/icons-gps_not_fixed-toggle.svg");
     background-color:#1F964D;
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
 }
 .icons-add {
     background: url("../icons/icons-add.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 .icons-remove {
     background: url("../icons/icons-remove.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 
 .icons-school {
     background: url("../icons/icons-school.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
-    width: 50px;
-    height: 50px;
-    display: block;
 }
 
 .icons-lock-open {
     background: url("../icons/icons-lock-open.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
-    width: 50px;
-    height: 50px;
-    display: block;
 }
 
 .icons-supervisor-account {
-    background: url("../icons/icons-supervisor-account.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
-    width: 50px;
-    height: 50px;
-    display: block;
+    background: url("../icons/icons-supervisor-account.svg"); 
 }
-
 .icons-settings {
     background: url("../icons/icons-settings.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
     display: block;
-
 }
 
 .icons-bug-report {
     background: url("../icons/icons-bug-report.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
     display: block;
 }
 
@@ -92,85 +48,86 @@
 
 .icons-vertical-align-top {
     background: url("../icons/icons-vertical-align-top.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 
 .icons-vertical-align-bottom {
     background: url("../icons/icons-vertical-align-bottom.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 
 .icons-fullscreen {
-    background: url("../icons/icons-fullscreen.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    background: url("../icons/icons-fullscreen.svg"); 
 }
 
 //ID workspace icons//
 
 .icons-close {
     background: url("../icons/icons-close.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
     background-color: #dddddd;
 }
 
 .icons-backup {
     background: url("../icons/icons-backup.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
     background-color: #dddddd;
 }
 
 .icons-description {
     background: url("../icons/icons-description.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
     background-color: #dddddd;
 }
-//Mobile icons//
 
 .icons-touch-app {
     background: url("../icons/icons-touch-app.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
     // background-color: #1F964D;
 }
 
 .icons-layers {
     background: url("../icons/icons-layers.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 
 .icons-location {
     background: url("../icons/icons-room.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
 }
 
+.filter{
+    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+}
+
+.icons-toggle {
+    background-image: url("../icons/icons-toggle-off.svg");
+}
+
+.icons-toggle.on {
+    background-image: url("../icons/icons-toggle-on.svg");
+}
+
+.icons-cloud-upload {
+    background-image: url("../icons/icons-cloud-upload.svg");
+}
+
+.icons-keyboard-arrow-up {
+    background: url("../icons/icons-keyboard-arrow-up.svg");
+}
+.icons-keyboard-arrow-down {
+    background: url("../icons/icons-keyboard-arrow-down.svg");
+}
+.icons-trash {
+    background: url("../icons/icons-trash.svg");
+}
+
+.icons-edit-attribute{
+    background: url("../icons/icons-edit-attribute");
+}
+//Sizing CSS// 
 .xyz-icon {
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center;                 
 }
-
-//Layers toolbar icons//
-
-.icons-keyboard-arrow-up {
-    background: url("../icons/icons-keyboard-arrow-up.svg");
+.xyz-icon2 {
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center; 
+    width: 50px;
+    height: 50px;
+    display: block;
 }

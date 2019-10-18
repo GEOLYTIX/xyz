@@ -53,9 +53,9 @@ export default (_xyz, layer) => {
     };
 
     const expander = _xyz.utils.wire()`
-    <i
+    <div
     title="Toggle layer dashboard"
-    class="material-icons cursor noselect btn_header expander">`;
+    class="cursor noselect btn_header expander xyz-icon icon-expander filter">`;
 
     layer.view.header.appendChild(expander);
   

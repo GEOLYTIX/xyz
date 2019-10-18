@@ -11,15 +11,15 @@
             max-height: 40px;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            .expander::before {
-                content: ""
+            .icon-expander {
+                background-image: url("../icons/icons-keyboard-arrow-up.svg");
             }
         }
         &.expanded {
             overflow: visible;
             max-height: 2500px;
-            .expander::before {
-                content: ""
+            .icon-expander {
+                background-image: url("../icons/icons-keyboard-arrow-down.svg");
             }
         }
         &.drawer-group {

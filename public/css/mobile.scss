@@ -48,16 +48,16 @@ body {
         .xyz-icon {
             &.icon-layers {
                 background-image: url("../icons/icons-layers.svg");
-                filter: invert(54%) sepia(91%) saturate(6371%) hue-rotate(134deg) brightness(99%) contrast(76%);
             }
             &.icon-location {
                 background-image: url("../icons/icons-room.svg");
-                filter: invert(54%) sepia(91%) saturate(6371%) hue-rotate(134deg) brightness(99%) contrast(76%);
             }
             &.active {
                 background-image: url("../icons/icons-touch-app.svg");
-                background-color: $glxgreen;
-                filter: invert(100%) sepia(4%) saturate(7470%) hue-rotate(26deg) brightness(121%) contrast(104%); 
+                background-color: #1F964D;
+            }
+            &.filter {
+                filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
             }
         }
     }

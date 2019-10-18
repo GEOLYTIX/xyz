@@ -95,10 +95,9 @@ export default _xyz => function () {
   <div
   style = "${'color: ' + location.style.strokeColor}"
   title = "Toggle location view drawer."
-  class = "icons-keyboard-arrow-up cursor noselect btn_header expander"
+  class = "cursor noselect btn_header expander xyz-icon icon-expander filter"
   onclick = ${e => {
     e.stopPropagation();
-    
     _xyz.utils.toggleExpanderParent({
       expandable: location.view.drawer,
     });
@@ -110,7 +109,7 @@ export default _xyz => function () {
     <div
     style = "${'color: ' + location.style.strokeColor}"
     title = "Zoom map to feature bounds"
-    class = "icons-search cursor noselect btn_header"
+    class = "icons-search cursor noselect btn_header xyz-icon"
     onclick = ${e => {
       e.stopPropagation();
       location.flyTo();
@@ -119,16 +118,16 @@ export default _xyz => function () {
 
   // Update icon.
   location.view.upload = _xyz.utils.wire()`
-  <i
+  <div
   style = "${'display: none; color: ' + location.style.strokeColor}"
   title = "Save changes to cloud."
-  class = "material-icons cursor noselect btn_header"
+  class = "icons-cloud-upload cursor noselect btn_header xyz-icon"
   onclick = ${e => {
     e.stopPropagation();
     
     location.update();
 
-  }}>cloud_upload`;
+  }}>`;
 
   location.view.header.appendChild(location.view.upload);
 
@@ -164,14 +163,14 @@ export default _xyz => function () {
 
   // Trash icon.
   location.view.trash = _xyz.utils.wire()`
-  <i
+  <div
   style = "${'color: ' + location.style.strokeColor}"
   title = "Delete location."
-  class = "material-icons cursor noselect btn_header"
+  class = "icons-trash cursor noselect btn_header xyz-icon"
   onclick = ${e => {
     e.stopPropagation();
     location.trash();
-  }}>delete`;
+  }}>`;
 
   location.editable && location.view.header.appendChild(location.view.trash);
 
@@ -189,25 +188,47 @@ export default _xyz => function () {
 
 
   // Toggle marker.
-  location.view.header.appendChild(_xyz.utils.wire()`
-  <i
-  style = "${'color: ' + location.style.strokeColor}"
-  title = "Hide marker"
-  class = "material-icons cursor noselect btn_header"
-  onclick = ${e => {
-    e.stopPropagation();
+  // location.view.header.appendChild(_xyz.utils.wire()`
+  // <i
+  // style = "${'color: ' + location.style.strokeColor}"
+  // title = "Hide marker"
+  // class = "material-icons cursor noselect btn_header"
+  // onclick = ${e => {
+  //   e.stopPropagation();
+  //   if (e.target.textContent === 'location_off') {
+  //     _xyz.map.removeLayer(location.Marker);
+  //     e.target.textContent = 'location_on';
+  //     e.target.title = 'Show marker';
 
-    if (e.target.textContent === 'location_off') {
-      _xyz.map.removeLayer(location.Marker);
-      e.target.textContent = 'location_on';
-      e.target.title = 'Show marker';
+  //   } else {
+  //     _xyz.map.addLayer(location.Marker);
+  //     e.target.textContent = 'location_off';
+  //     e.target.title = 'Hide marker';
+  //   }
+  // }}>location_off`);
 
-    } else {
-      _xyz.map.addLayer(location.Marker);
-      e.target.textContent = 'location_off';
-      e.target.title = 'Hide marker';
-    }
-  }}>location_off`);
+  console.log(_xyz.utils.Chroma(location.style.strokeColor));
+  console.log(_xyz.utils.Chroma(location.style.strokeColor).lch());
+
+location.view.header.appendChild(_xyz.utils.wire()`
+<div
+style = "${'color: ' + location.style.strokeColor}"
+title = "Hide marker"
+class = "icons-location cursor noselect btn_header xyz-icon" 
+onclick = ${e => {
+  e.stopPropagation();
+  if(e.target.classList.contains('icons-location')){
+    e.target.classList.remove('icons-location')
+    e.target.classList.add('icons-layers')
+    _xyz.map.addLayer(location.Marker);
+  } else {
+    e.target.classList.remove('icons-layers');
+    e.target.classList.add('icons-location');
+    _xyz.map.removeLayer(location.Marker);
+  }
+  
+}}>`);
+  
   
 
   // Clear selection.
@@ -215,7 +236,7 @@ export default _xyz => function () {
   <div
   style = "${'color: ' + location.style.strokeColor}"
   title = "Remove feature from selection"
-  class = "icons-fullscreen cursor noselect btn_header"
+  class = "icons-fullscreen cursor noselect btn_header xyz-icon"
   onclick = ${e => {
     e.stopPropagation();
     location.remove();

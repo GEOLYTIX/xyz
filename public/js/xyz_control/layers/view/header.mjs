@@ -13,10 +13,10 @@ export default (_xyz, layer) => {
   }
 
   header.zoomToExtent = _xyz.utils.wire()`
-    <i
+    <div
     title="Zoom to filtered layer extent"
-    class="material-icons cursor noselect btn_header">
-    fullscreen`;
+    class="cursor noselect btn_header xyz-icon icons-fullscreen">
+    `;
 
   header.appendChild(header.zoomToExtent);
 
@@ -34,10 +34,7 @@ export default (_xyz, layer) => {
   header.toggleDisplay = _xyz.utils.wire()`
     <div
     title="Toggle visibility"
-    class="material-icons cursor noselect btn_header">
-    ${layer.display ? 'toggle_on' : 'toggle_off'}`;
-
-  layer.display ? header.toggleDisplay.classList.remove('inactive') : header.toggleDisplay.classList.add('inactive');
+    class="${'cursor noselect btn_header xyz-icon icons-toggle ' + (layer.display && 'on')}">`;
 
   header.appendChild(header.toggleDisplay);
 
@@ -48,7 +45,7 @@ export default (_xyz, layer) => {
     // Toggle layer display property.
     layer.display = !layer.display;
 
-    header.toggleDisplay.classList.toggle('inactive');
+    header.toggleDisplay.classList.toggle('on');
   
     // Show layer.
     if (layer.display) return layer.show();

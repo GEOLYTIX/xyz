@@ -102,8 +102,8 @@ export default _xyz => {
 
     // Create hide all group layers button.
     group.visible = _xyz.utils.wire()`
-    <i class="material-icons cursor noselect btn_header hide-group"
-    title="Hide layers from group">edit_attributes`;
+    <div class="icons-edit-attribute cursor noselect btn_header hide-group"
+    title="Hide layers from group">`;
    
     group.visible.onclick = e => {
       e.stopPropagation();

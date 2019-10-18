@@ -183,7 +183,6 @@ export default _xyz => {
 
         gazetteer.toggle.classList.toggle('icons-search-toggle');
 
-
         if (gazetteer.group.style.display === 'block') {
           return gazetteer.group.style.display = 'none';
         }

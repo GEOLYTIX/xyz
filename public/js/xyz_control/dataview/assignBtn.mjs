@@ -29,14 +29,14 @@ export default (_xyz, params) => {
     params.btn.toggleDataview.onclick = () => {
   
       if (params.btn.toggleDataview.classList.contains('icons-vertical-align-bottom')) {
-        params.btn.toggleDataview.className = 'icons-vertical-align-top';
+        params.btn.toggleDataview.className = 'icons-vertical-align-top xyz-icon';
         document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
         _xyz.map.updateSize();
         return;
   
       }
   
-      params.btn.toggleDataview.className = 'icons-vertical-align-bottom';
+      params.btn.toggleDataview.className = 'icons-vertical-align-bottom xyz-icon';
     
       document.body.style.gridTemplateRows = `minmax(0, 1fr) ${window.innerHeight}px`;
 
