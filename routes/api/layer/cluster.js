@@ -59,26 +59,23 @@ module.exports = fastify => {
         theme = req.query.theme,
         label = req.query.label,
         filter = req.params.filter,
+        pixelRatio = parseFloat(req.query.pixelRatio),
         kmeans = parseInt(1 / req.query.kmeans),
         dbscan = parseFloat(req.query.dbscan),
-        resolution = parseFloat(req.query.resolution),
-        srid = parseInt(layer.srid),
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
         north = parseFloat(req.query.north);         
 
-      // SQL filter
-      const filter_sql = filter && await sql_filter(filter) || '';
 
+      // Combine filter with envelope
       const where_sql =  `
       WHERE ST_DWithin(
-        ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${srid}),
-        ${geom},
-        0.00001
-      ) ${filter_sql}`;
+        ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${parseInt(layer.srid)}),
+        ${geom}, 0.00001)
+        ${filter && await sql_filter(filter) || ''}`;
 
-      // Get cross distance and count required for kmeans or dbscan clustering.
+      // Apply KMeans cluster algorithm.
       if (kmeans) {
 
         var q = `
@@ -99,8 +96,8 @@ module.exports = fastify => {
           
         if (kmeans >= rows[0].count) kmeans = rows[0].count;
       
-        if (dbscan) dbscan *= rows[0].xdistance;
 
+        // KMeans cluster algorithm
         var cluster_sql = `
         (SELECT
           ${cat} AS cat,
@@ -112,7 +109,11 @@ module.exports = fastify => {
         FROM ${table} ${where_sql}) kmeans`;
 
 
+        // Apply nested DBScan cluster algorithm.
         if (dbscan) {
+
+          dbscan *= rows[0].xdistance;
+
           cluster_sql = `
           (SELECT
             cat,
@@ -124,161 +125,15 @@ module.exports = fastify => {
           FROM ${cluster_sql}) dbscan`;
         }
 
-      }
+        if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
 
+        if (theme === 'graduated') var cat_sql = `${req.query.aggregate || 'sum'}(cat) cat,`
 
-      if (resolution) {
-
-        let r = parseInt(40075016.68 / Math.pow(2, req.query.z) * resolution);
-
-        var agg_sql = `
-        SELECT
-          ${cat} AS cat,
-          ${size} AS size,
-          ST_X(${geom}) AS x_3857,
-          ST_Y(${geom}) AS y_3857,
-          round(ST_X(${geom}) / ${r}) * ${r} x_round,
-          round(ST_Y(${geom}) / ${r}) * ${r} y_round
-          
-        FROM ${table} ${where_sql}`;
-        
-        if (!theme) var q = `
+        var q = `
         SELECT
           count(1) count,
           SUM(size) size,
-          percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
-          percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y,
-          x_round,
-          y_round
-  
-        FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
-  
-  
-        if (theme === 'categorized') var q = `
-        SELECT
-          count(1) count,
-          SUM(size) size,
-          array_agg(cat) cat,
-          percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
-          percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y,
-          x_round,
-          y_round
-  
-          FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
-    
-  
-        if (theme === 'graduated') var q = `
-        SELECT
-          count(1) count,
-          SUM(size) size,
-          ${req.query.aggregate || 'sum'}(cat) cat,
-          percentile_disc(0.5) WITHIN GROUP (ORDER BY x_3857) x,
-          percentile_disc(0.5) WITHIN GROUP (ORDER BY y_3857) y,
-          x_round,
-          y_round
-  
-          FROM (${agg_sql}) agg_sql GROUP BY x_round, y_round`;
-
-
-        // var _width = 2*r;
-        // var _height = 2*r/Math.sqrt(3);
-        // var q = `
-        // WITH
-        // dist as (
-        //   SELECT
-        //     id,
-
-        //     price_paid,
-
-        //     geom_3857,
-
-        //     geom_3857 <#> ST_Point(
-        //       round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //       round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist0,
-
-        //     geom_3857 <#> ST_Point(
-        //       ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //       ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist1,
-
-        //     geom_3857 <#> ST_Point(
-        //       -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //       ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist2,
-
-        //     geom_3857 <#> ST_Point(
-        //       ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //       -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist3,
-
-        //     geom_3857 <#> ST_Point(
-        //       -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //       -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}) dist4
-
-        //   FROM ${table} ${where_sql}
-        // ),
-        // middle as (
-        //   SELECT
-        //     id,
-        //     price_paid,
-        //     CASE
-        //       WHEN dist1 < dist0 THEN ST_SnapToGrid(ST_Point(
-        //         ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //         ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
-        //       WHEN dist2 < dist0 THEN ST_SnapToGrid(ST_Point(
-        //         -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //         ${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
-        //       WHEN dist3 < dist0 THEN ST_SnapToGrid(ST_Point(
-        //         ${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //         -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
-        //       WHEN dist4 < dist0 THEN ST_SnapToGrid(ST_Point(
-        //         -${_width/2} + round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //         -${_height/2} + round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
-        //       ELSE ST_SnapToGrid(ST_Point(
-        //         round(ST_X(geom_3857) / ${_width}) * ${_width},
-        //         round(ST_Y(geom_3857) / ${_height}) * ${_height}),1)
-        //     END as point
-        //   FROM dist
-        // )
-
-        // SELECT
-        //   count(1) count,
-        //   count(price_paid) size,
-        //   avg(price_paid) cat,
-        //   st_x(point) x,
-        //   st_y(point) y
-        // FROM middle
-        // GROUP BY point;`;
-     
-
-      } else {
-
-        if (!theme) var q = `
-        SELECT
-          count(1) count,
-          SUM(size) size,
-          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
-          ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-          ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
-  
-          FROM ${cluster_sql}
-          GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
-
-        if (theme === 'categorized') var q = `
-        SELECT
-          count(1) AS count,
-          SUM(size) AS size,
-          array_agg(cat) cat,
-          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
-          ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-          ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
-  
-        FROM ${cluster_sql}
-        GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
-
-
-        if (theme === 'graduated') var q = `
-        SELECT
-          count(1) count,
-          SUM(size) size,
-          ${req.query.aggregate || 'sum'}(cat) cat,
+          ${cat_sql || ''}
           ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
           ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
           ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
@@ -309,6 +164,89 @@ module.exports = fastify => {
           GROUP BY cat, kmeans_cid ${dbscan ? ', dbscan_cid': ''}
   
         ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;': ';'}`;
+
+      // Apply grid aggregation if KMeans is not defined.
+      } else {
+
+        let r = parseInt(40075016.68 / Math.pow(2, req.query.z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));
+
+        if (layer.cluster_hexresolution) {
+
+          var _width = 2*r;
+          var _height = 2*r/Math.sqrt(3);
+          var with_sql = `
+          WITH
+          first as (
+            SELECT
+              id,
+
+              ${cat} AS cat,
+
+              ${size} AS size,
+
+              ${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'} AS geom,
+
+              ST_Point(
+                round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width},
+                round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height}) p0
+
+            FROM ${table} ${where_sql}
+          ),
+          second as (
+            SELECT
+              id,
+              cat,
+              size,
+              CASE
+                WHEN (geom <#> ST_Translate(p0,${_width/2},${_height/2})) < (geom <#> p0)
+                  THEN ST_SnapToGrid(ST_Translate(p0,${_width/2},${_height/2}),1)
+                WHEN (geom <#> ST_Translate(p0,-${_width/2},${_height/2})) < (geom <#> p0)
+                  THEN ST_SnapToGrid(ST_Translate(p0,-${_width/2},${_height/2}),1)
+                WHEN (geom <#> ST_Translate(p0,${_width/2},-${_height/2})) < (geom <#> p0)
+                  THEN ST_SnapToGrid(ST_Translate(p0,${_width/2},-${_height/2}),1)
+                WHEN (geom <#> ST_Translate(p0,-${_width/2},-${_height/2})) < (geom <#> p0)
+                  THEN ST_SnapToGrid(ST_Translate(p0,-${_width/2},-${_height/2}),1)
+                ELSE ST_SnapToGrid(p0,1)
+              END as point
+            FROM first
+          )`;
+
+          var agg_sql = `second GROUP BY point;`;
+
+          var xy_sql = `
+          ST_X(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) x,
+          ST_Y(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) y`
+
+        } else {
+
+          var agg_sql = `
+          (SELECT
+            ${cat} AS cat,
+            ${size} AS size,
+            ST_X(${geom}) AS x,
+            ST_Y(${geom}) AS y,
+            round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} x_round,
+            round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} y_round
+            
+          FROM ${table} ${where_sql}) agg_sql GROUP BY x_round, y_round;`;
+
+          var xy_sql = `
+          percentile_disc(0.5) WITHIN GROUP (ORDER BY x) x,
+          percentile_disc(0.5) WITHIN GROUP (ORDER BY y) y`
+        }
+
+        if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
+
+        if (theme === 'graduated') var cat_sql = `${req.query.aggregate || 'sum'}(cat) cat,`
+
+        var q = `
+        ${with_sql || ''}
+        SELECT
+          count(1) count,
+          SUM(size) size,
+          ${cat_sql || ''}
+          ${xy_sql}
+        FROM ${agg_sql}`;
 
       }
 

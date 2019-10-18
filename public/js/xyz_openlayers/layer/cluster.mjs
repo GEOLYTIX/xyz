@@ -42,13 +42,13 @@ export default _xyz => layer => {
             locale: _xyz.workspace.locale.key,
             layer: layer.key,
             table: tableZ,
-            resolution: layer.cluster_resolution,
-            kmeans: layer.cluster_kmeans,// * window.devicePixelRatio,
-            dbscan: layer.cluster_dbscan,// * window.devicePixelRatio,
-            aggregate: layer.style.theme && layer.style.theme.aggregate,
+            kmeans: layer.cluster_kmeans,
+            dbscan: layer.cluster_dbscan,
+            pixelRatio: window.devicePixelRatio,
             theme: layer.style.theme && layer.style.theme.type,
             cat: layer.style.theme && layer.style.theme.field,
             size: layer.style.theme && layer.style.theme.size,
+            aggregate: layer.style.theme && layer.style.theme.aggregate,
             label: layer.style.label && layer.style.label.field,
             filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
             west: extent[0],
@@ -78,6 +78,7 @@ export default _xyz => layer => {
         const features = cluster.map(f => new _xyz.mapview.lib.Feature({
           id: id++,
           geometry: new _xyz.mapview.lib.geom.Point(
+            //[f.geometry.x, f.geometry.y]
             layer.srid == 4326 && _xyz.mapview.lib.proj.fromLonLat([f.geometry.x, f.geometry.y]) || [f.geometry.x, f.geometry.y]
           ),
           properties: f.properties
