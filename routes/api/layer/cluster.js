@@ -172,8 +172,11 @@ module.exports = fastify => {
 
         if (layer.cluster_hexresolution) {
 
-          var _width = 2*r;
-          var _height = 2*r/Math.sqrt(3);
+          let
+            _width = r,
+            _height = r - ((r * 2 / Math.sqrt(3)) - r) / 2;
+            //_height = r * 0.992;
+
           var with_sql = `
           WITH
           first as (
@@ -186,9 +189,24 @@ module.exports = fastify => {
 
               ${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'} AS geom,
 
-              ST_Point(
-                round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width},
-                round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height}) p0
+              ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) x,
+
+              ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) y,
+
+              ((ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height})::integer % 2) odds,
+
+              CASE
+                WHEN ((ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
+                  ST_Point(
+                    round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width},
+                    round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
+
+                ELSE
+                  ST_Point(
+                    round(round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width/2}),
+                    round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
+
+              END p0                
 
             FROM ${table} ${where_sql}
           ),
@@ -197,17 +215,104 @@ module.exports = fastify => {
               id,
               cat,
               size,
+
               CASE
-                WHEN (geom <#> ST_Translate(p0,${_width/2},${_height/2})) < (geom <#> p0)
-                  THEN ST_SnapToGrid(ST_Translate(p0,${_width/2},${_height/2}),1)
-                WHEN (geom <#> ST_Translate(p0,-${_width/2},${_height/2})) < (geom <#> p0)
-                  THEN ST_SnapToGrid(ST_Translate(p0,-${_width/2},${_height/2}),1)
-                WHEN (geom <#> ST_Translate(p0,${_width/2},-${_height/2})) < (geom <#> p0)
-                  THEN ST_SnapToGrid(ST_Translate(p0,${_width/2},-${_height/2}),1)
-                WHEN (geom <#> ST_Translate(p0,-${_width/2},-${_height/2})) < (geom <#> p0)
-                  THEN ST_SnapToGrid(ST_Translate(p0,-${_width/2},-${_height/2}),1)
-                ELSE ST_SnapToGrid(p0,1)
-              END as point
+
+              WHEN odds = 0 THEN
+        
+                CASE
+        
+                  WHEN x < ST_X(p0) THEN
+        
+                    CASE
+        
+                      WHEN y < ST_Y(p0) THEN
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, -${_width/2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width/2}, -${_height}), 1)
+                          ELSE ST_SnapToGrid(p0, 1)
+                        END
+        
+                      ELSE
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, -${_width/2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width/2}, ${_height}), 1)
+                          ELSE ST_SnapToGrid(p0, 1)
+                        END
+        
+                    END
+        
+                  ELSE
+        
+                    CASE
+        
+                      WHEN y < ST_Y(p0) THEN
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, ${_width/2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width/2}, -${_height}), 1)
+                          ELSE ST_SnapToGrid(p0, 1)
+                        END
+        
+                      ELSE
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, ${_width/2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width/2}, ${_height}), 1)
+                          ELSE ST_SnapToGrid(p0, 1)
+                        END
+        
+                    END          
+        
+                END
+              
+              ELSE
+        
+                CASE
+        
+                  WHEN x < (ST_X(p0) - ${_width/2}) THEN
+        
+                    CASE
+        
+                      WHEN y < ST_Y(p0) THEN
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, -${_width/2}, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width/2}, -${_height}), 1)
+                          ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
+                        END
+        
+                      ELSE
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, -${_width/2}, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width/2}, ${_height}), 1)
+                          ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
+                        END
+        
+                    END          
+        
+                  ELSE
+        
+                    CASE
+        
+                      WHEN y < ST_Y(p0) THEN
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, -${_width/2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width/2}, -${_height}), 1)
+                          ELSE ST_SnapToGrid(p0, 1)
+                        END
+        
+                      ELSE
+        
+                        CASE
+                          WHEN (geom <#> ST_Translate(p0, -${_width/2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width/2}, ${_height}), 1)
+                          ELSE ST_SnapToGrid(p0, 1)
+                        END
+        
+                    END          
+        
+                END
+        
+            END as point
+
+
             FROM first
           )`;
 

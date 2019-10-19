@@ -1,0 +1,216 @@
+{
+    "title": "XYZ dev",
+    "locales": {
+            "London": {
+                "bounds": {
+                    "north": 51.686,
+                    "east": 0.236,
+                    "south": 51.28,
+                    "west": -0.489
+                },
+                "minZoom": 12,
+                "maxZoom": 18,
+                "view": {
+                    "lat": 51.5073,
+                    "lng": -0.12755
+                },
+            "maskBounds": true,
+            "layers": {
+                "OS Zoomstack": {
+                    "display": true,
+                    "attribution": {
+                        "© Ordanance Survey": "https://ordnancesurvey.co.uk"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.ordnancesurvey.co.uk/mapping_api/v1/service/zxy/EPSG%3A3857/Light%203857/{z}/{x}/{y}.png?&provider=OS"
+                },
+                "Retail Points": {
+                    "display": false,
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "dev.retailpoints",
+                    "geom": "geom",
+                    "srid": "4326",
+                    "cluster_kmeans": 0.01,
+                    "cluster_dbscan": 0.01,
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#eeeeee"
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#534B62"
+                        },
+                        "themes": {
+                            "Retailer": {
+                                "type": "categorized",
+                                "field": "retailer",
+                                "other": true,
+                                "cat": {
+                                    "Tesco": {
+                                        "label": "Tesco",
+                                        "style": {
+                                        "fillColor": "#0055a8",
+                                        "layers": {
+                                            "0.75": "#ffffff",
+                                            "0.35": "#f02f26"
+                                        }
+                                    }
+                                    },
+                                    "Sainsburys": {
+                                        "label": "Sainsbury's",
+                                        "style": {
+                                        "fillColor": "#ee8a00",
+                                        "layers": {
+                                            "0.5": "#ffffff",
+                                            "0.35": "#ee8a00"
+                                        }
+                                    }
+                                    },
+                                    "Marks and Spencer": {
+                                        "label": "Marks & Spencer",
+                                        "style": {
+                                        "fillColor": "#0a0d10",
+                                        "layers": {
+                                            "0.5": "#def036",
+                                            "0.25": "#0a0d10"
+                                        }
+                                    }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "PPD": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "dev.london_hpp",
+                    "geom": "geom_3857",
+                    "srid": "3857",
+                    "style": {
+                        "markerMin": 10,
+                        "markerMax": 30,
+                        "themes": {
+                            "PPD": {
+                                "type": "graduated",
+                                "field": "price_paid",
+                                "aggregate": "avg",
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
+                                        "label": "0",
+                                        "style": {
+                                        "fillColor": "#15773f"
+                                        }
+                                    },{
+                                        "value": 250000,
+                                        "label": "250000",
+                                        "style": {
+                                        "fillColor": "#66bd63"
+                                        }
+                                    },{
+                                        "value": 500000,
+                                        "label": "500000",
+                                        "style": {
+                                        "fillColor": "#a6d96a"
+                                        }
+                                    },{
+                                        "value": 750000,
+                                        "label": "750000",
+                                        "style": {
+                                        "fillColor": "#d9ef8b"
+                                        }
+                                    },{
+                                        "value": 1000000,
+                                        "label": "1000000",
+                                        "style": {
+                                        "fillColor": "#fdae61"
+                                        }
+                                    },{
+                                        "value": 1500000,
+                                        "label": "1500000",
+                                        "style": {
+                                        "fillColor": "#f46d43"
+                                        }
+                                    },{
+                                        "value": 2000000,
+                                        "label": "2000000",
+                                        "style": {
+                                        "fillColor": "#d73027"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "PPD HEX": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "dev.london_hpp",
+                    "geom": "geom_3857",
+                    "srid": "3857",
+                    "cluster_hexresolution": 0.2,
+                    "style": {
+                        "markerMin": 10,
+                        "markerMax": 30,
+                        "themes": {
+                            "PPD": {
+                                "type": "graduated",
+                                "field": "price_paid",
+                                "aggregate": "avg",
+                                "cat_arr": [
+                                    {
+                                        "value": 0,
+                                        "label": "0",
+                                        "style": {
+                                        "fillColor": "#15773f"
+                                        }
+                                    },{
+                                        "value": 250000,
+                                        "label": "250000",
+                                        "style": {
+                                        "fillColor": "#66bd63"
+                                        }
+                                    },{
+                                        "value": 500000,
+                                        "label": "500000",
+                                        "style": {
+                                        "fillColor": "#a6d96a"
+                                        }
+                                    },{
+                                        "value": 750000,
+                                        "label": "750000",
+                                        "style": {
+                                        "fillColor": "#d9ef8b"
+                                        }
+                                    },{
+                                        "value": 1000000,
+                                        "label": "1000000",
+                                        "style": {
+                                        "fillColor": "#fdae61"
+                                        }
+                                    },{
+                                        "value": 1500000,
+                                        "label": "1500000",
+                                        "style": {
+                                        "fillColor": "#f46d43"
+                                        }
+                                    },{
+                                        "value": 2000000,
+                                        "label": "2000000",
+                                        "style": {
+                                        "fillColor": "#d73027"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
