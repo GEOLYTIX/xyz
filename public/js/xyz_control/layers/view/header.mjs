@@ -13,9 +13,9 @@ export default (_xyz, layer) => {
   }
 
   header.zoomToExtent = _xyz.utils.wire()`
-    <div
+    <button
     title="Zoom to filtered layer extent"
-    class="cursor noselect btn_header xyz-icon icons-fullscreen">
+    class="cursor noselect btn_header xyz-icon icons-fullscreen filter">
     `;
 
   header.appendChild(header.zoomToExtent);
@@ -26,7 +26,7 @@ export default (_xyz, layer) => {
   };
    
   header.toggleDisplay = _xyz.utils.wire()`
-    <div
+    <button
     title="Toggle visibility"
     class="${'cursor noselect btn_header xyz-icon icons-toggle ' + (layer.display && 'on')}">`;
 

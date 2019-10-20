@@ -65,10 +65,10 @@ data-token={{:token}}>
 
         <div class="btn_column lv1 noselect desktop">
 
-                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;" class="icons-search xyz-icon">    
+                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;"" class="icons-search xyz-icon3">  
                     </button>
         
-                    <button id="btnLocate" title="Current location" style="display: none;" class="icons-gps-not-fixed xyz-icon">
+                    <button id="btnLocate" title="Current location" style="display: none;" class="icons-gps-not-fixed xyz-icon3">
                     </button>
         
                     <button id="btnZoomIn" class="icons-add xyz-icon">
@@ -77,20 +77,17 @@ data-token={{:token}}>
                     <button id="btnZoomOut" class="icons-remove xyz-icon">
                     </button>
         
-                    <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                        <a class="icons-school xyz-icon2" href="{{:hrefDocumentation}}" target="_blank">       
-                        </a>
-                    </div>
-        
-                    <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-                        <a class="icons-lock-open xyz-icon2" href="{{:dir}}{{:btnLogin_path}}"></a>
-                    </div>
-        
-                    <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
-                        <a class="icons-supervisor-account xyz-icon2" href="{{:dir}}/user/admin" target="_blank">
-                        </a>
-                    </div>
-        
+                    <a id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}
+                    class="icons-school xyz-icon2" href="{{:hrefDocumentation}}" target="_blank">       
+                    </a>
+                    
+                    <a id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}} class="icons-lock-open xyz-icon2" href="{{:dir}}{{:btnLogin_path}}">    
+                    </a>
+                    
+                    <a id="btnAdmin" title="Open account admin view" {{:btnAdmin}}
+                    class="icons-supervisor-account xyz-icon2" href="{{:dir}}/user/admin" target="_blank">
+                    </a>
+            
                     <button id="btnWorkspace" title="Open workspace configuration view" class="icons-settings xyz-icon" {{:btnEditor}}>
                     </button>            
         
@@ -123,8 +120,8 @@ data-token={{:token}}>
 
         <div class="btn_column lv0 noselect desktop">
         
-            <div style="margin-top: -10px;" id="toggleDataview" class="icons-vertical-align-top xyz-icon">
-            </div>
+            <button style="margin-top: -10px;" id="toggleDataview" class="icons-vertical-align-top xyz-icon">
+            </button>
 
             <button id="btnDataViewport" style="display: none;" class="icons-fullscreen xyz-icon">
             </button>

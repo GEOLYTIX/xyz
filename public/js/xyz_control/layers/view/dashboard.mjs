@@ -53,7 +53,7 @@ export default (_xyz, layer) => {
     };
 
     const expander = _xyz.utils.wire()`
-    <div
+    <button
     title="Toggle layer dashboard"
     class="cursor noselect btn_header expander xyz-icon icon-expander filter">`;
 

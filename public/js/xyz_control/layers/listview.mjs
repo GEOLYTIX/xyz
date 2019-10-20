@@ -119,7 +119,7 @@ export default _xyz => {
 
     // Create group expander button.
     const expander = _xyz.utils.wire()`
-    <button class="icon-expander xyz-icon cursor noselect btn_header expander-group"
+    <button class="icon-expander xyz-icon cursor noselect btn_header expander-group filter"
     title="Toggle group panel">`;
 
     expander.onclick = e => {

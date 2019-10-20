@@ -8,6 +8,7 @@ button {
     font-size: 14px;
     color: $glxgreen;
     height: 25px;
+    background-color:inherit;
 }
 
 .btn_subtext {
@@ -47,7 +48,8 @@ button {
     //     cursor: pointer;
     // }
     button,
-    >div {
+    >div,
+    >a {
         margin-top: 10px;
         border-radius: 10px;
         float: left;

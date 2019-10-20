@@ -38,13 +38,14 @@ data-token={{:token}}>
         <button id="btnZoomOut" class="icons-remove xyz-icon">
         </button>
 
-        <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-        <a class="icons-school xyz-icon2" href="{{:hrefDocumentation}}"></a>
-        </div>
+        <a id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}
+        class="icons-school xyz-icon2" href="{{:hrefDocumentation}}">
+        </a>
+        
 
-        <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-            <a class="icons-lock-open xyz-icon2" href="{{:dir}}{{:btnLogin_path}}"></a>
-        </div>
+        <a id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}
+        class="icons-lock-open xyz-icon2" href="{{:dir}}{{:btnLogin_path}}">
+        </a>
 
         <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." class="icons-bug-report xyz-icon"{{:btnLogRocket}}>
         </button>
@@ -70,7 +71,7 @@ data-token={{:token}}>
 
         <div id="modLocations" class="listview displaynone">
             <div class="title">Locations</div>
-            <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
+            <button id="clear_locations" class="btn_text cursor">Clear all locations.</button>
             <div id="locations" class="content"></div>
         </div>
 
