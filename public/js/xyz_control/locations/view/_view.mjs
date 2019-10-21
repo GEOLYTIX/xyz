@@ -119,7 +119,7 @@ export default _xyz => function () {
   // Update icon.
   location.view.upload = _xyz.utils.wire()`
   <button
-  style = "${'display: none; color: ' + location.style.strokeColor}"
+  style = "${'display: none; padding-left: 40px; color: ' + location.style.strokeColor}"
   title = "Save changes to cloud."
   class = "icons-cloud-upload cursor noselect btn_header xyz-icon filter"
   onclick = ${e => {

@@ -63,7 +63,7 @@
 //ID workspace icons//
 
 .icons-close {
-    background: url("../icons/icons-close.svg");
+    background-image: url("../icons/icons-close.svg");
     background-color: #dddddd;
 }
 
@@ -90,15 +90,6 @@
     background-image: url("../icons/icons-room.svg");
 }
 
-//Geolytix green//
-.filter {
-    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
-}
-
-.filter.toggle{
-    filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%);
-}
-
 .icons-toggle {
     background-image: url("../icons/icons-toggle-off.svg");
     filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%);
@@ -114,6 +105,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    background
 }
 
 .icons-keyboard-arrow-up {
@@ -185,4 +177,13 @@
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center; 
+}
+
+//Geolytix green//
+.filter {
+    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+}
+
+.filter.toggle{
+    filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%);
 }
