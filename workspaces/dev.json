@@ -708,7 +708,7 @@
                         {
                             "label": "Options",
                             "field": "dev_options",
-                            "type": "text",
+                            "inline": true,
                             "edit": {
                                 "options": [
                                     "Open",
@@ -1485,13 +1485,6 @@
                         }
                     },
                     "infoj": [
-                        {
-                            "type": "report",
-                            "class": "_report",
-                            "report": {
-                                "template": "/views/report_location.html"
-                            }
-                        },
                         {
                             "type": "streetview"
                         },
