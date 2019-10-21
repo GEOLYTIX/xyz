@@ -48,11 +48,10 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    _xyz.dataview.node.querySelector('.tab-content').innerHTML = '';
+    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
 
-    table.target = _xyz.utils.wire()`<div class="table">`;
-
-    _xyz.dataview.node.querySelector('.tab-content').appendChild(table.target);
+    // disable header sorting by default
+    table.columns.map(col => col.headerSort = col.headerSort ? col.headerSort : false );
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {

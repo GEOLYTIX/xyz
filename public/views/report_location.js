@@ -19,24 +19,32 @@ function init(_xyz) {
     target: document.getElementById('report_map')
   });
 
+  const layer = _xyz.layers.list[params.layer];
 
   _xyz.locations.select({
     locale: params.locale,
-    layer: params.layer,
+    layer: layer,
     table: params.table,
-    id: params.id
-  },
-  location => {
+    id: params.id,
+    callback: location => {
 
-    // Required for streetview fields.
-    location.marker = _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+      _xyz.locations.decorate(location);
 
-    location.view();
+      // Required for streetview fields.
+      location.marker = _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+      
+      console.log(location);
 
-    location.draw();
+      location.view();
 
-    document.getElementById('report_left').appendChild(location.view.node);
+      location.draw();
 
+      location.flyTo();
+
+      location.layer.show();
+
+      document.getElementById('report_left').appendChild(location.view.node);
+    }
   });
 
 }

@@ -5,8 +5,8 @@ export default _xyz => group => {
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
   group.row.appendChild(group.td);
 
-  _xyz.dataview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`
-   <div class="table">`);
+  /*_xyz.dataview.node.querySelector('.tab-content').appendChild(_xyz.utils.wire()`
+   <div class="table">`);*/ // aga: why is this here?
 
   group.div = _xyz.utils.wire()`<div class="table-section expandable">`;
   group.td.appendChild(group.div);
