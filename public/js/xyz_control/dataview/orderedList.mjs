@@ -48,7 +48,7 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
+    table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);
 
     // disable header sorting by default
     table.columns.map(col => col.headerSort = col.headerSort ? col.headerSort : false );
