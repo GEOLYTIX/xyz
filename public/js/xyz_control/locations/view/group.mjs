@@ -11,20 +11,18 @@ export default _xyz => group => {
   group.div = _xyz.utils.wire()`<div class="table-section expandable">`;
   group.td.appendChild(group.div);
 
-  function toggleExpandedState(e) {
-    if (e) {
-      e.stopPropagation();
-    }
-    _xyz.utils.toggleExpanderParent({
-      expandable: group.div,
-      accordeon: true,
-    });
-  };
 
   group.header = _xyz.utils.wire()`
   <div class="btn_subtext cursor noselect"
   style="text-align: left; font-style: italic;"
-  onclick=${ e => toggleExpandedState(e) }>`;
+  onclick=${ e => {
+
+    _xyz.utils.toggleExpanderParent({
+      expandable: group.div,
+      accordeon: true,
+    });
+    
+  }}>`;
 
   group.div.appendChild(group.header);
 
@@ -33,13 +31,10 @@ export default _xyz => group => {
   
   // Add table
   group.table = _xyz.utils.wire()`
-  <table
-  style="position: relative; width: 95%; cell-padding: 0; cell-spacing: 0; 
-  margin-top: -4px; margin-bottom: 10px;
-  padding-left: 20px; border-left: 2px solid #B4B4B4;"
-  >`;
+  <table style="width: 100%; cell-padding: 0; cell-spacing: 0; padding-left: 20px; border-left: 2px solid #B4B4B4;">`;
 
   group.div.appendChild(group.table);
+
 
   // If chart option specified
   if (group.chart) {
@@ -48,41 +43,75 @@ export default _xyz => group => {
     
     // Set up
     group.fields = group.location.infoj.filter(entry => entry.group === group.label);
+
     // Create chart element
     group.chartElem = _xyz.charts.create(group);
+
+    group.chartElem.classList.add('chart');
 
     // Add chart
     group.div.appendChild(group.chartElem);
 
+
+    const chartIcon = {
+      'line':  'icons-bar-chart',
+      'bar':  'icons-bar-chart',
+      'pie':  'pie_chart',
+      'doughnut':  'donut_small',
+      'horizontalBar':  'notes',
+      'bubble':  'bubble_chart',
+      'scatter':  'scatter_plot',
+      'radar':  'multiline_chart',
+      'polarArea':  'multiline_chart',
+      'mixed':  'multiline_chart',
+      'stackedBar':  'icons-bar-chart',
+   }
+
+   group.chartIcon = group.chart.type && chartIcon[group.chart.type] || 'icons-bar-chart';
+
     // Add chart control to group header for toggling
     group.viewToggler = _xyz.utils.wire()`
-    <i class="material-icons cursor noselect btn_header"
+    <div
+    class="xyz-icon cursor noselect btn_header"
     title="Show chart"
     style="margin: -6px 6px 0 0; float: right;"
     onclick=${
       e => {
         e.stopPropagation();
-        group.viewToggler.textContent === chartIcon(group) ? group.showChart() : group.showTable(e);
-      }
-    }
-    >`;
 
-    group.viewToggler.textContent = chartIcon(group);
+        e.target.classList.toggle(group.chartIcon);
+        e.target.classList.toggle('icons-view-list');
+        group.div.classList.toggle('chart');
+
+        // } else if (e.target.title = 'Show chart'){
+        //   console.log('test2');
+        //   group.showTable(e);
+        // }
+        //group.chart.type && chartIcon[group.chart.type] && 
+        //group.viewToggler.textContent === chartIcon(group) ? group.showChart() : group.showTable(e);
+      }
+    }>`;
 
     group.header.appendChild(group.viewToggler);
 
     // Functions for toggeling between table view and chart view
-    group.showChart = () => {
-      group.table.style.display = 'none';
-      group.chartElem.style.display = 'block';
-      group.viewToggler.textContent = 'view_list';
+    group.showChart = (e) => {
+      // group.table.style.display = 'none';
+      // group.chartElem.style.display = 'block';
+
+      group.viewToggler.classList.remove('icons-view-list');
+      group.viewToggler.classList.add('icons-bar-chart');
+
       group.viewToggler.title = 'Show table';
       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
+
     group.showTable = (e) => {
-      group.table.style.display = 'table';
-      group.chartElem.style.display = 'none';
-      group.viewToggler.textContent = chartIcon(group);
+      // group.table.style.display = 'table';
+      // group.chartElem.style.display = 'none';
+      group.viewToggler.classList.remove('icons-bar-chart');
+      group.viewToggler.classList.add('icons-view-list');
+
       group.viewToggler.title = 'Show chart';
       if (e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
@@ -97,22 +126,24 @@ export default _xyz => group => {
 
 };
 
-function chartIcon(group) {
-  if (!group.chart.type) {
-    group.chart.type = 'line';
-  }
-  switch (group.chart.type) {
-  case 'line': return 'show_chart';
-  case 'bar': return 'insert_chart_outlined';
-  case 'pie': return 'pie_chart';
-  case 'doughnut': return 'donut_small';
-  case 'horizontalBar': return 'notes';
-  case 'bubble': return 'bubble_chart';
-  case 'scatter': return 'scatter_plot';
-  case 'radar': return 'multiline_chart';
-  case 'polarArea': return 'multiline_chart';
-  case 'mixed': return 'multiline_chart';
-  case 'stackedBar': return 'insert_chart_outlined';
-  default: return 'show_chart';
-  }
-}
+
+
+// function chartIcon(group) {
+//   if (!group.chart.type) {
+//     group.chart.type = 'line';
+//   }
+//   switch (group.chart.type) {
+//   case 'line': return 'show_chart';
+//   case 'bar': return 'insert_chart_outlined';
+//   case 'pie': return 'pie_chart';
+//   case 'doughnut': return 'donut_small';
+//   case 'horizontalBar': return 'notes';
+//   case 'bubble': return 'bubble_chart';
+//   case 'scatter': return 'scatter_plot';
+//   case 'radar': return 'multiline_chart';
+//   case 'polarArea': return 'multiline_chart';
+//   case 'mixed': return 'multiline_chart';
+//   case 'stackedBar': return 'insert_chart_outlined';
+//   default: return 'show_chart';
+//   }
+// }

@@ -93,9 +93,9 @@ export default _xyz => function () {
   // Expander icon.
   location.infoj && location.view.header.appendChild(_xyz.utils.wire()`
   <button
-  style = "${'color: ' + location.style.strokeColor}"
+  style = "${'background-color: ' + location.style.strokeColor}" 
   title = "Toggle location view drawer."
-  class = "cursor noselect btn_header expander xyz-icon icon-expander filter"
+  class = "cursor noselect btn_header expander xyz-icon icon-expander"
   onclick = ${e => {
     e.stopPropagation();
     _xyz.utils.toggleExpanderParent({
@@ -107,9 +107,9 @@ export default _xyz => function () {
   // Zoom to location bounds.
   location.view.header.appendChild(_xyz.utils.wire()`
     <button
-    style = "${'color: ' + location.style.strokeColor}"
+    style = "${'background-color: ' + location.style.strokeColor}" 
     title = "Zoom map to feature bounds"
-    class = "icons-search cursor noselect btn_header xyz-icon filter"
+    class = "icons-search-mask cursor noselect btn_header xyz-icon"
     onclick = ${e => {
       e.stopPropagation();
       location.flyTo();
@@ -119,9 +119,9 @@ export default _xyz => function () {
   // Update icon.
   location.view.upload = _xyz.utils.wire()`
   <button
-  style = "${'display: none; padding-left: 40px; color: ' + location.style.strokeColor}"
+  style = "${'display: none; padding-left: 40px; background-color: ' + location.style.strokeColor}"
   title = "Save changes to cloud."
-  class = "icons-cloud-upload cursor noselect btn_header xyz-icon filter"
+  class = "icons-cloud-upload cursor noselect btn_header xyz-icon"
   onclick = ${e => {
     e.stopPropagation();
     
@@ -135,9 +135,9 @@ export default _xyz => function () {
 
     location.view.editor = _xyz.utils.wire()`
     <button
-    style = "${'color: ' + location.style.strokeColor}"
+    style = "${'background-color: ' + location.style.strokeColor}"
     title = "Edit the locations geometry."
-    class = "icons-build xyz-icon cursor noselect btn_header filter"
+    class = "icons-build xyz-icon cursor noselect btn_header"
     onclick = ${e => {
     e.stopPropagation();
 
@@ -164,9 +164,9 @@ export default _xyz => function () {
   // Trash icon.
   location.view.trash = _xyz.utils.wire()`
   <button
-  style = "${'color: ' + location.style.strokeColor}"
+  style = "${'background-color: ' + location.style.strokeColor}"
   title = "Delete location."
-  class = "icons-trash cursor noselect btn_header xyz-icon filter"
+  class = "icons-trash cursor noselect btn_header xyz-icon"
   onclick = ${e => {
     e.stopPropagation();
     location.trash();
@@ -212,9 +212,9 @@ export default _xyz => function () {
 
 location.view.header.appendChild(_xyz.utils.wire()`
 <button
-style = "${'color: ' + location.style.strokeColor}"
+style = "${'background-color: ' + location.style.strokeColor}"
 title = "Hide marker"
-class = "icons-location cursor noselect btn_header xyz-icon filter" 
+class = "icons-location cursor noselect btn_header xyz-icon" 
 onclick = ${e => {
   e.stopPropagation();
   if(e.target.classList.contains('icons-location')){
@@ -234,9 +234,9 @@ onclick = ${e => {
   // Clear selection.
   location.view.header.appendChild(_xyz.utils.wire()`
   <button
-  style = "${'color: ' + location.style.strokeColor}"
+  style = "${'background-color: ' + location.style.strokeColor}"
   title = "Remove feature from selection"
-  class = "icons-fullscreen cursor noselect btn_header xyz-icon filter"
+  class = "icons-fullscreen cursor noselect btn_header xyz-icon"
   onclick = ${e => {
     e.stopPropagation();
     location.remove();

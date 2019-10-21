@@ -115,6 +115,14 @@
     overflow: auto; }
     .locationview .table-section.expanded .t-expander::before {
       content: "expand_less"; }
+  .locationview .table-section.chart table {
+    display: none; }
+  .locationview .table-section.chart .chart {
+    display: block; }
+  .locationview .table-section:not(.chart) table {
+    display: block; }
+  .locationview .table-section:not(.chart) .chart {
+    display: none; }
   .locationview .td_images {
     text-align: center; }
     .locationview .td_images > div {
@@ -1747,12 +1755,14 @@ button {
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.expandable .icon-expander {
-      background-image: url("../icons/icons-keyboard-arrow-up.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
   .listview .drawer.expanded {
     overflow: visible;
     max-height: 2500px; }
     .listview .drawer.expanded .icon-expander {
-      background-image: url("../icons/icons-keyboard-arrow-down.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
   .listview .drawer.drawer-group .header {
     font-style: italic;
     font-size: 13px;
@@ -1778,11 +1788,13 @@ button {
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.drawer-group.expandable-group .icon-expander {
-      background-image: url("../icons/icons-keyboard-arrow-up.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
   .listview .drawer.drawer-group.expanded-group {
     max-height: 2500px; }
     .listview .drawer.drawer-group.expanded-group .icon-expander {
-      background-image: url("../icons/icons-keyboard-arrow-down.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
@@ -1984,6 +1996,10 @@ button {
       background-color: ghostwhite;
       cursor: pointer; }
 
+.icons-search-mask {
+  mask-image: url("../icons/icons-search.svg");
+  -webkit-mask-image: url("../icons/icons-search.svg"); }
+
 .icons-search {
   background-image: url("../icons/icons-search.svg");
   background-color: #ffffff; }
@@ -2001,39 +2017,49 @@ button {
   background-color: #1F964D; }
 
 .icons-add {
-  background-image: url("../icons/icons-add.svg"); }
+  -webkit-mask-image: url("../icons/icons-add.svg");
+  mask-image: url("../icons/icons-add.svg"); }
 
 .icons-remove {
-  background-image: url("../icons/icons-remove.svg"); }
+  -webkit-mask-image: url("../icons/icons-remove.svg");
+  mask-image: url("../icons/icons-remove.svg"); }
 
 .icons-school {
-  background-image: url("../icons/icons-school.svg"); }
+  -webkit-mask-image: url("../icons/icons-school.svg");
+  mask-image: url("../icons/icons-school.svg"); }
 
 .icons-lock-open {
-  background-image: url("../icons/icons-lock-open.svg"); }
+  -webkit-mask-image: url("../icons/icons-lock-open.svg");
+  mask-image: url("../icons/icons-lock-open.svg"); }
 
 .icons-supervisor-account {
-  background-image: url("../icons/icons-supervisor-account.svg"); }
+  -webkit-mask-image: url("../icons/icons-supervisor-account.svg");
+  mask-image: url("../icons/icons-supervisor-account.svg"); }
 
 .icons-settings {
-  background-image: url("../icons/icons-settings.svg");
+  -webkit-mask-image: url("../icons/icons-settings.svg");
+  mask-image: url("../icons/icons-settings.svg");
   display: block; }
 
 .icons-bug-report {
-  background-image: url("../icons/icons-bug-report.svg");
+  -webkit-mask-image: url("../icons/icons-bug-report.svg");
+  mask-image: url("../icons/icons-bug-report.svg");
   display: block; }
 
 .icons-vertical-align-top {
-  background-image: url("../icons/icons-vertical-align-top.svg"); }
+  -webkit-mask-image: url("../icons/icons-vertical-align-top.svg");
+  mask-image: url("../icons/icons-vertical-align-top.svg"); }
 
 .icons-vertical-align-bottom {
-  background-image: url("../icons/icons-vertical-align-bottom.svg"); }
+  -webkit-mask-image: url("../icons/icons-vertical-align-bottom.svg");
+  mask-image: url("../icons/icons-vertical-align-bottom.svg"); }
 
 .icons-fullscreen {
-  background-image: url("../icons/icons-fullscreen.svg"); }
+  -webkit-mask-image: url("../icons/icons-fullscreen.svg");
+  mask-image: url("../icons/icons-fullscreen.svg"); }
 
 .icons-close {
-  background: url("../icons/icons-close.svg");
+  background-image: url("../icons/icons-close.svg");
   background-color: #dddddd; }
 
 .icons-backup {
@@ -2048,30 +2074,26 @@ button {
   background-image: url("../icons/icons-touch-app.svg"); }
 
 .icons-layers {
-  background-image: url("../icons/icons-layers.svg"); }
+  -webkit-mask-image: url("../icons/icons-layers.svg");
+  mask-image: url("../icons/icons-layers.svg"); }
 
 .icons-location {
-  background-image: url("../icons/icons-room.svg"); }
-
-.filter {
-  filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
-
-.filter.toggle {
-  filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%); }
+  -webkit-mask-image: url("../icons/icons-room.svg");
+  mask-image: url("../icons/icons-room.svg"); }
 
 .icons-toggle {
-  background-image: url("../icons/icons-toggle-off.svg");
-  filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%); }
+  -webkit-mask-image: url("../icons/icons-toggle-off.svg");
+  mask-image: url("../icons/icons-toggle-off.svg");
+  background-color: #dddddd; }
 
 .icons-toggle.on {
-  background-image: url("../icons/icons-toggle-on.svg");
-  filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
+  -webkit-mask-image: url("../icons/icons-toggle-on.svg");
+  mask-image: url("../icons/icons-toggle-on.svg");
+  background-color: #1f964d; }
 
 .icons-cloud-upload {
-  background-image: url("../icons/icons-cloud-upload.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center; }
+  -webkit-mask-image: url("../icons/icons-cloud-upload.svg");
+  mask-image: url("../icons/icons-cloud-upload.svg"); }
 
 .icons-keyboard-arrow-up {
   background-image: url("../icons/icons-keyboard-arrow-up.svg"); }
@@ -2080,13 +2102,17 @@ button {
   background-image: url("../icons/icons-keyboard-arrow-down.svg"); }
 
 .icons-trash {
-  background-image: url("../icons/icons-trash.svg"); }
+  -webkit-mask-image: url("../icons/icons-trash.svg");
+  mask-image: url("../icons/icons-trash.svg"); }
 
 .icons-edit-attribute {
-  background-image: url("../icons/icons-edit-attribute.svg"); }
+  -webkit-mask-image: url("../icons/icons-edit-attribute.svg");
+  mask-image: url("../icons/icons-edit-attribute.svg"); }
 
 .icons-clear {
-  background-image: url("../icons/icons-clear.svg");
+  -webkit-mask-image: url("../icons/icons-clear.svg");
+  mask-image: url("../icons/icons-clear.svg");
+  background-color: #1F964D;
   width: 20px;
   height: 20px; }
 
@@ -2096,29 +2122,55 @@ button {
   background-size: 15px; }
 
 .icons-build {
-  background-image: url("../icons/icons-build.svg"); }
+  -webkit-mask-image: url("../icons/icons-build.svg");
+  mask-image: url("../icons/icons-build.svg"); }
 
 .icons-add-document {
-  background-image: url("../icons/icons-add-document.svg"); }
+  -webkit-mask-image: url("../icons/icons-add-document.svg");
+  mask-image: url("../icons/icons-add-document.svg"); }
 
 .icons-add-photo {
-  background-image: url("../icons/icons-add-photo.svg");
-  background-size: 70px;
-  height: 70px;
-  background-repeat: no-repeat;
-  background-position: center; }
+  -webkit-mask-image: url("../icons/icons-add-photo.svg");
+  mask-image: url("../icons/icons-add-photo.svg");
+  -webkit-mask-size: 70px 50px;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 70px 50px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: #1f964d;
+  height: 70px; }
 
 .icons-view-list {
-  background-image: url("../icons/icons-view-list.svg"); }
+  -webkit-mask-image: url("../icons/icons-view-list.svg");
+  mask-image: url("../icons/icons-view-list.svg");
+  height: 30px; }
 
 .icons-bar-chart {
-  background-image: url("../icons/icons-bar-chart.svg"); }
+  -webkit-mask-image: url("../icons/icons-bar-chart.svg");
+  mask-image: url("../icons/icons-bar-chart.svg");
+  height: 30px; }
 
 .xyz-icon {
   background-size: 32px 50px;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: inherit; }
+  background-color: inherit;
+  -webkit-mask-size: 32px 50px;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 32px 50px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: #1f964d; }
+
+.xyz-toggle {
+  -webkit-mask-size: 32px 50px;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 32px 50px;
+  mask-position: center;
+  mask-repeat: no-repeat; }
 
 .xyz-icon2 {
   background-size: 32px 50px;
@@ -2132,6 +2184,12 @@ button {
   background-size: 32px 50px;
   background-repeat: no-repeat;
   background-position: center; }
+
+.filter {
+  filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
+
+.filter.toggle {
+  filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%); }
 
 *,
 *::after,
