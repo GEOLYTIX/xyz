@@ -1766,6 +1766,7 @@
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
                             "display": true,
+                            "class": "_report",
                             "level": 2,
                             "edit": {
                                 "isoline_here": {
@@ -1784,7 +1785,6 @@
                         {
                             "label": "Population within 5min",
                             "type": "group",
-                            "class": "_report",
                             "level": 2,
                             "chart": {
                                 "active": true,
@@ -1917,6 +1917,7 @@
                             "type": "geometry",
                             "level": 2,
                             "display": true,
+                            "class": "_report",
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 10
@@ -2074,6 +2075,7 @@
                             "type": "geometry",
                             "level": 2,
                             "display": true,
+                            "class": "_report",
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 15
@@ -3394,7 +3396,7 @@
                                 "formatterParams": {
                                     "precision": 1
                                 },
-                                "align": "right"
+                                "align": "center"
                               },
                               {
                                 "type": "integer",
@@ -3406,7 +3408,7 @@
                                 "formatterParams": {
                                     "precision": 0
                                 },
-                                "align": "right"
+                                "align": "center"
                               }
                             ],
                             "order": "ASC",
