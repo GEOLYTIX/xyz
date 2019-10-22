@@ -11,7 +11,7 @@ export default _xyz => function(icon) {
     })
   });
 
-  if (icon.type) icon.url = _xyz.utils.svg_symbols(icon);
+  if (icon.type || icon.svg) icon.url = _xyz.utils.svg_symbols(icon);
 
   return new _xyz.mapview.lib.style.Icon({
     src: icon.url,
