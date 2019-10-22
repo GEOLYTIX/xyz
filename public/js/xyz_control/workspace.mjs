@@ -7,7 +7,7 @@ export default _xyz => {
     admin: admin,
   };
 
-  async function fetchWS() { 
+  async function fetchWS() {
 
     const promise = await fetch(
       _xyz.host +
@@ -50,25 +50,25 @@ export default _xyz => {
 
     // Assign key from params of first in locales list.
     const locale = (_xyz.workspace.locales[_xyz.locale] && _xyz.locale)
-    || (_xyz.hooks && _xyz.hooks.current.locale)
-    || Object.keys(_xyz.workspace.locales)[0];
+      || (_xyz.hooks && _xyz.hooks.current.locale)
+      || Object.keys(_xyz.workspace.locales)[0];
 
     // Assigne workspace locales from locales list and input params.
     _xyz.workspace.locale = Object.assign({ key: locale }, _xyz.workspace.locales[locale]);
 
     // Create layers list.
     _xyz.layers.list = {};
-    
+
     // Load layers.
     Object.keys(_xyz.workspace.locale.layers)
       .filter(key => key.indexOf('__') === -1)
       .forEach(key => {
-        _xyz.layers.list[key] = Object.assign({},_xyz.layers.layer(_xyz.workspace.locale.layers[key]));
+        _xyz.layers.list[key] = Object.assign({}, _xyz.layers.layer(_xyz.workspace.locale.layers[key]));
       });
 
   };
 
-  function admin(){
+  function admin() {
 
     const workspace = document.getElementById('workspace');
 
@@ -92,37 +92,37 @@ export default _xyz => {
       lineWrapping: true,
       autofocus: true,
     });
-    
-    
+
+
     const fileInput = document.getElementById('fileInputWS');
-    
+
     fileInput.addEventListener('change', function () {
-    
+
       let reader = new FileReader();
       reader.onload = function () {
         try {
           fileInput.value = null;
           codeMirror.setValue(this.result);
           codeMirror.refresh();
-    
+
         } catch (err) {
           alert('Failed to parse JSON');
         }
       };
       reader.readAsText(this.files[0]);
-    
+
     });
 
 
     const btnFile = document.getElementById('btnFileWS');
-    
+
     btnFile.onclick = () => fileInput.click();
-    
-    
+
+
     const btnUpload = document.getElementById('btnUploadWS');
-    
+
     btnUpload.onclick = () => {
-    
+
       const xhr = new XMLHttpRequest();
       xhr.open('POST', document.head.dataset.dir + '/workspace/check?token=' + document.body.dataset.token);
       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -138,41 +138,48 @@ export default _xyz => {
           xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.responseType = 'json';
           xhr.onload = e => {
-    
+
             if (e.target.status !== 200) alert('I am not here. This is not happening.');
 
             const locale = _xyz.hooks.current.locale;
 
-            setWS({locale : locale,
-              callback: ()=> {
+            _xyz.hooks.removeAll();
+
+            setWS({
+              locale: locale,
+              callback: () => {
                 _xyz.hooks.removeAll();
-  
-                _xyz.hooks.set({locale : locale});
-    
+
+                _xyz.hooks.set({ locale: locale });
+
                 _xyz.workspace.loadLocale({ locale: locale });
-  
-                mask.style.display = 'none';
-              }});
+
+                mask.remove();
+              }
+            });
+
+            mask.remove();
           };
 
           xhr.send(JSON.stringify({ settings: codeMirror.getValue() }));
 
         } else {
 
-          mask.style.display = 'none';
+          mask.remove();
 
         }
-    
+
       };
 
-      _xyz.utils.bind(mask)`<p class="msg">Updating Workspace</p>`;
-    
-      mask.style.display = 'block';
-       
+      const mask = _xyz.utils.wire()`
+      <div id="desktop_mask" style><p class="msg">Updating Workspace</p>`
+
+      document.body.appendChild(mask);
+
       xhr.send(JSON.stringify({ settings: codeMirror.getValue() }));
-      
+
     };
-    
+
     // Load workspace in codemirror.
     const xhr = new XMLHttpRequest();
     xhr.open('GET', document.head.dataset.dir + '/workspace/get?token=' + document.body.dataset.token);

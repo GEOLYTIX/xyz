@@ -2178,7 +2178,6 @@ body {
       background-color: #DEF6CA; }
 
 #desktop_mask {
-  display: none;
   position: fixed;
   width: 100%;
   height: 100%;
