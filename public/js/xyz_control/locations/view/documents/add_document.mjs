@@ -57,8 +57,8 @@ export default _xyz => param => {
         let btn_del = _xyz.utils.wire()`
         <span
         title="Delete document"
-        class="btn_del icons-clear filter"
-        style="cursor: pointer; display: inline-block; height: 20px; width:20px; vertical-align:middle; background-position: center;"
+        class="btn_del icons-clear xyz-documents"
+        style="cursor: pointer; display: inline-block; height: 20px; width:20px; vertical-align:middle;"
         onclick=${
             () => {
                 newDoc.remove();
@@ -70,9 +70,9 @@ export default _xyz => param => {
 
         // Add control to upload document
         const btn_save = _xyz.utils.wire()`
-        <span class="btn_save icons-cloud-upload filter"
+        <span class="btn_save icons-cloud-upload xyz-documents"
         title="Save document"
-        style="cursor: pointer; display: inline-block; height: 20px; width:24px; vertical-align:middle; background-position: center;"
+        style="cursor: pointer; display: inline-block; height: 20px; width:20px; vertical-align:middle; background-position: center; padding-left:30px;"
         onclick=${
             () => {
                 btn_del.remove();

@@ -54,8 +54,8 @@ export default _xyz => group => {
 
 
     const chartIcon = {
-      'line':  'icons-bar-chart',
-      'bar':  'icons-bar-chart',
+      'line':  'icons-view-list',
+      'bar':  'icons-view-list',
       'pie':  'pie_chart',
       'doughnut':  'donut_small',
       'horizontalBar':  'notes',
@@ -64,25 +64,25 @@ export default _xyz => group => {
       'radar':  'multiline_chart',
       'polarArea':  'multiline_chart',
       'mixed':  'multiline_chart',
-      'stackedBar':  'icons-bar-chart',
+      'stackedBar':  'icons-view-list',
    }
 
-   group.chartIcon = group.chart.type && chartIcon[group.chart.type] || 'icons-bar-chart';
+   group.chartIcon = group.chart.type && chartIcon[group.chart.type] || 'icons-view-list';
 
     // Add chart control to group header for toggling
     group.viewToggler = _xyz.utils.wire()`
     <div
     class="xyz-icon cursor noselect btn_header"
-    title="Show chart"
+    
     style="margin: -6px 6px 0 0; float: right;"
     onclick=${
       e => {
         e.stopPropagation();
 
         e.target.classList.toggle(group.chartIcon);
-        e.target.classList.toggle('icons-view-list');
+        e.target.classList.toggle('icons-bar-chart');
         group.div.classList.toggle('chart');
-
+        
         // } else if (e.target.title = 'Show chart'){
         //   console.log('test2');
         //   group.showTable(e);
@@ -101,7 +101,7 @@ export default _xyz => group => {
 
       group.viewToggler.classList.remove('icons-view-list');
       group.viewToggler.classList.add('icons-bar-chart');
-
+      console.log('test1');
       group.viewToggler.title = 'Show table';
       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
@@ -111,6 +111,7 @@ export default _xyz => group => {
       // group.chartElem.style.display = 'none';
       group.viewToggler.classList.remove('icons-bar-chart');
       group.viewToggler.classList.add('icons-view-list');
+      console.log('test2');
 
       group.viewToggler.title = 'Show chart';
       if (e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');

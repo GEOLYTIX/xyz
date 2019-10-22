@@ -1,11 +1,11 @@
 export default _xyz => (entry) => {
 
   // Add table cell for image upload input.
-  entry.ctrl.add_img_td = _xyz.utils.wire()`<div class="addImage">`;
+  entry.ctrl.add_img_td = _xyz.utils.wire()`<div class="addImage image-container" style="margin: auto;">`;
   entry.ctrl.container.appendChild(entry.ctrl.add_img_td);
 
   // Add label and image upload icon.
-  entry.ctrl.add_img_label = _xyz.utils.wire()`<label class="icons-add-photo cursor noselect filter"
+  entry.ctrl.add_img_label = _xyz.utils.wire()`<label class="icons-add-photo cursor noselect"
   style="display:block;">`;
 
   entry.ctrl.add_img_td.appendChild(entry.ctrl.add_img_label);

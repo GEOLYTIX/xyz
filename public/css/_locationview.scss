@@ -77,13 +77,11 @@
         &.chart {
             table { display: none};
             .chart { display: block};
-
         }
 
         &:not(.chart) {
-            table { display: block};
+            table { display: inline-table};
             .chart { display: none};
-
         }
     }
     .td_images {

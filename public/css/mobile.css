@@ -120,7 +120,7 @@
   .locationview .table-section.chart .chart {
     display: block; }
   .locationview .table-section:not(.chart) table {
-    display: block; }
+    display: inline-table; }
   .locationview .table-section:not(.chart) .chart {
     display: none; }
   .locationview .td_images {
@@ -2000,6 +2000,9 @@ button {
   mask-image: url("../icons/icons-search.svg");
   -webkit-mask-image: url("../icons/icons-search.svg"); }
 
+.icons-search-mobile {
+  background: url("../icons/icons-search.svg"); }
+
 .icons-search {
   background-image: url("../icons/icons-search.svg");
   background-color: #ffffff; }
@@ -2007,6 +2010,9 @@ button {
 .icons-search-toggle {
   background-image: url("../icons/icons-search-toggle.svg");
   background-color: #1F964D; }
+
+.icons-gps-not-fixed-mobile {
+  background: url("../icons/icons-gps_not_fixed.svg"); }
 
 .icons-gps-not-fixed {
   background-image: url("../icons/icons-gps_not_fixed.svg");
@@ -2020,13 +2026,25 @@ button {
   -webkit-mask-image: url("../icons/icons-add.svg");
   mask-image: url("../icons/icons-add.svg"); }
 
+.icons-add-mobile {
+  background: url("../icons/icons-add.svg"); }
+
+.icons-remove-mobile {
+  background: url("../icons/icons-remove.svg"); }
+
 .icons-remove {
   -webkit-mask-image: url("../icons/icons-remove.svg");
   mask-image: url("../icons/icons-remove.svg"); }
 
+.icons-school-mobile {
+  background: url("../icons/icons-school.svg"); }
+
 .icons-school {
   -webkit-mask-image: url("../icons/icons-school.svg");
   mask-image: url("../icons/icons-school.svg"); }
+
+.icons-lock-open-mobile {
+  background: url("../icons/icons-lock-open.svg"); }
 
 .icons-lock-open {
   -webkit-mask-image: url("../icons/icons-lock-open.svg");
@@ -2039,6 +2057,10 @@ button {
 .icons-settings {
   -webkit-mask-image: url("../icons/icons-settings.svg");
   mask-image: url("../icons/icons-settings.svg");
+  display: block; }
+
+.icons-bug-report-mobile {
+  background: url("../icons/icons-bug-report.svg");
   display: block; }
 
 .icons-bug-report {
@@ -2073,9 +2095,15 @@ button {
 .icons-touch-app {
   background-image: url("../icons/icons-touch-app.svg"); }
 
+.icons-layers-mobile {
+  background-image: url("../icons/icons-layers.svg"); }
+
 .icons-layers {
   -webkit-mask-image: url("../icons/icons-layers.svg");
   mask-image: url("../icons/icons-layers.svg"); }
+
+.icons-location-mobile {
+  background-image: url("../icons/icons-room.svg"); }
 
 .icons-location {
   -webkit-mask-image: url("../icons/icons-room.svg");
@@ -2093,7 +2121,8 @@ button {
 
 .icons-cloud-upload {
   -webkit-mask-image: url("../icons/icons-cloud-upload.svg");
-  mask-image: url("../icons/icons-cloud-upload.svg"); }
+  mask-image: url("../icons/icons-cloud-upload.svg");
+  background-color: #1F964D; }
 
 .icons-keyboard-arrow-up {
   background-image: url("../icons/icons-keyboard-arrow-up.svg"); }
@@ -2112,9 +2141,7 @@ button {
 .icons-clear {
   -webkit-mask-image: url("../icons/icons-clear.svg");
   mask-image: url("../icons/icons-clear.svg");
-  background-color: #1F964D;
-  width: 20px;
-  height: 20px; }
+  background-color: #1F964D; }
 
 .icons-event-note {
   background-image: url("../icons/icons-event-note.svg");
@@ -2132,7 +2159,7 @@ button {
 .icons-add-photo {
   -webkit-mask-image: url("../icons/icons-add-photo.svg");
   mask-image: url("../icons/icons-add-photo.svg");
-  -webkit-mask-size: 70px 50px;
+  -webkit-mask-size: 70px;
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
   mask-size: 70px 50px;
@@ -2140,6 +2167,15 @@ button {
   mask-repeat: no-repeat;
   background-color: #1f964d;
   height: 70px; }
+
+.image-container {
+  width: 70px;
+  height: 70px;
+  background-size: 100%;
+  -webkit-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35));
+  -moz-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35));
+  -ms-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35));
+  -o-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35)); }
 
 .icons-view-list {
   -webkit-mask-image: url("../icons/icons-view-list.svg");
@@ -2172,6 +2208,14 @@ button {
   mask-position: center;
   mask-repeat: no-repeat; }
 
+.xyz-documents {
+  -webkit-mask-size: 20px 20px;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 20px 20px;
+  mask-position: center;
+  mask-repeat: no-repeat; }
+
 .xyz-icon2 {
   background-size: 32px 50px;
   background-repeat: no-repeat;
@@ -2185,6 +2229,7 @@ button {
   background-repeat: no-repeat;
   background-position: center; }
 
+Geolytix green
 .filter {
   filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
 
@@ -2289,14 +2334,14 @@ body {
     text-align: center;
     table-layout: fixed;
     height: 50px; }
-    .listviews .tab_bar .xyz-icon.icon-layers {
+    .listviews .tab_bar .xyz-icon3.icon-layers-mobile {
       background-image: url("../icons/icons-layers.svg"); }
-    .listviews .tab_bar .xyz-icon.icon-location {
+    .listviews .tab_bar .xyz-icon3.icon-location-mobile {
       background-image: url("../icons/icons-room.svg"); }
-    .listviews .tab_bar .xyz-icon.active {
+    .listviews .tab_bar .xyz-icon3.active {
       background-image: url("../icons/icons-touch-app.svg");
       background-color: #1F964D; }
-    .listviews .tab_bar .xyz-icon.filter {
+    .listviews .tab_bar .xyz-icon3.filter {
       filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
 
 .gazetteer {

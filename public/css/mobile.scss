@@ -45,11 +45,11 @@ body {
         text-align: center;
         table-layout: fixed;
         height: 50px; // box-shadow: 0 3px 3px -3px #000;
-        .xyz-icon {
-            &.icon-layers {
+        .xyz-icon3 {
+            &.icon-layers-mobile {
                 background-image: url("../icons/icons-layers.svg");
             }
-            &.icon-location {
+            &.icon-location-mobile {
                 background-image: url("../icons/icons-room.svg");
             }
             &.active {

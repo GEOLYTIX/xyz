@@ -1,18 +1,24 @@
 //Mapview left column icons//
-
 .icons-search-mask {
     mask-image: url("../icons/icons-search.svg");
     -webkit-mask-image: url("../icons/icons-search.svg");
+}
+
+.icons-search-mobile {
+    background: url("../icons/icons-search.svg"); 
 }
 
 .icons-search {
     background-image: url("../icons/icons-search.svg");
     background-color: #ffffff;
 }
-
 .icons-search-toggle {
     background-image: url("../icons/icons-search-toggle.svg");
     background-color: #1F964D;
+}
+
+.icons-gps-not-fixed-mobile {
+    background: url("../icons/icons-gps_not_fixed.svg");
 }
 
 .icons-gps-not-fixed {
@@ -28,14 +34,31 @@
     -webkit-mask-image: url("../icons/icons-add.svg");
      mask-image: url("../icons/icons-add.svg");
 }
+
+.icons-add-mobile {
+    background: url("../icons/icons-add.svg");
+}
+
+.icons-remove-mobile {
+    background: url("../icons/icons-remove.svg");
+}
+
 .icons-remove {
     -webkit-mask-image: url("../icons/icons-remove.svg");
      mask-image: url("../icons/icons-remove.svg");
 }
 
+.icons-school-mobile {
+    background: url("../icons/icons-school.svg");
+}
+
 .icons-school {
     -webkit-mask-image: url("../icons/icons-school.svg");
      mask-image: url("../icons/icons-school.svg");
+}
+
+.icons-lock-open-mobile {
+    background: url("../icons/icons-lock-open.svg");
 }
 
 .icons-lock-open {
@@ -50,6 +73,11 @@
 .icons-settings {
     -webkit-mask-image: url("../icons/icons-settings.svg");
      mask-image: url("../icons/icons-settings.svg");
+    display: block;
+}
+
+.icons-bug-report-mobile {
+    background: url("../icons/icons-bug-report.svg");
     display: block;
 }
 
@@ -97,9 +125,17 @@
     background-image: url("../icons/icons-touch-app.svg");
 }
 
+.icons-layers-mobile {
+    background-image: url("../icons/icons-layers.svg");
+}
+
 .icons-layers {
     -webkit-mask-image: url("../icons/icons-layers.svg");
     mask-image: url("../icons/icons-layers.svg");
+}
+
+.icons-location-mobile {
+    background-image: url("../icons/icons-room.svg");
 }
 
 .icons-location {
@@ -122,9 +158,7 @@
 .icons-cloud-upload {
     -webkit-mask-image: url("../icons/icons-cloud-upload.svg");
     mask-image: url("../icons/icons-cloud-upload.svg");
-    // background-size: contain;
-    // background-repeat: no-repeat;
-    // background-position: center;
+    background-color: #1F964D;
 }
 
 .icons-keyboard-arrow-up {
@@ -147,8 +181,6 @@
     -webkit-mask-image: url("../icons/icons-clear.svg");
     mask-image: url("../icons/icons-clear.svg"); 
     background-color: #1F964D;
-    width:20px;
-    height:20px;
 }
 
 .icons-event-note {
@@ -170,7 +202,7 @@
 .icons-add-photo {
     -webkit-mask-image: url("../icons/icons-add-photo.svg");
      mask-image: url("../icons/icons-add-photo.svg");
-    -webkit-mask-size: 70px 50px;
+    -webkit-mask-size: 70px;
     -webkit-mask-position: center;
     -webkit-mask-repeat: no-repeat;
      mask-size: 70px 50px;
@@ -178,6 +210,17 @@
      mask-repeat: no-repeat;
      background-color: #1f964d;
      height:70px;            
+}
+
+.image-container {
+    width: 70px;
+    height: 70px;
+    background-size: 100%;
+    
+    -webkit-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+    -moz-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+    -ms-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+    -o-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
 }
 
 .icons-view-list {
@@ -220,6 +263,15 @@
      mask-repeat: no-repeat;
 }
 
+.xyz-documents {
+    -webkit-mask-size: 20px 20px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+     mask-size: 20px 20px;
+     mask-position: center;
+     mask-repeat: no-repeat;
+}
+
 .xyz-icon2 {
     background-size: 32px 50px;    
     background-repeat: no-repeat;
@@ -234,7 +286,7 @@
     background-position: center; 
 }
 
-//Geolytix green//
+Geolytix green//
 .filter {
     filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
 }
