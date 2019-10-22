@@ -116,8 +116,16 @@ export default _xyz => layer => {
   
       // Categorized theme
       if (theme && theme.type === 'categorized') {
-  
-        Object.assign(marker, theme.cat[properties.cat] && theme.cat[properties.cat].style);
+
+        let cat = {};
+
+        if( theme.cat[properties.cat]) {
+          if(theme.cat[properties.cat].svg) cat = theme.cat[properties.cat];
+          if(theme.cat[properties.cat].style) cat = theme.cat[properties.cat].style;
+        }
+
+        Object.assign(marker, cat);
+
       }
   
       // Graduated theme.
@@ -166,7 +174,7 @@ export default _xyz => layer => {
           size -= comp[1];
         });
 
-        Object.assign(marker, cat_style);
+        Object.assign({}, marker, cat_style);
       }
 
       const size = layer.cluster_logscale ?
