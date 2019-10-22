@@ -69,7 +69,7 @@ fastify
         styleSrc: env.CSP.styleSrc || ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
         fontSrc: env.CSP.fontSrc || ['\'self\'', 'fonts.gstatic.com'],
         scriptSrc: env.CSP.scriptSrc || ['\'self\'', '\'unsafe-inline\'', 'gitcdn.xyz', 'www.google.com', 'www.gstatic.com', '*.logrocket.io', 'cdn.logrocket.com', 'cdn.jsdelivr.net'],
-        imgSrc: env.CSP.imgSrc || ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', '*.global.ssl.fastly.net', 'cdn.jsdelivr.net', 'data:', 'https://raw.githubusercontent.com']
+        imgSrc: env.CSP.imgSrc || ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', '*.global.ssl.fastly.net', 'cdn.jsdelivr.net', 'data:']
       },
       setAllHeaders: true
     },
