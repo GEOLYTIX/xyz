@@ -329,7 +329,7 @@ export default (_xyz, layer) => {
       type: 'Point',
       geometryFunction: function(coordinates, geometry) {
 
-        geometry = new _xyz.mapview.lib.geom.Circle(coordinates, layer.edit.isoline_mapbox.minutes * 1000);
+        geometry = new _xyz.mapview.lib.geom.Circle(coordinates, layer.edit.isoline_here.minutes * 1000);
         
         var feature = new _xyz.mapview.lib.Feature({
           geometry: geometry
@@ -371,9 +371,9 @@ export default (_xyz, layer) => {
             featureProjection:'EPSG:' + _xyz.mapview.srid
           });
 
-          _xyz.mapview.interaction.draw.sourceVector.clear();
+          _xyz.mapview.interaction.draw.Source.clear();
 
-          _xyz.mapview.interaction.draw.sourceVector.addFeature(feature);
+          _xyz.mapview.interaction.draw.Source.addFeature(feature);
                                     
         };
     
