@@ -19,24 +19,49 @@ function init(_xyz) {
     target: document.getElementById('report_map')
   });
 
+  const layer = _xyz.layers.list[params.layer];
 
   _xyz.locations.select({
     locale: params.locale,
-    layer: params.layer,
+    layer: layer,
     table: params.table,
-    id: params.id
-  },
-  location => {
+    id: params.id,
+    callback: location => {
 
-    // Required for streetview fields.
-    location.marker = _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
+      _xyz.locations.decorate(location);
 
-    location.view();
+      // Required for streetview fields.
+      location.marker = _xyz.utils.turf.pointOnFeature(location.geometry).geometry.coordinates;
 
-    location.draw();
+      location.view();
 
-    document.getElementById('report_left').appendChild(location.view.node);
+      location.draw();
 
+      location.flyTo();
+
+      location.layer.show();
+
+      // Draw location marker.
+      location.Marker = _xyz.mapview.geoJSON({
+          geometry: {
+            type: 'Point',
+            coordinates: location.marker,
+          },
+          style: new _xyz.mapview.lib.style.Style({
+            image: _xyz.mapview.icon({
+              type: 'markerColor',
+              colorMarker: '#2E86AB',
+              colorDot: '#FFF',
+              scale: 0.05,
+              anchor: [0.5, 1]
+            })
+          }),
+          dataProjection: location.layer.srid,
+          featureProjection: _xyz.mapview.srid
+      });
+
+      document.getElementById('report_left').appendChild(location.view.node);
+    }
   });
 
 }

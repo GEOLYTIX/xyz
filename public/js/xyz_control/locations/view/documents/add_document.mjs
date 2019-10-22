@@ -1,6 +1,6 @@
 export default _xyz => param => {
 
-    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block;">`;
+    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block; text-align: center;">`;
 
     param.documentControl.container.appendChild(param.documentControl.add_doc);
 
@@ -14,8 +14,8 @@ export default _xyz => param => {
     // Add doc upload icon to label.
     param.documentControl.add_doc_label.appendChild(_xyz.utils.wire()`
         <i class="material-icons cursor noselect"
-        style="cursor: pointer;"
-        >add_circle_outline`);
+        style="cursor: pointer; font-size: 36px;"
+        >note_add`);
 
     // Add doc input.
     param.documentControl.add_doc_input = _xyz.utils.wire()`

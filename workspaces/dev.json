@@ -708,7 +708,7 @@
                         {
                             "label": "Options",
                             "field": "dev_options",
-                            "type": "text",
+                            "inline": true,
                             "edit": {
                                 "options": [
                                     "Open",
@@ -1486,13 +1486,6 @@
                     },
                     "infoj": [
                         {
-                            "type": "report",
-                            "class": "_report",
-                            "report": {
-                                "template": "/views/report_location.html"
-                            }
-                        },
-                        {
                             "type": "streetview"
                         },
                         {
@@ -1716,13 +1709,15 @@
                     "cluster_label": "site_name",
                     "infoj": [
                         {
-                            "type": "key"
+                            "type": "key",
+                            "class": "_report"
                         },
                         {
                             "type": "report",
                             "report": {
                               "template": "/views/report_location.html"
-                            }
+                            },
+                            "class": "_report"
                         },
                         {
                             "field": "site_name",
@@ -1743,23 +1738,28 @@
                         },
                         {
                             "label": "Available Dashboards",
-                            "type": "label"
+                            "type": "label",
+                            "class": "_report"
                         },
                         {
                             "type": "dashboard",
                             "title": "Dashboard 1",
-                            "display": true
+                            "display": true,
+                            "class": "_report"
                         },
                         {
                             "label": "Drivetimes",
                             "type": "label",
-                            "level": 1
+                            "level": 1,
+                            "class": "_report"
                         },
                         {
                             "name": "HERE Catchment 5min",
                             "field": "isoline_5min",
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
+                            "display": true,
+                            "class": "_report",
                             "level": 2,
                             "edit": {
                                 "isoline_here": {
@@ -1909,6 +1909,8 @@
                             "fieldfx": "ST_asGeoJson(isoline_10min)",
                             "type": "geometry",
                             "level": 2,
+                            "display": true,
+                            "class": "_report",
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 10
@@ -1927,6 +1929,7 @@
                             "label": "Population within 10min",
                             "type": "group",
                             "dashboard": "Dashboard 1",
+                            "class": "_report",
                             "level": 2,
                             "chart": {
                                 "active": false,
@@ -2064,6 +2067,8 @@
                             "fieldfx": "ST_asGeoJson(isoline_15min)",
                             "type": "geometry",
                             "level": 2,
+                            "display": true,
+                            "class": "_report",
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 15
@@ -2083,6 +2088,7 @@
                             "type": "group",
                             "level": 2,
                             "dashboard": "Dashboard 1",
+                            "class": "_report",
                             "chart": {
                                 "title": true,
                                 "active": false,
@@ -2214,6 +2220,7 @@
                             "label": "Random data series",
                             "type": "group",
                             "dashboard": "Dashboard 1",
+                            "class": "_report",
                             "level": 2,
                             "chart": {
                                 "type": "mixed",
@@ -2309,6 +2316,7 @@
                             "type": "group",
                             "dashboard": "Dashboard 1",
                             "level": 2,
+                            "class": "_report",
                             "chart": {
                                 "title": false,
                                 "legend": true,
@@ -2357,6 +2365,7 @@
                             "label": "Stacked Chart",
                             "type": "group",
                             "dashboard": "Dashboard 1",
+                            "class": "_report",
                             "chart": {
                                 "type": "stackedHorizontalBar",
                                 "title": true,
@@ -2437,6 +2446,7 @@
                             "label": "Radar Chart",
                             "type": "group",
                             "dashboard": "Dashboard 1",
+                            "class": "_report",
                             "chart": {
                                 "width": 400,
                                 "height": 400,
@@ -2533,6 +2543,7 @@
                             "label": "Polar Area Chart",
                             "type": "group",
                             "dashboard": "Dashboard 1",
+                            "class": "_report",
                             "level": 2,
                             "chart": {
                                 "title": false,
@@ -2581,35 +2592,42 @@
                         },
                         {
                             "type": "dashboard",
-                            "title": "Dashboard 2"
+                            "title": "Dashboard 2",
+                            "class": "_report"
                         },
                         {
                             "field": "comments",
                             "label": "Comments",
                             "type": "textarea",
-                            "edit": true
+                            "edit": true,
+                            "class": "_report"
                         },
                         {
                             "field": "images",
                             "label": "Images",
                             "type": "images",
-                            "edit": true
+                            "edit": true,
+                            "class": "_report"
                         },
                         {
                             "label": "Documents",
                             "field": "documents",
                             "type": "documents",
-                            "edit": true
+                            "edit": true,
+                            "class": "_report"
                         },
                         {
                             "label": "Available dataviews",
-                            "type": "label"
+                            "type": "label",
+                            "class": "_report"
                           },
                           {
                             "type": "tableDefinition",
                             "title": "Population Summary",
                             "display": true,
                             "target_id": "xyz_table1",
+                            "class": "_report",
+                            "layout": "fitColumns",
                             "toolbars": {},
                             "columns": [
                               {
@@ -2621,7 +2639,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_5min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "center"
                               },
                               {
                                 "type": "integer",
@@ -2632,7 +2655,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_10min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "center"
                               },
                               {
                                 "type": "integer",
@@ -2643,7 +2671,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_15min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "center"
                               }
                             ],
                             "rows": [
@@ -2708,7 +2741,9 @@
                             "type": "tableDefinition",
                             "title": "Worker Summary",
                             "display": true,
+                            "class": "_report",
                             "target_id": "xyz_table8",
+                            "layout": "fitColumns",
                             "columns": [
                               {
                               "type": "integer",
@@ -2719,6 +2754,11 @@
                                 "table_b": "geodata.uk_glx_geodata_hex_1k",
                                 "geom_a": "isoline_15min",
                                 "geom_b": "geom_p_4326"
+                              },
+                              "align": "center",
+                              "formatter": "money",
+                              "formatterParams": {
+                                "precision": 0
                               }
                             }],
                             "rows": [
@@ -2739,6 +2779,8 @@
                             "title": "OAC Profile",
                             "display": true,
                             "target_id": "xyz_table3",
+                            "layout": "fitColumns",
+                            "class": "_report",
                             "columns": [
                               {
                                 "type": "integer",
@@ -2749,7 +2791,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_5min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "integer",
@@ -2760,7 +2807,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_10min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "numeric",
@@ -2771,7 +2823,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_15min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "numeric",
@@ -2891,26 +2948,6 @@
                                 "title": "7d - Ageing city dwellers"
                               },
                               {
-                                "field": "oac_8a",
-                                "fieldfx": "round(sum(case when oac_group=23 then pop__17 else 0 end))",
-                                "title": "8a - Industrious communities"
-                              },
-                              {
-                                "field": "oac_8b",
-                                "fieldfx": "round(sum(case when oac_group=24 then pop__17 else 0 end))",
-                                "title": "8b - Challenged terraced workers"
-                              },
-                              {
-                                "field": "oac_8c",
-                                "fieldfx": "round(sum(case when oac_group=25 then pop__17 else 0 end))",
-                                "title": "8c - Hard-pressed ageing workers"
-                              },
-                              {
-                                "field": "oac_8d",
-                                "fieldfx": "round(sum(case when oac_group=26 then pop__17 else 0 end))",
-                                "title": "8d - Migration and churn"
-                              },
-                              {
                                 "field": "oac_total",
                                 "fieldfx": "round(sum(case when oac_group>0 then pop__17 else 0 end))",
                                 "title": "Total"
@@ -2942,12 +2979,13 @@
                                   "100*min15.oac_7a/min15.oac_total",
                                   "100*min15.oac_7b/min15.oac_total",
                                   "100*min15.oac_7c/min15.oac_total",
-                                  "100*min15.oac_7d/min15.oac_total",
-                                  "100*min15.oac_8a/min15.oac_total",
-                                  "100*min15.oac_8b/min15.oac_total",
-                                  "100*min15.oac_8c/min15.oac_total",
-                                  "100*min15.oac_8d/min15.oac_total"
-                                ]
+                                  "100*min15.oac_7d/min15.oac_total"
+                                ],
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               "oac_uk_total": {
                                 "title": "UK %",
@@ -2974,12 +3012,13 @@
                                   "uk.oac_7a_uk*100/uk.oac_total_uk",
                                   "uk.oac_7b_uk*100/uk.oac_total_uk",
                                   "uk.oac_7c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_7d_uk*100/uk.oac_total_uk",
-                                  "uk.oac_8a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_8b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_8c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_8d_uk*100/uk.oac_total_uk"
-                                ]
+                                  "uk.oac_7d_uk*100/uk.oac_total_uk"
+                                ],
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               "oac_index": {
                                 "title": "OAC Profile Index",
@@ -2989,7 +3028,7 @@
                                   "color": [
                                     "#2196f3", "orange", "red"
                                   ],
-                                  "max": 250
+                                  "max": 200
                                 },
                                 "width": 200,
                                 "sorter": "number",
@@ -3015,11 +3054,7 @@
                                   "uk.oac_total_uk*(100*min15.oac_7a/min15.oac_total)/uk.oac_7a_uk",
                                   "uk.oac_total_uk*(100*min15.oac_7b/min15.oac_total)/uk.oac_7b_uk",
                                   "uk.oac_total_uk*(100*min15.oac_7c/min15.oac_total)/uk.oac_7c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_7d/min15.oac_total)/uk.oac_7d_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_8a/min15.oac_total)/uk.oac_8a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_8b/min15.oac_total)/uk.oac_8b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_8c/min15.oac_total)/uk.oac_8c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_8d/min15.oac_total)/uk.oac_8d_uk"
+                                  "uk.oac_total_uk*(100*min15.oac_7d/min15.oac_total)/uk.oac_7d_uk"
                                 ]
                               }
                             }
@@ -3027,8 +3062,10 @@
                           {
                             "type": "tableDefinition",
                             "title": "Age Profile",
-                            "display": false,
+                            "display": true,
+                            "class": "_report",
                             "target_id": "xyz_table2",
+                            "layout": "fitColumns",
                             "columns": [
                               {
                                 "type": "integer",
@@ -3039,7 +3076,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_5min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "integer",
@@ -3050,7 +3092,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_10min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "numeric",
@@ -3061,7 +3108,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_15min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "numeric",
@@ -3109,6 +3161,7 @@
                             "agg": {
                               "share15": {
                                 "title": "% with 15 min",
+                                "align": "right",
                                 "type": "integer",
                                 "rows": [
                                   "100*min15.age_under_18/min15.age_profile_total",
@@ -3122,6 +3175,7 @@
                               },
                               "age_uk_total": {
                                 "title": "UK %",
+                                "align": "right",
                                 "type": "integer",
                                 "rows": [
                                   "uk.age_under_18_uk*100/uk.age_total_uk",
@@ -3135,13 +3189,14 @@
                               },
                               "age_index": {
                                 "title": "Age Profile Index",
+                                "align": "right",
                                 "type": "integer",
                                 "formatter": "progress",
                                 "formatterParams": {
                                   "color": [
                                     "#2196f3", "orange", "red"
                                   ],
-                                  "max": 250
+                                  "max": 200
                                 },
                                 "width": 200,
                                 "sorter": "number",
@@ -3162,6 +3217,8 @@
                             "title": "Social Grade",
                             "display": true,
                             "target_id": "xyz_table4",
+                            "class": "_report",
+                            "layout": "fitColumns",
                             "columns": [
                               {
                                 "type": "integer",
@@ -3173,7 +3230,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_5min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "integer",
@@ -3185,7 +3247,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_10min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "integer",
@@ -3197,7 +3264,12 @@
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
                                   "geom_a": "isoline_15min",
                                   "geom_b": "geom_p_4326"
-                                }
+                                },
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               {
                                 "type": "numeric",
@@ -3242,7 +3314,12 @@
                                   "100*min15.sg_c2/min15.sg_total",
                                   "100*min15.sg_de/min15.sg_total",
                                   "100*min15.sg_total/min15.sg_total"
-                                ]
+                                ],
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               "sg_uk_total": {
                                 "title": "UK %",
@@ -3253,7 +3330,12 @@
                                   "uk.social_grade_c2_uk*100/uk.social_grade_total_uk",
                                   "uk.social_grade_de_uk*100/uk.social_grade_total_uk",
                                   "uk.social_grade_total_uk*100/uk.social_grade_total_uk"
-                                ]
+                                ],
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                },
+                                "align": "right"
                               },
                               "sg_index": {
                                 "title": "Social Grade Index",
@@ -3263,7 +3345,7 @@
                                   "color": [
                                     "#2196f3", "orange", "red"
                                   ],
-                                  "max": 250
+                                  "max": 200
                                 },
                                 "width": 200,
                                 "sorter": "number",
@@ -3280,7 +3362,8 @@
                           {
                             "type": "orderedList",
                             "title": "Nearest competitors", 
-                            "display": false,
+                            "display": true,
+                            "class": "_report",
                             "target_id": "xyz_table5",
                             "toolbars": {},
                             "layout": "fitColumns",
@@ -3305,7 +3388,8 @@
                                 "formatter": "money",
                                 "formatterParams": {
                                     "precision": 1
-                                }
+                                },
+                                "align": "center"
                               },
                               {
                                 "type": "integer",
@@ -3316,14 +3400,16 @@
                                 "formatter": "money",
                                 "formatterParams": {
                                     "precision": 0
-                                }
+                                },
+                                "align": "center"
                               }
                             ],
                             "order": "ASC",
                             "limit": 8
                           },
                           {
-                            "type": "streetview"
+                            "type": "streetview",
+                            "class": "_report"
                           }
                     ],
                     "style": {
