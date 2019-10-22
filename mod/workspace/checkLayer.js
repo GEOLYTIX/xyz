@@ -46,8 +46,6 @@ async function chkLayers(layers) {
 
 async function chkLayerConnect(layer, layers) {
 
-  if (layer.format === 'tiles') await chkLayerURL(layer, layers);
-
   if (layer.format === 'cluster') await chkLayerGeom(layer, layers);
 
   if (layer.format === 'geojson') await chkLayerGeom(layer, layers);
@@ -55,30 +53,6 @@ async function chkLayerConnect(layer, layers) {
   if (layer.format === 'grid') await chkLayerGeom(layer, layers);
 
   if (layer.format === 'mvt') await chkLayerGeom(layer, layers);
-}
-
-async function chkLayerURL(layer, layers) {
-
-  // Get uri from layer and split at provider definition.
-  let uri = layer.URI.split('&provider=');
-
-  // Replace provider definition with provider key.
-  uri = `${uri[0]}${uri[1] ? env.keys[uri[1]] : ''}`;
-
-  // Replace subdomain (a) and x,y,z (0) location.
-  uri = uri.replace(/\{s\}/i,'a').replace(/\{.\}/ig,'0');
-
-  // Fetch results from Google maps places API.
-  const fetched = await require('../fetch')(uri, 'no_log');
-
-  if (fetched._err) {
-
-    log(`!!! ${layer.locale}.${layer.key} (${layer.format}) => '¡No bueno!'`);
-
-    return;
-  }
-
-  log(`${layer.locale}.${layer.key} (${layer.format}) => 'A-ok'`);
 }
 
 async function chkLayerGeom(layer, layers) {

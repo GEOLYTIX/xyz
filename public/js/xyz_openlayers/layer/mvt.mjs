@@ -2,6 +2,8 @@ import select from './select.mjs';
 
 import infotip from './infotip.mjs';
 
+import label from './mvtLabel.mjs';
+
 export default _xyz => layer => {
 
   layer.highlight = true;
@@ -14,10 +16,8 @@ export default _xyz => layer => {
 
     //source.tileCache.expireCache();
     //source.tileCache.clear();
-
     source.clear();
     source.refresh({force: true});
-
   };
 
   // Define source for mvt layer.
@@ -139,5 +139,7 @@ export default _xyz => layer => {
   });
 
   layer.L.set('layer', layer, true);
+
+  layer.label = label(_xyz, layer);
 
 };

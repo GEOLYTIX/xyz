@@ -78,7 +78,6 @@ export default _xyz => layer => {
         const features = cluster.map(f => new _xyz.mapview.lib.Feature({
           id: id++,
           geometry: new _xyz.mapview.lib.geom.Point(
-            //[f.geometry.x, f.geometry.y]
             layer.srid == 4326 && _xyz.mapview.lib.proj.fromLonLat([f.geometry.x, f.geometry.y]) || [f.geometry.x, f.geometry.y]
           ),
           properties: f.properties
