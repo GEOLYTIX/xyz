@@ -204,6 +204,7 @@ function createMap(_xyz) {
     _xyz.locations.list
       .filter(record => !!record.location)
       .forEach(record => record.location.remove());
+      if(_xyz.dataview.node) _xyz.map.updateSize();
   };
 
   _xyz.gazetteer.init({
