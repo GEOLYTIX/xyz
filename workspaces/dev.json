@@ -30,7 +30,10 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "dev.natural_earth_countries__mvts",
-                    "table": "dev.natural_earth_countries",
+                    "tables": {
+                        "2": null,
+                        "3": "dev.natural_earth_countries"
+                    },
                     "geom": "geom_3857",
                     "srid": "3857",
                     "dataview": {
@@ -760,7 +763,6 @@
                         "11": null,
                         "12": "dev.oa",
                         "13": "dev.oa"
-                        
                     },
                     "srid": "3857",
                     "geom": "geom_3857",

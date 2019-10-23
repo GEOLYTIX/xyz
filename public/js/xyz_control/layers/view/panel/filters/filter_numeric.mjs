@@ -15,7 +15,7 @@ export default (_xyz, layer, filter_entry) => {
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: layer.key,
-      table: layer.table,
+      table: layer.tableCurrent(),
       field: filter_entry.field,
       filter: JSON.stringify(filter),
       token: _xyz.token}));
