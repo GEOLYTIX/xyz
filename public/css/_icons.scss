@@ -108,17 +108,14 @@
 
 .icons-close {
     background-image: url("../icons/icons-close.svg");
-    background-color: #dddddd;
 }
 
 .icons-backup {
     background-image: url("../icons/icons-backup.svg");
-    background-color: #dddddd;
 }
 
 .icons-description {
     background-image: url("../icons/icons-description.svg");
-    background-color: #dddddd;
 }
 
 .icons-touch-app {
@@ -212,11 +209,11 @@
      height:70px;            
 }
 
+//.Shadow effect on photo add icon// 
 .image-container {
     width: 70px;
     height: 70px;
     background-size: 100%;
-    
     -webkit-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
     -moz-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
     -ms-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
@@ -235,23 +232,32 @@
     height:30px;
 }
 
-///// CSS STYLING /////
+.icons-checkbox-checked {
+    background-image: url("../icons/icons-checkbox-checked.svg");
+}
+.icons-checkbox-unchecked {
+    background-image: url("../icons/icons-checkbox-unchecked.svg");
+}
+
+.icons-face {
+    background-image: url("../icons/icons-face.svg");
+}
 
 //NON SVG PROPERTIES//
 .xyz-icon {
-        background-size: 32px 50px;    
-        background-repeat: no-repeat;
-        background-position: center;   
-        background-color: inherit;    
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center;   
+    background-color: inherit;    
         
 //SVG Mask properties//
-        -webkit-mask-size: 32px 50px;
-        -webkit-mask-position: center;
-        -webkit-mask-repeat: no-repeat;
-         mask-size: 32px 50px;
-         mask-position: center;
-         mask-repeat: no-repeat;
-         background-color: #1f964d;
+    -webkit-mask-size: 32px 50px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+     mask-size: 32px 50px;
+     mask-position: center;
+     mask-repeat: no-repeat;
+     background-color: #1f964d;
     }
 
 .xyz-toggle {
@@ -284,13 +290,12 @@
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center; 
+    &.BG{
+        background-color: #dddddd;
+    }
 }
 
-Geolytix green//
+//Geolytix green//
 .filter {
     filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
-}
-
-.filter.toggle{
-    filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%);
 }

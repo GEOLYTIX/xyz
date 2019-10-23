@@ -207,9 +207,6 @@ export default _xyz => function () {
   //   }
   // }}>location_off`);
 
-  console.log(_xyz.utils.Chroma(location.style.strokeColor));
-  console.log(_xyz.utils.Chroma(location.style.strokeColor).lch());
-
 location.view.header.appendChild(_xyz.utils.wire()`
 <button
 style = "${'background-color: ' + location.style.strokeColor}"
@@ -228,7 +225,6 @@ onclick = ${e => {
   }
   
 }}>`);
-  
   
 
   // Clear selection.

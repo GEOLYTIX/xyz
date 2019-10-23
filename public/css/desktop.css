@@ -2081,16 +2081,13 @@ button {
   mask-image: url("../icons/icons-fullscreen.svg"); }
 
 .icons-close {
-  background-image: url("../icons/icons-close.svg");
-  background-color: #dddddd; }
+  background-image: url("../icons/icons-close.svg"); }
 
 .icons-backup {
-  background-image: url("../icons/icons-backup.svg");
-  background-color: #dddddd; }
+  background-image: url("../icons/icons-backup.svg"); }
 
 .icons-description {
-  background-image: url("../icons/icons-description.svg");
-  background-color: #dddddd; }
+  background-image: url("../icons/icons-description.svg"); }
 
 .icons-touch-app {
   background-image: url("../icons/icons-touch-app.svg"); }
@@ -2172,10 +2169,10 @@ button {
   width: 70px;
   height: 70px;
   background-size: 100%;
-  -webkit-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35));
-  -moz-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35));
-  -ms-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35));
-  -o-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.35)); }
+  -webkit-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.25));
+  -moz-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.25));
+  -ms-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.25));
+  -o-filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.25)); }
 
 .icons-view-list {
   -webkit-mask-image: url("../icons/icons-view-list.svg");
@@ -2186,6 +2183,15 @@ button {
   -webkit-mask-image: url("../icons/icons-bar-chart.svg");
   mask-image: url("../icons/icons-bar-chart.svg");
   height: 30px; }
+
+.icons-checkbox-checked {
+  background-image: url("../icons/icons-checkbox-checked.svg"); }
+
+.icons-checkbox-unchecked {
+  background-image: url("../icons/icons-checkbox-unchecked.svg"); }
+
+.icons-face {
+  background-image: url("../icons/icons-face.svg"); }
 
 .xyz-icon {
   background-size: 32px 50px;
@@ -2228,13 +2234,11 @@ button {
   background-size: 32px 50px;
   background-repeat: no-repeat;
   background-position: center; }
+  .xyz-icon3.BG {
+    background-color: #dddddd; }
 
-Geolytix green
 .filter {
   filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
-
-.filter.toggle {
-  filter: invert(65%) sepia(16%) saturate(0%) hue-rotate(151deg) brightness(92%) contrast(83%); }
 
 *,
 *::after,
