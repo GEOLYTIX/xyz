@@ -160,7 +160,6 @@ export default _xyz => function () {
   }
  
 
-
   // Trash icon.
   location.view.trash = _xyz.utils.wire()`
   <button
@@ -185,27 +184,6 @@ export default _xyz => function () {
     e.stopPropagation();
     location.clipboard();
   }}>file_copy`);*/
-
-
-  // Toggle marker.
-  // location.view.header.appendChild(_xyz.utils.wire()`
-  // <i
-  // style = "${'color: ' + location.style.strokeColor}"
-  // title = "Hide marker"
-  // class = "material-icons cursor noselect btn_header"
-  // onclick = ${e => {
-  //   e.stopPropagation();
-  //   if (e.target.textContent === 'location_off') {
-  //     _xyz.map.removeLayer(location.Marker);
-  //     e.target.textContent = 'location_on';
-  //     e.target.title = 'Show marker';
-
-  //   } else {
-  //     _xyz.map.addLayer(location.Marker);
-  //     e.target.textContent = 'location_off';
-  //     e.target.title = 'Hide marker';
-  //   }
-  // }}>location_off`);
 
 location.view.header.appendChild(_xyz.utils.wire()`
 <button
