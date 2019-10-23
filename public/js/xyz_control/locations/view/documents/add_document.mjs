@@ -14,7 +14,7 @@ export default _xyz => param => {
     // Add doc upload icon to label.
     param.documentControl.add_doc_label.appendChild(_xyz.utils.wire()`
         <i class="material-icons cursor noselect"
-        style="cursor: pointer; font-size: 36px;"
+        style="cursor: pointer; font-size: 36px; text-shadow: 2px 2px 2px #999;"
         >note_add`);
 
     // Add doc input.
