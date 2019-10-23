@@ -1763,6 +1763,7 @@
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
                             "class": "_report",
+                            "display": true,
                             "level": 2,
                             "edit": {
                                 "isoline_here": {
