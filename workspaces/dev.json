@@ -1764,8 +1764,8 @@
                             "field": "isoline_5min",
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
-                            "display": true,
                             "class": "_report",
+                            "display": true,
                             "level": 2,
                             "edit": {
                                 "isoline_here": {
@@ -1915,7 +1915,6 @@
                             "fieldfx": "ST_asGeoJson(isoline_10min)",
                             "type": "geometry",
                             "level": 2,
-                            "display": true,
                             "class": "_report",
                             "edit": {
                                 "isoline_here": {
@@ -2073,7 +2072,6 @@
                             "fieldfx": "ST_asGeoJson(isoline_15min)",
                             "type": "geometry",
                             "level": 2,
-                            "display": true,
                             "class": "_report",
                             "edit": {
                                 "isoline_here": {
@@ -3034,6 +3032,8 @@
                                   "color": [
                                     "#2196f3", "orange", "red"
                                   ],
+                                  "legend": true,
+                                  "legendAlign": "center",
                                   "max": 200
                                 },
                                 "width": 200,
@@ -3202,6 +3202,8 @@
                                   "color": [
                                     "#2196f3", "orange", "red"
                                   ],
+                                  "legend": true,
+                                  "legendAlign": "center",
                                   "max": 200
                                 },
                                 "width": 200,
@@ -3351,6 +3353,8 @@
                                   "color": [
                                     "#2196f3", "orange", "red"
                                   ],
+                                  "legend": true,
+                                  "legendAlign": "center",
                                   "max": 200
                                 },
                                 "width": 200,
