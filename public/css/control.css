@@ -130,7 +130,7 @@
       position: relative; }
     .locationview .td_images .addImage i {
       color: #1F964D;
-      font-size: 70px;
+      font-size: 30px;
       text-shadow: 2px 2px 2px #999; }
     .locationview .td_images .addImage input {
       display: none; }
@@ -518,7 +518,7 @@ input[type=range]::-moz-range-thumb {
 .ul-drop {
   position: relative;
   cursor: pointer;
-  font-size: smaller; }
+  font-size: small; }
   .ul-drop > .head {
     padding: 10px; }
   .ul-drop > .head:after {
@@ -1088,6 +1088,7 @@ button {
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
   box-sizing: border-box;
   width: 100%;
+  font-family: ffmark_bold;
   /*white-space: nowrap;*/
   white-space: normal;
   overflow: hidden;
@@ -1111,9 +1112,6 @@ button {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-bottom: 6px solid #bbb; }
-
-.tabulator .tabulator-header .tabulator-col.tabulator-col-group > .tabulator-col-content .tabulator-col-title {
-  font-family: ffmark_bold; }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols {
   position: relative;
@@ -1749,9 +1747,9 @@ button {
   font-size: 18px;
   margin-bottom: 10px; }
 .listview .drawer {
-  margin-top: 10px; }
+  margin-top: 4px; }
   .listview .drawer.expandable {
-    max-height: 40px;
+    max-height: 36px;
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.expandable .icon-expander {
@@ -1763,45 +1761,47 @@ button {
     .listview .drawer.expanded .icon-expander {
       -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
       mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
-  .listview .drawer.drawer-group .header {
-    font-style: italic;
-    font-size: 13px;
-    margin-left: 12px;
-    border-bottom: 1px solid #bbb; }
-  .listview .drawer.drawer-group .dashboard {
-    margin-left: 12px; }
-  .listview .drawer.drawer-group .header-group {
-    font-family: ffmark_bold, sans-serif !important;
-    font-size: 14px;
-    line-height: 2;
-    display: flex; }
-    .listview .drawer.drawer-group .header-group > :nth-child(1) {
+  .listview .drawer.drawer-group {
+    margin: 10px 0 16px 0; }
+    .listview .drawer.drawer-group .header {
+      /*font-style: italic;*/
+      font-size: 13px;
+      margin-left: 12px;
+      border-bottom: 1px solid #bbb; }
+    .listview .drawer.drawer-group .dashboard {
+      margin-left: 12px; }
+    .listview .drawer.drawer-group .header-group {
+      font-family: ffmark_bold, sans-serif !important;
+      font-size: 13px;
+      line-height: 2;
+      display: flex; }
+      .listview .drawer.drawer-group .header-group > :nth-child(1) {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis; }
+      .listview .drawer.drawer-group .header-group > :nth-child(2) {
+        margin-left: auto; }
+      .listview .drawer.drawer-group .header-group:hover {
+        cursor: pointer; }
+    .listview .drawer.drawer-group.expandable-group {
+      max-height: 30px;
       overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis; }
-    .listview .drawer.drawer-group .header-group > :nth-child(2) {
-      margin-left: auto; }
-    .listview .drawer.drawer-group .header-group:hover {
-      cursor: pointer; }
-  .listview .drawer.drawer-group.expandable-group {
-    max-height: 30px;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out; }
-    .listview .drawer.drawer-group.expandable-group .icon-expander {
-      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
-      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
-  .listview .drawer.drawer-group.expanded-group {
-    max-height: 2500px; }
-    .listview .drawer.drawer-group.expanded-group .icon-expander {
-      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
-      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
+      transition: max-height 0.3s ease-out; }
+      .listview .drawer.drawer-group.expandable-group .icon-expander {
+        -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+        mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
+    .listview .drawer.drawer-group.expanded-group {
+      max-height: 2500px; }
+      .listview .drawer.drawer-group.expanded-group .icon-expander {
+        -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+        mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
   .listview .drawer .header {
-    font-size: 14px;
+    font-size: 13.5px;
     line-height: 2;
     font-family: ffmark, sans-serif;
     border-bottom: 1px solid #333;
     display: flex;
-    padding: 4px 0; }
+    /*padding: 4px 0;*/ }
     .listview .drawer .header > :nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
@@ -1819,17 +1819,19 @@ button {
     .listview .drawer .header i.inactive {
       color: #849483; }
   .listview .drawer .meta {
-    margin-top: 5px; }
+    margin-top: 10px; }
     .listview .drawer .meta a {
       color: #1F964D;
       font-weight: 600; }
   .listview .drawer .dashboard {
     border-bottom: 1px solid #333;
-    font-size: 14px; }
+    font-size: 13px; }
     .listview .drawer .dashboard .title {
       font-family: ffmark_bold, sans-serif;
       font-size: 14px;
       margin-bottom: 7px; }
+    .listview .drawer .dashboard .legend {
+      padding-top: 5px; }
     .listview .drawer .dashboard .legend > svg {
       width: 100%; }
     .listview .drawer .dashboard .panel {
@@ -1842,7 +1844,8 @@ button {
         .listview .drawer .dashboard .panel.expandable .expander::before {
           content: "expand_more"; }
       .listview .drawer .dashboard .panel.expanded {
-        max-height: 2500px !important; }
+        max-height: 2500px !important;
+        overflow: visible; }
         .listview .drawer .dashboard .panel.expanded .expander::before {
           content: "expand_less"; }
     .listview .drawer .dashboard .block-title {

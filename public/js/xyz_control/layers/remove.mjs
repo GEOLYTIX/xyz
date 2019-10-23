@@ -41,6 +41,8 @@ export default _xyz => function () {
       const table = layer.dataview.tables[key];
       
       if (table.tab) table.remove();
+
+      if(_xyz.dataview.nav_dropdown && !_xyz.dataview.nav_dropdown.firstChild) _xyz.map.updateSize();
       
     });
 
@@ -50,6 +52,8 @@ export default _xyz => function () {
       const chart = layer.dataview.charts[key];
       
       if (chart.tab) chart.remove();
+
+      if(_xyz.dataview.nav_dropdown && !_xyz.dataview.nav_dropdown.firstChild) _xyz.map.updateSize();
       
     });
 

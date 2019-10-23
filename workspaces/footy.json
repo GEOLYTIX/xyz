@@ -1,0 +1,46 @@
+{
+    "title": "XYZ Footy",
+    "locales": {
+        "Global": {
+            "minZoom": 2,
+            "maxZoom": 14,
+            "layers": {
+                "Mapbox Base": {
+                    "display": true,
+                    "attribution": {
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "format": "tiles",
+                    "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
+                },
+                "Players": {
+                    "display": true,
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "adm_premier_players_00",
+                    "geom": "geom_p_4326",
+                    "srid": "4326",
+                    "qID": "id",
+                    "cluster_label": "(lastname || ' ' || season)",
+                    "infoj": [
+                        {
+                            "label": "Name",
+                            "field": "firstname",
+                            "type": "text"
+                        },
+                        {
+                            "field": "lastname",
+                            "type": "text"
+                        },
+                        {
+                            "label": "Nationality",
+                            "field": "nationality",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

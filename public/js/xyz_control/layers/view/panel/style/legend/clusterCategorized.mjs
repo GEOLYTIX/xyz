@@ -18,7 +18,7 @@ export default _xyz => layer => {
     >`;
 
     image.setAttribute('y', y);
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style)));
+    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
 
     legend.appendChild(image);
 

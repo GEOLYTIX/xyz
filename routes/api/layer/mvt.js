@@ -62,7 +62,7 @@ module.exports = fastify => {
       const filter_sql = filter && await sql_filter(filter) || '';
 
       // Use MVT cache if set on layer and no filter active.
-      const mvt_cache = (!filter_sql && layer.mvt_cache);
+      const mvt_cache = (!filter_sql && (!layer.roles || !Object.keys(layer.roles).length) && layer.mvt_cache);
 
       if (mvt_cache) {
 

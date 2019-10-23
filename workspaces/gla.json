@@ -53,7 +53,7 @@
                     "dbs": "XYZ",
                     "table": "gla.gla",
                     "geom": "geom",
-                    "srid": 4326,
+                    "srid": "4326",
                     "qID": "id",
                     "cluster_label": "organisation_short",
                     "cluster_kmeans": 0.3,
@@ -381,7 +381,7 @@
                     "dbs": "XYZ",
                     "table": "gla.gla",
                     "geom": "geom",
-                    "srid": 4326,
+                    "srid": "4326",
                     "roles": {
                         "edit": null
                     },

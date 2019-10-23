@@ -20,6 +20,8 @@ module.exports = fastify => {
 
   require('./layer/mvt')(fastify);
 
+  require('./layer/label')(fastify);
+
   require('./layer/table')(fastify);
 
   require('./layer/chart')(fastify);
