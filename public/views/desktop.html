@@ -77,28 +77,18 @@ data-token={{:token}}>
                     <button id="btnZoomOut" class="icons-remove xyz-icon">
                     </button>
         
-                    <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                        <a href="{{:hrefDocumentation}}" target="_blank">
-                            <i class="material-icons">school</i>
-                        </a>
-                    </div>
-        
-                    <a
-                        {{:btnLogin}}
-                        id="btnLogin"
-                        title="{{:btnLogin_text}}"
-                        class="icons-lock-open"
-                        href="{{:dir}}{{:btnLogin_path}}">
+                    <a id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}
+                    class="icons-school xyz-icon" href="{{:hrefDocumentation}}" target="_blank">       
                     </a>
-        
-                    <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
-                        <a href="{{:dir}}/user/admin" target="_blank">
-                            <i class="material-icons">supervisor_account</i>
-                        </a>
-                    </div>
-        
-                    <button id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
-                        <i class="material-icons">settings</i>
+                    
+                    <a id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}} class="icons-lock-open xyz-icon" href="{{:dir}}{{:btnLogin_path}}">    
+                    </a>
+                    
+                    <a id="btnAdmin" title="Open account admin view" {{:btnAdmin}}
+                    class="icons-supervisor-account xyz-icon" href="{{:dir}}/user/admin" target="_blank">
+                    </a>
+            
+                    <button id="btnWorkspace" title="Open workspace configuration view" class="icons-settings xyz-icon" {{:btnEditor}}>
                     </button>            
         
                     <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." class="icons-bug-report xyz-icon"{{:btnLogRocket}}>
@@ -157,6 +147,8 @@ data-token={{:token}}>
         <div id="codemirror" class="codemirror"></div>
 
     </div>
+
+    <div id="desktop_mask"></div>
 
 </body>
 

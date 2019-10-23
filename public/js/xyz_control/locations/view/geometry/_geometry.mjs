@@ -65,7 +65,6 @@ export default _xyz => entry => {
 
   if (entry.value) entry.display = true;
 
-  if (entry.display && entry.edit && !entry.value) entry.ctrl.showGeom(entry); // allow isoline to be automatically created
 
   td.appendChild(_xyz.utils.wire()`
   <td style="padding-top: 5px;" colSpan=2>

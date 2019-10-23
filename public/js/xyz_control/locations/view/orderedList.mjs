@@ -1,7 +1,5 @@
 export default _xyz => entry => {
 
-  if(!_xyz.dataview.node && !document.getElementById(entry.target_id)) return;
-
   entry.row.appendChild(_xyz.utils.wire()`
   <td style="padding-top: 5px;" colSpan=2>
   <label class="checkbox">

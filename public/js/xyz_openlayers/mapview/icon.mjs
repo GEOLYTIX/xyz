@@ -1,7 +1,5 @@
 export default _xyz => function(icon) {
 
-  if(icon.svg || (icon.type && icon.type !== 'circle')) icon.url = _xyz.utils.svg_symbols(icon);
-
   if (icon.type && icon.type === 'circle') return new _xyz.mapview.lib.style.Circle({
     radius: parseInt(icon.radius) || 10,
     fill: icon.fillColor && new _xyz.mapview.lib.style.Fill({
@@ -12,6 +10,8 @@ export default _xyz => function(icon) {
       width: parseInt(icon.strokeWidth) || 1
     })
   });
+
+  if (icon.type) icon.url = _xyz.utils.svg_symbols(icon);
 
   return new _xyz.mapview.lib.style.Icon({
     src: icon.url,

@@ -37,9 +37,8 @@ export default (_xyz, layer) => {
     <input type="checkbox"
     checked=${!!layer.style.label.display}
     onchange=${e => {
-      layer.style.label.display = e.target.checked;
-      layer.show();
-    }}></input><span>Display Labels.`);
+    layer.style.label.display = e.target.checked;
+    layer.show();}}></input><span>Display Labels.`);
   }
 
 

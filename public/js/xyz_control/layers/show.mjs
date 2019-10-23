@@ -12,11 +12,21 @@ export default _xyz => function () {
 
   if(layer.style && layer.style.label){
 
-    _xyz.map.getLayers().forEach(l => {
-      l === layer.label && _xyz.map.removeLayer(layer.label);
-    });
+    if(layer.style.label.display) {
 
-    layer.style.label.display && _xyz.map.addLayer(layer.label);
+      _xyz.map.getLayers().forEach(l => {
+        if(l === layer.label) _xyz.map.removeLayer(layer.label);
+      });
+      
+      _xyz.map.addLayer(layer.label);
+    
+    } else {
+
+      _xyz.map.getLayers().forEach(l => {
+        if(l === layer.label) _xyz.map.removeLayer(layer.label);
+      });
+    }
+    
   }
 
   _xyz.mapview.attribution.check();

@@ -1,6 +1,6 @@
 export default _xyz => param => {
 
-    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block; text-align: center;">`;
+    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block;">`;
 
     param.documentControl.container.appendChild(param.documentControl.add_doc);
 

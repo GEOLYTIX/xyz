@@ -28,14 +28,22 @@ export default _xyz => {
     _xyz.mapview.node.addEventListener('click', select);
 
     _xyz.mapview.node.addEventListener('touchstart', touchSelect);
+  
+    //_xyz.mapview.node.addEventListener('touchstart', pointerMove);
+
+    //_xyz.mapview.node.addEventListener('touchstart', mouseMove);
 
     _xyz.mapview.node.addEventListener('mousemove', mouseMove);
-
+  
+    _xyz.mapview.node.addEventListener('mousemove', pointerMove);
+  
     _xyz.mapview.node.addEventListener('mouseout', mouseOut);
 
   };
 
   function mouseOut(e) {
+
+    //console.log(e);;
 
     _xyz.mapview.pointerLocation = {
       x: null,
@@ -45,19 +53,19 @@ export default _xyz => {
   }
 
   function mouseMove(e) {
-    e.preventDefault();
+
+    //console.log(e);;
 
     _xyz.mapview.pointerLocation = {
       x: e.clientX,
       y: e.clientY
     };
-    _xyz.mapview.infotip.node && _xyz.mapview.infotip.position();
-
-    clearTimeout(_xyz.mapview.interaction.timeout);
-    _xyz.mapview.interaction.timeout = setTimeout(()=>pointerMove(e), 100);
+    if (_xyz.mapview.infotip.node) _xyz.mapview.infotip.position();
   }
 
   function pointerMove(e) {
+
+    //console.log(e);
 
     const featureSet = new Set();
 
@@ -68,7 +76,7 @@ export default _xyz => {
       featureSet.add(feature);
 
       if (_xyz.mapview.interaction.highlight.featureSet.has(feature)) return;
-
+  
       // Set highlight layer / feature.
       _xyz.mapview.interaction.highlight.feature = feature;
       _xyz.mapview.interaction.highlight.layer = featureLayer.get('layer');
@@ -76,17 +84,17 @@ export default _xyz => {
 
       _xyz.mapview.node.style.cursor = 'pointer';
 
+      // Check for hover.
+      if (_xyz.mapview.interaction.highlight.layer.hover && _xyz.mapview.interaction.highlight.layer.hover.field) {
+        _xyz.mapview.interaction.highlight.layer.infotip();
+      }
+
       // Redraw layer to style highlight.
       _xyz.mapview.interaction.highlight.layer.L.setStyle(
         _xyz.mapview.interaction.highlight.layer.L.getStyle()
       );
 
-      // Check for hover.
-      _xyz.mapview.interaction.highlight.layer.hover
-        && _xyz.mapview.interaction.highlight.layer.hover.field
-        && _xyz.mapview.interaction.highlight.layer.infotip();
-
-    }, {
+    },{
       layerFilter: featureLayer => {
 
         // Filter for layers which have a highlight style.
@@ -107,11 +115,13 @@ export default _xyz => {
 
   function touchSelect(e) {
 
+    //console.log(e);
+
     if (e.touches.length > 1) return;
 
     //e.preventDefault();
     _xyz.mapview.node.removeEventListener('click', select);
-
+    
     const featureSet = new Set();
 
     // Iterate through all features (with layer) at pixel
@@ -121,12 +131,12 @@ export default _xyz => {
       featureSet.add(feature);
 
       if (_xyz.mapview.interaction.highlight.featureSet.has(feature)) return;
-
+  
       // Set highlight layer / feature.
       _xyz.mapview.interaction.highlight.feature = feature;
       _xyz.mapview.interaction.highlight.layer = featureLayer.get('layer');
 
-    }, {
+    },{
       layerFilter: featureLayer => {
 
         // Filter for layers which have a highlight style.
@@ -147,20 +157,25 @@ export default _xyz => {
   function finish() {
     _xyz.mapview.node.removeEventListener('click', select);
     _xyz.mapview.node.removeEventListener('touchstart', touchSelect);
+    // _xyz.mapview.node.removeEventListener('touchstart', pointerMove);
+    // _xyz.mapview.node.removeEventListener('touchstart', mouseMove);
+    _xyz.mapview.node.removeEventListener('mousemove', pointerMove);
     _xyz.mapview.node.removeEventListener('mousemove', mouseMove);
     _xyz.mapview.node.removeEventListener('mouseout', mouseOut);
   }
 
   function select(e) {
 
+    //console.log(e);;
+
     //if (e.mozInputSource === 5) return;
 
     if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
 
     if (!_xyz.mapview.interaction.highlight.layer) return;
-
+    
     if (!_xyz.mapview.interaction.highlight.feature) return;
-
+  
     _xyz.mapview.interaction.highlight.layer.select(_xyz.mapview.interaction.highlight.feature);
   }
 
@@ -171,7 +186,7 @@ export default _xyz => {
     if (_xyz.mapview.infotip.node) _xyz.mapview.infotip.node.remove();
 
     if (!_xyz.mapview.interaction.highlight.layer) return;
-
+  
     _xyz.mapview.interaction.highlight.layer.highlight = true;
     _xyz.mapview.node.style.cursor = 'auto';
     _xyz.mapview.interaction.highlight.layer.L.setStyle(_xyz.mapview.interaction.highlight.layer.L.getStyle());

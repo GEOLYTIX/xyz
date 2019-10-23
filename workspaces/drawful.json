@@ -18,7 +18,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.draw__mvts",
-                    "srid": "3857",
+                    "srid": 3857,
                     "geom": "tile",
                     "style": {
                         "default": {
@@ -32,7 +32,7 @@
                     "format": "mvt",
                     "dbs": "XYZ",
                     "table": "dev.draw",
-                    "srid": "3857",
+                    "srid": 3857,
                     "geom": "geom",
                     "qID": "id",
                     "edit": {

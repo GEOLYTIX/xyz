@@ -1,7 +1,5 @@
 export default _xyz => table => {
 
-  _xyz.map.updateSize();
-
   let style = {};
 
   // Give selection colour if relevant

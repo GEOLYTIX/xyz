@@ -6,7 +6,7 @@
         margin-bottom: 10px;
     }
     .drawer {
-        margin-top: 4px;
+        margin-top: 10px;
         &.expandable {
             max-height: 34px;
             overflow: hidden;
@@ -26,10 +26,8 @@
         }
         &.drawer-group {
 
-            margin: 10px 0 16px 0;
-
                 .header {
-                    /*font-style: italic;*/
+                    font-style: italic;
                     font-size: 13px;
                     margin-left: 12px;
                     border-bottom: 1px solid #bbb;
@@ -41,7 +39,7 @@
 
             .header-group {
                 font-family: ffmark_bold, sans-serif !important;
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 2;
                 display: flex;
 
@@ -77,12 +75,12 @@
             }
         }
         .header {
-            font-size: 13.5px;
+            font-size: 14px;
             line-height: 2;
             font-family: ffmark, sans-serif;
             border-bottom: 1px solid #333;
             display: flex;
-            /*padding: 4px 0;*/
+            padding: 4px 0;
 
             >:nth-child(1){
                 overflow: hidden;
@@ -112,7 +110,7 @@
             }
         }
         .meta {
-            margin-top: 10px;
+            margin-top: 5px;
             a {
                 color: $glxgreen;
                 font-weight: 600;
@@ -120,14 +118,11 @@
         }
         .dashboard {
             border-bottom: 1px solid #333;
-            font-size: 13px;
+            font-size: 14px;
             .title {
                 font-family: ffmark_bold, sans-serif;
                 font-size: 14px;
                 margin-bottom: 7px;
-            }
-            .legend {
-                padding-top: 5px;
             }
             .legend>svg {
                 width: 100%;
@@ -145,7 +140,6 @@
                 }
                 &.expanded {
                     max-height: 2500px !important;
-                    overflow: visible;
                     .expander::before {
                         content: "expand_less"
                     }

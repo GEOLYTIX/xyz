@@ -137,7 +137,7 @@ export default _xyz => table => {
 
       _xyz.locations.select({
         locale: _xyz.workspace.locale.key,
-        layer: table.layer,
+        layer: table.layer.key,
         table: table.from,
         id: rowData.qid,
       });

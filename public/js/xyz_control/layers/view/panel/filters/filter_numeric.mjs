@@ -1,9 +1,4 @@
-import filter_reset from './filter_reset.mjs';
-
 export default (_xyz, layer, filter_entry) => {
-
-  // Reset deselected filter
-  if(filter_entry.el && filter_entry.el.parentNode) return filter_reset(layer, filter_entry);
 
   const xhr = new XMLHttpRequest();
 
@@ -15,7 +10,7 @@ export default (_xyz, layer, filter_entry) => {
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: layer.key,
-      table: layer.tableCurrent(),
+      table: layer.table,
       field: filter_entry.field,
       filter: JSON.stringify(filter),
       token: _xyz.token}));
@@ -29,13 +24,7 @@ export default (_xyz, layer, filter_entry) => {
 
     const block = layer.filter.block(filter_entry);
 
-    // identify element with filter field
-    block.dataset.field = filter_entry.field;
-
-    // Bind element with filter entry
-    filter_entry.el = block;
-
-    const step = filter_entry.type === 'integer' ? 1 : 0.01;
+    const step = entry.type === 'integer' ? 1 : 0.01;
      
     // Label for min / greater then control.   
     block.appendChild(_xyz.utils.wire()`<div class="range-label">Greater or equal`);
@@ -54,8 +43,8 @@ export default (_xyz, layer, filter_entry) => {
 
     block.appendChild(input_min);
 
-    var div_min = _xyz.utils.wire()`<div class="range">`;
-    block.appendChild(div_min);
+    var div = _xyz.utils.wire()`<div class="range">`;
+    block.appendChild(div);
 
     const slider_min = _xyz.utils.wire()`
     <input
@@ -68,7 +57,7 @@ export default (_xyz, layer, filter_entry) => {
         input_min.value = e.target.value;
         applyFilter();}}>`;
 
-    div_min.appendChild(slider_min);
+    block.appendChild(slider_min);
   
     // Label for max / smaller then control.
     block.appendChild(_xyz.utils.wire()`<div class="range-label">Smaller or equal`);
@@ -87,8 +76,8 @@ export default (_xyz, layer, filter_entry) => {
 
     block.appendChild(input_max);
 
-    var div_max = _xyz.utils.wire()`<div class="range">`;
-    block.appendChild(div_max);
+    var div = _xyz.utils.wire()`<div class="range">`;
+    block.appendChild(div);
 
     const slider_max = _xyz.utils.wire()`
     <input
@@ -101,7 +90,7 @@ export default (_xyz, layer, filter_entry) => {
         input_max.value = e.target.value;
         applyFilter();}}>`;
 
-    div_max.appendChild(slider_max);
+    block.appendChild(slider_max);
 
 
     // Use timeout to debounce applyFilter from multiple and slider inputs.

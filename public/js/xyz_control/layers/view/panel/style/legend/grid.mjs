@@ -1,7 +1,7 @@
 export default _xyz => layer => {
 
   // Create grid_size dropdown.
-  layer.style.legend.appendChild(_xyz.utils.wire()`<div style="margin-top: 5px;">Select size variable.`);
+  layer.style.legend.appendChild(_xyz.utils.wire()`<div style="margin-top: 5px;"><small>Select size variable.`);
 
   layer.style.legend.appendChild(_xyz.utils.dropdownCustom({
     entries: Object.keys(layer.grid_fields),
@@ -16,7 +16,7 @@ export default _xyz => layer => {
   }));
 
   // Create grid_color dropdown.
-  layer.style.legend.appendChild(_xyz.utils.wire()`<div style="margin-top: 5px; margin-bottom: 8px;">Select colour variable.`);
+  layer.style.legend.appendChild(_xyz.utils.wire()`<div style="margin-top: 5px; margin-bottom: 8px;"><small>Select colour variable.`);
 
   layer.style.legend.appendChild(_xyz.utils.dropdownCustom({
     entries: Object.keys(layer.grid_fields),

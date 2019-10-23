@@ -16,7 +16,7 @@ export default _xyz => params => {
 
   _xyz.mapview.srid = params.srid || '3857';
 
-  const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || _xyz.workspace.locale.minZoom || 0;
+  const z = (params.view && params.view.z) || _xyz.workspace.locale.view.z || 5;
 
   const center = _xyz.mapview.lib.proj.fromLonLat([
     parseFloat((params.view && params.view.lng) || _xyz.workspace.locale.view.lng || 0),
@@ -31,7 +31,7 @@ export default _xyz => params => {
       mouseWheelZoom: params.scrollWheelZoom || false 
     }),
     controls: [],
-    view: new _xyz.mapview.lib.View({ 
+    view: new _xyz.mapview.lib.View({
       projection: 'EPSG:'+_xyz.mapview.srid,
       zoom: z,
       minZoom: _xyz.workspace.locale.minZoom,

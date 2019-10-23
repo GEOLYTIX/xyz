@@ -2,8 +2,6 @@ import select from './select.mjs';
 
 import selectCallback from './selectCallback.mjs';
 
-import draw from './draw.mjs';
-
 import listview from './listview.mjs';
 
 import remove from './remove.mjs';
@@ -48,8 +46,6 @@ export default _xyz => ({
         clipboard: clipboard(_xyz),
       
         view: view(_xyz),
-
-        draw: draw(_xyz),
           
         geometries: [],
         

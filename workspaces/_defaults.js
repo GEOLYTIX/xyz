@@ -64,6 +64,7 @@ module.exports = {
     },
     cluster: {
       srid: '4326',
+      cluster_kmeans: 0.1,
       style: {
         markerMin: 20,
         markerMax: 40,

@@ -175,7 +175,7 @@ module.exports = fastify => {
     const msgs = {
       fail: 'Login has failed.<br />'
       + 'This may be due to insufficient priviliges or the account being locked.<br />'
-      + 'Please check your inbox for an email with additional details.',
+      + 'More details will have been sent via mail to prevent user enumeration.',
       validation: 'Please check your inbox for an email with additional details.',
       reset: 'The password has been reset for this account.',
       approval: 'This account has been verified but requires administrator approval.',

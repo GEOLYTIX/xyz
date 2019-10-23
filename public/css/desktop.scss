@@ -22,7 +22,7 @@ body {
 
     #localeDropdown .ul-drop .head span {
         padding: 4px;
-        border-radius: 2px;
+        border-radius: 4px;
         background-color: $glxlightgreen;
     }
 
@@ -103,6 +103,7 @@ body {
 }
 
 #desktop_mask {
+    display: none;
     position: fixed;
     width: 100%;
     height: 100%;

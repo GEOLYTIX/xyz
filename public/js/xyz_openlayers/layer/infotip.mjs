@@ -11,7 +11,7 @@ export default _xyz => function() {
           _xyz.utils.paramString({
             locale: _xyz.workspace.locale.key,
             layer: layer.key,
-            table: layer.tableCurrent(),
+            table: layer.table,
             id: layer.highlight,
             coords: layer.format === 'cluster' && _xyz.mapview.lib.proj.transform(_xyz.mapview.interaction.highlight.feature.getGeometry().getCoordinates(),'EPSG:' + _xyz.mapview.srid,'EPSG:' + layer.srid),
             field: layer.hover.field,

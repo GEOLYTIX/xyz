@@ -16,7 +16,7 @@ module.exports = fastify => {
       SELECT * FROM acl_schema.acl_table WHERE verificationtoken = $1;`,
       [req.params.token]);
   
-      if (rows.err) return res.send('There seems to be a problem with the ACL configuration.');
+      if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
       const user = rows[0];
   
@@ -35,10 +35,10 @@ module.exports = fastify => {
       WHERE lower(email) = lower($1);`,
       [user.email]);
   
-      if (rows.err) return res.send('There seems to be a problem with the ACL configuration.');
+      if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
       // Return on password reset; Do NOT notify administrator
-      if (user.password_reset) return res.send(env.path + '/login?msg=reset');
+      if (user.password_reset) return res.redirect(env.path + '/login?msg=reset');
   
       // Notify administrator if user needs to be approved.
       if (!user.approved) {
@@ -46,7 +46,7 @@ module.exports = fastify => {
         // Get all admin accounts from the ACL.
         rows = await env.acl('SELECT email FROM acl_schema.acl_table WHERE admin_user = true;');
     
-        if (rows.err) return res.send('There seems to be a problem with the ACL configuration.');
+        if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
   
         if (rows.length === 0) return console.log('No admin accounts were found.');
   
@@ -62,7 +62,7 @@ module.exports = fastify => {
               + `!!! If you do not recognize this email address consider blocking the account >>> ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/user/block/${approvaltoken}`
         });
   
-        return res.send('This account has been verified but requires administrator approval.');
+        return res.redirect(env.path + '/login?msg=approval');
       }
   
       res.redirect(env.path + '/login');
