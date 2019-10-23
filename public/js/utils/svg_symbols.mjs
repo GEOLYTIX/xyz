@@ -1,6 +1,6 @@
 export default marker => {
 
-  if (typeof(marker) == 'string') return marker;
+  //if (typeof(marker) == 'string') return marker;
 
   if (marker.svg) return marker.svg;
 

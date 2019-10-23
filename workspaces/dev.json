@@ -411,6 +411,137 @@
                         }
                     ]
                 },
+                "Global Airports": {
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "geom": "geom_p_4326",
+                    "srid": "4326",
+                    "table": "geodata.global_glx_geodata_transport_airport",
+                    "cluster_kmeans": 0.05,
+                    "cluster_dbscan": 0.01,
+                    "cluster_label": "short_name",
+                    "hover": {
+                        "field": "short_name"
+                    },
+                    "dataview": {
+                        "tables": {
+                            "airports": {
+                                "display": true,
+                                "title": "Global Airports",
+                                "from": "geodata.global_glx_geodata_transport_airport",
+                                "columns": [
+                                    {
+                                        "field": "full_name",
+                                        "title": "Full name"
+                                    },
+                                    {
+                                        "field": "short_name",
+                                        "title": "Short name"
+                                    },
+                                    {
+                                        "field": "main_city",
+                                        "title": "Main city"
+                                    },
+                                    {
+                                        "field": "country",
+                                        "title": "Country"
+                                    },
+                                    {
+                                        "field": "iata",
+                                        "title": "IATA Code"
+                                    },
+                                    {
+                                        "field": "icao",
+                                        "title": "ICAO Code"
+                                    },
+                                    {
+                                        "field": "rank_group",
+                                        "title": "Rank group",
+                                        "align": "right",
+                                        "formatter": "money",
+                                        "formatterParams": {
+                                            "precision": 0
+                                        }
+                                    },
+                                    {
+                                        "field": "rank",
+                                        "title": "Rank",
+                                        "align": "right",
+                                        "formatter": "money",
+                                        "formatterParams": {
+                                            "precision": 0
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "style": {
+                        "label": {
+                            "field": "short_name",
+                            "display": true,
+                            "declutter": true,
+                            "strokeColor": "#fff",
+                            "strokeWidth": 3
+                        },
+                        "markerMin": 40,
+                        "markerMax": 60,
+                        "anchor": [
+                            20,
+                            40
+                        ],
+                        "marker": {
+                            "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_transport_airport.svg"
+                        },
+                        "markerMulti": {
+                            "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_transport_airport.svg"
+                        }
+                    },
+                    "filter": {
+                        "infoj": [
+                            {
+                                "label": "ID count",
+                                "field": "id_count",
+                                "type": "integer",
+                                "inline": true,
+                                "fieldfx": "count(id)"
+                            }
+                        ]
+                    },
+                    "infoj": [
+                        {
+                            "type": "key"
+                        },
+                        {
+                            "field": "full_name",
+                            "label": "Full Name",
+                            "inline": true
+                        },
+                        {
+                            "field": "short_name",
+                            "label": "Short Name",
+                            "inline": true
+                        },
+                        {
+                            "field": "main_city",
+                            "label": "City",
+                            "inline": true
+                        },
+                        {
+                            "field": "country",
+                            "label": "Country",
+                            "filter": "like",
+                            "inline": true
+                        },
+                        {
+                            "field": "rank",
+                            "label": "Rank",
+                            "filter": "numeric",
+                            "inline": true
+                        }
+                    ]
+                },
                 "Mapbox Label": {
                     "group": "Base Layer",
                     "format": "tiles",
