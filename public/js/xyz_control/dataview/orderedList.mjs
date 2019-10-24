@@ -48,11 +48,11 @@ export default _xyz => (table, callback) => {
 
   table.activate = () => {
 
-    _xyz.dataview.node.querySelector('.tab-content').innerHTML = '';
+    table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);
 
     table.target = _xyz.utils.wire()`<div class="table">`;
 
-    _xyz.dataview.node.querySelector('.tab-content').appendChild(table.target);
+    if(_xyz.dataview.node) _xyz.dataview.node.querySelector('.tab-content').appendChild(table.target);
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target, {
