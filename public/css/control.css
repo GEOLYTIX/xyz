@@ -1751,7 +1751,7 @@ button {
 .listview .drawer {
   margin-top: 10px; }
   .listview .drawer.expandable {
-    max-height: 34px;
+    max-height: 40px;
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.expandable .icon-expander {
