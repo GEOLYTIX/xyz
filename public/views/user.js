@@ -81,7 +81,7 @@ xhr.onload = e => {
           field: 'blocked',
           align: 'center',
           headerTooltip: 'Blocked accounts can no longer login or reset their password.',
-          titleFormatter: ()=> '<div class="icons-lock-closed"></div>',
+          titleFormatter: ()=> '<div class="icons-lock-closed xyz-icon"></div>',
           formatter: 'tickCross',
           cellClick: cellToggle,
         },

@@ -239,10 +239,10 @@
     background-image: url("../icons/icons-checkbox-unchecked.svg");
 }
 
-.icons-face {
-    background-image: url("../icons/icons-face.svg");
+.icons-location-tick {
+    -webkit-mask-image: url("../icons/icons-location-tick.svg");
+    mask-image: url("../icons/icons-location-tick.svg");
 }
-
 //NON SVG PROPERTIES//
 .xyz-icon {
     background-size: 32px 50px;    

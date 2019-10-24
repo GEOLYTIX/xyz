@@ -189,15 +189,15 @@ location.view.header.appendChild(_xyz.utils.wire()`
 <button
 style = "${'background-color: ' + location.style.strokeColor}"
 title = "Hide marker"
-class = "icons-location cursor noselect btn_header xyz-icon" 
+class = "icons-location-tick cursor noselect btn_header xyz-icon" 
 onclick = ${e => {
   e.stopPropagation();
   if(e.target.classList.contains('icons-location')){
     e.target.classList.remove('icons-location')
-    e.target.classList.add('icons-layers')
+    e.target.classList.add('icons-location-tick')
     _xyz.map.addLayer(location.Marker);
   } else {
-    e.target.classList.remove('icons-layers');
+    e.target.classList.remove('icons-location-tick');
     e.target.classList.add('icons-location');
     _xyz.map.removeLayer(location.Marker);
   }

@@ -1755,14 +1755,14 @@ button {
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.expandable .icon-expander {
-      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
-      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
   .listview .drawer.expanded {
     overflow: visible;
     max-height: 2500px; }
     .listview .drawer.expanded .icon-expander {
-      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
-      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
   .listview .drawer.drawer-group .header {
     font-style: italic;
     font-size: 13px;
@@ -1788,13 +1788,13 @@ button {
     overflow: hidden;
     transition: max-height 0.3s ease-out; }
     .listview .drawer.drawer-group.expandable-group .icon-expander {
-      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
-      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
   .listview .drawer.drawer-group.expanded-group {
     max-height: 2500px; }
     .listview .drawer.drawer-group.expanded-group .icon-expander {
-      -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
-      mask-image: url("../icons/icons-keyboard-arrow-down.svg"); }
+      -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+      mask-image: url("../icons/icons-keyboard-arrow-up.svg"); }
   .listview .drawer .header {
     font-size: 14px;
     line-height: 2;
@@ -2190,8 +2190,9 @@ button {
 .icons-checkbox-unchecked {
   background-image: url("../icons/icons-checkbox-unchecked.svg"); }
 
-.icons-face {
-  background-image: url("../icons/icons-face.svg"); }
+.icons-location-tick {
+  -webkit-mask-image: url("../icons/icons-location-tick.svg");
+  mask-image: url("../icons/icons-location-tick.svg"); }
 
 .xyz-icon {
   background-size: 32px 50px;

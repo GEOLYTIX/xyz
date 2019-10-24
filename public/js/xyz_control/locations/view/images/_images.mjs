@@ -48,7 +48,7 @@ export default _xyz => entry => {
 
     // Add delete button if images entry is editable.
     if(entry.edit) imageCell.appendChild(_xyz.utils.wire()`
-      <button title="Delete image" class="cursor"
+      <button title="Delete image" class="cursor" style="background-color:white;"
       onclick=${
         e => {
           e.target.remove();

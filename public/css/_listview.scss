@@ -12,16 +12,16 @@
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             .icon-expander {
-                -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
-                mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+                -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+                mask-image: url("../icons/icons-keyboard-arrow-down.svg");
             }
         }
         &.expanded {
             overflow: visible;
             max-height: 2500px;
             .icon-expander {
-                -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
-                mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+                -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+                mask-image: url("../icons/icons-keyboard-arrow-up.svg");
             }
         }
         &.drawer-group {
@@ -62,15 +62,15 @@
                 overflow: hidden;
                 transition: max-height 0.3s ease-out;
                 .icon-expander {
-                    -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
-                    mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+                    -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+                    mask-image: url("../icons/icons-keyboard-arrow-down.svg");
                 }
             }
             &.expanded-group {
                 max-height: 2500px;
                 .icon-expander {
-                    -webkit-mask-image: url("../icons/icons-keyboard-arrow-down.svg");
-                    mask-image: url("../icons/icons-keyboard-arrow-down.svg");
+                    -webkit-mask-image: url("../icons/icons-keyboard-arrow-up.svg");
+                    mask-image: url("../icons/icons-keyboard-arrow-up.svg");
                 }
             }
         }
