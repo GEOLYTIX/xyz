@@ -6,7 +6,7 @@ export default _xyz => param => {
 
     // Add label and doc upload icon.
     param.documentControl.add_doc_label = _xyz.utils.wire()`<label class="icons-add-document cursor noselect xyz-icon filter"
-    style="display: block; height: 32px; width: 10%;"
+    style="cursor: pointer; font-size: 36px; text-shadow: 2px 2px 2px #999;"
     >`;
 
     param.documentControl.add_doc_label.htmlFor = `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`;

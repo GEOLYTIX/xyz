@@ -6,7 +6,7 @@ export default _xyz => (entry) => {
 
   // Add label and image upload icon.
   entry.ctrl.add_img_label = _xyz.utils.wire()`<label class="icons-add-photo cursor noselect"
-  style="display:block;">`;
+  style="cursor: pointer; font-size: 36px; text-shadow: 2px 2px 2px #999;">`;
 
   entry.ctrl.add_img_td.appendChild(entry.ctrl.add_img_label);
 
