@@ -54,8 +54,8 @@ export default _xyz => group => {
 
 
     const chartIcon = {
-      'line':  'icons-view-list',
-      'bar':  'icons-view-list',
+      'line':  'icons-bar-chart',
+      'bar':  'icons-bar-chart',
       'pie':  'pie_chart',
       'doughnut':  'donut_small',
       'horizontalBar':  'notes',
@@ -64,10 +64,10 @@ export default _xyz => group => {
       'radar':  'multiline_chart',
       'polarArea':  'multiline_chart',
       'mixed':  'multiline_chart',
-      'stackedBar':  'icons-view-list',
+      'stackedBar':  'icons-bar-chart',
    }
 
-   group.chartIcon = group.chart.type && chartIcon[group.chart.type] || 'icons-view-list';
+   group.chartIcon = group.chart.type && chartIcon[group.chart.type] || 'icons-bar-chart';
 
     // Add chart control to group header for toggling
     group.viewToggler = _xyz.utils.wire()`
@@ -80,7 +80,7 @@ export default _xyz => group => {
         e.stopPropagation();
 
         e.target.classList.toggle(group.chartIcon);
-        e.target.classList.toggle('icons-bar-chart');
+        e.target.classList.toggle('icons-view-list');
         group.div.classList.toggle('chart');
 
       }
@@ -94,55 +94,24 @@ export default _xyz => group => {
   
       group.viewToggler.classList.remove('icons-bar-chart');
       group.viewToggler.classList.add('icons-view-list');
-      group.viewToggler.title = 'Show Table';
-      console.log('yes');
+      
       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
     group.showTable = (e) => {
 
       group.viewToggler.classList.remove('icons-view-list');
       group.viewToggler.classList.add('icons-bar-chart');
-      console.log('no');
-
-      group.viewToggler.title = 'Show Chart';
 
       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
 
     // Use the appropriate toggle function to initialise
-    if (group.chartIcon) {
+    if (group.chart.active) {
       group.showChart();
-      console.log('test1');  // if explicitly specified
+    // if explicitly specified
     } else {
-      console.log('test2');
       group.showTable();  // default
     }
   }
 
 };
-
-// if (group.chart.active) {
-//   group.showChart();  // if explicitly specified
-// } else {
-//   group.showTable();  // default
-// }
-
-// function chartIcon(group) {
-//   if (!group.chart.type) {
-//     group.chart.type = 'line';
-//   }
-//   switch (group.chart.type) {
-//   case 'line': return 'show_chart';
-//   case 'bar': return 'insert_chart_outlined';
-//   case 'pie': return 'pie_chart';
-//   case 'doughnut': return 'donut_small';
-//   case 'horizontalBar': return 'notes';
-//   case 'bubble': return 'bubble_chart';
-//   case 'scatter': return 'scatter_plot';
-//   case 'radar': return 'multiline_chart';
-//   case 'polarArea': return 'multiline_chart';
-//   case 'mixed': return 'multiline_chart';
-//   case 'stackedBar': return 'insert_chart_outlined';
-//   default: return 'show_chart';
-//   }
-// }

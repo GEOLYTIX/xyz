@@ -116,7 +116,7 @@
     .locationview .table-section.expanded .t-expander::before {
       content: "expand_less"; }
   .locationview .table-section.chart table {
-    display: block; }
+    display: inline-table; }
   .locationview .table-section.chart .chart {
     display: none; }
   .locationview .table-section:not(.chart) table {
