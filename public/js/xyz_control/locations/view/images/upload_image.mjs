@@ -26,7 +26,7 @@ export default _xyz => (entry, img, dataURL) => {
     img.src = json.image_url;
 
     img.parentNode.appendChild(_xyz.utils.wire()`
-      <button title="Delete image" class="cursor" style="font-size: 14px;"
+      <button title="Delete image" class="cursor" style="font-size: 14px; background-color:white;"
       onclick=${
         e => {
           e.target.remove();

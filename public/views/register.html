@@ -91,11 +91,11 @@
             box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
         }
 
-        button:hover:enabled {
+        /* button:hover:enabled {
             cursor: pointer;
             color: #1F964D;
             background-color: white;
-        }
+        }  */
 
         .login_form p {
             font-size: 20px;
@@ -168,6 +168,35 @@
             font-family: "Material Icons";
             content: '\E834';
         }
+
+        .icons-checkbox-checked {
+            -webkit-mask-image: url("../icons/icons-checkbox-checked.svg");
+            mask-image: url("../icons/icons-checkbox-checked.svg");
+
+        }
+        .icons-checkbox-unchecked {
+            -webkit-mask-image: url("../icons/icons-checkbox-unchecked.svg");
+            mask-image: url("../icons/icons-checkbox-unchecked.svg");
+        }
+
+        .xyz-icon {
+            -webkit-mask-size: 23px;
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-size: 20px 20px;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            background-color: #1f964d;
+        }
+
+        #privacy_agreement {
+            height:22px;
+            width:22px;
+            vertical-align: middle;
+        }
+        #btnRegister {
+            display:block;
+        };
     </style>
 </head>
 
@@ -235,9 +264,11 @@
         <p>This website is owned and operated by Geolytix, with its principal place of business at Phoenix Yard, 65
             Kings Cross Road, London, WC1X 9LW</p>
 
-        <label class="checkbox">I agree<input id="privacy_agreement" type="checkbox">
-            <div class="checkbox_i"></div>
-        </label>
+
+        <button id="privacy_agreement" class="icons-checkbox-unchecked xyz-icon">
+        </button>
+        
+        <span>I agree</span>
 
         <button id="btnRegister" type="submit" formaction="register" disabled>
             Register or Re-set Password

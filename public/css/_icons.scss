@@ -1,82 +1,301 @@
-//Mapview icons//
-.icons-search {
-    background: url("../icons/icons-search.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
+//Mapview left column icons//
+.icons-search-mask {
+    mask-image: url("../icons/icons-search.svg");
+    -webkit-mask-image: url("../icons/icons-search.svg");
 }
 
+.icons-search-mobile {
+    background: url("../icons/icons-search.svg"); 
+}
+
+.icons-search {
+    background-image: url("../icons/icons-search.svg");
+    background-color: #ffffff;
+}
 .icons-search-toggle {
-    background: url("../icons/icons-search-toggle.svg");
+    background-image: url("../icons/icons-search-toggle.svg");
     background-color: #1F964D;
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
+}
+
+.icons-gps-not-fixed-mobile {
+    background: url("../icons/icons-gps_not_fixed.svg");
 }
 
 .icons-gps-not-fixed {
-    background: url("../icons/icons-gps_not_fixed.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    background-image: url("../icons/icons-gps_not_fixed.svg");
+    background-color: #ffffff;
 }
 
 .icons-gps-not-fixed-toggle {
-    background: url("../icons/icons-gps_not_fixed-toggle.svg");
+    background-image: url("../icons/icons-gps_not_fixed-toggle.svg");
     background-color:#1F964D;
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center;
 }
 .icons-add {
-    background: url("../icons/icons-add.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    -webkit-mask-image: url("../icons/icons-add.svg");
+     mask-image: url("../icons/icons-add.svg");
 }
-.icons-remove {
+
+.icons-add-mobile {
+    background: url("../icons/icons-add.svg");
+}
+
+.icons-remove-mobile {
     background: url("../icons/icons-remove.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+}
+
+.icons-remove {
+    -webkit-mask-image: url("../icons/icons-remove.svg");
+     mask-image: url("../icons/icons-remove.svg");
+}
+
+.icons-school-mobile {
+    background: url("../icons/icons-school.svg");
+}
+
+.icons-school {
+    -webkit-mask-image: url("../icons/icons-school.svg");
+     mask-image: url("../icons/icons-school.svg");
+}
+
+.icons-lock-open-mobile {
+    background: url("../icons/icons-lock-open.svg");
 }
 
 .icons-lock-open {
-    background: url("../icons/icons-lock-open.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    -webkit-mask-image: url("../icons/icons-lock-open.svg");
+     mask-image: url("../icons/icons-lock-open.svg");
 }
 
+.icons-supervisor-account {
+    -webkit-mask-image: url("../icons/icons-supervisor-account.svg");
+     mask-image: url("../icons/icons-supervisor-account.svg");
+}
+.icons-settings {
+    -webkit-mask-image: url("../icons/icons-settings.svg");
+     mask-image: url("../icons/icons-settings.svg");
+    display: block;
+}
+
+.icons-bug-report-mobile {
+    background: url("../icons/icons-bug-report.svg");
+    display: block;
+}
+
+.icons-bug-report {
+    -webkit-mask-image: url("../icons/icons-bug-report.svg");
+     mask-image: url("../icons/icons-bug-report.svg");
+    display: block;
+}
 
 //ID dataview icons//
 
 .icons-vertical-align-top {
-    background: url("../icons/icons-vertical-align-top.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    -webkit-mask-image: url("../icons/icons-vertical-align-top.svg");
+    mask-image: url("../icons/icons-vertical-align-top.svg");
 }
 
 .icons-vertical-align-bottom {
-    background: url("../icons/icons-vertical-align-bottom.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    -webkit-mask-image: url("../icons/icons-vertical-align-bottom.svg");
+    mask-image: url("../icons/icons-vertical-align-bottom.svg");;
 }
 
 .icons-fullscreen {
-    background: url("../icons/icons-fullscreen.svg");
-    background-size: 32px 50px;    
-    background-repeat: no-repeat;
-    background-position: center; 
+    -webkit-mask-image: url("../icons/icons-fullscreen.svg"); 
+     mask-image: url("../icons/icons-fullscreen.svg"); 
 }
 
-//Mobile icons//
+//ID workspace icons//
 
-.icons-mobile-touch-app {
-    background: url("../icons/icons-mobile-touch-app.svg");
+.icons-close {
+    background-image: url("../icons/icons-close.svg");
+}
+
+.icons-backup {
+    background-image: url("../icons/icons-backup.svg");
+}
+
+.icons-description {
+    background-image: url("../icons/icons-description.svg");
+}
+
+.icons-touch-app {
+    background-image: url("../icons/icons-touch-app.svg");
+}
+
+.icons-layers-mobile {
+    background-image: url("../icons/icons-layers.svg");
+}
+
+.icons-layers {
+    -webkit-mask-image: url("../icons/icons-layers.svg");
+    mask-image: url("../icons/icons-layers.svg");
+}
+
+.icons-location-mobile {
+    background-image: url("../icons/icons-room.svg");
+}
+
+.icons-location {
+    -webkit-mask-image: url("../icons/icons-room.svg");
+    mask-image: url("../icons/icons-room.svg");
+}
+
+.icons-toggle {
+    -webkit-mask-image: url("../icons/icons-toggle-off.svg");
+    mask-image:  url("../icons/icons-toggle-off.svg");
+    background-color: #dddddd;
+}
+
+.icons-toggle.on {
+    -webkit-mask-image: url("../icons/icons-toggle-on.svg");
+    mask-image: url("../icons/icons-toggle-on.svg"); 
+    background-color:#1f964d;
+}
+
+.icons-cloud-upload {
+    -webkit-mask-image: url("../icons/icons-cloud-upload.svg");
+    mask-image: url("../icons/icons-cloud-upload.svg");
+    background-color: #1F964D;
+}
+
+.icons-keyboard-arrow-up {
+    background-image: url("../icons/icons-keyboard-arrow-up.svg");
+}
+.icons-keyboard-arrow-down {
+    background-image: url("../icons/icons-keyboard-arrow-down.svg");
+}
+.icons-trash {
+    -webkit-mask-image: url("../icons/icons-trash.svg");
+     mask-image: url("../icons/icons-trash.svg");
+}
+
+.icons-edit-attribute {
+    -webkit-mask-image: url("../icons/icons-edit-attribute.svg");
+    mask-image: url("../icons/icons-edit-attribute.svg");     
+}
+
+.icons-clear {
+    -webkit-mask-image: url("../icons/icons-clear.svg");
+    mask-image: url("../icons/icons-clear.svg"); 
+    background-color: #1F964D;
+}
+
+.icons-event-note {
+    background-image: url("../icons/icons-event-note.svg");
+    background-repeat:no-repeat;
+    background-size:15px;
+}
+
+.icons-build {
+    -webkit-mask-image: url("../icons/icons-build.svg");
+     mask-image: url("../icons/icons-build.svg");
+}
+
+.icons-add-document {
+    -webkit-mask-image: url("../icons/icons-add-document.svg");
+    mask-image: url("../icons/icons-add-document.svg");
+}
+
+.icons-add-photo {
+    -webkit-mask-image: url("../icons/icons-add-photo.svg");
+     mask-image: url("../icons/icons-add-photo.svg");
+    -webkit-mask-size: 70px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+     mask-size: 70px;
+     mask-position: center;
+     mask-repeat: no-repeat;
+     background-color: #1f964d;
+     height:70px;            
+}
+
+//.Shadow effect on photo add icon// 
+.image-container {
+    width: 70px;
+    height: 70px;
+    background-size: 100%;
+    -webkit-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+    -moz-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+    -ms-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+    -o-filter: drop-shadow(1px 1px 4px rgba(0,0,0,0.25));
+}
+
+.icons-view-list {
+    -webkit-mask-image: url("../icons/icons-view-list.svg");
+    mask-image: url("../icons/icons-view-list.svg");
+    height:30px;
+}
+
+.icons-bar-chart {
+    -webkit-mask-image: url("../icons/icons-bar-chart.svg");
+    mask-image: url("../icons/icons-bar-chart.svg");
+    height:30px;
+}
+
+.icons-checkbox-checked {
+    background-image: url("../icons/icons-checkbox-checked.svg");
+}
+.icons-checkbox-unchecked {
+    background-image: url("../icons/icons-checkbox-unchecked.svg");
+}
+
+.icons-location-tick {
+    -webkit-mask-image: url("../icons/icons-location-tick.svg");
+    mask-image: url("../icons/icons-location-tick.svg");
+}
+//NON SVG PROPERTIES//
+.xyz-icon {
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center;   
+    background-color: inherit;    
+        
+//SVG Mask properties//
+    -webkit-mask-size: 32px 50px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+     mask-size: 32px 50px;
+     mask-position: center;
+     mask-repeat: no-repeat;
+     background-color: #1f964d;
+    }
+
+.xyz-toggle {
+    -webkit-mask-size: 32px 50px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+     mask-size: 32px 50px;
+     mask-position: center;
+     mask-repeat: no-repeat;
+}
+
+.xyz-documents {
+    -webkit-mask-size: 20px 20px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+     mask-size: 20px 20px;
+     mask-position: center;
+     mask-repeat: no-repeat;
+}
+
+.xyz-icon2 {
     background-size: 32px 50px;    
     background-repeat: no-repeat;
     background-position: center; 
+    width: 50px;
+    height: 50px;
+    display: block;
+}
+.xyz-icon3 {
+    background-size: 32px 50px;    
+    background-repeat: no-repeat;
+    background-position: center; 
+    &.BG{
+        background-color: #dddddd;
+    }
+}
+
+//Geolytix green//
+.filter {
+    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
 }

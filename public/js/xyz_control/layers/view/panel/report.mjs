@@ -20,7 +20,7 @@ export default (_xyz, layer) => {
 
     layer.view.dashboard.appendChild(
       _xyz.utils.wire()`
-      <div style="margin-top: 10px;"><a target="_blank" href="${href}"><i class="material-icons" style="vertical-align:bottom; font-size: 16px;">event_note</i>${entry[1].name || entry[0]}`
+      <a style="margin-top: 10px; display: block; vertical-align: bottom;  font-size: 14px; padding-left: 15px;" target="_blank" href="${href}" class="icons-event-note">${entry[1].name || entry[0]}`
     );
 
   });

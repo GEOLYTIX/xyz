@@ -17,6 +17,16 @@ password_retype.addEventListener('keyup', () => check());
 
 privacy_agreement.addEventListener('change', () => check());
 
+privacy_agreement.addEventListener('click',(e) => {
+  if(e.target.classList.contains('icons-checkbox-unchecked')){
+  e.target.classList.remove('icons-checkbox-unchecked');
+  e.target.classList.add('icons-checkbox-checked');
+}
+  else {
+    e.target.classList.remove('icons-checkbox-checked');
+    e.target.classList.add('icons-checkbox-unchecked');
+  }
+});
 
 function check() {
 

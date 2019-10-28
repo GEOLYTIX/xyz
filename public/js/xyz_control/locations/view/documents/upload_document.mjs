@@ -29,7 +29,7 @@ export default _xyz => param => {
 
     // add delete control
     param.doc.appendChild(_xyz.utils.wire()`
-      <span title="Delete document" class="btn_del"
+      <span title="Delete document" class="btn_del icons-clear xyz-documents"
       onclick=${
         e => {
           e.target.parentNode.remove();
@@ -38,7 +38,7 @@ export default _xyz => param => {
           });
         }
       }
-      ><i class="material-icons">clear`);
+      >`);
 
   };
 

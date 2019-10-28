@@ -23,7 +23,7 @@ export default _xyz => function () {
 
   //if (layer.view.header) layer.view.header.toggleDisplay.textContent = 'layers';
   if (layer.view.header) {
-    layer.view.header.toggleDisplay.textContent = 'toggle_on';
+
     layer.view.header.toggleDisplay.classList.remove('inactive');
   }
 

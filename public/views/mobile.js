@@ -33,9 +33,14 @@ mobile.tabLayers.addEventListener('click', () => activateTab(mobile.tabLayers, m
 
 mobile.tabLocations.addEventListener('click', () => activateTab(mobile.tabLocations, mobile.modLocations));
 
+mobile.tabLocations.addEventListener('click', () => activateTab(mobile.tabLocations, mobile.modLocations));
 function activateTab(target, mod) {
-  Object.values(target.parentNode.children).forEach(el => el.classList.remove('active'));
+  Object.values(target.parentNode.children).forEach(el =>
+    el.classList.remove('active'))  
+  Object.values(target.parentNode.children).forEach(el =>
+      el.classList.add('filter')) 
   target.classList.add('active');
+  target.classList.remove('filter'); 
   mobile.listviews.forEach(m => m.classList.add('displaynone'));
   mod.classList.remove('displaynone');
   checkOverlap(mod);

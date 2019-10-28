@@ -1,21 +1,17 @@
 export default _xyz => param => {
 
-    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block; text-align: center;">`;
+    param.documentControl.add_doc = _xyz.utils.wire()`<div class="addDocCell" style="display: block;">`;
 
     param.documentControl.container.appendChild(param.documentControl.add_doc);
 
-    // Add label for doc upload icon.
-    param.documentControl.add_doc_label = _xyz.utils.wire()`<label>`;
+    // Add label and doc upload icon.
+    param.documentControl.add_doc_label = _xyz.utils.wire()`<label class="icons-add-document cursor noselect xyz-icon" title="Add Document"
+    style="cursor: pointer; display:block; height:50px;margin:auto;"
+    >`;
 
     param.documentControl.add_doc_label.htmlFor = `addDoc_${param.entry.location.layer.key}_${param.entry.location.id}`;
 
     param.documentControl.add_doc.appendChild(param.documentControl.add_doc_label);
-
-    // Add doc upload icon to label.
-    param.documentControl.add_doc_label.appendChild(_xyz.utils.wire()`
-        <i class="material-icons cursor noselect"
-        style="cursor: pointer; font-size: 36px; text-shadow: 2px 2px 2px #999;"
-        >note_add`);
 
     // Add doc input.
     param.documentControl.add_doc_input = _xyz.utils.wire()`
@@ -61,22 +57,22 @@ export default _xyz => param => {
         let btn_del = _xyz.utils.wire()`
         <span
         title="Delete document"
-        class="btn_del"
-        style="cursor: pointer;"
+        class="btn_del icons-clear xyz-documents"
+        style="cursor: pointer; display: inline-block; height: 20px; width:20px; vertical-align:middle;"
         onclick=${
             () => {
                 newDoc.remove();
             }
         }
-        ><i class="material-icons">clear`; 
+        >`; 
 
         newDoc.appendChild(btn_del);
 
         // Add control to upload document
         const btn_save = _xyz.utils.wire()`
-        <span class="btn_save"
+        <span class="btn_save icons-cloud-upload xyz-documents"
         title="Save document"
-        style="cursor: pointer;"
+        style="cursor: pointer; display: inline-block; height: 20px; width:20px; vertical-align:middle; background-position: center; padding-left:30px;"
         onclick=${
             () => {
                 btn_del.remove();
@@ -90,7 +86,7 @@ export default _xyz => param => {
                 });
             }
         }
-        ><i class="material-icons">cloud_upload`;
+        >`;
 
         newDoc.appendChild(btn_save);
 

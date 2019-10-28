@@ -37,43 +37,43 @@ export default (_xyz, layer) => {
     
   style(_xyz, layer);
     
-  // Add dashboard if it contains panel.
-  if (dashboard.children.length > 0) {
+ // Add dashboard if it contains panel.
+ if (dashboard.children.length > 0) {
     
-    layer.view.header.classList.add('pane_shadow');
-    layer.view.drawer.classList.add('expandable');
-    
-    // Expander control for layer drawer.
-    layer.view.header.onclick = e => {
-      e.stopPropagation();
-      _xyz.utils.toggleExpanderParent({
-        expandable: layer.view.drawer,
-        accordeon: true,
-      });
-    };
-
-    const expander = _xyz.utils.wire()`
-    <i
-    title="Toggle layer dashboard"
-    class="material-icons cursor noselect btn_header expander">`;
-
-    layer.view.header.appendChild(expander);
+  layer.view.header.classList.add('pane_shadow');
+  layer.view.drawer.classList.add('expandable');
   
-    expander.onclick = e => {
-      e.stopPropagation();
-      _xyz.utils.toggleExpanderParent({
-        expandable: layer.view.drawer,
-      });
-    };
+  // Expander control for layer drawer.
+  layer.view.header.onclick = e => {
+    e.stopPropagation();
+    _xyz.utils.toggleExpanderParent({
+      expandable: layer.view.drawer,
+      accordeon: true,
+    });
+  };
 
-    let panels = dashboard.querySelectorAll('.panel');
-    if(panels.length === 1) {
-      // disabled expandable if only one panel created.
-      panels[0].classList.remove('expandable');
-      // make panel non-expandable if only one added
-      if(!panels[0].classList.contains('expanded')) panels[0].classList.add('expanded');
-    }
-    
+  const expander = _xyz.utils.wire()`
+  <button
+  title="Toggle layer dashboard"
+  class="cursor noselect btn_header expander xyz-icon icon-expander">`;
+
+  layer.view.header.appendChild(expander);
+
+  expander.onclick = e => {
+    e.stopPropagation();
+    _xyz.utils.toggleExpanderParent({
+      expandable: layer.view.drawer,
+    });
+  };
+
+  let panels = dashboard.querySelectorAll('.panel');
+  if(panels.length === 1) {
+    // disabled expandable if only one panel created.
+    panels[0].classList.remove('expandable');
+    // make panel non-expandable if only one added
+    if(!panels[0].classList.contains('expanded')) panels[0].classList.add('expanded');
   }
   
+}
+
 };

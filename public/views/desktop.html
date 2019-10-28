@@ -65,45 +65,34 @@ data-token={{:token}}>
 
         <div class="btn_column lv1 noselect desktop">
 
-                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;" class="icons-search">    
-                    </button>
-        
-                    <button id="btnLocate" title="Current location" style="display: none;" class="icons-gps-not-fixed">
-                    </button>
-        
-                    <button id="btnZoomIn" class="icons-add">
-                    </button>
-        
-                    <button id="btnZoomOut" class="icons-remove">
-                    </button>
-        
-                    <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-                        <a href="{{:hrefDocumentation}}" target="_blank">
-                            <i class="material-icons">school</i>
-                        </a>
-                    </div>
-        
-                    <a
-                        {{:btnLogin}}
-                        id="btnLogin"
-                        title="{{:btnLogin_text}}"
-                        class="icons-lock-open"
-                        href="{{:dir}}{{:btnLogin_path}}">
-                    </a>
-        
-                    <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
-                        <a href="{{:dir}}/user/admin" target="_blank">
-                            <i class="material-icons">supervisor_account</i>
-                        </a>
-                    </div>
-        
-                    <button id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
-                        <i class="material-icons">settings</i>
-                    </button>            
-        
-                    <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
-                        <i class="material-icons">bug_report</i>
-                    </button>
+            <button id="btnGazetteer" title="Open Gazetteer" style="display: none;" class="icons-search xyz-icon3">  
+            </button>
+
+            <button id="btnLocate" title="Current location" style="display: none;" class="icons-gps-not-fixed xyz-icon3">
+            </button>
+
+            <button id="btnZoomIn" class="icons-add xyz-icon">
+            </button>
+
+            <button id="btnZoomOut" class="icons-remove xyz-icon">
+            </button>
+
+            <a id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}
+            class="icons-school xyz-icon" href="{{:hrefDocumentation}}" target="_blank">       
+            </a>
+            
+            <a id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}} class="icons-lock-open xyz-icon" href="{{:dir}}{{:btnLogin_path}}">    
+            </a>
+            
+            <a id="btnAdmin" title="Open account admin view" {{:btnAdmin}}
+            class="icons-supervisor-account xyz-icon" href="{{:dir}}/user/admin" target="_blank">
+            </a>
+    
+            <button id="btnWorkspace" title="Open workspace configuration view" class="icons-settings xyz-icon" {{:btnEditor}}>
+            </button>            
+
+            <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." class="icons-bug-report xyz-icon"{{:btnLogRocket}}>
+            </button>
         
         </div>
 
@@ -131,10 +120,10 @@ data-token={{:token}}>
 
         <div class="btn_column lv0 noselect desktop">
         
-            <div style="margin-top: -10px;" id="toggleDataview" class="icons-vertical-align-top">
+            <div style="margin-top: -10px;" id="toggleDataview" class="icons-vertical-align-top xyz-icon">
             </div>
 
-            <button id="btnDataViewport" style="display: none;" class="icons-fullscreen">
+            <button id="btnDataViewport" style="display: none;" class="icons-fullscreen xyz-icon">
             </button>
                     
         </div>
@@ -145,20 +134,14 @@ data-token={{:token}}>
 
         <div class="btn_column noselect">
         
-            <button id="btnCloseWS">
-                <i class="material-icons">clear</i>
-            </button>
+            <button id="btnCloseWS" class="icons-close xyz-icon3 BG"></button>
         
-            <button id="btnUploadWS">
-                <i class="material-icons">backup</i>
-            </button>
+            <button id="btnUploadWS" class="icons-backup xyz-icon3 BG"></button>
         
-            <button id="btnFileWS">
-                <i class="material-icons">description</i>
-            </button>
+            <button id="btnFileWS" class="icons-description xyz-icon3 BG"></button>
         
             <input id="fileInputWS" type="file" accept=".json" style="display: none;">
-        
+    
         </div>
 
         <div id="codemirror" class="codemirror"></div>

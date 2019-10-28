@@ -73,6 +73,16 @@
                 content: "expand_less"
             }
         }
+
+        &.chart {
+            table { display: block};
+            .chart { display: none};
+        }
+
+        &:not(.chart) {
+            table { display: none};
+            .chart { display: block};
+        }
     }
     .td_images {
         text-align: center;
@@ -83,7 +93,7 @@
         .addImage {
             i {
                 color: $glxgreen;
-                font-size: 30px;
+                font-size: 70px;
                 text-shadow: 2px 2px 2px #999;
             }
             input {

@@ -26,33 +26,29 @@ data-token={{:token}}>
     <div id="gazetteer" class="gazetteer"></div>
 
     <div class="btn_column noselect mobile">
-        <button id="btnGazetteer" class="icons-search"{{:btnSearch}}>
+        <button id="btnGazetteer" class="icons-search-mobile xyz-icon3"{{:btnSearch}}>
         </button>
 
-        <button id="btnLocate" title="Current location" class="icons-gps-not-fixed" {{:btnLocate}}>
+        <button id="btnLocate" title="Current location" class="icons-gps-not-fixed-mobile xyz-icon3" {{:btnLocate}}>
         </button>
 
-        <button id="btnZoomIn" class="icons-add">
+        <button id="btnZoomIn" class="icons-add-mobile xyz-icon3">
         </button>
 
-        <button id="btnZoomOut" class="icons-remove">
+        <button id="btnZoomOut" class="icons-remove-mobile xyz-icon3">
         </button>
 
-        <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
-            <a href="{{:hrefDocumentation}}">
-                <i class="material-icons">school</i>
-            </a>
-        </div>
+        <a id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}
+        class="icons-school-mobile xyz-icon3" href="{{:hrefDocumentation}}">
+        </a>
+        
 
-        <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
-            <a href="{{:dir}}{{:btnLogin_path}}">
-                <i class="material-icons">{{:btnLogin_style}}</i>
-            </a>
-        </div>
+        <a id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}
+        class="icons-lock-open-mobile xyz-icon3" href="{{:dir}}{{:btnLogin_path}}">
+        </a>
 
-        <div id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
-            <i class="material-icons">bug_report</i>
-        </div>
+        <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." class="icons-bug-report-mobile xyz-icon3"{{:btnLogRocket}}>
+        </button>
 
     </div>
 
@@ -61,13 +57,9 @@ data-token={{:token}}>
     <div class="listviews">
 
         <table class="tab_bar" cellpadding="0" cellspacing="0">
-            <td id="tabLayers" class="tab_btn active icons-mobile-touch-app">
-                <i class="material-icons tab_icon">layers</i>
-      
+            <td id="tabLayers" class="tab_btn xyz-icon3 icon-layers-mobile ">
             </td>
-            <td id="tabLocations" class="tab_btn displaynone icons-mobile-touch-app">
-                <i class="material-icons tab_icon">location_on</i>
-               
+            <td id="tabLocations" class="tab_btn displaynone xyz-icon3 icon-location-mobile ">
             </td>
         </table>
 
@@ -79,11 +71,12 @@ data-token={{:token}}>
 
         <div id="modLocations" class="listview displaynone">
             <div class="title">Locations</div>
-            <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
+            <button id="clear_locations" class="btn_text cursor">Clear all locations.</button>
             <div id="locations" class="content"></div>
         </div>
 
     </div>
+
 
 </body>
 
