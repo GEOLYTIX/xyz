@@ -906,6 +906,11 @@ button {
     .btn_column > div:hover:enabled,
     .btn_column > a:hover:enabled {
       cursor: pointer; }
+    .btn_column button.mobile-box-shadow,
+    .btn_column > div.mobile-box-shadow,
+    .btn_column > a.mobile-box-shadow {
+      box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+      border-radius: 50%; }
 
 .btn_header {
   font-size: 28px;
@@ -2054,17 +2059,14 @@ button {
 
 .icons-settings {
   -webkit-mask-image: url("../icons/icons-settings.svg");
-  mask-image: url("../icons/icons-settings.svg");
-  display: block; }
+  mask-image: url("../icons/icons-settings.svg"); }
 
 .icons-bug-report-mobile {
-  background: url("../icons/icons-bug-report.svg");
-  display: block; }
+  background: url("../icons/icons-bug-report.svg"); }
 
 .icons-bug-report {
   -webkit-mask-image: url("../icons/icons-bug-report.svg");
-  mask-image: url("../icons/icons-bug-report.svg");
-  display: block; }
+  mask-image: url("../icons/icons-bug-report.svg"); }
 
 .icons-vertical-align-top {
   -webkit-mask-image: url("../icons/icons-vertical-align-top.svg");
@@ -2182,12 +2184,6 @@ button {
   mask-image: url("../icons/icons-bar-chart.svg");
   height: 30px; }
 
-.icons-checkbox-checked {
-  background-image: url("../icons/icons-checkbox-checked.svg"); }
-
-.icons-checkbox-unchecked {
-  background-image: url("../icons/icons-checkbox-unchecked.svg"); }
-
 .icons-location-tick {
   -webkit-mask-image: url("../icons/icons-location-tick.svg");
   mask-image: url("../icons/icons-location-tick.svg"); }
@@ -2220,14 +2216,6 @@ button {
   mask-size: 20px 20px;
   mask-position: center;
   mask-repeat: no-repeat; }
-
-.xyz-icon2 {
-  background-size: 32px 50px;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 50px;
-  height: 50px;
-  display: block; }
 
 .xyz-icon3 {
   background-size: 32px 50px;
