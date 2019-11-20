@@ -10,7 +10,7 @@ export default _xyz => {
 
   function settings(entry) {
 
-    if (typeof(entry.edit.isoline_here) !== 'object') entry.edit.isoline_here = {};   
+    if (typeof(entry.edit.isoline_here) === 'object') return _xyz.utils.wire()`<div>`;
     
     const group = _xyz.utils.wire()`
     <div class="drawer panel expandable">`;
