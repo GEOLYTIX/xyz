@@ -34,7 +34,8 @@ export default _xyz => entry => {
       backgroundColor: entry.chart.backgroundColor || _xyz.dataview.charts.fallbackStyle.backgroundColor,
       borderColor: entry.chart.borderColor || _xyz.dataview.charts.fallbackStyle.borderColor,
       spanGaps: true,
-      data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : entry.chart.y ? (field[entry.chart.y] ? field[entry.chart.y] : field.value) : field.value))
+      data: entry.fields.map(field => (field.type === 'integer' ? parseInt(field.value) : entry.chart.y ? (field[entry.chart.y] ? field[entry.chart.y] : field.value) : field.value)),
+      pointRadius: entry.chart.pointRadius || 2
     };
 
     // sets offset
@@ -97,6 +98,7 @@ export default _xyz => entry => {
       //tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.value);
       tmp[(field.dataset)].data.push(field.type === 'integer' ? parseInt(field.value) : field.y ? field[entry.chart.y] : field.value);
       tmp[(field.dataset)].type = field.chartType || (entry.chart.type || 'line');
+      tmp[(field.dataset)].pointRadius = field.pointRadius ? field.pointRadius : 2;
     });
 
     Object.values(tmp).forEach(val => datasets.push(val));
@@ -158,7 +160,7 @@ export default _xyz => entry => {
     			}
     		}
     	}
-  });
+    });
 
 
   return graph;
