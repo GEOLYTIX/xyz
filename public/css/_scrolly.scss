@@ -1,0 +1,35 @@
+.scrolly {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+    padding-right: 35px;
+
+    // @supports (-webkit-scrollbar:display) {
+    //     width: 100%;
+    //     padding-right: 0;
+
+    //     &::-webkit-scrollbar {
+    //         display: none;
+    //     }
+    // }
+
+    >.scrolly_track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 10px;
+        background-color: #aaa;
+        >.scrolly_bar {
+            position: absolute;
+            width: 10px;
+            background: #666;
+        }
+        &:hover {
+            cursor: ns-resize;
+        }
+    }
+    .scrolly_spacer {
+        height: 30px;
+    }
+}

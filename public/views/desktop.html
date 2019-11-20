@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>{{:title}}</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- <script src="https://cdn.logrocket.com/LogRocket.min.js"></script> -->
+
+    <link rel="stylesheet" href="{{:dir}}/css/desktop.css" />
+
+    <link rel="stylesheet" href="{{:dir}}/codemirror/codemirror.css">
+    <script src="{{:dir}}/codemirror/codemirror.js" defer></script>
+    <script src="{{:dir}}/codemirror/javascript.js" defer></script>
+    <script src="{{:dir}}/codemirror/jsonlint.js" defer></script>
+    <script src="{{:dir}}/codemirror/lint.js" defer></script>
+    <script src="{{:dir}}/codemirror/lintjson.js" defer></script>
+
+    <script src="{{:dir}}/js/build/xyz_ui_bundle.js" async></script>
+</head>
+
+<body
+style="grid-template-columns: 333px 10px auto; grid-template-rows: 1fr 0;"
+data-viewmode="desktop"
+data-nanoid={{:nanoid}}
+data-log={{:log}}
+data-user={{:user}}
+data-logrocket={{:logrocket}}
+data-token={{:token}}>
+
+    <div class="listviews">
+
+        <div id="gazetteer"></div>
+
+        <div class="scrolly">
+
+            <div class="scrolly_track">
+                <div class="scrolly_bar"></div>
+            </div>
+
+            <div class="listview">
+                <div class="title">Layers</div>
+                <div id="localeDropdown"></div>
+                <div id="layers" class="content"></div>
+            </div>
+
+            <div class="listview">
+                <div class="title">Locations</div>
+                <div id="clear_locations" class="btn_text cursor">Clear all locations.</div>
+                <div id="locations" class="content"></div>
+            </div>
+
+            <div class="scrolly_spacer"></div>
+
+        </div>
+
+    </div>
+
+    <div id="vertDivider"></div>
+
+    <div class="mapview">
+
+        <div class="btn_column lv1 noselect desktop">
+
+                    <button id="btnGazetteer" title="Open Gazetteer" style="display: none;">
+                        <i class="material-icons">search</i>
+                    </button>
+        
+                    <button id="btnLocate" title="Current location" style="display: none;">
+                        <i class="material-icons">gps_not_fixed</i>
+                    </button>
+        
+                    <button id="btnZoomIn">
+                        <i class="material-icons">add</i>
+                    </button>
+        
+                    <button id="btnZoomOut">
+                        <i class="material-icons">remove</i>
+                    </button>
+        
+                    <div id="btnDocumentation" title="Open Documentation" {{:btnDocumentation}}>
+                        <a href="{{:hrefDocumentation}}" target="_blank">
+                            <i class="material-icons">school</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnLogin" title="{{:btnLogin_text}}" {{:btnLogin}}>
+                        <a href="{{:dir}}{{:btnLogin_path}}">
+                            <i class="material-icons">{{:btnLogin_style}}</i>
+                        </a>
+                    </div>
+        
+                    <div id="btnAdmin" title="Open account admin view" {{:btnAdmin}}>
+                        <a href="{{:dir}}/user/admin" target="_blank">
+                            <i class="material-icons">supervisor_account</i>
+                        </a>
+                    </div>
+        
+                    <button id="btnWorkspace" title="Open workspace configuration view" {{:btnEditor}}>
+                        <i class="material-icons">settings</i>
+                    </button>            
+        
+                    <button id="btnLogRocket" title="Start a Log Rocket session to record possible bugs." {{:btnLogRocket}}>
+                        <i class="material-icons">bug_report</i>
+                    </button>
+        
+        </div>
+
+        <div id="Map" class="map" >
+            <svg xmlns="w3.org/2000/svg" version="1.1" style="width:0; height:0">
+                <defs>
+                    <filter id='dropshadow'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' />
+                        <feOffset dx='1' dy='1' result='offsetblur' />
+                        <feMerge>
+                            <feMergeNode />
+                            <feMergeNode in='SourceGraphic' />
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+
+    </div>
+
+    
+
+    <div id="tableview" class="tableview">
+
+        <div id="hozDivider"></div>
+
+        <div class="resize_bar"></div>
+
+        <nav class="nav_bar">
+            <ul class="nav_bar-nav"></ul>
+            <div class="tab-dropdown-container">
+                <button class="tab-dropdown">»</button>
+                <div class="tab-dropdown-content">
+                    <ul></ul>
+                </div>
+            </div>
+        </nav>
+
+        <!--<div class="table"></div>-->
+        <div class="tab-content"></div>
+
+        <div class="btn_column lv0 noselect desktop">
+        
+            <div style="margin-top: -10px; background: none;">
+                <i id="toggleTableview" class="material-icons">vertical_align_top</i>
+            </div>
+
+            <button id="btnTableViewport" style="display: none;">
+                <i class="material-icons">fullscreen</i>
+            </button>
+                    
+        </div>
+
+    </div>
+
+    <div id="workspace" class="workspace" style="display: none;">
+
+        <div class="btn_column noselect">
+        
+            <button id="btnCloseWS">
+                <i class="material-icons">clear</i>
+            </button>
+        
+            <button id="btnUploadWS">
+                <i class="material-icons">backup</i>
+            </button>
+        
+            <button id="btnFileWS">
+                <i class="material-icons">description</i>
+            </button>
+        
+            <input id="fileInputWS" type="file" accept=".json" style="display: none;">
+        
+        </div>
+
+        <div id="codemirror" class="codemirror"></div>
+
+    </div>
+
+    <div id="desktop_mask"></div>
+
+</body>
+
+</html>

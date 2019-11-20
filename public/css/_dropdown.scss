@@ -1,0 +1,40 @@
+.md_drop {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    list-style: none;
+    color: $glxgreen;
+    font-family: ffmark_bold, sans-serif;
+    ;
+    &:hover {
+        cursor: pointer;
+    }
+    ul {
+        width: 290px;
+        font-family: ffmark, sans-serif;
+        z-index: 999;
+        background: white;
+        position: absolute;
+        left: 0;
+        transition: all 0.3s ease;
+        display: none;
+        margin: 0;
+        padding: 0;
+        max-height: 150px;
+        overflow-y: auto;
+        transform-origin: 0 0;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+        li {
+            display: block;
+            width: 100%;
+            padding: 5px 0;
+            &:hover {
+                background: $glxlightgreen;
+                cursor: pointer;
+            }
+        }
+    }
+    .ul--show {
+        display: block;
+    }
+}

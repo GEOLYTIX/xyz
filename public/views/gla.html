@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>Greater London Authority - Employment Rights Advice</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{:dir}}/css/control.css" />
+
+    <script src="{{:dir}}/js/build/xyz_control_bundle.js" defer></script>
+
+    <script src="{{:dir}}/views/gla_select.js" defer></script>
+    <script src="{{:dir}}/views/gla_desktop.js" defer></script>
+
+    <!-- <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/gla/master/select.js&type=application/javascript" defer></script>
+    <script type="application/javascript" src="{{:dir}}/proxy/cdn?uri=https://raw.githubusercontent.com/GEOLYTIX/gla/master/desktop.js&type=application/javascript" defer></script> -->
+
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        #pink {
+            background-color: #EE266D;
+        }
+
+        #burgundy {
+            background-color: #9E0059;
+        }
+
+        #cyan {
+            background-color: #00AEEF;
+        }
+
+        #green {
+            background-color: #008D48;
+        }
+
+        #orange {
+            background-color: #E85713;
+        }
+
+        .pink-box {
+            background-color: #fff;
+            color: #9E0059;
+            padding: 10px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .text-box {
+            background-color: #fff;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .btn {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 3px;
+            padding: 16px 32px;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+        }
+
+        .btn.active {
+            background-color: #9E0059;
+        }
+
+        .darkish {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .light {
+            color: #222;
+            border: 3px solid #222;
+        }
+
+        .pink-bg {
+            color: #fff;
+            background-color: #9E0059;
+        }
+
+        .pink-br {
+            border: 3px solid #9E0059;
+        }
+
+        #postcode-search input {
+            width: 100%;
+            height: 30px;
+            font-family: inherit;
+            font-size: 16px;
+            border: none;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .location {
+            display: grid;
+            grid-gap: 10px;
+            padding: 10px;
+        }
+
+        .location a {
+            color: #9E0059;
+        }
+
+        .location .title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            color: #9E0059;
+        }
+
+        .location .title-btn {
+            font-size: 30px;
+            color: #9E0059;
+            font-weight: bold;
+        }
+
+        .location .title-btn:hover {
+            cursor: pointer;
+        }
+
+        .location .expander {
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 24px;
+            width: 24px;
+            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_up.svg?sanitize=true);
+        }
+
+        .collapsed ._grid {
+            display: none !important;
+        }
+
+        .collapsed .expander {
+            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_down.svg?sanitize=true);
+        }
+
+        .location .exit {
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 24px;
+            width: 24px;
+            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_exit.svg?sanitize=true);
+        }
+
+        .location_icon {
+            width: 20px;
+            height: 20px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .location .grid {
+            display: grid;
+            grid-gap: 5px;
+        }
+
+        .align-flex {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        /* MAP */
+        #Map {
+            height: 400px;
+        }
+
+        #Map>._attribution {
+            z-index: 999;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align: left;
+            white-space: nowrap;
+            background-color: #fff;
+            opacity: 0.9;
+            padding: 5px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        ._attribution > a {
+            color: rgb(0, 120, 168);
+        }
+
+        .filter {
+            padding-top: 16px;
+            padding-bottom: 16px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .filterHead {
+            position: relative;
+            color: #9E0059;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .filterHead:hover {
+            cursor: pointer;
+        }
+
+        .filterHead > .expander {
+            position: absolute;
+            right: 0;
+            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_down.svg?sanitize=true);
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 24px;
+            width: 24px;
+            top: -5px;
+        }
+
+        .checkbox .checkbox_i {
+            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_unchecked.svg?sanitize=true);
+        }
+
+        .expanded .expander {
+            background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/icon_up.svg?sanitize=true);
+        }
+
+        .expanded .filterList {
+            height: auto !important;
+            padding-top: 16px;
+        }
+
+        .filterList > div {
+            color: #333;
+            font-weight: 400;
+        }
+
+        .filterList .checkbox_i {
+            color: #333;
+        }
+
+        .filterList .checkbox {
+            padding: 1px 0 5px 25px;
+        }
+
+
+
+        /* LIST */
+        .tabulator {
+            border: none;
+        }
+
+        .tabulator-row.tabulator-group {
+            background: #fff;
+        }
+
+        .tabulator .tabulator-header {
+            display: none;
+        }
+
+        .tabulator .tabulator-tableHolder .tabulator-table {
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .tabulator-row {
+            min-height: 0px;
+            color: rgb(158, 0, 89);
+            font-size: 18px;
+        }
+
+        .tabulator-row.tabulator-selectable:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .tabulator-row .tabulator-responsive-collapse {
+            border: none;
+        }
+
+        .tabulator-row .tabulator-cell {
+            border-left: none;
+        }
+
+        .tabulator-row .tabulator-cell div div {
+            display: block !important;
+            vertical-align: middle;
+        }
+
+        .tabulator-row.tabulator-group {
+            border-bottom: none;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div style="
+        min-width: 768px;
+        color: #FFF;
+        background-color: #353D42;
+        background-image: url(https://raw.githubusercontent.com/GEOLYTIX/gla/master/logo-mayoral.svg?sanitize=true);
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 65px;
+        font-size: 22px;
+        font-weight: bold;
+        white-space: nowrap;
+        line-height: 3;
+        text-align: center;">
+    </div>
+
+    <div
+    style="
+        min-width: 768px;
+        max-width: 1024px;
+        margin: auto;
+        color: #9E0059;
+        padding: 10px;
+        font-size: 32px;
+        font-weight: bold;
+        background-color: #F5F5F5;">
+            Employment rights advice near you
+    </div>
+
+    <div style="
+        min-width: 768px;
+        max-width: 1024px;
+        margin: auto;
+        background-color: #F5F5F5;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        grid-gap: 10px;">
+
+        <div style="grid-column: 1;">
+
+            <div class="pink-box">
+                Find
+            </div>
+
+            <div class="text-box">
+                Search for a location or click on a point on the map to see details of employment rights advice centres
+                near you.
+            </div>
+
+            <div style="
+                background-color: #fff;
+                padding: 10px;
+                display: grid;
+                grid-gap: 10px;">
+
+                <div id="postcode-search"
+                style="
+                    border: 1px solid #222;
+                    border-radius: 3px;
+                    padding: 13px;
+                    grid-row: 1;
+                    grid-column: 1/3">
+                    <input placeholder="Enter your postcode or address" />
+                </div>
+
+                <div id="btnLocate" class="btn darkish" style="grid-row: 2; grid-column: 1/2">
+                    Current Location
+                </div>
+
+                <div id="postcode-find" class="btn darkish" style="grid-row: 2; grid-column: 2/3">
+                    Find this Postcode
+                </div>
+
+            </div>
+
+            <div class="pink-box">
+                    Filter
+            </div>
+
+            <div style="
+            background-color: #fff;
+            padding: 10px;">
+
+            <div class="filter">
+                <div class="filterHead">Borough<div class="expander"></div></div>
+                <div class="filterList" id="filterBorough" style="height: 0; overflow: hidden;"></div>
+            </div>
+            <div class="filter" style="border-bottom: 1px solid #ddd;">
+                <div class="filterHead">Service Offered <div class="expander"></div></div>
+                <div class="filterList" id="filterServices" style="height: 0; overflow: hidden;"></div>
+            </div>
+            <div id="resetFilter"
+            class="btn"
+            style="
+            display: inline-block;
+            background-color: #9E0059;
+            color: #fff;
+            margin-top: 10px;">
+                Reset
+            </div>
+
+            </div>
+
+            <div id="locationView" style="background-color: #fff; padding: 10px;">
+            </div>
+
+        </div>
+
+        <div style="grid-column: 2;">
+
+            <div id="Map">
+                <div class="_attribution">
+                    <a target="_blank" href="https://github.com/geolytix/xyz">GEOLYTIX XYZ</a>;
+                    <a target="_blank" href="https://leafletjs.com/">Leaflet</a>;
+                    <a target="_blank" href="https://www.mapbox.com">© Mapbox</a>;
+                    <a target="_blank" href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a>
+                </div>
+            </div>
+
+            <div class="pink-box">
+                Browse advice centres in London
+            </div>
+
+            <div class="text-box">
+                Click on an advice centre in the last below to see details like when it opens and how to get in touch with them.
+            </div>
+
+            <div id="List" style="background-color: #fff;"></div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

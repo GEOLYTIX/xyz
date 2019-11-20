@@ -1,0 +1,33 @@
+.bar {
+    fill: #5AB664 !important;
+    width: 10px;
+}
+
+.chart-tooltip {
+    position: absolute;
+    text-align: center;
+    width: 40px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: #EFC9A5;
+    border: 0px;
+    border-radius: 2px;
+    pointer-events: none;
+    vertical-align: baseline;
+}
+
+.bar:hover {
+    fill: #D8BC8E !important;
+}
+
+.axis {
+    font: 10px sans-serif;
+    color: #333;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #333;
+    shape-rendering: crispEdges;
+}

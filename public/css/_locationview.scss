@@ -1,0 +1,121 @@
+.locationview {
+    text-align: left;
+    width: 100%;
+    font-size: 12px;
+    table-layout: fixed;
+    .changed {
+        color: #090;
+    }
+    .label {
+        padding-top: 5px;
+    }
+    a {
+        color: $glxgreen;
+    }
+    textarea {
+        resize: none;
+        width: 100%;
+    }
+    input {
+        width: 100%;
+        font-family: 'PT Mono', monospace;
+        margin: 5px 0 7px 0;
+        box-sizing: border-box;
+        padding-left: 3px;
+    }
+    .range {
+        padding: 10px 0 10px 10px;
+    }
+    .lv-0 {
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .lv-1 {
+        font-size: 13px;
+    }
+    .lv-2 {
+        font-size: 12px;
+        padding-left: 10px;
+    }
+    .val {
+        font-family: 'PT Mono', monospace; // padding-left: 10px;
+        font-weight: 400;
+        font-size: 12px;
+        white-space: pre-wrap;
+    }
+    .img_streetview {
+        width: 100%;
+        padding: 6px;
+      }
+    .num {
+        text-align: right;
+    }
+    .table-section {
+        .t-expander {
+            vertical-align: bottom;
+            float: right;
+            font-size: 15px;
+            padding-right: 5px;
+        }
+        &.expandable {
+            margin-bottom: 8px;
+            max-height: 25px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            .t-expander::before {
+                content: "expand_more"
+            }
+        }
+        &.expanded {
+            max-height: none;
+            overflow: auto;
+            .t-expander::before {
+                content: "expand_less"
+            }
+        }
+    }
+    .td_images {
+        text-align: center;
+        >div {
+            padding: 3px 0;
+            position: relative;
+        }
+        .addImage {
+            i {
+                color: #090;
+                font-size: 70px;
+                text-shadow: 2px 2px 2px #999;
+            }
+            input {
+                display: none;
+            }
+        }
+        img {
+            width: 100%;
+            -webkit-transition: opacity 0.2s linear;
+            -moz-transition: opacity 0.2s linear;
+            -o-transition: opacity 0.2s linear;
+            transition: opacity 0.2s linear;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.8);
+            position: absolute;
+            width: 100%;
+            font-size: 20px;
+            font-family: ffmark_bold;
+            text-align: right;
+            top: 0;
+            right: 0;
+            color: #090;
+        }
+    }
+    .sample-circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px #999;
+        float: right;
+        margin-right: 10px;
+    }
+
+}

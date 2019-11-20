@@ -1,0 +1,73 @@
+@import 'control';
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.tab_btn {
+    i {
+        font-size: 40px;
+    }
+}
+
+.spacer_mobile {
+    height: calc(100% - 50px);
+}
+
+.mapview {
+    position: fixed;
+    height: calc(100% - 50px);
+}
+
+.listviews {
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px slategrey;
+    z-index: 1000;
+    .listview {
+        padding: 20px;
+        overflow-y: scroll;
+        height: calc(100% - 50px);
+    }
+    .tab_bar {
+        width: 100%;
+        color: $glxgreen;
+        border-bottom: 1px solid $glxgreen;
+        text-align: center;
+        table-layout: fixed;
+        height: 50px; // box-shadow: 0 3px 3px -3px #000;
+        .swipe_icon {
+            display: none;
+        }
+        .active {
+            color: white;
+            background-color: $glxgreen;
+            .tab_icon {
+                display: none;
+            }
+            .swipe_icon {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.gazetteer {
+    position: fixed;
+    left: 0;
+    box-shadow: 0 3px 3px -3px #000;
+    input {
+        padding: 5px 0 5px 70px;
+    }
+    >ul {
+        padding-left: 70px;
+        li {
+            font-size: 20px;
+            color: $glxgreen;
+            list-style: none;
+            line-height: 1.5em;
+        }
+    }
+}

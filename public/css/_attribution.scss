@@ -1,0 +1,21 @@
+.attribution {
+    bottom: 0;
+    right: 0;
+    padding: 0 5px 5px 0;
+    margin-left: 150px;
+    position: absolute;
+    z-index: 999;
+    text-align: right;
+    font-family: ffmark_bold, sans-serif;
+    font-size: 18px;
+    text-shadow: 1px 1px 1px $glxlightgreen;
+    .logo {
+        font-family: ffmark_black, sans-serif;
+        font-size: 40px;
+    }
+    a {
+        margin-left: 10px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+}

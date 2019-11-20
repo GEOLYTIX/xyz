@@ -1,0 +1,114 @@
+@import 'control';
+
+body {
+    display: grid;
+    min-width: 666px;
+}
+
+.listviews {
+    grid-column: 1;
+    grid-row: 1/4;
+    padding: 0 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 2px #777;
+    overflow: hidden;
+    z-index: 1000;
+    >.scrolly {
+        width: calc(100% + 50px);
+    }
+    .listview {
+        padding: 10px 0;
+    }
+
+}
+
+#vertDivider {
+
+    grid-column: 2;
+    grid-row: 1/4;
+    background: repeating-linear-gradient( 90deg, #ddd, #fff 3px);
+    z-index: 1000;
+    
+
+    &:hover {
+        cursor: col-resize;
+    }
+
+}
+
+#hozDivider {
+
+    grid-column: 1/3;
+    grid-row: 1;
+    background: repeating-linear-gradient( 0deg, #ddd, #fff 3px);
+    box-shadow: inset 3px 0 4px -4px #777;
+    
+
+    &:hover {
+        cursor: row-resize;
+    }
+
+}
+
+.mapview {
+    grid-column: 3;
+    display: grid;
+    grid-template-columns: 55px;
+    overflow-y: hidden;
+
+    .map {
+        position: relative;
+        grid-row: 1;
+        grid-column: 1/3;
+    }
+
+    .btn_column {
+        grid-column: 1;
+        grid-row: 1;
+    }
+}
+
+.leaflet-left .leaflet-control-scale {
+    margin-left: 63px;
+}
+
+.gazetteer {
+    padding-top: 5px;
+    >ul {
+        li {
+            list-style: none;
+            line-height: 1.2em;
+            white-space: nowrap;
+            &:hover {
+                cursor: pointer;
+                background-color: $glxlightgreen;
+            }
+            &:focus {
+                background-color: $glxlightgreen;
+            }
+            &.active {
+                background-color: $glxlightgreen;
+            }
+        }
+    }
+}
+
+#desktop_mask {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,.8);
+    z-index: 9999;
+
+    .msg {
+        font-family: ffmark_bold;
+        font-size: 30px;
+        color: #090;
+        top: 50%;
+        transform: perspective(1px) translateY(-50%);
+        position: absolute;
+        width: 100%;
+        text-align: center;
+    }
+}

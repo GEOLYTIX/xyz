@@ -1,0 +1,48 @@
+.gazetteer {
+    background-color: #fff;
+
+    .clear {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 33px;
+        color: $glxgreen;
+    }
+
+    .clear-mask {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        background: linear-gradient(to right, transparent, #fff, #fff);
+        text-align: right;
+        line-height: 2;
+        color: white;
+    }
+
+    input {
+        width: 100%;
+        font-size: 20px;
+        box-shadow: 0 3px 3px -3px #000;
+    }
+
+    .bar {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    >ul {
+        -webkit-padding-start: 0;
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+        list-style-type: none;
+        position: absolute;
+        background-color: white;
+        margin: 0;
+        padding: 0 6px 0 0;
+        z-index: 999;
+        box-shadow: 0 3px 3px -3px #000;
+        /*width: 100%;*/
+    }
+}

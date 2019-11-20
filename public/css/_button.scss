@@ -1,0 +1,159 @@
+button {
+    border: none;
+    outline: none;
+}
+
+.btn_text {
+    font-family: ffmark_bold;
+    font-size: 15px;
+    color: $glxgreen;
+    height: 25px;
+}
+
+.btn_subtext {
+    font-family: ffmark;
+    font-size: 14px;
+    color: $glxgreen;
+    padding: 8px 0px 8px 0px;
+}
+
+.btn_column {
+    &.lv0 {
+        box-shadow: inset 2px 0 4px -4px #777;
+    }
+    &.lv1 {
+        box-shadow: inset 5px 0 4px -4px #777;
+    }
+    &.desktop {
+        // position: absolute;
+        z-index: 999;
+        background-color: #fff;
+        // height: 100%;
+        padding: 4px;
+        opacity: 0.8;
+    }
+    &.mobile {
+        position: fixed;
+        left: 10px;
+        button,
+        >div {
+            box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
+    }
+    // top: 0;
+    z-index: 999;
+    // div:hover {
+    //     cursor: pointer;
+    // }
+    button,
+    >div {
+        margin-top: 10px;
+        border-radius: 10px;
+        float: left;
+        clear: both;
+        height: 50px;
+        width: 50px;
+        padding: 0;
+        color: $glxgreen;
+        background: #fff;
+        text-align: center;
+        cursor: default;
+        border: none;
+        outline: none;
+        a {
+            color: $glxgreen;
+        }
+        i {
+            font-size: 30px;
+            line-height: 1.7;
+        }
+        &.active {
+            background: $glxgreen;
+            color: #fff;
+        }
+        &:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        &:hover:enabled {
+            cursor: pointer;
+        }
+    }
+}
+
+.btn_header {
+    font-size: 25px;
+    margin-left: 5px;
+    float: right;
+    color: $glxgreen;
+    &.active {
+        text-shadow: 2px 2px 2px #cf9;
+    }
+}
+
+.btn_small {
+    font-family: sans-serif;
+    font-size: 11px;
+    color: $glxgreen;
+    height: 14px;
+    display: none;
+    margin-bottom: 4px;
+}
+
+.btn_wide {
+    font-size: 13px;
+    border-radius: 2px;
+    line-height: 2;
+    text-align: center;
+    font-weight: 600;
+    color: $glxgreen;
+    box-shadow: 1px 1px 2px #999999;
+    margin: 5px 2px 5px 1px;
+    width: calc(100% - 5px);
+    &.disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+    &:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+    &:hover:enabled {
+        cursor: pointer;
+    }
+}
+
+.btn_state {
+    color: $glxgreen;
+    &.active {
+        color: #383836;
+    }
+}
+
+.btn_inline {
+    display: inline-block;
+    position: relative;
+    width: 130px;
+    font-size: 12px;
+    border-radius: 2px;
+    line-height: 2;
+    text-align: center;
+    font-weight: 600;
+    color: $glxgreen;
+    box-shadow: 1px 1px 3px #666;
+    margin: 6px 3px 12px 3px;
+    cursor: pointer;
+    &:active {
+        box-shadow: 2px 2px 3px #090;
+    }
+    span {
+        position: absolute;
+        top: 0;
+        left: 0
+    }
+    i {
+        font-size: 14px;
+        vertical-align: text-bottom;
+    }
+}
