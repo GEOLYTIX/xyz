@@ -65,6 +65,7 @@ export default _xyz => location => {
           dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777;">`;
 
         if(entry.dataset && entry.dataset !== dataset){
+          if(entry.skip) return;
           dataset_label.textContent = entry.dataset;
           dataset_row.appendChild(dataset_label);
           groups[entry.group].table.appendChild(dataset_row);
