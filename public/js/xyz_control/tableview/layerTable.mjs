@@ -87,13 +87,16 @@ export default _xyz => table => {
       _xyz.tableview.btn.tableViewport.style.display = 'block';
     }
 
-    if (!table.target) table.target = _xyz.tableview.tableContainer();
+    table.target = document.getElementById(table.target_id) || _xyz.tableview.tableContainer(table.toolbars);
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
       {
-        //layout: 'fitColumns',
-        columns: table.columns,
+        placeholder: "No Data Available",
+        tooltipsHeader: true,
+        columnVertAlign: "center",
+        columns: _xyz.tableview.groupColumns(table),//table.columns,
+        layout: table.layout || 'fitDataFill',
         autoResize: true,
         height: _xyz.tableview.height || 'auto',
         groupBy: table.groupBy || null,

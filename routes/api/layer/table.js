@@ -110,7 +110,7 @@ module.exports = fastify => {
         ${viewport_sql}
         ${filter_sql}
         ORDER BY ${orderby} ${order}
-        FETCH FIRST 99 ROW ONLY;`;
+        FETCH FIRST ${table.limit || 99} ROW ONLY;`;
 
       // OFFSET ${offset} ROWS
 

@@ -1529,7 +1529,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   transform: translatez(0);
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
-  border-right: 1px solid #ddd; }
+  border-right: 1px solid #ddd;
+  margin-bottom: 30px;
+  margin-right: 10px; }
 
 .tabulator[tabulator-layout="fitDataFill"] .tabulator-tableHolder .tabulator-table {
   min-width: 100%; }
@@ -1579,10 +1581,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
   box-sizing: border-box;
   width: 100%;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
+  white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: bottom; }
+  vertical-align: center; }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-title-editor {
   box-sizing: border-box;
@@ -1601,6 +1604,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-bottom: 6px solid #bbb; }
+
+.tabulator .tabulator-header .tabulator-col.tabulator-col-group > .tabulator-col-content .tabulator-col-title {
+  font-family: ffmark_bold; }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols {
   position: relative;
@@ -1742,9 +1748,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   display: inline-block;
   margin: 0 auto;
   padding: 10px;
-  color: #000;
   font-weight: bold;
-  font-size: 20px; }
+  font-size: 13px;
+  color: orange; }
 
 .tabulator .tabulator-tableHolder .tabulator-table {
   position: relative;

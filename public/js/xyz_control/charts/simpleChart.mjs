@@ -152,6 +152,7 @@ export default _xyz => entry => {
     			}],
                 xAxes: [{
                     ticks: {
+                        min: typeof(entry.chart.minX) !== undefined ?  entry.chart.minX : null,
                         display: entry.chart.hideTicksX ? false : null
                     }
                 }]
@@ -169,7 +170,6 @@ export default _xyz => entry => {
     		}
     	}
     });
-
 
     return graph;
 

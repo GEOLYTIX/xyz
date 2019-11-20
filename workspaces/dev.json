@@ -751,7 +751,9 @@
                         "tables": {
                             "Retail Places": {
                                 "from": "dev.retailplaces",
-                                "columns": [{
+                                "layout": "fitColumns",
+                                "columns": [
+                                    {
                                         "title": "ID",
                                         "field": "id",
                                         "type": "text"
@@ -763,13 +765,31 @@
                                     {
                                         "field": "rp_type",
                                         "type": "text"
+                                    },
+                                    {
+                                        "field": "comp_strgh",
+                                        "type": "integer",
+                                        "title": "Competition strength",
+                                        "group": "Characteristics"
+                                    },
+                                    {
+                                        "field": "est_units",
+                                        "title": "Estimate units",
+                                        "type": "integer",
+                                        "group": "Characteristics"
+                                    },
+                                    {
+                                        "field": "est_brands",
+                                        "title": "Estimate brands",
+                                        "type": "integer",
+                                        "group": "Characteristics"
                                     }
                                 ]
                             }
                         },
                         "charts": {
                             "Retail strength": {
-                                "display": true,
+                                "display": false,
                                 "chart": {
                                     "type": "bubble"
                                 },
@@ -798,7 +818,7 @@
                                 ]
                             },
                             "Services share": {
-                                "display": true,
+                                "display": false,
                                 "chart": {
                                     "type": "scatter",
                                     "pointStyle": "triangle",
@@ -1308,7 +1328,8 @@
                             "field": "postcode",
                             "type": "text",
                             "level": 1,
-                            "filter": "like"
+                            "filter": "like",
+                            "filterZoom": true
                         },
                         {
                             "label": "Households",
@@ -1516,6 +1537,9 @@
                     "table": "dev.uk_glx_sites",
                     "cluster_label": "site_name",
                     "infoj": [
+                        {
+                            "type": "key"
+                        },
                         {
                             "type": "report",
                             "report": {
@@ -2389,14 +2413,14 @@
                         },
                         {
                             "label": "Available tableviews",
-                            "type": "label",
-                            "hideInReport": true
+                            "type": "label"
                           },
                           {
                             "type": "tableDefinition",
                             "title": "Population Summary",
                             "display": true,
                             "target_id": "xyz_table1",
+                            "toolbars": {},
                             "columns": [
                               {
                                 "type": "integer",
@@ -2953,6 +2977,7 @@
                                 "type": "integer",
                                 "title": "0-5 mins",
                                 "field": "min5",
+                                "group": "Drivetimes",
                                 "lookup": {
                                   "table_a": "dev.uk_glx_sites",
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
@@ -2964,6 +2989,7 @@
                                 "type": "integer",
                                 "title": "0-10 mins",
                                 "field": "min10",
+                                "group": "Drivetimes",
                                 "lookup": {
                                   "table_a": "dev.uk_glx_sites",
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
@@ -2972,9 +2998,10 @@
                                 }
                               },
                               {
-                                "type": "numeric",
+                                "type": "integer",
                                 "title": "0-15 mins",
                                 "field": "min15",
+                                "group": "Drivetimes",
                                 "lookup": {
                                   "table_a": "dev.uk_glx_sites",
                                   "table_b": "geodata.uk_glx_geodata_hex_1k",
@@ -3065,6 +3092,8 @@
                             "title": "Nearest competitors", 
                             "display": false,
                             "target_id": "xyz_table5",
+                            "toolbars": {},
+                            "layout": "fitColumns",
                             "table": "geodata.uk_glx_open_retail_points_ed",
                             "geom": "geom_p_4326",
                             "columns": [
@@ -3078,19 +3107,33 @@
                               },
                               {
                                 "type": "integer",
+                                "geography": "km",
+                                "title": "Distance (km)",
+                                "fx": "ST_DISTANCE",
+                                "field": "dist",
+                                "orderby": true,
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 1
+                                }
+                              },
+                              {
+                                "type": "integer",
                                 "geography": true,
                                 "title": "Distance (m)",
                                 "fx": "ST_DISTANCE",
-                                "field": "dist",
-                                "orderby": true
+                                "field": "dist_m",
+                                "formatter": "money",
+                                "formatterParams": {
+                                    "precision": 0
+                                }
                               }
                             ],
                             "order": "ASC",
                             "limit": 8
                           },
                           {
-                            "type": "streetview",
-                            "hideInReport": true
+                            "type": "streetview"
                           }
                     ],
                     "style": {
