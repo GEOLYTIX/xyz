@@ -1,0 +1,46 @@
+.drawer {
+    box-sizing: content-box;
+
+    >.header {
+        display: flex;
+        align-items: center;
+
+        >:nth-child(1) {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        >:nth-child(2) {
+            margin-left: auto;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &.expandable {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+
+        >.header>.icon-expander {
+            background-image: url("../icons/icon-keyboard-arrow-down.svg");
+        }
+    }
+
+    &.expanded {
+        overflow: visible;
+        max-height: none !important;
+
+        >.header>.icon-expander {
+            background-image: url("../icons/icon-keyboard-arrow-up.svg");
+        }
+    }
+
+    &.disabled {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+}

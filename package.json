@@ -1,0 +1,60 @@
+{
+  "name": "xyz",
+  "version": "2.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geolytix/xyz"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development",
+    "start": "node server.js",
+    "debug": "nodemon --inspect server.js",
+    "lint": "eslint --debug ./",
+    "lint:write": "eslint --debug ./ --fix"
+  },
+  "lint-staged": {
+    "*.(js|mjs)": [
+      "npm run lint:write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "@mapbox/vector-tile": "^1.3.1",
+    "@turf/point-on-feature": "^5.1.5",
+    "bcrypt-nodejs": "0.0.3",
+    "chart.js": "^2.9.2",
+    "chartjs-plugin-datalabels": "^0.6.0",
+    "chroma-js": "^2.0.4",
+    "dotenv": "^8.0.0",
+    "fastify": "^2.10.0",
+    "fastify-auth": "^0.6.0",
+    "fastify-cors": "^2.1.3",
+    "fastify-formbody": "^3.1.0",
+    "fastify-helmet": "^3.0.2",
+    "fastify-jwt": "^1.1.0",
+    "fastify-static": "^2.5.0",
+    "fastify-swagger": "^2.4.0",
+    "hyperhtml": "^2.31.1",
+    "js-datepicker": "^4.6.6",
+    "jsrender": "^1.0.5",
+    "jwt-decode": "^2.2.0",
+    "mobile-detect": "^1.4.3",
+    "nanoid": "^1.2.3",
+    "node-fetch": "^2.2.1",
+    "nodemailer": "^4.6.8",
+    "ol": "^6.1.1",
+    "pg": "^7.5.0",
+    "pino-pretty": "^2.5.0",
+    "request": "^2.88.0",
+    "tabulator-tables": "^4.4.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "husky": "^1.1.3",
+    "lint-staged": "^8.0.4",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
+  }
+}

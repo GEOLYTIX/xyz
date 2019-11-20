@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head data-dir="{{:dir}}">
+    <title>XYZ | User Administration</title>
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{:dir}}/tabulator/tabulator.css">
+    <script src="{{:dir}}/tabulator/tabulator.js"></script>
+    <script src="{{:dir}}/views/user.js" async></script>
+
+    <style>
+
+        body {
+            margin: 40px;
+            padding: 0;
+            font: 14px "Open Sans", sans-serif;
+        }
+
+        .tabulator-row .tabulator-cell {
+            margin: 2px;
+        }
+
+        .tabulator .tabulator-header .tabulator-col {
+            margin: 2px;
+            padding-bottom:10px;
+        }
+
+        .icon-face {
+            background-image: url("../icons/icon-face.svg");
+        }
+
+        .icon-tick-done {
+            background-image: url("../icons/icon-tick-done.svg");
+        }
+
+        .icon-tick-done-all {
+            background-image: url("../icons/icon-tick-done-all.svg");
+        }
+
+        .icon-warning {
+            background-image: url("../icons/icon-warning.svg");
+        }
+
+        .icon-supervisor-account {
+            background-image: url("../icons/icon-supervisor-account.svg");
+        }
+
+        .icon-settings {
+            background-image: url("../icons/icon-settings.svg");
+        }
+
+        .icon-lock-closed {
+            background-image: url("../icons/icon-lock-closed.svg");
+            height: 40px;
+            width:30px;
+        }
+
+        .xyz-icon {
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 36px;
+            width:36px;
+        }
+    </style>
+    
+</head>
+
+<body data-token={{:token}}>
+
+    <h1>Account admin</h1>
+
+    <div id="userTable"></div>
+
+</body>
+
+</html>

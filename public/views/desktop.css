@@ -1,0 +1,103 @@
+body {
+    display: grid;
+    min-width: 666px;
+    grid-template-columns: 333px 10px auto;
+    grid-template-rows: minmax(0, 1fr) 0;
+}
+
+.map {
+    box-shadow: inset 4px 0px 4px -4px #777;
+}
+
+#listviews {
+    grid-column: 1;
+    grid-row: 1/4;
+    padding: 0 20px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+#listviews > .scrolly {
+    width: calc(100% + 50px);
+}
+
+#listviews > .scrolly > :not(.scrolly_track) {
+    margin: 10px 0;
+}
+
+#clear_locations {
+    font-size: 90%;
+}
+
+.listview-title {
+    font-weight: bold;
+    /*font-size: 105%;*/
+    margin-bottom: 10px;
+    padding: 3px;
+    border-radius: 2px;
+}
+
+#vertDivider {
+    grid-column: 2;
+    grid-row: 1/4;
+    background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
+}
+
+#vertDivider:hover {
+    cursor: col-resize;
+}
+
+#hozDivider {
+    grid-column: 1/3;
+    grid-row: 1;
+    background: repeating-linear-gradient(0deg, #ddd, #fff 3px);
+    box-shadow: inset 3px 0 4px -4px #777;
+    z-index: 9999;
+}
+
+#hozDivider:hover {
+    cursor: row-resize;
+}
+
+.mapview {
+    grid-column: 3;
+    position: relative;
+}
+
+.mapview > .btn-column {
+    position: absolute;
+}
+
+.btn-column {
+    height: 100%;
+    padding: 4px;
+    background-color: #fff;
+    opacity: 0.8;
+}
+
+.btn-column.lv0 {
+    box-shadow: inset 2px 0 4px -4px #777;
+    z-index: 9999;
+}
+
+.btn-column.lv1 {
+    box-shadow: inset 5px 0 4px -4px #777;
+}
+
+#desktop_mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .8);
+    z-index: 9999;
+}
+
+#desktop_mask > p {
+    font-weight: 600;
+    font-size: 200%;
+    top: 50%;
+    transform: perspective(1px) translateY(-50%);
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}

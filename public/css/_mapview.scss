@@ -1,0 +1,98 @@
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+.infotip {
+    position: fixed;
+    margin: 0;
+    padding: 5px;
+    background: #eee;
+    box-shadow: 2px 2px 2px #666;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    transition-delay: 0.2s;
+    opacity: 0;
+    z-index: 998;
+    font-size: 93%;
+}
+
+.popup {
+    position: absolute;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+    bottom: 12px;
+    transform: translate(-50%, 0);
+
+    &::after,
+    &::before {
+        border: solid transparent;
+        content: " ";
+        position: absolute;
+        pointer-events: none;
+    }
+
+    &::after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 50%;
+        margin-left: -10px;
+    }
+
+    >div {
+        background-color: white;
+        width: 400px;
+        max-height: 300px;
+        overflow-x: hidden;
+    }
+
+    ul {
+        list-style-type: none;
+        text-align: left;
+        overflow-x: hidden;
+
+        >li {
+            padding: 5px 0 5px 10px;
+            white-space: nowrap;
+            line-height: 1.5;
+        }
+    }
+}
+
+.attribution {
+    bottom: 0;
+    right: 5px;
+    margin-left: 150px;
+    position: absolute;
+    z-index: 999;
+    text-align: right;
+    font-weight: bold;
+    font-size: 100%;
+    pointer-events: none;
+
+    >*{
+        float: right;
+        clear: both;
+        margin-bottom: 5px;
+    }
+
+    a {
+        margin-left: 10px;
+        white-space: nowrap;
+        display: inline-block;
+        pointer-events: auto;
+        text-shadow: 0px 0px 5px #fff;
+    }
+
+    .logo {
+        width: 250px;
+        height: 30px;
+        background-repeat: no-repeat;
+        background-position: right;
+        background-size: contain;
+    }
+
+    .ol-scale-line {
+        position: static;
+    }
+
+}

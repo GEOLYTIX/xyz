@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head data-dir="{{:dir}}">
+    <title>XYZ Sample Report</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <link rel="stylesheet" href="{{:dir}}/css/control.css" />
+
+    <script src="{{:dir}}/js/build/xyz_openlayers.js" defer></script>
+    <script src="{{:dir}}/views/report_location.js" defer></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .page {
+            width: 297mm;
+            height: 200mm;
+            margin: 0 auto;
+            padding: 5mm;
+            page-break-after: always;
+            box-shadow: 1px 1px 2px #333;
+        }
+        
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        @media print {
+            .page {
+                box-shadow: none;
+            }
+        }
+
+        .page > .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-template-rows: auto 1fr;
+            grid-gap: 5mm;
+        }
+
+        .tr_report {
+            display: none;
+        }
+
+        #report_title {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        #report_left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        #xyz_table8_header {
+            grid-column: 1;
+            grid-row: 3;
+        }
+
+        #xyz_table8 {
+            grid-column: 1;
+            grid-row: 4;
+        }
+
+        #map_title {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        #report_map {
+            grid-column: 2;
+            grid-row: 2;
+            height: 300px;
+        }
+
+        ._report {
+            display: none;
+        }
+
+        .page h3 {
+            padding: 4px;
+            margin-bottom: 6px;
+            background-color: #2E86AB;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Begin tables styling */
+        #xyz_table1_header {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        #xyz_table1 {
+            grid-column: 2;
+            grid-row: 4;
+        }
+
+        #xyz_table3 .tabulator-cell {
+            height: 28px;
+            white-space: normal;
+        }
+
+        /* End tables styling */
+        
+    </style>
+
+</head>
+
+<body data-viewmode="report" data-token={{:token}}>
+
+    <div class="page">
+        <div class="grid">
+            <h3 id="report_title">XYZ LOCATION REPORT</h3>
+            <div id="report_left"></div>
+            <h3 id="xyz_table8_header">WORKERS SUMMARY</h3>
+            <div id="xyz_table8"></div>
+            <h3 id="map_title">MAP VIEW</h3>
+            <div id="report_map"></div>
+            <h3 id="xyz_table1_header">POPULATION SUMMARY</h3>
+            <div id="xyz_table1"></div>
+        </div>
+    </div>
+
+    <div class="page">
+            <h3 id="xyz_table3_header">OUTPUT AREA CLASSIFICATION PROFILE</h3>
+            <div id="xyz_table3"></div>
+        </div>
+    </div>
+
+    <div class="page">
+        <h3 id="xyz_table2_header">AGE PROFILE</h3>
+        <div id="xyz_table2"></div>
+        <h3 id="xyz_table4_header">SOCIAL GRADE PROFILE</h3>
+        <div id="xyz_table4"></div>
+        <h3 id="xyz_table5_header">NEAREST COMPETITORS</h3>
+        <div id="xyz_table5"></div>
+    </div>
+
+</body>
+
+</html>

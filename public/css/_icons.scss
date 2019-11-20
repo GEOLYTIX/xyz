@@ -1,0 +1,202 @@
+.xyz-icon {
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.enabled > .xyz-icon{
+    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); /* primary colour filter */
+}
+
+.icon-layers {
+    background-image: url("../icons/icon-layers.svg");
+}
+
+.icon-location {
+    background-image: url("../icons/icon-room.svg");
+}
+
+.icon-face {
+    background-image: url("../icons/icon-face.svg");
+}
+
+.icon-search {
+    background-image: url("../icons/icon-search.svg");
+}
+
+.icon-gps-not-fixed {
+    background-image: url("../icons/icon-gps_not_fixed.svg");
+}
+
+.icon-add {
+    background-image: url("../icons/icon-add.svg");
+}
+
+.icon-remove {
+    background-image: url("../icons/icon-remove.svg");
+}
+
+.icon-show-chart {
+    background-image: url("../icons/icon-show-chart.svg");
+}
+
+.icon-school {
+    background-image: url("../icons/icon-school.svg");
+}
+
+.icon-lock-open {
+    background-image: url("../icons/icon-lock-open.svg");
+}
+
+.icon-supervisor-account {
+    background-image: url("../icons/icon-supervisor-account.svg");
+}
+
+.icon-settings {
+    background-image: url("../icons/icon-settings.svg");
+}
+
+.icon-bug-report {
+    background-image: url("../icons/icon-bug-report.svg");
+}
+
+.icon-vertical-align-top {
+    background-image: url("../icons/icon-vertical-align-top.svg");
+}
+
+.icon-vertical-align-bottom {
+    background-image: url("../icons/icon-vertical-align-bottom.svg");
+}
+
+.icon-fullscreen {
+    background-image: url("../icons/icon-fullscreen.svg"); 
+}
+
+.icon-close {
+    background-image: url("../icons/icon-close.svg");
+    background-position: right;
+}
+
+.icon-backup {
+    background-image: url("../icons/icon-backup.svg");
+}
+
+.icon-description {
+    background-image: url("../icons/icon-description.svg");
+}
+
+.icon-touch-app {
+    background-image: url("../icons/icon-touch-app.svg");
+}
+
+.icon-toggle {
+    background-image: url("../icons/icon-toggle-off.svg");
+}
+
+.icon-toggle:not(.on) {
+    filter: invert(52%) sepia(6%) saturate(10%) hue-rotate(323deg) brightness(88%) contrast(85%);
+}
+
+.icon-toggle.on {
+    background-image: url("../icons/icon-toggle-on.svg");
+}
+
+.icon-cloud-upload {
+    background-image: url("../icons/icon-cloud-upload.svg");
+}
+
+.icon-keyboard-arrow-up {
+    background-image: url("../icons/icon-keyboard-arrow-up.svg");
+    background-position: right;
+}
+
+.icon-keyboard-arrow-down {
+    background-image: url("../icons/icon-keyboard-arrow-down.svg");
+    background-position: right;
+}
+
+.icon-trash {
+    background-image: url("../icons/icon-trash.svg");
+}
+
+.icon-build {
+    background-image: url("../icons/icon-build.svg");
+}
+
+.icon-add-document {
+    background-image: url("../icons/icon-add-document.svg");
+}
+
+.icon-add-photo {
+    background-image: url("../icons/icon-add-photo.svg");           
+}
+
+.icon-view-list {
+    background-image: url("../icons/icon-view-list.svg");
+}
+
+.icon-bar-chart {
+    background-image: url("../icons/icon-bar-chart.svg");
+}
+
+.icon-pie-chart {
+    background-image: url("../icons/icon-pie-chart.svg");
+}
+
+.icon-donut-small {
+    background-image: url("../icons/icon-donut-small.svg");
+}
+
+.icon-notes {
+    background-image: url("../icons/icon-notes.svg");
+}
+
+.icon-event-note {
+    background-image: url("../icons/icon-event-note.svg");
+}
+
+.icon-scatter-plot {
+    background-image: url("../icons/icon-scatter-plot.svg");
+}
+
+.icon-bubble-chart {
+    background-image: url("../icons/icon-bubble-chart.svg");
+}
+
+.icon-multiline-chart {
+    background-image: url("../icons/icon-multiline-chart.svg");
+}
+
+.icon-location-tick {
+    background-image: url("../icons/icon-location-tick.svg");
+}
+
+.sample-poly {
+    width: 30%;
+    height: 32px;
+    border-radius: 2px;
+    box-shadow: 2px 2px 2px #999;
+}
+
+.sample-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px #999;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.link-with-img {
+    display: block;
+    margin-top: 5px;
+
+    .xyz-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+    }
+
+    >* {
+        vertical-align: middle;
+    }
+}

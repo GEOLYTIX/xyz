@@ -1,0 +1,24 @@
+.workspace {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1002;
+    background-color: #fff;
+    grid-column: 3;
+    grid-row: 1;
+    overflow-y: scroll;
+
+    .btn-column {
+        position: fixed;
+        height: 100%;
+        padding: 4px;
+        background-color: #fff;
+        box-shadow: inset 2px 0 4px -4px #777;
+    }
+
+    .codemirror {
+        position: absolute;
+        right: 0;
+        width: calc(100% - 50px);
+    }
+}
