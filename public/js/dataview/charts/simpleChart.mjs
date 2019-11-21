@@ -154,14 +154,16 @@ export default _xyz => entry => {
     			yAlign: entry.chart.yAlign || null,
     			callbacks: {
     				title: () => '',
-          label: item => {
-            return entry.chart.offsetX ? `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}` : `${item.yLabel}: ${item.xLabel}`;
-          }
-    			}
+            label: item => {
+              return entry.chart.offsetX ? `${item.yLabel}: ${item.xLabel -= entry.chart.offsetX}` : `${item.yLabel}: ${item.xLabel}`;
+            }
+    			}/*,
+          filter: tooltipItem => {}*/
     		}
     	}
     });
 
+  //console.log(Object.values(datasets).value);
 
   return graph;
 
