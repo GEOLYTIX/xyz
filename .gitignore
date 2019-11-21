@@ -30,6 +30,7 @@ workspaces/brexit.json
 workspaces/mb.json
 workspaces/richersounds.json
 workspaces/mns.json
+workspaces/kfc_japan.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
