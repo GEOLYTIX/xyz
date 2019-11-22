@@ -1915,10 +1915,12 @@ button:disabled {
 }
 .location-view .lv-1 {
   font-size: 90%;
+  font-weight: 400;
 }
 .location-view .lv-2 {
   font-size: 85%;
   padding-left: 10px;
+  font-weight: 400;
 }
 .location-view img {
   width: 100%;
