@@ -1681,6 +1681,30 @@
                         }
                     ]
                 },
+                "Election Wards": {
+                    "group": "Cluster",
+                    "format": "cluster",
+                    "dbs": "XYZ",
+                    "table": "politics.election_ward",
+                    "geom": "geom_point_4326",
+                    "srid": "4326",
+                    "cluster_hexresolution": 0.1,
+                    "style": {
+                        "markerMin": 10,
+                        "markerMax": 20,
+                        "anchor": null,
+                        "marker": {
+                          "type": "target",
+                          "fillColor": "#cddc39",
+                          "scale": 0.05
+                        },
+                        "markerMulti": {
+                          "type": "target",
+                          "fillColor": "#ff9800",
+                          "scale": 0.05
+                        }
+                    }
+                }, 
                 "PPD": {
                     "group": "Cluster",
                     "format": "cluster",

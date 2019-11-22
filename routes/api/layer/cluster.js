@@ -181,8 +181,6 @@ module.exports = fastify => {
           WITH
           first as (
             SELECT
-              id,
-
               ${cat} AS cat,
 
               ${size} AS size,
@@ -203,7 +201,7 @@ module.exports = fastify => {
 
                 ELSE
                   ST_Point(
-                    round(round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width/2}),
+                    round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width/2},
                     round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
 
               END p0                
@@ -212,7 +210,7 @@ module.exports = fastify => {
           ),
           second as (
             SELECT
-              id,
+
               cat,
               size,
 
