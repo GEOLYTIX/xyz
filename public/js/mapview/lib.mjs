@@ -17,7 +17,7 @@ import {transform, transformExtent, fromLonLat} from 'ol/proj';
 
 import {defaults as interactionDefaults, PinchZoom, PinchRotate, DragPan, Draw, Modify} from 'ol/interaction.js';
 
-import {createBox} from 'ol/interaction/Draw.js';
+import {createBox, createRegularPolygon} from 'ol/interaction/Draw.js';
 
 import {click} from 'ol/events/condition.js';
 
@@ -54,6 +54,7 @@ export default () => ({
 
   draw: {
     createBox: createBox,
+    createRegularPolygon: createRegularPolygon,
   },
   
   events: {
