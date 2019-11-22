@@ -65,7 +65,7 @@ export default _xyz => layer => {
   
         Object.assign(
           style,
-          feature.get(theme.field) && theme.cat[feature.get(theme.field)].style || {}
+          feature.get(theme.field) && theme.cat[feature.get(theme.field)] && theme.cat[feature.get(theme.field)].style || {}
         );
   
       }
