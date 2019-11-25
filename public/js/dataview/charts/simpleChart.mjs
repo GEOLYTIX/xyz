@@ -129,6 +129,9 @@ export default _xyz => entry => {
     		},
     		scales: {
     			yAxes: [{
+          afterFit: (scaleInstance) => {
+            if (entry.chart.yAxesWidth) scaleInstance.width = entry.chart.yAxesWidth;
+          },
           gridlines: {
             display: true
           },
