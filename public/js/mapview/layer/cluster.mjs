@@ -66,7 +66,7 @@ export default _xyz => layer => {
 
         layer.max_size = cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0);
       
-        let id = 0;
+        let id = 1;
       
         const features = cluster.map(f => new _xyz.mapview.lib.Feature({
           id: id++,

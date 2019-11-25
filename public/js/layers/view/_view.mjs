@@ -78,7 +78,7 @@ export default _xyz => {
 
     layer.view.addEventListener('toggleDisplay', 
         ()=>header.toggleDisplay.classList.toggle('on'));
-  
+
     layer.view.appendChild(header);
 
     // Create layer meta.
@@ -129,7 +129,7 @@ export default _xyz => {
 
     const firstPanel = layer.view.querySelector('.panel');
 
-    //firstPanel && firstPanel.classList.add('expanded');
+    firstPanel && firstPanel.classList.add('expanded');
 
   }
 
