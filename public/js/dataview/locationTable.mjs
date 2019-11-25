@@ -91,7 +91,7 @@ export default _xyz => (table, callback) => {
       table.target,
       {
         invalidOptionWarnings: false,
-        placeholder: 'No Data Available',
+        //placeholder: 'No Data Available',
         tooltipsHeader: true,
         columnVertAlign: 'center',
         columns: columns,
