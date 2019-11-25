@@ -16,7 +16,7 @@ export default _xyz => layer => {
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
 
-    let cat_style = Object.assign({}, layer.style.default, cat[1].style);
+    let cat_style = Object.assign({}, layer.style.default, cat[1].style || cat[1]);
 
     if(cat_style.fillOpacity === undefined) {
 

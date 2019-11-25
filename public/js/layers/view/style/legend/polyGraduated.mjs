@@ -10,7 +10,7 @@ export default _xyz => layer => {
 
   layer.style.theme.cat_arr.forEach(cat => {
            
-    let cat_style = Object.assign({}, layer.style.default, cat.style);
+    let cat_style = Object.assign({}, layer.style.default, cat.style || cat);
 
     legend.appendChild(_xyz.utils.wire(null, 'svg')`
       <rect

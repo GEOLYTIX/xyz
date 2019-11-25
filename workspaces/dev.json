@@ -68,7 +68,7 @@
                                     "formatterParams": {
                                         "symbol": " dollars",
                                         "symbolAfter": true,
-                                        "precision": false 
+                                        "precision": false
                                     }
                                 },
                                 {
@@ -77,7 +77,7 @@
                                     "formatter": "money",
                                     "align": "right",
                                     "formatterParams": {
-                                        "precision": false 
+                                        "precision": false
                                     }
                                 }
                             ]
@@ -215,43 +215,49 @@
                                         "value": 0,
                                         "label": "0",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 5000,
                                         "label": "5000",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 25000,
                                         "label": "25000",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 75000,
                                         "label": "75000",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 250000,
                                         "label": "250000",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 500000,
                                         "label": "500000",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 1000000,
                                         "label": "1000000",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -264,43 +270,49 @@
                                         "value": 1,
                                         "label": "1",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 2.5,
                                         "label": "2.5",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 5,
                                         "label": "5",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 10,
                                         "label": "10",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 25,
                                         "label": "25",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 50,
                                         "label": "50",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 100,
                                         "label": "100",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -313,41 +325,47 @@
                                         "value": 0,
                                         "label": "0",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 0.01,
                                         "label": "0.01",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 0.025,
                                         "label": "0.025",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 0.05,
                                         "label": "0.05",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 0.1,
                                         "label": "0.1",
                                         "fillColor": "#fdae61"
-                                    },{
+                                    },
+                                    {
                                         "value": 0.5,
                                         "label": "0.5",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 1,
                                         "label": "1",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -380,7 +398,10 @@
                                 "type": "markerColor",
                                 "colorMarker": "#999999",
                                 "colorDot": "#333333",
-                                "anchor": [0.5, 1],
+                                "anchor": [
+                                    0.5,
+                                    1
+                                ],
                                 "scale": 0.05
                             }
                         },
@@ -389,7 +410,10 @@
                                 "type": "markerColor",
                                 "colorMarker": "#64dd17",
                                 "colorDot": "#33691e",
-                                "anchor": [0.5, 1],
+                                "anchor": [
+                                    0.5,
+                                    1
+                                ],
                                 "scale": 0.05
                             }
                         },
@@ -398,7 +422,10 @@
                                 "type": "markerColor",
                                 "colorMarker": "#64dd17",
                                 "colorDot": "#33691e",
-                                "anchor": [0.5, 1],
+                                "anchor": [
+                                    0.5,
+                                    1
+                                ],
                                 "scale": 0.05
                             }
                         }
@@ -689,7 +716,9 @@
                         "isoline_here": true,
                         "delete": true
                     },
-                    "mvt_fields": ["strokeColor"],
+                    "mvt_fields": [
+                        "strokeColor"
+                    ],
                     "mvt_cache": "dev.draw__mvts",
                     "style": {
                         "default": {
@@ -768,8 +797,12 @@
                             "inline": true,
                             "edit": {
                                 "options": [
-                                    {"Open" : "1"},
-                                    {"Closed": "2"},
+                                    {
+                                        "Open": "1"
+                                    },
+                                    {
+                                        "Closed": "2"
+                                    },
                                     "Other"
                                 ]
                             }
@@ -786,7 +819,10 @@
                             },
                             "_marker": {
                                 "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin.svg",
-                                "anchor": [0.5, 1]
+                                "anchor": [
+                                    0.5,
+                                    1
+                                ]
                             }
                         },
                         "highlight": {
@@ -828,43 +864,49 @@
                                         "value": 0,
                                         "label": "0 to 100",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 100,
                                         "label": "100 to 200",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 200,
                                         "label": "200 to 300",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 300,
                                         "label": "300 to 400",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 400,
                                         "label": "400 to 500",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 500,
                                         "label": "500 to 600",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 600,
                                         "label": "600 or more",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -918,31 +960,31 @@
                             "from": "dev.retailplaces",
                             "layout": "fitColumns",
                             "columns": [
-                                    {
-                                        "title": "ID",
-                                        "field": "id"
-                                    },
-                                    {
-                                        "field": "dev_date"
-                                    },
-                                    {
-                                        "field": "rp_type"
-                                    },
-                                    {
-                                        "field": "comp_strgh",
-                                        "title": "Competition strength",
-                                        "group": "Characteristics"
-                                    },
-                                    {
-                                        "field": "est_units",
-                                        "title": "Estimate units",
-                                        "group": "Characteristics"
-                                    },
-                                    {
-                                        "field": "est_brands",
-                                        "title": "Estimate brands",
-                                        "group": "Characteristics"
-                                    }
+                                {
+                                    "title": "ID",
+                                    "field": "id"
+                                },
+                                {
+                                    "field": "dev_date"
+                                },
+                                {
+                                    "field": "rp_type"
+                                },
+                                {
+                                    "field": "comp_strgh",
+                                    "title": "Competition strength",
+                                    "group": "Characteristics"
+                                },
+                                {
+                                    "field": "est_units",
+                                    "title": "Estimate units",
+                                    "group": "Characteristics"
+                                },
+                                {
+                                    "field": "est_brands",
+                                    "title": "Estimate brands",
+                                    "group": "Characteristics"
+                                }
                             ]
                         },
                         "Retail strength": {
@@ -952,32 +994,32 @@
                             },
                             "from": "dev.retailplaces",
                             "columns": [
-                                    {
-                                        "title": "Units",
-                                        "field": "est_units",
-                                        "type": "integer"
-                                    },
-                                    {
-                                        "title": "Brands",
-                                        "field": "est_brands",
-                                        "type": "integer"
-                                    },
-                                    {
-                                        "title": "Strength",
-                                        "field": "comp_strgh",
-                                        "fieldfx": "(comp_strgh/1000000)",
-                                        "type": "integer"
-                                    },
-                                    {
-                                        "title": "Name",
-                                        "field": "rp_name"
-                                    }
+                                {
+                                    "title": "Units",
+                                    "field": "est_units",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "Brands",
+                                    "field": "est_brands",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "Strength",
+                                    "field": "comp_strgh",
+                                    "fieldfx": "(comp_strgh/1000000)",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "Name",
+                                    "field": "rp_name"
+                                }
                             ]
                         },
                         "Services share": {
                             "display": false,
                             "chart": {
-                            "type": "scatter",
+                                "type": "scatter",
                                 "pointStyle": "triangle",
                                 "radius": 10
                             },
@@ -1015,120 +1057,120 @@
                                     "Major City Centre": {
                                         "label": "Major City Centre",
                                         "style": {
-                                        "strokeColor": "#EF271B",
-                                        "fillColor": "#EF271B"
+                                            "strokeColor": "#EF271B",
+                                            "fillColor": "#EF271B"
                                         }
                                     },
                                     "City Centre": {
                                         "label": "City Centre",
                                         "style": {
-                                        "strokeColor": "#BA2D0B",
-                                        "fillColor": "#BA2D0B"
+                                            "strokeColor": "#BA2D0B",
+                                            "fillColor": "#BA2D0B"
                                         }
                                     },
                                     "Large Town Centre": {
                                         "label": "Large Town Centre",
                                         "style": {
-                                        "strokeColor": "#FE4E00",
-                                        "fillColor": "#FE4E00"
+                                            "strokeColor": "#FE4E00",
+                                            "fillColor": "#FE4E00"
                                         }
                                     },
                                     "Major Urban Centre": {
                                         "label": "Major Urban Centre",
                                         "style": {
-                                        "strokeColor": "#E2711D",
-                                        "fillColor": "#E2711D"
+                                            "strokeColor": "#E2711D",
+                                            "fillColor": "#E2711D"
                                         }
                                     },
                                     "Town Centre": {
                                         "label": "Town Centre",
                                         "style": {
-                                        "strokeColor": "#F3A712",
-                                        "fillColor": "#F3A712"
+                                            "strokeColor": "#F3A712",
+                                            "fillColor": "#F3A712"
                                         }
                                     },
                                     "Urban Centre": {
                                         "label": "Urban Centre",
                                         "style": {
-                                        "strokeColor": "#FADF63",
-                                        "fillColor": "#FADF63"
+                                            "strokeColor": "#FADF63",
+                                            "fillColor": "#FADF63"
                                         }
                                     },
                                     "Small Town Centre": {
                                         "label": "Small Town Centre",
                                         "style": {
-                                        "strokeColor": "#FFE74C",
-                                        "fillColor": "#FFE74C"
+                                            "strokeColor": "#FFE74C",
+                                            "fillColor": "#FFE74C"
                                         }
                                     },
                                     "Village Centre": {
                                         "label": "Village Centre",
                                         "style": {
-                                        "strokeColor": "#DBFE87",
-                                        "fillColor": "#DBFE87"
+                                            "strokeColor": "#DBFE87",
+                                            "fillColor": "#DBFE87"
                                         }
                                     },
                                     "Regional SC": {
                                         "label": "Regional SC",
                                         "style": {
-                                        "strokeColor": "#8ED081",
-                                        "fillColor": "#8ED081"
+                                            "strokeColor": "#8ED081",
+                                            "fillColor": "#8ED081"
                                         }
                                     },
                                     "Outlet Centre": {
                                         "label": "Outlet Centre",
                                         "style": {
-                                        "strokeColor": "#7DDF64",
-                                        "fillColor": "#7DDF64"
+                                            "strokeColor": "#7DDF64",
+                                            "fillColor": "#7DDF64"
                                         }
                                     },
                                     "Shopping Park": {
                                         "label": "Shopping Park",
                                         "style": {
-                                        "strokeColor": "#074F57",
-                                        "fillColor": "#074F57"
+                                            "strokeColor": "#074F57",
+                                            "fillColor": "#074F57"
                                         }
                                     },
                                     "Retail Park": {
                                         "label": "Retail Park",
                                         "style": {
-                                        "strokeColor": "#32746D",
-                                        "fillColor": "#32746D"
+                                            "strokeColor": "#32746D",
+                                            "fillColor": "#32746D"
                                         }
                                     },
                                     "Leisure Park": {
                                         "label": "Leisure Park",
                                         "style": {
-                                        "strokeColor": "#41D3BD",
-                                        "fillColor": "#41D3BD"
+                                            "strokeColor": "#41D3BD",
+                                            "fillColor": "#41D3BD"
                                         }
                                     },
                                     "Local Hub": {
                                         "label": "Local Hub",
                                         "style": {
-                                        "strokeColor": "#08B2E3",
-                                        "fillColor": "#08B2E3"
+                                            "strokeColor": "#08B2E3",
+                                            "fillColor": "#08B2E3"
                                         }
                                     },
                                     "Large Parade": {
                                         "label": "Large Parade",
                                         "style": {
-                                        "strokeColor": "#1F487E",
-                                        "fillColor": "#1F487E"
+                                            "strokeColor": "#1F487E",
+                                            "fillColor": "#1F487E"
                                         }
                                     },
                                     "Parade": {
                                         "label": "Parade",
                                         "style": {
-                                        "strokeColor": "#541388",
-                                        "fillColor": "#541388"
+                                            "strokeColor": "#541388",
+                                            "fillColor": "#541388"
                                         }
                                     },
                                     "Weak Parade": {
                                         "label": "Weak Parade",
                                         "style": {
-                                        "strokeColor": "#D90368",
-                                        "fillColor": "#D90368"
+                                            "strokeColor": "#D90368",
+                                            "fillColor": "#D90368"
                                         }
                                     }
                                 }
@@ -1143,37 +1185,43 @@
                                         "style": {
                                             "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 10000,
                                         "label": "10000 to 25000",
                                         "style": {
                                             "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 25000,
                                         "label": "25000 to 50000",
                                         "style": {
                                             "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 50000,
                                         "label": "50000 to 100000",
                                         "style": {
                                             "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 100000,
                                         "label": "100000 to 250000",
                                         "style": {
                                             "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 250000,
                                         "label": "250000 to 500000",
                                         "style": {
                                             "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 500000,
                                         "label": "500000 or more",
                                         "style": {
@@ -1434,32 +1482,32 @@
                                     "Tesco": {
                                         "label": "Tesco",
                                         "style": {
-                                        "fillColor": "#0055a8",
-                                        "layers": {
-                                            "0.75": "#ffffff",
-                                            "0.35": "#f02f26"
+                                            "fillColor": "#0055a8",
+                                            "layers": {
+                                                "0.75": "#ffffff",
+                                                "0.35": "#f02f26"
+                                            }
                                         }
-                                    }
                                     },
                                     "Sainsburys": {
                                         "label": "Sainsbury's",
                                         "style": {
-                                        "fillColor": "#ee8a00",
-                                        "layers": {
-                                            "0.5": "#ffffff",
-                                            "0.35": "#ee8a00"
+                                            "fillColor": "#ee8a00",
+                                            "layers": {
+                                                "0.5": "#ffffff",
+                                                "0.35": "#ee8a00"
+                                            }
                                         }
-                                    }
                                     },
                                     "Marks and Spencer": {
                                         "label": "Marks & Spencer",
                                         "style": {
-                                        "fillColor": "#0a0d10",
-                                        "layers": {
-                                            "0.5": "#def036",
-                                            "0.25": "#0a0d10"
+                                            "fillColor": "#0a0d10",
+                                            "layers": {
+                                                "0.5": "#def036",
+                                                "0.25": "#0a0d10"
+                                            }
                                         }
-                                    }
                                     }
                                 }
                             },
@@ -1471,43 +1519,49 @@
                                         "value": 0,
                                         "label": "0 to 100",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 100,
                                         "label": "100 to 200",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 200,
                                         "label": "200 to 400",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 400,
                                         "label": "400 to 600",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 600,
                                         "label": "600 to 800",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 800,
                                         "label": "800 to 1000",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 1000,
                                         "label": "1000 or more",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -1521,43 +1575,49 @@
                                         "value": 0,
                                         "label": "0 to 100",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 100,
                                         "label": "100 to 200",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 200,
                                         "label": "200 to 400",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 400,
                                         "label": "400 to 600",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 600,
                                         "label": "600 to 800",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 800,
                                         "label": "800 to 1000",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 1000,
                                         "label": "1000 or more",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -1570,13 +1630,13 @@
                                     "Tesco": {
                                         "label": "Tesco",
                                         "style": {
-                                        "fillColor": "#0055a8"
+                                            "fillColor": "#0055a8"
                                         }
                                     },
                                     "Sainsburys": {
                                         "label": "Sainsbury's",
                                         "style": {
-                                        "fillColor": "#ee8a00"
+                                            "fillColor": "#ee8a00"
                                         }
                                     }
                                 }
@@ -1694,17 +1754,17 @@
                         "markerMax": 20,
                         "anchor": null,
                         "marker": {
-                          "type": "target",
-                          "fillColor": "#cddc39",
-                          "scale": 0.05
+                            "type": "target",
+                            "fillColor": "#cddc39",
+                            "scale": 0.05
                         },
                         "markerMulti": {
-                          "type": "target",
-                          "fillColor": "#ff9800",
-                          "scale": 0.05
+                            "type": "target",
+                            "fillColor": "#ff9800",
+                            "scale": 0.05
                         }
                     }
-                }, 
+                },
                 "PPD": {
                     "group": "Cluster",
                     "format": "cluster",
@@ -1734,50 +1794,56 @@
                                         "value": 0,
                                         "label": "0",
                                         "style": {
-                                        "fillColor": "#15773f"
+                                            "fillColor": "#15773f"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 250000,
                                         "label": "250000",
                                         "style": {
-                                        "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 500000,
                                         "label": "500000",
                                         "style": {
-                                        "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 750000,
                                         "label": "750000",
                                         "style": {
-                                        "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 1000000,
                                         "label": "1000000",
                                         "style": {
-                                        "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 1500000,
                                         "label": "1500000",
                                         "style": {
-                                        "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43"
                                         }
-                                    },{
+                                    },
+                                    {
                                         "value": 2000000,
                                         "label": "2000000",
                                         "style": {
-                                        "fillColor": "#d73027"
+                                            "fillColor": "#d73027"
                                         }
                                     }
                                 ]
                             }
                         }
                     }
-                },                
+                },
                 "Mapbox Label": {
                     "group": "Base Layer",
                     "format": "tiles",
@@ -1812,7 +1878,7 @@
                         {
                             "type": "report",
                             "report": {
-                              "template": "/views/report_location.html"
+                                "template": "/views/report_location.html"
                             },
                             "class": "_report"
                         },
@@ -1834,7 +1900,6 @@
                                 ]
                             }
                         },
-
                         {
                             "label": "Available Dashboards",
                             "type": "label",
@@ -2326,8 +2391,14 @@
                                 "title": true,
                                 "legend": true,
                                 "legendPosition": "bottom",
-                                "backgroundColor": ["rgba(192, 117, 205, 0.3)", "rgba(255, 167, 38, 0.3)"],
-                                "borderColor": ["#4a148c", "#e65100"]
+                                "backgroundColor": [
+                                    "rgba(192, 117, 205, 0.3)",
+                                    "rgba(255, 167, 38, 0.3)"
+                                ],
+                                "borderColor": [
+                                    "#4a148c",
+                                    "#e65100"
+                                ]
                             }
                         },
                         {
@@ -2421,7 +2492,13 @@
                                 "legend": true,
                                 "type": "doughnut",
                                 "cutoutPercentage": 36,
-                                "backgroundColor": ["rgba(229, 99 , 153, 0.4)", "rgba(0, 167, 225, 0.4)", "rgba(237, 222, 164, 0.4)", "rgba(247, 160 ,114, 0.4)", "rgba(255, 155, 66, 0.4)"],
+                                "backgroundColor": [
+                                    "rgba(229, 99 , 153, 0.4)",
+                                    "rgba(0, 167, 225, 0.4)",
+                                    "rgba(237, 222, 164, 0.4)",
+                                    "rgba(247, 160 ,114, 0.4)",
+                                    "rgba(255, 155, 66, 0.4)"
+                                ],
                                 "borderColor": "#C0B4A7"
                             }
                         },
@@ -2553,16 +2630,22 @@
                                 "legend": true,
                                 "legendPosition": "bottom",
                                 "type": "radar",
-                                "backgroundColor": ["rgba(233, 30, 99, 0.3)", "rgba(3, 169, 244, 0.3)"],
+                                "backgroundColor": [
+                                    "rgba(233, 30, 99, 0.3)",
+                                    "rgba(3, 169, 244, 0.3)"
+                                ],
                                 "fillOpacity": 0.3,
-                                "borderColor": ["rgba(233, 30, 99, 0.7)", "rgba(3, 169, 244, 0.7)"]
+                                "borderColor": [
+                                    "rgba(233, 30, 99, 0.7)",
+                                    "rgba(3, 169, 244, 0.7)"
+                                ]
                             }
                         },
                         {
                             "group": "Radar Chart",
                             "field": "actual_sales_activity1_radar",
                             "fieldfx": "actual_sales_activity1",
-                            "type": "integer", 
+                            "type": "integer",
                             "label": "Activity 1",
                             "dataset": "Actual"
                         },
@@ -2650,8 +2733,20 @@
                                 "height": 400,
                                 "legend": true,
                                 "type": "polarArea",
-                                "backgroundColor": ["rgba(229, 99, 153, 0.3)", "rgba(0, 167, 225, 0.3)", "rgba(237, 222, 164, 0.3)", "rgba(247, 160, 114, 0.3)", "rgba(255, 155, 66, 0.3)"],
-                                "borderColor": ["rgba(229, 99, 153, 0.3)", "rgba(0, 167, 225, 0.3)", "rgba(237, 222, 164, 0.3)", "rgba(247, 160, 114, 0.3)", "rgba(255, 155, 66, 0.3)"]
+                                "backgroundColor": [
+                                    "rgba(229, 99, 153, 0.3)",
+                                    "rgba(0, 167, 225, 0.3)",
+                                    "rgba(237, 222, 164, 0.3)",
+                                    "rgba(247, 160, 114, 0.3)",
+                                    "rgba(255, 155, 66, 0.3)"
+                                ],
+                                "borderColor": [
+                                    "rgba(229, 99, 153, 0.3)",
+                                    "rgba(0, 167, 225, 0.3)",
+                                    "rgba(237, 222, 164, 0.3)",
+                                    "rgba(247, 160, 114, 0.3)",
+                                    "rgba(255, 155, 66, 0.3)"
+                                ]
                             }
                         },
                         {
@@ -2719,8 +2814,8 @@
                             "label": "Available dataviews",
                             "type": "label",
                             "class": "_report"
-                          },
-                          {
+                        },
+                        {
                             "type": "tableDefinition",
                             "title": "Population Summary",
                             "display": true,
@@ -2729,114 +2824,114 @@
                             "layout": "fitColumns",
                             "toolbars": {},
                             "columns": [
-                              {
-                                "type": "integer",
-                                "title": "0-5 mins",
-                                "field": "min5",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_5min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "center"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "center"
                                 },
-                                "align": "center"
-                              },
-                              {
-                                "type": "integer",
-                                "title": "0-10 mins",
-                                "field": "min10",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_10min",
-                                  "geom_b": "geom_p_4326"
-                                },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "center"
-                              },
-                              {
-                                "type": "integer",
-                                "title": "0-15 mins",
-                                "field": "min15",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_15min",
-                                  "geom_b": "geom_p_4326"
-                                },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "center"
-                              }
+                                {
+                                    "type": "integer",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "center"
+                                }
                             ],
                             "rows": [
-                              {
-                                "field": "pop__17",
-                                "fieldfx": "SUM(b.pop__17)",
-                                "title": "Current Population"
-                              },
-                              {
-                                "field": "pop__11",
-                                "fieldfx": "SUM(b.pop__11)",
-                                "title": "Population 2011"
-                              },
-                              {
-                                "field": "pop_growth",
-                                "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
-                                "title": "Population Growth"
-                              },
-                              {
-                                "field": "students",
-                                "fieldfx": "SUM(eac_student__11) + SUM(ein_student__11)",
-                                "title": "Students"
-                              },
-                              {
-                                "field": "non_white",
-                                "fieldfx": "100*(SUM(pop__11) - SUM(ret_white_tot__11))/SUM(pop__11)",
-                                "title": "% Non-White"
-                              },
-                              {
-                                "field": "own_home",
-                                "fieldfx": "100*SUM(own)/SUM(own+rent+social)",
-                                "title": "Own Home"
-                              },
-                              {
-                                "field": "private_rented",
-                                "fieldfx": "100*SUM(rent)/SUM(own+rent+social)",
-                                "title": "Private Rented"
-                              },
-                              {
-                                "field": "social_rented",
-                                "fieldfx": "100*SUM(social)/SUM(own+rent+social)",
-                                "title": "Social Rented"
-                              },
-                              {
-                                "field": "single_hhds",
-                                "fieldfx": "100*SUM(pers1hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
-                                "title": "Single Hhds"
-                              },
-                              {
-                                "field": "hhds_two_ppl",
-                                "fieldfx": "100*SUM(pers2hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
-                                "title": "2 Person Hhds"
-                              },
-                              {
-                                "field": "hhds_3plus",
-                                "fieldfx": "100*SUM(pers2plushhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
-                                "title": "3+ Hhds"
-                              }
+                                {
+                                    "field": "pop__17",
+                                    "fieldfx": "SUM(b.pop__17)",
+                                    "title": "Current Population"
+                                },
+                                {
+                                    "field": "pop__11",
+                                    "fieldfx": "SUM(b.pop__11)",
+                                    "title": "Population 2011"
+                                },
+                                {
+                                    "field": "pop_growth",
+                                    "fieldfx": "SUM(b.pop__17 - b.pop__11) * 100 / SUM(b.pop__11)",
+                                    "title": "Population Growth"
+                                },
+                                {
+                                    "field": "students",
+                                    "fieldfx": "SUM(eac_student__11) + SUM(ein_student__11)",
+                                    "title": "Students"
+                                },
+                                {
+                                    "field": "non_white",
+                                    "fieldfx": "100*(SUM(pop__11) - SUM(ret_white_tot__11))/SUM(pop__11)",
+                                    "title": "% Non-White"
+                                },
+                                {
+                                    "field": "own_home",
+                                    "fieldfx": "100*SUM(own)/SUM(own+rent+social)",
+                                    "title": "Own Home"
+                                },
+                                {
+                                    "field": "private_rented",
+                                    "fieldfx": "100*SUM(rent)/SUM(own+rent+social)",
+                                    "title": "Private Rented"
+                                },
+                                {
+                                    "field": "social_rented",
+                                    "fieldfx": "100*SUM(social)/SUM(own+rent+social)",
+                                    "title": "Social Rented"
+                                },
+                                {
+                                    "field": "single_hhds",
+                                    "fieldfx": "100*SUM(pers1hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                                    "title": "Single Hhds"
+                                },
+                                {
+                                    "field": "hhds_two_ppl",
+                                    "fieldfx": "100*SUM(pers2hhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                                    "title": "2 Person Hhds"
+                                },
+                                {
+                                    "field": "hhds_3plus",
+                                    "fieldfx": "100*SUM(pers2plushhd)/SUM(pers1hhd+pers2hhd+pers2plushhd)",
+                                    "title": "3+ Hhds"
+                                }
                             ]
-                          },
-                          {
+                        },
+                        {
                             "type": "tableDefinition",
                             "title": "Worker Summary",
                             "display": true,
@@ -2844,36 +2939,37 @@
                             "target_id": "xyz_table8",
                             "layout": "fitColumns",
                             "columns": [
-                              {
-                              "type": "integer",
-                              "title": "Total Workers",
-                              "field": "workers",
-                              "lookup": {
-                                "table_a": "dev.uk_glx_sites",
-                                "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                "geom_a": "isoline_15min",
-                                "geom_b": "geom_p_4326"
-                              },
-                              "align": "center",
-                              "formatter": "money",
-                              "formatterParams": {
-                                "precision": 0
-                              }
-                            }],
+                                {
+                                    "type": "integer",
+                                    "title": "Total Workers",
+                                    "field": "workers",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "align": "center",
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    }
+                                }
+                            ],
                             "rows": [
-                              {
-                                "field": "workers_250",
-                                "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=250 then b.workers else 0 end)",
-                                "title": "Workers 250m"
-                              },
-                              {
-                                "field": "workers_500",
-                                "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=500 then b.workers else 0 end)",
-                                "title": "Workers 500m"
-                              }
+                                {
+                                    "field": "workers_250",
+                                    "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=250 then b.workers else 0 end)",
+                                    "title": "Workers 250m"
+                                },
+                                {
+                                    "field": "workers_500",
+                                    "fieldfx": "SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=500 then b.workers else 0 end)",
+                                    "title": "Workers 500m"
+                                }
                             ]
-                          },
-                          {
+                        },
+                        {
                             "type": "tableDefinition",
                             "title": "OAC Profile",
                             "display": true,
@@ -2882,286 +2978,288 @@
                             "layout": "fitColumns",
                             "class": "_report",
                             "columns": [
-                              {
-                                "type": "integer",
-                                "title": "0-5 mins",
-                                "field": "min5",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_5min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              {
-                                "type": "integer",
-                                "title": "0-10 mins",
-                                "field": "min10",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_10min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "numeric",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "right"
-                              },
-                              {
-                                "type": "numeric",
-                                "title": "0-15 mins",
-                                "field": "min15",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_15min",
-                                  "geom_b": "geom_p_4326"
-                                },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "right"
-                              },
-                              {
-                                "type": "numeric",
-                                "field": "uk",
-                                "aspatial": "oac_1a_uk, oac_1b_uk, oac_1c_uk, oac_2a_uk,oac_2b_uk, oac_2c_uk, oac_2d_uk, oac_3a_uk, oac_3b_uk, oac_3c_uk, oac_3d_uk, oac_4a_uk, oac_4b_uk, oac_4c_uk, oac_5a_uk, oac_5b_uk, oac_6a_uk, oac_6b_uk, oac_7a_uk, oac_7b_uk, oac_7c_uk, oac_7d_uk, oac_8a_uk, oac_8b_uk, oac_8c_uk, oac_8d_uk, oac_total_uk FROM mapp.report_summary"
-                              }
+                                {
+                                    "type": "numeric",
+                                    "field": "uk",
+                                    "aspatial": "oac_1a_uk, oac_1b_uk, oac_1c_uk, oac_2a_uk,oac_2b_uk, oac_2c_uk, oac_2d_uk, oac_3a_uk, oac_3b_uk, oac_3c_uk, oac_3d_uk, oac_4a_uk, oac_4b_uk, oac_4c_uk, oac_5a_uk, oac_5b_uk, oac_6a_uk, oac_6b_uk, oac_7a_uk, oac_7b_uk, oac_7c_uk, oac_7d_uk, oac_8a_uk, oac_8b_uk, oac_8c_uk, oac_8d_uk, oac_total_uk FROM mapp.report_summary"
+                                }
                             ],
                             "rows": [
-                              {
-                                "field": "oac_1a",
-                                "fieldfx": "round(SUM(CASE WHEN oac_group=1 THEN pop__17 ELSE 0 END))",
-                                "title": "1a - Farming communities"
-                              },
-                              {
-                                "field": "oac_1b",
-                                "fieldfx": "round(sum(case when oac_group=2 then pop__17 else 0 end))",
-                                "title": "1b - Rural tenants"
-                              },
-                              {
-                                "field": "oac_1c",
-                                "fieldfx": "round(sum(case when oac_group=3 then pop__17 else 0 end))",
-                                "title": "1c - Ageing rural dwellers"
-                              },
-                              {
-                                "field": "oac_2a",
-                                "fieldfx": "round(sum(case when oac_group=4 then pop__17 else 0 end))",
-                                "title": "2a - Students around campus"
-                              },
-                              {
-                                "field": "oac_2b",
-                                "fieldfx": "round(sum(case when oac_group=5 then pop__17 else 0 end))",
-                                "title": "2b - Inner city students"
-                              },
-                              {
-                                "field": "oac_2c",
-                                "fieldfx": "round(sum(case when oac_group=6 then pop__17 else 0 end))",
-                                "title": "2c - Comforable cosmopolitans"
-                              },
-                              {
-                                "field": "oac_2d",
-                                "fieldfx": "round(sum(case when oac_group=7 then pop__17 else 0 end))",
-                                "title": "2d - Aspiring and affluent"
-                              },
-                              {
-                                "field": "oac_3a",
-                                "fieldfx": "round(sum(case when oac_group=8 then pop__17 else 0 end))",
-                                "title": "3a - Ethnic family life"
-                              },
-                              {
-                                "field": "oac_3b",
-                                "fieldfx": "round(sum(case when oac_group=9 then pop__17 else 0 end))",
-                                "title": "3b - Endeavouring ethnic mix"
-                              },
-                              {
-                                "field": "oac_3c",
-                                "fieldfx": "round(sum(case when oac_group=10 then pop__17 else 0 end))",
-                                "title": "3c - Ethnic dynamics"
-                              },
-                              {
-                                "field": "oac_3d",
-                                "fieldfx": "round(sum(case when oac_group=11 then pop__17 else 0 end))",
-                                "title": "3d - Aspirational techies"
-                              },
-                              {
-                                "field": "oac_4a",
-                                "fieldfx": "round(sum(case when oac_group=12 then pop__17 else 0 end))",
-                                "title": "4a - Rented family living"
-                              },
-                              {
-                                "field": "oac_4b",
-                                "fieldfx": "round(sum(case when oac_group=13 then pop__17 else 0 end))",
-                                "title": "4b - Challenged Asian terraces"
-                              },
-                              {
-                                "field": "oac_4c",
-                                "fieldfx": "round(sum(case when oac_group=14 then pop__17 else 0 end))",
-                                "title": "4c - Asian traits"
-                              },
-                              {
-                                "field": "oac_5a",
-                                "fieldfx": "round(sum(case when oac_group=15 then pop__17 else 0 end))",
-                                "title": "5a - Urban professionals and families"
-                              },
-                              {
-                                "field": "oac_5b",
-                                "fieldfx": "round(sum(case when oac_group=16 then pop__17 else 0 end))",
-                                "title": "5b - Ageing urban living"
-                              },
-                              {
-                                "field": "oac_6a",
-                                "fieldfx": "round(sum(case when oac_group=17 then pop__17 else 0 end))",
-                                "title": "6a - Suburban achievers"
-                              },
-                              {
-                                "field": "oac_6b",
-                                "fieldfx": "round(sum(case when oac_group=18 then pop__17 else 0 end))",
-                                "title": "6b - Semi-detached suburbia"
-                              },
-                              {
-                                "field": "oac_7a",
-                                "fieldfx": "round(sum(case when oac_group=19 then pop__17 else 0 end))",
-                                "title": "7a - Challenged diversity"
-                              },
-                              {
-                                "field": "oac_7b",
-                                "fieldfx": "round(sum(case when oac_group=20 then pop__17 else 0 end))",
-                                "title": "7b - Constrained flat dwellers"
-                              },
-                              {
-                                "field": "oac_7c",
-                                "fieldfx": "round(sum(case when oac_group=21 then pop__17 else 0 end))",
-                                "title": "7c - White communities"
-                              },
-                              {
-                                "field": "oac_7d",
-                                "fieldfx": "round(sum(case when oac_group=22 then pop__17 else 0 end))",
-                                "title": "7d - Ageing city dwellers"
-                              },
-                              {
-                                "field": "oac_total",
-                                "fieldfx": "round(sum(case when oac_group>0 then pop__17 else 0 end))",
-                                "title": "Total"
-                              }
+                                {
+                                    "field": "oac_1a",
+                                    "fieldfx": "round(SUM(CASE WHEN oac_group=1 THEN pop__17 ELSE 0 END))",
+                                    "title": "1a - Farming communities"
+                                },
+                                {
+                                    "field": "oac_1b",
+                                    "fieldfx": "round(sum(case when oac_group=2 then pop__17 else 0 end))",
+                                    "title": "1b - Rural tenants"
+                                },
+                                {
+                                    "field": "oac_1c",
+                                    "fieldfx": "round(sum(case when oac_group=3 then pop__17 else 0 end))",
+                                    "title": "1c - Ageing rural dwellers"
+                                },
+                                {
+                                    "field": "oac_2a",
+                                    "fieldfx": "round(sum(case when oac_group=4 then pop__17 else 0 end))",
+                                    "title": "2a - Students around campus"
+                                },
+                                {
+                                    "field": "oac_2b",
+                                    "fieldfx": "round(sum(case when oac_group=5 then pop__17 else 0 end))",
+                                    "title": "2b - Inner city students"
+                                },
+                                {
+                                    "field": "oac_2c",
+                                    "fieldfx": "round(sum(case when oac_group=6 then pop__17 else 0 end))",
+                                    "title": "2c - Comforable cosmopolitans"
+                                },
+                                {
+                                    "field": "oac_2d",
+                                    "fieldfx": "round(sum(case when oac_group=7 then pop__17 else 0 end))",
+                                    "title": "2d - Aspiring and affluent"
+                                },
+                                {
+                                    "field": "oac_3a",
+                                    "fieldfx": "round(sum(case when oac_group=8 then pop__17 else 0 end))",
+                                    "title": "3a - Ethnic family life"
+                                },
+                                {
+                                    "field": "oac_3b",
+                                    "fieldfx": "round(sum(case when oac_group=9 then pop__17 else 0 end))",
+                                    "title": "3b - Endeavouring ethnic mix"
+                                },
+                                {
+                                    "field": "oac_3c",
+                                    "fieldfx": "round(sum(case when oac_group=10 then pop__17 else 0 end))",
+                                    "title": "3c - Ethnic dynamics"
+                                },
+                                {
+                                    "field": "oac_3d",
+                                    "fieldfx": "round(sum(case when oac_group=11 then pop__17 else 0 end))",
+                                    "title": "3d - Aspirational techies"
+                                },
+                                {
+                                    "field": "oac_4a",
+                                    "fieldfx": "round(sum(case when oac_group=12 then pop__17 else 0 end))",
+                                    "title": "4a - Rented family living"
+                                },
+                                {
+                                    "field": "oac_4b",
+                                    "fieldfx": "round(sum(case when oac_group=13 then pop__17 else 0 end))",
+                                    "title": "4b - Challenged Asian terraces"
+                                },
+                                {
+                                    "field": "oac_4c",
+                                    "fieldfx": "round(sum(case when oac_group=14 then pop__17 else 0 end))",
+                                    "title": "4c - Asian traits"
+                                },
+                                {
+                                    "field": "oac_5a",
+                                    "fieldfx": "round(sum(case when oac_group=15 then pop__17 else 0 end))",
+                                    "title": "5a - Urban professionals and families"
+                                },
+                                {
+                                    "field": "oac_5b",
+                                    "fieldfx": "round(sum(case when oac_group=16 then pop__17 else 0 end))",
+                                    "title": "5b - Ageing urban living"
+                                },
+                                {
+                                    "field": "oac_6a",
+                                    "fieldfx": "round(sum(case when oac_group=17 then pop__17 else 0 end))",
+                                    "title": "6a - Suburban achievers"
+                                },
+                                {
+                                    "field": "oac_6b",
+                                    "fieldfx": "round(sum(case when oac_group=18 then pop__17 else 0 end))",
+                                    "title": "6b - Semi-detached suburbia"
+                                },
+                                {
+                                    "field": "oac_7a",
+                                    "fieldfx": "round(sum(case when oac_group=19 then pop__17 else 0 end))",
+                                    "title": "7a - Challenged diversity"
+                                },
+                                {
+                                    "field": "oac_7b",
+                                    "fieldfx": "round(sum(case when oac_group=20 then pop__17 else 0 end))",
+                                    "title": "7b - Constrained flat dwellers"
+                                },
+                                {
+                                    "field": "oac_7c",
+                                    "fieldfx": "round(sum(case when oac_group=21 then pop__17 else 0 end))",
+                                    "title": "7c - White communities"
+                                },
+                                {
+                                    "field": "oac_7d",
+                                    "fieldfx": "round(sum(case when oac_group=22 then pop__17 else 0 end))",
+                                    "title": "7d - Ageing city dwellers"
+                                },
+                                {
+                                    "field": "oac_total",
+                                    "fieldfx": "round(sum(case when oac_group>0 then pop__17 else 0 end))",
+                                    "title": "Total"
+                                }
                             ],
                             "agg": {
-                              "share15": {
-                                "title": "% with 15 min",
-                                "type": "integer",
-                                "rows": [
-                                  "100*min15.oac_1a/min15.oac_total",
-                                  "100*min15.oac_1b/min15.oac_total",
-                                  "100*min15.oac_1c/min15.oac_total",
-                                  "100*min15.oac_2a/min15.oac_total",
-                                  "100*min15.oac_2b/min15.oac_total",
-                                  "100*min15.oac_2c/min15.oac_total",
-                                  "100*min15.oac_2d/min15.oac_total",
-                                  "100*min15.oac_3a/min15.oac_total",
-                                  "100*min15.oac_3b/min15.oac_total",
-                                  "100*min15.oac_3c/min15.oac_total",
-                                  "100*min15.oac_3d/min15.oac_total",
-                                  "100*min15.oac_4a/min15.oac_total",
-                                  "100*min15.oac_4b/min15.oac_total",
-                                  "100*min15.oac_4c/min15.oac_total",
-                                  "100*min15.oac_5a/min15.oac_total",
-                                  "100*min15.oac_5b/min15.oac_total",
-                                  "100*min15.oac_6a/min15.oac_total",
-                                  "100*min15.oac_6b/min15.oac_total",
-                                  "100*min15.oac_7a/min15.oac_total",
-                                  "100*min15.oac_7b/min15.oac_total",
-                                  "100*min15.oac_7c/min15.oac_total",
-                                  "100*min15.oac_7d/min15.oac_total"
-                                ],
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                "share15": {
+                                    "title": "% with 15 min",
+                                    "type": "integer",
+                                    "rows": [
+                                        "100*min15.oac_1a/min15.oac_total",
+                                        "100*min15.oac_1b/min15.oac_total",
+                                        "100*min15.oac_1c/min15.oac_total",
+                                        "100*min15.oac_2a/min15.oac_total",
+                                        "100*min15.oac_2b/min15.oac_total",
+                                        "100*min15.oac_2c/min15.oac_total",
+                                        "100*min15.oac_2d/min15.oac_total",
+                                        "100*min15.oac_3a/min15.oac_total",
+                                        "100*min15.oac_3b/min15.oac_total",
+                                        "100*min15.oac_3c/min15.oac_total",
+                                        "100*min15.oac_3d/min15.oac_total",
+                                        "100*min15.oac_4a/min15.oac_total",
+                                        "100*min15.oac_4b/min15.oac_total",
+                                        "100*min15.oac_4c/min15.oac_total",
+                                        "100*min15.oac_5a/min15.oac_total",
+                                        "100*min15.oac_5b/min15.oac_total",
+                                        "100*min15.oac_6a/min15.oac_total",
+                                        "100*min15.oac_6b/min15.oac_total",
+                                        "100*min15.oac_7a/min15.oac_total",
+                                        "100*min15.oac_7b/min15.oac_total",
+                                        "100*min15.oac_7c/min15.oac_total",
+                                        "100*min15.oac_7d/min15.oac_total"
+                                    ],
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              "oac_uk_total": {
-                                "title": "UK %",
-                                "type": "integer",
-                                "rows": [
-                                  "uk.oac_1a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_1b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_1c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_2a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_2b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_2c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_2d_uk*100/uk.oac_total_uk",
-                                  "uk.oac_3a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_3b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_3c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_3d_uk*100/uk.oac_total_uk",
-                                  "uk.oac_4a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_4b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_4c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_5a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_5b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_6a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_6b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_7a_uk*100/uk.oac_total_uk",
-                                  "uk.oac_7b_uk*100/uk.oac_total_uk",
-                                  "uk.oac_7c_uk*100/uk.oac_total_uk",
-                                  "uk.oac_7d_uk*100/uk.oac_total_uk"
-                                ],
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                "oac_uk_total": {
+                                    "title": "UK %",
+                                    "type": "integer",
+                                    "rows": [
+                                        "uk.oac_1a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_1b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_1c_uk*100/uk.oac_total_uk",
+                                        "uk.oac_2a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_2b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_2c_uk*100/uk.oac_total_uk",
+                                        "uk.oac_2d_uk*100/uk.oac_total_uk",
+                                        "uk.oac_3a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_3b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_3c_uk*100/uk.oac_total_uk",
+                                        "uk.oac_3d_uk*100/uk.oac_total_uk",
+                                        "uk.oac_4a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_4b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_4c_uk*100/uk.oac_total_uk",
+                                        "uk.oac_5a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_5b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_6a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_6b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_7a_uk*100/uk.oac_total_uk",
+                                        "uk.oac_7b_uk*100/uk.oac_total_uk",
+                                        "uk.oac_7c_uk*100/uk.oac_total_uk",
+                                        "uk.oac_7d_uk*100/uk.oac_total_uk"
+                                    ],
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              "oac_index": {
-                                "title": "OAC Profile Index",
-                                "type": "integer",
-                                "formatter": "progress",
-                                "formatterParams": {
-                                  "color": [
-                                    "#2196f3", "orange", "red"
-                                  ],
-                                  "legend": true,
-                                  "legendAlign": "center",
-                                  "max": 200
-                                },
-                                "width": 200,
-                                "sorter": "number",
-                                "rows": [
-                                  "uk.oac_total_uk*(100*min15.oac_1a/min15.oac_total)/uk.oac_1a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_1b/min15.oac_total)/uk.oac_1b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_1c/min15.oac_total)/uk.oac_1c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_2a/min15.oac_total)/uk.oac_2a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_2b/min15.oac_total)/uk.oac_2b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_2c/min15.oac_total)/uk.oac_2c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_2d/min15.oac_total)/uk.oac_2d_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_3a/min15.oac_total)/uk.oac_3a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_3b/min15.oac_total)/uk.oac_3b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_3c/min15.oac_total)/uk.oac_3c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_3d/min15.oac_total)/uk.oac_3d_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_4a/min15.oac_total)/uk.oac_4a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_4b/min15.oac_total)/uk.oac_4b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_4c/min15.oac_total)/uk.oac_4c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_5a/min15.oac_total)/uk.oac_5a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_5b/min15.oac_total)/uk.oac_5b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_6a/min15.oac_total)/uk.oac_6a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_6b/min15.oac_total)/uk.oac_6b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_7a/min15.oac_total)/uk.oac_7a_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_7b/min15.oac_total)/uk.oac_7b_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_7c/min15.oac_total)/uk.oac_7c_uk",
-                                  "uk.oac_total_uk*(100*min15.oac_7d/min15.oac_total)/uk.oac_7d_uk"
-                                ]
-                              }
+                                "oac_index": {
+                                    "title": "OAC Profile Index",
+                                    "type": "integer",
+                                    "formatter": "progress",
+                                    "formatterParams": {
+                                        "color": [
+                                            "#2196f3",
+                                            "orange",
+                                            "red"
+                                        ],
+                                        "legend": true,
+                                        "legendAlign": "center",
+                                        "max": 200
+                                    },
+                                    "width": 200,
+                                    "sorter": "number",
+                                    "rows": [
+                                        "uk.oac_total_uk*(100*min15.oac_1a/min15.oac_total)/uk.oac_1a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_1b/min15.oac_total)/uk.oac_1b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_1c/min15.oac_total)/uk.oac_1c_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_2a/min15.oac_total)/uk.oac_2a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_2b/min15.oac_total)/uk.oac_2b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_2c/min15.oac_total)/uk.oac_2c_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_2d/min15.oac_total)/uk.oac_2d_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_3a/min15.oac_total)/uk.oac_3a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_3b/min15.oac_total)/uk.oac_3b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_3c/min15.oac_total)/uk.oac_3c_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_3d/min15.oac_total)/uk.oac_3d_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_4a/min15.oac_total)/uk.oac_4a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_4b/min15.oac_total)/uk.oac_4b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_4c/min15.oac_total)/uk.oac_4c_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_5a/min15.oac_total)/uk.oac_5a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_5b/min15.oac_total)/uk.oac_5b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_6a/min15.oac_total)/uk.oac_6a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_6b/min15.oac_total)/uk.oac_6b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_7a/min15.oac_total)/uk.oac_7a_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_7b/min15.oac_total)/uk.oac_7b_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_7c/min15.oac_total)/uk.oac_7c_uk",
+                                        "uk.oac_total_uk*(100*min15.oac_7d/min15.oac_total)/uk.oac_7d_uk"
+                                    ]
+                                }
                             }
-                          },
-                          {
+                        },
+                        {
                             "type": "tableDefinition",
                             "title": "Age Profile",
                             "display": true,
@@ -3169,154 +3267,156 @@
                             "target_id": "xyz_table2",
                             "layout": "fitColumns",
                             "columns": [
-                              {
-                                "type": "integer",
-                                "title": "0-5 mins",
-                                "field": "min5",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_5min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              {
-                                "type": "integer",
-                                "title": "0-10 mins",
-                                "field": "min10",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_10min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "numeric",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "right"
-                              },
-                              {
-                                "type": "numeric",
-                                "title": "0-15 mins",
-                                "field": "min15",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_15min",
-                                  "geom_b": "geom_p_4326"
-                                },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "right"
-                              },
-                              {
-                                "type": "numeric",
-                                "field": "uk",
-                                "aspatial": "age_under_18_uk, age_18to24_uk, age_25to29_uk, age_30to44_uk, age_45to59_uk, age_60plus_uk, age_total_uk FROM mapp.report_summary"
-                              }
+                                {
+                                    "type": "numeric",
+                                    "field": "uk",
+                                    "aspatial": "age_under_18_uk, age_18to24_uk, age_25to29_uk, age_30to44_uk, age_45to59_uk, age_60plus_uk, age_total_uk FROM mapp.report_summary"
+                                }
                             ],
                             "rows": [
-                              {
-                                "field": "age_under_18",
-                                "title": "< 18",
-                                "fieldfx": "round(SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus))"
-                              },
-                              {
-                                "field": "age_18to24",
-                                "fieldfx": "round(SUM(age_18to19__11 + age_20to24__11))",
-                                "title": "18 to 24"
-                              },
-                              {
-                                "field": "age_25to29",
-                                "fieldfx": "round(SUM(age_25to29__11))",
-                                "title": "25 to 29"
-                              },
-                              {
-                                "field": "age_30to44",
-                                "fieldfx": "round(SUM(age_30to44__11))",
-                                "title": "30 to 44"
-                              },
-                              {
-                                "field": "age_45to59",
-                                "fieldfx": "round(SUM(age_45to59__11))",
-                                "title": "45 to 59"
-                              },
-                              {
-                                "field": "age_60plus",
-                                "fieldfx": "round(SUM(age60plus))",
-                                "title": "60+"
-                              },
-                              {
-                                "field": "age_profile_total",
-                                "fieldfx": "round(SUM(pop__11))",
-                                "title": "Total"
-                              }
+                                {
+                                    "field": "age_under_18",
+                                    "title": "< 18",
+                                    "fieldfx": "round(SUM(pop__11 - age_18to19__11 - age_20to24__11 - age_25to29__11 - age_30to44__11 - age_45to59__11 - age60plus))"
+                                },
+                                {
+                                    "field": "age_18to24",
+                                    "fieldfx": "round(SUM(age_18to19__11 + age_20to24__11))",
+                                    "title": "18 to 24"
+                                },
+                                {
+                                    "field": "age_25to29",
+                                    "fieldfx": "round(SUM(age_25to29__11))",
+                                    "title": "25 to 29"
+                                },
+                                {
+                                    "field": "age_30to44",
+                                    "fieldfx": "round(SUM(age_30to44__11))",
+                                    "title": "30 to 44"
+                                },
+                                {
+                                    "field": "age_45to59",
+                                    "fieldfx": "round(SUM(age_45to59__11))",
+                                    "title": "45 to 59"
+                                },
+                                {
+                                    "field": "age_60plus",
+                                    "fieldfx": "round(SUM(age60plus))",
+                                    "title": "60+"
+                                },
+                                {
+                                    "field": "age_profile_total",
+                                    "fieldfx": "round(SUM(pop__11))",
+                                    "title": "Total"
+                                }
                             ],
                             "agg": {
-                              "share15": {
-                                "title": "% with 15 min",
-                                "align": "right",
-                                "type": "integer",
-                                "rows": [
-                                  "100*min15.age_under_18/min15.age_profile_total",
-                                  "100*min15.age_18to24/min15.age_profile_total",
-                                  "100*min15.age_25to29/min15.age_profile_total",
-                                  "100*min15.age_30to44/min15.age_profile_total",
-                                  "100*min15.age_45to59/min15.age_profile_total",
-                                  "100*min15.age_60plus/min15.age_profile_total",
-                                  "100*min15.age_profile_total/min15.age_profile_total"
-                                ]
-                              },
-                              "age_uk_total": {
-                                "title": "UK %",
-                                "align": "right",
-                                "type": "integer",
-                                "rows": [
-                                  "uk.age_under_18_uk*100/uk.age_total_uk",
-                                  "uk.age_18to24_uk*100/uk.age_total_uk",
-                                  "uk.age_25to29_uk*100/uk.age_total_uk",
-                                  "uk.age_30to44_uk*100/uk.age_total_uk",
-                                  "uk.age_45to59_uk*100/uk.age_total_uk",
-                                  "uk.age_60plus_uk*100/uk.age_total_uk",
-                                  "uk.age_total_uk*100/uk.age_total_uk"
-                                ]
-                              },
-                              "age_index": {
-                                "title": "Age Profile Index",
-                                "align": "right",
-                                "type": "integer",
-                                "formatter": "progress",
-                                "formatterParams": {
-                                  "color": [
-                                    "#2196f3", "orange", "red"
-                                  ],
-                                  "legend": true,
-                                  "legendAlign": "center",
-                                  "max": 200
+                                "share15": {
+                                    "title": "% with 15 min",
+                                    "align": "right",
+                                    "type": "integer",
+                                    "rows": [
+                                        "100*min15.age_under_18/min15.age_profile_total",
+                                        "100*min15.age_18to24/min15.age_profile_total",
+                                        "100*min15.age_25to29/min15.age_profile_total",
+                                        "100*min15.age_30to44/min15.age_profile_total",
+                                        "100*min15.age_45to59/min15.age_profile_total",
+                                        "100*min15.age_60plus/min15.age_profile_total",
+                                        "100*min15.age_profile_total/min15.age_profile_total"
+                                    ]
                                 },
-                                "width": 200,
-                                "sorter": "number",
-                                "rows": [
-                                  "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
-                                  "uk.age_total_uk*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_uk",
-                                  "uk.age_total_uk*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_uk",
-                                  "uk.age_total_uk*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_uk",
-                                  "uk.age_total_uk*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_uk",
-                                  "uk.age_total_uk*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_uk",
-                                  "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
-                                ]
-                              }
+                                "age_uk_total": {
+                                    "title": "UK %",
+                                    "align": "right",
+                                    "type": "integer",
+                                    "rows": [
+                                        "uk.age_under_18_uk*100/uk.age_total_uk",
+                                        "uk.age_18to24_uk*100/uk.age_total_uk",
+                                        "uk.age_25to29_uk*100/uk.age_total_uk",
+                                        "uk.age_30to44_uk*100/uk.age_total_uk",
+                                        "uk.age_45to59_uk*100/uk.age_total_uk",
+                                        "uk.age_60plus_uk*100/uk.age_total_uk",
+                                        "uk.age_total_uk*100/uk.age_total_uk"
+                                    ]
+                                },
+                                "age_index": {
+                                    "title": "Age Profile Index",
+                                    "align": "right",
+                                    "type": "integer",
+                                    "formatter": "progress",
+                                    "formatterParams": {
+                                        "color": [
+                                            "#2196f3",
+                                            "orange",
+                                            "red"
+                                        ],
+                                        "legend": true,
+                                        "legendAlign": "center",
+                                        "max": 200
+                                    },
+                                    "width": 200,
+                                    "sorter": "number",
+                                    "rows": [
+                                        "uk.age_total_uk*(100*min15.age_under_18/min15.age_profile_total)/uk.age_under_18_uk",
+                                        "uk.age_total_uk*(100*min15.age_18to24/min15.age_profile_total)/uk.age_18to24_uk",
+                                        "uk.age_total_uk*(100*min15.age_25to29/min15.age_profile_total)/uk.age_25to29_uk",
+                                        "uk.age_total_uk*(100*min15.age_30to44/min15.age_profile_total)/uk.age_30to44_uk",
+                                        "uk.age_total_uk*(100*min15.age_45to59/min15.age_profile_total)/uk.age_45to59_uk",
+                                        "uk.age_total_uk*(100*min15.age_60plus/min15.age_profile_total)/uk.age_60plus_uk",
+                                        "uk.age_total_uk*(100*min15.age_profile_total/min15.age_profile_total)/uk.age_total_uk"
+                                    ]
+                                }
                             }
-                          },
-                          {
+                        },
+                        {
                             "type": "tableDefinition",
                             "title": "Social Grade",
                             "display": true,
@@ -3324,150 +3424,152 @@
                             "class": "_report",
                             "layout": "fitColumns",
                             "columns": [
-                              {
-                                "type": "integer",
-                                "title": "0-5 mins",
-                                "field": "min5",
-                                "group": "Drivetimes",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_5min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "integer",
+                                    "title": "0-5 mins",
+                                    "field": "min5",
+                                    "group": "Drivetimes",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_5min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                {
+                                    "type": "integer",
+                                    "title": "0-10 mins",
+                                    "field": "min10",
+                                    "group": "Drivetimes",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_10min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              {
-                                "type": "integer",
-                                "title": "0-10 mins",
-                                "field": "min10",
-                                "group": "Drivetimes",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_10min",
-                                  "geom_b": "geom_p_4326"
+                                {
+                                    "type": "integer",
+                                    "title": "0-15 mins",
+                                    "field": "min15",
+                                    "group": "Drivetimes",
+                                    "lookup": {
+                                        "table_a": "dev.uk_glx_sites",
+                                        "table_b": "geodata.uk_glx_geodata_hex_1k",
+                                        "geom_a": "isoline_15min",
+                                        "geom_b": "geom_p_4326"
+                                    },
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "right"
-                              },
-                              {
-                                "type": "integer",
-                                "title": "0-15 mins",
-                                "field": "min15",
-                                "group": "Drivetimes",
-                                "lookup": {
-                                  "table_a": "dev.uk_glx_sites",
-                                  "table_b": "geodata.uk_glx_geodata_hex_1k",
-                                  "geom_a": "isoline_15min",
-                                  "geom_b": "geom_p_4326"
-                                },
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
-                                },
-                                "align": "right"
-                              },
-                              {
-                                "type": "numeric",
-                                "field": "uk",
-                                "aspatial": "social_grade_ab_uk, social_grade_c1_uk, social_grade_c2_uk, social_grade_de_uk, social_grade_total_uk FROM mapp.report_summary"
-                              }
+                                {
+                                    "type": "numeric",
+                                    "field": "uk",
+                                    "aspatial": "social_grade_ab_uk, social_grade_c1_uk, social_grade_c2_uk, social_grade_de_uk, social_grade_total_uk FROM mapp.report_summary"
+                                }
                             ],
                             "rows": [
-                              {
-                                "field": "sg_ab",
-                                "fieldfx": "round(SUM(ski_ab__11))",
-                                "title": "AB"
-                              },
-                              {
-                                "field": "sg_c1",
-                                "fieldfx": "round(SUM(ski_c1__11))",
-                                "title": "C1"
-                              },
-                              {
-                                "field": "sg_c2",
-                                "fieldfx": "round(SUM(ski_c2__11))",
-                                "title": "C2"
-                              },
-                              {
-                                "field": "sg_de",
-                                "fieldfx": "round(SUM(ski_de__11))",
-                                "title": "DE"
-                              },
-                              {
-                                "field": "sg_total",
-                                "fieldfx": "round(SUM(ski_hrp_base__11))",
-                                "title": "Total"
-                              }
+                                {
+                                    "field": "sg_ab",
+                                    "fieldfx": "round(SUM(ski_ab__11))",
+                                    "title": "AB"
+                                },
+                                {
+                                    "field": "sg_c1",
+                                    "fieldfx": "round(SUM(ski_c1__11))",
+                                    "title": "C1"
+                                },
+                                {
+                                    "field": "sg_c2",
+                                    "fieldfx": "round(SUM(ski_c2__11))",
+                                    "title": "C2"
+                                },
+                                {
+                                    "field": "sg_de",
+                                    "fieldfx": "round(SUM(ski_de__11))",
+                                    "title": "DE"
+                                },
+                                {
+                                    "field": "sg_total",
+                                    "fieldfx": "round(SUM(ski_hrp_base__11))",
+                                    "title": "Total"
+                                }
                             ],
                             "agg": {
-                              "share15": {
-                                "title": "% with 15 min",
-                                "type": "integer",
-                                "rows": [
-                                  "100*min15.sg_ab/min15.sg_total",
-                                  "100*min15.sg_c1/min15.sg_total",
-                                  "100*min15.sg_c2/min15.sg_total",
-                                  "100*min15.sg_de/min15.sg_total",
-                                  "100*min15.sg_total/min15.sg_total"
-                                ],
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                "share15": {
+                                    "title": "% with 15 min",
+                                    "type": "integer",
+                                    "rows": [
+                                        "100*min15.sg_ab/min15.sg_total",
+                                        "100*min15.sg_c1/min15.sg_total",
+                                        "100*min15.sg_c2/min15.sg_total",
+                                        "100*min15.sg_de/min15.sg_total",
+                                        "100*min15.sg_total/min15.sg_total"
+                                    ],
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              "sg_uk_total": {
-                                "title": "UK %",
-                                "type": "integer",
-                                "rows": [
-                                  "uk.social_grade_ab_uk*100/uk.social_grade_total_uk",
-                                  "uk.social_grade_c1_uk*100/uk.social_grade_total_uk",
-                                  "uk.social_grade_c2_uk*100/uk.social_grade_total_uk",
-                                  "uk.social_grade_de_uk*100/uk.social_grade_total_uk",
-                                  "uk.social_grade_total_uk*100/uk.social_grade_total_uk"
-                                ],
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                "sg_uk_total": {
+                                    "title": "UK %",
+                                    "type": "integer",
+                                    "rows": [
+                                        "uk.social_grade_ab_uk*100/uk.social_grade_total_uk",
+                                        "uk.social_grade_c1_uk*100/uk.social_grade_total_uk",
+                                        "uk.social_grade_c2_uk*100/uk.social_grade_total_uk",
+                                        "uk.social_grade_de_uk*100/uk.social_grade_total_uk",
+                                        "uk.social_grade_total_uk*100/uk.social_grade_total_uk"
+                                    ],
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "right"
                                 },
-                                "align": "right"
-                              },
-                              "sg_index": {
-                                "title": "Social Grade Index",
-                                "type": "integer",
-                                "formatter": "progress",
-                                "formatterParams": {
-                                  "color": [
-                                    "#2196f3", "orange", "red"
-                                  ],
-                                  "legend": true,
-                                  "legendAlign": "center",
-                                  "max": 200
-                                },
-                                "width": 200,
-                                "sorter": "number",
-                                "rows": [
-                                  "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
-                                  "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
-                                  "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
-                                  "uk.social_grade_total_uk*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_uk",
-                                  "uk.social_grade_total_uk*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_uk"
-                                ]
-                              }
+                                "sg_index": {
+                                    "title": "Social Grade Index",
+                                    "type": "integer",
+                                    "formatter": "progress",
+                                    "formatterParams": {
+                                        "color": [
+                                            "#2196f3",
+                                            "orange",
+                                            "red"
+                                        ],
+                                        "legend": true,
+                                        "legendAlign": "center",
+                                        "max": 200
+                                    },
+                                    "width": 200,
+                                    "sorter": "number",
+                                    "rows": [
+                                        "uk.social_grade_total_uk*(100*min15.sg_ab/min15.sg_total)/uk.social_grade_ab_uk",
+                                        "uk.social_grade_total_uk*(100*min15.sg_c1/min15.sg_total)/uk.social_grade_c1_uk",
+                                        "uk.social_grade_total_uk*(100*min15.sg_c2/min15.sg_total)/uk.social_grade_c2_uk",
+                                        "uk.social_grade_total_uk*(100*min15.sg_de/min15.sg_total)/uk.social_grade_de_uk",
+                                        "uk.social_grade_total_uk*(100*min15.sg_total/min15.sg_total)/uk.social_grade_total_uk"
+                                    ]
+                                }
                             }
-                          },
-                          {
+                        },
+                        {
                             "type": "orderedList",
-                            "title": "Nearest competitors", 
+                            "title": "Nearest competitors",
                             "display": true,
                             "class": "_report",
                             "target_id": "xyz_table5",
@@ -3476,53 +3578,53 @@
                             "table": "geodata.uk_glx_open_retail_points",
                             "geom": "geom_p_4326",
                             "columns": [
-                              {
-                                "title": "Competitor name",
-                                "field": "fascia"
-                              },
-                              {
-                                "title": "Postcode",
-                                "field": "postcode"
-                              },
-                              {
-                                "type": "integer",
-                                "geography": "km",
-                                "title": "Distance (km)",
-                                "fx": "ST_DISTANCE",
-                                "field": "dist",
-                                "orderby": true,
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 1
+                                {
+                                    "title": "Competitor name",
+                                    "field": "fascia"
                                 },
-                                "align": "center"
-                              },
-                              {
-                                "type": "integer",
-                                "geography": true,
-                                "title": "Distance (m)",
-                                "fx": "ST_DISTANCE",
-                                "field": "dist_m",
-                                "formatter": "money",
-                                "formatterParams": {
-                                    "precision": 0
+                                {
+                                    "title": "Postcode",
+                                    "field": "postcode"
                                 },
-                                "align": "center"
-                              }
+                                {
+                                    "type": "integer",
+                                    "geography": "km",
+                                    "title": "Distance (km)",
+                                    "fx": "ST_DISTANCE",
+                                    "field": "dist",
+                                    "orderby": true,
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 1
+                                    },
+                                    "align": "center"
+                                },
+                                {
+                                    "type": "integer",
+                                    "geography": true,
+                                    "title": "Distance (m)",
+                                    "fx": "ST_DISTANCE",
+                                    "field": "dist_m",
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "precision": 0
+                                    },
+                                    "align": "center"
+                                }
                             ],
                             "order": "ASC",
                             "limit": 8
-                          },
-                          {
+                        },
+                        {
                             "type": "streetview",
                             "class": "_report"
-                          },
-                          {
+                        },
+                        {
                             "type": "geometry",
                             "field": "fixed_geom",
                             "fieldfx": "ST_asGeoJson(fixed_geom)",
                             "display": true
-                          }
+                        }
                     ],
                     "style": {
                         "marker": {
