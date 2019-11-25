@@ -110,10 +110,12 @@ export default _xyz => {
     xhr.onload = e => {
 
       if (e.target.status === 406) {
+        entry.location.view && entry.location.view.classList.remove('disabled');
         return alert(e.target.responseText);
       }
 
       if (e.target.status !== 200) {
+        entry.location.view && entry.location.view.classList.remove('disabled');
         console.log(e.target.response);
         return alert('No route found. Try a longer travel time.');
       }
@@ -127,6 +129,7 @@ export default _xyz => {
 
     };
 
+    entry.location.view && entry.location.view.classList.add('disabled');
     xhr.send();
 
   };

@@ -3,12 +3,12 @@ export default _xyz => function (callback) {
   const location = this;
 
   const newValues = location.infoj
-  .filter(entry => typeof entry.newValue !== 'undefined')
-  .map(entry => ({
-      field: entry.field,
-      newValue: entry.newValue,
-      type: entry.type
-  }));
+    .filter(entry => typeof entry.newValue !== 'undefined')
+    .map(entry => ({
+        field: entry.field,
+        newValue: entry.newValue,
+        type: entry.type
+    }));
 
   if (!newValues.length) return;
 

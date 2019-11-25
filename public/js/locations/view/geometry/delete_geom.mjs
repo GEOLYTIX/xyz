@@ -24,12 +24,13 @@ export default _xyz => entry => {
 
   xhr.onload = e => {
 
-    if (e.target.status !== 200) return;
+    if (e.target.status !== 200) return entry.location.view && entry.location.view.classList.remove('disabled');
 
     entry.location.infoj = JSON.parse(e.target.response);
 
     _xyz.locations.view.create(entry.location);
   };
 
+  entry.location.view && entry.location.view.classList.add('disabled');
   xhr.send();
 };
