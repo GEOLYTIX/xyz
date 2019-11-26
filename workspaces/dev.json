@@ -1423,8 +1423,8 @@
                     "table": "dev.retailpoints",
                     "geom": "geom",
                     "srid": "4326",
-                    "cluster_kmeans": 0.01,
-                    "cluster_dbscan": 0.01,
+                    "cluster_kmeans": 0.02,
+                    "cluster_dbscan": 0.02,
                     "hover": {
                         "field": "store"
                     },

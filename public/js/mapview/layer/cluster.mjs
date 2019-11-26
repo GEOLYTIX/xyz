@@ -109,15 +109,9 @@ export default _xyz => layer => {
       // Categorized theme
       if (theme && theme.type === 'categorized') {
 
-        let cat = {};
-
-        if( theme.cat[properties.cat]) {
-          if(theme.cat[properties.cat].svg) cat = theme.cat[properties.cat];
-          if(theme.cat[properties.cat].style) cat = theme.cat[properties.cat].style;
-        }
-
-        Object.assign(marker, cat);
-
+        Object.assign(
+          marker,
+          theme.cat[properties.cat] && theme.cat[properties.cat].style || theme.cat[properties.cat]);
       }
   
       // Graduated theme.
