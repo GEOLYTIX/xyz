@@ -806,6 +806,12 @@
                                     "Other"
                                 ]
                             }
+                        },
+                        {
+                            "field": "notes",
+                            "label": "Notes",
+                            "type": "textarea",
+                            "edit": true
                         }
                     ],
                     "style": {
@@ -1376,27 +1382,27 @@
                             "group": "Profile",
                             "label": "Comparison",
                             "title": "Comp",
-                            "field": "comp_pct",
+                            "field": "comparison",
                             "type": "numeric"
                         },
                         {
                             "group": "Profile",
                             "label": "Conv",
                             "title": "Convenience",
-                            "field": "conv_pct",
+                            "field": "conv",
                             "type": "numeric"
                         },
                         {
                             "group": "Profile",
                             "label": "F/B/L",
-                            "field": "fbl_pct",
+                            "field": "fbl",
                             "type": "numeric",
                             "title": "Food/Bev/Leisure"
                         },
                         {
                             "group": "Profile",
                             "label": "Services",
-                            "field": "serv_pct",
+                            "field": "services",
                             "type": "numeric"
                         },
                         {

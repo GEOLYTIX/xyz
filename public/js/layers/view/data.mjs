@@ -49,6 +49,7 @@ export default _xyz => {
             tab.display = e.target.checked;
             if (tab.display) return layer.show();
             tab.remove();
+            if(!_xyz.dataview.tables.length) _xyz.mapview.node.dispatchEvent(new CustomEvent('updatesize'));
           }}>
         </input>
         <div></div><span>${tab.title}`);
