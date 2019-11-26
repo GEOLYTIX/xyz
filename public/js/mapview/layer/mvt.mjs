@@ -88,11 +88,7 @@ export default _xyz => layer => {
           }
   
           // Assign style from base & cat_style.
-          Object.assign(
-            style,
-            cat_style
-          );
-
+          Object.assign(style, cat_style);
         }
     
       }

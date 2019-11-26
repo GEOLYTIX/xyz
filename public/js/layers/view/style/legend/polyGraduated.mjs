@@ -20,7 +20,7 @@ export default _xyz => layer => {
         height=14
         fill=${cat_style.fillColor}
         fill-opacity=${cat_style.fillOpacity}
-        stroke=${cat_style.color}/>`);
+        stroke=${cat_style.strokeColor}/>`);
 
     legend.appendChild(_xyz.utils.wire(null, 'svg')`
       <text

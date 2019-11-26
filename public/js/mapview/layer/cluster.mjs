@@ -119,7 +119,7 @@ export default _xyz => layer => {
   
         const value = parseFloat(properties.cat);
 
-        if (value) {
+        if (value || value === 0) {
 
           // Iterate through cat array.
           for (let i = 0; i < theme.cat_arr.length; i++) {
@@ -128,9 +128,10 @@ export default _xyz => layer => {
             if (value < theme.cat_arr[i].value) break;
       
             // Set cat_style to current cat style after value check.
-            var cat_style = theme.cat_arr[i].style;
+            var cat_style = theme.cat_arr[i].style || theme.cat_arr[i];
           }
   
+          // Assign style from base & cat_style.
           Object.assign(marker, cat_style);
         }
       }

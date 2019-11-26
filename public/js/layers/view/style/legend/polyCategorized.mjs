@@ -24,8 +24,8 @@ export default _xyz => layer => {
       <line
         x1=4
         x2=18
-        stroke=${cat_style.color}
-        stroke-width=${cat_style.weight || 1}>`;
+        stroke=${cat_style.strokeColor}
+        stroke-width=${cat_style.strokeWidth || 1}>`;
 
       line.setAttribute("y1", y + 10);
       line.setAttribute("y2", y + 10);
@@ -42,7 +42,7 @@ export default _xyz => layer => {
         fill=${cat_style.fillColor || '#FFF'}
         fill-opacity=${cat_style.fillOpacity}
         stroke=${cat_style.strokeColor}
-        stroke-width=${cat_style.weight || 1}>`;
+        stroke-width=${cat_style.strokeWidth || 1}>`;
 
       rect.setAttribute("y", y + 3);
 
@@ -91,8 +91,8 @@ export default _xyz => layer => {
       <line
         x1=4
         x2=18
-        stroke=${layer.style.default.color}
-        stroke-width=${layer.style.default.weight || 1}>`;
+        stroke=${layer.style.default.strokeColor}
+        stroke-width=${layer.style.default.strokeWidth || 1}>`;
 
       line.setAttribute("y1", y + 10);
       line.setAttribute("y2", y + 10);
@@ -108,7 +108,7 @@ export default _xyz => layer => {
         fill=${layer.style.default.fillColor || '#FFF'}
         fill-opacity=${layer.style.default.fillOpacity}
         stroke=${layer.style.default.strokeColor}
-        stroke-width=${layer.style.default.weight || 1}>`;
+        stroke-width=${layer.style.default.strokeWidth || 1}>`;
 
       rect.setAttribute("y", y + 3);
       legend.appendChild(rect);
