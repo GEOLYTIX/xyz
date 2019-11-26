@@ -42,7 +42,7 @@ module.exports =  fastify => {
         qID = layer.qID;
       
       // Clone the infoj from the memory workspace layer.
-      const infoj = layer.infoj && JSON.parse(JSON.stringify(layer.infoj));
+      let infoj = layer.infoj && JSON.parse(JSON.stringify(layer.infoj));
 
       // The fields array stores all fields to be queried for the location info.    
       const fields = (infoj && await sql_fields([], infoj, qID, req.params.token.roles || [], req.params.locale)) || [];
@@ -52,23 +52,10 @@ module.exports =  fastify => {
 
       fields.push(`\n   ARRAY[ST_X(ST_PointOnSurface(${layer.geom})), ST_Y(ST_PointOnSurface(${layer.geom}))] AS PointOnSurface`);
 
-      const fields_with = [];
-
-      infoj && await infoj.forEach(entry => {
-        
-        if (entry.field && !entry.columns) {
-          fields_with.push(entry.field);
-        }
-
-      });
-
       var q = `
-      with q as (
         SELECT ${fields.join()}
         FROM ${table}
-        WHERE ${qID} = $1
-      )
-      select ${(infoj && fields_with.join() ? (infoj && fields_with.join() + ',') : '') || ''} geomj, PointOnSurface from q`;
+        WHERE ${qID} = $1`;
 
       var rows = await env.dbs[layer.dbs](q, [id]);
 
@@ -76,18 +63,9 @@ module.exports =  fastify => {
 
       // return 204 if no record was returned from database.
       if (rows.length === 0) return res.code(202).send('No rows returned from table.');
-
-      // Iterate through infoj entries and assign values returned from query.
-      infoj && infoj.forEach(entry =>  {
-        if (rows[0][entry.field]) entry.value = rows[0][entry.field];
-      });
     
       // Send the infoj object with values back to the client.
-      res.code(200).send({
-        geomj: JSON.parse(rows[0].geomj),
-        pointonsurface: rows[0].pointonsurface,
-        infoj: infoj
-      });
+      res.code(200).send(rows[0]);
 
     }
   });

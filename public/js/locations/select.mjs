@@ -85,11 +85,17 @@ export default _xyz => location => {
     // Push the hook for the location.
     if (_xyz.hooks) _xyz.hooks.push('locations', location.hook);
 
+    const infoj = location.layer.infoj.map(entry => {
+      entry.label = e.target.response[entry.field + '_label'] || entry.label;
+      entry.value = e.target.response[entry.field]
+      return entry;
+    })
+
     _xyz.locations.decorate(
       location,
       {
-        infoj: e.target.response.infoj,
-        geometry: e.target.response.geomj,
+        infoj: infoj,
+        geometry: JSON.parse(e.target.response.geomj),
         editable: (location.layer.edit)
       });
 

@@ -80,6 +80,8 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
       return fields.push(q);
     
     }
+
+    if (entry.labelfx) fields.push(`\n   ${entry.labelfx} AS ${entry.field}_label`);
     
     if (entry.field) return fields.push(`\n   ${entry.fieldfx || entry.field} AS ${entry.field}`);
     
