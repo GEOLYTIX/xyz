@@ -23,6 +23,8 @@ export default _xyz => {
   function panel(layer) {
 
     if (!layer.style) return;
+
+    if (layer.style.hidden) return;
   
     const panel = _xyz.utils.wire()`
     <div class="drawer panel expandable ${layer.style.theme || layer.format === 'grid' ? 'expanded' : ''}">`;

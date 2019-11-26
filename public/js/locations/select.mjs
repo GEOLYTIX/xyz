@@ -61,8 +61,8 @@ export default _xyz => location => {
   // Get location properties from XYZ host.
   const xhr = new XMLHttpRequest();
 
-  xhr.open('GET',
-    _xyz.host + '/api/location/select/id?' +
+  xhr.open('GET', _xyz.host +
+    '/api/location/select/id?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: location.layer.key,
