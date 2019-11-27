@@ -15,7 +15,7 @@ export default _xyz => (layer, filter_entry) => {
   <input type="text" placeholder="Search" onkeyup=${e=>{
 
     layer.filter.current[filter_entry.field] = {};
-    layer.filter.current[filter_entry.field][filter_entry.filter] = e.target.value;
+    layer.filter.current[filter_entry.field][filter_entry.filter] = encodeURIComponent(e.target.value);
 
     layer.reload();
 

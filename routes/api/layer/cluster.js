@@ -65,7 +65,7 @@ module.exports = fastify => {
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north);         
+        north = parseFloat(req.query.north);    
 
 
       // Combine filter with envelope
