@@ -65,7 +65,7 @@ export default _xyz => {
     <td style="padding-top: 5px;" colSpan=2>
     <label class="input-checkbox">
     <input type="checkbox"
-      checked=${entry.value || !!entry.display}
+      checked=${!!entry.display}
       onchange=${e => {
         entry.display = e.target.checked;
         if (entry.display && entry.edit) return createGeom();
@@ -92,7 +92,7 @@ export default _xyz => {
 
     if (entry.edit && entry.edit.isoline_here) td.appendChild(isoline_here.settings(entry));
 
-    if (entry.value) drawGeom();
+    if (entry.value && entry.display) drawGeom();
 
     if (!entry.value && entry.display) createGeom();
 
