@@ -102,11 +102,11 @@ export default _xyz => layer => {
       return new _xyz.mapview.lib.style.Style({
         zIndex: style.zIndex,
         stroke: style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-          color: style.strokeColor,
+          color: _xyz.utils.Chroma(style.strokeColor).alpha(parseFloat(style.strokeOpacity) || 1).rgba(),
           width: parseInt(style.strokeWidth) || 1
         }),
         fill: style.fillColor && new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.Chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba()
+          color: _xyz.utils.Chroma(style.fillColor).alpha(parseFloat(style.fillOpacity) || 1).rgba()
         }),
         image: style.marker && _xyz.mapview.icon(style.marker)
       });
