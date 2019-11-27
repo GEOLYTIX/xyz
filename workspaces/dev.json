@@ -1898,14 +1898,7 @@
                         {
                             "field": "site_type",
                             "label": "Site Type",
-                            "inline": true,
-                            "edit": {
-                                "options": [
-                                    "New Store",
-                                    "Replacement",
-                                    " "
-                                ]
-                            }
+                            "inline": true
                         },
                         {
                             "label": "Available Dashboards",
