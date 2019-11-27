@@ -7,7 +7,7 @@ export default _xyz => group => {
   group.row.appendChild(group.td);
 
   group.div = _xyz.utils.wire()`
-  <div class="drawer panel expandable">`;
+  <div style="display: none;" class="drawer panel expandable">`;
 
   if (group.expanded) group.div.classList.add('expanded');
 
@@ -84,7 +84,7 @@ export default _xyz => group => {
       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
     };
 
-    group.showTable = e => {
+    group.showTable = () => {
 
       group.table.style.display = 'table';
       group.chartElem.style.display = 'none';
