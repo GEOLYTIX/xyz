@@ -18,7 +18,7 @@ export default _xyz => function(feature) {
   xhr.open('GET', _xyz.host + '/api/location/select/cluster?' + _xyz.utils.paramString({
     locale: _xyz.workspace.locale.key,
     layer: layer.key,
-    table: layer.table,
+    table: layer.tableCurrent(),
     filter: JSON.stringify(filter),
     count: count > 99 ? 99 : count,
     coords: coords,
@@ -44,7 +44,7 @@ export default _xyz => function(feature) {
           () => _xyz.locations.select({
             locale: _xyz.workspace.locale.key,
             layer: layer,
-            table: layer.table,
+            table: layer.tableCurrent(),
             id: li.id,
             marker: li.coords,
           })
