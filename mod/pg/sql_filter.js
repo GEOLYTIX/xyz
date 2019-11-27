@@ -35,7 +35,7 @@ module.exports = async filter => {
     }
 
     if (filter.in && filter.in.length > 0) {
-      sql_filter.push(`${field} IN ('${filter.in.join('\',\'')}')`);
+      sql_filter.push(`${field} IN ('${filter.in.map(f=>decodeURIComponent(f)).join('\',\'')}')`);
       sql_filter.push(conjunction);
     }
 

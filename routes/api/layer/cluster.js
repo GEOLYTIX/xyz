@@ -20,7 +20,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
-      filter: { type: 'string' }
+          filter: { type: 'string' }
         },
         required: ['locale', 'layer', 'table']
       },
