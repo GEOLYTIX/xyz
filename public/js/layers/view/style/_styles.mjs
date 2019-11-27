@@ -24,7 +24,7 @@ export default _xyz => {
 
     if (!layer.style) return;
 
-    if (layer.style.hidden) return;
+    if (!layer.style.theme && layer.style.hidden) return;
   
     const panel = _xyz.utils.wire()`
     <div class="drawer panel expandable ${layer.style.theme || layer.format === 'grid' ? 'expanded' : ''}">`;
@@ -53,8 +53,8 @@ export default _xyz => {
     <div></div><span>Display Labels.`);
   
     // Add theme control
-    if(layer.style.theme){
-  
+    if(layer.style.theme && !layer.style.hidden){
+
       // Assign 'Basic' style entry to themes object.
       const themes = Object.assign({"Basic": null}, layer.style.themes);
   
@@ -83,6 +83,10 @@ export default _xyz => {
             layer.reload();
           }}>${key}`)}`);
             
+    }
+
+    if (layer.style.theme && layer.style.themes && layer.style.hidden) {
+      panel.appendChild(_xyz.utils.wire()`<span>${Object.keys(layer.style.themes)[0]}`)
     }
     
     // Apply the current theme.
