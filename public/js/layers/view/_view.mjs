@@ -108,6 +108,9 @@ export default _xyz => {
     const report_panel = view.report.panel(layer);
     report_panel && layer.view.appendChild(report_panel);
 
+    layer.scripts && Object.entries(layer.scripts).forEach(
+        entry => _xyz.utils.customScript(entry[1]).then(()=>window[entry[0]](_xyz, layer)));
+
     if (layer.view.children.length <= 1) return;
 
     layer.view.classList.add('expandable');

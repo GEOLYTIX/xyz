@@ -4,7 +4,7 @@ export default _xyz => entry => {
     option => typeof option === 'object' && Object.values(option)[0] === entry.value || option === entry.value
   ) || entry.value
 
-  entry.displayValue = typeof chk === 'object' && Object.keys(chk)[0] || chk || entry.value;
+  entry.displayValue = chk && typeof chk === 'object' && Object.keys(chk)[0] || chk || entry.value;
 
   entry.val.appendChild(_xyz.utils.wire()`
   <button class="btn-drop">

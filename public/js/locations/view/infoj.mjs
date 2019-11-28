@@ -145,7 +145,7 @@ export default _xyz => location => {
 
 
     // Remove empty row which is not editable.
-    if (!entry.edit && !entry.value) return entry.row.remove();
+    if (!entry.edit && !entry.displayValue) return entry.row.remove();
 
 
     // Create val table cell in a new line.

@@ -774,9 +774,15 @@
                             "custom": "foo"
                         },
                         {
-                            "name": "something",
+                            "label": "something",
                             "field": "chk",
                             "type": "boolean",
+                            "edit": true
+                        },
+                        {
+                            "label": "int_test",
+                            "field": "int_test",
+                            "type": "integer",
                             "edit": true
                         },
                         {
@@ -1896,7 +1902,14 @@
                         {
                             "field": "site_type",
                             "label": "Site Type",
-                            "inline": true
+                            "inline": true,
+                            "edit": {
+                                "options": [
+                                    "New Store",
+                                    "Replacement",
+                                    " "
+                                ]
+                            }
                         },
                         {
                             "label": "Available Dashboards",

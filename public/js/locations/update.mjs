@@ -28,13 +28,17 @@ export default _xyz => function (callback) {
     }));
 
   xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.responseType = 'json';
 
   xhr.onload = e => {
 
     if (e.target.status !== 200) return console.log(e.target.response);
 
-    // Reset location infoj with response.
-    location.infoj = JSON.parse(e.target.response);
+    location.infoj = location.layer.infoj.map(entry => {
+      entry.label = e.target.response[entry.field + '_label'] || entry.label;
+      entry.value = e.target.response[entry.field];
+      return entry;
+    })
 
     // Recreate existing location view.
     location.view && _xyz.locations.view.create(location);

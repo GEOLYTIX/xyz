@@ -51,6 +51,8 @@ async function _xyz(params) {
 
   _xyz.utils = utils;
 
+  _xyz.custom = {};
+
   _xyz.workspace = workspace(_xyz);
 
   _xyz.hooks = hooks(_xyz);
