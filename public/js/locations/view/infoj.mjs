@@ -13,8 +13,10 @@ export default _xyz => location => {
   // Create object to hold view groups.
   const groups = {};
 
-  // Iterate through info fields to fill displayValue property
-  // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
+  // watch for group/chart data series and stacks
+  let dataset;
+
+  // Iterate through info fields and add to info table.
   location.infoj && Object.values(location.infoj).forEach(entry => {
 
     entry.listview = listview;
@@ -34,13 +36,6 @@ export default _xyz => location => {
     // Add pre- or suffix if specified
     if(entry.prefix) entry.displayValue = entry.prefix + entry.displayValue;
     if(entry.suffix) entry.displayValue = entry.displayValue + entry.suffix;
-  });
-
-  // watch for group/chart data series and stacks
-  let dataset;
-
-  // Iterate through info fields and add to info table.
-  location.infoj && Object.values(location.infoj).forEach(entry => {
 
     entry.row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`;
 
@@ -97,7 +92,6 @@ export default _xyz => location => {
       entry.row.appendChild(entry.label_td);
     }
 
-
     // display layer name in location view
     if(entry.type === 'key') {
      
@@ -107,9 +101,7 @@ export default _xyz => location => {
       <span title="Source layer"
       style="${'float: right; padding: 3px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.Chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
       >${location.layer.name}`);
-
     }
-
 
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
 

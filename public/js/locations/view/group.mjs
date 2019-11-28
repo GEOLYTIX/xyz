@@ -71,13 +71,12 @@ export default _xyz => group => {
       class="btn-header xyz-icon primary-colour-filter"
       onclick=${e => {
         e.stopPropagation();
-        group.showData(e);
+        group.showData();
       }}>`;
 
     group.header.appendChild(group.viewToggler);
 
-
-    group.showData = e => {
+    group.showData = () => {
 
        if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
 
@@ -102,7 +101,6 @@ export default _xyz => group => {
         group.viewToggler.classList.add(group.chartIcon);
 
       }
-    
     }
 
       if (group.expanded) group.div.classList.add('expanded');
