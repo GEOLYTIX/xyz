@@ -2,14 +2,19 @@ export default _xyz => group => {
 
   if (!group.label) return;
 
+  let values = []; // check if group has any data
+  Object.values(group.location.infoj).map(field => { if(field.group === group.label) values.push(field.value) });
+
+  let data_to_show = values.every(el => {return el !== undefined});
+
+  if(!data_to_show) return; // break when no data to show
+
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
   group.row.appendChild(group.td);
 
   group.div = _xyz.utils.wire()`
   <div style="display: none;" class="drawer panel expandable">`;
-
-  if (group.expanded) group.div.classList.add('expanded');
 
   group.td.appendChild(group.div);
 
@@ -24,9 +29,11 @@ export default _xyz => group => {
   group.div.appendChild(group.header);
 
   // Add table
-  group.table = _xyz.utils.wire()`<table>`;
+  group.table = _xyz.utils.wire()`<table style="display: none;">`;
 
   group.div.appendChild(group.table);
+
+  group.div.style.display = 'block';
 
   // If chart option specified
   if (group.chart) {
@@ -64,47 +71,44 @@ export default _xyz => group => {
       class="btn-header xyz-icon primary-colour-filter"
       onclick=${e => {
         e.stopPropagation();
-        group.viewToggler.classList.toggle(group.chartIcon);
-        group.viewToggler.classList.toggle('icon-view-list');
-        group.div.classList.contains('chart') ? group.showTable() : group.showChart();
+        group.showData(e);
       }}>`;
 
     group.header.appendChild(group.viewToggler);
 
-    group.showChart = () => {
 
-      group.table.style.display = 'none';
-      group.chartElem.style.display = 'block';
+    group.showData = e => {
 
-      group.div.classList.add('chart');
+       if (e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');
 
-      group.viewToggler.classList.remove(group.chartIcon);
-      group.viewToggler.classList.add('icon-view-list');
+      if(!group.div.classList.contains('chart')) {
 
-      if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
-    };
+        group.table.style.display = 'none';
+        group.chartElem.style.display = 'block';
+        
+        group.div.classList.add('chart');
+        
+        group.viewToggler.classList.remove(group.chartIcon);
+        group.viewToggler.classList.add('icon-view-list');
+        
+      } else {
 
-    group.showTable = () => {
+        group.table.style.display = 'table';
+        group.chartElem.style.display = 'none';
 
-      group.table.style.display = 'table';
-      group.chartElem.style.display = 'none';
+        group.div.classList.remove('chart');
 
-      group.div.classList.remove('chart');
+        group.viewToggler.classList.remove('icon-view-list');
+        group.viewToggler.classList.add(group.chartIcon);
 
-      group.viewToggler.classList.remove('icon-view-list');
-      group.viewToggler.classList.add(group.chartIcon);
-
-      if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
-    };
-
-    // Use the appropriate toggle function to initialise
-    if (group.chart.active) {
-
-      group.showChart();
-    } else {
-
-      group.showTable();
+      }
+    
     }
+
+      if (group.expanded) group.div.classList.add('expanded');
+      
+      group.showData();
+
   }
 
   return group;

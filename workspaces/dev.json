@@ -1357,10 +1357,8 @@
                         {
                             "label": "Profile",
                             "type": "group",
+                            "expanded": true,
                             "chart": {
-                                "active": true,
-                                "x": "label x",
-                                "y": "label y",
                                 "type": "horizontalBar",
                                 "backgroundColor": [
                                     "#FFA630",
@@ -1922,7 +1920,6 @@
                             "field": "isoline_5min",
                             "fieldfx": "ST_asGeoJson(isoline_5min)",
                             "type": "geometry",
-                            "display": true,
                             "class": "_report",
                             "level": 2,
                             "edit": {
@@ -1942,9 +1939,9 @@
                         {
                             "label": "Population within 5min",
                             "type": "group",
+                            "expanded": true,
                             "level": 2,
                             "chart": {
-                                "active": true,
                                 "type": "bar",
                                 "unit": "k",
                                 "maxRotationX": 90,
@@ -2097,7 +2094,6 @@
                             "class": "_report",
                             "level": 2,
                             "chart": {
-                                "active": false,
                                 "title": true,
                                 "hideTicksX": true,
                                 "type": "bar",
@@ -2255,7 +2251,6 @@
                             "class": "_report",
                             "chart": {
                                 "title": true,
-                                "active": false,
                                 "legend": true,
                                 "legendPosition": "bottom",
                                 "type": "bar",

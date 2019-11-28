@@ -50,16 +50,10 @@ export default _xyz => location => {
     // Create a new info group.
     if (entry.type === 'group') {
 
-      let values = []; // check if group has any data
-      Object.values(entry.location.infoj).map(field => { if(field.group === entry.label) values.push(field.value) });
-      if(values[0] === undefined) return;
-
       const group = _xyz.locations.view.group(entry);
-
       if (!group) return;
-
       groups[group.label] = group;
-
+            
       return listview.appendChild(group.row);
     }
 
@@ -89,9 +83,6 @@ export default _xyz => location => {
 
       }
 
-      if (!entry.value && entry.value !== 0) return;
-
-      groups[entry.group].div.style.display = 'block';
       groups[entry.group].table.appendChild(entry.row); 
     }
 
