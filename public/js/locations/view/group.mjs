@@ -109,9 +109,7 @@ export default _xyz => group => {
       
       group.showData();
 
-  } /*else {
-    group.table.style.display = 'table';
-  }*/
+  }
 
   return group;
 
