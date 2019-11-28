@@ -103,6 +103,11 @@ export default _xyz => location => {
       >${location.layer.name}`);
     }
 
+    if (entry.type === 'script') {
+      entry.src && _xyz.utils.customScript(entry.src).then(()=>window[entry.function](_xyz, entry));
+      return
+    }
+
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
 
 

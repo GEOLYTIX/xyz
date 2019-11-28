@@ -9,7 +9,6 @@ export function customScript(url) {
 
     const script = Object.assign(
       document.createElement("script"), {
-      defer: "defer",
       src: url,
       onerror: () => reject(new Error(`Failed to import: ${url}`)),
       onload: () => resolve()
