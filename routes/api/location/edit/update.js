@@ -74,14 +74,9 @@ module.exports = fastify => {
       var rows = await env.dbs[layer.dbs](q, [id]);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
-
-      // Iterate through infoj entries and assign values returned from query.
-      infoj.forEach(entry =>  {
-        if (rows[0][entry.field]) entry.value = rows[0][entry.field];
-      });
-    
+   
       // Send the infoj object with values back to the client.
-      res.code(200).send(infoj);
+      res.code(200).send(rows[0]);
 
     }
     

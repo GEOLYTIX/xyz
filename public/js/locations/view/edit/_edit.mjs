@@ -52,7 +52,7 @@ export default _xyz => {
 
     // Create a text input if no other rule applies.
     entry.val.appendChild(_xyz.utils.wire()`
-    <input type="text" value="${entry.value || ''}"
+    <input type="${(entry.type === 'numeric' || entry.type === 'integer') && 'number' || 'text'}" value="${entry.value || entry.displayValue || ''}"
       onkeyup=${e => {
         entry.location.view.dispatchEvent(
           new CustomEvent('valChange', {detail:{

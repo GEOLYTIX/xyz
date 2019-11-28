@@ -68,7 +68,7 @@ fastify
         formAction: env.CSP.formAction || ['\'self\''],
         styleSrc: env.CSP.styleSrc || ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
         fontSrc: env.CSP.fontSrc || ['\'self\'', 'fonts.gstatic.com', 'cdn.jsdelivr.net'],
-        scriptSrc: env.CSP.scriptSrc || ['\'self\'', '\'unsafe-inline\'', 'www.google.com', 'www.gstatic.com', 'cdn.jsdelivr.net'],
+        scriptSrc: env.CSP.scriptSrc || ['\'self\'', '\'unsafe-inline\'', 'www.google.com', 'www.gstatic.com', 'cdn.jsdelivr.net', 'blob:'],
         imgSrc: env.CSP.imgSrc || ['\'self\'', 'api.ordnancesurvey.co.uk', '*.tile.openstreetmap.org', 'api.mapbox.com', 'res.cloudinary.com', '*.global.ssl.fastly.net', 'cdn.jsdelivr.net', 'data:']
       },
       setAllHeaders: true

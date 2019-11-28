@@ -87,7 +87,7 @@ export default _xyz => location => {
 
     const infoj = location.layer.infoj.map(entry => {
       entry.label = e.target.response[entry.field + '_label'] || entry.label;
-      entry.value = e.target.response[entry.field]
+      entry.value = e.target.response[entry.field];
       return entry;
     })
 

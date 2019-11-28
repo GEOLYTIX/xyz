@@ -2,6 +2,8 @@ export {default as svg_symbols} from './svg_symbols.mjs';
 
 export {paramString} from './paramString.mjs';
 
+export {customScript} from './customScript.mjs';
+
 export {toggleExpanderParent} from './toggleExpanderParent.mjs';
 
 export {scrolly} from './scrolly.mjs';
