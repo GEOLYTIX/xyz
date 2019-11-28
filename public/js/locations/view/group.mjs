@@ -29,7 +29,7 @@ export default _xyz => group => {
   group.div.appendChild(group.header);
 
   // Add table
-  group.table = _xyz.utils.wire()`<table style="display: none;">`;
+  group.table = _xyz.utils.wire()`<table>`;
 
   group.div.appendChild(group.table);
 
@@ -79,7 +79,7 @@ export default _xyz => group => {
 
     group.showData = e => {
 
-       if (e && !group.div.classList.contains('expanded')) group.div.classList.add('expanded');
+       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
 
       if(!group.div.classList.contains('chart')) {
 
@@ -109,7 +109,9 @@ export default _xyz => group => {
       
       group.showData();
 
-  }
+  } /*else {
+    group.table.style.display = 'table';
+  }*/
 
   return group;
 
