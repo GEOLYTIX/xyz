@@ -78,7 +78,9 @@ export default _xyz => location => {
 
       }
 
-      groups[entry.group].table.appendChild(entry.row); 
+      groups[entry.group].table.appendChild(entry.row);
+      groups[entry.group].div.style.display = 'block';
+
     }
 
 
@@ -104,7 +106,8 @@ export default _xyz => location => {
     }
 
     if (entry.type === 'script') {
-      entry.src && _xyz.utils.customScript(entry.src).then(()=>window[entry.function](_xyz, entry));
+      entry.src && _xyz.utils.customScript(`${entry.src}&token=${_xyz.token}`).then(()=>window[entry.function](_xyz, entry));
+
       return
     }
 

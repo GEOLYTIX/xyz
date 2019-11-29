@@ -18,6 +18,8 @@ module.exports = fastify => {
 
   require('./proxy_cdn')(fastify);
 
+  require('./proxy_pg')(fastify);
+
   require('./report').route(fastify);
 
   require('./api/_api')(fastify);

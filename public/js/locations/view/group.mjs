@@ -3,11 +3,11 @@ export default _xyz => group => {
   if (!group.label) return;
 
   let values = []; // check if group has any data
-  Object.values(group.location.infoj).map(field => { if(field.group === group.label) values.push(field.value) });
+  Object.values(group.location.infoj).map(field => { if (field.group === group.label) values.push(field.value) });
 
-  let data_to_show = values.every(el => {return el !== undefined});
+  let data_to_show = values.every(el => { return el !== undefined });
 
-  if(!data_to_show) return; // break when no data to show
+  if (!data_to_show) return; // break when no data to show
 
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
@@ -15,6 +15,8 @@ export default _xyz => group => {
 
   group.div = _xyz.utils.wire()`
   <div style="display: none;" class="drawer panel expandable">`;
+
+  group.expanded && group.div.classList.add('expanded');
 
   group.td.appendChild(group.div);
 
@@ -31,9 +33,7 @@ export default _xyz => group => {
   // Add table
   group.table = _xyz.utils.wire()`<table>`;
 
-  group.div.appendChild(group.table);
-
-  group.div.style.display = 'block';
+  group.div.appendChild(group.table); 
 
   // If chart option specified
   if (group.chart) {
@@ -78,18 +78,18 @@ export default _xyz => group => {
 
     group.showData = () => {
 
-       if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
+      group.div.classList.add('expanded');
 
-      if(!group.div.classList.contains('chart')) {
+      if (!group.div.classList.contains('chart')) {
 
         group.table.style.display = 'none';
         group.chartElem.style.display = 'block';
-        
+
         group.div.classList.add('chart');
-        
+
         group.viewToggler.classList.remove(group.chartIcon);
         group.viewToggler.classList.add('icon-view-list');
-        
+
       } else {
 
         group.table.style.display = 'table';
@@ -103,9 +103,7 @@ export default _xyz => group => {
       }
     }
 
-      if (group.expanded) group.div.classList.add('expanded');
-      
-      group.showData();
+    group.showData();
 
   }
 

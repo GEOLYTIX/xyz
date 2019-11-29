@@ -32,6 +32,8 @@ workspaces/richersounds.json
 workspaces/mns.json
 workspaces/kfc_japan.json
 workspaces/camelot.json
+public/views/report_camelot.html
+public/views/report_camelot.js
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
