@@ -59,6 +59,7 @@ export default _xyz => table => {
     _xyz.dataview.nav_bar.appendChild(table.tab) :
     (table.tab.classList.add('folded'), _xyz.dataview.nav_dropdown.appendChild(table.tab));
 
+
   count1 = _xyz.dataview.nav_bar.children.length || 0;
   count2 = _xyz.dataview.nav_dropdown.children.length || 0;  
   total_count = count1 + count2;
@@ -67,10 +68,11 @@ export default _xyz => table => {
   if(!table.tab.classList.contains('folded')) {
     table.tab.classList.add('tab-current', 'primary-colour-bb');
   } else {
+    // regenerate nav_bar content
     _xyz.dataview.nav_bar.lastChild.classList.add('tab-current', 'primary-colour-bb');
   }
   
-  if(count2 > 0) _xyz.dataview.nav_dropdown_btn.style.display = 'inline-flex';
+  _xyz.dataview.nav_dropdown_btn.style.display = count2 > 0 ? 'inline-flex' : 'none';
 
 
 };
