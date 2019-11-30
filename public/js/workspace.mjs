@@ -3,7 +3,6 @@ export default _xyz => {
   return {
     fetchWS: fetchWS,
     setWS: setWS,
-    loadLocale: loadLocale,
     admin: admin,
   };
 
@@ -38,32 +37,48 @@ export default _xyz => {
 
       _xyz.workspace.locales = e.target.response.locales;
 
-      if (_xyz.locale) loadLocale();
-
-      callback && callback(_xyz);
+      loadLocale(callback);
     };
 
     xhr.send();
   };
 
-  function loadLocale() {
+  function loadLocale(callback) {
 
     // Assign key from params of first in locales list.
-    const locale = (_xyz.workspace.locales[_xyz.locale] && _xyz.locale)
+    const locale = (_xyz.locale && _xyz.workspace.locales[_xyz.locale])
       || (_xyz.hooks && _xyz.hooks.current.locale)
       || Object.keys(_xyz.workspace.locales)[0];
 
     // Assigne workspace locales from locales list and input params.
     _xyz.workspace.locale = Object.assign({ key: locale }, _xyz.workspace.locales[locale]);
 
-    // Load layers.
-    Object.keys(_xyz.workspace.locale.layers)
-      .filter(key => key.indexOf('__') === -1)
-      .forEach(key => {
-        _xyz.layers.list[key] = _xyz.layers.decorate(_xyz.workspace.locale.layers[key]);
-      });
-
+    loadScripts(callback)
   };
+
+  function loadScripts(callback){
+
+    if (!_xyz.workspace.locale.scripts) return loadLayers(callback);
+
+    const scripts = _xyz.workspace.locale.scripts.map(script=>_xyz.utils.customScript(script));
+
+    Promise.all(scripts).then(()=>{
+      loadLayers(callback)
+    });
+  }
+
+  function loadLayers(callback){
+
+    Object.keys(_xyz.workspace.locale.layers)
+    .filter(key => key.indexOf('__') === -1)
+    .forEach(key => {
+      _xyz.layers.list[key] = _xyz.layers.decorate(_xyz.workspace.locale.layers[key]);
+    });
+
+    callback && callback(_xyz);
+  }
+
+
 
   function admin() {
 
@@ -145,7 +160,7 @@ export default _xyz => {
 
               _xyz.hooks.set({ locale: locale });
 
-              _xyz.workspace.loadLocale({ locale: locale });
+              _xyz.workspace.loadLocale();
 
               mask.remove();
             });

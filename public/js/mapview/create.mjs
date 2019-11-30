@@ -5,9 +5,6 @@ export default _xyz => params => {
     _xyz.map.setTarget(null);
     _xyz.map = null;
   }
-
-  // Load locale if defined in params or if no locale is yet loaded.
-  if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
     
   // Return if no target has been defined for the leaflet map control.
   if (!params.target) return console.log('No target for mapview!');

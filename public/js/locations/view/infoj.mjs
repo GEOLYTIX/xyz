@@ -105,11 +105,9 @@ export default _xyz => location => {
       >${location.layer.name}`);
     }
 
-    if (entry.type === 'script') {
-      entry.src && _xyz.utils.customScript(`${entry.src}&token=${_xyz.token}`).then(()=>window[entry.function](_xyz, entry));
 
-      return
-    }
+    if (entry.script) return window[entry.script](_xyz, entry);
+
 
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
 
@@ -120,7 +118,6 @@ export default _xyz => location => {
     if (entry.type === 'report') return _xyz.locations.view.report(entry);
 
 
-    // If input is images create image control and return from object.map function.
     if (entry.type === 'images') return _xyz.locations.view.images(entry);
 
 

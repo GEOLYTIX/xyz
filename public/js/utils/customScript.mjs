@@ -1,19 +1,19 @@
-export function customScript(url) {
+export function customScript(src) {
 
   // create absolute URL
   // const a = document.createElement("a");
-  // a.setAttribute("href", url);
+  // a.setAttribute("href", src);
   // const absURL = a.cloneNode(false).href;
 
   return new Promise((resolve, reject) => {
-
     const script = Object.assign(
       document.createElement("script"), {
-      src: url,
-      onerror: () => reject(new Error(`Failed to import: ${url}`)),
-      onload: () => resolve()
+      src: src,
+      onerror: () => reject(console.error('failed:'+src)),
+      onload: () => resolve(console.log('loaded:'+src))
     });
-
+  
     document.head.appendChild(script);
   });
+
 }

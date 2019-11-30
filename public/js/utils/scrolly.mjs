@@ -36,17 +36,25 @@ export function scrolly(el) {
 
     e.preventDefault();
 
+    document.body.style.cursor='grabbing';
+
+    const bar_offsetTop = bar.offsetTop;
+
     const onMove = _e => {
+
       bar.style.top = Math.min(
         track.clientHeight - bar.clientHeight,
-        Math.max(0, bar.offsetTop + _e.pageY - e.pageY)) + 'px';
+        Math.max(0, bar_offsetTop + _e.pageY - e.pageY)) + 'px';
 
       el.scrollTop = (el.scrollHeight * bar.offsetTop / track.clientHeight);
     };
 
     document.addEventListener('mousemove', onMove);
 
-    document.addEventListener('mouseup', () => document.removeEventListener('mousemove', onMove));
+    document.addEventListener('mouseup', () => {
+      document.body.style.cursor='auto';
+      document.removeEventListener('mousemove', onMove)
+    });
   });
 
 }
