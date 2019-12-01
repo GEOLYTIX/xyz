@@ -16,10 +16,15 @@ module.exports = async () => {
     const dbs = key.split('_')[1];
 
     // Request which accepts q and arr and will return rows or rows.err.
-    env.dbs[dbs] = async (q, arr, no_log) => {
+    env.dbs[dbs] = async (q, arr, no_log, no_timeout) => {
 
       try {
+        no_timeout && await pool.query('SET statement_timeout = 0');
+        
         const { rows } = await pool.query(q, arr);
+
+        no_timeout && await pool.query('SET statement_timeout = 10000');
+
         return rows;
 
       } catch (err) {

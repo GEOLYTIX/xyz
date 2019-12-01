@@ -32,8 +32,13 @@ workspaces/richersounds.json
 workspaces/mns.json
 workspaces/kfc_japan.json
 workspaces/camelot.json
+workspaces/gla.json
 public/views/report_camelot.html
 public/views/report_camelot.js
+public/views/gla.html
+public/views/gla.js
+public/views/gla_mobile.html
+public/views/gla_mobile.js
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

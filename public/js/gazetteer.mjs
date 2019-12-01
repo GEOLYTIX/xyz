@@ -202,7 +202,7 @@ export default _xyz => {
     record.callback && record.callback();
   }
   
-  function mapbox(record, callback) {
+  function mapbox(record) {
 
     gazetteer.createFeature({
       type: 'Point',

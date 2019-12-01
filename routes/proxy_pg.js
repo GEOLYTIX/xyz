@@ -17,7 +17,7 @@ module.exports = fastify => {
 
       const q = req.params.locale.queries[req.query.q];
 
-      var rows = await env.dbs[req.query.dbs](q,[req.body]);
+      var rows = await env.dbs[req.query.dbs](q,[req.body],null,req.query.no_timeout);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
