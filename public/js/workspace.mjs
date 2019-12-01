@@ -60,7 +60,7 @@ export default _xyz => {
 
     if (!_xyz.workspace.locale.scripts) return loadLayers(callback);
 
-    const scripts = _xyz.workspace.locale.scripts.map(script=>_xyz.utils.customScript(script));
+    const scripts = _xyz.workspace.locale.scripts.map(script=>_xyz.utils.loadScript(script));
 
     Promise.all(scripts).then(()=>{
       loadLayers(callback)

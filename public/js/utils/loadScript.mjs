@@ -1,4 +1,4 @@
-export function customScript(src) {
+export function loadScript(src) {
 
   // create absolute URL
   // const a = document.createElement("a");

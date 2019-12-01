@@ -9,9 +9,15 @@ module.exports = fastify => {
         public: true
       })
     ]),
+    preHandler: [
+      fastify.evalParam.token,
+      fastify.evalParam.locale,
+    ],
     handler: async (req, res) => {
 
-      var rows = await env.dbs[req.query.dbs](req.body);
+      const q = req.params.locale.queries[req.query.q];
+
+      var rows = await env.dbs[req.query.dbs](q,[req.body]);
 
       if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
 
