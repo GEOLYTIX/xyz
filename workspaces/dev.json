@@ -1888,6 +1888,11 @@
                             "class": "_report"
                         },
                         {
+                            "field": "id",
+                            "label": "Site ID",
+                            "inline": true
+                        },
+                        {
                             "field": "site_name",
                             "label": "Site Name",
                             "edit": true,

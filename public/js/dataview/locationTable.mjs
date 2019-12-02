@@ -19,7 +19,9 @@ export default _xyz => (table, callback) => {
     table.columns.push(Object.assign({}, {field: key}, table.agg[key]));
   });
 
-  if (_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
+ if(_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
+  
+  //Object.values(_xyz.dataview.tables).map(v => console.log(v.location.id));
 
   if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(table);
 
@@ -55,6 +57,7 @@ export default _xyz => (table, callback) => {
         locale: _xyz.workspace.locale.key,
         layer: table.location.layer.key,
         id: table.location.id,
+        //id: table.tab.dataset.qid,
         tableDef: table.title,
         token: _xyz.token
       }));
@@ -82,6 +85,8 @@ export default _xyz => (table, callback) => {
     // disable header sorting by default
     table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false;});
 
+    table.update();
+
     // group columns if grouped defined
     let columns = _xyz.dataview.groupColumns(table);
     // filtered out helper columns
@@ -98,8 +103,6 @@ export default _xyz => (table, callback) => {
         layout: table.layout || 'fitDataFill',
         height: 'auto'
       });
-
-    table.update();
 
     _xyz.dataview.current_table = table;
 

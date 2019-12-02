@@ -136,13 +136,13 @@ export default _xyz => location => {
     if (entry.type === 'boolean') return _xyz.locations.view.boolean(entry);    
 
 
-    if (entry.type === 'tableDefinition') return _xyz.locations.view.tableDefinition(entry);
+    if (entry.type === 'tableDefinition') return _xyz.locations.view.tableDefinition(Object.assign({}, entry));
 
 
-    if (entry.type === 'orderedList') return _xyz.locations.view.orderedList(entry);  
+    if (entry.type === 'orderedList') return _xyz.locations.view.orderedList(Object.assign({}, entry));  
 
 
-    if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(entry);
+   if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(Object.assign({}, entry));
 
 
     // prevent clusterArea from firing if layer is not cluster
