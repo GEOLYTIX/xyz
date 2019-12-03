@@ -10,7 +10,7 @@ export default _xyz => {
 
   function settings(entry) {
 
-    if (typeof(entry.edit.isoline_mapbox) === 'object') return _xyz.utils.wire()`<div>`;
+    if (entry.edit.isoline_mapbox && entry.edit.isoline_mapbox.minutes) return _xyz.utils.wire()`<div>`;
     
     const group = _xyz.utils.wire()`
     <div class="drawer panel expandable">`;
@@ -31,7 +31,7 @@ export default _xyz => {
       { Driving : 'driving' },
       { Walking: 'walking' },
       { Cycling: 'cycling' },
-    ]
+    ];
 
     entry.edit.isoline_mapbox.profile = 'driving';  
 
@@ -79,7 +79,6 @@ export default _xyz => {
           e.target.parentNode.previousElementSibling.textContent = entry.edit.isoline_mapbox.minutes;
         }}>`);
 
-
     return group;
   }
 
@@ -90,7 +89,7 @@ export default _xyz => {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host +
-      '/api/location/edit/isoline/mapbox/info?' +
+      '/api/location/edit/isoline/mapbox?' +
       _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
         layer: entry.location.layer.key,
@@ -98,8 +97,8 @@ export default _xyz => {
         coordinates: origin.join(','),
         minutes: entry.edit.isoline_mapbox.minutes,
         profile: entry.edit.isoline_mapbox.profile,
-        id: entry.location.id,
-        field: entry.field,
+        //id: entry.location.id,
+        //field: entry.field,
         meta: entry.edit.isoline_mapbox.meta || null,
         token: _xyz.token
       }));
@@ -117,21 +116,53 @@ export default _xyz => {
       if (e.target.status !== 200) {
         entry.location.view && entry.location.view.classList.remove('disabled');
         console.log(e.target.response);
-        return alert('No route found. Try a longer travel time.');
+        return alert('No route found. Try alternative set up.');
       }
 
-      entry.location.infoj = e.target.response;
+      const xhr_save = new XMLHttpRequest();
 
-      // Update the location view.
-      _xyz.locations.view.create(entry.location);
+      xhr_save.open('POST', _xyz.host +
+      '/api/location/edit/isoline/mapbox/save?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: entry.location.layer.key,
+        table: entry.location.table,
+        field: entry.field,
+        id: entry.location.id,
+        meta: entry.edit.isoline_mapbox.meta || null,
+        token: _xyz.token
+      }));
 
-      //entry.location.flyTo();
+      xhr_save.setRequestHeader('Content-Type', 'application/json');
+      xhr_save.responseType = 'json';
+
+      xhr_save.onload = _e => {
+
+        if (_e.target.status !== 200) {
+          entry.location.view && entry.location.view.classList.remove('disabled');
+          console.log(_e.target.response);
+          return alert('Something with saving isoline went wrong.');
+        }
+
+        entry.location.infoj = _e.target.response;
+
+        // Update the location view.
+        _xyz.locations.view.create(entry.location);
+
+        //entry.location.flyTo();
+      }
+
+      xhr_save.send(JSON.stringify({
+        profile: entry.edit.isoline_mapbox.profile,
+        minutes: entry.edit.isoline_mapbox.minutes,
+        isoline: e.target.response
+      }));
 
     };
 
-    entry.location.view && entry.location.view.classList.add('disabled');
     xhr.send();
-
+    entry.location.view && entry.location.view.classList.add('disabled');
+  
   };
 
 }

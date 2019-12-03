@@ -575,7 +575,7 @@
                             "type": "label"
                         },
                         {
-                            "name": "Create / Delete",
+                            "name": "Create / Delete 10 min",
                             "field": "isoline_here",
                             "fieldfx": "ST_asGeoJson(isoline_here)",
                             "type": "geometry",
@@ -590,7 +590,7 @@
                             "type": "label"
                         },
                         {
-                            "name": "Create / Delete",
+                            "name": "Create/Delete 10 min",
                             "field": "isoline_mapbox",
                             "fieldfx": "ST_asGeoJson(isoline_mapbox)",
                             "type": "geometry",
@@ -619,7 +619,6 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline_here": {
-                                    "slider": true,
                                     "meta": "isoline_here_custom_meta"
                                 }
                             },
@@ -648,7 +647,6 @@
                             "type": "geometry",
                             "edit": {
                                 "isoline_mapbox": {
-                                    "slider": true,
                                     "meta": "isoline_mapbox_custom_meta"
                                 }
                             },

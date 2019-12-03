@@ -50,9 +50,9 @@ module.exports = fastify => {
 
   require('./location/edit/document_upload')(fastify);
 
-  require('./location/edit/isoline_mapbox')(fastify);
+  require('./location/edit/isoline_mapbox')(fastify); 
 
-  require('./location/edit/isoline_mapbox_info')(fastify);  
+  require('./location/edit/isoline_mapbox_save')(fastify);  
 
   require('./location/edit/isoline_here')(fastify);
 

@@ -10,7 +10,7 @@ export default _xyz => {
 
   function settings(entry) {
 
-    if (typeof(entry.edit.isoline_here) === 'object') return _xyz.utils.wire()`<div>`;
+    if (entry.edit.isoline_here && entry.edit.isoline_here.minutes) return _xyz.utils.wire()`<div>`;
     
     const group = _xyz.utils.wire()`
     <div class="drawer panel expandable">`;
@@ -62,7 +62,6 @@ export default _xyz => {
                     entry.edit.isoline_here.mode = Object.values(keyVal)[0];
         
                 }}>${Object.keys(keyVal)[0]}`)}`);
-
 
     const ranges = [
       { "Time (min)": "time" },
