@@ -47,7 +47,7 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
 
       let filter = {};
 
-      if(roles.length) await roles.forEach(async role => {
+      if(roles && roles.length) await roles.forEach(async role => {
 
         if(entry.lookup.layer_roles) { 
 
