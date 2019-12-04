@@ -2,6 +2,8 @@ const env = require('../mod/env');
 
 const fetch = require('../mod/fetch');
 
+const _fetch = require('node-fetch');
+
 const transformDate = require('../mod/date');
 
 const mailer = require('../mod/mailer');
@@ -182,7 +184,7 @@ module.exports = fastify => {
       badconfig: 'There seems to be a problem with the ACL configuration.'
     };
 
-    const tmpl = await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/login.html`)
+    const tmpl = await _fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/login.html`)
 
     const html = template(await tmpl.text(), {
       dir: env.path,
