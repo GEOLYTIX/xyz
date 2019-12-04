@@ -67,15 +67,12 @@ module.exports = fastify => {
         ${filter && await sql_filter(filter) || ''}`;
 
 
-
       var q = `
         SELECT
           ${label} AS label,
           ST_X(ST_PointOnSurface(${geom})) AS x,
           ST_Y(ST_PointOnSurface(${geom})) AS y
         FROM ${table} ${where_sql}`;
-
-      console.log(q);
 
 
       var rows = await env.dbs[layer.dbs](q);

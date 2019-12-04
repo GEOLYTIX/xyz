@@ -23,6 +23,7 @@
   "dependencies": {
     "@mapbox/vector-tile": "^1.3.1",
     "@turf/point-on-feature": "^5.1.5",
+    "backtick-template": "^0.2.0",
     "bcrypt-nodejs": "0.0.3",
     "chart.js": "^2.9.2",
     "chartjs-plugin-datalabels": "^0.6.0",
@@ -38,7 +39,6 @@
     "fastify-swagger": "^2.4.0",
     "hyperhtml": "^2.31.1",
     "js-datepicker": "^4.6.6",
-    "jsrender": "^1.0.5",
     "jwt-decode": "^2.2.0",
     "mobile-detect": "^1.4.3",
     "nanoid": "^1.2.3",

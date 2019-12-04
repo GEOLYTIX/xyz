@@ -1,15 +1,15 @@
 <!doctype html>
 <html>
 
-<head data-dir="{{:dir}}">
+<head data-dir="${dir}">
     <title>XYZ | Registration</title>
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="${dir}/favicon.ico" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{:captcha}}"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
 
-    <script src="{{:dir}}/views/register.js" async defer></script>
+    <script src="${dir}/views/register.js" async defer></script>
 
     <style>
         body {
@@ -161,7 +161,7 @@
     </style>
 </head>
 
-<body class="register_form" data-captcha="{{:captcha}}">
+<body class="register_form" data-captcha="${captcha}">
     <form method="post">
 
         <div class="input-group">
@@ -231,7 +231,7 @@
         <p>After verification, a site administrator will approve new accounts. You will receive a further email once
             your account has been approved.</p>
 
-        <a class="switch" href="{{:dir}}/login">Already registered? Login.</a>
+        <a class="switch" href="${dir}/login">Already registered? Login.</a>
     </form>
 
 </body>

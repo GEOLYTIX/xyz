@@ -1,6 +1,8 @@
 const env = require('../../mod/env');
 
-const jsr = require('jsrender');
+const template = require('backtick-template');
+
+const fetch = require('node-fetch');
 
 module.exports = { route, view };
 
@@ -31,15 +33,13 @@ function route(fastify) {
 
 async function view(req, res, token) {
 
-  const template = jsr
-    .templates('./public/views/user.html')
-    .render({
-      dir: env.path,
-      token: token.signed
-    });
+  const tmpl = await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/user.html`);
 
-  res
-    .type('text/html')
-    .send(template);
+  const html = template(await tmpl.text(), {
+    dir: env.path,
+    token: token.signed
+  });
+
+  res.type('text/html').send(html);
 
 }

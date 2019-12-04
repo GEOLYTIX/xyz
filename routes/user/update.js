@@ -52,7 +52,7 @@ module.exports = fastify => {
         await mailer({
           to: email,
           subject: `This account has been approved for ${env.alias || req.headers.host}${env.path}`,
-          text: `You are now able to log on to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`
+          text: `You are now able to log on to ${req.headers.host.includes('localhost') && 'http' || 'https'}://${env.alias || req.headers.host}${env.path}`
         });
   
       return res.code(200).send('Update successful.');

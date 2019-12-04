@@ -65,7 +65,7 @@ module.exports = fastify => {
         	if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
 
         	// Query field for updated infoj
-            const infoj = await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/api/location/select/isoline?locale=${req.query.locale}&layer=${encodeURIComponent(layer.key)}&table=${table}&id=${req.query.id}`);
+            const infoj = await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/api/location/select/isoline?locale=${req.query.locale}&layer=${encodeURIComponent(layer.key)}&table=${table}&id=${req.query.id}`);
 
             // Send the infoj object with values back to the client.
             return res.code(200).send(infoj);

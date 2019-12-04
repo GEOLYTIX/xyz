@@ -54,7 +54,7 @@ async function view(req, res, token) {
   mailer({
     to: user.email,
     subject: `This account has been blocked on ${env.alias || req.headers.host}${env.path}`,
-    text: `You are will no longer be able to log on to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`
+    text: `You are will no longer be able to log on to ${req.headers.host.includes('localhost') && 'http' || 'https'}://${env.alias || req.headers.host}${env.path}`
   });
 
   res.send('The account has been blocked by you. An email has been sent to the account holder.');

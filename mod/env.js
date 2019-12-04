@@ -64,8 +64,6 @@ module.exports = {
 
   transport: process.env.TRANSPORT,
 
-  http: process.env.HTTP,
-
   cloudinary: process.env.CLOUDINARY && process.env.CLOUDINARY.split(' '),
 
   secret: process.env.SECRET || 'ChinaCatSunflower',

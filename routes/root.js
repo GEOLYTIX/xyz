@@ -3,15 +3,14 @@ const env = require('../mod/env');
 // Create constructor for mobile detect module.
 const Md = require('mobile-detect');
 
-// Set jsrender module for server-side templates.
-const jsr = require('jsrender');
+const template = require('backtick-template');
 
 // Nanoid is used to pass a unique id on the client view.
 const nanoid = require('nanoid');
 
 const fetch = require('node-fetch');
 
-module.exports = {route, view};
+module.exports = { route, view };
 
 function route(fastify) {
 
@@ -42,31 +41,21 @@ async function view(req, res, token = { access: 'public' }) {
   // Check whether request comes from a mobile platform and set template.
   const md = new Md(req.headers['user-agent']);
 
-  let _tmpl;
+  const tmpl = (md.mobile() === null || md.tablet() !== null) ?
+    await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/desktop.html`) :
+    await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
 
-  try {
-    _tmpl = (md.mobile() === null || md.tablet() !== null) ?
-    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/desktop.html`) :
-    await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
-
-  } catch (err) {
-    _tmpl = (md.mobile() === null || md.tablet() !== null) ?
-      await fetch(`http://${req.headers.host}${env.path}/views/desktop.html`) :
-      await fetch(`http://${req.headers.host}${env.path}/views/mobile.html`);
-  }
-
-
-  const tmpl = jsr.templates('tmpl', await _tmpl.text());
-
-  //Build the template with jsrender and send to client.
-  res.type('text/html').send(tmpl.render({
+  const html = template(await tmpl.text(), {
     dir: env.path,
     title: env.workspace.title || 'GEOLYTIX | XYZ',
     nanoid: nanoid(6),
     token: req.query.token || token.signed || '""',
     log: env.logs || '""',
-    login: (env.acl_connection) && 'true' ||  '""',
-    pgworkspace: (env.pg.workspace) && 'true' ||  '""',
-  }));
+    login: (env.acl_connection) && 'true' || '""',
+    pgworkspace: (env.pg.workspace) && 'true' || '""',
+  });
+
+  //Build the template with jsrender and send to client.
+  res.type('text/html').send(html);
 
 };
