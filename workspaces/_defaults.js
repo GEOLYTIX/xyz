@@ -79,9 +79,7 @@ module.exports = {
           scale: 0.05,
         },
         highlight: {
-          type: 'target',
-          fillColor: '#cae0b8',
-          scale: 0.05,
+          scale: 0.08
         },
         themes: {},
       },
