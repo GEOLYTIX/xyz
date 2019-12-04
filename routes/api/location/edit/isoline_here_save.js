@@ -66,25 +66,8 @@ module.exports = fastify => {
 
         	if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
 
-        	// Query field for updated infoj
-            const infoj = JSON.parse(JSON.stringify(layer.infoj));
-
-            // The fields array stores all fields to be queried for the location info.
-            fields = await sql_fields([], infoj, layer.qID);
-
-            var q = `
-            SELECT ${fields.join()}
-            FROM ${table}
-            WHERE ${layer.qID} = $1;`;
-
-            var rows = await env.dbs[layer.dbs](q, [req.query.id]);
-
-            if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
-
-            // Iterate through infoj entries and assign values returned from query.
-            infoj.forEach(entry => {
-            	if (rows[0][entry.field]) entry.value = rows[0][entry.field];
-            });
+            //  Query field for updated infoj
+            const infoj = await fetch(`${env.http || 'https'}://${req.headers.host}${env.path}/api/location/select/isoline?locale=${req.query.locale}&layer=${encodeURIComponent(layer.key)}&table=${table}&id=${req.query.id}`);
 
             // Send the infoj object with values back to the client.
             return res.code(200).send(infoj);

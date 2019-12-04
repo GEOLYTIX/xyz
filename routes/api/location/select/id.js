@@ -2,7 +2,7 @@ const env = require('../../../../mod/env');
 
 const sql_fields = require('../../../../mod/pg/sql_fields');
 
-module.exports =  fastify => {
+module.exports = fastify => {
 
   fastify.route({
     method: 'GET',
