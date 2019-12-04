@@ -189,7 +189,7 @@ module.exports = fastify => {
     const html = template(await tmpl.text(), {
       dir: env.path,
       action: req.req.url,
-      msg: req.query.msg ? msgs[req.query.msg] : null,
+      msg: req.query.msg ? msgs[req.query.msg] : ' ',
       captcha: env.captcha && env.captcha[0],
     });
 
