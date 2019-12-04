@@ -2,6 +2,8 @@ const env = require('../mod/env');
 
 const fetch = require('../mod/fetch');
 
+const _fetch = require('node-fetch');
+
 const bcrypt = require('bcrypt-nodejs');
 
 const crypto = require('crypto');
@@ -19,7 +21,7 @@ module.exports = fastify => {
     url: '/register',
     handler: async (req, res) => {
 
-      const tmpl = await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/register.html`);
+      const tmpl = await _fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/register.html`);
 
       const html = template(await tmpl.text(), {
         dir: env.path,
@@ -52,9 +54,7 @@ module.exports = fastify => {
         return res.redirect(env.path + '/login?msg=validation');
       }
 
-      var rows = await env.acl(`
-      SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`,
-        [email]);
+      var rows = await env.acl(`SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`, [email]);
 
       if (rows.err) return res.redirect(env.path + '/login?msg=badconfig');
 
