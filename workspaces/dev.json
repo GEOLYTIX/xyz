@@ -793,6 +793,12 @@
                             "edit": true
                         },
                         {
+                            "label": "not editable:",
+                            "field": "_date",
+                            "fieldfx": "dev_date",
+                            "type": "date"
+                        },
+                        {
                             "label": "Options",
                             "field": "dev_options",
                             "inline": true,

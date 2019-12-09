@@ -46,7 +46,6 @@ export default _xyz => entry => {
       document.getElementById(entry.target_id);
 
     if (entry.target) _xyz.dataview.locationTable(entry, tableChart);
-
   }
 
   function removeTab() {
@@ -60,7 +59,6 @@ export default _xyz => entry => {
     _xyz.dataview.removeTab(entry);
 
     if (entry.chart) entry.chart.node.innerHTML = '';
-
   }
 
   function tableChart(data) {
@@ -85,7 +83,6 @@ export default _xyz => entry => {
       }));
 
     }
-
   }
 
 };
