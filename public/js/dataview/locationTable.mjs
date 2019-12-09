@@ -2,7 +2,7 @@ export default _xyz => (table, callback) => {
 
   if (!table || !table.location) return;
 
-  if (_xyz.dataview.node)  document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
+  if (_xyz.dataview.node) document.body.style.gridTemplateRows = 'minmax(0, 1fr) 40px';
   
   if (!table.columns) {
 
@@ -12,8 +12,6 @@ export default _xyz => (table, callback) => {
     Object.assign(table, infoj_table);
 
   }
-
-  table.columns.unshift({ field: 'rows', title: table.title, headerSort: false, align: 'left'});
 
   Object.keys(table.agg || {}).forEach(key => {
     table.columns.push(Object.assign({}, {field: key}, table.agg[key]));
@@ -87,10 +85,15 @@ export default _xyz => (table, callback) => {
 
     table.update();
 
+    //console.log(table.title);
+
     // group columns if grouped defined
     let columns = _xyz.dataview.groupColumns(table);
+
     // filtered out helper columns
-    columns = columns.filter(col => { return !col.aspatial; });
+    columns = columns.filter(col => { return !col.aspatial; }); 
+
+    columns.unshift({ field: 'rows', title: table.title, headerSort: false, align: 'left'});
 
     table.Tabulator = new _xyz.utils.Tabulator(
       table.target,
