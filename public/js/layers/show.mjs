@@ -31,8 +31,12 @@ export default _xyz => function () {
   if (layer.dataview && _xyz.dataview.node){
 
     Object.keys(layer.dataview).forEach(key => {
+     
+      layer.dataview[key].tab && layer.dataview[key].remove();
 
-      if(layer.dataview[key].display) layer.dataview[key].show();
+      _xyz.dataview.nav_dropdown && !_xyz.dataview.nav_dropdown.firstChild && _xyz.map.updateSize();
+
+      layer.dataview[key].display && layer.dataview[key].show();
 
     });
   
