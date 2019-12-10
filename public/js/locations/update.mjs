@@ -15,7 +15,7 @@ export default _xyz => function (callback) {
 
   location.view && location.view.classList.add('disabled');
 
-  location.tables.forEach(table => _xyz.dataview.removeTab(table));
+  // location.tables.forEach(table => _xyz.dataview.removeTab(table));
 
   const xhr = new XMLHttpRequest();
 
