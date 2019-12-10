@@ -63,7 +63,7 @@ export default _xyz => {
 
   function create(location){
 
-    //location.tables.forEach(table => _xyz.dataview.removeTab(table));
+    location.tables.forEach(table => _xyz.dataview.removeTab(table));
 
     if (!location.view) {
       location.view = _xyz.utils.wire()`<div class="drawer location-view expandable expanded">`;

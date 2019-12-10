@@ -51,7 +51,7 @@ export default _xyz => params => {
 
   _xyz.mapview.interaction.highlight.begin();
 
-  // Add scalebar.
+  // Add zoomControl.
   if (params.zoomControl !== 'never' && (params.zoomControl || _xyz.workspace.locale.zoomControl)) {
     _xyz.map.addControl(new _xyz.mapview.lib.control.Zoom());
   }
@@ -60,9 +60,8 @@ export default _xyz => params => {
   params.attribution && _xyz.mapview.attribution.create(params.attribution);
 
   // Add scalebar.
-  if (params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
+  if (params.showScaleBar !== 'never' && (params.showScaleBar || _xyz.workspace.locale.showScaleBar)) {
       _xyz.map.addControl(new _xyz.mapview.lib.control.ScaleLine({
-        // bar: true,
           target: 'ol-scale'
       }));
   }
