@@ -1,32 +1,36 @@
 export default _xyz => layer => {
 
-  const legend = _xyz.utils.wire()`<svg>`;
+  const legend = _xyz.utils.wire()`<div style="margin-top: 5px; display: grid; grid-template-columns: 30px auto;">`;
 
   layer.style.legend = legend;
-       
-  let y = 10;
 
   // Create / empty legend filter when theme is applied.
   layer.filter.legend = {};
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image x=0 width=20 height=20>`;
+    let image_container = _xyz.utils.wire()`<div style="height: 30px; width: 30px;">`;
 
-    image.setAttribute('y', y);
+    let svg = _xyz.utils.wire()`<svg>`;
+
+    let image = _xyz.utils.wire(null, 'svg')`
+    <image x=0 y=0 width=20 height=20>`;
+
     image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
 
-    legend.appendChild(image);
+    svg.appendChild(image);
 
-    let text = _xyz.utils.wire(null, 'svg')`
-    <text
-      style='font-size:12px; alignment-baseline:central; cursor:pointer;'
-      x=25 >${cat[1].label || cat[0]}`;
+    image_container.appendChild(svg);
 
-    text.setAttribute('y', y + 13);
+    legend.appendChild(image_container);
 
-    text.addEventListener('click', e => {
+    let text_container = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:pointer;">${cat[1].label || cat[0]}`;
+
+    legend.appendChild(text_container);
+
+    text_container.addEventListener('click', e => {
+
+      e.stopPropagation();
       
       if(e.target.style.textDecoration === 'line-through'){
         e.target.style.textDecoration = 'none';
@@ -54,30 +58,31 @@ export default _xyz => layer => {
     
     });
 
-    legend.appendChild(text);
-
-    y += 23;
   });
       
   // Attach box for other/default categories.
   if (layer.style.theme.other) {
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image x=0 width=20 height=20 />`;
+    let image_container = _xyz.utils.wire()`<div style="height: 30px; width: 30px;">`;
 
-    image.setAttribute('y', y);
+    let svg = _xyz.utils.wire()`<svg>`;
+
+    let image = _xyz.utils.wire(null, 'svg')`
+    <image x=0 y=0 width=20 height=20>`;
+
     image.setAttribute('href', _xyz.utils.svg_symbols(layer.style.marker));
 
-    legend.appendChild(image);
+    svg.appendChild(image);
 
-    let text = _xyz.utils.wire(null, 'svg')`
-    <text
-      style='font-size:12px; alignment-baseline:central; cursor:pointer;'
-      x=25>other</text>`;
+    image_container.appendChild(svg);
 
-    text.setAttribute('y', y + 13);
+    legend.appendChild(image_container);
 
-    text.addEventListener('click', e => {
+    let text_container = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:pointer;">other`;
+
+    legend.appendChild(text_container);
+
+    text_container.addEventListener('click', e => {
 
       if(e.target.style.textDecoration === 'line-through'){
 
@@ -107,29 +112,26 @@ export default _xyz => layer => {
 
     });
 
-    y += 20;
-
-    legend.appendChild(text);
-
   }
+
+  let imageMulti_container = _xyz.utils.wire()`<div style="height: 40px; width: 40px;">`;
+
+  let svgMulti = _xyz.utils.wire()`<svg>`;
+
+  imageMulti_container.appendChild(svgMulti);
 
   let imageMulti = _xyz.utils.wire(null, 'svg')`
   <image x=0 width=40 height=40 />`;
 
-  imageMulti.setAttribute('y', y + 5);
   imageMulti.setAttribute('href', _xyz.utils.svg_symbols(layer.style.markerMulti));
 
-  legend.appendChild(imageMulti);
+  svgMulti.appendChild(imageMulti);
 
-  let textMulti = _xyz.utils.wire(null, 'svg')`
-  <text
-    style='font-size:12px; alignment-baseline:central; cursor:pointer;'
-    x=44>Multiple Locations</text>`;
+  legend.appendChild(imageMulti_container);
 
-  textMulti.setAttribute('y', y + 27);
-  legend.appendChild(textMulti);
-      
-  legend.style.height = `${y + 50}px`;
+  let textMulti_container = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:default; margin-left: 20px; margin-top: 10px;">Multiple Locations`;
+
+  legend.appendChild(textMulti_container);
 
   return legend;
 };
