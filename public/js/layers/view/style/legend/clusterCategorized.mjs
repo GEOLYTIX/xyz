@@ -9,7 +9,7 @@ export default _xyz => layer => {
 
   Object.entries(layer.style.theme.cat).forEach(cat => {
 
-    let image_container = _xyz.utils.wire()`<div style="height: 30px; width: 30px;">`;
+    let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
     let svg = _xyz.utils.wire()`<svg>`;
 
@@ -24,11 +24,11 @@ export default _xyz => layer => {
 
     legend.appendChild(image_container);
 
-    let text_container = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:pointer;">${cat[1].label || cat[0]}`;
+    let text = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:pointer;">${cat[1].label || cat[0]}`;
 
-    legend.appendChild(text_container);
+    legend.appendChild(text);
 
-    text_container.addEventListener('click', e => {
+    text.addEventListener('click', e => {
 
       e.stopPropagation();
       
@@ -63,7 +63,7 @@ export default _xyz => layer => {
   // Attach box for other/default categories.
   if (layer.style.theme.other) {
 
-    let image_container = _xyz.utils.wire()`<div style="height: 30px; width: 30px;">`;
+    let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
     let svg = _xyz.utils.wire()`<svg>`;
 
@@ -78,11 +78,11 @@ export default _xyz => layer => {
 
     legend.appendChild(image_container);
 
-    let text_container = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:pointer;">other`;
+    let text = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:pointer;">other`;
 
-    legend.appendChild(text_container);
+    legend.appendChild(text);
 
-    text_container.addEventListener('click', e => {
+    text.addEventListener('click', e => {
 
       if(e.target.style.textDecoration === 'line-through'){
 
@@ -129,9 +129,9 @@ export default _xyz => layer => {
 
   legend.appendChild(imageMulti_container);
 
-  let textMulti_container = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:default; margin-left: 20px; margin-top: 10px;">Multiple Locations`;
+  let textMulti = _xyz.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:default; margin-left: 20px; margin-top: 10px;">Multiple Locations`;
 
-  legend.appendChild(textMulti_container);
+  legend.appendChild(textMulti);
 
   return legend;
 };
