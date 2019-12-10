@@ -25,7 +25,7 @@ module.exports = fastify => {
 
       const html = template(await tmpl.text(), {
         dir: env.path,
-        captcha: env.captcha && env.captcha[0],
+        captcha: env.captcha && env.captcha[0] || '',
       });
 
       res.type('text/html').send(html);
