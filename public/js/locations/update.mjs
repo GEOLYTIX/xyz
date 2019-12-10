@@ -15,6 +15,8 @@ export default _xyz => function (callback) {
 
   location.view && location.view.classList.add('disabled');
 
+  location.tables.forEach(table => _xyz.dataview.removeTab(table));
+
   const xhr = new XMLHttpRequest();
 
   xhr.open('POST', _xyz.host + 
@@ -38,7 +40,7 @@ export default _xyz => function (callback) {
       entry.label = e.target.response[entry.field + '_label'] || entry.label;
       entry.value = e.target.response[entry.field];
       return entry;
-    })
+    });
 
     // Recreate existing location view.
     location.view && _xyz.locations.view.create(location);

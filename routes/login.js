@@ -190,7 +190,7 @@ module.exports = fastify => {
       dir: env.path,
       action: req.req.url,
       msg: req.query.msg ? msgs[req.query.msg] : ' ',
-      captcha: env.captcha && env.captcha[0],
+      captcha: env.captcha && env.captcha[0] || '',
     });
 
     // Send login view to client.
