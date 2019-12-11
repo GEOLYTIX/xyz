@@ -790,7 +790,9 @@
                             "label": "Date:",
                             "field": "dev_date",
                             "type": "date",
-                            "edit": true
+                            "edit": {
+                                "enableTime": true
+                            }
                         },
                         {
                             "label": "not editable:",

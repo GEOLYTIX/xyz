@@ -10,7 +10,10 @@ export default _xyz => entry => {
 
   _xyz.utils.flatpickr({
     element: input,
+    enableTime: entry.edit && entry.edit.enableTime || false,
     callback: dateStr => {
+
+
 
       input.value = dateStr;
       
