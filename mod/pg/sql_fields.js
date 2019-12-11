@@ -7,7 +7,7 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
 
     if (entry.columns) return;
 
-    if(entry.type === 'key') return;
+    if (entry.type === 'key') return;
 
     if (entry.clusterArea) {
 
@@ -82,7 +82,7 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
 
     if (entry.labelfx) fields.push(`\n   ${entry.labelfx} AS ${entry.field}_label`);
     
-    if (entry.field) return fields.push(`\n   ${entry.fieldfx || entry.field} AS ${entry.field}`);
+    if (entry.field) return fields.push(`\n   (${entry.fieldfx || entry.field}) AS ${entry.field}`);
     
   });
 

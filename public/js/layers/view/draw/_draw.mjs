@@ -43,11 +43,7 @@ return draw;
 function panel(layer) {
 
     if (!layer.edit) return;
-  
-    if (layer.edit.properties && Object.keys(layer.edit).length === 1) return;
-  
-    if (layer.edit.properties && layer.edit.delete && Object.keys(layer.edit).length === 2) return;
-  
+   
     const panel = _xyz.utils.wire()`
     <div class="drawer panel expandable">`;
   

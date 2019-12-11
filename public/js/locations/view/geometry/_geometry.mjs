@@ -74,7 +74,7 @@ export default _xyz => {
         if (!entry.display && !entry.edit) return hideGeom();
       }}>
     </input>
-    <div></div><span>${entry.name || 'Additional geometries'}`);
+    <div></div><span>${entry.name || 'Geometry'}`);
 
     td.appendChild(_xyz.utils.wire()`
     <div class="sample-circle"
