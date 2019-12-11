@@ -1,4 +1,20 @@
 import datepicker from 'js-datepicker';
+import _flatpickr from "flatpickr";
+
+export function flatpickr(params) {
+
+  return _flatpickr(params.element, {
+
+    enableTime: params.enableTime || false,
+    time_24hr: params.time_24hr || false,
+    dateFormat: params.enableTime ? "Y-m-d H:i" : "Y-m-d",
+    
+    onClose: (selectedDates, dateStr, instance) => {
+      params.callback(dateStr);
+    }
+  
+  });
+}
 
 export function datePicker(params){
 
