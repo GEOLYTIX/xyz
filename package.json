@@ -37,6 +37,7 @@
     "fastify-jwt": "^1.1.0",
     "fastify-static": "^2.5.0",
     "fastify-swagger": "^2.4.0",
+    "flatpickr": "^4.6.3",
     "hyperhtml": "^2.31.1",
     "js-datepicker": "^4.6.6",
     "jwt-decode": "^2.2.0",

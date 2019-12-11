@@ -20,7 +20,7 @@ export {deepMerge} from './deepMerge.mjs';
 
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
-export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
+export {datePicker, flatpickr, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
 export {wire, bind} from 'hyperhtml/esm';
 
@@ -37,5 +37,5 @@ import 'chartjs-plugin-datalabels';
 import pointOnFeature from '@turf/point-on-feature';
 
 export const turf = {
-  pointOnFeature: pointOnFeature,
+  pointOnFeature: pointOnFeature
 };
