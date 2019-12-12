@@ -16,8 +16,7 @@ export default _xyz => entry => {
       layer: entry.location.layer.key,
       table: entry.location.table,
       id: entry.location.id,
-      field: entry.field,
-      meta: meta,
+      fields: [entry.field, meta].join(","),
       token: _xyz.token
     })
   );

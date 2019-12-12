@@ -20,10 +20,9 @@ module.exports = fastify => {
           layer: { type: 'string' },
           table: { type: 'string' },
           id: { type: 'string' },
-          field: { type: 'string' },
-          meta: { type: 'string' }
+          fields: { type: 'string' }
         },
-        required: ['locale', 'layer', 'table', 'id', 'field']
+        required: ['locale', 'layer', 'table', 'id', 'fields']
       }
     },
     preHandler: [
@@ -32,7 +31,7 @@ module.exports = fastify => {
       fastify.evalParam.layer,
       fastify.evalParam.roles,
       (req, res, next) => {
-        fastify.evalParam.layerValues(req, res, next, ['table', 'field', 'meta']);
+        fastify.evalParam.layerValues(req, res, next, ['table', req.query.fields.split(',')]);
       },
     ],
     handler: async (req, res) => {
@@ -42,12 +41,19 @@ module.exports = fastify => {
         table = req.query.table,
         qID = layer.qID,
         id = req.query.id,
-        field = req.query.field;
+        fields = req.query.fields.split(',');
+
+        fields = fields.filter(f => { // filter out empty elements
+          return !!f;
+        });
+
+        fields = fields.map(f => {
+          return `${f}=NULL`;
+        });
   
       var q = `
       UPDATE ${table}
-        SET ${field} = null 
-        ${req.query.meta ? `, ${req.query.meta} = null` : ``}
+        SET ${fields.join(',')}
       WHERE ${qID} = $1;`;
   
       var rows = await env.dbs[layer.dbs](q, [id]);
