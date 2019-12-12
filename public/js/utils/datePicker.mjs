@@ -9,7 +9,6 @@ export function flatpickr(params) {
     enableTime: params.enableTime || false,
     time_24hr: true,
     dateFormat: params.enableTime ? "j M Y H:i" : "j M Y",
-    
     onClose: (selectedDates, dateStr, instance) => {
       params.callback(dateStr);
     }

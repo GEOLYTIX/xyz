@@ -9,11 +9,11 @@
     animation: none;
     direction: ltr;
     border: 0;
-    font-size: 14px;
+    /*font-size: 14px;*/
     line-height: 24px;
     border-radius: 5px;
     position: absolute;
-    width: 307.875px;
+    width: 300px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -ms-touch-action: manipulation;
@@ -340,7 +340,7 @@
 }
 
 .flatpickr-current-month {
-    font-size: 135%;
+    font-size: 120%;
     line-height: inherit;
     font-weight: 300;
     color: inherit;

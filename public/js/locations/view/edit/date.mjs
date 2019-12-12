@@ -11,7 +11,7 @@ export default _xyz => entry => {
   _xyz.utils.flatpickr({
     value: entry.value ? new Date(entry.value*1000).toISOString() : '',
     element: input,
-    enableTime: entry.edit.enableTime,
+    enableTime: entry.type === 'datetime' ? true : false,
     callback: dateStr => {
 
       input.value = dateStr;

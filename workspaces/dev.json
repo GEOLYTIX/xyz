@@ -787,12 +787,17 @@
                             "edit": true
                         },
                         {
-                            "label": "Date:",
+                            "label": "Date",
                             "field": "dev_date",
                             "type": "date",
-                            "edit": {
-                                "enableTime": true
-                            }
+                            "edit": true
+                        },
+                        {
+                            "label": "Date and time",
+                            "field": "dev_date_time",
+                            "type": "datetime",
+                            "edit": true,
+                            "inline": true
                         },
                         {
                             "label": "not editable:",
