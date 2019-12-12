@@ -5,9 +5,10 @@ export function flatpickr(params) {
 
   return _flatpickr(params.element, {
 
+    defaultDate: params.value,
     enableTime: params.enableTime || false,
-    time_24hr: params.time_24hr || false,
-    dateFormat: params.enableTime ? "Y-m-d H:i" : "Y-m-d",
+    time_24hr: true,
+    dateFormat: params.enableTime ? "j M Y H:i" : "j M Y",
     
     onClose: (selectedDates, dateStr, instance) => {
       params.callback(dateStr);
@@ -75,7 +76,8 @@ export function formatDate(unix_timestamp){
     day = d.getDate(),
     weekday = days[d.getDay()];
     
-  return `${weekday} ${day} ${month} ${year}`;
+  //return `${weekday} ${day} ${month} ${year}`;
+  return `${day} ${month} ${year}`;
 }
   
 export function formatDateTime(unix_timestamp){
@@ -90,9 +92,10 @@ export function formatDateTime(unix_timestamp){
   let
     dateStr = formatDate(unix_timestamp),
     d = new Date(unix_timestamp*1000),
-    h = d.getHours(),
+    h = '0' + d.getHours(),
     min = '0' + d.getMinutes(),
     sec = '0' + d.getSeconds();
     
-  return `${dateStr}, ${h}:${min.substr(-2)}:${sec.substr(-2)}`;
+  //return `${dateStr}, ${h}:${min.substr(-2)}:${sec.substr(-2)}`;
+  return `${dateStr}, ${h.substr(-2)}:${min.substr(-2)}`;
 }

@@ -4,12 +4,14 @@ export default _xyz => entry => {
 
   const input = _input.childNodes[0];
 
-  //input.value = entry.type === 'datetime' && _xyz.utils.formatDateTime(entry.value) || _xyz.utils.formatDate(entry.value) || '';
+  input.value = entry.type === 'datetime' && _xyz.utils.formatDateTime(entry.value) || _xyz.utils.formatDate(entry.value) || '';
 
   entry.val.appendChild(input);
 
   _xyz.utils.flatpickr({
+    value: entry.value ? new Date(entry.value*1000).toISOString() : '',
     element: input,
+    enableTime: entry.edit.enableTime,
     callback: dateStr => {
 
       input.value = dateStr;

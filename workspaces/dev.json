@@ -790,13 +790,16 @@
                             "label": "Date:",
                             "field": "dev_date",
                             "type": "date",
-                            "edit": true
+                            "edit": {
+                                "enableTime": true
+                            }
                         },
                         {
                             "label": "not editable:",
                             "field": "_date",
                             "fieldfx": "dev_date",
-                            "type": "date"
+                            "type": "datetime",
+                            "inline": true
                         },
                         {
                             "label": "Options",
