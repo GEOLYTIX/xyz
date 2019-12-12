@@ -14,6 +14,10 @@ input {
     width: 100%;
 }
 
+input::placeholder {
+    text-align: left; 
+}
+
 textarea {
     resize: none;
     width: 100%;

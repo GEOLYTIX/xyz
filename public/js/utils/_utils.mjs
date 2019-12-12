@@ -20,7 +20,7 @@ export {deepMerge} from './deepMerge.mjs';
 
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
-export {datePicker, flatpickr, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
+export {flatpickr, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
 export {wire, bind} from 'hyperhtml/esm';
 
