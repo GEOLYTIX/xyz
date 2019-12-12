@@ -3323,11 +3323,13 @@
                                 },
                                 {
                                     "title": "Competitor name",
-                                    "field": "fascia"
+                                    "field": "fascia",
+                                    "fieldfx": "b.fascia"
                                 },
                                 {
                                     "title": "Postcode",
-                                    "field": "postcode"
+                                    "field": "postcode",
+                                    "fieldfx": "b.postcode"
                                 }
                             ]
                         }
