@@ -787,7 +787,7 @@
                             "edit": true
                         },
                         {
-                            "label": "Date:",
+                            "label": "Date",
                             "field": "dev_date",
                             "type": "date",
                             "edit": {
@@ -795,10 +795,18 @@
                             }
                         },
                         {
+                            "label": "Date and time",
+                            "field": "dev_date_time",
+                            "type": "datetime",
+                            "edit": true,
+                            "inline": true
+                        },
+                        {
                             "label": "not editable:",
                             "field": "_date",
                             "fieldfx": "dev_date",
-                            "type": "date"
+                            "type": "datetime",
+                            "inline": true
                         },
                         {
                             "label": "Options",
@@ -1266,14 +1274,12 @@
                         {
                             "label": "ID",
                             "field": "id",
-                            "type": "text",
                             "inline": true
                         },
                         {
                             "label": "Date edit",
                             "field": "dev_date",
                             "type": "date",
-                            "edit": "true",
                             "filter": "date"
                         },
                         {
@@ -1297,8 +1303,7 @@
                         },
                         {
                             "label": "Name",
-                            "field": "uniq_name",
-                            "type": "text"
+                            "field": "uniq_name"
                         },
                         {
                             "label": "Competition Str.",

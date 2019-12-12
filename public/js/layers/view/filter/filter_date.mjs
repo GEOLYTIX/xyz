@@ -17,7 +17,7 @@ export default _xyz => (layer, filter_entry) => {
     <span>After`
   
   const input_min = _xyz.utils.wire()`
-  <input type="text" readonly>`
+  <input type="text" readonly placeholder="Pick from calendar." style="width: 60%;">`
 
   range.appendChild(input_min);
 
@@ -28,43 +28,31 @@ export default _xyz => (layer, filter_entry) => {
     <span>Before`
 
   const input_max = _xyz.utils.wire()`
-  <input type="text" readonly>`
+  <input type="text" readonly placeholder="Pick from calendar." style="width: 60%;">`
 
   range.appendChild(input_max);
 
   block.appendChild(range);
 
-  _xyz.utils.datePicker({
+  _xyz.utils.flatpickr({
     element: input_min,
-    position: 'c',
-    formatter: (input, date) => {
+    enableTime: filter_entry.type === 'datetime' ? true : false,
+    callback: dateStr => {
+      
+      input_min.value = dateStr;
+      applyFilter();
+    
+    }});
 
-      const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
-
-      input.value = filter_entry.type === 'datetime' ?
-        _xyz.utils.formatDateTime(meltDateStr) :
-        _xyz.utils.formatDate(meltDateStr);
-
-    },
-    onSelect: (instance, date) => applyFilter(),
-    onShow: instance => {}
-  });
-
-  _xyz.utils.datePicker({
+    _xyz.utils.flatpickr({
     element: input_max,
-    position: 'c',
-    formatter: (input, date) => {
+    enableTime: filter_entry.type === 'datetime' ? true : false,
+    callback: dateStr => {
+      
+      input_max.value = dateStr;
+      applyFilter();
 
-      const meltDateStr = _xyz.utils.meltDateStr(new Date(date));
-
-      input.value = filter_entry.type === 'datetime' ?
-        _xyz.utils.formatDateTime(meltDateStr) :
-        _xyz.utils.formatDate(meltDateStr);
-
-    },
-    onSelect: (instance, date) => applyFilter(),
-    onShow: instance => {}
-  });
+    }});
 
   let timeout;
 
