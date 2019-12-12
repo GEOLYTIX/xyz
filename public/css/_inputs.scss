@@ -33,11 +33,15 @@ input[type=text],
 input[type=number] {
     border: 1px solid #ccc;
     padding: 3px;
+    
+    &:focus {
+        cursor: text;
+    }
 }
 
-input:hover {
+/*input:hover {
     cursor: pointer;
-}
+}*/
 
 .input-flex {
     display: flex;

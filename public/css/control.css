@@ -309,11 +309,14 @@ input[type=number] {
   border: 1px solid #ccc;
   padding: 3px;
 }
-
-input:hover {
-  cursor: pointer;
+input[type=text]:focus,
+input[type=number]:focus {
+  cursor: text;
 }
 
+/*input:hover {
+    cursor: pointer;
+}*/
 .input-flex {
   display: flex;
   align-items: center;
