@@ -2012,7 +2012,7 @@
                             "field": "isoline_10min",
                             "fieldfx": "ST_asGeoJson(isoline_10min)",
                             "type": "geometry",
-                            "class": "_report",
+                            "display": true,
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 10
