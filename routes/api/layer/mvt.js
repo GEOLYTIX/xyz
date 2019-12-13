@@ -64,6 +64,11 @@ module.exports = fastify => {
       // Use MVT cache if set on layer and no filter active.
       const mvt_cache = (!filter_sql && (!layer.roles || !Object.keys(layer.roles).length) && layer.mvt_cache);
 
+      // Construct array of fields queried
+      const mvt_fields = [];
+
+      Object.values(Object.assign({}, layer.style.themes)).map(t => mvt_fields.push(t.fieldfx ? `${t.fieldfx} AS ${t.field}` : t.field));
+
       if (mvt_cache) {
 
         // Get MVT from cache table.
@@ -100,7 +105,7 @@ module.exports = fastify => {
 
         SELECT
           ${id} as id,
-          ${layer.mvt_fields ? layer.mvt_fields.toString() + ',' : ''}
+          ${mvt_fields.length ? mvt_fields.toString() + ',' : ''}
           ST_AsMVTGeom(
             ${geom},
             ST_MakeEnvelope(

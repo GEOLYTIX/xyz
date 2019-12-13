@@ -115,7 +115,16 @@ async function chkMVTCache(layer) {
       const tile = new VectorTile(new Protobuf(rows[0].mvt));
 
       // MVT cache without fields.
-      if (!layer.mvt_fields) return;
+      //if (!layer.mvt_fields) return;
+
+      layer.mvt_fields = [];
+
+      Object.values(Object.assign({}, layer.style.themes)).map(t => mvt_fields.push(t.fieldfx ? `${t.fieldfx} AS ${t.field}` : t.field));
+
+      //Object.values(Object.assign({},layer.style.themes)).map(t => layer.mvt_fields.push(t.field));
+
+      // MVT cache without fields.
+      if (!layer.mvt_fields.length) return;
 
       // Check if all mvt_fields are contained in cached MVT.
       for (const field of layer.mvt_fields){

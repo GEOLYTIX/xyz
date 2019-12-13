@@ -93,8 +93,7 @@
                         },
                         {
                             "label": "Name",
-                            "field": "name",
-                            "type": "text"
+                            "field": "name"
                         },
                         {
                             "label": "Population Est",
@@ -126,14 +125,6 @@
                             "fieldfx": "ST_Area(geom_3857)",
                             "type": "integer"
                         }
-                    ],
-                    "mvt_fields": [
-                        "name",
-                        "pop_est",
-                        "pop_est_edit",
-                        "gdp_md_est",
-                        "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000 as gdp_pp",
-                        "(pop_est_edit / st_area(geom_3857)) * 1000 as pop_dens"
                     ],
                     "style": {
                         "label": {
@@ -265,6 +256,7 @@
                             "GDP / Population": {
                                 "type": "graduated",
                                 "field": "gdp_pp",
+                                "fieldfx": "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000",
                                 "cat_arr": [
                                     {
                                         "value": 1,
@@ -319,6 +311,7 @@
                             },
                             "Population Density": {
                                 "type": "graduated",
+                                "fieldfx": "(pop_est_edit / st_area(geom_3857)) * 1000",
                                 "field": "pop_dens",
                                 "cat_arr": [
                                     {
@@ -714,9 +707,6 @@
                         "isoline_here": true,
                         "delete": true
                     },
-                    "mvt_fields": [
-                        "strokeColor"
-                    ],
                     "mvt_cache": "dev.draw__mvts",
                     "style": {
                         "default": {
@@ -874,9 +864,6 @@
                     "srid": "3857",
                     "geom": "geom_3857",
                     "mvt_cache": "dev.oa__mvts",
-                    "mvt_fields": [
-                        "pop_11"
-                    ],
                     "style": {
                         "themes": {
                             "Population '11": {
@@ -1066,10 +1053,6 @@
                         }
                     },
                     "mvt_cache": "dev.retailplaces__mvts",
-                    "mvt_fields": [
-                        "rp_type",
-                        "pop__11"
-                    ],
                     "style": {
                         "themes": {
                             "Retail Place type": {
