@@ -56,7 +56,7 @@ export default _xyz => (table, callback) => {
         layer: table.location.layer.key,
         id: table.location.id,
         //id: table.tab.dataset.qid,
-        tableDef: table.title,
+        tableDef: encodeURIComponent(table.title),
         token: _xyz.token
       }));
 
