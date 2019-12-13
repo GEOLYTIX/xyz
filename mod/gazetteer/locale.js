@@ -38,7 +38,7 @@ module.exports = async (req, locale) => {
       ST_X(ST_PointOnSurface(${layer.geom || 'geom'})) AS lng,
       ST_Y(ST_PointOnSurface(${layer.geom || 'geom'})) AS lat
       FROM ${dataset.table}
-      WHERE ${dataset.qterm || dataset.label} ILIKE $1
+      WHERE ${dataset.qterm || dataset.label}::text ILIKE $1
       ${filter_sql}
       ORDER BY length(${dataset.label})
       LIMIT 10`;
