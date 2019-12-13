@@ -114,15 +114,10 @@ async function chkMVTCache(layer) {
       const Protobuf = require('pbf');
       const tile = new VectorTile(new Protobuf(rows[0].mvt));
 
-      // MVT cache without fields.
-      //if (!layer.mvt_fields) return;
+      
+      layer.mvt_fields = Object.values(layer.style.themes || {}).map(theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.field);
 
-      layer.mvt_fields = [];
-
-      Object.values(Object.assign({}, layer.style.themes)).map(t => layer.mvt_fields.push(t.fieldfx ? `${t.fieldfx} AS ${t.field}` : t.field));
-
-      //Object.values(Object.assign({},layer.style.themes)).map(t => layer.mvt_fields.push(t.field));
-
+     
       // MVT cache without fields.
       if (!layer.mvt_fields.length) return;
 

@@ -64,11 +64,6 @@ module.exports = fastify => {
       // Use MVT cache if set on layer and no filter active.
       const mvt_cache = (!filter_sql && (!layer.roles || !Object.keys(layer.roles).length) && layer.mvt_cache);
 
-      // Construct array of fields queried
-      const mvt_fields = [];
-
-      Object.values(Object.assign({}, layer.style.themes)).map(t => mvt_fields.push(t.fieldfx ? `${t.fieldfx} AS ${t.field}` : t.field));
-
       if (mvt_cache) {
 
         // Get MVT from cache table.
@@ -83,6 +78,9 @@ module.exports = fastify => {
           .send(rows[0].mvt);
 
       }
+
+      // Construct array of fields queried
+      const mvt_fields = Object.values(layer.style.themes || {}).map(theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.field);
 
       // Create a new tile and store in cache table if defined.
       // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
@@ -105,7 +103,7 @@ module.exports = fastify => {
 
         SELECT
           ${id} as id,
-          ${mvt_fields.length ? mvt_fields.toString() + ',' : ''}
+          ${mvt_fields.length && mvt_fields.toString() + ',' || ''}
           ST_AsMVTGeom(
             ${geom},
             ST_MakeEnvelope(
