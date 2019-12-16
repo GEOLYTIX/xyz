@@ -522,7 +522,7 @@
     text-overflow: ellipsis;
 
     div div {
-        display: block!important;
+        display: block; /*!important;*/
         vertical-align: middle;
     }
 }

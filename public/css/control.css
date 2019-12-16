@@ -1152,7 +1152,8 @@ button:disabled {
   text-overflow: ellipsis;
 }
 .tabulator-row .tabulator-cell div div {
-  display: block !important;
+  display: block;
+  /*!important;*/
   vertical-align: middle;
 }
 
