@@ -143,14 +143,14 @@
 
 <body class="login_form" data-captcha=${captcha}>
 
-    <form action="${action}" method="post">
+    <form action="${action}" method="post" autocomplete="off">
 
         <div class="input-group">
             <input
             id="auth_user_email"
             name="email"
             type="email"
-            autocomplete="email"
+
             required 
             maxlength="50">
 
@@ -165,7 +165,7 @@
             id="auth_user_password" 
             name="password" 
             type="password" 
-            autocomplete="off" 
+
             required
             minlength="8">
 

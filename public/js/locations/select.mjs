@@ -1,5 +1,7 @@
 export default _xyz => location => {
 
+  _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
+
   location.hook = `${location.layer.key}!${location.table}!${location.id}`;
 
   let record = {stamp: parseInt(Date.now())};
