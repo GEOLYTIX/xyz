@@ -13,6 +13,7 @@ module.exports = {
   layerChart: _layerChart,
   geomTable: _geomTable,
   layerValues: _layerValues,
+  layerTheme: _layerTheme,
   tableDef: _tableDef,
   userSchemaField: _userSchemaField,
   pgFunction: _pgFunction
@@ -170,6 +171,19 @@ async function _layerValues(req, res, next, vals) {
   return next(new Error('Invalid querystring parameter.'));
 
 };
+
+function _layerTheme(req, res, next){
+
+  const themes = Object.keys(req.params.layer.style.themes);
+
+  if(!req.query.theme || req.query.theme && themes.includes(decodeURIComponent(req.query.theme))){
+    return next();
+  }
+
+  res.code(400);
+  return next(new Error('Invalid querystring parameter for layer theme.'));
+
+}
 
 function _tableDef(req, res, next) {
 
