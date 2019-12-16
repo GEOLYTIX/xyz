@@ -30,7 +30,7 @@ export default _xyz => layer => {
       if (!tableZ) return;
 
       layer.xhr = new XMLHttpRequest();   
-  
+
       layer.xhr.open(
         'GET', _xyz.host + '/api/layer/cluster?' +
           _xyz.utils.paramString({
@@ -40,10 +40,7 @@ export default _xyz => layer => {
             kmeans: layer.cluster_kmeans,
             dbscan: layer.cluster_dbscan,
             pixelRatio: window.devicePixelRatio,
-            theme: layer.style.theme && layer.style.theme.type,
-            cat: layer.style.theme && layer.style.theme.field,
-            size: layer.style.theme && layer.style.theme.size,
-            aggregate: layer.style.theme && layer.style.theme.aggregate,
+            theme: layer.style.theme && encodeURIComponent(Object.keys(layer.style.themes).find(k => layer.style.themes[k] === layer.style.theme)),
             label: layer.style.label && layer.style.label.field,
             filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
             west: extent[0],
