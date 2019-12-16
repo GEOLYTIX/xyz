@@ -14,22 +14,6 @@ export default _xyz => entry => {
   </input>
   <div></div><span>${entry.title || 'Show table'}`);
 
-
-  if (entry.chart) {
-
-    const tr = _xyz.utils.wire()`<tr class="${'table-chart ' + (entry.chart.class || '')}">`;
-    
-    const td = _xyz.utils.wire()`<td colspan=2>`;
-
-    tr.appendChild(td);
-
-    entry.chart.node = _xyz.utils.wire()`<div>`;
-
-    td.appendChild(entry.chart.node);
-
-    entry.listview.appendChild(tr);
-  }
-
   if (entry.display) showTab();
 
   function showTab() {
@@ -58,14 +42,13 @@ export default _xyz => entry => {
 
     _xyz.dataview.removeTab(entry);
 
-    if (entry.chart) entry.chart.node.innerHTML = '';
   }
 
   function tableChart(data) {
 
     if (!entry.chart) return;
 
-    entry.chart.node.innerHTML = '';
+    entry.target.innerHTML = '';
 
     const fields = data.map(field => ({
       label: field.rows,
@@ -76,7 +59,7 @@ export default _xyz => entry => {
 
     if (fields.length && fields.some(field => field.displayValue)) {
 
-      entry.chart.node.appendChild(_xyz.dataview.charts.create({
+      entry.target.appendChild(_xyz.dataview.charts.create({
         label: entry.title,
         fields: fields,
         chart: entry.chart
