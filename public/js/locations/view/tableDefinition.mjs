@@ -57,6 +57,10 @@ export default _xyz => entry => {
       displayValue: field[entry.chart.field]
     }));
 
+    const values = Object.values(fields).filter(field => { if(field.value) return field.value });
+
+    if(!values.length) return entry.target.appendChild(_xyz.utils.wire()`<div style="text-align: center;">No information to show here.`);
+
     if (fields.length && fields.some(field => field.displayValue)) {
 
       entry.target.appendChild(_xyz.dataview.charts.create({

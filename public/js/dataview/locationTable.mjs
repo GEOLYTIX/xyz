@@ -19,8 +19,6 @@ export default _xyz => (table, callback) => {
 
  if(_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
   
-  //Object.values(_xyz.dataview.tables).map(v => console.log(v.location.id));
-
   if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(table);
 
   table.update = () => {
@@ -55,7 +53,6 @@ export default _xyz => (table, callback) => {
         locale: _xyz.workspace.locale.key,
         layer: table.location.layer.key,
         id: table.location.id,
-        //id: table.tab.dataset.qid,
         tableDef: encodeURIComponent(table.title),
         token: _xyz.token
       }));
