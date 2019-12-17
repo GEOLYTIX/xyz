@@ -2,12 +2,10 @@ export default _xyz => group => {
 
   if (!group.label) return;
 
-  let values = []; // check if group has any data
-  Object.values(group.location.infoj).map(field => { if (field.group === group.label) values.push(field.value) });
+  // check if group has any data
+  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) return field.value });
 
-  let data_to_show = values.every(el => { return el !== undefined });
-
-  if (!data_to_show) return; // break when no data to show
+  if (!values.length) return; // break when no data to show
 
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
