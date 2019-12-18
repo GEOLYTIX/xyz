@@ -2,6 +2,8 @@ export {default as svg_symbols} from './svg_symbols.mjs';
 
 export {paramString} from './paramString.mjs';
 
+export {loadScript} from './loadScript.mjs';
+
 export {toggleExpanderParent} from './toggleExpanderParent.mjs';
 
 export {scrolly} from './scrolly.mjs';
@@ -18,7 +20,7 @@ export {deepMerge} from './deepMerge.mjs';
 
 export const compose = (...fns) => p => fns.forEach(f=>f(p));
 
-export {datePicker, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
+export {flatpickr, formatDate, formatDateTime, meltDateStr} from './datePicker.mjs';
 
 export {wire, bind} from 'hyperhtml/esm';
 
@@ -35,5 +37,5 @@ import 'chartjs-plugin-datalabels';
 import pointOnFeature from '@turf/point-on-feature';
 
 export const turf = {
-  pointOnFeature: pointOnFeature,
+  pointOnFeature: pointOnFeature
 };

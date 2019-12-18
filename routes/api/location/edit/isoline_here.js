@@ -36,9 +36,9 @@ module.exports = fastify => {
       };
 
       params.range = params.rangetype === 'time' ?
-        req.query.minutes * 60 || 600 :
+        (req.query.minutes || 10) * 60 || 600 :
         params.rangetype === 'distance' ?
-          req.query.distance * 1000 || 1000 :
+          (req.query.distance || 1) * 1000 || 1000 :
           600;
 
 

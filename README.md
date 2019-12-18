@@ -71,7 +71,7 @@ The XYZ middle may consume 3rd party services from Google Maps, Mapbox, MapTiler
 
 [hyperHTML](https://github.com/WebReflection/hyperHTML) - A Fast & Light Virtual DOM Alternative.
 
-[JSRender](https://github.com/BorisMoore/jsrender) - A lightweight, powerful and highly extensible templating engine.
+[backtick-templates](https://github.com/WebReflection/backtick-template) - ES2015 backticks for ES3+ engines.
 
 [chart.js](https://github.com/chartjs/Chart.js) - For the creation of HTML canvas charts in info panels and report views.
 

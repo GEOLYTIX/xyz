@@ -2,14 +2,19 @@ export default _xyz => group => {
 
   if (!group.label) return;
 
+  // check if group has any data
+  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) return field.value });
+
+  if (!values.length) return; // break when no data to show
+
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
   group.row.appendChild(group.td);
 
   group.div = _xyz.utils.wire()`
-  <div class="drawer panel expandable">`;
+  <div style="display: none;" class="drawer panel expandable">`;
 
-  if (group.expanded) group.div.classList.add('expanded');
+  group.expanded && group.div.classList.add('expanded');
 
   group.td.appendChild(group.div);
 
@@ -26,7 +31,7 @@ export default _xyz => group => {
   // Add table
   group.table = _xyz.utils.wire()`<table>`;
 
-  group.div.appendChild(group.table);
+  group.div.appendChild(group.table); 
 
   // If chart option specified
   if (group.chart) {
@@ -64,47 +69,40 @@ export default _xyz => group => {
       class="btn-header xyz-icon primary-colour-filter"
       onclick=${e => {
         e.stopPropagation();
-        group.viewToggler.classList.toggle(group.chartIcon);
-        group.viewToggler.classList.toggle('icon-view-list');
-        group.div.classList.contains('chart') ? group.showTable() : group.showChart();
+        group.showData();
       }}>`;
 
     group.header.appendChild(group.viewToggler);
 
-    group.showChart = () => {
+    group.showData = () => {
 
-      group.table.style.display = 'none';
-      group.chartElem.style.display = 'block';
+      group.div.classList.add('expanded');
 
-      group.div.classList.add('chart');
+      if (!group.div.classList.contains('chart')) {
 
-      group.viewToggler.classList.remove(group.chartIcon);
-      group.viewToggler.classList.add('icon-view-list');
+        group.table.style.display = 'none';
+        group.chartElem.style.display = 'block';
 
-      if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
-    };
+        group.div.classList.add('chart');
 
-    group.showTable = e => {
+        group.viewToggler.classList.remove(group.chartIcon);
+        group.viewToggler.classList.add('icon-view-list');
 
-      group.table.style.display = 'table';
-      group.chartElem.style.display = 'none';
+      } else {
 
-      group.div.classList.remove('chart');
+        group.table.style.display = 'table';
+        group.chartElem.style.display = 'none';
 
-      group.viewToggler.classList.remove('icon-view-list');
-      group.viewToggler.classList.add(group.chartIcon);
+        group.div.classList.remove('chart');
 
-      if (!group.div.classList.contains('expanded')) group.div.classList.add('expanded');
-    };
+        group.viewToggler.classList.remove('icon-view-list');
+        group.viewToggler.classList.add(group.chartIcon);
 
-    // Use the appropriate toggle function to initialise
-    if (group.chart.active) {
-
-      group.showChart();
-    } else {
-
-      group.showTable();
+      }
     }
+
+    group.showData();
+
   }
 
   return group;

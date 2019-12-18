@@ -27,7 +27,7 @@ export default _xyz => (table, callback) => {
       layer: table.location.layer.key,
       table: table.location.layer.tables ? table.location.layer.tableMax() : null,
       id: table.location.id,
-      tableDef: table.title,
+      tableDef: encodeURIComponent(table.title),
       token: _xyz.token
     }));
 
@@ -57,7 +57,7 @@ export default _xyz => (table, callback) => {
       table.target,
       {
         invalidOptionWarnings: false,
-        placeholder: 'No Data Available',
+        //placeholder: 'No Data Available',
         tooltipsHeader: true,
         columnVertAlign: 'center',
         columns: _xyz.dataview.groupColumns(table),

@@ -14,10 +14,9 @@ export default _xyz => {
     _xyz.locations.listview.callbackAdd = _xyz.locations.listview.callbackAdd || params.callbackAdd;
 
     _xyz.locations.listview.callbackInit = _xyz.locations.listview.callbackInit || params.callbackInit;
-  
+
     _xyz.locations.listview.node = _xyz.locations.listview.node || params.target;
-   
-    // Empty the locations list.
+
     _xyz.locations.listview.node.innerHTML = '';
 
     _xyz.locations.list = [
@@ -44,16 +43,16 @@ export default _xyz => {
     }));
 
     _xyz.locations.listview.callbackInit && _xyz.locations.listview.callbackInit();
-         
+
   };
 
 
   function add(location) {
 
     if(!_xyz.locations.listview.node) return;
-  
+
     Object.values(_xyz.locations.listview.node.children).forEach(el => el.classList.remove('expanded'));
-     
+
     _xyz.locations.listview.node.insertBefore(location.view, _xyz.locations.listview.node.firstChild);
 
     setTimeout(
@@ -62,7 +61,7 @@ export default _xyz => {
       scrolly && scrolly.dispatchEvent(new CustomEvent('scrolly'));
       location.view.style.maxHeight = location.view.querySelector('.header').offsetHeight + 'px';
       }, 500);
-  
+
     _xyz.locations.listview.callbackAdd && _xyz.locations.listview.callbackAdd();
 
   }

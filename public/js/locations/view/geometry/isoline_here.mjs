@@ -10,7 +10,7 @@ export default _xyz => {
 
   function settings(entry) {
 
-    if (typeof(entry.edit.isoline_here) !== 'object') entry.edit.isoline_here = {};   
+    if (entry.edit.isoline_here && entry.edit.isoline_here.minutes) return _xyz.utils.wire()`<div>`;
     
     const group = _xyz.utils.wire()`
     <div class="drawer panel expandable">`;
@@ -62,7 +62,6 @@ export default _xyz => {
                     entry.edit.isoline_here.mode = Object.values(keyVal)[0];
         
                 }}>${Object.keys(keyVal)[0]}`)}`);
-
 
     const ranges = [
       { "Time (min)": "time" },
@@ -158,20 +157,17 @@ export default _xyz => {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', _xyz.host +
-      '/api/location/edit/isoline/here/info?' +
+      '/api/location/edit/isoline/here?' +
       _xyz.utils.paramString({
         locale: _xyz.workspace.locale.key,
         layer: entry.location.layer.key,
         table: entry.location.table,
-        field: entry.field,
-        id: entry.location.id,
         coordinates: origin.join(','),
         mode: entry.edit.isoline_here.mode,
         type: entry.edit.isoline_here.type,
         rangetype: entry.edit.isoline_here.rangetype,
         minutes: entry.edit.isoline_here.minutes,
         distance: entry.edit.isoline_here.distance,
-        meta: entry.edit.isoline_here.meta || null,
         token: _xyz.token
       }));
 
@@ -181,24 +177,63 @@ export default _xyz => {
     xhr.onload = e => {
 
       if (e.target.status === 406) {
+        entry.location.view && entry.location.view.classList.remove('disabled');
         return alert(e.target.responseText);
       }
 
       if (e.target.status !== 200) {
+        entry.location.view && entry.location.view.classList.remove('disabled');
         console.log(e.target.response);
         return alert('No route found. Try alternative set up.');
       }
 
-      entry.location.infoj = e.target.response;
+      const xhr_save = new XMLHttpRequest();
 
-      // Update the location view.
-      _xyz.locations.view.create(entry.location);
+      xhr_save.open('POST', _xyz.host +
+      '/api/location/edit/isoline/here/save?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        layer: entry.location.layer.key,
+        table: entry.location.table,
+        field: entry.field,
+        id: entry.location.id,
+        meta: entry.edit.isoline_here.meta || null,
+        token: _xyz.token
+      }));
 
-      //entry.location.flyTo();
+      xhr_save.setRequestHeader('Content-Type', 'application/json');
+      xhr_save.responseType = 'json';
+
+      xhr_save.onload = _e => {
+
+        if (_e.target.status !== 200) {
+          entry.location.view && entry.location.view.classList.remove('disabled');
+          console.log(_e.target.response);
+          return alert('Something with saving isoline went wrong.');
+        }
+
+        entry.location.infoj = _e.target.response;
+
+        // Update the location view.
+        _xyz.locations.view.create(entry.location);
+
+        //entry.location.flyTo();
+      }
+
+      xhr_save.send(JSON.stringify({
+        mode: entry.edit.isoline_here.mode,
+        rangetype: entry.edit.isoline_here.rangetype,
+        type: entry.edit.isoline_here.type,
+        minutes: entry.edit.isoline_here.minutes,
+        distance: entry.edit.isoline_here.distance,
+        isoline: e.target.response
+      }));
 
     };
 
     xhr.send();
+
+    entry.location.view && entry.location.view.classList.add('disabled');
 
   }
 

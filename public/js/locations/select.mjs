@@ -1,5 +1,7 @@
 export default _xyz => location => {
 
+  _xyz.mapview.popup.node && _xyz.mapview.popup.node.remove();
+
   location.hook = `${location.layer.key}!${location.table}!${location.id}`;
 
   let record = {stamp: parseInt(Date.now())};
@@ -61,8 +63,8 @@ export default _xyz => location => {
   // Get location properties from XYZ host.
   const xhr = new XMLHttpRequest();
 
-  xhr.open('GET',
-    _xyz.host + '/api/location/select/id?' +
+  xhr.open('GET', _xyz.host +
+    '/api/location/select/id?' +
     _xyz.utils.paramString({
       locale: _xyz.workspace.locale.key,
       layer: location.layer.key,
@@ -85,11 +87,17 @@ export default _xyz => location => {
     // Push the hook for the location.
     if (_xyz.hooks) _xyz.hooks.push('locations', location.hook);
 
+    const infoj = location.layer.infoj.map(entry => {
+      entry.label = e.target.response[entry.field + '_label'] || entry.label;
+      entry.value = e.target.response[entry.field];
+      return entry;
+    })
+
     _xyz.locations.decorate(
       location,
       {
-        infoj: e.target.response.infoj,
-        geometry: e.target.response.geomj,
+        infoj: infoj,
+        geometry: JSON.parse(e.target.response.geomj),
         editable: (location.layer.edit)
       });
 

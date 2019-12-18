@@ -93,7 +93,7 @@ export default _xyz => table => {
       table.target,
       {
         invalidOptionWarnings: false,
-        placeholder: 'No Data Available',
+        //placeholder: 'No Data Available',
         tooltipsHeader: true,
         columnVertAlign: 'center',
         columns: _xyz.dataview.groupColumns(table),//table.columns,

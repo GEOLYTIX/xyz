@@ -79,6 +79,9 @@ module.exports = fastify => {
 
       }
 
+      // Construct array of fields queried
+      const mvt_fields = Object.values(layer.style.themes || {}).map(theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.field);
+
       // Create a new tile and store in cache table if defined.
       // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
       var q = `
@@ -100,7 +103,7 @@ module.exports = fastify => {
 
         SELECT
           ${id} as id,
-          ${layer.mvt_fields ? layer.mvt_fields.toString() + ',' : ''}
+          ${mvt_fields.length && mvt_fields.toString() + ',' || ''}
           ST_AsMVTGeom(
             ${geom},
             ST_MakeEnvelope(

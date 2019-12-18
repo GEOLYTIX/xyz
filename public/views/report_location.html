@@ -2,17 +2,18 @@
 
 <html lang="en">
 
-<head data-dir="{{:dir}}">
+<head data-dir="${dir}">
+    
     <title>XYZ Sample Report</title>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="icon" type="image/x-icon" href="{{:dir}}/favicon.ico" />
-    <link rel="stylesheet" href="{{:dir}}/css/control.css" />
+    <link rel="icon" type="image/x-icon" href="${dir}/favicon.ico" />
+    <link rel="stylesheet" href="${dir}/css/control.css" />
 
-    <script src="{{:dir}}/js/build/xyz_openlayers.js" defer></script>
-    <script src="{{:dir}}/views/report_location.js" defer></script>
+    <script src="${dir}/js/build/xyz_openlayers.js" defer></script>
+    <script src="${dir}/views/report_location.js" defer></script>
 
     <style>
         * {
@@ -114,7 +115,7 @@
 
 </head>
 
-<body data-viewmode="report" data-token={{:token}}>
+<body data-viewmode="report" data-token=${token}>
 
     <div class="page">
         <div class="grid">

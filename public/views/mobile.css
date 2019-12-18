@@ -80,7 +80,7 @@ body {
 }
 
 #ctrls .listview.shadow {
-    box-shadow: inset 0px 4px 4px -4px #ccc;
+    box-shadow: inset 0px 4px 4px -4px #999;
 }
 
 #clear_locations {
@@ -92,4 +92,9 @@ body {
     width: 100%;
     padding: 0 5px 0 75px;
     background-color: rgba(255,255,255,0.6)
+}
+
+.tabulator {
+    margin-bottom: 0;
+    margin-top: 0;
 }

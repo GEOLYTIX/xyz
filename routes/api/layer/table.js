@@ -39,8 +39,6 @@ module.exports = fastify => {
 
       let
         layer = req.params.layer,
-        srid = layer.srid,
-        mapview_srid = req.query.mapview_srid,
         table = req.params.table,
         viewport = req.query.viewport,
         filter = req.params.filter,
@@ -58,12 +56,12 @@ module.exports = fastify => {
         WHERE
           ST_DWithin(
             ST_Transform(
-              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${srid}),
-              ${mapview_srid}),
+              ST_MakeEnvelope(${west}, ${south}, ${east}, ${north}, ${req.query.mapview_srid}),
+              ${layer.srid}),
             ${layer.geom},
             0.00001)`;
       }
-             
+
 
       // SQL filter
       const filter_sql = filter && await sql_filter(filter) || '';

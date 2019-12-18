@@ -35,7 +35,7 @@ module.exports = async filter => {
     }
 
     if (filter.in && filter.in.length > 0) {
-      sql_filter.push(`${field} IN ('${filter.in.join('\',\'')}')`);
+      sql_filter.push(`${field} IN ('${filter.in.map(f=>decodeURIComponent(f)).join('\',\'')}')`);
       sql_filter.push(conjunction);
     }
 
@@ -60,12 +60,15 @@ module.exports = async filter => {
     }
           
     if((filter.like)) {
-      sql_filter.push(`${field}::text ILIKE '${filter.like}%'`);
+      const likes = decodeURIComponent(filter.like).split(',')
+        .filter(like => like.length > 0)
+        .map(like => `${field}::text ILIKE '${like}%'`);
+      sql_filter.push(likes.join(' OR '));
       sql_filter.push(conjunction);
     }
 
     if((filter.match)) {
-      sql_filter.push(`${field}::text ILIKE '${filter.match}'`);
+      sql_filter.push(`${field}::text ILIKE '${decodeURIComponent(filter.match)}'`);
       sql_filter.push(conjunction);
     }
 

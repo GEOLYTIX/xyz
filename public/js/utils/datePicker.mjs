@@ -1,39 +1,18 @@
-import datepicker from 'js-datepicker';
+import _flatpickr from "flatpickr";
 
-export function datePicker(params){
+export function flatpickr(params) {
 
-  return datepicker(
-    params.element,
-    {
-      position: params.position,
-      formatter: params.formatter,
-      onSelect: instance => {
-        instance.calendar.style.top = '-10000px';
-        params.onSelect(instance);
-      
-      },
-      onShow: instance => {
-        let i = 0;
-        const yPosition = instance.el.getBoundingClientRect().top;
-        instance.calendar.style.top = (yPosition - 100) + 'px';
+  return _flatpickr(params.element, {
 
-        params.onShow(instance);
-
-        document.querySelector('.listviews').addEventListener('click', e => {
-
-          i++;
-          
-          let clickedInside = instance.calendar.contains(e.target);
-          
-          if(!clickedInside && i === 2 ) {
-            instance.calendar.style.top = '-10000px';
-          } else {
-            return false;
-          }
-        });
-      }
-    });
-
+    defaultDate: params.value,
+    enableTime: params.enableTime || false,
+    time_24hr: true,
+    dateFormat: params.enableTime ? "j M Y H:i" : "j M Y",
+    onClose: (selectedDates, dateStr, instance) => {
+      params.callback(dateStr);
+    }
+  
+  });
 }
 
 // from beautiful string to bigint format
@@ -59,7 +38,8 @@ export function formatDate(unix_timestamp){
     day = d.getDate(),
     weekday = days[d.getDay()];
     
-  return `${weekday} ${day} ${month} ${year}`;
+  //return `${weekday} ${day} ${month} ${year}`;
+  return `${day} ${month} ${year}`;
 }
   
 export function formatDateTime(unix_timestamp){
@@ -74,9 +54,10 @@ export function formatDateTime(unix_timestamp){
   let
     dateStr = formatDate(unix_timestamp),
     d = new Date(unix_timestamp*1000),
-    h = d.getHours(),
+    h = '0' + d.getHours(),
     min = '0' + d.getMinutes(),
     sec = '0' + d.getSeconds();
     
-  return `${dateStr}, ${h}:${min.substr(-2)}:${sec.substr(-2)}`;
+  //return `${dateStr}, ${h}:${min.substr(-2)}:${sec.substr(-2)}`;
+  return `${dateStr}, ${h.substr(-2)}:${min.substr(-2)}`;
 }

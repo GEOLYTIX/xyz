@@ -28,7 +28,7 @@ export default _xyz => layer => {
 
       const tableZ = layer.tableCurrent();
 
-      if (!tableZ) return;
+      if (!tableZ) return source.clear();
 
       //const url = _xyz.host + '/api/layer/mvt/'+tileCoord[0]+'/'+tileCoord[1]+'/'+ String(-tileCoord[2] - 1) +'?' + _xyz.utils.paramString({
       const url = _xyz.host + '/api/layer/mvt/'+tileCoord[0]+'/'+tileCoord[1]+'/'+ tileCoord[2] +'?' + _xyz.utils.paramString({
@@ -62,12 +62,12 @@ export default _xyz => layer => {
   
       // Categorized theme.
       if (theme && theme.type === 'categorized') {
+
+        const field = feature.get(theme.field);
   
         Object.assign(
           style,
-          feature.get(theme.field) && theme.cat[feature.get(theme.field)].style || {}
-        );
-  
+          field && theme.cat[field] && theme.cat[field].style || theme.cat[field] || {});
       }
   
       // Graduated theme.
@@ -75,7 +75,7 @@ export default _xyz => layer => {
    
         const value = parseFloat(feature.get(theme.field));
   
-        if (value) {
+        if (value || value === 0) {
 
           // Iterate through cat array.
           for (let i = 0; i < theme.cat_arr.length; i++) {
@@ -84,15 +84,11 @@ export default _xyz => layer => {
             if (value < theme.cat_arr[i].value) break;
   
             // Set cat_style to current cat style after value check.
-            var cat_style = theme.cat_arr[i].style;
+            var cat_style = theme.cat_arr[i].style || theme.cat_arr[i];
           }
   
           // Assign style from base & cat_style.
-          Object.assign(
-            style,
-            cat_style
-          );
-
+          Object.assign(style, cat_style);
         }
     
       }
@@ -106,11 +102,11 @@ export default _xyz => layer => {
       return new _xyz.mapview.lib.style.Style({
         zIndex: style.zIndex,
         stroke: style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-          color: style.strokeColor,
-          width: parseInt(style.strokeWidth) || 1
+          color: _xyz.utils.Chroma(style.strokeColor).alpha(parseFloat(style.strokeOpacity) || 1).rgba(),
+          width: parseFloat(style.strokeWidth) || 1
         }),
         fill: style.fillColor && new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.Chroma(style.fillColor).alpha(style.fillOpacity === 0 ? 0 : parseFloat(style.fillOpacity) || 1).rgba()
+          color: _xyz.utils.Chroma(style.fillColor).alpha(parseFloat(style.fillOpacity) || 1).rgba()
         }),
         image: style.marker && _xyz.mapview.icon(style.marker)
       });

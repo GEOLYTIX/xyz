@@ -14,11 +14,6 @@ export default _xyz => params => {
   _xyz.mapview.node.addEventListener('updatesize', ()=>{
     _xyz.dataview.current_table && _xyz.dataview.current_table.Tabulator && _xyz.dataview.current_table.Tabulator.redraw(true);
   });
-
-   
-  // Load locale if defined in params or if no locale is yet loaded.
-  if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
-
   
   _xyz.dataview.nav_bar = _xyz.dataview.node.querySelector('.nav_bar > ul.nav_bar-nav');
   _xyz.dataview.nav_dropdown = _xyz.dataview.node.querySelector('.nav_bar .tab-dropdown-content ul'); 

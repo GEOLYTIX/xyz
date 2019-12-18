@@ -15,10 +15,11 @@
 @import 'button';
 @import 'drawer';
 
-@import 'datepicker';
 @import 'scrolly';
 @import 'tabulator';
 @import 'workspace';
+
+@import 'flatpickr';
 
 @import 'mapview';
 @import 'dataview';
@@ -51,6 +52,10 @@ body {
 a {
     text-decoration: none;
     background-color: transparent;
+}
+
+li {
+    list-style-type: none;
 }
 
 .no-select {

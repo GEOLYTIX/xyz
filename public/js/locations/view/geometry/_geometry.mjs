@@ -65,7 +65,7 @@ export default _xyz => {
     <td style="padding-top: 5px;" colSpan=2>
     <label class="input-checkbox">
     <input type="checkbox"
-      checked=${entry.value || !!entry.display}
+      checked=${(entry.edit && entry.value) || !!entry.display}
       onchange=${e => {
         entry.display = e.target.checked;
         if (entry.display && entry.edit) return createGeom();
@@ -74,7 +74,7 @@ export default _xyz => {
         if (!entry.display && !entry.edit) return hideGeom();
       }}>
     </input>
-    <div></div><span>${entry.name || 'Additional geometries'}`);
+    <div></div><span>${entry.name || 'Geometry'}`);
 
     td.appendChild(_xyz.utils.wire()`
     <div class="sample-circle"
@@ -92,7 +92,7 @@ export default _xyz => {
 
     if (entry.edit && entry.edit.isoline_here) td.appendChild(isoline_here.settings(entry));
 
-    if (entry.value) drawGeom();
+    if (entry.value && (entry.display || entry.edit)) drawGeom();
 
     if (!entry.value && entry.display) createGeom();
 

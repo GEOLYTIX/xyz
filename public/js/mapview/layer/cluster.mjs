@@ -30,7 +30,7 @@ export default _xyz => layer => {
       if (!tableZ) return;
 
       layer.xhr = new XMLHttpRequest();   
-  
+
       layer.xhr.open(
         'GET', _xyz.host + '/api/layer/cluster?' +
           _xyz.utils.paramString({
@@ -40,10 +40,7 @@ export default _xyz => layer => {
             kmeans: layer.cluster_kmeans,
             dbscan: layer.cluster_dbscan,
             pixelRatio: window.devicePixelRatio,
-            theme: layer.style.theme && layer.style.theme.type,
-            cat: layer.style.theme && layer.style.theme.field,
-            size: layer.style.theme && layer.style.theme.size,
-            aggregate: layer.style.theme && layer.style.theme.aggregate,
+            theme: layer.style.theme && encodeURIComponent(Object.keys(layer.style.themes).find(k => layer.style.themes[k] === layer.style.theme)),
             label: layer.style.label && layer.style.label.field,
             filter: JSON.stringify(layer.filter && Object.assign({}, layer.filter.legend, layer.filter.current)),
             west: extent[0],
@@ -66,7 +63,7 @@ export default _xyz => layer => {
 
         layer.max_size = cluster.reduce((max_size, f) => Math.max(max_size, f.properties.size), 0);
       
-        let id = 0;
+        let id = 1;
       
         const features = cluster.map(f => new _xyz.mapview.lib.Feature({
           id: id++,
@@ -109,15 +106,9 @@ export default _xyz => layer => {
       // Categorized theme
       if (theme && theme.type === 'categorized') {
 
-        let cat = {};
-
-        if( theme.cat[properties.cat]) {
-          if(theme.cat[properties.cat].svg) cat = theme.cat[properties.cat];
-          if(theme.cat[properties.cat].style) cat = theme.cat[properties.cat].style;
-        }
-
-        Object.assign(marker, cat);
-
+        Object.assign(
+          marker,
+          theme.cat[properties.cat] && theme.cat[properties.cat].style || theme.cat[properties.cat]);
       }
   
       // Graduated theme.
@@ -125,7 +116,7 @@ export default _xyz => layer => {
   
         const value = parseFloat(properties.cat);
 
-        if (value) {
+        if (value || value === 0) {
 
           // Iterate through cat array.
           for (let i = 0; i < theme.cat_arr.length; i++) {
@@ -134,9 +125,10 @@ export default _xyz => layer => {
             if (value < theme.cat_arr[i].value) break;
       
             // Set cat_style to current cat style after value check.
-            var cat_style = theme.cat_arr[i].style;
+            var cat_style = theme.cat_arr[i].style || theme.cat_arr[i];
           }
   
+          // Assign style from base & cat_style.
           Object.assign(marker, cat_style);
         }
       }

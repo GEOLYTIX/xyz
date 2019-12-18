@@ -8,9 +8,12 @@ module.exports = async infoj => {
         
     if (fields.length > 0) fields += ', ';
         
-    // if (entry.type === 'integer') return fields += `${entry.field} = ${entry.newValue},`;
+    if (entry.type === 'integer') {
+      let parsed = parseInt(entry.newValue);
+      return fields += `${entry.field} = ${ parsed || parsed === 0 ? parsed : null }`;
+    }
         
-    if (entry.type === 'date') return fields += `${entry.field} = ${entry.newValue}`;
+    if (entry.type === 'date' || entry.type === 'datetime') return fields += `${entry.field} = ${entry.newValue}`;
 
     if (entry.type === 'boolean') return fields += `${entry.field} = ${entry.newValue}`;
         

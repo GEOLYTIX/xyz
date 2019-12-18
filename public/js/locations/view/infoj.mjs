@@ -13,8 +13,10 @@ export default _xyz => location => {
   // Create object to hold view groups.
   const groups = {};
 
-  // Iterate through info fields to fill displayValue property
-  // This must come before the adding-to-table loop so displayValues for all group members are already existent when groups are created!
+  // watch for group/chart data series and stacks
+  let dataset;
+
+  // Iterate through info fields and add to info table.
   location.infoj && Object.values(location.infoj).forEach(entry => {
 
     entry.listview = listview;
@@ -34,13 +36,6 @@ export default _xyz => location => {
     // Add pre- or suffix if specified
     if(entry.prefix) entry.displayValue = entry.prefix + entry.displayValue;
     if(entry.suffix) entry.displayValue = entry.displayValue + entry.suffix;
-  });
-
-  // watch for group/chart data series and stacks
-  let dataset;
-
-  // Iterate through info fields and add to info table.
-  location.infoj && Object.values(location.infoj).forEach(entry => {
 
     entry.row = _xyz.utils.wire()`<tr class=${'lv-' + (entry.level || 0) + ' ' + (entry.class || '')}>`;
 
@@ -49,9 +44,11 @@ export default _xyz => location => {
 
     // Create a new info group.
     if (entry.type === 'group') {
+
       const group = _xyz.locations.view.group(entry);
       if (!group) return;
       groups[group.label] = group;
+            
       return listview.appendChild(group.row);
     }
 
@@ -65,6 +62,7 @@ export default _xyz => location => {
           dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777;">`;
 
         if(entry.dataset && entry.dataset !== dataset){
+          if(entry.skip) return;
           dataset_label.textContent = entry.dataset;
           dataset_row.appendChild(dataset_label);
           groups[entry.group].table.appendChild(dataset_row);
@@ -80,7 +78,9 @@ export default _xyz => location => {
 
       }
 
-      groups[entry.group].table.appendChild(entry.row); 
+      groups[entry.group].table.appendChild(entry.row);
+      groups[entry.group].div.style.display = 'block';
+
     }
 
 
@@ -94,7 +94,6 @@ export default _xyz => location => {
       entry.row.appendChild(entry.label_td);
     }
 
-
     // display layer name in location view
     if(entry.type === 'key') {
      
@@ -104,8 +103,10 @@ export default _xyz => location => {
       <span title="Source layer"
       style="${'float: right; padding: 3px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.Chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
       >${location.layer.name}`);
-
     }
+
+
+    if (entry.script) return window[entry.script](_xyz, entry);
 
 
     if (entry.type === 'label') return entry.label_td.colSpan = '2';
@@ -117,7 +118,6 @@ export default _xyz => location => {
     if (entry.type === 'report') return _xyz.locations.view.report(entry);
 
 
-    // If input is images create image control and return from object.map function.
     if (entry.type === 'images') return _xyz.locations.view.images(entry);
 
 
@@ -136,13 +136,13 @@ export default _xyz => location => {
     if (entry.type === 'boolean') return _xyz.locations.view.boolean(entry);    
 
 
-    if (entry.type === 'tableDefinition') return _xyz.locations.view.tableDefinition(entry);
+    if (entry.type === 'tableDefinition') return _xyz.locations.view.tableDefinition(Object.assign({}, entry));
 
 
-    if (entry.type === 'orderedList') return _xyz.locations.view.orderedList(entry);  
+    if (entry.type === 'orderedList') return _xyz.locations.view.orderedList(Object.assign({}, entry));  
 
 
-    if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(entry);
+   if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(Object.assign({}, entry));
 
 
     // prevent clusterArea from firing if layer is not cluster
@@ -150,7 +150,7 @@ export default _xyz => location => {
 
 
     // Remove empty row which is not editable.
-    if (!entry.edit && !entry.value) return entry.row.remove();
+    if (!entry.edit && !entry.displayValue) return entry.row.remove();
 
 
     // Create val table cell in a new line.

@@ -7,9 +7,7 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
 
     if (entry.columns) return;
 
-    if(entry.type === 'key') return;
-
-    //if (entry.withSelect) return;
+    if (entry.type === 'key') return;
 
     if (entry.clusterArea) {
 
@@ -49,15 +47,14 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
 
       let filter = {};
 
-      if(roles) await roles.forEach(async role => {
+      if(roles && roles.length) await roles.forEach(async role => {
 
-        if (!entry.lookup.layer_roles) return;
+        if(entry.lookup.layer_roles) { 
 
-        const layer_roles = locale.layers[entry.lookup.layer_roles].roles;
-
-        if (!layer_roles) return;
-   
-        Object.assign(filter, layer_roles[role]);
+          const layer_roles = locale.layers[entry.lookup.layer_roles].roles;
+          
+          if(layer_roles) Object.assign(filter, layer_roles[role]);
+        }
     
       });
 
@@ -82,10 +79,14 @@ module.exports = async (fields, infoj, qID, roles, locale) => {
       return fields.push(q);
     
     }
+
+    if (entry.labelfx) fields.push(`\n   ${entry.labelfx} AS ${entry.field}_label`);
     
-    if (entry.field) return fields.push(`\n   ${entry.fieldfx || entry.field} AS ${entry.field}`);
+    if (entry.field) return fields.push(`\n   (${entry.fieldfx || entry.field}) AS ${entry.field}`);
     
   });
+
+  //console.log(fields);
 
   return fields;
 

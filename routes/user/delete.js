@@ -28,7 +28,7 @@ module.exports = fastify => {
       await mailer({
         to: email,
         subject: `This ${env.alias || req.headers.host}${env.path} account has been deleted.`,
-        text: `You will no longer be able to log in to ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}`
+        text: `You will no longer be able to log in to ${req.headers.host.includes('localhost') && 'http' || 'https'}://${env.alias || req.headers.host}${env.path}`
       });
 
       res.code(200).send('User account deleted.');

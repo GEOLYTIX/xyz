@@ -30,7 +30,7 @@ module.exports = fastify => {
       const params = {
         coordinates: req.query.coordinates,
         minutes: req.query.minutes || 10,
-        profile: req.query.profile || 'driving',
+        profile: req.query.profile || 'driving'
       };
          
       var q = `https://api.mapbox.com/isochrone/v1/mapbox/${params.profile}/${params.coordinates}?contours_minutes=${params.minutes}&generalize=${params.minutes}&polygons=true&${env.keys.MAPBOX}`;

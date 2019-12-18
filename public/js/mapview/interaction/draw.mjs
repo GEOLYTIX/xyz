@@ -103,7 +103,7 @@ export default _xyz => {
     const features = _xyz.mapview.interaction.draw.Source.getFeatures();
 
     const geoJSON = new _xyz.mapview.lib.format.GeoJSON();
-  
+   
     const feature = JSON.parse(
       geoJSON.writeFeature(
         features[0],

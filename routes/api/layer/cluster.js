@@ -20,7 +20,7 @@ module.exports = fastify => {
           locale: { type: 'string' },
           layer: { type: 'string' },
           table: { type: 'string' },
-      filter: { type: 'string' }
+          filter: { type: 'string' }
         },
         required: ['locale', 'layer', 'table']
       },
@@ -44,9 +44,7 @@ module.exports = fastify => {
       fastify.evalParam.layer,
       fastify.evalParam.roles,
       fastify.evalParam.geomTable,
-      (req, res, next) => {
-        fastify.evalParam.layerValues(req, res, next, ['cat']);
-      },
+      fastify.evalParam.layerTheme
     ],
     handler: async (req, res) => {
  
@@ -54,9 +52,10 @@ module.exports = fastify => {
         layer = req.params.layer,
         table = req.query.table,
         geom = layer.geom,
-        cat = req.query.cat || null,
-        size = req.query.size || 1,
-        theme = req.query.theme,
+        style_theme = layer.style.themes[decodeURIComponent(req.query.theme)],
+        cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
+        size = style_theme && style_theme.size || 1,
+        theme = style_theme && style_theme.type,
         label = req.query.label,
         filter = req.params.filter,
         pixelRatio = parseFloat(req.query.pixelRatio),
@@ -65,8 +64,7 @@ module.exports = fastify => {
         west = parseFloat(req.query.west),
         south = parseFloat(req.query.south),
         east = parseFloat(req.query.east),
-        north = parseFloat(req.query.north);         
-
+        north = parseFloat(req.query.north);   
 
       // Combine filter with envelope
       const where_sql =  `
@@ -181,8 +179,6 @@ module.exports = fastify => {
           WITH
           first as (
             SELECT
-              id,
-
               ${cat} AS cat,
 
               ${size} AS size,
@@ -203,7 +199,7 @@ module.exports = fastify => {
 
                 ELSE
                   ST_Point(
-                    round(round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width/2}),
+                    round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width/2},
                     round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
 
               END p0                
@@ -212,7 +208,7 @@ module.exports = fastify => {
           ),
           second as (
             SELECT
-              id,
+
               cat,
               size,
 

@@ -5,9 +5,6 @@ export default _xyz => params => {
     _xyz.map.setTarget(null);
     _xyz.map = null;
   }
-
-  // Load locale if defined in params or if no locale is yet loaded.
-  if (!_xyz.workspace.locale || params.locale) _xyz.workspace.loadLocale(params);
     
   // Return if no target has been defined for the leaflet map control.
   if (!params.target) return console.log('No target for mapview!');
@@ -54,7 +51,7 @@ export default _xyz => params => {
 
   _xyz.mapview.interaction.highlight.begin();
 
-  // Add scalebar.
+  // Add zoomControl.
   if (params.zoomControl !== 'never' && (params.zoomControl || _xyz.workspace.locale.zoomControl)) {
     _xyz.map.addControl(new _xyz.mapview.lib.control.Zoom());
   }
@@ -63,9 +60,8 @@ export default _xyz => params => {
   params.attribution && _xyz.mapview.attribution.create(params.attribution);
 
   // Add scalebar.
-  if (params.showScaleBar || _xyz.workspace.locale.showScaleBar) {
+  if (params.showScaleBar !== 'never' && (params.showScaleBar || _xyz.workspace.locale.showScaleBar)) {
       _xyz.map.addControl(new _xyz.mapview.lib.control.ScaleLine({
-        // bar: true,
           target: 'ol-scale'
       }));
   }

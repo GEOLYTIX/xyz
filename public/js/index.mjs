@@ -51,6 +51,8 @@ async function _xyz(params) {
 
   _xyz.utils = utils;
 
+  _xyz.custom = {};
+
   _xyz.workspace = workspace(_xyz);
 
   _xyz.hooks = hooks(_xyz);
@@ -75,10 +77,7 @@ async function _xyz(params) {
   // Fetch workspace if no callback is provided.
   await _xyz.workspace.fetchWS();
 
-  if (_xyz.locale) _xyz.workspace.loadLocale();
-
   return _xyz;
-
 };
 
 window._xyz = _xyz;

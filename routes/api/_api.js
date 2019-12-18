@@ -50,13 +50,13 @@ module.exports = fastify => {
 
   require('./location/edit/document_upload')(fastify);
 
-  require('./location/edit/isoline_mapbox')(fastify);
+  require('./location/edit/isoline_mapbox')(fastify); 
 
-  require('./location/edit/isoline_mapbox_info')(fastify);  
+  require('./location/edit/isoline_mapbox_save')(fastify);  
 
   require('./location/edit/isoline_here')(fastify);
 
-  require('./location/edit/isoline_here_info')(fastify); 
+  require('./location/edit/isoline_here_save')(fastify);
 
   require('./location/edit/draw')(fastify);
 
@@ -79,5 +79,7 @@ module.exports = fastify => {
   require('./location/select/latlng_contains')(fastify);
 
   require('./location/select/aggregate')(fastify);
+
+  require('./location/select/isoline')(fastify);
 
 };

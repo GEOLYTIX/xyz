@@ -57,9 +57,9 @@ module.exports = fastify => {
         mailer({
           bcc: adminmail,
           subject: `A new account has been verified on ${env.alias || req.headers.host}${env.path}`,
-          text: `Please log into the admin panel ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/user/admin to approve ${user.email} \n \n`
-              + `You can also approve the account by following this link: ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/user/approve/${approvaltoken} \n \n`
-              + `!!! If you do not recognize this email address consider blocking the account >>> ${env.http || 'https'}://${env.alias || req.headers.host}${env.path}/user/block/${approvaltoken}`
+          text: `Please log into the admin panel ${req.headers.host.includes('localhost') && 'http' || 'https'}://${env.alias || req.headers.host}${env.path}/user/admin to approve ${user.email} \n \n`
+              + `You can also approve the account by following this link: ${req.headers.host.includes('localhost') && 'http' || 'https'}://${env.alias || req.headers.host}${env.path}/user/approve/${approvaltoken} \n \n`
+              + `!!! If you do not recognize this email address consider blocking the account >>> ${req.headers.host.includes('localhost') && 'http' || 'https'}://${env.alias || req.headers.host}${env.path}/user/block/${approvaltoken}`
         });
   
         return res.send('This account has been verified but requires administrator approval.');

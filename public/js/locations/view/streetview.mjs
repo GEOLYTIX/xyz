@@ -11,7 +11,7 @@ export default _xyz => entry => {
     'EPSG:' + _xyz.mapview.srid,
     'EPSG:4326');
 
-  const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${lnglat[1]},${lnglat[0]}&size=300x230&provider=GOOGLE&token=${_xyz.token || ''}`;
+  const src = `${_xyz.host}/proxy/request?uri=https://maps.googleapis.com/maps/api/streetview?location=${lnglat[1]},${lnglat[0]}&source=outdoor&size=300x230&provider=GOOGLE&token=${_xyz.token || ''}`;
 
   entry.listview.appendChild(
     _xyz.utils.wire()`

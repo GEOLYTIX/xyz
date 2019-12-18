@@ -9,7 +9,7 @@ export default _xyz => () => {
     mapview_srid: _xyz.mapview.srid,
     layer: _xyz.dataview.current_layer.key,
     table: _xyz.dataview.current_layer.tableMax(),
-    viewport: bounds ? true : false,
+    viewport: !!(bounds),
     west: bounds && bounds.west,
     south: bounds && bounds.south,
     east: bounds && bounds.east,

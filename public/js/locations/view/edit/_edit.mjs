@@ -25,7 +25,7 @@ export default _xyz => {
     if(!entry.edit) return;
 
     // Create a date control.
-    if (entry.type === 'date') return edit.date(entry);
+    if (entry.type === 'date' || entry.type === 'datetime') return edit.date(entry);
 
     // Create range input for range fields.
     if (entry.edit.range) return edit.range(entry);
@@ -52,7 +52,7 @@ export default _xyz => {
 
     // Create a text input if no other rule applies.
     entry.val.appendChild(_xyz.utils.wire()`
-    <input type="text" value="${entry.value || ''}"
+    <input type="${(entry.type === 'numeric' || entry.type === 'integer') && 'number' || 'text'}" value="${entry.value || entry.displayValue || ''}"
       onkeyup=${e => {
         entry.location.view.dispatchEvent(
           new CustomEvent('valChange', {detail:{
