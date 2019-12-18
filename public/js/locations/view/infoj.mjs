@@ -142,7 +142,7 @@ export default _xyz => location => {
     if (entry.type === 'orderedList') return _xyz.locations.view.orderedList(Object.assign({}, entry));  
 
 
-   if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(Object.assign({}, entry));
+    if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(Object.assign({}, entry));
 
 
     // prevent clusterArea from firing if layer is not cluster
