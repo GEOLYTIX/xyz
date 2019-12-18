@@ -34,7 +34,7 @@ async function view(req, res, token = { access: 'public' }) {
 
   let tmpl;
 
-  if (req.query.uri.toLowerCase().includes('api.github')) {
+  if (req.query.template.toLowerCase().includes('api.github')) {
 
     const response = await fetch(
       req.query.template,
