@@ -69,6 +69,8 @@ export default _xyz => {
       location.view = _xyz.utils.wire()`<div class="drawer location-view expandable expanded">`;
     }
 
+    location.view.classList.remove('disabled');
+
     location.view.innerHTML = '';
     location.view.classList.remove('disabled');
 

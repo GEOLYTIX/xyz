@@ -92,7 +92,7 @@ export default _xyz => {
 
     if (entry.edit && entry.edit.isoline_here) td.appendChild(isoline_here.settings(entry));
 
-    if (entry.value && (entry.display || entry.edit)) drawGeom();
+    if (entry.value && (entry.display || entry.edit)) return drawGeom();
 
     if (!entry.value && entry.display) createGeom();
 

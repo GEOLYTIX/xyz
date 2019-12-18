@@ -1,10 +1,8 @@
 const env = require('../../../../mod/env');
 
-const fetch = require('../../../../mod/fetch');
-
-const sql_fields = require('../../../../mod/pg/sql_fields');
-
 const date = require('../../../../mod/date.js');
+
+const infoj_values = require('../select/infoj_values.js');
 
 module.exports = fastify => {
 
@@ -64,11 +62,21 @@ module.exports = fastify => {
 
         	if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
 
-        	// Query field for updated infoj
-            const infoj = await fetch(`${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/api/location/select/isoline?locale=${req.query.locale}&layer=${encodeURIComponent(layer.key)}&table=${table}&id=${req.query.id}`);
+			var rows = await infoj_values({
+				locale: req.query.locale,
+				layer: layer,
+				table: table,
+				id: req.query.id,
+				roles: req.params.token.roles || []
+			})
 
-            // Send the infoj object with values back to the client.
-            return res.code(200).send(infoj);
+			if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+
+			// return 204 if no record was returned from database.
+			if (rows.length === 0) return res.code(202).send('No rows returned from table.');
+
+			// Send the infoj object with values back to the client.
+			res.code(200).send(rows[0]);
 
         }
 	});

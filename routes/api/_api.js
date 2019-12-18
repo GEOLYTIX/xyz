@@ -80,6 +80,4 @@ module.exports = fastify => {
 
   require('./location/select/aggregate')(fastify);
 
-  require('./location/select/isoline')(fastify);
-
 };
