@@ -13,9 +13,12 @@ module.exports = fastify => {
     ]),
     handler: async (req, res) => {
 
-      if (req.query.source === 'GITHUB') {
+      if (req.query.uri.toLowerCase().includes('api.github')) {
 
-        const response = await fetch(`${req.query.uri}?access_token=${env.keys.GITHUB}`);
+        const response = await fetch(
+          req.query.uri,
+          { headers: new fetch.Headers({ Authorization: `Basic ${Buffer.from(env.keys.GITHUB).toString('base64')}` }) });
+
         const b64 = await response.json();
         const buff = await Buffer.from(b64.content, 'base64');
         const file = await buff.toString('utf8');

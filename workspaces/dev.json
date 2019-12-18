@@ -831,7 +831,7 @@
                                 "strokeColor": "#083D77"
                             },
                             "_marker": {
-                                "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin.svg",
+                                "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla/icon-pin.svg",
                                 "anchor": [
                                     0.5,
                                     1
@@ -1822,12 +1822,12 @@
                                 "cat": {
                                     "Hospital": {
                                         "label": "Hospital",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_hospital.svg",
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_hospital.svg",
                                         "anchor": [0.5, 0.95]
                                     },
                                     "Pharmacy": {
                                         "label": "Pharmacy",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_pharmacy.svg",
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_pharmacy.svg",
                                         "anchor": [0.5, 0.95]
                                     }
                                 }

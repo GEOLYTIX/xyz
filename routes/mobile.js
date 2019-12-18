@@ -23,13 +23,31 @@ function route(fastify) {
 
 async function view(req, res, token = { access: 'public' }) {
 
-  const tmpl = await fetch(env.mobile || `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/mobile.html`);
+  let tmpl;
 
-  const html = template(await tmpl.text(), {
+  if (env.mobile.toLowerCase().includes('api.github')) {
+
+    const response = await fetch(
+      env.mobile,
+      { headers: new fetch.Headers({ Authorization: `Basic ${Buffer.from(env.keys.GITHUB).toString('base64')}` }) });
+
+    const b64 = await response.json();
+    const buff = await Buffer.from(b64.content, 'base64');
+    tmpl = await buff.toString('utf8');
+
+  } else {
+
+    const response = await fetch(env.mobile || `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${env.path}/views/desktop.html`);
+    tmpl = await response.text();
+
+  }
+
+  const html = template(tmpl, {
     dir: env.path,
     token: req.query.token || token.signed || '""',
-  });
+  })
 
+  //Build the template with jsrender and send to client.
   res.type('text/html').send(html);
 
 };

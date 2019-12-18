@@ -911,27 +911,27 @@
                                 "cat": {
                                     "Airport": {
                                         "label": "Airport",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_transport_airport.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_transport_airport.svg"
                                     },
                                     "Cinema": {
                                         "label": "Cinema",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_entertainment_cinema.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_entertainment_cinema.svg"
                                     },
                                     "Hospital": {
                                         "label": "Hospital",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_hospital.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_hospital.svg"
                                     },
                                     "Pharmacy": {
                                         "label": "Pharmacy",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_pharmacy.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_pharmacy.svg"
                                     },
                                     "Sport and Leisure": {
                                         "label": "Sport and Leisure",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
                                     },
                                     "Stadium": {
                                         "label": "Stadium",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_entertainment_stadium.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_entertainment_stadium.svg"
                                     }
                                 }
                             }

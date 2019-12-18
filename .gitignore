@@ -36,8 +36,8 @@ workspaces/camelot.json
 workspaces/gla.json
 public/views/report_camelot.html
 public/views/report_camelot.js
-public/views/gla.html
-public/views/gla.js
+public/views/gla_desktop.html
+public/views/gla_desktop.js
 public/views/gla_mobile.html
 public/views/gla_mobile.js
 

@@ -34,9 +34,12 @@ async function view(req, res, token = { access: 'public' }) {
 
   let tmpl;
 
-  if (req.query.source === 'GITHUB') {
+  if (req.query.uri.toLowerCase().includes('api.github')) {
 
-    const response = await fetch(`${req.query.template}?access_token=${env.keys.GITHUB}`);
+    const response = await fetch(
+      req.query.template,
+      { headers: new fetch.Headers({ Authorization: `Basic ${Buffer.from(env.keys.GITHUB).toString('base64')}` }) });
+
     const b64 = await response.json();
     const buff = await Buffer.from(b64.content, 'base64');
     tmpl = await buff.toString('utf8');
