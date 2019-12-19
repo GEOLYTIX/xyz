@@ -13,10 +13,6 @@ export default _xyz => (table, callback) => {
 
   }
 
-  Object.keys(table.agg || {}).forEach(key => {
-    table.columns.push(Object.assign({}, {field: key}, table.agg[key]));
-  });
-
  if(_xyz.dataview.tables.indexOf(table) < 0) _xyz.dataview.tables.push(table);
   
   if (_xyz.dataview.nav_bar) _xyz.dataview.addTab(table);
@@ -103,12 +99,18 @@ export default _xyz => (table, callback) => {
     // disable header sorting by default
     table.columns.map(col => { col.headerSort = col.headerSort ? col.headerSort : false;});
 
+    // get table columns
+    const _columns = Object.values(table.columns).map(col => { return Object.assign({}, col) });
+
+    // get table aggregate columns if defined
+    const _agg_columns = Object.keys(table.agg || {}).map(key => {
+      return Object.assign({}, {field: key}, table.agg[key]);
+    });
+
     table.update();
 
-    //console.log(table.title);
-
     // group columns if grouped defined
-    let columns = _xyz.dataview.groupColumns(table);
+    let columns = _xyz.dataview.groupColumns({columns: _columns.concat(_agg_columns)});
 
     // filtered out helper columns
     columns = columns.filter(col => { return !col.aspatial; }); 
