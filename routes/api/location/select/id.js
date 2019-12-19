@@ -1,7 +1,3 @@
-const env = require('../../../../mod/env');
-
-const sql_fields = require('../../../../mod/pg/sql_fields');
-
 const infoj_values = require('./infoj_values.js');
 
 module.exports = fastify => {

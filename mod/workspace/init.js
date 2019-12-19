@@ -36,8 +36,8 @@ module.exports = async () => {
     }
   }
 
-    // Load workspace from cdn.
-    if (env.workspace_connection.split(':')[0] === 'cdn') {
+    // Load workspace from github.
+    if (env.workspace_connection.split(':')[0] === 'github') {
 
       let workspace = {};
      
