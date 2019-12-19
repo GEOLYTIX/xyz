@@ -38,6 +38,8 @@ module.exports = fastify => {
 
   require('./location/pgFunction')(fastify);
 
+  require('./location/pgQuery')(fastify);
+
   // location/edit
 
   require('./location/edit/delete')(fastify);
