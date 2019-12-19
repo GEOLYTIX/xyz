@@ -218,7 +218,7 @@ export default _xyz => {
             if (entry.field === key) entry.value = _e.target.response[key];
           });
 
-        })
+        });
 
         // Update the location view.
         _xyz.locations.view.create(entry.location);
@@ -241,6 +241,6 @@ export default _xyz => {
 
     entry.location.view && entry.location.view.classList.add('disabled');
 
-  }
+  };
 
 };
