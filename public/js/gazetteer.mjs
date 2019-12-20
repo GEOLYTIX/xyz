@@ -230,6 +230,8 @@ export default _xyz => {
       
       // Send results to createFeature
       if (e.target.status === 200) gazetteer.createFeature(e.target.response);
+
+      if (gazetteer.callback) return gazetteer.callback(e.target.response);
     
       record.callback && record.callback(e.target.response);
     };

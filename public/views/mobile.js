@@ -1,4 +1,4 @@
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
 
 //move map up on document scroll
 document.addEventListener('scroll', () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
