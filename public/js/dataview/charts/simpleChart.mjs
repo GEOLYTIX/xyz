@@ -5,6 +5,7 @@ export default _xyz => entry => {
   const canvas = _xyz.utils.wire()`<canvas>`;
 
   canvas.setAttribute("height", entry.chart.height || 150);
+
   canvas.setAttribute("width", entry.chart.width || 350);
 
   canvas.style.height = `${entry.chart.height ? entry.chart.height : 150}px`;
@@ -119,7 +120,7 @@ export default _xyz => entry => {
     	options: {
       layout: entry.chart.layout ? entry.chart.layout : null,
     		title: (entry.chart.title && typeof(entry.chart.title) === 'object' ? entry.chart.title : title),
-    		responsive: true,
+    		responsive: entry.chart.responsive === undefined ? true : false,
     		legend: {
     			display: entry.chart.legend,
     			position: entry.chart.legendPosition || 'left',

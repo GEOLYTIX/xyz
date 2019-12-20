@@ -50,6 +50,9 @@ export default _xyz => entry => {
         display: entry.chart.legend || false,
         position: entry.chart.legendPosition || 'bottom'
       },
+      layout: {
+        responsive: entry.chart.responsive === undefined ? true : false
+      },
       tooltips: {
         callbacks: {
           title: () => ''
