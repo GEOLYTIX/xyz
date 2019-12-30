@@ -174,7 +174,7 @@ export default _xyz => {
 
 
     // Trash icon.
-    location.editable && header.appendChild(_xyz.utils.wire()`
+    location.layer.edit && location.layer.edit.delete && header.appendChild(_xyz.utils.wire()`
     <button
       style = "${'filter: ' + location.colorFilter}"
       title = "Delete location."
