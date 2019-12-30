@@ -151,10 +151,10 @@ export default _xyz => {
 
 
     // Edit geometry icon
-    location.layer.edit && header.appendChild(_xyz.utils.wire()`
+    location.layer.edit && location.layer.edit.geometry && header.appendChild(_xyz.utils.wire()`
     <button
       style = "${'filter: ' + location.colorFilter}"
-      title = "Edit the locations geometry."
+      title = "Edit location geometry."
       class = "btn-header xyz-icon icon-build"
       onclick = ${e => {
         e.stopPropagation();
