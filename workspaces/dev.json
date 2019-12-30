@@ -541,6 +541,7 @@
                     "cluster_kmeans": 0.01,
                     "edit": {
                         "point": true,
+                        "geometry": true,
                         "delete": true
                     },
                     "qID": "id",
@@ -831,7 +832,7 @@
                                 "strokeColor": "#083D77"
                             },
                             "_marker": {
-                                "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla/icon-pin.svg",
+                                "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin.svg",
                                 "anchor": [
                                     0.5,
                                     1
@@ -866,7 +867,7 @@
                     "mvt_cache": "dev.oa__mvts",
                     "style": {
                         "themes": {
-                            "Population '11": {
+                            "Population 2011": {
                                 "type": "graduated",
                                 "field": "pop_11",
                                 "cat_arr": [
@@ -1822,12 +1823,12 @@
                                 "cat": {
                                     "Hospital": {
                                         "label": "Hospital",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_hospital.svg",
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_hospital.svg",
                                         "anchor": [0.5, 0.95]
                                     },
                                     "Pharmacy": {
                                         "label": "Pharmacy",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_pharmacy.svg",
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_pharmacy.svg",
                                         "anchor": [0.5, 0.95]
                                     }
                                 }
@@ -2012,7 +2013,7 @@
                             "field": "isoline_10min",
                             "fieldfx": "ST_asGeoJson(isoline_10min)",
                             "type": "geometry",
-                            "display": true,
+                            "display": false,
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 10
@@ -2030,6 +2031,7 @@
                             "type": "group",
                             "class": "_report",
                             "chart": {
+                                "height": 300,
                                 "type": "bar",
                                 "unit": "k",
                                 "maxRotationX": 90,
@@ -2109,14 +2111,18 @@
                             "type": "dashboard",
                             "title": "Dashboard",
                             "display": true,
-                            "class": "_report"
+                            "class": "_report",
+                            "template": "/views/dashboard.html"
                         },
                         {
                             "label": "Random data series",
                             "type": "group",
                             "dashboard": "Dashboard",
+                            "dashboard_id": "chart_1",
                             "class": "_report",
                             "chart": {
+                                "height": 300,
+                                "width": 500,
                                 "type": "mixed",
                                 "title": true,
                                 "legend": true,
@@ -2542,7 +2548,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "Population Summary",
-                            "display": true,
+                            "display": false,
                             "target_id": "xyz_table1",
                             "class": "_report",
                             "layout": "fitColumns",
@@ -2658,7 +2664,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "Worker Summary",
-                            "display": true,
+                            "display": false,
                             "class": "_report",
                             "target_id": "xyz_table8",
                             "layout": "fitColumns",
@@ -2696,7 +2702,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "OAC Profile",
-                            "display": true,
+                            "display": false,
                             "toolbars": {},
                             "target_id": "xyz_table3",
                             "layout": "fitColumns",
@@ -3143,7 +3149,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "Social Grade",
-                            "display": true,
+                            "display": false,
                             "target_id": "xyz_table4",
                             "class": "_report",
                             "layout": "fitColumns",
@@ -3304,10 +3310,15 @@
                             "limit": 5,
                             "columns": [
                                 {
-                                    "title": "Distance (km)",
+                                    "title": "Distance",
                                     "field": "dist",
                                     "fieldfx": "ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2)",
-                                    "align": "left"
+                                    "align": "right",
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "symbol": " km",
+                                        "symbolAfter": true
+                                    }
                                 },
                                 {
                                     "title": "Competitor name",
