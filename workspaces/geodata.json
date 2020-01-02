@@ -190,6 +190,7 @@
                         }
                     ],
                     "style": {
+                        "hidden": true,
                         "marker": {
                             "type": "target",
                             "fillColor": "#93827F"

@@ -86,7 +86,7 @@ export default _xyz => {
     }
 
     if (layer.style.theme && layer.style.themes && layer.style.hidden) {
-      panel.appendChild(_xyz.utils.wire()`<span>${Object.keys(layer.style.themes)[0]}`)
+      panel.appendChild(_xyz.utils.wire()`<span style="font-weight: bold;">${Object.keys(layer.style.themes)[0]}`)
     }
     
     // Apply the current theme.

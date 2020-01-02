@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="${dir}">
+    <title>Geodata</title>
+    <link rel="icon" type="image/x-icon" href="${dir}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="${dir}/css/openlayers.css" />
+    <link rel="stylesheet" href="${dir}/css/control.css" />
+
+    <script src="${dir}/js/build/xyz_openlayers.js" defer></script>
+    <script src="${dir}/views/geodata.js" defer></script>
+
+    <style>
+
+        body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            min-width: 799px;
+            overflow-x: hidden;
+            margin: 0px;
+            color: #3f3f3f;
+
+            font-family: "Open Sans", sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        #section_geodata {
+          margin: 50px auto 0 auto;
+          max-width: 1600px;
+          padding-left: 50px;
+        }
+        
+        #section_geodata>p:nth-of-type(1) {
+          font-family: ffmark_bold, "Open Sans", "Microsoft YaHei New", "Microsoft Yahei", 微软雅黑, 宋体, SimSun, STXihei, 华文细黑, sans-serif;
+          font-weight: 700;
+          font-size: 300%;
+          margin-bottom: 10px;
+        }
+        
+        #section_geodata>p:nth-of-type(2) {
+          color: #090;
+          font-family: ffmark_bold, "Open Sans", "Microsoft YaHei New", "Microsoft Yahei", 微软雅黑, 宋体, SimSun, STXihei, 华文细黑, sans-serif;
+          font-weight: 700;
+          font-size: 200%;
+          margin-bottom: 10px;
+        }
+        
+        #section_geodata>p:nth-of-type(3) {
+          font-size: 150%;
+          margin-bottom: 20px;
+        }
+                
+        #section_geodata .geodata__select {
+          font-size: 18px;
+          grid-column: 1;
+        }
+        
+        #section_geodata .geodata__select>div {
+          margin-bottom: 5px;
+          border-bottom: 10px solid white;
+        }
+        
+        #section_geodata .geodata__select>div:hover {
+          border-bottom: 10px solid black;
+          cursor: pointer;
+        }
+        
+        #section_geodata .geodata__select>.selected {
+          font-family: ffmark_bold, "Open Sans", "Microsoft YaHei New", "Microsoft Yahei", 微软雅黑, 宋体, SimSun, STXihei, 华文细黑, sans-serif;
+          font-weight: 700;
+        }
+        
+        #section_geodata .geodata__info {
+          background-color: #f0f0f0;
+          padding: 10px;
+        }
+        
+        #section_geodata .geodata__info a {
+          color: #090;
+        }
+        
+        #geodata__faq>table td {
+          padding-bottom: 20px;
+          vertical-align: top;
+        }
+        
+        #geodata__faq>table td:first-child {
+          padding-right: 30px;
+        }
+        
+        #geodata__faq>table .title {
+          font-family: ffmark_bold, "Open Sans", "Microsoft YaHei New", "Microsoft Yahei", 微软雅黑, 宋体, SimSun, STXihei, 华文细黑, sans-serif;
+          font-weight: 700;
+          padding-bottom: 10px;
+        }
+                
+        #section_geodata #map_geodata {
+          width: 100%;
+          height: 100%;
+        }
+    </style>    
+</head>
+
+<body>
+
+    <div id="section_geodata">
+      <p>GeoData</p>
+      <p>Where people live, work, study and shop</p>
+      <p>We create novel datasets using Open Data as inputs, to help with your network strategy and location based decisions.</p>
+    
+      <div style="display: grid; grid-template-columns: 270px 300px 1fr;">
+
+        <div id="geodata__select" class="geodata__select" style="grid-row: 1; grid-column: 1;">
+
+            <div data-locale="London" data-layers="Retail Points">Retail Points</div>
+
+            <div data-locale="London" data-layers="Census">Census</div>
+
+            <div data-locale="London" data-layers="LAD,OA">Admin Boundaries</div>
+
+            <div data-locale="London" data-layers="Education,University building">Education</div>
+
+            <div data-locale="London" data-layers="Grocery Demand">Grocery Demand</div>
+
+            <div data-locale="London" data-layers="Points of Interest">Points of Interest</div>
+
+            <div data-locale="London" data-layers="Postal Sector,Postal District,Postal Areas">Postal</div>
+
+            <div data-locale="London" data-layers="Rail Lines,Rail Stations">Public Transport</div>
+
+            <div data-locale="London" data-layers="Residential">Residential</div>
+
+            <div data-locale="London" data-layers="Retail Places">Retail Places</div>
+
+            <div data-locale="London" data-layers="Road Network">Road Network</div>
+
+            <div data-locale="London" data-layers="Seamless towns and suburbs">Seamless towns and suburbs</div>
+
+            <div data-locale="London" data-layers="Town and suburb">Town and suburb</div>
+
+            <div data-locale="London" data-layers="Urbanity">Urbanity</div>
+
+            <div data-locale="London" data-layers="Workers">Workers</div>
+
+            <div data-faq=true>FAQ</div>
+
+        </div>
+
+        <div id="geodata__info" class="geodata__info" style="grid-row: 1; grid-column: 2;">
+        </div>
+
+        <div class="geodata__content" style="grid-row: 1; grid-column: 3; position: relative;">
+          <div class="btn-column" style="position: absolute; height: 100%; padding: 4px; background-color: #fff; opacity: 0.8; box-shadow: inset 4px 0 4px -4px #777;">
+            <button class="btn-zoomin enabled"><div class="xyz-icon icon-add"></div></button>
+            <button class="btn-zoomout enabled" disabled><div class="xyz-icon icon-remove"></div></button>
+            <a class="btn-fullscreen enabled" target="_blank"><div class="xyz-icon icon-fullscreen"></div></a>
+          </div>
+          <div id="map_geodata" class="map" ></div>
+        </div>
+
+        <div id="geodata__faq" style="display: none; background-color: white; grid-row: 1; grid-column: 2/4;">
+          <table>
+              <tbody>
+              <tr>
+                  <td class="title">IS THE DATA I PURCHASE LICENSED?</td>
+                  <td class="title">CAN I PUBLISH THE DATA?</td>
+              </tr>
+              <tr>
+                  <td>Yes, our aim is to keep licensing simple and transparent. All prices shown are for an annual right to use. This includes full corporate use with no restrictions on user numbers.
+                  </td>
+                  <td>The prices shown are for internal business use only. If you would like to use the data in a website or in a commercial product we’d be delighted to discuss options so please get in touch.
+                  </td>
+              </tr>
+              <tr>
+                  <td class="title">WHAT SOFTWARE CAN THE DATA BE USED IN?</td>
+                  <td class="title">I CAN’T TELL IF THE DATA IS WHAT I NEED?</td>
+              </tr>
+              <tr>
+                  <td>We provide our data in all formats commonly used by desktop GIS, spatial databases and web mapping applications. We’re more than happy to discuss, whatever your software requirements are.
+                  </td>
+                  <td>Then please get in touch. We’d be delighted to pay a visit and take you through the data with examples of the benefits and how it can be used.
+                  </td>
+              </tr>
+              <tr>
+                  <td class="title">HOW OFTEN IS THE DATA UPDATED?</td>
+                  <td class="title">I’M INTERESTED, HOW DO I BUY?</td>
+              </tr>
+              <tr>
+                  <td>Every pack is updated at least annually, with some packs updated every quarter. Ask for more details.
+                  </td>
+                  <td>Please get in touch, we can send you the data asap and provide payment details.</td>
+              </tr>
+              <tr>
+                  <td class="title">CAN I SEE A USER GUIDE / DOCUMENTATION?</td>
+                  <td class="title">HOW DOES THE DATA ARRIVE?</td>
+              </tr>
+              <tr>
+                  <td>Yes of course, please get in touch and we will send the same day.</td>
+                  <td>We can send a link to download, memory stick or DVD.</td>
+              </tr>
+              </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+</body>
+
+</html>
