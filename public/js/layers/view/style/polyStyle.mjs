@@ -124,7 +124,7 @@ export default _xyz => (layer, style, title) => {
       type="range"
       class="secondary-colour-bg"
       min=0.1
-      value=${style.fillOpacity || 1}
+      value=${style.fillOpacity === undefined ? 1 : (parseFloat(style.fillOpacity) || 0)}
       max=1
       step=0.1
       oninput=${e=>{
