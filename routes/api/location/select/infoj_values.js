@@ -13,8 +13,6 @@ module.exports = async params => {
     // Push JSON geometry field into fields array.
     fields.push(`\n   ST_asGeoJson(${params.layer.geom},4) AS geomj`);
 
-    fields.push(`\n   ARRAY[ST_X(ST_PointOnSurface(${params.layer.geom})), ST_Y(ST_PointOnSurface(${params.layer.geom}))] AS PointOnSurface`);
-
     var q = `
         SELECT ${fields.join()}
         FROM ${params.table}

@@ -102,7 +102,7 @@ export default _xyz => location => {
       });
 
     location.marker = _xyz.mapview.lib.proj.transform(
-      e.target.response.pointonsurface,
+      _xyz.utils.turf.pointOnFeature(JSON.parse(e.target.response.geomj)).geometry.coordinates,
       'EPSG:' + location.layer.srid,
       'EPSG:' + _xyz.mapview.srid);
 
