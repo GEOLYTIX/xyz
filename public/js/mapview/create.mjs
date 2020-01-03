@@ -51,6 +51,8 @@ export default _xyz => params => {
   // Set interaction break when map move starts.
   _xyz.map.on('movestart', () => _xyz.mapview.interaction.break = true);
 
+  _xyz.mapview.node.addEventListener('changeEnd', ()=> _xyz.mapview.interaction.break = false);
+   
   _xyz.mapview.interaction.highlight.begin();
 
   // Add zoomControl.
@@ -133,9 +135,6 @@ export default _xyz => params => {
     }
     
     _xyz.mapview.node.addEventListener('changeEnd', ()=>{
-
-      // remove interaction break.
-      _xyz.mapview.interaction.break = false;
 
       const center = _xyz.mapview.lib.proj.transform(
         _xyz.map.getView().getCenter(),

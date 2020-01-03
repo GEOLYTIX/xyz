@@ -1,17 +1,15 @@
-const geodata_select = document.getElementById('geodata__select');
-
 document.querySelectorAll('#geodata__select > div').forEach(function(el){
 
     el.onclick = function() {
 
-        document.querySelector('#geodata__select > .selected') && document.querySelector('#geodata__select > .selected').classList.remove('selected');
+        document.querySelector('#geodata__select > .bold') && document.querySelector('#geodata__select > .bold').classList.remove('bold');
 
-        el.classList.add('selected');
+        el.classList.add('bold');
 
         document.getElementById('map_geodata').innerHTML = '';
         document.querySelector('.geodata__info').innerHTML =  '';
 
-        if (el.dataset.faq) return document.getElementById('geodata__faq').style.display = 'block';
+        if (el.dataset.faq) return document.getElementById('geodata__faq').style.display = 'grid';
 
         document.getElementById('geodata__faq').style.display = 'none';
 
@@ -32,7 +30,7 @@ document.querySelectorAll('#geodata__select > div').forEach(function(el){
                         document.querySelector('.geodata__info').innerHTML = _xyz.layers.list[layer].groupmeta;
                     }
 
-                    if (_xyz.layers.list[layer].style.theme) {
+                    if (_xyz.layers.list[layer].style.theme || _xyz.layers.list[layer].format === 'grid') {
                         document.querySelector('.geodata__info').appendChild(_xyz.layers.view.style.legend(_xyz.layers.list[layer]));
                     }
 
@@ -60,6 +58,19 @@ document.querySelectorAll('#geodata__select > div').forEach(function(el){
                   });
 
                 document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://xyz-geodata-v2.now.sh/geodata?layers=Mapbox Baselayer,Mapbox Labels," + el.dataset.layers + "&locale=London";
+
+                _xyz.locations.selectCallback = location => {
+
+                    const locationview = _xyz.utils.wire()`<div class="location-view" style="padding: 10px;">`;
+
+                    locationview.appendChild(_xyz.locations.view.infoj(location));
+
+                    _xyz.mapview.popup.create({
+                        coords: location.marker,
+                        content: locationview
+                    });
+
+                }
         
             }});
 

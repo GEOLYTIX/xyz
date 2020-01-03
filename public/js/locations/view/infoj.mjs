@@ -10,7 +10,7 @@ export default _xyz => location => {
     _xyz.dataview.removeTab(table)
   });
 
-  const listview = _xyz.utils.wire()`<table class="locationview">`;
+  const listview = _xyz.utils.wire()`<table>`;
 
   // Create object to hold view groups.
   const groups = {};
