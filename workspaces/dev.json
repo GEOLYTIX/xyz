@@ -1665,7 +1665,6 @@
                         },
                         {
                             "label": "Retailer",
-                            "labelfx": "store",
                             "field": "retailer",
                             "filter": "like"
                         },
